@@ -76,7 +76,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Clefs</string>
+        <string>Clefs, key &amp; time signatures</string>
        </property>
       </item>
       <item>
@@ -277,8 +277,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>591</width>
-                <height>441</height>
+                <width>673</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -873,89 +873,297 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>408</width>
-                <height>484</height>
+                <width>673</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
-               <item row="0" column="2">
-                <widget class="QToolButton" name="resetStaffUpperBorder">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
+               <item row="3" column="0" colspan="9">
+                <widget class="mu::uicomponents::RadioButtonGroupBox" name="disableVerticalSpread">
+                 <property name="title">
+                  <string>Disable vertical justification of staves</string>
                  </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Music top margin' value</string>
+                 <property name="checkable">
+                  <bool>true</bool>
                  </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_76">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>Music top margin:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>staffUpperBorder</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QDoubleSpinBox" name="systemFrameDistance">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="keyboardTracking">
+                 <property name="checked">
                   <bool>false</bool>
                  </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="decimals">
-                  <number>1</number>
-                 </property>
-                 <property name="minimum">
-                  <double>-100.000000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.500000000000000</double>
-                 </property>
+                 <layout class="QGridLayout" name="gridLayout_49">
+                  <item row="0" column="1">
+                   <widget class="QDoubleSpinBox" name="staffDistance">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="decimals">
+                     <number>1</number>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QToolButton" name="resetAkkoladeDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Grand staff distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label_69">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Staff distance:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>staffDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="6">
+                   <widget class="QToolButton" name="resetMinSystemDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Min. system distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="6">
+                   <widget class="QToolButton" name="resetMaxSystemDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Max. system distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="3">
+                   <spacer name="horizontalSpacer_15">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="0" column="2">
+                   <widget class="QToolButton" name="resetStaffDistance">
+                    <property name="toolTip">
+                     <string>Reset to default</string>
+                    </property>
+                    <property name="accessibleName">
+                     <string>Reset 'Staff distance' value</string>
+                    </property>
+                    <property name="text">
+                     <string notr="true"/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="5">
+                   <widget class="QDoubleSpinBox" name="minSystemDistance">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="decimals">
+                     <number>1</number>
+                    </property>
+                    <property name="minimum">
+                     <double>-1000.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="4">
+                   <widget class="QLabel" name="label_191">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Max. system distance:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>maxSystemDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="4">
+                   <widget class="QLabel" name="label_73">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Min. system distance:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>minSystemDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QDoubleSpinBox" name="akkoladeDistance">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="decimals">
+                     <number>1</number>
+                    </property>
+                    <property name="minimum">
+                     <double>0.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_70">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="text">
+                     <string>Grand staff distance:</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>akkoladeDistance</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="7">
+                   <spacer name="horizontalSpacer_50">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="1" column="5">
+                   <widget class="QDoubleSpinBox" name="maxSystemDistance">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
+                    <property name="suffix">
+                     <string>sp</string>
+                    </property>
+                    <property name="decimals">
+                     <number>1</number>
+                    </property>
+                    <property name="minimum">
+                     <double>0.000000000000000</double>
+                    </property>
+                    <property name="maximum">
+                     <double>1000.000000000000000</double>
+                    </property>
+                    <property name="singleStep">
+                     <double>0.500000000000000</double>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </widget>
                </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="label_77">
+               <item row="0" column="4" colspan="2">
+                <widget class="QLabel" name="label_78">
                  <property name="text">
-                  <string>Last system fill threshold:</string>
+                  <string>Music bottom margin:</string>
                  </property>
                  <property name="buddy">
-                  <cstring>lastSystemFillThreshold</cstring>
+                  <cstring>staffLowerBorder</cstring>
                  </property>
                 </widget>
                </item>
-               <item row="11" column="0" colspan="2">
-                <widget class="QCheckBox" name="genCourtesyTimesig">
-                 <property name="text">
-                  <string>Create courtesy time signatures</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="7">
-                <widget class="QToolButton" name="resetFrameSystemDistance">
+               <item row="0" column="7">
+                <widget class="QToolButton" name="resetStaffLowerBorder">
                  <property name="toolTip">
                   <string>Reset to default</string>
                  </property>
                  <property name="accessibleName">
-                  <string>Reset 'Vertical frame bottom margin' value</string>
+                  <string>Reset 'Music bottom margin' value</string>
                  </property>
                  <property name="text">
                   <string notr="true"/>
@@ -975,57 +1183,12 @@
                  </property>
                 </widget>
                </item>
-               <item row="5" column="6">
-                <widget class="QDoubleSpinBox" name="frameSystemDistance">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="keyboardTracking">
-                  <bool>false</bool>
-                 </property>
-                 <property name="suffix">
-                  <string>sp</string>
-                 </property>
-                 <property name="decimals">
-                  <number>1</number>
-                 </property>
-                 <property name="minimum">
-                  <double>-100.000000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.500000000000000</double>
-                 </property>
-                </widget>
-               </item>
-               <item row="9" column="0" colspan="2">
-                <widget class="QCheckBox" name="genKeysig">
-                 <property name="text">
-                  <string>Create key signature for all systems</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="10" column="0" colspan="2">
-                <widget class="QCheckBox" name="genCourtesyClef">
-                 <property name="text">
-                  <string>Create courtesy clefs</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <spacer name="horizontalSpacer_11">
+               <item row="1" column="0" colspan="9">
+                <widget class="Line" name="line_8">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
+                </widget>
                </item>
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="staffUpperBorder">
@@ -1055,91 +1218,8 @@
                  </property>
                 </widget>
                </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_74">
-                 <property name="text">
-                  <string>Vertical frame top margin:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>systemFrameDistance</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="2">
-                <widget class="QToolButton" name="resetLastSystemFillThreshold">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Last system fill threshold' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="7">
-                <widget class="QToolButton" name="resetStaffLowerBorder">
-                 <property name="toolTip">
-                  <string>Reset to default</string>
-                 </property>
-                 <property name="accessibleName">
-                  <string>Reset 'Music bottom margin' value</string>
-                 </property>
-                 <property name="text">
-                  <string notr="true"/>
-                 </property>
-                </widget>
-               </item>
-               <item row="12" column="0" colspan="2">
-                <widget class="QCheckBox" name="genCourtesyKeysig">
-                 <property name="text">
-                  <string>Create courtesy key signatures</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="4">
-                <widget class="QLabel" name="label_75">
-                 <property name="text">
-                  <string>Vertical frame bottom margin:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>frameSystemDistance</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="8" column="0" colspan="2">
-                <widget class="QCheckBox" name="genClef">
-                 <property name="text">
-                  <string>Create clef for all systems</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="13" column="0" colspan="8">
-                <spacer name="verticalSpacer_9">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>0</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item row="0" column="4" colspan="2">
-                <widget class="QLabel" name="label_78">
-                 <property name="text">
-                  <string>Music bottom margin:</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>staffLowerBorder</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="6">
-                <widget class="QDoubleSpinBox" name="staffLowerBorder">
+               <item row="5" column="6">
+                <widget class="QDoubleSpinBox" name="frameSystemDistance">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1156,13 +1236,70 @@
                   <number>1</number>
                  </property>
                  <property name="minimum">
-                  <double>-1000.000000000000000</double>
-                 </property>
-                 <property name="maximum">
-                  <double>1000.000000000000000</double>
+                  <double>-100.000000000000000</double>
                  </property>
                  <property name="singleStep">
                   <double>0.500000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0" colspan="9">
+                <widget class="Line" name="line_6">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_74">
+                 <property name="text">
+                  <string>Vertical frame top margin:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>systemFrameDistance</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="7">
+                <widget class="QToolButton" name="resetFrameSystemDistance">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Vertical frame bottom margin' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="4">
+                <widget class="QLabel" name="label_75">
+                 <property name="text">
+                  <string>Vertical frame bottom margin:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>frameSystemDistance</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QToolButton" name="resetLastSystemFillThreshold">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Last system fill threshold' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0" colspan="9">
+                <widget class="Line" name="line_7">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1201,12 +1338,95 @@
                  </property>
                 </spacer>
                </item>
-               <item row="1" column="0" colspan="9">
-                <widget class="Line" name="line_8">
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_77">
+                 <property name="text">
+                  <string>Last system fill threshold:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>lastSystemFillThreshold</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QDoubleSpinBox" name="systemFrameDistance">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                 <property name="suffix">
+                  <string>sp</string>
+                 </property>
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-100.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.500000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <spacer name="horizontalSpacer_11">
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="resetStaffUpperBorder">
+                 <property name="toolTip">
+                  <string>Reset to default</string>
+                 </property>
+                 <property name="accessibleName">
+                  <string>Reset 'Music top margin' value</string>
+                 </property>
+                 <property name="text">
+                  <string notr="true"/>
+                 </property>
                 </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_76">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Music top margin:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>staffUpperBorder</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0" colspan="8">
+                <spacer name="verticalSpacer_9">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
                <item row="2" column="0" colspan="9">
                 <widget class="mu::uicomponents::RadioButtonGroupBox" name="enableVerticalSpread">
@@ -1676,286 +1896,31 @@
                  </layout>
                 </widget>
                </item>
-               <item row="3" column="0" colspan="9">
-                <widget class="mu::uicomponents::RadioButtonGroupBox" name="disableVerticalSpread">
-                 <property name="title">
-                  <string>Disable vertical justification of staves</string>
+               <item row="0" column="6">
+                <widget class="QDoubleSpinBox" name="staffLowerBorder">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="checked">
+                 <property name="keyboardTracking">
                   <bool>false</bool>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_49">
-                  <item row="0" column="1">
-                   <widget class="QDoubleSpinBox" name="staffDistance">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="decimals">
-                     <number>1</number>
-                    </property>
-                    <property name="minimum">
-                     <double>-1000.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>1000.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="2">
-                   <widget class="QToolButton" name="resetAkkoladeDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Grand staff distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_69">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Staff distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>staffDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="6">
-                   <widget class="QToolButton" name="resetMinSystemDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Min. system distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="6">
-                   <widget class="QToolButton" name="resetMaxSystemDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Max. system distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="3">
-                   <spacer name="horizontalSpacer_15">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item row="0" column="2">
-                   <widget class="QToolButton" name="resetStaffDistance">
-                    <property name="toolTip">
-                     <string>Reset to default</string>
-                    </property>
-                    <property name="accessibleName">
-                     <string>Reset 'Staff distance' value</string>
-                    </property>
-                    <property name="text">
-                     <string notr="true"/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="5">
-                   <widget class="QDoubleSpinBox" name="minSystemDistance">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="decimals">
-                     <number>1</number>
-                    </property>
-                    <property name="minimum">
-                     <double>-1000.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>1000.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="4">
-                   <widget class="QLabel" name="label_191">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Max. system distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>maxSystemDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="4">
-                   <widget class="QLabel" name="label_73">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Min. system distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>minSystemDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1">
-                   <widget class="QDoubleSpinBox" name="akkoladeDistance">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="decimals">
-                     <number>1</number>
-                    </property>
-                    <property name="minimum">
-                     <double>0.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>1000.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_70">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>Grand staff distance:</string>
-                    </property>
-                    <property name="buddy">
-                     <cstring>akkoladeDistance</cstring>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="7">
-                   <spacer name="horizontalSpacer_50">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>0</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item row="1" column="5">
-                   <widget class="QDoubleSpinBox" name="maxSystemDistance">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="keyboardTracking">
-                     <bool>false</bool>
-                    </property>
-                    <property name="suffix">
-                     <string>sp</string>
-                    </property>
-                    <property name="decimals">
-                     <number>1</number>
-                    </property>
-                    <property name="minimum">
-                     <double>0.000000000000000</double>
-                    </property>
-                    <property name="maximum">
-                     <double>1000.000000000000000</double>
-                    </property>
-                    <property name="singleStep">
-                     <double>0.500000000000000</double>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item row="4" column="0" colspan="9">
-                <widget class="Line" name="line_7">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                 <property name="suffix">
+                  <string>sp</string>
                  </property>
-                </widget>
-               </item>
-               <item row="7" column="0" colspan="9">
-                <widget class="Line" name="line_6">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-1000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>1000.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.500000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -2253,8 +2218,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>685</width>
-             <height>298</height>
+             <width>737</width>
+             <height>674</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -3744,28 +3709,122 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="PageClefs">
+      <widget class="QWidget" name="PageClefsKeyTimeSigs">
        <layout class="QVBoxLayout" name="verticalLayout_27">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
-         <widget class="QGroupBox" name="groupBox_TABClef">
+         <widget class="QGroupBox" name="groupBox_clefSettings">
           <property name="title">
-           <string>Default TAB clef</string>
+           <string>Clefs</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_29">
+          <layout class="QVBoxLayout" name="verticalLayout_59">
            <item>
-            <widget class="QRadioButton" name="clefTab1">
+            <widget class="QLabel" name="label_173">
              <property name="text">
-              <string>Standard TAB clef</string>
+              <string>Visibility</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="clefTab2">
+            <widget class="QRadioButton" name="radioShowAllClefs">
              <property name="text">
-              <string>Serif TAB clef</string>
+              <string>Show all clefs on every system</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioHideClefs">
+             <property name="text">
+              <string>Hide all clefs after the first system where they appear</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="hideTabClefs">
+             <property name="text">
+              <string>Hide TAB clefs after the first system where they appear</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="genCourtesyClef">
+             <property name="text">
+              <string>Show courtesy clefs</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_TABClef">
+             <property name="title">
+              <string>Default TAB clef</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_29">
+              <item>
+               <widget class="QRadioButton" name="clefTab1">
+                <property name="text">
+                 <string>Standard TAB clef</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="clefTab2">
+                <property name="text">
+                 <string>Serif TAB clef</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_keySigSettings">
+          <property name="title">
+           <string>Key signatures</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_60">
+           <item>
+            <widget class="QLabel" name="label_194">
+             <property name="text">
+              <string>Visibility</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioShowAllKeys">
+             <property name="text">
+              <string>Show on every system</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioHideKeys">
+             <property name="text">
+              <string>Hide after the first system where they appear</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="genCourtesyKeysig">
+             <property name="text">
+              <string>Show courtesy key signatures</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_timeSigSettings">
+          <property name="title">
+           <string>Time signatures</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_61">
+           <item>
+            <widget class="QCheckBox" name="genCourtesyTimesig">
+             <property name="text">
+              <string>Show courtesy time signatures</string>
              </property>
             </widget>
            </item>
@@ -3776,6 +3835,9 @@
          <spacer name="verticalSpacer_15">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -4019,8 +4081,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>239</width>
-                <height>593</height>
+                <width>673</width>
+                <height>882</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -6230,8 +6292,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>363</width>
-                <height>386</height>
+                <width>578</width>
+                <height>527</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -10421,8 +10483,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>380</width>
-             <height>324</height>
+             <width>703</width>
+             <height>674</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -11938,8 +12000,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>384</width>
-                <height>422</height>
+                <width>673</width>
+                <height>638</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -14156,11 +14218,6 @@ articulation markings are present</string>
   <tabstop>resetFrameSystemDistance</tabstop>
   <tabstop>lastSystemFillThreshold</tabstop>
   <tabstop>resetLastSystemFillThreshold</tabstop>
-  <tabstop>genClef</tabstop>
-  <tabstop>genKeysig</tabstop>
-  <tabstop>genCourtesyClef</tabstop>
-  <tabstop>genCourtesyTimesig</tabstop>
-  <tabstop>genCourtesyKeysig</tabstop>
   <tabstop>smallStaffSize</tabstop>
   <tabstop>resetSmallStaffSize</tabstop>
   <tabstop>smallNoteSize</tabstop>
@@ -14229,8 +14286,16 @@ articulation markings are present</string>
   <tabstop>dividerRightSym</tabstop>
   <tabstop>dividerRightX</tabstop>
   <tabstop>dividerRightY</tabstop>
+  <tabstop>radioShowAllClefs</tabstop>
+  <tabstop>radioHideClefs</tabstop>
+  <tabstop>hideTabClefs</tabstop>
+  <tabstop>genCourtesyClef</tabstop>
   <tabstop>clefTab1</tabstop>
   <tabstop>clefTab2</tabstop>
+  <tabstop>radioShowAllKeys</tabstop>
+  <tabstop>radioHideKeys</tabstop>
+  <tabstop>genCourtesyKeysig</tabstop>
+  <tabstop>genCourtesyTimesig</tabstop>
   <tabstop>accidentalsOctaveColumnsAlignLeft</tabstop>
   <tabstop>resetAccidentalsOctaveColumnsAlignLeft</tabstop>
   <tabstop>accidentalsBracketsBadding</tabstop>
