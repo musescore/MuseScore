@@ -11549,7 +11549,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Annotations:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1218"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1217"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1074"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1085"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3109"/>
@@ -11559,7 +11559,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Start of %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1221"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1220"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1077"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1087"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3113"/>
@@ -22150,6 +22150,14 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="35"/>
         <source>Custom</source>
         <translation type="unfinished">Custom</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="276"/>
+        <source>%n string(s)</source>
+        <translation type="unfinished">
+            <numerusform>%n string(s)</numerusform>
+            <numerusform>%n string(s)</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
