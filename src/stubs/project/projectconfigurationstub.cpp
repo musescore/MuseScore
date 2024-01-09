@@ -323,3 +323,12 @@ bool ProjectConfigurationStub::showCloudIsNotAvailableWarning() const
 void ProjectConfigurationStub::setShowCloudIsNotAvailableWarning(bool)
 {
 }
+
+bool ProjectConfigurationStub::disableVersionChecking() const
+{
+    return false;
+}
+
+void ProjectConfigurationStub::setDisableVersionChecking(bool)
+{
+}
