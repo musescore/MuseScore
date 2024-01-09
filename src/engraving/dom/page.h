@@ -56,8 +56,8 @@ public:
     Page* clone() const override { return new Page(*this); }
     const std::vector<System*>& systems() const { return m_systems; }
     std::vector<System*>& systems() { return m_systems; }
-    System* system(int idx) { return m_systems[idx]; }
-    const System* system(int idx) const { return m_systems.at(idx); }
+    System* system(size_t idx) { return m_systems[idx]; }
+    const System* system(size_t idx) const { return m_systems.at(idx); }
 
     void appendSystem(System* s);
 
