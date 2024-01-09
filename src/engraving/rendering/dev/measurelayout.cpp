@@ -1069,7 +1069,8 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     }
 
     int measureNo = adjustMeasureNo(currentMB, ctx.state().measureNo());
-    //LOGDA() << "measureNo: " << measureNo;
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(currentMB) << " measureNo: " << measureNo;
+
     ctx.mutState().setMeasureNo(measureNo);
 
     createMultiMeasureRestsIfNeed(currentMB, ctx);
@@ -1255,6 +1256,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 {
     TRACEFUNC;
+    LAYOUT_CALL();
 
     moveToNextMeasure(ctx);
 
