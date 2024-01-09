@@ -120,10 +120,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     Page* page = ctx.mutState().page();
     const LayoutConfiguration& conf = ctx.conf();
 
-//    LOGDA() << "begin " << page->no();
-//    Defer([page]() {
-//        LOGDA() << "end " << page->no();
-//    });
+    LAYOUT_CALL() << "page->no: " << page->no();
 
     const double slb = conf.styleMM(Sid::staffLowerBorder);
     bool breakPages = conf.viewMode() != LayoutMode::SYSTEM;

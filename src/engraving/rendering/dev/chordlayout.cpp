@@ -1162,6 +1162,8 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
 //! May be called again when the chord is added to or removed from a beam.
 void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 {
+    LAYOUT_CALL() << "chord: " << item->eid();
+
     // Stem needs to know hook's bbox and SMuFL anchors.
     // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
     if (item->hook()) {

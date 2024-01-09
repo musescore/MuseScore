@@ -26,6 +26,7 @@
 #include <string>
 #include <string_view>
 
+#include "global/logstream.h"
 #include "types/types.h"
 
 namespace mu::engraving {
@@ -54,6 +55,12 @@ private:
     ElementType m_type = ElementType::INVALID;
     uint32_t m_id = 0;
 };
+}
+
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::engraving::EID& v)
+{
+    s << "[" << static_cast<int>(v.type()) << "] " << v.id();
+    return s;
 }
 
 #endif // MU_ENGRAVING_EID_H

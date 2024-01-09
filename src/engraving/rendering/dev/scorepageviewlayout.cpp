@@ -43,6 +43,8 @@ using namespace mu::engraving::rendering::dev;
 
 void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
 {
+    LAYOUT_CALL();
+
     LayoutState& state = ctx.mutState();
 
     state.setEndTick(etick);
@@ -128,6 +130,8 @@ void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& c
 
 void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
 {
+    LAYOUT_CALL();
+
     if (!ctx.state().isLayoutAll() && ctx.state().curSystem()) {
         system_idx_t systemIndex = mu::indexOf(score->systems(), ctx.state().curSystem());
         score->systems().erase(score->systems().begin() + systemIndex, score->systems().end());
@@ -163,6 +167,9 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
 {
     TRACEFUNC;
 
+    LAYOUT_CALL_CLEAR();
+    LAYOUT_CALL();
+
     initLayoutContext(score, ctx, stick, etick);
 
     prepareScore(score, ctx);
@@ -183,10 +190,14 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
     doLayout(ctx);
 
     layoutFinished(score, ctx);
+
+    LAYOUT_CALL_PRINT();
 }
 
 void ScorePageViewLayout::doLayout(LayoutContext& ctx)
 {
+    LAYOUT_CALL();
+
     LayoutState& state = ctx.mutState();
     MeasureLayout::getNextMeasure(ctx);
     state.setCurSystem(SystemLayout::collectSystem(ctx));
@@ -217,6 +228,8 @@ void ScorePageViewLayout::doLayout(LayoutContext& ctx)
 
 void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
 {
+    LAYOUT_CALL();
+
     LayoutState& state = ctx.mutState();
 
     if (!state.curSystem()) {
