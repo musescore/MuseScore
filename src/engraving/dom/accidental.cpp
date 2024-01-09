@@ -88,7 +88,7 @@ static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBuyukMucennebSharp),   // SHARP_SLASH2
 
     // Extended Helmholtz-Ellis accidentals (just intonation)
-    Acc(AccidentalVal::NATURAL,    0, SymId::accidentalDoubleFlatOneArrowDown),
+    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalDoubleFlatOneArrowDown),
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalFlatOneArrowDown),
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalNaturalOneArrowDown),
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalSharpOneArrowDown),
@@ -151,9 +151,9 @@ static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::NATURAL,    1.7, SymId::accidentalCombiningRaise31Schisma),
     Acc(AccidentalVal::NATURAL,  -10.9, SymId::accidentalCombiningLower53LimitComma),
     Acc(AccidentalVal::NATURAL,   10.9, SymId::accidentalCombiningRaise53LimitComma),
-    //Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalEnharmonicAlmostEqualTo),
-    //Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalEnharmonicEquals),
-    //Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalEnharmonicTilde),
+    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalEnharmonicAlmostEqualTo),
+    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalEnharmonicEquals),
+    Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalEnharmonicTilde),
 
     // Persian
     Acc(AccidentalVal::NATURAL,   33,   SymId::accidentalSori),                            // SORI

@@ -249,9 +249,9 @@ enum class AccidentalType {
     SHARP_31,
     FLAT_53,
     SHARP_53,
-    //EQUALS_ALMOST,
-    //EQUALS,
-    //TILDE,
+    EQUALS_ALMOST,
+    EQUALS,
+    TILDE,
 
     // Persian
     SORI,
