@@ -2679,7 +2679,7 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
     }
     double y0   = segm1->ldata()->pos().y();
     double yTot = segm2->ldata()->pos().y() + segm2->ipos2().y() - y0;
-    yTot -= yStaffDifference(segm2->system(), segm2->staffIdx(), segm1->system(), segm1->staffIdx());
+    yTot -= yStaffDifference(segm2->system(), track2staff(item->track2()), segm1->system(), track2staff(item->track()));
     double ratio = mu::divide(yTot, xTot, 1.0);
     // interpolate y-coord of intermediate points across total width and height
     double xCurr = 0.0;
@@ -2691,7 +2691,7 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
         segm->rypos2() = yCurr - segm->ldata()->pos().y();           // position segm. end point at yCurr
         // next segment shall start where this segment stopped, corrected for the staff y-difference
         SpannerSegment* nextSeg = const_cast<Glissando*>(item)->segmentAt(i + 1);
-        yCurr += yStaffDifference(nextSeg->system(), nextSeg->staffIdx(), segm->system(), segm->staffIdx());
+        yCurr += yStaffDifference(nextSeg->system(), track2staff(item->track2()), segm->system(), track2staff(item->track()));
         segm = nextSeg;
         segm->rypos2() += segm->ldata()->pos().y() - yCurr;          // adjust next segm. vertical length
         segm->mutldata()->setPosY(yCurr);                                // position next segm. start point at yCurr
