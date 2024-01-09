@@ -205,7 +205,6 @@ double HorizontalSpacing::minHorizontalCollidingDistance(const Segment* f, const
     }
 
     double w = -DBL_MAX; // This can remain negative in some cases (for instance, mid-system clefs)
-    Score* score = f->score();
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
