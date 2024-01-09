@@ -448,7 +448,11 @@ bool MeasureBase::setProperty(Pid id, const PropertyValue& value)
         }
         break;
     }
-    triggerLayout();
+    if (id == Pid::IRREGULAR || id == Pid::NO_OFFSET) {
+        triggerLayoutAll();
+    } else {
+        triggerLayout();
+    }
     score()->setPlaylistDirty();
     return true;
 }
