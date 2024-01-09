@@ -62,6 +62,7 @@ static const Settings::Key HAS_ASKED_AUDIO_GENERATION_SETTINGS(module_name, "pro
 static const Settings::Key GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY(module_name, "project/generateAudioTimePeriodType");
 static const Settings::Key NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY(module_name, "project/numberOfSavesToGenerateAudio");
 static const Settings::Key SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING(module_name, "project/showCloudIsNotAvailableWarning");
+static const Settings::Key DISABLE_VERSION_CHECKING(module_name, "project/disableVersionChecking");
 
 static const std::string DEFAULT_FILE_SUFFIX(".mscz");
 static const std::string DEFAULT_FILE_FILTER("*.mscz");
@@ -114,6 +115,8 @@ void ProjectConfiguration::init()
     settings()->setDefaultValue(GENERATE_AUDIO_TIME_PERIOD_TYPE_KEY, Val(static_cast<int>(GenerateAudioTimePeriodType::Never)));
     settings()->setDefaultValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(10));
     settings()->setDefaultValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(true));
+
+    settings()->setDefaultValue(DISABLE_VERSION_CHECKING, Val(false));
 
     if (!userTemplatesPath().empty()) {
         fileSystem()->makePath(userTemplatesPath());
@@ -664,4 +667,14 @@ bool ProjectConfiguration::showCloudIsNotAvailableWarning() const
 void ProjectConfiguration::setShowCloudIsNotAvailableWarning(bool show)
 {
     settings()->setSharedValue(SHOW_CLOUD_IS_NOT_AVAILABLE_WARNING, Val(show));
+}
+
+bool ProjectConfiguration::disableVersionChecking() const
+{
+    return settings()->value(DISABLE_VERSION_CHECKING).toBool();
+}
+
+void ProjectConfiguration::setDisableVersionChecking(bool disable)
+{
+    settings()->setSharedValue(DISABLE_VERSION_CHECKING, Val(disable));
 }
