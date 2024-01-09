@@ -1069,6 +1069,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     }
 
     int measureNo = adjustMeasureNo(currentMB, ctx.state().measureNo());
+    //LOGDA() << "measureNo: " << measureNo;
     ctx.mutState().setMeasureNo(measureNo);
 
     createMultiMeasureRestsIfNeed(currentMB, ctx);
