@@ -138,6 +138,20 @@ int FileIO::modifiedTime()
     return fileInfo.lastModified().toSecsSinceEpoch();
 }
 
+void MsProcess::start(const QString& command)
+{
+    QT_WARNING_PUSH;
+    QT_WARNING_DISABLE_DEPRECATED;
+    DEPRECATED_USE("startWithArgs(program, [arg1, arg2, ...])");
+    QProcess::start(command);
+    QT_WARNING_POP;
+}
+
+void MsProcess::startWithArgs(const QString& program, const QStringList& args)
+{
+    QProcess::start(program, args, ReadWrite);
+}
+
 //---------------------------------------------------------
 //   setScore
 //---------------------------------------------------------

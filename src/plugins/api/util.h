@@ -136,8 +136,19 @@ public:
         : QProcess(parent) {}
 
 public slots:
-    //@ --
-    Q_INVOKABLE void start(const QString& program) { QProcess::start(program, {}, ReadWrite); }
+    /**
+     * Execute an external command.
+     * \param command A command line to execute.
+     * \warning This function is deprecated. Use \ref startWithArgs instead.
+     */
+    Q_INVOKABLE void start(const QString& command);
+    /**
+     * Execute an external command.
+     * \param program A program to execute.
+     * \param args An array of arguments passed to the program.
+     * \since MuseScore 4.3
+     */
+    Q_INVOKABLE void startWithArgs(const QString& program, const QStringList& args);
     //@ --
     Q_INVOKABLE bool waitForFinished(int msecs = 30000) { return QProcess::waitForFinished(msecs); }
     //@ --
