@@ -394,6 +394,74 @@ const std::set<Spanner*>& DomAccessor::unmanagedSpanners() const
 }
 
 // =============================================================
+// LayoutDebug
+// =============================================================
+LayoutDebug* LayoutDebug::instance()
+{
+    static LayoutDebug ld;
+    return &ld;
+}
+
+void LayoutDebug::callClear()
+{
+    m_currentCall = nullptr;
+    m_calls.clear();
+}
+
+void LayoutDebug::callBegin(const std::string_view& name, const std::string_view& info)
+{
+    //LOGDA() << name << " " << info;
+    Call c;
+    c.name = name;
+    c.info = info;
+    if (m_currentCall) {
+        c.top = m_currentCall;
+        m_currentCall->nested.push_back(c);
+        m_currentCall = &m_currentCall->nested.back();
+    } else {
+        m_calls.push_back(c);
+        m_currentCall = &m_calls.back();
+    }
+}
+
+void LayoutDebug::callEnd()
+{
+    IF_ASSERT_FAILED(m_currentCall) {
+        return;
+    }
+
+    //LOGDA() << m_currentCall->name << " " << m_currentCall->info;
+    m_currentCall = m_currentCall->top;
+}
+
+void LayoutDebug::callDump(const LayoutDebug::Call& c, std::stringstream& ss, int& indent)
+{
+    std::string gap;
+    gap.resize(indent * 2, ' ');
+    ss << "\n";
+    ss << gap << c.name << " " << c.info;
+
+    for (const Call& cn : c.nested) {
+        ++indent;
+        callDump(cn, ss, indent);
+        --indent;
+    }
+}
+
+void LayoutDebug::callDump(std::stringstream& ss) const
+{
+    for (const Call& c : m_calls) {
+        int indent = 0;
+        callDump(c, ss, indent);
+    }
+}
+
+void LayoutDebug::callPrint()
+{
+    LOGDA() << "\n" << callDump();
+}
+
+// =============================================================
 // LayoutContext
 // =============================================================
 

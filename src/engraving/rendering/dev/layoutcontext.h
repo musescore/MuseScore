@@ -34,6 +34,25 @@
 
 #include "../layoutoptions.h"
 
+#ifdef MUE_ENABLE_ENGRAVING_RENDER_DEBUG
+#include "log.h"
+#include "logstream.h"
+#define LAYOUT_CALL_CLEAR mu::engraving::rendering::dev::LayoutDebug::instance()->callClear
+#define LAYOUT_CALL_BEGIN(name) mu::engraving::rendering::dev::LayoutDebug::CallBegin(name)
+#define LAYOUT_CALL_END mu::engraving::rendering::dev::LayoutDebug::instance()->callEnd
+#define LAYOUT_CALL() mu::engraving::rendering::dev::LayoutDebug::CallMarker _ldcall; _ldcall.begin(FUNCNAME).stream
+#define LAYOUT_ITEM_INFO(item) item->typeName() << "(" << item->eid() << ")"
+
+#define LAYOUT_CALL_PRINT mu::engraving::rendering::dev::LayoutDebug::instance()->callPrint
+#else
+#define LAYOUT_CALL_CLEAR()
+#define LAYOUT_CALL_BEGIN(name, info)
+#define LAYOUT_CALL_END()
+#define LAYOUT_CALL(info) if (0) mu::logger::Stream()
+#define LAYOUT_ITEM_INFO(item) ""
+#define LAYOUT_CALL_PRINT()
+#endif
+
 namespace mu::engraving {
 class EngravingItem;
 class RootItem;
@@ -292,6 +311,64 @@ private:
 
     // cache
     double m_totalBracketsWidth = -1.0;
+};
+
+class LayoutDebug
+{
+public:
+
+    static LayoutDebug* instance();
+
+    struct CallBeginMarker {
+        std::string_view name;
+        mu::logger::Stream stream;
+        CallBeginMarker(const std::string_view& n)
+            : name(n)
+        {
+        }
+
+        ~CallBeginMarker()
+        {
+            LayoutDebug::instance()->callBegin(name, stream.str());
+        }
+    };
+
+    struct CallMarker {
+        CallBeginMarker begin(const std::string_view& n) { return CallBeginMarker(n); }
+
+        ~CallMarker()
+        {
+            LayoutDebug::instance()->callEnd();
+        }
+    };
+
+    void callClear();
+    void callBegin(const std::string_view& name, const std::string_view& info);
+    void callEnd();
+
+    void callDump(std::stringstream& ss) const;
+    std::string callDump() const
+    {
+        std::stringstream ss;
+        callDump(ss);
+        return ss.str();
+    }
+
+    void callPrint();
+
+private:
+
+    struct Call {
+        std::string name;
+        std::string info;
+        Call* top = nullptr;
+        std::vector<Call> nested;
+    };
+
+    static void callDump(const LayoutDebug::Call& c, std::stringstream& ss, int& indent);
+
+    Call* m_currentCall;
+    std::vector<Call> m_calls;
 };
 
 class LayoutContext : public IGetScoreInternal

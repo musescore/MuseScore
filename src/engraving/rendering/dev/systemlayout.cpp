@@ -103,10 +103,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     System* system = getNextSystem(ctx);
 
-//    LOGDA() << "begin " << system;
-//    Defer([system]() {
-//        LOGDA() << "end " << system;
-//    });
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
 
     Fraction lcmTick = ctx.state().curMeasure()->tick();
     SystemLayout::setInstrumentNames(system, ctx, ctx.state().startWithLongNames(), lcmTick);
