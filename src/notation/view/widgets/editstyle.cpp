@@ -61,7 +61,7 @@ static const QStringList ALL_PAGE_CODES {
     "header-and-footer",
     "measure-number",
     "system",
-    "clefs",
+    "clefs-key-and-time-signatures",
     "accidentals",
     "measure",
     "barlines",
@@ -252,6 +252,14 @@ EditStyle::EditStyle(QWidget* parent)
     QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
+
+    QButtonGroup* clefVisibility = new QButtonGroup(this);
+    clefVisibility->addButton(radioShowAllClefs, true);
+    clefVisibility->addButton(radioHideClefs, false);
+
+    QButtonGroup* keysigVisibility = new QButtonGroup(this);
+    keysigVisibility->addButton(radioShowAllKeys, true);
+    keysigVisibility->addButton(radioHideKeys, false);
 
     // ====================================================
     // Style widgets
@@ -501,8 +509,9 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::smallNoteMag,             true,  smallNoteSize,                resetSmallNoteSize },
         { StyleId::smallClefMag,             true,  smallClefSize,                resetSmallClefSize },
         { StyleId::lastSystemFillLimit,      true,  lastSystemFillThreshold,      resetLastSystemFillThreshold },
-        { StyleId::genClef,                  false, genClef,                      0 },
-        { StyleId::genKeysig,                false, genKeysig,                    0 },
+        { StyleId::hideTabClefAfterFirst,    false, hideTabClefs,                 0 },
+        { StyleId::genClef,                  false, clefVisibility,               0 },
+        { StyleId::genKeysig,                false, keysigVisibility,             0 },
         { StyleId::genCourtesyTimesig,       false, genCourtesyTimesig,           0 },
         { StyleId::genCourtesyKeysig,        false, genCourtesyKeysig,            0 },
         { StyleId::genCourtesyClef,          false, genCourtesyClef,              0 },
@@ -878,6 +887,9 @@ EditStyle::EditStyle(QWidget* parent)
     connect(lyricsDashMaxLength, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStyle::lyricsDashMaxLengthValueChanged);
     connect(minSystemDistance,   QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStyle::systemMinDistanceValueChanged);
     connect(maxSystemDistance,   QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStyle::systemMaxDistanceValueChanged);
+
+    connect(radioShowAllClefs, &QRadioButton::toggled, this, &EditStyle::clefVisibilityChanged);
+    connect(radioHideClefs,    &QRadioButton::toggled, this, &EditStyle::clefVisibilityChanged);
 
     accidentalsGroup->setVisible(false);   // disable, not yet implemented
 
@@ -1356,9 +1368,10 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "system";
 
     case ElementType::CLEF:
-        return "clefs";
-
     case ElementType::KEYSIG:
+    case ElementType::TIMESIG:
+        return "clefs-key-and-time-signatures";
+
     case ElementType::ACCIDENTAL:
         return "accidentals";
 
@@ -1667,7 +1680,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             v = cb->currentIndex();
-        } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+        } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
             QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
             v = bool(bg->checkedId());
         } else {
@@ -1779,7 +1792,7 @@ void EditStyle::setValues()
             bool value = val.toBool();
             if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
                 voicingSelectWidget->interpretBox->setCurrentIndex(value);
-            } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+            } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
                 qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
                 qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
             } else {
@@ -2437,4 +2450,17 @@ void EditStyle::resetUserStyleName()
 {
     styleName->clear();
     endEditUserStyleName();
+}
+
+void EditStyle::clefVisibilityChanged(bool checked)
+{
+    if (!checked) {
+        return;
+    }
+    if (radioHideClefs->isChecked()) {
+        hideTabClefs->setChecked(true);
+        hideTabClefs->setEnabled(false);
+    } else {
+        hideTabClefs->setEnabled(true);
+    }
 }
