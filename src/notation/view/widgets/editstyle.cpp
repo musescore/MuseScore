@@ -268,7 +268,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(tabShowTiedFrets, tabShowTiedFretsButtonClicked, this, [this](QAbstractButton*){
         updateParenthesisIndicatingTiesGroupState();
     });
-    updateParenthesisIndicatingTiesGroupState();
 
     // ====================================================
     // Style widgets
@@ -1924,6 +1923,8 @@ void EditStyle::setValues()
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         lineStyleSelect->update();
     }
+
+    updateParenthesisIndicatingTiesGroupState();
 }
 
 //---------------------------------------------------------
@@ -2412,5 +2413,5 @@ void EditStyle::resetUserStyleName()
 
 void EditStyle::updateParenthesisIndicatingTiesGroupState()
 {
-    groupBox_2->setEnabled(tabShowTies->isChecked());
+    groupBox_2->setEnabled(tabShowTies->isChecked() || tabShowNone->isChecked());
 }
