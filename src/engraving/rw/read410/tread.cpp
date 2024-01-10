@@ -2574,7 +2574,7 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         TRead::read(arpeggio, e, ctx);
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
-    } else if (tag == "Tremolo") {
+    } else if (tag == "Tremolo") { // compat
         compat::TremoloCompat tcompat;
         tcompat.parent = ch;
         TRead::read(&tcompat, e, ctx);
@@ -2589,6 +2589,20 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         } else {
             UNREACHABLE;
         }
+    } else if (tag == "TremoloSingleChord") {
+        TremoloSingleChord* trem = Factory::createTremoloSingleChord(ch);
+        trem->setTrack(ch->track());
+        TRead::read(trem, e, ctx);
+        trem->setParent(ch);
+        trem->setDurationType(ch->durationType());
+        ch->setTremoloSingleChord(trem);
+    } else if (tag == "TremoloTwoChord") {
+        TremoloTwoChord* trem = Factory::createTremoloTwoChord(ch);
+        trem->setTrack(ch->track());
+        TRead::read(trem, e, ctx);
+        trem->setParent(ch);
+        trem->setDurationType(ch->durationType());
+        ch->setTremoloTwoChord(trem, false);
     } else if (tag == "tickOffset") {      // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
