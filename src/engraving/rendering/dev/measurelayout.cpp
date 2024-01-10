@@ -125,7 +125,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
                     SlurTieLayout::tieLayoutFor(tieFor, item->system());
                 }
                 if (tieBack && tieBack->tick() < stick && tieBack->isCrossStaff()) {
-                    SlurTieLayout::tieLayoutBack(tieBack, item->system());
+                    SlurTieLayout::tieLayoutBack(tieBack, item->system(), ctx);
                 }
             }
         }
