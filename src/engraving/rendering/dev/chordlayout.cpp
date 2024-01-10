@@ -2061,7 +2061,9 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
         // be sure chord position is initialized
         // chord may be moved to the right later
         // if there are conflicts between voices
-        chord->mutldata()->setPosX(0.0);
+        if (!chord->isGrace()) {
+            chord->mutldata()->setPosX(0.0);
+        }
 
         // let user mirror property override the default we calculated
         if (note->userMirror() == DirectionH::AUTO) {
