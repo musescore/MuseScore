@@ -48,7 +48,7 @@
 #define LAYOUT_CALL_CLEAR()
 #define LAYOUT_CALL_BEGIN(name, info)
 #define LAYOUT_CALL_END()
-#define LAYOUT_CALL(info) if (0) mu::logger::Stream()
+#define LAYOUT_CALL() if (0) mu::logger::Stream()
 #define LAYOUT_ITEM_INFO(item) ""
 #define LAYOUT_CALL_PRINT()
 #endif
