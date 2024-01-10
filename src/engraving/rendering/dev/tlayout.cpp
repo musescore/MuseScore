@@ -5690,19 +5690,20 @@ Shape TLayout::textLineBaseSegmentShape(const TextLineBaseSegment* item)
     LAYOUT_CALL_ITEM(item);
     Shape shape;
     if (!item->text()->empty()) {
-        shape.add(item->text()->ldata()->bbox().translated(item->text()->pos()));
+        shape.add(item->text()->ldata()->bbox().translated(item->text()->pos()), item->text());
     }
     if (!item->endText()->empty()) {
-        shape.add(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
+        shape.add(item->endText()->ldata()->bbox().translated(item->endText()->pos()), item->endText());
     }
     double lw2 = 0.5 * item->textLineBase()->lineWidth();
     bool isDottedLine = item->textLineBase()->lineStyle() == LineType::DOTTED;
     if (item->twoLines()) {     // hairpins
-        shape.add(item->boundingBoxOfLine(item->points()[0], item->points()[1], lw2, isDottedLine));
-        shape.add(item->boundingBoxOfLine(item->points()[2], item->points()[3], lw2, isDottedLine));
-    } else if (item->textLineBase()->lineVisible()) {
+        shape.add(item->boundingBoxOfLine(item->points()[0], item->points()[1], lw2, isDottedLine), item);
+        shape.add(item->boundingBoxOfLine(item->points()[2], item->points()[3], lw2, isDottedLine), item);
+    } else {
         for (int i = 0; i < item->npoints() - 1; ++i) {
-            shape.add(item->boundingBoxOfLine(item->points()[i], item->points()[i + 1], lw2, isDottedLine));
+            shape.add(item->boundingBoxOfLine(item->points()[i], item->points()[i + 1], lw2, isDottedLine), item,
+                      !item->textLineBase()->lineVisible());
         }
     }
     return shape;
@@ -5921,10 +5922,6 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     if (!item->endText()->empty()) {
         item->endText()->mutldata()->moveX(ldata->bbox().right());
         ldata->addBbox(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
-    }
-
-    if (!(tl->lineVisible() || ctx.conf().isShowInvisible())) {
-        return;
     }
 
     if (tl->lineVisible() || !ctx.conf().isPrintingMode()) {
