@@ -4323,6 +4323,7 @@ void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, 
         accidental->computeMag();
 
         accLData->setMag(accLData->mag() * ornamentAccidentalMag);
+        accLData->syms.clear(); // Invalidate
         layoutAccidental(accidental, accLData, conf);
         Shape accidentalShape = accidental->shape();
         double minVertDist = above
