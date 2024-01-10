@@ -634,6 +634,7 @@ void EditDrumsetDialog::updateExample()
     Stem* stem = Factory::createStem(chord.get());
     stem->setParent(chord.get());
     stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->style().spatium()));
+    engravingRenderer()->layoutItem(stem);
     chord->add(stem);
     drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));
 }

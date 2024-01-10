@@ -1600,6 +1600,8 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
 
 void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
+
     SystemLayout::layout2(system, ctx); // Computes staff distances, essential for the rest of the calculations
     // Update grace cross beams
     for (MeasureBase* mb : system->measures()) {
@@ -2168,6 +2170,8 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
 void SystemLayout::layout2(System* system, LayoutContext& ctx)
 {
     TRACEFUNC;
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(system);
+
     Box* vb = system->vbox();
     if (vb) {
         TLayout::layoutBox(vb, vb->mutldata(), ctx);

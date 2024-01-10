@@ -29,6 +29,7 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "playback/iplaybackcontroller.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 namespace mu::engraving {
 class Drumset;
@@ -41,6 +42,7 @@ class DrumsetPalette : public PaletteScrollArea
 
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackController, playback)
+    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
 
 public:
     explicit DrumsetPalette(QWidget* parent = nullptr);

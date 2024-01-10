@@ -225,6 +225,8 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutDat
 
 void BeamTremoloLayout::extendStem(const BeamBase::LayoutData* ldata, Chord* chord, double addition)
 {
+    LayoutContext ctx(chord->score());
+
     PointF anchor = chordBeamAnchor(ldata, chord, ChordBeamAnchorType::Middle);
     double desiredY;
     if (ldata->endAnchor.x() > ldata->startAnchor.x()) {
@@ -239,8 +241,9 @@ void BeamTremoloLayout::extendStem(const BeamBase::LayoutData* ldata, Chord* cho
     } else {
         chord->setBeamExtension(desiredY - anchor.y() + addition);
     }
+    TLayout::layoutStem(chord->stem(), chord->stem()->mutldata(), ctx.conf());
+
     if (chord->stemSlash()) {
-        LayoutContext ctx(chord->stemSlash()->score());
         TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutldata(), ctx.conf());
     }
 }

@@ -138,6 +138,7 @@ void DrumsetPalette::updateDrumset()
         Stem* stem = Factory::createStem(chord.get());
         stem->setParent(chord.get());
         stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * _spatium));
+        engravingRenderer()->layoutItem(stem);
         chord->add(stem);
 
         int shortcutCode = m_drumset->shortcut(pitch);

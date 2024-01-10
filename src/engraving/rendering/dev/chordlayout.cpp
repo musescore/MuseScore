@@ -1182,8 +1182,8 @@ void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 
     item->stem()->mutldata()->setPosX(item->stemPosX());
 
-    // This calls _stem->layout()
     item->stem()->setBaseLength(Millimetre(item->defaultStemLength()));
+    TLayout::layoutStem(item->stem(), item->stem()->mutldata(), ctx.conf());
 
     // And now we need to set the position of the flag.
     if (item->hook()) {
@@ -1500,6 +1500,8 @@ void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, trac
 void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
 {
     TRACEFUNC;
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(segment);
+
     const Staff* staff = ctx.dom().staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
     const track_idx_t startTrack = staffIdx * VOICES;
