@@ -374,9 +374,7 @@ void AbstractNotationPaintView::onViewSizeChanged()
 
     ensureViewportInsideScrollableArea();
 
-    if (m_playbackCursor->visible()) {
-        scheduleRedraw();
-    }
+    scheduleRedraw();
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
