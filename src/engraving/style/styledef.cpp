@@ -29,6 +29,7 @@
 #include "dom/articulation.h"
 #include "dom/mscore.h"
 #include "dom/realizedharmony.h"
+#include "dom/stafftype.h"
 #include "dom/textbase.h"
 #include "dom/tremolo.h"
 #include "dom/tuplet.h"
@@ -1576,6 +1577,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::wahShowTabCommon, "wahShowTabCommon", true },
     { Sid::golpeShowTabSimple, "golpeShowTabSimple", true },
     { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
+
+    { Sid::tabShowTiedFret, "tabShowTiedFret", int(ShowTiedFret::TIE_AND_FRET) },
+    { Sid::tabParenthesizeTiedFret, "tabParenthesizeTiedFret", int(ParenthesizeTiedFret::START_OF_SYSTEM) },
+    { Sid::parenthesizeTiedFretIfArticulation, "parenthesizeTiedFretIfArticulation", true },
 
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.16) },
 
