@@ -310,7 +310,7 @@ public:
     NamedEventList* midiAction(const String& s, int channel) const;
     int channelIdx(const String& s) const;
     double getVelocityMultiplier(const String& name) const;
-    void updateGateTime(int* gateTime, int channelIdx, const String& name);
+    void updateGateTime(int* gateTime, const String& name) const;
 
     String recognizeMusicXmlId() const;
     String recognizeId() const;

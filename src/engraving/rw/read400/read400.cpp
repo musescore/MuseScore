@@ -277,8 +277,6 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         score->addSystemObjectStaff(score->staff(idx));
     }
 
-//      createPlayEvents();
-
     return true;
 }
 

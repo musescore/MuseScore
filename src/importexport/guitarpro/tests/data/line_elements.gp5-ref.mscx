@@ -38,34 +38,6 @@
           <string>59</string>
           <string>64</string>
           </StringData>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>30</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="accent">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>144</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>169</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
         <Channel>
           <program value="24"/>
           <controller ctrl="7" value="95"/>
@@ -97,34 +69,6 @@
           <string>59</string>
           <string>64</string>
           </StringData>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>30</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="accent">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>144</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>169</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
         <Channel>
           <program value="26"/>
           <controller ctrl="7" value="119"/>
@@ -155,34 +99,6 @@
           <string>59</string>
           <string>64</string>
           </StringData>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>30</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="accent">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>144</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>169</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="119"/>
@@ -212,34 +128,6 @@
           <string>38</string>
           <string>43</string>
           </StringData>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>30</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="accent">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>144</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>169</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
         <Channel>
           <program value="0"/>
           <controller ctrl="7" value="119"/>
@@ -271,34 +159,6 @@
           <string>59</string>
           <string>64</string>
           </StringData>
-        <Articulation name="staccatissimo">
-          <velocity>100</velocity>
-          <gateTime>30</gateTime>
-          </Articulation>
-        <Articulation name="staccato">
-          <velocity>100</velocity>
-          <gateTime>50</gateTime>
-          </Articulation>
-        <Articulation name="portato">
-          <velocity>100</velocity>
-          <gateTime>67</gateTime>
-          </Articulation>
-        <Articulation name="tenuto">
-          <velocity>100</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="accent">
-          <velocity>120</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="marcato">
-          <velocity>144</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
-        <Articulation name="sforzato">
-          <velocity>169</velocity>
-          <gateTime>100</gateTime>
-          </Articulation>
         <Channel>
           <program value="29"/>
           <controller ctrl="7" value="119"/>

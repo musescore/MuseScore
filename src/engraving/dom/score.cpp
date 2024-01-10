@@ -1500,22 +1500,8 @@ void Score::addElement(EngravingItem* element)
 
     case ElementType::CHORD:
         setPlaylistDirty();
-        // create playlist does not work here bc. tremolos may not be complete
-        // createPlayEvents(toChord(element));
         break;
 
-    case ElementType::NOTE:
-    case ElementType::TREMOLO_SINGLECHORD:
-    case ElementType::TREMOLO_TWOCHORD:
-    case ElementType::ARTICULATION:
-    case ElementType::ORNAMENT:
-    case ElementType::ARPEGGIO:
-    {
-        if (parent && parent->isChord()) {
-            CompatMidiRender::createPlayEvents(this, toChord(parent));
-        }
-    }
-    break;
     case ElementType::HARMONY:
         element->part()->updateHarmonyChannels(true);
         break;
@@ -1707,18 +1693,6 @@ void Score::removeElement(EngravingItem* element)
     }
     break;
 
-    case ElementType::TREMOLO_SINGLECHORD:
-    case ElementType::TREMOLO_TWOCHORD:
-    case ElementType::ARTICULATION:
-    case ElementType::ORNAMENT:
-    case ElementType::ARPEGGIO:
-    {
-        EngravingItem* cr = element->parentItem();
-        if (cr->isChord()) {
-            CompatMidiRender::createPlayEvents(this, toChord(cr));
-        }
-    }
-    break;
     case ElementType::HARMONY:
         element->part()->updateHarmonyChannels(true, true);
         break;
