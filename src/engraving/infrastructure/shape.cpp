@@ -396,17 +396,10 @@ void Shape::add(const Shape& s)
     invalidateBBox();
 }
 
-void Shape::add(const RectF& r, const EngravingItem* p)
+void Shape::add(const ShapeElement& shapeEl)
 {
     m_type = Type::Composite;
-    m_elements.push_back(ShapeElement(r, p));
-    invalidateBBox();
-}
-
-void Shape::add(const mu::RectF& r)
-{
-    m_type = Type::Composite;
-    m_elements.push_back(ShapeElement(r));
+    m_elements.push_back(shapeEl);
     invalidateBBox();
 }
 

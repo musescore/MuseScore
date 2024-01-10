@@ -44,15 +44,19 @@ class EngravingItem;
 struct ShapeElement : public mu::RectF {
 public:
 
+    ShapeElement(const mu::RectF& f, const EngravingItem* p, bool ignoreForLayout)
+        : mu::RectF(f), m_item(p), m_ignoreForLayout(ignoreForLayout) {}
     ShapeElement(const mu::RectF& f, const EngravingItem* p)
         : mu::RectF(f), m_item(p) {}
     ShapeElement(const mu::RectF& f)
         : mu::RectF(f) {}
 
     const EngravingItem* item() const { return m_item; }
+    bool ignoreForLayout() const { return m_ignoreForLayout; }
 
 private:
     const EngravingItem* m_item = nullptr;
+    bool m_ignoreForLayout = false;
 };
 
 //---------------------------------------------------------
@@ -102,8 +106,10 @@ public:
 
     // Composite
     void add(const Shape& s);
-    void add(const mu::RectF& r, const EngravingItem* p);
-    void add(const mu::RectF& r);
+    void add(const ShapeElement& shapeEl);
+    void add(const mu::RectF& r, const EngravingItem* p, bool ignoreForLayout) { add(ShapeElement(r, p, ignoreForLayout)); }
+    void add(const mu::RectF& r, const EngravingItem* p) { add(ShapeElement(r, p)); }
+    void add(const mu::RectF& r) { add(ShapeElement(r)); }
 
     void remove(const mu::RectF&);
     void remove(const Shape&);
