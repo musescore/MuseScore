@@ -254,9 +254,9 @@ enum class AccidentalType {
       SHARP_31,
       FLAT_53,
       SHARP_53,
-      //EQUALS_ALMOST,
-      //EQUALS,
-      //TILDE,
+      EQUALS_ALMOST,
+      EQUALS,
+      TILDE,
 
       // Persian
       SORI,
@@ -322,7 +322,7 @@ enum class AccidentalType {
       THREE_COMMA_FLAT,
       THREE_COMMA_SHARP,
       FOUR_COMMA_FLAT,
-      //FOUR_COMMA_SHARP,
+      //FOUR_COMMA_SHARP, // uses a regular sharp glyph
       FIVE_COMMA_SHARP,
 
       END

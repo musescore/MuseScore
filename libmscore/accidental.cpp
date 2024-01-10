@@ -138,9 +138,9 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL,   1.7, SymId::accidentalCombiningRaise31Schisma),
       Acc(AccidentalVal::NATURAL, -10.9, SymId::accidentalCombiningLower53LimitComma),
       Acc(AccidentalVal::NATURAL,  10.9, SymId::accidentalCombiningRaise53LimitComma),
-      //Acc(AccidentalVal::NATURAL,     0, SymId::accidentalEnharmonicAlmostEqualTo),
-      //Acc(AccidentalVal::NATURAL,     0, SymId::accidentalEnharmonicEquals),
-      //Acc(AccidentalVal::NATURAL,     0, SymId::accidentalEnharmonicTilde),
+      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalEnharmonicAlmostEqualTo),
+      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalEnharmonicEquals),
+      Acc(AccidentalVal::NATURAL,     0, SymId::accidentalEnharmonicTilde),
 
       // Persian
       Acc(AccidentalVal::NATURAL,    33, SymId::accidentalSori),                          // SORI
@@ -206,7 +206,7 @@ static Acc accList[] = {
       Acc(AccidentalVal::NATURAL, -66.7, SymId::accidental3CommaFlat),
       Acc(AccidentalVal::NATURAL,  66.7, SymId::accidental3CommaSharp),
       Acc(AccidentalVal::NATURAL, -88.9, SymId::accidental4CommaFlat),
-      //Acc(AccidentalVal::NATURAL,  88.9, SymId::accidentalSharp),
+      //Acc(AccidentalVal::NATURAL,  88.9, SymId::accidentalSharp), // there's no accidental4CommaSharp, it does look like a regular sharp instead.
       Acc(AccidentalVal::NATURAL, 111.1, SymId::accidental5CommaSharp),
       };
 

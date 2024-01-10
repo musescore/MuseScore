@@ -32911,7 +32911,7 @@ Takt ist nicht leer</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3344"/>
         <source>1-comma sharp</source>
-        <translation>1-Komma eröht</translation>
+        <translation>1-Komma erhöht</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3345"/>
@@ -32921,7 +32921,7 @@ Takt ist nicht leer</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3346"/>
         <source>2-comma sharp</source>
-        <translation>2-Komma eröht</translation>
+        <translation>2-Komma erhöht</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3347"/>
@@ -32931,7 +32931,7 @@ Takt ist nicht leer</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3348"/>
         <source>3-comma sharp</source>
-        <translation>3-Komma eröht</translation>
+        <translation>3-Komma erhöht</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3349"/>
@@ -32941,7 +32941,7 @@ Takt ist nicht leer</translation>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3350"/>
         <source>5-comma sharp</source>
-        <translation>5-Komma eröht</translation>
+        <translation>5-Komma erhöht</translation>
     </message>
     <message>
         <location filename="../../libmscore/sym.cpp" line="3351"/>

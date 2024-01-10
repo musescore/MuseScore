@@ -629,6 +629,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
             case AccidentalType::ONE_COMMA_SHARP:    s = "sharp-1";              break;
             case AccidentalType::TWO_COMMA_SHARP:    s = "sharp-2";              break;
             case AccidentalType::THREE_COMMA_SHARP:  s = "sharp-3";              break;
+            //case AccidentalType::FOUR_COMMA_SHARP:   s = "sharp";                break; // uses a regular sharp glyph
             case AccidentalType::FIVE_COMMA_SHARP:   s = "sharp-5";              break;
             case AccidentalType::ONE_COMMA_FLAT:     s = "flat-1";               break;
             case AccidentalType::TWO_COMMA_FLAT:     s = "flat-2";               break;
