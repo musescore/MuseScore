@@ -27,7 +27,6 @@
 
 #include "dom/measure.h"
 #include "dom/mscore.h"
-#include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
 #include "velocitymap.h"
@@ -36,7 +35,8 @@ namespace mu::engraving {
 class EventsHolder;
 class MasterScore;
 class Staff;
-class SynthesizerState;
+class Instrument;
+class Chord;
 // This struct specifies how to render an articulation.
 //   atype - the articulation type to implement, such as SymId::ornamentTurn
 //   ostyles - the actual ornament has a property called ornamentStyle whose value is
@@ -147,15 +147,24 @@ public:
 
     struct Context
     {
+        struct BuiltInArticulation {
+            double velocityMultiplier = 1.0;
+            int gateTime = 100;
+        };
+
+        static std::unordered_map<String, BuiltInArticulation> s_builtInArticulationsValues;
+
         int sndController = CTRL_BREATH;
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
 
         bool eachStringHasChannel = false; //!to better display the guitar instrument, each string has its own channel
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
+        bool useDefaultArticulations = false; //!using default articulations means ignoring the ones stored for each instrument
 
         HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
         std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
         std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
+        std::unordered_map<String, std::unordered_set<String> > articulationsWithoutValuesByInstrument;
     };
 
     explicit CompatMidiRendererInternal(Score* s);
@@ -187,6 +196,7 @@ private:
     ChordParams collectChordParams(const Chord* chord, int tickOffset) const;
     void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
+    void fillArticulationsInfo();
 
     Score* score = nullptr;
     Context m_context;
