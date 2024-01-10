@@ -62,7 +62,6 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/chordlist.h"
@@ -2506,7 +2505,6 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
             hp->setTick2(Fraction::fromTicks(absTick2));
             hp->setAnchor(Spanner::Anchor::SEGMENT);
             m_score->addSpanner(hp);
-            m_score->updateHairpin(hp);
         }
     }
 }

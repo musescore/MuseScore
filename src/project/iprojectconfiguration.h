@@ -157,6 +157,9 @@ public:
 
     virtual bool showCloudIsNotAvailableWarning() const = 0;
     virtual void setShowCloudIsNotAvailableWarning(bool show) = 0;
+
+    virtual bool disableVersionChecking() const = 0;
+    virtual void setDisableVersionChecking(bool disable) = 0;
 };
 }
 

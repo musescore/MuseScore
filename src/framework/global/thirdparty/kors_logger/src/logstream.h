@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <sstream>
 #include <thread>
+#include <vector>
 
 #ifdef KORS_LOGGER_QT_SUPPORT
 #include <QDebug>

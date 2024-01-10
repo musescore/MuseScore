@@ -67,7 +67,7 @@ private:
 
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
 
-    static int adjustMeasureNo(MeasureBase* m, LayoutContext& ctx);
+    static int adjustMeasureNo(MeasureBase* m, int measureNo);
 
     static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
 
@@ -77,6 +77,19 @@ private:
     static double computeMinMeasureWidth(Measure* m, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
+
+    //
+    static void moveToNextMeasure(LayoutContext& ctx);
+    static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
+    static void layoutMeasureIndependentElements(const Segment& segment, track_idx_t track, const LayoutContext& ctx);
+    static void checkStaffMoveValidity(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack);
+    static void layoutChordDrumset(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                   const LayoutConfiguration& conf);
+    static void setChordsMag(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                             const LayoutConfiguration& conf);
+    static void cmdUpdateNotes(const Measure* measure, const DomAccessor& dom);
+    static void createStems(const Measure* measure, LayoutContext& ctx);
+    static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
 };
 }
 

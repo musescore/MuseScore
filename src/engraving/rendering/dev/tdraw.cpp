@@ -132,7 +132,6 @@
 #include "dom/textlinebase.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
-#include "dom/tremolo.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
@@ -3004,6 +3003,8 @@ void TDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    const TremoloTwoChord::LayoutData* ldata = item->ldata();
+
     if (!item->beamSegments().empty()) {
         // two-note trems act like beams
 
@@ -3014,7 +3015,7 @@ void TDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
         if (item->beamSegments().size() > 1 && d > M_PI / 6.0) {
             d = M_PI / 6.0;
         }
-        double ww = (item->beamWidth() / 2.0) / sin(M_PI_2 - atan(d));
+        double ww = (ldata->beamWidth / 2.0) / sin(M_PI_2 - atan(d));
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         for (const BeamSegment* bs1 : item->beamSegments()) {

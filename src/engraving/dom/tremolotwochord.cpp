@@ -38,7 +38,6 @@
 #include "stem.h"
 #include "system.h"
 #include "stafftype.h"
-#include "tremolo.h"
 
 #include "log.h"
 
@@ -60,13 +59,13 @@ static const ElementStyle TREMOLO_STYLE {
 //---------------------------------------------------------
 
 TremoloTwoChord::TremoloTwoChord(Chord* parent)
-    : EngravingItem(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
+    : BeamBase(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&TREMOLO_STYLE);
 }
 
 TremoloTwoChord::TremoloTwoChord(const TremoloTwoChord& t)
-    : EngravingItem(t)
+    : BeamBase(t)
 {
     setTremoloType(t.tremoloType());
     m_chord1       = t.chord1();
@@ -76,17 +75,13 @@ TremoloTwoChord::TremoloTwoChord(const TremoloTwoChord& t)
 
 TremoloTwoChord::~TremoloTwoChord()
 {
-    if (m_dispatcher) {
-        m_dispatcher->twoChord = nullptr;
-    }
-
     //
     // delete all references from chords
     //
-    if (m_chord1) {
+    if (m_chord1 && m_chord1->tremoloTwoChord() == this) {
         m_chord1->setTremoloTwoChord(nullptr);
     }
-    if (m_chord2) {
+    if (m_chord2 && m_chord2->tremoloTwoChord() == this) {
         m_chord2->setTremoloTwoChord(nullptr);
     }
 
@@ -119,18 +114,7 @@ double TremoloTwoChord::minHeight() const
 
 PointF TremoloTwoChord::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
-    IF_ASSERT_FAILED(m_layoutInfo) {
-        return PointF();
-    }
-    return m_layoutInfo->chordBeamAnchor(chord, anchorType);
-}
-
-double TremoloTwoChord::beamWidth() const
-{
-    IF_ASSERT_FAILED(m_layoutInfo) {
-        return 0.0;
-    }
-    return m_layoutInfo->beamWidth();
+    return rendering::dev::BeamTremoloLayout::chordBeamAnchor(this->ldata(), chord, anchorType);
 }
 
 //---------------------------------------------------------
@@ -586,19 +570,6 @@ void TremoloTwoChord::clearBeamSegments()
 
     DeleteAll(m_beamSegments);
     m_beamSegments.clear();
-}
-
-TremoloDispatcher* TremoloTwoChord::dispatcher() const
-{
-    if (!m_dispatcher) {
-        m_dispatcher = new TremoloDispatcher(item_cast<Chord*>(parent()));
-        m_dispatcher->twoChord = const_cast<TremoloTwoChord*>(this);
-        m_dispatcher->setTrack(this->track());
-        if (explicitParent()) {
-            m_dispatcher->setParent(chord());
-        }
-    }
-    return m_dispatcher;
 }
 
 // used for palettes

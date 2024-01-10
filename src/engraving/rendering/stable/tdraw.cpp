@@ -132,7 +132,8 @@
 #include "dom/textlinebase.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
-#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/tripletfeel.h"
@@ -146,6 +147,12 @@
 #include "dom/mscoreview.h"
 
 #include "infrastructure/rtti.h"
+
+// dev
+#include "dom/system.h"
+#include "dom/measure.h"
+#include "dom/segment.h"
+#include "dom/chord.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
@@ -347,7 +354,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
-    case ElementType::TREMOLO:              draw(item_cast<const TremoloDispatcher*>(item), painter);
+    case ElementType::TREMOLO_SINGLECHORD:  draw(item_cast<const TremoloSingleChord*>(item), painter);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:     draw(item_cast<const TremoloTwoChord*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
@@ -364,6 +373,18 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter);
+        break;
+
+    // dev
+    case ElementType::SYSTEM:               draw(item_cast<const System*>(item), painter);
+        break;
+    case ElementType::MEASURE:              draw(item_cast<const Measure*>(item), painter);
+        break;
+    case ElementType::SEGMENT:              draw(item_cast<const Segment*>(item), painter);
+        break;
+    case ElementType::CHORD:                draw(item_cast<const Chord*>(item), painter);
+        break;
+    case ElementType::GRACE_NOTES_GROUP:
         break;
     default:
         NOT_IMPLEMENTED << " type: " << item->typeName();
@@ -1489,6 +1510,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
     pen.setWidthF(item->lineWidth());
     pen.setCapStyle(PenCapStyle::FlatCap);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    pen.setColor(item->uiColor());
     painter->setPen(pen);
 
     Brush brush;
@@ -1499,7 +1521,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
 
     if (item->staff()->isTabStaff(item->tick())) {
         brush.setStyle(BrushStyle::SolidPattern);
-        brush.setColor(item->curColor());
+        brush.setColor(item->uiColor());
         painter->setBrush(brush);
         painter->setNoPen();
         painter->drawPolygon(item->ldata()->arrow());
@@ -2963,18 +2985,27 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const TremoloDispatcher* item, Painter* painter)
+void TDraw::draw(const TremoloSingleChord* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor());
         item->drawSymbol(SymId::buzzRoll, painter);
-    } else if (!item->twoNotes() || !item->explicitParent()) {
+    } else {
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         painter->drawPath(item->path());
-    } else if (item->twoNotes() && !item->beamSegments().empty()) {
+    }
+}
+
+void TDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    const TremoloTwoChord::LayoutData* ldata = item->ldata();
+
+    if (!item->beamSegments().empty()) {
         // two-note trems act like beams
 
         // make beam thickness independent of slant
@@ -2984,7 +3015,7 @@ void TDraw::draw(const TremoloDispatcher* item, Painter* painter)
         if (item->beamSegments().size() > 1 && d > M_PI / 6.0) {
             d = M_PI / 6.0;
         }
-        double ww = (item->beamWidth() / 2.0) / sin(M_PI_2 - atan(d));
+        double ww = (ldata->beamWidth / 2.0) / sin(M_PI_2 - atan(d));
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         for (const BeamSegment* bs1 : item->beamSegments()) {
@@ -3041,7 +3072,10 @@ void TDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        painter->setPen(Pen(color, item->bracketWidth().val() * item->mag()));
+        Pen pen(color, item->bracketWidth().val() * item->mag());
+        pen.setJoinStyle(PenJoinStyle::MiterJoin);
+        pen.setCapStyle(PenCapStyle::FlatCap);
+        painter->setPen(pen);
         if (!item->number()) {
             painter->drawPolyline(item->bracketL, 4);
         } else {
@@ -3068,4 +3102,33 @@ void TDraw::draw(const WhammyBarSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+// dev
+void TDraw::draw(const System* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
+}
+
+void TDraw::draw(const Measure* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
+}
+
+void TDraw::draw(const Segment* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
+}
+
+void TDraw::draw(const Chord* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
 }

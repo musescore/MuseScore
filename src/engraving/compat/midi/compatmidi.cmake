@@ -30,6 +30,8 @@ set(COMPAT_MIDI_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compatmidirender.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/velocitymap.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/velocitymap.h
     )
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)

@@ -401,7 +401,7 @@ public:
     void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = nullptr) const;
-    void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
+    void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false, bool moveStaffTypeChanges = true);
     void undoChangeMeasureRepeatCount(Measure* m, int count, staff_idx_t staffIdx);
     void undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span);
     void undoRemoveBracket(Bracket*);
@@ -648,7 +648,6 @@ public:
     const InputState& inputState() const { return m_is; }
     InputState& inputState() { return m_is; }
     void setInputState(const InputState& st) { m_is = st; }
-    void setInputTrack(int t) { inputState().setTrack(t); }
 
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
@@ -669,7 +668,6 @@ public:
     void updateSwing();
 
     void updateCapo();
-    void updateVelo();
     void updateChannel();
 
     void cmdConcertPitchChanged(bool);
@@ -776,8 +774,6 @@ public:
     SynthesizerState& synthesizerState() { return m_synthesizerState; }
     void setSynthesizerState(const SynthesizerState& s);
 
-    void updateHairpin(Hairpin*);         // add/modify hairpin to pitchOffset list
-
     MasterScore* masterScore() const { return m_masterScore; }
     void setMasterScore(MasterScore* s) { m_masterScore = s; }
 
@@ -831,6 +827,7 @@ public:
         bool moveSignaturesClef = true;
         bool needDeselectAll = true;
         bool cloneBoxToAllParts = true;
+        bool moveStaffTypeChanges = true;
     };
 
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,

@@ -25,7 +25,7 @@
 
 #include "chord.h"
 #include "hook.h"
-#include "tremolo.h"
+
 #include "tremolosinglechord.h"
 
 #include "log.h"

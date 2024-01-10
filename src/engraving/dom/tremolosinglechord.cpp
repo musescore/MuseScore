@@ -38,7 +38,6 @@
 #include "stem.h"
 #include "system.h"
 #include "stafftype.h"
-#include "tremolo.h"
 
 #include "log.h"
 
@@ -61,14 +60,10 @@ TremoloSingleChord::TremoloSingleChord(const TremoloSingleChord& t)
 
 TremoloSingleChord::~TremoloSingleChord()
 {
-    if (m_dispatcher) {
-        m_dispatcher->singleChord = nullptr;
-    }
-
     //
     // delete all references from chords
     //
-    if (chord()) {
+    if (chord() && chord()->tremoloSingleChord() == this) {
         chord()->setTremoloSingleChord(nullptr);
     }
 }
@@ -331,7 +326,8 @@ PropertyValue TremoloSingleChord::getProperty(Pid propertyId) const
     case Pid::TREMOLO_TYPE:
         return int(m_tremoloType);
     case Pid::TREMOLO_STYLE:
-        return int(TremoloStyle::DEFAULT);
+        UNREACHABLE;
+        return int(-1);
     case Pid::PLAY:
         return m_playTremolo;
     default:
@@ -398,18 +394,5 @@ void TremoloSingleChord::scanElements(void* data, void (* func)(void*, Engraving
         return;
     }
     EngravingItem::scanElements(data, func, all);
-}
-
-TremoloDispatcher* TremoloSingleChord::dispatcher() const
-{
-    if (!m_dispatcher) {
-        m_dispatcher = new TremoloDispatcher(item_cast<Chord*>(parent()));
-        m_dispatcher->singleChord = const_cast<TremoloSingleChord*>(this);
-        m_dispatcher->setTrack(this->track());
-        if (explicitParent()) {
-            m_dispatcher->setParent(chord());
-        }
-    }
-    return m_dispatcher;
 }
 }

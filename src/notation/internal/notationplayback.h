@@ -70,7 +70,7 @@ public:
     RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
-    void setLoopBoundariesVisible(bool visible) override;
+    void setLoopBoundariesEnabled(bool enabled) override;
     const LoopBoundaries& loopBoundaries() const override;
     async::Notification loopBoundariesChanged() const override;
 

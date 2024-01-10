@@ -45,8 +45,8 @@ class BeamLayout
 {
 public:
 
-    static void layout(Beam* item, LayoutContext& ctx);
-    static void layoutIfNeed(Beam* item, LayoutContext& ctx);
+    static void layout(Beam* item, const LayoutContext& ctx);
+    static void layoutIfNeed(Beam* item, const LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
 
     static bool isTopBeam(ChordRest* cr);
@@ -59,17 +59,17 @@ public:
 
     static PointF chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static double chordBeamAnchorY(const Beam* item, const ChordRest* chord);
-    static void setTremAnchors(Beam* item, LayoutContext& ctx);
+    static void setTremAnchors(Beam* item, const LayoutContext& ctx);
 
 private:
     static void beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after);
 
-    static void layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
+    static void layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag);
 
-    static void createBeamSegments(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests);
+    static void createBeamSegments(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests);
     static bool calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break);
     static void createBeamSegment(Beam* item, ChordRest* startChord, ChordRest* endChord, int level);
-    static void createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest* chord, bool isBefore, int level);
+    static void createBeamletSegment(Beam* item, const LayoutContext& ctx, ChordRest* chord, bool isBefore, int level);
 
     static bool layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, int frag);
 };

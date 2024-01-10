@@ -80,6 +80,12 @@
           <midiPort>0</midiPort>
           <midiChannel>2</midiChannel>
           </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">

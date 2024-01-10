@@ -230,13 +230,13 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     }
 
     EventsHolder events;
-    CompatMidiRendererInternal::Context ctx;
-    ctx.eachStringHasChannel = false;
-    ctx.instrumentsHaveEffects = false;
-    ctx.metronome = false;
-    ctx.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
+    CompatMidiRendererInternal::Context context;
+    context.eachStringHasChannel = false;
+    context.instrumentsHaveEffects = false;
+    context.harmonyChannelSetting = CompatMidiRendererInternal::HarmonyChannelSetting::DEFAULT;
+    context.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
 
-    CompatMidiRender::renderScore(m_score, events, ctx, midiExpandRepeats);
+    CompatMidiRender::renderScore(m_score, events, context, midiExpandRepeats);
 
     m_pauseMap.calculate(m_score);
     writeHeader();

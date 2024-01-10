@@ -22,13 +22,15 @@
 #ifndef MU_ENGRAVING_ARPEGGIOLAYOUT_DEV_H
 #define MU_ENGRAVING_ARPEGGIOLAYOUT_DEV_H
 
+#include <climits>
+
 #include "layoutcontext.h"
 #include "dom/arpeggio.h"
 
 namespace mu::engraving::rendering::dev {
 class ArpeggioLayout
 {
-    static constexpr int ARBITRARY_ARPEGGIO_LENGTH = 10000;
+    static constexpr int ARBITRARY_ARPEGGIO_LENGTH = INT_MAX;
 public:
 
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);

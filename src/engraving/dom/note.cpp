@@ -63,7 +63,7 @@
 #include "stafftype.h"
 #include "stringdata.h"
 #include "tie.h"
-#include "tremolo.h"
+
 #include "undo.h"
 #include "utils.h"
 

@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
+
 #include "horizontalspacing.h"
 
 #include "dom/chord.h"
@@ -43,7 +45,7 @@ using namespace mu::engraving::rendering::dev;
 
 double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor)
 {
-    double dist = -1000000.0;        // min real
+    double dist = -DBL_MAX;        // min real
     double absoluteMinPadding = 0.1 * spatium * squeezeFactor;
     double verticalClearance = 0.2 * spatium * squeezeFactor;
     for (const ShapeElement& r2 : s.elements()) {
@@ -107,9 +109,14 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
         return 0.0;
     }
 
-    double ww = -1000000.0;          // can remain negative
+    double ww = -DBL_MAX;          // can remain negative
     double d = 0.0;
+    Score* score = f->score();
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
+        if (score->staff(staffIdx) && !score->staff(staffIdx)->show()) {
+            continue;
+        }
+
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
         d = ns ? minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor) : 0.0;
@@ -202,8 +209,13 @@ double HorizontalSpacing::minHorizontalCollidingDistance(const Segment* f, const
         return 0.0;
     }
 
-    double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
+    double w = -DBL_MAX; // This can remain negative in some cases (for instance, mid-system clefs)
+    Score* score = f->score();
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
+        if (score->staff(staffIdx) && !score->staff(staffIdx)->show()) {
+            continue;
+        }
+
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
         double d = minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor);
@@ -241,16 +253,15 @@ void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShap
         }
     }
     // Compute spacing
-    static constexpr double arbitraryLowReal = -10000.0;
     for (Segment* raSegment : rightAlignedSegments) {
         // 1) right-align the segment against the following ones
-        double minDistAfter = arbitraryLowReal;
+        double minDistAfter = -DBL_MAX;
         for (Segment* seg = raSegment->next(); seg; seg = seg->next()) {
             double xDiff = seg->x() - raSegment->x();
             double minDist = minHorizontalCollidingDistance(raSegment, seg, segmentShapeSqueezeFactor);
             minDistAfter = std::max(minDistAfter, minDist - xDiff);
         }
-        if (minDistAfter != arbitraryLowReal && raSegment->prevActive()) {
+        if (minDistAfter != -DBL_MAX && raSegment->prevActive()) {
             Segment* prevSegment = raSegment->prev();
             prevSegment->setWidth(prevSegment->width() - minDistAfter);
             prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);

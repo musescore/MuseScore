@@ -69,7 +69,7 @@
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-#include "tremolo.h"
+
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"
@@ -85,7 +85,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------

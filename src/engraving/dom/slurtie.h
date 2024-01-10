@@ -175,6 +175,8 @@ public:
 
     void fixupSegments(unsigned nsegs);
 
+    virtual double scalingFactor() const = 0;
+
 protected:
 
     bool m_up = true;                 // actual direction

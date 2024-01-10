@@ -30,6 +30,7 @@
 #include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
+#include "velocitymap.h"
 
 namespace mu::engraving {
 class EventsHolder;
@@ -127,6 +128,7 @@ public:
             int32_t string = INVALID_STRING;
             staff_idx_t staffIdx = 0;
             MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
+            bool harmony = false;
 
             bool operator<(const LookupData& other) const;
         };
@@ -137,14 +139,23 @@ public:
         uint32_t getChannel(uint32_t instrumentChannel, const LookupData& lookupData);
     };
 
+    enum HarmonyChannelSetting {
+        DISABLED = -1, // harmony chords should not be played
+        DEFAULT = 0,   // harmony chords' channels are setup in default way
+        LOOKUP         // harmony chords' channels are setup in specific way
+    };
+
     struct Context
     {
         int sndController = CTRL_BREATH;
-        bool metronome = true;
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
 
         bool eachStringHasChannel = false; //!to better display the guitar instrument, each string has its own channel
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
+
+        HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
+        std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
+        std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
     };
 
     explicit CompatMidiRendererInternal(Score* s);
@@ -162,9 +173,6 @@ private:
     void doRenderSpanners(EventsHolder& events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
                           MidiInstrumentEffect effect);
 
-    void renderMetronome(EventsHolder& events);
-    void renderMetronome(EventsHolder& events, Measure const* m);
-
     void collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
                               PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
     void doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
@@ -181,8 +189,7 @@ private:
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
 
     Score* score = nullptr;
-
-    Context _context;
+    Context m_context;
 };
 } // namespace mu::engraving
 

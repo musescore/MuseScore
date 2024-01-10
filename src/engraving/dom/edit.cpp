@@ -80,7 +80,7 @@
 #include "tie.h"
 #include "tiemap.h"
 #include "timesig.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tremolosinglechord.h"
 #include "trill.h"
@@ -2427,8 +2427,9 @@ void Score::deleteItem(EngravingItem* el)
                 return;
             }
         }
-        bool ic = k->segment()->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                             el->part()->startTrack(), el->part()->endTrack() - 1);
+        Segment* nextCrSeg = k->segment()->next1(SegmentType::ChordRest);
+        bool ic = nextCrSeg && nextCrSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE,
+                                                         el->part()->startTrack(), el->part()->endTrack() - 1);
         undoRemoveElement(k);
         if (ic) {
             KeySigEvent ke = k->keySigEvent();
@@ -6723,7 +6724,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
 //   undoRemoveMeasures
 //---------------------------------------------------------
 
-void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
+void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool moveStaffTypeChanges)
 {
     assert(m1 && m2);
 
@@ -6797,7 +6798,17 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
         undoRemoveElement(a);
     }
 
-    undo(new RemoveMeasures(m1, m2));
+    // delete staffTypeChanges in removed measures
+    for (Measure* m = m1; m && m != m2->nextMeasure(); m = m->nextMeasure()) {
+        for (size_t i = m->el().size(); i > 0; --i) {
+            EngravingItem* el = m->el().at(i - 1);
+            if (el && el->isStaffTypeChange()) {
+                deleteItem(el);
+            }
+        }
+    }
+
+    undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }
 
 //---------------------------------------------------------

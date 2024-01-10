@@ -49,7 +49,7 @@
 #include "staff.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -60,7 +60,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------

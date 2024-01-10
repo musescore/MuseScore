@@ -565,7 +565,6 @@ void TestMidi::events()
     SynthesizerState ss;
     MidiRenderer::Context ctx;
     ctx.eachStringHasChannel = false;
-    ctx.metronome = true;
     ctx.synthState = ss;
     score->renderMidi(&events, ctx, true);
     qDebug() << "Opened score " << readFile;

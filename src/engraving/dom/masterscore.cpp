@@ -266,7 +266,6 @@ MasterScore* MasterScore::clone()
     XmlReader r(scoreData);
     MscLoader().readMasterScore(score, r, true);
 
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
     return score;
 }
@@ -547,7 +546,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         newMeasure->setTimesig(currentTimeSig);
         newMeasure->setTicks(currentTimeSig);
 
-        undo(new InsertMeasures(newMeasure, newMeasure));
+        undo(new InsertMeasures(newMeasure, newMeasure, options.moveStaffTypeChanges));
 
         ticks = newMeasure->ticks();
         Measure* measureInsert = nullptr; // insert before

@@ -71,8 +71,10 @@
         <Channel>
           <program value="25"/>
           <controller ctrl="7" value="101"/>
-          <midiPort>0</midiPort>
-          <midiChannel>0</midiChannel>
+          </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <controller ctrl="7" value="101"/>
           </Channel>
         </Instrument>
       </Part>
@@ -131,8 +133,6 @@
         <Channel>
           <program value="24"/>
           <controller ctrl="7" value="95"/>
-          <midiPort>0</midiPort>
-          <midiChannel>2</midiChannel>
           </Channel>
         </Instrument>
       </Part>

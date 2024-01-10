@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "beambase.h"
 #include "engravingitem.h"
 
 #include "durationtype.h"
@@ -32,12 +33,11 @@
 #include "types/types.h"
 #include "beam.h"
 #include "chord.h"
-#include "tremolo.h"
 
 namespace mu::engraving {
 class Chord;
 
-class TremoloTwoChord final : public EngravingItem
+class TremoloTwoChord final : public BeamBase
 {
     OBJECT_ALLOCATOR(engraving, TremoloTwoChord)
     DECLARE_CLASSOF(ElementType::TREMOLO_TWOCHORD)
@@ -84,7 +84,6 @@ public:
     }
 
     PairF beamPos() const;
-    double beamWidth() const;
 
     TDuration durationType() const;
     void setDurationType(TDuration d);
@@ -152,25 +151,8 @@ public:
     void computeShape();
     //! -----------------
 
-    void setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info)
-    {
-        m_layoutInfo = info;
-    }
-
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo() const
-    {
-        return m_layoutInfo;
-    }
-
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> m_layoutInfo;
-
-    TremoloDispatcher* dispatcher() const;
-
 private:
     friend class Factory;
-    friend class TremoloDispatcher;
-
-    mutable TremoloDispatcher* m_dispatcher = nullptr;
 
     TremoloTwoChord(Chord* parent);
     TremoloTwoChord(const TremoloTwoChord&);

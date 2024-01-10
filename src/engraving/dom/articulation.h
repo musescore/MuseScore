@@ -172,7 +172,7 @@ public:
 
     bool isOnCrossBeamSide() const;
 
-    staff_idx_t vStaffIdx() const override { return chordRest()->vStaffIdx(); }
+    staff_idx_t vStaffIdx() const override;
 
     struct LayoutData : public EngravingItem::LayoutData
     {

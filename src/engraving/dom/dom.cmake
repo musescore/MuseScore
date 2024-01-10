@@ -37,6 +37,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/barline.h
     ${CMAKE_CURRENT_LIST_DIR}/beam.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beam.h
+    ${CMAKE_CURRENT_LIST_DIR}/beambase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/beambase.h
     ${CMAKE_CURRENT_LIST_DIR}/bend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bend.h
     ${CMAKE_CURRENT_LIST_DIR}/box.cpp
@@ -51,8 +53,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/bsp.h
     ${CMAKE_CURRENT_LIST_DIR}/bsymbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bsymbol.h
-    ${CMAKE_CURRENT_LIST_DIR}/changeMap.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/changeMap.h
     ${CMAKE_CURRENT_LIST_DIR}/check.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chord.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chord.h
@@ -338,8 +338,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/timesig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timesig.h
     ${CMAKE_CURRENT_LIST_DIR}/transpose.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolo.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolosinglechord.cpp

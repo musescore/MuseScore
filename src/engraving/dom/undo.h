@@ -62,7 +62,7 @@
 #include "stringtunings.h"
 #include "synthesizerstate.h"
 #include "text.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tremolobar.h"
 
@@ -895,13 +895,15 @@ class InsertRemoveMeasures : public UndoCommand
 
     static std::vector<Clef*> getCourtesyClefs(Measure* m);
 
+    bool moveStc = true;
+
 protected:
     void removeMeasures();
     void insertMeasures();
 
 public:
-    InsertRemoveMeasures(MeasureBase* _fm, MeasureBase* _lm)
-        : fm(_fm), lm(_lm) {}
+    InsertRemoveMeasures(MeasureBase* _fm, MeasureBase* _lm, bool _moveStc)
+        : fm(_fm), lm(_lm), moveStc(_moveStc) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
     UNDO_CHANGED_OBJECTS({ fm, lm })
@@ -911,8 +913,8 @@ class RemoveMeasures : public InsertRemoveMeasures
 {
     OBJECT_ALLOCATOR(engraving, RemoveMeasures)
 public:
-    RemoveMeasures(MeasureBase* m1, MeasureBase* m2)
-        : InsertRemoveMeasures(m1, m2) {}
+    RemoveMeasures(MeasureBase* m1, MeasureBase* m2, bool moveStc = true)
+        : InsertRemoveMeasures(m1, m2, moveStc) {}
     void undo(EditData*) override { insertMeasures(); }
     void redo(EditData*) override { removeMeasures(); }
 
@@ -924,8 +926,8 @@ class InsertMeasures : public InsertRemoveMeasures
 {
     OBJECT_ALLOCATOR(engraving, InsertMeasures)
 public:
-    InsertMeasures(MeasureBase* m1, MeasureBase* m2)
-        : InsertRemoveMeasures(m1, m2) {}
+    InsertMeasures(MeasureBase* m1, MeasureBase* m2, bool moveStc = true)
+        : InsertRemoveMeasures(m1, m2, moveStc) {}
     void redo(EditData*) override { insertMeasures(); }
     void undo(EditData*) override { removeMeasures(); }
 

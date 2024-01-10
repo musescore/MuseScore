@@ -38,7 +38,6 @@
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
 #include "dom/bend.h"
-#include "dom/changeMap.h"
 #include "dom/chord.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"
@@ -66,7 +65,6 @@
 #include "dom/synthesizerstate.h"
 #include "dom/tempo.h"
 #include "dom/tie.h"
-#include "dom/tremolo.h"
 #include "dom/trill.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
@@ -110,6 +108,10 @@ struct VibratoParams {
 
 static uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect,
                            const CompatMidiRendererInternal::Context& context);
+
+static void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context& context);
+static void fillHairpinVelocities(const Hairpin* h, std::unordered_map<staff_idx_t, VelocityMap>& velocitiesByStaff);
+static void fillVoltaVelocities(const Volta* volta, VelocityMap& veloMap);
 
 //---------------------------------------------------------
 //   Converts midi time (noteoff - noteon) to milliseconds
@@ -352,13 +354,14 @@ static bool letRingShouldApply(const NoteEvent& event, const Note* note)
     return true;
 }
 
-static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel, int tickOffset, int sndController)
+static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel, int tickOffset,
+                      const CompatMidiRendererInternal::Context& context)
 {
-    Staff* staff = chord->staff();
-    ChangeMap& veloEvents = staff->velocities();
-    ChangeMap& multEvents = staff->velocityMultiplications();
     Fraction stick = chord->tick();
     Fraction etick = stick + chord->ticks();
+    const Staff* staff = chord->staff();
+    const VelocityMap& veloEvents = context.velocitiesByStaff.at(staff->idx());
+    const VelocityMap& multEvents = context.velocityMultiplicationsByStaff.at(staff->idx());
     auto changes = veloEvents.changesInRange(stick, etick);
     auto multChanges = multEvents.changesInRange(stick, etick);
 
@@ -408,7 +411,7 @@ static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel,
     for (auto point = velocityMap.cbegin(); point != velocityMap.cend(); ++point) {
         // NOTE:JT if we ever want to use poly aftertouch instead of CC, this is where we want to
         // be using it. Instead of ME_CONTROLLER, use ME_POLYAFTER (but duplicate for each note in chord)
-        NPlayEvent event = NPlayEvent(ME_CONTROLLER, noteChannel, sndController, std::clamp(point->second, 0, 127));
+        NPlayEvent event = NPlayEvent(ME_CONTROLLER, noteChannel, context.sndController, std::clamp(point->second, 0, 127));
         event.setOriginatingStaff(chord->staffIdx());
         events[noteChannel].insert(std::make_pair(point->first + tickOffset, event));
     }
@@ -500,7 +503,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
         // Get the velocity used for this note from the staff
         // This allows correct playback of tremolos even without SND enabled.
         Fraction nonUnwoundTick = Fraction::fromTicks(on - noteParams.tickOffset);
-        int velo = staff->velocities().val(nonUnwoundTick) * noteParams.velocityMultiplier * e.velocityMultiplier();
+        int velo = context.velocitiesByStaff.at(staff->idx()).val(nonUnwoundTick) * noteParams.velocityMultiplier * e.velocityMultiplier();
         if (e.play()) {
             PlayNoteParams playParams;
             MidiInstrumentEffect eventEffect = noteEffect;
@@ -534,7 +537,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
     }
 
     if (instr->singleNoteDynamics()) {
-        renderSnd(events, chord, noteChannel, noteParams.tickOffset, context.sndController);
+        renderSnd(events, chord, noteChannel, noteParams.tickOffset, context);
     }
 
     // Bends
@@ -643,14 +646,17 @@ static void collectProgramChanges(EventsHolder& events, Measure const* m, const 
 //    renderHarmony
 ///    renders chord symbols
 //---------------------------------------------------------
-static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, int tickOffset)
+static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, int tickOffset,
+                          const CompatMidiRendererInternal::Context& context)
 {
-    if (!h->isRealizable()) {
+    if (!h->isRealizable() || context.harmonyChannelSetting == CompatMidiRendererInternal::HarmonyChannelSetting::DISABLED) {
         return;
     }
+
     Staff* staff = m->score()->staff(h->track() / VOICES);
-    const InstrChannel* channel = staff->part()->harmonyChannel();
-    IF_ASSERT_FAILED(channel) {
+    const InstrChannel* instrChannel = staff->part()->harmonyChannel();
+    IF_ASSERT_FAILED(instrChannel) {
+        LOGE() << "channel for harmony isn't found for part " << staff->part()->partName();
         return;
     }
 
@@ -658,13 +664,21 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
         return;
     }
 
+    int channel = instrChannel->channel();
     int staffIdx = static_cast<int>(staff->idx());
-    int velocity = staff->velocities().val(h->tick());
+
+    if (context.harmonyChannelSetting == CompatMidiRendererInternal::HarmonyChannelSetting::LOOKUP) {
+        CompatMidiRendererInternal::ChannelLookup::LookupData lookupData;
+        lookupData.harmony = true;
+        channel = context.channels->getChannel(channel, lookupData);
+    }
+
+    int velocity = context.velocitiesByStaff.at(staff->idx()).val(h->tick());
 
     RealizedHarmony r = h->getRealizedHarmony();
     std::vector<int> pitches = r.pitches();
 
-    NPlayEvent ev(ME_NOTEON, static_cast<uint8_t>(channel->channel()), 0, velocity);
+    NPlayEvent ev(ME_NOTEON, static_cast<uint8_t>(channel), 0, velocity);
     ev.setHarmony(h);
     Fraction duration = r.getActualDuration(h->tick().ticks() + tickOffset);
 
@@ -678,9 +692,9 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
     for (int p : pitches) {
         ev.setPitch(p);
         ev.setVelo(velocity);
-        events[channel->channel()].insert(std::pair<int, NPlayEvent>(onTime, ev));
+        events[channel].insert(std::pair<int, NPlayEvent>(onTime, ev));
         ev.setVelo(0);
-        events[channel->channel()].insert(std::pair<int, NPlayEvent>(offTime, ev));
+        events[channel].insert(std::pair<int, NPlayEvent>(offTime, ev));
     }
 }
 
@@ -722,9 +736,9 @@ void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Cho
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
                     params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1);
 
-                    collectNote(events, note, params, st, pitchWheelRenderer, _context);
+                    collectNote(events, note, params, st, pitchWheelRenderer, m_context);
                 } else {
-                    collectNote(events, note, params, st, pitchWheelRenderer, _context);
+                    collectNote(events, note, params, st, pitchWheelRenderer, m_context);
                 }
             }
 
@@ -791,7 +805,7 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
             if (!h || !h->play()) {
                 continue;
             }
-            renderHarmony(events, m, h, tickOffset);
+            renderHarmony(events, m, h, tickOffset, m_context);
         }
 
         for (track_idx_t track = strack; track < etrack; ++track) {
@@ -839,15 +853,15 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
                 params.tickOffset = tickOffset;
                 params.letRingNote = chordParams.letRing;
                 params.endLetRingTick = chordParams.endLetRingTick;
-                if (_context.instrumentsHaveEffects) {
+                if (m_context.instrumentsHaveEffects) {
                     params.effect = effect;
                 }
 
-                if (_context.eachStringHasChannel && instr->hasStrings()) {
+                if (m_context.eachStringHasChannel && instr->hasStrings()) {
                     params.callAllSoundOff = true;
                 }
 
-                collectNote(events, note, params, st1, pitchWheelRenderer, _context);
+                collectNote(events, note, params, st1, pitchWheelRenderer, m_context);
             }
 
             if (!graceNotesMerged(chord)) {
@@ -857,7 +871,7 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
                         params.velocityMultiplier = veloMultiplier;
                         params.tickOffset = tickOffset;
                         params.effect = effect;
-                        collectNote(events, note, params, st1, pitchWheelRenderer, _context);
+                        collectNote(events, note, params, st1, pitchWheelRenderer, m_context);
                     }
                 }
             }
@@ -943,7 +957,7 @@ void CompatMidiRendererInternal::renderSpanners(EventsHolder& events, PitchWheel
 
         int idx = s->staff()->channel(s->tick(), 0);
         int channel = s->part()->instrument(s->tick())->channel(idx)->channel();
-        const auto& channels = _context.channels->channelsMap[channel];
+        const auto& channels = m_context.channels->channelsMap[channel];
         if (channels.empty()) {
             doRenderSpanners(events, s, channel, pitchWheelRenderer, MidiInstrumentEffect::NONE);
         } else {
@@ -1126,54 +1140,11 @@ static Trill* findFirstTrill(Chord* chord)
     return nullptr;
 }
 
-//---------------------------------------------------------
-//   renderMetronome
-///   add metronome tick events
-//---------------------------------------------------------
-
-void CompatMidiRendererInternal::renderMetronome(EventsHolder& events)
-{
-    Measure const* const start = score->firstMeasure();
-    Measure const* const end = score->lastMeasure();
-
-    for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        renderMetronome(events, m);
-    }
-}
-
-//---------------------------------------------------------
-//   renderMetronome
-///   add metronome tick events
-//---------------------------------------------------------
-
-void CompatMidiRendererInternal::renderMetronome(EventsHolder& events, Measure const* m)
-{
-    int msrTick         = m->tick().ticks();
-    BeatsPerSecond tempo = score->tempomap()->tempo(msrTick);
-    TimeSigFrac timeSig = score->sigmap()->timesig(msrTick).nominal();
-
-    int clickTicks      = timeSig.isBeatedCompound(tempo.val) ? timeSig.beatTicks() : timeSig.dUnitTicks();
-    int endTick         = m->endTick().ticks();
-
-    int rtick;
-
-    if (m->isAnacrusis()) {
-        int rem = m->ticks().ticks() % clickTicks;
-        msrTick += rem;
-        rtick = rem + timeSig.ticksPerMeasure() - m->ticks().ticks();
-    } else {
-        rtick = 0;
-    }
-
-    for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks) {
-        events[0].insert(std::pair<int, NPlayEvent>(tick, NPlayEvent(timeSig.rtick2beatType(rtick))));
-    }
-}
-
-void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& ctx, bool expandRepeats)
+void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& context, bool expandRepeats)
 {
     UNUSED(expandRepeats);
-    _context = ctx;
+
+    m_context = context;
     PitchWheelRenderer pitchWheelRender(wheelSpec);
 
     score->updateSwing();
@@ -1182,7 +1153,7 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
     CompatMidiRender::createPlayEvents(score, score->firstMeasure(), nullptr);
 
     score->updateChannel();
-    score->updateVelo();
+    fillScoreVelocities(score, m_context);
 
     // create note & other events
     for (const Staff* st : score->staves()) {
@@ -1195,11 +1166,6 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
 
     EventsHolder pitchWheelEvents = pitchWheelRender.renderPitchWheel();
     events.mergePitchWheelEvents(pitchWheelEvents);
-//    events->merge(pitchWheelEvents);
-
-    if (ctx.metronome) {
-        renderMetronome(events);
-    }
 }
 
 /* static */
@@ -1243,6 +1209,14 @@ uint32_t CompatMidiRendererInternal::ChannelLookup::getChannel(uint32_t instrume
 bool CompatMidiRendererInternal::ChannelLookup::LookupData::operator<(const CompatMidiRendererInternal::ChannelLookup::LookupData& other)
 const
 {
+    if (harmony && !other.harmony) {
+        return true;
+    }
+
+    if (!harmony && other.harmony) {
+        return false;
+    }
+
     return std::tie(string, staffIdx, effect) < std::tie(other.string, other.staffIdx, other.effect);
 }
 
@@ -1265,5 +1239,223 @@ bool CompatMidiRendererInternal::graceNotesMerged(Chord* chord)
         }
     }
     return false;
+}
+
+/* static */
+void fillHairpinVelocities(const Hairpin* h, std::unordered_map<staff_idx_t, VelocityMap>& velocitiesByStaff)
+{
+    Staff* st = h->staff();
+    Fraction tick  = h->tick();
+    Fraction tick2 = h->tick2();
+    int veloChange  = h->veloChange();
+    ChangeMethod method = h->veloChangeMethod();
+
+    // Make the change negative when the hairpin is a diminuendo
+    HairpinType htype = h->hairpinType();
+    ChangeDirection direction = ChangeDirection::INCREASING;
+    if (htype == HairpinType::DECRESC_HAIRPIN || htype == HairpinType::DECRESC_LINE) {
+        veloChange *= -1;
+        direction = ChangeDirection::DECREASING;
+    }
+
+    switch (h->dynRange()) {
+    case DynamicRange::STAFF:
+        if (st->isPrimaryStaff()) {
+            velocitiesByStaff[st->idx()].addHairpin(tick, tick2, veloChange, method, direction);
+        }
+        break;
+    case DynamicRange::PART:
+        for (Staff* s : st->part()->staves()) {
+            if (s->isPrimaryStaff()) {
+                velocitiesByStaff[s->idx()].addHairpin(tick, tick2, veloChange, method, direction);
+            }
+        }
+        break;
+    case DynamicRange::SYSTEM:
+        for (Staff* s : st->score()->staves()) {
+            if (s->isPrimaryStaff()) {
+                velocitiesByStaff[s->idx()].addHairpin(tick, tick2, veloChange, method, direction);
+            }
+        }
+        break;
+    }
+}
+
+void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context& context)
+{
+    if (!score->firstMeasure()) {
+        return;
+    }
+
+    for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
+        Staff* st = score->staff(staffIdx);
+        if (!st->isPrimaryStaff()) {
+            LOGE() << "@# skip";
+            continue;
+        }
+
+        VelocityMap& velo = context.velocitiesByStaff[st->idx()];
+        VelocityMap& mult = context.velocityMultiplicationsByStaff[st->idx()];
+        Part* prt = st->part();
+        size_t partStaves = prt->nstaves();
+        staff_idx_t partStaff = score->staffIdx(prt);
+
+        for (Segment* s = score->firstMeasure()->first(); s; s = s->next1()) {
+            Fraction tick = s->tick();
+            for (const EngravingItem* e : s->annotations()) {
+                if (e->staffIdx() != staffIdx) {
+                    continue;
+                }
+
+                if (e->type() != ElementType::DYNAMIC) {
+                    continue;
+                }
+
+                const Dynamic* d = toDynamic(e);
+                int v = d->velocity();
+
+                // treat an invalid dynamic as no change, i.e. a dynamic set to 0
+                if (v < 1) {
+                    continue;
+                }
+
+                v = std::clamp(v, 1, 127);                 //  illegal values
+
+                // If a dynamic has 'velocity change' update its ending
+                int change = d->changeInVelocity();
+                ChangeDirection direction = ChangeDirection::INCREASING;
+                if (change < 0) {
+                    direction = ChangeDirection::DECREASING;
+                }
+
+                staff_idx_t dStaffIdx = d->staffIdx();
+                switch (d->dynRange()) {
+                case DynamicRange::STAFF:
+                    if (dStaffIdx == staffIdx) {
+                        velo.addDynamic(tick, v);
+                        if (change != 0) {
+                            Fraction etick = tick + d->velocityChangeLength();
+                            ChangeMethod method = ChangeMethod::NORMAL;
+                            velo.addHairpin(tick, etick, change, method, direction);
+                        }
+                    }
+                    break;
+                case DynamicRange::PART:
+                    if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
+                        for (staff_idx_t i = partStaff; i < partStaff + partStaves; ++i) {
+                            Staff* stp = score->staff(i);
+                            if (!stp->isPrimaryStaff()) {
+                                continue;
+                            }
+
+                            VelocityMap& stVelo = context.velocitiesByStaff[stp->idx()];
+                            stVelo.addDynamic(tick, v);
+                            if (change != 0) {
+                                Fraction etick = tick + d->velocityChangeLength();
+                                ChangeMethod method = ChangeMethod::NORMAL;
+                                stVelo.addHairpin(tick, etick, change, method, direction);
+                            }
+                        }
+                    }
+                    break;
+                case DynamicRange::SYSTEM:
+                    for (size_t i = 0; i < score->nstaves(); ++i) {
+                        Staff* sts = score->staff(i);
+                        if (!sts->isPrimaryStaff()) {
+                            continue;
+                        }
+
+                        VelocityMap& stVelo = context.velocitiesByStaff[score->staff(i)->idx()];
+                        stVelo.addDynamic(tick, v);
+                        if (change != 0) {
+                            Fraction etick = tick + d->velocityChangeLength();
+                            ChangeMethod method = ChangeMethod::NORMAL;
+                            stVelo.addHairpin(tick, etick, change, method, direction);
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (s->isChordRestType()) {
+                for (size_t i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
+                    EngravingItem* el = s->element(i);
+                    if (!el || !el->isChord()) {
+                        continue;
+                    }
+
+                    Chord* chord = toChord(el);
+                    Instrument* instr = chord->part()->instrument();
+
+                    double veloMultiplier = 1.0;
+                    for (Articulation* a : chord->articulations()) {
+                        if (a->playArticulation()) {
+                            veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
+                        }
+                    }
+
+                    if (RealIsEqual(veloMultiplier, 1.0)) {
+                        continue;
+                    }
+
+                    // TODO this should be a (configurable?) constant somewhere
+                    static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
+                    Fraction ARTICULATION_CHANGE_TIME = std::min(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
+                    int start = veloMultiplier * engraving::CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+                    int change = (veloMultiplier - 1) * engraving::CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+                    mult.addDynamic(chord->tick(), start);
+                    mult.addHairpin(chord->tick(),
+                                    chord->tick() + ARTICULATION_CHANGE_TIME, change, ChangeMethod::NORMAL, ChangeDirection::DECREASING);
+                }
+            }
+        }
+
+        for (const auto& sp : score->spannerMap().map()) {
+            Spanner* s = sp.second;
+            if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx) {
+                continue;
+            }
+
+            fillHairpinVelocities(toHairpin(s), context.velocitiesByStaff);
+        }
+    }
+
+    for (Staff* st : score->staves()) {
+        if (st->isPrimaryStaff()) {
+            context.velocitiesByStaff[st->idx()].setup();
+            context.velocityMultiplicationsByStaff[st->idx()].setup();
+        }
+    }
+
+    for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+        Spanner* spanner = (*it).second;
+        if (!spanner->isVolta()) {
+            continue;
+        }
+
+        Volta* volta = toVolta(spanner);
+        Staff* st = volta->staff();
+        if (st->isPrimaryStaff()) {
+            fillVoltaVelocities(volta, context.velocitiesByStaff[st->idx()]);
+        }
+    }
+}
+
+/* static */
+void fillVoltaVelocities(const Volta* volta, VelocityMap& veloMap)
+{
+    Measure* startMeasure = volta->startMeasure();
+    Measure* endMeasure = volta->endMeasure();
+
+    if (startMeasure && endMeasure) {
+        if (!endMeasure->repeatEnd()) {
+            return;
+        }
+
+        Fraction startTick = Fraction::fromTicks(startMeasure->tick().ticks() - 1);
+        Fraction endTick = Fraction::fromTicks((endMeasure->tick() + endMeasure->ticks()).ticks() - 1);
+        int prevVelo = veloMap.val(startTick);
+        veloMap.addDynamic(endTick, prevVelo);
+    }
 }
 }

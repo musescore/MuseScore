@@ -119,12 +119,14 @@ public:
     // ---
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
+    std::vector<ShapeElement>& elements() { return m_elements; }
 
     std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
     std::optional<ShapeElement> find_first(ElementType type) const;
     std::optional<ShapeElement> get_first() const;
 
     void removeInvisibles();
+    void removeTypes(const std::set<ElementType>& types);
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 

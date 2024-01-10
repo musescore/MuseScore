@@ -35,6 +35,8 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "note.h"
+#include "tie.h"
 
 #include "log.h"
 
@@ -658,6 +660,15 @@ bool Articulation::isOnCrossBeamSide() const
     }
     Chord* chord = toChord(cr);
     return chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0) && (up() == chord->up());
+}
+
+staff_idx_t Articulation::vStaffIdx() const
+{
+    ChordRest* cr = chordRest();
+    if (!cr) {
+        return staffIdx();
+    }
+    return cr->vStaffIdx();
 }
 
 struct ArticulationGroup

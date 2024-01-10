@@ -53,7 +53,7 @@
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"
@@ -171,37 +171,13 @@ void Excerpt::setFileName(const String& fileName)
     m_fileName = fileName;
 }
 
-static inline bool isValidExcerptFileNameCharacter(char16_t c)
-{
-    return (u'a' <= c && c <= u'z')
-           || (u'A' <= c && c <= 'Z')
-           || (u'0' <= c && c <= '9')
-           || c == u'_' || c == u'-' || c == u' ';
-}
-
-static inline String escapeExcerptFileName(const String& name)
-{
-    String result;
-    result.reserve(name.size());
-
-    for (const char16_t& c : name.toStdU16String()) {
-        if (isValidExcerptFileNameCharacter(c)) {
-            result.append(c);
-        } else {
-            result.append(u'_');
-        }
-    }
-
-    return result;
-}
-
 void Excerpt::updateFileName(size_t index)
 {
     if (index == mu::nidx && m_masterScore) {
         index = mu::indexOf(m_masterScore->excerpts(), this);
     }
 
-    const String escapedName = escapeExcerptFileName(m_name);
+    const String escapedName = io::escapeFileName(m_name).toString();
 
     if (index == mu::nidx) {
         m_fileName = escapedName;
@@ -430,7 +406,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // initial layout of score
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
 
     // handle transposing instruments

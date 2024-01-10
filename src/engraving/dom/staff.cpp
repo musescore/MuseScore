@@ -1050,6 +1050,11 @@ void Staff::moveStaffType(const Fraction& from, const Fraction& to)
     staffTypeListChanged(from);
 }
 
+std::pair<int, int> Staff::staffTypeRange(const Fraction& tick) const
+{
+    return m_staffTypeList.staffTypeRange(tick);
+}
+
 //---------------------------------------------------------
 //   staffTypeListChanged
 //    Signal that the staffTypeList has changed at

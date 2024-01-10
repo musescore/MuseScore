@@ -80,7 +80,6 @@
 #include "dom/textline.h"
 #include "dom/textlinebase.h"
 #include "dom/timesig.h"
-#include "dom/tremolo.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
@@ -770,6 +769,7 @@ void SingleLayout::layout(Capo* item, const Context& ctx)
 void SingleLayout::layout(Chord* item, const Context& ctx)
 {
     LayoutContext tctx(ctx.dontUseScore());
+    ChordLayout::computeUp(item, tctx);
     ChordLayout::layout(item, tctx);
     ChordLayout::layoutStem(item, tctx);
 }

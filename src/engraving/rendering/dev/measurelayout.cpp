@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
+
 #include "measurelayout.h"
 
 #include "infrastructure/rtti.h"
@@ -1067,6 +1069,8 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     }
 
     int measureNo = adjustMeasureNo(currentMB, ctx.state().measureNo());
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(currentMB) << " measureNo: " << measureNo;
+
     ctx.mutState().setMeasureNo(measureNo);
 
     createMultiMeasureRestsIfNeed(currentMB, ctx);
@@ -1252,6 +1256,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 {
     TRACEFUNC;
+    LAYOUT_CALL();
 
     moveToNextMeasure(ctx);
 
@@ -1298,6 +1303,10 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
                 continue;
             }
             Chord* chord = toChord(e);
+            Staff* staff = chord->staff();
+            if (staff && !staff->show()) {
+                continue;
+            }
 
             ChordLayout::updateLineAttachPoints(chord, isFirstChordInMeasure, ctx);
             for (Chord* gn : chord->graceNotes()) {
@@ -2359,7 +2368,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     // left barriere:
     //    Make sure no elements crosses the left boarder if first measure in a system.
     //
-    Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
+    Shape ls(first ? RectF(0.0, -DBL_MAX, 0.0, DBL_MAX) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
 
     x = HorizontalSpacing::minLeft(s, ls);
 
@@ -2403,7 +2412,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
         fs = fs->nextActive();
     }
     bool first  = m->isFirstInSystem();
-    const Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
+    const Shape ls(first ? RectF(0.0, -DBL_MAX, 0.0, DBL_MAX) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
 
     static constexpr double spacingMultiplier = 1.2;
     double minNoteSpace = ctx.conf().noteHeadWidth() + spacingMultiplier * ctx.conf().styleMM(Sid::minNoteDistance);

@@ -39,7 +39,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tuplet.h"
 
@@ -58,7 +58,7 @@ static const ElementStyle beamStyle {
 //---------------------------------------------------------
 
 Beam::Beam(System* parent)
-    : EngravingItem(ElementType::BEAM, parent)
+    : BeamBase(ElementType::BEAM, parent)
 {
     initElementStyle(&beamStyle);
 }
@@ -68,7 +68,7 @@ Beam::Beam(System* parent)
 //---------------------------------------------------------
 
 Beam::Beam(const Beam& b)
-    : EngravingItem(b)
+    : BeamBase(b)
 {
     m_elements     = b.m_elements;
     m_id           = b.m_id;
@@ -91,7 +91,6 @@ Beam::Beam(const Beam& b)
     m_cross            = b.m_cross;
     m_fullCross        = b.m_fullCross;
     m_slope            = b.m_slope;
-    layoutInfo       = b.layoutInfo;
 }
 
 //---------------------------------------------------------
@@ -907,7 +906,7 @@ Shape BeamSegment::shape() const
     PointF endPoint = line.p2();
     double _beamWidth = parentElement->isBeam()
                         ? item_cast<const Beam*>(parentElement)->m_beamWidth
-                        : item_cast<const TremoloTwoChord*>(parentElement)->beamWidth();
+                        : item_cast<const TremoloTwoChord*>(parentElement)->ldata()->beamWidth;
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

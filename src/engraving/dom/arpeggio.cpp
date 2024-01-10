@@ -80,11 +80,17 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 
 void Arpeggio::findAndAttachToChords()
 {
-    Chord* _chord = chord();
-    track_idx_t strack = track();
-    track_idx_t etrack = track() + (m_span - 1);
-    track_idx_t lastTrack = strack;
+    const track_idx_t strack = track();
+    const Chord* _chord = chord();
+    const Part* part = _chord->part();
+    const track_idx_t btrack = part->endTrack();
 
+    if (strack + m_span > btrack) {
+        rebaseEndAnchor(AnchorRebaseDirection::UP);
+    }
+
+    const track_idx_t etrack = strack + (m_span - 1);
+    track_idx_t lastTrack = strack;
     for (track_idx_t track = strack; track <= etrack; track++) {
         EngravingItem* e = _chord->segment()->element(track);
         if (e && e->isChord()) {
@@ -94,7 +100,7 @@ void Arpeggio::findAndAttachToChords()
     }
 
     if (lastTrack != etrack) {
-        track_idx_t newSpan = lastTrack - track() + 1;
+        track_idx_t newSpan = lastTrack - strack + 1;
         undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
     }
 }
@@ -423,6 +429,11 @@ void Arpeggio::reset()
 bool Arpeggio::crossStaff() const
 {
     return (track() + span() - 1) / VOICES != staffIdx();
+}
+
+staff_idx_t Arpeggio::vStaffIdx() const
+{
+    return chord() ? chord()->vStaffIdx() : EngravingItem::vStaffIdx();
 }
 
 //---------------------------------------------------------

@@ -56,7 +56,7 @@
 #include "stringdata.h"
 #include "system.h"
 #include "tie.h"
-#include "tremolo.h"
+
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "trill.h"
@@ -72,7 +72,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------

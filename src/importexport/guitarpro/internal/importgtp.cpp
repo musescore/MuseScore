@@ -78,7 +78,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/vibrato.h"
@@ -3370,6 +3369,9 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experiment
     }
 
     score->setUpTempoMap();
+    for (Part* p : score->parts()) {
+        p->updateHarmonyChannels(false);
+    }
 
     delete gp;
 

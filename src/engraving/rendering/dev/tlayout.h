@@ -194,17 +194,18 @@ public:
     static void layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
                                bool includeCrossStaffHeight = false);
     static void layoutArticulation(const Articulation* item, Articulation::LayoutData* ldata);
+    static void fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata);
 
     static void layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutBarLine2(BarLine* item, LayoutContext& ctx);
-    static void layoutBeam(Beam* item, LayoutContext& ctx);
+    static void layoutBeam(Beam* item, const LayoutContext& ctx);
     static void layoutBeam1(Beam* item, LayoutContext& ctx);
     static void layoutBend(const Bend* item, Bend::LayoutData* ldata);
 
     static void layoutBox(const Box* item, Box::LayoutData* ldata, const LayoutContext& ctx); // factory
     static void layoutBaseBox(const Box* item, Box::LayoutData* ldata, const LayoutContext& ctx); // base class
     static void layoutHBox(const HBox* item, HBox::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutHBox2(HBox* item, LayoutContext& ctx);
+    static void layoutHBox2(HBox* item, const LayoutContext& ctx);
     static void layoutVBox(const VBox* item, VBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFBox(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutTBox(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
