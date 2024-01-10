@@ -577,20 +577,21 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     m_beginPoint = logicPos;
 
-    if (playbackController()->isPlaying()) {
-        if (hitElement) {
-            switch (hitElement->type()) {
-            case ElementType::NOTE:
-            case ElementType::REST:
-            case ElementType::MMREST:
-            case ElementType::MEASURE:
-            case ElementType::BAR_LINE: {
-                playbackController()->seekElement(hitElement);
-                break;
-            }
-            default: break;
-            }
+    if (hitElement) {
+        switch (hitElement->type()) {
+        case ElementType::NOTE:
+        case ElementType::REST:
+        case ElementType::MMREST:
+        case ElementType::MEASURE:
+        case ElementType::BAR_LINE: {
+            playbackController()->seekElement(hitElement);
+            break;
         }
+        default: break;
+        }
+    }
+
+    if (playbackController()->isPlaying()) {
         return;
     }
 
@@ -619,10 +620,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
     }
 
-    if (hitElement && !viewInteraction()->selection()->isRange()) {
-        playbackController()->seekElement(hitElement);
-    }
-
     if (button == Qt::LeftButton) {
         handleLeftClick(ctx);
     } else if (button == Qt::RightButton) {
@@ -647,8 +644,6 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
     } else if (ctx.event->button() == Qt::RightButton && selection->isRange()) {
         return !selection->range()->containsPoint(ctx.logicClickPos);
     } else if (!ctx.hitElement->selected()) {
-        return true;
-    } else if (ctx.hitElement->selected() && selection->isRange()) {
         return true;
     }
 
