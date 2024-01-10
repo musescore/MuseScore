@@ -761,7 +761,7 @@
             <text><sym>keyboardPedalPed</sym></text>
             </beginText>
           <continueText>
-            <text>(<sym>keyboardPedalPed</sym>)</text>
+            <text><sym>keyboardPedalParensLeft</sym><sym>keyboardPedalPed</sym><sym>keyboardPedalParensRight</sym></text>
             </continueText>
           </Pedal>
         <Chord>

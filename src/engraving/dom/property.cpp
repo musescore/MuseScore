@@ -313,6 +313,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FRAME_BG_COLOR,          false, "frameBgColor",          P_TYPE::COLOR,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "frame background color") },
     { Pid::SIZE_SPATIUM_DEPENDENT,  false, "sizeIsSpatiumDependent",P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "spatium dependent size") },
     { Pid::TEXT_SIZE_SPATIUM_DEPENDENT, false, "textSizeIsSpatiumDependent", P_TYPE::BOOL,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "spatium dependent text size") },
+    { Pid::MUSICAL_SYMBOLS_SCALE,   false, "musicalSymbolsScale",   P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "musical symbols scale") },
     { Pid::ALIGN,                   false, "align",                 P_TYPE::ALIGN,              PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "align") },
     { Pid::TEXT_SCRIPT_ALIGN,       false, "align",                 P_TYPE::INT,                PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "text script align") },
     { Pid::SYSTEM_FLAG,             false, "systemFlag",            P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "system flag") },

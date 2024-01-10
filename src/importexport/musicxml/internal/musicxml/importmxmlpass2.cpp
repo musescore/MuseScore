@@ -3580,11 +3580,11 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
             p->setLineVisible(false);
         }
         if (!p->lineVisible() || sign == u"yes") {
-            p->setBeginText(u"<sym>keyboardPedalPed</sym>");
-            p->setContinueText(u"(<sym>keyboardPedalPed</sym>)");
+            p->setBeginText(m_score->style().styleSt(Sid::pedalText));
+            p->setContinueText(m_score->style().styleSt(Sid::pedalContinueText));
             if (type == "sostenuto") {
                 p->setBeginText(u"<sym>keyboardPedalSost</sym>");
-                p->setContinueText(u"(<sym>keyboardPedalSost</sym>)");
+                p->setContinueText(u"<sym>keyboardPedalParensLeft</sym><sym>keyboardPedalSost</sym><sym>keyboardPedalParensRight</sym>");
             }
         } else {
             p->setBeginText(u"");
