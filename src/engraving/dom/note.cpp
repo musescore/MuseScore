@@ -2819,8 +2819,7 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::DOT_POSITION:
         setUserDotPosition(v.value<DirectionV>());
-        triggerLayout();
-        return true;
+        break;
     case Pid::HEAD_SCHEME:
         setHeadScheme(v.value<NoteHeadScheme>());
         break;

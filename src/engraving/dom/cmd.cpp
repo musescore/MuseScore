@@ -823,6 +823,8 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
         if (n->pitch() == pitch) {
             note->setTpc1(n->tpc1());
             note->setTpc2(n->tpc2());
+            note->setString(n->string());
+            note->setFret(n->fret());
             break;
         }
     }
