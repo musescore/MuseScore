@@ -25,6 +25,7 @@
 #include "dom/slur.h"
 #include "dom/score.h"
 #include "dom/chord.h"
+#include "dom/score.h"
 #include "dom/system.h"
 #include "dom/staff.h"
 #include "dom/stafftype.h"
@@ -1038,7 +1039,13 @@ static bool tieSegmentShouldBeSkipped(Tie* item)
         return false;
     }
 
-    return !st->showBackTied() || (startNote && startNote->harmonic());
+    if (startNote->isContinuationOfBend()) {
+        return true;
+    }
+
+    ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
+
+    return showTiedFret == ShowTiedFret::NONE;
 }
 
 TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
@@ -1112,8 +1119,12 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     return segment;
 }
 
-TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
+TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContext& ctx)
 {
+    if (item->staffType() && item->staffType()->isTabStaff()) {
+        // On TAB, the presence of this tie may require to add a parenthesis
+        ChordLayout::layout(item->endNote()->chord(), ctx);
+    }
     // do not layout ties in tablature if not showing back-tied fret marks
     if (tieSegmentShouldBeSkipped(item)) {
         if (!item->segmentsEmpty()) {

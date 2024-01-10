@@ -145,7 +145,6 @@ EditStaffType::EditStaffType(QWidget* parent)
     connect(showTabFingering,  &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(upsideDown,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
     connect(numbersRadio,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
-    connect(showBackTied,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
 
     connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
     connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
@@ -284,7 +283,6 @@ void EditStaffType::setValues()
         aboveLinesRadio->setChecked(!staffType.onLines());
         linesThroughRadio->setChecked(staffType.linesThrough());
         linesBrokenRadio->setChecked(!staffType.linesThrough());
-        showBackTied->setChecked(staffType.showBackTied());
 
         idx = durFontName->findText(staffType.durationFontName(), Qt::MatchFixedString);
         if (idx == -1) {
@@ -451,7 +449,6 @@ void EditStaffType::setFromDlg()
     staffType.setFretFontSize(fretFontSize->value());
     staffType.setFretFontUserY(fretY->value());
     staffType.setLinesThrough(linesThroughRadio->isChecked());
-    staffType.setShowBackTied(showBackTied->isChecked());
     staffType.setMinimStyle(minimNoneRadio->isChecked() ? mu::engraving::TablatureMinimStyle::NONE
                             : (minimShortRadio->isChecked() ? mu::engraving::TablatureMinimStyle::SHORTER : mu::engraving::
                                TablatureMinimStyle::
@@ -513,7 +510,6 @@ void EditStaffType::blockSignals(bool block)
     aboveLinesRadio->blockSignals(block);
     linesThroughRadio->blockSignals(block);
     linesBrokenRadio->blockSignals(block);
-    showBackTied->blockSignals(block);
 
     durFontName->blockSignals(block);
     durFontSize->blockSignals(block);
