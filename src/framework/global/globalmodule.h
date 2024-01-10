@@ -31,6 +31,10 @@
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
 
+namespace mu {
+class SystemInfo;
+}
+
 namespace mu::framework {
 class Invoker;
 class GlobalConfiguration;
@@ -51,6 +55,7 @@ public:
 
 private:
     std::shared_ptr<GlobalConfiguration> m_configuration;
+    std::shared_ptr<SystemInfo> m_systemInfo;
 
     std::optional<mu::logger::Level> m_loggerLevel;
 
