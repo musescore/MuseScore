@@ -323,6 +323,7 @@ enum class Pid {
     FRAME_BG_COLOR,
     SIZE_SPATIUM_DEPENDENT,
     TEXT_SIZE_SPATIUM_DEPENDENT, // for text component of textLine items
+    MUSICAL_SYMBOLS_SCALE,
     ALIGN,
     TEXT_SCRIPT_ALIGN,
     SYSTEM_FLAG,
