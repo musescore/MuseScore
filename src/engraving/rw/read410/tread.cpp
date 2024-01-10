@@ -3642,7 +3642,7 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
         }
     }
 
-    if (p->score()->mscVersion() < 420) {
+    if (p->score()->mscVersion() < 420 && !ctx.pasteMode()) {
         // Set to the pre-420 defaults if no value was specified;
         // or follow the new style setting if the specified value matches it
         if (!beginTextTag) {
