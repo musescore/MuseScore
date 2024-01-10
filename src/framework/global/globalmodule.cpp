@@ -63,14 +63,15 @@ void GlobalModule::registerExports()
 {
     m_configuration = std::make_shared<GlobalConfiguration>();
     s_asyncInvoker = std::make_shared<Invoker>();
+    m_systemInfo = std::make_shared<SystemInfo>();
 
     ioc()->registerExport<IApplication>(moduleName(), new Application());
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
     ioc()->registerExport<IProcess>(moduleName(), new Process());
-    ioc()->registerExport<ISystemInfo>(moduleName(), new SystemInfo());
 }
 
 void GlobalModule::onPreInit(const IApplication::RunMode& mode)
@@ -179,6 +180,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 void GlobalModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+    m_systemInfo->init();
 }
 
 void GlobalModule::onDeinit()

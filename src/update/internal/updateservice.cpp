@@ -40,19 +40,6 @@ using namespace mu::update;
 using namespace mu::network;
 using namespace mu::framework;
 
-static std::string platformFileSuffix()
-{
-#if defined(Q_OS_WIN)
-    return "msi";
-#elif defined(Q_OS_MACOS)
-    return "dmg";
-#elif defined(Q_OS_LINUX)
-    return "appimage";
-#else
-    return "";
-#endif
-}
-
 mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
@@ -163,9 +150,19 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
         return result;
     }
 
+    QJsonObject release = jsonDoc.object();
+
+    QJsonObject assetObj = resolveReleaseAsset(release);
+    if (assetObj.empty()) {
+        LOGE() << "failed parse, no release asset";
+        result.ret = make_ret(Ret::Code::InternalError);
+        return result;
+    }
+
     result.ret = make_ok();
 
-    QJsonObject release = jsonDoc.object();
+    result.val.fileName = assetObj.value("name").toString().toStdString();
+    result.val.fileUrl = assetObj.value("browser_download_url").toString().toStdString();
 
     QString tagName = release.value("tag_name").toString();
     QString version = tagName.replace("v", "");
@@ -173,9 +170,43 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
 
     result.val.notes = release.value("bodyMarkdown").toString().toStdString();
 
+    return result;
+}
+
+std::string UpdateService::platformFileSuffix() const
+{
+    switch (systemInfo()->productType()) {
+    case ISystemInfo::ProductType::Windows: return "msi";
+    case ISystemInfo::ProductType::MacOS: return "dmg";
+    case ISystemInfo::ProductType::Linux: return "appimage";
+    case ISystemInfo::ProductType::Unknown: break;
+    }
+
+    return "";
+}
+
+mu::ISystemInfo::CpuArchitecture UpdateService::assetArch(const QString& asset) const
+{
+    if (asset.contains("aarch64")) {
+        return ISystemInfo::CpuArchitecture::Arm64;
+    } else if (asset.contains("arm")) {
+        return ISystemInfo::CpuArchitecture::Arm;
+    }
+
+    return ISystemInfo::CpuArchitecture::x86_64;
+}
+
+QJsonObject UpdateService::resolveReleaseAsset(const QJsonObject& release) const
+{
     std::string fileSuffix = platformFileSuffix();
+    ISystemInfo::ProductType productType = systemInfo()->productType();
+    ISystemInfo::CpuArchitecture arch = systemInfo()->cpuArchitecture();
 
     QJsonArray assets = release.value("assets").toArray();
+    for (const QJsonValue& asset : release.value("assetsNew").toArray()) {
+        assets.push_back(asset);
+    }
+
     for (const QJsonValue asset : assets) {
         QJsonObject assetObj = asset.toObject();
 
@@ -184,11 +215,16 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
             continue;
         }
 
-        result.val.fileName = name.toStdString();
-        result.val.fileUrl = assetObj.value("browser_download_url").toString().toStdString();
+        if (productType == ISystemInfo::ProductType::Linux) {
+            if (arch != ISystemInfo::CpuArchitecture::Unknown && arch != assetArch(name)) {
+                continue;
+            }
+        }
+
+        return assetObj;
     }
 
-    return result;
+    return QJsonObject();
 }
 
 void UpdateService::clear()
