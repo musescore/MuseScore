@@ -1178,8 +1178,8 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
 
     item->stem()->mutldata()->setPosX(item->stemPosX());
 
-    // This calls _stem->layout()
     item->stem()->setBaseLength(Millimetre(item->defaultStemLength()));
+    TLayout::layoutItem(item->stem(), ctx);
 
     // And now we need to set the position of the flag.
     if (item->hook()) {

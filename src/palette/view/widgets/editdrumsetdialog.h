@@ -29,6 +29,7 @@
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 #include "engraving/dom/drumset.h"
 
@@ -44,6 +45,7 @@ class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
     INJECT(framework::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
