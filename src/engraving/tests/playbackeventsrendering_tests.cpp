@@ -2204,3 +2204,70 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
         }
     }
 }
+
+/**
+ * @brief PlaybackEventsRendererTests_Pauses
+ *  @details Checks whether we correctly calculate note durations when there are pauses in the score. See:
+ * https://github.com/musescore/MuseScore/issues/20669
+ * https://github.com/musescore/MuseScore/issues/20557
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "pauses/pauses.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            const EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+
+            m_renderer.render(toChord(el), dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                              ArticulationType::Standard, m_defaultProfile, result);
+        }
+    }
+
+    // [THEN] Expected time and duration of each event
+    timestamp_t secondMeasureTime = QUARTER_NOTE_DURATION * 4;
+    timestamp_t thirdMeasureTime = secondMeasureTime + QUARTER_NOTE_DURATION + 2000000 + HALF_NOTE_DURATION
+                                   + QUARTER_NOTE_DURATION + 4000000;
+
+    std::vector<TimestampAndDuration> expectedTnDList {
+        // 2nd measure
+        { secondMeasureTime, QUARTER_NOTE_DURATION }, // + 2s pause (caesura)
+        { secondMeasureTime + QUARTER_NOTE_DURATION + 2000000, HALF_NOTE_DURATION },
+        { secondMeasureTime + QUARTER_NOTE_DURATION + 2000000 + HALF_NOTE_DURATION, QUARTER_NOTE_DURATION }, // + 4s pause (section break)
+
+        // 3rd measure
+        { thirdMeasureTime, HALF_NOTE_DURATION + QUARTER_NOTE_DURATION }, // tied half + quarter notes + 3s pause (caesura)
+        { thirdMeasureTime + HALF_NOTE_DURATION + QUARTER_NOTE_DURATION + 3000000, QUARTER_NOTE_DURATION },
+    };
+
+    EXPECT_FALSE(result.empty());
+
+    int tndNum = 0;
+    for (const auto& pair : result) {
+        if (pair.second.empty()) {
+            continue;
+        }
+
+        ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(pair.second.front()));
+
+        const TimestampAndDuration& expectedTnD = expectedTnDList.at(tndNum);
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.front());
+
+        EXPECT_EQ(pair.first, expectedTnD.timestamp);
+        EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
+        EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
+
+        ++tndNum;
+    }
+
+    EXPECT_EQ(tndNum, expectedTnDList.size());
+}
