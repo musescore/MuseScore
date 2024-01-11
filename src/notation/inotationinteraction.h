@@ -59,6 +59,11 @@ public:
     {
         notation::EngravingItem* element = nullptr;
         notation::Staff* staff = nullptr;
+
+        bool operator ==(const HitElementContext& other) const
+        {
+            return element == other.element && staff == other.staff;
+        }
     };
 
     virtual const HitElementContext& hitElementContext() const = 0;
