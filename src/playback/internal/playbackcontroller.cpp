@@ -115,6 +115,8 @@ void PlaybackController::init()
 
     m_totalPlayTimeChanged.onNotify(this, [this]() {
         updateCurrentTempo();
+
+        updateLoop();
     });
 
     m_playbackPositionChanged.onNotify(this, [this]() {
@@ -669,7 +671,7 @@ void PlaybackController::addLoopBoundaryToTick(LoopBoundaryType type, int tick)
 
 void PlaybackController::updateLoop()
 {
-    IF_ASSERT_FAILED(notationPlayback() && playback()) {
+    if (!notationPlayback() || !playback()) {
         return;
     }
 
