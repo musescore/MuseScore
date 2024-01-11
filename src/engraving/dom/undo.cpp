@@ -1999,9 +1999,22 @@ ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v)
 void ChangeChordStaffMove::flip(EditData*)
 {
     int v = chordRest->staffMove();
+    staff_idx_t oldStaff = chordRest->vStaffIdx();
+
+    chordRest->setStaffMove(staffMove);
+    chordRest->checkStaffMoveValidity();
+    chordRest->triggerLayout();
+    if (chordRest->vStaffIdx() == oldStaff) {
+        return;
+    }
+
     for (EngravingObject* e : chordRest->linkList()) {
         ChordRest* cr = toChordRest(e);
+        if (cr == chordRest) {
+            continue;
+        }
         cr->setStaffMove(staffMove);
+        cr->checkStaffMoveValidity();
         cr->triggerLayout();
     }
     staffMove = v;

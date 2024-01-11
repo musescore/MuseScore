@@ -83,6 +83,8 @@ private:
     //
     static void moveToNextMeasure(LayoutContext& ctx);
     static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
+    static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
+
     static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
 };
 }
