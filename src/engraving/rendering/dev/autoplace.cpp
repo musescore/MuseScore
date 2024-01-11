@@ -193,7 +193,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         bool above = item->spanner()->placeAbove();
         SkylineLine sl(!above);
         Shape sh = item->shape();
-        sl.add(sh.translated(item->pos()));
+        sl.add(sh.translate(item->pos()));
         double yd = 0.0;
         staff_idx_t stfIdx = item->systemFlag() ? item->staffIdxOrNextVisible() : item->staffIdx();
         if (stfIdx == mu::nidx) {
