@@ -201,8 +201,8 @@ PointF Pedal::linePos(Grip grip, System** sys) const
     } else {
         EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
-        if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
-            // pedal marking on single note or ends with non-angled hook:
+        if (!e || e == startElement() || (endHookType() == HookType::HOOK_90) || !lineVisible()) {
+            // pedal marking on single note or ends with non-angled hook or line not visible (rosette star):
             // extend to next note or end of measure
             Segment* seg = nullptr;
             if (!e) {
