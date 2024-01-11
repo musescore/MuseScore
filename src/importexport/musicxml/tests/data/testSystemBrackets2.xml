@@ -20,6 +20,7 @@
   <part-list>
     <part-group type="start" number="1">
       <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
       </part-group>
     <score-part id="P1">
       <part-name>Piano 1</part-name>
