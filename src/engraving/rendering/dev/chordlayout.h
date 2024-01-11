@@ -58,7 +58,7 @@ public:
     static void layoutStem(Chord* item, const LayoutContext& ctx);
 
     static void computeUp(const Chord* item, ChordRest::LayoutData* ldata, const LayoutContext& ctx);
-    static void computeUp(ChordRest* item, LayoutContext& ctx);
+    static void computeUp(ChordRest* item, const LayoutContext& ctx);
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
 
     static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);

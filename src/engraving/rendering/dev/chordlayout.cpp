@@ -1365,6 +1365,8 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
 
 void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const LayoutContext& ctx)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(item);
+
     assert(!item->notes().empty());
 
     const StaffType* tab = item->staff() ? item->staff()->staffTypeForElement(item) : 0;
@@ -1430,7 +1432,7 @@ void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const L
     ldata->up = direction > 0;
 }
 
-void ChordLayout::computeUp(ChordRest* item, LayoutContext& ctx)
+void ChordLayout::computeUp(ChordRest* item, const LayoutContext& ctx)
 {
     if (item->isChord()) {
         Chord* ch = item_cast<Chord*>(item);
