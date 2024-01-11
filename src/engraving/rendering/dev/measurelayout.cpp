@@ -807,6 +807,25 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
     }
 }
 
+void MeasureLayout::checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx)
+{
+    for (const Segment& segment : measure->segments()) {
+        if (!segment.isJustType(SegmentType::ChordRest)) {
+            continue;
+        }
+
+        for (track_idx_t t = 0; t < ctx.dom().nstaves() * VOICES; ++t) {
+            ChordRest* cr = toChordRest(segment.element(t));
+            if (cr) {
+                // Check if requested cross-staff is possible
+                if (cr->staffMove() || cr->storedStaffMove()) {
+                    cr->checkStaffMoveValidity();
+                }
+            }
+        }
+    }
+}
+
 void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
@@ -847,13 +866,16 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         return;
     }
 
+    // Check if requested cross-staff is possible
+    // This must happen before cmdUpdateNotes
+    checkStaffMoveValidity(measure, ctx);
+
     // ---- Modify DOM ----
     ModifyDom::connectTremolo(measure);
     ModifyDom::cmdUpdateNotes(measure, ctx.dom());
     ModifyDom::createStems(measure,  ctx);
     ModifyDom::setTrackForChordGraceNotes(measure, ctx.dom());
     // --------------------
-
     //
     // calculate accidentals and note lines,
     // create stem and set stem direction
@@ -881,9 +903,6 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
             //! NOTE Maybe it makes sense to group these methods by chord
 
             SegmentLayout::setChordMag(staff, segment, startTrack, endTrack, conf);
-
-            // Check if requested cross-staff is possible
-            SegmentLayout::checkStaffMoveValidity(segment, startTrack, endTrack);
 
             SegmentLayout::layoutChordDrumset(staff, segment, startTrack, endTrack, conf);
 

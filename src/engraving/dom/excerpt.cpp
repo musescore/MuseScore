@@ -41,6 +41,7 @@
 #include "masterscore.h"
 #include "measure.h"
 #include "note.h"
+#include "ornament.h"
 #include "page.h"
 #include "part.h"
 #include "rest.h"
@@ -1340,6 +1341,16 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             } else {
                                 LOGD("inconsistent two note tremolo");
+                            }
+                        }
+                        // Check grace note staff move validity
+                        for (Chord* gn : nch->graceNotes()) {
+                            gn->checkStaffMoveValidity();
+                        }
+                        if (Ornament* o = nch->findOrnament()) {
+                            Chord* cueChord = o->cueNoteChord();
+                            if (cueChord) {
+                                cueChord->checkStaffMoveValidity();
                             }
                         }
                     }
