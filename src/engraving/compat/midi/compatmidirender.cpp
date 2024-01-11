@@ -1146,4 +1146,9 @@ int CompatMidiRender::slideTicks(Chord* chord)
 
     return SLIDE_DURATION;
 }
+
+int CompatMidiRender::tick(const CompatMidiRendererInternal::Context& ctx, int tick)
+{
+    return ctx.applyCaesuras ? ctx.pauseMap->tickWithPauses(tick) : tick;
+}
 }

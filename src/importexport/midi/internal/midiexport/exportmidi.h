@@ -26,6 +26,7 @@
 #include <QFile>
 
 #include "../midishared/midifile.h"
+#include "engraving/compat/midi/pausemap.h"
 
 namespace mu::engraving {
 class Score;
@@ -48,28 +49,11 @@ public:
     bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
 
 private:
-    //---------------------------------------------------
-    //   PauseMap
-    //    MIDI files cannot contain pauses so need to insert
-    //    extra ticks extra ticks and tempo changes instead.
-    //---------------------------------------------------
-    class PauseMap : std::map<int, int>
-    {
-        int offsetAtUTick(int utick) const;
-
-    public:
-        engraving::TempoMap* tempomapWithPauses = nullptr;
-
-        void calculate(const engraving::Score* s);
-        inline int addPauseTicks(int utick) const { return utick + this->offsetAtUTick(utick); }
-    };
-
-    void writeHeader();
+    void writeHeader(const CompatMidiRendererInternal::Context& context);
 
     QFile m_file;
     MidiFile m_midiFile;
     engraving::Score* m_score = nullptr;
-    PauseMap m_pauseMap;
 };
 }
 #endif // EXPORTMIDI_H

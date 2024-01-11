@@ -29,6 +29,7 @@
 #include "dom/mscore.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
+#include "pausemap.h"
 #include "velocitymap.h"
 
 namespace mu::engraving {
@@ -154,17 +155,19 @@ public:
 
         static std::unordered_map<String, BuiltInArticulation> s_builtInArticulationsValues;
 
-        int sndController = CTRL_BREATH;
-        std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
-
         bool eachStringHasChannel = false; //!to better display the guitar instrument, each string has its own channel
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
         bool useDefaultArticulations = false; //!using default articulations means ignoring the ones stored for each instrument
-
+        bool applyCaesuras = false; //! to add pauses (caesura) between midi events
         HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
+        int sndController = CTRL_BREATH;
+
         std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
         std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
         std::unordered_map<String, std::unordered_set<String> > articulationsWithoutValuesByInstrument;
+
+        std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
+        std::shared_ptr<PauseMap> pauseMap = std::make_shared<PauseMap>();
     };
 
     explicit CompatMidiRendererInternal(Score* s);

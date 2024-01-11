@@ -76,6 +76,8 @@ public:
     static int getControllerForSnd(Score* score, int globalSndController);
     static void createPlayEvents(const Score* score, Measure const* start = nullptr, Measure const* end = nullptr,
                                  const CompatMidiRendererInternal::Context& context = CompatMidiRendererInternal::Context());
+
+    static int tick(const CompatMidiRendererInternal::Context& ctx, int tick);
 private:
     static void createPlayEvents(const Score* score, const CompatMidiRendererInternal::Context& context, Chord* chord,
                                  Chord* prevChord = nullptr, Chord* nextChord = nullptr);
