@@ -7118,6 +7118,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             if (number < MAX_PART_GROUPS) {
                 const BracketItem* bi = Factory::createBracketItem(score->dummy());
                 partGroupStart(xml, number + 1, bi, false);
+                delete bi;
                 partGroupEnd[number] = static_cast<int>(idx + part->nstaves());
             }
         }
