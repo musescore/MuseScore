@@ -23,7 +23,7 @@ trap 'echo Build failed; exit 1' ERR
 
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
-BUILD_DIR=build.release
+BUILD_DIR=build.debug
 INSTALL_DIR=build.install
 
 cat $BUILD_TOOLS/environment.sh
@@ -41,7 +41,7 @@ bash ninja_build.sh -t clean
 
 MUSESCORE_BUILD_CONFIGURATION="vtest" \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
-bash ninja_build.sh -t appimage
+bash ninja_build.sh -t appimagedebug
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $BUILD_MODE
 bash ./build/ci/tools/make_version_env.sh $BUILD_NUMBER
