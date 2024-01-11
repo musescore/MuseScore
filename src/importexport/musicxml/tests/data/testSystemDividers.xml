@@ -70,9 +70,11 @@
   <part-list>
     <part-group type="start" number="1">
       <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
       </part-group>
     <part-group type="start" number="2">
       <group-symbol>square</group-symbol>
+      <group-barline>yes</group-barline>
       </part-group>
     <score-part id="P1">
       <part-name>Violine 1</part-name>
