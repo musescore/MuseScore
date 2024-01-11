@@ -5922,6 +5922,10 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
         item->endText()->mutldata()->moveX(ldata->bbox().right());
+        //center end text for pedals (rosette star), prevents collision of rosette and "Ped" on following note
+        if (item->isPedalSegment() && !toPedalSegment(item)->pedal()->lineVisible()) {
+            item->endText()->mutldata()->moveX(-item->endText()->width() / 2);
+        }
         ldata->addBbox(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
     }
 
