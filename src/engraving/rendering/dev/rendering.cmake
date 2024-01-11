@@ -55,6 +55,10 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.h
     ${CMAKE_CURRENT_LIST_DIR}/autoplace.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autoplace.h
+    ${CMAKE_CURRENT_LIST_DIR}/segmentlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/segmentlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/modifydom.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modifydom.h
 
     ${CMAKE_CURRENT_LIST_DIR}/passbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passbase.h
