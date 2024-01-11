@@ -77,6 +77,8 @@ private:
     static double computeMinMeasureWidth(Measure* m, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
+
+    static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 };
 }
 

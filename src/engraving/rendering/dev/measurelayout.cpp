@@ -831,6 +831,10 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
         return;
     }
 
+    // Check if requested cross-staff is possible
+    // This must happen before cmdUpdateNotes
+    checkStaffMoveValidity(measure, ctx);
+
     measure->connectTremolo();
 
     //
@@ -886,10 +890,6 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                     ChordRest* cr = segment.cr(t);
                     if (!cr) {
                         continue;
-                    }
-                    // Check if requested cross-staff is possible
-                    if (cr->staffMove() || cr->storedStaffMove()) {
-                        cr->checkStaffMoveValidity();
                     }
 
                     double m = staff->staffMag(&segment);
@@ -1033,6 +1033,25 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     // Segment::visible() property, which is determined by Segment::createShapes().
 
     ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
+}
+
+void MeasureLayout::checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx)
+{
+    for (const Segment& segment : measure->segments()) {
+        if (!segment.isJustType(SegmentType::ChordRest)) {
+            continue;
+        }
+
+        for (track_idx_t t = 0; t < ctx.dom().nstaves() * VOICES; ++t) {
+            ChordRest* cr = toChordRest(segment.element(t));
+            if (cr) {
+                // Check if requested cross-staff is possible
+                if (cr->staffMove() || cr->storedStaffMove()) {
+                    cr->checkStaffMoveValidity();
+                }
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
