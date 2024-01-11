@@ -28,6 +28,8 @@ set(COMPAT_MIDI_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compatmidirenderinternal.h
     ${CMAKE_CURRENT_LIST_DIR}/compatmidirender.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compatmidirender.h
+    ${CMAKE_CURRENT_LIST_DIR}/pausemap.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/pausemap.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/velocitymap.cpp

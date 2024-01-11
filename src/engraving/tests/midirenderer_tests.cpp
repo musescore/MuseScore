@@ -24,6 +24,7 @@
 
 #include "utils/scorerw.h"
 #include "engraving/compat/midi/compatmidirender.h"
+#include "engraving/compat/midi/pausemap.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/noteevent.h"
@@ -84,6 +85,20 @@ static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasC
 
     ctx.eachStringHasChannel = eachStringHasChannel;
     ctx.instrumentsHaveEffects = instrumentsHaveEffects;
+    CompatMidiRender::renderScore(score, events, ctx, true);
+
+    return events;
+}
+
+static EventsHolder renderMidiEventsWithPause(const String& fileName,
+                                              CompatMidiRendererInternal::Context& ctx)
+{
+    MasterScore* score = ScoreRW::readScore(MIDIRENDERER_TESTS_DIR + fileName);
+    EXPECT_TRUE(score);
+
+    EventsHolder events;
+    ctx.applyCaesuras = true;
+
     CompatMidiRender::renderScore(score, events, ctx, true);
 
     return events;
@@ -829,6 +844,25 @@ TEST_F(MidiRenderer_Tests, breathController)
         EXPECT_TRUE(breathControllerVal > prevBreathControllerVal);
         prevBreathControllerVal = breathControllerVal;
     }
+}
+
+TEST_F(MidiRenderer_Tests, caesura)
+{
+    constexpr int defVol = 80; // mf
+    CompatMidiRendererInternal::Context context;
+
+    EventsHolder events = getNoteOnEvents(renderMidiEventsWithPause(u"caesura.mscx", context));
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
+
+    // caesuras check
+    EXPECT_EQ(CompatMidiRender::tick(context, 0), 0);
+    EXPECT_EQ(CompatMidiRender::tick(context, 911), 911);
+    EXPECT_EQ(CompatMidiRender::tick(context, 960), 2880);
+    EXPECT_EQ(CompatMidiRender::tick(context, 1871), 3791);
+
+    checkEventInterval(events, 0, 911, 64, defVol);
+    checkEventInterval(events, 960, 1871, 67, defVol);
 }
 
 /*****************************************************************************
