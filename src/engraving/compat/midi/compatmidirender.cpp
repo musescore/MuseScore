@@ -26,7 +26,8 @@ int CompatMidiRender::getControllerForSnd(Score* score, int globalSndController)
     return controller;
 }
 
-void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start, Measure const* const end)
+void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start, Measure const* const end,
+                                        const CompatMidiRendererInternal::Context& context)
 {
     if (!start) {
         start = score->firstMeasure();
@@ -87,14 +88,15 @@ void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start
                     }
                 }
 
-                CompatMidiRender::createPlayEvents(score, chord, prevChord, nextChord);
+                CompatMidiRender::createPlayEvents(score, context, chord, prevChord, nextChord);
                 prevChord = chord;
             }
         }
     }
 }
 
-void CompatMidiRender::createPlayEvents(const Score* score, Chord* chord, Chord* prevChord, Chord* nextChord)
+void CompatMidiRender::createPlayEvents(const Score* score, const CompatMidiRendererInternal::Context& context, Chord* chord,
+                                        Chord* prevChord, Chord* nextChord)
 {
     int gateTime = 100;
 
@@ -113,7 +115,7 @@ void CompatMidiRender::createPlayEvents(const Score* score, Chord* chord, Chord*
     // gateTime is 100% for slurred notes
     if (!slur) {
         Instrument* instr = chord->part()->instrument(tick);
-        instr->updateGateTime(&gateTime, 0, u"");
+        instr->updateGateTime(&gateTime, u"");
     }
 
     int ontime    = 0;
@@ -130,7 +132,7 @@ void CompatMidiRender::createPlayEvents(const Score* score, Chord* chord, Chord*
     //
     //    render normal (and articulated) chords
     //
-    std::vector<NoteEventList> el = CompatMidiRender::renderChord(chord, prevChord, gateTime, ontime, trailtime);
+    std::vector<NoteEventList> el = CompatMidiRender::renderChord(context, chord, prevChord, gateTime, ontime, trailtime);
     if (chord->playEventType() == PlayEventType::Auto) {
         chord->setNoteEventLists(el);
     }
@@ -144,7 +146,8 @@ void CompatMidiRender::createPlayEvents(const Score* score, Chord* chord, Chord*
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-std::vector<NoteEventList> CompatMidiRender::renderChord(Chord* chord, Chord* prevChord, int gateTime, int ontime, int trailtime)
+std::vector<NoteEventList> CompatMidiRender::renderChord(const CompatMidiRendererInternal::Context& context, Chord* chord, Chord* prevChord,
+                                                         int gateTime, int ontime, int trailtime)
 {
     const std::vector<mu::engraving::Note*>& notes = chord->notes();
     if (notes.empty()) {
@@ -186,7 +189,7 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(Chord* chord, Chord* pr
             tremolo = true;
         }
 
-        CompatMidiRender::renderChordArticulation(chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH, tremolo);
+        CompatMidiRender::renderChordArticulation(context, chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH, tremolo);
     }
 
     // Check each note and apply gateTime
@@ -417,12 +420,12 @@ void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& e
 //   renderChordArticulation
 //---------------------------------------------------------
 
-void CompatMidiRender::renderChordArticulation(Chord* chord, std::vector<NoteEventList>& ell, int& gateTime, double graceOnBeatProportion,
+void CompatMidiRender::renderChordArticulation(const CompatMidiRendererInternal::Context& context, Chord* chord,
+                                               std::vector<NoteEventList>& ell, int& gateTime, double graceOnBeatProportion,
                                                bool tremoloBefore /* = false */)
 {
     Segment* seg = chord->segment();
     Instrument* instr = chord->part()->instrument(seg->tick());
-    int channel  = 0;        // note->subchannel();
 
     for (unsigned k = 0; k < chord->notes().size(); ++k) {
         NoteEventList* events = &ell[k];
@@ -439,9 +442,35 @@ void CompatMidiRender::renderChordArticulation(Chord* chord, std::vector<NoteEve
                     continue;
                 }
                 if (!CompatMidiRender::renderNoteArticulation(events, note, false, a->symId(), a->ornamentStyle())) {
-                    instr->updateGateTime(&gateTime, channel, a->articulationName());
+                    CompatMidiRender::updateGateTime(instr, gateTime, a->articulationName(), context);
                 }
             }
+        }
+    }
+}
+
+void CompatMidiRender::updateGateTime(const Instrument* instrument, int& gateTime, const String& articulationName,
+                                      const CompatMidiRendererInternal::Context& context)
+{
+    using Ctx = CompatMidiRendererInternal::Context;
+    if (context.useDefaultArticulations) {
+        auto it = Ctx::s_builtInArticulationsValues.find(articulationName);
+        if (it != Ctx::s_builtInArticulationsValues.end()) {
+            gateTime = std::min(gateTime, it->second.gateTime);
+        } else {
+            instrument->updateGateTime(&gateTime, articulationName);
+        }
+
+        return;
+    }
+
+    auto articulationsForInstrumentIt = context.articulationsWithoutValuesByInstrument.find(instrument->id());
+    if (articulationsForInstrumentIt != context.articulationsWithoutValuesByInstrument.end()) {
+        const auto& articulationsForInstrument = articulationsForInstrumentIt->second;
+        if (articulationsForInstrument.find(articulationName) != articulationsForInstrument.end()) {
+            gateTime = std::min(gateTime, Ctx::s_builtInArticulationsValues[articulationName].gateTime);
+        } else {
+            instrument->updateGateTime(&gateTime, articulationName);
         }
     }
 }

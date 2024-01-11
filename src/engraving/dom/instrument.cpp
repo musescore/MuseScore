@@ -732,7 +732,7 @@ double Instrument::getVelocityMultiplier(const String& name) const
 //   updateGateTime
 //---------------------------------------------------------
 
-void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const String& name)
+void Instrument::updateGateTime(int* gateTime, const String& name) const
 {
     for (const MidiArticulation& a : m_articulation) {
         if (a.name == name) {
@@ -746,7 +746,7 @@ void Instrument::updateGateTime(int* gateTime, int /*channelIdx*/, const String&
 }
 
 //---------------------------------------------------------
-//   updateGateTime
+//   switchExpressive
 //---------------------------------------------------------
 
 void Instrument::switchExpressive(MasterScore* score, Synthesizer* synth, bool expressive, bool force /* = false */)

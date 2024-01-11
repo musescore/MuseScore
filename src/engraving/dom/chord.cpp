@@ -2306,7 +2306,6 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 void Chord::reset()
 {
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
-    CompatMidiRender::createPlayEvents(this->score(), this);
     ChordRest::reset();
 }
 
