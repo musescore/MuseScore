@@ -1797,7 +1797,7 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
         return;
     }
 
-    Shape noteShape = note->shape().translated(note->pos() + chordSystemPos);
+    Shape noteShape = note->shape().translate(note->pos() + chordSystemPos);
     double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
 
     resultingX = start ? std::max(resultingX, xNoteEdge) : std::min(resultingX, xNoteEdge);

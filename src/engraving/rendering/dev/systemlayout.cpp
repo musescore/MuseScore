@@ -833,7 +833,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
                         // add element to skyline
                         if (e->addToSkyline()) {
-                            skyline.add(e->shape().translated(e->pos() + p));
+                            skyline.add(e->shape().translate(e->pos() + p));
                             // add grace notes to skyline
                             if (e->isChord()) {
                                 GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
@@ -841,10 +841,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                                 TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
                                 TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
                                 if (!graceBefore.empty()) {
-                                    skyline.add(graceBefore.shape().translated(graceBefore.pos() + p));
+                                    skyline.add(graceBefore.shape().translate(graceBefore.pos() + p));
                                 }
                                 if (!graceAfter.empty()) {
-                                    skyline.add(graceAfter.shape().translated(graceAfter.pos() + p));
+                                    skyline.add(graceAfter.shape().translate(graceAfter.pos() + p));
                                 }
                             }
                             // If present, add ornament cue note to skyline

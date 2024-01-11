@@ -514,7 +514,7 @@ int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
                 continue;
             }
             Chord* chord = toChord(item);
-            Shape chordShape = chord->shape().translated(chord->pos());
+            Shape chordShape = chord->shape().translate(chord->pos());
             chordShape.removeInvisibles();
             if (chordShape.empty()) {
                 continue;
