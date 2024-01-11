@@ -40,7 +40,7 @@ MUSESCORE_VST3_SDK_PATH=${MUSESCORE_VST3_SDK_PATH:-""}
 MUSESCORE_DOWNLOAD_SOUNDFONT=${MUSESCORE_DOWNLOAD_SOUNDFONT:-"ON"}
 MUSESCORE_BUILD_UNIT_TESTS=${MUSESCORE_BUILD_UNIT_TESTS:-"OFF"}
 MUSESCORE_NO_RPATH=${MUSESCORE_NO_RPATH:-"OFF"}
-MUSESCORE_YOUTUBE_API_KEY=${MUSESCORE_YOUTUBE_API_KEY:-""} 
+MUSESCORE_YOUTUBE_API_KEY=${MUSESCORE_YOUTUBE_API_KEY:-""}
 MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"}
 MUSESCORE_BUILD_VST_MODULE=${MUSESCORE_BUILD_VST_MODULE:-"OFF"}
 MUSESCORE_BUILD_VIDEOEXPORT_MODULE=${MUSESCORE_BUILD_VIDEOEXPORT_MODULE:-"OFF"}
@@ -100,7 +100,7 @@ function do_build() {
         -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
 
 
-    ninja -j $JOBS 
+    ninja -j $JOBS
 }
 
 
@@ -110,7 +110,7 @@ case $TARGET in
         mkdir -p build.release
         cd build.release
         do_build Release
-        ;; 
+        ;;
 
     debug)
         mkdir -p build.debug
@@ -122,7 +122,7 @@ case $TARGET in
         mkdir -p build.release
         cd build.release
         do_build RelWithDebInfo
-        ;;     
+        ;;
 
     install)
         mkdir -p build.release
@@ -136,19 +136,19 @@ case $TARGET in
         cd build.release
         do_build RelWithDebInfo
         ninja install
-        ;;    
+        ;;
 
     installdebug)
         mkdir -p build.debug
         cd build.debug
         do_build Debug
         ninja install
-        ;; 
+        ;;
 
     clean)
         rm -rf build.debug build.release
-        ;; 
-    
+        ;;
+
     compile_commands)
         # Generate compile_commands.json file (https://clang.llvm.org/docs/JSONCompilationDatabase.html)
         mkdir -p build.tooldata
@@ -175,8 +175,6 @@ case $TARGET in
             -DMUE_LOGGER_DEBUGLEVEL_ENABLED="${MUSESCORE_DEBUGLEVEL_ENABLED}" \
             -DVST3_SDK_PATH="${MUSESCORE_VST3_SDK_PATH}" \
             -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
-
-
         ;;
 
     revision)
@@ -184,29 +182,52 @@ case $TARGET in
         ;;
 
     appimage)
-        MUSESCORE_INSTALL_DIR=../MuseScore 
+        MUSESCORE_INSTALL_DIR=../MuseScore
         MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
-        MUSESCORE_NO_RPATH=ON 
+        MUSESCORE_NO_RPATH=ON
 
         mkdir -p build.release
         cd build.release
         do_build RELEASE
         ninja install
 
-        build_dir="$(pwd)" 
-        install_dir="$(cat $build_dir/PREFIX.txt)" 
+        build_dir="$(pwd)"
+        install_dir="$(cat $build_dir/PREFIX.txt)"
         cd $install_dir
 
         ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
         mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
         desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
         icon="${mscore}.png"
-        mani="install_manifest.txt" 
+        mani="install_manifest.txt"
         cp "share/applications/${desktop}" "${desktop}"
         cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
         <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
+        ;;
 
-        ;;     
+    appimagedebug)
+        MUSESCORE_INSTALL_DIR=../MuseScore
+        MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
+        MUSESCORE_NO_RPATH=ON
+
+        mkdir -p build.debug
+        cd build.debug
+        do_build Debug
+        ninja install
+
+        build_dir="$(pwd)"
+        install_dir="$(cat $build_dir/PREFIX.txt)"
+        cd $install_dir
+
+        ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
+        mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
+        desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
+        icon="${mscore}.png"
+        mani="install_manifest.txt"
+        cp "share/applications/${desktop}" "${desktop}"
+        cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
+        <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
+        ;;
 
     *)
         echo "Unknown target: $TARGET";
