@@ -211,11 +211,9 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         QString pageCode = EditStyle::pageCodeForElement(hitElement);
 
         if (!pageCode.isEmpty()) {
-            if (pageCode == "text-styles") {
-                QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
-                if (!subPageCode.isEmpty()) {
-                    item->setArgs(mu::actions::ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
-                }
+            QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
+            if (!subPageCode.isEmpty()) {
+                item->setArgs(mu::actions::ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
             } else {
                 item->setArgs(mu::actions::ActionData::make_arg1<QString>(pageCode));
             }
