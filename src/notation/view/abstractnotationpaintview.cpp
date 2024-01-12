@@ -274,6 +274,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     m_notation->viewModeChanged().onNotify(this, [this]() {
         updateLoopMarkers();
+        ensureViewportInsideScrollableArea();
     });
 
     if (isMainView()) {
