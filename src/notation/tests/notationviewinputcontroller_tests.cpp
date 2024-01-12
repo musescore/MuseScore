@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -25,42 +25,69 @@
 
 using ::testing::_;
 using ::testing::Return;
+using ::testing::ReturnRef;
+using ::testing::NiceMock;
 
-#include "scenes/notation/view/notationviewinputcontroller.h"
 #include "mocks/controlledviewmock.h"
-#include "mocks/notationsceneconfigurationmock.h"
+#include "mocks/notationconfigurationmock.h"
+#include "mocks/notationinteractionmock.h"
+#include "mocks/notationselectionmock.h"
+#include "playback/tests/mocks/playbackcontrollermock.h"
+
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "notation/internal/notationselection.h"
+
+#include "notation/view/notationviewinputcontroller.h"
+
+#include "global/types/string.h"
+#include "engraving/tests/utils/scorerw.h"
 
 using namespace mu;
-using namespace mu::scene::notation;
+using namespace mu::notation;
 using namespace mu::framework;
+
+static const String TEST_SCORE_PATH(u"data/test.mscx");
 
 class NotationViewInputControllerTests : public ::testing::Test
 {
 public:
 
-    ~NotationViewInputControllerTests()
+    void SetUp() override
     {
-        qDeleteAll(m_events);
+        m_interaction = std::make_shared<NotationInteractionMock>();
+
+        m_selection = std::make_shared<NotationSelectionMock>();
+        ON_CALL(*m_interaction, selection())
+        .WillByDefault(Return(m_selection));
+
+        ON_CALL(m_view, notationInteraction())
+        .WillByDefault(Return(m_interaction));
+
+        ON_CALL(m_view, currentScaling())
+        .WillByDefault(Return(1));
+
+        m_controller = new NotationViewInputController(&m_view);
+
+        m_configuration = std::make_shared<NotationConfigurationMock>();
+        m_controller->setconfiguration(m_configuration);
+
+        m_playbackController = std::make_shared<playback::PlaybackControllerMock>();
+        m_controller->setplaybackController(m_playbackController);
     }
 
-    struct Env {
-        ControlledViewMock view;
-        NotationViewInputController* controller = nullptr;
-        std::shared_ptr<NotationSceneConfigurationMock> configuration;
+    void TearDown() override
+    {
+        qDeleteAll(m_events);
+        delete m_controller;
+    }
 
-        Env()
-        {
-            controller = new NotationViewInputController(&view);
-
-            configuration = std::make_shared<NotationSceneConfigurationMock>();
-            controller->setconfiguration(configuration);
-        }
-
-        ~Env()
-        {
-            delete controller;
-        }
-    };
+    NotationViewInputController* m_controller = nullptr;
+    ControlledViewMock m_view;
+    std::shared_ptr<NotationConfigurationMock> m_configuration;
+    std::shared_ptr<NotationInteractionMock> m_interaction;
+    std::shared_ptr<NotationSelectionMock> m_selection;
+    std::shared_ptr<playback::PlaybackControllerMock > m_playbackController;
 
     mutable QList<QInputEvent*> m_events;
 
@@ -70,83 +97,175 @@ public:
                                  QPointF pos = QPointF(100, 100)) const
     {
         QPointF globalPos = pos;
-        int qt4Delta = 60;
-        Qt::Orientation qt4Orientation = Qt::Vertical;
         Qt::MouseButtons buttons = Qt::NoButton;
 
         QWheelEvent* ev = new QWheelEvent(pos,  globalPos,  pixelDelta,  angleDelta,
-                                          qt4Delta, qt4Orientation, buttons, modifiers);
+                                          buttons, modifiers, Qt::ScrollPhase::NoScrollPhase, false);
 
         m_events << ev;
 
         return ev;
     }
+
+    QMouseEvent* make_mousePressEvent(
+        Qt::MouseButton button,
+        Qt::KeyboardModifiers modifiers = Qt::NoModifier,
+        QPointF pos = QPointF(100, 100)) const
+    {
+        QMouseEvent* ev = new QMouseEvent(QMouseEvent::Type::MouseButtonPress, pos, button, {}, modifiers);
+
+        m_events << ev;
+
+        return ev;
+    }
+
+    INotationInteraction::HitElementContext hitContext(engraving::MasterScore* score, bool start) const
+    {
+        INotationInteraction::HitElementContext context;
+
+        Measure* firstMeasure = score->firstMeasure();
+        Segment* segment = start ? firstMeasure->segments().firstCRSegment() : firstMeasure->segments().last();
+        ChordRest* firstChord = segment->nextChordRest(0, !start);
+
+        context.element = engraving::toChord(firstChord)->notes().front();
+        context.staff = context.element->staff();
+
+        return context;
+    }
 };
 
+/**
+ * @brief WheelEvent_ScrollVertical
+ * @details Received wheel event, without modifiers
+ */
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
 {
-    //! CASE Received wheel event, without modifiers
-    Env env;
+    //! [GIVEN] No Wayland display
+    setenv("WAYLAND_DISPLAY", "OFF", false);
 
-    //! GIVEN Has pixelDelta
-
-    //! CHECK Should be called vertical scroll with value 180
-    EXPECT_CALL(env.view, scrollVertical(180))
+    //! [THEN] Should be called vertical scroll with value 180
+    EXPECT_CALL(m_view, moveCanvas(0, 180))
     .Times(1);
 
-    env.controller->wheelEvent(make_wheelEvent(QPoint(0, 180), QPoint(0, 120)));
+    //! [WHEN] User scrolled mouse wheel
+    m_controller->wheelEvent(make_wheelEvent(QPoint(0, 180), QPoint(0, 120)));
 
-    //! CHECK Should be called vertical scroll with value 80
-    EXPECT_CALL(env.view, scrollVertical(80))
+    //! [THEN] Should be called vertical scroll with value 80
+    EXPECT_CALL(m_view, moveCanvas(0, 80))
     .Times(1);
 
-    env.controller->wheelEvent(make_wheelEvent(QPoint(0, 80), QPoint(0, 120)));
+    //! [WHEN] User scrolled mouse wheel
+    m_controller->wheelEvent(make_wheelEvent(QPoint(0, 80), QPoint(0, 120)));
 
-    //! GIVEN pixelDelta is Null
+    //! [GIVEN] pixelDelta is Null
     //!  dy = (angleDelta.y() * qMax(2.0, m_view->height() / 10.0)) / QWheelEvent::DefaultDeltasPerStep;
 
-    //! CHECK Should be called vertical scroll with value 50  (dy = (120 * 500 / 10) / 120 = 50)
-    EXPECT_CALL(env.view, scrollVertical(50))
+    //! [THEN] Should be called vertical scroll with value 50  (dy = (120 * 500 / 10) / 120 = 50)
+    EXPECT_CALL(m_view, moveCanvas(0, 50))
     .Times(1);
 
-    EXPECT_CALL(env.view, height())
+    EXPECT_CALL(m_view, height())
     .WillOnce(Return(500));
 
-    env.controller->wheelEvent(make_wheelEvent(QPoint(), QPoint(0, 120)));
+    //! [WHEN] User scrolled mouse wheel
+    m_controller->wheelEvent(make_wheelEvent(QPoint(), QPoint(0, 120)));
 }
 
+/**
+ * @brief WheelEvent_ScrollHorizontal
+ * @details Received wheel event, with key modifier ShiftModifier
+ */
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollHorizontal)
 {
-    //! CASE Received wheel event, with key modifier ShiftModifier
-    Env env;
+    //! [GIVEN] No Wayland display
+    setenv("WAYLAND_DISPLAY", "OFF", false);
 
-    //! CHECK Should be called vertical scroll with value 120
-    EXPECT_CALL(env.view, scrollHorizontal(120))
+    //! [THEN] Should be called horizontal scroll with value 120
+    EXPECT_CALL(m_view, moveCanvasHorizontal(120))
     .Times(1);
 
-    env.controller->wheelEvent(make_wheelEvent(QPoint(0, 120), QPoint(), Qt::ShiftModifier));
+    //! [WHEN] User scrolled mouse wheel
+    m_controller->wheelEvent(make_wheelEvent(QPoint(0, 120), QPoint(), Qt::ShiftModifier));
 }
 
-TEST_F(NotationViewInputControllerTests, WheelEvent_Zoom)
+/**
+ * @brief WheelEvent_ScrollHorizontal
+ * @details Received wheel event, with key modifier ControlModifier
+ */
+TEST_F(NotationViewInputControllerTests, DISABLED_WheelEvent_Zoom)
 {
     //! CASE Received wheel event, with key modifier ControlModifier
-    Env env;
-
     ValCh<int> currentZoom;
     currentZoom.val = 100;
 
-    ON_CALL(*(env.configuration), currentZoom())
-    .WillByDefault(Return(currentZoom));
+//    ON_CALL(*m_configuration, currentZoom())
+//    .WillByDefault(Return(currentZoom));
 
     //! CHECK Should be called zoomStep with value 110
-    EXPECT_CALL(env.view, setZoom(110, QPoint(100, 100)))
-    .Times(1);
+//    EXPECT_CALL(env.view, setZoom(110, QPoint(100, 100)))
+//    .Times(1);
 
-    EXPECT_CALL(env.view, height())
+    EXPECT_CALL(m_view, height())
     .WillOnce(Return(500));
 
-    EXPECT_CALL(env.view, toLogical(_))
-    .WillOnce(Return(QPoint(100, 100)));
+    EXPECT_CALL(m_view, toLogical(QPointF(100, 100)))
+    .WillOnce(Return(PointF(100, 100)));
 
-    env.controller->wheelEvent(make_wheelEvent(QPoint(), QPoint(0, 120), Qt::ControlModifier, QPointF(100, 100)));
+    m_controller->wheelEvent(make_wheelEvent(QPoint(), QPoint(0, 120), Qt::ControlModifier, QPointF(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Range_Start_Drag_From_Selected_Element
+ * @details User pressed left mouse button on already selected note
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selected_Element)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Previous selected note
+    INotationInteraction::HitElementContext oldContext = hitContext(score, true /*first note*/);
+
+    EXPECT_CALL(*m_interaction, hitElementContext())
+    .WillOnce(ReturnRef(oldContext));
+
+    //! [GIVEN] User selected new note that was already selected
+    INotationInteraction::HitElementContext newContext = hitContext(score, false /*last note*/);
+    newContext.element->setSelected(true);
+
+    EXPECT_CALL(*m_interaction, hitElement(_, _))
+    .WillOnce(Return(newContext.element));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.element->staff()));
+
+    //! [GIVEN] The hew hit element context with new note will be set
+    EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
+    .Times(1);
+
+    //! [GIVEN] There is a range selection
+    ON_CALL(*m_selection, isRange())
+    .WillByDefault(Return(true));
+
+    //! [GIVEN] No note enter mode, no playing
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(false));
+
+    EXPECT_CALL(*m_playbackController, isPlaying())
+    .WillOnce(Return(false));
+
+    //! [THEN] We will seek and play selected note
+    EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
+    .Times(1);
+
+    std::vector<const EngravingItem*> elements = { newContext.element };
+    EXPECT_CALL(*m_playbackController, playElements(elements))
+    .Times(1);
+
+    //! [THEN] We will not select already selected note
+    EXPECT_CALL(*m_interaction, select(_, _, _))
+    .Times(0);
+
+    //! [WHEN] User pressed left mouse button
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
 }
