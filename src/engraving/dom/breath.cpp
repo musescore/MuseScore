@@ -128,6 +128,7 @@ bool Breath::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::PAUSE:
         setPause(v.toDouble());
+        score()->setUpTempoMapLater();
         break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
