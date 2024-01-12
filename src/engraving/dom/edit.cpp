@@ -6162,6 +6162,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                         }
                     }
                 }
+
+                if (sp->isTextLine() && sp != nsp) {
+                    EngravingItem* parent = sp->parentItem();
+                    if (parent && parent->isNote()) {
+                        nsp->setParent(parent->findLinkedInStaff(staff));
+                    }
+                }
+
                 doUndoAddElement(nsp);
             } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND) {
                 doUndoAddElement(toSpanner(ne));
