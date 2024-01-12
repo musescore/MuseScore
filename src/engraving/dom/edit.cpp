@@ -6731,7 +6731,6 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
     const Fraction startTick = m1->tick();
     const Fraction endTick = m2->endTick();
     std::set<Spanner*> spannersToRemove;
-    std::set<EngravingItem*> annotationsToRemove;
 
     //
     //  handle ties which start before m1 and end in (m1-m2)
@@ -6749,8 +6748,14 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
             continue;
         }
 
-        for (EngravingItem* ee : s->annotations()) {
-            annotationsToRemove.insert(ee);
+        // Make sure annotations are removed once, even if this segment contains linked copies of the same annotation
+        // (the linked copy would be removed by undoRemoveElement)
+        while (!s->annotations().empty()) {
+            EngravingItem* annotation = s->annotations().front();
+            IF_ASSERT_FAILED(annotation) {
+                continue;
+            }
+            undoRemoveElement(annotation);
         }
 
         for (track_idx_t track = 0; track < ntracks(); ++track) {
@@ -6792,10 +6797,6 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool
 
     for (Spanner* s : spannersToRemove) {
         undoRemoveElement(s);
-    }
-
-    for (EngravingItem* a : annotationsToRemove) {
-        undoRemoveElement(a);
     }
 
     // delete staffTypeChanges in removed measures
