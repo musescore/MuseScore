@@ -109,7 +109,7 @@ wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescor
 7z x -y dump_syms.7z -o"$HOME/breakpad"
 
 # VST SDK
-wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
+wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"
 7z x -y vst_sdk.7z -o"$HOME/vst"
 echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
 
