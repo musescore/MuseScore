@@ -135,9 +135,9 @@ enum class AccidentalType {
     SHARP_31 = int(mu::engraving::AccidentalType::SHARP_31),
     FLAT_53 = int(mu::engraving::AccidentalType::FLAT_53),
     SHARP_53 = int(mu::engraving::AccidentalType::SHARP_53),
-    //EQUALS_ALMOST = int(mu::engraving::AccidentalType::EQUALS_ALMOST),
-    //EQUALS = int(mu::engraving::AccidentalType::EQUALS),
-    //TILDE = int(mu::engraving::AccidentalType::TILDE),
+    EQUALS_ALMOST = int(mu::engraving::AccidentalType::EQUALS_ALMOST),
+    EQUALS = int(mu::engraving::AccidentalType::EQUALS),
+    TILDE = int(mu::engraving::AccidentalType::TILDE),
 
     // Persian
     SORI = int(mu::engraving::AccidentalType::SORI),
