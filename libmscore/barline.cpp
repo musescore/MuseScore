@@ -739,7 +739,7 @@ void BarLine::draw(QPainter* painter) const
                   break;
             }
       Segment* s = segment();
-      if (s && s->isEndBarLineType() && !score()->printing() && score()->showUnprintable()) {
+      if (s && s->isEndBarLineType() && !score()->printing()) {
             Measure* m = s->measure();
             if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
                   painter->setPen(MScore::layoutBreakColor);
