@@ -1419,7 +1419,9 @@ TieSegment* SlurTieLayout::layoutTieWithNoEndNote(Tie* item)
     SlurTiePos sPos;
     computeStartAndEndSystem(item, sPos);
     sPos.p1 = computeDefaultStartOrEndPoint(item, Grip::START);
-    sPos.p2 = computeDefaultStartOrEndPoint(item, Grip::END);
+
+    Segment* chordSeg = c1->segment();
+    sPos.p2 = PointF(sPos.p1.x() + chordSeg->width(), sPos.p1.y());
 
     segment->ups(Grip::START).p = sPos.p1;
     segment->ups(Grip::END).p = sPos.p2;
