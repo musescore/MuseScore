@@ -74,6 +74,8 @@ public:
 
         m_playbackController = std::make_shared<playback::PlaybackControllerMock>();
         m_controller->setplaybackController(m_playbackController);
+
+        setNoWaylandForLinux();
     }
 
     void TearDown() override
@@ -132,6 +134,14 @@ public:
 
         return context;
     }
+
+    void setNoWaylandForLinux()
+    {
+#ifdef Q_OS_LINUX
+        //! [GIVEN] No Wayland display
+        setenv("WAYLAND_DISPLAY", "OFF", false);
+#endif
+    }
 };
 
 /**
@@ -140,9 +150,6 @@ public:
  */
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
 {
-    //! [GIVEN] No Wayland display
-    setenv("WAYLAND_DISPLAY", "OFF", false);
-
     //! [THEN] Should be called vertical scroll with value 180
     EXPECT_CALL(m_view, moveCanvas(0, 180))
     .Times(1);
@@ -177,9 +184,6 @@ TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollVertical)
  */
 TEST_F(NotationViewInputControllerTests, WheelEvent_ScrollHorizontal)
 {
-    //! [GIVEN] No Wayland display
-    setenv("WAYLAND_DISPLAY", "OFF", false);
-
     //! [THEN] Should be called horizontal scroll with value 120
     EXPECT_CALL(m_view, moveCanvasHorizontal(120))
     .Times(1);
