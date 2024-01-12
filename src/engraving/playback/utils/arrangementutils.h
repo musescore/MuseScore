@@ -35,9 +35,9 @@
 #include "types/constants.h"
 
 namespace mu::engraving {
-inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
+inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick, bool ignorePauseOnTick = false)
 {
-    return score->repeatList().utick2utime(tick) * 1000000;
+    return score->repeatList().utick2utime(tick, ignorePauseOnTick) * 1000000;
 }
 
 inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
@@ -47,7 +47,7 @@ inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
 
 inline mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick)
 {
-    return timestampFromTicks(score, endTick) - timestampFromTicks(score, startTick);
+    return timestampFromTicks(score, endTick, true /*ignorePauseOnTick*/) - timestampFromTicks(score, startTick);
 }
 
 inline mpe::duration_t durationFromStartAndTicks(const Score* score, const int startTick, const int ticks)
@@ -64,7 +64,7 @@ inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const 
                                                                           const int startTick, const int durationTicks)
 {
     mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick);
-    mpe::duration_t duration = timestampFromTicks(score, startTick + durationTicks) - startTimestamp;
+    mpe::duration_t duration = timestampFromTicks(score, startTick + durationTicks, true /*ignorePauseOnTick*/) - startTimestamp;
 
     return { startTimestamp, duration };
 }
