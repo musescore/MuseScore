@@ -5188,16 +5188,20 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                 if (dstChord != dstCR) {
                     undoAddCR(dstChord, m, s->tick());
                 }
-                // reconnect the tie to this note, if any
-                Tie* tie = note->tieBack();
-                if (tie) {
-                    undoChangeSpannerElements(tie, tie->startNote(), newNote);
+                for (EngravingObject* linked : note->linkList()) {
+                    Note* linkedNote = toNote(linked);
+                    // reconnect the tie to this note, if any
+                    Tie* tie = linkedNote->tieBack();
+                    if (tie) {
+                        undoChangeSpannerElements(tie, tie->startNote(), newNote->findLinkedInStaff(linkedNote->staff()));
+                    }
+                    // reconnect the tie from this note, if any
+                    tie = linkedNote->tieFor();
+                    if (tie) {
+                        undoChangeSpannerElements(tie, newNote->findLinkedInStaff(linkedNote->staff()), tie->endNote());
+                    }
                 }
-                // reconnect the tie from this note, if any
-                tie = note->tieFor();
-                if (tie) {
-                    undoChangeSpannerElements(tie, newNote, tie->endNote());
-                }
+
                 // remove original note
                 if (notes > 1) {
                     undoRemoveElement(note);
