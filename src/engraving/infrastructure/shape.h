@@ -25,6 +25,7 @@
 
 #include <functional>
 #include <optional>
+#include <memory>
 
 #include "draw/types/geometry.h"
 
@@ -75,28 +76,26 @@ public:
         Composite   // composed of other shapes
     };
 
-    Shape(Type t = Type::Fixed)
-        : m_type(t) {}
-    Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
-        : m_type(t) { setBBox(r, p); }
+    Shape(Type t = Type::Fixed);
+    Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed);
     Shape(const std::vector<mu::RectF>& rects, const EngravingItem* p = nullptr);
 
-    Type type() const { return m_type; }
-    bool isComposite() const { return m_type == Type::Composite; }
+    Type type() const { return m_data->type; }
+    bool isComposite() const { return m_data->type == Type::Composite; }
 
-    size_t size() const { return m_elements.size(); }
-    bool empty() const { return m_elements.empty(); }
-    void clear() { m_elements.clear(); }
+    size_t size() const { return m_data->elements.size(); }
+    bool empty() const { return m_data->elements.empty(); }
+    void clear();
 
     bool equal(const Shape& sh) const
     {
-        if (m_type != sh.m_type) {
+        if (m_data->type != sh.m_data->type) {
             return false;
         }
 
-        switch (m_type) {
+        switch (m_data->type) {
         case Type::Fixed: return this->bbox() == sh.bbox();
-        case Type::Composite: return this->m_elements == sh.m_elements;
+        case Type::Composite: return this->m_data->elements == sh.m_data->elements;
         }
 
         return true;
@@ -118,16 +117,21 @@ public:
     template<typename Predicate>
     inline bool remove_if(Predicate p)
     {
-        size_t origSize = m_elements.size();
-        m_elements.erase(std::remove_if(m_elements.begin(), m_elements.end(), p), m_elements.end());
+        detach();
+        size_t origSize = m_data->elements.size();
+        m_data->elements.erase(std::remove_if(m_data->elements.begin(), m_data->elements.end(), p), m_data->elements.end());
         invalidateBBox();
-        return origSize != m_elements.size();
+        return origSize != m_data->elements.size();
     }
 
     // ---
 
-    const std::vector<ShapeElement>& elements() const { return m_elements; }
-    std::vector<ShapeElement>& elements() { return m_elements; }
+    const std::vector<ShapeElement>& elements() const { return m_data->elements; }
+    std::vector<ShapeElement>& elements()
+    {
+        detach();
+        return m_data->elements;
+    }
 
     std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
     std::optional<ShapeElement> find_first(ElementType type) const;
@@ -168,9 +172,15 @@ private:
 
     void invalidateBBox();
 
-    Type m_type = Type::Fixed;
-    std::vector<ShapeElement> m_elements;
-    mutable RectF m_bbox;   // cache
+    void detach();
+
+    struct Data {
+        Type type = Type::Fixed;
+        std::vector<ShapeElement> elements;
+        mutable RectF bbox;   // cache
+    };
+
+    std::shared_ptr<Data> m_data;
 };
 
 void dump(const ShapeElement& sh, std::stringstream& ss);
