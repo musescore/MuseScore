@@ -234,14 +234,14 @@ int RepeatList::tick2utick(int tick) const
 //   utick2utime
 //---------------------------------------------------------
 
-double RepeatList::utick2utime(int tick) const
+double RepeatList::utick2utime(int tick, bool ignorePauseOnTick) const
 {
     size_t n = size();
     unsigned ii = (m_idx1 < n) && (tick >= at(m_idx1)->utick) ? m_idx1 : 0;
     for (unsigned i = ii; i < n; ++i) {
         if ((tick >= at(i)->utick) && ((i + 1 == n) || (tick < at(i + 1)->utick))) {
             int t     = tick - (at(i)->utick - at(i)->tick);
-            double tt = m_score->tempomap()->tick2time(t) + at(i)->timeOffset;
+            double tt = m_score->tempomap()->tick2time(t, nullptr, ignorePauseOnTick) + at(i)->timeOffset;
             return tt;
         }
     }
