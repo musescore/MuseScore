@@ -491,13 +491,15 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
         return { SymId::noSym, SymId::noSym };
     };
 
+    Shape shape;
+
     // Single?
     SymId singleSym = accidentalSingleSym(item);
     if (singleSym != SymId::noSym && conf.engravingFont()->isValid(singleSym)) {
         Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
         ldata->syms.push_back(s);
 
-        ldata->addBbox(item->symBbox(singleSym));
+        shape.add(item->symShapeWithCutouts(singleSym));
     }
     // Multi
     else {
@@ -515,7 +517,7 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
             Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
                                            item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
             ldata->syms.push_back(ls);
-            ldata->addBbox(item->symBbox(bracketSyms.first));
+            shape.add(item->symBbox(bracketSyms.first), item);
 
             x += item->symAdvance(bracketSyms.first) + margin;
         }
@@ -524,7 +526,7 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
         SymId mainSym = item->symId();
         Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
         ldata->syms.push_back(ms);
-        ldata->addBbox(item->symBbox(mainSym).translated(x, 0.0));
+        shape.add(item->symShapeWithCutouts(mainSym).translated(PointF(x, 0.0)));
 
         // Right
         if (bracketSyms.second != SymId::noSym) {
@@ -533,9 +535,11 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
             Accidental::LayoutData::Sym rs(bracketSyms.second, x,
                                            item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
             ldata->syms.push_back(rs);
-            ldata->addBbox(item->symBbox(bracketSyms.second).translated(x, 0.0));
+            shape.add(item->symBbox(bracketSyms.second).translated(x, 0.0), item);
         }
     }
+
+    ldata->setShape(shape);
 }
 
 void TLayout::layoutActionIcon(const ActionIcon* item, ActionIcon::LayoutData* ldata)
@@ -4261,7 +4265,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
 
     Accidental* acc = item->accidental();
     if (acc && acc->addToSkyline()) {
-        shape.add(acc->ldata()->bbox().translated(acc->pos()), acc);
+        shape.add(acc->ldata()->shape().translated(acc->pos()));
     }
     for (auto e : item->el()) {
         if (e->addToSkyline()) {

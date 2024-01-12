@@ -75,6 +75,8 @@ public:
     RectF bbox(const SymIdList& s, const mu::SizeF& mag) const override;
     Shape shape(const SymIdList& s, double mag) const override;
     Shape shape(const SymIdList& s, const mu::SizeF& mag) const override;
+    Shape shapeWithCutouts(SymId id, double mag) override;
+    Shape shapeWithCutouts(SymId id, const mu::SizeF& mag) override;
 
     double width(SymId id, double mag) const override;
     double width(const SymIdList&, double mag) const override;
@@ -99,6 +101,7 @@ private:
     struct Sym {
         char32_t code;
         RectF bbox;
+        Shape shapeWithCutouts;
         double advance = 0.0;
 
         std::map<SmuflAnchorId, mu::PointF> smuflAnchors;
@@ -120,6 +123,8 @@ private:
     void loadStylisticAlternates(const JsonObject& glyphsWithAlternatesObject);
     void loadEngravingDefaults(const JsonObject& engravingDefaultsObject);
     void computeMetrics(Sym& sym, const Smufl::Code& code);
+
+    void constructShapeWithCutouts(Shape& shape, SymId id);
 
     Sym& sym(SymId id);
     const Sym& sym(SymId id) const;
