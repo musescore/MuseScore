@@ -1638,6 +1638,16 @@ RectF EngravingItem::symBbox(const SymIdList& symbols) const
     return score()->engravingFont()->bbox(symbols, magS());
 }
 
+Shape EngravingItem::symShapeWithCutouts(SymId id) const
+{
+    Shape shape = score()->engravingFont()->shapeWithCutouts(id, magS());
+    for (ShapeElement& element : shape.elements()) {
+        element.setItem(this);
+    }
+
+    return shape;
+}
+
 //---------------------------------------------------------
 //   symSmuflAnchor
 //---------------------------------------------------------
@@ -2535,9 +2545,6 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             //! We can remove it the moment we figure out the layout order of the elements
             TLayout::fillTupletShape(toTuplet(m_item), static_cast<Tuplet::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
-        } break;
-        case ElementType::ACCIDENTAL: {
-            return Shape(sh.bbox(), m_item);
         } break;
         default:
             break;
