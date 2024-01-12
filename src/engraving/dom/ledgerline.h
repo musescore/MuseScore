@@ -25,6 +25,10 @@
 
 #include "engravingitem.h"
 
+namespace mu::engraving::compat {
+class DummyElement;
+}
+
 namespace mu::engraving {
 class Chord;
 
@@ -39,12 +43,14 @@ class Chord;
 
 class LedgerLine final : public EngravingItem
 {
-    OBJECT_ALLOCATOR(engraving, LedgerLine)
+    //OBJECT_ALLOCATOR(engraving, LedgerLine)
     DECLARE_CLASSOF(ElementType::LEDGER_LINE)
 
 public:
-    LedgerLine(EngravingItem*);
-    ~LedgerLine();
+
+    static LedgerLine* create(EngravingItem* parent);
+    static void destroy(LedgerLine* l);
+
     LedgerLine& operator=(const LedgerLine&) = delete;
 
     LedgerLine* clone() const override { return new LedgerLine(*this); }
@@ -70,6 +76,11 @@ public:
     DECLARE_LAYOUTDATA_METHODS(LedgerLine);
 
 private:
+
+    friend class compat::DummyElement;
+
+    LedgerLine(EngravingItem*);
+    ~LedgerLine();
 
     double m_len = 0.0;
     LedgerLine* m_next = nullptr;

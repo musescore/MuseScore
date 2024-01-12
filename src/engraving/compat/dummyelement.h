@@ -42,6 +42,8 @@ public:
 
     void init();
 
+    EngravingItem* clone() const override;
+
     RootItem* rootItem();
     Page* page();
     System* system();
@@ -51,7 +53,8 @@ public:
     Note* note();
     BracketItem* bracketItem();
 
-    EngravingItem* clone() const override;
+    LedgerLine* createLedgerLine(EngravingItem* parent);
+    void destroyLedgerLine(LedgerLine* l);
 
     PropertyValue getProperty(Pid) const override { return PropertyValue(); }
     bool setProperty(Pid, const PropertyValue&) override { return false; }
@@ -69,6 +72,7 @@ private:
     Chord* m_chord = nullptr;
     Note* m_note = nullptr;
     BracketItem* m_bracketItem = nullptr;
+    std::set<LedgerLine*> m_ledgerLinePool;
 };
 }
 

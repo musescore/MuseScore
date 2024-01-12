@@ -25,12 +25,23 @@
 #include "chord.h"
 #include "measure.h"
 #include "system.h"
+#include "score.h"
 
 #include "log.h"
 
 using namespace mu;
 
 namespace mu::engraving {
+LedgerLine* LedgerLine::create(EngravingItem* parent)
+{
+    return parent->score()->dummy()->createLedgerLine(parent);
+}
+
+void LedgerLine::destroy(LedgerLine* l)
+{
+    l->score()->dummy()->destroyLedgerLine(l);
+}
+
 //---------------------------------------------------------
 //   LedgerLine
 //---------------------------------------------------------

@@ -433,7 +433,7 @@ Chord::~Chord()
     delete m_hook;
     for (LedgerLine* ll = m_ledgerLines; ll;) {
         LedgerLine* llNext = ll->next();
-        delete ll;
+        LedgerLine::destroy(ll);
         ll = llNext;
     }
     DeleteAll(m_graceNotes);
@@ -1009,7 +1009,7 @@ void Chord::addLedgerLines()
             double _spatium = spatium();
             double stepDistance = lineDistance * 0.5;
             for (auto lld : vecLines) {
-                LedgerLine* h = new LedgerLine(score()->dummy());
+                LedgerLine* h = LedgerLine::create(score()->dummy());
                 h->setParent(this);
                 h->setTrack(track);
                 h->setVisible(lld.visible && staffVisible);

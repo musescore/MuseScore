@@ -2122,6 +2122,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
         m->setWidth(0.0);
         return;
     }
+
     double x = 0.0;
     bool first = m->isFirstInSystem();
 

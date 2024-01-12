@@ -102,7 +102,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     while (item->ledgerLines()) {
         LedgerLine* l = item->ledgerLines()->next();
-        delete item->ledgerLines();
+        LedgerLine::destroy(item->ledgerLines());
         item->setLedgerLine(l);
     }
 
@@ -276,7 +276,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     while (item->ledgerLines()) {
         LedgerLine* l = item->ledgerLines()->next();
-        delete item->ledgerLines();
+        LedgerLine::destroy(item->ledgerLines());
         item->setLedgerLine(l);
     }
 
@@ -370,7 +370,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         double extraLen    = 0;
         double llX         = stemX - (headWidth + extraLen) * 0.5;
         for (int i = 0; i < ledgerLines; i++) {
-            LedgerLine* ldgLin = new LedgerLine(ctx.mutDom().dummyParent());
+            LedgerLine* ldgLin = LedgerLine::create(ctx.mutDom().dummyParent());
             ldgLin->setParent(item);
             ldgLin->setTrack(item->track());
             ldgLin->setVisible(item->visible());

@@ -30,6 +30,7 @@
 #include "dom/chord.h"
 #include "dom/note.h"
 #include "dom/bracketItem.h"
+#include "dom/ledgerline.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -45,6 +46,11 @@ DummyElement::DummyElement(EngravingObject* parent)
 
 DummyElement::~DummyElement()
 {
+    for (LedgerLine* l : m_ledgerLinePool) {
+        delete l;
+    }
+    m_ledgerLinePool.clear();
+
     delete m_bracketItem;
     delete m_note;
     delete m_chord;
@@ -90,6 +96,11 @@ void DummyElement::init()
     m_bracketItem->setParent(m_system);
 }
 
+EngravingItem* DummyElement::clone() const
+{
+    return nullptr;
+}
+
 RootItem* DummyElement::rootItem()
 {
     return m_root;
@@ -130,9 +141,27 @@ BracketItem* DummyElement::bracketItem()
     return m_bracketItem;
 }
 
-EngravingItem* DummyElement::clone() const
+LedgerLine* DummyElement::createLedgerLine(EngravingItem* parent)
 {
-    return nullptr;
+    LedgerLine* v = nullptr;
+    if (!m_ledgerLinePool.empty()) {
+        v = *m_ledgerLinePool.begin();
+        m_ledgerLinePool.erase(m_ledgerLinePool.begin());
+        v->setParent(parent);
+        v->setLen(0.0);
+        v->setVertical(false);
+        v->setNext(nullptr);
+    } else {
+        v = new LedgerLine(parent);
+    }
+    return v;
+}
+
+void DummyElement::destroyLedgerLine(LedgerLine* l)
+{
+    l->setParent(this);
+    l->m_next = nullptr;
+    m_ledgerLinePool.insert(l);
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
