@@ -88,8 +88,8 @@ static const QStringList ALL_PAGE_CODES {
     "staff-text",
     "tempo-text",
     "lyrics",
-    "expression",
     "dynamics",
+    "expression",
     "rehearsal-marks",
     "figured-bass",
     "chord-symbols",
@@ -114,6 +114,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "measure-number",
     "multimeasure-rest-range",
     "tempo",
+    "tempo-change",
     "metronome",
     "repeat-text-left",
     "repeat-text-right",
@@ -121,7 +122,6 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "system",
     "staff",
     "expression",
-    "dynamics",
     "hairpin",
     "lyrics-odd-lines",
     "lyrics-even-lines",
@@ -135,6 +135,9 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "lh-guitar-fingering",
     "rh-guitar-fingering",
     "string-number",
+    "string-tunings",
+    "harp-pedal-diagram",
+    "harp-pedal-text-diagram",
     "text-line",
     "volta",
     "ottava",
@@ -1366,7 +1369,8 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "page";
 
     case ElementType::INSTRUMENT_NAME:
-    case ElementType::TEXT: {
+    case ElementType::TEXT:
+    case ElementType::HARP_DIAGRAM: {
         if (element->isText()) {
             if (toText(element)->textStyleType() == TextStyleType::FOOTER
                 || toText(element)->textStyleType() == TextStyleType::HEADER) {
@@ -1557,6 +1561,9 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::TEMPO:
             return "tempo";
 
+        case TextStyleType::TEMPO_CHANGE:
+            return "tempo-change";
+
         case TextStyleType::METRONOME:
             return "metronome";
 
@@ -1617,6 +1624,15 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
         case TextStyleType::STRING_NUMBER:
             return "string-number";
 
+        case TextStyleType::STRING_TUNINGS:
+            return "string-tunings";
+
+        case TextStyleType::HARP_PEDAL_DIAGRAM:
+            return "harp-pedal-diagram";
+
+        case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM:
+            return "harp-pedal-text-diagram";
+
         case TextStyleType::TEXTLINE:
             return "text-line";
 
@@ -1676,8 +1692,15 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
         case TextStyleType::USER12:
             return "user12";
+
+        case TextStyleType::DYNAMICS:
+        case TextStyleType::DEFAULT:
+        case TextStyleType::TEXT_TYPES:
+        case TextStyleType::IGNORED_TYPES:
+            return QString();
         }
     }
+    return QString();
 }
 
 void EditStyle::setCurrentPageCode(const QString& code)
