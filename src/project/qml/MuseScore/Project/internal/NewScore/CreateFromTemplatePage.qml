@@ -59,8 +59,9 @@ Item {
         spacing: 12
 
         TitleListView {
+            Layout.minimumWidth: 200
+            Layout.preferredWidth: parent.width / 5
             Layout.fillHeight: true
-            Layout.preferredWidth: parent.width / 4
 
             navigationPanel.section: root.navigationSection
             navigationPanel.name: "Category"
@@ -86,8 +87,9 @@ Item {
         TitleListView {
             id: templatesView
 
-            Layout.fillHeight: true
+            Layout.minimumWidth: 276
             Layout.preferredWidth: parent.width / 4
+            Layout.fillHeight: true
 
             navigationPanel.section: root.navigationSection
             navigationPanel.name: "Template"
