@@ -11236,22 +11236,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Start and end of %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3320"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3322"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished">Current contents of measures will be replaced</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3321"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3323"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished">Continue with inserting measure repeat?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2362"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2372"/>
         <source>Measure: %1</source>
         <translation type="unfinished">Measure: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2365"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2375"/>
         <source>Beat: %1</source>
         <translation type="unfinished">Beat: %1</translation>
     </message>
@@ -11418,77 +11418,77 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">Note</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3016"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3054"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3015"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3053"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation type="unfinished">Voice: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3024"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3023"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished">(on %1‰ off %2‰)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3030"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3059"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3029"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3058"/>
         <source>Beat slash</source>
         <translation type="unfinished">Beat slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3030"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3059"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3029"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3058"/>
         <source>Rhythm slash</source>
         <translation type="unfinished">Rhythm slash</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3034"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3063"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3033"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3062"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished">%1; String: %2; Fret: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3040"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3039"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished">%1; Pitch: %2; Duration: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3069"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3068"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished">%1 head %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3071"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3070"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation type="unfinished">Cross-staff above</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3073"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3072"/>
         <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation type="unfinished">Cross-staff below</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3077"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3076"/>
         <source>too low</source>
         <translation type="unfinished">too low</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3079"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3078"/>
         <source>too high</source>
         <translation type="unfinished">too high</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3081"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3080"/>
         <source>too low for amateurs</source>
         <translation type="unfinished">too low for amateurs</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3083"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3082"/>
         <source>too high for amateurs</source>
         <translation type="unfinished">too high for amateurs</translation>
     </message>
@@ -11552,8 +11552,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1217"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1074"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1085"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3109"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3121"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3108"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3120"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2254"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
@@ -11562,8 +11562,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/barline.cpp" line="1220"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1077"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1087"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3113"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3129"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3112"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3128"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2269"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
@@ -15619,6 +15619,21 @@ Fret %1 on strings %2</translation>
         <translation type="unfinished">Double sharp raised by two syntonic commas</translation>
     </message>
     <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3456"/>
+        <source>Enharmonically reinterpret accidental almost equal to</source>
+        <translation type="unfinished">Enharmonically reinterpret accidental almost equal to</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3457"/>
+        <source>Enharmonically reinterpret accidental equals</source>
+        <translation type="unfinished">Enharmonically reinterpret accidental equals</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/symnames.cpp" line="3458"/>
+        <source>Enharmonically reinterpret accidental tilde</source>
+        <translation type="unfinished">Enharmonically reinterpret accidental tilde</translation>
+    </message>
+    <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3464"/>
         <source>Five-quarter-tones flat</source>
         <translation type="unfinished">Five-quarter-tones flat</translation>
@@ -17732,18 +17747,18 @@ Fret %1 on strings %2</translation>
 <context>
     <name>iex_guitarpro</name>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="477"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="485"/>
         <source>Free time</source>
         <comment>time signature</comment>
         <translation type="unfinished">Free time</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1056"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1064"/>
         <source>Music by %1</source>
         <translation type="unfinished">Music by %1</translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1061"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1069"/>
         <source>Words by %1</source>
         <translation type="unfinished">Words by %1</translation>
     </message>
@@ -25543,17 +25558,17 @@ failed.</translation>
         <translation type="unfinished">Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="767"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="769"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronome</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="777"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="779"/>
         <source>Chords</source>
         <translation type="unfinished">Chords</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1087"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1089"/>
         <source>Loading audio samples</source>
         <translation type="unfinished">Loading audio samples</translation>
     </message>
@@ -26092,7 +26107,7 @@ failed.</translation>
         <translation type="unfinished">Open</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="330"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="333"/>
         <source>Untitled</source>
         <translation type="unfinished">Untitled</translation>
     </message>
