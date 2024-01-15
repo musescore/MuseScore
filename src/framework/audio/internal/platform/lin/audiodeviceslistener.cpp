@@ -51,6 +51,8 @@ void AudioDevicesListener::stop()
     }
 
     m_isRunning = false;
+    m_runningCv.notify_all();
+
     m_devicesUpdateThread->join();
     m_devicesUpdateThread = nullptr;
 }
@@ -62,12 +64,14 @@ mu::async::Notification AudioDevicesListener::devicesChanged() const
 
 void AudioDevicesListener::th_updateDevices()
 {
+    std::unique_lock<std::mutex> lock(m_mutex);
+
     while (m_isRunning) {
         AudioDeviceList devices = m_actualDevicesCallback();
 
         th_setDevices(devices);
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        m_runningCv.wait_for(lock, std::chrono::milliseconds(5000));
     }
 }
 
