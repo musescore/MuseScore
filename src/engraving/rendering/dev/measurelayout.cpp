@@ -763,46 +763,46 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
     }
 
     int mno = ctx.state().measureNo();
-    Measure* m = toMeasure(currentMB);
+    Measure* firstMeasure = toMeasure(currentMB);
 
     if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
-        Measure* nm = m;
-        Measure* lm = nm;
+        Measure* measureToBeChecked = firstMeasure;
+        Measure* lastMeasure = measureToBeChecked;
         int n       = 0;
         Fraction len;
 
-        while (validMMRestMeasure(ctx, nm)) {
-            MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
-            if (breakMultiMeasureRest(ctx, nm) && n) {
+        while (validMMRestMeasure(ctx, measureToBeChecked)) {
+            MeasureBase* nextMeasureBase = ctx.conf().isShowVBox() ? measureToBeChecked->next() : measureToBeChecked->nextMeasure();
+            if (breakMultiMeasureRest(ctx, measureToBeChecked) && n) {
                 break;
             }
-            if (nm != m) {
-                int measureNo = adjustMeasureNo(nm, ctx.state().measureNo());
+            if (measureToBeChecked != firstMeasure) {
+                int measureNo = adjustMeasureNo(measureToBeChecked, ctx.state().measureNo());
                 ctx.mutState().setMeasureNo(measureNo);
             }
             ++n;
-            len += nm->ticks();
-            lm = nm;
-            if (!(mb && mb->isMeasure())) {
+            len += measureToBeChecked->ticks();
+            lastMeasure = measureToBeChecked;
+            if (!(nextMeasureBase && nextMeasureBase->isMeasure())) {
                 break;
             }
-            nm = toMeasure(mb);
+            measureToBeChecked = toMeasure(nextMeasureBase);
         }
 
         if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
-            createMMRest(ctx, m, lm, len);
-            ctx.mutState().setCurMeasure(m->mmRest());
-            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
+            createMMRest(ctx, firstMeasure, lastMeasure, len);
+            ctx.mutState().setCurMeasure(firstMeasure->mmRest());
+            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure());
         } else {
-            if (m->mmRest()) {
-                ctx.mutDom().undo(new ChangeMMRest(m, 0));
+            if (firstMeasure->mmRest()) {
+                ctx.mutDom().undo(new ChangeMMRest(firstMeasure, 0));
             }
-            m->setMMRestCount(0);
+            firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNo(mno);
         }
-    } else if (m->isMMRest()) {
-        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), m->mmRestCount());
-        int measureNo = ctx.state().measureNo() + m->mmRestCount() - 1;
+    } else if (firstMeasure->isMMRest()) {
+        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
+        int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
         ctx.mutState().setMeasureNo(measureNo);
     }
 }
