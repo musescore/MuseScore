@@ -1157,11 +1157,14 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     const qreal sizeRatio = spatium / gpaletteScore->style().spatium();
     const qreal adjustedRatio = sizeRatio * 1.5;
 
-    engravingRender()->layoutItem(const_cast<EngravingItem*>(element));
+    engravingRenderer()->layoutItem(const_cast<EngravingItem*>(element));
 
     qreal width = element->ldata()->bbox().width();
     qreal height = element->ldata()->bbox().height();
+    // qreal width = 100;
+    // qreal height = 100;
     QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
+    // QSize pixmapSize = QSize(width, height);
 
     static QPixmap pixmap(pixmapSize); // null or 1x1 crashes on Linux under ChromeOS?!
     pixmap.fill(Qt::white);

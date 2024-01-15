@@ -58,7 +58,6 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
     INJECT(framework::IInteractive, interactive)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
     INJECT_STATIC(mu::palette::IPaletteConfiguration, paletteConf)
-    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
