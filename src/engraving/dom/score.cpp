@@ -4304,12 +4304,14 @@ void Score::appendMeasures(int n)
 //   addSpanner
 //---------------------------------------------------------
 
-void Score::addSpanner(Spanner* s)
+void Score::addSpanner(Spanner* s, bool computeStartEnd)
 {
     m_spanner.addSpanner(s);
     s->added();
-    s->computeStartElement();
-    s->computeEndElement();
+    if (computeStartEnd) {
+        s->computeStartElement();
+        s->computeEndElement();
+    }
 }
 
 //---------------------------------------------------------
