@@ -359,7 +359,7 @@ void TWrite::writeItems(const ElementList& items, XmlWriter& xml, WriteContext& 
     }
 }
 
-void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
+void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force)
 {
     if (item->isStyled(pid)) {
         return;
@@ -370,7 +370,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
         return;
     }
     PropertyFlags f = item->propertyFlags(pid);
-    PropertyValue d = (f != PropertyFlags::STYLED) ? item->propertyDefault(pid) : PropertyValue();
+    PropertyValue d = !force && (f != PropertyFlags::STYLED) ? item->propertyDefault(pid) : PropertyValue();
 
     if (pid == Pid::FONT_STYLE) {
         FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
@@ -742,7 +742,8 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
         Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE
     }) {
-        writeProperty(item, xml, id);
+        bool force = (item->isVBox() && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
+        writeProperty(item, xml, id, force);
     }
     writeItemProperties(item, xml, ctx);
     for (const EngravingItem* e : item->el()) {
