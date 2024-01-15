@@ -1372,8 +1372,8 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
     for (EngravingItem* e : item->el()) {
         layoutItem(e, const_cast<LayoutContext&>(ctx));
     }
-
-    if (item->getProperty(Pid::BOX_AUTOSIZE).toBool()) {
+    bool boxAutoSize = item->getProperty(Pid::BOX_AUTOSIZE).toBool();
+    if (boxAutoSize) {
         double contentHeight = item->contentRect().height();
 
         if (contentHeight < item->minHeight()) {
@@ -1383,7 +1383,7 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
         ldata->setHeight(contentHeight);
     }
 
-    if (MScore::noImages) {
+    if (boxAutoSize && MScore::noImages) {
         // adjustLayoutWithoutImages
         double calculatedVBoxHeight = 0;
         const int padding = ctx.conf().spatium();
