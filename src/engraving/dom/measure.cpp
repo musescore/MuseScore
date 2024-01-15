@@ -533,12 +533,12 @@ bool Measure::showsMeasureNumberInAutoMode()
         return false;
     }
 
-    // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
-    if (!no()) {
-        return style().styleB(Sid::showMeasureNumberOne);
-    }
-
     if (style().styleB(Sid::measureNumberSystem)) {
+        // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
+        if (!prevMeasure() || (prevMeasure()->irregular() && no() == 1)) {
+            return style().styleB(Sid::showMeasureNumberOne);
+        }
+
         // Show either if
         //   1) This is the first measure of the system OR
         //   2) The previous measure in the system is the first, and is irregular.
@@ -549,13 +549,19 @@ bool Measure::showsMeasureNumberInAutoMode()
         //   1) We should show them every measure
         int interval = style().styleI(Sid::measureNumberInterval);
         if (interval == 1) {
+            // We only consider hiding the first measure number if there's also no anacrusis
+            if (!prevMeasure()) {
+                return style().styleB(Sid::showMeasureNumberOne);
+            }
             return true;
         }
-
+        if (!prevMeasure() || (prevMeasure()->irregular() && no() == 1)) {
+            return style().styleB(Sid::showMeasureNumberOne);
+        }
         //   2) (measureNumber + 1) % interval == 0 (or 1 if measure number one is numbered.)
         // If measure number 1 is numbered, and the interval is let's say 5, then we should number #1, 6, 11, 16, etc.
         // If measure number 1 is not numbered, with the same interval (5), then we should number #5, 10, 15, 20, etc.
-        return ((no() + 1) % style().styleI(Sid::measureNumberInterval)) == (style().styleB(Sid::showMeasureNumberOne) ? 1 : 0);
+        return ((no() + 1) % interval) == (style().styleB(Sid::showMeasureNumberOne) ? 1 : 0);
     }
 }
 
