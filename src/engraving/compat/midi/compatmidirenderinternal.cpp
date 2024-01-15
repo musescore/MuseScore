@@ -668,6 +668,10 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
         return;
     }
 
+    if (context.partsWithMutedHarmony.find(h->part()->id().toStdString()) != context.partsWithMutedHarmony.end()) {
+        return;
+    }
+
     Staff* staff = m->score()->staff(h->track() / VOICES);
     const InstrChannel* instrChannel = staff->part()->harmonyChannel();
     IF_ASSERT_FAILED(instrChannel) {
