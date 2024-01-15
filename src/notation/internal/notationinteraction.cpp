@@ -33,12 +33,14 @@
 #include <QDrag>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QBitmap>
 
 #include "defer.h"
 #include "ptrutils.h"
 #include "containers.h"
 
 #include "draw/types/pen.h"
+#include "draw/painter.h"
 #include "draw/types/painterpath.h"
 #include "engraving/internal/qmimedataadapter.h"
 
@@ -92,6 +94,7 @@ using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::engraving;
+using namespace mu::draw;
 
 static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
 {
@@ -1150,8 +1153,37 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
         m_drag = nullptr;
     });
 
+    const qreal spatium = paletteConf()->paletteSpatium();
+    const qreal sizeRatio = spatium / gpaletteScore->style().spatium();
+    const qreal adjustedRatio = sizeRatio * 1.5;
+
+    engravingRender()->layoutItem(const_cast<EngravingItem*>(element));
+
     static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
+
+    qreal width = element->ldata()->bbox().width();
+    qreal height = element->ldata()->bbox().height();
+    QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
+    pixmap = QPixmap(pixmapSize);
     pixmap.fill(Qt::white);
+    QBitmap mask = pixmap.createMaskFromColor(Qt::white); // Transparent background
+    pixmap.setMask(mask);
+
+    QPainter painter(&pixmap);
+    QPainter* qp = &painter;
+    qreal dpi = qp->device()->logicalDpiX();
+
+    Painter p(qp, "startDragCopy");
+    p.save();
+    p.setAntialiasing(true);
+    p.setPen(paletteConf()->elementsColor());
+
+    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
+    p.translate(qAbs(element->ldata()->bbox().x() * adjustedRatio), qAbs(element->ldata()->bbox().y() * adjustedRatio));
+    p.scale(adjustedRatio, adjustedRatio);
+    engravingRenderer()->drawItem(element, &p);
+
+    p.restore();
 
     m_drag->setPixmap(pixmap);
     m_drag->exec(Qt::CopyAction);
