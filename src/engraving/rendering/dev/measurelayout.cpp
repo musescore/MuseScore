@@ -517,6 +517,13 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
         return false;
     }
 
+    size_t nstaves = ctx.dom().nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (m->isMeasureRepeatGroup(staffIdx)) {
+            return false;
+        }
+    }
+
     int n = 0;
     for (Segment* s = m->first(); s; s = s->next()) {
         for (EngravingItem* e : s->annotations()) {
@@ -638,14 +645,6 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
                     return true;
                 }
             }
-        }
-    }
-
-    // break for MeasureRepeat group
-    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        if (m->isMeasureRepeatGroup(staffIdx)
-            || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
-            return true;
         }
     }
 
@@ -779,8 +778,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
             Fraction len;
 
             while (validMMRestMeasure(ctx, measureToBeChecked)) {
-                MeasureBase* nextMeasureBase = ctx.conf().isShowVBox() ? measureToBeChecked->next() : measureToBeChecked->nextMeasure();
-                if (breakMultiMeasureRest(ctx, measureToBeChecked) && n) {
+                if (n && breakMultiMeasureRest(ctx, measureToBeChecked)) {
                     break;
                 }
                 if (measureToBeChecked != firstMeasure) {
@@ -789,6 +787,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                 ++n;
                 len += measureToBeChecked->ticks();
                 lastMeasure = measureToBeChecked;
+                MeasureBase* nextMeasureBase = ctx.conf().isShowVBox() ? measureToBeChecked->next() : measureToBeChecked->nextMeasure();
                 if (!(nextMeasureBase && nextMeasureBase->isMeasure())) {
                     break;
                 }
