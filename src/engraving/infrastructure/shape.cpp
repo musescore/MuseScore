@@ -33,11 +33,27 @@ using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
 
+Shape::Stat Shape::s_stat = Shape::Stat();
+
+void Shape::Stat::print()
+{
+    std::stringstream ss;
+    ss << "\n";
+    ss << "copies: " << copies << "\n";
+    for (auto p : stat) {
+        ss << p.first << ": " << p.second.count << "\n";
+    }
+
+    LOGDA() << ss.str();
+}
+
 void Shape::detach()
 {
     if (!m_data) {
         return;
     }
+
+    s_stat.add(m_data.use_count());
 
     if (m_data.use_count() == 1) {
         return;

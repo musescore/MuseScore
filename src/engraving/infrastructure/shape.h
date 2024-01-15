@@ -80,6 +80,17 @@ public:
     Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed);
     Shape(const std::vector<mu::RectF>& rects, const EngravingItem* p = nullptr);
 
+    Shape(const Shape& sh) {
+        s_stat.copies++;
+        m_data = sh.m_data;
+    }
+
+    Shape& operator=(const Shape& sh) {
+        s_stat.copies++;
+        m_data = sh.m_data;
+        return *this;
+    }
+
     Type type() const { return m_data->type; }
     bool isComposite() const { return m_data->type == Type::Composite; }
 
@@ -167,6 +178,29 @@ public:
     bool clearsVertically(const Shape& a) const;
 
     void paint(mu::draw::Painter& painter) const;
+
+    struct Stat {
+
+        struct Counter {
+            int count = 0;
+        };
+
+        std::map<int, Counter> stat;
+        int copies = 0;
+
+        void clear() {
+            copies = 0;
+            stat.clear();
+        }
+
+        void add(int use_count) {
+            stat[use_count].count++;
+        }
+
+        void print();
+    };
+
+    static Stat s_stat;
 
 private:
 

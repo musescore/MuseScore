@@ -170,6 +170,8 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
     LAYOUT_CALL_CLEAR();
     LAYOUT_CALL();
 
+    Shape::s_stat.clear();
+
     initLayoutContext(score, ctx, stick, etick);
 
     prepareScore(score, ctx);
@@ -192,6 +194,8 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
     layoutFinished(score, ctx);
 
     LAYOUT_CALL_PRINT();
+
+    Shape::s_stat.print();
 }
 
 void ScorePageViewLayout::doLayout(LayoutContext& ctx)

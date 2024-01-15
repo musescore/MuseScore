@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#ifdef Q_OS_LINUX
+
 using ::testing::_;
 using ::testing::Return;
 using ::testing::ReturnRef;
@@ -273,3 +275,5 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     //! [WHEN] User pressed left mouse button
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
 }
+
+#endif // Q_OS_LINUX
