@@ -160,6 +160,8 @@ public:
         bool useDefaultArticulations = false; //!using default articulations means ignoring the ones stored for each instrument
         bool applyCaesuras = false; //! to add pauses (caesura) between midi events
         HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
+        std::unordered_set<std::string> partsWithMutedHarmony;
+
         int sndController = CTRL_BREATH;
 
         std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
