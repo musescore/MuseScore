@@ -23,6 +23,8 @@
 #define MU_MIDI_MIDIDEVICESLISTENER_H
 
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 
 #include "async/notification.h"
 #include "miditypes.h"
@@ -46,6 +48,9 @@ private:
 
     std::shared_ptr<std::thread> m_devicesUpdateThread;
     std::atomic<bool> m_isRunning = false;
+
+    mutable std::mutex m_mutex;
+    std::condition_variable m_runningCv;
 
     MidiDeviceList m_devices;
     async::Notification m_devicesChanged;
