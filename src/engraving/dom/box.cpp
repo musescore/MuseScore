@@ -288,7 +288,7 @@ HBox::HBox(System* parent)
     : Box(ElementType::HBOX, parent)
 {
     initElementStyle(&hBoxStyle);
-    setBoxWidth(Spatium(5.0));
+    resetProperty(Pid::BOX_WIDTH);
 }
 
 //---------------------------------------------------------
@@ -574,6 +574,8 @@ PropertyValue HBox::propertyDefault(Pid id) const
     switch (id) {
     case Pid::CREATE_SYSTEM_HEADER:
         return true;
+    case Pid::BOX_WIDTH:
+        return Spatium(5.0);
     default:
         return Box::propertyDefault(id);
     }
@@ -587,7 +589,7 @@ VBox::VBox(const ElementType& type, System* parent)
     : Box(type, parent)
 {
     initElementStyle(&boxStyle);
-    setBoxHeight(Spatium(10.0));
+    resetProperty(Pid::BOX_HEIGHT);
     setLineBreak(true);
 }
 
@@ -613,6 +615,20 @@ PropertyValue VBox::getProperty(Pid propertyId) const
         return isAutoSizeEnabled();
     default:
         return Box::getProperty(propertyId);
+    }
+}
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+PropertyValue VBox::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::BOX_HEIGHT:
+        return Spatium(10.0);
+    default:
+        return Box::propertyDefault(id);
     }
 }
 
@@ -655,7 +671,7 @@ void FBox::add(EngravingItem* e)
 TBox::TBox(System* parent)
     : VBox(ElementType::TBOX, parent)
 {
-    setBoxHeight(Spatium(1));
+    resetProperty(Pid::BOX_HEIGHT);
     m_text  = Factory::createText(this, TextStyleType::FRAME);
     m_text->setLayoutToParentWidth(true);
     m_text->setParent(this);
@@ -733,6 +749,20 @@ void TBox::remove(EngravingItem* el)
         el->removed();
     } else {
         VBox::remove(el);
+    }
+}
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+PropertyValue TBox::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::BOX_HEIGHT:
+        return Spatium(1);
+    default:
+        return VBox::propertyDefault(id);
     }
 }
 
