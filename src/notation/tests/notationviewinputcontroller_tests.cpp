@@ -23,25 +23,19 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-using ::testing::_;
-using ::testing::Return;
-using ::testing::ReturnRef;
-using ::testing::NiceMock;
-
 #include "mocks/controlledviewmock.h"
 #include "mocks/notationconfigurationmock.h"
 #include "mocks/notationinteractionmock.h"
 #include "mocks/notationselectionmock.h"
 #include "playback/tests/mocks/playbackcontrollermock.h"
 
-#include "engraving/dom/factory.h"
-#include "engraving/dom/masterscore.h"
-#include "notation/internal/notationselection.h"
+#include "engraving/tests/utils/scorerw.h"
 
 #include "notation/view/notationviewinputcontroller.h"
 
-#include "global/types/string.h"
-#include "engraving/tests/utils/scorerw.h"
+using ::testing::_;
+using ::testing::Return;
+using ::testing::ReturnRef;
 
 using namespace mu;
 using namespace mu::notation;
