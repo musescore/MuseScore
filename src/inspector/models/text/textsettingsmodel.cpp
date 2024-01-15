@@ -48,6 +48,8 @@ TextSettingsModel::TextSettingsModel(QObject* parent, IElementRepositoryService*
         loadProperties();
         setIsSpecialCharactersInsertionAvailable(isTextEditingStarted());
     });
+
+    setIsSpecialCharactersInsertionAvailable(isTextEditingStarted());
 }
 
 void TextSettingsModel::createProperties()
