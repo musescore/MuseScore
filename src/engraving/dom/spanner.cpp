@@ -657,10 +657,8 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SPANNER_TICK:
         triggerLayout();           // spanner may have moved to another system
         setTick(v.value<Fraction>());
-        setStartElement(0);               // invalidate
-        setEndElement(0);                 //
         if (score() && score()->spannerMap().removeSpanner(this)) {
-            score()->addSpanner(this);
+            score()->addSpanner(this, /*computeStartEnd =*/ false);
         }
         break;
     case Pid::SPANNER_TICKS:
@@ -725,6 +723,8 @@ PropertyValue Spanner::propertyDefault(Pid propertyId) const
 
 void Spanner::computeStartElement()
 {
+    EngravingItem* oldStartElement = m_startElement;
+
     switch (m_anchor) {
     case Anchor::SEGMENT: {
         if (systemFlag()) {
@@ -763,6 +763,10 @@ void Spanner::computeStartElement()
         break;
     }
 
+    if (oldStartElement && oldStartElement->isChord()) {
+        toChord(oldStartElement)->removeStartingSpanner(this);
+    }
+
     Chord* startChord = m_startElement && m_startElement->isChord() ? toChord(m_startElement) : nullptr;
     if (startChord) {
         startChord->addStartingSpanner(this);
@@ -775,6 +779,8 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
 {
+    EngravingItem* oldEndElement = m_endElement;
+
     if (score()->isPaletteScore()) {
         // return immediately to prevent lots of
         // "no element found" messages from appearing
@@ -850,6 +856,10 @@ void Spanner::computeEndElement()
         }
     case Anchor::CHORD:
         break;
+    }
+
+    if (oldEndElement && oldEndElement->isChord()) {
+        toChord(oldEndElement)->removeEndingSpanner(this);
     }
 
     Chord* endChord = m_endElement && m_endElement->isChord() ? toChord(m_endElement) : nullptr;
