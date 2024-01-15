@@ -1159,12 +1159,11 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
 
     engravingRender()->layoutItem(const_cast<EngravingItem*>(element));
 
-    static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
-
     qreal width = element->ldata()->bbox().width();
     qreal height = element->ldata()->bbox().height();
     QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
-    pixmap = QPixmap(pixmapSize);
+
+    static QPixmap pixmap(pixmapSize); // null or 1x1 crashes on Linux under ChromeOS?!
     pixmap.fill(Qt::white);
     QBitmap mask = pixmap.createMaskFromColor(Qt::white); // Transparent background
     pixmap.setMask(mask);
