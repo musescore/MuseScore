@@ -341,18 +341,22 @@ Chord::Chord(const Chord& c, bool link)
         }
         add(t);
     } else if (c.m_tremoloTwoChord) {
-        TremoloTwoChord* t = Factory::copyTremoloTwoChord(*(c.m_tremoloTwoChord));
-        if (link) {
-            score()->undo(new Link(t, const_cast<TremoloTwoChord*>(c.m_tremoloTwoChord)));
-        }
-
         if (c.m_tremoloTwoChord->chord1() == &c) {
-            t->setChords(this, nullptr);
-        } else {
-            t->setChords(nullptr, this);
-        }
+            TremoloTwoChord* t = Factory::copyTremoloTwoChord(*(c.m_tremoloTwoChord));
+            if (link) {
+                score()->undo(new Link(t, const_cast<TremoloTwoChord*>(c.m_tremoloTwoChord)));
+            }
 
-        add(t);
+            if (c.m_tremoloTwoChord->chord1() == &c) {
+                t->setChords(this, nullptr);
+                m_tremoloTwoChord = t;
+            } else {
+                t->setChords(nullptr, this);
+            }
+            add(t);
+        } else {
+            setTremoloTwoChord(nullptr);
+        }
     }
 
     for (EngravingItem* e : c.el()) {

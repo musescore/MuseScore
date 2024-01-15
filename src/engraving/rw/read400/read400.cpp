@@ -290,6 +290,7 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
 
     std::vector<Harmony*> pastedHarmony;
     std::vector<Chord*> graceNotes;
+    std::vector<TremoloTwoChord*> twoNoteTrems;
     Beam* startingBeam = nullptr;
     Tuplet* tuplet = nullptr;
     Fraction dstTick = dst->tick();
@@ -472,16 +473,21 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             // but these will be removed later
                             TremoloTwoChord* t = chord->tremoloTwoChord();
                             if (t) {
-                                if (doScale) {
-                                    Fraction d = t->durationType().ticks();
-                                    t->setDurationType(d * scale);
-                                }
-                                Measure* m = score->tick2measure(tick);
-                                Fraction ticks = cr->actualTicks();
-                                Fraction rticks = m->endTick() - tick;
-                                if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
-                                    MScore::setError(MsError::DEST_TREMOLO);
-                                    return false;
+                                if (t->chord1() == chord) {
+                                    twoNoteTrems.push_back(t);
+                                    if (doScale) {
+                                        Fraction d = t->durationType().ticks();
+                                        t->setDurationType(d * scale);
+                                    }
+                                    Measure* m = score->tick2measure(tick);
+                                    Fraction ticks = cr->actualTicks();
+                                    Fraction rticks = m->endTick() - tick;
+                                    if (rticks < ticks || (rticks != ticks && rticks < ticks * 2)) {
+                                        MScore::setError(MsError::DEST_TREMOLO);
+                                        return false;
+                                    }
+                                } else {
+                                    chord->setTremoloTwoChord(nullptr);
                                 }
                             }
                             for (size_t i = 0; i < graceNotes.size(); ++i) {
@@ -662,6 +668,34 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                 }
             }
         }
+        // Set tremolo chords
+        for (TremoloTwoChord* trem : twoNoteTrems) {
+            Chord* c1 = toChord(trem->explicitParent());
+            Segment* c2Seg = c1->segment()->next(SegmentType::ChordRest);
+            EngravingItem* item = nullptr;
+            while (c2Seg) {
+                item = c2Seg->element(c1->track());
+                if (item && item->isChord()) {
+                    break;
+                }
+                c2Seg = c2Seg->next(SegmentType::ChordRest);
+            }
+            if (c2Seg == nullptr || !item) {
+                LOGD("no segment or item for second note of tremolo found");
+                delete trem;
+                continue;
+            }
+            Chord* c2 = toChord(item);
+            if (c2->ticks() != c1->ticks()) {
+                LOGD("no matching chord for second note of tremolo found");
+                delete trem;
+                continue;
+            }
+
+            trem->setChords(c1, c2);
+            c2->setTremoloTwoChord(trem);
+        }
+
         // fix up spanners
         if (doScale && spannerFound) {
             // build list of original spanners

@@ -780,6 +780,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
         }
         size_t tracks = oscore->nstaves() * VOICES;
 
+        std::vector<TremoloTwoChord*> twoNoteTrems;
+
         if (sourceStavesIndexes.empty() && trackList.empty()) {
             tracks = 0;
         }
@@ -789,7 +791,6 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
             track_idx_t strack = mu::value(trackList, srcTrack, mu::nidx);
 
-            TremoloTwoChord* tremolo = 0;
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nullptr;           //create segment later, on demand
                 for (EngravingItem* e : oseg->annotations()) {
@@ -961,27 +962,12 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                         }
                                     }
                                 }
-                                // two note tremolo
-                                if (och->tremoloTwoChord()) {
-                                    if (och == och->tremoloTwoChord()->chord1()) {
-                                        if (tremolo) {
-                                            LOGD("unconnected two note tremolo");
-                                        }
-                                        tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
-                                        tremolo->setScore(nch->score());
-                                        tremolo->setParent(nch);
-                                        tremolo->setTrack(nch->track());
-                                        tremolo->setChords(nch, 0);
-                                        nch->setTremoloTwoChord(tremolo);
-                                    } else if (och == och->tremoloTwoChord()->chord2()) {
-                                        if (!tremolo) {
-                                            LOGD("first note for two note tremolo missing");
-                                        } else {
-                                            tremolo->setChords(tremolo->chord1(), nch);
-                                            nch->setTremoloTwoChord(tremolo);
-                                        }
+                                TremoloTwoChord* t = nch->tremoloTwoChord();
+                                if (t) {
+                                    if (t->chord1() == nch) {
+                                        twoNoteTrems.push_back(nch->tremoloTwoChord());
                                     } else {
-                                        LOGD("inconsistent two note tremolo");
+                                        nch->setTremoloTwoChord(nullptr);
                                     }
                                 }
                             }
@@ -1003,6 +989,33 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                     }
                 }
             }
+        }
+        // Set tremolo chords
+        for (TremoloTwoChord* trem : twoNoteTrems) {
+            Chord* c1 = toChord(trem->explicitParent());
+            Segment* c2Seg = c1->segment()->next(SegmentType::ChordRest);
+            EngravingItem* item = nullptr;
+            while (c2Seg) {
+                item = c2Seg->element(c1->track());
+                if (item && item->isChord()) {
+                    break;
+                }
+                c2Seg = c2Seg->next(SegmentType::ChordRest);
+            }
+            if (c2Seg == nullptr || !item) {
+                LOGD("no segment or item for second note of tremolo found");
+                delete trem;
+                continue;
+            }
+            Chord* c2 = toChord(item);
+            if (c2->ticks() != c1->ticks()) {
+                LOGD("no matching chord for second note of tremolo found");
+                delete trem;
+                continue;
+            }
+
+            trem->setChords(c1, c2);
+            c2->setTremoloTwoChord(trem);
         }
     }
 
@@ -1163,6 +1176,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
 {
     Score* score = srcStaff->score();
     TieMap tieMap;
+    std::vector<TremoloTwoChord*> twoNoteTrems;
 
     score->undo(new Link(dstStaff, srcStaff));
 
@@ -1177,7 +1191,6 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
         for (track_idx_t srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
-            TremoloTwoChord* tremolo = 0;
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 EngravingItem* oe = seg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
@@ -1284,6 +1297,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         Chord* och = toChord(ocr);
                         Chord* nch = toChord(ncr);
                         size_t n = och->notes().size();
+
                         for (size_t i = 0; i < n; ++i) {
                             Note* on = och->notes().at(i);
                             Note* nn = nch->notes().at(i);
@@ -1318,33 +1332,46 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                                 }
                             }
                         }
-                        // two note tremolo
-                        if (och->tremoloTwoChord()) {
-                            if (och == och->tremoloTwoChord()->chord1()) {
-                                if (tremolo) {
-                                    LOGD("unconnected two note tremolo");
-                                }
-                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
-                                tremolo->setScore(nch->score());
-                                tremolo->setParent(nch);
-                                tremolo->setTrack(nch->track());
-                                tremolo->setChords(nch, 0);
-                                nch->setTremoloTwoChord(tremolo);
-                            } else if (och == och->tremoloTwoChord()->chord2()) {
-                                if (!tremolo) {
-                                    LOGD("first note for two note tremolo missing");
-                                } else {
-                                    tremolo->setChords(tremolo->chord1(), nch);
-                                    nch->setTremoloTwoChord(tremolo);
-                                }
+                        TremoloTwoChord* t = nch->tremoloTwoChord();
+                        if (t) {
+                            if (t->chord1() == nch) {
+                                twoNoteTrems.push_back(nch->tremoloTwoChord());
                             } else {
-                                LOGD("inconsistent two note tremolo");
+                                nch->setTremoloTwoChord(nullptr);
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    // Set tremolo chords
+    for (TremoloTwoChord* trem : twoNoteTrems) {
+        Chord* c1 = toChord(trem->explicitParent());
+        Segment* c2Seg = c1->segment()->next(SegmentType::ChordRest);
+        EngravingItem* item = nullptr;
+        while (c2Seg) {
+            item = c2Seg->element(c1->track());
+            if (item && item->isChord()) {
+                break;
+            }
+            c2Seg = c2Seg->next(SegmentType::ChordRest);
+        }
+        if (c2Seg == nullptr || !item) {
+            LOGD("no segment or item for second note of tremolo found");
+            delete trem;
+            continue;
+        }
+        Chord* c2 = toChord(item);
+        if (c2->ticks() != c1->ticks()) {
+            LOGD("no matching chord for second note of tremolo found");
+            delete trem;
+            continue;
+        }
+
+        trem->setChords(c1, c2);
+        c2->setTremoloTwoChord(trem);
     }
 
     if (cloneSpanners) {
@@ -1392,6 +1419,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     }
 
     TieMap tieMap;
+    std::vector<TremoloTwoChord*> twoNoteTrems;
 
     staff_idx_t srcStaffIdx = srcStaff->idx();
     staff_idx_t dstStaffIdx = dstStaff->idx();
@@ -1575,6 +1603,14 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 nn->addSpannerFor(newBend);
                             }
                         }
+                        TremoloTwoChord* t = nch->tremoloTwoChord();
+                        if (t) {
+                            if (t->chord1() == nch) {
+                                twoNoteTrems.push_back(nch->tremoloTwoChord());
+                            } else {
+                                nch->setTremoloTwoChord(nullptr);
+                            }
+                        }
                     }
                 }
             }
@@ -1585,6 +1621,34 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 score->removeElement(&seg);
             }
         }
+    }
+
+    // Set tremolo chords
+    for (TremoloTwoChord* trem : twoNoteTrems) {
+        Chord* c1 = toChord(trem->explicitParent());
+        Segment* c2Seg = c1->segment()->next(SegmentType::ChordRest);
+        EngravingItem* item = nullptr;
+        while (c2Seg) {
+            item = c2Seg->element(c1->track());
+            if (item && item->isChord()) {
+                break;
+            }
+            c2Seg = c2Seg->next(SegmentType::ChordRest);
+        }
+        if (c2Seg == nullptr || !item) {
+            LOGD("no segment or item for second note of tremolo found");
+            delete trem;
+            continue;
+        }
+        Chord* c2 = toChord(item);
+        if (c2->ticks() != c1->ticks()) {
+            LOGD("no matching chord for second note of tremolo found");
+            delete trem;
+            continue;
+        }
+
+        trem->setChords(c1, c2);
+        c2->setTremoloTwoChord(trem);
     }
 
     for (auto i : oscore->spanner()) {

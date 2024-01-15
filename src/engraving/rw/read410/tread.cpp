@@ -2603,6 +2603,7 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         TRead::read(trem, e, ctx);
         trem->setParent(ch);
         trem->setDurationType(ch->durationType());
+        trem->setChord1(ch);
         ch->setTremoloTwoChord(trem, false);
     } else if (tag == "tickOffset") {      // obsolete
     } else if (tag == "ChordLine") {
