@@ -61,6 +61,7 @@ import "rests"
 import "dynamics"
 import "expressions"
 import "stringtunings"
+import "symbols"
 
 Loader {
     id: root
@@ -137,6 +138,7 @@ Loader {
             case Inspector.TYPE_DYNAMIC: return dynamicComp
             case Inspector.TYPE_EXPRESSION: return expressionComp
             case Inspector.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case Inspector.TYPE_SYMBOL: return symbolComp
             }
 
             return null
@@ -354,5 +356,10 @@ Loader {
     Component {
         id: stringTuningsComp
         StringTuningsSettings {}
+    }
+
+    Component {
+        id: symbolComp
+        SymbolSettings {}
     }
 }

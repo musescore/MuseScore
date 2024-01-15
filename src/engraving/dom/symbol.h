@@ -62,12 +62,15 @@ public:
     void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { m_sym  = s; m_scoreFont = sf; }
     SymId sym() const { return m_sym; }
     const std::shared_ptr<IEngravingFont>& scoreFont() const { return m_scoreFont; }
+    double symbolsSize() const { return m_symbolsSize; }
+    double symAngle() const { return m_symAngle; }
     mu::AsciiStringView symName() const;
 
     String accessibleInfo() const override;
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
@@ -75,6 +78,8 @@ public:
 protected:
     SymId m_sym = SymId::noSym;
     std::shared_ptr<IEngravingFont> m_scoreFont = nullptr;
+    double m_symbolsSize =  1.0;
+    double m_symAngle = 0.0;
 };
 
 //---------------------------------------------------------

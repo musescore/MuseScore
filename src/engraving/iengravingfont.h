@@ -52,10 +52,10 @@ public:
     virtual PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const = 0;
 
     // Draw
-    virtual void draw(SymId id, draw::Painter* p, double mag, const PointF& pos) const = 0;
-    virtual void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos) const = 0;
-    virtual void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos) const = 0;
-    virtual void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos) const = 0;
+    virtual void draw(SymId id, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const = 0;
 };
 
 using IEngravingFontPtr = std::shared_ptr<IEngravingFont>;

@@ -2833,6 +2833,8 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("name", SymNames::nameForSymId(item->sym()));
     if (item->scoreFont()) {
         xml.tag("font", item->scoreFont()->name());
+        writeProperty(item, xml, Pid::SYMBOLS_SIZE);
+        writeProperty(item, xml, Pid::SYMBOL_ANGLE);
     }
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();

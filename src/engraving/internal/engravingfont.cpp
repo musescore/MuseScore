@@ -744,17 +744,17 @@ PointF EngravingFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double ma
 // Draw
 // =============================================
 
-void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
+void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos, const double angle) const
 {
     const Sym& sym = this->sym(id);
     if (sym.isCompound()) { // is this a compound symbol?
-        draw(sym.subSymbolIds, painter, mag, pos);
+        draw(sym.subSymbolIds, painter, mag, pos, angle);
         return;
     }
 
     if (!sym.isValid()) {
         if (MScore::useFallbackFont && !engravingFonts()->isFallbackFont(this)) {
-            engravingFonts()->fallbackFont()->draw(id, painter, mag, pos);
+            engravingFonts()->fallbackFont()->draw(id, painter, mag, pos, angle);
         } else {
             LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
@@ -767,29 +767,36 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
+    if (angle != 0) {
+        const double _width = sym.bbox.width() / 2;
+        const double _height = sym.bbox.height() / 2;
+        painter->translate(_width, -_height);
+        painter->rotate(angle);
+        painter->translate(-_width, _height);
+    }
     painter->drawSymbol(PointF(pos.x() / mag.width(), pos.y() / mag.height()), symCode(id));
     painter->restore();
 }
 
-void EngravingFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
+void EngravingFont::draw(SymId id, Painter* painter, double mag, const PointF& pos, const double angle) const
 {
-    draw(id, painter, SizeF(mag, mag), pos);
+    draw(id, painter, SizeF(mag, mag), pos, angle);
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos, const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, painter, mag, pos);
+        draw(id, painter, mag, pos, angle);
         pos.setX(pos.x() + advance(id, mag));
     }
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos, const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, painter, mag, pos);
+        draw(id, painter, mag, pos, angle);
         pos.setX(pos.x() + advance(id, mag.width()));
     }
 }

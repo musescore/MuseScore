@@ -409,6 +409,8 @@ public:
         TIE_CHORD_OUTSIDE = 0xF466,
         TIE_CHORD_INSIDE = 0xF467,
 
+        TRIANGLE_SYMBOL = 0xF46D,
+
         NONE = 0xFFFF
     };
 
