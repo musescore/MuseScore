@@ -28,6 +28,7 @@ class Segment;
 class Note;
 class Measure;
 class Chord;
+class Tuplet;
 
 //---------------------------------------------------------
 //   ElementPattern
@@ -162,6 +163,7 @@ class Selection {
       bool canSelectVoice(int track) const { return selectionFilter().canSelectVoice(track); }
       void appendFiltered(Element* e);
       void appendChord(Chord* chord);
+      void appendTupletHierarchy(Tuplet* innermostTuplet);
 
    public:
       Selection()                      { _score = 0; _state = SelState::NONE; }

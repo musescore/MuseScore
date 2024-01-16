@@ -509,6 +509,19 @@ void Selection::appendChord(Chord* chord)
             }
       }
 
+void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
+      {
+      if (_el.contains(innermostTuplet))
+            return;
+
+      appendFiltered(innermostTuplet);
+
+      // Recursively append upwards/outwards
+      Tuplet* outerTuplet = innermostTuplet->tuplet();
+      if (outerTuplet && !_el.contains(outerTuplet->tuplet()))
+            appendTupletHierarchy(outerTuplet);
+      }
+
 //---------------------------------------------------------
 //   updateSelectedElements
 //---------------------------------------------------------
@@ -581,6 +594,9 @@ void Selection::updateSelectedElements()
                               if (el)
                                     appendFiltered(el);
                               }
+                        Tuplet* tuplet = cr->tuplet();
+                        if (tuplet)
+                              appendTupletHierarchy(tuplet);
                         }
                   if (e->isChord()) {
                         Chord* chord = toChord(e);
