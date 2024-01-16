@@ -259,9 +259,9 @@ void TempoMap::delTempo(int tick)
 //   tick2time
 //---------------------------------------------------------
 
-double TempoMap::tick2time(int tick, double time, int* sn) const
+double TempoMap::tick2time(int tick, double time, int* sn, bool ignorePauseOnTick) const
 {
-    return (*sn == m_tempoSN) ? time : tick2time(tick, sn);
+    return (*sn == m_tempoSN) ? time : tick2time(tick, sn, ignorePauseOnTick);
 }
 
 //---------------------------------------------------------
@@ -278,7 +278,7 @@ int TempoMap::time2tick(double time, int t, int* sn) const
 //   tick2time
 //---------------------------------------------------------
 
-double TempoMap::tick2time(int tick, int* sn) const
+double TempoMap::tick2time(int tick, int* sn, bool ignorePauseOnTick) const
 {
     double time  = 0.0;
     double delta = double(tick);
@@ -297,6 +297,10 @@ double TempoMap::tick2time(int tick, int* sn) const
             ptick = tick;
             tempo = e->second.tempo;
             time  = e->second.time;
+
+            if (ignorePauseOnTick) {
+                time -= e->second.pause;
+            }
         } else if (e != begin()) {
             auto pe = e;
             --pe;
