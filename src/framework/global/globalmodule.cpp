@@ -35,6 +35,7 @@
 #include "internal/invoker.h"
 #include "internal/cryptographichash.h"
 #include "internal/process.h"
+#include "internal/systeminfo.h"
 
 #include "runtime.h"
 #include "async/processevents.h"
@@ -62,9 +63,11 @@ void GlobalModule::registerExports()
 {
     m_configuration = std::make_shared<GlobalConfiguration>();
     s_asyncInvoker = std::make_shared<Invoker>();
+    m_systemInfo = std::make_shared<SystemInfo>();
 
     ioc()->registerExport<IApplication>(moduleName(), new Application());
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
@@ -177,6 +180,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 void GlobalModule::onInit(const IApplication::RunMode&)
 {
     m_configuration->init();
+    m_systemInfo->init();
 }
 
 void GlobalModule::onDeinit()

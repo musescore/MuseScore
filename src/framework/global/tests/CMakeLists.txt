@@ -26,6 +26,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/mocks/processmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/globalconfigurationmock.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/interactivemock.h
+    ${CMAKE_CURRENT_LIST_DIR}/mocks/systeminfomock.h
 
     ${CMAKE_CURRENT_LIST_DIR}/uri_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/val_tests.cpp
