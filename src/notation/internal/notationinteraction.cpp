@@ -1153,39 +1153,27 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
         m_drag = nullptr;
     });
 
-    const qreal spatium = paletteConf()->paletteSpatium();
-    const qreal sizeRatio = spatium / gpaletteScore->style().spatium();
-    const qreal adjustedRatio = sizeRatio * 1.5;
+    const qreal adjustedRatio = 0.4;
+    const qreal width = element->ldata()->bbox().width();
+    const qreal height = element->ldata()->bbox().height();
 
-    engravingRenderer()->layoutItem(const_cast<EngravingItem*>(element));
-
-    qreal width = element->ldata()->bbox().width();
-    qreal height = element->ldata()->bbox().height();
-    // qreal width = 100;
-    // qreal height = 100;
     QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
-    // QSize pixmapSize = QSize(width, height);
-
-    static QPixmap pixmap(pixmapSize); // null or 1x1 crashes on Linux under ChromeOS?!
+    QPixmap pixmap(pixmapSize); // null or 1x1 crashes on Linux under ChromeOS?!
     pixmap.fill(Qt::white);
     QBitmap mask = pixmap.createMaskFromColor(Qt::white); // Transparent background
     pixmap.setMask(mask);
 
     QPainter painter(&pixmap);
     QPainter* qp = &painter;
-    qreal dpi = qp->device()->logicalDpiX();
+    const qreal dpi = qp->device()->logicalDpiX();
 
     Painter p(qp, "startDragCopy");
-    p.save();
     p.setAntialiasing(true);
-    p.setPen(paletteConf()->elementsColor());
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
     p.translate(qAbs(element->ldata()->bbox().x() * adjustedRatio), qAbs(element->ldata()->bbox().y() * adjustedRatio));
     p.scale(adjustedRatio, adjustedRatio);
     engravingRenderer()->drawItem(element, &p);
-
-    p.restore();
 
     m_drag->setPixmap(pixmap);
     m_drag->exec(Qt::CopyAction);

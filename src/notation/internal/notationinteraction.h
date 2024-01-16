@@ -37,10 +37,7 @@
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
-#include "palette/ipaletteconfiguration.h"
 #include "scorecallbacks.h"
-
-#include "palette/internal/palettecell.h"
 
 namespace mu::engraving {
 class Lasso;
@@ -57,7 +54,6 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
     INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
     INJECT(framework::IInteractive, interactive)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
-    INJECT_STATIC(mu::palette::IPaletteConfiguration, paletteConf)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
