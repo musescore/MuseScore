@@ -512,7 +512,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     upOffset = maxDownWidth + adjSpace;
                                     if (downHooks) {
                                           bool needsHookSpace = (ledgerOverlapBelow || ledgerOverlapAbove);
-                                          double hookSpace = topDownNote->chord()->hook()->width();
+                                          Hook* hook = topDownNote->chord()->hook();
+                                          double hookSpace = hook ? hook->width() : 0.0;
                                           upOffset = needsHookSpace ? hookSpace + ledgerLen + ledgerGap : upOffset + 0.3 * sp;
                                           }
                                     }
