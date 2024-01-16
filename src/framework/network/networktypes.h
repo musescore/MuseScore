@@ -26,6 +26,7 @@
 #include <QNetworkRequest>
 
 class QHttpMultiPart;
+class QIODevice;
 
 namespace mu::network {
 struct RequestHeaders
