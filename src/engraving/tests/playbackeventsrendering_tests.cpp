@@ -1114,7 +1114,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
 
     expectedPitches.clear();
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
-        expectedPitches.push_back(nominalPitchLevel + i * PITCH_LEVEL_STEP);
+        expectedPitches.push_back(nominalPitchLevel + int(i) * PITCH_LEVEL_STEP);
     }
 
     // [WHEN] Request to render a chord with the A4 note on it
