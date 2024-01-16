@@ -92,7 +92,7 @@ std::string ConsoleLogDest::name() const
 
 void ConsoleLogDest::write(const LogMsg& logMsg)
 {
-    auto colorCode = [](Color c){
+    auto colorCode = [](Color c) {
         switch (c) {
         case Color::None:    return "\033[0m";
         case Color::Black:   return "\033[1;30m";
@@ -113,8 +113,13 @@ void ConsoleLogDest::write(const LogMsg& logMsg)
     msg.append(m_layout.output(logMsg));
     msg.append("\033[0m");
 #ifdef _WIN32
-    std::wstring temp = std::wstring(msg.begin(), msg.end());
-    OutputDebugString(temp.c_str());
+    size_t stepSize = 30000;
+    for (size_t s = 0; s < msg.size(); s += stepSize) {
+        size_t end = std::min(s + stepSize, msg.size());
+        std::wstring temp = std::wstring(msg.begin() + s, msg.begin() + end);
+        OutputDebugString(temp.c_str());
+    }
+
     OutputDebugString(L"\n");
 #else
     std::cout << msg << std::endl;
