@@ -1587,7 +1587,7 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
 
     Articulation* articulation = static_cast<Articulation*>(this->addToChordRest(meiArtic, nullptr, chord));
     if (!articulation) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiImporter::addSpanner
         return true;
     }
 
@@ -2186,7 +2186,7 @@ bool MeiImporter::readBreath(pugi::xml_node breathNode, Measure* measure)
 
     Breath* breath = static_cast<Breath*>(this->addAnnotation(meiBreath, measure));
     if (!breath) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
 
@@ -2211,7 +2211,7 @@ bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, Measure* measure)
 
     Breath* breath = static_cast<Breath*>(this->addAnnotation(meiCaesura, measure));
     if (!breath) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
 
@@ -2241,14 +2241,14 @@ bool MeiImporter::readDir(pugi::xml_node dirNode, Measure* measure)
     if (Convert::isDirWithExt(meiDir)) {
         TextLineBase* textLineBase = static_cast<TextLineBase*>(this->addSpanner(meiDir, measure, dirNode));
         if (!textLineBase) {
-            // Warning message given in MeiExpoter::addSpanner
+            // Warning message given in MeiImporter::addSpanner
             return true;
         }
         Convert::dirFromMEI(textLineBase, meiLines, meiDir, warning);
     } else {
         TextBase* textBase = static_cast<TextBase*>(this->addAnnotation(meiDir, measure));
         if (!textBase) {
-            // Warning message given in MeiExpoter::addAnnotation
+            // Warning message given in MeiImporter::addAnnotation
             return true;
         }
         Convert::dirFromMEI(textBase, meiLines, meiDir, warning);
@@ -2273,7 +2273,7 @@ bool MeiImporter::readDynam(pugi::xml_node dynamNode, Measure* measure)
 
     Dynamic* dynamic = static_cast<Dynamic*>(this->addAnnotation(meiDynam, measure));
     if (!dynamic) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
 
@@ -2340,7 +2340,7 @@ bool MeiImporter::readFb(pugi::xml_node harmNode, Measure* measure)
 
     FiguredBass* figuredBass = static_cast<FiguredBass*>(this->addAnnotation(meiHarm, measure));
     if (!figuredBass) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
     // Needs to be registered by hand because we pass meiHarm to MeiImporter::addAnnotation
@@ -2391,7 +2391,7 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, Measure* measure)
     }
 
     if (!fermata) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
 
@@ -2416,7 +2416,7 @@ bool MeiImporter::readHairpin(pugi::xml_node hairpinNode, Measure* measure)
 
     Hairpin* hairpin = static_cast<Hairpin*>(this->addSpanner(meiHairpin, measure, hairpinNode));
     if (!hairpin) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiImporter::addSpanner
         return true;
     }
 
@@ -2442,7 +2442,7 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
 
     Harmony* harmony = static_cast<Harmony*>(this->addAnnotation(meiHarm, measure));
     if (!harmony) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
 
@@ -2497,7 +2497,7 @@ bool MeiImporter::readOctave(pugi::xml_node octaveNode, Measure* measure)
 
     Ottava* ottava = static_cast<Ottava*>(this->addSpanner(meiOctave, measure, octaveNode));
     if (!ottava) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiImporter::addSpanner
         return true;
     }
 
@@ -2548,7 +2548,7 @@ bool MeiImporter::readPedal(pugi::xml_node pedalNode, Measure* measure)
 
     Pedal* pedal = static_cast<Pedal*>(this->addSpanner(meiPedal, measure, pedalNode));
     if (!pedal) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiImporter::addSpanner
         return true;
     }
 
@@ -2604,7 +2604,7 @@ bool MeiImporter::readSlur(pugi::xml_node slurNode, Measure* measure)
 
     Slur* slur = static_cast<Slur*>(this->addSpanner(meiSlur, measure, slurNode));
     if (!slur) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiImporter::addSpanner
         return true;
     }
 
@@ -2629,7 +2629,7 @@ bool MeiImporter::readTempo(pugi::xml_node tempoNode, Measure* measure)
 
     TempoText* tempoText = static_cast<TempoText*>(this->addAnnotation(meiTempo, measure));
     if (!tempoText) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiImporter::addAnnotation
         return true;
     }
 
