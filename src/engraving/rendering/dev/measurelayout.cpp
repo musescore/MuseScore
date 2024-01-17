@@ -525,6 +525,13 @@ static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
         return false;
     }
 
+    size_t nstaves = ctx.dom().nstaves();
+    for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
+        if (m->isMeasureRepeatGroup(staffIdx)) {
+            return false;
+        }
+    }
+
     int n = 0;
     for (const Segment* s = m->first(); s; s = s->next()) {
         for (const EngravingItem* e : s->annotations()) {
@@ -649,14 +656,6 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         }
     }
 
-    // break for MeasureRepeat group
-    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        if (m->isMeasureRepeatGroup(staffIdx)
-            || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
-            return true;
-        }
-    }
-
     auto breakForAnnotation = [&](EngravingItem* e) {
         if (mu::contains(ALWAYS_BREAK_TYPES, e->type())) {
             return true;
@@ -763,46 +762,46 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
     }
 
     int mno = ctx.state().measureNo();
-    Measure* m = toMeasure(currentMB);
+    Measure* firstMeasure = toMeasure(currentMB);
 
     if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
-        Measure* nm = m;
-        Measure* lm = nm;
+        Measure* measureToBeChecked = firstMeasure;
+        Measure* lastMeasure = measureToBeChecked;
         int n       = 0;
         Fraction len;
 
-        while (validMMRestMeasure(ctx, nm)) {
-            MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
-            if (breakMultiMeasureRest(ctx, nm) && n) {
+        while (validMMRestMeasure(ctx, measureToBeChecked)) {
+            if (n && breakMultiMeasureRest(ctx, measureToBeChecked)) {
                 break;
             }
-            if (nm != m) {
-                int measureNo = adjustMeasureNo(nm, ctx.state().measureNo());
+            if (measureToBeChecked != firstMeasure) {
+                int measureNo = adjustMeasureNo(measureToBeChecked, ctx.state().measureNo());
                 ctx.mutState().setMeasureNo(measureNo);
             }
             ++n;
-            len += nm->ticks();
-            lm = nm;
-            if (!(mb && mb->isMeasure())) {
+            len += measureToBeChecked->ticks();
+            lastMeasure = measureToBeChecked;
+            MeasureBase* nextMeasureBase = ctx.conf().isShowVBox() ? measureToBeChecked->next() : measureToBeChecked->nextMeasure();
+            if (!(nextMeasureBase && nextMeasureBase->isMeasure())) {
                 break;
             }
-            nm = toMeasure(mb);
+            measureToBeChecked = toMeasure(nextMeasureBase);
         }
 
         if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
-            createMMRest(ctx, m, lm, len);
-            ctx.mutState().setCurMeasure(m->mmRest());
-            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
+            createMMRest(ctx, firstMeasure, lastMeasure, len);
+            ctx.mutState().setCurMeasure(firstMeasure->mmRest());
+            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lastMeasure->next() : lastMeasure->nextMeasure());
         } else {
-            if (m->mmRest()) {
-                ctx.mutDom().undo(new ChangeMMRest(m, 0));
+            if (firstMeasure->mmRest()) {
+                ctx.mutDom().undo(new ChangeMMRest(firstMeasure, 0));
             }
-            m->setMMRestCount(0);
+            firstMeasure->setMMRestCount(0);
             ctx.mutState().setMeasureNo(mno);
         }
-    } else if (m->isMMRest()) {
-        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), m->mmRestCount());
-        int measureNo = ctx.state().measureNo() + m->mmRestCount() - 1;
+    } else if (firstMeasure->isMMRest()) {
+        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), firstMeasure->mmRestCount());
+        int measureNo = ctx.state().measureNo() + firstMeasure->mmRestCount() - 1;
         ctx.mutState().setMeasureNo(measureNo);
     }
 }
