@@ -1322,6 +1322,9 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
 {
     const Chord* c1 = tremolo->chord1();
     const Chord* c2 = tremolo->chord2();
+    if (!c1 || !c2) {
+        return true;
+    }
     bool cross = c1->staffMove() != c2->staffMove();
     if (item == c1) {
         // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
