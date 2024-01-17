@@ -1074,9 +1074,9 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     //  ... 8 is the bottom line.
     int lineL = noteL->line();
     if (lineL == INVALID_LINE) {
-        int relLine = absStep(noteL->tpc(), noteL->epitch());
+        int absLine = absStep(noteL->tpc(), noteL->epitch());
         ClefType clef = noteL->staff()->clef(noteL->tick());
-        lineL = relStep(relLine, clef);
+        lineL = relStep(absLine, clef);
     }
 
     // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
