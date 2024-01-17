@@ -33,15 +33,14 @@
 #include <QDrag>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
-#include <QBitmap>
 
 #include "defer.h"
 #include "ptrutils.h"
 #include "containers.h"
 
-#include "draw/types/pen.h"
 #include "draw/painter.h"
 #include "draw/types/painterpath.h"
+#include "draw/types/pen.h"
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/actionicon.h"
@@ -1154,24 +1153,22 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
     });
 
     const qreal adjustedRatio = 0.4;
-    const qreal width = element->ldata()->bbox().width();
-    const qreal height = element->ldata()->bbox().height();
+    const RectF bbox = element->ldata()->bbox();
+    const qreal width = bbox.width();
+    const qreal height = bbox.height();
 
     QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
-    QPixmap pixmap(pixmapSize); // null or 1x1 crashes on Linux under ChromeOS?!
-    pixmap.fill(Qt::white);
-    QBitmap mask = pixmap.createMaskFromColor(Qt::white); // Transparent background
-    pixmap.setMask(mask);
+    QPixmap pixmap(pixmapSize);
+    pixmap.fill(Qt::transparent);
 
-    QPainter painter(&pixmap);
-    QPainter* qp = &painter;
-    const qreal dpi = qp->device()->logicalDpiX();
+    QPainter qp(&pixmap);
+    const qreal dpi = qp.device()->logicalDpiX();
 
-    Painter p(qp, "startDragCopy");
+    Painter p(&qp, "startDragCopy");
     p.setAntialiasing(true);
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
-    p.translate(qAbs(element->ldata()->bbox().x() * adjustedRatio), qAbs(element->ldata()->bbox().y() * adjustedRatio));
+    p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
     p.scale(adjustedRatio, adjustedRatio);
     engravingRenderer()->drawItem(element, &p);
 
