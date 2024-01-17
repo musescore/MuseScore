@@ -38,6 +38,7 @@
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/realizedharmony.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/text.h"
 #include "engraving/style/textstyle.h"
 #include "engraving/types/symnames.h"
@@ -252,6 +253,21 @@ EditStyle::EditStyle(QWidget* parent)
     QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
+
+    QButtonGroup* tabShowTiedFrets = new QButtonGroup(this);
+    tabShowTiedFrets->addButton(tabShowTiesAndFret, int(ShowTiedFret::TIE_AND_FRET));
+    tabShowTiedFrets->addButton(tabShowTies, int(ShowTiedFret::TIE));
+    tabShowTiedFrets->addButton(tabShowNone, int(ShowTiedFret::NONE));
+
+    QButtonGroup* tabParenthFrets = new QButtonGroup(this);
+    tabParenthFrets->addButton(tabParenthSystem, int(ParenthesizeTiedFret::START_OF_SYSTEM));
+    tabParenthFrets->addButton(tabParenthMeasure, int(ParenthesizeTiedFret::START_OF_MEASURE));
+    tabParenthFrets->addButton(tabParenthNone, int(ParenthesizeTiedFret::NEVER));
+
+    void (QButtonGroup::* tabShowTiedFretsButtonClicked)(QAbstractButton*) = &QButtonGroup::buttonClicked;
+    connect(tabShowTiedFrets, tabShowTiedFretsButtonClicked, this, [this](QAbstractButton*){
+        updateParenthesisIndicatingTiesGroupState();
+    });
 
     // ====================================================
     // Style widgets
@@ -625,6 +641,10 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::wahShowTabCommon, false, wahShowTabCommon, 0 },
         { StyleId::golpeShowTabSimple, false, golpeShowTabSimple, 0 },
         { StyleId::golpeShowTabCommon, false, golpeShowTabCommon, 0 },
+
+        { StyleId::tabShowTiedFret, false, tabShowTiedFrets, 0 },
+        { StyleId::tabParenthesizeTiedFret, false, tabParenthFrets, 0 },
+        { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
     };
 
     // ====================================================
@@ -1075,9 +1095,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(textStyleColor, &Awl::ColorLabel::colorChanged, [=]() {
         textStyleValueChanged(TextStylePropertyType::Color, textStyleColor->color());
     });
-
-    // TODO: bring back the tab styles button and make sure right styles are applied as default
-    resetTabStylesButton->setVisible(false);
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
     textStyles->setCurrentRow(s_lastSubPageRow);
@@ -1953,6 +1970,8 @@ void EditStyle::setValues()
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         lineStyleSelect->update();
     }
+
+    updateParenthesisIndicatingTiesGroupState();
 }
 
 //---------------------------------------------------------
@@ -2437,4 +2456,9 @@ void EditStyle::resetUserStyleName()
 {
     styleName->clear();
     endEditUserStyleName();
+}
+
+void EditStyle::updateParenthesisIndicatingTiesGroupState()
+{
+    groupBox_2->setEnabled(tabShowTies->isChecked() || tabShowNone->isChecked());
 }
