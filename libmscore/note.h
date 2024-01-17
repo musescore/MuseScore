@@ -313,7 +313,7 @@ class Note final : public Element {
       void addSpanner(Spanner*);
       void removeSpanner(Spanner*);
       int concertPitchIdx() const;
-      void updateRelLine(int relLine, bool undoable);
+      void updateRelLine(int absLine, bool undoable);
       bool isNoteName() const;
 
       void normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned);

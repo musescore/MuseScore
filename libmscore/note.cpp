@@ -2191,9 +2191,9 @@ static bool hasAlteredUnison(Note* note)
       {
       const auto& chordNotes = note->chord()->notes();
       AccidentalVal accVal = tpc2alter(note->tpc());
-      int relLine = absStep(note->tpc(), note->epitch());
-      return std::find_if(chordNotes.begin(), chordNotes.end(), [note, accVal, relLine](Note* n) {
-            return n != note && !n->hidden() && absStep(n->tpc(), n->epitch()) == relLine && tpc2alter(n->tpc()) != accVal;
+      int absLine = absStep(note->tpc(), note->epitch());
+      return std::find_if(chordNotes.begin(), chordNotes.end(), [note, accVal, absLine](Note* n) {
+            return n != note && !n->hidden() && absStep(n->tpc(), n->epitch()) == absLine && tpc2alter(n->tpc()) != accVal;
             }) != chordNotes.end();
 }
 
@@ -2204,7 +2204,7 @@ static bool hasAlteredUnison(Note* note)
 
 void Note::updateAccidental(AccidentalState* as)
       {
-      int relLine = absStep(tpc(), epitch());
+      int absLine = absStep(tpc(), epitch());
 
       // don't touch accidentals that don't concern tpc such as
       // quarter tones
@@ -2214,14 +2214,14 @@ void Note::updateAccidental(AccidentalState* as)
 
             AccidentalVal accVal = tpc2alter(tpc());
             bool error = false;
-            int eRelLine = absStep(tpc(), epitch()+ottaveCapoFret());
-            AccidentalVal relLineAccVal = as->accidentalVal(eRelLine, error);
+            int eAbsLine = absStep(tpc(), epitch()+ottaveCapoFret());
+            AccidentalVal absLineAccVal = as->accidentalVal(eAbsLine, error);
             if (error) {
                   qDebug("error accidentalVal()");
                   return;
                   }
-            if ((accVal != relLineAccVal) || hidden() || as->tieContext(eRelLine)) {
-                  as->setAccidentalVal(eRelLine, accVal, _tieBack != 0 && _accidental == 0);
+            if ((accVal != absLineAccVal) || hidden() || as->tieContext(eAbsLine)) {
+                  as->setAccidentalVal(eAbsLine, accVal, _tieBack != 0 && _accidental == 0);
                   acci = Accidental::value2subtype(accVal);
                   // if previous tied note has same tpc, don't show accidental
                   if (_tieBack && _tieBack->startNote()->tpc1() == tpc1())
@@ -2276,10 +2276,10 @@ void Note::updateAccidental(AccidentalState* as)
             // for now, at least change state to natural, so subsequent notes playback as might be expected
             // this is an incompatible change, but better to break it for 2.0 than wait until later
             AccidentalVal accVal = Accidental::subtype2value(_accidental->accidentalType());
-            as->setAccidentalVal(relLine, accVal, _tieBack != 0 && _accidental == 0);
+            as->setAccidentalVal(absLine, accVal, _tieBack != 0 && _accidental == 0);
             }
 
-      updateRelLine(relLine, true);
+      updateRelLine(absLine, true);
       }
 
 //---------------------------------------------------------
@@ -2715,10 +2715,10 @@ void Note::horizontalDrag(EditData &ed)
 //---------------------------------------------------------
 //   updateRelLine
 //    calculate the real note line depending on clef,
-//    _line is the absolute line
+//    absLine is the absolute line
 //---------------------------------------------------------
 
-void Note::updateRelLine(int relLine, bool undoable)
+void Note::updateRelLine(int absLine, bool undoable)
       {
       if (!staff())
             return;
@@ -2745,7 +2745,7 @@ void Note::updateRelLine(int relLine, bool undoable)
             }
 
       ClefType clef = staff->clef(chord()->tick());
-      int line      = relStep(relLine, clef);
+      int line      = relStep(absLine, clef);
 
       if (undoable && (_line != INVALID_LINE) && (line != _line))
             undoChangeProperty(Pid::LINE, line);
@@ -2763,8 +2763,8 @@ void Note::updateRelLine(int relLine, bool undoable)
 
 void Note::updateLine()
       {
-      int relLine = absStep(tpc(), epitch());
-      updateRelLine(relLine, false);
+      int absLine = absStep(tpc(), epitch());
+      updateRelLine(absLine, false);
       }
 
 //---------------------------------------------------------
