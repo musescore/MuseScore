@@ -200,7 +200,7 @@ private:
     const engraving::Segment* m_keySig;
     /** Same for the timeSig segment */
     const engraving::Segment* m_timeSig;
-    /** A flag indicating that we have mulitple sections in the file */
+    /** A flag indicating that we have multiple sections in the file */
     bool m_hasSections;
 
     /** A list of items (first) for which we know the @startid (second)  */
