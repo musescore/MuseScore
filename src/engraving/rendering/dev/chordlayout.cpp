@@ -1890,7 +1890,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         // we will need more space to avoid collision with hook
                         // but we won't need as much dot adjustment
                         if (ledgerOverlapBelow) {
-                            double hookWidth = topDownNote->chord()->hook()->width();
+                            Hook* hook = topDownNote->chord()->hook();
+                            double hookWidth = hook ? hook->width() : 0.0;
                             upOffset = hookWidth + ledgerLen + ledgerGap;
                         }
                         upOffset = std::max(upOffset, maxDownWidth + 0.1 * sp);
