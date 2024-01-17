@@ -549,7 +549,8 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     // we will need more space to avoid collision with hook
                                     // but we won't need as much dot adjustment
                                     if (ledgerOverlapBelow) {
-                                          double hookWidth = topDownNote->chord()->hook()->width();
+                                          Hook* hook = topDownNote->chord()->hook();
+                                          double hookWidth = hook ? hook->width() : 0.0;
                                           upOffset = hookWidth + ledgerLen + ledgerGap;
                                           }
                                     // we will need more space to avoid collision with hook
