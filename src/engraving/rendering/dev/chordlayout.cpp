@@ -1333,6 +1333,10 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     } else if (item->tremolo() && item->tremolo()->twoNotes()) {
         Chord* c1 = item->tremolo()->chord1();
         Chord* c2 = item->tremolo()->chord2();
+        if (!c1 || !c2) {
+            item->setUp(true);
+            return;
+        }
         bool cross = c1->staffMove() != c2->staffMove();
         if (item == c1) {
             // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
