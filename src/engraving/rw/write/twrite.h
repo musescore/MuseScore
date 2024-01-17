@@ -305,7 +305,7 @@ public:
 
     static void writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t st, track_idx_t et, Segment* sseg, Segment* eseg, bool, bool);
 
-    static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid);
+    static void writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force = false);
 
 private:
 
