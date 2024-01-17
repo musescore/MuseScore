@@ -1322,6 +1322,9 @@ static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tr
 {
     const Chord* c1 = tremolo->chord1();
     const Chord* c2 = tremolo->chord2();
+    if (!c1 || !c2) {
+        return true;
+    }
     bool cross = c1->staffMove() != c2->staffMove();
     if (item == c1) {
         // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
@@ -1926,7 +1929,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         // we will need more space to avoid collision with hook
                         // but we won't need as much dot adjustment
                         if (ledgerOverlapBelow) {
-                            double hookWidth = topDownNote->chord()->hook()->width();
+                            Hook* hook = topDownNote->chord()->hook();
+                            double hookWidth = hook ? hook->width() : 0.0;
                             upOffset = hookWidth + ledgerLen + ledgerGap;
                         }
                         upOffset = std::max(upOffset, maxDownWidth + 0.1 * sp);
