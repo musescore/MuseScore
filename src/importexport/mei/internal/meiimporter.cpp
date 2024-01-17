@@ -336,7 +336,7 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
 }
 
 /**
- * Add grace notes to a ChordRest When a grace group was previously read and added to MeiImpoter::m_graceNotes
+ * Add grace notes to a ChordRest When a grace group was previously read and added to MeiImporter::m_graceNotes
  * Ignore (delete) the grace notes if the ChordRest is a Rest.
  * Look at m_graceNoteType for setting the acciaccatura note type (when grace notes precede only)
  */
@@ -935,7 +935,7 @@ bool MeiImporter::readScore(pugi::xml_node root)
 
 /**
  * Read a scoreDef (initial or intermediate).
- * For the intial scoreDef, also tries to build the part structure from the scoreDef relying on staffGrp@label and staffDef@label.
+ * For the initial scoreDef, also tries to build the part structure from the scoreDef relying on staffGrp@label and staffDef@label.
  * Sets the time signature and key signature to the global m_timeSigs and m_keySigs maps.
  * Uses the SCOREDEF_IDX index position for global (scoreDef) time signature and key signatures.
  * Since the map are ordered, these will have priority over the ones read in MeiImporter::readStaffDef.
@@ -2156,7 +2156,7 @@ bool MeiImporter::readArpeg(pugi::xml_node arpegNode, Measure* measure)
 
     Arpeggio* arpeggio = static_cast<Arpeggio*>(this->addToChordRest(meiArpeg, measure));
     if (!arpeggio) {
-        // Warning message given in MeiExpoter::addToChordRest
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
@@ -2471,7 +2471,7 @@ bool MeiImporter::readMordent(pugi::xml_node mordentNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiMordent, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addToChordRest
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
@@ -2522,7 +2522,7 @@ bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiOrnam, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addToChordRest
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
@@ -2658,7 +2658,7 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
     // We do not use addSpanner here because Tie object are added directly to the start and end Note objects
     Note* startNote = this->findStartNote(meiTie);
     if (!startNote) {
-        // Here we could detect if a if its a tied chord (for files not exported from MuseScore)
+        // Here we could detect if it's a tied chord (for files not exported from MuseScore)
         // We would need a dedicated list and tie each note once the second chord has been found.
         return true;
     }
@@ -2693,7 +2693,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiTrill, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addToChordRest
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
@@ -2719,7 +2719,7 @@ bool MeiImporter::readTurn(pugi::xml_node turnNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiTurn, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addToChordRest
+        // Warning message given in MeiImporter::addToChordRest
         return true;
     }
 
@@ -2828,7 +2828,7 @@ bool MeiImporter::buildIdMap(pugi::xml_node scoreNode)
 
 /**
  * Create a mapping for <staff> `@n` and <layer> `@n`.
- * Usefull only when reading MEI files where the sequence of `@n` is not starting from 1 or not sequential.
+ * Useful only when reading MEI files where the sequence of `@n` is not starting from 1 or not sequential.
  * Not really useful when reading MEI files generated from MuseScore since these will have sequential numbers starting with 1.
  */
 
