@@ -3279,7 +3279,11 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     bool useParens = isTabStaff && !item->fixed() && item->tieBack()
                      && showTiedFret != ShowTiedFret::TIE_AND_FRET && !item->shouldHideFret();
     if (useParens) {
-        item->setFretString(String(u"(%1)").arg(item->fretString()));
+        const String& fretString = item->fretString();
+        if (!fretString.empty() && fretString[0] != '(') {
+            item->setFretString(String(u"(%1)").arg(item->fretString()));
+        }
+
         double w = item->tabHeadWidth(staffType);     // !! use _fretString
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
     }
