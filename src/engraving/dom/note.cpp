@@ -3494,4 +3494,70 @@ bool Note::negativeFretUsed() const
 {
     return engravingConfiguration()->negativeFretsAllowed() && m_fret < 0;
 }
+
+bool Note::shouldHideFret() const
+{
+    if (!tieBack() || shouldForceShowFret()) {
+        return false;
+    }
+
+//    if (isContinuationOfBend()) {
+//        return true;
+//    }
+
+    ShowTiedFret showTiedFret = style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
+    if (showTiedFret == ShowTiedFret::TIE_AND_FRET) {
+        return false;
+    }
+
+    ParenthesizeTiedFret parenthTiedFret = style().value(Sid::tabParenthesizeTiedFret).value<ParenthesizeTiedFret>();
+    if (parenthTiedFret == ParenthesizeTiedFret::NEVER || !rtick().isZero()) {
+        return true;
+    }
+
+    if (parenthTiedFret == ParenthesizeTiedFret::START_OF_MEASURE) {
+        return false;
+    }
+
+    const Measure* measure = findMeasure();
+    bool isStartOfSystem = measure && measure->system() && measure->isFirstInSystem();
+
+    return !isStartOfSystem;
+}
+
+bool Note::shouldForceShowFret() const
+{
+    if (!style().styleB(Sid::parenthesizeTiedFretIfArticulation)) {
+        return false;
+    }
+
+    Chord* ch = chord();
+    if (!ch) {
+        return false;
+    }
+
+    auto hasTremoloBar = [&] () {
+        for (EngravingItem* item : ch->segment()->annotations()) {
+            if (item && item->isTremoloBar() && item->track() == track()) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    auto hasVibratoLine = [&] () {
+        auto spanners = score()->spannerMap().findOverlapping(tick().ticks(), (tick() + ch->actualTicks()).ticks());
+        for (auto interval : spanners) {
+            Spanner* sp = interval.value;
+            if (sp->isVibrato() && sp->startElement() == ch) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+//    bool startsNonBendSpanner = !spannerFor().empty() && !bendFor();
+
+    return !ch->articulations().empty() || ch->chordLine() /*|| startsNonBendSpanner*/ || hasTremoloBar() || hasVibratoLine();
+}
 }

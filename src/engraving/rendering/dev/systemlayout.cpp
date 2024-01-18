@@ -513,7 +513,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
-        SystemLayout::restoreTies(oldSystem);
+        SystemLayout::restoreTies(oldSystem, ctx);
     }
 
     return system;
@@ -930,7 +930,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
     // ties
-    doLayoutTies(system, sl, stick, etick);
+    doLayoutTies(system, sl, stick, etick, ctx);
 
     // slurs
     std::vector<Spanner*> spanner;
@@ -1278,7 +1278,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick)
+void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick, LayoutContext& ctx)
 {
     UNUSED(etick);
 
@@ -1289,9 +1289,9 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
             }
             Chord* c = toChord(e);
             for (Chord* ch : c->graceNotes()) {
-                layoutTies(ch, system, stick);
+                layoutTies(ch, system, stick, ctx);
             }
-            layoutTies(c, system, stick);
+            layoutTies(c, system, stick, ctx);
         }
     }
 }
@@ -1441,7 +1441,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     }
 }
 
-void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
+void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, LayoutContext& ctx)
 {
     SysStaff* staff = system->staff(ch->staffIdx());
     if (!staff->show()) {
@@ -1458,7 +1458,7 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
         t = note->tieBack();
         if (t) {
             if (t->startNote()->tick() < stick) {
-                TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system);
+                TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system, ctx);
                 if (ts && ts->addToSkyline()) {
                     staff->skyline().add(ts->shape().translate(ts->pos()));
                 }
@@ -1535,7 +1535,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::restoreTies(System* system)
+void SystemLayout::restoreTies(System* system, LayoutContext& ctx)
 {
     std::vector<Segment*> segList;
     for (MeasureBase* mb : system->measures()) {
@@ -1550,7 +1550,7 @@ void SystemLayout::restoreTies(System* system)
     }
     Fraction stick = system->measures().front()->tick();
     Fraction etick = system->measures().back()->endTick();
-    doLayoutTies(system, segList, stick, etick);
+    doLayoutTies(system, segList, stick, etick, ctx);
 }
 
 void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth,

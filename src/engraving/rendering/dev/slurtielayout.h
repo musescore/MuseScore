@@ -44,7 +44,7 @@ public:
     static SpannerSegment* layoutSystem(Slur* item, System* system, LayoutContext& ctx);
 
     static TieSegment* tieLayoutFor(Tie* item, System* system);
-    static TieSegment* tieLayoutBack(Tie* item, System* system);
+    static TieSegment* tieLayoutBack(Tie* item, System* system, LayoutContext& ctx);
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
 

@@ -434,6 +434,9 @@ public:
 
     mu::PointF posInStaffCoordinates();
 
+    bool shouldHideFret() const;
+    bool shouldForceShowFret() const;
+
     bool isTrillCueNote() const { return m_isTrillCueNote; }
     void setIsTrillCueNote(bool v) { m_isTrillCueNote = v; }
 
