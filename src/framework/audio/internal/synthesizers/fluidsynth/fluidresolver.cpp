@@ -78,6 +78,11 @@ AudioResourceMetaList FluidResolver::resolveResources() const
     return result;
 }
 
+SoundPresetList FluidResolver::resolveSoundPresets(const audio::AudioInputParams&) const
+{
+    return SoundPresetList();
+}
+
 static std::string makeId(const std::string& name, int bank, int program)
 {
     return name + "\\" + std::to_string(bank) + "\\" + std::to_string(program);

@@ -380,6 +380,25 @@ struct AudioDevice {
 
 using AudioDeviceList = std::vector<AudioDevice>;
 
+struct SoundPreset
+{
+    std::string code;
+    std::string name;
+    std::optional<char> defaultSymbol = std::nullopt;
+
+    bool operator==(const SoundPreset& other) const
+    {
+        return code == other.code && name == other.name && defaultSymbol == other.defaultSymbol;
+    }
+
+    bool isValid() const
+    {
+        return !code.empty();
+    }
+};
+
+using SoundPresetList = std::vector<SoundPreset>;
+
 enum class RenderMode {
     Undefined = -1,
     RealTimeMode,
