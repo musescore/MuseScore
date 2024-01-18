@@ -156,6 +156,6 @@ set(MODULE_INCLUDE ${MODULE_INCLUDE}
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_DIAGNOSTICS_TESTS)
     add_subdirectory(tests)
 endif()

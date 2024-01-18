@@ -185,7 +185,7 @@ set(MODULE_LINK
     ui
     )
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_NOTATION_TESTS)
     add_subdirectory(tests)
 endif()
 
