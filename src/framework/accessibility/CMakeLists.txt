@@ -56,6 +56,6 @@ endif()
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_ACCESSIBILITY_TESTS)
     add_subdirectory(tests)
 endif()

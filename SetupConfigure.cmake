@@ -221,6 +221,31 @@ if (NOT MUE_BUILD_UI_MODULE)
 endif()
 
 ###########################################
+# Unit tests
+###########################################
+if (NOT MUE_BUILD_UNIT_TESTS)
+
+    set(MUE_BUILD_ACCESSIBILITY_TESTS OFF)
+    set(MUE_BUILD_AUDIO_TESTS OFF)
+    set(MUE_BUILD_DRAW_TESTS OFF)
+    set(MUE_BUILD_GLOBAL_TESTS OFF)
+    set(MUE_BUILD_MPE_TESTS OFF)
+    set(MUE_BUILD_NETWORK_TESTS OFF)
+    set(MUE_BUILD_UI_TESTS OFF)
+
+    set(MUE_BUILD_BRAILLE_TESTS OFF)
+    set(MUE_BUILD_DIAGNOSTICS_TESTS OFF)
+    set(MUE_BUILD_ENGRAVING_TESTS OFF)
+    set(MUE_BUILD_IMPORTEXPORT_TESTS OFF)
+    set(MUE_BUILD_NOTATION_TESTS OFF)
+    set(MUE_BUILD_PLAYBACK_TESTS OFF)
+    set(MUE_BUILD_PLUGINS_TESTS OFF)
+    set(MUE_BUILD_PROJECT_TESTS OFF)
+    set(MUE_BUILD_UPDATE_TESTS OFF)
+
+endif()
+
+###########################################
 # Global definitions
 ###########################################
 

@@ -48,7 +48,7 @@ set(MODULE_LINK
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
 endif()
 

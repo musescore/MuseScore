@@ -94,6 +94,6 @@ set(MODULE_LINK
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
 endif()

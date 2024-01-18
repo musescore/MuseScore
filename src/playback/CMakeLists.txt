@@ -69,7 +69,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/soundprofilesmodel.h
     )
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_PLAYBACK_TESTS)
     add_subdirectory(tests)
 endif()
 

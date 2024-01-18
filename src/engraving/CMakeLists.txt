@@ -323,6 +323,6 @@ set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGI
 
 #target_compile_options(${MODULE} PUBLIC -Wconversion)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_ENGRAVING_TESTS)
     add_subdirectory(tests)
 endif()
