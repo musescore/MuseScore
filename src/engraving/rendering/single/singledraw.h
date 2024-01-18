@@ -130,6 +130,7 @@ class Sticking;
 class Symbol;
 class SystemText;
 class SystemDivider;
+class SoundFlag;
 
 class TabDurationSymbol;
 class TempoText;
@@ -249,6 +250,7 @@ private:
     static void draw(const FSymbol* item, draw::Painter* painter);
     static void draw(const SystemDivider* item, draw::Painter* painter);
     static void draw(const SystemText* item, draw::Painter* painter);
+    static void draw(const SoundFlag* item, draw::Painter* painter);
 
     static void draw(const TempoText* item, draw::Painter* painter);
     static void draw(const Text* item, draw::Painter* painter);

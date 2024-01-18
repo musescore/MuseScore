@@ -149,6 +149,7 @@ class StringTunings;
 class System;
 class SystemDivider;
 class Symbol;
+class SoundFlag;
 class BSymbol;
 class FSymbol;
 
@@ -295,6 +296,7 @@ public:
     static void read(System* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
     static void read(Symbol* sym, XmlReader& xml, ReadContext& ctx);
+    static void read(SoundFlag* sym, XmlReader& xml, ReadContext& ctx);
     static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
 
     static void read(Text* t, XmlReader& xml, ReadContext& ctx);
