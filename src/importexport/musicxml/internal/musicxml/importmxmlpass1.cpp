@@ -1598,6 +1598,9 @@ void MusicXMLParserPass1::defaults()
             if (isImportLayout) {
                 _score->style().setSpatium(_spatium);
             }
+        } else if (_e.name() == "concert-score") {
+            _score->style().set(Sid::concertPitch, true);
+            _e.skipCurrentElement();
         } else if (_e.name() == "page-layout") {
             PageFormat pf;
             pageLayout(pf, millimeter / (tenths * INCH));

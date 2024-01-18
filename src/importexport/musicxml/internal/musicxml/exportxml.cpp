@@ -441,7 +441,7 @@ public:
     double getTenthsFromInches(double) const;
     double getTenthsFromDots(double) const;
     Fraction tick() const { return _tick; }
-    void writeInstrumentDetails(const Instrument* instrument);
+    void writeInstrumentDetails(const Instrument* instrument, const bool concertPitch);
 
     static bool canWrite(const EngravingItem* e);
 };
@@ -1328,6 +1328,10 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
         xml.tag("millimeters", millimeters);
         xml.tag("tenths", tenths);
         xml.endElement();
+    }
+
+    if (s.styleB(Sid::concertPitch)) {
+        xml.tag("concert-score");
     }
 
     writePageFormat(s, xml, INCH / millimeters * tenths);
@@ -6044,7 +6048,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
     // optionally writing the associated staff text is done below
     if (e->isInstrumentChange()) {
         const auto instrChange = toInstrumentChange(e);
-        exp->writeInstrumentDetails(instrChange->instrument());
+        exp->writeInstrumentDetails(instrChange->instrument(), false);
         instrChangeHandled = true;
     }
 
@@ -7317,11 +7321,16 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
  Write the instrument details for \a instrument.
  */
 
-void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument)
+void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument, const bool concertPitch)
 {
     if (instrument->transpose().chromatic) {
         _attr.doAttr(_xml, true);
-        _xml.startElement("transpose");
+        if (concertPitch) {
+            _xml.startElement("for-part");
+            _xml.startElement("part-transpose");
+        } else {
+            _xml.startElement("transpose");
+        }
         _xml.tag("diatonic",  instrument->transpose().diatonic % 7);
         _xml.tag("chromatic", instrument->transpose().chromatic % 12);
         int octaveChange = instrument->transpose().chromatic / 12;
@@ -7329,6 +7338,9 @@ void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument)
             _xml.tag("octave-change", octaveChange);
         }
         _xml.endElement();
+        if (concertPitch) {
+            _xml.endElement();
+        }
         _attr.doAttr(_xml, false);
     }
 }
@@ -7761,7 +7773,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     // output attributes with the first actual measure (pickup or regular) only
     if (isFirstActualMeasure) {
         writeStaffDetails(_xml, part);
-        writeInstrumentDetails(part->instrument());
+        writeInstrumentDetails(part->instrument(), _score->style().styleB(Sid::concertPitch));
     }
 
     // output attribute at start of measure: measure-style
@@ -7906,17 +7918,6 @@ static std::vector<const Jump*> findJumpElements(const Score* score)
 
 void ExportMusicXml::write(mu::io::IODevice* dev)
 {
-    // must export in transposed pitch to prevent
-    // losing the transposition information
-    // if necessary, switch concert pitch mode off
-    // before export and restore it after export
-    bool concertPitch = score()->style().styleB(Sid::concertPitch);
-    if (concertPitch) {
-        score()->startCmd();
-        score()->undo(new ChangeStyleVal(score(), Sid::concertPitch, false));
-        score()->doLayout();        // this is only allowed in a cmd context to not corrupt the undo/redo stack
-    }
-
     calcDivisions();
 
     for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
@@ -7941,17 +7942,16 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
     if (configuration()->musicxmlExportLayout()) {
         defaults(_xml, _score->style(), millimeters, tenths);
         credits(_xml);
+    } else if (_score->style().styleB(Sid::concertPitch)) {
+        _xml.startElement("defaults");
+        _xml.tag("concert-score");
+        _xml.endElement();
     }
 
     partList(_xml, _score, instrMap);
     writeParts();
 
     _xml.endElement();
-
-    if (concertPitch) {
-        // restore concert pitch
-        score()->endCmd(true);            // rollback
-    }
 }
 
 //---------------------------------------------------------
