@@ -57,6 +57,7 @@ public:
     async::Channel<TrackSequenceId, TrackId> trackRemoved() const override;
 
     async::Promise<AudioResourceMetaList> availableInputResources() const override;
+    async::Promise<SoundPresetList> availableSoundPresets(const TrackSequenceId sequenceId, const TrackId trackId) const override;
 
     async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;

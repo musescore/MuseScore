@@ -60,6 +60,11 @@ AudioResourceMetaList VstiResolver::resolveResources() const
     return pluginModulesRepo()->instrumentModulesMeta();
 }
 
+SoundPresetList VstiResolver::resolveSoundPresets(const audio::AudioInputParams&) const
+{
+    return SoundPresetList();
+}
+
 void VstiResolver::clearSources()
 {
     pluginsRegister()->unregisterAllInstrPlugin();

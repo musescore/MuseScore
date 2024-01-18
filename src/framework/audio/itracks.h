@@ -56,6 +56,7 @@ public:
     virtual async::Channel<TrackSequenceId, TrackId> trackRemoved() const = 0;
 
     virtual async::Promise<AudioResourceMetaList> availableInputResources() const = 0;
+    virtual async::Promise<SoundPresetList> availableSoundPresets(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
 
     virtual async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;
