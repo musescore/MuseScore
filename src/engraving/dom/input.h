@@ -127,7 +127,7 @@ public:
 
 private:
 
-    Segment* nextInputPos() const;
+    Segment* nextInputPos(Segment* seg) const;
 
     track_idx_t m_track = 0;
     track_idx_t m_prevTrack = 0; // used for navigation
