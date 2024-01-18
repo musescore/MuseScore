@@ -537,6 +537,21 @@ void Selection::appendChord(Chord* chord)
     }
 }
 
+void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
+{
+    if (mu::contains(m_el, static_cast<EngravingItem*>(innermostTuplet))) {
+        return;
+    }
+
+    appendFiltered(innermostTuplet);
+
+    // Recursively append upwards/outwards
+    Tuplet* outerTuplet = innermostTuplet->tuplet();
+    if (outerTuplet) {
+        appendTupletHierarchy(outerTuplet);
+    }
+}
+
 void Selection::updateSelectedElements()
 {
     IF_ASSERT_FAILED(!isLocked()) {
@@ -619,6 +634,10 @@ void Selection::updateSelectedElements()
                     if (el) {
                         appendFiltered(el);
                     }
+                }
+                Tuplet* tuplet = cr->tuplet();
+                if (tuplet) {
+                    appendTupletHierarchy(tuplet);
                 }
             }
             if (e->isChord()) {
