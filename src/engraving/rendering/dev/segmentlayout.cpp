@@ -185,6 +185,8 @@ void SegmentLayout::layoutChordDrumset(const Staff* staff, const Segment& segmen
 
 void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack, const LayoutContext& ctx)
 {
+    LAYOUT_CALL() << segment.typeName() << "(" << segment.eid() << ")";
+
     IF_ASSERT_FAILED(segment.isJustType(SegmentType::ChordRest)) {
         return;
     }
@@ -209,6 +211,8 @@ void SegmentLayout::computeChordsUp(const Segment& segment, track_idx_t startTra
 
 void SegmentLayout::layoutChordsStem(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack, const LayoutContext& ctx)
 {
+    LAYOUT_CALL() << segment.typeName() << "(" << segment.eid() << ")";
+
     IF_ASSERT_FAILED(segment.isJustType(SegmentType::ChordRest)) {
         return;
     }

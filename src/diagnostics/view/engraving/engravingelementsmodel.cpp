@@ -190,10 +190,7 @@ QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObjec
     QString info = name + ": ";
     info += "children: " + QString::number(el->children().size());
     info += "\n";
-    if (el->isEngravingItem()) {
-        const mu::engraving::EngravingItem* item = mu::engraving::toEngravingItem(el);
-        info += "pagePos: " + formatPoint(item->pagePos()) + ", bbox: " + formatRect(item->ldata()->bbox());
-    }
+    info += "id: " + QString::number(el->eid().id());
 
     QVariantMap d;
     d["selected"] = elementsProvider()->isSelected(el);

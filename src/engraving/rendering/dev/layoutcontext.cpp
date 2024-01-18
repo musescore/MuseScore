@@ -410,7 +410,7 @@ void LayoutDebug::callClear()
 
 void LayoutDebug::callBegin(const std::string_view& name, const std::string_view& info)
 {
-    //LOGDA() << name << " " << info;
+    LOGDA() << "-> " << name << " " << info;
     Call c;
     c.name = name;
     c.info = info;
@@ -430,7 +430,7 @@ void LayoutDebug::callEnd()
         return;
     }
 
-    //LOGDA() << m_currentCall->name << " " << m_currentCall->info;
+    LOGDA() << "<- " << m_currentCall->name << " " << m_currentCall->info;
     m_currentCall = m_currentCall->top;
 }
 

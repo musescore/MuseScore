@@ -1338,6 +1338,8 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
 
 void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(seg);
+
     int track = 0;
     for (Staff* staff : ctx.dom().staves()) {
         BarLine* bl = toBarLine(seg->element(track));      // get existing bar line for this staff, if any

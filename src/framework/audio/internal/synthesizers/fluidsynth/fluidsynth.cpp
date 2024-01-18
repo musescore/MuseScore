@@ -78,6 +78,9 @@ bool FluidSynth::isValid() const
 Ret FluidSynth::init()
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
+#undef LOG_TAG
+#define LOG_TAG "FluidSynth"
+
         switch (level) {
         case FLUID_PANIC:
         case FLUID_ERR:  {
@@ -93,6 +96,9 @@ Ret FluidSynth::init()
             LOGD() << message;
         } break;
         }
+
+#undef LOG_TAG
+#define LOG_TAG CLASSFUNC
 
         if (level < FLUID_DBG) {
             bool debugme = true;

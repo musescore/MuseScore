@@ -38,7 +38,7 @@
 #include "log.h"
 #include "logstream.h"
 #define LAYOUT_CALL_CLEAR mu::engraving::rendering::dev::LayoutDebug::instance()->callClear
-#define LAYOUT_CALL_BEGIN(name) mu::engraving::rendering::dev::LayoutDebug::CallBegin(name)
+#define LAYOUT_CALL_BEGIN(info) mu::engraving::rendering::dev::LayoutDebug::callBegin(FUNCNAME, info)
 #define LAYOUT_CALL_END mu::engraving::rendering::dev::LayoutDebug::instance()->callEnd
 #define LAYOUT_CALL() mu::engraving::rendering::dev::LayoutDebug::CallMarker _ldcall; _ldcall.begin(FUNCNAME).stream
 #define LAYOUT_ITEM_INFO(item) item->typeName() << "(" << item->eid() << ")"

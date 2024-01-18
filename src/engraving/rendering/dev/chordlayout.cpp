@@ -2938,6 +2938,8 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
  * */
 void ChordLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(measure);
+
     // Clean everything
     for (Segment& s : measure->segments()) {
         for (unsigned track = 0; track < ctx.dom().ntracks(); ++track) {
@@ -3095,6 +3097,8 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
 
 void ChordLayout::resolveVerticalRestConflicts(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(segment);
+
     std::vector<Rest*> rests;
     std::vector<Chord*> chords;
 

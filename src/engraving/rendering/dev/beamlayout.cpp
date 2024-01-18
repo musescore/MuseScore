@@ -612,6 +612,8 @@ void BeamLayout::beamGraceNotes(LayoutContext& ctx, Chord* mainNote, bool after)
 
 void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(measure);
+
     bool crossMeasure = ctx.conf().styleB(Sid::crossMeasureValues);
 
     for (track_idx_t track = 0; track < ctx.dom().ntracks(); ++track) {
@@ -833,6 +835,8 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
 void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
 {
+    LAYOUT_CALL() << LAYOUT_ITEM_INFO(s);
+
     for (EngravingItem* e : s->elist()) {
         if (!e || !e->isChordRest() || !ctx.dom().staff(e->staffIdx())->show()) {
             // the beam and its system may still be referenced when selecting all,
