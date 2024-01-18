@@ -13413,7 +13413,7 @@ By default, they will be placed such as that their right end are at the same lev
                 </layout>
                </item>
                <item>
-                <widget class="QGroupBox" name="groupBox">
+                <widget class="QGroupBox" name="groupBox_1">
                  <property name="title">
                   <string>Tied fret marks</string>
                  </property>
