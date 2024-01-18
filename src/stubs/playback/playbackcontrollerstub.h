@@ -54,6 +54,8 @@ public:
     std::string auxChannelName(audio::aux_channel_idx_t index) const override;
     async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
 
+    async::Promise<audio::SoundPresetList> availableSoundPresets(engraving::InstrumentTrackId instrumentTrackId) const override;
+
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;

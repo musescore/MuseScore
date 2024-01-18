@@ -25,6 +25,7 @@
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 #include "async/channel.h"
+#include "async/promise.h"
 #include "global/progress.h"
 #include "notation/inotation.h"
 #include "notation/notationtypes.h"
@@ -69,6 +70,8 @@ public:
 
     virtual std::string auxChannelName(audio::aux_channel_idx_t index) const = 0;
     virtual async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
+
+    virtual async::Promise<audio::SoundPresetList> availableSoundPresets(engraving::InstrumentTrackId instrumentTrackId) const = 0;
 
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
     virtual void playMetronome(int tick) = 0;

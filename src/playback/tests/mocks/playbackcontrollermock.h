@@ -57,6 +57,8 @@ public:
     MOCK_METHOD(std::string, auxChannelName, (audio::aux_channel_idx_t), (const, override));
     MOCK_METHOD((async::Channel<audio::aux_channel_idx_t, std::string>), auxChannelNameChanged, (), (const, override));
 
+    MOCK_METHOD(async::Promise<audio::SoundPresetList>, availableSoundPresets, (engraving::InstrumentTrackId), (const, override));
+
     MOCK_METHOD(void, playElements, ((const std::vector<const notation::EngravingItem*>&)), (override));
     MOCK_METHOD(void, playMetronome, (int), (override));
     MOCK_METHOD(void, seekElement, (const notation::EngravingItem*), (override));
