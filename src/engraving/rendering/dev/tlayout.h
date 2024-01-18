@@ -148,6 +148,7 @@ class SpannerSegment;
 class StaffLines;
 class StretchedBend;
 class StringTunings;
+class SoundFlag;
 
 class BSymbol;
 class Symbol;
@@ -309,6 +310,7 @@ public:
     static void layoutStretchedBend(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
     static void layoutStringTunings(StringTunings* item, LayoutContext& ctx);
+    static void layoutSoundFlag(const SoundFlag* item, StaffText::LayoutData* ldata);
 
     static void layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata);

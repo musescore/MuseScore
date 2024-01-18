@@ -136,6 +136,7 @@
 #include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
+#include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -318,6 +319,8 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::SYSTEM_DIVIDER: write(item_cast<const SystemDivider*>(item), xml, ctx);
         break;
     case ElementType::SYSTEM_TEXT:  write(item_cast<const SystemText*>(item), xml, ctx);
+        break;
+    case ElementType::SOUND_FLAG:   write(item_cast<const SoundFlag*>(item), xml, ctx);
         break;
     case ElementType::TEMPO_TEXT:   write(item_cast<const TempoText*>(item), xml, ctx);
         break;
@@ -2849,6 +2852,14 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
     write(static_cast<const StaffTextBase*>(item), xml, ctx);
 }
 
+void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::SOUND_PRESET);
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -3214,6 +3225,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     ElementType et = e1->type();
                     if ((et == ElementType::REHEARSAL_MARK)
                         || (et == ElementType::SYSTEM_TEXT)
+                        || (et == ElementType::SOUND_FLAG)
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::CAPO)

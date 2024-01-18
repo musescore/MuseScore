@@ -210,6 +210,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::TEMPO_TEXT,           "Tempo",                TranslatableString("engraving", "Tempo") },
     { ElementType::STAFF_TEXT,           "StaffText",            TranslatableString("engraving", "Staff text") },
     { ElementType::SYSTEM_TEXT,          "SystemText",           TranslatableString("engraving", "System text") },
+    { ElementType::SOUND_FLAG,           "SoundFlag",            TranslatableString("engraving", "Sound flag") },
     { ElementType::PLAYTECH_ANNOTATION,  "PlayTechAnnotation",   TranslatableString("engraving", "Playing technique annotation") },
     { ElementType::CAPO,                 "Capo",                 TranslatableString("engraving", "Capo") },
     { ElementType::STRING_TUNINGS,       "StringTunings",        TranslatableString("engraving", "String tunings") },
