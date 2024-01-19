@@ -37,6 +37,8 @@ class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiConfiguration() = default;
 
+    virtual bool midiPortIsAvalaible() const = 0;
+
     virtual bool useRemoteControl() const = 0;
     virtual void setUseRemoteControl(bool value) = 0;
 

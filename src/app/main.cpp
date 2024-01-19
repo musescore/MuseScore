@@ -54,7 +54,7 @@
 #include "stubs/framework/midi/midistubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_MIDI_MODULE
+#ifdef MUE_BUILD_MPE_MODULE
 #include "framework/mpe/mpemodule.h"
 #else
 #include "stubs/framework/mpe/mpestubmodule.h"
