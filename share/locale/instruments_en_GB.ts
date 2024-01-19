@@ -979,7 +979,7 @@
         <source>The smallest modern recorder, pitched in C (an octave above the soprano).</source>
         <comment>garklein-recorder description</comment>
         <extracomment>description for Garklein Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>The smallest modern recorder, pitched in C (an octave above the soprano).</translation>
+        <translation>The smallest modern recorder, pitched in C (an octave above the descant).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="521"/>
@@ -1007,7 +1007,7 @@
         <source>The second smallest recorder, pitched in F (an octave above the alto).</source>
         <comment>sopranino-recorder description</comment>
         <extracomment>description for Sopranino Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>The second smallest recorder, pitched in F (an octave above the alto).</translation>
+        <translation>The second smallest recorder, pitched in F (an octave above the treble).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="530"/>
@@ -1035,7 +1035,7 @@
         <source>Also known as the descant recorder. Pitched in C.</source>
         <comment>soprano-recorder description</comment>
         <extracomment>description for Soprano Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Also known as the descant recorder. Pitched in C.</translation>
+        <translation>Also known as the soprano recorder. Pitched in C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="539"/>
@@ -1063,7 +1063,7 @@
         <source>Soprano or descant recorder, pitched in C.</source>
         <comment>recorder description</comment>
         <extracomment>description for Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soprano or descant recorder, pitched in C.</translation>
+        <translation>Descant or soprano recorder, pitched in C.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="548"/>
@@ -1091,7 +1091,7 @@
         <source>Also known as the treble recorder. Pitched in F. Sometimes with an extra key for low E.</source>
         <comment>alto-recorder description</comment>
         <extracomment>description for Alto Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Also known as the treble recorder. Pitched in F. Sometimes with an extra key for low E.</translation>
+        <translation>Also known as the alto recorder. Pitched in F. Sometimes with an extra key for low E.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="557"/>
@@ -1119,7 +1119,7 @@
         <source>Recorder pitched in C (an octave below the soprano).</source>
         <comment>tenor-recorder description</comment>
         <extracomment>description for Tenor Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Recorder pitched in C (an octave below the soprano).</translation>
+        <translation>Recorder pitched in C (an octave below the descant).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="566"/>
@@ -1147,7 +1147,7 @@
         <source>Recorder pitched in F (an octave below the alto).</source>
         <comment>bass-recorder description</comment>
         <extracomment>description for Bass Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Recorder pitched in F (an octave below the alto).</translation>
+        <translation>Recorder pitched in F (an octave below the treble).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="575"/>
@@ -2141,7 +2141,7 @@
         <source>Hph.</source>
         <comment>heckelphone shortName</comment>
         <extracomment>shortName for Heckelphone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Hph.-cl.</translation>
+        <translation>Hph.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="896"/>
@@ -13509,7 +13509,7 @@
         <source>W.</source>
         <comment>women shortName</comment>
         <extracomment>shortName for Women; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Wi.</translation>
+        <translation>W.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4548"/>
@@ -14104,21 +14104,21 @@
         <source>Mallet synthesizer.</source>
         <comment>mallet-synthesizer description</comment>
         <extracomment>description for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mallet synthesiser.</translation>
+        <translation>Mallet synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4745"/>
         <source>Mallet Synthesizer</source>
         <comment>mallet-synthesizer trackName</comment>
         <extracomment>trackName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mallet Synthesiser</translation>
+        <translation>Mallet Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4747"/>
         <source>Mallet Synthesizer</source>
         <comment>mallet-synthesizer longName</comment>
         <extracomment>longName for Mallet Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Mallet Synthesiser</translation>
+        <translation>Mallet Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4749"/>
@@ -14160,21 +14160,21 @@
         <source>Percussion synthesizer.</source>
         <comment>percussion-synthesizer description</comment>
         <extracomment>description for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Percussion synthesiser.</translation>
+        <translation>Percussion synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4763"/>
         <source>Percussion Synthesizer</source>
         <comment>percussion-synthesizer trackName</comment>
         <extracomment>trackName for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Percussion Synthesiser</translation>
+        <translation>Percussion Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4765"/>
         <source>Percussion Synthesizer</source>
         <comment>percussion-synthesizer longName</comment>
         <extracomment>longName for Percussion Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Percussion Synthesiser</translation>
+        <translation>Percussion Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4767"/>
@@ -14188,21 +14188,21 @@
         <source>Atmosphere synth effect (General MIDI program 100).</source>
         <comment>atmosphere-synth description</comment>
         <extracomment>description for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Atmosphere synth effect (General MIDI programme 100).</translation>
+        <translation>Atmosphere synth effect (General MIDI program 100).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4772"/>
         <source>Atmosphere Synthesizer</source>
         <comment>atmosphere-synth trackName</comment>
         <extracomment>trackName for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Atmosphere Synthesiser</translation>
+        <translation>Atmosphere Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4774"/>
         <source>Atmosphere Synthesizer</source>
         <comment>atmosphere-synth longName</comment>
         <extracomment>longName for Atmosphere Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Atmosphere Synthesiser</translation>
+        <translation>Atmosphere Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4776"/>
@@ -14216,21 +14216,21 @@
         <source>Bass synthesizer.</source>
         <comment>bass-synthesizer description</comment>
         <extracomment>description for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass synthesiser.</translation>
+        <translation>Bass synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4781"/>
         <source>Bass Synthesizer</source>
         <comment>bass-synthesizer trackName</comment>
         <extracomment>trackName for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Synthesiser</translation>
+        <translation>Bass Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4783"/>
         <source>Bass Synthesizer</source>
         <comment>bass-synthesizer longName</comment>
         <extracomment>longName for Bass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bass Synthesiser</translation>
+        <translation>Bass Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4785"/>
@@ -14258,21 +14258,21 @@
         <source>Bowed synth pad (General MIDI program 93).</source>
         <comment>bowed-synth description</comment>
         <extracomment>description for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bowed synth pad (General MIDI programme 93).</translation>
+        <translation>Bowed synth pad (General MIDI program 93).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4794"/>
         <source>Bowed Synthesizer</source>
         <comment>bowed-synth trackName</comment>
         <extracomment>trackName for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bowed Synthesiser</translation>
+        <translation>Bowed Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4796"/>
         <source>Bowed Synthesizer</source>
         <comment>bowed-synth longName</comment>
         <extracomment>longName for Bowed Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Bowed Synthesiser</translation>
+        <translation>Bowed Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4798"/>
@@ -14286,21 +14286,21 @@
         <source>Brass synthesizer.</source>
         <comment>brass-synthesizer description</comment>
         <extracomment>description for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brass synthesiser.</translation>
+        <translation>Brass synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4803"/>
         <source>Brass Synthesizer</source>
         <comment>brass-synthesizer trackName</comment>
         <extracomment>trackName for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brass Synthesiser</translation>
+        <translation>Brass Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4805"/>
         <source>Brass Synthesizer</source>
         <comment>brass-synthesizer longName</comment>
         <extracomment>longName for Brass Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brass Synthesiser</translation>
+        <translation>Brass Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4807"/>
@@ -14328,21 +14328,21 @@
         <source>Brightness synth effect (General MIDI program 101).</source>
         <comment>brightness-synth description</comment>
         <extracomment>description for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brightness synth effect (General MIDI programme 101).</translation>
+        <translation>Brightness synth effect (General MIDI program 101).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4816"/>
         <source>Brightness Synthesizer</source>
         <comment>brightness-synth trackName</comment>
         <extracomment>trackName for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brightness Synthesiser</translation>
+        <translation>Brightness Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4818"/>
         <source>Brightness Synthesizer</source>
         <comment>brightness-synth longName</comment>
         <extracomment>longName for Brightness Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Brightness Synthesiser</translation>
+        <translation>Brightness Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4820"/>
@@ -14356,21 +14356,21 @@
         <source>Choir synth pad (General MIDI program 92).</source>
         <comment>choir-synth description</comment>
         <extracomment>description for Choir Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Choir synth pad (General MIDI programme 92).</translation>
+        <translation>Choir synth pad (General MIDI program 92).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4825"/>
         <source>Choir Synthesizer</source>
         <comment>choir-synth trackName</comment>
         <extracomment>trackName for Choir Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Choir Synthesiser</translation>
+        <translation>Choir Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4827"/>
         <source>Choir Synthesizer</source>
         <comment>choir-synth longName</comment>
         <extracomment>longName for Choir Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Choir Synthesiser</translation>
+        <translation>Choir Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4829"/>
@@ -14384,21 +14384,21 @@
         <source>Crystal synth effect (General MIDI program 99).</source>
         <comment>crystal-synth description</comment>
         <extracomment>description for Crystal Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Crystal synth effect (General MIDI programme 99).</translation>
+        <translation>Crystal synth effect (General MIDI program 99).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4834"/>
         <source>Crystal Synthesizer</source>
         <comment>crystal-synth trackName</comment>
         <extracomment>trackName for Crystal Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Crystal Synthesiser</translation>
+        <translation>Crystal Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4836"/>
         <source>Crystal Synthesizer</source>
         <comment>crystal-synth longName</comment>
         <extracomment>longName for Crystal Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Crystal Synthesiser</translation>
+        <translation>Crystal Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4838"/>
@@ -14412,21 +14412,21 @@
         <source>Echoes synth effect (General MIDI program 103).</source>
         <comment>echoes-synth description</comment>
         <extracomment>description for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Echoes synth effect (General MIDI programme 103).</translation>
+        <translation>Echoes synth effect (General MIDI program 103).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4843"/>
         <source>Echoes Synthesizer</source>
         <comment>echoes-synth trackName</comment>
         <extracomment>trackName for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Echoes Synthesiser</translation>
+        <translation>Echoes Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4845"/>
         <source>Echoes Synthesizer</source>
         <comment>echoes-synth longName</comment>
         <extracomment>longName for Echoes Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Echoes Synthesiser</translation>
+        <translation>Echoes Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4847"/>
@@ -14440,21 +14440,21 @@
         <source>General MIDI effect synthesizer (generic).</source>
         <comment>effect-synth description</comment>
         <extracomment>description for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>General MIDI effect synthesiser (generic).</translation>
+        <translation>General MIDI effect synthesizer (generic).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4852"/>
         <source>Effect Synthesizer</source>
         <comment>effect-synth trackName</comment>
         <extracomment>trackName for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Effect Synthesiser</translation>
+        <translation>Effect Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4854"/>
         <source>Effect Synthesizer</source>
         <comment>effect-synth longName</comment>
         <extracomment>longName for Effect Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Effect Synthesiser</translation>
+        <translation>Effect Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4856"/>
@@ -14524,21 +14524,21 @@
         <source>Goblins synth effect (General MIDI program 102).</source>
         <comment>goblins-synth description</comment>
         <extracomment>description for Goblins Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Goblins synth effect (General MIDI programme 102).</translation>
+        <translation>Goblins synth effect (General MIDI program 102).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4877"/>
         <source>Goblins Synthesizer</source>
         <comment>goblins-synth trackName</comment>
         <extracomment>trackName for Goblins Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Goblins Synthesiser</translation>
+        <translation>Goblins Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4879"/>
         <source>Goblins Synthesizer</source>
         <comment>goblins-synth longName</comment>
         <extracomment>longName for Goblins Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Goblins Synthesiser</translation>
+        <translation>Goblins Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4881"/>
@@ -14552,21 +14552,21 @@
         <source>Halo synth pad (General MIDI program 95).</source>
         <comment>halo-synth description</comment>
         <extracomment>description for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Halo synth pad (General MIDI programme 95).</translation>
+        <translation>Halo synth pad (General MIDI program 95).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4886"/>
         <source>Halo Synthesizer</source>
         <comment>halo-synth trackName</comment>
         <extracomment>trackName for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Halo Synthesiser</translation>
+        <translation>Halo Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4888"/>
         <source>Halo Synthesizer</source>
         <comment>halo-synth longName</comment>
         <extracomment>longName for Halo Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Halo Synthesiser</translation>
+        <translation>Halo Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4890"/>
@@ -14580,21 +14580,21 @@
         <source>Metallic synth pad (General MIDI program 94).</source>
         <comment>metallic-synth description</comment>
         <extracomment>description for Metallic Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Metallic synth pad (General MIDI programme 94).</translation>
+        <translation>Metallic synth pad (General MIDI program 94).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4895"/>
         <source>Metallic Synthesizer</source>
         <comment>metallic-synth trackName</comment>
         <extracomment>trackName for Metallic Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Metallic Synthesiser</translation>
+        <translation>Metallic Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4897"/>
         <source>Metallic Synthesizer</source>
         <comment>metallic-synth longName</comment>
         <extracomment>longName for Metallic Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Metallic Synthesiser</translation>
+        <translation>Metallic Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4899"/>
@@ -14608,21 +14608,21 @@
         <source>New age synth pad (General MIDI program 89).</source>
         <comment>new-age-synth description</comment>
         <extracomment>description for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>New age synth pad (General MIDI programme 89).</translation>
+        <translation>New age synth pad (General MIDI program 89).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4904"/>
         <source>New Age Synthesizer</source>
         <comment>new-age-synth trackName</comment>
         <extracomment>trackName for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>New Age Synthesiser</translation>
+        <translation>New Age Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4906"/>
         <source>New Age Synthesizer</source>
         <comment>new-age-synth longName</comment>
         <extracomment>longName for New Age Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>New Age Synthesiser</translation>
+        <translation>New Age Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4908"/>
@@ -14643,14 +14643,14 @@
         <source>Pad Synthesizer</source>
         <comment>pad-synth trackName</comment>
         <extracomment>trackName for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pad Synthesiser</translation>
+        <translation>Pad Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4915"/>
         <source>Pad Synthesizer</source>
         <comment>pad-synth longName</comment>
         <extracomment>longName for Pad Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Pad Synthesiser</translation>
+        <translation>Pad Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4917"/>
@@ -14720,21 +14720,21 @@
         <source>Polysynth synth pad (General MIDI program 91).</source>
         <comment>poly-synth description</comment>
         <extracomment>description for Poly Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Polysynth synth pad (General MIDI programme 91).</translation>
+        <translation>Polysynth synth pad (General MIDI program 91).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4938"/>
         <source>Poly Synthesizer</source>
         <comment>poly-synth trackName</comment>
         <extracomment>trackName for Poly Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Poly Synthesiser</translation>
+        <translation>Poly Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4940"/>
         <source>Poly Synthesizer</source>
         <comment>poly-synth longName</comment>
         <extracomment>longName for Poly Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Poly Synthesiser</translation>
+        <translation>Poly Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4942"/>
@@ -14748,21 +14748,21 @@
         <source>Rain synth effect (General MIDI program 97).</source>
         <comment>rain-synth description</comment>
         <extracomment>description for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Rain synth effect (General MIDI programme 97).</translation>
+        <translation>Rain synth effect (General MIDI program 97).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4947"/>
         <source>Rain Synthesizer</source>
         <comment>rain-synth trackName</comment>
         <extracomment>trackName for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Rain Synthesiser</translation>
+        <translation>Rain Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4949"/>
         <source>Rain Synthesizer</source>
         <comment>rain-synth longName</comment>
         <extracomment>longName for Rain Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Rain Synthesiser</translation>
+        <translation>Rain Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4951"/>
@@ -14776,21 +14776,21 @@
         <source>Sawtooth wave synthesizer.</source>
         <comment>saw-synth description</comment>
         <extracomment>description for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sawtooth wave synthesiser.</translation>
+        <translation>Sawtooth wave synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4956"/>
         <source>Saw Synthesizer</source>
         <comment>saw-synth trackName</comment>
         <extracomment>trackName for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saw Synthesiser</translation>
+        <translation>Saw Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4958"/>
         <source>Saw Synthesizer</source>
         <comment>saw-synth longName</comment>
         <extracomment>longName for Saw Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saw Synthesiser</translation>
+        <translation>Saw Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4960"/>
@@ -14804,21 +14804,21 @@
         <source>Sci-fi synth effect (General MIDI program 104).</source>
         <comment>sci-fi-synth description</comment>
         <extracomment>description for Sci-fi Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sci-fi synth effect (General MIDI programme 104).</translation>
+        <translation>Sci-fi synth effect (General MIDI program 104).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4965"/>
         <source>Sci-fi Synthesizer</source>
         <comment>sci-fi-synth trackName</comment>
         <extracomment>trackName for Sci-fi Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sci-fi Synthesiser</translation>
+        <translation>Sci-fi Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4967"/>
         <source>Sci-fi Synthesizer</source>
         <comment>sci-fi-synth longName</comment>
         <extracomment>longName for Sci-fi Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sci-fi Synthesiser</translation>
+        <translation>Sci-fi Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4969"/>
@@ -14832,21 +14832,21 @@
         <source>Sine wave synthesizer.</source>
         <comment>sine-synth description</comment>
         <extracomment>description for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sine wave synthesiser.</translation>
+        <translation>Sine wave synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4974"/>
         <source>Sine Synthesizer</source>
         <comment>sine-synth trackName</comment>
         <extracomment>trackName for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sine Synthesiser</translation>
+        <translation>Sine Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4976"/>
         <source>Sine Synthesizer</source>
         <comment>sine-synth longName</comment>
         <extracomment>longName for Sine Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sine Synthesiser</translation>
+        <translation>Sine Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4978"/>
@@ -14860,21 +14860,21 @@
         <source>Soundtrack synth effect (General MIDI program 98).</source>
         <comment>soundtrack-synth description</comment>
         <extracomment>description for Soundtrack Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soundtrack synth effect (General MIDI programme  98).</translation>
+        <translation>Soundtrack synth effect (General MIDI program 98).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4983"/>
         <source>Soundtrack Synthesizer</source>
         <comment>soundtrack-synth trackName</comment>
         <extracomment>trackName for Soundtrack Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soundtrack Synthesiser</translation>
+        <translation>Soundtrack Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4985"/>
         <source>Soundtrack Synthesizer</source>
         <comment>soundtrack-synth longName</comment>
         <extracomment>longName for Soundtrack Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Soundtrack Synthesiser</translation>
+        <translation>Soundtrack Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4987"/>
@@ -14888,21 +14888,21 @@
         <source>Square wave synthesizer.</source>
         <comment>square-synth description</comment>
         <extracomment>description for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Square wave synthesiser.</translation>
+        <translation>Square wave synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4992"/>
         <source>Square Synthesizer</source>
         <comment>square-synth trackName</comment>
         <extracomment>trackName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Square Synthesiser</translation>
+        <translation>Square Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4994"/>
         <source>Square Synthesizer</source>
         <comment>square-synth longName</comment>
         <extracomment>longName for Square Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Square Synthesiser</translation>
+        <translation>Square Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4996"/>
@@ -14916,21 +14916,21 @@
         <source>String synthesizer.</source>
         <comment>string-synthesizer description</comment>
         <extracomment>description for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>String synthesiser.</translation>
+        <translation>String synthesizer.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5001"/>
         <source>String Synthesizer</source>
         <comment>string-synthesizer trackName</comment>
         <extracomment>trackName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>String Synthesiser</translation>
+        <translation>String Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5003"/>
         <source>String Synthesizer</source>
         <comment>string-synthesizer longName</comment>
         <extracomment>longName for String Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>String Synthesiser</translation>
+        <translation>String Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5005"/>
@@ -14958,21 +14958,21 @@
         <source>Sweep synth pad (General MIDI program 96).</source>
         <comment>sweep-synth description</comment>
         <extracomment>description for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sweep synth pad (General MIDI programme 96).</translation>
+        <translation>Sweep synth pad (General MIDI program 96).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5014"/>
         <source>Sweep Synthesizer</source>
         <comment>sweep-synth trackName</comment>
         <extracomment>trackName for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sweep Synthesiser</translation>
+        <translation>Sweep Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5016"/>
         <source>Sweep Synthesizer</source>
         <comment>sweep-synth longName</comment>
         <extracomment>longName for Sweep Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sweep Synthesiser</translation>
+        <translation>Sweep Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5018"/>
@@ -15014,21 +15014,21 @@
         <source>Warm synth pad (General MIDI program 90).</source>
         <comment>warm-synth description</comment>
         <extracomment>description for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Warm synth pad (General MIDI programme 90).</translation>
+        <translation>Warm synth pad (General MIDI program 90).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5032"/>
         <source>Warm Synthesizer</source>
         <comment>warm-synth trackName</comment>
         <extracomment>trackName for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Warm Synthesiser</translation>
+        <translation>Warm Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5034"/>
         <source>Warm Synthesizer</source>
         <comment>warm-synth longName</comment>
         <extracomment>longName for Warm Synthesizer; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Warm Synthesiser</translation>
+        <translation>Warm Synthesizer</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5036"/>
@@ -16715,7 +16715,7 @@
         <source>Mda.</source>
         <comment>mandola shortName</comment>
         <extracomment>shortName for Mandola; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>A. Mda.</translation>
+        <translation>Mda.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5529"/>

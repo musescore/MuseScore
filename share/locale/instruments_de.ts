@@ -1007,7 +1007,7 @@
         <source>The second smallest recorder, pitched in F (an octave above the alto).</source>
         <comment>sopranino-recorder description</comment>
         <extracomment>description for Sopranino Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Die zweitkleinste moderne Blockflöte, in F (eine Oktave über der Altflöte).</translation>
+        <translation>Die zweitkleinste moderne Blockflöte, in F (eine Oktave über der Altblockflöte).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="530"/>
@@ -1035,7 +1035,7 @@
         <source>Also known as the descant recorder. Pitched in C.</source>
         <comment>soprano-recorder description</comment>
         <extracomment>description for Soprano Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Auch bekannt als Diskantblockflöte. In C.</translation>
+        <translation>Auch bekannt als Diskantblockflöte. In C, auch C-Flöte genannt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="539"/>
@@ -1063,7 +1063,7 @@
         <source>Soprano or descant recorder, pitched in C.</source>
         <comment>recorder description</comment>
         <extracomment>description for Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sopran- oder Diskantblockflöte. In C.</translation>
+        <translation>Sopran- oder Diskantblockflöte. In C, auch C-Flöte genannt.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="548"/>
@@ -1091,7 +1091,7 @@
         <source>Also known as the treble recorder. Pitched in F. Sometimes with an extra key for low E.</source>
         <comment>alto-recorder description</comment>
         <extracomment>description for Alto Recorder; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Im Englischen auch bekannt als Treble Recorder In F. Gelegentlich mit einem extra Loch für das tiefe E</translation>
+        <translation>Im Englischen auch bekannt als Treble Recorder. In F, auch F-Flöte oder Altflöte genannt. Gelegentlich mit einem extra Loch für das tiefe E</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="557"/>

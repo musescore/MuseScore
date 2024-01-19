@@ -832,7 +832,7 @@
         <source>Whistle pitched in B♭ (notated at concert pitch).</source>
         <comment>bflat-tin-whistle description</comment>
         <extracomment>description for Tin Whistle; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tin whistle en Si♭ (noté en tonalité réelle).</translation>
+        <translation>Sifflet en Si♭ (écrit en tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="474"/>
@@ -4241,7 +4241,7 @@
         <source>Saxophone in B♭ (an octave above the soprano).</source>
         <comment>sopranissimo-saxophone description</comment>
         <extracomment>description for Sopranissimo Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en si♭ (une octave plus grave que le soprano).</translation>
+        <translation>Saxophone en Si♭ (une octave plus grave que le soprano).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1565"/>
@@ -4269,7 +4269,7 @@
         <source>Saxophone in E♭ (an octave above the alto).</source>
         <comment>sopranino-saxophone description</comment>
         <extracomment>description for Sopranino Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en mi♭ (une octave plus aigüe que l&apos;alto).</translation>
+        <translation>Saxophone en Mi♭ (une octave plus aigüe que l&apos;alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1574"/>
@@ -4325,7 +4325,7 @@
         <source>Saxophone in B♭ (an octave above the tenor).</source>
         <comment>soprano-saxophone description</comment>
         <extracomment>description for Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en si♭ (une octave plus aigüe que le ténor).</translation>
+        <translation>Saxophone en Si♭ (une octave plus aigüe que le ténor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1592"/>
@@ -4353,7 +4353,7 @@
         <source>Saxophone in F (a tone above the alto).</source>
         <comment>mezzo-soprano-saxophone description</comment>
         <extracomment>description for Mezzo-Soprano Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en fa (un ton plus aigu que l&apos;alto).</translation>
+        <translation>Saxophone en Fa (un ton plus aigu que l&apos;alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1601"/>
@@ -4409,7 +4409,7 @@
         <source>Saxophone in E♭ (an octave above the baritone).</source>
         <comment>alto-saxophone description</comment>
         <extracomment>description for Alto Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en mi♭ (une octave plus aigüe que le baryton).</translation>
+        <translation>Saxophone en Mi♭ (une octave plus aigüe que le baryton).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1619"/>
@@ -4437,7 +4437,7 @@
         <source>Saxophone in C (a tone above the tenor).</source>
         <comment>melody-saxophone description</comment>
         <extracomment>description for Melody Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en do (un ton plus aigu que le ténor).</translation>
+        <translation>Saxophone en Do (un ton plus aigu que le ténor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1628"/>
@@ -4465,7 +4465,7 @@
         <source>Saxophone in B♭ (an octave below the soprano).</source>
         <comment>saxophone description</comment>
         <extracomment>description for Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en si♭ (une octave plus grave que le soprano).</translation>
+        <translation>Saxophone en Si♭ (une octave plus grave que le soprano).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1637"/>
@@ -4493,7 +4493,7 @@
         <source>Saxophone in B♭ (an octave below the soprano).</source>
         <comment>tenor-saxophone description</comment>
         <extracomment>description for Tenor Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en si♭ (une octave plus grave que le soprano).</translation>
+        <translation>Saxophone en Si♭ (une octave plus grave que le soprano).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1646"/>
@@ -4521,7 +4521,7 @@
         <source>Saxophone in E♭ (an octave below the alto).</source>
         <comment>baritone-saxophone description</comment>
         <extracomment>description for Baritone Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en mi♭ (une octave plus grave que l&apos;alto).</translation>
+        <translation>Saxophone en Mi♭ (une octave plus grave que l&apos;alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1655"/>
@@ -4549,7 +4549,7 @@
         <source>Saxophone in B♭ (an octave below the tenor).</source>
         <comment>bass-saxophone description</comment>
         <extracomment>description for Bass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en si♭ (une octave plus grave que le ténor).</translation>
+        <translation>Saxophone en Si♭ (une octave plus grave que le ténor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1664"/>
@@ -4577,7 +4577,7 @@
         <source>Saxophone in E♭ (an octave below the baritone).</source>
         <comment>contrabass-saxophone description</comment>
         <extracomment>description for Contrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en mi♭ (une octave plus grave que le baryton).</translation>
+        <translation>Saxophone en Mi♭ (une octave plus grave que le baryton).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1673"/>
@@ -4605,7 +4605,7 @@
         <source>Saxophone in B♭ (an octave below the bass).</source>
         <comment>subcontrabass-saxophone description</comment>
         <extracomment>description for Subcontrabass Saxophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxophone en si♭ (une octave plus grave que le basse).</translation>
+        <translation>Saxophone en Si♭ (une octave plus grave que le basse).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1682"/>
@@ -4773,7 +4773,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭ (an octave above the soprano).</source>
         <comment>sopranino-sarrusophone description</comment>
         <extracomment>description for Sopranino Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument métallique à anche simple ou double à perce conique, en si♭ (une octave plus aigüe que le soprano).</translation>
+        <translation>Instrument métallique à anche simple ou double à perce conique, en Si♭ (une octave plus aigüe que le soprano).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1736"/>
@@ -4885,7 +4885,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭ (an octave below the soprano).</source>
         <comment>tenor-sarrusophone description</comment>
         <extracomment>description for Tenor Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument métallique à anche simple ou double à perce conique, en si♭ (une octave plus grave que le soprano).</translation>
+        <translation>Instrument métallique à anche simple ou double à perce conique, en Si♭ (une octave plus grave que le soprano).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1772"/>
@@ -4913,7 +4913,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in E♭ (an octave below the alto).</source>
         <comment>baritone-sarrusophone description</comment>
         <extracomment>description for Baritone Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument métallique à anche simple ou double à perce conique, en mi♭ (une octave plus grave que l&apos;alto).</translation>
+        <translation>Instrument métallique à anche simple ou double à perce conique, en Mi♭ (une octave plus grave que l&apos;alto).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1781"/>
@@ -4941,7 +4941,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in B♭ (an octave below the tenor).</source>
         <comment>bass-sarrusophone description</comment>
         <extracomment>description for Bass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument métallique à anche simple ou double à perce conique, en si♭ (une octave plus grave que le ténor).</translation>
+        <translation>Instrument métallique à anche simple ou double à perce conique, en Si♭ (une octave plus grave que le ténor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1790"/>
@@ -4969,7 +4969,7 @@
         <source>Single- or double-reed metal instrument with a conical bore, in E♭ (an octave below the baritone).</source>
         <comment>contrabass-sarrusophone description</comment>
         <extracomment>description for Contrabass Sarrusophone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Instrument métallique à anche simple ou double à perce conique, en mi♭ (une octave plus grave que le baryton).</translation>
+        <translation>Instrument métallique à anche simple ou double à perce conique, en Mi♭ (une octave plus grave que le baryton).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="1799"/>
@@ -6362,7 +6362,7 @@
         <source>Horn in low C (notated in bass clef).</source>
         <comment>c-horn-bass description</comment>
         <extracomment>description for Horn (bass clef); transposition: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor en Ut grave (noté en Clef de Fa).</translation>
+        <translation>Cor en Ut grave (écrit en Clef de Fa).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2240"/>
@@ -6796,7 +6796,7 @@
         <source>Soprano saxhorn.</source>
         <comment>saxhorn description</comment>
         <extracomment>description for Saxhorn; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn soprano</translation>
+        <translation>Saxhorn soprano.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2374"/>
@@ -6838,28 +6838,28 @@
         <source>Alto horn in F. (Known as ‘tenor horn’ in British English.)</source>
         <comment>f-alto-horn description</comment>
         <extracomment>description for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor en fa</translation>
+        <translation>Saxhorn Alto en Fa (Connu en anglais comme Cor ténor)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2387"/>
         <source>Alto Horn</source>
         <comment>f-alto-horn trackName</comment>
         <extracomment>trackName for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor alto</translation>
+        <translation>Saxhorn Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2389"/>
         <source>Alto Horn</source>
         <comment>f-alto-horn longName</comment>
         <extracomment>longName for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor alto</translation>
+        <translation>Saxhorn Alto en Fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2391"/>
         <source>A. Hn.</source>
         <comment>f-alto-horn shortName</comment>
         <extracomment>shortName for Alto Horn; transposition: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor. A.</translation>
+        <translation>Saxh. A. Fa</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2393"/>
@@ -6887,28 +6887,28 @@
         <source>Alto horn in E♭. (Known as ‘tenor horn’ in British English.)</source>
         <comment>eb-alto-horn description</comment>
         <extracomment>description for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor alto en mi♭. (Aussi connu sous le nom de « Cor ténor ».)</translation>
+        <translation>Saxhorn Alto en Mi♭. (Connu en anglais comme Cor ténor.)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2402"/>
         <source>Alto Horn</source>
         <comment>eb-alto-horn trackName</comment>
         <extracomment>trackName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor alto</translation>
+        <translation>Saxhorn Alto</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2404"/>
         <source>Alto Horn</source>
         <comment>eb-alto-horn longName</comment>
         <extracomment>longName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor alto</translation>
+        <translation>Saxhorn Alto en Mi♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2406"/>
         <source>A. Hn.</source>
         <comment>eb-alto-horn shortName</comment>
         <extracomment>shortName for Alto Horn; transposition: E♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cor. A.</translation>
+        <translation>Saxh. A. Mi♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2408"/>
@@ -6978,21 +6978,21 @@
         <source>Baritone horn (sometimes just called ‘baritone’). Notated in treble clef, often as a transposing instrument.</source>
         <comment>baritone-horn-treble description</comment>
         <extracomment>description for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton (parfois simplement appelé « baryton »). Noté en Clef de Sol, souvent comme instrument de transposition.</translation>
+        <translation>Saxhorn baryton (parfois simplement appelé Baryton). Noté en Clef de Sol, souvent comme instrument de transposition.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2430"/>
         <source>Baritone Horn (treble clef)</source>
         <comment>baritone-horn-treble trackName</comment>
         <extracomment>trackName for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton (Clef de Sol)</translation>
+        <translation>Saxhorn Baryton (Clef de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2432"/>
         <source>Baritone Horn</source>
         <comment>baritone-horn-treble longName</comment>
         <extracomment>longName for Baritone Horn (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton</translation>
+        <translation>Saxhorn baryton (Clef de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2434"/>
@@ -7020,21 +7020,21 @@
         <source>Central European variant of the baritone horn. Notated in treble clef, often as a transposing instrument.</source>
         <comment>baritone-horn-central-europe-treble description</comment>
         <extracomment>description for Baritone Horn (Central European, treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Variante d&apos;Europe centrale du saxhorn baryton. Noté en Clef de Sol, souvent comme instrument de transposition.</translation>
+        <translation>Variante d&apos;Europe centrale du Saxhorn baryton, écrit en Clef de Sol, souvent comme instrument transpositeur.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2443"/>
         <source>Baritone Horn (Central European, treble clef)</source>
         <comment>baritone-horn-central-europe-treble trackName</comment>
         <extracomment>trackName for Baritone Horn (Central European, treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton (Europe centrale, Clef de Sol).</translation>
+        <translation>Saxhorn Baryton (Europe centrale, Clef de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2445"/>
         <source>Baritone Horn</source>
         <comment>baritone-horn-central-europe-treble longName</comment>
         <extracomment>longName for Baritone Horn (Central European, treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton</translation>
+        <translation>Saxhorn Baryton (Europe centrale, Clef de Sol)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2447"/>
@@ -7069,14 +7069,14 @@
         <source>Baritone Horn (Central European)</source>
         <comment>baritone-horn-central-europe trackName</comment>
         <extracomment>trackName for Baritone Horn (Central European); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton (Europe centrale)</translation>
+        <translation>Saxhorn Baryton (Europe centrale)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2458"/>
         <source>Baritone Horn</source>
         <comment>baritone-horn-central-europe longName</comment>
         <extracomment>longName for Baritone Horn (Central European); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Saxhorn baryton</translation>
+        <translation>Saxhorn Baryton (Europe centrale)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="2460"/>
@@ -8973,7 +8973,7 @@
         <source>Soprano trombone (usually pitched in B♭, an octave above the tenor).</source>
         <comment>soprano-trombone description</comment>
         <extracomment>description for Soprano Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombone soprano (généralement accordé en si♭, une octave plus aigüe que le ténor).</translation>
+        <translation>Trombone soprano (généralement accordé en Si♭, une octave plus aigüe que le ténor).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3057"/>
@@ -9015,7 +9015,7 @@
         <source>Alto trombone (pitched in E♭ or F).</source>
         <comment>alto-trombone description</comment>
         <extracomment>description for Alto Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombone alto (accordé en mi♭ ou en fa).</translation>
+        <translation>Trombone alto (accordé en Si♭ ou en Fa).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3070"/>
@@ -9057,7 +9057,7 @@
         <source>Tenor trombone (pitched in B♭).</source>
         <comment>tenor-trombone description</comment>
         <extracomment>description for Tenor Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombone ténor (accordé en si♭).</translation>
+        <translation>Trombone ténor (accordé en Si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3083"/>
@@ -9141,7 +9141,7 @@
         <source>Trombone (notated in treble clef as a transposing instrument in B♭).</source>
         <comment>trombone-treble description</comment>
         <extracomment>description for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombone (noté en Clef de Sol comme un instrument de transposition en Si♭).</translation>
+        <translation>Trombone (noté en Clef de Sol comme un instrument transpositeur en Si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3109"/>
@@ -9183,7 +9183,7 @@
         <source>Contrabass Trombone (usually pitched in F).</source>
         <comment>contrabass-trombone description</comment>
         <extracomment>description for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombone Contrebasse (généralement accordé en fa).</translation>
+        <translation>Trombone Contrebasse (généralement accordé en Fa).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3122"/>
@@ -9225,7 +9225,7 @@
         <source>Bass trombone (pitched in B♭).</source>
         <comment>bass-trombone description</comment>
         <extracomment>description for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Trombone basse (accordé en si♭).</translation>
+        <translation>Trombone basse (accordé en Si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3135"/>
@@ -9379,7 +9379,7 @@
         <source>Euphonium (notated in bass clef at concert pitch).</source>
         <comment>euphonium description</comment>
         <extracomment>description for Euphonium; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Euphonium (noté en Clef de Fa à la tonalité réelle).</translation>
+        <translation>Euphonium (écrit en Clef de Fa à la tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3184"/>
@@ -9407,7 +9407,7 @@
         <source>Euphonium (notated in treble clef as a transposing instrument in B♭).</source>
         <comment>euphonium-treble description</comment>
         <extracomment>description for Euphonium (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Euphonium (noté en Clef de Sol comme un instrument de transposition en Si♭).</translation>
+        <translation>Euphonium (écrit e n Clef de Sol comme un instrument transpositeur en Si♭).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3193"/>
@@ -9463,7 +9463,7 @@
         <source>Bass tuba in F (notated in bass clef at concert pitch).</source>
         <comment>f-tuba description</comment>
         <extracomment>description for Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba basse en Fa (noté en Clef de Fa à la tonalité réelle).</translation>
+        <translation>Tuba basse en Fa (écrit en Clef de Fa à la tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3211"/>
@@ -9491,7 +9491,7 @@
         <source>Bass tuba in E♭ (notated in bass clef at concert pitch).</source>
         <comment>eb-tuba description</comment>
         <extracomment>description for Tuba; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba basse en Mi♭ (noté en Clef de Fa à la tonalité réelle).</translation>
+        <translation>Tuba basse en Mi♭ (écrit en Clef de Fa à la tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3220"/>
@@ -9554,7 +9554,7 @@
         <source>Bass tuba in F (notated in bass clef at concert pitch).</source>
         <comment>bass-f-tuba description</comment>
         <extracomment>description for Bass Tuba; tuning: F; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba basse en Fa (noté en Clef de Fa à la tonalité réelle).</translation>
+        <translation>Tuba basse en Fa (écrit en Clef de Fa à la tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3240"/>
@@ -9624,7 +9624,7 @@
         <source>Contrabass tuba in C (notated in bass clef).</source>
         <comment>c-tuba description</comment>
         <extracomment>description for Contrabass Tuba; tuning: C; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba contrebasse en Ut (noté en Clef de Fa).</translation>
+        <translation>Tuba contrebasse en Ut (écrit en Clef de Fa).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3262"/>
@@ -9659,7 +9659,7 @@
         <source>Contrabass tuba in B♭ (notated in bass clef at concert pitch).</source>
         <comment>bb-tuba description</comment>
         <extracomment>description for Contrabass Tuba; tuning: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba contrebasse en Si♭ (noté en Clef de Fa à la tonalité réelle).</translation>
+        <translation>Tuba contrebasse en Si♭ (écrit en Clef de Fa à la tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3273"/>
@@ -9694,7 +9694,7 @@
         <source>Contrabass tuba in B♭ (notated in treble clef as a transposing instrument).</source>
         <comment>bb-tuba-treble description</comment>
         <extracomment>description for Contrabass Tuba (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Tuba contrebasse en Si♭ (noté en Clef de Sol comme un instrument de transposition).</translation>
+        <translation>Tuba contrebasse en Si♭ (écrit en Clef de Sol comme un instrument de transposition).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3284"/>
@@ -9757,7 +9757,7 @@
         <source>Sousaphone in B♭ (notated in bass clef).</source>
         <comment>bb-sousaphone description</comment>
         <extracomment>description for Sousaphone; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousaphone en Si♭ (noté en Clef de Fa).</translation>
+        <translation>Sousaphone en Si♭ (écrit en Clef de Fa).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3304"/>
@@ -9785,14 +9785,14 @@
         <source>(B♭)</source>
         <comment>bb-sousaphone traitName</comment>
         <extracomment>traitName for Sousaphone; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>(Si♭)</translation>
+        <translation>Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3313"/>
         <source>Sousaphone in B♭ (notated in treble clef).</source>
         <comment>bb-sousaphone-treble description</comment>
         <extracomment>description for Sousaphone (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousaphone en Si♭ (noté en Clef de Sol).</translation>
+        <translation>Sousaphone en Si♭ (écrit en Clef de Sol).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3315"/>
@@ -9820,14 +9820,14 @@
         <source>(B♭)</source>
         <comment>bb-sousaphone-treble traitName</comment>
         <extracomment>traitName for Sousaphone (treble clef); transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>(Si♭)</translation>
+        <translation>Si♭</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3324"/>
         <source>Sousaphone in B♭ (notated in treble clef at concert pitch).</source>
         <comment>sousaphone description</comment>
         <extracomment>description for Sousaphone (concert pitch); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Sousaphone en Si♭ (noté en Clef de Sol à la tonalité réelle).</translation>
+        <translation>Sousaphone en Si♭ (écrit en Clef de Sol à la tonalité réelle).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3326"/>
@@ -10709,7 +10709,7 @@
         <source>Tubular bells (British English), or chimes (American English).</source>
         <comment>tubular-bells description</comment>
         <extracomment>description for Chimes; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Cloches tubulaires (traduction de l&apos;anglais britannique), ou carillon  (traduction de l&apos;anglais américain)</translation>
+        <translation>Tubular bells (anglais britannique), ou carillon  (traduction de l&apos;anglais américain)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3612"/>
@@ -13124,7 +13124,7 @@
         <source>Soprano voice (notated in C clef).</source>
         <comment>soprano-c-clef description</comment>
         <extracomment>description for Soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de soprano (notée en Clef d&apos;Ut).</translation>
+        <translation>Voix de soprano (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4425"/>
@@ -13180,7 +13180,7 @@
         <source>Mezzo-soprano voice (notated in C clef).</source>
         <comment>mezzo-soprano-c-clef description</comment>
         <extracomment>description for Mezzo-soprano (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de mezzo-soprano (notée en Clef d&apos;Ut).</translation>
+        <translation>Voix de mezzo-soprano (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4443"/>
@@ -13264,7 +13264,7 @@
         <source>Alto voice (notated in C clef).</source>
         <comment>alto-c-clef description</comment>
         <extracomment>description for Alto (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix d&apos;alto (notée en Clef d&apos;Ut)</translation>
+        <translation>Voix d&apos;alto (écrit en Clef d&apos;Ut)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4470"/>
@@ -13348,7 +13348,7 @@
         <source>Tenor voice (notated in C clef).</source>
         <comment>tenor-c-clef description</comment>
         <extracomment>description for Tenor (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de ténor (notée en Clef d&apos;Ut).</translation>
+        <translation>Voix de ténor (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4497"/>
@@ -13404,7 +13404,7 @@
         <source>Baritone voice (notated in C clef).</source>
         <comment>baritone-c-clef description</comment>
         <extracomment>description for Baritone (C clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Voix de baryton (notée en Clef d&apos;Ut).</translation>
+        <translation>Voix de baryton (écrit en Clef d&apos;Ut).</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4515"/>

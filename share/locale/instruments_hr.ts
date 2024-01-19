@@ -10093,7 +10093,7 @@
         <source>Large pitched orchestral drums, also known as kettle drums. Sometimes fitted with a pedal to allow quick changes of tuning.</source>
         <comment>timpani description</comment>
         <extracomment>description for Timpani; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Veliki bubanj određene visine tona. Ponekad opremljen s pedalom koja dozvoljava brzo mijenjanje ugođaja.</translation>
+        <translation>Veliki orkestralni bubnjevi, određene visine tona. Ponekad opremljeni s pedalom koja dozvoljava brzo mijenjanje ugođaja.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="3414"/>
@@ -12053,14 +12053,14 @@
         <source>Mark Tree</source>
         <comment>mark-tree trackName</comment>
         <extracomment>trackName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mark Tree</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4058"/>
         <source>Mark Tree</source>
         <comment>mark-tree longName</comment>
         <extracomment>longName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mark Tree</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4060"/>

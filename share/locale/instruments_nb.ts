@@ -12053,14 +12053,14 @@
         <source>Mark Tree</source>
         <comment>mark-tree trackName</comment>
         <extracomment>trackName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Marktre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4058"/>
         <source>Mark Tree</source>
         <comment>mark-tree longName</comment>
         <extracomment>longName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Marktre</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4060"/>
