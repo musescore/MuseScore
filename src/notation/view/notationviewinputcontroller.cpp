@@ -632,11 +632,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
+    }
 
-        EngravingItem* playbackStartElement = resolveStartPlayableElement();
-        if (playbackStartElement && playbackStartElement != ctx.hitElement) {
-            playbackController()->seekElement(playbackStartElement);
-        }
+    EngravingItem* playbackStartElement = resolveStartPlayableElement();
+    if (playbackStartElement) {
+        playbackController()->seekElement(playbackStartElement);
     }
 
     if (button == Qt::LeftButton) {
