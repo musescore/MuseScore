@@ -252,9 +252,9 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     EXPECT_CALL(*m_playbackController, isPlaying())
     .WillOnce(Return(false));
 
-    //! [THEN] We will seek and play selected note
+    //! [THEN] We will no seek selected note, but play it
     EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
-    .Times(1);
+    .Times(0);
 
     std::vector<const EngravingItem*> elements = { newContext.element };
     EXPECT_CALL(*m_playbackController, playElements(elements))
@@ -266,4 +266,69 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
 
     //! [WHEN] User pressed left mouse button
     m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::NoModifier, QPoint(100, 100)));
+}
+
+/**
+ * @brief Mouse_Press_Range_Start_Play_From_First_Playable_Element
+ * @details User selected a range in a note that is located after the previous selected note
+ */
+TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First_Playable_Element)
+{
+    //! [GIVEN] There is a test score
+    engraving::MasterScore* score = engraving::ScoreRW::readScore(TEST_SCORE_PATH);
+
+    //! [GIVEN] Previous selected note
+    INotationInteraction::HitElementContext oldContext = hitContext(score, true /*first note*/);
+
+    //! [GIVEN] User selected new note that is located after the previous selected note
+    INotationInteraction::HitElementContext newContext = hitContext(score, false /*last note*/);
+
+    EXPECT_CALL(*m_interaction, hitElement(_, _))
+    .WillOnce(Return(newContext.element));
+
+    EXPECT_CALL(*m_interaction, hitStaff(_))
+    .WillOnce(Return(newContext.element->staff()));
+
+    //! [GIVEN] The hew hit element context with new note will be set
+    EXPECT_CALL(*m_interaction, setHitElementContext(newContext))
+    .Times(1);
+
+    EXPECT_CALL(*m_interaction, hitElementContext())
+    .Times(2)
+    .WillOnce(ReturnRef(oldContext))
+    .WillOnce(ReturnRef(newContext));
+
+    //! [GIVEN] No note enter mode, no playing
+    EXPECT_CALL(m_view, isNoteEnterMode())
+    .WillOnce(Return(false));
+
+    EXPECT_CALL(*m_playbackController, isPlaying())
+    .WillOnce(Return(false));
+
+    //! [THEN] We will select and play selected note, but no seek
+    std::vector<EngravingItem*> selectElements = { newContext.element };
+    EXPECT_CALL(*m_interaction, select(selectElements, _, _))
+    .Times(1);
+
+    std::vector<const EngravingItem*> playElements = { newContext.element };
+    EXPECT_CALL(*m_playbackController, playElements(playElements))
+    .Times(1);
+
+    EXPECT_CALL(*m_playbackController, seekElement(newContext.element))
+    .Times(0);
+
+    //! [GIVEN] There is a range selection with two notes
+    ON_CALL(*m_selection, isRange())
+    .WillByDefault(Return(true));
+
+    selectElements.push_back(oldContext.element);
+    EXPECT_CALL(*m_selection, elements())
+    .WillOnce(Return(selectElements));
+
+    //! [THEN] We will seek first note in the range
+    EXPECT_CALL(*m_playbackController, seekElement(oldContext.element))
+    .Times(1);
+
+    //! [WHEN] User pressed left mouse button with ShiftModifier on the new note
+    m_controller->mousePressEvent(make_mousePressEvent(Qt::LeftButton, Qt::ShiftModifier, QPoint(100, 100)));
 }

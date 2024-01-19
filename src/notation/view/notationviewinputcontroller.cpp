@@ -39,6 +39,23 @@ using namespace mu::commonscene;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 
+static bool seekAllowed(const mu::engraving::EngravingItem* element)
+{
+    if (!element) {
+        return false;
+    }
+
+    static const ElementTypeSet playableTypes = {
+        ElementType::NOTE,
+        ElementType::REST,
+        ElementType::MMREST,
+        ElementType::MEASURE,
+        ElementType::BAR_LINE
+    };
+
+    return contains(playableTypes, element->type());
+}
+
 NotationViewInputController::NotationViewInputController(IControlledView* view)
     : m_view(view)
 {
@@ -579,21 +596,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     m_physicalBeginPoint = event->pos();
     m_logicalBeginPoint = logicPos;
 
-    if (hitElement) {
-        switch (hitElement->type()) {
-        case ElementType::NOTE:
-        case ElementType::REST:
-        case ElementType::MMREST:
-        case ElementType::MEASURE:
-        case ElementType::BAR_LINE: {
-            playbackController()->seekElement(hitElement);
-            break;
-        }
-        default: break;
-        }
-    }
-
     if (playbackController()->isPlaying()) {
+        if (seekAllowed(hitElement)) {
+            playbackController()->seekElement(hitElement);
+        }
+
         return;
     }
 
@@ -620,6 +627,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
+
+        EngravingItem* playbackStartElement = resolveStartPlayableElement();
+        if (playbackStartElement && playbackStartElement != ctx.hitElement) {
+            playbackController()->seekElement(playbackStartElement);
+        }
     }
 
     if (button == Qt::LeftButton) {
@@ -1128,4 +1140,34 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
     if (AbstractElementPopupModel::supportsPopup(type)) {
         m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
+}
+
+EngravingItem* NotationViewInputController::resolveStartPlayableElement() const
+{
+    EngravingItem* hitElement = hitElementContext().element;
+
+    INotationSelectionPtr selection = viewInteraction()->selection();
+    if (!selection->isRange()) {
+        return hitElement;
+    }
+
+    EngravingItem* playbackStartElement = hitElement;
+
+    for (EngravingItem* element: selection->elements()) {
+        if (!element || element == playbackStartElement) {
+            continue;
+        }
+
+        if (!seekAllowed(element)) {
+            continue;
+        }
+
+        if (playbackStartElement && playbackStartElement->tick() <= element->tick()) {
+            continue;
+        }
+
+        playbackStartElement = element;
+    }
+
+    return playbackStartElement;
 }
