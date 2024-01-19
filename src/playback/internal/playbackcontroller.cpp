@@ -1232,10 +1232,6 @@ void PlaybackController::setupSequencePlayer()
             return;
         }
 
-        if (!isPlaying()) {
-            return;
-        }
-
         setCurrentPlaybackTime(msecs);
         m_tickPlayed.send(m_currentTick);
     });

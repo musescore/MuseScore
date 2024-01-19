@@ -335,7 +335,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
 
     selectElements.push_back(oldContext.element);
     EXPECT_CALL(*m_selection, elements())
-    .WillOnce(Return(selectElements));
+    .WillOnce(ReturnRef(selectElements));
 
     //! [THEN] We will seek first note in the range
     EXPECT_CALL(*m_playbackController, seekElement(oldContext.element))
