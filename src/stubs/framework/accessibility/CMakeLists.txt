@@ -24,6 +24,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accessibilitystubmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/accessibilityconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibilityconfigurationstub.h
+    ${CMAKE_CURRENT_LIST_DIR}/accessibilitycontrollerstub.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibilitycontrollerstub.h
     )
 
 set(MODULE_IS_STUB ON)

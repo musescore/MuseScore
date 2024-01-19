@@ -19,23 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessibilitystubmodule.h"
+#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLERSTUB_H
+#define MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLERSTUB_H
 
-#include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 
-#include "accessibilityconfigurationstub.h"
-#include "accessibilitycontrollerstub.h"
-
-using namespace mu::accessibility;
-using namespace mu::modularity;
-
-std::string AccessibilityModule::moduleName() const
+namespace mu::accessibility {
+class AccessibilityControllerStub : public IAccessibilityController
 {
-    return "accessibility_stub";
+public:
+    void reg(IAccessible* item) override;
+    void unreg(IAccessible* item) override;
+
+    const IAccessible* accessibleRoot() const override;
+
+    const IAccessible* lastFocused() const override;
+
+    bool needToVoicePanelInfo() const override;
+    QString currentPanelAccessibleName() const override;
+
+    void setIgnoreQtAccessibilityEvents(bool ignore) override;
+};
 }
 
-void AccessibilityModule::registerExports()
-{
-    ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfigurationStub());
-    ioc()->registerExport<IAccessibilityController>(moduleName(), new AccessibilityControllerStub());
-}
+#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLERSTUB_H
