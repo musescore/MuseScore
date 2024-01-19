@@ -96,9 +96,11 @@ void BeamSettingsModel::loadProperties()
     loadProperties(propertyIdSet);
 }
 
-void BeamSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
+void BeamSettingsModel::onNotationChanged(const PropertyIdSet&, const StyleIdSet&)
 {
-    loadProperties(changedPropertyIdSet);
+    // The list of elements may have become invalid; beams might have been deleted and replaced during layout.
+    // Request the actual list to prevent crashes. TODO: Not ideal for performance though.
+    updateProperties();
 }
 
 void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
