@@ -3953,7 +3953,7 @@ System* Score::collectSystem(LayoutContext& lc)
             measure = measure->findPotentialSectionBreak();
       if (measure) {
             lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-            lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
+            lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIndentation() && styleB(Sid::enableIndentationOnFirstSystem);
             lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
             }
       System* system = getNextSystem(lc);
@@ -4280,7 +4280,7 @@ System* Score::collectSystem(LayoutContext& lc)
             measure = measure->findPotentialSectionBreak();
       if (measure) {
             lc.firstSystem        = measure->sectionBreak() && _layoutMode != LayoutMode::FLOAT;
-            lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && styleB(Sid::enableIndentationOnFirstSystem);
+            lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIndentation() && styleB(Sid::enableIndentationOnFirstSystem);
             lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
             }
 #endif
