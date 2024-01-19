@@ -15315,7 +15315,7 @@
         <source>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-steel description</comment>
         <extracomment>description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustik çelik telli gitar (dizek notasyonu, sol açkısı ile 1 oktav alttan)</translation>
+        <translation>Akustik çelik-telli gitar (dizek notasyonu, sol açkısı ile 8&apos;li alttan)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5142"/>
@@ -15329,7 +15329,7 @@
         <source>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</source>
         <comment>guitar-nylon description</comment>
         <extracomment>description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Akustik naylon telli gitar (dizek notasyonu, sol açkısı ile 1 oktav alttan)</translation>
+        <translation>Akustik naylon telli gitar (dizek notasyonu, sol açkısı ile 8&apos;li alttan)</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5164"/>
@@ -15427,7 +15427,7 @@
         <source>Cymbals.</source>
         <comment>cymbal description</comment>
         <extracomment>description for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Ziller</translation>
+        <translation>Ziller.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4020"/>
@@ -15483,7 +15483,7 @@
         <source>Marching Cymbals</source>
         <comment>marching-cymbals trackName</comment>
         <extracomment>trackName for Marching Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation>Marş zili.</translation>
+        <translation>Marş Zillerii.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="5131"/>
@@ -19711,22 +19711,22 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="32"/>
         <source>SATB Closed Score</source>
-        <translation>SATB Kapalı Partisyon</translation>
+        <translation>SATB Birleşmiş Partisyon</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="33"/>
         <source>SATB Closed Score + Organ</source>
-        <translation>SATB Kapalı Partisyon + Org</translation>
+        <translation>SATB Birleşmiş Partisyon + Org</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="34"/>
         <source>SATB Closed Score + Piano</source>
-        <translation>SATB Kapalı Partisyon + Piyano</translation>
+        <translation>SATB Birleşmiş Partisyon + Piyano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="35"/>
         <source>Voice + Piano</source>
-        <translation>Vokal + Piyano</translation>
+        <translation>Ses + Piyano</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="36"/>
@@ -19751,7 +19751,7 @@
     <message>
         <location filename="../instruments/instrumentsxml.h" line="41"/>
         <source>String Quartet</source>
-        <translation>Yaylı Çalgılar Dörtlüsü</translation>
+        <translation>Yaylı Dörtlüsü</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="42"/>

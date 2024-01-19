@@ -1359,7 +1359,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="968"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation type="unfinished"/>
+        <translation>אל תשקף את ההטמעה בסולמות תווים תפקידיות מקושרות</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1005"/>
@@ -1701,23 +1701,23 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="20"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12159"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11867"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12243"/>
         <source>Style</source>
         <translation>סגנון</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13352"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13436"/>
         <source>Edit text style</source>
         <translation>עריכת סגנון טקסט</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13554"/>
         <source>Padding:</source>
         <translation>ריווח</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13600"/>
         <source>Reset &apos;Padding&apos; value</source>
         <translation>איפוס ערך &quot;ריווח&quot;</translation>
     </message>
@@ -1777,32 +1777,32 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="114"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6160"/>
         <source>Beams</source>
         <translation>קורות</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6205"/>
         <source>Tuplets</source>
         <translation>מקצבים אי רציונלים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6916"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6970"/>
         <source>Arpeggios</source>
         <translation>ארפג&apos;ים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7366"/>
         <source>Hairpins</source>
         <translation>סימני (&lt; &gt;) קרשנדו/דימינואנדו</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9788"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13159"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9866"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13243"/>
         <source>Fermatas</source>
         <translation>פרמטה</translation>
     </message>
@@ -1813,8 +1813,8 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11094"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13106"/>
         <source>Dynamics</source>
         <translation>דינמיקות</translation>
     </message>
@@ -1903,69 +1903,69 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5495"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5617"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5659"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5745"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5778"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5808"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5877"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6056"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6225"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6273"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6324"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6602"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6678"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6707"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6828"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6941"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6957"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7067"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7161"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7200"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7331"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7431"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7581"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7731"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7770"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8118"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8286"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8413"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9089"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9141"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9666"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9807"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9993"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10376"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10395"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10492"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10620"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10717"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10941"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10992"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11047"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11289"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11525"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11671"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12276"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12385"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5662"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5721"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5766"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5922"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6279"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6378"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6732"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6995"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7011"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7027"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7183"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7215"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7254"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7385"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7485"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7498"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7785"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8064"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8340"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8467"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9219"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10071"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10339"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10473"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10528"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10698"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10795"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11019"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11070"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11755"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12456"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12469"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12547"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12640"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12709"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12793"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2038,128 +2038,136 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5135"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5178"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5630"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5672"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5755"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6026"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6199"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6257"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6298"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6388"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6407"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6487"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6586"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6627"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6764"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6802"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7216"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7268"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7367"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7386"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7405"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7460"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7503"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7532"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7653"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7705"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7754"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7900"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7994"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8056"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8163"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8195"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8270"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8338"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8357"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8423"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8436"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8469"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8548"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8561"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8662"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8681"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8743"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8780"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8803"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8879"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8916"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8939"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9160"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9248"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9290"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9396"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9409"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9438"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9843"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9863"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9886"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9951"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10009"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5695"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5776"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5854"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5945"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6077"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6352"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6640"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6818"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6856"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7270"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7296"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7309"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7322"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7440"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7459"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7514"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7557"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7707"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7733"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7759"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7808"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8188"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8249"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8392"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8411"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8523"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8615"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8716"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8735"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8797"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8834"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8933"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8993"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9093"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9238"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9326"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9339"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9368"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9474"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9921"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9964"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10029"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10095"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10187"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10216"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10277"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10411"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10434"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10469"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10508"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10528"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10574"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10701"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10733"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10087"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10107"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10173"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10265"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10294"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10355"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10489"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10512"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10629"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10652"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10745"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10779"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10821"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10834"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10847"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10860"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10976"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11021"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11070"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11126"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11148"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11237"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11263"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11384"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11457"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11470"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11285"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11395"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11468"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11541"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11946"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11979"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12012"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12025"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13457"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13490"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13513"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13553"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13582"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13618"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13631"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13657"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13686"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13729"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11577"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12109"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13477"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13528"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13574"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13597"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13666"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13702"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13715"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13813"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13905"/>
         <source>Reset to default</source>
         <translation>איפוס לברירת המחדל</translation>
     </message>
@@ -2225,8 +2233,8 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="678"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10899"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11103"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10977"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11181"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -2520,7 +2528,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2381"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2751"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3508"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12772"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12856"/>
         <source>Left</source>
         <translation>שמאל</translation>
     </message>
@@ -2546,7 +2554,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2552"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2855"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3620"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12765"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12849"/>
         <source>Right</source>
         <translation>ימין</translation>
     </message>
@@ -2568,19 +2576,19 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2910"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3156"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7351"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7978"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8492"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8720"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9428"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10085"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10206"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10798"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11483"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7405"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8546"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8774"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9911"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10876"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11567"/>
         <source>Position above:</source>
         <translation>מיקום מעל:</translation>
     </message>
@@ -2592,38 +2600,38 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2950"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3215"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7516"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8040"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8459"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8929"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10055"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10150"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10762"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11433"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8094"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8513"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8847"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9302"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10133"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10228"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11275"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
         <source>Position below:</source>
         <translation>מיקום מתחת:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2966"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7370"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7997"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8426"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8746"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9293"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9441"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9866"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9954"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10670"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11314"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11496"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8051"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8936"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9519"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9944"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11398"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11580"/>
         <source>Reset &apos;Position above&apos; value</source>
         <translation>איפוס ערך &quot;מיקום מעל&quot;</translation>
     </message>
@@ -2636,20 +2644,20 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3238"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7535"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8273"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8564"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8806"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8942"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9264"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9889"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10012"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10098"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10190"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11207"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11473"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9342"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9967"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10090"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10268"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11557"/>
         <source>Reset &apos;Position below&apos; value</source>
         <translation>איפוס ערך &quot;מיקום מתחת&quot;</translation>
     </message>
@@ -2829,7 +2837,7 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6029"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6080"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
         <translation>איפוס ערך &quot;מרחק בין סימן משקל לקו תיבה&quot;</translation>
     </message>
@@ -2994,74 +3002,103 @@ By default, they will be placed such as that their right end are at the same lev
         <translation>ברירת מחדל של הזחה אנכית:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
         <source>Break H-bar if it collides with number</source>
-        <translation type="unfinished"/>
+        <translation>שורת הפרדה חצי-משהו אם היא מתנגשת עם מספר</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6630"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5698"/>
+        <source>Reset &apos;Break H-bar if it collides with number&apos; value</source>
+        <translation>איפוס ערך &quot;שורת הפסק עם מספר אם הם מתנגשים&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5737"/>
+        <source>Reset &apos;H-bar horizontal stroke thickness&apos; value</source>
+        <translation>איפוס ערך &quot;עובי קו אופקי של חצי פסקל&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5779"/>
+        <source>Reset &apos;H-bar margin within barlines&apos; value</source>
+        <translation>איפוס ערך &quot;מרווח חוצץ אפוקס בתוך קווי תיבה&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5818"/>
+        <source>Reset &apos;H-bar vertical stroke thickness&apos; value</source>
+        <translation>איפוס ערך &quot;עובי קו אנכי בפס האצה&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5857"/>
+        <source>Reset &apos;H-bar vertical stroke height&apos; value</source>
+        <translation>איפוס ערך &quot;גובה של קו אופקי בר&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6684"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
         <translation>איפוס ערך &quot;עובי סוגריים&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7006"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7060"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation>לא להציג סימני ארפג&apos;ים בתווים סטנדרטים כשהם מוצגים בטבלטורה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7338"/>
         <source>Ties</source>
         <translation>קשתות מאריכות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9040"/>
         <source>Label for full bends</source>
-        <translation type="unfinished"/>
+        <translation>תווית לכיפול מלא</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9073"/>
+        <source>Line thickness on standard staves:</source>
+        <translation>עובי קווים בחמשות סטנדרטיות:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9096"/>
+        <source>Reset &apos;Line thickness on standard staves&apos; value</source>
+        <translation>איפוס ערך &quot;עובי קווים בחמשות סטנדרטיות&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9145"/>
         <source>Arrow height:</source>
         <translation>גובה חץ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9033"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9108"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9192"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
         <source>Tablature fret numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרי אצבעות טבלטורה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9198"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9276"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation type="unfinished"/>
+        <translation>השתמש במספרים בגודל קיו לכיפוף תוי חינם</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11149"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11227"/>
         <source>Override score font</source>
         <translation>לעקוף גופן פרטיטורה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
         <source>Avoid barlines</source>
         <translation>להימנע מקווי תיבה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11364"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11448"/>
         <source>Snap to dynamics</source>
         <translation>להצמיד לדינמיקות </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
         <source>Playback</source>
         <translation>פלייבק</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12849"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12933"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation>בחרו את הרכיבים שתרצו שיוצגו בחמשות טבלטורה פשוטות ונפוצות </translation>
     </message>
@@ -3276,197 +3313,192 @@ By default, they will be placed such as that their right end are at the same lev
         <translation>מיקום אנכי של מספר:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5678"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
         <translation>איפוס את ערך &quot;פוזיציה אנכית של מספר&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5699"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5708"/>
         <source>H-bar horizontal stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>עובי של קו אופקי בקו חצי כפול:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5747"/>
         <source>H-bar margin within barlines:</source>
-        <translation type="unfinished"/>
+        <translation>מרגין חצי פסקלים בתוך סרגלים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5758"/>
-        <source>Reset &apos;Multimeasure rest margin&apos; value</source>
-        <translation>איפוס ערך &quot;שוליים של הפסקות מרובת תיבות&quot;</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5789"/>
         <source>H-bar vertical stroke thickness:</source>
-        <translation type="unfinished"/>
+        <translation>עובי של קו אנכי בקו חצי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5798"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5828"/>
         <source>H-bar vertical stroke height:</source>
-        <translation type="unfinished"/>
+        <translation>גובה של קו אנכי בקו כפול:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5853"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5892"/>
         <source>Maximum number of measures:</source>
         <translation>מספר תיבות מקסימלי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5890"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5935"/>
         <source>Spacing of symbols:</source>
         <translation>ריווח סמלים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5933"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5984"/>
         <source>Show extenders on 4-measure repeats</source>
         <translation>להציג הרחבות על חזרות 4 תיבות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5953"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6004"/>
         <source>Number consecutive measure repeats</source>
         <translation>למספר חזרות תיבה רצופות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5962"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6013"/>
         <source>Every</source>
         <translation>כל</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5982"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6033"/>
         <source>measures</source>
         <translation>תיבות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6016"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6067"/>
         <source>With parentheses</source>
         <translation>עם סוגריים עגולים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6090"/>
         <source>Number position:</source>
         <translation>מיקום מספר:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6202"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6256"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
         <translation>איפוס ערך &quot;מדרון מקסימלי&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6266"/>
         <source>Maximum slope:</source>
         <translation>מדרון מקסימלי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6295"/>
         <source>Vertical distance from stem:</source>
         <translation>מרחק אנכי מהרגל:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6260"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6314"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
         <translation>איפוס ערך &quot;מרחק אנכי מהרגל&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6355"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
         <translation>איפוס ערך &quot;מרחק אנכי מראש התו&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6365"/>
         <source>Vertical distance from notehead:</source>
         <translation>מרחק אנכי מראש התו:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6356"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6410"/>
         <source>Avoid staves</source>
         <translation>להימנע מחמשות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6366"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6420"/>
         <source>Properties</source>
         <translation>מאפיינים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6372"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6426"/>
         <source>Direction:</source>
         <translation>כיוון</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6391"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6445"/>
         <source>Reset &apos;Number type&apos; value</source>
         <translation>איפוס ערך &quot;סוג מספר&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6410"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6464"/>
         <source>Reset &apos;Direction&apos; value</source>
         <translation>איפוס ערך &quot;כיוון&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6475"/>
         <source>Number</source>
         <translation>מספר</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6480"/>
         <source>Ratio</source>
         <translation>יחס</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6431"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6485"/>
         <source>None</source>
         <comment>no tuplet number</comment>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6440"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6494"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6565"/>
         <source>Auto</source>
         <translation>אוטומטי</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6499"/>
         <source>Up</source>
         <translation>למעלה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Down</source>
         <translation>למטה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6471"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6525"/>
         <source>Number type:</source>
         <translation>סוג מספר:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6570"/>
         <source>Bracket</source>
         <translation>תוחם</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6575"/>
         <source>None</source>
         <comment>no tuplet bracket</comment>
         <translation>ללא</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6586"/>
         <source>Brackets</source>
         <translation>סוגריים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6592"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
         <translation>עובי סוגריים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6624"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
         <translation>גובה קרס סוגר:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6643"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
         <translation>איפוס ערך &quot;גובה קרס סוגר&quot;</translation>
     </message>
@@ -3494,49 +3526,49 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7695"/>
         <source>Voltas</source>
         <translation>וולטות</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7955"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8009"/>
         <source>Ottavas</source>
         <translation>קווי אוקטבות</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8444"/>
         <source>Pedal lines</source>
         <translation>קווי פדאל</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8714"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
         <source>Trill lines</source>
         <translation>קווי טריל</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8904"/>
         <source>Vibrato lines</source>
         <translation>קווי ויברטו</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8994"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9048"/>
         <source>Bends</source>
-        <translation type="unfinished"/>
+        <translation>כיפולים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9290"/>
         <source>Text lines</source>
         <translation>שורות טקסט</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9438"/>
         <source>System text lines</source>
         <translation>שורות טקסט סיסטמה</translation>
     </message>
@@ -3547,7 +3579,7 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11442"/>
         <source>Expression text</source>
         <translation>טקסט הבעה</translation>
     </message>
@@ -3590,818 +3622,832 @@ By default, they will be placed such as that their right end are at the same lev
         <translation> מפתח טבלטורה בחירת מחדל</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6544"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
         <translation>איפוס ערך &quot;סוג סוגר&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6500"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6554"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
         <translation>סוג סוגר:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6694"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6748"/>
         <source>Distance after stem of last note:</source>
         <translation>מרחק אחרי רגל של התו האחרון:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6802"/>
         <source>Distance after head of last note:</source>
         <translation>מרחק אחרי ראש של התו האחרון:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6767"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6821"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
         <translation>איפוס ערך &quot;מרחק אחרי ראש של התו האחרון&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6786"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6840"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
         <translation>איפוס ערך &quot;מרחק לפני ראש של התו הראשון&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6805"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6859"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
         <translation>איפוס ערך &quot;מרחק לפני רגל של התו הראשון&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6869"/>
         <source>Distance before stem of first note:</source>
         <translation>מרחק לפני רגל של התו הראשון:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
         <source>Distance before head of first note:</source>
         <translation>מרחק לפני ראש של התו הראשון:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6863"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6917"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
         <translation>איפוס ערך &quot;מרחק אחרי רגל של התו האחרון&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6979"/>
         <source>Hook length:</source>
         <translation>אורך הקרס:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6986"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7591"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7832"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8030"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8482"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9128"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7645"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8084"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8536"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9206"/>
         <source>Line thickness:</source>
         <translation>עובי קו:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7050"/>
         <source>Distance to note:</source>
         <translation>מרחק לתו:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7049"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7103"/>
         <source>Slurs &amp;&amp; ties</source>
         <translation>קשתות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7077"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7131"/>
         <source>Dotted line thickness:</source>
         <translation>עובי קו מנוקד:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7106"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9794"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9974"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11116"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11423"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7160"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9872"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11194"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
         <source>Autoplace min. distance:</source>
         <translation>מיקום אוטומטי – מרחק מינ&apos;:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7170"/>
         <source>Line thickness at end:</source>
         <translation>עובי קו בסוף:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7225"/>
         <source>Line thickness middle:</source>
         <translation>עובי קו באמצע:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7235"/>
         <source>Minimum tie length:</source>
         <translation>מרחק קשת מאריכה מינימלי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9846"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11266"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11544"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7273"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9924"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
         <translation>איפוס ערך &quot;מיקום אוטומטי – מרחק מינ&apos;&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7232"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7286"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
         <translation>איפוס ערך &quot;עובי קו בסוף&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7245"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7299"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
         <translation>איפוס ערך &quot;עובי קו באמצע&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7312"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
         <translation>איפוס ערך &quot;עובי קו מנוקד&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7325"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
         <translation>איפוס ערך &quot;אורך קשת מינימלי&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7372"/>
         <source>Height:</source>
         <translation>גובה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7341"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7395"/>
         <source>Continue height:</source>
         <translation>גובה המשך:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7443"/>
         <source>Reset &apos;Height&apos; value</source>
         <translation>איפוס ערך &quot;גובה&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7408"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7462"/>
         <source>Reset &apos;Continue height&apos; value</source>
         <translation>איפוס ערך &quot;גובה המשך&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7418"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7472"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>מיקום אוטומטי, מרחק לדינמיקות:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7463"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7517"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
         <translation>איפוס ערך &quot;מיקום אוטומטי, מרחק לדינמיקות&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7473"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8538"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8770"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8906"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9303"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9451"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9964"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10922"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11250"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7527"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8960"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9381"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9529"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10042"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10307"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11331"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11590"/>
         <source>Placement:</source>
         <translation>מיקום:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7506"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8472"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8919"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9251"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9399"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10032"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10177"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10824"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11240"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11460"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8526"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8973"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9329"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9477"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11544"/>
         <source>Reset &apos;Placement&apos; value</source>
         <translation>איפוס ערך &quot;מיקום&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7568"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7757"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8254"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7622"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8308"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8605"/>
         <source>Reset &apos;Line thickness&apos; value</source>
         <translation>איפוס ערך &quot;עובי קו&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7710"/>
         <source>Reset &apos;Position&apos; value</source>
         <translation>איפוס ערך &quot;מיקום&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7682"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7786"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7903"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8166"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8360"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8665"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8684"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7736"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8395"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8414"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8738"/>
         <source>Reset &apos;Line style&apos; value</source>
         <translation>איפוס ערך &quot;סגנון קו&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7708"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8137"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7762"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8191"/>
         <source>Reset &apos;Hook height&apos; value</source>
         <translation>איפוס ערך &quot;גובה קרס&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7718"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7961"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8597"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7772"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8015"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8651"/>
         <source>Dash size:</source>
         <translation>גודל קו מפריד:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7792"/>
         <source>Position:</source>
         <translation>מיקום:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7796"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8020"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8449"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8503"/>
         <source>Line style:</source>
         <translation>סגנון קו:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7822"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7876"/>
         <source>Hook height:</source>
         <translation>גובה קרס:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8070"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8510"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8124"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8564"/>
         <source>Continuous</source>
         <translation>מתמשך</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7861"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8515"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8569"/>
         <source>Dashed</source>
         <translation>מקווקו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7866"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8080"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8520"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7920"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8574"/>
         <source>Dotted</source>
         <translation>מנוקד</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7871"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8085"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8525"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8139"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8579"/>
         <source>Dash-dotted</source>
         <translation>קו־נקודה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8090"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8530"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7930"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8144"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8584"/>
         <source>Dash-dot-dotted</source>
         <translation>קו־נקודה־נקודה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7884"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8235"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8614"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8289"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8668"/>
         <source>Gap size:</source>
         <translation>גודל רווח:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8098"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8152"/>
         <source>Hook height above:</source>
         <translation>גובה קרס מעל:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8108"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8162"/>
         <source>Numbers only</source>
         <translation>מספרים בלבד</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8147"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8201"/>
         <source>Hook height below:</source>
         <translation>גובה קרס מתחת:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8198"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8252"/>
         <source>Reset &apos;Numbers only&apos; value</source>
         <translation>איפוס ערך &quot;מספרים בלבד&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9054"/>
         <source>Standard staff</source>
         <translation>חמשה סטנדרית</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9128"/>
         <source>Reset &apos;Arrow width&apos; value</source>
         <translation>איפוס ערך &quot;רוחב חץ&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9049"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9115"/>
         <source>Arrow width:</source>
         <translation>רוחב חץ:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9180"/>
+        <source>Reset &apos;Arrow height&apos; value</source>
+        <translation>איפוס ערך &quot;גובה חץ&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9203"/>
+        <source>Line thickness on tablature staves:</source>
+        <translation>עובי קווי חמשוניות במערך טבלטורה:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9241"/>
+        <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
+        <translation>איפוס ערך &quot;עובי קווים בחמשות טאבלטורה&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9589"/>
         <source>Articulations &amp;&amp; ornaments</source>
         <translation>ארטיקולציה וקישוטים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9595"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
         <translation>איפוס ערך &apos;מרחק ארטיקולציה&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9527"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9560"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9638"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9670"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation>רווח</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9537"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9615"/>
         <source>Distance from stem:</source>
         <translation>מרחק מרגל תו: </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9625"/>
         <source>Articulation size:</source>
         <translation>גודל ארטיקולציה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9680"/>
         <source>Reset &apos;Stem distance&apos; value</source>
         <translation>איפוס ערך &quot;מרחק מרגל תו&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9687"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
         <translation>איפוס ערך &quot;מרחק מראש תו&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9616"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9694"/>
         <source>Distance from staff:</source>
         <translation>מרחב מהחמשה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9717"/>
         <source>Distance from notehead:</source>
         <translation>מרחק מראש התו:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9649"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9727"/>
         <source>Reset &apos;Articulation size&apos; value</source>
         <translation>איפוס ערך &apos;גודל ארטיקולציה&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
         <source>Minimum vertical distance:</source>
         <translation>מרחק אנכי מינימלי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9702"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation>יישור ארטיקולציה כשהיא ממוקמת ברגל התו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9786"/>
         <source>Align with stem</source>
         <translation>ליישר עם רגל התו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9715"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9793"/>
         <source>Align with notehead</source>
         <translation>ליישר עם ראש התו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9722"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9800"/>
         <source>Center between stem and notehead</source>
         <translation>למרכז בין רגל לראש התו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9826"/>
         <source>Combined articulation</source>
         <translation>ארטיקולציה משולבת</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9832"/>
         <source>Always keep together</source>
         <translation>תמיד להשאיר ביחד</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9839"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
         <translation>להעדיף קרבה לראש התו (ארטיקולציות משולבות עלולות להיפרד)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10414"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10492"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;יחס מיקום קו מפריד&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10502"/>
         <source>Dash thickness:</source>
         <translation>עובי קו מפריד:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10437"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10515"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
         <translation>איפוס ערך &quot;מרחק קו מפריד מקס&apos;&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10472"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10550"/>
         <source>Reset &apos;Always force dash&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;תמיד לכוון מקף&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10589"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;אורך קו מקטע מינימלי&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10599"/>
         <source>Always force dash</source>
-        <translation type="unfinished"/>
+        <translation>תמיד לכפות מקף</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10531"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
         <source>Reset &apos;Dash pad&apos; value</source>
         <translation>איפוס ערך &apos;ריווח קו מפריד&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10619"/>
         <source>Max. dash length:</source>
         <translation>אורך קו מפריד מקס&apos;:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10632"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
         <translation>איפוס ערך &quot;אורך קו מפריד מקס&apos;&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10564"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10642"/>
         <source>Max. dash distance:</source>
         <translation>מרחק קו מפריד מקס&apos;:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10577"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10655"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;עובי מקפים&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10587"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10665"/>
         <source>Dash pad:</source>
         <translation>ריווח קו מפריד:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10597"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10675"/>
         <source>Dash Y position ratio:</source>
-        <translation type="unfinished"/>
+        <translation>יחס מיקום Y של מקפים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10607"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10685"/>
         <source>Min. dash length:</source>
         <translation>אורך קו מפריד מינ&apos;:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10758"/>
         <source>Align verse number</source>
         <translation>ליישר מספרי בתי שיר</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10704"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10782"/>
         <source>Reset &apos;Align verse number&apos; value</source>
         <translation>איפוס ערך &quot;יישור מספר בתי שיר&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10736"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10814"/>
         <source>Reset &apos;Min. distance&apos; value</source>
         <translation>איפוס ערך &quot;מרחק מינימלי&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10746"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11690"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11774"/>
         <source>Line height:</source>
         <translation>גובה קו:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10782"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10860"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
         <translation>איפוס ערך &quot;מינ&apos; שוליים תחתונים &quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10928"/>
         <source>Reset &apos;Line height&apos; value</source>
         <translation>איפוס ערך &quot;גובה קו&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10863"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10941"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
         <translation>איפוס ערך &quot;מינ&apos; שוליים עליונים&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
         <source>Min. top margin:</source>
         <translation>מינ&apos; שוליים עליונים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10990"/>
         <source>Min. bottom margin:</source>
         <translation>מינ&apos; שולים תחתונים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11035"/>
         <source>Min. distance:</source>
         <translation>מרחק מינ&apos;:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10979"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11057"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
         <translation>איפוס ערך &quot;עובי מליסמה&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11011"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11089"/>
         <source>Melisma thickness:</source>
         <translation>עובי מליסמה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11024"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11102"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
         <translation>איפוס ערך &apos;ריווח מליסמה&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11034"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11112"/>
         <source>Melisma pad:</source>
         <translation>ריווח מליסמה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11063"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13755"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11141"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13839"/>
         <source>Align:</source>
         <translation>יישור:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11073"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
         <source>Reset &apos;Align&apos; value</source>
         <translation>איפוס ערך &quot;יישור&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11129"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11207"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
         <translation>איפוס הגדרה &apos;להמנע מקווי תיבה&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
         <source>Reset &apos;Scale&apos; value</source>
         <translation>איפוס ערך &apos;קנה מידה&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11387"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11471"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
         <translation>איפוס הגדרה &quot;להצמיד לדינמיקות&quot; </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11609"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13785"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13869"/>
         <source>Size:</source>
         <translation>גודל:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13598"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11709"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13682"/>
         <source>pt</source>
         <translation>תפק&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
         <source>from top of staff</source>
         <translation>מעל החמשה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11745"/>
         <source>of font height</source>
         <translation>של גובה הגופן</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11158"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13608"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11809"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13692"/>
         <source>Font:</source>
         <translation>גופן:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11829"/>
         <source>Vertical position:</source>
         <translation>מיקום אנכי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11760"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11844"/>
         <source>Alignment</source>
         <translation>יישור</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11766"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11850"/>
         <source>Top</source>
         <translation>חלק עליון</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11773"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11857"/>
         <source>Bottom</source>
         <translation>חלק תחתון</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11789"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11873"/>
         <source>Modern</source>
         <translation>מודרני</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11880"/>
         <source>Historic</source>
         <translation>היסטורי</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11865"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11949"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
         <translation>מיקום שריג קאפו: </translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11984"/>
         <source>Appearance</source>
         <translation>תצוגה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11949"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;היסט תוספת אנכית&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
         <source>Extension vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>היסט אנכי הרחבה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12053"/>
         <source>Extension scaling:</source>
-        <translation type="unfinished"/>
+        <translation>קנה מידה להרחבה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11982"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12066"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;קנה מידה להרחבה&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11992"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
         <source>Modifier scaling:</source>
-        <translation type="unfinished"/>
+        <translation>קנה מידה של מודיפיקטור:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12086"/>
         <source>Modifier vertical offset:</source>
-        <translation type="unfinished"/>
+        <translation>היסט אנכי של מודיפיקטור:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12015"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12099"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;קנה מידה של מודיפיקטור&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12028"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12112"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation type="unfinished"/>
+        <translation>איפוס ערך &quot;היסט עזר אופקי&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12047"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12131"/>
         <source>Lower case minor chords</source>
         <translation>אותיות קטנות לאקורדים מינוריים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12138"/>
         <source>Lower case bass notes</source>
         <translation>אותיות קטנות לצלילי בס</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
         <source>All caps note names</source>
         <translation>אותיות גדולות להכל</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12084"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12168"/>
         <source>Spelling</source>
         <translation>איות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12093"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12249"/>
         <source>Standard</source>
         <translation>נורמלי</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12190"/>
         <source>German</source>
         <translation>גרמני</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
         <source>Full German</source>
         <translation>גרמני מלא</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12126"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12210"/>
         <source>Solfeggio</source>
         <translation>סולפג&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12136"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12220"/>
         <source>French</source>
         <translation>צרפתי</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12175"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12259"/>
         <source>Jazz</source>
         <translation>ג&apos;אז</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12182"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12266"/>
         <source>Custom</source>
         <translation>מותאם אישית</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12204"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12288"/>
         <source>Load XML</source>
         <translation>טען XML</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12314"/>
         <source>Positioning</source>
         <translation>מיקום</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12534"/>
         <source>Maximum shift below:</source>
-        <translation type="unfinished"/>
+        <translation>הזזה מקסימלית למטה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12337"/>
         <source>Distance to fretboard diagram:</source>
         <translation>מרחק לדיאגרמת הצוואר:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12263"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12683"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12767"/>
         <source>Maximum shift above:</source>
-        <translation type="unfinished"/>
+        <translation>הזזה מקסימלית למעלה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12295"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12379"/>
         <source>Minimum chord spacing:</source>
         <translation>ריווח אקורד מינימלי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
         <source>Maximum barline distance:</source>
         <translation>מרחק קו תיבה מקסימלי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12564"/>
         <source>Fret number font size</source>
         <translation>גודל גופן של מספר שריג</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12502"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12586"/>
         <source>Fret spacing</source>
         <translation>ריווח סריגים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12527"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12611"/>
         <source>Relative dot size:</source>
         <translation>גודל נקודה יחסי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11276"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12537"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11357"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12621"/>
         <source>Scale:</source>
         <translation>סולם:</translation>
     </message>
@@ -4409,47 +4455,47 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2891"/>
         <source>Measure numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרי תיבות</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5927"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5978"/>
         <source>Measure repeats</source>
         <translation>חזרות תיבה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9932"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10010"/>
         <source>Staff text</source>
         <translation>טקסט חמשה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10128"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10206"/>
         <source>Tempo text</source>
         <translation>טקסט טמפו</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11417"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11501"/>
         <source>Rehearsal marks</source>
         <translation>סימני מנצח</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11601"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11685"/>
         <source>Figured bass</source>
         <translation>בס מסופרר</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11829"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
         <source>Chord symbols</source>
         <translation>סימני אקורדים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12444"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12528"/>
         <source>Fretboard diagrams</source>
         <translation>דיאגרמות סריגים</translation>
     </message>
@@ -4504,306 +4550,306 @@ By default, they will be placed such as that their right end are at the same lev
         <translation>הפסקה מרובת תיבות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5828"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5867"/>
         <source>Old-style multimeasure rests</source>
         <translation>הפסקות מרובת תיבות &quot;סגנון עתיק&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6241"/>
         <source>Vertical distance from notes</source>
         <translation>מרחק אנכי מתווים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6669"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6723"/>
         <source>Horizontal distance from notes</source>
         <translation>מרחק אופקי מתווים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10445"/>
         <source>Lyrics dash</source>
         <translation>קו מפריד (-) במילות שיר</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10642"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10720"/>
         <source>Lyrics text</source>
         <translation>טקסט מילות שיר</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11048"/>
         <source>Lyrics melisma</source>
         <translation>מליסמת מילות שיר</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12038"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12122"/>
         <source>Automatic capitalization</source>
         <translation>אותיות גדולות אוטומטיות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12631"/>
         <source>Scale</source>
         <translation>סולם</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12566"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12650"/>
         <source>Fret number font size:</source>
         <translation>גודל גופן של מספר שריג:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12576"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12660"/>
         <source>Fret spacing:</source>
         <translation>ריווח סריגים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12670"/>
         <source>Default vertical position</source>
         <translation>ברירת מחדל למיקום אנכי</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12614"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12698"/>
         <source>Barre line thickness</source>
         <translation>עובי קו בארה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12617"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12701"/>
         <source>Barre line thickness:</source>
         <translation>עובי קו בארה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12627"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12711"/>
         <source>String spacing:</source>
         <translation>ריווח מיתרים:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
         <source>Fret number position:</source>
         <translation>מיקום מספר סריג:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12777"/>
         <source>Default vertical position:</source>
         <translation>ברירת מחדל למיקום אנכי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12787"/>
         <source>String spacing</source>
         <translation>ריווח מיתרים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12825"/>
         <source>Relative dot size</source>
         <translation>גודל נקודה יחסי</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9043"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9109"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12894"/>
         <source>Tablature</source>
         <translation>טבלטורה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12905"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12989"/>
         <source>Staccato</source>
         <translation>סטקטו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13013"/>
         <source>Accent and marcato marks</source>
         <translation>סימוני דגש ומרקטו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12943"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13027"/>
         <source>Harmonic marks</source>
         <translation>סימני הרמוניקה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12960"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13044"/>
         <source>Turns</source>
         <translation>גרופטואים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13075"/>
         <source>Palm mute (P.M.)</source>
-        <translation type="unfinished"/>
+        <translation>דיכוי כף יד (P.M.)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12998"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13082"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>לתת להתגלגל</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13029"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13113"/>
         <source>Slurs</source>
         <translation>קשתות</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13120"/>
         <source>Wah open/close</source>
         <translation>ווה פתוח/סגור</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13043"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13127"/>
         <source>Crescendo and diminuendo lines</source>
         <translation>קווי קרשנדו ודימינואנדו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13060"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13144"/>
         <source>Simple</source>
         <translation>פשוט</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13196"/>
         <source>Common</source>
         <translation>נפוצים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13260"/>
         <source>Golpe</source>
         <translation>גולפה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13304"/>
         <source>Mordents</source>
         <translation>מורדנטים</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13227"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13311"/>
         <source>Rasgueado</source>
         <translation>גסגאדו</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
         <source>Reset tablature styles to default</source>
         <translation>איפוס סגנונות טבלטורה לברירת המחדל</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13895"/>
         <source>Line spacing:</source>
         <translation>מרווח בין שורות:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13975"/>
         <source>Reset all styles to default</source>
         <translation>איפוס כל הסגנונות לברירת המחדל</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13364"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
         <source>Frame:</source>
         <translation>מסגרת:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13385"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13469"/>
         <source>Circle</source>
         <translation>עיגול</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13480"/>
         <source>Reset &apos;Frame&apos; value</source>
         <translation>איפוס ערך &quot;מסגרת&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13508"/>
         <source>Thickness:</source>
         <translation>עובי:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13531"/>
         <source>Reset &apos;Background&apos; value</source>
         <translation>איפוס ערך &quot;רקע&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13460"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13544"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13577"/>
         <source>Reset &apos;Border&apos; value</source>
         <translation>איפוס ערך &quot;גבול&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13564"/>
         <source>Corner radius:</source>
         <translation>רדיוס פינה:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13533"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
         <source>Border:</source>
         <translation>גבול:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13627"/>
         <source>Highlight:</source>
-        <translation type="unfinished"/>
+        <translation>סימון:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13556"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13640"/>
         <source>Reset &apos;Corner radius&apos; value</source>
         <translation>איפוס ערך &quot;רדיוס פינה&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13669"/>
         <source>Reset &apos;Font style&apos; values</source>
         <translation>איפוס ערכי &quot;סגנון גופן&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13621"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13705"/>
         <source>Reset &apos;Align&apos; values</source>
         <translation>איפוס ערכי &quot;יישור&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13634"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13718"/>
         <source>Reset &apos;Color&apos; value</source>
         <translation>איפוס ערך &quot;צבע&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13644"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
         <source>Color:</source>
         <translation>צבע</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13660"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13908"/>
         <source>Reset &apos;Font size&apos; value</source>
         <translation>איפוס ערך &quot;גודל גופן&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13673"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13757"/>
         <source>Style:</source>
         <translation>סגנון:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13689"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13773"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
         <translation>איפוס ערך &quot;לעקוב אחרי גודל חמשה&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13699"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13783"/>
         <source>Offset:</source>
         <translation>הזחה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13709"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13793"/>
         <source>Follow staff size</source>
         <translation>לעקוב אחרי גודל חמשה</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13803"/>
         <source>Reset &apos;Name&apos; value</source>
         <translation>איפוס ערך &quot;שם&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13732"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13816"/>
         <source>Reset &apos;Font face&apos; value</source>
         <translation>איפוס ערך &quot;סוג גופן&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13829"/>
         <source>Reset &apos;Offset&apos; values</source>
         <translation>איפוס ערכי &quot;הזחה&quot;</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13765"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13849"/>
         <source>Name:</source>
         <translation>שם:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13798"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13882"/>
         <source>li</source>
         <translation>קו&apos;</translation>
     </message>
@@ -4833,7 +4879,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/font_style_select.ui" line="139"/>
         <source>Strike</source>
-        <translation type="unfinished"/>
+        <translation>קו חוצה</translation>
     </message>
 </context>
 <context>
@@ -4864,7 +4910,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/palette/view/widgets/masterpalette.ui" line="14"/>
         <source>Master palette</source>
-        <translation type="unfinished"/>
+        <translation>לוח כלים ראשי</translation>
     </message>
 </context>
 <context>
@@ -4902,12 +4948,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="52"/>
         <source>New row</source>
-        <translation type="unfinished"/>
+        <translation>שורה חדשה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="99"/>
         <source>Measure duration</source>
-        <translation type="unfinished"/>
+        <translation>אורך תיבה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="114"/>
@@ -4988,7 +5034,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="306"/>
         <source>Play count:</source>
-        <translation type="unfinished"/>
+        <translation>מספר הפעמות הפעלה:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
@@ -5251,7 +5297,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="95"/>
         <source>Override with custom options</source>
-        <translation type="unfinished"/>
+        <translation>שנה עם אפשרויות מותאמות אישית</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="172"/>
@@ -5343,7 +5389,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="14"/>
         <source>Select notes</source>
-        <translation type="unfinished"/>
+        <translation>בחירת תווים</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="34"/>
@@ -6925,7 +6971,7 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="62"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="63"/>
         <source>Apply current palette element</source>
-        <translation type="unfinished"/>
+        <translation>החל רכיב לוח הכלים הנוכחי</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="69"/>
@@ -7781,107 +7827,107 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1606"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: פעמה הבאה (סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1617"/>
         <source>Advance longa (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>לכתוב לונגה מראש (בס קונטינו/סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1618"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: לונגה (בס מפורט/סימני סקורדים)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
         <source>Advance breve (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>הקדמת ברבה (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1624"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: ברבה (בס מצומצם/סימני סקורדים)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>הקדמת תו שלם (ב.ס./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: רבע (בס מצוייר/סימני סקורדים)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
         <source>Advance half note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>הקדמה רבע תו (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן הקרא: תו חצי (בס משולב/סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>הקדמה רבע תו (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: רבע (בס מצורף/סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1647"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>לכתוב תו שמיניה מראש (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1648"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: תיבת שמינית (בס מצוייר/סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1653"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>פרטית מראש (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: רבע חלקי (בס מצומצם/סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1659"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>הקדמת תו 32 (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן: תיבת 32 (בס מצויר/סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1665"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
-        <translation type="unfinished"/>
+        <translation>הקדמה רבע חלקי (ס.ב./סימן אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1666"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
-        <translation type="unfinished"/>
+        <translation>הזזת הסמן הפועל: תו 64 (בס מצומצם/סימני אקורד)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1672"/>
         <source>Move text/go to next lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>הזזת טקסט/לך לשורת מילים הבאה</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1678"/>
         <source>Move text/go to previous lyric verse</source>
-        <translation type="unfinished"/>
+        <translation>הזזת טקסט/לך לשורת מילים הקודמת</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1702"/>
@@ -7946,12 +7992,12 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1780"/>
         <source>Add/remove bowing: up bow</source>
-        <translation type="unfinished"/>
+        <translation>הוספת/הסרת קשת: קשת למעלה</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1786"/>
         <source>Add/remove bowing: down bow</source>
-        <translation type="unfinished"/>
+        <translation>הוספת/הסרת קשת: קשת למטה</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1798"/>
@@ -8180,25 +8226,25 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
         <source>Standard bend</source>
-        <translation type="unfinished"/>
+        <translation>כיפול סטנדרטי</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2335"/>
         <source>Pre-bend</source>
-        <translation type="unfinished"/>
+        <translation>פרה-קיפ</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2341"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2342"/>
         <source>Grace note bend</source>
-        <translation type="unfinished"/>
+        <translation>כיוון תו קטן</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2348"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2349"/>
         <source>Slight bend</source>
-        <translation type="unfinished"/>
+        <translation>כיפוף קל</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
@@ -8980,7 +9026,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="446"/>
         <source>Toggle rhythmic slash notation</source>
-        <translation type="unfinished"/>
+        <translation>הפעל/כבה סימון חיתוך ריתמי</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="451"/>
@@ -9502,48 +9548,48 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1925"/>
         <source>Insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>הכנסה/החלפה</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הכנסת תווים: הכנסה/החלפה</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
         <source>Toggle note input mode: default (step-time)</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הכנסת תווים: ברירת מחדל (צעד-זמן)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
         <source>Toggle note input mode: rhythm only (not pitch)</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הקלדת תווים: ריתם בלבד (לא גובה)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1946"/>
         <source>Toggle note input mode: re-pitch existing notes</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הכנסת תווים: שינוי גובה התווים הקיימים</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1953"/>
         <source>Toggle note input mode: real-time (metronome)</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הזנת תווים: זמן-אמת (מטרונום)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1960"/>
         <source>Toggle note input mode: real-time (foot pedal)</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הזנת תווים: זמן-אמת (פדל)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1967"/>
         <source>Toggle note input mode: insert (increases measure duration)</source>
-        <translation type="unfinished"/>
+        <translation>החלפת מצב הכנסת תווים: הכנסה (מגדילה את אורך התיבה)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1973"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
         <source>Real-time advance</source>
-        <translation type="unfinished"/>
+        <translation>הקדמה בזמן אמת</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2195"/>
@@ -9624,7 +9670,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/autobot/internal/autobotactions.cpp" line="35"/>
         <source>Show batch tests…</source>
-        <translation type="unfinished"/>
+        <translation>הצגת בדיקות סדרתיות...</translation>
     </message>
     <message>
         <location filename="../../src/autobot/internal/autobotactions.cpp" line="40"/>
@@ -9676,17 +9722,17 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="45"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation type="unfinished"/>
+        <translation>הצגת פרופי&amp;לר...</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="50"/>
         <source>Show &amp;navigation tree…</source>
-        <translation type="unfinished"/>
+        <translation>הצגת עץ ניווט…</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
         <source>Show &amp;accessible tree…</source>
-        <translation type="unfinished"/>
+        <translation>הצגת עץ &amp;נגיש...</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="65"/>
@@ -9696,7 +9742,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="35"/>
         <source>&amp;Multiinstances</source>
-        <translation type="unfinished"/>
+        <translation>&amp;מרכיבים מרובים</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="45"/>
@@ -9910,7 +9956,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="71"/>
         <source>Buffer size:</source>
-        <translation type="unfinished"/>
+        <translation>גודל חיצוני:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/platform/AppMenuBar.qml" line="71"/>
@@ -9983,6 +10029,11 @@ This action will not delete any of your scores.</source>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="139"/>
+        <source>Copyright © 1999-2024 MuseScore BVBA and others.
+Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <source>Copyright © 1999-2023 MuseScore BVBA and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
         <translation>זכויות יוצרים © 1999-2023 MuseScore BVBA ואחרים.
@@ -10180,7 +10231,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="390"/>
         <source>Auto&amp;bot</source>
-        <translation type="unfinished"/>
+        <translation>אוטובוט</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="394"/>
@@ -10372,12 +10423,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="29"/>
         <source>Character set used when importing binary files</source>
-        <translation type="unfinished"/>
+        <translation>סט תווים בשימוש בייבוא קבצים בינאריים</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="37"/>
         <source>Overture import character set:</source>
-        <translation type="unfinished"/>
+        <translation>סט תווים לייבוא Overture:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ColorAndWallpaperSection.qml" line="62"/>
@@ -10535,7 +10586,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="77"/>
         <source>Color guitar bends outside of playable range</source>
-        <translation type="unfinished"/>
+        <translation>צבע כיפולי סינטיסייזר בטווח שאינו ניגנו</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="91"/>
@@ -10773,7 +10824,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ProgramStartSection.qml" line="30"/>
         <source>Program start</source>
-        <translation>הפעלת תוכנה</translation>
+        <translation>בהפעלת תוכנה:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="151"/>
@@ -10833,22 +10884,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="193"/>
         <source>Start empty</source>
-        <translation>התחלת מסמך ריק</translation>
+        <translation>להתחיל ריק</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="194"/>
         <source>Continue last session</source>
-        <translation>המשך עבודה אחרונה</translation>
+        <translation>להמשיך עבודה אחרונה</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="195"/>
         <source>Start with new score</source>
-        <translation>התחלה עם פרטיטורה חדשה</translation>
+        <translation>להתחיל עם פרטיטורה חדשה</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="196"/>
         <source>Start with score:</source>
-        <translation>התחלה עם פרטיטורה:</translation>
+        <translation>להתחיל עם פרטיטורה:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="219"/>
@@ -10949,7 +11000,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PublishMuseScoreComSection.qml" line="41"/>
         <source>Always prompt to share on Audio.com after publishing to MuseScore.com</source>
-        <translation type="unfinished"/>
+        <translation>תמיד להציג הודעה לשיתוף ב-Audio.com לאחר פרסום ב-MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/braillepreferencesmodel.cpp" line="60"/>
@@ -11067,7 +11118,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to the MuseScore desktop app.</source>
-        <translation type="unfinished"/>
+        <translation>התחברות מוצלחת! ניתן לחזור ליישום השולחן של MuseScore.</translation>
     </message>
 </context>
 <context>
@@ -11495,7 +11546,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>הערות:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1165"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1164"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1078"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1089"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3108"/>
@@ -11505,7 +11556,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>התחלה %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1168"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1167"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1081"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1091"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3112"/>
@@ -11799,7 +11850,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
         <source>Dead slapped</source>
-        <translation type="unfinished"/>
+        <translation>הכה מת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="191"/>
@@ -11849,7 +11900,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="201"/>
         <source>Beam segment</source>
-        <translation type="unfinished"/>
+        <translation>חלק קורה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="202"/>
@@ -11869,7 +11920,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="205"/>
         <source>Figured bass item</source>
-        <translation type="unfinished"/>
+        <translation>פריט בס מסווג</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
@@ -12000,7 +12051,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="230"/>
         <source>Let ring segment</source>
-        <translation type="unfinished"/>
+        <translation>השאר רגע</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="232"/>
@@ -12020,7 +12071,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="235"/>
         <source>Whammy bar segment</source>
-        <translation type="unfinished"/>
+        <translation>קטע במוט ווֹמִי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
@@ -12035,7 +12086,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="238"/>
         <source>Pick scrape segment</source>
-        <translation type="unfinished"/>
+        <translation>חלק חריטת פיק</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
@@ -12116,7 +12167,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Shadow note</source>
-        <translation type="unfinished"/>
+        <translation>תו צל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
@@ -12160,7 +12211,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="262"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1093"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>לתת להתגלגל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="263"/>
@@ -12182,7 +12233,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="266"/>
         <source>Whammy bar</source>
-        <translation type="unfinished"/>
+        <translation>מקל ווֹמִי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="267"/>
@@ -12192,7 +12243,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>Pick scrape out</source>
-        <translation type="unfinished"/>
+        <translation>פיק חריטה חיצונית</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
@@ -12208,7 +12259,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="272"/>
         <source>Note line</source>
-        <translation type="unfinished"/>
+        <translation>קו תו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="273"/>
@@ -12291,32 +12342,32 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="292"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1078"/>
         <source>Sticking</source>
-        <translation type="unfinished"/>
+        <translation>דרכי הקלטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="295"/>
         <source>Guitar bend</source>
-        <translation type="unfinished"/>
+        <translation>גיטרה בנד</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
         <source>Guitar bend segment</source>
-        <translation type="unfinished"/>
+        <translation>קטע כיפול בגיטרה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="297"/>
         <source>Guitar bend hold</source>
-        <translation type="unfinished"/>
+        <translation>החזקת בנד גיטרה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="298"/>
         <source>Guitar bend hold segment</source>
-        <translation type="unfinished"/>
+        <translation>קטע החזקת כיפול בגיטרה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>Guitar bend text</source>
-        <translation type="unfinished"/>
+        <translation>טקסט פליטה של גיטרה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="448"/>
@@ -12698,22 +12749,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2176"/>
         <source>Fall</source>
-        <translation type="unfinished"/>
+        <translation>נפילה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2177"/>
         <source>Doit</source>
-        <translation type="unfinished"/>
+        <translation>דווה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2178"/>
         <source>Plop</source>
-        <translation type="unfinished"/>
+        <translation>פלופ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2179"/>
         <source>Scoop</source>
-        <translation type="unfinished"/>
+        <translation>סקופ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2181"/>
@@ -12888,42 +12939,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2328"/>
         <source>Da Capo al Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>דה קאפו אל דופיה קודה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2329"/>
         <source>Dal Segno al Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>דל סגנו אל דופיה קודה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2330"/>
         <source>Dal Doppio Segno</source>
-        <translation type="unfinished"/>
+        <translation>Dal Doppio Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
         <source>Dal Doppio Segno al Coda</source>
-        <translation type="unfinished"/>
+        <translation>מדגש כפול סימן סגנו עד קודה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2332"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2333"/>
         <source>Dal Doppio Segno al Fine</source>
-        <translation type="unfinished"/>
+        <translation>מדל דופיו סגנו אל פינה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2353"/>
         <source>Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>דופלה קודה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2358"/>
         <source>Da Doppia Coda</source>
-        <translation type="unfinished"/>
+        <translation>Da Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2579"/>
@@ -13213,50 +13264,50 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1919"/>
         <source>Half strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1920"/>
         <source>Half strike on B</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1921"/>
         <source>Half strike on C</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1922"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1923"/>
         <source>Half strike on D</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1924"/>
         <source>Half strike on E</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1925"/>
         <source>Half strike on F</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1926"/>
         <source>Half strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1929"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1984"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1985"/>
         <source>Grip</source>
-        <translation type="unfinished"/>
+        <translation>אחיזה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1932"/>
         <source>Half D throw</source>
-        <translation type="unfinished"/>
+        <translation>חזרה חציונית על רה חצי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1935"/>
@@ -13362,79 +13413,79 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1963"/>
         <source>Double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1964"/>
         <source>Double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1965"/>
         <source>Double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1966"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1967"/>
         <source>Double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1968"/>
         <source>Double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1969"/>
         <source>Double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1970"/>
         <source>Double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1971"/>
         <source>Double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק על לה גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1974"/>
         <source>Thumb strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>מכה אגודלית בלה תחתון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1975"/>
         <source>Thumb strike on B</source>
-        <translation type="unfinished"/>
+        <translation>מכה באגודל באגודל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
         <source>Thumb strike on C</source>
-        <translation type="unfinished"/>
+        <translation>מכה אגודל על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1977"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
         <source>Thumb strike on D</source>
-        <translation type="unfinished"/>
+        <translation>מכה אגודלית בא על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1979"/>
         <source>Thumb strike on E</source>
-        <translation type="unfinished"/>
+        <translation>מכה באגודל על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1980"/>
         <source>Thumb strike on F</source>
-        <translation type="unfinished"/>
+        <translation>מכה באצבע האמצע על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1981"/>
         <source>Thumb strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>מכה אגודלית בג&apos; גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1988"/>
@@ -13442,503 +13493,503 @@ Fret %1 on strings %2</translation>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2055"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2056"/>
         <source>Birl</source>
-        <translation type="unfinished"/>
+        <translation>בירל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1989"/>
         <source>D throw</source>
-        <translation type="unfinished"/>
+        <translation>דיוויל על ספסטר</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
         <source>Half heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>חצי זריקת D כבד</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1991"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
         <source>Taorluath</source>
-        <translation type="unfinished"/>
+        <translation>טאורלואת&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2052"/>
         <source>Bubbly</source>
-        <translation type="unfinished"/>
+        <translation>קורקינטיות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1996"/>
         <source>Heavy D throw</source>
-        <translation type="unfinished"/>
+        <translation>Heavy D throw</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
         <source>Half double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>חצי כפיפת דאבלי על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
         <source>Half double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה כפולה על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
         <source>Half double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה כפולה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
         <source>Half double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה כפולה על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2006"/>
         <source>Half double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה כפולה על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
         <source>Half double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>חצי כפיפת דאבלי על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
         <source>Half double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה כפולה על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2009"/>
         <source>Half double strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>חצי כפיפת דאבלי על לה גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
         <source>Half grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>חצי אחיזה על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
         <source>Half grip on B</source>
-        <translation type="unfinished"/>
+        <translation>חצי אחיזה על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2014"/>
         <source>Half grip on C</source>
-        <translation type="unfinished"/>
+        <translation>חצי אחיזה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2016"/>
         <source>Half grip on D</source>
-        <translation type="unfinished"/>
+        <translation>הכנעה חציונית על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
         <source>Half grip on E</source>
-        <translation type="unfinished"/>
+        <translation>חצי אחיזה על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
         <source>Half grip on F</source>
-        <translation type="unfinished"/>
+        <translation>חצי אחיזה על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2019"/>
         <source>Half grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>חצי אחיזה על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2020"/>
         <source>Half grip on high A</source>
-        <translation type="unfinished"/>
+        <translation>חצי קרצ&apos; על לה גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2023"/>
         <source>Half pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>חצי פלה על לה תחתון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2024"/>
         <source>Half pele on B</source>
-        <translation type="unfinished"/>
+        <translation>פלה חצי על בי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2025"/>
         <source>Half pele on C</source>
-        <translation type="unfinished"/>
+        <translation>חצי פלה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2026"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2027"/>
         <source>Half pele on D</source>
-        <translation type="unfinished"/>
+        <translation>חצי פלה על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2028"/>
         <source>Half pele on E</source>
-        <translation type="unfinished"/>
+        <translation>חצי פלה על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2029"/>
         <source>Half pele on F</source>
-        <translation type="unfinished"/>
+        <translation>פלה חצי על F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2030"/>
         <source>Half pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>חצי פלה על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2033"/>
         <source>G grace note grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>הצטלמות פתגמה על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2034"/>
         <source>G grace note grip on B</source>
-        <translation type="unfinished"/>
+        <translation>הסירנוי קרצ&apos; על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2035"/>
         <source>G grace note grip on C</source>
-        <translation type="unfinished"/>
+        <translation>התלקקות תו חן סוף על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2036"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2037"/>
         <source>G grace note grip on D</source>
-        <translation type="unfinished"/>
+        <translation>התחזות פתיחה על רה-סול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2038"/>
         <source>G grace note grip on E</source>
-        <translation type="unfinished"/>
+        <translation>התלקקות תו חן סוף על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2039"/>
         <source>G grace note grip on F</source>
-        <translation type="unfinished"/>
+        <translation>הסבר על תו חן סוף על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2042"/>
         <source>Thumb grip on low A</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל בלהות נמוכה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2043"/>
         <source>Thumb grip on B</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל בסי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2044"/>
         <source>Thumb grip on C</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל בדו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2045"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2046"/>
         <source>Thumb grip on D</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל ב-רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2047"/>
         <source>Thumb grip on E</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל במי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2048"/>
         <source>Thumb grip on F</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל באצבע האמצע על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
         <source>Thumb grip on high G</source>
-        <translation type="unfinished"/>
+        <translation>אחיזת אגודל בסול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
         <source>Pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>פלה על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
         <source>Pele on B</source>
-        <translation type="unfinished"/>
+        <translation>פלה על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
         <source>Pele on C</source>
-        <translation type="unfinished"/>
+        <translation>פלה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
         <source>Pele on D</source>
-        <translation type="unfinished"/>
+        <translation>פלה על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
         <source>Pele on E</source>
-        <translation type="unfinished"/>
+        <translation>פלה על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>Pele on F</source>
-        <translation type="unfinished"/>
+        <translation>פלה על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
         <source>Thumb grace note pele on low A</source>
-        <translation type="unfinished"/>
+        <translation>תו חינה אצבע אילפלה על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
         <source>Thumb grace note pele on B</source>
-        <translation type="unfinished"/>
+        <translation>תו חינה היפרי פלה על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2070"/>
         <source>Thumb grace note pele on C</source>
-        <translation type="unfinished"/>
+        <translation>תו קישוט אצבע אגודל פלה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
         <source>Thumb grace note pele on D</source>
-        <translation type="unfinished"/>
+        <translation>תו קישוט אצבע אגודל על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
         <source>Thumb grace note pele on E</source>
-        <translation type="unfinished"/>
+        <translation>תו חינה אצבע אגודל על מי-מי-סול ראשון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
         <source>Thumb grace note pele on F</source>
-        <translation type="unfinished"/>
+        <translation>תו חינך אגודל על מיותר ראשון על מיותר ראשון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
         <source>Thumb grace note pele on high G</source>
-        <translation type="unfinished"/>
+        <translation>תו חינה אצבע אפילוי פלה על סול רם</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
         <source>G grace note double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה כפולה פגיעה על לה תחתון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2079"/>
         <source>G grace note double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה כפולה פגיעה על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2080"/>
         <source>G grace note double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה כפולה מכה כפולה על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2081"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2082"/>
         <source>G grace note double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה כפולה מכה כפולה על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2083"/>
         <source>G grace note double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה כפולה פגיעה על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2084"/>
         <source>G grace note double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה כפולה פגועה על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2087"/>
         <source>Thumb double strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק באגודל תמום על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2088"/>
         <source>Thumb double strike on B</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק באגודל על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2089"/>
         <source>Thumb double strike on C</source>
-        <translation type="unfinished"/>
+        <translation>מכה כפולה באגודל על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
         <source>Thumb double strike on D</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק באגודל על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Thumb double strike on E</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק באגודל על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <source>Thumb double strike on F</source>
-        <translation type="unfinished"/>
+        <translation>מכה כפולה באגודל על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
         <source>Thumb double strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>דאבל סטרייק באגודל גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>Triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>סטרייק משולש על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
         <source>Triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
         <source>Triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
         <source>Triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
         <source>Triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
         <source>Triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
         <source>Triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>כיסוי משולש על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
         <source>Triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>כיסוי משולש על לה גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
         <source>Half triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה משולשת על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2109"/>
         <source>Half triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>חצי פגיעה משולשת על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
         <source>Half triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>חצי פגיעה משולשת על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Half triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>חצי פגיעה משולשת על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2113"/>
         <source>Half triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>חצי פגיעה משולשת על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
         <source>Half triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה משולשת על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
         <source>Half triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה משולשת על סול גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
         <source>Half triple strike on high A</source>
-        <translation type="unfinished"/>
+        <translation>חצי מכה משולשת על לה גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
         <source>G grace note triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה ג&apos; פגיעה משולשת על לה נמוך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
         <source>G grace note triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה ג&apos; פגיעה תוך כך על סי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
         <source>G grace note triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה ג&apos; פעמות חשק על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
         <source>G grace note triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה ג&apos; כפולה משטרק על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
         <source>G grace note triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה ג&apos; פגיעה תלוי על מי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
         <source>G grace note triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>נקודת חינה ג&apos; פלטי מחץ על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2128"/>
         <source>Thumb triple strike on low A</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת באגודל תחתון-סול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2129"/>
         <source>Thumb triple strike on B</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת באגודל זרוע האגודל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2130"/>
         <source>Thumb triple strike on C</source>
-        <translation type="unfinished"/>
+        <translation>תורג&apos;ם משולש אגודל על דו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2131"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2132"/>
         <source>Thumb triple strike on D</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת של האגודל על רה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2133"/>
         <source>Thumb triple strike on E</source>
-        <translation type="unfinished"/>
+        <translation>תורג&apos;ם משולש אגרון במי#</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2134"/>
         <source>Thumb triple strike on F</source>
-        <translation type="unfinished"/>
+        <translation>תורם סטרייק משולש על פה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2135"/>
         <source>Thumb triple strike on high G</source>
-        <translation type="unfinished"/>
+        <translation>מכה משולשת של האגודל על סול גבוה</translation>
     </message>
 </context>
 <context>
@@ -14121,7 +14172,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="687"/>
         <source>Tenor clef 8va bassa</source>
-        <translation type="unfinished"/>
+        <translation>מפתח טנור 8va bassa</translation>
     </message>
 </context>
 <context>
@@ -14129,7 +14180,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2209"/>
         <source>High Q</source>
-        <translation type="unfinished"/>
+        <translation>קיו גבוה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2210"/>
@@ -14139,12 +14190,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2211"/>
         <source>Scratch Push</source>
-        <translation type="unfinished"/>
+        <translation>דחיפת סרטטש</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2213"/>
         <source>Scratch Pull</source>
-        <translation type="unfinished"/>
+        <translation>פיל חריטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2214"/>
@@ -14154,7 +14205,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2215"/>
         <source>Square Click</source>
-        <translation type="unfinished"/>
+        <translation>קליק מרובע</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2216"/>
@@ -14179,7 +14230,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
         <source>Side Stick</source>
-        <translation type="unfinished"/>
+        <translation>סייד סטיק</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2221"/>
@@ -14434,12 +14485,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2277"/>
         <source>Snare (Rim shot)</source>
-        <translation type="unfinished"/>
+        <translation>תוף סנר (רים שוט)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2279"/>
         <source>Ride (Edge)</source>
-        <translation type="unfinished"/>
+        <translation>רייד (קצה)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2281"/>
@@ -14469,7 +14520,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/dom/instrument.cpp" line="41"/>
         <source>palmmute</source>
-        <translation type="unfinished"/>
+        <translation>כיבוי כף</translation>
     </message>
 </context>
 <context>
@@ -14837,12 +14888,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="604"/>
         <source>Swiss Rudiments Flam</source>
-        <translation type="unfinished"/>
+        <translation>פלאם רודימנטים שוויצרי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Swiss Rudiments Doublé</source>
-        <translation type="unfinished"/>
+        <translation>רודימנטים שוויצריים דובלה</translation>
     </message>
 </context>
 <context>
@@ -14957,157 +15008,157 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3100"/>
         <source>11 large diesis down, 3° down [46 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>11 דיאזז גדול מטה, 3° מטה [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3101"/>
         <source>11 large diesis up, (11L), (sharp less 11M), 3° up [46 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>11 דיאזזים גדולים כלפי מעלה, (11L), (דיאז פחות חזק 11M), 3° מעלה [46 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3102"/>
         <source>11 medium diesis down, 1°[17 31] 2°46 down, 1/4-tone down</source>
-        <translation type="unfinished"/>
+        <translation>11 דיאזיס בינוני למטה, 1°[17 31] 2°46 למטה, רבע־טון למטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3103"/>
         <source>11 medium diesis up, (11M), 1°[17 31] 2°46 up, 1/4-tone up</source>
-        <translation type="unfinished"/>
+        <translation>11 דיאז׳ מטה במיתה, (11M), 1°[17 31] 2°46 מטה, 1/4 טון מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3128"/>
         <source>25 small diesis down, 2° down [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25 דיאזים קטנים למטה, 2° למטה [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3129"/>
         <source>25 small diesis up, (25S, ~5:13S, ~37S, 5C plus 5C), 2° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>25 דיאזזמה קטנה למעלה, (25S, ~5:13S, ~37S, 5C פלוס 5C), 2° למעלה [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3134"/>
         <source>35 large diesis down, 2° down [50 EDO], 5/18-tone down</source>
-        <translation type="unfinished"/>
+        <translation>35 דיאזס גדול מטה, 2° מטה [50 EDO], 5/18 טון מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3135"/>
         <source>35 large diesis up, (35L, ~13L, ~125L, sharp less 35M), 2°50 up</source>
-        <translation type="unfinished"/>
+        <translation>35 דיאזס גדול למעלה, (35L, ~13L, ~125L, דיאז פחות 35M), 2°50 למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3136"/>
         <source>35 medium diesis down, 1°[50] 2°[27] down, 2/9-tone down</source>
-        <translation type="unfinished"/>
+        <translation>35 דיאזיס בינוני, 1°[50] 2°[27] מטה, 2/9-טון מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3137"/>
         <source>35 medium diesis up, (35M, ~13M, ~125M, 5C plus 7C), 2/9-tone up</source>
-        <translation type="unfinished"/>
+        <translation>35 דיאזים בינוניים למעלה, (35M, ~13M, ~125M, 5C פלוס 7C), 2/9 טון למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3150"/>
         <source>5 comma down, 1° down [22 27 29 34 41 46 53 96 EDOs], 1/12-tone down</source>
-        <translation type="unfinished"/>
+        <translation>5 קומה מטה, 1° מטה [22 27 29 34 41 46 53 96 אקורדים למחצה], 1/12 טון מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3151"/>
         <source>5 comma up, (5C), 1° up [22 27 29 34 41 46 53 96 EDOs], 1/12-tone up</source>
-        <translation type="unfinished"/>
+        <translation>5 קומה למעלה, (5C), 1° למעלה [22 27 29 34 41 46 53 96 EDOs], 1/12 טון למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3166"/>
         <source>5:7 kleisma down</source>
-        <translation type="unfinished"/>
+        <translation>5:7 קליזמה למטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3167"/>
         <source>5:7 kleisma up, (5:7k, ~11:13k, 7C less 5C)</source>
-        <translation type="unfinished"/>
+        <translation>5:7 קליזמה למעלה, (5:7k, ~11:13k, 7C פחות 5C)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3170"/>
         <source>7 comma down, 1° down [43 EDO], 2° down [72 EDO], 1/6-tone down</source>
-        <translation type="unfinished"/>
+        <translation>7 קומה מטה, 1° מטה [43 EDO], 2° מטה [72 EDO], 1/6 טון מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3171"/>
         <source>7 comma up, (7C), 1° up [43 EDO], 2° up [72 EDO], 1/6-tone up</source>
-        <translation type="unfinished"/>
+        <translation>7 קומה למעלה, (7C), 1° למעלה [43 EDO], 2° למעלה [72 EDO], 1/6 טון למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3227"/>
         <source>Flat, (apotome down)[almost all EDOs], 1/2-tone down</source>
-        <translation type="unfinished"/>
+        <translation>במול, (אפוטומה מטה) [כמעט כל EDO], 1/2 טון מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3249"/>
         <source>Flat 25S-up, 3° down [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>במול 25S-למעלה, 3° למטה [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3259"/>
         <source>Flat 5C-up, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°72 7°[96] down, 5/12-tone down</source>
-        <translation type="unfinished"/>
+        <translation>במול 5C-למעלה, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°72 7°[96] למטה, 5/12-טון למטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3270"/>
         <source>Flat 5:7k-up</source>
-        <translation type="unfinished"/>
+        <translation>במול 5:7k-למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3272"/>
         <source>Flat 7C-up, 2° down [43 EDO], 4° down [72 EDO], 1/3-tone down</source>
-        <translation type="unfinished"/>
+        <translation>דו♭ 7C-למעלה, 2° למטה [43 EDO], 4° למטה [72 EDO], טון ו-1/3 למטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3284"/>
         <source>Sharp, (apotome up)[almost all EDOs], 1/2-tone up</source>
-        <translation type="unfinished"/>
+        <translation>דיאז, (אפוטומה למעלה) [כמעט כל EDO], 1/2 טון למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3305"/>
         <source>Sharp 25S-down, 3° up [53 EDO]</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 25S למטה, 3° למעלה [53 EDO]</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3315"/>
         <source>Sharp 5C-down, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°[72] 7°[96] up, 5/12-tone up</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 5C למטה, 2°[22 29] 3°[27 34 41] 4°[39 46 53] 5°[72] 7°[96] למעלה, 5/12 טון למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3326"/>
         <source>Sharp 5:7k-down</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 5:7k-למטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3328"/>
         <source>Sharp 7C-down, 2° up [43 EDO], 4° up [72 EDO], 1/3-tone up</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 7C למטה, 2° למעלה [43 שלבים לאוודות אשר], 4° למעלה [72 שלבים לאוודות אשר], חצי טון למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3340"/>
         <source>Combining accordion coupler dot</source>
-        <translation type="unfinished"/>
+        <translation>שלב נקודת קופל קומבינציה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3341"/>
         <source>Combining left hand, 2 ranks, empty</source>
-        <translation type="unfinished"/>
+        <translation>שליבה של יד שמאל, 2 מעמדים, ריק</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3342"/>
         <source>Combining left hand, 3 ranks, empty (square)</source>
-        <translation type="unfinished"/>
+        <translation>שליבה של יד שמאל, 3 מעמדים, ריק (ריבוע)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3343"/>
         <source>Combining right hand, 3 ranks, empty</source>
-        <translation type="unfinished"/>
+        <translation>שליבת יד ימנית, 3 מעלות, ריקה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3344"/>
         <source>Combining right hand, 4 ranks, empty</source>
-        <translation type="unfinished"/>
+        <translation>שליבת יד ימנית, 4 מעלות, ריק</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3345"/>
@@ -15117,292 +15168,292 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3346"/>
         <source>Left hand, 2 ranks, 16&apos; stop (round)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 2 דרגות, סטופ 16&apos; (עגול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3347"/>
         <source>Left hand, 2 ranks, 8&apos; stop + 16&apos; stop (round)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 2 דרגות, 8&apos; שנדק + 16&apos; שנדק (עגול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3348"/>
         <source>Left hand, 2 ranks, 8&apos; stop (round)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 2 מעמדות, 8&apos; סטופ (עגול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3349"/>
         <source>Left hand, 2 ranks, full master (round)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 2 דרגות, מאסטר מלא (עגול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3350"/>
         <source>Left hand, 2 ranks, master + 16&apos; stop (round)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 2 דרגות, סולם ראשי + 16&apos; מקצועי (עגול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3351"/>
         <source>Left hand, 2 ranks, master (round)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 2 דרגות, ראשי (עגול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3352"/>
         <source>Left hand, 3 ranks, 2&apos; stop + 8&apos; stop (square)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 3 דרגות, סטופ 2&apos; + סטופ 8&apos; (ריבוע)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3353"/>
         <source>Left hand, 3 ranks, 2&apos; stop (square)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 3 מעמדות, 2&apos; סטופ (ריבוע)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3354"/>
         <source>Left hand, 3 ranks, 8&apos; stop (square)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 3 מעמדים, סטופ 8&apos; (ריבוע)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3355"/>
         <source>Left hand, 3 ranks, double 8&apos; stop (square)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 3 מעמדים, סטופ כפול 8&apos; (ריבוע)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3356"/>
         <source>Left hand, 3 ranks, 2&apos; stop + double 8&apos; stop (tutti) (square)</source>
-        <translation type="unfinished"/>
+        <translation>יד שמאל, 3 דרגות, סוללת 2&apos; + 8&apos; כפולה (טוטי) (ריבוע)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3357"/>
         <source>Pull</source>
-        <translation type="unfinished"/>
+        <translation>משיכה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3358"/>
         <source>Push</source>
-        <translation type="unfinished"/>
+        <translation>דחיפה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3359"/>
         <source>Right hand, 3 ranks, 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop (accordion)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 8&apos; + טרמולו עליון 8&apos; + 16&apos; (אקורדיון)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3360"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop (authentic musette)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, טרמולו תחתון 8&apos; + 8&apos; + טרמולו עליון 8&apos; (מוזטה אותנטית)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3361"/>
         <source>Right hand, 3 ranks, 8&apos; stop + 16&apos; stop (bandoneón)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 8&apos; שנוק + 16&apos; שנוק (בנדונאון)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3362"/>
         <source>Right hand, 3 ranks, 16&apos; stop (bassoon)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 16&apos; סטופ (פגוט)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3363"/>
         <source>Right hand, 3 ranks, 8&apos; stop (clarinet)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, סטופ 8&apos; (קלרינט)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3364"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, טרמולו תחתון 8&apos; + 8&apos; + טרמולו עליון 8&apos; + 16&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3365"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, סטופ 4&apos; + טרמולו תחתון 8&apos; + 8&apos; + טרמולו עליון 8&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3366"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; + טרמולו תחתון 8&apos; + 8&apos; + טרמולו עליון 8&apos; + 16&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3367"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop + 16&apos; stop (harmonium)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; + 8&apos; + 16&apos; (הרמוניום)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3368"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop + upper tremolo 8&apos; stop (imitation musette)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; סטופ + 8&apos; סטופ + טרמולו עליון 8&apos; סטופ (מוזטה אימיטציה)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3369"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, טרמולו תחתון 8&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3370"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop (master)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; + טרמולו תחתון 8&apos; + טרמולו עליון 8&apos; + 16&apos; (ראשי)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3371"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 8&apos; stop (oboe)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; + 8&apos; (אובואי)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3372"/>
         <source>Right hand, 3 ranks, 4&apos; stop + 16&apos; stop (organ)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; סטופ + 16&apos; סטופ (אורגן)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3373"/>
         <source>Right hand, 3 ranks, 4&apos; stop (piccolo)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדות, 4&apos; סטופ (פיקולו)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3374"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + upper tremolo 8&apos; stop + 16&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, טרמולו תחתון 8&apos; + טרמולו עליון 8&apos; + 16&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3375"/>
         <source>Right hand, 3 ranks, 4&apos; stop + lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, 4&apos; סטופ + טרמולו תחתון 8&apos; סטופ + טרמולו עליון 8&apos; סטופ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3376"/>
         <source>Right hand, 3 ranks, lower tremolo 8&apos; stop + upper tremolo 8&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, טרמולו תחתון 8&apos; + טרמולו עליון 8&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3377"/>
         <source>Right hand, 3 ranks, upper tremolo 8&apos; stop</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מעמדים, טרמולו עליון 8&apos; שורר</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3378"/>
         <source>Right hand, 3 ranks, 8&apos; stop + upper tremolo 8&apos; stop (violin)</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 3 מערכות, סאבלים 8&apos; + טרמולו עליון 8&apos; (כינור)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3379"/>
         <source>Right hand, 4 ranks, alto</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 4 מעמדים, אלט</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3380"/>
         <source>Right hand, 4 ranks, bass/alto</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 4 מעמדים, פה/אלט</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3381"/>
         <source>Right hand, 4 ranks, master</source>
-        <translation type="unfinished"/>
+        <translation>יד ימין, 4 דרגות, מאסטר</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3382"/>
         <source>Right hand, 4 ranks, soft bass</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 4 מעמדות, בס רך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3383"/>
         <source>Right hand, 4 ranks, soft tenor</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 4 מעמדות, טנור רך</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3384"/>
         <source>Right hand, 4 ranks, soprano</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 4 מעמדות, סופרן</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3385"/>
         <source>Right hand, 4 ranks, tenor</source>
-        <translation type="unfinished"/>
+        <translation>יד ימנית, 4 מעמדים, טנור</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3386"/>
         <source>Ricochet (2 tones)</source>
-        <translation type="unfinished"/>
+        <translation>ריקושה (2 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3387"/>
         <source>Ricochet (3 tones)</source>
-        <translation type="unfinished"/>
+        <translation>ריקושה (3 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3388"/>
         <source>Ricochet (4 tones)</source>
-        <translation type="unfinished"/>
+        <translation>ריקושה (4 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3389"/>
         <source>Ricochet (5 tones)</source>
-        <translation type="unfinished"/>
+        <translation>ריקושה (5 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3390"/>
         <source>Ricochet (6 tones)</source>
-        <translation type="unfinished"/>
+        <translation>ריקושה (6 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3391"/>
         <source>Combining ricochet for stem (2 tones)</source>
-        <translation type="unfinished"/>
+        <translation>קומבינציה ריקושה לרגל (2 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3392"/>
         <source>Combining ricochet for stem (3 tones)</source>
-        <translation type="unfinished"/>
+        <translation>שלבי ריקושה משתלבים לרגל (3 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3393"/>
         <source>Combining ricochet for stem (4 tones)</source>
-        <translation type="unfinished"/>
+        <translation>קומבינציה ריקושה לרגל (4 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3394"/>
         <source>Combining ricochet for stem (5 tones)</source>
-        <translation type="unfinished"/>
+        <translation>שלב ריקושה לרגל (5 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3395"/>
         <source>Combining ricochet for stem (6 tones)</source>
-        <translation type="unfinished"/>
+        <translation>שלב ריקושה לרגל (6 צלילים)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3396"/>
         <source>1-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>דקה-קומה מי bemol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3397"/>
         <source>1-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 1 קומה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3398"/>
         <source>2-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>במה 2-פסים מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3399"/>
         <source>2-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 2 קומה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3400"/>
         <source>3-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>במה 3-פסים מטה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3401"/>
         <source>3-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 3 פסים</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3402"/>
         <source>4-comma flat</source>
-        <translation type="unfinished"/>
+        <translation>דיאז מקומה 4</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3403"/>
         <source>5-comma sharp</source>
-        <translation type="unfinished"/>
+        <translation>דיאז 5 קומות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3404"/>
@@ -15417,67 +15468,67 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3406"/>
         <source>Bakiye (flat)</source>
-        <translation type="unfinished"/>
+        <translation>בקיה (מול)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3410"/>
         <source>Büyük mücenneb (flat)</source>
-        <translation type="unfinished"/>
+        <translation>ביוק מוג&apos;נב (דמיון)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3411"/>
         <source>Büyük mücenneb (sharp)</source>
-        <translation type="unfinished"/>
+        <translation>ביוק מוג&apos;נב (דיאז)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3413"/>
         <source>Combining lower by one 17-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב נמוך באחד של 17-גבול סכיסמה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3414"/>
         <source>Combining lower by one 19-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב נמוך באחד שיסמה 19-גון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3415"/>
         <source>Combining lower by one 23-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב נמוך באחד 23-פסקה מעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3417"/>
         <source>Combining lower by one 31-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב נמוך באחד של 31-גבול סכיסמה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3422"/>
         <source>Combining lower by one 53-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב נמוך באחד פס קומה 53-גבול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3424"/>
         <source>Combining raise by one 17-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב גבירה בסקיסמה 17-גבולי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3425"/>
         <source>Combining raise by one 19-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב העלאה ב-1 שיסמה 19-גבול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3426"/>
         <source>Combining raise by one 23-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב העלאה בקומה 23-גבול לפי 1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3428"/>
         <source>Combining raise by one 31-limit schisma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב גבירה באחד של 31-גבול סכיסמה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3433"/>
         <source>Combining raise by one 53-limit comma</source>
-        <translation type="unfinished"/>
+        <translation>שילוב גבוה באחד קומה 53-גבול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3436"/>
@@ -15492,32 +15543,32 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3439"/>
         <source>Double flat lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיבל פה נמוך בקומה סינטונית אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3440"/>
         <source>Double flat raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיבל מופלס על ידי פס סינטוני א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3442"/>
         <source>Double flat lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיבל פה נמוך בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3443"/>
         <source>Double flat raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיבל מופלס על ידי שלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3445"/>
         <source>Double flat lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיבל פה נמוך בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3446"/>
         <source>Double flat raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיבל מופלס על ידי שני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3447"/>
@@ -15532,32 +15583,32 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3450"/>
         <source>Double sharp lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיאז כפול מורה נמוך בסימטוני פסוקה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3451"/>
         <source>Double sharp raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיאז כפול נשא בקומה סינטונית אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3452"/>
         <source>Double sharp lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז כפול מורה נמוך בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3453"/>
         <source>Double sharp raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז כפול תווה עלוי בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3454"/>
         <source>Double sharp lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז כפול מורה נמוך בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3455"/>
         <source>Double sharp raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז כפול נשא בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3464"/>
@@ -15582,62 +15633,62 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3470"/>
         <source>Flat lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>מישהו מופיע נמוך בפסקה סינטונית</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3471"/>
         <source>Flat raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>מישהו מופיע כאן?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3475"/>
         <source>Flat lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>מישהן מופשטת בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3476"/>
         <source>Flat raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>מישהן מורם נחטף חזק</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3478"/>
         <source>Flat lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>מישהו נמוך בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3479"/>
         <source>Flat raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>מישהו מופלג בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3498"/>
         <source>Koron (quarter tone flat)</source>
-        <translation type="unfinished"/>
+        <translation>קורון (רבע טון מוליך)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3500"/>
         <source>Küçük mücenneb (sharp)</source>
-        <translation type="unfinished"/>
+        <translation>קוצ&apos;וק מוג&apos;נב (דיאז)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3502"/>
         <source>Lower by one septimal comma</source>
-        <translation type="unfinished"/>
+        <translation>הנמך בקומה ספטימלית אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3503"/>
         <source>Lower by one tridecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>הנמך ברבע־טון טרידצ&apos;ימלי אחד</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3504"/>
         <source>Lower by one undecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>הנמך ברבע־טון אונדצ&apos;ימלי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3505"/>
         <source>Lower by two septimal commas</source>
-        <translation type="unfinished"/>
+        <translation>הנמך בשני קומות ספטימה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3509"/>
@@ -15657,12 +15708,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3514"/>
         <source>Natural lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נמוך בסימפוני פסיקה אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3515"/>
         <source>Natural raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נטול קומה סינטונית אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3518"/>
@@ -15672,22 +15723,22 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3519"/>
         <source>Natural lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נמוך בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3520"/>
         <source>Natural raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז עלה בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3521"/>
         <source>Natural lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז&apos; מורה נמוך בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3522"/>
         <source>Natural raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז עלה בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3533"/>
@@ -15724,22 +15775,22 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3550"/>
         <source>Raise by one septimal comma</source>
-        <translation type="unfinished"/>
+        <translation>הגבלה בקומה ספטימלית אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3551"/>
         <source>Raise by one tridecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>הגבלה ברבע טרטיצ&apos;מי אחד</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3552"/>
         <source>Raise by one undecimal quartertone</source>
-        <translation type="unfinished"/>
+        <translation>הרמה ברבע־טון אונדצ&apos;ימלי אחד</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3553"/>
         <source>Raise by two septimal commas</source>
-        <translation type="unfinished"/>
+        <translation>הרמוניה בקומה ספטימלית כפולה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3559"/>
@@ -15754,12 +15805,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3563"/>
         <source>Sharp lowered by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נמוך בסימפונית פסול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3564"/>
         <source>Sharp raised by one syntonic comma</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נשא בקומה סינטונית אחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3570"/>
@@ -15769,27 +15820,27 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3571"/>
         <source>Sharp lowered by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נמוך בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3572"/>
         <source>Sharp raised by three syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז תורם מוגבה בשלושה קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3573"/>
         <source>Sharp lowered by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז נמוך בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3574"/>
         <source>Sharp raised by two syntonic commas</source>
-        <translation type="unfinished"/>
+        <translation>דיאז תופעלי מוגבר בשני קומות סינטוניות</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3581"/>
         <source>Sori (quarter tone sharp)</source>
-        <translation type="unfinished"/>
+        <translation>סורי (רבע טון חף)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3585"/>
@@ -15800,13 +15851,13 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3590"/>
         <source>Reversed flat and flat (three-quarter-tones flat) (Zimmermann)</source>
-        <translation type="unfinished"/>
+        <translation>במול הפוך ובמול (במול של שלושה רבעי טון) (צ&apos;ימרמן)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3592"/>
         <location filename="../../src/engraving/types/symnames.cpp" line="3593"/>
         <source>Three-quarter-tones sharp</source>
-        <translation type="unfinished"/>
+        <translation>דיאז שלושה רבעי על</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3595"/>
@@ -15956,12 +16007,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
         <source>Laissez vibrer (l.v.) above</source>
-        <translation type="unfinished"/>
+        <translation>לצאז&apos; ויברה (לצ&apos; ויב&apos;) מעל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
         <source>Laissez vibrer (l.v.) below</source>
-        <translation type="unfinished"/>
+        <translation>Laissez vibrer (l.v.) מתחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
@@ -16076,12 +16127,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3722"/>
         <source>Stress above</source>
-        <translation type="unfinished"/>
+        <translation>הדגשה מעל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3723"/>
         <source>Stress below</source>
-        <translation type="unfinished"/>
+        <translation>לחץ מתחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3724"/>
@@ -16116,12 +16167,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3730"/>
         <source>Unstress above</source>
-        <translation type="unfinished"/>
+        <translation>לחץ למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3731"/>
         <source>Unstress below</source>
-        <translation type="unfinished"/>
+        <translation>ללא הבלטה מתחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3733"/>
@@ -16176,7 +16227,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3788"/>
         <source>Muted (closed)</source>
-        <translation type="unfinished"/>
+        <translation>מושתק (סגור)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3790"/>
@@ -16211,7 +16262,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3802"/>
         <source>C clef ottava bassa</source>
-        <translation type="unfinished"/>
+        <translation>מפתח דו אוטאווה באסו</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3809"/>
@@ -16282,7 +16333,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3990"/>
         <source>Z</source>
-        <translation type="unfinished"/>
+        <translation>Z</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4056"/>
@@ -16377,7 +16428,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4296"/>
         <source>Volume swell</source>
-        <translation type="unfinished"/>
+        <translation>הגברת ווליום</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4505"/>
@@ -16402,17 +16453,17 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4593"/>
         <source>Elision</source>
-        <translation type="unfinished"/>
+        <translation>הפסקה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4594"/>
         <source>Narrow elision</source>
-        <translation type="unfinished"/>
+        <translation>אליזיה צרה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
         <source>Wide elision</source>
-        <translation type="unfinished"/>
+        <translation>אליקציה רחבה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4761"/>
@@ -16482,27 +16533,27 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5268"/>
         <source>Pincé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>פינסה (קופרן)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5282"/>
         <source>Mordent with upper prefix</source>
-        <translation type="unfinished"/>
+        <translation>מורדנט עם תחילה עליונה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5284"/>
         <source>Slide</source>
-        <translation type="unfinished"/>
+        <translation>סלייד</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5300"/>
         <source>Shake</source>
-        <translation type="unfinished"/>
+        <translation>רעידה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5301"/>
         <source>Shake (Muffat)</source>
-        <translation type="unfinished"/>
+        <translation>רעידה (מופאט)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5304"/>
@@ -16512,12 +16563,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5309"/>
         <source>Tremblement</source>
-        <translation type="unfinished"/>
+        <translation>טרמבלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5310"/>
         <source>Tremblement appuyé (Couperin)</source>
-        <translation type="unfinished"/>
+        <translation>טרמבלמן אפוייה (קופרן)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5311"/>
@@ -16752,12 +16803,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5950"/>
         <source>Sawtooth line segment</source>
-        <translation type="unfinished"/>
+        <translation>קטע קו רצועת קרסול</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5952"/>
         <source>Wide sawtooth line segment</source>
-        <translation type="unfinished"/>
+        <translation>קטע קו פלסטלין רחב</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5969"/>
@@ -16772,42 +16823,42 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6065"/>
         <source>Prall mordent</source>
-        <translation type="unfinished"/>
+        <translation>פראל מורדנט</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6066"/>
         <source>Up prall</source>
-        <translation type="unfinished"/>
+        <translation>פראל מעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6067"/>
         <source>Up mordent</source>
-        <translation type="unfinished"/>
+        <translation>מורדנט פשוט מעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6068"/>
         <source>Prall down</source>
-        <translation type="unfinished"/>
+        <translation>טריל פרטי מתחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6070"/>
         <source>Down mordent</source>
-        <translation type="unfinished"/>
+        <translation>מורדנט מתחת</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6071"/>
         <source>Prall up</source>
-        <translation type="unfinished"/>
+        <translation>פראל למעלה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6072"/>
         <source>Line prall</source>
-        <translation type="unfinished"/>
+        <translation>פראל ליניארי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="6086"/>
         <source>Space</source>
-        <translation type="unfinished"/>
+        <translation>רווח</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="358"/>
@@ -16822,7 +16873,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2496"/>
         <source>Tap</source>
-        <translation type="unfinished"/>
+        <translation>הקשה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2497"/>
@@ -16832,7 +16883,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2498"/>
         <source>Pop</source>
-        <translation type="unfinished"/>
+        <translation>פופ</translation>
     </message>
 </context>
 <context>
@@ -16894,7 +16945,7 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1771"/>
         <source>Buzz roll</source>
-        <translation type="unfinished"/>
+        <translation>טרמולה דופקה</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1772"/>
@@ -16927,17 +16978,17 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2419"/>
         <source>Upprall line</source>
-        <translation type="unfinished"/>
+        <translation>קו אפראל עליון</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2420"/>
         <source>Downprall line</source>
-        <translation type="unfinished"/>
+        <translation>קו דאון-פראל</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2421"/>
         <source>Prallprall line</source>
-        <translation type="unfinished"/>
+        <translation>קו פראלפראל</translation>
     </message>
 </context>
 <context>
@@ -16993,12 +17044,12 @@ Fret %1 on strings %2</translation>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2463"/>
         <source>Vibrato sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>ויברטו פלסי</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2464"/>
         <source>Tremolo sawtooth wide</source>
-        <translation type="unfinished"/>
+        <translation>טרמולו פלס רחב</translation>
     </message>
 </context>
 <context>
@@ -17944,7 +17995,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="347"/>
         <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
-        <translation type="unfinished"/>
+        <translation>סוג טוקן ושם צפוי &quot;סיום אלמנט %1&quot;, בפועל &quot;%2 %3&quot;</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="211"/>
@@ -18108,7 +18159,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="72"/>
         <source>Reset stacking order to default</source>
-        <translation type="unfinished"/>
+        <translation>איפוס סדר ערימה לברירת המחדל</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="135"/>
@@ -18180,7 +18231,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml" line="42"/>
         <source>Spread delay</source>
-        <translation type="unfinished"/>
+        <translation>הפסקת התפשטות</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/staffs/staffsettingsmodel.cpp" line="32"/>
@@ -18275,7 +18326,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="65"/>
         <source>Easing method</source>
-        <translation type="unfinished"/>
+        <translation>שיטת קליטה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="73"/>
@@ -18295,7 +18346,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="81"/>
         <source>Ease in and out</source>
-        <translation type="unfinished"/>
+        <translation>הקלה פנימה וחיצונית</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
@@ -18534,7 +18585,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="65"/>
         <source>Hold line</source>
-        <translation type="unfinished"/>
+        <translation>קו החזקה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="75"/>
@@ -18544,12 +18595,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
         <source>Customize bend</source>
-        <translation type="unfinished"/>
+        <translation>התאמה אישית לכיפול</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
         <source>Press Enter to start editing</source>
-        <translation type="unfinished"/>
+        <translation>לחיצה על Enter תתחיל בעריכה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="78"/>
@@ -18750,7 +18801,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="142"/>
         <source>Show nut</source>
-        <translation type="unfinished"/>
+        <translation>הצג קרס</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="152"/>
@@ -18765,7 +18816,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="65"/>
         <source>Barre</source>
-        <translation type="unfinished"/>
+        <translation>ברה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="83"/>
@@ -19322,7 +19373,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="148"/>
         <source>Step offset</source>
-        <translation type="unfinished"/>
+        <translation>היסט צעד</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="162"/>
@@ -19430,7 +19481,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="53"/>
         <source>Set specific tempo</source>
-        <translation type="unfinished"/>
+        <translation>קביעת טמפו מסוים</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="77"/>
@@ -19781,13 +19832,13 @@ pickup measure</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="79"/>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="53"/>
         <source>Ease in</source>
-        <translation type="unfinished"/>
+        <translation>כניסה הדרגתית</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="80"/>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="54"/>
         <source>Ease out</source>
-        <translation type="unfinished"/>
+        <translation>יציאה הדרגתית</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/noteplaybackmodel.cpp" line="32"/>
@@ -19899,7 +19950,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>לתת להתגלגל</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="36"/>
@@ -20009,12 +20060,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="55"/>
         <source>Vibrato sawtooth</source>
-        <translation type="unfinished"/>
+        <translation>ויברטו פלסי</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="56"/>
         <source>Vibrato sawtooth wide</source>
-        <translation type="unfinished"/>
+        <translation>ויברטו שיני כסף רחב</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="37"/>
@@ -20329,29 +20380,32 @@ pickup measure</source>
         <translation>בחוץ</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
         <source>Synchronise with main score</source>
-        <translation type="unfinished"/>
+        <translation>סנכרון עם הפרטיטורה הראשית</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
+        <source>Synchronize with main score</source>
+        <translation>סנכרון עם הפרטיטורה הראשית</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="79"/>
         <source>Style/appearance</source>
-        <translation type="unfinished"/>
+        <translation>סגנון/תצוגה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="110"/>
         <source>Exclude from score</source>
-        <translation type="unfinished"/>
+        <translation>לא לכלול בפרטיטורה</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="111"/>
         <source>Exclude from parts</source>
-        <translation type="unfinished"/>
+        <translation>לא לכלול בחלקים</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronisation</source>
-        <translation type="unfinished"/>
+        <translation>סנכרון פרטיטורה ותפקיד</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml" line="51"/>
@@ -20361,7 +20415,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/models/notation/stringtunings/stringtuningssettingsmodel.cpp" line="33"/>
         <source>Fretted instruments</source>
-        <translation type="unfinished"/>
+        <translation>כלי נגינה עם סריגים</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tempos/temposettingsmodel.cpp" line="45"/>
@@ -20376,7 +20430,12 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/widgets/bendgridcanvas.cpp" line="819"/>
         <source>Time: %2, value: %3</source>
-        <translation type="unfinished"/>
+        <translation>זמן: %2, ערך: %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
+        <source>Score and part synchronization</source>
+        <translation>סנכרון פרטיטורה ותפקיד</translation>
     </message>
 </context>
 <context>
@@ -20665,7 +20724,7 @@ pickup measure</source>
     <message>
         <location filename="../../src/languages/languageserrors.h" line="58"/>
         <source>Another operation on this language has already been started</source>
-        <translation type="unfinished"/>
+        <translation>פעולה נוספת בשפה זו כבר התחילה</translation>
     </message>
 </context>
 <context>
@@ -20791,12 +20850,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/framework/network/networkerrors.h" line="52"/>
         <source>The I/O device was not opened for reading</source>
-        <translation type="unfinished"/>
+        <translation>המכשיר I/O לא נפתח לקריאה</translation>
     </message>
     <message>
         <location filename="../../src/framework/network/networkerrors.h" line="53"/>
         <source>The I/O device was not opened for writing</source>
-        <translation type="unfinished"/>
+        <translation>המכשיר I/O לא נפתח לכתיבה</translation>
     </message>
 </context>
 <context>
@@ -20880,7 +20939,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="99"/>
         <source>Broken beam minimum length</source>
-        <translation type="unfinished"/>
+        <translation>אורך מינימלי של קורות חצופים</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="120"/>
@@ -21089,17 +21148,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1249"/>
         <source>PNG Bitmap Graphic</source>
-        <translation type="unfinished"/>
+        <translation>PNG גרפיקה סיבובית</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1250"/>
         <source>Bitmap</source>
-        <translation type="unfinished"/>
+        <translation>תמונה סטטית</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1251"/>
         <source>TIFF</source>
-        <translation type="unfinished"/>
+        <translation>TIFF</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1254"/>
@@ -22019,7 +22078,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
         <source>Smooth panning</source>
-        <translation type="unfinished"/>
+        <translation>גליבה בגלילה</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="72"/>
@@ -22029,7 +22088,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="78"/>
         <source>Presets</source>
-        <translation type="unfinished"/>
+        <translation>הגדרות מוגדרות מראש</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="114"/>
@@ -22050,6 +22109,11 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="35"/>
         <source>Custom</source>
         <translation>מותאם אישית</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="276"/>
+        <source>%n string(s)</source>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
@@ -22094,7 +22158,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="238"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation type="unfinished"/>
+        <translation>&lt;b&gt;תמיד פתוח&lt;/b&gt;&lt;br&gt;על תווי תאבור, תיבות סריג שונות מ-‘0’ לא ניתן להזין במיתרים המסומנים ‘תמיד פתוח’. שימושי לכלי נגינה עם מיתרים שאינם על לוח הסריג, כמו התאורבו.</translation>
     </message>
 </context>
 <context>
@@ -22423,17 +22487,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/measureproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="184"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="191"/>
         <source>Measure properties for measure %1</source>
         <translation>מאפייני תיבה של תיבה %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="229"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="236"/>
         <source>Visible</source>
         <translation>מוצג</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="236"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="243"/>
         <source>Stemless</source>
         <translation>חסר־רגל</translation>
     </message>
@@ -22441,12 +22505,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
 <context>
     <name>notation/staffpartproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="523"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="536"/>
         <source>Invalid instrument name</source>
         <translation>שם כלי הנגינה אינו תקין</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="524"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="537"/>
         <source>The instrument name is invalid.</source>
         <translation>שם כלי הנגינה אינו תקף</translation>
     </message>
@@ -22469,27 +22533,27 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="588"/>
         <source>Expand meta rows</source>
-        <translation type="unfinished"/>
+        <translation>הרחבת שורות מטה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="591"/>
         <source>Collapse meta rows</source>
-        <translation type="unfinished"/>
+        <translation>כיווץ שורות מטה</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="594"/>
         <source>Move meta row down one</source>
-        <translation type="unfinished"/>
+        <translation>הזזת שורת מטה מטה אחת</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="597"/>
         <source>Move meta row up one</source>
-        <translation type="unfinished"/>
+        <translation>הזזת שורת מטה למעלה אחת</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="600"/>
         <source>Move meta row up/down one</source>
-        <translation type="unfinished"/>
+        <translation>הזזת שורת מטה למעלה/למטה באחת</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="603"/>
@@ -22752,7 +22816,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="68"/>
         <source>Content offset</source>
-        <translation type="unfinished"/>
+        <translation>היסט תוכן</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml" line="84"/>
@@ -23192,7 +23256,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1330"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1834"/>
         <source>Let ring</source>
-        <translation type="unfinished"/>
+        <translation>לתת להתגלגל</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1350"/>
@@ -23327,7 +23391,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1468"/>
         <source>string.</source>
-        <translation type="unfinished"/>
+        <translation>מיתר</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1480"/>
@@ -23522,32 +23586,32 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1632"/>
         <source>détaché</source>
-        <translation type="unfinished"/>
+        <translation>דטשה</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1634"/>
         <source>Détaché</source>
-        <translation type="unfinished"/>
+        <translation>דטשה</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1637"/>
         <source>martelé</source>
-        <translation type="unfinished"/>
+        <translation>מרטלה</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1639"/>
         <source>Martelé</source>
-        <translation type="unfinished"/>
+        <translation>מרטלה</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1649"/>
         <source>Sul ponticello</source>
-        <translation type="unfinished"/>
+        <translation>סול פונטיצ&apos;לו</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1654"/>
         <source>Sul tasto</source>
-        <translation type="unfinished"/>
+        <translation>Sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2036"/>
@@ -23557,7 +23621,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
         <source>col legno</source>
-        <translation type="unfinished"/>
+        <translation>col legno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1549"/>
@@ -23567,17 +23631,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1644"/>
         <source>Col legno</source>
-        <translation type="unfinished"/>
+        <translation>Col legno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1647"/>
         <source>sul pont.</source>
-        <translation type="unfinished"/>
+        <translation>סול פונט.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1652"/>
         <source>sul tasto</source>
-        <translation type="unfinished"/>
+        <translation>סול טסטו</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1657"/>
@@ -23820,24 +23884,26 @@ failed: %2</source>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="543"/>
         <source>Writing palette file</source>
-        <translation type="unfinished"/>
+        <translation>כותב קובץ לוח כלים</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="544"/>
         <source>Writing palette file
 %1
 failed.</source>
-        <translation type="unfinished"/>
+        <translation>כותב קובץ לוח כלים
+%1
+נכשל.</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="129"/>
         <source>Expand all palettes</source>
-        <translation type="unfinished"/>
+        <translation>הרחב את כל לוחות הכלים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/palettespanelcontextmenumodel.cpp" line="130"/>
         <source>Collapse all palettes</source>
-        <translation type="unfinished"/>
+        <translation>כווץ את כל לוחות הכלים</translation>
     </message>
 </context>
 <context>
@@ -23876,7 +23942,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="107"/>
         <source>Combining Diacritical Marks</source>
-        <translation type="unfinished"/>
+        <translation>סימני דיאקריטיקה משולבים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="108"/>
@@ -23921,12 +23987,12 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="116"/>
         <source>Thaana</source>
-        <translation type="unfinished"/>
+        <translation>תאנה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="117"/>
         <source>NKo</source>
-        <translation type="unfinished"/>
+        <translation>אנ׳קו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="118"/>
@@ -23936,7 +24002,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="119"/>
         <source>Mandaic</source>
-        <translation type="unfinished"/>
+        <translation>מנדאי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="120"/>
@@ -23951,7 +24017,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="122"/>
         <source>Devanagari</source>
-        <translation type="unfinished"/>
+        <translation>דוואנגרי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="123"/>
@@ -23961,17 +24027,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="124"/>
         <source>Gurmukhi</source>
-        <translation type="unfinished"/>
+        <translation>גורמוקהי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="125"/>
         <source>Gujarati</source>
-        <translation type="unfinished"/>
+        <translation>גוג&apos;ראטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="126"/>
         <source>Oriya</source>
-        <translation type="unfinished"/>
+        <translation>אורייה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="127"/>
@@ -23981,22 +24047,22 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="128"/>
         <source>Telugu</source>
-        <translation type="unfinished"/>
+        <translation>טלוגו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="129"/>
         <source>Kannada</source>
-        <translation type="unfinished"/>
+        <translation>קאנאדה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="130"/>
         <source>Malayalam</source>
-        <translation type="unfinished"/>
+        <translation>מליאלאם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="131"/>
         <source>Sinhala</source>
-        <translation type="unfinished"/>
+        <translation>סינהלה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="132"/>
@@ -24006,7 +24072,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="133"/>
         <source>Lao</source>
-        <translation type="unfinished"/>
+        <translation>לאו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="134"/>
@@ -24016,7 +24082,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="135"/>
         <source>Myanmar</source>
-        <translation type="unfinished"/>
+        <translation>מיאנמר</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="136"/>
@@ -24026,7 +24092,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="137"/>
         <source>Hangul Jamo</source>
-        <translation type="unfinished"/>
+        <translation>האנגול ג&apos;אמו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="138"/>
@@ -24041,42 +24107,42 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="140"/>
         <source>Cherokee</source>
-        <translation type="unfinished"/>
+        <translation>צ&apos;רוקי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="141"/>
         <source>Unified Canadian Aboriginal Syllabics</source>
-        <translation type="unfinished"/>
+        <translation>סילביקה כנדית אבוריג&apos;ינית מאוחדת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="142"/>
         <source>Ogham</source>
-        <translation type="unfinished"/>
+        <translation>אוגם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="143"/>
         <source>Runic</source>
-        <translation type="unfinished"/>
+        <translation>רוני</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="144"/>
         <source>Tagalog</source>
-        <translation type="unfinished"/>
+        <translation>טגלוג</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="145"/>
         <source>Hanunoo</source>
-        <translation type="unfinished"/>
+        <translation>האנונו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="146"/>
         <source>Buhid</source>
-        <translation type="unfinished"/>
+        <translation>בוהיד</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="147"/>
         <source>Tagbanwa</source>
-        <translation type="unfinished"/>
+        <translation>טגבנווה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="148"/>
@@ -24091,42 +24157,42 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="150"/>
         <source>Unified Canadian Aboriginal Syllabics Extended</source>
-        <translation type="unfinished"/>
+        <translation>סילביקה קנדית אבוריג&apos;ינית מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="151"/>
         <source>Limbu</source>
-        <translation type="unfinished"/>
+        <translation>לימבו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="152"/>
         <source>Tai Le</source>
-        <translation type="unfinished"/>
+        <translation>טאי לה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="153"/>
         <source>New Tai Lue</source>
-        <translation type="unfinished"/>
+        <translation>טאי ליו חדש</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="154"/>
         <source>Khmer Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סמלים קמרים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="155"/>
         <source>Buginese</source>
-        <translation type="unfinished"/>
+        <translation>בוגינזית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="156"/>
         <source>Tai Tham</source>
-        <translation type="unfinished"/>
+        <translation>טאי תאם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="157"/>
         <source>Combining Diacritical Marks Extended</source>
-        <translation type="unfinished"/>
+        <translation>סימני דיאקריטיקה משולבים מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="158"/>
@@ -24141,32 +24207,32 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="160"/>
         <source>Batak</source>
-        <translation type="unfinished"/>
+        <translation>בטאק</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="161"/>
         <source>Lepcha</source>
-        <translation type="unfinished"/>
+        <translation>לפצ&apos;ה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="162"/>
         <source>Ol Chiki</source>
-        <translation type="unfinished"/>
+        <translation>אול צ&apos;יקי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="163"/>
         <source>Cyrillic Extended-C</source>
-        <translation type="unfinished"/>
+        <translation>קירילי מורחב-סי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="164"/>
         <source>Georgian Extended</source>
-        <translation type="unfinished"/>
+        <translation>ג&apos;ורג&apos;ית מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="165"/>
         <source>Sundanese Supplement</source>
-        <translation type="unfinished"/>
+        <translation>סונדנזית תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="166"/>
@@ -24186,7 +24252,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="169"/>
         <source>Combining Diacritical Marks Supplement</source>
-        <translation type="unfinished"/>
+        <translation>שלב סימני דיאקריטיקה תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="170"/>
@@ -24201,32 +24267,32 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="172"/>
         <source>General Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>פיסוק כללי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="173"/>
         <source>Superscripts and Subscripts</source>
-        <translation type="unfinished"/>
+        <translation>כתב עילי ותתי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="174"/>
         <source>Currency Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סימני מטבע</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="175"/>
         <source>Combining Diacritical Marks for Symbols</source>
-        <translation type="unfinished"/>
+        <translation>שילוב סימני דיאקריטיקה לסמלים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="176"/>
         <source>Letterlike Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סמלים כמו אותיות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="177"/>
         <source>Number Forms</source>
-        <translation type="unfinished"/>
+        <translation>צורות מספרים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="178"/>
@@ -24241,7 +24307,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="180"/>
         <source>Miscellaneous Technical</source>
-        <translation type="unfinished"/>
+        <translation>טכניות מעורבות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="181"/>
@@ -24251,17 +24317,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="182"/>
         <source>Optical Character Recognition</source>
-        <translation type="unfinished"/>
+        <translation>זיהוי תווים אופטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="183"/>
         <source>Enclosed Alphanumerics</source>
-        <translation type="unfinished"/>
+        <translation>אלפאנומרים מוקפים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="184"/>
         <source>Box Drawing</source>
-        <translation type="unfinished"/>
+        <translation>קווי תיבות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="185"/>
@@ -24271,7 +24337,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="186"/>
         <source>Geometric Shapes</source>
-        <translation type="unfinished"/>
+        <translation>צורות גיאומטריות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="187"/>
@@ -24281,7 +24347,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="188"/>
         <source>Dingbats</source>
-        <translation type="unfinished"/>
+        <translation>דינגבטים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="189"/>
@@ -24321,7 +24387,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="196"/>
         <source>Glagolitic</source>
-        <translation type="unfinished"/>
+        <translation>גלגולית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="197"/>
@@ -24336,47 +24402,47 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="199"/>
         <source>Georgian Supplement</source>
-        <translation type="unfinished"/>
+        <translation>ג&apos;ורג&apos;ית תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="200"/>
         <source>Tifinagh</source>
-        <translation type="unfinished"/>
+        <translation>טיפינאג&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="201"/>
         <source>Ethiopic Extended</source>
-        <translation type="unfinished"/>
+        <translation>אתיופי מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="202"/>
         <source>Cyrillic Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>קירילי מורחב-א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="203"/>
         <source>Supplemental Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>פיסוק תוספתי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="204"/>
         <source>CJK Radicals Supplement</source>
-        <translation type="unfinished"/>
+        <translation>מקורות CJK תוספים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="205"/>
         <source>Kangxi Radicals</source>
-        <translation type="unfinished"/>
+        <translation>רדיקלים קאנגשי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="206"/>
         <source>Ideographic Description Characters</source>
-        <translation type="unfinished"/>
+        <translation>Ideographic Description Characters</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="207"/>
         <source>CJK Symbols and Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>סימנים ופיסוק CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="208"/>
@@ -24391,27 +24457,27 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="210"/>
         <source>Bopomofo</source>
-        <translation type="unfinished"/>
+        <translation>בופומופו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="211"/>
         <source>Hangul Compatibility Jamo</source>
-        <translation type="unfinished"/>
+        <translation>Hangul Compatibility Jamo</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="212"/>
         <source>Kanbun</source>
-        <translation type="unfinished"/>
+        <translation>קאנבון</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="213"/>
         <source>Bopomofo Extended</source>
-        <translation type="unfinished"/>
+        <translation>בופומופו מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="214"/>
         <source>CJK Strokes</source>
-        <translation type="unfinished"/>
+        <translation>מכה CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="215"/>
@@ -24421,62 +24487,62 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="216"/>
         <source>Enclosed CJK Letters and Months</source>
-        <translation type="unfinished"/>
+        <translation>אותיות וחודשים מוקפים CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="217"/>
         <source>CJK Compatibility</source>
-        <translation type="unfinished"/>
+        <translation>התאמה ל-CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="218"/>
         <source>CJK Unified Ideographs Extension A</source>
-        <translation type="unfinished"/>
+        <translation>הרחבת אותיות האידיאוגרמות המאוחדות CJK A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="219"/>
         <source>Yijing Hexagram Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סימני הקסגרמות של ייג&apos;ינג</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="220"/>
         <source>CJK Unified Ideographs</source>
-        <translation type="unfinished"/>
+        <translation>CJK Unified Ideographs</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="221"/>
         <source>Yi Syllables</source>
-        <translation type="unfinished"/>
+        <translation>היאנג סילבולים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="222"/>
         <source>Yi Radicals</source>
-        <translation type="unfinished"/>
+        <translation>רדיקלים יי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="223"/>
         <source>Lisu</source>
-        <translation type="unfinished"/>
+        <translation>ליסו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="224"/>
         <source>Vai</source>
-        <translation type="unfinished"/>
+        <translation>ויי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="225"/>
         <source>Cyrillic Extended-B</source>
-        <translation type="unfinished"/>
+        <translation>קירילי מורחב-ב&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="226"/>
         <source>Bamum</source>
-        <translation type="unfinished"/>
+        <translation>במום</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="227"/>
         <source>Modifier Tone Letters</source>
-        <translation type="unfinished"/>
+        <translation>אותיות טון משנות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="228"/>
@@ -24486,67 +24552,67 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="229"/>
         <source>Syloti Nagri</source>
-        <translation type="unfinished"/>
+        <translation>סילוטי נגרי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="230"/>
         <source>Common Indic Number Forms</source>
-        <translation type="unfinished"/>
+        <translation>Common Indic Number Forms</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="231"/>
         <source>Phags-pa</source>
-        <translation type="unfinished"/>
+        <translation>פאגס-פה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="232"/>
         <source>Saurashtra</source>
-        <translation type="unfinished"/>
+        <translation>סאוראשטרה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="233"/>
         <source>Devanagari Extended</source>
-        <translation type="unfinished"/>
+        <translation>דוואנגרי מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="234"/>
         <source>Kayah Li</source>
-        <translation type="unfinished"/>
+        <translation>קאיה לי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="235"/>
         <source>Rejang</source>
-        <translation type="unfinished"/>
+        <translation>רג&apos;נג</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="236"/>
         <source>Hangul Jamo Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>האנגול ג&apos;אמו הרחב-א</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="237"/>
         <source>Javanese</source>
-        <translation type="unfinished"/>
+        <translation>ג&apos;אוונזית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="238"/>
         <source>Myanmar Extended-B</source>
-        <translation type="unfinished"/>
+        <translation>מיאנמר מורחב-ב&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="239"/>
         <source>Cham</source>
-        <translation type="unfinished"/>
+        <translation>צ&apos;אם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="240"/>
         <source>Myanmar Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>מיאנמר מורחב-א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="241"/>
         <source>Tai Viet</source>
-        <translation type="unfinished"/>
+        <translation>טאי וייט</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="242"/>
@@ -24556,7 +24622,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="243"/>
         <source>Ethiopic Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>אתיופי מורחב-א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="244"/>
@@ -24566,92 +24632,92 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="245"/>
         <source>Cherokee Supplement</source>
-        <translation type="unfinished"/>
+        <translation>הוספה של צ&apos;רוקי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="246"/>
         <source>Meetei Mayek</source>
-        <translation type="unfinished"/>
+        <translation>מיטי מאייק</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="247"/>
         <source>Hangul Syllables</source>
-        <translation type="unfinished"/>
+        <translation>סילבות האנגול</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="248"/>
         <source>Hangul Jamo Extended-B</source>
-        <translation type="unfinished"/>
+        <translation>האנגול ג&apos;אמו הרחב-ב&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="249"/>
         <source>High Surrogates</source>
-        <translation type="unfinished"/>
+        <translation>סירוגטים עליונים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="250"/>
         <source>High Private Use Surrogates</source>
-        <translation type="unfinished"/>
+        <translation>סירוגטים גבוהים לשימוש פרטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="251"/>
         <source>Low Surrogates</source>
-        <translation type="unfinished"/>
+        <translation>סירוגטים נמוכים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="252"/>
         <source>Private Use Area</source>
-        <translation type="unfinished"/>
+        <translation>אזור השימוש הפרטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="253"/>
         <source>CJK Compatibility Ideographs</source>
-        <translation type="unfinished"/>
+        <translation>אידאוגרמות תואמות CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="254"/>
         <source>Alphabetic Presentation Forms</source>
-        <translation type="unfinished"/>
+        <translation>טפסות מצגת אלפביתיות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="255"/>
         <source>Arabic Presentation Forms-A</source>
-        <translation type="unfinished"/>
+        <translation>טפסות הצגה ערביות - א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="256"/>
         <source>Variation Selectors</source>
-        <translation type="unfinished"/>
+        <translation>בחירת וריאנטים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="257"/>
         <source>Vertical Forms</source>
-        <translation type="unfinished"/>
+        <translation>טופסים אנכיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="258"/>
         <source>Combining Half Marks</source>
-        <translation type="unfinished"/>
+        <translation>שילוב חצי סימנים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="259"/>
         <source>CJK Compatibility Forms</source>
-        <translation type="unfinished"/>
+        <translation>טפסים של תאימות CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="260"/>
         <source>Small Form Variants</source>
-        <translation type="unfinished"/>
+        <translation>גרסאות טופסים קטנות</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="261"/>
         <source>Arabic Presentation Forms-B</source>
-        <translation type="unfinished"/>
+        <translation>צורות מצג ארביות - ב&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="262"/>
         <source>Halfwidth and Fullwidth Forms</source>
-        <translation type="unfinished"/>
+        <translation>צורות רוחב חצי ומלא</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="263"/>
@@ -24661,17 +24727,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="264"/>
         <source>Linear B Syllabary</source>
-        <translation type="unfinished"/>
+        <translation>ליניארי ב&apos; סילברי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="265"/>
         <source>Linear B Ideograms</source>
-        <translation type="unfinished"/>
+        <translation>אידיאוגרמות ליניאריות ב&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="266"/>
         <source>Aegean Numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרים איגיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="267"/>
@@ -24686,22 +24752,22 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="269"/>
         <source>Phaistos Disc</source>
-        <translation type="unfinished"/>
+        <translation>דיסק פייסטוס</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="270"/>
         <source>Lycian</source>
-        <translation type="unfinished"/>
+        <translation>ליקי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="271"/>
         <source>Carian</source>
-        <translation type="unfinished"/>
+        <translation>קרי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="272"/>
         <source>Coptic Epact Numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרים קופטיים אפקט</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="273"/>
@@ -24716,7 +24782,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="275"/>
         <source>Old Permic</source>
-        <translation type="unfinished"/>
+        <translation>פרמי עתיק</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="276"/>
@@ -24731,67 +24797,67 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="278"/>
         <source>Deseret</source>
-        <translation type="unfinished"/>
+        <translation>דסרט</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="279"/>
         <source>Shavian</source>
-        <translation type="unfinished"/>
+        <translation>שיוואן</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="280"/>
         <source>Osmanya</source>
-        <translation type="unfinished"/>
+        <translation>אוסמניה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="281"/>
         <source>Osage</source>
-        <translation type="unfinished"/>
+        <translation>אוסג&apos;ה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="282"/>
         <source>Elbasan</source>
-        <translation type="unfinished"/>
+        <translation>אלבסאן</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="283"/>
         <source>Caucasian Albanian</source>
-        <translation type="unfinished"/>
+        <translation>אלבנית קווקזית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="284"/>
         <source>Linear A</source>
-        <translation type="unfinished"/>
+        <translation>ליניארי א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="285"/>
         <source>Cypriot Syllabary</source>
-        <translation type="unfinished"/>
+        <translation>סילבריות קפרית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="286"/>
         <source>Imperial Aramaic</source>
-        <translation type="unfinished"/>
+        <translation>ארמית מלכותית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="287"/>
         <source>Palmyrene</source>
-        <translation type="unfinished"/>
+        <translation>פלמירית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="288"/>
         <source>Nabataean</source>
-        <translation type="unfinished"/>
+        <translation>נבטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="289"/>
         <source>Hatran</source>
-        <translation type="unfinished"/>
+        <translation>חטראני</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="290"/>
         <source>Phoenician</source>
-        <translation type="unfinished"/>
+        <translation>פיניקי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="291"/>
@@ -24801,17 +24867,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="292"/>
         <source>Meroitic Hieroglyphs</source>
-        <translation type="unfinished"/>
+        <translation>הירוגליפים מרואיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="293"/>
         <source>Meroitic Cursive</source>
-        <translation type="unfinished"/>
+        <translation>מרואי כתב רהוט</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="294"/>
         <source>Kharoshthi</source>
-        <translation type="unfinished"/>
+        <translation>כרושטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="295"/>
@@ -24826,182 +24892,182 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="297"/>
         <source>Manichaean</source>
-        <translation type="unfinished"/>
+        <translation>מניכאאית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="298"/>
         <source>Avestan</source>
-        <translation type="unfinished"/>
+        <translation>אבסטאני</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="299"/>
         <source>Inscriptional Parthian</source>
-        <translation type="unfinished"/>
+        <translation>פרסי פרתי כתובה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="300"/>
         <source>Inscriptional Pahlavi</source>
-        <translation type="unfinished"/>
+        <translation>פהלווי כתובה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="301"/>
         <source>Psalter Pahlavi</source>
-        <translation type="unfinished"/>
+        <translation>פסלטר פהלווי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="302"/>
         <source>Old Turkic</source>
-        <translation type="unfinished"/>
+        <translation>טורקית עתיקה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="303"/>
         <source>Old Hungarian</source>
-        <translation type="unfinished"/>
+        <translation>הונגרית עתיקה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="304"/>
         <source>Hanifi Rohingya</source>
-        <translation type="unfinished"/>
+        <translation>האניפי רוהינג&apos;ה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="305"/>
         <source>Rumi Numeral Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סימני מספרים רומיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="306"/>
         <source>Yezidi</source>
-        <translation type="unfinished"/>
+        <translation>יזידי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="307"/>
         <source>Old Sogdian</source>
-        <translation type="unfinished"/>
+        <translation>סוגדית עתיקה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="308"/>
         <source>Sogdian</source>
-        <translation type="unfinished"/>
+        <translation>סוגדית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="309"/>
         <source>Chorasmian</source>
-        <translation type="unfinished"/>
+        <translation>כורסמי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="310"/>
         <source>Elymaic</source>
-        <translation type="unfinished"/>
+        <translation>אלימאית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="311"/>
         <source>Brahmi</source>
-        <translation type="unfinished"/>
+        <translation>ברהמי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="312"/>
         <source>Kaithi</source>
-        <translation type="unfinished"/>
+        <translation>קיית&apos;י</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="313"/>
         <source>Sora Sompeng</source>
-        <translation type="unfinished"/>
+        <translation>סורה סומפנג</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="314"/>
         <source>Chakma</source>
-        <translation type="unfinished"/>
+        <translation>צ&apos;אקמה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="315"/>
         <source>Mahajani</source>
-        <translation type="unfinished"/>
+        <translation>מהאג&apos;אני</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="316"/>
         <source>Sharada</source>
-        <translation type="unfinished"/>
+        <translation>שרדה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="317"/>
         <source>Sinhala Archaic Numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרים ארכאיים סינהליים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="318"/>
         <source>Khojki</source>
-        <translation type="unfinished"/>
+        <translation>קוג&apos;קי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="319"/>
         <source>Multani</source>
-        <translation type="unfinished"/>
+        <translation>מולטני</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="320"/>
         <source>Khudawadi</source>
-        <translation type="unfinished"/>
+        <translation>כודאוודי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="321"/>
         <source>Grantha</source>
-        <translation type="unfinished"/>
+        <translation>גרנת&apos;ה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="322"/>
         <source>Newa</source>
-        <translation type="unfinished"/>
+        <translation>ניווא</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="323"/>
         <source>Tirhuta</source>
-        <translation type="unfinished"/>
+        <translation>טירהוטה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="324"/>
         <source>Siddham</source>
-        <translation type="unfinished"/>
+        <translation>סידהאם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="325"/>
         <source>Modi</source>
-        <translation type="unfinished"/>
+        <translation>מודי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="326"/>
         <source>Mongolian Supplement</source>
-        <translation type="unfinished"/>
+        <translation>תוספת מונגולית</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="327"/>
         <source>Takri</source>
-        <translation type="unfinished"/>
+        <translation>טקרי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="328"/>
         <source>Ahom</source>
-        <translation type="unfinished"/>
+        <translation>אהום</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="329"/>
         <source>Dogra</source>
-        <translation type="unfinished"/>
+        <translation>דוגרה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="330"/>
         <source>Warang Citi</source>
-        <translation type="unfinished"/>
+        <translation>ווארנג&apos; צ&apos;יטי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="331"/>
         <source>Dives Akuru</source>
-        <translation type="unfinished"/>
+        <translation>Dives Akuru</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="332"/>
         <source>Nandinagari</source>
-        <translation type="unfinished"/>
+        <translation>ננדינגרי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="333"/>
@@ -25011,62 +25077,62 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="334"/>
         <source>Soyombo</source>
-        <translation type="unfinished"/>
+        <translation>סויומבו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="335"/>
         <source>Pau Cin Hau</source>
-        <translation type="unfinished"/>
+        <translation>פאו צ&apos;ין האו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="336"/>
         <source>Bhaiksuki</source>
-        <translation type="unfinished"/>
+        <translation>בהייקסוקי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="337"/>
         <source>Marchen</source>
-        <translation type="unfinished"/>
+        <translation>מרצ&apos;ן</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="338"/>
         <source>Masaram Gondi</source>
-        <translation type="unfinished"/>
+        <translation>מסאראם גונדי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="339"/>
         <source>Gunjala Gondi</source>
-        <translation type="unfinished"/>
+        <translation>גונג&apos;לה גונדי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="340"/>
         <source>Makasar</source>
-        <translation type="unfinished"/>
+        <translation>מקסאר</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="341"/>
         <source>Lisu Supplement</source>
-        <translation type="unfinished"/>
+        <translation>ליסו תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="342"/>
         <source>Tamil Supplement</source>
-        <translation type="unfinished"/>
+        <translation>טמילית תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="343"/>
         <source>Cuneiform</source>
-        <translation type="unfinished"/>
+        <translation>כתב קוניאה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="344"/>
         <source>Cuneiform Numbers and Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>מספרים ופיסוק כתב כיתי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="345"/>
         <source>Early Dynastic Cuneiform</source>
-        <translation type="unfinished"/>
+        <translation>כתב כינאית מהתקופה הדינסטית המוקדמת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="346"/>
@@ -25081,87 +25147,87 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="348"/>
         <source>Anatolian Hieroglyphs</source>
-        <translation type="unfinished"/>
+        <translation>הירוגליפים אנטולים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="349"/>
         <source>Bamum Supplement</source>
-        <translation type="unfinished"/>
+        <translation>Bamum Supplement</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="350"/>
         <source>Mro</source>
-        <translation type="unfinished"/>
+        <translation>Mro</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="351"/>
         <source>Bassa Vah</source>
-        <translation type="unfinished"/>
+        <translation>באסה ואה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="352"/>
         <source>Pahawh Hmong</source>
-        <translation type="unfinished"/>
+        <translation>פהאוו המונג</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="353"/>
         <source>Medefaidrin</source>
-        <translation type="unfinished"/>
+        <translation>Medefaidrin</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="354"/>
         <source>Miao</source>
-        <translation type="unfinished"/>
+        <translation>Miao</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="355"/>
         <source>Ideographic Symbols and Punctuation</source>
-        <translation type="unfinished"/>
+        <translation>סמלים ופיסוק אידיאוגרפיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="356"/>
         <source>Tangut Components</source>
-        <translation type="unfinished"/>
+        <translation>רכיבי טנגוט</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="357"/>
         <source>Khitan Small Script</source>
-        <translation type="unfinished"/>
+        <translation>כיתאנית כתב קטן</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="358"/>
         <source>Tangut Supplement</source>
-        <translation type="unfinished"/>
+        <translation>טאנגוט השלמה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="359"/>
         <source>Kana Supplement</source>
-        <translation type="unfinished"/>
+        <translation>השלמת קאנה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="360"/>
         <source>Kana Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>קאנה מורחב-א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="361"/>
         <source>Small Kana Extension</source>
-        <translation type="unfinished"/>
+        <translation>הרחבת קאנה קטנה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="362"/>
         <source>Nushu</source>
-        <translation type="unfinished"/>
+        <translation>Nushu</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="363"/>
         <source>Duployan</source>
-        <translation type="unfinished"/>
+        <translation>דופלויאן</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="364"/>
         <source>Shorthand Format Controls</source>
-        <translation type="unfinished"/>
+        <translation>בקרי פורמט כתיבה מקוצרת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="365"/>
@@ -25181,57 +25247,57 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="368"/>
         <source>Tai Xuan Jing Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סימנים מתאי סואן ג&apos;ינג&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="369"/>
         <source>Counting Rod Numerals</source>
-        <translation type="unfinished"/>
+        <translation>מספרים במקלות ספירה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="370"/>
         <source>Mathematical Alphanumeric Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סמלים אלפאנומריים מתמטיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="371"/>
         <source>Sutton SignWriting</source>
-        <translation type="unfinished"/>
+        <translation>כתב סימנים של סאטון</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="372"/>
         <source>Glagolitic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>גלגולית&apos; תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="373"/>
         <source>Nyiakeng Puachue Hmong</source>
-        <translation type="unfinished"/>
+        <translation>Nyiakeng Puachue Hmong</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="374"/>
         <source>Wancho</source>
-        <translation type="unfinished"/>
+        <translation>וואנצ&apos;ו</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="375"/>
         <source>Mende Kikakui</source>
-        <translation type="unfinished"/>
+        <translation>מנדה קיקאקוי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="376"/>
         <source>Adlam</source>
-        <translation type="unfinished"/>
+        <translation>אדלאם</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="377"/>
         <source>Indic Siyaq Numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרים סיאק אינדיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="378"/>
         <source>Ottoman Siyaq Numbers</source>
-        <translation type="unfinished"/>
+        <translation>מספרים סיאק אותומניים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="379"/>
@@ -25256,17 +25322,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="383"/>
         <source>Enclosed Alphanumeric Supplement</source>
-        <translation type="unfinished"/>
+        <translation>הספרות והאותיות הסגורות - תוספת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="384"/>
         <source>Enclosed Ideographic Supplement</source>
-        <translation type="unfinished"/>
+        <translation>הספרה הסינית הסגורה המשלימה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="385"/>
         <source>Miscellaneous Symbols and Pictographs</source>
-        <translation type="unfinished"/>
+        <translation>סמלים ופיקטוגרפים מעורבים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="386"/>
@@ -25276,22 +25342,22 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="387"/>
         <source>Ornamental Dingbats</source>
-        <translation type="unfinished"/>
+        <translation>דינגבטים אורנמנטליים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="388"/>
         <source>Transport and Map Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סמלי תחבורה ומפה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="389"/>
         <source>Alchemical Symbols</source>
-        <translation type="unfinished"/>
+        <translation>סימנים אלכימיים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="390"/>
         <source>Geometric Shapes Extended</source>
-        <translation type="unfinished"/>
+        <translation>צורות גיאומטריות מורחב</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="391"/>
@@ -25301,7 +25367,7 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="392"/>
         <source>Supplemental Symbols and Pictographs</source>
-        <translation type="unfinished"/>
+        <translation>סימנים נוספים ופיקטוגרפים</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="393"/>
@@ -25311,32 +25377,32 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="394"/>
         <source>Symbols and Pictographs Extended-A</source>
-        <translation type="unfinished"/>
+        <translation>סמלים ופיקטוגרמות מורחב-א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="395"/>
         <source>Symbols for Legacy Computing</source>
-        <translation type="unfinished"/>
+        <translation>סמלים לחישוב מורשת</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="396"/>
         <source>CJK Unified Ideographs Extension B</source>
-        <translation type="unfinished"/>
+        <translation>הרחבת ב&apos; של אידאוגרמות מאוחדות CJK</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="397"/>
         <source>CJK Unified Ideographs Extension C</source>
-        <translation type="unfinished"/>
+        <translation>CJK Unified Ideographs Extension C</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="398"/>
         <source>CJK Unified Ideographs Extension D</source>
-        <translation type="unfinished"/>
+        <translation>הרחבת תווי רעיונות מאוחדים CJK D</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="399"/>
         <source>CJK Compatibility Ideographs Supplement</source>
-        <translation type="unfinished"/>
+        <translation>הידיעות הכתובות הסיניות המותאמות הרחבה</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="400"/>
@@ -25346,17 +25412,17 @@ failed.</source>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="401"/>
         <source>Variation Selectors Supplement</source>
-        <translation type="unfinished"/>
+        <translation>מגוון בחירה תוספתי</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="402"/>
         <source>Supplementary Private Use Area-A</source>
-        <translation type="unfinished"/>
+        <translation>אזור שימוש פרטי משלים-א&apos;</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="403"/>
         <source>Supplementary Private Use Area-B</source>
-        <translation type="unfinished"/>
+        <translation>אזור שימוש פרטי משלים-ב&apos;</translation>
     </message>
 </context>
 <context>
@@ -25430,17 +25496,17 @@ failed.</source>
         <translation>Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="764"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="766"/>
         <source>Metronome</source>
         <translation>מטרונום</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="774"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="776"/>
         <source>Chords</source>
         <translation>אקורדים</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1084"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1086"/>
         <source>Loading audio samples</source>
         <translation>דגימות שמע בטעינה</translation>
     </message>
@@ -25457,7 +25523,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="48"/>
         <source>Fader</source>
-        <translation type="unfinished"/>
+        <translation>פיידר</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="49"/>
@@ -25482,23 +25548,23 @@ failed.</source>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="327"/>
         <source>Bank %1, preset %2</source>
-        <translation type="unfinished"/>
+        <translation>בנק %1, פריסט %2</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="381"/>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="438"/>
         <source>Choose automatically</source>
-        <translation type="unfinished"/>
+        <translation>בחירה אוטומטית</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="421"/>
         <source>Preset %1</source>
-        <translation type="unfinished"/>
+        <translation>הגדרות מוגדרות מראש %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="430"/>
         <source>Bank %1</source>
-        <translation type="unfinished"/>
+        <translation>בנק %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="61"/>
@@ -25548,7 +25614,7 @@ failed.</source>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation type="unfinished"/>
+        <translation>שליחות מסיורים</translation>
     </message>
 </context>
 <context>
@@ -25931,12 +25997,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
         <source>BB files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>קבצי BB (ניסיוני)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1712"/>
         <source>Overture / Score Writer files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>קבצי Overture / Score Writer (ניסיוני)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1713"/>
@@ -25951,7 +26017,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
         <source>Power Tab Editor files (experimental)</source>
-        <translation type="unfinished"/>
+        <translation>קבצי Power Tab Editor (ניסיוני)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1716"/>
@@ -25979,7 +26045,7 @@ failed.</source>
         <translation>פתיחה…</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="330"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="333"/>
         <source>Untitled</source>
         <translation>ללא כותרת</translation>
     </message>
@@ -26006,17 +26072,17 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="54"/>
         <source>Work number</source>
-        <translation type="unfinished"/>
+        <translation>מספר עבודה</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="55"/>
         <source>Movement title</source>
-        <translation type="unfinished"/>
+        <translation>כותרת תנועה</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="56"/>
         <source>Movement number</source>
-        <translation type="unfinished"/>
+        <translation>מספר תנועה</translation>
     </message>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="58"/>
@@ -26031,7 +26097,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
         <source>Audio.com URL</source>
-        <translation type="unfinished"/>
+        <translation>URL של Audio.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoresListView.qml" line="77"/>
@@ -26133,7 +26199,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="154"/>
         <source>Log in or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; to view online scores.</source>
-        <translation type="unfinished"/>
+        <translation>התחברו או צרו חשבון חדש ב-&lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; כדי לצפות בפרטיטורות מקוונות.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="217"/>
@@ -26282,7 +26348,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
         <source>Share your score’s audio with millions of listeners on this free streaming platform</source>
-        <translation type="unfinished"/>
+        <translation>שתפו את השמע של הפרטיטורה שלכם עם מיליוני הקוראים בפלטפורמת הסטרימינג החינמית הזו</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
@@ -26570,7 +26636,7 @@ failed.</source>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="100"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://musescore.org/en/handbook/4/file-export#Score_formats</extracomment>
-        <translation type="unfinished"/>
+        <translation>ברייל (בסיסי בר-על-בר)</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="101"/>
@@ -26634,7 +26700,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
         <source>Include page and system breaks</source>
-        <translation type="unfinished"/>
+        <translation>כלול שבירות עמוד וסיסטמה</translation>
     </message>
 </context>
 <context>
@@ -27275,7 +27341,7 @@ failed.</source>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="372"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="458"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
-        <translation type="unfinished"/>
+        <translation>התחבר או צור חשבון חינמי ב־musescore.com כדי לפתוח את הפרטיטורה הזו.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1265"/>
@@ -27295,7 +27361,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="183"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
-        <translation type="unfinished"/>
+        <translation>התחבר או צור חשבון חדש ב-Audio.com כדי לשתף את המוזיקה שלך.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
@@ -27716,7 +27782,7 @@ failed.</source>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="127"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="216"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="223"/>
         <source>checked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'on' state of a toggle-able ui item.</extracomment>
@@ -27726,7 +27792,7 @@ failed.</source>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="77"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="127"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="216"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="223"/>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>

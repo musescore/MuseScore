@@ -12053,14 +12053,14 @@
         <source>Mark Tree</source>
         <comment>mark-tree trackName</comment>
         <extracomment>trackName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mark Tree</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4058"/>
         <source>Mark Tree</source>
         <comment>mark-tree longName</comment>
         <extracomment>longName for Mark Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Mark Tree</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4060"/>
@@ -12347,14 +12347,14 @@
         <source>Claves</source>
         <comment>claves trackName</comment>
         <extracomment>trackName for Claves; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Claves</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4157"/>
         <source>Claves</source>
         <comment>claves longName</comment>
         <extracomment>longName for Claves; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Claves</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4159"/>
@@ -13019,14 +13019,14 @@
         <source>Slap</source>
         <comment>slap trackName</comment>
         <extracomment>trackName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4388"/>
         <source>Slap</source>
         <comment>slap longName</comment>
         <extracomment>longName for Slap; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"/>
+        <translation>Slap</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4390"/>

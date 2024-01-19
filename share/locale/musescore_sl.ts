@@ -4,37 +4,37 @@
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="51"/>
         <source>Align left edge of text to reference point</source>
-        <translation>Poravnaj levi rob napisa z referenčno točko</translation>
+        <translation>Poravnaj levi rob besedila z določeno točko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="76"/>
         <source>Center text on reference point</source>
-        <translation>Sredinsko poravnaj napis z referenčno točko</translation>
+        <translation>Poravnaj vodoravno središče besedila z določeno točko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="101"/>
         <source>Align right edge of text to reference point</source>
-        <translation>Poravnaj desni rob napisa z referenčno točko</translation>
+        <translation>Poravnaj desni rob besedila z določeno točko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="139"/>
         <source>Align top edge of text to reference point</source>
-        <translation>Poravnaj zgornji rob napisa z referenčno točko</translation>
+        <translation>Poravnaj zgornji rob besedila z določeno točko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="164"/>
         <source>Center text vertical to reference point</source>
-        <translation>Sredinsko poravnaj napis navpično z referenčno točko</translation>
+        <translation>Poravnaj navpično središče besedila z določeno točko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="189"/>
         <source>Align bottom edge of text to reference point</source>
-        <translation>Poravnaj spodnji rob napisa z referenčno točko</translation>
+        <translation>Poravnaj spodnji rob besedila z določeno točko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/align_select.ui" line="214"/>
         <source>Align baseline of text to reference point</source>
-        <translation>Poravnaj osnovnico napisa z referenčno točko</translation>
+        <translation>Poravnaj osnovnico besedila z določeno točko</translation>
     </message>
 </context>
 <context>
@@ -47,7 +47,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="24"/>
         <source>Break systems every X measures</source>
-        <translation>Prelomi vrstice vsakih X taktov</translation>
+        <translation>Prelomi zapis vsakih X taktov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="34"/>
@@ -58,13 +58,13 @@
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="69"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="72"/>
         <source>Add system break at end of each system</source>
-        <translation>Dodaj prelom na koncu vsake vrstice</translation>
+        <translation>Dodaj prelom vrstice na koncu vsake vrstice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="79"/>
         <location filename="../../src/notation/view/widgets/breaksdialog.ui" line="82"/>
         <source>Remove current system breaks</source>
-        <translation>Odstrani trenutne prelome vrstic</translation>
+        <translation>Odstrani trenutne prelome vrstice</translation>
     </message>
 </context>
 <context>
@@ -72,7 +72,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="14"/>
         <source>Edit Drumset</source>
-        <translation>Uredi tolkala</translation>
+        <translation>Uredi set bobnov</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="50"/>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="102"/>
         <source>Enter a name to enable pitch editing</source>
-        <translation>Če želite omogočiti urejanje višine tona, vnesite ime.</translation>
+        <translation>Vnesite ime za urejanje višine tona</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="109"/>
@@ -133,7 +133,7 @@
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="176"/>
         <source>Double whole note</source>
-        <translation>Brevis</translation>
+        <translation>Dvojna celinka</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/editdrumsetdialog.ui" line="238"/>
@@ -211,62 +211,62 @@
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="20"/>
         <source>Select note:</source>
-        <translation>Izberite noto:</translation>
+        <translation>Izberi noto:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="57"/>
         <source>Octave 9</source>
-        <translation>Oktava 9</translation>
+        <translation>6x-črtana okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="62"/>
         <source>Octave 8</source>
-        <translation>Oktava 8</translation>
+        <translation>5x-črtana okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="67"/>
         <source>Octave 7</source>
-        <translation>Oktava 7</translation>
+        <translation>4x-črtana okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="72"/>
         <source>Octave 6</source>
-        <translation>Oktava 6</translation>
+        <translation>3x-črtana okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="77"/>
         <source>Octave 5</source>
-        <translation>Oktava 5</translation>
+        <translation>2x-črtana okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="82"/>
         <source>Octave 4</source>
-        <translation>Oktava 4</translation>
+        <translation>1x-črtana okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="87"/>
         <source>Octave 3</source>
-        <translation>Oktava 3</translation>
+        <translation>Mala oktava</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="92"/>
         <source>Octave 2</source>
-        <translation>Oktava 2</translation>
+        <translation>Velika oktava</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="97"/>
         <source>Octave 1</source>
-        <translation>Oktava 1</translation>
+        <translation>Konta oktava</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="102"/>
         <source>Octave 0</source>
-        <translation>Oktava 0</translation>
+        <translation>Subkontra oktava</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="107"/>
         <source>Octave -1</source>
-        <translation>Oktava -1</translation>
+        <translation>Subsubkontra okt.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="112"/>
@@ -337,651 +337,651 @@
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="177"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="344"/>
         <source>C 9</source>
-        <translation>C 9</translation>
+        <translation>c⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="182"/>
         <source>C♯ 9</source>
-        <translation>Cis 9</translation>
+        <translation>cis⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="187"/>
         <source>D 9</source>
-        <translation>D 9</translation>
+        <translation>d⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="192"/>
         <source>E♭ 9</source>
-        <translation>Es 9</translation>
+        <translation>es⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="197"/>
         <source>E 9</source>
-        <translation>E 9</translation>
+        <translation>e⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="202"/>
         <source>F 9</source>
-        <translation>F 9</translation>
+        <translation>f⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="207"/>
         <source>F♯ 9</source>
-        <translation>Fis 9</translation>
+        <translation>fis⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="212"/>
         <source>G 9</source>
-        <translation>G 9</translation>
+        <translation>g⁶</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="242"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="454"/>
         <source>C 8</source>
-        <translation>C 8</translation>
+        <translation>c⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="256"/>
         <source>C♯ 8</source>
-        <translation>Cis 8</translation>
+        <translation>cis⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="264"/>
         <source>D 8</source>
-        <translation>D 8</translation>
+        <translation>d⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="272"/>
         <source>E♭ 8</source>
-        <translation>Es 8</translation>
+        <translation>es⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="280"/>
         <source>E 8</source>
-        <translation>E 8</translation>
+        <translation>e⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="288"/>
         <source>F 8</source>
-        <translation>F 8</translation>
+        <translation>f⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="296"/>
         <source>F♯ 8</source>
-        <translation>Fis 8</translation>
+        <translation>fis⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="304"/>
         <source>G 8</source>
-        <translation>G 8</translation>
+        <translation>g⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="312"/>
         <source>A♭ 8</source>
-        <translation>As 8</translation>
+        <translation>as⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="320"/>
         <source>A 8</source>
-        <translation>A 8</translation>
+        <translation>a⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="328"/>
         <source>B♭ 8</source>
-        <translation>B 8</translation>
+        <translation>b⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="336"/>
         <source>B 8</source>
-        <translation>H 8</translation>
+        <translation>h⁵</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="352"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="564"/>
         <source>C 7</source>
-        <translation>C 7</translation>
+        <translation>c⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="366"/>
         <source>C♯ 7</source>
-        <translation>Cis 7</translation>
+        <translation>cis⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="374"/>
         <source>D 7</source>
-        <translation>D 7</translation>
+        <translation>d⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="382"/>
         <source>E♭ 7</source>
-        <translation>Es 7</translation>
+        <translation>es⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="390"/>
         <source>E 7</source>
-        <translation>E 7</translation>
+        <translation>e⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="398"/>
         <source>F 7</source>
-        <translation>F 7</translation>
+        <translation>f⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="406"/>
         <source>F♯ 7</source>
-        <translation>Fis 7</translation>
+        <translation>fis⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="414"/>
         <source>G 7</source>
-        <translation>G 7</translation>
+        <translation>g⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="422"/>
         <source>A♭ 7</source>
-        <translation>As 7</translation>
+        <translation>as⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="430"/>
         <source>A 7</source>
-        <translation>A 7</translation>
+        <translation>a⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="438"/>
         <source>B♭ 7</source>
-        <translation>B 7</translation>
+        <translation>b⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="446"/>
         <source>B 7</source>
-        <translation>H 7</translation>
+        <translation>h⁴</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="462"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="674"/>
         <source>C 6</source>
-        <translation>C 6</translation>
+        <translation>c³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="476"/>
         <source>C♯ 6</source>
-        <translation>Cis 6</translation>
+        <translation>cis³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="484"/>
         <source>D 6</source>
-        <translation>D 6</translation>
+        <translation>d³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="492"/>
         <source>E♭ 6</source>
-        <translation>Es 6</translation>
+        <translation>es³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="500"/>
         <source>E 6</source>
-        <translation>E 6</translation>
+        <translation>e³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="508"/>
         <source>F 6</source>
-        <translation>F 6</translation>
+        <translation>F³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="516"/>
         <source>F♯ 6</source>
-        <translation>Fis 6</translation>
+        <translation>fis³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="524"/>
         <source>G 6</source>
-        <translation>G 6</translation>
+        <translation>g³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="532"/>
         <source>A♭ 6</source>
-        <translation>As 6</translation>
+        <translation>as³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="540"/>
         <source>A 6</source>
-        <translation>A 6</translation>
+        <translation>a³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="548"/>
         <source>B♭ 6</source>
-        <translation>B 6</translation>
+        <translation>b³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="556"/>
         <source>B 6</source>
-        <translation>H 6</translation>
+        <translation>h³</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="572"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="784"/>
         <source>C 5</source>
-        <translation>C 5</translation>
+        <translation>c²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="586"/>
         <source>C♯ 5</source>
-        <translation>Cis 5</translation>
+        <translation>cis²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="594"/>
         <source>D 5</source>
-        <translation>D 5</translation>
+        <translation>d²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="602"/>
         <source>E♭ 5</source>
-        <translation>Es 5</translation>
+        <translation>es²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="610"/>
         <source>E 5</source>
-        <translation>E 5</translation>
+        <translation>e²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="618"/>
         <source>F 5</source>
-        <translation>F 5</translation>
+        <translation>f²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="626"/>
         <source>F♯ 5</source>
-        <translation>Fis 5</translation>
+        <translation>fis²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="634"/>
         <source>G 5</source>
-        <translation>G 5</translation>
+        <translation>g²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="642"/>
         <source>A♭ 5</source>
-        <translation>As 5</translation>
+        <translation>as²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="650"/>
         <source>A 5</source>
-        <translation>A 5</translation>
+        <translation>a²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="658"/>
         <source>B♭ 5</source>
-        <translation>B 5</translation>
+        <translation>b²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="666"/>
         <source>B 5</source>
-        <translation>H 5</translation>
+        <translation>h²</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="682"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="894"/>
         <source>C 4</source>
-        <translation>C 4</translation>
+        <translation>c¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="696"/>
         <source>C♯ 4</source>
-        <translation>Cis 4</translation>
+        <translation>cis¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="704"/>
         <source>D 4</source>
-        <translation>D 4</translation>
+        <translation>d¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="712"/>
         <source>E♭ 4</source>
-        <translation>Es 4</translation>
+        <translation>es¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="720"/>
         <source>E 4</source>
-        <translation>E 4</translation>
+        <translation>e¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="728"/>
         <source>F 4</source>
-        <translation>F 4</translation>
+        <translation>f¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="736"/>
         <source>F♯ 4</source>
-        <translation>Fis 4</translation>
+        <translation>fis¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="744"/>
         <source>G 4</source>
-        <translation>G 4</translation>
+        <translation>g¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="752"/>
         <source>A♭ 4</source>
-        <translation>As 4</translation>
+        <translation>as¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="760"/>
         <source>A 4</source>
-        <translation>A 4</translation>
+        <translation>a¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="768"/>
         <source>B♭ 4</source>
-        <translation>B 4</translation>
+        <translation>b¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="776"/>
         <source>B 4</source>
-        <translation>H 4</translation>
+        <translation>h¹</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="792"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1004"/>
         <source>C 3</source>
-        <translation>C 3</translation>
+        <translation>c</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="806"/>
         <source>C♯ 3</source>
-        <translation>Cis 3</translation>
+        <translation>cis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="814"/>
         <source>D 3</source>
-        <translation>D 3</translation>
+        <translation>d</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="822"/>
         <source>E♭ 3</source>
-        <translation>Es 3</translation>
+        <translation>es</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="830"/>
         <source>E 3</source>
-        <translation>E 3</translation>
+        <translation>e</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="838"/>
         <source>F 3</source>
-        <translation>F 3</translation>
+        <translation>f</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="846"/>
         <source>F♯ 3</source>
-        <translation>Fis 3</translation>
+        <translation>fis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="854"/>
         <source>G 3</source>
-        <translation>G 3</translation>
+        <translation>g</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="862"/>
         <source>A♭ 3</source>
-        <translation>As 3</translation>
+        <translation>as</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="870"/>
         <source>A 3</source>
-        <translation>A 3</translation>
+        <translation>a</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="878"/>
         <source>B♭ 3</source>
-        <translation>B 3</translation>
+        <translation>b</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="886"/>
         <source>B 3</source>
-        <translation>H 3</translation>
+        <translation>h</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="902"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1114"/>
         <source>C 2</source>
-        <translation>C 2</translation>
+        <translation>C</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="916"/>
         <source>C♯ 2</source>
-        <translation>Cis 2</translation>
+        <translation>Cis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="924"/>
         <source>D 2</source>
-        <translation>D 2</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="932"/>
         <source>E♭ 2</source>
-        <translation>Es 2</translation>
+        <translation>Es</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="940"/>
         <source>E 2</source>
-        <translation>E 2</translation>
+        <translation>E</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="948"/>
         <source>F 2</source>
-        <translation>F 2</translation>
+        <translation>F</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="956"/>
         <source>F♯ 2</source>
-        <translation>Fis 2</translation>
+        <translation>Fis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="964"/>
         <source>G 2</source>
-        <translation>G 2</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="972"/>
         <source>A♭ 2</source>
-        <translation>As 2</translation>
+        <translation>As</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="980"/>
         <source>A 2</source>
-        <translation>A 2</translation>
+        <translation>A</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="988"/>
         <source>B♭ 2</source>
-        <translation>B 2</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="996"/>
         <source>B 2</source>
-        <translation>H 2</translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1012"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1224"/>
         <source>C 1</source>
-        <translation>C 1</translation>
+        <translation>C₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1026"/>
         <source>C♯ 1</source>
-        <translation>Cis 1</translation>
+        <translation>Cis₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1034"/>
         <source>D 1</source>
-        <translation>D 1</translation>
+        <translation>D₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1042"/>
         <source>E♭ 1</source>
-        <translation>Es 1</translation>
+        <translation>Es₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1050"/>
         <source>E 1</source>
-        <translation>E 1</translation>
+        <translation>E₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1058"/>
         <source>F 1</source>
-        <translation>F 1</translation>
+        <translation>F₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1066"/>
         <source>F♯ 1</source>
-        <translation>Fis 1</translation>
+        <translation>Fis₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1074"/>
         <source>G 1</source>
-        <translation>G 1</translation>
+        <translation>G₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1082"/>
         <source>A♭ 1</source>
-        <translation>As 1</translation>
+        <translation>As₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1090"/>
         <source>A 1</source>
-        <translation>A 1</translation>
+        <translation>A₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1098"/>
         <source>B♭ 1</source>
-        <translation>B 1</translation>
+        <translation>B₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1106"/>
         <source>B 1</source>
-        <translation>H 1</translation>
+        <translation>H₁</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1122"/>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1334"/>
         <source>C 0</source>
-        <translation>C 0</translation>
+        <translation>C₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1136"/>
         <source>C♯ 0</source>
-        <translation>Cis 0</translation>
+        <translation>Cis₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1144"/>
         <source>D 0</source>
-        <translation>D 0</translation>
+        <translation>D₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1152"/>
         <source>E♭ 0</source>
-        <translation>Es 0</translation>
+        <translation>Es₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1160"/>
         <source>E 0</source>
-        <translation>E 0</translation>
+        <translation>E₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1168"/>
         <source>F 0</source>
-        <translation>F 0</translation>
+        <translation>F₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1176"/>
         <source>F♯ 0</source>
-        <translation>Fis 0</translation>
+        <translation>Fis₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1184"/>
         <source>G 0</source>
-        <translation>G 0</translation>
+        <translation>G₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1192"/>
         <source>A♭ 0</source>
-        <translation>As 0</translation>
+        <translation>As₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1200"/>
         <source>A 0</source>
-        <translation>A 0</translation>
+        <translation>A₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1208"/>
         <source>B♭ 0</source>
-        <translation>B 0</translation>
+        <translation>B₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1216"/>
         <source>B 0</source>
-        <translation>H 0</translation>
+        <translation>H₂</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1232"/>
         <source>C -1</source>
-        <translation>C -1</translation>
+        <translation>C₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1246"/>
         <source>C♯ -1</source>
-        <translation>Cis -1</translation>
+        <translation>Cis₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1254"/>
         <source>D -1</source>
-        <translation>D -1</translation>
+        <translation>D₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1262"/>
         <source>E♭ -1</source>
-        <translation>Es -1</translation>
+        <translation>Es₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1270"/>
         <source>E -1</source>
-        <translation>E -1</translation>
+        <translation>E₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1278"/>
         <source>F -1</source>
-        <translation>F -1</translation>
+        <translation>F₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1286"/>
         <source>F♯ -1</source>
-        <translation>Fis -1</translation>
+        <translation>Fis₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1294"/>
         <source>G -1</source>
-        <translation>G -1</translation>
+        <translation>G₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1302"/>
         <source>A♭ -1</source>
-        <translation>As -1</translation>
+        <translation>As₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1310"/>
         <source>A -1</source>
-        <translation>A -1</translation>
+        <translation>A₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1318"/>
         <source>B♭ -1</source>
-        <translation>B -1</translation>
+        <translation>B₃</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editpitch.ui" line="1326"/>
         <source>B -1</source>
-        <translation>H -1</translation>
+        <translation>H₃</translation>
     </message>
 </context>
 <context>
@@ -1014,12 +1014,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="73"/>
         <source>Do not hide if system is empty</source>
-        <translation>Ne skrij, če je vrstica prazna</translation>
+        <translation>Ne skrij praznih vrstic zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="82"/>
         <source>Hide when empty:</source>
-        <translation>Skrij, če je prazno:</translation>
+        <translation>Skrij prazno:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="93"/>
@@ -1050,7 +1050,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="139"/>
         <source>Invisible staff lines</source>
-        <translation>Nevidno črtovje</translation>
+        <translation>Nevidne črte črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="159"/>
@@ -1060,12 +1060,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="166"/>
         <source>Cutaway</source>
-        <translation>Odrez</translation>
+        <translation>Odreži</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="186"/>
         <source>Merge matching rests</source>
-        <translation>Združi ujemajoče pavze</translation>
+        <translation>Združi enake pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="193"/>
@@ -1075,7 +1075,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="214"/>
         <source>Lines:</source>
-        <translation>Število črt:</translation>
+        <translation>Št. črt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="240"/>
@@ -1086,7 +1086,7 @@
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="256"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="276"/>
         <source>sp</source>
-        <translation>sp</translation>
+        <translation> pr.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="266"/>
@@ -1096,7 +1096,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="292"/>
         <source>Scale:</source>
-        <translation>Merilo:</translation>
+        <translation>Velikost:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="302"/>
@@ -1111,7 +1111,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="333"/>
         <source>Advanced style properties…</source>
-        <translation>Napredne lastnosti sloga ...</translation>
+        <translation>Dodatne lastnosti sloga ...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="364"/>
@@ -1261,7 +1261,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="961"/>
         <source>Edit string data…</source>
-        <translation>Urejanje podatkov o stunah ...</translation>
+        <translation>Uredi podatke o strunah ...</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="429"/>
@@ -1281,7 +1281,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="492"/>
         <source>Amateur:</source>
-        <translation>Začetnik:</translation>
+        <translation>Začetniški:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="512"/>
@@ -1294,12 +1294,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="565"/>
         <source>Professional:</source>
-        <translation>Strokovnjak:</translation>
+        <translation>Profesionalni:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="651"/>
         <source>Interval from written to sounding pitch</source>
-        <translation>Interval med zapisano in zvenečo višino tona</translation>
+        <translation>Interval med transponirano in igrano višino tona</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="654"/>
@@ -1314,7 +1314,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="674"/>
         <source>Octave(s) +</source>
-        <translation>Oktav(a/i/e) +</translation>
+        <translation>Oktava/-i/-e/- +</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="690"/>
@@ -1324,12 +1324,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="827"/>
         <source>Up</source>
-        <translation>Gor</translation>
+        <translation>Navzgor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="834"/>
         <source>Down</source>
-        <translation>Dol</translation>
+        <translation>Navzdol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="874"/>
@@ -1339,17 +1339,17 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="885"/>
         <source>None</source>
-        <translation>Brez</translation>
+        <translation>Nobenim</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="890"/>
         <source>Sharps</source>
-        <translation>Višaje</translation>
+        <translation>Višajem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="895"/>
         <source>Flats</source>
-        <translation>Nižaje</translation>
+        <translation>Nižajem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="944"/>
@@ -1359,19 +1359,19 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="968"/>
         <source>Don’t reflect transposition in linked tablature staves</source>
-        <translation>Brez odražanja transpozicije v povezanih tablaturnih črtovjih</translation>
+        <translation>Ne prikaži transpozicije v povezanih tablaturnih črtovjih</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1005"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1008"/>
         <source>Go to previous staff</source>
-        <translation>Pojdi v prejšnje črtovje</translation>
+        <translation>Pojdi na prejšnje črtovje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1024"/>
         <location filename="../../src/notation/view/widgets/editstaff.ui" line="1027"/>
         <source>Go to next staff</source>
-        <translation>Pojdi v naslednje črtovje</translation>
+        <translation>Pojdi na naslednje črtovje</translation>
     </message>
 </context>
 <context>
@@ -1384,19 +1384,19 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="108"/>
         <source>Lines:</source>
-        <translation>Število črt:</translation>
+        <translation>Št. črt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="143"/>
         <source>Line distance:</source>
-        <translation>Razmiki med črtami:</translation>
+        <translation>Razmik med črtami:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="159"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="505"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="792"/>
         <source>sp</source>
-        <translation>sp.</translation>
+        <translation> pr.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="189"/>
@@ -1445,7 +1445,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="406"/>
         <source>Upside down</source>
-        <translation>Obrnjeno navzdol</translation>
+        <translation>Obrni na glavo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="448"/>
@@ -1463,7 +1463,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="475"/>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="760"/>
         <source>pt</source>
-        <translation>tč</translation>
+        <translation> tč</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="495"/>
@@ -1524,7 +1524,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="694"/>
         <source>Show fingering in tablature</source>
-        <translation>Prikaži v tablaturi prstni red</translation>
+        <translation>Prikaži v tablaturah prstni red</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="20"/>
@@ -1534,7 +1534,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="438"/>
         <source>Fret marks</source>
-        <translation>Oznake na prečkah</translation>
+        <translation>Oznake prečk</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="717"/>
@@ -1544,18 +1544,18 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="834"/>
         <source>Shown as:</source>
-        <translation>Prikazano kot:</translation>
+        <translation>Prikazane kot:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="853"/>
         <source>None</source>
         <comment>neither note symbols nor stems and beams</comment>
-        <translation>Brez</translation>
+        <translation>Niso</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="866"/>
         <source>Note symbols</source>
-        <translation>Simboli za note</translation>
+        <translation>Oznake not</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="873"/>
@@ -1610,12 +1610,12 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1111"/>
         <source>Above</source>
-        <translation>Zgoraj</translation>
+        <translation>Nad</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1118"/>
         <source>Below</source>
-        <translation>Spodaj</translation>
+        <translation>Pod</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1168"/>
@@ -1626,7 +1626,7 @@
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1187"/>
         <source>None</source>
         <comment>neither short nor slashed stem</comment>
-        <translation>Brez</translation>
+        <translation>Brez oznake</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1203"/>
@@ -1641,7 +1641,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1241"/>
         <source>Show rests</source>
-        <translation>Pokaži pavze</translation>
+        <translation>Prikaži pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstafftype.ui" line="1322"/>
@@ -1701,25 +1701,25 @@
     <name>EditStyleBase</name>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="20"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12159"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11867"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12243"/>
         <source>Style</source>
         <translation>Slog</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13352"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13436"/>
         <source>Edit text style</source>
         <translation>Uredi slog napisa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13470"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13554"/>
         <source>Padding:</source>
         <translation>Notranji odmik:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13600"/>
         <source>Reset &apos;Padding&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Notranjega odmika&quot;</translation>
+        <translation>Ponastavi notranji odmik</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="49"/>
@@ -1745,7 +1745,7 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="74"/>
         <source>System</source>
         <extracomment>a music system, a line of music</extracomment>
-        <translation>Vrstica</translation>
+        <translation>Črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="79"/>
@@ -1777,44 +1777,44 @@
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="114"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6160"/>
         <source>Beams</source>
         <translation>Prečke</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="119"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6151"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6205"/>
         <source>Tuplets</source>
-        <translation>Nepravilne poddelitve</translation>
+        <translation>Poddelitve</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6916"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6970"/>
         <source>Arpeggios</source>
-        <translation>Razložitve (arpeggii)</translation>
+        <translation>Razložitve (arpeggi)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7312"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7366"/>
         <source>Hairpins</source>
         <translation>Vilice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="184"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9788"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13159"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9866"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13243"/>
         <source>Fermatas</source>
         <translation>Prenehljaji (korone)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="199"/>
         <source>Lyrics</source>
-        <translation>Besedilo</translation>
+        <translation>Besedilo skladbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11094"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13022"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13106"/>
         <source>Dynamics</source>
         <translation>Dinamika</translation>
     </message>
@@ -1836,7 +1836,7 @@
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="376"/>
         <source>Musical text font:</source>
-        <translation>Pisava glasbenega napisa:</translation>
+        <translation>Pisava glasbenega teksta:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="420"/>
@@ -1903,69 +1903,69 @@
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5404"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5495"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5617"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5659"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5709"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5745"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5778"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5808"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5877"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6056"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6225"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6273"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6324"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6602"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6678"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6707"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6729"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6828"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6941"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6957"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6973"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7067"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7096"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7129"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7161"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7200"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7331"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7431"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7581"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7731"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7770"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8010"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8118"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8286"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8413"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9089"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9141"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9666"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9807"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9993"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10376"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10395"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10450"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10492"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10620"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10651"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10717"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10941"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10992"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11047"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11289"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11525"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11671"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12276"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12328"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12350"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12385"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12463"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12508"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5662"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5721"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5766"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5802"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5841"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5922"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6279"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6378"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6732"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6882"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6995"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7011"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7027"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7121"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7150"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7183"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7215"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7254"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7385"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7485"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7498"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7635"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7785"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8064"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8172"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8340"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8467"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9158"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9219"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10071"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10339"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10454"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10473"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10528"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10698"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10795"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11019"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11070"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11373"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11755"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12412"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12434"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12456"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12469"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12547"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="12592"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12640"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12709"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12724"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12793"/>
         <source>sp</source>
         <extracomment>spatium unit
 ----------
@@ -2038,135 +2038,143 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5135"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5178"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5630"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5672"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5755"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6026"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6199"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6257"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6298"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6388"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6407"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6487"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6586"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6627"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6764"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6802"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6860"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7216"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7242"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7255"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7268"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7367"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7386"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7405"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7460"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7503"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7532"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7565"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7653"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7679"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7705"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7754"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7900"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7994"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8056"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8163"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8195"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8251"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8270"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8338"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8357"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8423"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8436"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8469"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8548"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8561"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8662"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8681"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8743"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8780"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8803"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8879"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8916"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8939"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9160"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9248"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9261"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9290"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9396"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9409"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9438"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9843"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9863"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9886"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9951"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10009"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5695"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5734"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5776"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5854"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5945"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6077"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6352"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6442"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6461"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6640"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6681"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6818"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6856"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6914"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7270"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7296"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7309"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7322"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7440"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7459"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7514"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7557"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7619"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7707"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7733"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7759"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7808"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8048"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8188"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8249"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8324"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8392"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8411"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8477"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8523"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8615"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8716"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8735"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8797"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8834"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8933"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8993"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9093"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9125"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9238"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9326"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9339"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9368"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9474"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9487"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9921"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9941"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9964"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10029"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10095"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10187"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10216"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10277"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10411"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10434"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10469"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10508"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10528"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10574"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10667"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10701"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10733"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10087"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10107"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10173"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10252"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10265"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10294"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10355"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10489"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10512"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10606"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10629"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10652"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10745"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10779"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10821"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10834"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10847"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10860"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10976"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11021"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11070"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11126"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11178"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10857"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10899"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11099"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11148"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11204"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11237"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11263"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11384"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11457"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11470"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11259"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11285"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11344"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11395"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11468"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11541"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11946"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11979"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12012"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12025"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13393"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13444"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13457"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13490"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13513"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13553"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13582"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13618"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13631"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13657"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13686"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13716"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13729"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13742"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13821"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11577"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12030"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12063"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12096"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12109"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13477"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13528"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13574"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13597"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13637"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13666"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13702"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13715"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13770"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13813"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13826"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13905"/>
         <source>Reset to default</source>
         <translation>Ponastavi na privzeto vrednost</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="449"/>
         <source>Reset &apos;Staff line thickness&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Debelina črt črtovja&quot;</translation>
+        <translation>Ponastavi debelino črt črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="461"/>
@@ -2176,37 +2184,37 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="468"/>
         <source>Enable indentation on first system</source>
-        <translation>Omogoči zamik prve vrstice</translation>
+        <translation>Napravi zamik prve vrstice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="486"/>
         <source>First system indentation:</source>
-        <translation>Zamik v prvi vrstici:</translation>
+        <translation>Zamik prve vrstice:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="518"/>
         <source>Reset &apos;First system indentation&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Zamik v prvi vrstici&quot;</translation>
+        <translation>Ponastavi vrednost zamika v prvi vrstici</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="544"/>
         <source>Hide empty staves within systems</source>
-        <translation>Skrij prazna črtovja znotraj vrstic</translation>
+        <translation>Skrij prazna črtovja na sredini zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="563"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Prikaži predklepaje, ko oklepajo eno samo črtovje</translation>
+        <translation>Prikaži oklepaje, ko oklepajo eno samo črtovje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="573"/>
         <source>Display note values across measure boundaries (EXPERIMENTAL, early music only!)</source>
-        <translation>Pokaži vrednosti not prek taktnic (PREIZKUSNO in le za zgodnjo glasbo!)</translation>
+        <translation>Pokaži vrednosti not prek taktnic (PREIZKUSNO, le za zgodnjo glasbo!)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="580"/>
         <source>Hide instrument name if there is only 1 instrument</source>
-        <translation>Ne izpiši imena glasbila, če je to le eno</translation>
+        <translation>Skrij ime glasbila, če je edino</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="611"/>
@@ -2225,15 +2233,15 @@ space unit</extracomment>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="678"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10899"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11103"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10977"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11181"/>
         <source>%</source>
         <translation> %</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="709"/>
         <source>Autoplace</source>
-        <translation>Samodejno postavi</translation>
+        <translation>Samodejna postavitev</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="715"/>
@@ -2243,47 +2251,47 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="769"/>
         <source>Reset &apos;Min. vertical distance&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjši višinski odmik&quot;</translation>
+        <translation>Ponastavi najmanjši višinski odmik</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="779"/>
         <source>Vertical align range:</source>
-        <translation>Razpon poravnavanja po višini:</translation>
+        <translation>Obseg poravnavanja po višini:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="792"/>
         <source>Reset &apos;Vertical align range&apos; value</source>
-        <translation>Ponastavi &quot;Razpon poravnavanja po višini&quot;</translation>
+        <translation>Ponastavi razpon poravnavanja po višini</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="887"/>
         <source>Reset &apos;Music top margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Zgornji rob zapisa&quot; </translation>
+        <translation>Ponastavi zgornji rob notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="903"/>
         <source>Music top margin:</source>
-        <translation>Zgornji rob zapisa:</translation>
+        <translation>Zgornji rob notnega zapisa:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="938"/>
         <source>Last system fill threshold:</source>
-        <translation>Prag za zapolnitev zadnje vrste:</translation>
+        <translation>Prag zapolnitve zadnje vrstice:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="948"/>
         <source>Create courtesy time signatures</source>
-        <translation>Prikaži menjavo taktovskega načina že v predhodni vrsti</translation>
+        <translation>Prikaži menjavo taktovskega načina tudi v predhodni vrstici</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="958"/>
         <source>Reset &apos;Vertical frame bottom margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Spodnji rob medvrstnega okvirja&quot;</translation>
+        <translation>Ponastavi spodnji rob medvrstičnega okvirja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="971"/>
         <source>Reset &apos;Vertical frame top margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Zgornji rob medvrstnega okvirja&quot;</translation>
+        <translation>Ponastavi zgornji rob medvrstičnega okvirja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1006"/>
@@ -2293,52 +2301,52 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1013"/>
         <source>Create courtesy clefs</source>
-        <translation>Prikaži novi ključ tudi v predhodnji vrsti</translation>
+        <translation>Prikaži menjavo ključa tudi v predhodni vrstici</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1061"/>
         <source>Vertical frame top margin:</source>
-        <translation>Zgornji rob medvrstnega okvirja:</translation>
+        <translation>Zgornji rob medvrstičnega okvirja:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1074"/>
         <source>Reset &apos;Last system fill threshold&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Prag za zapolnitev zadnje vrste&quot;</translation>
+        <translation>Ponastavi prag zapolnitve zadnje vrstice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1087"/>
         <source>Reset &apos;Music bottom margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Spodnji roba zapisa&quot; </translation>
+        <translation>Ponastavi spodnji rob notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1097"/>
         <source>Create courtesy key signatures</source>
-        <translation>Prikaži nove predznake v predhodnji vrstici</translation>
+        <translation>Prikaži menjavo tonalitete tudi v predhodni vrstici</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1104"/>
         <source>Vertical frame bottom margin:</source>
-        <translation>Spodnji rob medvrstnega okvirja:</translation>
+        <translation>Spodnji rob medvrstičnega okvirja:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1114"/>
         <source>Create clef for all systems</source>
-        <translation>Izriši ključ v vseh vrsticah</translation>
+        <translation>Ustvari ključ v vseh vrsticah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1134"/>
         <source>Music bottom margin:</source>
-        <translation>Spodnji rob zapisa:</translation>
+        <translation>Spodnji rob notnega zapisa:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1214"/>
         <source>Enable vertical justification of staves</source>
-        <translation>Omogoči poravnavanje črtovij po navpičnici</translation>
+        <translation>Omogoči navpično poravnavo črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1239"/>
         <source>Max. grand staff distance:</source>
-        <translation>Najv. razmik dvojnega črtovja:</translation>
+        <translation>Najv. razmik črtovij za klaviature/harfo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1277"/>
@@ -2349,37 +2357,37 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1287"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1754"/>
         <source>Reset &apos;Min. system distance&apos; value</source>
-        <translation>Ponastavi &quot;Najm. odmik vrstice&quot;</translation>
+        <translation>Ponastavi najm. odmik vrstice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1328"/>
         <source>Reset &apos;Factor for distance above/below bracket&apos; value</source>
-        <translation>Ponastavi &quot;Količnik odmika nad/pod oklepajem&quot;</translation>
+        <translation>Ponastavi količnik odmika nad/pod oklepajem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1373"/>
         <source>Reset &apos;Min. staff distance&apos; value</source>
-        <translation>Ponastavi &quot;Najm. odmik črtovja&quot;</translation>
+        <translation>Ponastavi najm. odmik črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1383"/>
         <source>Max. page fill distance:</source>
-        <translation>Najv. razdalja zapolnitve strani:</translation>
+        <translation>Najv. odmik zapolnitve strani:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1396"/>
         <source>Reset &apos;Factor for distance above/below brace&apos; value</source>
-        <translation>Ponastavi &quot;Količnik odmika nad/pod zavitim uklepajem&quot;</translation>
+        <translation>Ponastavi količnik odmika nad/pod zavitim oklepajem</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1409"/>
         <source>Reset &apos;Max. staff distance&apos; value</source>
-        <translation>Ponastavi &quot;Najv. odmik črtovja&quot;</translation>
+        <translation>Ponastavi najv. odmik črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1419"/>
         <source>Reset &apos;Max. grand staff distance&apos; value</source>
-        <translation>Ponastavi &quot;Najv. razmik dvojnega črtovja&quot;</translation>
+        <translation>Ponastavi najv. razmik črtovij za klavir/harfo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1429"/>
@@ -2401,7 +2409,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1518"/>
         <source>Factor for distance above/below brace:</source>
-        <translation>Količnik odmika nad/pod zavitim uklepajem:</translation>
+        <translation>Količnik odmika nad/pod zavitim oklepajem:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1531"/>
@@ -2412,17 +2420,17 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1592"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1767"/>
         <source>Reset &apos;Max. system distance&apos; value</source>
-        <translation>Ponastavi &quot;Najv. odmik vrstice&quot;</translation>
+        <translation>Ponastavi najv. odmik vrstice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1602"/>
         <source>Reset &apos;Max. page fill distance&apos; value</source>
-        <translation>Ponastavi &quot;Najv. odmik zapolnitve strani&quot;</translation>
+        <translation>Ponastavi najv. odmik zapolnitve strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1643"/>
         <source>Reset &apos;Factor for distance between systems&apos; value</source>
-        <translation>Ponastavi &quot;Količnik odmika med vrsticami&quot;</translation>
+        <translation>Ponastavi količnik odmika med vrsticami</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1656"/>
@@ -2432,37 +2440,37 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1682"/>
         <source>Disable vertical justification of staves</source>
-        <translation>Onemogoči poravnavo črtovij po navpičnici</translation>
+        <translation>Onemogoči navpično poravnavo črtovij</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1725"/>
         <source>Reset &apos;Grand staff distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med dvojnim črtovjem&quot;</translation>
+        <translation>Ponastavi razmik črtovja za klaviature/harfo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1741"/>
         <source>Staff distance:</source>
-        <translation>Odmik črtovja:</translation>
+        <translation>Razmik med črtovji:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1793"/>
         <source>Reset &apos;Staff distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik črtovja&quot;</translation>
+        <translation>Ponastavi razmik med črtovji</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1897"/>
         <source>Grand staff distance:</source>
-        <translation>Razmik dvojnega črtovja:</translation>
+        <translation>Razmik črtovja za klaviature/harfo:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="1991"/>
         <source>Small staff size:</source>
-        <translation>Velikost pomanjšanega črtovja</translation>
+        <translation>Velikost pomanjšanega črtovja:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2029"/>
         <source>Reset &apos;Small staff size&apos; value</source>
-        <translation>Ponastavi &quot;Velikost pomanjšanega črtovja&quot;</translation>
+        <translation>Ponastavi velikost pomanjšanega črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2058"/>
@@ -2472,7 +2480,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2096"/>
         <source>Reset &apos;Small note size&apos; value</source>
-        <translation>Ponastavi &quot;Velikost pomanjšanih not&quot;</translation>
+        <translation>Ponastavi velikost pomanjšanih not</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2112"/>
@@ -2482,7 +2490,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2150"/>
         <source>Reset &apos;Grace note size&apos; value</source>
-        <translation>Ponastavi &quot;Velikost predložkov&quot;</translation>
+        <translation>Ponastavi velikost predložkov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2166"/>
@@ -2492,7 +2500,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2204"/>
         <source>Reset &apos;Small clef size&apos; value</source>
-        <translation>Ponastavi &quot;Velikost pomanjšanega ključa&quot;</translation>
+        <translation>Ponastavi velikost pomanjšanega ključa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2275"/>
@@ -2508,19 +2516,19 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2298"/>
         <source>Use odd/even page header</source>
-        <translation>Uporabi različne glave za sode in lihe strani</translation>
+        <translation>Uporabi različni glavi za sode in lihe strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2301"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2604"/>
         <source>Different odd/even pages</source>
-        <translation>Različne lihe in sode strani</translation>
+        <translation>Različna za lihe in sode strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2381"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2751"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3508"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12772"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12856"/>
         <source>Left</source>
         <translation>Levo</translation>
     </message>
@@ -2534,7 +2542,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2485"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2672"/>
         <source>Middle</source>
-        <translation>Sredinsko</translation>
+        <translation>Na sredini</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2539"/>
@@ -2546,43 +2554,43 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2552"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2855"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3620"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12765"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12849"/>
         <source>Right</source>
         <translation>Desno</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2578"/>
         <source>Show footer also on first page</source>
-        <translation>Pokaži nogo tudi na prvi strani</translation>
+        <translation>Prikaži nogo tudi na prvi strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2601"/>
         <source>Use odd/even page footer</source>
-        <translation>Uporabi različne noge za sode in lihe strani</translation>
+        <translation>Uporabi različni nogi za sode in lihe strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2903"/>
         <source>Show first</source>
-        <translation>Pokaži najprej</translation>
+        <translation>Oštevilči prvega</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2910"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3156"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7351"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7978"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8492"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8720"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9428"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9833"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10085"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10206"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10798"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11483"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7405"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8546"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8774"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9911"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10876"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11217"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11567"/>
         <source>Position above:</source>
-        <translation>Zgornja umestitev:</translation>
+        <translation>Zgornji položaj:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2925"/>
@@ -2592,72 +2600,72 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2950"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3215"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7516"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8040"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8459"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8793"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8929"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9372"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10055"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10150"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10762"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11433"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8094"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8513"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8847"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8983"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9302"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9954"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10133"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10228"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11275"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11517"/>
         <source>Position below:</source>
-        <translation>Spodnja umestitev:</translation>
+        <translation>Spodnji položaj:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2966"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3124"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7370"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7997"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8426"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8746"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8882"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9293"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9441"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9866"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9954"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10670"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11314"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11496"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8051"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8800"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8936"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9371"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9519"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9944"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10032"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10297"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11398"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11580"/>
         <source>Reset &apos;Position above&apos; value</source>
-        <translation>Ponastavi vrednosti &quot;Zgornja umestitev&quot;</translation>
+        <translation>Ponastavi vrednosti zgornje umestitve</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2976"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3134"/>
         <source>Vertical placement:</source>
-        <translation>Položaj po navpičnici:</translation>
+        <translation>Navpična postavitev:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2989"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3238"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7535"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8273"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8564"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8806"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8942"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9264"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9412"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9889"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10012"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10098"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10190"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10837"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11207"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11473"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8327"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8618"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8860"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9342"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9967"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10090"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10268"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11288"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11557"/>
         <source>Reset &apos;Position below&apos; value</source>
-        <translation>Ponastavi vrednosti &quot;Spodnja umestitev&quot;</translation>
+        <translation>Ponastavi vrednosti spodnje umestitve</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="2999"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3189"/>
         <source>Horizontal placement:</source>
-        <translation>Položaj po vodoravnici:</translation>
+        <translation>Vodoravna postavitev:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3033"/>
@@ -2672,7 +2680,7 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3092"/>
         <source>Show measure number range at multimeasure rests</source>
-        <translation>Pokaži razpon števila taktov pri večtaktnih premorih (pavzah)</translation>
+        <translation>Pokaži razpon števila taktov pri večtaktnih pavzah</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3309"/>
@@ -2683,12 +2691,12 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3382"/>
         <source>Brace thickness:</source>
-        <translation>Debelina zavitega uklepaja:</translation>
+        <translation>Debelina zavitega oklepaja:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3427"/>
         <source>Brace distance:</source>
-        <translation>Razdalja do zavitega uklepaja:</translation>
+        <translation>Odmik zavitega oklepaja:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3450"/>
@@ -2700,7 +2708,7 @@ space unit</extracomment>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3463"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>System bracket</comment>
-        <translation>Ponastavi &quot;Debelina oklepaja&quot;</translation>
+        <translation>Ponastavi debelino oklepaja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3561"/>
@@ -2733,19 +2741,19 @@ space unit</extracomment>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3801"/>
         <source>Reset to align accidentals within octaves to default</source>
-        <translation>Ponastavi na privzeto poravnavo predznakov znotraj oktave</translation>
+        <translation>Ponastavi poravnavo predznakov znotraj oktave na privzeto</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3804"/>
         <source>Reset &apos;Align octaves left&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Poravnaj oktave levo&quot;</translation>
+        <translation>Ponastavi poravnavo oktave levo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3827"/>
         <source>When a chord has accidentals octave apart, these will be placed in the same columns. However, sometimes one of these accidentals can be larger than another, causing thus moving the others. 
 By default, they will be placed such as that their right end are at the same level. Use this checkbox to override this behaviour.</source>
-        <translation>Če ima akord predznake razmaknjene za oktavo, bodo postavljeni v isti stolpec. Včasih je lahko en predznak večji od drugega, zato se premaknejo skupaj z njim tudi vsi ostali.
-Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravilo.</translation>
+        <translation>Če ima akord predznake razmaknjene za oktavo, bodo ti postavljeni v isti stolpec. Včasih je lahko en predznak večji od drugega, zato se premaknejo skupaj z njim tudi vsi ostali.
+Privzeta je poravnava desno. Označi to polje, da to razveljaviš.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3831"/>
@@ -2765,12 +2773,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3872"/>
         <source>Reset &apos;Padding inside parentheses&apos; value</source>
-        <translation>Ponastavi &quot;Presledek znotraj oklepajev&quot;</translation>
+        <translation>Ponastavi presledek znotraj oklepajev</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3888"/>
         <source>Bracketed accidentals have a margin between the accidental and the brackets.</source>
-        <translation>Predznaki znotraj oklepajev imajo odmik od oklepajev.</translation>
+        <translation>Med oklepaji in predznaki znotraj njih je presledek.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3891"/>
@@ -2800,22 +2808,22 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3941"/>
         <source>Only for a change to C Maj / A min</source>
-        <translation>Le za spremembo v C-dur / a-mol</translation>
+        <translation>Le za spremembe v C-dur / a-mol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3948"/>
         <source>Before key signature if changing to fewer ♯ or ♭</source>
-        <translation>Pred predznaki tonalitete, če je naprej manj ♯ ali ♭</translation>
+        <translation>Za predznaki ob spremembi v tonaliteto z manj ♯ ali ♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3955"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation>Za predznaki tonalitete, če je naprej manj ♯ ali ♭. Spredaj ob menjavi ♯ in ♭.</translation>
+        <translation>Za predznaki ob spremembi v tonaliteto z manj ♯ ali ♭ in pred njimi ob spremembi ♯ in ♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4052"/>
         <source>Padding</source>
-        <translation>Presledek</translation>
+        <translation>Razmiki</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4058"/>
@@ -2829,19 +2837,19 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4101"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6029"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6080"/>
         <source>Reset &apos;Time signature to barline distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med taktovskim načinom in taktnico&quot;</translation>
+        <translation>Ponastavi razmik med taktovskim načinom in taktnico</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4121"/>
         <source>Reset &apos;Note to barline distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med noto in taktnico&quot;</translation>
+        <translation>Ponastavi razmik med noto in taktnico</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4147"/>
         <source>Reset &apos;Time signature left margin&apos; value</source>
-        <translation>Ponastavi &quot;Levi rob taktovskega načina&quot;</translation>
+        <translation>Ponastavi levi rob taktovskega načina</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4177"/>
@@ -2856,17 +2864,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4200"/>
         <source>Reset &apos;Clef to time signature distance&apos; value</source>
-        <translation>Ponastavi  &quot;Razmik med ključem in taktovskim načinom&quot;</translation>
+        <translation>Ponastavi razmik med ključem in taktovskim načinom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4213"/>
         <source>Reset &apos;Clef to key distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med ključem in predznaki tonalitete&quot;</translation>
+        <translation>Ponastavi razmik med ključem in predznaki tonalitete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4252"/>
         <source>Reset &apos;Clef to barline distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med ključem in taktnico&quot;</translation>
+        <translation>Ponastavi razmik med ključem in taktnico</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4262"/>
@@ -2886,7 +2894,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4308"/>
         <source>Reset &apos;Clef left margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Levi rob ključa&quot;</translation>
+        <translation>Ponastavi levi rob ključa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4331"/>
@@ -2896,7 +2904,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4344"/>
         <source>Reset &apos;Note left margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Levi rob note&quot;</translation>
+        <translation>Ponastavi vrednost levi rob note</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4354"/>
@@ -2906,17 +2914,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4367"/>
         <source>Reset &apos;Key signature left margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Levi rob predznakov tonalitete&quot;</translation>
+        <translation>Ponastavi levi rob predznakov tonalitete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4393"/>
         <source>Reset &apos;Clef/Key right margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Desni rob ključa/predznakov tonalitete&quot;</translation>
+        <translation>Ponastavi desni rob ključa/predznakov tonalitete</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4419"/>
         <source>Reset &apos;Key to barline distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med predznaki tonalitete in taktnico&quot;</translation>
+        <translation>Ponastavi razmik med predznaki tonalitete in taktnico</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4462"/>
@@ -2936,7 +2944,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4511"/>
         <source>Reset &apos;Barline to accidental distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med taktnico in predznakom&quot;</translation>
+        <translation>Ponastavi razmik med taktnico in predznakom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4521"/>
@@ -2946,12 +2954,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4534"/>
         <source>Reset &apos;Key to time signature distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med ključem in taktovskim načinom&quot;</translation>
+        <translation>Ponastavi razmik med ključem in taktovskim načinom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4560"/>
         <source>Reset &apos;Barline to grace note distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med taktnico in predložkom&quot;</translation>
+        <translation>Ponastavi razmik med taktnico in predložkom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4596"/>
@@ -2961,7 +2969,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4654"/>
         <source>Reset &apos;Spacing&apos; value</source>
-        <translation>Ponastavi &quot;Razmiki&quot;</translation>
+        <translation>Ponastavi razmik</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4664"/>
@@ -2971,12 +2979,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4690"/>
         <source>Reset &apos;Minimum note distance&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjši odmik note&quot;</translation>
+        <translation>Ponastavi najmanjši odmik note</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4729"/>
         <source>Reset &apos;Minimum measure width&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjša širino takta&quot;</translation>
+        <translation>Ponastavi najmanjšo širino takta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4739"/>
@@ -2994,74 +3002,103 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <translation>Privzeti navpični zamik:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5685"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5688"/>
         <source>Break H-bar if it collides with number</source>
-        <translation>Prekini večtaktni premor, če se prekriva s številko</translation>
+        <translation>Prekini simbol za večtaktno pavzo, če se prekriva s številko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6630"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5698"/>
+        <source>Reset &apos;Break H-bar if it collides with number&apos; value</source>
+        <translation>Ponastavi znak za večtaktno pavzo, če se prekriva s številko</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5737"/>
+        <source>Reset &apos;H-bar horizontal stroke thickness&apos; value</source>
+        <translation>Ponastavi debelino vodoravnice večtaktne pavze</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5779"/>
+        <source>Reset &apos;H-bar margin within barlines&apos; value</source>
+        <translation>Ponastavi robove večtaktne pavze glede na taktnice</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5818"/>
+        <source>Reset &apos;H-bar vertical stroke thickness&apos; value</source>
+        <translation>Ponastavi debelino navpičnic večtaktne pavze</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5857"/>
+        <source>Reset &apos;H-bar vertical stroke height&apos; value</source>
+        <translation>Ponastavi višino navpičnic večtaktne pavze</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6684"/>
         <source>Reset &apos;Bracket thickness&apos; value</source>
         <comment>Tuplet bracket</comment>
-        <translation>Ponastavi  &quot;Debelina oklepaja&quot;</translation>
+        <translation>Ponastavi debelino oklepaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7006"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7060"/>
         <source>Do not show arpeggios in standard notation when displayed in tablature</source>
         <translation>Ne prikaži razložitev (arpeggiev) v navadnem zapisu, ko so prikazane v tablaturah</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7284"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7338"/>
         <source>Ties</source>
         <translation>Vezaji</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8986"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9040"/>
         <source>Label for full bends</source>
-        <translation>Oznaka za zatege za cel ton</translation>
+        <translation>Oznaka za celotonske bende strun</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9079"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9073"/>
+        <source>Line thickness on standard staves:</source>
+        <translation>Debeline črt osnovnih črtovij:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9096"/>
+        <source>Reset &apos;Line thickness on standard staves&apos; value</source>
+        <translation>Ponastavi debelino črt osnovnih črtovij</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9145"/>
         <source>Arrow height:</source>
         <translation>Višina puščice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9033"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9108"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9192"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9270"/>
         <source>Tablature fret numbers</source>
         <translation>Številke prečk tablature</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9198"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9276"/>
         <source>Use cue sized numbers for grace note bends</source>
-        <translation>Uporabi majhne številke za predložne zatege</translation>
+        <translation>Uporabi majhne številke za predložne bende strun</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11149"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11227"/>
         <source>Override score font</source>
-        <translation>Obidi pisavo notnega zapisa</translation>
+        <translation>Povozi pisavo notnega zapisa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11311"/>
         <source>Avoid barlines</source>
         <translation>Izogibanje taktnicam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11364"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11448"/>
         <source>Snap to dynamics</source>
         <translation>Pripni na dinamiko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11885"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
         <source>Playback</source>
         <translation>Predvajanje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12849"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12933"/>
         <source>Select the elements you would like displayed in common and simple tablature staves</source>
         <translation>Izberi elemente, ki želiš, da so prikazani v običajnih in enostavnih tablaturnih črtovjih</translation>
     </message>
@@ -3073,22 +3110,22 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3350"/>
         <source>Reset &apos;Bracket distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik oklepajev&quot;</translation>
+        <translation>Ponastavi odmik oklepajev</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3417"/>
         <source>Reset &apos;Brace thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina zavitega uklepaja&quot;</translation>
+        <translation>Ponastavi debelino zavitega oklepaja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3440"/>
         <source>Reset &apos;Brace distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik zavitega uklepaja&quot;</translation>
+        <translation>Ponastavi odmik zavitega oklepaja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4759"/>
         <source>System header</source>
-        <translation>Glava vrstice</translation>
+        <translation>Glava zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4791"/>
@@ -3103,12 +3140,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4827"/>
         <source>Reset &apos;System header with time signature distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med glavo vrstice in taktovskim načinom&quot;</translation>
+        <translation>Ponastavi razmik med glavo zapisa in taktovskim načinom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4840"/>
         <source>Reset &apos;System header distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik glave vrstice&quot;</translation>
+        <translation>Ponastavi odmik glave zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4886"/>
@@ -3118,7 +3155,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4912"/>
         <source>Reset &apos;Thin barline thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina tanke taktnice&quot;</translation>
+        <translation>Ponastavi debelino tanke taktnice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4935"/>
@@ -3128,22 +3165,22 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4948"/>
         <source>Reset &apos;Barline at start of multiple staves&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Taktnica na začetku več črtovij&quot;</translation>
+        <translation>Ponastavi taktnice na začetku več črtovij</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4958"/>
         <source>Barline at start of multiple staves</source>
-        <translation>Taktnica na začetku več črtovij</translation>
+        <translation>Taktnice na začetku več črtovij</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5023"/>
         <source>Reset &apos;Repeat barline to dots distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med pikama in črto ponavljaja&quot;</translation>
+        <translation>Ponastavi razmik med pikama in taktnico ponavljaja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5043"/>
         <source>Reset &apos;Thick barline distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik odebeljene taktnice&quot;</translation>
+        <translation>Ponastavi odmik odebeljene taktnice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5066"/>
@@ -3153,27 +3190,27 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5076"/>
         <source>Scale barlines to staff size</source>
-        <translation>Prilagodi taktnice velikosti notnega črtovja</translation>
+        <translation>Povečaj taktnice na velikost notnega črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5086"/>
         <source>Reset &apos;Double barline distance&apos; value</source>
-        <translation>Ponastavi &quot;Razmik med črtama dvojne taktnice&quot;</translation>
+        <translation>Ponastavi razmik med črtama dvojne taktnice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5099"/>
         <source>Reset &apos;Barline at start of single staff&apos; value</source>
-        <translation>Ponastavi &quot;Taktnica na začetku enojnega črtovja&quot;</translation>
+        <translation>Ponastavi taktnice na začetku enojnega črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5112"/>
         <source>Reset &apos;Scale barlines to staff size&apos; value</source>
-        <translation>Ponastavi &quot;Spremeni velikost taktnic glede na velikost črtovja&quot;</translation>
+        <translation>Ponastavi povečavo taktnic na velikost notnega črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5138"/>
         <source>Reset &apos;Double barline thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina črt dvojne taktnice&quot;</translation>
+        <translation>Ponastavi debelino dvojne taktnice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5148"/>
@@ -3183,7 +3220,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5158"/>
         <source>Repeat barline to dots distance:</source>
-        <translation>Razmik med črto in pikami ponavljaja:</translation>
+        <translation>Razmik med taktnico in pikami ponavljaja:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5168"/>
@@ -3193,7 +3230,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5181"/>
         <source>Reset &apos;Thick barline thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina odebeljene taktnice&quot;</translation>
+        <translation>Ponastavi debelino odebeljene taktnice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5191"/>
@@ -3208,17 +3245,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5251"/>
         <source>Dot size:</source>
-        <translation>Velikost pike:</translation>
+        <translation>Velikost pik:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5261"/>
         <source>Ledger line thickness:</source>
-        <translation>Debelina pomožnih črtic:</translation>
+        <translation>Debelina pomožnih črt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5290"/>
         <source>Ledger line length:</source>
-        <translation>Dolžina pomožnih črtic:</translation>
+        <translation>Dolžina pomožnih črt:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5414"/>
@@ -3238,7 +3275,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5444"/>
         <source>Accidental distance:</source>
-        <translation>Oddaljenost predznaka:</translation>
+        <translation>Odmik predznaka:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5476"/>
@@ -3268,7 +3305,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5633"/>
         <source>Reset &apos;Minimum width of measure&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjša širino takta&quot;</translation>
+        <translation>Ponastavi najmanjšo širino takta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5649"/>
@@ -3276,205 +3313,200 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <translation>Višina položaja številke:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5675"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5678"/>
         <source>Reset &apos;Vertical position of number&apos; value</source>
-        <translation>Ponastavi &quot;Višina položaja številke&quot;</translation>
+        <translation>Ponastavi višino položaja številke</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5699"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5708"/>
         <source>H-bar horizontal stroke thickness:</source>
-        <translation>Debelina vodoravnice večtaktnega premora:</translation>
+        <translation>Debelina vodoravnice večtaktne pavze:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5729"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5747"/>
         <source>H-bar margin within barlines:</source>
-        <translation>Robovi večtaktnega premora glede na taktnice:</translation>
+        <translation>Robovi večtaktne pavze glede na taktnice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5758"/>
-        <source>Reset &apos;Multimeasure rest margin&apos; value</source>
-        <translation>Ponastavi &quot;Mere večtaktnih pavz&quot;</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5768"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5789"/>
         <source>H-bar vertical stroke thickness:</source>
         <translation>Debelina navpičnic večtaktnega premora:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5798"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5828"/>
         <source>H-bar vertical stroke height:</source>
-        <translation>Višina navpičnic večtaktnega premora:</translation>
+        <translation>Dolžina navpičnic večtaktnega premora:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5853"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5892"/>
         <source>Maximum number of measures:</source>
         <translation>Največje število taktov:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5890"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5935"/>
         <source>Spacing of symbols:</source>
         <translation>Odmiki znakov:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5933"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5984"/>
         <source>Show extenders on 4-measure repeats</source>
-        <translation>Prikaži na 4-taktnem ponavljaju podaljške</translation>
+        <translation>Prikaži podlajške na 4-taktnih ponavljajih</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5953"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6004"/>
         <source>Number consecutive measure repeats</source>
         <translation>Število zaporednih taktnih ponovitev</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5962"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6013"/>
         <source>Every</source>
-        <translation>Vsak</translation>
+        <translation>Vsakih</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5982"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6033"/>
         <source>measures</source>
-        <translation>taktom v vrstici</translation>
+        <translation>taktov v vrstici</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6016"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6067"/>
         <source>With parentheses</source>
         <translation>Z okroglimi oklepaji</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6039"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6090"/>
         <source>Number position:</source>
         <translation>Položaj števike:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6202"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6256"/>
         <source>Reset &apos;Maximum slope&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Največjega naklona&quot;</translation>
+        <translation>Ponastavi največji naklon</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6266"/>
         <source>Maximum slope:</source>
         <translation>Največji naklon:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6241"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6295"/>
         <source>Vertical distance from stem:</source>
         <translation>Navpična razdalja od vratu:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6260"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6314"/>
         <source>Reset &apos;Vertical distance from stem&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Odmik od vratu po višini&quot;</translation>
+        <translation>Ponastavi navpično razdaljo od vratu</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6301"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6355"/>
         <source>Reset &apos;Vertical distance from notehead&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Odmik od notne glavice po višini&quot;</translation>
+        <translation>Ponastavi navpično razdaljo od glavice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6311"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6365"/>
         <source>Vertical distance from notehead:</source>
-        <translation>Navpična razdalja od notne glavice:</translation>
+        <translation>Navpična razdalja od glavice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6356"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6410"/>
         <source>Avoid staves</source>
         <translation>Izogibanje črtovjem</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6366"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6420"/>
         <source>Properties</source>
         <translation>Lastnosti</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6372"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6426"/>
         <source>Direction:</source>
         <translation>Postavitev:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6391"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6445"/>
         <source>Reset &apos;Number type&apos; value</source>
-        <translation>Ponastavi &quot;Vrsta številke&quot;</translation>
+        <translation>Ponastavi vrsto zapisa</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6410"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6464"/>
         <source>Reset &apos;Direction&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Postavitve&quot;</translation>
+        <translation>Ponastavi postavitev</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6421"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6475"/>
         <source>Number</source>
         <translation>Številka</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6426"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6480"/>
         <source>Ratio</source>
         <translation>Razmerje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6431"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6485"/>
         <source>None</source>
         <comment>no tuplet number</comment>
-        <translation>Brez</translation>
+        <translation>Brez številk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6440"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6494"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6565"/>
         <source>Auto</source>
         <translation>Samodejna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6445"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6499"/>
         <source>Up</source>
-        <translation>Navzgor</translation>
+        <translation>Nad</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6504"/>
         <source>Down</source>
-        <translation>Navzdol</translation>
+        <translation>Pod</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6471"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6525"/>
         <source>Number type:</source>
-        <translation>Vrsta številke:</translation>
+        <translation>Vrsta zapisa:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6516"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6570"/>
         <source>Bracket</source>
-        <translation>Vrstični oklepaj</translation>
+        <translation>Oklepaj</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6575"/>
         <source>None</source>
         <comment>no tuplet bracket</comment>
         <translation>Brez</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6532"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6586"/>
         <source>Brackets</source>
-        <translation>Vrstični oklepaji</translation>
+        <translation>Oklepaji</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6538"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6592"/>
         <source>Bracket thickness:</source>
         <comment>Tuplet bracket</comment>
         <translation>Debelina oklepaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6570"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6624"/>
         <source>Bracket hook height:</source>
         <comment>Tuplet bracket</comment>
-        <translation>Višina kljukic oklepaja:</translation>
+        <translation>Dolžina kljukic oklepaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6589"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6643"/>
         <source>Reset &apos;Bracket hook height&apos; value</source>
-        <translation>Ponastavi &quot;Višina kljukic oklepaja&quot;</translation>
+        <translation>Ponastavi dolžino kljukic oklepaja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3019"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3202"/>
         <source>Reset &apos;Horizontal placement&apos; value</source>
-        <translation>Ponastavi &quot;Položaj po vodoravnici&quot;</translation>
+        <translation>Ponastavi vodoravno postavitev</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="64"/>
@@ -3494,60 +3526,60 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="139"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7695"/>
         <source>Voltas</source>
-        <translation>Oklepaji zaporedja (volte)</translation>
+        <translation>Volte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="144"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7955"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8009"/>
         <source>Ottavas</source>
-        <translation>Oktave</translation>
+        <translation>Premiki oktav</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="149"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8390"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8444"/>
         <source>Pedal lines</source>
         <translation>Pedalne črte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="154"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8714"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8768"/>
         <source>Trill lines</source>
         <translation>Trilčne črte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="159"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8904"/>
         <source>Vibrato lines</source>
         <translation>Vibratne črte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="164"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8994"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9048"/>
         <source>Bends</source>
-        <translation>Zategi</translation>
+        <translation>Zategi strun</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="169"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9290"/>
         <source>Text lines</source>
-        <translation>Napisne črte</translation>
+        <translation>Oklepaji z napisom</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="174"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9360"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9438"/>
         <source>System text lines</source>
-        <translation>Vrstične napisne črte</translation>
+        <translation>Oklepaji z napisom za celo partituro</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="179"/>
         <source>Articulations &amp; ornaments</source>
-        <translation>Artikulacije in okraski</translation>
+        <translation>Artikulacije &amp; okraski</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="209"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11442"/>
         <source>Expression text</source>
         <translation>Izraznostni napis</translation>
     </message>
@@ -3570,13 +3602,13 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3043"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3182"/>
         <source>Reset &apos;Vertical placement&apos; value</source>
-        <translation>Ponastavi &quot;Položaj po navpičnici&quot;</translation>
+        <translation>Ponastavi navpično postavitev</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3104"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for measure number ranges for multi-measure rests</comment>
-        <translation>Ponastavi &quot;Vrsta oklepaja&quot;</translation>
+        <translation>Ponastavi vrsto oklepaja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3169"/>
@@ -3590,818 +3622,832 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <translation>Privzeti tablaturni ključ</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6490"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6544"/>
         <source>Reset &apos;Bracket type&apos; value</source>
         <comment>Bracket type for tuplets</comment>
-        <translation>Ponastavi &quot;Vrsta oklepaja&quot;</translation>
+        <translation>Ponastavi vrsto oklepaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6500"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6554"/>
         <source>Bracket type:</source>
         <comment>Bracket type for tuplets</comment>
         <translation>Vrsta oklepaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6694"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6748"/>
         <source>Distance after stem of last note:</source>
-        <translation>Odmik od vrata zadnje note:</translation>
+        <translation>Odmik od vratu zadnje note:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6802"/>
         <source>Distance after head of last note:</source>
         <translation>Odmik od glavice zadnje note:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6767"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6821"/>
         <source>Reset &apos;Distance after head of last note&apos; value</source>
-        <translation>Ponastavi &quot;Odmik od glavice zadnje note&quot;</translation>
+        <translation>Ponastavi odmik od glavice zadnje note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6786"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6840"/>
         <source>Reset &apos;Distance before head of first note&apos; value</source>
-        <translation>Ponastavi &quot;Odmik pred glavico prve note&quot;</translation>
+        <translation>Ponastavi odmik pred glavico prve note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6805"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6859"/>
         <source>Reset &apos;Distance before stem of first note&apos; value</source>
-        <translation>Ponastavi &quot;Odmik pred vratom prve note&quot;</translation>
+        <translation>Ponastavi odmik pred vratom prve note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6815"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6869"/>
         <source>Distance before stem of first note:</source>
-        <translation>Prostor pred vratom prve note:</translation>
+        <translation>Odmik pred vratom prve note:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6844"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6898"/>
         <source>Distance before head of first note:</source>
-        <translation>Prostor pred glavico prve note:</translation>
+        <translation>Odmik pred glavico prve note:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6863"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6917"/>
         <source>Reset &apos;Distance after stem of last note&apos; value</source>
-        <translation>Ponastavi &quot;Odmik od vrata zadnje note&quot;</translation>
+        <translation>Ponastavi odmik od vratu zadnje note</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6979"/>
         <source>Hook length:</source>
         <translation>Dolžina zastavice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6986"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7591"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7832"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8030"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8482"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9019"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9128"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7040"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7645"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8084"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8536"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9076"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9206"/>
         <source>Line thickness:</source>
         <translation>Debelina črte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6996"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7050"/>
         <source>Distance to note:</source>
         <translation>Odmik od note:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7049"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7103"/>
         <source>Slurs &amp;&amp; ties</source>
-        <translation>Loki in vezaji</translation>
+        <translation>Loki &amp;&amp; vezaji</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7077"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7131"/>
         <source>Dotted line thickness:</source>
-        <translation>Debelina točkaste črte:</translation>
+        <translation>Debelina prekinjene črte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7106"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9794"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9974"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10134"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11116"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11423"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7160"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9872"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10052"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10212"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11194"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11507"/>
         <source>Autoplace min. distance:</source>
-        <translation>Najmanjši odmik pri samodejni postavitvi:</translation>
+        <translation>Najm. razmik pri samodejni postavitvi:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7170"/>
         <source>Line thickness at end:</source>
-        <translation>Debelina konic črte:</translation>
+        <translation>Debelina koncev črte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7171"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7225"/>
         <source>Line thickness middle:</source>
-        <translation>Sredinska debelina črte:</translation>
+        <translation>Debelina črte na sredini:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7235"/>
         <source>Minimum tie length:</source>
         <translation>Najmanjša dolžina vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9846"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10280"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11266"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11544"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7273"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9924"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10358"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11628"/>
         <source>Reset &apos;Autoplace min. distance&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjši odmik pri samostavljenju&quot;</translation>
+        <translation>Ponastavi najm. razmik pri samodejni postavitvi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7232"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7286"/>
         <source>Reset &apos;Line thickness at end&apos; value</source>
-        <translation>Ponastavi &quot;Debelina konic črte&quot;</translation>
+        <translation>Ponastavi debelino koncev črte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7245"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7299"/>
         <source>Reset &apos;Line thickness middle&apos; value</source>
-        <translation>Ponastavi &quot;Sredinska debelina črte&quot;</translation>
+        <translation>Ponastavi debelino črte na sredini</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7258"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7312"/>
         <source>Reset &apos;Dotted line thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina točkaste črte&quot;</translation>
+        <translation>Ponastavi debelino prekinjene črte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7271"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7325"/>
         <source>Reset &apos;Minimum tie length&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjša dolžina vezaja&quot;</translation>
+        <translation>Ponastavi najmanjšo dolžino vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7318"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7372"/>
         <source>Height:</source>
-        <translation>Višina:</translation>
+        <translation>Širina:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7341"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7395"/>
         <source>Continue height:</source>
-        <translation>Nadaljuj višino:</translation>
+        <translation>Širina za nadaljevanje:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7389"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7443"/>
         <source>Reset &apos;Height&apos; value</source>
-        <translation>Ponastavi &quot;Višina&quot;</translation>
+        <translation>Ponastavi širino</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7408"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7462"/>
         <source>Reset &apos;Continue height&apos; value</source>
-        <translation>Ponastavi &quot;Nadaljevanje višine&quot;</translation>
+        <translation>Ponastavi širino za nadaljevanje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7418"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7472"/>
         <source>Autoplace, distance to dynamics:</source>
         <translation>Odmik od dinamičnih oznak pri samodejni postavitvi:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7463"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7517"/>
         <source>Reset &apos;Autoplace, distance to dynamics&apos; value</source>
-        <translation>Ponastavi &quot;Odmik od dinamičnih oznak pri samodejni postavitvi&quot;</translation>
+        <translation>Ponastavi odmik od dinamičnih oznak pri samodejni postavitvi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7473"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8538"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8770"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8906"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9303"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9451"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9964"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10922"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11250"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11506"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7527"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8960"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9381"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9529"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10042"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10307"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11331"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11590"/>
         <source>Placement:</source>
         <translation>Postavitev:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7506"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8472"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8783"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8919"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9251"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9399"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10032"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10177"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10824"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11240"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11460"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7560"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8526"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8837"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8973"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9329"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9477"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10110"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10255"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10902"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11321"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11544"/>
         <source>Reset &apos;Placement&apos; value</source>
-        <translation>Ponastavi &quot;Postavitev&quot;</translation>
+        <translation>Ponastavi postavitev</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7568"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7757"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8254"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8551"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9062"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7622"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8308"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8605"/>
         <source>Reset &apos;Line thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina črte&quot;</translation>
+        <translation>Ponastavi debelino črte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7710"/>
         <source>Reset &apos;Position&apos; value</source>
-        <translation>Ponastavi &quot;Položaj&quot;</translation>
+        <translation>Ponastavi pozicijo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7682"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7786"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7903"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8166"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8341"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8360"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8439"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8665"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8684"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7736"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7840"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8395"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8414"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8738"/>
         <source>Reset &apos;Line style&apos; value</source>
-        <translation>Ponastavi &quot;Slog črte&quot;</translation>
+        <translation>Ponastavi slog črte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7708"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8059"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8137"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7762"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8113"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8191"/>
         <source>Reset &apos;Hook height&apos; value</source>
-        <translation>Ponastavi &quot;Višina kljuke&quot;</translation>
+        <translation>Ponastavi dolžino kljukic</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7718"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7961"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8597"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7772"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8015"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8651"/>
         <source>Dash size:</source>
-        <translation>Merilo črtice:</translation>
+        <translation>Dolžina črtic:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7738"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7792"/>
         <source>Position:</source>
         <translation>Položaj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7796"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8020"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8449"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8074"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8503"/>
         <source>Line style:</source>
         <translation>Slog črte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7822"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7876"/>
         <source>Hook height:</source>
-        <translation>Višina kljukice:</translation>
+        <translation>Dolžina kljukice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7856"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8070"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8510"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7910"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8124"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8564"/>
         <source>Continuous</source>
         <translation>Polna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7861"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8075"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8515"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7915"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8129"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8569"/>
         <source>Dashed</source>
         <translation>Črtkana</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7866"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8080"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8520"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7920"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8134"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8574"/>
         <source>Dotted</source>
         <translation>Pikčasta</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7871"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8085"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8525"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7925"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8139"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8579"/>
         <source>Dash-dotted</source>
         <translation>Črtopična</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7876"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8090"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8530"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7930"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8144"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8584"/>
         <source>Dash-dot-dotted</source>
         <translation>Črtodvopična</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7884"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8235"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8614"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="7938"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8289"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8668"/>
         <source>Gap size:</source>
         <translation>Velikost razmika:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8098"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8152"/>
         <source>Hook height above:</source>
-        <translation>Višina zgornje kljukice:</translation>
+        <translation>Dolžina kljukice zgoraj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8108"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8162"/>
         <source>Numbers only</source>
         <translation>Le številke</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8147"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8201"/>
         <source>Hook height below:</source>
-        <translation>Višina spodnje klukice:</translation>
+        <translation>Dolžina kljukice spodaj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8198"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="8252"/>
         <source>Reset &apos;Numbers only&apos; value</source>
-        <translation>Ponastavi vrednost »Le številke«</translation>
+        <translation>Ponastavi na prikaz le številk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9000"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9054"/>
         <source>Standard staff</source>
-        <translation>Osnovno črtovje</translation>
+        <translation>Standardno črtovje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9163"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9128"/>
         <source>Reset &apos;Arrow width&apos; value</source>
-        <translation>Ponastavi &quot;Širina puščice&quot;</translation>
+        <translation>Ponastavi širino puščice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9049"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9115"/>
         <source>Arrow width:</source>
         <translation>Širina puščice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9180"/>
+        <source>Reset &apos;Arrow height&apos; value</source>
+        <translation>Ponastavi višino puščic</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9203"/>
+        <source>Line thickness on tablature staves:</source>
+        <translation>Debeline črt tablaturnih črtovij:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9241"/>
+        <source>Reset &apos;Line thickness on tablature staves&apos; value</source>
+        <translation>Ponastavi debelino črt tablaturnih črtovij</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9589"/>
         <source>Articulations &amp;&amp; ornaments</source>
-        <translation>Artikulacije in okraski</translation>
+        <translation>Artikulacije &amp;&amp; okraski</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9517"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9595"/>
         <source>Reset &apos;Articulation distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik artikulacij&quot;</translation>
+        <translation>Ponastavi odmik artikulacij</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9527"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9560"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9592"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9605"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9638"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9670"/>
         <source>sp</source>
         <comment>space unit</comment>
         <translation> sp</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9537"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9615"/>
         <source>Distance from stem:</source>
         <translation>Odmik od vratu:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9625"/>
         <source>Articulation size:</source>
         <translation>Velikost artikulacije:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9602"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9680"/>
         <source>Reset &apos;Stem distance&apos; value</source>
-        <translation>Ponastavi &quot;Odmik od vratu&quot;</translation>
+        <translation>Ponastavi odmik od vratu</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9609"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9687"/>
         <source>Reset &apos;Notehead distance&apos; value</source>
-        <translation>Postavi &quot;Odmik od notne glavice&quot;</translation>
+        <translation>Postavi odmik od notne glavice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9616"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9694"/>
         <source>Distance from staff:</source>
         <translation>Odmik od črtovja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9639"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9717"/>
         <source>Distance from notehead:</source>
         <translation>Odmik od notne glavice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9649"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9727"/>
         <source>Reset &apos;Articulation size&apos; value</source>
-        <translation>Ponastavi &quot;Velikost artikulacij&quot;</translation>
+        <translation>Ponastavi velikost artikulacij</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9656"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9734"/>
         <source>Minimum vertical distance:</source>
         <translation>Najmanjši navpični odmik:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9702"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9780"/>
         <source>Articulation alignment when positioned at the stem</source>
         <translation>Poravnava artikulacije, ko je postavljena pri vratu</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9708"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9786"/>
         <source>Align with stem</source>
         <translation>Poravnaj z vratom</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9715"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9793"/>
         <source>Align with notehead</source>
         <translation>Poravnaj z glavico</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9722"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9800"/>
         <source>Center between stem and notehead</source>
         <translation>Središčno med glavico in vratom</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9748"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9826"/>
         <source>Combined articulation</source>
         <translation>Združena artikulacija</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9754"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9832"/>
         <source>Always keep together</source>
         <translation>Vedno ohrani skupaj</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9761"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9839"/>
         <source>Prefer closeness to notehead (combined articulations may become separated)</source>
-        <translation>Prednostna je bližina glavice (združene artikulacije se lahko razdelijo)</translation>
+        <translation>Daj prednost bližini glavice (združene artikulacije se lahko razdelijo)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10414"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10492"/>
         <source>Reset &apos;Dash Y position ratio&apos; value</source>
-        <translation>Ponastavi &quot;Razmerje višine umestitve višaja&quot;</translation>
+        <translation>Ponastavi razmerje višine pozicije vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10502"/>
         <source>Dash thickness:</source>
         <translation>Debelina vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10437"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10515"/>
         <source>Reset &apos;Max. dash distance&apos; value</source>
-        <translation>Ponastavi &quot;Največji odmik vezaja&quot;</translation>
+        <translation>Ponastavi najv. odmik vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10472"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10550"/>
         <source>Reset &apos;Always force dash&apos; value</source>
-        <translation>Ponastavi &quot;Vedno vsili vezaj&quot;</translation>
+        <translation>Ponastavi stalno vsiljevanje vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10511"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10589"/>
         <source>Reset &apos;Min. dash length&apos; value</source>
-        <translation>Ponastavi &quot;Najmanjša dolžina vezaja&quot;</translation>
+        <translation>Ponastavi najm. dolžino vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10521"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10599"/>
         <source>Always force dash</source>
         <translation>Vedno vsili vezaj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10531"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10609"/>
         <source>Reset &apos;Dash pad&apos; value</source>
-        <translation>Ponastavi &quot;Odmaknitev vezaja&quot;</translation>
+        <translation>Ponastavi odmik vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10541"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10619"/>
         <source>Max. dash length:</source>
-        <translation>Največja dolžina vezaja:</translation>
+        <translation>Najv. dolžina vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10554"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10632"/>
         <source>Reset &apos;Max. dash length&apos; value</source>
-        <translation>Ponastavi &quot;Največja dolžina vezaja&quot;</translation>
+        <translation>Ponastavi najv. dolžina vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10564"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10642"/>
         <source>Max. dash distance:</source>
-        <translation>Največji odmik vezaja:</translation>
+        <translation>Najv. odmik vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10577"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10655"/>
         <source>Reset &apos;Dash thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina vezaja&quot;</translation>
+        <translation>Ponastavi debelino vezaja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10587"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10665"/>
         <source>Dash pad:</source>
-        <translation>Odmaknitev vezaja:</translation>
+        <translation>Odmik vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10597"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10675"/>
         <source>Dash Y position ratio:</source>
-        <translation>Razmerje višine umestitve vezaja:</translation>
+        <translation>Razmerje višine pozicije vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10607"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10685"/>
         <source>Min. dash length:</source>
-        <translation>Najmanjša dolžina vezaja:</translation>
+        <translation>Najm. dolžina vezaja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10680"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10758"/>
         <source>Align verse number</source>
-        <translation>Poravnaj številko verza</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10704"/>
-        <source>Reset &apos;Align verse number&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Poravnaj številko verza&quot;</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10736"/>
-        <source>Reset &apos;Min. distance&apos; value</source>
-        <translation>Ponastavi &quot;Namanjši odmik&quot;</translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10746"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11690"/>
-        <source>Line height:</source>
-        <translation>Višina vrstice:</translation>
+        <translation>Poravnaj številko kitice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="10782"/>
+        <source>Reset &apos;Align verse number&apos; value</source>
+        <translation>Ponastavi poravnavo številke kitice</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10814"/>
+        <source>Reset &apos;Min. distance&apos; value</source>
+        <translation>Ponastavi najm odmik</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11774"/>
+        <source>Line height:</source>
+        <translation>Širina besedila:</translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10860"/>
         <source>Reset &apos;Min. bottom margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Najmanjši spodnji rob&quot;</translation>
+        <translation>Ponastavi najm. spodnji rob</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10850"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10928"/>
         <source>Reset &apos;Line height&apos; value</source>
-        <translation>Ponastavi &quot;Višina besedila&quot;</translation>
+        <translation>Ponastavi širino besedila</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10863"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10941"/>
         <source>Reset &apos;Min. top margin&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Najmanjši zgornji rob&quot;</translation>
+        <translation>Ponastavi najm, zgornji rob</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10886"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10964"/>
         <source>Min. top margin:</source>
-        <translation>Najmanjši zgornji rob:</translation>
+        <translation>Najm. zgornji rob:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10912"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10990"/>
         <source>Min. bottom margin:</source>
-        <translation>Najmanjši spodnji rob:</translation>
+        <translation>Najm. spodnji rob:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10957"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11035"/>
         <source>Min. distance:</source>
-        <translation>Najmanjši odmik:</translation>
+        <translation>Najm. odmik:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10979"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11057"/>
         <source>Reset &apos;Melisma thickness&apos; value</source>
-        <translation>Ponastavi &quot;Debelina melizme&quot;</translation>
+        <translation>Ponastavi debelino melizme</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11011"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11089"/>
         <source>Melisma thickness:</source>
         <translation>Debelina melizme:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11024"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11102"/>
         <source>Reset &apos;Melisma pad&apos; value</source>
-        <translation>Ponastavi &quot;Odmaknitev melizme&quot;</translation>
+        <translation>Ponastavi odmik melizme</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11034"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11112"/>
         <source>Melisma pad:</source>
-        <translation>Odmaknitev melizme:</translation>
+        <translation>Odmik melizme:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11063"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13755"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11141"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13839"/>
         <source>Align:</source>
         <translation>Poravnava:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11073"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11151"/>
         <source>Reset &apos;Align&apos; value</source>
-        <translation>Ponastavi &quot;Poravnava&quot;</translation>
+        <translation>Ponastavi poravnavo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11129"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11207"/>
         <source>Reset &apos;Avoid barlines&apos; setting</source>
-        <translation>Ponastavi &quot;Izogibanje taktnicam&quot;</translation>
+        <translation>Ponastavi izogibanje taktnicam</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11181"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11262"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation>Ponastavi vrednost &quot;Merilo&quot;</translation>
+        <translation>Ponastavi povečavo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11387"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11471"/>
         <source>Reset &apos;Snap to dynamics&apos; setting</source>
-        <translation>Ponastavi &quot;Pripni na dinamiko&quot;</translation>
+        <translation>Ponastavi ripenjanje na dinamiko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11609"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13785"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13869"/>
         <source>Size:</source>
         <translation>Velikost:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11625"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13598"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11709"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13682"/>
         <source>pt</source>
-        <translation> točk</translation>
+        <translation> tč.</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11641"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
         <source>from top of staff</source>
         <translation>od vrha črtovja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11661"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11745"/>
         <source>of font height</source>
         <translation>višine pisave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11158"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11725"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13608"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11236"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11809"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13692"/>
         <source>Font:</source>
         <translation>Pisava:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11829"/>
         <source>Vertical position:</source>
         <translation>Navpični položaj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11760"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11844"/>
         <source>Alignment</source>
         <translation>Poravnava</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11766"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11850"/>
         <source>Top</source>
-        <translation>Na vrhu</translation>
+        <translation>Zgoraj</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11773"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11857"/>
         <source>Bottom</source>
-        <translation>Na dnu</translation>
+        <translation>Spodaj</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11789"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11873"/>
         <source>Modern</source>
-        <translation>Sodoben </translation>
+        <translation>Sodoben</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11796"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11880"/>
         <source>Historic</source>
         <translation>Zgodovinski</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11865"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11949"/>
         <source>Capo fret position:</source>
         <extracomment>Capodastro</extracomment>
-        <translation>Položaj kapodastra:</translation>
+        <translation>Prečka s kapodastrom:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11900"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11984"/>
         <source>Appearance</source>
         <translation>Videz</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11949"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12033"/>
         <source>Reset &apos;Extension vertical offset&apos; value</source>
-        <translation>Ponastavi &quot;Višinski odmik razširitve&quot;</translation>
+        <translation>Ponastavi navpični odmik razširitve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11959"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12043"/>
         <source>Extension vertical offset:</source>
-        <translation>Višinski odmik razširitve:</translation>
+        <translation>Navpični odmik razširitve:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11969"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12053"/>
         <source>Extension scaling:</source>
         <translation>Velikost razširitve:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11982"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12066"/>
         <source>Reset &apos;Extension scaling&apos; value</source>
-        <translation>Ponastavi &quot;Velikost razširitve&quot;</translation>
+        <translation>Ponastavi velikost razširitve</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11992"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12076"/>
         <source>Modifier scaling:</source>
-        <translation>Velikost pripone:</translation>
+        <translation>Velikost modifikatorja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12002"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12086"/>
         <source>Modifier vertical offset:</source>
-        <translation>Višinski odmik pripone:</translation>
+        <translation>Navpični odmik modifikatorja:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12015"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12099"/>
         <source>Reset &apos;Modifier scaling&apos; value</source>
-        <translation>Ponastavi &quot;Velikost pripone&quot;</translation>
+        <translation>Ponastavi velikost modifikatorja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12028"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12112"/>
         <source>Reset &apos;Modifier vertical offset&apos; value</source>
-        <translation>Ponastavi &quot;Višinski odmik pripone&quot;</translation>
+        <translation>Ponastavi navpični odmik modifikatorja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12047"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12131"/>
         <source>Lower case minor chords</source>
-        <translation>Molovi akordi z malo črko</translation>
+        <translation>Zapiši molove akorde z malo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12054"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12138"/>
         <source>Lower case bass notes</source>
-        <translation>Basovske note z malo črko</translation>
+        <translation>Zapiši basovske note z malo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12061"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12145"/>
         <source>All caps note names</source>
-        <translation>Vse note z velikimi črkami</translation>
+        <translation>Zapiši vse note z veliko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12084"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12168"/>
         <source>Spelling</source>
-        <translation>Črkovanje</translation>
+        <translation>Poimenovanje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12093"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12165"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12177"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12249"/>
         <source>Standard</source>
-        <translation>Običajno</translation>
+        <translation>Angleško</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12106"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12190"/>
         <source>German</source>
-        <translation>Znakovno nemško</translation>
+        <translation>Angleško s H</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12116"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12200"/>
         <source>Full German</source>
-        <translation>Črkovno nemško</translation>
+        <translation>Srednjeevropsko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12126"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12210"/>
         <source>Solfeggio</source>
-        <translation>Solfeggio</translation>
+        <translation>Solmizacija</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12136"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12220"/>
         <source>French</source>
         <translation>Francosko</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12175"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12259"/>
         <source>Jazz</source>
         <translation>Jazzovski</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12182"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12266"/>
         <source>Custom</source>
         <translation>Po meri</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12204"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12288"/>
         <source>Load XML</source>
         <translation>Naloži XML</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12230"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12314"/>
         <source>Positioning</source>
-        <translation>Umeščanje</translation>
+        <translation>Postavitev</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12236"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12450"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12320"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12534"/>
         <source>Maximum shift below:</source>
         <translation>Največji zamik spodaj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12253"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12337"/>
         <source>Distance to fretboard diagram:</source>
         <translation>Odmik od slike prijema:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12263"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12683"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12347"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12767"/>
         <source>Maximum shift above:</source>
         <translation>Največji zamik zgoraj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12295"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12379"/>
         <source>Minimum chord spacing:</source>
         <translation>Najmanjši razmik med akordi:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12305"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12389"/>
         <source>Maximum barline distance:</source>
         <translation>Največja oddaljenost taktnice:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12564"/>
         <source>Fret number font size</source>
         <translation>Velikost pisave oštevilčenja prečk</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12502"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12586"/>
         <source>Fret spacing</source>
         <translation>Razmik med prečkami</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12527"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12611"/>
         <source>Relative dot size:</source>
-        <translation>Odnosna velikost pike:</translation>
+        <translation>Sorazmerna velikost pike:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11276"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12537"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11357"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12621"/>
         <source>Scale:</source>
         <translation>Povečava:</translation>
     </message>
@@ -4413,43 +4459,43 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="109"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5927"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5978"/>
         <source>Measure repeats</source>
-        <translation>Taktni ponavljaji</translation>
+        <translation>Ponavljaji taktov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="189"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9932"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10010"/>
         <source>Staff text</source>
-        <translation>Napis črtovja</translation>
+        <translation>Napisi v črtovju</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="194"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10128"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10206"/>
         <source>Tempo text</source>
-        <translation>Napis hitrosti izvajanja</translation>
+        <translation>Napisi hitrosti izvajanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="214"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11417"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11501"/>
         <source>Rehearsal marks</source>
         <translation>Vadbene oznake</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="219"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11601"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11685"/>
         <source>Figured bass</source>
         <translation>Oštevilčeni bas</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="224"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11829"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11913"/>
         <source>Chord symbols</source>
         <translation>Oznake akordov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="229"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12444"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12528"/>
         <source>Fretboard diagrams</source>
         <translation>Slike prijemov</translation>
     </message>
@@ -4476,12 +4522,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3281"/>
         <source>System brackets</source>
-        <translation>Vrstni oklepaji</translation>
+        <translation>Oklepaji zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3502"/>
         <source>System dividers</source>
-        <translation>Ločilniki vrst</translation>
+        <translation>Ločilniki vrstic zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3935"/>
@@ -4491,7 +4537,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="4925"/>
         <source>Reset &apos;Show repeat barline tips (“winged” repeats)&apos; value</source>
-        <translation>Ponastavi &quot;Prikaži ponavljaje z repki (krilci)&quot;</translation>
+        <translation>Ponastavi prikaz ponavljajev z repki</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5033"/>
@@ -4501,316 +4547,316 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="5557"/>
         <source>Multimeasure rests</source>
-        <translation>Večtaktni premori (pavze)</translation>
+        <translation>Večtaktne pavze</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5828"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="5867"/>
         <source>Old-style multimeasure rests</source>
-        <translation>Starinski večtaktni premori (pavze)</translation>
+        <translation>Starinske večtaktne pavze</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6187"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6241"/>
         <source>Vertical distance from notes</source>
         <translation>Navpični odmik od not</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6669"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="6723"/>
         <source>Horizontal distance from notes</source>
         <translation>Vodoravni odmik od not</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10367"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10445"/>
         <source>Lyrics dash</source>
         <translation>Vezaj med zlogi</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10642"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10720"/>
         <source>Lyrics text</source>
-        <translation>Besedilo</translation>
+        <translation>Besedilo skladbe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="10970"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11048"/>
         <source>Lyrics melisma</source>
         <translation>Melizma besedila</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12038"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12122"/>
         <source>Automatic capitalization</source>
-        <translation>Samodejna velika začetnica</translation>
+        <translation>Samodejni zapis velike začetnice</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12547"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12631"/>
         <source>Scale</source>
         <translation>Povečava</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12566"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12650"/>
         <source>Fret number font size:</source>
         <translation>Velikost pisave oštevilčenja prečk:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12576"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12660"/>
         <source>Fret spacing:</source>
         <translation>Razmik med prečkami:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12586"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12670"/>
         <source>Default vertical position</source>
-        <translation>Privzeta višina umestitve</translation>
+        <translation>Privzeti navpični položaj</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12614"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12698"/>
         <source>Barre line thickness</source>
         <translation>Debelina bare črte</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12617"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12701"/>
         <source>Barre line thickness:</source>
         <translation>Debelina bare črte:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12627"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12711"/>
         <source>String spacing:</source>
         <translation>Razmik med strunami:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12676"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12760"/>
         <source>Fret number position:</source>
         <translation>Položaj številke prečke:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12693"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12777"/>
         <source>Default vertical position:</source>
         <translation>Privzeti navpični položaj:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12703"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12787"/>
         <source>String spacing</source>
         <translation>Razmik med strunami</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12741"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12825"/>
         <source>Relative dot size</source>
-        <translation>Relativna velikost pike</translation>
+        <translation>Sorazmerna velikost pike</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="234"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9043"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12810"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9109"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12894"/>
         <source>Tablature</source>
         <translation>Tablatura</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12905"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12989"/>
         <source>Staccato</source>
-        <translation>Odsekano (staccato)</translation>
+        <translation>Oznake za staccato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12929"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13013"/>
         <source>Accent and marcato marks</source>
-        <translation>Oznake za poudarjeno (accent) in naznačeno (marcato)</translation>
+        <translation>Oznake za poudarek (akcent) in marcato</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12943"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13027"/>
         <source>Harmonic marks</source>
-        <translation>Oznake harmoničnih tonov</translation>
+        <translation>Oznake za flažolet</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12960"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13044"/>
         <source>Turns</source>
-        <translation>Dvoložke</translation>
+        <translation>Dvoložki</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12991"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13075"/>
         <source>Palm mute (P.M.)</source>
         <translation>Dušenje z dlanjo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="12998"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13082"/>
         <source>Let ring</source>
-        <translation>Pusti zveneti</translation>
+        <translation>Zvenenje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13029"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13113"/>
         <source>Slurs</source>
         <translation>Loki</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13036"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13120"/>
         <source>Wah open/close</source>
-        <translation>Ua-ua oglasitev/stišanje</translation>
+        <translation>Pritisk/sput wah-wah pedala</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13043"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13127"/>
         <source>Crescendo and diminuendo lines</source>
         <translation>Črte naraščanja (crescendo) in pojemanja (decrescendo)</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13060"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13144"/>
         <source>Simple</source>
-        <translation>Enostavni</translation>
+        <translation>Enostavna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13112"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13196"/>
         <source>Common</source>
-        <translation>Običajni</translation>
+        <translation>Običajna</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13176"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13260"/>
         <source>Golpe</source>
-        <translation>Potrk (golpe)</translation>
+        <translation>Golpe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13220"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13304"/>
         <source>Mordents</source>
-        <translation>Grizci (mordenti)</translation>
+        <translation>Grizci</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13227"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13311"/>
         <source>Rasgueado</source>
-        <translation>Brenkanje (rasgueado)</translation>
+        <translation>Rasgueado</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13283"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13367"/>
         <source>Reset tablature styles to default</source>
         <translation>Ponastavi sloge tablatur na privzeto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13811"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13895"/>
         <source>Line spacing:</source>
         <translation>Medvrstični razmik:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13891"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13975"/>
         <source>Reset all styles to default</source>
         <translation>Ponastavi vse sloge na privzeto</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13364"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13448"/>
         <source>Frame:</source>
         <translation>Okvir:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13385"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13469"/>
         <source>Circle</source>
-        <translation>Okrogel</translation>
+        <translation>Okrogla</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13396"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13480"/>
         <source>Reset &apos;Frame&apos; value</source>
-        <translation>Ponastavi &quot;Okvir&quot;</translation>
+        <translation>Ponastavi okvir</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13424"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13508"/>
         <source>Thickness:</source>
         <translation>Debelina:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13447"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13531"/>
         <source>Reset &apos;Background&apos; value</source>
-        <translation>Ponastavi &quot;Ozadje&quot;</translation>
+        <translation>Ponastavi ozadje</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13460"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13493"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13544"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13577"/>
         <source>Reset &apos;Border&apos; value</source>
-        <translation>Ponastavi &quot;Obrobe&quot;</translation>
+        <translation>Ponastavi obrobe</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13480"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13564"/>
         <source>Corner radius:</source>
-        <translation>Polmer zaokrožitve vogala:</translation>
+        <translation>Vogalni polmer:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13533"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13617"/>
         <source>Border:</source>
         <translation>Obroba:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13543"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13627"/>
         <source>Highlight:</source>
-        <translation>Poudarjenje:</translation>
+        <translation>Polnilo:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13556"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13640"/>
         <source>Reset &apos;Corner radius&apos; value</source>
-        <translation>Ponastavi &quot;Polmer zaokrožitve vogala&quot;</translation>
+        <translation>Ponastavi vogalni pomer</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13585"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13669"/>
         <source>Reset &apos;Font style&apos; values</source>
-        <translation>Ponastavi &quot;Slog pisave&quot;</translation>
+        <translation>Ponastavi slog pisave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13621"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13705"/>
         <source>Reset &apos;Align&apos; values</source>
-        <translation>Ponastavi &quot;Poravnava&quot;</translation>
+        <translation>Ponastavi poravnavo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13634"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13718"/>
         <source>Reset &apos;Color&apos; value</source>
-        <translation>Ponastavi &quot;Barva&quot;</translation>
+        <translation>Ponastavi barvo</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13644"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13728"/>
         <source>Color:</source>
         <translation>Barva:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13660"/>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13824"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13744"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13908"/>
         <source>Reset &apos;Font size&apos; value</source>
-        <translation>Ponastavi &quot;Velikost pisave&quot;</translation>
+        <translation>Ponastavi velikost pisave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13673"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13757"/>
         <source>Style:</source>
         <translation>Slog:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13689"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13773"/>
         <source>Reset &apos;Follow staff size&apos; value</source>
-        <translation>Ponastavi &quot;Sledenje velikosti črtovja&quot;</translation>
+        <translation>Ponastavi prilagoditev velikosti črtovja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13699"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13783"/>
         <source>Offset:</source>
         <translation>Odmik:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13709"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13793"/>
         <source>Follow staff size</source>
-        <translation>Sledi velikosti črtovja</translation>
+        <translation>Prilagodi velikosti črtovja</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13719"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13803"/>
         <source>Reset &apos;Name&apos; value</source>
-        <translation>Ponastavi &quot;Ime&quot;</translation>
+        <translation>Ponastavi ime</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13732"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13816"/>
         <source>Reset &apos;Font face&apos; value</source>
-        <translation>Ponastavi &quot;Vrsta pisave&quot;</translation>
+        <translation>Ponastavi vrsto pisave</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13745"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13829"/>
         <source>Reset &apos;Offset&apos; values</source>
-        <translation>Ponastavi &quot;Odmik&quot;</translation>
+        <translation>Ponastavi odmik</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13765"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13849"/>
         <source>Name:</source>
         <translation>Ime:</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13798"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="13882"/>
         <source>li</source>
-        <translation>mr</translation>
+        <translation> mr</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="776"/>
         <source>Show ‘1’ on 1-measure repeats</source>
-        <translation>Prikaži &quot;1&quot; pri enotaktnih ponavljajih</translation>
+        <translation>Prikaži »1« pri enotaktnih ponavljajih</translation>
     </message>
 </context>
 <context>
@@ -4877,17 +4923,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="27"/>
         <source>Staves</source>
-        <translation>Črtovja</translation>
+        <translation>Notna črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="57"/>
         <source>Staff</source>
-        <translation>Notno črtovje</translation>
+        <translation>Črtovje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="62"/>
         <source>Visible</source>
-        <translation>Vidno</translation>
+        <translation>Viden</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="67"/>
@@ -4973,7 +5019,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="283"/>
         <source>Do not count</source>
-        <translation>brez štetja</translation>
+        <translation>Izključi iz štetja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="286"/>
@@ -4983,37 +5029,37 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="293"/>
         <source>Break multimeasure rest</source>
-        <translation>Prekini večtaktne premore (pavze)</translation>
+        <translation>Prekini večtaktne pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="306"/>
         <source>Play count:</source>
-        <translation>Števec predvajanja:</translation>
+        <translation>Število predvajanj:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="351"/>
         <source>Layout stretch factor</source>
-        <translation>Količnik razstegnitve postavitve:</translation>
+        <translation>Količnik raztegnitve takta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="354"/>
         <source>Layout stretch:</source>
-        <translation>Razširitev postavitve:</translation>
+        <translation>Razširitev takta:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="389"/>
         <source>Add to measure number:</source>
-        <translation>Dodaj k številu taktov:</translation>
+        <translation>Prištevek številu taktov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="415"/>
         <source>Measure number mode:</source>
-        <translation>Način številčenja taktov:</translation>
+        <translation>Prikaz številčenja taktov:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="426"/>
         <source>Auto</source>
-        <translation>Samodejna</translation>
+        <translation>Samodejen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="431"/>
@@ -5028,12 +5074,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="474"/>
         <source>Go to previous measure</source>
-        <translation>Skoči na predhodni takt</translation>
+        <translation>Pojdi na predhodni takt</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/measureproperties.ui" line="490"/>
         <source>Go to next measure</source>
-        <translation>Skoči na naslednji takt</translation>
+        <translation>Pojdi na naslednji takt</translation>
     </message>
 </context>
 <context>
@@ -5046,12 +5092,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="17"/>
         <source>Beam groups</source>
-        <translation>Poveži skupine s prečko</translation>
+        <translation>Povezovanje s prečko</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="37"/>
         <source>Beam selector</source>
-        <translation>Izbirnik prečk</translation>
+        <translation>Izbor prečk</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="69"/>
@@ -5076,7 +5122,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="186"/>
         <source>Reset note grouping</source>
-        <translation>Ponastavi grupiranje not</translation>
+        <translation>Ponastavi združevanje not</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/note_groups.ui" line="189"/>
@@ -5100,7 +5146,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="40"/>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="65"/>
         <source>sp</source>
-        <translation> sp</translation>
+        <translation> pr.</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/offset_select.ui" line="62"/>
@@ -5128,7 +5174,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="75"/>
         <source>Apply to all parts</source>
-        <translation>Uveljavi za vse parte</translation>
+        <translation>Spremeni za vse parte</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="108"/>
@@ -5143,7 +5189,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="124"/>
         <source>Two sided</source>
-        <translation>Dvostransko</translation>
+        <translation>Obojestransko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="131"/>
@@ -5174,7 +5220,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="205"/>
         <source>Staff space (sp):</source>
-        <translation>Razmiki črtovja (sp):</translation>
+        <translation>Razmiki črtovja (pr.):</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="246"/>
@@ -5184,12 +5230,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="252"/>
         <source>Inch (in)</source>
-        <translation>Palec (in)</translation>
+        <translation>Palci (in)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="259"/>
         <source>Millimeter (mm)</source>
-        <translation>Millimeter (mm)</translation>
+        <translation>Millimetri (mm)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="288"/>
@@ -5217,13 +5263,13 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="338"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="420"/>
         <source>Bottom</source>
-        <translation>Na dnu</translation>
+        <translation>Spodaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="373"/>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="474"/>
         <source>Top</source>
-        <translation>Na vrhu</translation>
+        <translation>Zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/pagesettings.ui" line="492"/>
@@ -5236,7 +5282,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="14"/>
         <source>Realize chord symbols</source>
-        <translation>Realiziraj oznake akordov</translation>
+        <translation>Realizacija oznak akordov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.ui" line="17"/>
@@ -5265,12 +5311,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="14"/>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="34"/>
         <source>Select</source>
-        <translation>Izberi</translation>
+        <translation>Izbor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="82"/>
         <source>Element type:</source>
-        <translation>Vrsta predmeta:</translation>
+        <translation>Vrsta elementa:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="54"/>
@@ -5305,7 +5351,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="106"/>
         <source>Same system</source>
-        <translation>Ista vrstica</translation>
+        <translation>Ista vrstica zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="113"/>
@@ -5315,7 +5361,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="123"/>
         <source>Action</source>
-        <translation>Dejanje</translation>
+        <translation>Dejanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectdialog.ui" line="129"/>
@@ -5343,12 +5389,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="14"/>
         <source>Select notes</source>
-        <translation>Izberi note</translation>
+        <translation>Izbor not</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="34"/>
         <source>Select</source>
-        <translation>Izberi</translation>
+        <translation>Izbor</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="110"/>
@@ -5358,7 +5404,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="138"/>
         <source>Same system</source>
-        <translation>Ista vrstica</translation>
+        <translation>Ista vrstica zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="54"/>
@@ -5368,7 +5414,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="152"/>
         <source>Same note type:</source>
-        <translation>Enaka vrsta note:</translation>
+        <translation>Ista vrsta note:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="103"/>
@@ -5418,7 +5464,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="183"/>
         <source>Action</source>
-        <translation>Dejanje</translation>
+        <translation>Dejanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.ui" line="189"/>
@@ -5584,7 +5630,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="290"/>
         <source>Add time signature to master palette</source>
-        <translation>Dodaj glavni paleti taktovski način</translation>
+        <translation>Dodaj taktovski način v glavno paleto</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timedialog.ui" line="293"/>
@@ -5603,7 +5649,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="49"/>
         <source>Beam groups</source>
-        <translation>Poveži skupine s prečko</translation>
+        <translation>Povezovanje skupin s prečkami</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/timesignaturepropertiesdialog.ui" line="56"/>
@@ -5671,12 +5717,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="77"/>
         <source>E♭ major / C minor</source>
-        <translation> Es-dur / c-mol</translation>
+        <translation>Es-dur / c-mol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="82"/>
         <source>B♭ major / G minor</source>
-        <translation> B-dur / g-mol</translation>
+        <translation>B-dur / g-mol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="87"/>
@@ -5711,7 +5757,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="117"/>
         <source>B major / G♯ minor</source>
-        <translation> H-dur / gis-mol</translation>
+        <translation>H-dur / gis-mol</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="122"/>
@@ -5897,7 +5943,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="494"/>
         <source>Single ♯ and ♭ only</source>
-        <translation>Le enojni višaji in nižaji</translation>
+        <translation>Le enojni ♯ in ♭</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/transposedialog.ui" line="499"/>
@@ -5971,7 +6017,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="14"/>
         <source>Create tuplet</source>
-        <translation>Ustvari nepravilno poddelitev</translation>
+        <translation>Ustvari poddelitev</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="34"/>
@@ -6019,7 +6065,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="215"/>
         <source>Auto</source>
-        <translation>Samodejna</translation>
+        <translation>Samodejni</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/tupletdialog.ui" line="232"/>
@@ -6043,7 +6089,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="55"/>
         <source>Voicing:</source>
-        <translation>Oglašanje:</translation>
+        <translation>Igranje:</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="69"/>
@@ -6071,25 +6117,25 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="98"/>
         <source>Drop two</source>
         <extracomment>2nd note an octave down</extracomment>
-        <translation>Brez dveh</translation>
+        <translation>Z drugo noto oktavo nižje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="103"/>
         <source>Six note</source>
         <extracomment>6 note chord</extracomment>
-        <translation>Šestglasno</translation>
+        <translation>Kot šesterozvok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="108"/>
         <source>Four note</source>
         <extracomment>4 note chord</extracomment>
-        <translation>Štiriglasno</translation>
+        <translation>Kot četverozvok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="113"/>
         <source>Three note</source>
         <extracomment>3 note chord</extracomment>
-        <translation>Troglasno</translation>
+        <translation>Kot trozvok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="122"/>
@@ -6104,13 +6150,13 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="132"/>
         <source>Chord/rest duration</source>
-        <translation>Trajanje akorda/pavze</translation>
+        <translation>Kot je trajanje akorda/pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/voicing_select.ui" line="93"/>
         <source>Close</source>
         <extracomment>all notes within an octave</extracomment>
-        <translation>Bližnje</translation>
+        <translation>Znotraj oktave</translation>
     </message>
 </context>
 <context>
@@ -6118,7 +6164,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/framework/accessibility/internal/accessibleiteminterface.cpp" line="256"/>
         <source>Panel</source>
-        <translation>Plošča</translation>
+        <translation>Podokno</translation>
     </message>
 </context>
 <context>
@@ -6136,7 +6182,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="40"/>
         <source>&amp;New…</source>
-        <translation>&amp;Novo ...</translation>
+        <translation>&amp;Nov zapis ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="41"/>
@@ -6176,12 +6222,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="66"/>
         <source>Save a cop&amp;y…</source>
-        <translation>Shrani &amp;dvojnik ...</translation>
+        <translation>Shrani ko&amp;pijo ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="67"/>
         <source>Save a copy…</source>
-        <translation>Shrani dvojnik ...</translation>
+        <translation>Shrani kopijo ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="72"/>
@@ -6206,7 +6252,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="85"/>
         <source>Pu&amp;blish to MuseScore.com…</source>
-        <translation>Ob&amp;javi na MuseScore.com ...</translation>
+        <translation>Objavi na &amp;MuseScore.com ...</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="86"/>
@@ -6257,7 +6303,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="126"/>
         <source>&amp;Clear recent files</source>
-        <translation>Po&amp;čisti nedavne datoteke</translation>
+        <translation>Počisti nedavne &amp;datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectuiactions.cpp" line="127"/>
@@ -6347,22 +6393,22 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="134"/>
         <source>Up note in chord</source>
-        <translation>Višja nota akorda</translation>
+        <translation>Na noto akorda nad</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="140"/>
         <source>Down note in chord</source>
-        <translation>Nižja nota akorda</translation>
+        <translation>Na noto akorda pod</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="146"/>
         <source>Top note in chord</source>
-        <translation>Najvišja nota akorda</translation>
+        <translation>Na najvišjo noto akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="152"/>
         <source>Bottom note in chord</source>
-        <translation>Najnižja nota akorda</translation>
+        <translation>Na najnižjo noto akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="158"/>
@@ -6372,17 +6418,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="159"/>
         <source>Go to first element in score</source>
-        <translation>Na prvi element notnega zapisa</translation>
+        <translation>Pojdi na prvi predmet notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="164"/>
         <source>Last element</source>
-        <translation>Zadnji element</translation>
+        <translation>Zadnji predmet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="165"/>
         <source>Go to last element in score</source>
-        <translation>Na zadnji element notnega zapisa</translation>
+        <translation>Pojdi na zadnji predmet notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="170"/>
@@ -6407,27 +6453,27 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="206"/>
         <source>Next system</source>
-        <translation>Naslednja vrstica</translation>
+        <translation>Naslednja vrstica zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="212"/>
         <source>Previous system</source>
-        <translation>Predhodna vrstica</translation>
+        <translation>Predhodna vrstica zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="254"/>
         <source>Down octave</source>
-        <translation>Dol oktavo</translation>
+        <translation>Oktavo navzdol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="260"/>
         <source>Up octave</source>
-        <translation>Gor oktavo</translation>
+        <translation>Oktavo navzgor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="272"/>
         <source>Halve duration</source>
-        <translation>Polovično trajanje</translation>
+        <translation>Prepolovi trajanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="278"/>
@@ -6473,7 +6519,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="335"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="336"/>
         <source>Toggle visibility of elements</source>
-        <translation>Preklopi vidnost predmetov</translation>
+        <translation>Preklopi vidljivost elementov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="341"/>
@@ -6509,7 +6555,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="469"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="470"/>
         <source>Unroll repeats</source>
-        <translation>Razgrni ponavljanja</translation>
+        <translation>Razpiši ponavljanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="487"/>
@@ -6541,7 +6587,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="533"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="534"/>
         <source>System text properties…</source>
-        <translation>Lastnosti napisa vrstice …</translation>
+        <translation>Lastnosti napisa partiture …</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="539"/>
@@ -6553,7 +6599,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="631"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="632"/>
         <source>Insert one measure before selection</source>
-        <translation> Vstavi en takt pred izborom</translation>
+        <translation>Vstavi en takt pred izborom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="638"/>
@@ -6577,7 +6623,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="656"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="657"/>
         <source>Insert one measure at end of score</source>
-        <translation> Vstavi en takt na koncu notnega zapisa</translation>
+        <translation>Vstavi en takt na koncu notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="662"/>
@@ -6611,17 +6657,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="798"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="799"/>
         <source>Join beams</source>
-        <translation>Spoji prečke</translation>
+        <translation>Poveži prečke</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="805"/>
         <source>Feathered beam, decelerate</source>
-        <translation>Peresna prečka – upočasnjevanje</translation>
+        <translation>Prečka – upočasnjevanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="812"/>
         <source>Feathered beam, accelerate</source>
-        <translation>Peresna prečka – pohitritev</translation>
+        <translation>Prečka – pospeševanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="826"/>
@@ -6656,12 +6702,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2272"/>
         <source>Cross-staff beaming</source>
-        <translation>Prečke čez črtovja</translation>
+        <translation>Prečke med črtovji</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2278"/>
         <source>Tuplet</source>
-        <translation>Nepravilna poddelitev</translation>
+        <translation>Poddelitev</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1061"/>
@@ -6694,7 +6740,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="64"/>
         <source>Add %1 to chord</source>
-        <translation>Dodaj akordu %1</translation>
+        <translation>Dodaj akordu ton %1</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="65"/>
@@ -6709,7 +6755,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1390"/>
         <source>Reset all text style overrides to default</source>
-        <translation>Ponastavi na prevzeto vse razveljavitve sloga napisov</translation>
+        <translation>Ponastavi na privzeto vse spremembe sloga napisov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1529"/>
@@ -6740,12 +6786,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1593"/>
         <source>Next text element</source>
-        <translation>Naslednji besedilni element</translation>
+        <translation>Naslednji napisni predmet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1599"/>
         <source>Previous text element</source>
-        <translation>Predhodni besedilni element</translation>
+        <translation>Predhodni napisni predmet</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1671"/>
@@ -6793,7 +6839,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1931"/>
         <source>Default (step time)</source>
-        <translation>Privzeto (korak po korak)</translation>
+        <translation>Privzeto (korak za trajanje note)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1938"/>
@@ -6925,7 +6971,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="62"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="63"/>
         <source>Apply current palette element</source>
-        <translation>Uveljavi predmet trenutne palete</translation>
+        <translation>Dodaj element trenutne palete</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="69"/>
@@ -6962,13 +7008,13 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="236"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="237"/>
         <source>Move chord/rest right</source>
-        <translation>Premakni akord oz. pavzo desno</translation>
+        <translation>Premakni akord/pavzo desno</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="230"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="231"/>
         <source>Move chord/rest left</source>
-        <translation>Premakni akord oz. pavzo levo</translation>
+        <translation>Premakni akord/pavzo levo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="68"/>
@@ -6978,7 +7024,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="69"/>
         <source>Enter TAB: fret %1</source>
-        <translation>Vnesi TAB: %1. prečka</translation>
+        <translation>Vnesi tablaturo: %1. prečka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="73"/>
@@ -6989,7 +7035,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="99"/>
         <source>Select next element in score</source>
-        <translation>Izberi naslednji element notnega zapisa</translation>
+        <translation>Izberi naslednji predmet notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="111"/>
@@ -7004,17 +7050,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="123"/>
         <source>Go to next measure / move text right quickly</source>
-        <translation>Skoči na naslednji takt / premakni napis desno hitro</translation>
+        <translation>Skoči na naslednji takt / hitro premakni napis desno</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="135"/>
         <source>Select note/rest above</source>
-        <translation>Izberi noto/pavzo zgoraj</translation>
+        <translation>Izberi noto/pavzo nad</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="141"/>
         <source>Select note/rest below</source>
-        <translation>Izberi noto/pavzo spodaj</translation>
+        <translation>Izberi noto/pavzo pod</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="147"/>
@@ -7039,32 +7085,32 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="183"/>
         <source>Go to next staff or voice</source>
-        <translation>Skoči na naslednje črtovje ali glas</translation>
+        <translation>Pojdi v naslednje črtovje ali glas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="189"/>
         <source>Go to previous staff or voice</source>
-        <translation>Skoči na predhodno črtovje ali glas</translation>
+        <translation>Pojdi v predhodno črtovje ali glas</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="195"/>
         <source>Go to next frame</source>
-        <translation>Skoči na naslednji okvir</translation>
+        <translation>Pojdi na naslednji okvir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="201"/>
         <source>Go to previous frame</source>
-        <translation>Skoči na predhodni okvir</translation>
+        <translation>Pojdi na predhodni okvir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="207"/>
         <source>Go to next system</source>
-        <translation>Skoči v naslednjo vrstico</translation>
+        <translation>Pojdi v naslednjo vrstico zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="213"/>
         <source>Go to previous system</source>
-        <translation>Skoči v predhodno vrstico</translation>
+        <translation>Pojdi v predhodno vrstico zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="219"/>
@@ -7079,12 +7125,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="243"/>
         <source>Move pitch/selection up</source>
-        <translation>Premakni ton/izbor višje</translation>
+        <translation>Premakni ton/izbor navzgor</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="249"/>
         <source>Move pitch/selection down</source>
-        <translation>Premakni ton/izbor nižje</translation>
+        <translation>Premakni ton/izbor navzdol</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="255"/>
@@ -7144,7 +7190,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="330"/>
         <source>Copy/paste: swap with clipboard</source>
-        <translation>Kopiraj/prilepi: zamenjava z odložiščem</translation>
+        <translation>Kopiraj/prilepi: zamenjaj z odložiščem</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="342"/>
@@ -7159,22 +7205,22 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="354"/>
         <source>Select similar elements</source>
-        <translation>Izberi podobne predmete</translation>
+        <translation>Izberi podobne elemente</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="360"/>
         <source>Select similar elements on the same staff</source>
-        <translation>Izberi podobne predmete v istem črtovju</translation>
+        <translation>Izberi podobne elemente v istem črtovju</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="366"/>
         <source>Select similar elements in the selected range</source>
-        <translation>Izberi podobne predmete v izbranem obsegu</translation>
+        <translation>Izberi podobne elemente v izbranem obsegu</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="372"/>
         <source>Select similar elements with more options…</source>
-        <translation>Izberi podobne predmete z več možnostmi ...</translation>
+        <translation>Izberi podobne elemente z več možnostmi ...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="378"/>
@@ -7219,7 +7265,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="427"/>
         <source>Realize chord symbols</source>
-        <translation>Realiziraj oznake sozvokov</translation>
+        <translation>Igranje oznak akodov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="433"/>
@@ -7229,7 +7275,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="452"/>
         <source>Respell pitches</source>
-        <translation>Zamenjaj z enakozvočnim</translation>
+        <translation>Enharmonično preimenuj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="458"/>
@@ -7239,7 +7285,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="464"/>
         <source>Resequence rehearsal marks</source>
-        <translation>Samodejno prerazvrsti vadbene oznake</translation>
+        <translation>Prerazvrsti vadbene oznake</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="476"/>
@@ -7254,7 +7300,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="495"/>
         <source>Display page view</source>
-        <translation>Prikaži kot list</translation>
+        <translation>Prikaži po straneh</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="502"/>
@@ -7303,12 +7349,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="613"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="614"/>
         <source>Add/remove section break</source>
-        <translation>Dodaj/odstrani razdelilni prelom</translation>
+        <translation>Dodaj/odstrani prelom zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="620"/>
         <source>Split measure before selected note/rest</source>
-        <translation>Razdeli takt pred izbrano noto oz. pavzo</translation>
+        <translation>Razdeli takt pred izbrano noto/pavzo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="626"/>
@@ -7323,7 +7369,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="676"/>
         <source>Insert vertical frame</source>
-        <translation>Vstavi medvrstni okvir</translation>
+        <translation>Vstavi medvrstični okvir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="683"/>
@@ -7393,12 +7439,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="806"/>
         <source>Add feathered beam: decelerate</source>
-        <translation>Dodaj peresno prečko – upočasnjevanje</translation>
+        <translation>Dodaj prečko – upočasnjevanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="813"/>
         <source>Add feathered beam: accelerate</source>
-        <translation>Dodaj peresno prečko – pospeševanje</translation>
+        <translation>Dodaj prečko – pospeševanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="840"/>
@@ -7543,7 +7589,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1240"/>
         <source>Add text: system text</source>
-        <translation>Dodaj napis: vrstični napis</translation>
+        <translation>Dodaj napis: napis partiture</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1246"/>
@@ -7583,12 +7629,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1288"/>
         <source>Add text: Roman numeral analysis</source>
-        <translation>Dodaj napis: rimskoštevilčna razčlemba</translation>
+        <translation>Dodaj napis: rimskoštevilčna oznaka akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1294"/>
         <source>Add text: Nashville number</source>
-        <translation>Dodaj napis: nashvillsko oštevilčenje</translation>
+        <translation>Dodaj napis: nashvillska oznaka akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1300"/>
@@ -7608,42 +7654,42 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1318"/>
         <source>Enter tuplet: duplet</source>
-        <translation>Vnos nepravilne poddelitve: duola</translation>
+        <translation>Vnos poddelitve: duola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1324"/>
         <source>Enter tuplet: triplet</source>
-        <translation>Vnos nepravilne poddelitve: triola</translation>
+        <translation>Vnos poddelitve: triola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1330"/>
         <source>Enter tuplet: quadruplet</source>
-        <translation>Vnos nepravilne poddelitve: kvartola</translation>
+        <translation>Vnos poddelitve: kvartola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1336"/>
         <source>Enter tuplet: quintuplet</source>
-        <translation>Vnos nepravilne: kvintola</translation>
+        <translation>Vnos poddelitve: kvintola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1342"/>
         <source>Enter tuplet: sextuplet</source>
-        <translation>Vnos nepravilne poddelitve: sekstola</translation>
+        <translation>Vnos poddelitve: sekstola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1348"/>
         <source>Enter tuplet: septuplet</source>
-        <translation>Vnos nepravilne poddelitve: septola</translation>
+        <translation>Vnos poddelitve: septola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1354"/>
         <source>Enter tuplet: octuplet</source>
-        <translation>Vnos nepravilne poddelitve: oktiola</translation>
+        <translation>Vnos poddelitve: oktiola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1360"/>
         <source>Enter tuplet: nonuplet</source>
-        <translation>Vnos nepravilne poddelitve: nonola</translation>
+        <translation>Vnos poddelitve: nonola</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1372"/>
@@ -7668,30 +7714,30 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1402"/>
         <source>Reset shapes and positions</source>
-        <translation>Ponastavi oblike in umestitve</translation>
+        <translation>Ponastavi oblike in položaje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1427"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1428"/>
         <source>Zoom to page width</source>
-        <translation>Približaj na širino lista</translation>
+        <translation>Povečaj na širino lista</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1433"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1434"/>
         <source>Zoom to whole page</source>
-        <translation>Približaj na celotno stran</translation>
+        <translation>Povečaj na celotno stran</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1439"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1440"/>
         <source>Zoom to two pages</source>
-        <translation>Približaj na dve strani</translation>
+        <translation>Povečaj na dve strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1446"/>
         <source>Accessibility: get location</source>
-        <translation>Dostopnost: pridobi mesto</translation>
+        <translation>Dostopnost: najdi mesto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1463"/>
@@ -7726,7 +7772,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1493"/>
         <source>Add staff above to selection</source>
-        <translation>Dodaj črtovje nad izborom</translation>
+        <translation>Dodaj v izbor črtovje nad izborom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1494"/>
@@ -7736,7 +7782,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1499"/>
         <source>Add staff below to selection</source>
-        <translation>Dodaj črtovje pod izborom</translation>
+        <translation>Dodaj v izbor črtovje pod izborom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1500"/>
@@ -7766,122 +7812,122 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1559"/>
         <source>Change enharmonic spelling (concert and written pitch)</source>
-        <translation>Spremeni poimenovanje enakozvočja (komorna in zapisana višina)</translation>
+        <translation>Spremeni enharmonično poimenovanje (komorna in zapisana višina)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1566"/>
         <source>Change enharmonic spelling (current mode only)</source>
-        <translation>Spremeni poimenovanje enakozvočja (le trenutni način)</translation>
+        <translation>Spremeni enharmonično poimenovanje (le trenutni način)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1580"/>
         <source>Toggle concert pitch</source>
-        <translation>Preklopi komorni ton</translation>
+        <translation>Vklopi/izklopi komorni ton</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1606"/>
         <source>Advance cursor: next beat (chord symbols)</source>
-        <translation>Pomik kazalke: naslednja doba (oznake akordov)</translation>
+        <translation>Naslednji vnos: naslednja doba (oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1617"/>
         <source>Advance longa (F.B./Chord symbol)</source>
-        <translation>Za dolginko dalje (Ošt. bas/Oznaka akorda)</translation>
+        <translation>Za dolginko naprej (ošt. bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1618"/>
         <source>Advance cursor: longa (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: dolginka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za dolginko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1623"/>
         <source>Advance breve (F.B./Chord symbol)</source>
-        <translation>Za dvojno celinko dalje (Ošt.bas/Oznaka akorda)</translation>
+        <translation>Za dvojno celinko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1624"/>
         <source>Advance cursor: breve (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: dvojna celinka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za dvojno celinko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1629"/>
         <source>Advance whole note (F.B./Chord symbol)</source>
-        <translation>Za celinko dalje (Ošt.bas/Oznaka akord)</translation>
+        <translation>Za celinko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1630"/>
         <source>Advance cursor: whole note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: celinka (oštevilčeni bas/oznake ακορδοω)</translation>
+        <translation>Naslednji vnos: za celinko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1635"/>
         <source>Advance half note (F.B./Chord symbol)</source>
-        <translation>Za polovinko dalje (Ošt.bas/Oznaka akorda)</translation>
+        <translation>Za polovinko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1636"/>
         <source>Advance cursor: half note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: polovinka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za polovinko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1641"/>
         <source>Advance quarter note (F.B./Chord symbol)</source>
-        <translation>Za četrtinko dalje (Ošt.bas/Oznaka akordov)</translation>
+        <translation>Za četrtinko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1642"/>
         <source>Advance cursor: quarter note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: četrtinka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za četrtinko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1647"/>
         <source>Advance eighth note (F.B./Chord symbol)</source>
-        <translation>Za osminko dalje (Ošt.bas/Oznaka akordov)</translation>
+        <translation>Za osminko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1648"/>
         <source>Advance cursor: eighth note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: osminka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za osminko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1653"/>
         <source>Advance 16th note (F.B./Chord symbol)</source>
-        <translation>Za 16-inko dalje (Ošt.bas/Oznaka akorda)</translation>
+        <translation>Za 16-inko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1654"/>
         <source>Advance cursor: 16th note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: 16-inka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za 16-inko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1659"/>
         <source>Advance 32nd note (F.B./Chord symbol)</source>
-        <translation>Za 32-inko dalje (Ošt.bas/Oznaka akorda)</translation>
+        <translation>Za 32-inko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1660"/>
         <source>Advance cursor: 32nd note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: 32-inka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za 32-inko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1665"/>
         <source>Advance 64th note (F.B./Chord symbol)</source>
-        <translation>Za 64-inko dalje (Ošt.bas/Oznaka akorda)</translation>
+        <translation>Za 64-inko naprej (ošt.bas/oznaka akorda)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1666"/>
         <source>Advance cursor: 64th note (figured bass/chord symbols)</source>
-        <translation>Pomik kazalke naprej: 64-inka (oštevilčeni bas/oznake akordov)</translation>
+        <translation>Naslednji vnos: za 64-inko naprej (oštevilčeni bas/oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1672"/>
         <source>Move text/go to next lyric verse</source>
-        <translation>Prestavi napis / skoči na naslednjo kitico besedila</translation>
+        <translation>Prestavi napis / pojdi na naslednjo kitico besedila</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1678"/>
         <source>Move text/go to previous lyric verse</source>
-        <translation>Prestavi napis / skoči na predhodno kitico besedila</translation>
+        <translation>Prestavi napis / pojdi na predhodno kitico besedila</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1702"/>
@@ -7991,18 +8037,18 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1882"/>
         <source>Make selected element(s) visible</source>
-        <translation>Spremeni izbrane elemente v vidne</translation>
+        <translation>Spremeni izbrane predmete v vidne</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1888"/>
         <source>Make selected element(s) invisible</source>
-        <translation>Spremeni izbrane elemente v nevidne</translation>
+        <translation>Spremeni izbrane predmete v nevidne</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1893"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1894"/>
         <source>Toggle automatic placement for selected elements</source>
-        <translation>Preklopi samodejno postavljanje izbranih elementov</translation>
+        <translation>Vklopi/izklopi samodejno postavljanje izbranih elementov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1905"/>
@@ -8012,7 +8058,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1906"/>
         <source>Go to string above (TAB)</source>
-        <translation>Skoči na višjo struno (TAB)</translation>
+        <translation>Pojdi na višjo struno (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1911"/>
@@ -8022,7 +8068,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1912"/>
         <source>Go to string below (TAB)</source>
-        <translation>Skoči na nižjo struno (TAB)</translation>
+        <translation>Pojdi na nižjo struno (TAB)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1981"/>
@@ -8032,25 +8078,25 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1988"/>
         <source>Set duration: double whole note</source>
-        <translation>Nastavi vrednost: dvojna celinka</translation>
+        <translation>Nastavi trajanje: dvojna celinka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1995"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2072"/>
         <source>Set duration: whole note</source>
-        <translation>Nastavi vrednost: celinka</translation>
+        <translation>Nastavi trajanje: celinka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2002"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2079"/>
         <source>Set duration: half note</source>
-        <translation>Nastavi vrednost: polovinka</translation>
+        <translation>Nastavi trajanje: polovinka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2009"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2086"/>
         <source>Set duration: quarter note</source>
-        <translation>Nastavi vrednost: četrtinka</translation>
+        <translation>Nastavi trajanje: četrtinka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2015"/>
@@ -8062,99 +8108,99 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2016"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2093"/>
         <source>Set duration: eighth note</source>
-        <translation>Nastavi vrednost: osminka</translation>
+        <translation>Nastavi trajanje: osminka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2023"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2100"/>
         <source>Set duration: 16th note</source>
-        <translation>Nastavi vrednost: 16-inka</translation>
+        <translation>Nastavi trajanje: 16-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2030"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2107"/>
         <source>Set duration: 32nd note</source>
-        <translation>Nastavi vrednost: 32-inka</translation>
+        <translation>Nastavi trajanje: 32-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2037"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2114"/>
         <source>Set duration: 64th note</source>
-        <translation>Nastavi vrednost: 64-inka</translation>
+        <translation>Nastavi trajanje: 64-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2044"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2121"/>
         <source>Set duration: 128th note</source>
-        <translation>Nastavi vrednost: 128-inka</translation>
+        <translation>Nastavi trajanje: 128-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2051"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2128"/>
         <source>Set duration: 256th note</source>
-        <translation>Nastavi vrednost: 256-inka</translation>
+        <translation>Nastavi trajanje: 256-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2058"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2135"/>
         <source>Set duration: 512th note</source>
-        <translation>Nastavi vrednost: 512-inka</translation>
+        <translation>Nastavi trajanje: 512-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2065"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2142"/>
         <source>Set duration: 1024th note</source>
-        <translation>Nastavi vrednost: 1024-inka</translation>
+        <translation>Nastavi trajanje: 1024-inka</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2149"/>
         <source>Toggle duration dot</source>
-        <translation>Preklopi piko</translation>
+        <translation>Dodaj/odstrani piko</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2156"/>
         <source>Toggle duration dot: double</source>
-        <translation>Preklopi piko: dvojna</translation>
+        <translation>Dodaj/odstrani pike: dve</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2163"/>
         <source>Toggle duration dot: triple</source>
-        <translation>Preklopi piko: trojna</translation>
+        <translation>Dodaj/odstrani pike: tri</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2170"/>
         <source>Toggle duration dot: quadruple</source>
-        <translation>Preklopi piko: četverna</translation>
+        <translation>Dodaj/odstrani pike: štiri</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2177"/>
         <source>Toggle rest</source>
-        <translation>Preklopi pavzo</translation>
+        <translation>Dodaj/odstrani pavzo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2184"/>
         <source>Select next in-staff element</source>
-        <translation>Izberi naslednji element iz črtovja</translation>
+        <translation>Izberi naslednji element v črtovju</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2190"/>
         <source>Select previous in-staff element</source>
-        <translation>Izberi predhodni element iz črtovja</translation>
+        <translation>Izberi predhodni element v črtovju</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2196"/>
         <source>Toggle accidental: flat</source>
-        <translation>Preklopi predznak: nižaj</translation>
+        <translation>Dodaj/odstrani predznak: nižaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2210"/>
         <source>Toggle accidental: natural</source>
-        <translation>Preklopi predznak: razvezaj</translation>
+        <translation>Dodaj/odstrani predznak: razvezaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2217"/>
         <source>Toggle accidental: sharp</source>
-        <translation>Preklopi predznak: višaj</translation>
+        <translation>Dodaj/odstrani predznak: višaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2231"/>
@@ -8169,7 +8215,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2316"/>
         <source>Staff type change</source>
-        <translation>Spreminjanje vrste črtovja</translation>
+        <translation>Sprememba vrste črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2317"/>
@@ -8180,25 +8226,25 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2327"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2328"/>
         <source>Standard bend</source>
-        <translation>Običajni zateg</translation>
+        <translation>Običajni zateg strune</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2334"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2335"/>
         <source>Pre-bend</source>
-        <translation>Predzateg</translation>
+        <translation>Predzateg strune</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2341"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2342"/>
         <source>Grace note bend</source>
-        <translation>Predložni zateg</translation>
+        <translation>Predložni zateg strune</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2348"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2349"/>
         <source>Slight bend</source>
-        <translation>Rahli zateg</translation>
+        <translation>Rahli zateg strune</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2359"/>
@@ -8280,17 +8326,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2155"/>
         <source>Double augmentation dot</source>
-        <translation>Dvojna pika za pod. trajanja</translation>
+        <translation>Dve piki za pod. trajanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2162"/>
         <source>Triple augmentation dot</source>
-        <translation>Trojna pika za pod. trajanja</translation>
+        <translation>Tri pike za pod. trajanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2169"/>
         <source>Quadruple augmentation dot</source>
-        <translation>Četverna pika za pod. trajanja</translation>
+        <translation>Štiri pike za pod. trajanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2230"/>
@@ -8340,7 +8386,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2252"/>
         <source>Add articulation: accent</source>
-        <translation>Dodaj artikulacije: poudarek (akcent)</translation>
+        <translation>Dodaj artikulacijo: poudarek (akcent)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2259"/>
@@ -8395,12 +8441,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1558"/>
         <source>Change enharmonic spelling (both modes)</source>
-        <translation>Spremeni poimenovanje enakozvočja (oba načina)</translation>
+        <translation>Spremeni enharmonično poimenovanje (oba načina)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1565"/>
         <source>Change enharmonic spelling (current mode)</source>
-        <translation>Spremeni poimenovanje enakozvočja (trenutni način)</translation>
+        <translation>Spremeni enharmonično poimenovanje (trenutni način)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="181"/>
@@ -8453,17 +8499,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1445"/>
         <source>Accessibility: Get location</source>
-        <translation>Dostopnost: Pridobi mesto</translation>
+        <translation>Dostopnost: Najdi mesto</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1505"/>
         <source>Screen: Previous</source>
-        <translation>Zaslon: Predhodni</translation>
+        <translation>Pikaz: Predhodni</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1511"/>
         <source>Screen: Next</source>
-        <translation>Zaslon: Naslednji</translation>
+        <translation>Prikaz: Naslednji</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="770"/>
@@ -8480,7 +8526,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="50"/>
         <source>Restart</source>
-        <translation>Začni znova</translation>
+        <translation>Ponovno zaženi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="55"/>
@@ -8490,12 +8536,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="67"/>
         <source>About &amp;Qt…</source>
-        <translation>O okolju &amp;Qt …</translation>
+        <translation>O orodju &amp;Qt …</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="72"/>
         <source>About &amp;MusicXML…</source>
-        <translation>O &amp;MusicXML …</translation>
+        <translation>O &amp;MusicXML-u …</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="77"/>
@@ -8510,7 +8556,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="88"/>
         <source>Revert to &amp;factory settings</source>
-        <translation>Povrni na &amp;začetne nastavitve</translation>
+        <translation>Po&amp;nastavi nastavitve</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="104"/>
@@ -8545,7 +8591,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="128"/>
         <source>Open instruments dialog…</source>
-        <translation>Odpri pogovorno okno za glasbila ...</translation>
+        <translation>Odpri okno z glasbili ...</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="134"/>
@@ -8560,12 +8606,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="141"/>
         <source>Se&amp;lection filter</source>
-        <translation>&amp;Izborni filter</translation>
+        <translation>Filter &amp;izbora</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="142"/>
         <source>Show/hide selection filter</source>
-        <translation>Prikaži/skrij izborni filter</translation>
+        <translation>Prikaži/skrij filter izbora</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="150"/>
@@ -8590,7 +8636,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
         <source>Show/hide mixer</source>
-        <translation>Prikaži/skrij mešalno mizo</translation>
+        <translation>Prikaži/skrij mešalnik</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
@@ -8600,12 +8646,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="189"/>
         <source>&amp;Status bar</source>
-        <translation>Vrstica &amp;stanja</translation>
+        <translation>&amp;Statusna vrstica</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="190"/>
         <source>Show/hide status bar</source>
-        <translation>Prikaži/skrij vrstico stanja</translation>
+        <translation>Prikaži/skrij statusno vrstico</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="198"/>
@@ -8615,7 +8661,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="89"/>
         <source>Revert to factory settings</source>
-        <translation>Povrni na začetne nastavitve</translation>
+        <translation>Ponastavi nastavitve</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="56"/>
@@ -8635,17 +8681,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="96"/>
         <source>Restore the &amp;default layout</source>
-        <translation>Povrni na pri&amp;vzeto razporeditev</translation>
+        <translation>Ponastavi na pri&amp;vzeto razporeditev</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
         <source>Restore the default layout</source>
-        <translation>Povrni na privzeto razporeditev</translation>
+        <translation>Ponastavi na privzeto razporeditev</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="111"/>
         <source>&amp;Note input</source>
-        <translation>&amp;Vnašanje not</translation>
+        <translation>&amp;Vnos not</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="174"/>
@@ -8697,7 +8743,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="73"/>
         <source>Open playback setup dialog</source>
-        <translation>Odpri pogovorno okno z nastavitvami predvajanja</translation>
+        <translation>Odpri okno z nastavitvami predvajanja</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="98"/>
@@ -8723,17 +8769,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="57"/>
         <source>Toggle ‘Loop playback’</source>
-        <translation>Preklopi &quot;Ponavljanje predvajanja&quot;</translation>
+        <translation>Vklopi/izklopi ponavljanje predvajanja</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="65"/>
         <source>Toggle metronome playback</source>
-        <translation>Preklopi predvajanje metronoma</translation>
+        <translation>Vklopi/izklopi predvajanje metronoma</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="72"/>
         <source>Playback setup</source>
-        <translation>Nastavitev predvajanja</translation>
+        <translation>Nastavitve predvajanja</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="125"/>
@@ -8845,7 +8891,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2379"/>
         <source>Show page &amp;margins</source>
-        <translation>Pokaži &amp;robove strani</translation>
+        <translation>Prikaži &amp;robove strani</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="68"/>
@@ -8879,13 +8925,13 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="266"/>
         <source>Double duration</source>
-        <translation>Dvojna vrednost</translation>
+        <translation>Dvojno trajanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1546"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1547"/>
         <source>Repeat selection</source>
-        <translation>Ponovi izbor</translation>
+        <translation>Ponovi izbrano</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackuiactions.cpp" line="64"/>
@@ -8930,7 +8976,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="129"/>
         <source>Go to previous measure / move text left quickly</source>
-        <translation>Skoči v predhodni takt / hitro prestavi napis levo</translation>
+        <translation>Pojdi v predhodni takt / hitro prestavi napis levo</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="384"/>
@@ -8965,7 +9011,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="426"/>
         <source>Realize &amp;chord symbols</source>
-        <translation>Realiziraj &amp;oznake akordov</translation>
+        <translation>Igranje &amp;oznak akordov</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="432"/>
@@ -8975,7 +9021,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="445"/>
         <source>Toggle rhythmic sl&amp;ash notation</source>
-        <translation>Preklopi ritmični po&amp;ševnični zapis</translation>
+        <translation>Vklopi/izklopi ritmični po&amp;ševnični zapis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="446"/>
@@ -8985,7 +9031,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="451"/>
         <source>Respell &amp;pitches</source>
-        <translation>Zamenjaj z &amp;enakozvočnim</translation>
+        <translation>&amp;Enharmonično preimenuj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="457"/>
@@ -9015,27 +9061,27 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="545"/>
         <source>Add/remove s&amp;ystem breaks…</source>
-        <translation>Dodaj/odstrani prelome vrstic ...</translation>
+        <translation>Dodaj/odstrani &amp;prelom vrstice ...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="565"/>
         <source>Exchange voice &amp;1-2</source>
-        <translation>Zamenjava glasov &amp;1-2</translation>
+        <translation>Zamenjaj glasova &amp;1 in 2</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="577"/>
         <source>Exchange voice 1-&amp;4</source>
-        <translation>Zamenjava glasov 1-&amp;4</translation>
+        <translation>Zamenjaj glasova 1 in &amp;4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="583"/>
         <source>Exchange voice &amp;2-3</source>
-        <translation>Zamenjava glasov &amp;2-3</translation>
+        <translation>Zamenjaj glasova &amp;2 in 3</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="595"/>
         <source>Exchange voice &amp;3-4</source>
-        <translation>Zamenjava glasov &amp;3-4</translation>
+        <translation>Zamenjaj glasova &amp;3 in 4</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="619"/>
@@ -9055,12 +9101,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="675"/>
         <source>Insert &amp;vertical frame</source>
-        <translation>Vstavi &amp;medvrstni okvir</translation>
+        <translation>Vstavi &amp;medvrstični okvir</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="682"/>
         <source>Insert &amp;text frame</source>
-        <translation>Vstavi n&amp;apisni okvir</translation>
+        <translation>Vstavi okvir z &amp;besedilom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="689"/>
@@ -9075,7 +9121,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="701"/>
         <source>Append te&amp;xt frame</source>
-        <translation>Dodaj &amp;napisni okvir</translation>
+        <translation>Dodaj okvir z be&amp;sedilom</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="846"/>
@@ -9165,7 +9211,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1164"/>
         <source>Add ottava 8va alta</source>
-        <translation>Dodaj ottava 8va alta</translation>
+        <translation>Dodaj črto za igranje oktavo višje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1169"/>
@@ -9175,7 +9221,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1170"/>
         <source>Add ottava 8va bassa</source>
-        <translation>Dodaj ottava 8va bassa</translation>
+        <translation>Dodaj črto za igranje oktavo nižje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1175"/>
@@ -9265,12 +9311,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1287"/>
         <source>R&amp;oman numeral analysis</source>
-        <translation>Ri&amp;mskoštevilčna razčlemba</translation>
+        <translation>Ri&amp;mskoštevilčna oznaka akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1293"/>
         <source>&amp;Nashville number</source>
-        <translation>Nas&amp;hvillsko številčenje</translation>
+        <translation>Nas&amp;hvillska oznaka akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1299"/>
@@ -9335,7 +9381,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1366"/>
         <source>Enter tuplet: create custom…</source>
-        <translation>Vnos nepravilne poddelitve po meri ...</translation>
+        <translation>Vnos poddelitve po meri ...</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1371"/>
@@ -9355,17 +9401,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1389"/>
         <source>Reset &amp;text style overrides</source>
-        <translation>P&amp;onastavi razveljavitve sloga napisa</translation>
+        <translation>P&amp;onastavi spremebe sloga napisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1395"/>
         <source>Reset &amp;beams</source>
-        <translation>&amp;Ponastavi prečke</translation>
+        <translation>Pona&amp;stavi prečke</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1401"/>
         <source>Reset shapes and &amp;positions</source>
-        <translation>Ponastavi oblike in &amp;umestitve</translation>
+        <translation>Ponastavi oblike in po&amp;zicije</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1506"/>
@@ -9400,17 +9446,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1594"/>
         <source>Go to next text element</source>
-        <translation>Pojdi na naslednji predmet</translation>
+        <translation>Pojdi na naslednji napis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1600"/>
         <source>Go to previous text element</source>
-        <translation>Vrni se na predhodni predmet</translation>
+        <translation>Vrni se na predhodni napis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1612"/>
         <source>Advance cursor: previous beat (chord symbols)</source>
-        <translation>Napredna kazalka: predhodna doba (oznake akordov)</translation>
+        <translation>Predhodni vnos: predhodna doba (oznake akordov)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1684"/>
@@ -9470,49 +9516,49 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1840"/>
         <source>Transpose up a semitone</source>
-        <translation>Prestavi polton višje</translation>
+        <translation>Transponiraj polton višje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1846"/>
         <source>Transpose down a semitone</source>
-        <translation>Prestavi polton nižje</translation>
+        <translation>Transponiraj polton nižje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1869"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1870"/>
         <source>Toggle multimeasure rests</source>
-        <translation>Preklopi večtaktne premore (pavze)</translation>
+        <translation>Vklopi/izklopi večtaktne pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1875"/>
         <source>Toggle empty staves</source>
-        <translation>Preklopi prazna črtovja</translation>
+        <translation>Prikaži/skrij prazna črtovja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1899"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1900"/>
         <source>Toggle automatic placement for entire score</source>
-        <translation>Preklopi samodejno stavljenje za celotni notni zapis</translation>
+        <translation>Vklopi/izklopi samodejno postavitev za celoten notni zapis</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1918"/>
         <source>Toggle note input mode</source>
-        <translation>Preklopi način vnašanja not</translation>
+        <translation>Vklopi/izklopi način vnašanja not</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1925"/>
         <source>Insert/overwrite</source>
-        <translation>Vstavi/prepiši</translation>
+        <translation>Vstavi/ponovno napiši</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1926"/>
         <source>Toggle note input mode: insert/overwrite</source>
-        <translation>Preklopi način vnašanja not: vstavi/prepiši</translation>
+        <translation>Preklopi način vnašanja not: vstavi/ponovno napiši</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1932"/>
         <source>Toggle note input mode: default (step-time)</source>
-        <translation>Preklopi način vnašanja not: privzeto (korak po korak)</translation>
+        <translation>Preklopi način vnašanja not: privzeto (korak za trajanje note)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1939"/>
@@ -9543,42 +9589,42 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1973"/>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="1974"/>
         <source>Real-time advance</source>
-        <translation>Napreduj v trenutnem času</translation>
+        <translation>Napreduj sočasno</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2195"/>
         <source>Toggle flat</source>
-        <translation>Preklopi nižaj</translation>
+        <translation>Dodaj/odstrani nižaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2202"/>
         <source>Toggle double-flat</source>
-        <translation>Preklopi dvojni nižaj</translation>
+        <translation>Dodaj/odstrani dvojni nižaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2203"/>
         <source>Toggle accidental: double-flat</source>
-        <translation>Preklopi predznak: dvojni nižaj</translation>
+        <translation>Dodaj/odstrani predznak: dvojni nižaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2209"/>
         <source>Toggle natural</source>
-        <translation>Preklopi razvezaj</translation>
+        <translation>Dodaj/odstrani razvezaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2216"/>
         <source>Toggle sharp</source>
-        <translation>Preklopi višaj</translation>
+        <translation>Dodaj/odstrani višaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2223"/>
         <source>Toggle double-sharp</source>
-        <translation>Preklopi dvojni višaj</translation>
+        <translation>Dodaj/odstrani dvojni višaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2224"/>
         <source>Toggle accidental: double-sharp</source>
-        <translation>Preklopi predznak: dvojni višaj</translation>
+        <translation>Dodaj/odstrani predznak: dvojni višaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationuiactions.cpp" line="2238"/>
@@ -9651,7 +9697,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/workspace/internal/workspaceuiactions.cpp" line="34"/>
         <source>Select workspace</source>
-        <translation>Izberite delovno okolje</translation>
+        <translation>Izberi delovno okolje</translation>
     </message>
     <message>
         <location filename="../../src/workspace/internal/workspaceuiactions.cpp" line="39"/>
@@ -9666,7 +9712,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="35"/>
         <source>Save diagnostic files</source>
-        <translation>Shrani datoteko o pregledu</translation>
+        <translation>Shrani datoteke o pregledu</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="40"/>
@@ -9676,12 +9722,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="45"/>
         <source>Show pr&amp;ofiler…</source>
-        <translation>Prikaži &amp;profiler</translation>
+        <translation>Prikaži &amp;profiler ...</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="50"/>
         <source>Show &amp;navigation tree…</source>
-        <translation>Prikaži &amp;navigacijsko drevo ...</translation>
+        <translation>Prikaži &amp;krmarno drevo ...</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="55"/>
@@ -9691,22 +9737,22 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/diagnostics/internal/diagnosticsactions.cpp" line="65"/>
         <source>Engraving &amp;elements</source>
-        <translation>Stavlj&amp;enje elementov</translation>
+        <translation>Zapisovanje &amp;predmetov</translation>
     </message>
     <message>
         <location filename="../../src/multiinstances/internal/multiinstancesuiactions.cpp" line="35"/>
         <source>&amp;Multiinstances</source>
-        <translation>&amp;Več primerkov</translation>
+        <translation>&amp;Več primerov</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="45"/>
         <source>&amp;Manage plugins…</source>
-        <translation>Upravljanje vtičnikov ...</translation>
+        <translation>&amp;Upravljaj z vtičniki ...</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="46"/>
         <source>Manage plugins…</source>
-        <translation>Upravljanje vtičnikov ...</translation>
+        <translation>Upravljaj z vtičniki ...</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleruiactions.cpp" line="35"/>
@@ -9736,17 +9782,17 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/qml/HomePage/HomeMenu.qml" line="92"/>
         <source>Learn</source>
-        <translation>Naučite se</translation>
+        <translation>Učenje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="110"/>
         <source>Plugins search</source>
-        <translation>Išči vtičnike</translation>
+        <translation>Išči med vtičniki</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="129"/>
         <source>Category:</source>
-        <translation>Zvrst:</translation>
+        <translation>Kategorija:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="137"/>
@@ -9758,7 +9804,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="118"/>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="56"/>
         <source>Notation toolbar</source>
-        <translation>Orodna vrstica vnašanja not</translation>
+        <translation>Vrstica za vnašanja not</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="144"/>
@@ -9774,7 +9820,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="188"/>
         <source>Note input</source>
-        <translation>Vnašanje not</translation>
+        <translation>Vnos not</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="217"/>
@@ -9794,12 +9840,12 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="289"/>
         <source>Selection filter</source>
-        <translation>Izborni filter</translation>
+        <translation>Izborno sito</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="317"/>
         <source>Mixer</source>
-        <translation>Mešalna miza</translation>
+        <translation>Mešalnik</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="351"/>
@@ -9814,7 +9860,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="407"/>
         <source>Drumset tools</source>
-        <translation>Tolkalska orodja</translation>
+        <translation>Orodja za tolkala</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/platform/win/AppTitleBar.qml" line="93"/>
@@ -9825,7 +9871,7 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
     <message>
         <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
         <source>Undo/redo toolbar</source>
-        <translation>Orodna vrstica razveljavitve/povrnitve</translation>
+        <translation>Vrstica za razveljavitve/povrnitve</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
@@ -9843,7 +9889,9 @@ Privzeta je poravnava na desni rob. Označite to polje, da razveljavite to pravi
         <source>This action will reset all your app preferences and delete all custom palettes and custom shortcuts. The list of recent scores will also be cleared.
 
 This action will not delete any of your scores.</source>
-        <translation>S tem boste ponastavili vse nastavitve in izbrisali vse palete po meri ter ustvarjene bljižnice. Tudi seznam notnih zapisov bo izbrisan, sami zapisi pa ne. </translation>
+        <translation>S tem boste ponastavili vse nastavitve in izbrisal vse palete po meri ter ustvarjene bljižnice. Izbrisan bo tudi seznam nedavnih notnih zapisov, sami zapisi pa ne.
+
+Vaši notni zapisi bodo vsi ohranjeni.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="257"/>
@@ -9853,12 +9901,12 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="268"/>
         <source>Would you like to restart MuseScore now?</source>
-        <translation>Želite znova zagnati MuseScore zdaj?</translation>
+        <translation>Ali želite takoj ponovno zagnati MuseScore?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="269"/>
         <source>MuseScore needs to be restarted for these changes to take effect.</source>
-        <translation>Da bi spremembe bile opazne, morate znova zagnati MuseScore.</translation>
+        <translation>Potreben je ponovni zagon MuseScora za prikaz sprememb.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/internal/applicationactioncontroller.cpp" line="274"/>
@@ -9873,7 +9921,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/internal/startupscenario.cpp" line="191"/>
         <source>Do you want to restore the session?</source>
-        <translation>Ali želite obnoviti sejo?</translation>
+        <translation>Ali želite nadaljevati, kjer ste ostali?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="90"/>
@@ -9883,7 +9931,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="91"/>
         <source>Score</source>
-        <translation>Notni zapis</translation>
+        <translation>Zapis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/maintoolbarmodel.cpp" line="92"/>
@@ -9938,7 +9986,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="44"/>
         <source>Loading “%1”…‎</source>
-        <translation>Nalaganje &quot;%1&quot; …‎</translation>
+        <translation>»%1« se nalaga …‎</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/internal/splashscreen/newinstanceloadingscreenview.cpp" line="50"/>
@@ -9951,7 +9999,7 @@ This action will not delete any of your scores.</source>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="32"/>
         <source>About MuseScore</source>
-        <translation>O programu</translation>
+        <translation>O MuseScoru</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="84"/>
@@ -9967,20 +10015,26 @@ This action will not delete any of your scores.</source>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="114"/>
         <source>Visit %1 for new versions and more information.</source>
         <extracomment>%1 will be a link to the MuseScore website</extracomment>
-        <translation>Nove različice in več podatkov lahko najdeš na %1</translation>
+        <translation>Nove različice in več podatkov lahko najdete na %1.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="117"/>
         <source>Get &lt;a href=&quot;%1&quot;&gt;help&lt;/a&gt; with the program or &lt;a href=&quot;%2&quot;&gt;contribute&lt;/a&gt; to its development.</source>
-        <translation>Najdi &lt;a href=&quot;%1&quot;&gt;pomoč&lt;/a&gt; pri programu ali &lt;a href=&quot;%2&quot;&gt;prispevaj&lt;/a&gt; k njegovemu razvoju.</translation>
+        <translation>Poiščite &lt;a href=&quot;%1&quot;&gt;pomoč&lt;/a&gt; pri uporabi programa ali &lt;a href=&quot;%2&quot;&gt;prispevajte&lt;/a&gt; k njegovemu razvoju.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="130"/>
         <source>For privacy information, see our &lt;a href=&quot;%1&quot;&gt;privacy policy&lt;/a&gt;.</source>
-        <translation>Informacije o zasebnosti lahko najdeš v &lt;a href=&quot;%1&quot;&gt;pravilniku zasebnosti&lt;/a&gt;.</translation>
+        <translation>Informacije o zasebnosti lahko najdene v &lt;a href=&quot;%1&quot;&gt;pravilniku zasebnosti&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="139"/>
+        <source>Copyright © 1999-2024 MuseScore BVBA and others.
+Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
+        <translation>Avtorske pravice © 1999–2024 MuseScore BVBA in drugi.
+Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt;/a&gt;.</translation>
+    </message>
+    <message>
         <source>Copyright © 1999-2023 MuseScore BVBA and others.
 Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License version 3&lt;/a&gt;.</source>
         <translation>Avtorske pravice © 1999–2023 MuseScore BVBA in drugi.
@@ -9989,7 +10043,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="32"/>
         <source>About MusicXML</source>
-        <translation>O MusicXML</translation>
+        <translation>O MusicXML-u</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="59"/>
@@ -9999,7 +10053,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="71"/>
         <source>Copyright © 2004-2021 the Contributors to the MusicXML Specification, published by the Music Notation Community Group under the W3C Community Final Specification Agreement (FSA):</source>
-        <translation>Avtorske pravice © 2004–2021 Sodelavci specifikacije MusicXML, ki ga izdaja Music Notation Community Group z licenco W3C Community Final Specification Agreement (FSA):</translation>
+        <translation>Avtorske pravice © 2004–2021 sodelavci specifikacije MusicXML, ki ga izdaja Music Notation Community Group z licenco W3C Community Final Specification Agreement (FSA):</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/AboutMusicXMLDialog.qml" line="95"/>
@@ -10040,7 +10094,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/FirstLaunchSetupDialog.qml" line="191"/>
         <source>Finish</source>
-        <translation>Konec</translation>
+        <translation>Zaključi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="31"/>
@@ -10050,12 +10104,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="32"/>
         <source>Enjoy realistic playback for free by downloading our new Muse Sounds library</source>
-        <translation>Prenesite našo novo knjižnico Muse Sound in uživajte v brezplačnem realističnem zvoku</translation>
+        <translation>Prenesi našo novo knjižnico Muse Sounds in uživaj v brezplačnem pristnem zvoku</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/PlaybackPage.qml" line="36"/>
         <source>Watch video</source>
-        <translation>Glej video</translation>
+        <translation>Oglejte si video</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="34"/>
@@ -10065,12 +10119,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="35"/>
         <source>Let’s get started by choosing a theme.</source>
-        <translation>Začniva z izbiro podlage.</translation>
+        <translation>Začniva z izbiro barvnega načina.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="56"/>
         <source>Follow system theme</source>
-        <translation>Prizvemi podlago sistema</translation>
+        <translation>Prizvemi barvno temo sistema</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="117"/>
@@ -10080,19 +10134,19 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/ThemesPage.qml" line="123"/>
         <source>Enable high contrast</source>
-        <translation>Omogoči visok kontrast</translation>
+        <translation>Vklopi visok kontrast</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="31"/>
         <source>Video tutorials</source>
-        <translation>Video priročniki</translation>
+        <translation>Učni videi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/FirstLaunchSetup/TutorialsPage.qml" line="32"/>
         <source>Behind this dialog is the ‘Learn’ section, where you’ll find tutorials to get you started
 (Video tutorials require an internet connection)</source>
-        <translation>Temu pogovornemu oknu sledi razdelek &quot;Poznavanje&quot;, kjer lahko za začetek najdete vadnice
-(Videovadnice potrebujejo spletno povezavo)</translation>
+        <translation>Temu oknu sledi razdelek »Učenje«, kjer za lažji začetek najdetete vadnice
+(Učni videi potrebujejo spletno povezavo)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="102"/>
@@ -10102,12 +10156,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="106"/>
         <source>Are you sure you want to cancel?</source>
-        <translation>Ali ste prepričani, da želite preklicati?</translation>
+        <translation>Ali si prepričan, da želiš zaključiti?</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/firstlaunchsetup/firstlaunchsetupmodel.cpp" line="107"/>
         <source>If you choose to cancel, then be sure to check out our free Muse Sounds playback library on musescore.org.</source>
-        <translation>Če izbereš preklic, vabljen, da si na musescore.org pogledaš našo brezplačno knjižnico zvokov Muse Sounds.</translation>
+        <translation>Če želiš zaključiti, vabljen, da si na musescore.org pogledaš našo brezplačno knjižnico zvokov Muse Sounds.</translation>
     </message>
 </context>
 <context>
@@ -10125,7 +10179,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
         <source>T&amp;uplets</source>
-        <translation>Po&amp;ddelitve</translation>
+        <translation>T&amp;upleti</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
@@ -10140,7 +10194,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="223"/>
         <source>&amp;Text</source>
-        <translation>&amp;Napis</translation>
+        <translation>N&amp;apis</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
@@ -10163,7 +10217,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="362"/>
         <source>&amp;Muse Sampler</source>
-        <translation>Vzorčnik &amp;Muse Sampler</translation>
+        <translation>&amp;Muse Sampler</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="388"/>
@@ -10173,7 +10227,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="389"/>
         <source>&amp;Engraving</source>
-        <translation>Stavlj&amp;enje</translation>
+        <translation>Zapisovanj&amp;e</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/appmenumodel.cpp" line="390"/>
@@ -10297,7 +10351,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="145"/>
         <source>Choose background wallpaper</source>
-        <translation>Izberite ozadje podlage</translation>
+        <translation>Izberi ozadje</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/AppearancePreferencesPage.qml" line="184"/>
@@ -10313,7 +10367,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/appshell/qml/Preferences/internal/AccentColorsSection.qml" line="63"/>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="47"/>
         <source>Accent color:</source>
-        <translation>Barva za poudarjanje:</translation>
+        <translation>Barva za označevanje:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="44"/>
@@ -10325,7 +10379,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/appshell/qml/Preferences/internal/AdvancedTopSection.qml" line="67"/>
         <source>Search advanced</source>
         <extracomment>Search advanced preferences</extracomment>
-        <translation>Napredno iskanje</translation>
+        <translation>Išči po naprednem</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AudioApiSection.qml" line="29"/>
@@ -10350,7 +10404,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="42"/>
         <source>Check to see if a new version of MuseScore is available</source>
-        <translation>Preveri razpoložljivost novih različic MuseScora</translation>
+        <translation>Preveri, ali je na voljo nova različica MuseScora</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/AutomaticUpdateSection.qml" line="58"/>
@@ -10370,7 +10424,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="29"/>
         <source>Character set used when importing binary files</source>
-        <translation>Kodni nabor, uporabljen za uvoz dvojiških datotek</translation>
+        <translation>Kodni nabor, uporabljen za uvoz binarnih datotek</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CharsetsSection.qml" line="37"/>
@@ -10385,12 +10439,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ColorAndWallpaperSection.qml" line="95"/>
         <source>Wallpaper:</source>
-        <translation>Slika ozadja:</translation>
+        <translation>Slika:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/CommonAudioApiConfiguration.qml" line="53"/>
         <source>Audio device:</source>
-        <translation>Zvočni izhod:</translation>
+        <translation>Zvočnik:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/DefaultFilesSection.qml" line="31"/>
@@ -10416,7 +10470,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="51"/>
         <source>Built-in style</source>
-        <translation>Vgrajen slog</translation>
+        <translation>Vgrajeni slog</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ImportStyleSection.qml" line="75"/>
@@ -10441,7 +10495,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/LanguagesSection.qml" line="92"/>
         <source>Restart required</source>
-        <translation>Potreben ponovni zagon</translation>
+        <translation>Potreben je ponovni zagon</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="42"/>
@@ -10452,12 +10506,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="47"/>
         <source>MIDI input:</source>
-        <translation>Vhod MIDI:</translation>
+        <translation>MIDI vhod:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiDevicesSection.qml" line="63"/>
         <source>MIDI output:</source>
-        <translation>Izhod MIDI:</translation>
+        <translation>MIDI izhod:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MidiSection.qml" line="39"/>
@@ -10467,12 +10521,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MiscellaneousSection.qml" line="30"/>
         <source>Miscellaneous</source>
-        <translation>Ostale nastavitve</translation>
+        <translation>Ostalo</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MiscellaneousSection.qml" line="39"/>
         <source>Proximity for selecting elements:</source>
-        <translation>Natančnost za izbiranje predmetov</translation>
+        <translation>Najv. oddaljenost za izbor elementa:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="29"/>
@@ -10492,12 +10546,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/MusicXmlSection.qml" line="73"/>
         <source>Apply default typeface (Edwin) to imported scores</source>
-        <translation>Pri uvoženih notnih zapisih uveljavi privzeto različico pisave (Edwin)</translation>
+        <translation>Pri uvoženih notnih zapisih uveljavi privzeto pisavo (Edwin)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="44"/>
         <source>Play notes when editing</source>
-        <translation>Med urejanjem predvajaj note</translation>
+        <translation>Med urejanjem predvajaj izbrane note</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="59"/>
@@ -10507,12 +10561,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="82"/>
         <source>Play chord when editing</source>
-        <translation>Med urejanjem predvajaj akord</translation>
+        <translation>Med urejanjem predvajaj izbran akord</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputPlaySection.qml" line="99"/>
         <source>Play chord symbol when editing</source>
-        <translation>Med urejanjem predvajaj oznake akordov</translation>
+        <translation>Med urejanjem predvajaj izbrane oznake akordov</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="31"/>
@@ -10523,22 +10577,22 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="47"/>
         <source>Advance to next note on key release (MIDI)</source>
-        <translation>Pomik k naslednji noti ob spustitvi tipke (MIDI)</translation>
+        <translation>Pomakni se k naslednji noti ob spustitvi tipke (MIDI)</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="62"/>
         <source>Color notes outside of usable pitch range</source>
-        <translation>Obarvaj note, ki so izven tonskega obsega izbranega glasbila</translation>
+        <translation>Obarvaj note izven tonskega obsega glasbila</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="77"/>
         <source>Color guitar bends outside of playable range</source>
-        <translation>Obarvaj kitarske zatege, ki so izven obsega možnega igranja</translation>
+        <translation>Obarvaj zateg strun izven obsega možnega igranja</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/NoteInputSection.qml" line="91"/>
         <source>Delay between notes in automatic real time mode:</source>
-        <translation>Zakasni note pri samodejnem sočasnem načinu:</translation>
+        <translation>Zamik not pri samodejnem sočasnem načinu:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/PreferencesButtonsPanel.qml" line="50"/>
@@ -10583,7 +10637,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemeAdditionalOptionsSection.qml" line="38"/>
         <source>Invert score</source>
-        <translation>Preobrni notni zapis</translation>
+        <translation>Obrnjena tema notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ThemesSection.qml" line="32"/>
@@ -10623,7 +10677,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiColorsSection.qml" line="50"/>
         <source>Border color:</source>
-        <translation>Barva meje:</translation>
+        <translation>Barva obrob:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="29"/>
@@ -10634,12 +10688,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="42"/>
         <source>Font face:</source>
-        <translation>Oblika pisave:</translation>
+        <translation>Pisava:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/UiFontSection.qml" line="57"/>
         <source>Body text size:</source>
-        <translation>Velikost glavnega besedila:</translation>
+        <translation>Velikost običajnega napisa:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="30"/>
@@ -10654,7 +10708,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/ZoomSection.qml" line="94"/>
         <source>Mouse zoom precision:</source>
-        <translation>Natančnost povečanja z miško:</translation>
+        <translation>Natančnost povečave z miško:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/PreferencesDialog.qml" line="34"/>
@@ -10705,7 +10759,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="62"/>
         <source>Your version of %1 is up to date.</source>
-        <translation>Vaša različica programa %1 je najnovejša.</translation>
+        <translation>Tvoja verzija programa %1 je najnovejša.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="95"/>
@@ -10761,7 +10815,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="75"/>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="185"/>
         <source>MuseScore style file</source>
-        <translation>Datoteka sloga MuseScore</translation>
+        <translation>MuseScorova datoteka sloga</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/importpreferencesmodel.cpp" line="80"/>
@@ -10781,12 +10835,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="157"/>
         <source>Canvas</source>
-        <translation>Platno</translation>
+        <translation>Prikaz strani</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="160"/>
         <source>Save &amp; publish</source>
-        <translation>Shrani in objavi</translation>
+        <translation>Shranjevanje &amp; objava</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="166"/>
@@ -10801,7 +10855,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="172"/>
         <source>I/O</source>
-        <translation>Vhod/Izhod</translation>
+        <translation>Vhodi &amp; Izhodi</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="175"/>
@@ -10816,7 +10870,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="181"/>
         <source>Update</source>
-        <translation>Posodobi</translation>
+        <translation>Posodobitve</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/preferencesmodel.cpp" line="187"/>
@@ -10836,7 +10890,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="194"/>
         <source>Continue last session</source>
-        <translation>Nadaljuj z zadnjo sejo</translation>
+        <translation>Nadaljuj, kjer si ostal</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/generalpreferencesmodel.cpp" line="195"/>
@@ -10856,12 +10910,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="91"/>
         <source>Score order list 1</source>
-        <translation>Seznam zaporedja notnih zapisov 1</translation>
+        <translation>Vrstni red glasbil v partituri 1</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="93"/>
         <source>Score order list 2</source>
-        <translation>Seznam zaporedja notnih zapisov 2</translation>
+        <translation>Vrstni red glasbil v partituri 2</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="95"/>
@@ -10876,12 +10930,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="180"/>
         <source>Score order list</source>
-        <translation>Seznam zaporedja notnih zapisov</translation>
+        <translation>Vrstni red glasbil v partituri</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="190"/>
         <source>Choose score order list</source>
-        <translation>Izberite seznam zaporedja notnih zapisov</translation>
+        <translation>Izberite vrstni red glasbil v partituri</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="195"/>
@@ -10891,7 +10945,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/view/preferences/scorepreferencesmodel.cpp" line="200"/>
         <source>Choose default style for parts</source>
-        <translation>Izbor privzetega sloga partov</translation>
+        <translation>zberite privzeti slog partov</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="31"/>
@@ -10901,17 +10955,17 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/SaveToCloudSection.qml" line="41"/>
         <source>Generate MP3 audio for private cloud scores</source>
-        <translation>Ustvari MP3 posnetek za zasebni oblak notnih zapisov</translation>
+        <translation>Ustvari MP3 posnetek za zasebne zapise v oblaku</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="31"/>
         <source>Enable/disable</source>
-        <translation>Omogoči/onemogoči</translation>
+        <translation>Prikaži/skrij</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleSection.qml" line="40"/>
         <source>Show braille panel</source>
-        <translation>Prikaži okno brajice</translation>
+        <translation>Prikaži podokno z zapisom brajice</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="29"/>
@@ -10921,7 +10975,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="41"/>
         <source>Braille table for lyrics:</source>
-        <translation>Preglednica besedila z brajico:</translation>
+        <translation>Prečrkovanje besedila skladbe v brajico:</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/Preferences/internal/BrailleAdvancedSection.qml" line="57"/>
@@ -10973,7 +11027,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="104"/>
         <source>Do you want to add the SoundFont: %1?</source>
-        <translation>Ali želite dodati zvok SoundFont: %1?</translation>
+        <translation>Ali želite dodati SoundFontov zvok: %1?</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="122"/>
@@ -10988,12 +11042,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="143"/>
         <source>SoundFont installed</source>
-        <translation>Zvoki SoundFont nameščeni</translation>
+        <translation>SoundFont je nameščen</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="144"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
-        <translation>Zvok lahko glasbilom dodelite s pomočjo mešalne mize.</translation>
+        <translation>Zvok lahko glasbilom dodelite s pomočjo mešalnika.</translation>
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="236"/>
@@ -11008,7 +11062,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/framework/audio/internal/plugins/registeraudiopluginsscenario.cpp" line="77"/>
         <location filename="../../src/framework/audio/tests/registeraudiopluginsscenariotest.cpp" line="156"/>
         <source>Scanning audio plugins</source>
-        <translation>Pregledovanje zvočnih vhodov</translation>
+        <translation>Skeniranje zvočnih vtičnikov</translation>
     </message>
 </context>
 <context>
@@ -11017,7 +11071,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/CloudItem.qml" line="75"/>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/CloudItem.qml" line="131"/>
         <source>Not signed in</source>
-        <translation>Nisi vprisan</translation>
+        <translation>Niste prijavljeni</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/CloudItem.qml" line="161"/>
@@ -11033,12 +11087,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/cloud/qml/MuseScore/Cloud/internal/CloudItem.qml" line="161"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="193"/>
         <source>Sign in</source>
-        <translation>Vpis</translation>
+        <translation>Prijava</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/RequireAuthorizationDialog.qml" line="68"/>
         <source>You are not signed in</source>
-        <translation>Nisi vpisan</translation>
+        <translation>Niste prijavljeni</translation>
     </message>
     <message>
         <location filename="../../src/cloud/qml/MuseScore/Cloud/RequireAuthorizationDialog.qml" line="77"/>
@@ -11060,12 +11114,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="176"/>
         <source>Sign in buttons</source>
-        <translation>Vpisni gumbi</translation>
+        <translation>Gumbi za prijavo</translation>
     </message>
     <message>
         <location filename="../../src/cloud/internal/oauthhttpserverreplyhandler.cpp" line="184"/>
         <source>Sign in successful! You’re good to go back to the MuseScore desktop app.</source>
-        <translation>Uspešno si se vpisal! Sedaj se lahko vrnete na namizno aplikacijo MuseScore.</translation>
+        <translation>Uspešno ste se prijavili! Sedaj se lahko vrnete v namizni program MuseScore.</translation>
     </message>
 </context>
 <context>
@@ -11073,12 +11127,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="37"/>
         <source>Save diagnostic files?</source>
-        <translation>Želite shraniti datoteko o pregledu?</translation>
+        <translation>Ali želite shraniti datoteke o pregledu?</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="38"/>
         <source>This will create a .zip file with information about your MuseScore setup to help developers diagnose any problems you are having. You can inspect the contents of this file before sending it to anyone.</source>
-        <translation>Ustvarjena bo .zip datoteka s podatki o namestitvi MuseScora, da bodo razvijalci lažje določili težave, ki se vam pojavljajo. Preden pošljete to datoteko komurkoli lahko preverite njeno vsebino.</translation>
+        <translation>Ustvarjena bo .zip datoteka s podatki o namestitvi MuseScora, da bodo razvijalci lažje določili težave, ki se vam pojavljajo. Preden pošljete to datoteko komurkoli, lahko preverite njeno vsebino.</translation>
     </message>
     <message>
         <location filename="../../src/diagnostics/internal/savediagnosticfilesscenario.cpp" line="52"/>
@@ -11113,42 +11167,42 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="487"/>
         <source>Duplet</source>
-        <translation>Duola</translation>
+        <translation>Duolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="490"/>
         <source>Triplet</source>
-        <translation>Triola</translation>
+        <translation>Triolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="493"/>
         <source>Quadruplet</source>
-        <translation>Kvartola</translation>
+        <translation>Kvartolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="496"/>
         <source>Quintuplet</source>
-        <translation>Kvintola</translation>
+        <translation>Kvintolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="499"/>
         <source>Sextuplet</source>
-        <translation>Sekstola</translation>
+        <translation>Sekstolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="502"/>
         <source>Septuplet</source>
-        <translation>Septiola</translation>
+        <translation>Septiolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="505"/>
         <source>Octuplet</source>
-        <translation>Oktiola</translation>
+        <translation>Oktiolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="508"/>
         <source>Nonuplet</source>
-        <translation>Noniola</translation>
+        <translation>Noniolna</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="512"/>
@@ -11166,19 +11220,19 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/dom/chordrest.cpp" line="525"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Double dotted %1</source>
-        <translation>Z dvojno piko %1</translation>
+        <translation>Z dvema pikama %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="528"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Triple dotted %1</source>
-        <translation>S trojno piko %1</translation>
+        <translation>S tremi pikami %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="531"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Quadruple dotted %1</source>
-        <translation>S četverno piko %1</translation>
+        <translation>S štirimi pikami %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1087"/>
@@ -11193,7 +11247,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/cmd.cpp" line="3327"/>
         <source>Continue with inserting measure repeat?</source>
-        <translation>Želite nadaljevati z vstavljanjem taktnega ponavljaja?</translation>
+        <translation>Ali želite nadaljevati z vstavljanjem taktnega ponavljaja?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/engravingitem.cpp" line="2357"/>
@@ -11267,7 +11321,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="866"/>
         <source>and ending string %1</source>
-        <translation>končna struna %1</translation>
+        <translation>in končna struna %1</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/fret.cpp" line="869"/>
@@ -11306,13 +11360,13 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1731"/>
         <source>Roman numeral</source>
-        <translation>Rimskoštevilčen</translation>
+        <translation>Rimskoštevilčna oznaka</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1733"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1075"/>
         <source>Nashville number</source>
-        <translation>Nashvillski številčen</translation>
+        <translation>Nashvillska oznaka</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/harmony.cpp" line="1771"/>
@@ -11396,7 +11450,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3039"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
-        <translation>%1; Višina tona: %2; Trajanje:  %3%4%5</translation>
+        <translation>%1; Višina tona: %2; Trajanje: %3%4%5</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="3068"/>
@@ -11444,7 +11498,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/noteentry.cpp" line="410"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
-        <translation>Ta takt vsebuje taktni ponavljaj. Če vanj vnesete note, bo ponavljaj izbrisan. Ali želite nadaljevati?</translation>
+        <translation>Ta takt vsebuje taktni ponavljaj. Če vanj vneseš note, bo ponavljaj izbrisan. Ali želiš nadaljevati?</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1338"/>
@@ -11485,7 +11539,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/rest.cpp" line="748"/>
         <source>%1; Duration: %2; %3</source>
-        <translation>%1; trajanje: %2; %3</translation>
+        <translation>%1; Trajanje: %2; %3</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/segment.cpp" line="2227"/>
@@ -11493,7 +11547,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <translation>Pripisi:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1165"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1164"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1078"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1089"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3108"/>
@@ -11503,7 +11557,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <translation>Začetek %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/barline.cpp" line="1168"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1167"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1081"/>
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1091"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3112"/>
@@ -11595,17 +11649,17 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1208"/>
         <source>Tab. ukulele</source>
-        <translation>Ukulele tab.</translation>
+        <translation>Tab. za ukulele</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1209"/>
         <source>Tab. balalaika</source>
-        <translation>Balalajka tab.</translation>
+        <translation>Tab. za balalajko</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1210"/>
         <source>Tab. dulcimer</source>
-        <translation>Dulčimer tab.</translation>
+        <translation>Tab. za dulčimer</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1211"/>
@@ -11706,22 +11760,22 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="171"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1056"/>
         <source>Multimeasure rest range</source>
-        <translation>Razpon večtaktnih premorov (pavz)</translation>
+        <translation>Razpon večtaktnih pavz</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="172"/>
         <source>Instrument name</source>
-        <translation>Naziv glasbila</translation>
+        <translation>Ime glasbila</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="173"/>
         <source>Slur segment</source>
-        <translation>Odsek loka</translation>
+        <translation>Odsek z lokom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="174"/>
         <source>Tie segment</source>
-        <translation>Odsek vezaja</translation>
+        <translation>Odsek z vezajem</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="175"/>
@@ -11792,7 +11846,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="189"/>
         <source>Multimeasure rest</source>
-        <translation>Večtaktni premor (pavza)</translation>
+        <translation>Večtaktna pavza</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="190"/>
@@ -11867,7 +11921,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="205"/>
         <source>Figured bass item</source>
-        <translation>Predmet oštevilčenega basa</translation>
+        <translation>Oznaka oštevilčenega basa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="206"/>
@@ -11877,7 +11931,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="207"/>
         <source>Jump</source>
-        <translation>Skoči</translation>
+        <translation>Preskok</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="208"/>
@@ -11889,7 +11943,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="209"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1077"/>
         <source>Tuplet</source>
-        <translation>Nepravilna poddelitev</translation>
+        <translation>Poddelitev</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="210"/>
@@ -11967,7 +12021,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="224"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1092"/>
         <source>Bend</source>
-        <translation>Zateg</translation>
+        <translation>Zateg strune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="225"/>
@@ -11978,7 +12032,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="226"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1088"/>
         <source>Volta</source>
-        <translation>Oklepaj zaporedja (volta)</translation>
+        <translation>Volta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="227"/>
@@ -11988,7 +12042,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="228"/>
         <source>Ottava segment</source>
-        <translation>Odsek ottave</translation>
+        <translation>Odsek premika oktave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="229"/>
@@ -12018,7 +12072,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="235"/>
         <source>Whammy bar segment</source>
-        <translation>Del s tremolo ročko</translation>
+        <translation>Odsek tremolo roče</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="236"/>
@@ -12028,22 +12082,22 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="237"/>
         <source>Harmonic mark segment</source>
-        <translation>Odsek oznake harmoničnega tona</translation>
+        <translation>Odsek flažoleta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="238"/>
         <source>Pick scrape segment</source>
-        <translation>Odsek za drsanje trzalice</translation>
+        <translation>Odsek drsanja trzalice</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="239"/>
         <source>Text line segment</source>
-        <translation>Odsek napisne črte</translation>
+        <translation>Odsek oklepaja z napisom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="240"/>
         <source>Volta segment</source>
-        <translation>Odsek oklepaja zaporedja (volta)</translation>
+        <translation>Odsek volte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="241"/>
@@ -12053,7 +12107,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="242"/>
         <source>Melisma line segment</source>
-        <translation>Odsek melizmine črte</translation>
+        <translation>Odsek melizme</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="243"/>
@@ -12088,7 +12142,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="249"/>
         <source>Tremolo</source>
-        <translation>Tremolo – hitro ponavljanje tonov</translation>
+        <translation>Tremolo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="250"/>
@@ -12114,7 +12168,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="254"/>
         <source>Shadow note</source>
-        <translation>Senca note</translation>
+        <translation>Skrita nota</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="255"/>
@@ -12141,7 +12195,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="259"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1089"/>
         <source>Ottava</source>
-        <translation>Oktava</translation>
+        <translation>Premik oktave</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="260"/>
@@ -12190,13 +12244,13 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="269"/>
         <source>Pick scrape out</source>
-        <translation>Konec drsanja trzalice</translation>
+        <translation>Drsanje trzalice</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="270"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1087"/>
         <source>Text line</source>
-        <translation>Črta za besedilo</translation>
+        <translation>Odsek z napisom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="271"/>
@@ -12228,7 +12282,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <location filename="../../src/engraving/types/typesconv.cpp" line="277"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1064"/>
         <source>System</source>
-        <translation>Vrsta</translation>
+        <translation>Vrsta zapisa</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="278"/>
@@ -12263,12 +12317,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="286"/>
         <source>Vertical frame</source>
-        <translation>Medvrstni okvir</translation>
+        <translation>Medvrstični okvir</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="287"/>
         <source>Text frame</source>
-        <translation>Okvir za besedilo</translation>
+        <translation>Okvir z napisi</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="288"/>
@@ -12278,7 +12332,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="290"/>
         <source>Ossia</source>
-        <translation>Druga možnost (ossia)</translation>
+        <translation>Ossia (druga možnost)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="291"/>
@@ -12294,12 +12348,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="295"/>
         <source>Guitar bend</source>
-        <translation>Kitarski zateg</translation>
+        <translation>Kitarski zateg strune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="296"/>
         <source>Guitar bend segment</source>
-        <translation>Odsek kitarskega zatega</translation>
+        <translation>Odsek zategovanja strune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="297"/>
@@ -12314,7 +12368,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="299"/>
         <source>Guitar bend text</source>
-        <translation>Napis kitarskega zatega</translation>
+        <translation>Napis zatega strune</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="448"/>
@@ -12378,7 +12432,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="268"/>
         <source>Harmonic mark</source>
-        <translation>Oznaka harmoničnega tona</translation>
+        <translation>Oznaka flažoleta</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="282"/>
@@ -12484,7 +12538,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1074"/>
         <source>Roman numeral analysis</source>
-        <translation>Rimskoštevilčna razčlemba</translation>
+        <translation>Rimskoštevilčna oznaka akorda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1080"/>
@@ -12746,47 +12800,47 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2321"/>
         <source>Da Capo</source>
-        <translation>Od začetka (Da Capo)</translation>
+        <translation>Da Capo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2322"/>
         <source>Da Capo al Fine</source>
-        <translation>Od začetka do konca (Da Capo al Fine)</translation>
+        <translation>Da Capo al Fine</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2323"/>
         <source>Da Capo al Coda</source>
-        <translation>Od začetka do kode (Da Capo al Coda)</translation>
+        <translation>Da Capo al Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2324"/>
         <source>D.S. al Coda</source>
-        <translation>Od znamenja do kode (D.S. al Coda)</translation>
+        <translation>D.S. al Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2325"/>
         <source>D.S. al Fine</source>
-        <translation>Od znamenja do Konca (D.S. al Fine)</translation>
+        <translation>D.S. al Fine</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2326"/>
         <source>D.S.</source>
-        <translation>Od znamenja (Dal Segno)</translation>
+        <translation>D.S.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2357"/>
         <source>Da Coda</source>
-        <translation>Od kode</translation>
+        <translation>Da Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2349"/>
         <source>Segno</source>
-        <translation>Znamenje (segno)</translation>
+        <translation>Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2350"/>
         <source>Segno variation</source>
-        <translation>Različica znamenja (segno)</translation>
+        <translation>Segno (različica)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2351"/>
@@ -12796,12 +12850,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2352"/>
         <source>Varied coda</source>
-        <translation>Variacija kode</translation>
+        <translation>Različica kode</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2354"/>
         <source>Fine</source>
-        <translation>Fine</translation>
+        <translation>Konec</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2355"/>
@@ -12886,52 +12940,52 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2328"/>
         <source>Da Capo al Doppia Coda</source>
-        <translation>Od začetka do dvojne kode (Da Capo al Doppia Coda)</translation>
+        <translation>Da Capo al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2329"/>
         <source>Dal Segno al Doppia Coda</source>
-        <translation>Od znamenja do dvojne kode (Dal Segno al Doppia Coda)</translation>
+        <translation>Dal Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2330"/>
         <source>Dal Doppio Segno</source>
-        <translation>Od dvojnega znamenja (Dal Doppio Segno)</translation>
+        <translation>Dal Doppio Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2331"/>
         <source>Dal Doppio Segno al Coda</source>
-        <translation>Od dvojnega znamenja do kode (Dal Doppio Segno al Coda)</translation>
+        <translation>Dal Doppio Segno al Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2332"/>
         <source>Dal Doppio Segno al Doppia Coda</source>
-        <translation>Od dvojnega znamenja do dvojne kode (Dal Doppio Segno al Doppia Coda)</translation>
+        <translation>Dal Doppio Segno al Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2333"/>
         <source>Dal Doppio Segno al Fine</source>
-        <translation>Od dvojnega znamenja do konca (Dal Doppio Segno al Fine)</translation>
+        <translation>Dal Doppio Segno al Fine</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2353"/>
         <source>Doppia Coda</source>
-        <translation>Dvojna koda</translation>
+        <translation>Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2358"/>
         <source>Da Doppia Coda</source>
-        <translation>Do dvojne kode (Da Doppia Coda)</translation>
+        <translation>Da Doppia Coda</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2579"/>
         <source>C major, A minor</source>
-        <translation>C-mol, A-dur</translation>
+        <translation>C-dur, a-mol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2587"/>
         <source>Open/Atonal</source>
-        <translation>Odprto/Atonsko</translation>
+        <translation>Odprto/Atonalno</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/engraving/dom/measurerepeat.cpp" line="193"/>
@@ -12946,12 +13000,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="64"/>
         <source>File “%1” not found</source>
-        <translation>Datoteke &quot;%1&quot; ni mogoče najti</translation>
+        <translation>Datoteke »%1« ni mogoče najti</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="67"/>
         <source>File open error</source>
-        <translation>Napaka odpiranja datoteke</translation>
+        <translation>Napaka pri odpiranju datoteke</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="70"/>
@@ -12966,12 +13020,12 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="76"/>
         <source>This file was last saved in a version older than 2.0.0. You can convert this score by opening and then saving in MuseScore version 2.x. Visit the &lt;a href=&quot;%1&quot;&gt;MuseScore download page&lt;/a&gt; to obtain such a 2.x version.</source>
-        <translation>Nazadnje je bila datoteka shranjeno v starejši različici od 2.0.0. Ta notni zapis lahko pretvorite tako, da ga odprete in shranite z različico MuseScore 2.x. Za 2.x različico pojdite na &lt;a href=&quot;%1&quot;&gt;stran MuseScora za prenašanje&lt;/a&gt;.</translation>
+        <translation>Nazadnje je bila datoteka shranjena v različici, starejši od 2.0.0. Ta notni zapis lahko pretvorite tako, da ga odprete in shranite z različico MuseScore 2.x. Za 2.x različico pojdite na &lt;a href=&quot;%1&quot;&gt;stran MuseScora za prenose&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="83"/>
         <source>This file was saved using a newer version of MuseScore. Please visit &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt; to obtain the latest version.</source>
-        <translation>Te note so bile shranjene v novejši različici MuseScora. Za najnovejšo različico pojdite na &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt;.</translation>
+        <translation>Ta datoteka je bila shranjena v novejši različici MuseScora. Za najnovejšo različico pojdite na &lt;a href=&quot;https://musescore.org&quot;&gt;musescore.org&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="87"/>
@@ -12981,17 +13035,17 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="90"/>
         <source>File “%1” is corrupted.</source>
-        <translation>Datoteka “%1” je okvarjena.</translation>
+        <translation>Datoteka »%1« je okvarjena.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/engravingerrors.h" line="93"/>
         <source>File “%1” is critically corrupted and cannot be processed.</source>
-        <translation>Datoteka &quot;%1&quot; je usodno poškodovana, zato je ni mogoče obdelati.</translation>
+        <translation>Datoteka »%1« je kritično poškodovana in je ni mogoče obdelati.</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/ambitus.cpp" line="553"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
-        <translation>Zgornja višina: %1; Spodnja višina: %2</translation>
+        <translation>Zgornji ton: %1; Spodnji ton: %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/accessibility/accessibleitem.cpp" line="201"/>
@@ -13051,7 +13105,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
     <message>
         <location filename="../../src/engraving/internal/engravingconfiguration.cpp" line="74"/>
         <source>Voice %1 color</source>
-        <translation>Barva %1 . glasu </translation>
+        <translation>Barva %1 . glasu</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/capo.cpp" line="141"/>
@@ -13069,7 +13123,7 @@ Izdano s &lt;a href=&quot;%1&quot;&gt;Splošnim dovoljenjem GNU, različica 3&lt
         <source>Partial capo:
 Fret %1 on strings %2</source>
         <translation>Delni kapodaster:
-%1. prečka  na %2. struni </translation>
+%1. prečka na strunah %2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/stringtunings.cpp" line="180"/>
@@ -13107,17 +13161,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1862"/>
         <source>Single grace D</source>
-        <translation>Enojni okrasek s D</translation>
+        <translation>Enojni okrasek z D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1863"/>
         <source>Single grace E</source>
-        <translation>Enojni okrasek s E</translation>
+        <translation>Enojni okrasek z E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1864"/>
         <source>Single grace F</source>
-        <translation>Enojni okrasek s F</translation>
+        <translation>Enojni okrasek z F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1865"/>
@@ -13216,45 +13270,45 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1920"/>
         <source>Half strike on B</source>
-        <translation>Polovični udarec na H</translation>
+        <translation>Polovični strike na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1921"/>
         <source>Half strike on C</source>
-        <translation>Polovični udarec na C</translation>
+        <translation>Polovični strike na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1922"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1923"/>
         <source>Half strike on D</source>
-        <translation>Polovični udarec na D</translation>
+        <translation>Polovični strike na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1924"/>
         <source>Half strike on E</source>
-        <translation>Polovični udarec na E</translation>
+        <translation>Polovični strike na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1925"/>
         <source>Half strike on F</source>
-        <translation>Polovični udarec na F</translation>
+        <translation>Polovični strike na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1926"/>
         <source>Half strike on high G</source>
-        <translation>Polovični udarec na G</translation>
+        <translation>Polovični strike na G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1929"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1984"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1985"/>
         <source>Grip</source>
-        <translation>Prijem</translation>
+        <translation>Grip</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1932"/>
         <source>Half D throw</source>
-        <translation>Polovični &quot;throw&quot; na D</translation>
+        <translation>Polovični throw na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1935"/>
@@ -13360,79 +13414,79 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1963"/>
         <source>Double strike on low A</source>
-        <translation>Dvoudarec na nizki A</translation>
+        <translation>Dvojni strike na nizki A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1964"/>
         <source>Double strike on B</source>
-        <translation>Dvoudarec na H</translation>
+        <translation>Dvojni strike na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1965"/>
         <source>Double strike on C</source>
-        <translation>Dvoudarec na C</translation>
+        <translation>Dvojni strike na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1966"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1967"/>
         <source>Double strike on D</source>
-        <translation>Dvoudarec na D</translation>
+        <translation>Dvojni strike na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1968"/>
         <source>Double strike on E</source>
-        <translation>Dvoudarec na E</translation>
+        <translation>Dvojni strike na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1969"/>
         <source>Double strike on F</source>
-        <translation>Dvoudarec na F</translation>
+        <translation>Dvojni strike na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1970"/>
         <source>Double strike on high G</source>
-        <translation>Dvoudarec na visoki G</translation>
+        <translation>Dvojni strike na visoki G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1971"/>
         <source>Double strike on high A</source>
-        <translation>Dvoudarec na visoki A</translation>
+        <translation>Dvojni strike na visoki A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1974"/>
         <source>Thumb strike on low A</source>
-        <translation>Udarec s palcem na nizkem A</translation>
+        <translation>Strike s palcem na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1975"/>
         <source>Thumb strike on B</source>
-        <translation>Udarec s palcem na H</translation>
+        <translation>Strike s palcem na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1976"/>
         <source>Thumb strike on C</source>
-        <translation>Udarec s palcem na C</translation>
+        <translation>Strike s palcem na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1977"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1978"/>
         <source>Thumb strike on D</source>
-        <translation>Udarec s palcem na D</translation>
+        <translation>Strike s palcem na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1979"/>
         <source>Thumb strike on E</source>
-        <translation>Udarec s palcem na E</translation>
+        <translation>Strike s palcem na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1980"/>
         <source>Thumb strike on F</source>
-        <translation>Udarec s palcem na F</translation>
+        <translation>Strike s palcem na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1981"/>
         <source>Thumb strike on high G</source>
-        <translation>Udarec s palcem na visokem G</translation>
+        <translation>Strike s palcem na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1988"/>
@@ -13440,503 +13494,503 @@ Fret %1 on strings %2</source>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2055"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2056"/>
         <source>Birl</source>
-        <translation>&quot;birl&quot;</translation>
+        <translation>Birl</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1989"/>
         <source>D throw</source>
-        <translation>&quot;throw&quot; na D</translation>
+        <translation>Throw na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1990"/>
         <source>Half heavy D throw</source>
-        <translation>Polovični močni &quot;throw&quot; na D</translation>
+        <translation>Polovični heavy throw na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1991"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1997"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1998"/>
         <source>Taorluath</source>
-        <translation>&quot;taorluath&quot;</translation>
+        <translation>Taorluath</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1995"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2052"/>
         <source>Bubbly</source>
-        <translation>&quot;Bubbly&quot; (darado)</translation>
+        <translation>Bubbly</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1996"/>
         <source>Heavy D throw</source>
-        <translation>Močni &quot;throw&quot; na D</translation>
+        <translation>Heawy throw na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2001"/>
         <source>Half double strike on low A</source>
-        <translation>Pol-dvoudarec na nizki A</translation>
+        <translation>Polovični dvojni strike na nizki A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2002"/>
         <source>Half double strike on B</source>
-        <translation>Pol-dvoudarec na B</translation>
+        <translation>Polovični dvojni strike na B</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2003"/>
         <source>Half double strike on C</source>
-        <translation>Pol-dvoudarec na C</translation>
+        <translation>Polovični dvojni strike na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2004"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2005"/>
         <source>Half double strike on D</source>
-        <translation>Pol-dvoudarec na D</translation>
+        <translation>Polovični dvojni strike na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2006"/>
         <source>Half double strike on E</source>
-        <translation>Pol-dvoudarec na E</translation>
+        <translation>Polovični dvojni strike na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2007"/>
         <source>Half double strike on F</source>
-        <translation>Pol-dvoudarec na F</translation>
+        <translation>Polovični dvojni strike na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2008"/>
         <source>Half double strike on high G</source>
-        <translation>Pol-dvoudarec na visoki G</translation>
+        <translation>Polovični dvojni strike na visoki G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2009"/>
         <source>Half double strike on high A</source>
-        <translation>Pol-dvoudarec na visoki A</translation>
+        <translation>Polovični dvojni strike na visoki A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2012"/>
         <source>Half grip on low A</source>
-        <translation>Polprijem na nizkem A</translation>
+        <translation>Polovični grip na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2013"/>
         <source>Half grip on B</source>
-        <translation>Polprijem na H</translation>
+        <translation>Polovični grip na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2014"/>
         <source>Half grip on C</source>
-        <translation>Polprijem na C</translation>
+        <translation>Polovični grip na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2015"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2016"/>
         <source>Half grip on D</source>
-        <translation>Polprijem na D</translation>
+        <translation>Polovični grip na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2017"/>
         <source>Half grip on E</source>
-        <translation>Polprijem na E</translation>
+        <translation>Polovični grip na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2018"/>
         <source>Half grip on F</source>
-        <translation>Polprijem na F</translation>
+        <translation>Polovični grip na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2019"/>
         <source>Half grip on high G</source>
-        <translation>Polprijem na visokem G</translation>
+        <translation>Polovični grip na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2020"/>
         <source>Half grip on high A</source>
-        <translation>Polprijem na visokem A</translation>
+        <translation>Polovični grip na visokem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2023"/>
         <source>Half pele on low A</source>
-        <translation>Polovični &quot;pele&quot; na nizkem A</translation>
+        <translation>Polovično potrojevanje na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2024"/>
         <source>Half pele on B</source>
-        <translation>Polovični &quot;pele&quot; na H</translation>
+        <translation>Polovično potrojevanje na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2025"/>
         <source>Half pele on C</source>
-        <translation>Polovični &quot;pele&quot; na C</translation>
+        <translation>Polovično potrojevanje na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2026"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2027"/>
         <source>Half pele on D</source>
-        <translation>Polovični &quot;pele&quot; na D</translation>
+        <translation>Polovično potrojevanje na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2028"/>
         <source>Half pele on E</source>
-        <translation>Polovični &quot;pele&quot; na E</translation>
+        <translation>Polovično potrojevanje na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2029"/>
         <source>Half pele on F</source>
-        <translation>Polovični &quot;pele&quot; na F</translation>
+        <translation>Polovično potrojevanje na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2030"/>
         <source>Half pele on high G</source>
-        <translation>Polovični &quot;pele&quot; na visokem G</translation>
+        <translation>Polovično potrojevanje na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2033"/>
         <source>G grace note grip on low A</source>
-        <translation>Prijem z okrasnim G na nizkem A</translation>
+        <translation>Grip z okrasnim G na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2034"/>
         <source>G grace note grip on B</source>
-        <translation>Prijem z okrasnim G na H</translation>
+        <translation>Grip z okrasnim G na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2035"/>
         <source>G grace note grip on C</source>
-        <translation>Prijem z okrasnim G na C</translation>
+        <translation>Grip z okrasnim G na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2036"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2037"/>
         <source>G grace note grip on D</source>
-        <translation>Prijem z okrasnim G na D</translation>
+        <translation>Grip z okrasnim G na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2038"/>
         <source>G grace note grip on E</source>
-        <translation>Prijem z okrasnim G na E</translation>
+        <translation>Grip z okrasnim G na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2039"/>
         <source>G grace note grip on F</source>
-        <translation>Prijem z okrasnim G na F</translation>
+        <translation>Grip z okrasnim G na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2042"/>
         <source>Thumb grip on low A</source>
-        <translation>Prijem s palcem na nizkem A</translation>
+        <translation>Grip s palcem na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2043"/>
         <source>Thumb grip on B</source>
-        <translation>Prijem s palcem na H</translation>
+        <translation>Grip s palcem na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2044"/>
         <source>Thumb grip on C</source>
-        <translation>Prijem s palcem na C</translation>
+        <translation>Grip s palcem na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2045"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2046"/>
         <source>Thumb grip on D</source>
-        <translation>Prijem s palcem na D</translation>
+        <translation>Grip s palcem na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2047"/>
         <source>Thumb grip on E</source>
-        <translation>Prijem s palcem na E</translation>
+        <translation>Grip s palcem na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2048"/>
         <source>Thumb grip on F</source>
-        <translation>Prijem s palcem na F</translation>
+        <translation>Grip s palcem na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2049"/>
         <source>Thumb grip on high G</source>
-        <translation>Prijem s palcem na visokem G</translation>
+        <translation>Grip s palcem na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2059"/>
         <source>Pele on low A</source>
-        <translation>&quot;Pele&quot; na nizkem A</translation>
+        <translation>Potrojevanje na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2060"/>
         <source>Pele on B</source>
-        <translation>&quot;Pele&quot; na H</translation>
+        <translation>Potrojevanje na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2061"/>
         <source>Pele on C</source>
-        <translation>&quot;Pele&quot; na C</translation>
+        <translation>Potrojevanje na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2062"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2063"/>
         <source>Pele on D</source>
-        <translation>&quot;Pele&quot; na D</translation>
+        <translation>Potrojevanje na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2064"/>
         <source>Pele on E</source>
-        <translation>&quot;Pele&quot; na E</translation>
+        <translation>Potrojevanje na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2065"/>
         <source>Pele on F</source>
-        <translation>&quot;Pele&quot; na F</translation>
+        <translation>Potrojevanje na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2068"/>
         <source>Thumb grace note pele on low A</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na nizkem A</translation>
+        <translation>Potrojevanje z okraskom s palcem na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2069"/>
         <source>Thumb grace note pele on B</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na H</translation>
+        <translation>Potrojevanje z okraskom s palcem na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2070"/>
         <source>Thumb grace note pele on C</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na C</translation>
+        <translation>Potrojevanje z okraskom s palcem na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2071"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2072"/>
         <source>Thumb grace note pele on D</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na D</translation>
+        <translation>Potrojevanje z okraskom s palcem na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2073"/>
         <source>Thumb grace note pele on E</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na E</translation>
+        <translation>Potrojevanje z okraskom s palcem na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2074"/>
         <source>Thumb grace note pele on F</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na F</translation>
+        <translation>Potrojevanje z okraskom s palcem na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2075"/>
         <source>Thumb grace note pele on high G</source>
-        <translation>&quot;Pele&quot; s palčnim okraskom na visokem G</translation>
+        <translation>Potrojevanje z okraskom s palcem na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2078"/>
         <source>G grace note double strike on low A</source>
-        <translation>Dvoudarec z okrasnim G na nizkem A</translation>
+        <translation>Dvojni strike z okrasnim G na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2079"/>
         <source>G grace note double strike on B</source>
-        <translation>Dvoudarec z okrasnim G na H</translation>
+        <translation>Dvojni strike z okrasnim G na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2080"/>
         <source>G grace note double strike on C</source>
-        <translation>Dvoudarec z okrasnim G na C</translation>
+        <translation>Dvojni strike z okrasnim G na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2081"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2082"/>
         <source>G grace note double strike on D</source>
-        <translation>Dvoudarec z okrasnim G na D</translation>
+        <translation>Dvojni strike z okrasnim G na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2083"/>
         <source>G grace note double strike on E</source>
-        <translation>Dvoudarec z okrasnim G na E</translation>
+        <translation>Dvojni strike z okrasnim G na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2084"/>
         <source>G grace note double strike on F</source>
-        <translation>Dvoudarec z okrasnim G na F</translation>
+        <translation>Dvojni strike z okrasnim G na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2087"/>
         <source>Thumb double strike on low A</source>
-        <translation>Dvoudarec s palcem na nizkem A</translation>
+        <translation>Dvojni strike s palcem na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2088"/>
         <source>Thumb double strike on B</source>
-        <translation>Dvoudarec s palcem na B</translation>
+        <translation>Dvojni strike s palcem na B</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2089"/>
         <source>Thumb double strike on C</source>
-        <translation>Dvoudarec s palcem na C</translation>
+        <translation>Dvojni strike s palcem na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2090"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2091"/>
         <source>Thumb double strike on D</source>
-        <translation>Dvoudarec s palcem na D</translation>
+        <translation>Dvojni strike s palcem na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2092"/>
         <source>Thumb double strike on E</source>
-        <translation>Dvoudarec s palcem na E</translation>
+        <translation>Dvojni strike s palcem na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2093"/>
         <source>Thumb double strike on F</source>
-        <translation>Dvoudarec s palcem na F</translation>
+        <translation>Dvojni strike s palcem na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2094"/>
         <source>Thumb double strike on high G</source>
-        <translation>Dvoudarec s palcem na visokem G</translation>
+        <translation>Dvojni strike s palcem na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2097"/>
         <source>Triple strike on low A</source>
-        <translation>Troudarec na nizkem A</translation>
+        <translation>Trojni strike na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2098"/>
         <source>Triple strike on B</source>
-        <translation>Troudarec na H</translation>
+        <translation>Trojni strike na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2099"/>
         <source>Triple strike on C</source>
-        <translation>Troudarec na C</translation>
+        <translation>Trojni strike na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2100"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2101"/>
         <source>Triple strike on D</source>
-        <translation>Troudarec na D</translation>
+        <translation>Trojni strike na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2102"/>
         <source>Triple strike on E</source>
-        <translation>Troudarec na E</translation>
+        <translation>Trojni strike na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2103"/>
         <source>Triple strike on F</source>
-        <translation>Troudarec na F</translation>
+        <translation>Trojni strike na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2104"/>
         <source>Triple strike on high G</source>
-        <translation>Troudarec na visokem G</translation>
+        <translation>Trojni strike na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2105"/>
         <source>Triple strike on high A</source>
-        <translation>Troudarec na visokem A</translation>
+        <translation>Trojni strike na visokem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2108"/>
         <source>Half triple strike on low A</source>
-        <translation>Pol-troudarec na nizkem A</translation>
+        <translation>Polovični trojni strike na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2109"/>
         <source>Half triple strike on B</source>
-        <translation>Pol-troudarec na B</translation>
+        <translation>Polovični trojni strike na B</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2110"/>
         <source>Half triple strike on C</source>
-        <translation>Pol-troudarec na C</translation>
+        <translation>Polovični trojni strike na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2111"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2112"/>
         <source>Half triple strike on D</source>
-        <translation>Pol-troudarec na D</translation>
+        <translation>Polovični trojni strike na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2113"/>
         <source>Half triple strike on E</source>
-        <translation>Pol-troudarec na E</translation>
+        <translation>Polovični trojni strike na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2114"/>
         <source>Half triple strike on F</source>
-        <translation>Pol-troudarec na F</translation>
+        <translation>Polovični trojni strike na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2115"/>
         <source>Half triple strike on high G</source>
-        <translation>Pol-troudarec na visokem G</translation>
+        <translation>Polovični trojni strike na visokem G</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2116"/>
         <source>Half triple strike on high A</source>
-        <translation>Pol-troudarec na visokem A</translation>
+        <translation>Polovični trojni strike na visokem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2119"/>
         <source>G grace note triple strike on low A</source>
-        <translation>Troudarec z okrasnim G na nizkem A</translation>
+        <translation>Triple strike z okrasnim G na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2120"/>
         <source>G grace note triple strike on B</source>
-        <translation>Troudarec z okrasnim G na H</translation>
+        <translation>Triple strike z okrasnim G na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2121"/>
         <source>G grace note triple strike on C</source>
-        <translation>Troudarec z okrasnim G na C</translation>
+        <translation>Triple strike z okrasnim G na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2122"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2123"/>
         <source>G grace note triple strike on D</source>
-        <translation>Troudarec z okrasnim G na D</translation>
+        <translation>Triple strike z okrasnim G na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2124"/>
         <source>G grace note triple strike on E</source>
-        <translation>Troudarec z okrasnim G na E</translation>
+        <translation>Triple strike z okrasnim G na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2125"/>
         <source>G grace note triple strike on F</source>
-        <translation>Troudarec z okrasnim G na F</translation>
+        <translation>Triple strike z okrasnim G na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2128"/>
         <source>Thumb triple strike on low A</source>
-        <translation>Troudarec s palcem na nizkem A</translation>
+        <translation>Trojni strike s palcem na nizkem A</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2129"/>
         <source>Thumb triple strike on B</source>
-        <translation>Troudarec s palcem na H</translation>
+        <translation>Trojni strike s palcem na H</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2130"/>
         <source>Thumb triple strike on C</source>
-        <translation>Troudarec s palcem na C</translation>
+        <translation>Trojni strike s palcem na C</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2131"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2132"/>
         <source>Thumb triple strike on D</source>
-        <translation>Troudarec s palcem na D</translation>
+        <translation>Trojni strike s palcem na D</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2133"/>
         <source>Thumb triple strike on E</source>
-        <translation>Troudarec s palcem na E</translation>
+        <translation>Trojni strike s palcem na E</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2134"/>
         <source>Thumb triple strike on F</source>
-        <translation>Troudarec s palcem na F</translation>
+        <translation>Trojni strike s palcem na F</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2135"/>
         <source>Thumb triple strike on high G</source>
-        <translation>Troudarec s palcem na visokem G</translation>
+        <translation>Trojni strike s palcem na visokem G</translation>
     </message>
 </context>
 <context>
@@ -14009,7 +14063,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="662"/>
         <source>C clef, H shape (19th century)</source>
-        <translation>C-kluč, v obliki H (19. st.)</translation>
+        <translation>C-kluč, v obliki črke H (19. st.)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="663"/>
@@ -14099,22 +14153,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="682"/>
         <source>Tablature</source>
-        <translation>Tablatura</translation>
+        <translation>Tablaturni ključ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="683"/>
         <source>Tablature 4 lines</source>
-        <translation>Štiričrtne tablature</translation>
+        <translation>Ključ za štiričrtno tablaturo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="684"/>
         <source>Tablature Serif</source>
-        <translation>Tablatura serifno</translation>
+        <translation>Serifni tablaturni ključ</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="685"/>
         <source>Tablature Serif 4 lines</source>
-        <translation>Štirivrstične tablature serifno</translation>
+        <translation>Serifni ključ za štiričrtno tablaturo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="687"/>
@@ -14127,7 +14181,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2209"/>
         <source>High Q</source>
-        <translation>Filtrirani tlesk (High Q)</translation>
+        <translation>High Q</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2210"/>
@@ -14392,7 +14446,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2268"/>
         <source>Mute Triangle</source>
-        <translation>Dušen triangel</translation>
+        <translation>Dušeni triangel</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2269"/>
@@ -14422,12 +14476,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2274"/>
         <source>Mute Surdo</source>
-        <translation>Dušen surdo</translation>
+        <translation>Dušeni surdo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2275"/>
         <source>Open Surdo</source>
-        <translation>Zveneč surdo</translation>
+        <translation>Zveneči surdo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2277"/>
@@ -14500,12 +14554,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="526"/>
         <source>Triangle up</source>
-        <translation>Pokončni trikotnik</translation>
+        <translation>Trikotnik</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="527"/>
         <source>Triangle down</source>
-        <translation>Obrnjen trikotnik</translation>
+        <translation>Obrnjeni trikotnik</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="528"/>
@@ -14545,7 +14599,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="535"/>
         <source>Alt. brevis</source>
-        <translation>Alt. brevis</translation>
+        <translation>Alt. dvojna celinka</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="537"/>
@@ -14555,7 +14609,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="538"/>
         <source>Large diamond</source>
-        <translation>Velik karo</translation>
+        <translation>Veliki karo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="540"/>
@@ -14835,12 +14889,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="604"/>
         <source>Swiss Rudiments Flam</source>
-        <translation>Švicarski rudiment &quot;flam&quot;</translation>
+        <translation>Švicarski rudiment flam</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="606"/>
         <source>Swiss Rudiments Doublé</source>
-        <translation>Švicarski rudiment &quot;doublé&quot;</translation>
+        <translation>Švicarski rudiment doublé</translation>
     </message>
 </context>
 <context>
@@ -14848,47 +14902,47 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="493"/>
         <source>Normal</source>
-        <translation>Običajno</translation>
+        <translation>Običajne</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="494"/>
         <source>Pitch names</source>
-        <translation>Poimenovanje tonov</translation>
+        <translation>Angleška imena tonov</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="495"/>
         <source>German pitch names</source>
-        <translation>Srednjeevropsko poimenovanje tonov</translation>
+        <translation>Srednjeevropska imena tonov</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="496"/>
         <source>Solfège movable Do</source>
-        <translation>Solimzacijsko s premičnim Do</translation>
+        <translation>Solimizacija s premičnim Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="497"/>
         <source>Solfège fixed Do</source>
-        <translation>Solimzacijsko s stalnim Do</translation>
+        <translation>Solimizacija z nepremičnim Do</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="498"/>
         <source>4-shape (Walker)</source>
-        <translation>4-oblični (Walker)</translation>
+        <translation>4 oblike (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="499"/>
         <source>7-shape (Aikin)</source>
-        <translation>7-oblični (Aikini)</translation>
+        <translation>7 oblik (Aikini)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="500"/>
         <source>7-shape (Funk)</source>
-        <translation>7-oblični (Funk)</translation>
+        <translation>7 oblik (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="501"/>
         <source>7-shape (Walker)</source>
-        <translation>7-oblični (Walker)</translation>
+        <translation>7 oblik (Walker)</translation>
     </message>
 </context>
 <context>
@@ -14942,7 +14996,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2399"/>
         <source>Tablature</source>
-        <translation>Tablatura</translation>
+        <translation>Tablature</translation>
     </message>
 </context>
 <context>
@@ -15615,7 +15669,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3500"/>
         <source>Küçük mücenneb (sharp)</source>
-        <translation>Kičik miceneb (višaj)</translation>
+        <translation>Kičik miceneb višaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3502"/>
@@ -15949,37 +16003,37 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3697"/>
         <source>Accent-staccato below</source>
-        <translation>Odskan poudarek (staccato akcent) spodaj</translation>
+        <translation>Staccato poudarek (akcent) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3698"/>
         <source>Laissez vibrer (l.v.) above</source>
-        <translation>Laissez vibrer (pusti zveneti), l.v. zgoraj</translation>
+        <translation>Laissez vibrer (pusti zveneti) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3699"/>
         <source>Laissez vibrer (l.v.) below</source>
-        <translation>Laissez vibrer (pusti zveneti), l.v. spodaj</translation>
+        <translation>Laissez vibrer (pusti zveneti) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3700"/>
         <source>Marcato above</source>
-        <translation>Naznačeno (marcato) zgoraj</translation>
+        <translation>Marcato (naznačeno) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3701"/>
         <source>Marcato below</source>
-        <translation>Naznačeno (marcato) spodaj</translation>
+        <translation>Marcato (naznačeno) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3702"/>
         <source>Marcato-staccato above</source>
-        <translation>Odsekano-naznačeno (arcato-staccato) zgoraj</translation>
+        <translation>Odsekano-naznačeno (marcato-staccato) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3703"/>
         <source>Marcato-staccato below</source>
-        <translation>Odsekano-naznačeno (arcato-staccato) spodaj</translation>
+        <translation>Odsekano-naznačeno (marcato-staccato) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3704"/>
@@ -15994,12 +16048,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3706"/>
         <source>Soft accent above</source>
-        <translation>Rahel poudarek zgoraj</translation>
+        <translation>Rahel poudarek (akcent) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3707"/>
         <source>Soft accent below</source>
-        <translation>Rahel poudarek spodaj</translation>
+        <translation>Rahel poudarek (akcent) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3708"/>
@@ -16019,17 +16073,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3711"/>
         <source>Soft accent-tenuto below</source>
-        <translation>Rahel zadržan poudarek zgoraj</translation>
+        <translation>Rahel zadržan poudarek (accent-tenuto) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3712"/>
         <source>Soft accent-tenuto-staccato above</source>
-        <translation>Rahel zadržan odsekan poudarek zgoraj</translation>
+        <translation>Rahel tenuto-staccato poudarek (akcent) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3713"/>
         <source>Soft accent-tenuto-staccato below</source>
-        <translation>Rahel zadržan odsekan poudarek zgoraj</translation>
+        <translation>Rahel tenuto-staccato poudarek (akcent) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3714"/>
@@ -16074,32 +16128,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3722"/>
         <source>Stress above</source>
-        <translation>Naglasitev zgoraj</translation>
+        <translation>Poudarek (stress) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3723"/>
         <source>Stress below</source>
-        <translation>Naglasitev spodaj</translation>
+        <translation>Poudarek (stress) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3724"/>
         <source>Tenuto above</source>
-        <translation>Zadržano zgoraj</translation>
+        <translation>Zadržano (tenuto) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3725"/>
         <source>Tenuto-accent above</source>
-        <translation>Zadržani poudarek zgoraj</translation>
+        <translation>Zadržani poudarek (tenuto-accent) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3726"/>
         <source>Tenuto-accent below</source>
-        <translation>Zadržani poudarek spodaj</translation>
+        <translation>Zadržani poudarek (tenuto-accent) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3727"/>
         <source>Tenuto below</source>
-        <translation>Zadržano spodaj</translation>
+        <translation>Zadržano (tenuto) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3728"/>
@@ -16129,7 +16183,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3734"/>
         <source>Dotted barline</source>
-        <translation>Točkasta taktnica</translation>
+        <translation>Pikčasta taktnica</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3735"/>
@@ -16139,7 +16193,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3736"/>
         <source>Final barline</source>
-        <translation>Končna taktnica – končaj</translation>
+        <translation>Končaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3737"/>
@@ -16154,7 +16208,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3739"/>
         <source>Reverse final barline</source>
-        <translation>Obrnjen končaj</translation>
+        <translation>Obrnjeni končaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3740"/>
@@ -16220,7 +16274,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3810"/>
         <source>Curved caesura</source>
-        <translation>ločna cezura</translation>
+        <translation>Ukrivljena cezura</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3811"/>
@@ -16250,12 +16304,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3960"/>
         <source>Forte</source>
-        <translation>Glasno (forte)</translation>
+        <translation>Forte</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3970"/>
         <source>Mezzo</source>
-        <translation>Srednje (mezzo)</translation>
+        <translation>Mezzo</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3971"/>
@@ -16275,7 +16329,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3983"/>
         <source>Sforzando</source>
-        <translation>Sforzato (močno poudarjeno)</translation>
+        <translation>Sforzato</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="3990"/>
@@ -16290,72 +16344,72 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4066"/>
         <source>Fermata above</source>
-        <translation>Zgornji prenehljaj</translation>
+        <translation>Prenehljaj (korona) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4067"/>
         <source>Fermata below</source>
-        <translation>Spodnji prenehljaj</translation>
+        <translation>Prenehljaj (korona) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4068"/>
         <source>Long fermata above</source>
-        <translation>Dolgi zgornji prenehljaj</translation>
+        <translation>Dolga korona (korona) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4069"/>
         <source>Long fermata below</source>
-        <translation>Dolgi spodnji prenehljaj</translation>
+        <translation>Dolgi prenehljaj (korona) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4070"/>
         <source>Long fermata (Henze) above</source>
-        <translation>Dolgi zgornji henzejev prenehljaj</translation>
+        <translation>Dolga korona (Henze) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4071"/>
         <source>Long fermata (Henze) below</source>
-        <translation>Dolgi spodnji henzejev prenehljaj</translation>
+        <translation>Dolga korona (Henze) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4072"/>
         <source>Short fermata above</source>
-        <translation>Kratki zgornji prenehljaj</translation>
+        <translation>Kratki prenehljaj (korona) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4073"/>
         <source>Short fermata below</source>
-        <translation>Kratki spodnji prenehljaj</translation>
+        <translation>Kratki prenehljaj (korona) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4074"/>
         <source>Short fermata (Henze) above</source>
-        <translation>Kratki zgornji henzejev prenehljaj</translation>
+        <translation>Kratka korona (Henze) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4075"/>
         <source>Short fermata (Henze) below</source>
-        <translation>Kratki spodnji henzejev prenehljaj</translation>
+        <translation>Kratka korona (Henze) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4076"/>
         <source>Very long fermata above</source>
-        <translation>Zelo dolgi zgornji prenehljaj</translation>
+        <translation>Zelo dolgi prenehljaj (korona) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4077"/>
         <source>Very long fermata below</source>
-        <translation>Zelo dolgi spodnji prenehljaj</translation>
+        <translation>Zelo dolgi prenehljaj (korona) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4078"/>
         <source>Very short fermata above</source>
-        <translation>Zelo kratki zgornji prenehljaj</translation>
+        <translation>Zelo kratki prenehljaj (korona) zgoraj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4079"/>
         <source>Very short fermata below</source>
-        <translation>Zelo kratki spodnji prenehljaj</translation>
+        <translation>Zelo kratki prenelhjaj (korona) spodaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4243"/>
@@ -16400,32 +16454,32 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4593"/>
         <source>Elision</source>
-        <translation>Izpad (elision)</translation>
+        <translation>Izpad (elipsa)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4594"/>
         <source>Narrow elision</source>
-        <translation>Ozki izpad (elision)</translation>
+        <translation>Ozki izpad (elipsa)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4595"/>
         <source>Wide elision</source>
-        <translation>Široki izpad (elision)</translation>
+        <translation>Široki izpad (elipsa)</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4761"/>
         <source>Augmentation dot</source>
-        <translation>Pika</translation>
+        <translation>Pika za podaljšanje trajanja</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4763"/>
         <source>1024th note (semihemidemisemihemidemisemiquaver) stem up</source>
-        <translation>1024-inska nota (tisočštiriindvajsetinka)  z vratom navzgor</translation>
+        <translation>1024-inka (tisočštiriindvajsetinka) z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4765"/>
         <source>128th note (semihemidemisemiquaver) stem up</source>
-        <translation>128-inska nota (stoosemindvajsetinke) z vratom navzgor</translation>
+        <translation>128-inka (stoosemindvajsetinka) z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4767"/>
@@ -16435,22 +16489,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4769"/>
         <source>256th note (demisemihemidemisemiquaver) stem up</source>
-        <translation>256-inska nota (dvestošestinpetdesetinke) z vratom navzgor</translation>
+        <translation>256-inka (dvestošestinpetdesetinka) z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4771"/>
         <source>32nd note (demisemiquaver) stem up</source>
-        <translation>32-inske note (dvaintridesetinke) vrat navzgor</translation>
+        <translation>32-inka (dvaintridesetinka) z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4773"/>
         <source>512th note (hemidemisemihemidemisemiquaver) stem up</source>
-        <translation>512-inska nota (petstodvanajstinke) z vratom navzgor</translation>
+        <translation>512-inka (petstodvanajstinka) z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4775"/>
         <source>64th note (hemidemisemiquaver) stem up</source>
-        <translation>64-inska nota (štiriinšestdesetinka) z vratom navzgor</translation>
+        <translation>64-inka (štiriinšestdesetinka) z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4777"/>
@@ -16465,7 +16519,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4783"/>
         <source>Quarter note (crotchet) stem up</source>
-        <translation>Polovinka z vratom navzgor</translation>
+        <translation>Četrtinka z vratom navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="4784"/>
@@ -16485,7 +16539,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5282"/>
         <source>Mordent with upper prefix</source>
-        <translation>Grizec (mordent) z gornjim predložkom</translation>
+        <translation>Grizec z gornjim predložkom</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5284"/>
@@ -16510,7 +16564,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5309"/>
         <source>Tremblement</source>
-        <translation>Tremblement</translation>
+        <translation>Ornament tremblement</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5310"/>
@@ -16565,17 +16619,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5627"/>
         <source>Left (start) repeat sign</source>
-        <translation>Začetni ponavljáj</translation>
+        <translation>Levi (začetni) ponavljaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5628"/>
         <source>Right (end) repeat sign</source>
-        <translation>Končni ponavljáj</translation>
+        <translation>Desni (končni) ponavljaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5629"/>
         <source>Right and left repeat sign</source>
-        <translation>Končno-začetni ponavljáj</translation>
+        <translation>Levi in desni (končni in začetni) ponavljaj</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5630"/>
@@ -16600,7 +16654,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5634"/>
         <source>32nd (demisemiquaver) rest</source>
-        <translation>32-inska (dvaintridesetinski) pavza</translation>
+        <translation>32-inska (dvaintridesetinska) pavza</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5635"/>
@@ -16615,7 +16669,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5637"/>
         <source>Eighth (quaver) rest</source>
-        <translation>Osminska pavza</translation>
+        <translation>Osminska</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5638"/>
@@ -16665,22 +16719,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5670"/>
         <source>Segno</source>
-        <translation>Znamenje (segno)</translation>
+        <translation>Segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5671"/>
         <source>Segno (serpent)</source>
-        <translation>Kačasto znamenje (segno)</translation>
+        <translation>Kačasti segno</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5749"/>
         <source>Down bow</source>
-        <translation>Navzdolni lok</translation>
+        <translation>Lok navzdol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5756"/>
         <source>Harmonic</source>
-        <translation>Alikvotni ton</translation>
+        <translation>Flažolet</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5770"/>
@@ -16690,7 +16744,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5774"/>
         <source>Up bow</source>
-        <translation>Vzgorni lok</translation>
+        <translation>Lok navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5784"/>
@@ -16700,12 +16754,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5785"/>
         <source>Extra long system divider</source>
-        <translation>Zelo dolg ločilnik vrst</translation>
+        <translation>Zelo dolgi ločilnik vrst</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5786"/>
         <source>Long system divider</source>
-        <translation>Podaljšan ločilnik vrst</translation>
+        <translation>Dolgi ločilnik vrst</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/symnames.cpp" line="5851"/>
@@ -16815,22 +16869,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="360"/>
         <source>Short barline 2</source>
-        <translation>Skrajšana taktnica 2</translation>
+        <translation>Kratka taktnica 2</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2496"/>
         <source>Tap</source>
-        <translation>Tap igranje</translation>
+        <translation>Tap</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2497"/>
         <source>Slap</source>
-        <translation>Slap igranje</translation>
+        <translation>Slap</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2498"/>
         <source>Pop</source>
-        <translation>Pop igranje</translation>
+        <translation>Pop</translation>
     </message>
 </context>
 <context>
@@ -16882,7 +16936,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1769"/>
         <source>32nd through stem</source>
-        <translation>32-inski žez vrat</translation>
+        <translation>32-inski čez vrat</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1770"/>
@@ -16925,17 +16979,17 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2419"/>
         <source>Upprall line</source>
-        <translation>Črta vzgornega trilčka</translation>
+        <translation>Črta trilčka navzgor</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2420"/>
         <source>Downprall line</source>
-        <translation>Črta navzdolnega trilčka</translation>
+        <translation>Črta trilčka navzdol</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2421"/>
         <source>Prallprall line</source>
-        <translation>Trilna črta</translation>
+        <translation>Trilčna črta</translation>
     </message>
 </context>
 <context>
@@ -16973,7 +17027,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/engraving/dom/tripletfeel.cpp" line="112"/>
         <source>No triplet feel</source>
-        <translation>Brez triolskega občutja</translation>
+        <translation>Brez triolskega občutka</translation>
     </message>
 </context>
 <context>
@@ -17154,7 +17208,7 @@ Fret %1 on strings %2</source>
     <message numerus="yes">
         <location filename="../../src/framework/global/dataformatter.cpp" line="79"/>
         <source>%n year(s) ago</source>
-        <translation><numerusform>Pred %n letom</numerusform><numerusform>Pred %n letoma</numerusform><numerusform>Pred %n let</numerusform><numerusform>Pred %n leti</numerusform></translation>
+        <translation><numerusform>Pred %n letom</numerusform><numerusform>Pred %n letoma</numerusform><numerusform>Pred %n leti</numerusform><numerusform>Pred %n leti</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/framework/global/dataformatter.cpp" line="87"/>
@@ -17181,17 +17235,17 @@ Fret %1 on strings %2</source>
         <location filename="../../src/framework/global/dataformatter.cpp" line="103"/>
         <source>%n byte(s)</source>
         <extracomment>Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.</extracomment>
-        <translation><numerusform>%n bit</numerusform><numerusform>%n bita</numerusform><numerusform>%n biti</numerusform><numerusform>%n bitov</numerusform></translation>
+        <translation><numerusform>%n bajt</numerusform><numerusform>%n bajta</numerusform><numerusform>%n bajti</numerusform><numerusform>%n bajtov</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="45"/>
         <source>C♭♭</source>
-        <translation>C♭♭</translation>
+        <translation>Ceses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="46"/>
         <source>C♭</source>
-        <translation>C♭</translation>
+        <translation>Ces</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="47"/>
@@ -17209,12 +17263,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="49"/>
         <source>C♯♯</source>
-        <translation>C♯♯</translation>
+        <translation>Cisis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="50"/>
         <source>D♭♭</source>
-        <translation>D♭♭</translation>
+        <translation>Deses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="51"/>
@@ -17238,12 +17292,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="54"/>
         <source>D♯♯</source>
-        <translation>D♯♯</translation>
+        <translation>Disis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="55"/>
         <source>E♭♭</source>
-        <translation>E♭♭</translation>
+        <translation>Eses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="56"/>
@@ -17261,22 +17315,22 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="58"/>
         <source>E♯</source>
-        <translation>E♯</translation>
+        <translation>Eis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="59"/>
         <source>E♯♯</source>
-        <translation>E♯♯</translation>
+        <translation>Eisis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="60"/>
         <source>F♭♭</source>
-        <translation>F♭♭</translation>
+        <translation>Feses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="61"/>
         <source>F♭</source>
-        <translation>F♭</translation>
+        <translation>Fes</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="62"/>
@@ -17294,18 +17348,18 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="64"/>
         <source>F♯♯</source>
-        <translation>F♯♯</translation>
+        <translation>Fisis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="65"/>
         <source>G♭♭</source>
-        <translation>G♭♭</translation>
+        <translation>Geses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="66"/>
         <location filename="../../src/framework/global/utils.cpp" line="50"/>
         <source>G♭</source>
-        <translation>G♭</translation>
+        <translation>Ges</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="67"/>
@@ -17323,18 +17377,18 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="69"/>
         <source>G♯♯</source>
-        <translation>G♯♯</translation>
+        <translation>Gisis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="70"/>
         <source>A♭♭</source>
-        <translation>A♭♭</translation>
+        <translation>Ases</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="71"/>
         <location filename="../../src/framework/global/utils.cpp" line="52"/>
         <source>A♭</source>
-        <translation>A♭</translation>
+        <translation>As</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="72"/>
@@ -17352,18 +17406,18 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="74"/>
         <source>A♯♯</source>
-        <translation>A♯♯</translation>
+        <translation>Aisis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="75"/>
         <source>B♭♭</source>
-        <translation>B♭♭</translation>
+        <translation>Heses</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="76"/>
         <location filename="../../src/framework/global/utils.cpp" line="54"/>
         <source>B♭</source>
-        <translation>B</translation>
+        <translation>B (hes)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="77"/>
@@ -17375,12 +17429,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="78"/>
         <source>B♯</source>
-        <translation>H♯</translation>
+        <translation>His</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml" line="79"/>
         <source>B♯♯</source>
-        <translation>H♯♯</translation>
+        <translation>Hisis</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/realizeharmonydialog.cpp" line="96"/>
@@ -17410,7 +17464,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextInspectorView.qml" line="148"/>
         <source>pt</source>
         <extracomment>Abbreviation of &quot;points&quot;, used to specify a font size</extracomment>
-        <translation> točk</translation>
+        <translation> tč.</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="98"/>
@@ -17464,7 +17518,7 @@ Fret %1 on strings %2</source>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2304"/>
         <source>sp</source>
         <extracomment>Abbreviation of &quot;spatium&quot;</extracomment>
-        <translation> sp</translation>
+        <translation> pr.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml" line="53"/>
@@ -17475,13 +17529,13 @@ Fret %1 on strings %2</source>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="101"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="2304"/>
         <source>mm</source>
-        <translation>milimetri</translation>
+        <translation>mm</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="56"/>
         <source>s</source>
         <extracomment>Abbreviation of &quot;seconds&quot;</extracomment>
-        <translation>Samodejno</translation>
+        <translation>s</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="99"/>
@@ -17659,17 +17713,17 @@ Fret %1 on strings %2</source>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="477"/>
         <source>Free time</source>
         <comment>time signature</comment>
-        <translation>Prosti čas</translation>
+        <translation>Prosti taktovski način</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1056"/>
         <source>Music by %1</source>
-        <translation>Skladatelj %1</translation>
+        <translation>Skladatelj: %1</translation>
     </message>
     <message>
         <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1061"/>
         <source>Words by %1</source>
-        <translation>Besedilopisec %1</translation>
+        <translation>Besedilopisec: %1</translation>
     </message>
 </context>
 <context>
@@ -17677,7 +17731,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/mei/internal/meireader.cpp" line="79"/>
         <source>Do you want to try to load this MEI file anyway?</source>
-        <translation>Ali želite vseeno poskusiti to datoteko MEI naložiti?</translation>
+        <translation>Ali želite vseeno poskusiti naložiti to MEI datoteko?</translation>
     </message>
 </context>
 <context>
@@ -17715,7 +17769,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="206"/>
         <source>MuseScore instrument</source>
-        <translation>Glasbilo MuseScore</translation>
+        <translation>MuseScorovo glasbilo</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="269"/>
@@ -17730,7 +17784,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="315"/>
         <source>Eighth</source>
-        <translation>8-inka</translation>
+        <translation>Osminka</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="316"/>
@@ -17755,12 +17809,12 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="324"/>
         <source>Max. quantization</source>
-        <translation>Najmanjši korak</translation>
+        <translation>Najm. korak</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="352"/>
         <source>Max. voices</source>
-        <translation>Največ glasov</translation>
+        <translation>Najv. glasov</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="380"/>
@@ -17795,7 +17849,7 @@ Fret %1 on strings %2</source>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="391"/>
         <source>Tuplets</source>
-        <translation>Neparni deli dobe</translation>
+        <translation>Poddelitve</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="556"/>
@@ -17860,8 +17914,8 @@ napis hitrosti</translation>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="835"/>
         <source>Show
 chord symbols</source>
-        <translation>Pokaži
-oznake sozvokov</translation>
+        <translation>Prikaži
+oznake akordov</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="861"/>
@@ -17888,7 +17942,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="889"/>
         <source>Detect swing</source>
-        <translation>Zaznaj pozibavanje</translation>
+        <translation>Zaznaj neenakost dolžine not</translation>
     </message>
     <message>
         <location filename="../../src/importexport/midi/internal/midiimport/importmidi_model.cpp" line="1221"/>
@@ -17902,7 +17956,7 @@ predtakt</translation>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="49"/>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="122"/>
         <source>Do you want to try to load this file anyway?</source>
-        <translation>Ali želite vseeno poskusiti datoteko naložiti?</translation>
+        <translation>Ali želite vseeno poskusiti naložiti datoteko?</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/importexport/musicxml/internal/musicxml/importmxml.cpp" line="122"/>
@@ -17922,7 +17976,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="247"/>
         <source>Critical error:</source>
-        <translation>Odločilna napaka:</translation>
+        <translation>Kritična napaka:</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="249"/>
@@ -17942,12 +17996,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/musicxmlsupport.cpp" line="347"/>
         <source>expected token type and name ‘EndElement %1’, actual ‘%2 %3’</source>
-        <translation>Pričakovana vrsta žetona in ime &quot;EndElement %1&quot; dejansko &quot;%2 %3&quot;</translation>
+        <translation>Pričakovana vrsta žetona in ime »EndElement %1« dejansko »%2 %3«</translation>
     </message>
     <message>
         <location filename="../../src/importexport/musicxml/internal/musicxml/importxml.cpp" line="211"/>
         <source>File “%1” is not a valid MusicXML file.</source>
-        <translation>Datoteka &quot;%1&quot; ni veljavena MusicXML datoteka.</translation>
+        <translation>Datoteka »%1« ni veljavena MusicXML datoteka.</translation>
     </message>
 </context>
 <context>
@@ -18029,7 +18083,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="127"/>
         <source>Reset “%1” to default value</source>
-        <translation>ponastavi &quot;%1&quot; na privzeto vrednost</translation>
+        <translation>ponastavi »%1« na privzeto vrednost</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="156"/>
@@ -18039,7 +18093,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/InspectorPropertyView.qml" line="158"/>
         <source>This is set as the default style for this score</source>
-        <translation>Nastavljeno je za privzeto tega notnaga zapisa</translation>
+        <translation>Nastavljeno je za privzeto za ta notni zapis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/OffsetSection.qml" line="35"/>
@@ -18101,12 +18155,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="64"/>
         <source>Arrange</source>
-        <translation>Priredi</translation>
+        <translation>Razvrsti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="72"/>
         <source>Reset stacking order to default</source>
-        <translation>Ponastavi zaporedje vrhovatenja na privzeto</translation>
+        <translation>Ponastavi razvrstitev na privzeto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml" line="135"/>
@@ -18131,7 +18185,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="58"/>
         <source>Leading space</source>
-        <translation>Začetni presledek</translation>
+        <translation>Začetni razmik</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml" line="74"/>
@@ -18195,12 +18249,12 @@ predtakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="85"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="57"/>
         <source>Velocity change</source>
-        <translation>Hitrost spremembe</translation>
+        <translation>Sprememba hitrosti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="97"/>
         <source>Change speed</source>
-        <translation>Hitrost spreminjanja</translation>
+        <translation>Spremeni hitrost</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml" line="105"/>
@@ -18223,7 +18277,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/FermataExpandableBlank.qml" line="51"/>
         <source>Time stretch</source>
-        <translation>Zapotegnitev</translation>
+        <translation>Podaljšava</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml" line="51"/>
@@ -18273,7 +18327,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml" line="65"/>
         <source>Easing method</source>
-        <translation>Način pojenjanja</translation>
+        <translation>Način pojemanja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml" line="73"/>
@@ -18298,7 +18352,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml" line="83"/>
         <source>Tuning (cents)</source>
-        <translation>Uglasitev (odstotki)</translation>
+        <translation>Uglasitev (centi)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/general/playback/internal/PausesExpandableBlank.qml" line="51"/>
@@ -18356,7 +18410,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="58"/>
         <source>Brackets</source>
-        <translation>Vrstni oklepaji</translation>
+        <translation>Oglati oklepaji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/accidentals/AccidentalSettings.qml" line="66"/>
@@ -18429,7 +18483,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="63"/>
         <source>Final barline</source>
-        <translation>Končna taktnica – končaj</translation>
+        <translation>Končaj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="64"/>
@@ -18439,7 +18493,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="65"/>
         <source>Reverse final barline</source>
-        <translation>Obrnjen končaj</translation>
+        <translation>Obrnjeni končaj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="66"/>
@@ -18479,7 +18533,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="171"/>
         <source>Span presets</source>
-        <translation>Prednastavitve razpona</translation>
+        <translation>Predloge razpona</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="180"/>
@@ -18491,27 +18545,27 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="192"/>
         <source>Tick 1</source>
-        <translation>Črtica enojne širine</translation>
+        <translation>Zgoraj 1 pr.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="204"/>
         <source>Tick 2</source>
-        <translation>Črtica dvojne širine</translation>
+        <translation>Zgoraj 2 pr.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="221"/>
         <source>Short 1</source>
-        <translation>Dvojna sredinska črta</translation>
+        <translation>Sredina 2 pr.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/barlines/BarlineSettings.qml" line="233"/>
         <source>Short 2</source>
-        <translation>Trojna sredinska črta</translation>
+        <translation>Sredina 3 pr.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="62"/>
         <source>Bend</source>
-        <translation>Zategni</translation>
+        <translation>Zateg strune</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/bends/bendsettingsmodel.cpp" line="168"/>
@@ -18542,7 +18596,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="81"/>
         <source>Customize bend</source>
-        <translation>Prilagodi skupino</translation>
+        <translation>Prilagodi zateg</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/bends/BendSettings.qml" line="104"/>
@@ -18592,32 +18646,32 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="71"/>
         <source>Root only</source>
-        <translation>Le osnovni položaj</translation>
+        <translation>Le osnovni ton</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="72"/>
         <source>Close</source>
-        <translation>Bližnje</translation>
+        <translation>Znotraj oktave</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="73"/>
         <source>Drop two</source>
-        <translation>Brez dveh</translation>
+        <translation>Z drugo noto oktavo nižje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="74"/>
         <source>Six note</source>
-        <translation>Šestglasno</translation>
+        <translation>Kot šesterozvok</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="75"/>
         <source>Four note</source>
-        <translation>Štiriglasno</translation>
+        <translation>Kot četverozvok</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="76"/>
         <source>Three note</source>
-        <translation>Troglasno</translation>
+        <translation>Kot trozvok</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="81"/>
@@ -18627,7 +18681,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="88"/>
         <source>Until the next chord symbol</source>
-        <translation>Do naslednje oznake sozvoka</translation>
+        <translation>Do naslednje oznake akorda</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="89"/>
@@ -18637,12 +18691,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml" line="90"/>
         <source>Until the end of the attached duration</source>
-        <translation>Do konca vrednosti pripete note</translation>
+        <translation>Do konca vrednosti istočasne note</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="53"/>
         <source>Show courtesy clef on previous system</source>
-        <translation>Prikaži v predhodni vrstici opomniški ključ</translation>
+        <translation>Prikaži menjavo ključa tudi v predhodni vrstici</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="61"/>
@@ -18657,7 +18711,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml" line="71"/>
         <source>After</source>
-        <translation>Za</translation>
+        <translation>Po</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/HorizontalFrameSettings.qml" line="53"/>
@@ -18672,34 +18726,34 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="49"/>
         <source>Left gap</source>
-        <translation>Leva vrzel</translation>
+        <translation>Levi odmik</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml" line="64"/>
         <source>Right gap</source>
-        <translation>Desna vrzel</translation>
+        <translation>Desni odmik</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="53"/>
         <source>Gap above</source>
-        <translation>Prostor nad</translation>
+        <translation>Odmik nad</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml" line="68"/>
         <source>Gap below</source>
-        <translation>Prostor pod</translation>
+        <translation>Odmik pod</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml" line="53"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="120"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml" line="48"/>
         <source>Height</source>
-        <translation>Višina</translation>
+        <translation>Širina</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/FretDiagramSettings.qml" line="104"/>
         <source>You have multiple fretboard diagrams selected. Select a single diagram to edit its settings.</source>
-        <translation>Izbranih je več slik prijemov. Za urejanje lastnosti izberite le eno sliko prijema.</translation>
+        <translation>Izbranih je več slik prijemov. Za urejanje lastnosti izberi le eno sliko prijema.</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="57"/>
@@ -18723,17 +18777,17 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="113"/>
         <source>Center on notehead</source>
-        <translation>Sredinjenje na glavico</translation>
+        <translation>Sredinska poravnava na glavico</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/dynamics/DynamicsSettings.qml" line="114"/>
         <source>Use text centering</source>
-        <translation>Uporabi sredinjenje besedila</translation>
+        <translation>Uporabi sredinsko poravnavo besedila</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="79"/>
         <source>Strings</source>
-        <translation>Godala</translation>
+        <translation>Strune</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="103"/>
@@ -18743,7 +18797,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="122"/>
         <source>Fret number</source>
-        <translation>Število prečk</translation>
+        <translation>Število prečke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml" line="142"/>
@@ -18768,7 +18822,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="83"/>
         <source>Multiple dots</source>
-        <translation>Več pik</translation>
+        <translation>Več pik na struno</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="101"/>
@@ -18788,7 +18842,7 @@ predtakt</translation>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="43"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="192"/>
         <source>Normal</source>
-        <translation>Običajno</translation>
+        <translation>Običajna</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="115"/>
@@ -18798,7 +18852,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="116"/>
         <source>Square</source>
-        <translation>Oglata alokada</translation>
+        <translation>Kvadrat</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml" line="117"/>
@@ -18824,7 +18878,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="111"/>
         <source>Scale to frame size</source>
-        <translation>Prilagodi velikosti okvirja</translation>
+        <translation>Povečaj na velikost okvirja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/images/ImageSettings.qml" line="121"/>
@@ -18860,12 +18914,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml" line="75"/>
         <source>Play repeats</source>
-        <translation>Predvajaj s ponavljanjem</translation>
+        <translation>Predvajaj s ponavljanji</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="48"/>
         <source>Show courtesy key signature on previous system</source>
-        <translation>Prikaži v predhodni vrstici opomniške predznake tonalitete</translation>
+        <translation>Prikaži menjavo tonalitete tudi v predhodni vrstici</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="58"/>
@@ -18876,7 +18930,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="66"/>
         <source>Unknown</source>
-        <translation>Neznano</translation>
+        <translation>Neznan</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="69"/>
@@ -18915,7 +18969,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="76"/>
         <source>Aeolian</source>
-        <translation>Eolska</translation>
+        <translation>Eolski</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/keysignatures/KeySignatureSettings.qml" line="77"/>
@@ -18930,12 +18984,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="49"/>
         <source>Glissando line</source>
-        <translation>Zadrsna črta</translation>
+        <translation>Zadrsna (glissando) črta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="59"/>
         <source>Show text</source>
-        <translation>Pokaži besedilo</translation>
+        <translation>Prikaži besedilo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml" line="68"/>
@@ -18954,7 +19008,7 @@ predtakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="71"/>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="58"/>
         <source>Allow diagonal</source>
-        <translation>Dovoli diagonalo</translation>
+        <translation>Dovoli diagonalno</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="119"/>
@@ -18967,7 +19021,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml" line="142"/>
         <source>Height (new system)</source>
-        <translation>Višina (nova vrsta)</translation>
+        <translation>Širina (nova vrstica)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="81"/>
@@ -18984,17 +19038,17 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="99"/>
         <source>Dash</source>
-        <translation>Črtica</translation>
+        <translation>Črta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml" line="121"/>
         <source>Gap</source>
-        <translation>Vrzel</translation>
+        <translation>Presledek</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="52"/>
         <source>Beginning text</source>
-        <translation>Začetni napis</translation>
+        <translation>Napis na začetku</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="76"/>
@@ -19004,32 +19058,32 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="93"/>
         <source>Text when continuing to a new system</source>
-        <translation>Napis pri skoku v novo vrsto</translation>
+        <translation>Napis pri nadaljevanju v novo vrsto</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml" line="113"/>
         <source>End text</source>
-        <translation>Zaključni napis</translation>
+        <translation>Napis na koncu</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="61"/>
         <source>Start hook</source>
-        <translation>Začetna kljuka</translation>
+        <translation>Začetna kljukica</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="75"/>
         <source>End hook</source>
-        <translation>Zaključna kljuka</translation>
+        <translation>Zaključna kljukica</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="99"/>
         <source>Start hook height</source>
-        <translation>Višina začetne kljuke</translation>
+        <translation>Dolžina začetne kljukice</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/HooksSection.qml" line="118"/>
         <source>End hook height</source>
-        <translation>Višina zaključne kljuke</translation>
+        <translation>Dolžina zaključne kljukice</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml" line="49"/>
@@ -19065,12 +19119,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="60"/>
         <source>Segno</source>
-        <translation>Znamenje (segno)</translation>
+        <translation>Segno</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="61"/>
         <source>Segno variation</source>
-        <translation>Različica znamenja (segno)</translation>
+        <translation>Segno (različica)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="62"/>
@@ -19080,7 +19134,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="63"/>
         <source>Varied coda</source>
-        <translation>Varirana koda</translation>
+        <translation>Koda (različica)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml" line="64"/>
@@ -19122,7 +19176,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="87"/>
         <source>Feathered beams</source>
-        <translation>Peresne prečke</translation>
+        <translation>Prečke pospeševanja/upočasnjevanja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="102"/>
@@ -19137,17 +19191,17 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="136"/>
         <source>Feathering left</source>
-        <translation>Peresna leva</translation>
+        <translation>Levi razmik</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="156"/>
         <source>Feathering right</source>
-        <translation>Peresna desna</translation>
+        <translation>Desni razmik</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="182"/>
         <source>Force horizontal</source>
-        <translation>Vsili vodoravno</translation>
+        <translation>Napravi prečke vodoravne</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/BeamSettings.qml" line="209"/>
@@ -19182,7 +19236,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="99"/>
         <source>Duration dot position</source>
-        <translation>Požaj vrednostne pike</translation>
+        <translation>Požaj pike za pod. trajanja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/HeadSettings.qml" line="147"/>
@@ -19207,7 +19261,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="62"/>
         <source>Break beam left</source>
-        <translation>Prekini prečko levo</translation>
+        <translation>Prekini prečke levo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="63"/>
@@ -19222,7 +19276,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/beams/BeamTypeSelector.qml" line="65"/>
         <source>Join beams</source>
-        <translation>Spoji prečke</translation>
+        <translation>Poveži prečke</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadGroupSelector.qml" line="34"/>
@@ -19252,7 +19306,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml" line="43"/>
         <source>Brevis</source>
-        <translation>Brevis</translation>
+        <translation>Dvojna celinka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="66"/>
@@ -19295,12 +19349,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="48"/>
         <source>Pause before new section starts</source>
-        <translation>Premor pred začetkom novega odseka</translation>
+        <translation>Napravi premor pred začetkom novega odseka</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="65"/>
         <source>Start new section with long instrument names</source>
-        <translation>Začni nov odsek z polnimi nazivi glasbil</translation>
+        <translation>Začni nov odsek s polnimi nazivi glasbil</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml" line="74"/>
@@ -19315,7 +19369,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="129"/>
         <source>Line distance</source>
-        <translation>Razmiki med črtami:</translation>
+        <translation>Razmiki med črtami</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="148"/>
@@ -19342,47 +19396,47 @@ predtakt</translation>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="192"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="193"/>
         <source>Pitch names</source>
-        <translation>Imena višin</translation>
+        <translation>Angleška imena tonov</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="193"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="194"/>
         <source>German pitch names</source>
-        <translation>Srednjeevropsko poimenovanje tonov</translation>
+        <translation>Srednjeevropska imena tonov</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="194"/>
         <source>Solfege movable Do</source>
-        <translation>Solimzacijsko s premičnim Do</translation>
+        <translation>Solimizacija s premičnim Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="195"/>
         <source>Solfege fixed Do</source>
-        <translation>Solimzacijsko s stalnim Do</translation>
+        <translation>Solimizacija z nepremičnim Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="196"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="197"/>
         <source>4-shape (Walker)</source>
-        <translation>4-oblični (Walker)</translation>
+        <translation>4 oblike (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="197"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="198"/>
         <source>7-shape (Aikin)</source>
-        <translation>7-oblični (Aikini)</translation>
+        <translation>7 oblik (Aikin)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="198"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="199"/>
         <source>7-shape (Funk)</source>
-        <translation>4-oblični (Funk)</translation>
+        <translation>4 oblike (Funk)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="199"/>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="200"/>
         <source>7-shape (Walker)</source>
-        <translation>7-oblični (Walker)</translation>
+        <translation>7 oblik (Walker)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/notes/StemSettings.qml" line="55"/>
@@ -19393,32 +19447,32 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="218"/>
         <source>Show barlines</source>
-        <translation>Pokaži taktnice</translation>
+        <translation>Prikaži taktnice</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="227"/>
         <source>Show ledger lines</source>
-        <translation>Pokaži pomožne črtice</translation>
+        <translation>Prikaži pomožne črtice</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="236"/>
         <source>Generate clefs</source>
-        <translation>Prikazovanje ključa</translation>
+        <translation>Prikaži ključe</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="245"/>
         <source>Generate time signatures</source>
-        <translation>Ustvarjanje taktovskega načina</translation>
+        <translation>Prikaži taktovske načine</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml" line="254"/>
         <source>Generate key signatures</source>
-        <translation>Ustvajanje predznakov tonalitete</translation>
+        <translation>Prikaži predznake tonalitete</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="48"/>
         <source>Follow written tempo</source>
-        <translation>Sledenje zapisani hitrosti</translation>
+        <translation>Sledi zapisani hitrosti</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml" line="57"/>
@@ -19428,7 +19482,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="53"/>
         <source>Set specific tempo</source>
-        <translation>Določitev hirosti izvajanja</translation>
+        <translation>Določi hirost izvajanja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml" line="77"/>
@@ -19439,7 +19493,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="135"/>
         <source>Show courtesy time signature on previous system</source>
-        <translation>Prikaži v predhodni vrstici opomniški taktovki način</translation>
+        <translation>Prikaži menjavo taktovskega načina tudi v predhodni vrstici</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml" line="146"/>
@@ -19454,32 +19508,32 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="64"/>
         <source>Dip</source>
-        <translation type="unfinished"/>
+        <translation>Dip</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="65"/>
         <source>Dive</source>
-        <translation type="unfinished"/>
+        <translation>Dive</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="66"/>
         <source>Release (Up)</source>
-        <translation type="unfinished"/>
+        <translation>Release (navzgor)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="67"/>
         <source>Inverted dip</source>
-        <translation type="unfinished"/>
+        <translation>Obrnjeni dip</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="68"/>
         <source>Return</source>
-        <translation type="unfinished"/>
+        <translation>Return</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="69"/>
         <source>Release (Down)</source>
-        <translation type="unfinished"/>
+        <translation>Release (navzdol)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolobars/TremoloBarSettings.qml" line="151"/>
@@ -19499,7 +19553,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tremolos/TremoloSettings.qml" line="58"/>
         <source>Traditional alternative</source>
-        <translation>Običajno nadomestno</translation>
+        <translation>Običajno alternativno</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml" line="58"/>
@@ -19514,7 +19568,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/HideEmptyStavesSettings.qml" line="68"/>
         <source>Show brackets when spanning a single staff</source>
-        <translation>Prikaži oklepaje, če oklepajo le eno črtovje</translation>
+        <translation>Prikaži oklepaje, ko oklepajo eno samo črtovje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml" line="50"/>
@@ -19540,7 +19594,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="54"/>
         <source>Invisible elements</source>
-        <translation>Nevidni predmeti</translation>
+        <translation>Nevidni elementi</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml" line="67"/>
@@ -19670,7 +19724,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="61"/>
         <source>Match staff size</source>
-        <translation>Ujemajoča velikost s črtovjem</translation>
+        <translation>Enaka velikost kot črtovje</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="75"/>
@@ -19695,12 +19749,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="59"/>
         <source>Circle</source>
-        <translation>Okrogel</translation>
+        <translation>Krog</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="80"/>
         <source>Border</source>
-        <translation>Meja</translation>
+        <translation>Obroba</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="97"/>
@@ -19710,7 +19764,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="140"/>
         <source>Padding</source>
-        <translation>Podlaganje</translation>
+        <translation>Notranji odmik</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/common/FrameSettings.qml" line="162"/>
@@ -19741,7 +19795,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/chordsymbols/chordsymbolsettingsmodel.cpp" line="32"/>
         <source>Chord symbol</source>
-        <translation>Oznaka sozvoka</translation>
+        <translation>Oznaka akorda</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/text/TextSettings.qml" line="179"/>
@@ -19751,7 +19805,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/arpeggioplaybackmodel.cpp" line="33"/>
         <source>Arpeggio</source>
-        <translation>Razložitev (arpeggio)</translation>
+        <translation>Arpeggio</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/breathplaybackmodel.cpp" line="33"/>
@@ -19761,13 +19815,13 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/fermataplaybackmodel.cpp" line="33"/>
         <source>Fermatas</source>
-        <translation>Prenehljaji (korone)</translation>
+        <translation>Korone</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/glissandoplaybackmodel.cpp" line="33"/>
         <location filename="../../src/inspector/models/notation/lines/glissandosettingsmodel.cpp" line="32"/>
         <source>Glissando</source>
-        <translation>Zadrs (glissando)</translation>
+        <translation>Glissando</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/general/playback/internal_models/gradualtempochangeplaybackmodel.cpp" line="33"/>
@@ -19832,7 +19886,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/fermatas/fermatasettingsmodel.cpp" line="32"/>
         <source>Fermata</source>
-        <translation>Prenehljaj (korona)</translation>
+        <translation>Korona</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/horizontalframesettingsmodel.cpp" line="34"/>
@@ -19842,12 +19896,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/frames/textframesettingsmodel.cpp" line="33"/>
         <source>Text frame</source>
-        <translation>Napisni okvir</translation>
+        <translation>Okvir z besedilom</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/frames/verticalframesettingsmodel.cpp" line="35"/>
         <source>Vertical frame</source>
-        <translation>Medvrstni okvir</translation>
+        <translation>Medvrstični okvir</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp" line="35"/>
@@ -19862,7 +19916,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/instrumentname/instrumentnamesettingsmodel.cpp" line="33"/>
         <source>Instrument names</source>
-        <translation>Nazivi glasbil</translation>
+        <translation>Imena glasbil</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/jumps/jumpsettingsmodel.cpp" line="32"/>
@@ -19887,12 +19941,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="40"/>
         <source>Diminuendo</source>
-        <translation>Pojemanje</translation>
+        <translation>Pojemanje (diminuendo)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/hairpinlinesettingsmodel.cpp" line="44"/>
         <source>Crescendo</source>
-        <translation>Naraščajoče (crescendo)</translation>
+        <translation>Naraščanje (crescendo)</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/letringsettingsmodel.cpp" line="31"/>
@@ -19911,7 +19965,7 @@ predtakt</translation>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="54"/>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="44"/>
         <source>Hooked 90°</source>
-        <translation>Z 90° kljuko</translation>
+        <translation>Z 90° kljukico</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="45"/>
@@ -19919,7 +19973,7 @@ predtakt</translation>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="46"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="55"/>
         <source>Hooked 45°</source>
-        <translation>S 45° kljuko</translation>
+        <translation>S 45° kljukico</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/ottavasettingsmodel.cpp" line="66"/>
@@ -19966,7 +20020,7 @@ predtakt</translation>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="47"/>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="56"/>
         <source>Hooked 90° T-style</source>
-        <translation>Z 90° kljuko na T</translation>
+        <translation>Z 90° kljukico na T</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/pedalsettingsmodel.cpp" line="47"/>
@@ -19991,7 +20045,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/textlinesettingsmodel.cpp" line="40"/>
         <source>Text line</source>
-        <translation>Napisna črta</translation>
+        <translation>Oklepaj z napisom</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/lines/vibratosettingsmodel.cpp" line="34"/>
@@ -20017,7 +20071,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lines/voltasettingsmodel.cpp" line="37"/>
         <source>Volta</source>
-        <translation>Oklepaj zaporedja (volta)</translation>
+        <translation>Volta</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/markers/markersettingsmodel.cpp" line="32"/>
@@ -20058,12 +20112,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="195"/>
         <source>Solfège movable do</source>
-        <translation>Solimzacijsko s premičnim Do</translation>
+        <translation>Solimizacija s premičnim Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/noteheads/noteheadsettingsmodel.cpp" line="196"/>
         <source>Solfège fixed do</source>
-        <translation>Solimzacijsko s stalnim Do</translation>
+        <translation>Solimizacija s stalnim Do</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/notesettingsproxymodel.cpp" line="45"/>
@@ -20083,7 +20137,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/sectionbreaks/sectionbreaksettingsmodel.cpp" line="33"/>
         <source>Section break</source>
-        <translation>Razdelilni prelom</translation>
+        <translation>Prelom zapisa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/spacers/spacersettingsmodel.cpp" line="35"/>
@@ -20093,7 +20147,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/stafftype/stafftypesettingsmodel.cpp" line="34"/>
         <source>Staff type changes</source>
-        <translation>Spreminjanje vrste črtovja</translation>
+        <translation>Sprememba vrste črtovja</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/timesignatures/timesignaturesettingsmodel.cpp" line="34"/>
@@ -20113,7 +20167,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="37"/>
         <source>Tuplet</source>
-        <translation>Neparni del dobe</translation>
+        <translation>Poddelitev</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tuplets/tupletsettingsmodel.cpp" line="67"/>
@@ -20144,12 +20198,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/lyrics/lyricssettingsmodel.cpp" line="32"/>
         <source>Lyrics</source>
-        <translation>Besedilo</translation>
+        <translation>Besedilo skladbe</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/notes/chords/chordsettingsmodel.cpp" line="33"/>
         <source>Chord</source>
-        <translation>Sozvok</translation>
+        <translation>Akord</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/expressions/ExpressionsSettings.qml" line="82"/>
@@ -20159,7 +20213,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="51"/>
         <source>Interval above</source>
-        <translation>Interval nad</translation>
+        <translation>Interval navzgor</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="58"/>
@@ -20184,7 +20238,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="68"/>
         <source>Interval below</source>
-        <translation>Interval pod</translation>
+        <translation>Interval navzdol</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="85"/>
@@ -20225,7 +20279,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="156"/>
         <source>Unison</source>
-        <translation>Enoglasno</translation>
+        <translation>Prima</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="157"/>
@@ -20270,7 +20324,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="187"/>
         <source>Show any alteration</source>
-        <translation>Pokaži katerokoli enakozvočnico</translation>
+        <translation>Pokaži katerikoli enharmonični zapis</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml" line="188"/>
@@ -20285,27 +20339,27 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/rests/restsettingsproxymodel.cpp" line="36"/>
         <source>Rest</source>
-        <translation>Premor (pavza)</translation>
+        <translation>Pavza</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml" line="49"/>
         <source>Left padding</source>
-        <translation>Levo podlaganje</translation>
+        <translation>Odmik levo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml" line="65"/>
         <source>Right padding</source>
-        <translation>Desno podlaganje</translation>
+        <translation>Odmik desno</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="49"/>
         <source>Top padding</source>
-        <translation>Zgornje podlaganje</translation>
+        <translation>Odmik navzgor</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml" line="65"/>
         <source>Bottom padding</source>
-        <translation>Spodnje podlaganje</translation>
+        <translation>Odmik navzdol</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="77"/>
@@ -20317,18 +20371,22 @@ predtakt</translation>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="49"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="73"/>
         <source>Inside</source>
-        <translation>Vmesni</translation>
+        <translation>Znotraj</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml" line="85"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="50"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="74"/>
         <source>Outside</source>
-        <translation>Robni</translation>
+        <translation>Zunaj</translation>
+    </message>
+    <message>
+        <source>Synchronise with main score</source>
+        <translation>Uskladi z glavnim notnim zapisom</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
-        <source>Synchronise with main score</source>
+        <source>Synchronize with main score</source>
         <translation>Uskladi z glavnim notnim zapisom</translation>
     </message>
     <message>
@@ -20339,15 +20397,14 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="110"/>
         <source>Exclude from score</source>
-        <translation>Izvzemi iz notnega zapisa</translation>
+        <translation>Izključi iz notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="111"/>
         <source>Exclude from parts</source>
-        <translation>Izvzemi iz partov</translation>
+        <translation>Izključi iz partov</translation>
     </message>
     <message>
-        <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
         <source>Score and part synchronisation</source>
         <translation>Uskladitev notnega zapisa in partov</translation>
     </message>
@@ -20364,17 +20421,22 @@ predtakt</translation>
     <message>
         <location filename="../../src/inspector/models/notation/tempos/temposettingsmodel.cpp" line="45"/>
         <source>A tempo</source>
-        <translation>V tempu (a tempo)</translation>
+        <translation>A tempo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/models/notation/tempos/temposettingsmodel.cpp" line="48"/>
         <source>Tempo primo</source>
-        <translation>Začetna hitrost (tempo primo)</translation>
+        <translation>Tempo primo</translation>
     </message>
     <message>
         <location filename="../../src/inspector/view/widgets/bendgridcanvas.cpp" line="819"/>
         <source>Time: %2, value: %3</source>
         <translation>Čas: %2, vrednost: %3</translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
+        <source>Score and part synchronization</source>
+        <translation>Uskladitev notnega zapisa in partov</translation>
     </message>
 </context>
 <context>
@@ -20395,7 +20457,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="39"/>
         <source>Add or remove instruments</source>
-        <translation>Dodaj ali odstrani inštrumente</translation>
+        <translation>Dodaj ali odstrani glasbila</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsDialog.qml" line="40"/>
@@ -20443,13 +20505,13 @@ predtakt</translation>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="236"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="85"/>
         <source>Move selected instruments up</source>
-        <translation>Premakni izbrana glasbila više</translation>
+        <translation>Premakni izbrana glasbila višje</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/ChooseInstrumentsPage.qml" line="251"/>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="103"/>
         <source>Move selected instruments down</source>
-        <translation>Premakni izbrana glasbila niže</translation>
+        <translation>Premakni izbrana glasbila nižje</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentsControlPanel.qml" line="121"/>
@@ -20459,12 +20521,12 @@ predtakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="64"/>
         <source>Name on main score</source>
-        <translation>Polno ime črtovja</translation>
+        <translation>Ime v partituri</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="65"/>
         <source>Name on part score</source>
-        <translation>Naslov parta</translation>
+        <translation>Ime v partu</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="86"/>
@@ -20474,7 +20536,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="111"/>
         <source>Replace instrument</source>
-        <translation>Nadomesti glasbilo</translation>
+        <translation>Zamenjaj glasbilo</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml" line="127"/>
@@ -20555,7 +20617,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml" line="187"/>
         <source>Note: linked staves contain identical information.</source>
-        <translation>Opomba: vezana črtovja vsebujejo enake podatke.</translation>
+        <translation>Opomba: vezana črtovja vsebujejo iste podatke.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/view/instrumentlistmodel.cpp" line="201"/>
@@ -20586,31 +20648,31 @@ predtakt</translation>
         <location filename="../../src/instrumentsscene/view/stafftreeitem.cpp" line="63"/>
         <source>[LINK] %1</source>
         <extracomment>Prefix for the display name for a linked staff. Preferably, keep this short.</extracomment>
-        <translation>[VEZ] %1</translation>
+        <translation>[POVEZAVA] %1</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="127"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;, or use the keyboard shortcut %1.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation>V vašem notnem zapisu ni nobenega glasbila. Če jih želite izbrati, pritisnite &lt;b&gt;Dodaj&lt;/b&gt; ali uporabite tipkovno bližnjico %1.</translation>
+        <translation>V vašem notnem zapisu ni nobenega glasbila. Če jih želite izbrati, pritisnite &lt;b&gt;Dodaj&lt;/b&gt; ali uporabite bližnjično tipko %1.</translation>
     </message>
     <message>
         <location filename="../../src/instrumentsscene/qml/MuseScore/InstrumentsScene/InstrumentsPanel.qml" line="130"/>
         <source>There are no instruments in your score. To choose some, press &lt;b&gt;Add&lt;/b&gt;.</source>
         <extracomment>Keep in sync with the text of the &quot;Add&quot; button at the top of the Instruments panel (InstrumentsControlPanel.qml)</extracomment>
-        <translation> vašem notnem zapisu ni nobenega glasbila. Če jih želite izbrati, pritisnite &lt;b&gt;Dodaj&lt;/b&gt;.</translation>
+        <translation>V vašem notnem zapisu ni nobenega glasbila. Če jih želite izbrati, pritisnite &lt;b&gt;Dodaj&lt;/b&gt;.</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="826"/>
         <source>Are you sure you want to delete the selected %n instrument(s)?</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>Ali ste prepričani, da želite izbrisatni %n izbrano glasbilo?</numerusform><numerusform>Ali ste prepričani, da želite izbrisatni %n izbrani glasbili?</numerusform><numerusform>Ali ste prepričani, da želite izbrisatni %n izbrana glasbila?</numerusform><numerusform>Ali ste prepričani, da želite izbrisatni %n izbranih glasbil?</numerusform></translation>
+        <translation><numerusform>Ali ste prepričani, da želite izbrisati %n izbranih glasbil?</numerusform><numerusform>Ali ste prepričani, da želite izbrisati %n izbranih glasbil?</numerusform><numerusform>Ali ste prepričani, da želite izbrisati %n izbranih glasbil?</numerusform><numerusform>Ali ste prepričani, da želite izbrisati %n izbranih glasbil?</numerusform></translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/instrumentsscene/view/instrumentspaneltreemodel.cpp" line="831"/>
         <source>This will remove the %n instrument(s) from the full score and all part scores.</source>
         <extracomment>Please omit `%n` in the translation in this case; it's only there so that you have the possibility to provide translations with the correct numerus form, i.e. to show &quot;instrument&quot; or &quot;instruments&quot; as appropriate.</extracomment>
-        <translation><numerusform>S tem bo odstranjeno %n glasbilo iz glavnega notnega zapisa in vseh partov.</numerusform><numerusform>S tem bosta odstranjeni %n glasbili iz glavnega notnega zapisa in vseh partov.</numerusform><numerusform>S tem bodo odstranjena %n glasbila iz glavnega notnega zapisa in vseh partov.</numerusform><numerusform>S tem bo odstranjenih %n glasbil iz glavnega notnega zapisa in vseh partov.</numerusform></translation>
+        <translation><numerusform>S tem bo odstranjeno %n glasbilo iz glavnega zapisa in vseh partov.</numerusform><numerusform>S tem bosta odstranjeni %n glasbili iz glavnega zapisa in vseh partov.</numerusform><numerusform>S tem bodo odstranjena %n glasbila iz glavnega zapisa in vseh partov.</numerusform><numerusform>S tem bo odstranjenih %n glasbil iz glavnega zapisa in vseh partov.</numerusform></translation>
     </message>
 </context>
 <context>
@@ -20618,7 +20680,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/languages/internal/languagesservice.cpp" line="356"/>
         <source>Checking for updates…</source>
-        <translation>Preverjanje posodobitev ...</translation>
+        <translation>Preverjanje za posodobitve ...</translation>
     </message>
     <message>
         <location filename="../../src/languages/internal/languagesservice.cpp" line="410"/>
@@ -20643,7 +20705,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/languages/languageserrors.h" line="53"/>
         <source>Error while downloading language</source>
-        <translation>Napaka pri prenosu jezikov</translation>
+        <translation>Napaka pri prenosu jezika</translation>
     </message>
     <message>
         <location filename="../../src/languages/languageserrors.h" line="54"/>
@@ -20676,7 +20738,7 @@ predtakt</translation>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/internal/Playlist.qml" line="137"/>
         <source>Sorry, we are unable to load these videos right now</source>
-        <translation>Žal trenutno ni mogoče naložit teh posnetkov</translation>
+        <translation>Žal trenutno ni mogoče naložiti teh posnetkov</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/internal/Playlist.qml" line="142"/>
@@ -20687,7 +20749,7 @@ predtakt</translation>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="96"/>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="103"/>
         <source>Learn</source>
-        <translation>Naučite se</translation>
+        <translation>Učenje</translation>
     </message>
     <message>
         <location filename="../../src/learn/qml/MuseScore/Learn/LearnPage.qml" line="156"/>
@@ -20742,7 +20804,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/learn/learnerrors.h" line="45"/>
         <source>The received playlist is empty.</source>
-        <translation>Prejeti predvajalni seznam je prazen.</translation>
+        <translation>Prejeti seznam predvajanja je prazen.</translation>
     </message>
 </context>
 <context>
@@ -20763,7 +20825,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="39"/>
         <source>Muse Sampler library is not found</source>
-        <translation>Knjižnice vzorčnika Muse Sampler ni mogoče najti</translation>
+        <translation>Knjižnice Muse Samplerja ni mogoče najti</translation>
     </message>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="41"/>
@@ -20840,7 +20902,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="49"/>
         <source>Customization actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Customize toolbar&quot; popup</extracomment>
-        <translation>Opravila prilagotive po meri</translation>
+        <translation>Opravila prilagotive</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="61"/>
@@ -20855,7 +20917,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml" line="118"/>
         <source>Move down</source>
-        <translation>Navzdol</translation>
+        <translation>Premakni nižje</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="36"/>
@@ -20885,7 +20947,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml" line="120"/>
         <source>Flatten all beams</source>
-        <translation>Splošči vse prečke</translation>
+        <translation>Napravi prečke vodoravne</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml" line="42"/>
@@ -20905,12 +20967,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="142"/>
         <source>Scroll left</source>
-        <translation>Zadrsaj levo</translation>
+        <translation>Podrsaj levo</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/NotationSwitchPanel.qml" line="159"/>
         <source>Scroll right</source>
-        <translation>Zadrsaj desno</translation>
+        <translation>Podrsaj desno</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartDelegate.qml" line="166"/>
@@ -20937,7 +20999,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="42"/>
         <source>Parts actions</source>
         <extracomment>Accessibility description of the button group at the top of the &quot;Parts&quot; dialog</extracomment>
-        <translation>Dejanja parta</translation>
+        <translation>Dejanja partov</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/PartsTopPanel.qml" line="55"/>
@@ -20987,12 +21049,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NotationToolBar.qml" line="43"/>
         <source>Notation toolbar</source>
-        <translation>Orodna vrstica vnašanja not</translation>
+        <translation>Orodna vrstica urejanja zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="46"/>
         <source>Note input toolbar</source>
-        <translation>Orodna vrstica vpisovanja not</translation>
+        <translation>Orodna vrstica vnašanja not</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/NoteInputBar.qml" line="231"/>
@@ -21007,7 +21069,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="78"/>
         <source>Zoom in</source>
-        <translation>Približaj</translation>
+        <translation>Povečaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="58"/>
@@ -21017,7 +21079,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/ZoomControl.qml" line="126"/>
         <source>Zoom menu</source>
-        <translation>Meni približevanja</translation>
+        <translation>Meni povečave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/partlistmodel.cpp" line="128"/>
@@ -21079,7 +21141,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1247"/>
         <source>Scalable Vector Graphics</source>
-        <translation>Vektorska datoteka SVG</translation>
+        <translation>Povečljive vektorske grafike (SVG)</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1248"/>
@@ -21089,12 +21151,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1249"/>
         <source>PNG Bitmap Graphic</source>
-        <translation>Slikovna datoteka PNG</translation>
+        <translation>PNG točkovna grafika</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1250"/>
         <source>Bitmap</source>
-        <translation>Točkovna slika</translation>
+        <translation>Točkovna grafika</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1251"/>
@@ -21135,7 +21197,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1624"/>
         <source>Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly.</source>
-        <translation>Ker je ta datoteka sloga iz drugačne različice MuseScora, ni gotovo, da bo vaš zapis prikazan pravilno.</translation>
+        <translation>Ker je ta datoteka sloga iz drugačne različice MuseScora, ni zagotovila, da bo vaš zapis prikazan pravilno.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/notationactioncontroller.cpp" line="1626"/>
@@ -21392,13 +21454,13 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="270"/>
         <source>Diagram type buttons</source>
-        <translation>Gumbi vrste obrazca</translation>
+        <translation>Gumbi vrste diagrama</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="285"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="290"/>
         <source>Diagram</source>
-        <translation>Obrazec</translation>
+        <translation>Diagram</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="308"/>
@@ -21435,7 +21497,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="78"/>
         <source>Large</source>
-        <translation>Veliko</translation>
+        <translation>Povečano</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="79"/>
@@ -21450,7 +21512,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="100"/>
         <source>128 keys (full)</source>
-        <translation>128 tipk (popolno)</translation>
+        <translation>128 tipk (cela)</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/pianokeyboard/pianokeyboardpanelcontextmenumodel.cpp" line="101"/>
@@ -21491,7 +21553,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="173"/>
         <source>Hairpins</source>
-        <translation>Črte spreminjanja</translation>
+        <translation>Vilice</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="175"/>
@@ -21506,7 +21568,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="179"/>
         <source>Chord symbols</source>
-        <translation>Oznake sozvokov</translation>
+        <translation>Oznake akordov</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/selectionfiltermodel.cpp" line="181"/>
@@ -21625,17 +21687,17 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="56"/>
         <source>No chord/rest selected</source>
-        <translation>Izbran ni noben sozvok/pavza</translation>
+        <translation>Izbran ni noben akord/pavza</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="57"/>
         <source>Please select a chord or rest and retry</source>
-        <translation>Izberite sozvok ali pavzo in ponovno poskusite</translation>
+        <translation>Izberite akord ali pavzo in ponovno poskusite</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="60"/>
         <source>No note or lyrics selected</source>
-        <translation>Izbrana ni nobena nota ali besedilo</translation>
+        <translation>Izbrana ni nobena nota ali besedilo skladbe</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="61"/>
@@ -21658,12 +21720,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="68"/>
         <source>No flippable element selected</source>
-        <translation>Izbran ni noben predmet, ki ga je mogoče preobrniti</translation>
+        <translation>Izbran ni noben predmet, ki ga je mogoče obrniti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="69"/>
         <source>Please select an element that can be flipped and retry</source>
-        <translation>Izberite predmet, ki ga je mogoče preobrniti in ponovno poskusite</translation>
+        <translation>Izberite predmet, ki ga je mogoče obrniti in ponovno poskusite</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="72"/>
@@ -21690,13 +21752,13 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="80"/>
         <source>Cannot insert chord/rest in tuplet</source>
-        <translation>V nepravilno poddelitev ni mogoče vstaviti sozvoka oz. pavze</translation>
+        <translation>V poddelitev ni mogoče vstaviti akorda oz. pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="83"/>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="90"/>
         <source>Cannot split tuplet</source>
-        <translation>Nepravilne poddelitve ni mogoče razcepiti</translation>
+        <translation>Poddelitve ni mogoče razcepiti</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="86"/>
@@ -21731,12 +21793,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="104"/>
         <source>Cannot remove time from tuplet</source>
-        <translation>Neenakomerni poddelitvi ni mogoče ukiniti trajanja</translation>
+        <translation>Poddelitvi ni mogoče ukiniti trajanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="105"/>
         <source>Please select the complete tuplet and retry</source>
-        <translation>Izberite popolno poddelitev in ponovno poskusite</translation>
+        <translation>Izberite celo poddelitev in ponovno poskusite</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="108"/>
@@ -21746,22 +21808,22 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="109"/>
         <source>Please select the complete measure repeat and retry</source>
-        <translation>Izberite popoln taktni ponavljaj in ponovno poskusite</translation>
+        <translation>Izberite cel taktni ponavljaj in ponovno poskusite</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="112"/>
         <source>No destination to paste</source>
-        <translation>Ni mesta lepljenje</translation>
+        <translation>Ni mesta za lepljenje</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="115"/>
         <source>Cannot paste into tuplet</source>
-        <translation>Vsebine ni mogoče prilepiti v nepravilno poddelitev</translation>
+        <translation>Vsebine ni mogoče prilepiti v poddelitev</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="118"/>
         <source>Tuplet cannot cross barlines</source>
-        <translation>Nepravilna poddelitev ne more segati izven takta</translation>
+        <translation>Poddelitev ne more segati izven takta</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="121"/>
@@ -21781,13 +21843,13 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="130"/>
         <source>Destination is not a chord or rest</source>
-        <translation>Ciljni predmet ni sozvok ali pavza </translation>
+        <translation>Ciljni element ni akord ali pavza </translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="133"/>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="137"/>
         <source>Cannot change local time signature</source>
-        <translation>Ni mogoče spremeniti krajevnega taktovskega načina</translation>
+        <translation>Ni mogoče spremeniti tukajšnjega taktovskega načina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="134"/>
@@ -21797,12 +21859,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="138"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
-        <translation>Ta notni zapis že ima parte. Krajevno spreminjanje taktovskega načina ob prisotnosti partov še ni podprto. </translation>
+        <translation>Ta notni zapis že ima parte. Spreminjanje tukajšnjega taktovskega načina ob prisotnosti partov še ni podprto.</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Cannot change time signature in front of a corrupted measure</source>
-        <translation>Pred okvarjenim taktom in mogoče spremeniti taktovskega načina</translation>
+        <translation>Pred okvarjenim taktom ni mogoče spremeniti taktovskega načina</translation>
     </message>
     <message>
         <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
@@ -21837,7 +21899,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/notationtypes.h" line="295"/>
         <source>Percentage</source>
-        <translation>Odstotkovni delež</translation>
+        <translation>Odstotek</translation>
     </message>
     <message>
         <location filename="../../src/notation/notationtypes.h" line="296"/>
@@ -21916,7 +21978,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/colorlabel.cpp" line="109"/>
         <source>Select color</source>
-        <translation>Izbor barve</translation>
+        <translation>Izberite barvo</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/selectnotedialog.cpp" line="82"/>
@@ -21953,7 +22015,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1965"/>
         <source>MuseScore chord symbol style files</source>
-        <translation>Datoteke slogov MuseScorovih oznak sozvokov</translation>
+        <translation>Datoteke slogov MuseScorovih oznak akordov</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml" line="39"/>
@@ -21989,7 +22051,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="201"/>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="179"/>
         <source>String %1</source>
-        <translation>Struno %1</translation>
+        <translation>%1. struno</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/CapoPopup.qml" line="215"/>
@@ -22019,7 +22081,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/internal/notationconfiguration.cpp" line="171"/>
         <source>Smooth panning</source>
-        <translation>Tekoče preokvirjanje</translation>
+        <translation>Tekoče premikanje</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="72"/>
@@ -22029,7 +22091,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="78"/>
         <source>Presets</source>
-        <translation>Prednastavitve</translation>
+        <translation>Predloge</translation>
     </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml" line="114"/>
@@ -22051,6 +22113,11 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <source>Custom</source>
         <translation>Po meri</translation>
     </message>
+    <message numerus="yes">
+        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="276"/>
+        <source>%n string(s)</source>
+        <translation><numerusform>%n struna</numerusform><numerusform>%n struni</numerusform><numerusform>%n strune</numerusform><numerusform>%n strun</numerusform></translation>
+    </message>
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="41"/>
         <source>Placement on single notes:</source>
@@ -22059,7 +22126,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml" line="68"/>
         <source>Placement on chords:</source>
-        <translation>Postavitev pri sozvokih:</translation>
+        <translation>Postavitev na akorde:</translation>
     </message>
 </context>
 <context>
@@ -22084,7 +22151,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="236"/>
         <source>Always open</source>
-        <translation>Vedno prazno</translation>
+        <translation>Vedno prazna</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="237"/>
@@ -22094,7 +22161,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="238"/>
         <source>&lt;b&gt;Always open&lt;/b&gt;&lt;br&gt;On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.</source>
-        <translation>&lt;b&gt;Vedno prazna&lt;/b&gt;&lt;br&gt;V tablaturnih črtovjih na strune, ki so označene kot &quot;vedno prazne&quot;, ni mogoče vnesti druge prečke kot &quot;0&quot;. Uprabno je za strunska glasbila brez prečk, kot npr. teorba.</translation>
+        <translation>&lt;b&gt;Vedno prazna&lt;/b&gt;&lt;br&gt;V tablaturnih črtovjih na strune, ki so označene kot »vedno prazne«, ni mogoče vnesti druge prečke kot »0«. Uporabno je za strunska glasbila brez prečk, kot npr. teorba.</translation>
     </message>
 </context>
 <context>
@@ -22139,7 +22206,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="709"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1165"/>
         <source>Brackets</source>
-        <translation>Vrstni oklepaji</translation>
+        <translation>Oglati oklepaji</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="710"/>
@@ -22163,7 +22230,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="715"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1170"/>
         <source>System</source>
-        <translation>Vrstica</translation>
+        <translation>Vrstica zapisa</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="718"/>
@@ -22196,7 +22263,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="724"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1177"/>
         <source>Bracket</source>
-        <translation>Vrstni oklepaj</translation>
+        <translation>Oklepaj</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="725"/>
@@ -22209,7 +22276,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="832"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1180"/>
         <source>Jazz</source>
-        <translation>Jazz</translation>
+        <translation>Jazzovsko</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="833"/>
@@ -22221,7 +22288,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="838"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1185"/>
         <source>Close</source>
-        <translation>Bližnje</translation>
+        <translation>Znotraj oktave</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="182"/>
@@ -22239,7 +22306,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="186"/>
         <source>Dotted</source>
         <extracomment>line style</extracomment>
-        <translation>Točkasta</translation>
+        <translation>Pikčasta</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="215"/>
@@ -22257,31 +22324,31 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="839"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1186"/>
         <source>Drop two</source>
-        <translation>Brez dveh</translation>
+        <translation>Z drugo noto oktavo nižje</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="840"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1187"/>
         <source>Six note</source>
-        <translation>Šestglasno</translation>
+        <translation>Kot šesterozvok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="841"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1188"/>
         <source>Four note</source>
-        <translation>Štiriglasno</translation>
+        <translation>Kot četverozvok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="842"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1189"/>
         <source>Three note</source>
-        <translation>Troglasno</translation>
+        <translation>Kot trozvok</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="845"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1191"/>
         <source>Until next chord symbol</source>
-        <translation>Do naslednje oznake sozvoka</translation>
+        <translation>Do naslednje oznake akorda</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="847"/>
@@ -22293,7 +22360,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="849"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1193"/>
         <source>Chord/rest duration</source>
-        <translation>Trajanje sozvoka/pavze</translation>
+        <translation>Trajanje akorda/pavze</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="951"/>
@@ -22312,7 +22379,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="953"/>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1207"/>
         <source>Circle</source>
-        <translation>Okrogel</translation>
+        <translation>Krog</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1220"/>
@@ -22322,7 +22389,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1223"/>
         <source>Page number, except on first page</source>
-        <translation>Oštevilčenje strani, razen prve</translation>
+        <translation>Oštevilčenje strani, razen na prvi strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1225"/>
@@ -22347,7 +22414,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1233"/>
         <source>File path+name</source>
-        <translation>Pot in ime</translation>
+        <translation>Pot do datoteke in ime</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1235"/>
@@ -22357,7 +22424,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1237"/>
         <source>Part name, on all pages</source>
-        <translation>Ime parta na vseh straneh</translation>
+        <translation>Ime parta, na vseh straneh</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1239"/>
@@ -22382,22 +22449,22 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1247"/>
         <source>Copyright, on first page only</source>
-        <translation>Avtorske pravice le na prvi strani</translation>
+        <translation>Avtorske pravice, le na prvi strani</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1249"/>
         <source>Copyright, on all pages</source>
-        <translation>Avtorske pravice na vseh straneh</translation>
+        <translation>Avtorske pravice, na vseh straneh</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1251"/>
         <source>MuseScore version this score was last saved with</source>
-        <translation>Različica MuseScora, s katero je bil ta notni zapis nazadnje shranjen</translation>
+        <translation>Različica MuseScora, s katero je bil zapis nazadnje shranjen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1253"/>
         <source>MuseScore revision this score was last saved with</source>
-        <translation>Predelava MuseScora, s katero je je bil ta notni zapis nazadnje shranjen</translation>
+        <translation>Revizija MuseScora, s katero je je bil zapis nazadnje shranjen</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1255"/>
@@ -22417,23 +22484,23 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.cpp" line="1261"/>
         <source>(in File &gt; Project properties…):</source>
-        <translation>(in Dokument &gt; Lastnosti projekta ...):</translation>
+        <translation>(pod Dokument &gt; Lastnosti projekta ...):</translation>
     </message>
 </context>
 <context>
     <name>notation/measureproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="184"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="191"/>
         <source>Measure properties for measure %1</source>
         <translation>Lastnosti takta %1</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="229"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="236"/>
         <source>Visible</source>
-        <translation>Vidno</translation>
+        <translation>Viden</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="236"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="243"/>
         <source>Stemless</source>
         <translation>Brez vratu</translation>
     </message>
@@ -22441,14 +22508,14 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
 <context>
     <name>notation/staffpartproperties</name>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="523"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="536"/>
         <source>Invalid instrument name</source>
-        <translation>Neveljaven naziv glasbila</translation>
+        <translation>Neveljavno ime glasbila</translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="524"/>
+        <location filename="../../src/notation/view/widgets/editstaff.cpp" line="537"/>
         <source>The instrument name is invalid.</source>
-        <translation>Naziv glasbila ni veljaven.</translation>
+        <translation>Ime glasbila ni veljavno.</translation>
     </message>
 </context>
 <context>
@@ -22456,7 +22523,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="56"/>
         <source>System text properties</source>
-        <translation>Lastnosti napisa vrstice</translation>
+        <translation>Lastnosti napisa partiture</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/stafftextpropertiesdialog.cpp" line="58"/>
@@ -22506,7 +22573,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1174"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2535"/>
         <source>Tempo</source>
-        <translation>Tempo</translation>
+        <translation>Hitrost izvajanja</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="769"/>
@@ -22537,7 +22604,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1434"/>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="2540"/>
         <source>Jumps and markers</source>
-        <translation>Skoki in oznake</translation>
+        <translation>Preskoki in oznake</translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/timeline.cpp" line="1345"/>
@@ -22620,17 +22687,17 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="160"/>
         <source>%1 added</source>
-        <translation>%1 dodano</translation>
+        <translation>Paleta %1 je dodana</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="161"/>
         <source>%1 removed</source>
-        <translation>Paleta %1 odstranjena</translation>
+        <translation>Paleta %1 je odstranjena</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="56"/>
         <source>Name your custom palette</source>
-        <translation>Poimenujte vašo paleto po meri</translation>
+        <translation>Poimenuj svojo paleto po meri</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/CreateCustomPalettePopup.qml" line="99"/>
@@ -22655,12 +22722,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="138"/>
         <source>Drag and drop any element here</source>
-        <translation>Primi in spusti sem katerikoli predmet</translation>
+        <translation>Primi in spusti sem katerikoli element</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="139"/>
         <source>No elements</source>
-        <translation>Ni nobenega predmeta</translation>
+        <translation>Ni nobenega elementa</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="194"/>
@@ -22689,7 +22756,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="412"/>
         <source>%1 expanded</source>
         <comment>tree item not collapsed</comment>
-        <translation>%1 porabljeno</translation>
+        <translation>%1 razširjen</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="547"/>
@@ -22798,7 +22865,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="98"/>
         <source>Element offset</source>
-        <translation>Odmik predmeta</translation>
+        <translation>Odmik elementa</translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettePropertiesDialog.qml" line="106"/>
@@ -22813,7 +22880,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
         <source>Start typing to search all palettes</source>
-        <translation>Vtipkajte, kar želite poiskati v vseh paletah</translation>
+        <translation>Začnite tipkati za iskanje po vseh paletah</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="194"/>
@@ -22829,31 +22896,31 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="240"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1149"/>
         <source>Crescendo line</source>
-        <translation>Črta naraščanja (crescendo)</translation>
+        <translation>Oklepaj naraščanja (crescendo)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="241"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1150"/>
         <source>Diminuendo line</source>
-        <translation>Diminuendo črtice</translation>
+        <translation>Oklepaj pojemanja (diminuendo)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="242"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1147"/>
         <source>Crescendo hairpin</source>
-        <translation>Vilice naraščanja</translation>
+        <translation>Vilice naraščanja (crescendo)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="243"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1148"/>
         <source>Diminuendo hairpin</source>
-        <translation>Vilice pojemanja</translation>
+        <translation>Vilice pojemanja (diminuendo)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="265"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1167"/>
         <source>Dynamic + hairpin</source>
-        <translation>Dinamika in vilice</translation>
+        <translation>Dinamika + vilice</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="274"/>
@@ -22881,25 +22948,25 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="472"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1176"/>
         <source>Prima volta</source>
-        <translation>Prvikrat</translation>
+        <translation>Prvič (prima volta)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="481"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1205"/>
         <source>Seconda volta, open</source>
-        <translation>Drugikrat, odprto</translation>
+        <translation>Drugič (seconda volta), odprto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="490"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1186"/>
         <source>Seconda volta</source>
-        <translation>Drugikrat</translation>
+        <translation>Drugič (seconda volta)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="499"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1195"/>
         <source>Terza volta</source>
-        <translation>Tretjikrat</translation>
+        <translation>Tretjič (terza volta)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="520"/>
@@ -22910,7 +22977,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="526"/>
         <source>System break</source>
-        <translation>Prelom vrste</translation>
+        <translation>Prelom vrstice</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="531"/>
@@ -22920,22 +22987,22 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="536"/>
         <source>Section break</source>
-        <translation>Razdelilni prelom</translation>
+        <translation>Prelom zapisa</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="548"/>
         <source>Staff spacer down</source>
-        <translation>Spodnji odmičnik črtovja</translation>
+        <translation>Odmičnik črtovja navzdol</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="554"/>
         <source>Staff spacer up</source>
-        <translation>Zgornji odmičnik črtovja</translation>
+        <translation>Odmičnik črtovja navzgor</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="560"/>
         <source>Staff spacer fixed down</source>
-        <translation>Izrecni odmik spodnjega črtovja</translation>
+        <translation>Stalni odmik črtovja navzdol</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="588"/>
@@ -23011,12 +23078,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="931"/>
         <source>Brace</source>
-        <translation>Zaviti uklepaj</translation>
+        <translation>Zaviti oklepaj</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="932"/>
         <source>Square</source>
-        <translation>Oglata alokada</translation>
+        <translation>Oglati oklepaj</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="933"/>
@@ -23037,7 +23104,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1095"/>
         <source>Grace notes</source>
-        <translation>Glasbeni okraski</translation>
+        <translation>Predložki in doložki</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1115"/>
@@ -23089,42 +23156,42 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1251"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1947"/>
         <source>Pedal (with ped and line)</source>
-        <translation>Pedal (&quot;ped&quot; in črta)</translation>
+        <translation>Pedal (»ped« in črta)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1256"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1942"/>
         <source>Pedal (with ped and asterisk)</source>
-        <translation>Pedal (&quot;ped&quot; in zvezdica)</translation>
+        <translation>Pedal (»ped« in zvezdica)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1262"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1953"/>
         <source>Pedal (straight hooks)</source>
-        <translation>Pedal (pravokotne kljuke)</translation>
+        <translation>Pedal (pravokotne kljukice)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1269"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1959"/>
         <source>Pedal (angled end hook)</source>
-        <translation>Pedal (poševna zaključna kljuka)</translation>
+        <translation>Pedal (poševna zaključna kljukica)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1275"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1965"/>
         <source>Pedal (both hooks angled)</source>
-        <translation>Pedal (obe poševni kljuki)</translation>
+        <translation>Pedal (obe kljukici poševni)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1281"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1971"/>
         <source>Pedal (angled start hook)</source>
-        <translation>Pedal (poševna začetna kljuka)</translation>
+        <translation>Pedal (poševna začetna kljukica)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1317"/>
         <source>Text line</source>
-        <translation>Napisna črta</translation>
+        <translation>Oklepaj z napisom</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1826"/>
@@ -23148,18 +23215,18 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2042"/>
         <source>Harp pedal diagram</source>
-        <translation>Obrazec pedala harfe</translation>
+        <translation>Diagram harfinih pedalov</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="2047"/>
         <source>Harp pedal text diagram</source>
-        <translation>Besedilni obrazec pedala harfe</translation>
+        <translation>Besedilna oznaka harfinih pedalov</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1303"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1534"/>
         <source>Staff text line</source>
-        <translation>Napisna črta črtovja</translation>
+        <translation>Oklepaj z napisom za črtovje</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="541"/>
@@ -23180,7 +23247,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1310"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1545"/>
         <source>System text line</source>
-        <translation>Napisna črta vrste</translation>
+        <translation>Oklepaj z napisom za partituro</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1326"/>
@@ -23343,7 +23410,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1496"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1498"/>
         <source>Swing</source>
-        <translation>Pozibavanje</translation>
+        <translation>Pozibavajoče</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1505"/>
@@ -23367,7 +23434,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1537"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1538"/>
         <source>System text</source>
-        <translation>Napis vrste</translation>
+        <translation>Napis partiture</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1551"/>
@@ -23392,12 +23459,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1562"/>
         <source>legato</source>
-        <translation>vezano</translation>
+        <translation>legato</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1564"/>
         <source>Legato</source>
-        <translation>Vezano</translation>
+        <translation>Vezano (legato)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1567"/>
@@ -23439,7 +23506,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1587"/>
         <source>Mute</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to use mute while playing, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>Dušilec</translation>
+        <translation>Uporaba dušilca</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1591"/>
@@ -23451,7 +23518,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1594"/>
         <source>Open</source>
         <extracomment>For brass and plucked string instruments: staff text that prescribes to play without mute, see https://en.wikipedia.org/wiki/Mute_(music)</extracomment>
-        <translation>Odprto</translation>
+        <translation>Brez dušilca</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1597"/>
@@ -23469,25 +23536,25 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1602"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1908"/>
         <source>overdrive</source>
-        <translation type="unfinished"/>
+        <translation>overdrive</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1604"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1910"/>
         <source>Overdrive</source>
-        <translation type="unfinished"/>
+        <translation>Prekoračitev najv. glasnosti el. naprav</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1607"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1913"/>
         <source>harmonics</source>
-        <translation>nadtoni</translation>
+        <translation>flažoleti</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1609"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1915"/>
         <source>Harmonics</source>
-        <translation>Nadtoni</translation>
+        <translation>Nadtoni (flažoleti)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1612"/>
@@ -23505,7 +23572,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1617"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1923"/>
         <source>normal</source>
-        <translation>običajni</translation>
+        <translation>običajno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1619"/>
@@ -23522,7 +23589,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1632"/>
         <source>détaché</source>
-        <translation>odstavljaje (détaché)</translation>
+        <translation>détaché</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1634"/>
@@ -23532,12 +23599,12 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1637"/>
         <source>martelé</source>
-        <translation>udarjajoče (martellato)</translation>
+        <translation>martelé</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1639"/>
         <source>Martelé</source>
-        <translation>Udarjajoče (martellato)</translation>
+        <translation>Udarjajoče (martelé)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1649"/>
@@ -23557,7 +23624,7 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1642"/>
         <source>col legno</source>
-        <translation>col legno (z lesom loka)</translation>
+        <translation>col legno</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1549"/>
@@ -23567,17 +23634,17 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1644"/>
         <source>Col legno</source>
-        <translation>col legno (z lesom loka)</translation>
+        <translation>Col legno (z lesom loka)</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1647"/>
         <source>sul pont.</source>
-        <translation>sul pont. (ob mostičku)</translation>
+        <translation>sul pont.</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1652"/>
         <source>sul tasto</source>
-        <translation>sul tasto (ob ubiralki)</translation>
+        <translation>sul tasto</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1657"/>
@@ -23645,37 +23712,37 @@ Poleg tega ima Obvladovanje MuseScora podporno skupnost glasbenikov s prostori z
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="375"/>
         <source>Do you want to hide this custom palette cell or permanently delete it?</source>
-        <translation>Ali želite to polje prikrojene palete skriti ali trajno izbrisati?</translation>
+        <translation>Ali želite to polje palete po meri skriti ali trajno izbrisati?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="376"/>
         <source>Do you want to hide these custom palette cells or permanently delete them?</source>
-        <translation>Ali želite ta polja prikrojene palete skriti ali trajno izbrisati?</translation>
+        <translation>Ali želite ta polja palete po meri skriti ali trajno izbrisati?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="382"/>
         <source>Do you want to permanently delete this custom palette cell?</source>
-        <translation>Ali želite to polje prikrojene palete trajno izbrisati?</translation>
+        <translation>Ali želite to polje palete po meri trajno izbrisati?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="383"/>
         <source>Do you want to permanently delete these custom palette cells?</source>
-        <translation>Ali želite ta polja prikrojene palete trajno izbrisati?</translation>
+        <translation>Ali želite ta polja palete po meri trajno izbrisati?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="399"/>
         <source>Do you want to hide this custom palette or permanently delete it?</source>
-        <translation>Ali želite to prikrojeno paleto skriti ali trajno izbrisati?</translation>
+        <translation>Ali želite to paleto po meri skriti ali trajno izbrisati?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="400"/>
         <source>Do you want to hide these custom palettes or permanently delete them?</source>
-        <translation>Ali želite te prikrojene palete skriti ali trajno izbrisati?</translation>
+        <translation>Ali želite te palete po meri skriti ali trajno izbrisati?</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="818"/>
         <source>Do you want to permanently delete this custom palette?</source>
-        <translation>Ali želite trajno izbrisati to prikrojeno paleto? </translation>
+        <translation>Ali želite trajno izbrisati to paleto po meri? </translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteprovider.cpp" line="839"/>
@@ -23772,7 +23839,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1154"/>
         <source>Are you sure you want to delete palette cell “%1”?</source>
-        <translation>Ali ste prepričani, da želite izbrisatni paletno polje &quot;%1&quot;?</translation>
+        <translation>Ali ste prepričani, da želite izbrisati paletno polje »%1«?</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="436"/>
@@ -23787,7 +23854,7 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="479"/>
         <source>Unicode symbols</source>
-        <translation>Unicode znaki</translation>
+        <translation>Unikodni znaki</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/paletteconfiguration.cpp" line="42"/>
@@ -23820,14 +23887,14 @@ je spodletelo: %2</translation>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="543"/>
         <source>Writing palette file</source>
-        <translation>Zapisovanje datoteko palete</translation>
+        <translation>Zapisovanje datoteke palete</translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palette.cpp" line="544"/>
         <source>Writing palette file
 %1
 failed.</source>
-        <translation>Zapisovanje paletine datoteke
+        <translation>Zapisovanje datoteke palete
 %1
 je spodletelo.</translation>
     </message>
@@ -23848,32 +23915,32 @@ je spodletelo.</translation>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="101"/>
         <source>Basic Latin</source>
         <extracomment>For strings in the &quot;palette/unicodeRanges&quot; context, it may help to refer to https://en.wikipedia.org/wiki/Unicode_block or translated versions of this resource.</extracomment>
-        <translation>Osnovni latinični</translation>
+        <translation>Latinica – osnovna</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="102"/>
         <source>Latin-1 Supplement</source>
-        <translation>Latinični 1 – dodatni</translation>
+        <translation>Latinica – dopolnitev 1</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="103"/>
         <source>Latin Extended-A</source>
-        <translation>Latinični – razširjeni A</translation>
+        <translation>Latinica – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="104"/>
         <source>Latin Extended-B</source>
-        <translation>Latinični – razširjeni B</translation>
+        <translation>Latinica – razširitev B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="105"/>
         <source>IPA Extensions</source>
-        <translation>Razširitve IPA</translation>
+        <translation>IPA razširitve</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="106"/>
         <source>Spacing Modifier Letters</source>
-        <translation>Črke za spreminjanje razmika</translation>
+        <translation>Modifikacijske črke</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="107"/>
@@ -23893,7 +23960,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="110"/>
         <source>Cyrillic Supplement</source>
-        <translation>Cirilica – dodatni</translation>
+        <translation>Cirilica – dopolnitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="111"/>
@@ -23913,12 +23980,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="114"/>
         <source>Syriac</source>
-        <translation>Sirijski</translation>
+        <translation>Sirski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="115"/>
         <source>Arabic Supplement</source>
-        <translation>Arabski – dodatni</translation>
+        <translation>Arabski – dopolnitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="116"/>
@@ -23943,12 +24010,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="120"/>
         <source>Syriac Supplement</source>
-        <translation>Sirsko – dodatni</translation>
+        <translation>Sirijski – dopolnitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="121"/>
         <source>Arabic Extended-A</source>
-        <translation>Arabski – razširjeni A</translation>
+        <translation>Arabski – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="122"/>
@@ -23968,7 +24035,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="125"/>
         <source>Gujarati</source>
-        <translation>Gujaratski</translation>
+        <translation>Gudžaratski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="126"/>
@@ -23993,7 +24060,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="130"/>
         <source>Malayalam</source>
-        <translation>Malajlamski</translation>
+        <translation>Malajalamski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="131"/>
@@ -24028,7 +24095,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="137"/>
         <source>Hangul Jamo</source>
-        <translation>Hangul Jamo</translation>
+        <translation>Hangulski džamo</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="138"/>
@@ -24038,7 +24105,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="139"/>
         <source>Ethiopic Supplement</source>
-        <translation>Etiopski – dodatni</translation>
+        <translation>Etiopski – dopolnitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="140"/>
@@ -24048,7 +24115,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="141"/>
         <source>Unified Canadian Aboriginal Syllabics</source>
-        <translation>Enotni kanadski domorodni zapisi</translation>
+        <translation>Kanadski domorodski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="142"/>
@@ -24093,7 +24160,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="150"/>
         <source>Unified Canadian Aboriginal Syllabics Extended</source>
-        <translation>Razširjen enotni kanadski domorodni zapisi</translation>
+        <translation>Kanadski domorodski – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="151"/>
@@ -24128,7 +24195,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="157"/>
         <source>Combining Diacritical Marks Extended</source>
-        <translation>Razširjena sestavljiva ločevalna znamenja</translation>
+        <translation>Sestavljiva ločevalna znamenja – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="158"/>
@@ -24153,42 +24220,42 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="162"/>
         <source>Ol Chiki</source>
-        <translation>Oi Čiki</translation>
+        <translation>Ol Čiki</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="163"/>
         <source>Cyrillic Extended-C</source>
-        <translation>Cirilica – razširjeni C</translation>
+        <translation>Cirilica – razširitev C</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="164"/>
         <source>Georgian Extended</source>
-        <translation>Gruzijščina - razširjeni</translation>
+        <translation>Gruzijščina - razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="165"/>
         <source>Sundanese Supplement</source>
-        <translation>Sundanski – dodatni</translation>
+        <translation>Sundanski – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="166"/>
         <source>Vedic Extensions</source>
-        <translation>Razširjeni vedski simboli</translation>
+        <translation>Vedski simboli – razširitve</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="167"/>
         <source>Phonetic Extensions</source>
-        <translation>Razširjeni fonetični simboli</translation>
+        <translation>Fonetični simboli – razširitve</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="168"/>
         <source>Phonetic Extensions Supplement</source>
-        <translation>Razširjeni fonetični simboli</translation>
+        <translation>Fonetični simboli – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="169"/>
         <source>Combining Diacritical Marks Supplement</source>
-        <translation>Dodatek za sestavljiva ločevalna znamenja</translation>
+        <translation>Sestavljiva ločevalna znamenja – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="170"/>
@@ -24198,7 +24265,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="171"/>
         <source>Greek Extended</source>
-        <translation>Razširjeni – grški</translation>
+        <translation>Grški – razširjeni</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="172"/>
@@ -24208,7 +24275,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="173"/>
         <source>Superscripts and Subscripts</source>
-        <translation>Nadpisani in podpisani</translation>
+        <translation>Nadpisi in podpisi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="174"/>
@@ -24238,7 +24305,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="179"/>
         <source>Mathematical Operators</source>
-        <translation>Matematični operaterji</translation>
+        <translation>Matematični operatorji</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="180"/>
@@ -24253,7 +24320,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="182"/>
         <source>Optical Character Recognition</source>
-        <translation>Optična prepoznava znakov</translation>
+        <translation>Znaki za optično prepoznavo</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="183"/>
@@ -24288,12 +24355,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="189"/>
         <source>Miscellaneous Mathematical Symbols-A</source>
-        <translation>Različni matematični simboli – A</translation>
+        <translation>Matematični simboli – A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="190"/>
         <source>Supplemental Arrows-A</source>
-        <translation>Dodatne puščice – A</translation>
+        <translation>Puščice – dodatek A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="191"/>
@@ -24303,7 +24370,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="192"/>
         <source>Supplemental Arrows-B</source>
-        <translation>Dodatne puščice – B</translation>
+        <translation>Puščice – dodatek B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="193"/>
@@ -24313,7 +24380,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="194"/>
         <source>Supplemental Mathematical Operators</source>
-        <translation>Matematični operaterji – dodatni</translation>
+        <translation>Matematični operatorji – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="195"/>
@@ -24323,12 +24390,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="196"/>
         <source>Glagolitic</source>
-        <translation>Glagoliški</translation>
+        <translation>Glagolica</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="197"/>
         <source>Latin Extended-C</source>
-        <translation>Latinični – razširjeni C</translation>
+        <translation>Latinica – razširitev C</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="198"/>
@@ -24338,7 +24405,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="199"/>
         <source>Georgian Supplement</source>
-        <translation>Gruzijski – dodatni</translation>
+        <translation>Gruzijski – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="200"/>
@@ -24348,47 +24415,47 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="201"/>
         <source>Ethiopic Extended</source>
-        <translation>Etiopski – razširjeni</translation>
+        <translation>Etiopski – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="202"/>
         <source>Cyrillic Extended-A</source>
-        <translation>Cirilica – razširjeni A</translation>
+        <translation>Cirilica – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="203"/>
         <source>Supplemental Punctuation</source>
-        <translation>Splošna ločila – dodatno</translation>
+        <translation>Splošna ločila – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="204"/>
         <source>CJK Radicals Supplement</source>
-        <translation>Korenski dodatki za KJK</translation>
+        <translation>KJK radikali – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="205"/>
         <source>Kangxi Radicals</source>
-        <translation>Korenski kandži</translation>
+        <translation>Kandži radikali</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="206"/>
         <source>Ideographic Description Characters</source>
-        <translation>Znaki za opis pojmovnih znamenj</translation>
+        <translation>Znaki za opis ideografov</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="207"/>
         <source>CJK Symbols and Punctuation</source>
-        <translation>Simboli in ločila KJK</translation>
+        <translation>KJK simboli in ločila</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="208"/>
         <source>Hiragana</source>
-        <translation>Hiraganski</translation>
+        <translation>Hiragana</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="209"/>
         <source>Katakana</source>
-        <translation>Katakanski</translation>
+        <translation>Katakana</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="210"/>
@@ -24398,7 +24465,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="211"/>
         <source>Hangul Compatibility Jamo</source>
-        <translation>Hangul Jamo – razširjeni</translation>
+        <translation>Hangulski džamo – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="212"/>
@@ -24408,52 +24475,52 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="213"/>
         <source>Bopomofo Extended</source>
-        <translation>Bopomofo – razširjeni</translation>
+        <translation>Bopomofo – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="214"/>
         <source>CJK Strokes</source>
-        <translation>Poteze KJK</translation>
+        <translation>KJK poteze</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="215"/>
         <source>Katakana Phonetic Extensions</source>
-        <translation>Razširjeni katakanski fonetični simboli</translation>
+        <translation>Katakanski fonetični simboli – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="216"/>
         <source>Enclosed CJK Letters and Months</source>
-        <translation>Priložene črke in meseci KJK</translation>
+        <translation>Obrobljene KJK črke in znaki za mesece</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="217"/>
         <source>CJK Compatibility</source>
-        <translation>Združljivost s KJK</translation>
+        <translation>KJK združljivostni</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="218"/>
         <source>CJK Unified Ideographs Extension A</source>
-        <translation>Razširitev KJK poenotenih pojmovnih znamenj – A</translation>
+        <translation>KJK poenoteni ideografi – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="219"/>
         <source>Yijing Hexagram Symbols</source>
-        <translation>Šesterokotni simboli I Ching</translation>
+        <translation>I Ching heksagrami</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="220"/>
         <source>CJK Unified Ideographs</source>
-        <translation>Poenotena pojmovna znamenja KJK</translation>
+        <translation>KJK poenoteni ideografi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="221"/>
         <source>Yi Syllables</source>
-        <translation>Zlogi yi</translation>
+        <translation>Yi zlogi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="222"/>
         <source>Yi Radicals</source>
-        <translation>Koreni yi</translation>
+        <translation>Yi koreni</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="223"/>
@@ -24468,7 +24535,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="225"/>
         <source>Cyrillic Extended-B</source>
-        <translation>Cirilica – razširjeni B</translation>
+        <translation>Cirilica – razširitev B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="226"/>
@@ -24483,7 +24550,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="228"/>
         <source>Latin Extended-D</source>
-        <translation>Latinični - razširjeni D</translation>
+        <translation>Latinica – razširitev D</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="229"/>
@@ -24508,7 +24575,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="233"/>
         <source>Devanagari Extended</source>
-        <translation>Devanagarski razširjeni</translation>
+        <translation>Devanagarski – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="234"/>
@@ -24523,7 +24590,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="236"/>
         <source>Hangul Jamo Extended-A</source>
-        <translation>Hangul Jamo – razširjeni A </translation>
+        <translation>Hangul džamo – razširitev A </translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="237"/>
@@ -24533,7 +24600,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="238"/>
         <source>Myanmar Extended-B</source>
-        <translation>Mjanmarski – razširjeni B</translation>
+        <translation>Mjanmarski – razširitev B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="239"/>
@@ -24543,7 +24610,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="240"/>
         <source>Myanmar Extended-A</source>
-        <translation>Mjanmarski – razširjeni A</translation>
+        <translation>Mjanmarski – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="241"/>
@@ -24553,22 +24620,22 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="242"/>
         <source>Meetei Mayek Extensions</source>
-        <translation>Meetei mayek razširitve</translation>
+        <translation>Meetei mayek – razširitve</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="243"/>
         <source>Ethiopic Extended-A</source>
-        <translation>Etiopski – razširjeni A</translation>
+        <translation>Etiopski – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="244"/>
         <source>Latin Extended-E</source>
-        <translation>Latinični – razširjeni E</translation>
+        <translation>Latinični – razširitev E</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="245"/>
         <source>Cherokee Supplement</source>
-        <translation>Čerokeški dodatek</translation>
+        <translation>Čerokeški – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="246"/>
@@ -24578,12 +24645,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="247"/>
         <source>Hangul Syllables</source>
-        <translation>Hangulski zlogovni</translation>
+        <translation>Hangulski zlogi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="248"/>
         <source>Hangul Jamo Extended-B</source>
-        <translation>Hangul Jamo – razširjeni B</translation>
+        <translation>Hangul džamo – razširitev B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="249"/>
@@ -24608,7 +24675,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="253"/>
         <source>CJK Compatibility Ideographs</source>
-        <translation>Pojmovna znamenja, združljiva s KJK</translation>
+        <translation>KJK združljivostni ideografi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="254"/>
@@ -24618,7 +24685,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="255"/>
         <source>Arabic Presentation Forms-A</source>
-        <translation>Arabske predstavitvene oblike - A</translation>
+        <translation>Arabske predstavitvene oblike – A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="256"/>
@@ -24633,27 +24700,27 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="258"/>
         <source>Combining Half Marks</source>
-        <translation>Združevnje polovičnih oznak</translation>
+        <translation>Združljive polovične oznake</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="259"/>
         <source>CJK Compatibility Forms</source>
-        <translation>Oblike, združljive s KJK</translation>
+        <translation>KJK združljivostne oblike</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="260"/>
         <source>Small Form Variants</source>
-        <translation>Različice majhnih oblik</translation>
+        <translation>Pomanjšane različice</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="261"/>
         <source>Arabic Presentation Forms-B</source>
-        <translation>Arabske predstavitvene oblike - B</translation>
+        <translation>Arabske predstavitvene oblike – B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="262"/>
         <source>Halfwidth and Fullwidth Forms</source>
-        <translation>Oblike, polovične in polne širine</translation>
+        <translation>Oblike polovične in polne širine</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="263"/>
@@ -24663,12 +24730,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="264"/>
         <source>Linear B Syllabary</source>
-        <translation>Linearna pisava B zlogovno</translation>
+        <translation>Linearna pisava B – zlogi</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="265"/>
         <source>Linear B Ideograms</source>
-        <translation>Linearna pisava B s pojmovnimi znaki</translation>
+        <translation>Linearna pisava B – ideogrami</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="266"/>
@@ -24708,7 +24775,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="273"/>
         <source>Old Italic</source>
-        <translation>Staro-italijanski</translation>
+        <translation>Staroitalijanski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="274"/>
@@ -24718,7 +24785,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="275"/>
         <source>Old Permic</source>
-        <translation>Staro-permski</translation>
+        <translation>Staropermski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="276"/>
@@ -24728,7 +24795,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="277"/>
         <source>Old Persian</source>
-        <translation>Staro-perzijski</translation>
+        <translation>Staroperzijski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="278"/>
@@ -24758,7 +24825,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="283"/>
         <source>Caucasian Albanian</source>
-        <translation>kavkaška albanščina</translation>
+        <translation>Kavkaškoalbanski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="284"/>
@@ -24773,7 +24840,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="286"/>
         <source>Imperial Aramaic</source>
-        <translation>cesarska aramejščina</translation>
+        <translation>Cesarskoaramejski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="287"/>
@@ -24818,12 +24885,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="295"/>
         <source>Old South Arabian</source>
-        <translation>Južni staro-arabski</translation>
+        <translation>Južni staroarabski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="296"/>
         <source>Old North Arabian</source>
-        <translation>Severni staro-arabski</translation>
+        <translation>Severni staroarabski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="297"/>
@@ -24853,12 +24920,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="302"/>
         <source>Old Turkic</source>
-        <translation>Staro-turški</translation>
+        <translation>Staroturški</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="303"/>
         <source>Old Hungarian</source>
-        <translation>satromadžarščina</translation>
+        <translation>Staromadžarski</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="304"/>
@@ -24973,7 +25040,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="326"/>
         <source>Mongolian Supplement</source>
-        <translation>Mongolski – dodatni</translation>
+        <translation>Mongolski – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="327"/>
@@ -25148,7 +25215,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="361"/>
         <source>Small Kana Extension</source>
-        <translation>Razširitev za malo kano</translation>
+        <translation>Mala kana – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="362"/>
@@ -25198,12 +25265,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="371"/>
         <source>Sutton SignWriting</source>
-        <translation>Suttonini SignWriting</translation>
+        <translation>Suttonin SignWriting</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="372"/>
         <source>Glagolitic Supplement</source>
-        <translation>Glagolica – dodatni</translation>
+        <translation>Glagolica – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="373"/>
@@ -25243,12 +25310,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="380"/>
         <source>Mahjong Tiles</source>
-        <translation>Ploščice mahjong</translation>
+        <translation>Mahjong ploščice</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="381"/>
         <source>Domino Tiles</source>
-        <translation>Ploščice domino</translation>
+        <translation>Domino ploščice</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="382"/>
@@ -25258,12 +25325,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="383"/>
         <source>Enclosed Alphanumeric Supplement</source>
-        <translation>Obrobljeni alfanumerični znaki - dodatni</translation>
+        <translation>Obrobljeni alfanumerični znaki – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="384"/>
         <source>Enclosed Ideographic Supplement</source>
-        <translation>Obrobljeni ideograpski – razširjeno</translation>
+        <translation>Obrobljeni ideografski – razširitev</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="385"/>
@@ -25273,7 +25340,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="386"/>
         <source>Emoticons (Emoji)</source>
-        <translation>Izrazne ikone (emoji)</translation>
+        <translation>Emotikoni (emojiji)</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="387"/>
@@ -25298,7 +25365,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="391"/>
         <source>Supplemental Arrows-C</source>
-        <translation>Dodatne puščice – C</translation>
+        <translation>Puščice – dodatek C</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="392"/>
@@ -25313,7 +25380,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="394"/>
         <source>Symbols and Pictographs Extended-A</source>
-        <translation>Razširjeni znaki in piktogrami - A</translation>
+        <translation>Znaki in piktogrami – razširitev A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="395"/>
@@ -25323,22 +25390,22 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="396"/>
         <source>CJK Unified Ideographs Extension B</source>
-        <translation>Razširitev KJK poenotenih pojmovnih znamenj – B</translation>
+        <translation>KJK poenotena pojmovna znamenja – razširitev B</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="397"/>
         <source>CJK Unified Ideographs Extension C</source>
-        <translation>Razširitev KJK poenotenih pojmovnih znamenj – C</translation>
+        <translation>KJK poenotena pojmovna znamenja – razširitev C</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="398"/>
         <source>CJK Unified Ideographs Extension D</source>
-        <translation>Razširitev KJK poenotenih pojmovnih znamenj – D</translation>
+        <translation>KJK poenotena pojmovna znamenja – razširitev D</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="399"/>
         <source>CJK Compatibility Ideographs Supplement</source>
-        <translation>Pojmovna znamenja, združljiva s KJK - dodatna</translation>
+        <translation>KJK združljivostni ideografi – dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="400"/>
@@ -25348,17 +25415,17 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="401"/>
         <source>Variation Selectors Supplement</source>
-        <translation> Izbirniki različic - dodatni</translation>
+        <translation> Izbirniki različic - dodatek</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="402"/>
         <source>Supplementary Private Use Area-A</source>
-        <translation>Dodatno območje za zasebno uporabo – A</translation>
+        <translation>Območje za zasebno uporabo – dodatek A</translation>
     </message>
     <message>
         <location filename="../../src/palette/view/widgets/specialcharactersdialog.cpp" line="403"/>
         <source>Supplementary Private Use Area-B</source>
-        <translation>Dodatno območje za zasebno uporabo – B</translation>
+        <translation>Območje za zasebno uporabo – dodatek B</translation>
     </message>
 </context>
 <context>
@@ -25367,7 +25434,7 @@ je spodletelo.</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="99"/>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AuxSendControl.qml" line="91"/>
         <source>Bypass</source>
-        <translation>Obvod</translation>
+        <translation>Stranski priključek</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/AudioResourceControl.qml" line="263"/>
@@ -25390,7 +25457,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="60"/>
         <source>Mute</source>
-        <translation>Dušilec</translation>
+        <translation>Utišaj</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerMuteAndSoloSection.qml" line="87"/>
@@ -25429,22 +25496,22 @@ je spodletelo.</translation>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="77"/>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="575"/>
         <source>Aux %1</source>
-        <translation type="unfinished"/>
+        <translation>Aux. %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="764"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="766"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="774"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="776"/>
         <source>Chords</source>
-        <translation>Sozvoki</translation>
+        <translation>Akordi</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1084"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1086"/>
         <source>Loading audio samples</source>
-        <translation>Nalaganje zvočnih vzorcev</translation>
+        <translation>Nalaganje zvočnih posnetkov</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/outputresourceitem.cpp" line="14"/>
@@ -25484,7 +25551,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="327"/>
         <source>Bank %1, preset %2</source>
-        <translation>Zbirka %1, prednastavljeno %2</translation>
+        <translation>Zbirka %1, predloga %2</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="381"/>
@@ -25495,7 +25562,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="421"/>
         <source>Preset %1</source>
-        <translation>Prednastavljeno %1</translation>
+        <translation>Predloga %1</translation>
     </message>
     <message>
         <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="430"/>
@@ -25505,7 +25572,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="61"/>
         <source>Mixer channel panel %1</source>
-        <translation>Kanal %1 mešalne mize</translation>
+        <translation>%1. kanal mešalne mize</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -25540,7 +25607,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="201"/>
         <source>Set as default for new scores</source>
-        <translation>Shrani kot privzeto pri novih notnih zapisih</translation>
+        <translation>Shrani kot privzeto pri novih zapisih</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundProfilesDialog.qml" line="237"/>
@@ -25550,7 +25617,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/MixerAuxSendsSection.qml" line="31"/>
         <source>Aux sends</source>
-        <translation type="unfinished"/>
+        <translation>Aux sendi</translation>
     </message>
 </context>
 <context>
@@ -25579,7 +25646,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="116"/>
         <source>Enabled</source>
-        <translation>Omogočeno</translation>
+        <translation>Omogočeni</translation>
     </message>
     <message>
         <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="147"/>
@@ -25605,7 +25672,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="82"/>
         <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation>Še vedno imate možnost, da ga kadarkoli omogočite, če greste na Domov &gt; Vtičniki</translation>
+        <translation>Še vedno imate možnost, da ga kadarkoli omogočite, če greste na Domov &gt; Vtičniki.</translation>
     </message>
     <message>
         <location filename="../../src/plugins/view/pluginsmodel.cpp" line="109"/>
@@ -25631,7 +25698,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/plugins/internal/pluginsservice.cpp" line="84"/>
         <source>Lyrics</source>
-        <translation>Besedilo</translation>
+        <translation>Besedilo skladbe</translation>
     </message>
     <message>
         <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="58"/>
@@ -25660,7 +25727,7 @@ je spodletelo.</translation>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="70"/>
         <location filename="../../src/project/internal/notationproject.cpp" line="79"/>
         <source>Untitled score</source>
-        <translation>Nenaslovljen notni zapis</translation>
+        <translation>Nenaslovljeni notni zapis</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/GeneralInfoView.qml" line="82"/>
@@ -25707,7 +25774,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="107"/>
         <source>Search recent scores</source>
-        <translation>Iskanje med nedavnimi notnimi zapisi</translation>
+        <translation>Išči med nedavnimi notnimi zapisi</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="142"/>
@@ -25722,7 +25789,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="176"/>
         <source>View buttons</source>
-        <translation>Pogledni gumbi</translation>
+        <translation>Gumba za izbiro pogleda</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="188"/>
@@ -25732,12 +25799,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="200"/>
         <source>Grid view</source>
-        <translation>Mrežni pogled</translation>
+        <translation>Mreža</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="201"/>
         <source>List view</source>
-        <translation>Seznamski pogled</translation>
+        <translation>Seznam</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="321"/>
@@ -25748,7 +25815,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="334"/>
         <source>Score manager (online)</source>
-        <translation>Upravljalnik notnih zapisov (spletni)</translation>
+        <translation>Upravljalnik notnih zapisov (na spletu)</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ScoresPage.qml" line="353"/>
@@ -25763,7 +25830,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="655"/>
         <source>Do you want to save changes to the score “%1” before closing?</source>
-        <translation>Ali želite pred zapiranjem shraniti spremembe v notnem zapisu &quot;%1&quot;?</translation>
+        <translation>Ali želite pred zapiranjem shraniti spremembe v notnem zapisu »%1«?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="658"/>
@@ -25779,7 +25846,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1606"/>
         <source>File “%1” is corrupted</source>
-        <translation>Datoteka “%1” je okvarjena</translation>
+        <translation>Datoteka »%1« je okvarjena</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1607"/>
@@ -25789,7 +25856,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1621"/>
         <source>File “%1” is corrupted and cannot be opened</source>
-        <translation>Datoteka “%1” je okvarjena in je ni mogoče odpreti</translation>
+        <translation>Datoteka »%1« je okvarjena in je ni mogoče odpreti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1622"/>
@@ -25811,7 +25878,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1393"/>
         <source>This score has become corrupted and contains errors. You can fix the errors manually, or save the score to your computer and get help for this issue on musescore.org.</source>
-        <translation>Ta notni zapis se je pokvaril in ima napake. Te lahko odpravite ročno ali shranite zapis na svoj računalnik in poskusite poiskati pomoč za nastalo težavo na musescore.org.</translation>
+        <translation>Ta notni zapis se je okvaril in ima napake. Te lahko odpravite ročno ali shranite zapis na svoj računalnik in poskusite poiskati pomoč za nastalo težavo na musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1400"/>
@@ -25837,7 +25904,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1429"/>
         <source>You can continue saving it locally, although the file may become unusable. To preserve your score, revert to the last saved version, or fix the errors manually. You can also get help for this issue on musescore.org.</source>
-        <translation>Lahko nadaljujete s shranjevanjem na računalnik, vendar obstaja možnost, da postane datoteka neuporabna. Če želite ohraniti zapis, ga povrnite na zadnjeshranjeno različico ali poskusite odpraviti napake ročno. Pomoč pri reševanju težave najdete tudi na musescore.org.</translation>
+        <translation>Lahko nadaljujete s shranjevanjem na računalnik, vendar obstaja možnost, da postane datoteka neuporabna. Če želite ohraniti zapis, ga povrnite na zadnjo shranjeno različico ali poskusite odpraviti napake ročno. Pomoč pri reševanju težave najdete tudi na musescore.org.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1436"/>
@@ -25857,7 +25924,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1508"/>
         <source>Revert to last saved?</source>
-        <translation>Povrnitev na zadnje shranjeno?</translation>
+        <translation>Povrni na zadnje shranjeno?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1509"/>
@@ -25913,57 +25980,57 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1707"/>
         <source>MusicXML files</source>
-        <translation>Datoteke MusicXML</translation>
+        <translation>MusicXML datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1708"/>
         <source>MIDI files</source>
-        <translation>Datoteke MIDI</translation>
+        <translation>MIDI datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1709"/>
         <source>MuseData files</source>
-        <translation>Datoteke MuseData</translation>
+        <translation>MuseData datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1710"/>
         <source>Capella files</source>
-        <translation>Datoteke Capella</translation>
+        <translation>Capella datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1711"/>
         <source>BB files (experimental)</source>
-        <translation>Datoteke BB (delovna različica)</translation>
+        <translation>BB datoteke (poskusno)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1712"/>
         <source>Overture / Score Writer files (experimental)</source>
-        <translation>Datoteke Overture / Score Writer (delovna različica)</translation>
+        <translation>Overture / Score Writer datoteke (poskusno)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1713"/>
         <source>Bagpipe Music Writer files (experimental)</source>
-        <translation>Datoteke Bagpipe Music Writer (delovna različica)</translation>
+        <translation>Bagpipe Music Writer datoteke (poskusno)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1714"/>
         <source>Guitar Pro files</source>
-        <translation>Datoteke Guitar Pro</translation>
+        <translation>Guitar Pro datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1715"/>
         <source>Power Tab Editor files (experimental)</source>
-        <translation>Datoteke Power Tab Editor (delovna različica)</translation>
+        <translation>Power Tab Editor datoteke (poskusno)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1716"/>
         <source>MEI files</source>
-        <translation>Datoteke MEI</translation>
+        <translation>MEI datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1717"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
-        <translation>Nestisnjene mape MuseScora (delovna različica)</translation>
+        <translation>Nestisnjene MuseScorove mape (poskusno)</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1718"/>
@@ -25973,7 +26040,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1719"/>
         <source>MuseScore backup files</source>
-        <translation>Varnostne datoteke MuseScora</translation>
+        <translation>Varnostne MuseScorove datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1731"/>
@@ -25981,7 +26048,7 @@ je spodletelo.</translation>
         <translation>Odprto</translation>
     </message>
     <message>
-        <location filename="../../src/project/internal/projectconfiguration.cpp" line="330"/>
+        <location filename="../../src/project/internal/projectconfiguration.cpp" line="333"/>
         <source>Untitled</source>
         <translation>Brez naslova</translation>
     </message>
@@ -26033,7 +26100,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/view/projectpropertiesmodel.cpp" line="60"/>
         <source>Audio.com URL</source>
-        <translation>Spletni naslov Audio.com</translation>
+        <translation>Audio.com URL</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoresListView.qml" line="77"/>
@@ -26070,12 +26137,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="120"/>
         <source>All saved changes will now update to the cloud</source>
-        <translation>Vse shranjene spremembe se bodo preslikale tudi v oblaku</translation>
+        <translation>Vse shranjene spremembe se bodo prikazale tudi v oblaku</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="162"/>
         <source>Publish your finished scores on MuseScore.com</source>
-        <translation>Objavite končne notne zapise na MuseScore.com</translation>
+        <translation>Objavi končane notne zapise na MuseScore.com</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="187"/>
@@ -26095,7 +26162,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="223"/>
         <source>Watch video</source>
-        <translation>Glejte video</translation>
+        <translation>Glej video</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/ProjectUploadedDialog.qml" line="251"/>
@@ -26130,12 +26197,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="153"/>
         <source>You are not signed in</source>
-        <translation>Niste vpisani</translation>
+        <translation>Niste prijavljeni</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="154"/>
         <source>Log in or create a new account on &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; to view online scores.</source>
-        <translation>Za ogled notnih zapisov na spletu se prijavite ali ustvarite nov račun na &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; .</translation>
+        <translation>Za ogled notnih zapisov na spletu se prijavite ali ustvarite nov račun na &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="217"/>
@@ -26150,12 +26217,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="57"/>
         <source>Recent scores grid</source>
-        <translation>Mreža predhodnega notnega zapisa</translation>
+        <translation>Mreža nedavnih notnih zapisov</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml" line="88"/>
         <source>Recent scores list</source>
-        <translation>Nedavni notni zapisi</translation>
+        <translation>Seznam nedavnih notnih zapisov</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresGridView.qml" line="32"/>
@@ -26236,7 +26303,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="462"/>
         <source>MuseScore.com returned an unknown error code.</source>
-        <translation>MuseScore.com je javil kodo z neznano napako.</translation>
+        <translation>MuseScore.com je javil kodo neznane napake.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="468"/>
@@ -26253,12 +26320,12 @@ je spodletelo.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="487"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="553"/>
         <source>Your musescore.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>Vaš račun na musescore.com mora biti najprej preverjen. Omogočite vaš račun s klikom na povezavo v omogočitvenem e-sporočilu.</translation>
+        <translation>Vaš račun na musescore.com mora biti najprej preverjen. Omogočite svoj račun s klikom na povezavo v aktivacijski e-pošti.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="491"/>
         <source>This score does not belong to this account. To access this score, make sure you are logged in to the desktop app with the account to which this score belongs.</source>
-        <translation>Ta notni zapis ne pripada temu računu. Za dostop do tega notnega zapisa morate biti v krajevni program vpisani z računom, kateremu zapis pripada.</translation>
+        <translation>Ta notni zapis ne pripada temu računu. Za dostop do tega notnega zapisa morate biti v namizni program vpisani z računom, kateremu zapis pripada.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="495"/>
@@ -26269,7 +26336,7 @@ je spodletelo.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="508"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="594"/>
         <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
-        <translation>Na &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; se ni mogoče povezati. Preverite vašo spletno povezavo ali ponovno poskusite pozneje. </translation>
+        <translation>Na &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt; se ni mogoče povezati. Preverite svojo spletno povezavo ali ponovno poskusite pozneje.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="512"/>
@@ -26279,7 +26346,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="117"/>
         <source>Would you also like to share your music on Audio.com?</source>
-        <translation>Ali želite deliti vašo glasbo tudi na Audio.com?</translation>
+        <translation>Ali želite deliti svojo glasbo tudi na Audio.com?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="126"/>
@@ -26289,7 +26356,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="145"/>
         <source>You can change this setting in Preferences at any time.</source>
-        <translation>To nastavitev lahko kadarkoli spremenite v Prednastavitvah.</translation>
+        <translation>To nastavitev lahko kadarkoli spremenite v nastavitvah.</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AlsoShareAudioComDialog.qml" line="165"/>
@@ -26412,7 +26479,7 @@ je spodletelo.</translation>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="69"/>
         <source>Score_and_Parts</source>
         <extracomment>Used in export filename suggestion. Please use only characters that are valid for filenames.</extracomment>
-        <translation>Notni zapis in parti</translation>
+        <translation>Notni_zapis_in_parti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="72"/>
@@ -26438,7 +26505,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="364"/>
         <source>Replace all</source>
-        <translation>Nadomesti vse</translation>
+        <translation>Zamenjaj vse</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/exportprojectscenario.cpp" line="365"/>
@@ -26483,23 +26550,23 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="49"/>
         <source>Compressed MusicXML files</source>
-        <translation>Stisnjena datoteka MusicXML</translation>
+        <translation>Stisnjene MusicXML datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="53"/>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="57"/>
         <source>Uncompressed MusicXML files</source>
-        <translation>Nestisnjena datoteka MusicXML</translation>
+        <translation>Nestisnjene MusicXML datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="63"/>
         <source>PDF file</source>
-        <translation>Datoteka PDF</translation>
+        <translation>PDF datoteka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="64"/>
         <source>PDF files</source>
-        <translation>Datoteke PDF</translation>
+        <translation>PDF datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="67"/>
@@ -26516,52 +26583,52 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="75"/>
         <source>MP3 audio</source>
-        <translation>Zvočna datoteka MP3</translation>
+        <translation>MP3 zvočna datoteka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="76"/>
         <source>MP3 audio files</source>
-        <translation>Zvočne datoteke MP3</translation>
+        <translation>MP3 zvočne datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="79"/>
         <source>WAV audio</source>
-        <translation>Zvočna datoteka WAV</translation>
+        <translation>WAV zvočna datoteka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="80"/>
         <source>WAV audio files</source>
-        <translation>Zvočne datoteke WAV</translation>
+        <translation>WAV zvočne datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="83"/>
         <source>OGG audio</source>
-        <translation>Zvočna datoteka OGG</translation>
+        <translation>OGG zvočna datoteka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="84"/>
         <source>OGG audio files</source>
-        <translation>Zvočne datoteke OGG</translation>
+        <translation>OGG zvočne datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="87"/>
         <source>FLAC audio</source>
-        <translation>Zvočna datoteka FLAC</translation>
+        <translation>FLAC zvočna datoteka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="88"/>
         <source>FLAC audio files</source>
-        <translation>Zvočne datoteke FLAC</translation>
+        <translation>FLAC zvočne datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="91"/>
         <source>MIDI file</source>
-        <translation>Datoteka MIDI</translation>
+        <translation>MIDI datoteka</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="92"/>
         <source>MIDI files</source>
-        <translation>Datoteke MIDI</translation>
+        <translation>MIDI datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="95"/>
@@ -26572,12 +26639,12 @@ je spodletelo.</translation>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="100"/>
         <source>Braille (basic bar-over-bar)</source>
         <extracomment>Meaning like &quot;measure-over-measure&quot;, but called &quot;bar-over-bar&quot; even in US English. Not to be confused with &quot;bar-by-bar&quot; format. See https://musescore.org/en/handbook/4/file-export#Score_formats</extracomment>
-        <translation type="unfinished"/>
+        <translation>Braille (osnovno takt po takt)</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="101"/>
         <source>Braille files</source>
-        <translation>Datoteke Braille</translation>
+        <translation>Braille datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="103"/>
@@ -26587,7 +26654,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="104"/>
         <source>MEI files</source>
-        <translation>Datoteke MEI</translation>
+        <translation>MEI datoteke</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="303"/>
@@ -26597,7 +26664,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="304"/>
         <source>Each part to a separate file</source>
-        <translation>Izvozi vsak part kot ločeno datoteko</translation>
+        <translation>Vsak part v svojo datoteko</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="305"/>
@@ -26608,35 +26675,35 @@ je spodletelo.</translation>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="545"/>
         <source>All layout</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Celotna postavitev</translation>
+        <translation>Vsa postavitev</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="547"/>
         <source>System and page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Prelomi vrst in strani</translation>
+        <translation>Prelomi partiture in strani</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="549"/>
         <source>Manually added system and page breaks only</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Le ročno dodani prelomi vrst in strani</translation>
+        <translation>Le ročno dodani prelomi partiture in strani</translation>
     </message>
     <message>
         <location filename="../../src/project/view/exportdialogmodel.cpp" line="551"/>
         <source>No system or page breaks</source>
         <extracomment>Specifies to which extent layout customizations should be exported to MusicXML.</extracomment>
-        <translation>Ni prelomov vrst ali strani</translation>
+        <translation>Brez prelomov partiture ali strani</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/ExportScoresListView.qml" line="72"/>
         <source>Main score</source>
-        <translation>Glavni notni zapis</translation>
+        <translation>Partitura</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Export/MeiSettingsPage.qml" line="31"/>
         <source>Include page and system breaks</source>
-        <translation>Vključi tudi prelome strani in vrst</translation>
+        <translation>Vključi tudi prelome strani in vrstic</translation>
     </message>
 </context>
 <context>
@@ -26660,27 +26727,27 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="109"/>
         <source>Select the engraving improvements you would like to apply to your score</source>
-        <translation>Izberite izboljšave stavljenja, ki jih želite uporabiti v vašem notnem zapisu</translation>
+        <translation>Izberite izboljšave zapisa, ki jih želite uporabiti v svojem notnem zapisu</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="132"/>
         <source>Our new notation font, Leland</source>
-        <translation>Nov glasbopis Leland</translation>
+        <translation>Naša nova pisava za glasbeno notacijo, Leland</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="147"/>
         <source>Our new text font, Edwin</source>
-        <translation>Nova besedilna pisava Edwin</translation>
+        <translation>Naša nova pisava za besedilo, Edwin</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="172"/>
         <source>Please note: score layouts will be affected by improvements to MuseScore 4</source>
-        <translation>Opomba: izboljšave v MuseScore 4 bodo vplivale na razporeditev notnega zapisa</translation>
+        <translation>Opomba: izboljšave v MuseScoru 4 bodo vplivale na razporeditev notnega zapisa</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml" line="178"/>
         <source>Watch video</source>
-        <translation>Glejte video</translation>
+        <translation>Glej video</translation>
     </message>
 </context>
 <context>
@@ -26713,7 +26780,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="112"/>
         <source>Choose instruments</source>
-        <translation>Izbor glasbil</translation>
+        <translation>Izborite glasbila</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/ChooseInstrumentsAndTemplatesPage.qml" line="122"/>
@@ -26753,7 +26820,7 @@ je spodletelo.</translation>
     <message numerus="yes">
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="57"/>
         <source>%n measure(s),</source>
-        <translation><numerusform>%n takt,</numerusform><numerusform>%n takta,</numerusform><numerusform>%n takti,</numerusform><numerusform>%n taktov,</numerusform></translation>
+        <translation><numerusform>en takt,</numerusform><numerusform>%n takta,</numerusform><numerusform>%n takti,</numerusform><numerusform>%n taktov,</numerusform></translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/MeasuresSettings.qml" line="100"/>
@@ -27037,7 +27104,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="81"/>
         <source>MuseScore version:</source>
-        <translation>Različica programa:</translation>
+        <translation>Različica MuseScora:</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml" line="90"/>
@@ -27211,7 +27278,7 @@ je spodletelo.</translation>
         <source>copy</source>
         <comment>a copy of a file</comment>
         <extracomment>used to form a filename suggestion, like &quot;originalFile - copy&quot;</extracomment>
-        <translation>kopiraj</translation>
+        <translation>kopija</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="101"/>
@@ -27223,7 +27290,7 @@ je spodletelo.</translation>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="348"/>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="381"/>
         <source>Publish changes online?</source>
-        <translation>Spletna objava sprememb?</translation>
+        <translation>Objavi spremembe na spletu?</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="349"/>
@@ -27238,7 +27305,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="351"/>
         <source>Publish this score online?</source>
-        <translation>Spletna objava notnega zapisa?</translation>
+        <translation>Objavi notni zapis na spletu?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettings.qml" line="59"/>
@@ -27266,18 +27333,18 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="77"/>
         <source>Generate MP3 audio for web playback?</source>
-        <translation>Ustvarjanje MP3 posnetka za spletno predvajanje?</translation>
+        <translation>Ustvari MP3 posnetek za spletno predvajanje?</translation>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/AudioGenerationSettingsDialog.qml" line="87"/>
         <source>This could take a few minutes each time you save, depending on the size of your score. These settings can always be changed in Preferences.</source>
-        <translation>Vsakič, ko shranite,  lahko to traja nekaj minut, odvisno od velikosti zapisa. Te nastavitve lahko kadar koli spremenite v Prednastavitvah.</translation>
+        <translation>Vsakič, ko shranite, lahko to traja nekaj minut, odvisno od velikosti zapisa. Te nastavitve lahko kadar koli spremenite v nastavitvah.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="372"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="458"/>
         <source>Log in or create a free account on musescore.com to open this score.</source>
-        <translation>Če želiš odpreti ta notni zapis, se prijavite ali ustvarite brezplačen račun na musescore.com.</translation>
+        <translation>Če želite odpreti ta notni zapis, se prijavite ali ustvarite brezplačen račun na musescore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1265"/>
@@ -27297,13 +27364,13 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="183"/>
         <source>Log in or create a new account on Audio.com to share your music.</source>
-        <translation>Če želiš deliti svojo glasbo, se prijavite ali pa ustvarite nov račun na Audio.com.</translation>
+        <translation>Če želite deliti svojo glasbo, se prijavite ali pa ustvarite nov račun na Audio.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="235"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="887"/>
         <source>Log in to musescore.com to save this score to the cloud.</source>
-        <translation>Če želite ta notni zapis shraniti v oblak, se vpišite v musescore.com.</translation>
+        <translation>Če želite ta notni zapis shraniti v oblak, se prijavite v musescore.com.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="236"/>
@@ -27333,7 +27400,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="529"/>
         <source>Your score cannot be published</source>
-        <translation>Vaš notni zapis ni mogoče objaviti</translation>
+        <translation>Vašega notnega zapisa ni mogoče objaviti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="530"/>
@@ -27402,7 +27469,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1501"/>
         <source>Your score could not be saved</source>
-        <translation>Vašega računa ni bilo mogoče shraniti</translation>
+        <translation>Vašega notnega zapisa ni bilo mogoče shraniti</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1356"/>
@@ -27425,7 +27492,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="630"/>
         <source>Your audio.com account needs to be verified first. Please activate your account via the link in the activation email.</source>
-        <translation>Vaš audio.com račun mora biti najprej preverjen. Omogočite vaš račun s klikom na povezavo v omogočitvenem e-sporočilu.</translation>
+        <translation>Vaš audio.com račun mora biti najprej preverjen. Omogočite svoj račun s klikom na povezavo v omogočitvenem e-sporočilu.</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="637"/>
@@ -27447,7 +27514,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/project/internal/opensaveprojectscenario.cpp" line="645"/>
         <source>Could not connect to audio.com. Please check your internet connection or try again later.</source>
-        <translation>Na audio.com se ni mogoče povezati. Preverite vašo spletno povezavo ali ponovno poskusite pozneje. </translation>
+        <translation>Na audio.com se ni mogoče povezati. Preverite svojo spletno povezavo ali ponovno poskusite pozneje.</translation>
     </message>
 </context>
 <context>
@@ -27461,17 +27528,17 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="83"/>
         <source>Press a key or adjust a control on your MIDI device to assign it to this action.</source>
-        <translation>Pritisnite tipko ali prilagodite vašo MIDI napravo, da ji dodelite to opravilo.</translation>
+        <translation>Pritisnite tipko ali prilagodite svojo MIDI napravo, da ji dodelite to opravilo.</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml" line="92"/>
         <source>MIDI mapping:</source>
-        <translation>MIDI preslikavanje:</translation>
+        <translation>MIDI preslikava:</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="32"/>
         <source>Enter shortcut sequence</source>
-        <translation>Vnos sekvenčne bližnjice</translation>
+        <translation>Vnesite bljižnične tipke</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="73"/>
@@ -27491,22 +27558,22 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/EditShortcutDialog.qml" line="126"/>
         <source>Type to set shortcut</source>
-        <translation>Vtipkajte za nastavitev bližnjice</translation>
+        <translation>Vnesite novo bližnjico</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="43"/>
         <source>MIDI mapping bottom panel</source>
-        <translation>Spodnja plošča MIDI preslikave</translation>
+        <translation>Spodnje podokno MIDI preslikave</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml" line="55"/>
         <source>Assign MIDI mapping…</source>
-        <translation>Dodeli MIDI preslikavanje ...</translation>
+        <translation>Dodeli MIDI preslikavo ...</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml" line="45"/>
         <source>Shortcuts bottom panel</source>
-        <translation>Spodnji bližnično podokno</translation>
+        <translation>Spodnje bližnično podokno</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml" line="57"/>
@@ -27527,7 +27594,7 @@ je spodletelo.</translation>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsList.qml" line="31"/>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/MidiDeviceMappingPage.qml" line="93"/>
         <source>action</source>
-        <translation>dejanje</translation>
+        <translation>ukaz</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/qml/MuseScore/Shortcuts/internal/ShortcutsList.qml" line="33"/>
@@ -27607,7 +27674,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="174"/>
         <source>Are you sure you want to assign it to &lt;b&gt;%1&lt;/b&gt; instead?</source>
-        <translation>Ali ste prepričani, da jo želite namesto tega dodeliti za &lt;b&gt;%1 &lt;/b&gt;?</translation>
+        <translation>Ali ste prepričani, da jo želiš namesto tega dodeliti za &lt;b&gt;%1 &lt;/b&gt;?</translation>
     </message>
     <message>
         <location filename="../../src/framework/shortcuts/view/editshortcutmodel.cpp" line="179"/>
@@ -27718,7 +27785,7 @@ je spodletelo.</translation>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="75"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="127"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="216"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="223"/>
         <source>checked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'on' state of a toggle-able ui item.</extracomment>
@@ -27728,7 +27795,7 @@ je spodletelo.</translation>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/StyledMenuItem.qml" line="77"/>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/ValueListItem.qml" line="247"/>
         <location filename="../../src/notation/view/widgets/editstringdata.cpp" line="127"/>
-        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="216"/>
+        <location filename="../../src/notation/view/widgets/measureproperties.cpp" line="223"/>
         <source>unchecked</source>
         <comment>checkstate</comment>
         <extracomment>Describes the 'off' state of a toggle-able ui item.</extracomment>
@@ -27763,13 +27830,13 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/FilePicker.qml" line="97"/>
         <source>Choose file</source>
-        <translation>Izbrana datoteka:</translation>
+        <translation>Izberite datoteko</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/FilePicker.qml" line="98"/>
         <location filename="../../src/framework/uicomponents/view/selectmultipledirectoriesmodel.cpp" line="124"/>
         <source>Choose directory</source>
-        <translation>Izbrana mapa</translation>
+        <translation>Izberite mapo</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/internal/DirectoriesTopPanel.qml" line="44"/>
@@ -27815,7 +27882,7 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/SearchField.qml" line="38"/>
         <source>Search</source>
-        <translation>Iščite</translation>
+        <translation>Išči</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/Utils.js" line="40"/>
@@ -27848,13 +27915,13 @@ je spodletelo.</translation>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/ValueList.qml" line="128"/>
         <source>Value list header panel</source>
         <extracomment>Accessibility description of the header of a value list (table)</extracomment>
-        <translation>Plošča naslova za seznam po velikosti</translation>
+        <translation>Naslov podokna za seznam vrednosti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/ValueList.qml" line="198"/>
         <source>Value list panel</source>
         <extracomment>Accessibility description of the body of a value list (table)</extracomment>
-        <translation>Plošča seznama vrednosti</translation>
+        <translation>Podokno s seznamom vrednosti</translation>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/qml/MuseScore/UiComponents/VisibilityBox.qml" line="67"/>
@@ -28085,22 +28152,22 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/internal/WorkspacesTopPanel.qml" line="111"/>
         <source>Use workspaces to save different arrangements of the MuseScore interface</source>
-        <translation>S spomočjo delovnih okolij shrani različne postavitve v MuseScore vmesniku</translation>
+        <translation>S pomočjo delovnih okolij shranite različne postavitve v MuseScorovem vmesniku</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="74"/>
         <source>Workspace name:</source>
-        <translation>Naziv delovne površine:</translation>
+        <translation>Ime delovne površine:</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="114"/>
         <source>Select the options you want remembered in your new workspace</source>
-        <translation>Izberite možnosti, ki želite, da se ohranijo v novem delovnem okolju</translation>
+        <translation>Izberi možnosti, za katere želite, da se ohranijo v novem delovnem okolju</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="133"/>
         <source>UI preferences (colors, canvas style, etc.)</source>
-        <translation>Prednastavitve vmesnika (barva, slog platna, ...)</translation>
+        <translation>Nastavitve vmesnika (barva, slog platna, ...)</translation>
     </message>
     <message>
         <location filename="../../src/workspace/qml/MuseScore/Workspace/NewWorkspaceDialog.qml" line="150"/>
@@ -28125,12 +28192,12 @@ je spodletelo.</translation>
     <message>
         <location filename="../../src/workspace/view/newworkspacemodel.cpp" line="98"/>
         <source>A workspace with the name “%1” already exists. Please choose a different name.</source>
-        <translation>Delovno okolje z imenom &quot;%1&quot; že obstaja. Izberite drugo ime.</translation>
+        <translation>Delovno okolje z imenom »%1« že obstaja. Izberite drugo ime.</translation>
     </message>
     <message>
         <location filename="../../src/workspace/view/newworkspacemodel.cpp" line="105"/>
         <source>“%1” cannot be used as a workspace name. Please choose a different name.</source>
-        <translation>&quot;%1&quot; ne more biti poimenovanje delovnega okolja. Določite drugo ime.</translation>
+        <translation>»%1« ne more biti poimenovanje delovnega okolja. Določite drugo ime.</translation>
     </message>
     <message>
         <location filename="../../src/appshell/view/notationstatusbarmodel.cpp" line="94"/>
