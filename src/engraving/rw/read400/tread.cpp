@@ -2881,8 +2881,7 @@ void TRead::read(LayoutBreak* b, XmlReader& e, ReadContext& ctx)
             TRead::readProperty(b, e, ctx, Pid::START_WITH_LONG_NAMES);
         } else if (tag == "startWithMeasureOne") {
             TRead::readProperty(b, e, ctx, Pid::START_WITH_MEASURE_ONE);
-        } else if (tag == "firstSystemIndentation"
-                   || tag == "firstSystemIdentation" /* pre-4.0 typo */) {
+        } else if (tag == "firstSystemIndentation") {
             TRead::readProperty(b, e, ctx, Pid::FIRST_SYSTEM_INDENTATION);
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
