@@ -30,6 +30,8 @@ class MidiConfiguration : public IMidiConfiguration
 public:
     void init();
 
+    bool midiPortIsAvalaible() const override;
+
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;
 
