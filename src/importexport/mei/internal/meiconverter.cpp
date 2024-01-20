@@ -733,6 +733,47 @@ libmei::Caesura Convert::caesuraToMEI(const engraving::Breath* breath)
 engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warning)
 {
     warning = false;
+
+    // @glyhp.name
+    bool smufl = (meiClef.HasGlyphAuth() && (meiClef.GetGlyphAuth() == SMUFL_AUTH));
+
+    // We give @glyph.name priority over @shape
+    if (smufl && meiClef.HasGlyphName()) {
+        if (meiClef.GetGlyphName() == "cClefFrench") {
+            switch (meiClef.GetLine()) {
+            case 1: return engraving::ClefType::C1_F18C;
+            case 3: return engraving::ClefType::C3_F18C;
+            case 4: return engraving::ClefType::C4_F18C;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "cClefFrench20C") {
+            switch (meiClef.GetLine()) {
+            case 1: return engraving::ClefType::C1_F20C;
+            case 3: return engraving::ClefType::C3_F20C;
+            case 4: return engraving::ClefType::C4_F20C;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "fClefFrench") {
+            switch (meiClef.GetLine()) {
+            case 4: return engraving::ClefType::F_F18C;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "fClef19thCentury") {
+            switch (meiClef.GetLine()) {
+            case 4: return engraving::ClefType::F_19C;
+            default:
+                break;
+            }
+        } else {
+            LOGD() << "Unsupported clef@glyph.name";
+            // try to find a proper replacement from other attributes
+        }
+    }
+
+    // @shape
     if (meiClef.GetShape() == libmei::CLEFSHAPE_G) {
         if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below) {
             switch (meiClef.GetDis()) {
@@ -847,7 +888,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
             meiClef.SetShape(libmei::CLEFSHAPE_G);
             break;
         default:
-            LOGD() << "Unsupported clef shape";
+            LOGD() << "Unsupported engraving::ClefType";
             meiClef.SetShape(libmei::CLEFSHAPE_NONE);
             break;
         }
