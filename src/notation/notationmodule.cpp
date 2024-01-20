@@ -78,7 +78,6 @@
 #include "view/styledialog/notespagemodel.h"
 #include "view/styledialog/restspagemodel.h"
 #include "view/styledialog/beamspagemodel.h"
-#include "view/styledialog/bendstyleselector.h"
 #include "view/styledialog/tieplacementselector.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -206,7 +205,6 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotesPageModel>("MuseScore.NotationScene", 1, 0, "NotesPageModel");
     qmlRegisterType<RestsPageModel>("MuseScore.NotationScene", 1, 0, "RestsPageModel");
     qmlRegisterType<BeamsPageModel>("MuseScore.NotationScene", 1, 0, "BeamsPageModel");
-    qmlRegisterType<BendStyleSelector>("MuseScore.NotationScene", 1, 0, "BendStyleSelector");
     qmlRegisterType<TiePlacementSelectorModel>("MuseScore.NotationScene", 1, 0, "TiePlacementSelectorModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
