@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Style>
     <slurShowTabSimple>0</slurShowTabSimple>
     <slurShowTabCommon>1</slurShowTabCommon>
@@ -32,5 +32,7 @@
     <tabShowTiedFret>1</tabShowTiedFret>
     <tabParenthesizeTiedFret>1</tabParenthesizeTiedFret>
     <parenthesizeTiedFretIfArticulation>1</parenthesizeTiedFretIfArticulation>
+    <tiePlacementSingleNote>outside</tiePlacementSingleNote>
+    <tiePlacementChord>outside</tiePlacementChord>
   </Style>
 </museScore>
