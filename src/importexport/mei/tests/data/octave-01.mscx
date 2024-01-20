@@ -223,6 +223,7 @@
           <Spanner type="Ottava">
             <Ottava>
               <subtype>22ma</subtype>
+              <lineVisible>0</lineVisible>
               </Ottava>
             <next>
               <location>

@@ -149,7 +149,7 @@
                            <rest xml:id="s2l1_t13_2" dur="2" />
                         </layer>
                      </staff>
-                     <octave xml:id="m7ot1" dis="22" dis.place="above" startid="#s1l1_t6_1" endid="#s1l1_t13_2" />
+                     <octave xml:id="m7ot1" dis="22" dis.place="above" startid="#s1l1_t6_1" extender="false" endid="#s1l1_t13_2" />
                      <octave xml:id="m7ot2" dis="22" dis.place="below" startid="#s2l1_t6_1" endid="#s2l1_t13_2" />
                   </measure>
                </section>

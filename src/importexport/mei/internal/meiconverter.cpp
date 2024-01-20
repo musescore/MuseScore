@@ -419,7 +419,7 @@ libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
     case (engraving::SymId::articTenutoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_ten });
         break;
     case (engraving::SymId::pluckedSnapPizzicatoAbove):
-    case (engraving::SymId::pluckedSnapPizzicatoBelow):   meiArtic.SetArtic({ libmei::ARTICULATION_snap });
+    case (engraving::SymId::pluckedSnapPizzicatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_snap });
         break;
     case (engraving::SymId::stringsDownBow):
     case (engraving::SymId::stringsDownBowTurned): meiArtic.SetArtic({ libmei::ARTICULATION_dnbow });
@@ -2111,6 +2111,11 @@ void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& mei
     }
     ottava->setOttavaType(ottavaType);
 
+    // @extender
+    if (meiOctave.HasExtender() && (meiOctave.GetExtender() == libmei::BOOLEAN_false)) {
+        ottava->setLineVisible(false);
+    }
+
     // @lform
     if (meiOctave.HasLform()) {
         bool lformWarning = false;
@@ -2160,6 +2165,11 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     case (engraving::OttavaType::OTTAVA_22MB):
         meiOctave.SetDisPlace(libmei::STAFFREL_basic_below);
         break;
+    }
+
+    // @extender
+    if (!ottava->lineVisible()) {
+        meiOctave.SetExtender(libmei::BOOLEAN_false);
     }
 
     // @lform
@@ -2380,8 +2390,8 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
                                            bool& warning)
 {
     // The mapping from pitch name to step
-    static int pitchMap[7]  = { 0, 2, 4, 5, 7, 9, 11 };
-    //                          c  d  e  f  g  a   b
+    static int pitchMap[7] = { 0, 2, 4, 5, 7, 9, 11 };
+    //                         c  d  e  f  g  a   b
 
     warning = false;
     PitchStruct pitchSt;
@@ -2447,7 +2457,7 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     meiNote.SetPname(static_cast<libmei::data_PITCHNAME>(engraving::tpc2step(pitch.tpc2) + 1));
 
     int writtenAlterInt = static_cast<int>(engraving::Accidental::subtype2value(pitch.accidType));
-    int alterInt  = tpc2alterByKey(pitch.tpc2, engraving::Key::C);
+    int alterInt = tpc2alterByKey(pitch.tpc2, engraving::Key::C);
 
     // @oct
     // We need to adjust the pitch to its transposed value for the octave calculation
@@ -2650,7 +2660,7 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
 engraving::TremoloType Convert::stemModFromMEI(const libmei::data_STEMMODIFIER meiStemMod)
 {
     switch (meiStemMod) {
-    case (libmei::STEMMODIFIER_1slash):  return engraving::TremoloType::R8;
+    case (libmei::STEMMODIFIER_1slash): return engraving::TremoloType::R8;
     case (libmei::STEMMODIFIER_2slash): return engraving::TremoloType::R16;
     case (libmei::STEMMODIFIER_3slash): return engraving::TremoloType::R32;
     case (libmei::STEMMODIFIER_4slash): return engraving::TremoloType::R64;
@@ -3214,10 +3224,10 @@ engraving::Fraction Convert::tstampToFraction(double tstamp, const engraving::Fr
     const int cycles = 10;
     const double precision = 0.01;
 
-    int sign  = tstamp > 0 ? 1 : -1;
+    int sign = tstamp > 0 ? 1 : -1;
     tstamp = tstamp * sign; //abs(number);
     double new_number, whole_part;
-    double decimal_part =  tstamp - (int)tstamp;
+    double decimal_part = tstamp - (int)tstamp;
     int counter = 0;
 
     std::valarray<double> vec_1{ double((int)tstamp), 1 }, vec_2{ 1, 0 }, temporary;
