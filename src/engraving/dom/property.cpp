@@ -406,14 +406,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
     { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
-    { Pid::TIE_PLACEMENT,           true,  "tiePlacement",          P_TYPE::TIE_PLACEMENT,      PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tie placement") },
+    { Pid::TIE_PLACEMENT,           true,  "tiePlacement",          P_TYPE::TIE_PLACEMENT,  DUMMY_QT_TR_NOOP("propertyName", "tie placement") },
 
-    { Pid::POSITION_LINKED_TO_MASTER,   false, "positionLinkedToMaster",   P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "position linked to master") },
-    { Pid::APPEARANCE_LINKED_TO_MASTER, false, "appearanceLinkedToMaster", P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "appearance linked to master") },
-    { Pid::TEXT_LINKED_TO_MASTER,       false, "textLinkedToMaster",       P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "text linked to master") },
-    { Pid::EXCLUDE_FROM_OTHER_PARTS,    false, "excludeFromParts",         P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "exclude from parts") },
-
-    { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
+    { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */
 
