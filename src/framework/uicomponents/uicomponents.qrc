@@ -85,5 +85,6 @@
         <file>qml/MuseScore/UiComponents/treeview/TableViewItemDelegateLoader.qml</file>
         <file>qml/MuseScore/UiComponents/treeview/ScrollBar.qml</file>
         <file>qml/MuseScore/UiComponents/treeview/images/header.png</file>
+        <file>qml/MuseScore/UiComponents/StyledGroupBox.qml</file>
     </qresource>
 </RCC>

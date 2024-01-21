@@ -33,6 +33,7 @@ class BeamsPageModel : public AbstractStyleDialogModel
     Q_PROPERTY(StyleItem * beamWidth READ beamWidth CONSTANT)
     Q_PROPERTY(StyleItem * beamMinLen READ beamMinLen CONSTANT)
     Q_PROPERTY(StyleItem * beamNoSlope READ beamNoSlope CONSTANT)
+    Q_PROPERTY(StyleItem * frenchStyleBeams READ frenchStyleBeams CONSTANT)
 
 public:
     explicit BeamsPageModel(QObject* parent = nullptr);
@@ -41,6 +42,7 @@ public:
     StyleItem* beamWidth() const;
     StyleItem* beamMinLen() const;
     StyleItem* beamNoSlope() const;
+    StyleItem* frenchStyleBeams() const;
 };
 }
 
