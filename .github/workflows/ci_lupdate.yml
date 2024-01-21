@@ -64,15 +64,15 @@ jobs:
 
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/translation/qt_install.sh 
+        bash ./build/ci/translation/qt_install.sh 
     - name: Run lupdate
       run: |
-        sudo bash ./build/ci/translation/run_lupdate.sh
+        bash ./build/ci/translation/run_lupdate.sh
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-        sudo bash ./build/ci/translation/tx_push.sh
+        bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+        bash ./build/ci/translation/tx_push.sh
     - name: Create Pull Request
       if: env.DO_CREATE_PR == 'true'
       uses: peter-evans/create-pull-request@v6
