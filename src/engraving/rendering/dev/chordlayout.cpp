@@ -3255,13 +3255,10 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     bool isTabStaff = staffType && staffType->isTabStaff();
     // First, for tab staves that have show back-tied fret marks option, we add parentheses to the tied note if
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
-    bool useParens = isTabStaff && !staffType->showBackTied() && !item->fixed();
-    if (useParens
-        && item->tieBack()
-        && (
-            item->chord()->measure()->system() != item->tieBack()->startNote()->chord()->measure()->system()
-            || !item->el().empty()
-            )) {
+    ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
+    bool useParens = isTabStaff && !item->fixed() && item->tieBack()
+                     && showTiedFret != ShowTiedFret::TIE_AND_FRET && !item->shouldHideFret();
+    if (useParens) {
         item->setFretString(String(u"(%1)").arg(item->fretString()));
         double w = item->tabHeadWidth(staffType);     // !! use _fretString
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
