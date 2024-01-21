@@ -40,7 +40,8 @@ public:
         TYPE_INVALID,
         TYPE_AUTO_DIATONIC,
         TYPE_MAJOR_SECOND,
-        TYPE_MINOR_SECOND
+        TYPE_MINOR_SECOND,
+        TYPE_AUGMENTED_SECOND
     };
 
     // For ornaments that can define a custom interval (trills)

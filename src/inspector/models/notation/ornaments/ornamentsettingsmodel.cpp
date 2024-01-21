@@ -65,6 +65,10 @@ void OrnamentSettingsModel::createProperties()
             newInterval.step = IntervalStep::SECOND;
             newInterval.type = IntervalType::MINOR;
             break;
+        case OrnamentTypes::BasicInterval::TYPE_AUGMENTED_SECOND:
+            newInterval.step = IntervalStep::SECOND;
+            newInterval.type = IntervalType::AUGMENTED;
+            break;
         default:
             break;
         }
@@ -109,6 +113,8 @@ void OrnamentSettingsModel::loadProperties()
             basicInterval = OrnamentTypes::BasicInterval::TYPE_MAJOR_SECOND;
         } else if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::MINOR) {
             basicInterval = OrnamentTypes::BasicInterval::TYPE_MINOR_SECOND;
+        } else if (interval.step == IntervalStep::SECOND && interval.type == IntervalType::AUGMENTED) {
+            basicInterval = OrnamentTypes::BasicInterval::TYPE_AUGMENTED_SECOND;
         }
 
         return static_cast<int>(basicInterval);
