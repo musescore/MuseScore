@@ -1039,9 +1039,9 @@ static bool tieSegmentShouldBeSkipped(Tie* item)
         return false;
     }
 
-    if (startNote->isContinuationOfBend()) {
-        return true;
-    }
+//    if (startNote->isContinuationOfBend()) {
+//        return true;
+//    }
 
     ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
 

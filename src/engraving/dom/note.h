@@ -440,6 +440,9 @@ public:
     SymId noteHead() const;
     bool isNoteName() const;
 
+    bool shouldHideFret() const;
+    bool shouldForceShowFret() const;
+
     struct LayoutData : public EngravingItem::LayoutData {
         SymId cachedNoteheadSym;      // use in draw to avoid recomputing at every update
         SymId cachedSymNull;          // additional symbol for some transparent notehead
