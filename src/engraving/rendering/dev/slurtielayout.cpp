@@ -1236,24 +1236,20 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
     const bool up = tie->up();
     const bool inside = tie->isInside();
+    const bool noteIsHiddenFret = note->shouldHideFret();
     const int upSign = up ? -1 : 1;
     const int leftRightSign = start ? +1 : -1;
     const double noteWidth = note->width();
     const double noteHeight = note->height();
     const double spatium = tie->spatium();
 
-    double baseX, baseY = 0.0;
-    if (inside) {
-        baseX = start ? noteWidth : 0.0;
-    } else {
-        baseX = noteOpticalCenterForTie(note, up);
-        baseY = upSign * noteHeight / 2;
-    }
+    double baseX = (inside && !noteIsHiddenFret) ? (start ? noteWidth : 0.0) : noteOpticalCenterForTie(note, up);
+    double baseY = inside ? 0.0 : upSign * noteHeight / 2;
 
     result += PointF(baseX, baseY);
 
     double visualInsetSp = 0.0;
-    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
+    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH || noteIsHiddenFret) {
         visualInsetSp = 0.2;
     } else if (note->hasAnotherStraightAboveOrBelow(up)) {
         visualInsetSp = 0.45;
@@ -1340,7 +1336,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     Tie* tie = tieSegment->tie();
     Note* note = start ? tie->startNote() : tie->endNote();
-    if (!note) {
+    if (!note || note->shouldHideFret()) {
         return;
     }
 
