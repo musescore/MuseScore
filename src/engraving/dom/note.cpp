@@ -1384,10 +1384,6 @@ bool Note::shouldHideFret() const
         return false;
     }
 
-//    if (isContinuationOfBend()) {
-//        return true;
-//    }
-
     ShowTiedFret showTiedFret = style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
     if (showTiedFret == ShowTiedFret::TIE_AND_FRET) {
         return false;
@@ -1439,7 +1435,7 @@ bool Note::shouldForceShowFret() const
         return false;
     };
 
-    bool startsNonBendSpanner = !spannerFor().empty(); // && !bendFor();
+    bool startsNonBendSpanner = !spannerFor().empty();
 
     return !ch->articulations().empty() || ch->chordLine() || startsNonBendSpanner || hasTremoloBar() || hasVibratoLine();
 }

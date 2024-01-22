@@ -32,5 +32,7 @@
     <tabShowTiedFret>1</tabShowTiedFret>
     <tabParenthesizeTiedFret>1</tabParenthesizeTiedFret>
     <parenthesizeTiedFretIfArticulation>1</parenthesizeTiedFretIfArticulation>
+    <tiePlacementSingleNote>outside</tiePlacementSingleNote>
+    <tiePlacementChord>inside</tiePlacementChord>
   </Style>
 </museScore>
