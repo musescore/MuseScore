@@ -1498,7 +1498,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     const double halfLineThicknessCorrection = 0.5 * staffLineThickness * upSign;
     const double protrusion = abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
-    const double badIntersectionLimit = 0.20 * spatium; // TODO: style
+    const double badIntersectionLimit = 0.15 * spatium; // TODO: style
 
     bool badIntersection = protrusion < badIntersectionLimit && (isEndInsideStaff || isEndInsideLedgerLines);
     if (badIntersection) {
