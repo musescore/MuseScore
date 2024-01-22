@@ -272,9 +272,16 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
         const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
         if (!item->cross() || !staffMove) {
             if (cr->up() != item->up()) {
-                cr->setUp(isEntirelyMoved ? item->up() : (item->up() != staffMove));
+                bool prevChordUpValue = cr->up();
+                bool newChordUpValue = isEntirelyMoved ? item->up() : (item->up() != staffMove);
+                cr->setUp(newChordUpValue);
                 if (cr->isChord()) {
-                    ChordLayout::layoutStem(toChord(cr), ctx);
+                    if (newChordUpValue != prevChordUpValue && !toChord(cr)->isGrace()) {
+                        // A change in stem direction may require to recompute note positions
+                        ChordLayout::layoutChords1(ctx, cr->segment(), cr->staffIdx());
+                    } else {
+                        ChordLayout::layoutStem(toChord(cr), ctx);
+                    }
                 }
             }
         }
