@@ -51,6 +51,11 @@ AudioResourceMetaList SynthResolverStub::resolveAvailableResources() const
     return {};
 }
 
+SoundPresetList SynthResolverStub::resolveAvailableSoundPresets(const AudioInputParams&) const
+{
+    return {};
+}
+
 void SynthResolverStub::registerResolver(const AudioSourceType, IResolverPtr)
 {
 }

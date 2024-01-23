@@ -78,6 +78,7 @@ class SlurSegment;
 class SlurTie;
 class StaffText;
 class Stem;
+class SoundFlag;
 
 class TextBase;
 class Text;
@@ -146,6 +147,7 @@ public:
                                    SlurTie*,
                                    StaffText*,
                                    Stem*,
+                                   SoundFlag*,
                                    TextBase*,
                                    Text*,
                                    TimeSig*

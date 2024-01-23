@@ -35,6 +35,7 @@
 #include "../../dom/tempotext.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
+#include "../../dom/soundflag.h"
 #include "../../dom/capo.h"
 
 #include "../../dom/drumset.h"
@@ -292,6 +293,8 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::STRING_TUNINGS: read(item_cast<StringTunings*>(item), xml, ctx);
         break;
     case ElementType::SYMBOL: read(item_cast<Symbol*>(item), xml, ctx);
+        break;
+    case ElementType::SOUND_FLAG: read(item_cast<SoundFlag*>(item), xml, ctx);
         break;
     case ElementType::FSYMBOL: read(item_cast<FSymbol*>(item), xml, ctx);
         break;
@@ -2476,6 +2479,19 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
 
     sym->setPos(PointF());
     sym->setSym(symId, scoreFont);
+}
+
+void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (tag == "soundPreset") {
+            item->setSoundPreset(xml.readText());
+        } else if (!readProperties(static_cast<StaffTextBase*>(item), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(FSymbol* sym, XmlReader& e, ReadContext& ctx)

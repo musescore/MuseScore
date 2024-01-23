@@ -195,6 +195,27 @@ Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
     }, AudioThread::ID);
 }
 
+Promise<SoundPresetList> TracksHandler::availableSoundPresets(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return Promise<SoundPresetList>([this, sequenceId, trackId](auto resolve, auto reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (!s) {
+            return reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+
+        RetVal<AudioInputParams> params = s->audioIO()->inputParams(trackId);
+
+        if (!params.ret) {
+            return reject(params.ret.code(), params.ret.text());
+        }
+
+        return resolve(resolver()->resolveAvailableSoundPresets(params.val));
+    }, AudioThread::ID);
+}
+
 Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
     return Promise<AudioInputParams>([this, sequenceId, trackId](auto resolve, auto reject) {

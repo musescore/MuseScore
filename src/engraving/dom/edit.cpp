@@ -2298,6 +2298,7 @@ void Score::cmdFlip()
                    || e->isCapo()
                    || e->isStringTunings()
                    || e->isSticking()
+                   || e->isSoundFlag()
                    || e->isFingering()
                    || e->isDynamic()
                    || e->isExpression()
@@ -5852,6 +5853,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::CAPO
             && et != ElementType::STRING_TUNINGS
             && et != ElementType::STICKING
+            && et != ElementType::SOUND_FLAG
             && et != ElementType::TREMOLO_SINGLECHORD
             && et != ElementType::TREMOLO_TWOCHORD
             && et != ElementType::ARPEGGIO
@@ -5930,6 +5932,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                            || element->isCapo()
                            || element->isStringTunings()
                            || element->isSticking()
+                           || element->isSoundFlag()
                            || element->isFretDiagram()
                            || element->isHarmony()
                            || element->isHairpin()
@@ -5958,6 +5961,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     case ElementType::PLAYTECH_ANNOTATION:
                     case ElementType::CAPO:
                     case ElementType::STRING_TUNINGS:
+                    case ElementType::SOUND_FLAG:
                     case ElementType::FRET_DIAGRAM:
                     case ElementType::HARMONY:
                     case ElementType::FIGURED_BASS:
@@ -6062,6 +6066,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                      || element->isCapo()
                      || element->isStringTunings()
                      || element->isSticking()
+                     || element->isSoundFlag()
                      || element->isFretDiagram()
                      || element->isFermata()
                      || element->isHarmony()

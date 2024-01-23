@@ -115,6 +115,7 @@ enum class ElementType {
     TEMPO_TEXT,
     STAFF_TEXT,
     SYSTEM_TEXT,
+    SOUND_FLAG,
     PLAYTECH_ANNOTATION,
     CAPO,
     STRING_TUNINGS,

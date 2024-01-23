@@ -165,6 +165,7 @@ class Symbol;
 class System;
 class SystemDivider;
 class SystemText;
+class SoundFlag;
 class TBox;
 class TempoText;
 class Text;
@@ -438,6 +439,7 @@ public:
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
     CONVERT(SystemText,    SYSTEM_TEXT)
+    CONVERT(SoundFlag,     SOUND_FLAG)
     CONVERT(PlayTechAnnotation, PLAYTECH_ANNOTATION)
     CONVERT(Capo,          CAPO)
     CONVERT(BracketItem,   BRACKET_ITEM)
@@ -533,7 +535,8 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings()
+               || isSoundFlag();
     }
 
     bool isArticulationFamily() const
