@@ -364,7 +364,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
         Measure* m = item->measure();
         staff_idx_t si = item->vStaffIdx();
 
-        double sp = item->style().spatium();
+        double sp = item->spatium();
         double md = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
