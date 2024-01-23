@@ -4666,7 +4666,9 @@ void NotationInteraction::navigateToLyrics(bool back, bool moveOnly, bool end)
             break;
         }
         // for the same reason, it cannot have a melisma
-        fromLyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, Fraction::fromTicks(0));
+        if (fromLyrics->separator() && !fromLyrics->separator()->isEndMelisma()) {
+            fromLyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, Fraction::fromTicks(0));
+        }
     }
 
     if (newLyrics) {
