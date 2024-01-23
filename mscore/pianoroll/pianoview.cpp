@@ -25,7 +25,6 @@
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
-#include "libmscore/slur.h"
 #include "libmscore/tie.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/segment.h"
@@ -74,7 +73,7 @@ const BarPattern PianoView::barPatterns[] = {
 //---------------------------------------------------------
 
 PianoItem::PianoItem(Note* n, PianoView* pianoView)
-   : _note(n), _pianoView(pianoView)
+      : _note(n), _pianoView(pianoView)
       {
       }
 
@@ -100,7 +99,7 @@ QRect PianoItem::boundingRectTicks(NoteEvent* evt)
       int len = (evt ? ticks * evt->len() / 1000 : ticks) + tieLen;
 
       int x1 = _note->chord()->tick().ticks()
-            + (evt ? evt->ontime() * ticks / 1000 : 0);
+                  + (evt ? evt->ontime() * ticks / 1000 : 0);
       qreal y1 = pitch;
 
       QRect rect;
@@ -120,10 +119,10 @@ QRect PianoItem::boundingRectPixels(NoteEvent* evt)
       int noteHeight = _pianoView->noteHeight();
 
       rect.setRect(_pianoView->tickToPixelX(rect.x()),
-            (127 - rect.y()) * noteHeight,
-            rect.width() * tix2pix,
-            rect.height() * noteHeight
-            );
+                   (127 - rect.y()) * noteHeight,
+                   rect.width() * tix2pix,
+                   rect.height() * noteHeight
+                   );
 
       return rect;
       }
@@ -162,7 +161,7 @@ bool PianoItem::intersectsBlock(int startTick, int endTick, int highPitch, int l
       int pitch = r.y();
 
       return r.right() >= startTick && r.left() <= endTick
-            && pitch >= lowPitch && pitch <= highPitch;
+                  && pitch >= lowPitch && pitch <= highPitch;
       }
 
 //---------------------------------------------------------
@@ -251,21 +250,21 @@ void PianoItem::paintNoteBlock(QPainter* painter, NoteEvent* evt)
             QString name = qApp->translate("InspectorAmbitus", tpc2name(_note->tpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO, false).replace("b", "♭").replace("#", "♯").toUtf8().constData());
             painter->setPen(QPen(noteColor.lighter(130)));
             painter->drawText(textHiliteRect,
-                  Qt::AlignLeft | Qt::AlignTop, name);
+                              Qt::AlignLeft | Qt::AlignTop, name);
 
             painter->setPen(QPen(noteColor.darker(180)));
             painter->drawText(textRect,
-                  Qt::AlignLeft | Qt::AlignTop, name);
+                              Qt::AlignLeft | Qt::AlignTop, name);
 
             //Voice number
             if (bounds.width() >= 26) {
                   painter->setPen(QPen(noteColor.lighter(130)));
                   painter->drawText(textHiliteRect,
-                        Qt::AlignRight | Qt::AlignTop, QString::number(_note->voice() + 1));
+                                    Qt::AlignRight | Qt::AlignTop, QString::number(_note->voice() + 1));
 
                   painter->setPen(QPen(noteColor.darker(180)));
                   painter->drawText(textRect,
-                        Qt::AlignRight | Qt::AlignTop, QString::number(_note->voice() + 1));
+                                    Qt::AlignRight | Qt::AlignTop, QString::number(_note->voice() + 1));
                   }
             }
       }
@@ -293,7 +292,7 @@ void PianoItem::paint(QPainter* painter)
 //---------------------------------------------------------
 
 PianoView::PianoView()
-    : QGraphicsView()
+      : QGraphicsView()
       {
       setFrameStyle(QFrame::NoFrame);
       setLineWidth(0);
@@ -421,8 +420,8 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
 
                   hbar.setCoords(px0, y, px1, y + _noteHeight);
                   p->fillRect(hbar,
-                        _pitchHighlight[pitch] ? colHilightKeyBg : colBlackKeyBg);
-            }
+                              _pitchHighlight[pitch] ? colHilightKeyBg : colBlackKeyBg);
+                  }
 
             //Lines between rows
             p->setPen(degree == 0 ? penLineMajor : penLineMinor);
@@ -463,12 +462,12 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
                   int subbeats = _tuplet * (1 << _subdiv);
 
                   for (int sub = 1; sub < subbeats; ++sub) {
-                      Pos subBeatPos(_score->tempomap(), _score->sigmap(), bar, beat1, sub * MScore::division / subbeats);
-                      x = tickToPixelX(subBeatPos.time(TType::TICKS));
+                        Pos subBeatPos(_score->tempomap(), _score->sigmap(), bar, beat1, sub * MScore::division / subbeats);
+                        x = tickToPixelX(subBeatPos.time(TType::TICKS));
 
-                      p->setPen(penLineSub);
-                      p->drawLine(x, y1, x, y2);
-                      }
+                        p->setPen(penLineSub);
+                        p->drawLine(x, y1, x, y2);
+                        }
 
                   }
 
@@ -490,9 +489,9 @@ void PianoView::drawBackground(QPainter* p, const QRectF& r)
             }
 
       if (_dragStyle == DragStyle::NOTE_POSITION || _dragStyle == DragStyle::NOTE_LENGTH_END
-            || _dragStyle == DragStyle::NOTE_LENGTH_START || _dragStyle == DragStyle::DRAW_NOTE
-            || _dragStyle == DragStyle::EVENT_LENGTH || _dragStyle == DragStyle::EVENT_MOVE
-            || _dragStyle == DragStyle::EVENT_ONTIME)
+          || _dragStyle == DragStyle::NOTE_LENGTH_START || _dragStyle == DragStyle::DRAW_NOTE
+          || _dragStyle == DragStyle::EVENT_LENGTH || _dragStyle == DragStyle::EVENT_MOVE
+          || _dragStyle == DragStyle::EVENT_ONTIME)
             drawDraggedNotes(p);
 
       //Draw locators
@@ -537,18 +536,18 @@ void PianoView::drawNoteBlock(QPainter* p, PianoItem* block)
             }
       else {
             switch (note->voice()) {
-            case 0:
-                  noteColor = _colorNoteVoice1;
-                  break;
-            case 1:
-                  noteColor = _colorNoteVoice2;
-                  break;
-            case 2:
-                  noteColor = _colorNoteVoice3;
-                  break;
-            case 3:
-                  noteColor = _colorNoteVoice4;
-                  break;
+                  case 0:
+                        noteColor = _colorNoteVoice1;
+                        break;
+                  case 1:
+                        noteColor = _colorNoteVoice2;
+                        break;
+                  case 2:
+                        noteColor = _colorNoteVoice3;
+                        break;
+                  case 3:
+                        noteColor = _colorNoteVoice4;
+                        break;
                   }
             }
 
@@ -556,9 +555,9 @@ void PianoView::drawNoteBlock(QPainter* p, PianoItem* block)
             noteColor = _colorNoteSel;
             }
 
-    //if (block->staffIdx != m_activeStaff) {
-    //    noteColor = noteColor.lighter(150);
-    //}
+      //if (block->staffIdx != m_activeStaff) {
+      //    noteColor = noteColor.lighter(150);
+      //}
 
       p->setBrush(noteColor);
       p->setPen(QPen(noteColor.darker(250)));
@@ -584,7 +583,7 @@ void PianoView::drawNoteBlock(QPainter* p, PianoItem* block)
                   p->drawText(textRect, Qt::AlignLeft | Qt::AlignTop, name);
                   }
             }
-}
+      }
 
 
 QRect PianoView::boundingRect(Note* note, bool applyEvents)
@@ -777,7 +776,7 @@ void PianoView::showPopupMenu(const QPoint& posGlobal)
 
       QMenu* menuTuplet = new QMenu(tr("Tuplets"));
       for (auto i : { "duplet", "triplet", "quadruplet", "quintuplet", "sextuplet",
-            "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
+           "septuplet", "octuplet", "nonuplet", "tuplet-dialog" })
             menuTuplet->addAction(getAction(i));
       popup.addMenu(menuTuplet);
 
@@ -853,7 +852,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
 
 
       NoteSelectType selType = bnShift ? (bnCtrl ? NoteSelectType::SUBTRACT : NoteSelectType::XOR)
-            : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
+                                       : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
 
       if (_dragStarted) {
             if (_dragStyle == DragStyle::SELECTION_RECT) {
@@ -871,7 +870,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                   selectNotes(startTick, endTick, lowPitch, highPitch, selType);
                   }
             else if (_dragStyle == DragStyle::NOTE_POSITION || _dragStyle == DragStyle::NOTE_LENGTH_START
-                  || _dragStyle == DragStyle::NOTE_LENGTH_END) {
+                     || _dragStyle == DragStyle::NOTE_LENGTH_END) {
                   if (_editNoteTool == PianoRollEditTool::SELECT || _editNoteTool == PianoRollEditTool::ADD) {
                         finishNoteGroupDrag(event);
 
@@ -881,7 +880,7 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                         }
                   }
             else if (_dragStyle == DragStyle::EVENT_ONTIME || _dragStyle == DragStyle::EVENT_MOVE
-                  || _dragStyle == DragStyle::EVENT_LENGTH) {
+                     || _dragStyle == DragStyle::EVENT_LENGTH) {
                   finishNoteEventAdjustDrag();
                   }
             else if (_dragStyle == DragStyle::DRAW_NOTE) {
@@ -916,32 +915,32 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                         }
                   }
 
-                  _dragStarted = false;
+            _dragStarted = false;
             }
       else {
             //This was just a click, not a drag
             switch (_editNoteTool) {
-            case SELECT:
-            case EVENT_ADJUST:
-                  handleSelectionClick();
-                  break;
-            case ERASE:
-                  eraseNote(_mouseDownPos);
-                  break;
-            case ADD:
-                  insertNote(modifiers);
-                  break;
-            case APPEND_NOTE:
-                  appendNoteToChord(_mouseDownPos);
-                  break;
-            case CUT:
-                  cutChord(_mouseDownPos);
-                  break;
-            case TIE:
-                  toggleTie(_mouseDownPos);
-                  break;
-            default:
-                  break;
+                  case SELECT:
+                  case EVENT_ADJUST:
+                        handleSelectionClick();
+                        break;
+                  case ERASE:
+                        eraseNote(_mouseDownPos);
+                        break;
+                  case ADD:
+                        insertNote(modifiers);
+                        break;
+                  case APPEND_NOTE:
+                        appendNoteToChord(_mouseDownPos);
+                        break;
+                  case CUT:
+                        cutChord(_mouseDownPos);
+                        break;
+                  case TIE:
+                        toggleTie(_mouseDownPos);
+                        break;
+                  default:
+                        break;
                   }
 
             }
@@ -975,7 +974,6 @@ void PianoView::finishNoteEventAdjustDrag()
                               }
 
                         Fraction start = pi->note()->chord()->tick();
-                        Fraction len = ticks;
                         Fraction startAdj = start + ticks * e.ontime() / 1000;
                         Fraction lenAdj = ticks * e.len() / 1000;
 
@@ -983,19 +981,19 @@ void PianoView::finishNoteEventAdjustDrag()
                         Fraction startNew;
                         Fraction lenNew;
                         switch (_dragStyle) {
-                        case DragStyle::EVENT_ONTIME:
-                              startNew = startAdj + dx;
-                              lenNew = lenAdj - dx;
-                              break;
-                        case DragStyle::EVENT_MOVE:
-                              startNew = startAdj + dx;
-                              lenNew = lenAdj;
-                              break;
-                        default:
-                        case DragStyle::EVENT_LENGTH:
-                              startNew = startAdj;
-                              lenNew = lenAdj + dx;
-                              break;
+                              case DragStyle::EVENT_ONTIME:
+                                    startNew = startAdj + dx;
+                                    lenNew = lenAdj - dx;
+                                    break;
+                              case DragStyle::EVENT_MOVE:
+                                    startNew = startAdj + dx;
+                                    lenNew = lenAdj;
+                                    break;
+                              default:
+                              case DragStyle::EVENT_LENGTH:
+                                    startNew = startAdj;
+                                    lenNew = lenAdj + dx;
+                                    break;
                               }
 
                         int evtOntimeNew = int(((startNew - start) / ticks).toDouble() * 1000);
@@ -1026,8 +1024,8 @@ void PianoView::finishNoteEventAdjustDrag()
 void PianoView::updateCursor()
       {
       if (_editNoteTool == PianoRollEditTool::SELECT
-            || _editNoteTool == PianoRollEditTool::ADD
-            || _editNoteTool == PianoRollEditTool::EVENT_ADJUST) {
+          || _editNoteTool == PianoRollEditTool::ADD
+          || _editNoteTool == PianoRollEditTool::EVENT_ADJUST) {
 
             QPointF pos = _lastMousePos;
             int tick = pixelXToTick(pos.x());
@@ -1038,7 +1036,7 @@ void PianoView::updateCursor()
                   QRect bounds = boundingRect(pi->note(), _editNoteTool == PianoRollEditTool::EVENT_ADJUST);
                   if (bounds.contains(pos.x(), pos.y())) {
                         if (pos.x() <= bounds.x() + _dragNoteLengthMargin
-                              || pos.x() >= bounds.x() + bounds.width() - _dragNoteLengthMargin) {
+                            || pos.x() >= bounds.x() + bounds.width() - _dragNoteLengthMargin) {
                               setCursor(Qt::SizeHorCursor);
                               return;
                               }
@@ -1121,7 +1119,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                               else {
                                     _dragStyle = DragStyle::EVENT_MOVE;
                                     }
-                        }
+                              }
                         else if (!pi && _editNoteTool == PianoRollEditTool::SELECT) {
                               _dragStyle = DragStyle::SELECTION_RECT;
                               }
@@ -1130,9 +1128,9 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                               }
                         else
                               _dragStyle = DragStyle::NONE;
+                        }
                   }
             }
-      }
 
       if (_dragStarted) {
             if (_dragStyle == DragStyle::MOVE_VIEWPORT) {
@@ -1147,20 +1145,20 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
                   }
             else {
                   switch (_editNoteTool) {
-                  case SELECT:
-                  case ADD:
-                  case EVENT_ADJUST:
-                  case APPEND_NOTE:
-                  case CUT:
-                  case TIE:
-                        scene()->update();
-                        break;
-                  case ERASE:
-                        eraseNote(_lastMousePos);
-                        scene()->update();
-                        break;
-                  default:
-                        break;
+                        case SELECT:
+                        case ADD:
+                        case EVENT_ADJUST:
+                        case APPEND_NOTE:
+                        case CUT:
+                        case TIE:
+                              scene()->update();
+                              break;
+                        case ERASE:
+                              eraseNote(_lastMousePos);
+                              scene()->update();
+                              break;
+                        default:
+                              break;
                         }
                   }
             }
@@ -1180,7 +1178,7 @@ void PianoView::mouseMoveEvent(QMouseEvent* event)
       else
             _trackingPos.setTick(tick);
       emit trackingPosChanged(_trackingPos);
-}
+      }
 
 
 //---------------------------------------------------------
@@ -1325,7 +1323,7 @@ void PianoView::changeChordLength(const QPointF& pos) {
                   //Copy existing cord
                   QList<NoteVal> nvList;
                   for (Note* n: chord->notes())
-                      nvList.push_back(n->noteVal());
+                        nvList.push_back(n->noteVal());
 
                   //Rebuild chord
                   score->startCmd();
@@ -1556,12 +1554,12 @@ void PianoView::cutChord(const QPointF& pos) {
 //---------------------------------------------------------
 
 void PianoView::handleSelectionClick()
-{
+      {
       int modifiers = QGuiApplication::keyboardModifiers();
       bool bnShift = modifiers & Qt::ShiftModifier;
       bool bnCtrl = modifiers & Qt::ControlModifier;
       NoteSelectType selType = bnShift ? (bnCtrl ? NoteSelectType::SUBTRACT : NoteSelectType::XOR)
-            : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
+                                       : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
 
       Score* score = _staff->score();
 
@@ -1873,8 +1871,8 @@ void PianoView::updateBoundingSize()
       Measure* lm = _staff->score()->lastMeasure();
       _ticks = (lm->tick() + lm->ticks()).ticks();
       scene()->setSceneRect(0.0, 0.0,
-              double((_ticks + MAP_OFFSET * 2) * _xZoom),
-              _noteHeight * 128);
+                            double((_ticks + MAP_OFFSET * 2) * _xZoom),
+                            _noteHeight * 128);
       }
 
 //---------------------------------------------------------
@@ -2461,7 +2459,7 @@ void PianoView::drawDraggedNotes(QPainter* painter)
             double endTick = pixelXToTick(_lastMousePos.x());
             if (startTick > endTick) {
                   std::swap(startTick, endTick);
-            }
+                  }
 
             Fraction startTickFrac = roundToStartBeat(startTick);
             Fraction endTickFrac = roundToStartBeat(endTick, false);
@@ -2476,8 +2474,8 @@ void PianoView::drawDraggedNotes(QPainter* painter)
             }
 
       if (_dragStyle == DragStyle::EVENT_LENGTH || _dragStyle == DragStyle::EVENT_MOVE
-            || _dragStyle == DragStyle::EVENT_ONTIME) {
-          
+          || _dragStyle == DragStyle::EVENT_ONTIME) {
+
             Fraction dx = Fraction::fromTicks(pixelXToTick(_lastMousePos.x()) - pixelXToTick(_mouseDownPos.x()));
 
             for (int i = 0; i < _noteList.size(); ++i) {
@@ -2493,7 +2491,6 @@ void PianoView::drawDraggedNotes(QPainter* painter)
                                     }
 
                               Fraction start = pi->note()->chord()->tick();
-                              Fraction len = ticks;
                               Fraction startAdj = start + ticks * e.ontime() / 1000;
                               Fraction lenAdj = ticks * e.len() / 1000;
 
@@ -2501,19 +2498,19 @@ void PianoView::drawDraggedNotes(QPainter* painter)
                               Fraction startNew;
                               Fraction lenNew;
                               switch (_dragStyle) {
-                              case DragStyle::EVENT_ONTIME:
-                                    startNew = startAdj + dx;
-                                    lenNew = lenAdj - dx;
-                                    break;
-                              case DragStyle::EVENT_MOVE:
-                                    startNew = startAdj + dx;
-                                    lenNew = lenAdj;
-                                    break;
-                              default:
-                              case DragStyle::EVENT_LENGTH:
-                                    startNew = startAdj;
-                                    lenNew = lenAdj + dx;
-                                    break;
+                                    case DragStyle::EVENT_ONTIME:
+                                          startNew = startAdj + dx;
+                                          lenNew = lenAdj - dx;
+                                          break;
+                                    case DragStyle::EVENT_MOVE:
+                                          startNew = startAdj + dx;
+                                          lenNew = lenAdj;
+                                          break;
+                                    default:
+                                    case DragStyle::EVENT_LENGTH:
+                                          startNew = startAdj;
+                                          lenNew = lenAdj + dx;
+                                          break;
                                     }
 
                               int pitch = pi->note()->pitch();
@@ -2525,13 +2522,12 @@ void PianoView::drawDraggedNotes(QPainter* painter)
                         }
                   }
 
-                  return;
+            return;
             }
 
       Fraction pos = Fraction::fromTicks(pixelXToTick(_lastMousePos.x()));
       Measure* m = score->tick2measure(pos);
 
-      int ticksPerWholeNote = MScore::division * 4;
       Fraction timeSig = m->timesig();
       int noteWithBeat = timeSig.denominator();
 
