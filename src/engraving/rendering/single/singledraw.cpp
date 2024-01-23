@@ -1729,9 +1729,9 @@ void SingleDraw::draw(const GradualTempoChangeSegment* item, Painter* painter)
     drawTextLineBaseSegment(item, painter);
 }
 
-void SingleDraw::draw(const GuitarBendSegment* item, draw::Painter* painter)
+void SingleDraw::draw(const GuitarBendSegment*, draw::Painter*)
 {
-    TRACE_DRAW_ITEM;
+    // TRACE_DRAW_ITEM;
     // To be implemented
 }
 

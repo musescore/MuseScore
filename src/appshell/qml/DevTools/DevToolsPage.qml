@@ -26,7 +26,6 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 
 import MuseScore.Audio 1.0
-import MuseScore.Mpe 1.0
 
 import "./Gallery"
 import "./Interactive"
