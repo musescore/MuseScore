@@ -115,15 +115,7 @@ void ModifyDom::createStems(const Measure* measure, LayoutContext& ctx)
                     continue;
                 }
 
-                auto createStems = [](Chord* chord, LayoutContext& ctx) {
-                    if (chord->shouldHaveHook()) {
-                        if (!chord->hook()) {
-                            chord->createHook();
-                        }
-                    } else {
-                        ctx.mutDom().undoRemoveElement(chord->hook());
-                    }
-
+                auto createStems = [](Chord* chord) {
                     if (!chord->shouldHaveStem()) {
                         chord->removeStem();
                         return;
@@ -138,10 +130,10 @@ void ModifyDom::createStems(const Measure* measure, LayoutContext& ctx)
                     Chord* chord = toChord(cr);
 
                     for (Chord* c : chord->graceNotes()) {
-                        createStems(c, ctx);
+                        createStems(c);
                     }
 
-                    createStems(chord, ctx);     // create stems needed to calculate spacing
+                    createStems(chord);     // create stems needed to calculate spacing
                     // stem direction can change later during beam processing
                 }
             }
