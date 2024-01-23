@@ -22,7 +22,11 @@
 
 #include "oggencoder.h"
 
+#ifdef SYSTEM_OPUSENC
+#include <opus/opusenc.h>
+#else
 #include "opusenc.h"
+#endif
 
 #include "log.h"
 
