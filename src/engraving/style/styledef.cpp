@@ -29,6 +29,7 @@
 #include "dom/articulation.h"
 #include "dom/mscore.h"
 #include "dom/realizedharmony.h"
+#include "dom/stafftype.h"
 #include "dom/textbase.h"
 #include "dom/tremolo.h"
 #include "dom/tuplet.h"
@@ -478,6 +479,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::MinWigglyGlissandoLength, "minWigglyGlissandoLength", Spatium(2.0) },
     { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
     { Sid::HeaderToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
+
+    { Sid::tiePlacementSingleNote,   "tiePlacementSingleNote", TiePlacement::OUTSIDE },
+    { Sid::tiePlacementChord,        "tiePlacementChord",      TiePlacement::OUTSIDE },
+    { Sid::tieMinShoulderHeight,     "tieMinShoulderHeight",   Spatium(0.3) },
+    { Sid::tieMaxShoulderHeight,     "tieMaxShoulderHeight",   Spatium(2.0) },
 
     { Sid::SectionPause,            "sectionPause",            PropertyValue(double(3.0)) },
     { Sid::MusicalSymbolFont,       "musicalSymbolFont",       PropertyValue(String(u"Leland")) },
@@ -1576,6 +1582,10 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::wahShowTabCommon, "wahShowTabCommon", true },
     { Sid::golpeShowTabSimple, "golpeShowTabSimple", true },
     { Sid::golpeShowTabCommon, "golpeShowTabCommon", true },
+
+    { Sid::tabShowTiedFret, "tabShowTiedFret", int(ShowTiedFret::TIE_AND_FRET) },
+    { Sid::tabParenthesizeTiedFret, "tabParenthesizeTiedFret", int(ParenthesizeTiedFret::START_OF_SYSTEM) },
+    { Sid::parenthesizeTiedFretIfArticulation, "parenthesizeTiedFretIfArticulation", true },
 
     { Sid::chordlineThickness, "chordlineThickness", Spatium(0.16) },
 

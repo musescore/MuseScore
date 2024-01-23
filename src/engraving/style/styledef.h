@@ -489,6 +489,11 @@ enum class Sid {
     SlurMinDistance,
     HeaderToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
 
+    tiePlacementSingleNote,
+    tiePlacementChord,
+    tieMinShoulderHeight,
+    tieMaxShoulderHeight,
+
     SectionPause,
     MusicalSymbolFont,
     MusicalTextFont,
@@ -1584,6 +1589,10 @@ enum class Sid {
     wahShowTabCommon,
     golpeShowTabSimple,
     golpeShowTabCommon,
+
+    tabShowTiedFret,
+    tabParenthesizeTiedFret,
+    parenthesizeTiedFretIfArticulation,
 
     chordlineThickness,
 

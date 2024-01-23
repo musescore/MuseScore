@@ -32,7 +32,7 @@ namespace mu::engraving {
 //   SlurPos
 //---------------------------------------------------------
 
-struct SlurPos {
+struct SlurTiePos {
     PointF p1;               // start point of slur
     System* system1 = nullptr;          // start system of slur
     PointF p2;               // end point of slur

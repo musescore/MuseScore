@@ -397,6 +397,9 @@ public:
         CLOUD_FILL = 0xF454,
         BRAILLE = 0xF455,
 
+        TIE_OUTSIDE = 0xF45D,
+        TIE_INSIDE = 0xF45E,
+
         NONE = 0xFFFF
     };
 

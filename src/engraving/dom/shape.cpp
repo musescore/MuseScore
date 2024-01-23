@@ -297,6 +297,30 @@ double Shape::bottom() const
     return dist;
 }
 
+double Shape::rightMostEdgeAtHeight(double yAbove, double yBelow) const
+{
+    double edge = -100000.0;
+    for (const ShapeElement& sh : *this) {
+        if (sh.bottom() > yAbove && sh.top() < yBelow) {
+            edge = std::max(edge, sh.right());
+        }
+    }
+
+    return edge;
+}
+
+double Shape::leftMostEdgeAtHeight(double yAbove, double yBelow) const
+{
+    double edge = 100000.0;
+    for (const ShapeElement& sh : *this) {
+        if (sh.bottom() > yAbove && sh.top() < yBelow) {
+            edge = std::min(edge, sh.left());
+        }
+    }
+
+    return edge;
+}
+
 //---------------------------------------------------------
 //   topDistance
 //    p is on top of shape

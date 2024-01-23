@@ -36,13 +36,20 @@ class TieSegment final : public SlurTieSegment
     OBJECT_ALLOCATOR(engraving, TieSegment)
     DECLARE_CLASSOF(ElementType::TIE_SEGMENT)
 
-    PointF autoAdjustOffset;
+    double m_midThickness = 0.0;
+
+    std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
+
+    /*************************
+     * DEPRECATED
+     * **********************/
     double shoulderHeightMin = 0.4;
     double shoulderHeightMax = 1.3;
-
+    PointF autoAdjustOffset;
     void setAutoAdjust(const PointF& offset);
     void setAutoAdjust(double x, double y) { setAutoAdjust(PointF(x, y)); }
     PointF getAutoAdjust() const { return autoAdjustOffset; }
+    /************************/
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
@@ -57,6 +64,12 @@ public:
 
     void adjustY(const PointF& p1, const PointF& p2);
     void adjustX();
+
+    void addAdjustmentOffset(const PointF& offset, Grip grip) { m_adjustmentOffsets[static_cast<size_t>(grip)] += offset; }
+    void resetAdjustmentOffset() { m_adjustmentOffsets.fill(PointF()); }
+    PointF adjustmentOffset(Grip grip) { return m_adjustmentOffsets[static_cast<size_t>(grip)]; }
+    void consolidateAdjustmentOffsetIntoUserOffset();
+
     void finalizeSegment();
 
     bool isEdited() const;
@@ -67,7 +80,9 @@ public:
     Tie* tie() const { return (Tie*)spanner(); }
 
     void computeBezier(PointF so = PointF()) override;
+    void computeMidThickness(double tieLengthInSp);
     void addLineAttachPoints();
+    double midThickness() const { return m_midThickness; }
 };
 
 //---------------------------------------------------------
@@ -83,6 +98,8 @@ class Tie final : public SlurTie
     static Note* editStartNote;
     static Note* editEndNote;
 
+    M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
+
 public:
     Tie(EngravingItem* parent = 0);
 
@@ -93,12 +110,18 @@ public:
     Note* startNote() const;
     Note* endNote() const;
 
-    bool isConnectingEqualArticulations() const;
-
     bool isInside() const { return m_isInside; }
     void setIsInside(bool val) { m_isInside = val; }
+    bool isOuterTieOfChord(Grip startOrEnd) const;
+    bool hasTiedSecondInside() const;
+    bool isCrossStaff() const;
 
     void calculateDirection();
+    void calculateIsInside();
+
+    PropertyValue getProperty(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid id) const override;
+    bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
     TieSegment* frontSegment() { return toTieSegment(Spanner::frontSegment()); }
     const TieSegment* frontSegment() const { return toTieSegment(Spanner::frontSegment()); }

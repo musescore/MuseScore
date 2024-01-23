@@ -38,6 +38,7 @@
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/realizedharmony.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/text.h"
 #include "engraving/style/textstyle.h"
 #include "engraving/types/symnames.h"
@@ -252,6 +253,21 @@ EditStyle::EditStyle(QWidget* parent)
     QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
+
+    QButtonGroup* tabShowTiedFrets = new QButtonGroup(this);
+    tabShowTiedFrets->addButton(tabShowTiesAndFret, int(ShowTiedFret::TIE_AND_FRET));
+    tabShowTiedFrets->addButton(tabShowTies, int(ShowTiedFret::TIE));
+    tabShowTiedFrets->addButton(tabShowNone, int(ShowTiedFret::NONE));
+
+    QButtonGroup* tabParenthFrets = new QButtonGroup(this);
+    tabParenthFrets->addButton(tabParenthSystem, int(ParenthesizeTiedFret::START_OF_SYSTEM));
+    tabParenthFrets->addButton(tabParenthMeasure, int(ParenthesizeTiedFret::START_OF_MEASURE));
+    tabParenthFrets->addButton(tabParenthNone, int(ParenthesizeTiedFret::NEVER));
+
+    void (QButtonGroup::* tabShowTiedFretsButtonClicked)(QAbstractButton*) = &QButtonGroup::buttonClicked;
+    connect(tabShowTiedFrets, tabShowTiedFretsButtonClicked, this, [this](QAbstractButton*){
+        updateParenthesisIndicatingTiesGroupState();
+    });
 
     // ====================================================
     // Style widgets
@@ -622,6 +638,10 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::wahShowTabCommon, false, wahShowTabCommon, 0 },
         { StyleId::golpeShowTabSimple, false, golpeShowTabSimple, 0 },
         { StyleId::golpeShowTabCommon, false, golpeShowTabCommon, 0 },
+
+        { StyleId::tabShowTiedFret, false, tabShowTiedFrets, 0 },
+        { StyleId::tabParenthesizeTiedFret, false, tabParenthFrets, 0 },
+        { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
     };
 
     // ====================================================
@@ -775,6 +795,19 @@ EditStyle::EditStyle(QWidget* parent)
     beamsPage->setMinimumSize(224, 280);
     beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_beams->layout()->addWidget(beamsPage);
+
+    // ====================================================
+    // TIE PLACEMENT (QML)
+    // ====================================================
+
+    QQuickWidget* tiePlacementSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                          /*parent*/ groupBox_slursTies);
+    tiePlacementSelector->setObjectName("tiePlacementSelector_QQuickWidget");
+    tiePlacementSelector->setSource(QUrl(QString::fromUtf8(
+                                             "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
+    tiePlacementSelector->setMinimumSize(224, 120);
+    tiePlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_slursTies->layout()->addWidget(tiePlacementSelector);
 
     // ====================================================
     // Figured Bass
@@ -1038,9 +1071,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(textStyleColor, &Awl::ColorLabel::colorChanged, [=]() {
         textStyleValueChanged(TextStylePropertyType::Color, textStyleColor->color());
     });
-
-    // TODO: bring back the tab styles button and make sure right styles are applied as default
-    resetTabStylesButton->setVisible(false);
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
     textStyles->setCurrentRow(s_lastSubPageRow);
@@ -1688,6 +1718,10 @@ PropertyValue EditStyle::getValue(StyleId idx)
         AlignSelect* as = qobject_cast<AlignSelect*>(sw.widget);
         return as->align();
     } break;
+    case P_TYPE::TIE_PLACEMENT: {
+        QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
+        return TiePlacement(bg->checkedId());
+    } break;
     default: {
         ASSERT_X(QString::asprintf("EditStyle::getValue: unhandled type <%d>", static_cast<int>(type)));
     } break;
@@ -1752,6 +1786,7 @@ void EditStyle::setValues()
         case P_TYPE::HOOK_TYPE:
         case P_TYPE::DYNAMIC_TYPE:
         case P_TYPE::ACCIDENTAL_ROLE:
+        case P_TYPE::TIE_PLACEMENT:
         case P_TYPE::INT: {
             int value = val.toInt();
             if (qobject_cast<QComboBox*>(sw.widget)) {
@@ -1906,6 +1941,8 @@ void EditStyle::setValues()
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         lineStyleSelect->update();
     }
+
+    updateParenthesisIndicatingTiesGroupState();
 }
 
 //---------------------------------------------------------
@@ -2390,4 +2427,9 @@ void EditStyle::resetUserStyleName()
 {
     styleName->clear();
     endEditUserStyleName();
+}
+
+void EditStyle::updateParenthesisIndicatingTiesGroupState()
+{
+    groupBox_2->setEnabled(tabShowTies->isChecked() || tabShowNone->isChecked());
 }

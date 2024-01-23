@@ -70,4 +70,19 @@ Column {
             { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
         ]
     }
+
+    FlatRadioButtonGroupPropertyView {
+        visible: root.model ? root.model.isTiePlacementAvailable : false
+        propertyItem: root.model ? root.model.tiePlacement : null
+        titleText: qsTrc("inspector", "Tie placement")
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: styleSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: SlurTieTypes.TIE_PLACEMENT_AUTO, title: qsTrc("inspector", "Auto")  },
+            { iconCode: IconCode.TIE_INSIDE, value: SlurTieTypes.TIE_PLACEMENT_INSIDE, title: qsTrc("inspector", "Inside") },
+            { iconCode: IconCode.TIE_OUTSIDE, value: SlurTieTypes.TIE_PLACEMENT_OUTSIDE, title: qsTrc("inspector", "Outside")  }
+        ]
+    }
 }

@@ -139,6 +139,7 @@ private slots:
     void editUserStyleName();
     void endEditUserStyleName();
     void resetUserStyleName();
+    void updateParenthesisIndicatingTiesGroupState();
 
 private:
     QString m_currentPageCode;

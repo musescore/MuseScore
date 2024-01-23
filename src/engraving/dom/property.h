@@ -415,6 +415,8 @@ enum class Pid {
     CAPO_IGNORED_STRINGS,
     CAPO_GENERATE_TEXT,
 
+    TIE_PLACEMENT,
+
     END
 };
 
