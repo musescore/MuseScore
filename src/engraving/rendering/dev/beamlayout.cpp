@@ -347,7 +347,15 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notes());
         item->setStartAnchor(item->ldata()->startAnchor);
         item->setEndAnchor(item->ldata()->endAnchor);
-        item->setSlope(mu::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));
+        double xDiff = item->endAnchor().x() - item->startAnchor().x();
+        double yDiff = item->endAnchor().y() - item->startAnchor().y();
+        if (abs(xDiff) < 0.5 * item->spatium()) {
+            // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
+            // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
+            item->setSlope(0.0);
+        } else {
+            item->setSlope(yDiff / xDiff);
+        }
         item->setBeamDist(item->ldata()->beamDist);
     } else {
         item->setSlope(0.0);
