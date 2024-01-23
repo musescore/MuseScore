@@ -5125,6 +5125,12 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         track_idx_t track    = staffIdx * VOICES;
         Clef* clef   = toClef(destSeg->element(track));
 
+        StaffType* staffType = staff->staffType(e->tick());
+        StaffGroup staffGroup = staffType->group();
+        if (ClefInfo::staffGroup(ct) != staffGroup) {
+            continue;
+        }
+
         if (clef) {
             //
             // for transposing instruments, differentiate
