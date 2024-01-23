@@ -406,12 +406,20 @@ void GPConverter::fixEmptyMeasures()
                 continue;
             }
             for (size_t i = 1; i < segItemPairs.size(); ++i) {
-                segItemPairs.at(i).first->remove(segItemPairs.at(i).second);
+                Rest* rest = toRest(segItemPairs.at(i).second);
+                if (Tuplet* tuplet = rest->tuplet()) {
+                    tuplet->remove(rest);
+                }
+
+                segItemPairs.at(i).first->remove(rest);
             }
 
             Rest* rest = toRest(segItemPairs.at(0).second);
             rest->setTicks(lastMeasure->ticks());
             rest->setDurationType(DurationType::V_MEASURE);
+            if (Tuplet* tuplet = rest->tuplet()) {
+                tuplet->remove(rest);
+            }
         }
     }
 }
