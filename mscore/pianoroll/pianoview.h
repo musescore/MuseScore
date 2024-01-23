@@ -37,10 +37,17 @@ enum class NoteSelectType {
       };
 
 enum class DragStyle {
-    NONE = 0,
-    CANCELLED,
-    SELECTION_RECT,
-    NOTES
+      NONE = 0,
+      CANCELLED,
+      SELECTION_RECT,
+      NOTE_POSITION,
+      NOTE_LENGTH_START,
+      NOTE_LENGTH_END,
+      DRAW_NOTE,
+      EVENT_ONTIME,
+      EVENT_MOVE,
+      EVENT_LENGTH,
+      MOVE_VIEWPORT
       };
 
 struct BarPattern {
@@ -89,7 +96,7 @@ private:
       Staff* _staff;
       Chord* _chord;
       
-      Pos trackingPos;  //Track mouse position
+      Pos _trackingPos;  //Track mouse position
       Pos* _locator;
       int _ticks;
       TType _timeType;
@@ -105,14 +112,20 @@ private:
       QString _dragNoteCache;
       QPointF _mouseDownPos;
       QPointF _lastMousePos;
+      QPointF _mouseDownScreenPos;
+      QPointF _lastMouseScreenPos;
+      QPointF _viewportFocus;
       QPointF _popupMenuPos;
       DragStyle _dragStyle;
       int _dragStartPitch;
+      Fraction _dragStartTick;
+      Fraction _dragEndTick;
+      int _dragNoteLengthMargin = 4;
       bool _inProgressUndoEvent;
 
       //The length of the note we are using for editng purposes, expressed as a fraction of the measure.
       // Note length will be (2^_editNoteLength) of a measure
-      int _editNoteLength = 0;
+      Fraction _editNoteLength = Fraction(1, 4);
       int _editNoteDots = 0;
       int _editNoteVoice = 0;
       PianoRollEditTool _editNoteTool = PianoRollEditTool::SELECT;
@@ -120,7 +133,23 @@ private:
       QList<PianoItem*> _noteList;
       quint8 _pitchHighlight[128];
 
+      QColor _colorNoteSel = QColor(0xffff00);
+      QColor _colorNoteVoice1 = QColor(0x9bcdff);
+      QColor _colorNoteVoice2 = QColor(0x80d580);
+      QColor _colorNoteVoice3 = QColor(0xffac85);
+      QColor _colorNoteVoice4 = QColor(0xff94db);
+
+      QColor _colorTweaks = QColor(0xfd63fcc);
+      QColor _colorNoteDrag = QColor(0xffbb33);
+      QColor _colorText = QColor(0x111111);
+      QColor _colorTie = QColor(0xff0000);
+
+      float _noteRectRoundedRadius = 3;
+
       virtual void drawBackground(QPainter* painter, const QRectF& rect);
+      void drawNoteBlock(QPainter* p, PianoItem* block);
+      QRect boundingRect(Note* note, bool applyEvents);
+      QRect boundingRect(Note* note, NoteEvent* evt, bool applyEvents);
 
       void addChord(Chord* _chord, int voice);
       QVector<Note*> getSegmentNotes(Segment* seg, int track);
@@ -132,7 +161,7 @@ private:
       QVector<Note*> addNote(Fraction startTick, Fraction duration, int pitch, int track);
       void handleSelectionClick();
       void insertNote(int modifiers);
-      Fraction roundToStartBeat(int tick) const;
+      Fraction roundToStartBeat(int tick, bool down = true) const;
       Fraction noteEditLength() const;
       void changeChordLength(const QPointF& pos);
       void eraseNote(const QPointF& pos);
@@ -141,23 +170,25 @@ private:
       void toggleTie(const QPointF& pos);
       void toggleTie(Note*);
       void dragSelectionNoteGroup();
-      void finishNoteGroupDrag();
+      void finishNoteGroupDrag(QMouseEvent* event);
+      void finishNoteEventAdjustDrag();
       bool toolCanDragNotes() const {
-            return _editNoteTool == PianoRollEditTool::SELECT || _editNoteTool == PianoRollEditTool::INSERT_NOTE ||
-                  _editNoteTool == PianoRollEditTool::APPEND_NOTE || _editNoteTool == PianoRollEditTool::CUT_CHORD ||
+            return _editNoteTool == PianoRollEditTool::SELECT || _editNoteTool == PianoRollEditTool::ADD ||
+                  _editNoteTool == PianoRollEditTool::APPEND_NOTE || _editNoteTool == PianoRollEditTool::CUT ||
                   _editNoteTool == PianoRollEditTool::TIE;
             }
 
       QAction* getAction(const char* id);
+      void updateCursor();
 
    protected:
-      virtual void wheelEvent(QWheelEvent* event);
-      virtual void keyReleaseEvent(QKeyEvent* event);
-      virtual void mousePressEvent(QMouseEvent* event);
-      virtual void mouseReleaseEvent(QMouseEvent* event);
-      virtual void mouseMoveEvent(QMouseEvent* event);
-      virtual void leaveEvent(QEvent*);
-      virtual void contextMenuEvent(QContextMenuEvent *event);
+      void wheelEvent(QWheelEvent* event) override;
+      void keyReleaseEvent(QKeyEvent* event) override;
+      void mousePressEvent(QMouseEvent* event) override;
+      void mouseReleaseEvent(QMouseEvent* event) override;
+      void mouseMoveEvent(QMouseEvent* event) override;
+      void leaveEvent(QEvent*) override;
+      void contextMenuEvent(QContextMenuEvent *event) override;
 
    signals:
       void xZoomChanged(qreal);
@@ -182,7 +213,7 @@ private:
       void setNotesToVoice(int voice);
 
       QString serializeSelectedNotes();
-      void pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, int pitchOffset, bool xIsOffset = false);
+      QVector<Note*> pasteNotes(const QString& copiedNotes, Fraction pasteStartTick, Fraction lengthOffset, int pitchOffset, bool xIsOffset = false);
       void drawDraggedNotes(QPainter* painter);
       void drawDraggedNote(QPainter* painter, Fraction startTick, Fraction frac, int pitch, int track, QColor color);
 
@@ -205,10 +236,10 @@ private:
       QList<QGraphicsItem*> items() { return scene()->selectedItems(); }
       int editNoteDots() const { return _editNoteDots; }
 
-      void setEditNoteLength(int len) { _editNoteLength = len; }
+      void setEditNoteLength(Fraction len) { _editNoteLength = len; }
       void setEditNoteVoice(int voice) { _editNoteVoice = voice; }
       void setEditNoteDots(int dot) { _editNoteDots = dot; }
-      void setEditNoteTool(PianoRollEditTool tool) { _editNoteTool = tool; }
+      void setEditNoteTool(PianoRollEditTool tool) { _editNoteTool = tool; updateNotes();  }
 
       int pixelXToTick(int pixX);
       int tickToPixelX(int tick);

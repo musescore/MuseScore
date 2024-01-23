@@ -221,6 +221,7 @@ class Fraction {
       Fraction operator/(const Fraction& v) const { return Fraction(*this) /= v; }
       Fraction operator/(int v)             const { return Fraction(*this) /= v; }
 
+      double toDouble() { return (double)_numerator / _denominator; }
 
       //---------------------------------------------------------
       //   fromTicks
