@@ -1566,8 +1566,10 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, 
             }
         }
     }
-    SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);
-    SlurTieLayout::resolveVerticalTieCollisions(stackedBackwardTies);
+    if (!ch->staffType()->isTabStaff()) {
+        SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);
+        SlurTieLayout::resolveVerticalTieCollisions(stackedBackwardTies);
+    }
 }
 
 /****************************************************************************
