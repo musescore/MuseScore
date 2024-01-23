@@ -81,19 +81,24 @@ DateTime DateTime::now()
     milliseconds ms_d = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 
     std::time_t sec = static_cast<std::time_t>(ms_d.count() / 1000);
-    std::tm* tm = std::localtime(&sec);
-    assert(tm);
-    if (!tm) {
+    std::tm tm;
+#ifdef WIN32
+    bool err = localtime_s(&tm, &sec) != 0;
+#else
+    bool err = localtime_r(&sec, &tm) == nullptr;
+#endif
+    assert(!err);
+    if (err) {
         return DateTime();
     }
 
     DateTime dt;
-    dt.date.year = tm->tm_year + 1900;
-    dt.date.mon = tm->tm_mon + 1;
-    dt.date.day = tm->tm_mday;
-    dt.time.hour = tm->tm_hour;
-    dt.time.min = tm->tm_min;
-    dt.time.sec = tm->tm_sec;
+    dt.date.year = tm.tm_year + 1900;
+    dt.date.mon = tm.tm_mon + 1;
+    dt.date.day = tm.tm_mday;
+    dt.time.hour = tm.tm_hour;
+    dt.time.min = tm.tm_min;
+    dt.time.sec = tm.tm_sec;
     dt.time.msec = ms_d.count() - (sec * 1000);
 
     return dt;
