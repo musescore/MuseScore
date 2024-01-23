@@ -43,6 +43,9 @@ Item {
         accessible.name: qsTrc("playback", "Playback toolbar")
     }
 
+    property alias navigationPanelSection: navigationPanel.section
+    property alias navigationPanelOrder: navigationPanel.order
+
     PlaybackToolBarModel {
         id: playbackModel
         isToolbarFloating: root.floating

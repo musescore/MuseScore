@@ -25,12 +25,9 @@ import MuseScore.UiComponents 1.0
 
 Rectangle {
 
-    property bool floating: false
+    property var navigationSection
 
-    property var navigationPanelSection: navigationPanel.section
-    property var navigationPanelOrder: navigationPanel.order
-
-    color: ui.theme.backgroundPrimaryColor
+    signal resizeRequested(int newWidth, int newHeight)
 
     StyledTextLabel {
         anchors.centerIn: parent
