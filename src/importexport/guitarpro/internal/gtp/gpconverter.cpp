@@ -1410,6 +1410,25 @@ void GPConverter::addFermatas()
     }
 }
 
+static Segment* findClosestSegment(Measure* m, Fraction tick)
+{
+    Segment* segment = m->findSegment(SegmentType::ChordRest, tick);
+    if (!segment) {
+        segment = m->getSegment(SegmentType::ChordRest, tick);
+        Segment* prev = segment->prev1(SegmentType::ChordRest);
+        Segment* next = segment->next1(SegmentType::ChordRest);
+        if (prev && next) {
+            segment = (next->tick() - segment->tick() < segment->tick() - prev->tick() ? next : prev);
+        } else if (prev) {
+            segment = prev;
+        } else if (next) {
+            segment = next;
+        }
+    }
+
+    return segment;
+}
+
 void GPConverter::addTempoMap()
 {
     auto realTempo = [](const GPMasterTracks::Automation& temp) {
@@ -1442,7 +1461,7 @@ void GPConverter::addTempoMap()
         for (auto tempIt = range.first; tempIt != range.second; tempIt++) {
             Fraction tick = m->tick() + Fraction::fromTicks(
                 tempIt->second.position * Constants::DIVISION * 4 * m->ticks().numerator() / m->ticks().denominator());
-            Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
+            Segment* segment = findClosestSegment(m, tick);
             int realTemp = realTempo(tempIt->second);
             TempoText* tt = Factory::createTempoText(segment);
             tt->setTempo((double)realTemp / 60);
