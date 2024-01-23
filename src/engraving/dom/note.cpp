@@ -1411,7 +1411,7 @@ bool Note::shouldHideFret() const
         return false;
     }
 
-    if (isContinuationOfBend()) {
+    if (isContinuationOfBend() && !rtick().isZero()) {
         return true;
     }
 
