@@ -585,8 +585,13 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     writeUInt(header.h.uncompressed_size, (uint)contents.size());
 
     std::time_t t = std::time(0);   // get time now
-    std::tm* now = std::localtime(&t);
-    writeMSDosDate(header.h.last_mod_file, *now);
+    std::tm now;
+#ifdef WIN32
+    localtime_s(&now, &t);
+#else
+    localtime_r(&t, &now);
+#endif
+    writeMSDosDate(header.h.last_mod_file, now);
     ByteArray data = contents;
     if (compression == ZipContainer::AlwaysCompress) {
         writeUShort(header.h.compression_method, CompressionMethodDeflated);
