@@ -4933,9 +4933,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageBarlines">
        <layout class="QVBoxLayout" name="verticalLayout_17">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_barlines">
           <property name="title">
@@ -5251,6 +5248,66 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QCheckBox" name="showStartBarlineSingle">
              <property name="text">
               <string>Barline at start of single staff</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="keySigCourtesyBarlineGroup">
+          <property name="title">
+           <string>Use double barlines before key signatures</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_61">
+           <item>
+            <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysDouble">
+             <property name="text">
+              <string>Always</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysSingle">
+             <property name="text">
+              <string>Never</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioKeySigCourtesyBarlineDoubleBeforeNewSystem">
+             <property name="text">
+              <string>Only before courtesy key signatures</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="timeSigCourtesyBarlineGroup">
+          <property name="title">
+           <string>Use double barlines before time signatures</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_62">
+           <item>
+            <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineAlwaysDouble">
+             <property name="text">
+              <string>Always</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineAlwaysSingle">
+             <property name="text">
+              <string>Never</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioTimeSigCourtesyBarlineDoubleBeforeNewSystem">
+             <property name="text">
+              <string>Only before courtesy time signatures</string>
              </property>
             </widget>
            </item>
@@ -14669,6 +14726,12 @@ articulation markings are present</string>
   <tabstop>resetDoubleBarDistance</tabstop>
   <tabstop>repeatBarlineDotSeparation</tabstop>
   <tabstop>resetRepeatBarlineDotSeparation</tabstop>
+  <tabstop>radioKeySigCourtesyBarlineAlwaysDouble</tabstop>
+  <tabstop>radioKeySigCourtesyBarlineAlwaysSingle</tabstop>
+  <tabstop>radioKeySigCourtesyBarlineDoubleBeforeNewSystem</tabstop>
+  <tabstop>radioTimeSigCourtesyBarlineAlwaysDouble</tabstop>
+  <tabstop>radioTimeSigCourtesyBarlineAlwaysSingle</tabstop>
+  <tabstop>radioTimeSigCourtesyBarlineDoubleBeforeNewSystem</tabstop>
   <tabstop>shortenStem</tabstop>
   <tabstop>shortestStem</tabstop>
   <tabstop>accidentalNoteDistance</tabstop>

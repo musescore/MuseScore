@@ -122,6 +122,16 @@ enum class KeySigNatural : char {
 };
 
 //---------------------------------------------------------
+//    CourtesyBarlineMode (for key sig. and time sig. changes)
+//---------------------------------------------------------
+
+enum class CourtesyBarlineMode : char {
+    ALWAYS_SINGLE = 0,
+    ALWAYS_DOUBLE = 1,
+    DOUBLE_BEFORE_COURTESY = 2,
+};
+
+//---------------------------------------------------------
 //   UpDownMode
 //---------------------------------------------------------
 

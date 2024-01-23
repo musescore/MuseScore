@@ -1411,17 +1411,18 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             seg = m->getSegmentR(SegmentType::EndBarLine, m->ticks());
         }
         seg->setEnabled(true);
-        //
+
+        m->setHasCourtesyKeySig(false);
         //  Set flag "hasCourtesyKeySig" if this measure needs a courtesy key sig.
         //  This flag is later used to set a double end bar line and to actually
         //  create the courtesy key sig.
-        //
 
-        bool show = ctx.conf().styleB(Sid::genCourtesyKeysig) && !m->sectionBreak() && nm;
+        if (nm && !m->sectionBreak()) {
+            //  Don't change barlines at the end of a section break,
+            //  and don't create courtesy key/time signatures.
+            bool hasKeySig = false;
+            bool showCourtesyKeySig = isLastMeasureInSystem && ctx.conf().styleB(Sid::genCourtesyKeysig);
 
-        m->setHasCourtesyKeySig(false);
-
-        if (isLastMeasureInSystem && show) {
             Fraction tick = m->endTick();
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
                 const Staff* staff     = ctx.dom().staff(staffIdx);
@@ -1432,14 +1433,56 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
                     // check if it has court. sig turned off
                     Segment* s = nm->findSegment(SegmentType::KeySig, tick);
                     if (s) {
+                        hasKeySig = true;
                         KeySig* ks = toKeySig(s->element(staffIdx * VOICES));
                         if (ks && !ks->showCourtesy()) {
                             continue;
                         }
                     }
-                    m->setHasCourtesyKeySig(true);
-                    t = BarLineType::DOUBLE;
+                    if (showCourtesyKeySig) {
+                        m->setHasCourtesyKeySig(true);
+                    }
                     break;
+                }
+            }
+
+            int keySigBarlineMode = ctx.conf().styleI(Sid::keySigCourtesyBarlineMode);
+            if (keySigBarlineMode == int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY)) {
+                if (m->hasCourtesyKeySig()) {
+                    t = BarLineType::DOUBLE;
+                }
+            } else if (keySigBarlineMode == int(CourtesyBarlineMode::ALWAYS_DOUBLE)) {
+                if (hasKeySig) {
+                    t = BarLineType::DOUBLE;
+                }
+            }
+
+            bool hasTimeSig = false;
+            bool hasCourtesyTimeSig = false;
+            bool showCourtesyTimeSig = isLastMeasureInSystem && ctx.conf().styleB(Sid::genCourtesyTimesig);
+
+            Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+            if (tss) {
+                for (track_idx_t track = 0; track < nstaves * VOICES; track += VOICES) {
+                    TimeSig* ts = toTimeSig(tss->element(track));
+                    if (ts) {
+                        hasTimeSig = true;
+                        if (ts->showCourtesySig() && showCourtesyTimeSig) {
+                            hasCourtesyTimeSig = true;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            int timeSigBarlineMode = ctx.conf().styleI(Sid::timeSigCourtesyBarlineMode);
+            if (timeSigBarlineMode == int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY)) {
+                if (hasCourtesyTimeSig) {
+                    t = BarLineType::DOUBLE;
+                }
+            } else if (timeSigBarlineMode == int(CourtesyBarlineMode::ALWAYS_DOUBLE)) {
+                if (hasTimeSig) {
+                    t = BarLineType::DOUBLE;
                 }
             }
         }
@@ -1448,9 +1491,6 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
         if (m->repeatEnd()) {
             t = BarLineType::END_REPEAT;
             force = true;
-        } else if (isLastMeasureInSystem && m->nextMeasure() && m->nextMeasure()->repeatStart()) {
-            t = BarLineType::NORMAL;
-//                  force = true;
         }
 
         for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
