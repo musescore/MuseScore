@@ -563,8 +563,14 @@ Element* ChordRest::drop(EditData& data)
                         InstrumentChange* ic = toInstrumentChange(e);
                         ic->setParent(segment());
                         ic->setTrack((track() / VOICES) * VOICES);
-                        Instrument* instr = part()->instrument(tick());
-                        ic->setInstrument(instr);
+
+                        const Instrument* instr = part()->instrument(tick());
+                        if (!instr) {
+                            delete e;
+                            return 0;
+                        }
+
+                        ic->setInstrument(*instr);
                         score()->undoAddElement(ic);
                         return e;
                         }
