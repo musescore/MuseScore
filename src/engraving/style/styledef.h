@@ -432,6 +432,9 @@ enum class Sid {
     genCourtesyKeysig,
     genCourtesyClef,
 
+    keySigCourtesyBarlineMode,
+    timeSigCourtesyBarlineMode,
+
     swingRatio,
     swingUnit,
 

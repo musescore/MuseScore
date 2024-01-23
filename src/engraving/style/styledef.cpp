@@ -417,6 +417,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::genCourtesyTimesig,      "genCourtesyTimesig",      true },
     { Sid::genCourtesyKeysig,       "genCourtesyKeysig",       true },
     { Sid::genCourtesyClef,         "genCourtesyClef",         true },
+    { Sid::keySigCourtesyBarlineMode, "keySigCourtesyBarlineMode", PropertyValue(int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY)) },
+    { Sid::timeSigCourtesyBarlineMode, "timeSigCourtesyBarlineMode", PropertyValue(int(CourtesyBarlineMode::ALWAYS_SINGLE)) },
     { Sid::swingRatio,              "swingRatio",              PropertyValue(60) },
     { Sid::swingUnit,               "swingUnit",               PropertyValue(String(u"")) },
     { Sid::useStandardNoteNames,    "useStandardNoteNames",    true },

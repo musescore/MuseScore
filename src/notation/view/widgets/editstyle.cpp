@@ -237,6 +237,16 @@ EditStyle::EditStyle(QWidget* parent)
     ksng->addButton(radioKeySigNatBefore, int(KeySigNatural::BEFORE));
     ksng->addButton(radioKeySigNatAfter, int(KeySigNatural::AFTER));
 
+    QButtonGroup* ksbl = new QButtonGroup(this);
+    ksbl->addButton(radioKeySigCourtesyBarlineAlwaysSingle, int(CourtesyBarlineMode::ALWAYS_SINGLE));
+    ksbl->addButton(radioKeySigCourtesyBarlineAlwaysDouble, int(CourtesyBarlineMode::ALWAYS_DOUBLE));
+    ksbl->addButton(radioKeySigCourtesyBarlineDoubleBeforeNewSystem, int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY));
+
+    QButtonGroup* tsbl = new QButtonGroup(this);
+    tsbl->addButton(radioTimeSigCourtesyBarlineAlwaysSingle, int(CourtesyBarlineMode::ALWAYS_SINGLE));
+    tsbl->addButton(radioTimeSigCourtesyBarlineAlwaysDouble, int(CourtesyBarlineMode::ALWAYS_DOUBLE));
+    tsbl->addButton(radioTimeSigCourtesyBarlineDoubleBeforeNewSystem, int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY));
+
     QButtonGroup* ctg = new QButtonGroup(this);
     ctg->addButton(clefTab1, int(ClefType::TAB));
     ctg->addButton(clefTab2, int(ClefType::TAB_SERIF));
@@ -539,6 +549,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::genCourtesyTimesig,       false, genCourtesyTimesig,           0 },
         { StyleId::genCourtesyKeysig,        false, genCourtesyKeysig,            0 },
         { StyleId::genCourtesyClef,          false, genCourtesyClef,              0 },
+        { StyleId::keySigCourtesyBarlineMode, false, ksbl,                        0 },
+        { StyleId::timeSigCourtesyBarlineMode, false, tsbl,                       0 },
         { StyleId::swingRatio,               false, swingBox,                     0 },
         { StyleId::chordsXmlFile,            false, chordsXmlFile,                0 },
         { StyleId::dotMag,                   true,  dotMag,                       0 },
