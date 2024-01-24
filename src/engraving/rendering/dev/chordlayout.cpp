@@ -358,6 +358,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
         note->updateFrettingForTiesAndBends();
+        note->setDotRelativeLine(0);
         TLayout::layoutNote(note, note->mutldata());
         // set headWidth to max fret text width
         double fretWidth = note->ldata()->bbox().width();
