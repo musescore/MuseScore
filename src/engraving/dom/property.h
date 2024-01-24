@@ -432,8 +432,6 @@ enum class Pid {
     STRINGTUNINGS_PRESET,
     STRINGTUNINGS_VISIBLE_STRINGS,
 
-    SOUND_PRESET,
-
     END
 };
 

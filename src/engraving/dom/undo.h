@@ -61,6 +61,7 @@
 #include "stringdata.h"
 #include "stringtunings.h"
 #include "synthesizerstate.h"
+#include "soundflag.h"
 #include "text.h"
 
 #include "tremolotwochord.h"
@@ -1651,6 +1652,21 @@ public:
 
     void flip(EditData*) override;
     UNDO_NAME("ChangeStringData")
+};
+
+class ChangeSoundFlag : public UndoCommand
+{
+    SoundFlag* m_soundFlag = nullptr;
+    SoundFlag::PresetCodes m_presets;
+    SoundFlag::Params m_params;
+
+public:
+    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::Params& params)
+        : m_soundFlag(soundFlag), m_presets(presets), m_params(params) {}
+
+    void flip(EditData*) override;
+    UNDO_NAME("ChangeSoundFlag")
+    UNDO_CHANGED_OBJECTS({ m_soundFlag })
 };
 
 class ChangeSpanArpeggio : public UndoCommand

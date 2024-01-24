@@ -2855,8 +2855,20 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-    writeProperty(item, xml, Pid::SOUND_PRESET);
-    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
+
+    if (!item->soundPresets().empty()) {
+        xml.tag("presets", item->soundPresets().join(u","));
+    }
+
+    if (!item->params().empty()) {
+        xml.startElement("Params");
+        for (const auto& pair : item->params()) {
+            xml.tag(pair.first.toStdString(), pair.second.toString().c_str());
+        }
+        xml.endElement();
+    }
+
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 

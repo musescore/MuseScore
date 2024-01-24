@@ -534,15 +534,9 @@ StaffText* Factory::createStaffText(Segment * parent, TextStyleType textStyleTyp
     return staffText;
 }
 
-SoundFlag* Factory::createSoundFlag(Segment* parent, TextStyleType textStyleType, bool isAccessibleEnabled)
-{
-    SoundFlag* soundFlag = new SoundFlag(parent, textStyleType);
-    soundFlag->setAccessibleEnabled(isAccessibleEnabled);
+CREATE_ITEM_IMPL(SoundFlag, ElementType::SOUND_FLAG, Segment, isAccessibleEnabled)
 
-    return soundFlag;
-}
-
-Expression* Factory::createExpression(Segment* parent, bool isAccessibleEnabled)
+Expression* Factory::createExpression(Segment * parent, bool isAccessibleEnabled)
 {
     Expression* expression = new Expression(parent);
     expression->setAccessibleEnabled(isAccessibleEnabled);
