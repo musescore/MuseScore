@@ -29,6 +29,7 @@
 
 #include "async/channel.h"
 #include "realfn.h"
+#include "types/val.h"
 
 #include "mpetypes.h"
 #include "soundid.h"
@@ -40,8 +41,12 @@ using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
 
-using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelMap>;
-using OffStreamChanges = async::Channel<PlaybackEventsMap>;
+struct PlaybackParam;
+using PlaybackParamList = std::vector<PlaybackParam>;
+using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
+
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelMap, PlaybackParamMap>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamMap>;
 
 struct ArrangementContext
 {
@@ -374,10 +379,23 @@ static const PlaybackSetupData GENERIC_SETUP_DATA = {
 
 static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 
+struct PlaybackParam {
+    String code;
+    Val val;
+
+    bool operator==(const PlaybackParam& other) const
+    {
+        return code == other.code && val == other.val;
+    }
+};
+
+static const String SOUND_PRESET_PARAM_CODE(u"sound_preset");
+
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
     DynamicLevelMap dynamicLevelMap;
+    PlaybackParamMap paramMap;
 
     MainStreamChanges mainStream;
     OffStreamChanges offStream;
@@ -386,7 +404,8 @@ struct PlaybackData {
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamicLevelMap == other.dynamicLevelMap;
+               && dynamicLevelMap == other.dynamicLevelMap
+               && paramMap == other.paramMap;
     }
 
     bool isValid() const

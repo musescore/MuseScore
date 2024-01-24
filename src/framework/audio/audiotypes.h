@@ -102,6 +102,8 @@ using AudioUnitConfig = std::map<std::string, std::string>;
 static const String PLAYBACK_SETUP_DATA_ATTRIBUTE("playbackSetupData");
 static const String CATEGORIES_ATTRIBUTE("categories");
 
+static const String KEYSWITCH_PARAM_CODE("keyswitch");
+
 enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
@@ -384,11 +386,10 @@ struct SoundPreset
 {
     std::string code;
     std::string name;
-    std::optional<char> defaultSymbol = std::nullopt;
 
     bool operator==(const SoundPreset& other) const
     {
-        return code == other.code && name == other.name && defaultSymbol == other.defaultSymbol;
+        return code == other.code && name == other.name;
     }
 
     bool isValid() const
