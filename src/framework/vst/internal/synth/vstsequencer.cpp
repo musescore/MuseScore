@@ -48,12 +48,13 @@ void VstSequencer::init(ParamsMapping&& mapping)
     m_mapping = std::move(mapping);
     m_inited = true;
 
-    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelMap);
+    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelMap, m_playbackParamsMap);
 
     m_playbackEventsMap.clear();
+    m_playbackParamsMap.clear();
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params)
 {
     m_offStreamEvents.clear();
 
@@ -61,16 +62,18 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
         m_onOffStreamFlushed();
     }
 
-    updatePlaybackEvents(m_offStreamEvents, events);
+    updatePlaybackEvents(m_offStreamEvents, events, params);
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics)
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                          const mpe::PlaybackParamMap& params)
 {
     m_dynamicLevelMap = dynamics;
 
     if (!m_inited) {
         m_playbackEventsMap = events;
+        m_playbackParamsMap = params;
         return;
     }
 
@@ -81,7 +84,7 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, 
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, events);
+    updatePlaybackEvents(m_mainStreamEvents, events, params);
     updateMainSequenceIterator();
 
     updateDynamicEvents(m_dynamicEvents, dynamics);
@@ -94,9 +97,12 @@ audio::gain_t VstSequencer::currentGain() const
     return expressionLevel(currentDynamicLevel);
 }
 
-void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events,
+                                        const mpe::PlaybackParamMap& params)
 {
-    for (const auto& pair : changes) {
+    appendKeySwitches(destination, params);
+
+    for (const auto& pair : events) {
         for (const mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
@@ -120,10 +126,23 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
     }
 }
 
-void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& changes)
+void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics)
 {
-    for (const auto& pair : changes) {
+    for (const auto& pair : dynamics) {
         destination[pair.first].emplace(expressionLevel(pair.second));
+    }
+}
+
+void VstSequencer::appendKeySwitches(EventSequenceMap& destination, const mpe::PlaybackParamMap& params)
+{
+    for (const auto& pair : params) {
+        for (const mpe::PlaybackParam& param : pair.second) {
+            if (param.code != audio::KEYSWITCH_PARAM_CODE) {
+                continue;
+            }
+
+            destination[pair.first].emplace(buildEvent(VstEvent::kNoteOnEvent, param.val.toInt(), 64.f, 0.f));
+        }
     }
 }
 

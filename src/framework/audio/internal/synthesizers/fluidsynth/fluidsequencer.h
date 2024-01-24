@@ -38,8 +38,9 @@ public:
 
     int currentExpressionLevel() const;
 
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                const mpe::PlaybackParamMap& params) override;
 
     async::Channel<midi::channel_t, midi::Program> channelAdded() const;
 

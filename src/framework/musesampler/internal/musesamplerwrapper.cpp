@@ -294,8 +294,8 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
         return;
     }
 
-    if (std::holds_alternative<ms_AuditionStartNoteEvent_2>(event)) {
-        m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent_2>(event));
+    if (std::holds_alternative<ms_AuditionStartNoteEvent_3>(event)) {
+        m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent_3>(event));
         return;
     }
 

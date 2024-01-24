@@ -57,19 +57,22 @@ public:
         m_mainStreamChanges = data.mainStream;
         m_offStreamChanges = data.offStream;
 
-        m_mainStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics) {
-            updateMainStreamEvents(events, dynamics);
+        m_mainStreamChanges.onReceive(this,
+                                      [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                             const mpe::PlaybackParamMap& params) {
+            updateMainStreamEvents(events, dynamics, params);
         });
 
-        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events) {
-            updateOffStreamEvents(events);
+        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) {
+            updateOffStreamEvents(events, params);
         });
 
-        updateMainStreamEvents(data.originEvents, data.dynamicLevelMap);
+        updateMainStreamEvents(data.originEvents, data.dynamicLevelMap, data.paramMap);
     }
 
-    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) = 0;
-    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics) = 0;
+    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) = 0;
+    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                        const mpe::PlaybackParamMap& params) = 0;
 
     void setActive(const bool active)
     {

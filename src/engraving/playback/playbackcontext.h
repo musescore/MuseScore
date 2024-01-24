@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_PLAYBACKCONTEXT_H
 
 #include "mpe/mpetypes.h"
+#include "mpe/events.h"
 
 #include "types/types.h"
 
@@ -31,10 +32,8 @@ namespace mu::engraving {
 class Segment;
 class Dynamic;
 class PlayTechAnnotation;
+class SoundFlag;
 class Score;
-
-using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
-using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
 class PlaybackContext
 {
@@ -42,16 +41,23 @@ public:
     mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
+    mpe::PlaybackParamMap playbackParamMap(const Score* score, const int nominalPositionTick) const;
+    mpe::PlaybackParamMap playbackParamMap(const Score* score) const;
+    mpe::DynamicLevelMap dynamicLevelMap(const Score* score) const;
+
     void update(const ID partId, const Score* score);
     void clear();
 
-    mpe::DynamicLevelMap dynamicLevelMap(const Score* score) const;
-
 private:
+    using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
+    using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
+    using ParamMap = std::map<int /*nominalPositionTick*/, mpe::PlaybackParamList>;
+
     mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
+    void updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick);
     void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick, const mpe::dynamic_level_t dynamicLevel);
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
@@ -63,6 +69,7 @@ private:
 
     DynamicMap m_dynamicsMap;
     PlayTechniquesMap m_playTechniquesMap;
+    ParamMap m_playbackParamMap;
 };
 }
 
