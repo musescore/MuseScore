@@ -120,11 +120,11 @@ PianorollEditor::PianorollEditor(QWidget* parent)
             };
       ToolIconData _iconDataTool[] = {
             { QStringLiteral(":/data/icons/preEdit-select.svg"), PianoRollEditTool::SELECT, tr("Select Notes"), true },
-            { QStringLiteral(":/data/icons/preEdit-insertNote.svg"), PianoRollEditTool::ADD, tr("Insert Note"), false },
+            { QStringLiteral(":/data/icons/preEdit-insertNote.svg"), PianoRollEditTool::ADD, tr("Add Note"), false },
             //{ QStringLiteral(":/data/icons/preEdit-appendChord.svg"), PianoRollEditTool::APPEND_NOTE, tr("Append Note to Chord"), false },
             { QStringLiteral(":/data/icons/preEdit-cutNote.svg"), PianoRollEditTool::CUT, tr("Cut Chord"), false },
             { QStringLiteral(":/data/icons/preEdit-eraseNote.svg"), PianoRollEditTool::ERASE, tr("Erase Note"), false },
-            { QStringLiteral(":/data/icons/preEdit-changeLength.svg"), PianoRollEditTool::EVENT_ADJUST, tr("Change Chord Length"), false },
+            { QStringLiteral(":/data/icons/preEdit-changeLength.svg"), PianoRollEditTool::EVENT_ADJUST, tr("Change Playback Length"), false },
             { QStringLiteral(":/data/icons/preEdit-tie.svg"), PianoRollEditTool::TIE, tr("Toggle Tie"), false },
             { "", PianoRollEditTool::LAST, "", false },
             };

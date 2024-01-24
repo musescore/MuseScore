@@ -890,8 +890,8 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
                         std::swap(startTick, endTick);
                         }
 
-                  Fraction startTickFrac = roundToStartBeat(startTick);
-                  Fraction endTickFrac = roundToStartBeat(endTick, false);
+                  Fraction startTickFrac = roundToNearestBeat(startTick);
+                  Fraction endTickFrac = roundToNearestBeat(endTick, false);
 
                   if (endTickFrac != startTickFrac) {
                         double pitch = pixelYToPitch(_mouseDownPos.y());
@@ -1349,16 +1349,16 @@ void PianoView::changeChordLength(const QPointF& pos) {
 //   roundToStartBeat
 //---------------------------------------------------------
 
-Fraction PianoView::roundToStartBeat(int tick, bool down)  const
+Fraction PianoView::roundToNearestBeat(int tick, bool down)  const
       {
       Score* _score = _staff->score();
       Pos barPos(_score->tempomap(), _score->sigmap(), tick, TType::TICKS);
-
-      int beatsInBar = barPos.timesig().timesig().numerator();
+      
+      int noteWithBeat = barPos.timesig().timesig().denominator();
 
       //Number of smaller pieces the beat is divided into
       int subbeats = _tuplet * (1 << _subdiv);
-      int divisions = beatsInBar * subbeats;
+      int divisions = noteWithBeat * subbeats;
 
       //Round down to nearest division
       Fraction pickFrac = Fraction::fromTicks(tick);
@@ -1430,7 +1430,6 @@ void PianoView::insertNote(int modifiers)
       int pickTick = pixelXToTick((int)_mouseDownPos.x());
       int pickPitch = pixelYToPitch(_mouseDownPos.y());
 
-
       if (bnShift) {
             //If shift is held, select note instead
             PianoItem *pn = pickNote(pickTick, pickPitch);
@@ -1443,8 +1442,7 @@ void PianoView::insertNote(int modifiers)
             return;
             }
 
-
-      Fraction insertPosition = roundToStartBeat(pickTick);
+      Fraction insertPosition = roundToNearestBeat(pickTick);
 
       int voice = _editNoteVoice;
       int track = _staff->idx() * VOICES + voice;
@@ -1457,7 +1455,6 @@ void PianoView::insertNote(int modifiers)
 
       ChordRest* e = score->findCR(insertPosition, track);
       if (e) {
-
             score->startCmd();
 
             addNote(insertPosition, noteLen, pickPitch, track);
@@ -1529,7 +1526,7 @@ void PianoView::cutChord(const QPointF& pos) {
       //Find best chord to add to
       int track = _staff->idx() * VOICES + voice;
 
-      Fraction insertPosition = roundToStartBeat(pickTick);
+      Fraction insertPosition = roundToNearestBeat(pickTick);
 
       Segment* seg = score->tick2segment(insertPosition);
       score->expandVoice(seg, track);
@@ -1585,7 +1582,7 @@ void PianoView::handleSelectionClick()
             else if (!bnShift && bnCtrl) {
 
                   //Insert a new note at nearest subbeat
-                  Fraction insertPosition = roundToStartBeat(pickTick);
+                  Fraction insertPosition = roundToNearestBeat(pickTick);
 
                   InputState& is = score->inputState();
                   int voice = _editNoteVoice;
@@ -1665,7 +1662,7 @@ void PianoView::handleSelectionClick()
                   //Find best chord to add to
                   int track = _staff->idx() * VOICES + voice;
 
-                  Fraction insertPosition = roundToStartBeat(pickTick);
+                  Fraction insertPosition = roundToNearestBeat(pickTick);
 
                   Segment* seg = score->tick2segment(insertPosition);
                   score->expandVoice(seg, track);
@@ -2267,19 +2264,7 @@ void PianoView::pasteNotesAtCursor()
             return;
 
       Score* score = _staff->score();
-      Pos barPos(score->tempomap(), score->sigmap(), pixelXToTick(_popupMenuPos.x()), TType::TICKS);
-
-      int beatsInBar = barPos.timesig().timesig().numerator();
-      int pickTick = barPos.tick();
-      Fraction pickFrac = Fraction::fromTicks(pickTick);
-
-      //Number of smaller pieces the beat is divided into
-      int subbeats = _tuplet * (1 << _subdiv);
-      int divisions = beatsInBar * subbeats;
-
-      //Round down to nearest division
-      int numDiv = (int)floor((pickFrac.numerator() * divisions / (double)pickFrac.denominator()));
-      Fraction pasteStartTick(numDiv, divisions);
+      Fraction pasteStartTick = roundToNearestBeat(pixelXToTick(_popupMenuPos.x()));
 
       if (ms->hasFormat(PIANO_NOTE_MIME_TYPE)) {
             //Decode our XML format and recreate the notes
@@ -2461,8 +2446,8 @@ void PianoView::drawDraggedNotes(QPainter* painter)
                   std::swap(startTick, endTick);
                   }
 
-            Fraction startTickFrac = roundToStartBeat(startTick);
-            Fraction endTickFrac = roundToStartBeat(endTick, false);
+            Fraction startTickFrac = roundToNearestBeat(startTick);
+            Fraction endTickFrac = roundToNearestBeat(endTick, false);
 
             if (endTickFrac != startTickFrac) {
                   double pitch = pixelYToPitch(_mouseDownPos.y());

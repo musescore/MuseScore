@@ -161,7 +161,7 @@ private:
       QVector<Note*> addNote(Fraction startTick, Fraction duration, int pitch, int track);
       void handleSelectionClick();
       void insertNote(int modifiers);
-      Fraction roundToStartBeat(int tick, bool down = true) const;
+      Fraction roundToNearestBeat(int tick, bool down = true) const;
       Fraction noteEditLength() const;
       void changeChordLength(const QPointF& pos);
       void eraseNote(const QPointF& pos);
