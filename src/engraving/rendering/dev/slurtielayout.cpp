@@ -1502,7 +1502,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     segment->setSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
 
-    Chord* startChord = item->startNote()->chord();
+    const Chord* startChord = item->startNote()->chord();
     item->setTick(startChord->tick()); // Why is this here?? (M.S.)
 
     if (segment->autoplace() && !segment->isEdited()) {
@@ -1529,9 +1529,11 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
 
 TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContext& ctx)
 {
+    Chord* chord = item->endNote() ? item->endNote()->chord() : nullptr;
+
     if (item->staffType() && item->staffType()->isTabStaff()) {
         // On TAB, the presence of this tie may require to add a parenthesis
-        ChordLayout::layout(item->endNote()->chord(), ctx);
+        ChordLayout::layout(chord, ctx);
     }
     // do not layout ties in tablature if not showing back-tied fret marks
     if (tieSegmentShouldBeSkipped(item)) {
@@ -1555,6 +1557,10 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContex
     segment->setTrack(item->track());
     segment->setSystem(system);
     segment->resetAdjustmentOffset();
+
+    if (chord) {
+        segment->setStaffMove(chord->vStaffIdx() - segment->staffIdx());
+    }
 
     adjustY(segment);
     segment->setSpannerSegmentType(SpannerSegmentType::END);
@@ -1672,7 +1678,7 @@ void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos)
         return;
     }
 
-    if (startChord->vStaffIdx() != tie->staffIdx() && sPos.system1) {
+    if (startChord->vStaffIdx() != tie->staffIdx() && sPos.system1 && sPos.system1 == sPos.system2) {
         double yOrigin = sPos.system1->staff(tie->staffIdx())->y();
         double yMoved = sPos.system1->staff(startChord->vStaffIdx())->y();
         double yDiff = yMoved - yOrigin;
@@ -1684,7 +1690,7 @@ void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos)
         return;
     }
 
-    if (endChord->vStaffIdx() != tie->staffIdx() && sPos.system2) {
+    if (endChord->vStaffIdx() != tie->staffIdx() && sPos.system2 && sPos.system2 == sPos.system1) {
         double yOrigin = sPos.system2->staff(tie->staffIdx())->y();
         double yMoved = sPos.system2->staff(endChord->vStaffIdx())->y();
         double yDiff = yMoved - yOrigin;
@@ -1744,7 +1750,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     }
 
     PointF chordSystemPos = chord->pos() + chord->segment()->pos() + chord->measure()->pos();
-    if (chord->vStaffIdx() != tieSegment->staffIdx()) {
+    if (chord->vStaffIdx() != tieSegment->vStaffIdx()) {
         System* system = tieSegment->system();
         double yDiff = system->staff(chord->vStaffIdx())->y() - system->staff(tie->staffIdx())->y();
         chordSystemPos += PointF(0.0, yDiff);
@@ -1852,7 +1858,7 @@ void SlurTieLayout::adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sP
 
 void SlurTieLayout::adjustY(TieSegment* tieSegment)
 {
-    Staff* staff = tieSegment->staff();
+    Staff* staff = tieSegment->score() ? tieSegment->score()->staff(tieSegment->vStaffIdx()) : nullptr;
     if (!staff) {
         return;
     }
@@ -2009,7 +2015,14 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
             return;
         }
 
-        Staff* staff = thisTie->staff();
+        if (!thisTie->score()) {
+            return;
+        }
+        Staff* staff = thisTie->score() ? thisTie->score()->staff(thisTie->vStaffIdx()) : nullptr;
+        if (!staff) {
+            return;
+        }
+
         Fraction tick = thisTie->tick();
         double yMidPoint = 0.5 * (thisTieOuterY + nextTieInnerY);
         double halfLineDist = 0.5 * staff->lineDistance(tick) * spatium;
@@ -2481,7 +2494,8 @@ void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurT
                                 : slurTieSeg->style().styleMM(Sid::SlurEndWidth);
     const Millimetre midWidth = slurTieSeg->isTieSegment() ? slurTieSeg->style().styleMM(Sid::TieMidWidth)
                                 : slurTieSeg->style().styleMM(Sid::SlurMidWidth);
-    const double mag = slurTieSeg->staff() ? slurTieSeg->staff()->staffMag(slurTieSeg->slurTie()->tick()) : 1.0;
+    Staff* staff = slurTieSeg->score() ? slurTieSeg->score()->staff(slurTieSeg->vStaffIdx()) : nullptr;
+    const double mag = staff ? staff->staffMag(slurTieSeg->slurTie()->tick()) : 1.0;
     const double minTieLength = mag * slurTieSeg->style().styleS(Sid::MinTieLength).val();
     const double shortTieLimit = mag * 4.0;
     const double minTieThickness = mag * (0.15 * slurTieSeg->spatium() - endWidth);
