@@ -466,7 +466,7 @@
 	<key>LSRequiresCarbon</key>
 	<true/>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.14.0</string>
+	<string>${MACOSX_DEPLOYMENT_TARGET}</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>${MACOSX_BUNDLE_COPYRIGHT}</string>
 	<key>LSApplicationCategoryType</key>
