@@ -3173,6 +3173,22 @@ void ChangeStringData::flip(EditData*)
     m_stringData.set(StringData(frets, stringList));
 }
 
+void ChangeSoundFlag::flip(EditData*)
+{
+    IF_ASSERT_FAILED(m_soundFlag) {
+        return;
+    }
+
+    SoundFlag::Params params = m_soundFlag->params();
+    SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
+
+    m_soundFlag->setSoundPresets(presets);
+    m_soundFlag->setParams(m_params);
+
+    m_presets = std::move(presets);
+    m_params = std::move(params);
+}
+
 void ChangeSpanArpeggio::flip(EditData*)
 {
     Arpeggio* f_spanArp = m_chord->spanArpeggio();
