@@ -59,14 +59,17 @@ class VstSequencer : public audio::AbstractEventSequencer<VstEvent, PluginParamI
 public:
     void init(ParamsMapping&& mapping);
 
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                const mpe::PlaybackParamMap& params) override;
 
     audio::gain_t currentGain() const;
 
 private:
-    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
-    void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& changes);
+    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params);
+    void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics);
+
+    void appendKeySwitches(EventSequenceMap& destination, const mpe::PlaybackParamMap& params);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                              const ControllIdx controlIdx);
@@ -85,6 +88,7 @@ private:
     bool m_inited = false;
     ParamsMapping m_mapping;
     mpe::PlaybackEventsMap m_playbackEventsMap;
+    mpe::PlaybackParamMap m_playbackParamsMap;
 };
 }
 

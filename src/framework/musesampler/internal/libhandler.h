@@ -198,6 +198,8 @@ struct MuseSamplerLibHandler
 
     ms_Instrument_get_preset_list getPresetList = nullptr;
     ms_PresetList_get_next getNextPreset = nullptr;
+    ms_MuseSampler_create_preset_change createPresetChange = nullptr;
+    ms_MuseSampler_add_preset addPreset = nullptr;
 
     ms_MuseSampler_create create = nullptr;
     ms_MuseSampler_destroy destroy = nullptr;
@@ -219,7 +221,7 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_add_pitch_bend addPitchBend = nullptr;
     ms_MuseSampler_add_vibrato addVibrato = nullptr;
 
-    std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2)> startAuditionNote = nullptr;
+    std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
 
     ms_MuseSampler_start_liveplay_mode startLivePlayMode = nullptr;
@@ -247,6 +249,7 @@ private:
     ms_MuseSampler_add_track_note_event_4 addNoteEventInternal4 = nullptr;
     ms_MuseSampler_start_audition_note startAuditionNoteInternal = nullptr;
     ms_MuseSampler_start_audition_note_2 startAuditionNoteInternal2 = nullptr;
+    ms_MuseSampler_start_audition_note_3 startAuditionNoteInternal3 = nullptr;
     ms_MuseSampler_start_liveplay_note startLivePlayNoteInternal = nullptr;
     ms_MuseSampler_start_liveplay_note_2 startLivePlayNoteInternal2 = nullptr;
 public:
@@ -298,6 +301,7 @@ public:
         bool at_least_v_0_3 = (versionMajor == 0 && versionMinor >= 3) || versionMajor > 0;
         bool at_least_v_0_4 = (versionMajor == 0 && versionMinor >= 4) || versionMajor > 0;
         bool at_least_v_0_5 = (versionMajor == 0 && versionMinor >= 5) || versionMajor > 0;
+        bool at_least_v_0_6 = (versionMajor == 0 && versionMinor >= 6) || versionMajor > 0;
 
         containsInstrument = (ms_contains_instrument)getLibFunc(m_lib, "ms_contains_instrument");
         getMatchingInstrumentId = (ms_get_matching_instrument_id)getLibFunc(m_lib, "ms_get_matching_instrument_id");
@@ -419,19 +423,28 @@ public:
             = (ms_MuseSampler_add_track_event_range_start)getLibFunc(m_lib, "ms_MuseSampler_add_track_event_range_start");
         addTrackEventRangeEnd = (ms_MuseSampler_add_track_event_range_end)getLibFunc(m_lib, "ms_MuseSampler_add_track_event_range_end");
 
-        if (at_least_v_0_3) {
+        if (at_least_v_0_6) {
+            if (startAuditionNoteInternal3
+                    = (ms_MuseSampler_start_audition_note_3)getLibFunc(m_lib, "ms_MuseSampler_start_audition_note_3");
+                startAuditionNoteInternal3 != nullptr) {
+                startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 evt) {
+                    return startAuditionNoteInternal3(ms, track, evt) == ms_Result_OK;
+                };
+            }
+        } else if (at_least_v_0_3) {
             if (startAuditionNoteInternal2
                     = (ms_MuseSampler_start_audition_note_2)getLibFunc(m_lib, "ms_MuseSampler_start_audition_note_2");
                 startAuditionNoteInternal2 != nullptr) {
-                startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2 evt) {
-                    return startAuditionNoteInternal2(ms, track, evt) == ms_Result_OK;
+                startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 evt3) {
+                    ms_AuditionStartNoteEvent_2 evt2{ evt3._pitch, evt3._offset_cents, evt3._articulation, evt3._dynamics };
+                    return startAuditionNoteInternal2(ms, track, evt2) == ms_Result_OK;
                 };
             }
         } else {
             if (startAuditionNoteInternal = (ms_MuseSampler_start_audition_note)getLibFunc(m_lib, "ms_MuseSampler_start_audition_note");
                 startAuditionNoteInternal != nullptr) {
-                startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2 evt2) {
-                    ms_AuditionStartNoteEvent evt{ evt2._pitch, evt2._articulation, evt2._dynamics };
+                startAuditionNote = [this](ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_3 evt3) {
+                    ms_AuditionStartNoteEvent evt{ evt3._pitch, evt3._articulation, evt3._dynamics };
                     return startAuditionNoteInternal(ms, track, evt) == ms_Result_OK;
                 };
             }
@@ -457,6 +470,12 @@ public:
                 };
             }
         }
+
+        if (at_least_v_0_6) {
+            createPresetChange = (ms_MuseSampler_create_preset_change)getLibFunc(m_lib, "ms_MuseSampler_create_preset_change");
+            addPreset = (ms_MuseSampler_add_preset)getLibFunc(m_lib, "ms_MuseSampler_add_preset");
+        }
+
         stopLivePlayNote = (ms_MuseSampler_stop_liveplay_note)getLibFunc(m_lib, "ms_MuseSampler_stop_liveplay_note");
 
         startOfflineMode = (ms_MuseSampler_start_offline_mode)getLibFunc(m_lib, "ms_MuseSampler_start_offline_mode");
@@ -557,6 +576,8 @@ private:
                << "\n ms_Instrument_get_reverb_level - " << reinterpret_cast<uint64_t>(getReverbLevel)
                << "\n ms_Instrument_get_preset_list - " << reinterpret_cast<uint64_t>(getPresetList)
                << "\n ms_PresetList_get_next - " << reinterpret_cast<uint64_t>(getNextPreset)
+               << "\n ms_MuseSampler_create_preset_change - " << reinterpret_cast<uint64_t>(createPresetChange)
+               << "\n ms_MuseSampler_add_preset - " << reinterpret_cast<uint64_t>(addPreset)
                << "\n ms_MuseSampler_create - " << reinterpret_cast<uint64_t>(create)
                << "\n ms_MuseSampler_destroy - " << reinterpret_cast<uint64_t>(destroy)
                << "\n ms_MuseSampler_init - " << reinterpret_cast<uint64_t>(initSampler)
@@ -575,6 +596,7 @@ private:
                << "\n ms_MuseSampler_add_pitch_bend - " << reinterpret_cast<uint64_t>(addPitchBend)
                << "\n ms_MuseSampler_start_audition_note - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal)
                << "\n ms_MuseSampler_start_audition_note_2 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal2)
+               << "\n ms_MuseSampler_start_audition_note_3 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal3)
                << "\n ms_MuseSampler_stop_audition_note - " << reinterpret_cast<uint64_t>(stopAuditionNote)
                << "\n ms_MuseSampler_start_liveplay_mode - " << reinterpret_cast<uint64_t>(startLivePlayMode)
                << "\n ms_MuseSampler_stop_liveplay_mode - " << reinterpret_cast<uint64_t>(stopLivePlayMode)

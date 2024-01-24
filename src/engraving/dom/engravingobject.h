@@ -823,6 +823,7 @@ CONVERT(GraceNotesGroup)
 CONVERT(FretCircle)
 CONVERT(DeadSlapped)
 CONVERT(StringTunings)
+CONVERT(SoundFlag)
 #undef CONVERT
 }
 

@@ -37,6 +37,8 @@
 
 #include "log.h"
 
+#include <limits>
+
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -118,7 +120,7 @@ void PlaybackModel::reload()
     update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamicLevelMap);
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamicLevelMap, pair.second.paramMap);
     }
 
     m_dataChanged.notify();
@@ -221,6 +223,10 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
+    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+
+    int minTick = std::numeric_limits<int>::min();
+
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
             m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, profile, result);
@@ -228,13 +234,14 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         }
 
         int utick = repeats.tick2utick(item->tick().ticks());
-        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+        minTick = std::min(utick, minTick);
 
         m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile,
                           result);
     }
 
-    trackPlaybackData.offStream.send(std::move(result));
+    PlaybackParamMap params = ctx.playbackParamMap(m_score, minTick);
+    trackPlaybackData.offStream.send(std::move(result), std::move(params));
 }
 
 void PlaybackModel::triggerMetronome(int tick)
@@ -246,7 +253,7 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, result);
-    trackPlaybackData->second.offStream.send(std::move(result));
+    trackPlaybackData->second.offStream.send(std::move(result), {});
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
@@ -324,6 +331,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
     trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
+    trackData.paramMap = ctx.playbackParamMap(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
@@ -707,7 +715,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents, search->second.dynamicLevelMap);
+        search->second.mainStream.send(search->second.originEvents, search->second.dynamicLevelMap, search->second.paramMap);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

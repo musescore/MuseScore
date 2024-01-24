@@ -44,7 +44,7 @@ int FluidSequencer::currentExpressionLevel() const
     return expressionLevel(dynamicLevel(m_playbackPosition));
 }
 
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamMap&)
 {
     m_offStreamEvents.clear();
 
@@ -56,7 +56,8 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
     updateOffSequenceIterator();
 }
 
-void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics)
+void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                            const mpe::PlaybackParamMap&)
 {
     m_dynamicLevelMap = dynamics;
 
