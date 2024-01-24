@@ -2338,9 +2338,18 @@ void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext& ctx)
     while (xml.readNextStartElement()) {
         const AsciiStringView tag(xml.name());
 
-        if (tag == "soundPreset") {
-            item->setSoundPreset(xml.readText());
-        } else if (!readProperties(static_cast<StaffTextBase*>(item), xml, ctx)) {
+        if (tag == "presets") {
+            item->setSoundPresets(xml.readText().split(u","));
+        } else if (tag == "Params") {
+            SoundFlag::Params params;
+
+            while (xml.readNextStartElement()) {
+                String paramKey = String::fromStdString(std::string(xml.name()));
+                params.insert_or_assign(std::move(paramKey), Val(xml.readText().toStdString()));
+            }
+
+            item->setParams(params);
+        } else if (!readProperties(static_cast<TextBase*>(item), xml, ctx)) {
             xml.unknown();
         }
     }

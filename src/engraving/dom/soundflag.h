@@ -23,30 +23,35 @@
 #ifndef MU_ENGRAVING_SOUNDFLAG_H
 #define MU_ENGRAVING_SOUNDFLAG_H
 
-#include "stafftextbase.h"
+#include "textbase.h"
 
 #include "global/types/val.h"
 
 namespace mu::engraving {
-class SoundFlag final : public StaffTextBase
+class SoundFlag final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, SoundFlag)
     DECLARE_CLASSOF(ElementType::SOUND_FLAG)
 
 public:
-    SoundFlag(Segment* parent = nullptr, TextStyleType = TextStyleType::STAFF);
+    SoundFlag(Segment* parent = nullptr);
 
     SoundFlag* clone() const override;
 
-    PropertyValue getProperty(Pid id) const override;
-    PropertyValue propertyDefault(Pid id) const override;
-    bool setProperty(Pid id, const PropertyValue& val) override;
+    using PresetCodes = StringList;
+    using Params = std::map<String, Val>;
 
-    const String& soundPreset() const;
-    void setSoundPreset(const String& val);
+    const PresetCodes& soundPresets() const;
+    void setSoundPresets(const PresetCodes& soundPresets);
+
+    const Params& params() const;
+    void setParams(const Params& params);
+
+    void undoChangeSoundFlag(const PresetCodes& presets, const Params& params);
 
 private:
-    String m_soundPreset;
+    PresetCodes m_soundPresets;
+    Params m_params;
 };
 }
 
