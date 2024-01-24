@@ -373,7 +373,6 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         item->startAnchor() = PointF(x1, y);
         item->endAnchor() = PointF(x2, y);
         item->mutldata()->setAnchors(item->startAnchor(), item->endAnchor());
-        item->setBeamWidth(item->ldata()->beamWidth);
     }
 
     item->beamFragments()[frag]->py1[fragmentIndex] = item->startAnchor().y() - item->pagePos().y();
