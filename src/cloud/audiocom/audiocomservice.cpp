@@ -84,6 +84,8 @@ cloud::AbstractCloudService::ServerConfig AudioComService::serverConfig() const
     serverConfig.serverCode = AUDIO_COM_CLOUD_CODE;
     serverConfig.serverUrl = AUDIOCOM_CLOUD_URL;
 
+    serverConfig.serverAvailabilityUrl = AUDIOCOM_API_ROOT_URL + "/system/healthcheck";
+
     serverConfig.authorizationUrl = AUDIOCOM_CLOUD_URL + "/auth/sign-in";
     serverConfig.signUpUrl = AUDIOCOM_CLOUD_URL + "/auth/sign-up";
     serverConfig.signInSuccessUrl = AUDIOCOM_CLOUD_URL + "/my-audio?muAuthSuccess=true";
