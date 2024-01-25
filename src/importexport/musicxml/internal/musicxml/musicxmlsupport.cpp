@@ -95,7 +95,7 @@ NoteList::NoteList()
 
 void NoteList::addNote(const int startTick, const int endTick, const size_t staff)
 {
-    if (staff >= 0 && staff < _staffNoteLists.size()) {
+    if (staff < _staffNoteLists.size()) {
         _staffNoteLists[staff].push_back(StartStop(startTick, endTick));
     }
 }

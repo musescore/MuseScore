@@ -219,7 +219,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, cons
     }
     // cleanup
     for (Lyrics* l : list) {
-        _lyrics.remove(l);
+        mu::remove(_lyrics, l);
     }
 }
 
@@ -891,13 +891,13 @@ static void addLyric(MxmlLogger* logger, const QXmlStreamReader* const xmlreader
 static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
                       ChordRest* cr,
                       const std::map<int, Lyrics*>& numbrdLyrics,
-                      const QSet<Lyrics*>& extLyrics,
+                      const std::set<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
     for (const auto lyricNo : mu::keys(numbrdLyrics)) {
         const auto lyric = numbrdLyrics.at(lyricNo);
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
-        if (extLyrics.contains(lyric)) {
+        if (mu::contains(extLyrics, lyric)) {
             extendedLyrics.addLyric(lyric);
         }
     }
@@ -1894,7 +1894,7 @@ void MusicXMLParserPass2::part()
     // try to prevent an empty track name
     if (part->partName() == "") {
         QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-        part->setPartName(instruments.at(instrId).name);
+        part->setPartName(mu::value(instruments, instrId).name);
     }
 
 #ifdef DEBUG_VOICE_MAPPER
