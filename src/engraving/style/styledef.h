@@ -426,6 +426,7 @@ enum class Sid {
     smallStaffMag,
     smallClefMag,
     genClef,
+    hideTabClefAfterFirst,
     genKeysig,
     genCourtesyTimesig,
     genCourtesyKeysig,
