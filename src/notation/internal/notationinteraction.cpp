@@ -4204,9 +4204,19 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
         return;
     }
 
+    if (textBox->isInstrumentChange()) {
+        if (!selectInstrument(toInstrumentChange(textBox))) {
+            rollback();
+            return;
+        }
+    }
+
     apply();
     showItem(textBox);
-    startEditText(textBox);
+
+    if (!textBox->isInstrumentChange()) {
+        startEditText(textBox);
+    }
 }
 
 mu::Ret NotationInteraction::canAddImageToItem(const EngravingItem* item) const
