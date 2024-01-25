@@ -1141,7 +1141,7 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
     sp->setName(QT_TRANSLATE_NOOP("palette", "Bagpipe embellishments"));
     sp->setMag(0.8);
     sp->setYOffset(2.0);
-    sp->setGridSize(55, 55);
+    sp->setGridSize(55, 72);
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
