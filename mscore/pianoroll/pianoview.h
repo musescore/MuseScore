@@ -23,6 +23,7 @@ class Staff;
 class Chord;
 class ChordRest;
 class Segment;
+class Measure;
 class Note;
 class NoteEvent;
 class PianoView;
@@ -106,7 +107,6 @@ private:
       int _subdiv;  //Beat subdivisions
       int _barPattern;
 
-      bool _playEventsView;
       bool _mouseDown;
       bool _dragStarted;
       QString _dragNoteCache;
@@ -169,6 +169,8 @@ private:
       void cutChord(const QPointF& pos);
       void toggleTie(const QPointF& pos);
       void toggleTie(Note*);
+      void compactMeasures(QList<Measure*> measures);
+      void deleteSeletedNotes();
       void dragSelectionNoteGroup();
       void finishNoteGroupDrag(QMouseEvent* event);
       void finishNoteEventAdjustDrag();
@@ -253,7 +255,7 @@ private:
       
       void zoomView(int step, bool horizontal, int centerX, int centerY);
 
-      bool playEventsView() { return _playEventsView; }
+      bool playEventsView() { return _editNoteTool == PianoRollEditTool::EVENT_ADJUST; }
       };
 
 

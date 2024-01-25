@@ -302,7 +302,6 @@ PianoView::PianoView()
       setResizeAnchor(QGraphicsView::AnchorUnderMouse);
       setMouseTracking(true);
       _timeType   = TType::TICKS;
-      _playEventsView = true;
       _staff      = nullptr;
       _chord      = nullptr;
       _locator    = nullptr;
@@ -551,9 +550,8 @@ void PianoView::drawNoteBlock(QPainter* p, PianoItem* block)
                   }
             }
 
-      if (note->selected()) {
+      if (note->selected())
             noteColor = _colorNoteSel;
-            }
 
       //if (block->staffIdx != m_activeStaff) {
       //    noteColor = noteColor.lighter(150);
@@ -581,6 +579,19 @@ void PianoView::drawNoteBlock(QPainter* p, PianoItem* block)
 
                   p->setPen(QPen(noteColor.darker(180)));
                   p->drawText(textRect, Qt::AlignLeft | Qt::AlignTop, name);
+                  }
+            }
+
+      if (_editNoteTool != PianoRollEditTool::EVENT_ADJUST) {
+            p->setPen(QPen(_colorTie));
+            for (Tie* note_tie = note->tieFor(); note_tie != nullptr; note_tie = note_tie->endNote()->tieFor()) {
+                  Fraction tieTime = note_tie->endNote()->tick();
+                  float xpos = tickToPixelX(tieTime.ticks());
+                  int pitch = note_tie->endNote()->pitch();
+                  int y0 = pitchToPixelY(pitch + 1);
+                  int y1 = pitchToPixelY(pitch);
+
+                  p->drawLine(xpos, y0, xpos, y1);
                   }
             }
       }
@@ -849,7 +860,6 @@ void PianoView::mouseReleaseEvent(QMouseEvent* event)
             //Right clicks have been handled as popup menu
             return;
             }
-
 
       NoteSelectType selType = bnShift ? (bnCtrl ? NoteSelectType::SUBTRACT : NoteSelectType::XOR)
                                        : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
@@ -1231,7 +1241,7 @@ QVector<Note*> PianoView::getSegmentNotes(Segment* seg, int track)
 
 QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pitch, int track)
       {
-      NoteVal nv(pitch);
+      NoteVal added_note_pitch(pitch);
 
       Score* score = _staff->score();
 
@@ -1240,48 +1250,60 @@ QVector<Note*> PianoView::addNote(Fraction startTick, Fraction duration, int pit
       ChordRest* curCr = score->findCR(startTick, track);
       if (curCr) {
             ChordRest* cr0 = nullptr;
-            ChordRest* cr1 = nullptr;
+            ChordRest* curChordRest = nullptr;
 
-            if (startTick > curCr->tick())
-                  cutChordRest(curCr, track, startTick, cr0, cr1);  //Cut at the start of existing chord rest
+            //Cut first chord if new note starts inside of it
+            if (startTick > curCr->tick()) {
+                  cutChordRest(curCr, track, startTick, cr0, curChordRest);  //Cut at the start of existing chord rest
+                  }
             else
-                  cr1 = curCr;  //We are inserting at start of chordrest
+                  curChordRest = curCr;  //We are inserting at start of chordrest
 
-            Fraction cr1End = cr1->tick() + cr1->ticks();
-            if (cr1End > startTick + duration) {
-                  //Cut from middle of enveloping chord
+            Fraction curStartTick = curChordRest->tick();
+            Fraction curDur = curChordRest->ticks();
+            while (startTick + duration >= curStartTick + curDur) {
+                  if (curChordRest->isChord()) {
+                        Chord* ch = toChord(curChordRest);
+                        if (!std::any_of(ch->notes().begin(), ch->notes().end(), [pitch](Note* n) { return n->pitch() == pitch; }))
+                              addedNotes.append(score->addNote(ch, added_note_pitch));
+                        }
+                  else {
+                        Segment* newSeg = score->setNoteRest(curChordRest->segment(), track, added_note_pitch, curDur);
+                        if (newSeg)
+                              addedNotes.append(getSegmentNotes(newSeg, track));
+                        }
+
+                  startTick += curDur;
+                  duration -= curDur;
+
+                  Segment* seg = curChordRest->nextSegmentAfterCR(SegmentType::ChordRest);
+                  if (!seg)
+                        break;
+                  curChordRest = seg->cr(track);
+                  curStartTick = curChordRest->tick();
+                  curDur = curChordRest->ticks();
+                  }
+
+            if (duration > Fraction(0, 1)) {
                   ChordRest* crMid = nullptr;
                   ChordRest* crEnd = nullptr;
 
-                  cutChordRest(cr1, track, startTick + duration, crMid, crEnd);
+                  cutChordRest(curChordRest, track, startTick + duration, crMid, crEnd);
                   if (crMid->isChord()) {
                         Chord* ch = toChord(crMid);
-                        addedNotes.append(score->addNote(ch, nv));
+                        if (!std::any_of(ch->notes().begin(), ch->notes().end(), [pitch](Note* n) { return n->pitch() == pitch; }))
+                              addedNotes.append(score->addNote(ch, added_note_pitch));
                         }
                   else {
-                        Segment* newSeg = score->setNoteRest(crMid->segment(), track, nv, duration);
+                        Segment* newSeg = score->setNoteRest(crMid->segment(), track, added_note_pitch, duration);
                         if (newSeg)
                               addedNotes.append(getSegmentNotes(newSeg, track));
                         }
                   }
-            else if (cr1End == startTick + duration) {
-                  if (cr1->isChord()) {
-                        Chord* ch = toChord(cr1);
-                        addedNotes.append(score->addNote(ch, nv));
-                        }
-                  else {
-                        Segment* newSeg = score->setNoteRest(cr1->segment(), track, nv, duration);
-                        if (newSeg)
-                              addedNotes.append(getSegmentNotes(newSeg, track));
-                        }
-                  }
-            else {
-                  Segment* newSeg = score->setNoteRest(cr1->segment(), track, nv, duration);
-                  if (newSeg)
-                        addedNotes.append(getSegmentNotes(newSeg, track));
-                  }
-
             }
+
+      for (auto it = addedNotes.begin(); it != std::prev(addedNotes.end()); it++)
+            toggleTie(*it);
 
       return addedNotes;
       }
@@ -1473,11 +1495,11 @@ void PianoView::toggleTie(const QPointF& pos) {
 
       int pickTick = pixelXToTick((int)pos.x());
       int pickPitch = pixelYToPitch(pos.y());
-      PianoItem *pn = pickNote(pickTick, pickPitch);
+      PianoItem *pi = pickNote(pickTick, pickPitch);
 
-      if (pn) {
+      if (pi) {
             score->startCmd();
-            toggleTie(pn->note());
+            toggleTie(pi->note());
             score->endCmd();
             }
       }
@@ -1738,14 +1760,17 @@ bool PianoView::cutChordRest(ChordRest* targetCr, int track, Fraction cutTick, C
             Chord* ch1 = toChord(nextCR);
 
             for (Note* n: ch1->notes()) {
-                  NoteVal nx = n->noteVal();
+                  NoteVal notePitch = n->noteVal();
                   if (!ch0) {
                         ChordRest* cr = score->findCR(startTick, track);
-                        score->setNoteRest(cr->segment(), track, nx, cr->ticks());
+                        score->setNoteRest(cr->segment(), track, notePitch, cr->ticks());
                         ch0 = toChord(score->findCR(startTick, track));
+                        Note* note = ch0->notes()[0];
+                        toggleTie(note);
                         }
                   else {
-                        score->addNote(ch0, nx);
+                        Note* note = score->addNote(ch0, notePitch);
+                        toggleTie(note);
                         }
                   }
             cr0 = ch0;
@@ -1981,8 +2006,7 @@ void PianoView::updateNotes()
                         addChord(toChord(e), voice);
                   }
             }
-      for (int i = 0; i < 3; ++i)
-            moveLocator(i);
+
       scene()->blockSignals(false);
 
       scene()->update(sceneRect());
@@ -2232,7 +2256,8 @@ void PianoView::cutNotes()
       Score* score = _staff->score();
       score->startCmd();
 
-      score->cmdDeleteSelection();
+      //score->cmdDeleteSelection();
+      deleteSeletedNotes();
 
       score->endCmd();
       }
@@ -2250,6 +2275,118 @@ void PianoView::copyNotes()
       QMimeData* mimeData = new QMimeData;
       mimeData->setData(PIANO_NOTE_MIME_TYPE, copiedNotes.toUtf8());
       QApplication::clipboard()->setMimeData(mimeData);
+      }
+
+
+//---------------------------------------------------------
+//   compactMeasures
+//---------------------------------------------------------
+
+void PianoView::compactMeasures(QList<Measure*> measures)
+      {
+      Score* score = _staff->score();
+
+      for (Measure* m : measures) {
+            for (int track = 0; track < VOICES; ++track) {
+                  ChordRest* cr = m->findChordRest(m->tick(), track);
+                  if (!cr)
+                        continue;
+
+                  while (true) {
+                        Fraction crTick = cr->tick();
+                        Fraction crTicks = cr->ticks();
+
+                        Segment* segNext = cr->nextSegmentAfterCR(SegmentType::ChordRest);
+                        ChordRest* crNext = segNext->cr(track);
+
+                        if (!crNext || crNext->measure() != m)
+                              break;
+
+                        Measure* mNext = crNext->measure();
+                        Fraction crNextTick = crNext->tick();
+                        Fraction crNextTicks = crNext->ticks();
+
+                        if (cr->isRest() && crNext->isRest()) {
+                              Segment* newSeg = score->setNoteRest(cr->segment(), track, NoteVal(-1), crTicks + crNextTicks);
+                              cr = newSeg->cr(track);
+                              }
+                        else if (cr->isChord() && crNext->isChord()) {
+                              Chord* chord = toChord(cr);
+
+                              bool allAreTied = true;
+                              QList<NoteVal> pitchList;
+
+                              for (Note* n : chord->notes()) {
+                                    if (!n->tieFor()) {
+                                          allAreTied = false;
+                                          break;
+                                          }
+                                    pitchList.append(n->noteVal());
+                                    }
+
+                              if (allAreTied) {
+                                    Segment* newSeg = score->setNoteRest(cr->segment(), track, NoteVal(pitchList.at(0)), crTicks + crNextTicks);
+                                    cr = newSeg->cr(track);
+
+                                    for (int i = 1; i < pitchList.size(); ++i)
+                                          score->addNote(toChord(cr), pitchList.at(i));
+                                    }
+                              else
+                                    cr = crNext;
+                              }
+                        else
+                              cr = crNext;
+                        }
+                  }
+
+            }
+      }
+
+//---------------------------------------------------------
+//   pasteNotesAtCursor
+//---------------------------------------------------------
+
+void PianoView::deleteSeletedNotes()
+      {
+      ChordRest* cr = 0;            // select something after deleting notes
+
+      Score* score = _staff->score();
+
+      // deleteItem modifies selection().elements() list,
+      // so we need a local copy:
+      QList<Element*> el = score->selection().elements();
+
+      QList<Note*> notesToDelete;
+      QList<Measure*> changedMeasures;
+
+      for (Element* e : el) {
+            if (!e->isNote())
+                  continue;
+
+            Measure* m = e->findMeasure();
+            if (changedMeasures.indexOf(m) == -1)
+                  changedMeasures.append(m);
+
+            Note* noteStart = toNote(e);
+            while (noteStart->tieBack()) {
+                  noteStart = noteStart->tieBack()->startNote();
+            }
+
+            notesToDelete.append(noteStart);
+            for (Note* note = noteStart; note->tieFor() != nullptr; note = note->tieFor()->endNote()) {
+                  notesToDelete.append(note->tieFor()->endNote());
+
+                  m = note->findMeasure();
+                  if (changedMeasures.indexOf(m) == -1)
+                        changedMeasures.append(m);
+                  }
+            }
+
+      for (Note* note : notesToDelete)
+            score->deleteItem(note);
+
+      compactMeasures(changedMeasures);
+
       }
 
 //---------------------------------------------------------
@@ -2330,7 +2467,8 @@ void PianoView::finishNoteGroupDrag(QMouseEvent* event) {
       score->startCmd();
 
       if (!(event->modifiers() & Qt::ShiftModifier)) {
-            score->cmdDeleteSelection();
+            //score->cmdDeleteSelection();
+            deleteSeletedNotes();
             }
       QVector<Note*> notes = pasteNotes(_dragNoteCache, pasteTickOffset, pasteLengthOffset, pitchOffset, true);
 
