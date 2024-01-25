@@ -112,7 +112,7 @@ public:
                                         "{ \"version\": \"%1\", \"notes\": \"blabla2\" },"
                                         "{ \"version\": \"0.4.1\", \"notes\": \"blabla1\" }"
                                         "]"
-                                        "}").arg(MUVersion::fullVersion());
+                                        "}").arg(framework::MUVersion::fullVersion());
 
         EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousReleasesNotesUrl)), _, _))
         .WillOnce(testing::Invoke(

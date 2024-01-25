@@ -58,7 +58,7 @@ private:
     ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
     QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
 
-    PrevReleasesNotesList previousReleasesNotes(const Version& updateVersion) const;
+    PrevReleasesNotesList previousReleasesNotes(const framework::Version& updateVersion) const;
     PrevReleasesNotesList parsePreviousReleasesNotes(const QByteArray& json) const;
 
     void clear();
