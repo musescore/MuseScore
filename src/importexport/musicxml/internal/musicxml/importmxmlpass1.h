@@ -145,7 +145,7 @@ public:
     void transpose(const QString& partId, const Fraction& tick);
     void divisions();
     void direction(const QString& partId, const Fraction cTime);
-    void directionType(const Fraction cTime, QList<MxmlOctaveShiftDesc>& starts, QList<MxmlOctaveShiftDesc>& stops);
+    void directionType(const Fraction cTime, std::vector<MxmlOctaveShiftDesc>& starts, std::vector<MxmlOctaveShiftDesc>& stops);
     void handleOctaveShift(const Fraction cTime, const QString& type, short size, MxmlOctaveShiftDesc& desc);
     void notations(MxmlStartStop& tupletStartStop);
     void note(const QString& partId, const Fraction cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr,

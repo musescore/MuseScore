@@ -269,15 +269,15 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
     ml.clear();
 
     // determine number of measures: max number of measures in any part
-    int nMeasures = 0;
-    foreach (const MusicXmlPart& part, _parts) {
+    size_t nMeasures = 0;
+    for (const MusicXmlPart& part : _parts) {
         if (part.nMeasures() > nMeasures) {
             nMeasures = part.nMeasures();
         }
     }
 
     // determine max length of a specific measure in all parts
-    for (int i = 0; i < nMeasures; ++i) {
+    for (size_t i = 0; i < nMeasures; ++i) {
         Fraction maxMeasDur;
         foreach (const MusicXmlPart& part, _parts) {
             if (i < part.nMeasures()) {
@@ -1454,7 +1454,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
         // use credit-type only if exactly one was found
         QString crtype = (crtypes.size() == 1) ? crtypes.at(0) : "";
         CreditWords* cw = new CreditWords(page, crtype, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
-        credits.append(cw);
+        credits.push_back(cw);
     }
 }
 
@@ -2730,8 +2730,8 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
     // note: file order is direction-type first, then staff
     // this means staff is still unknown when direction-type is handled
 
-    QList<MxmlOctaveShiftDesc> starts;
-    QList<MxmlOctaveShiftDesc> stops;
+    std::vector<MxmlOctaveShiftDesc> starts;
+    std::vector<MxmlOctaveShiftDesc> stops;
     int staff = 0;
 
     while (_e.readNextStartElement()) {
@@ -2753,7 +2753,7 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
     }
 
     // handle the stops first
-    foreach (auto desc, stops) {
+    for (const MxmlOctaveShiftDesc& desc : stops) {
         if (_octaveShifts.contains(desc.num)) {
             MxmlOctaveShiftDesc prevDesc = _octaveShifts.value(desc.num);
             if (prevDesc.tp == MxmlOctaveShiftDesc::Type::UP
@@ -2771,7 +2771,7 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
     }
 
     // then handle the starts
-    foreach (auto desc, starts) {
+    for (const MxmlOctaveShiftDesc& desc : starts) {
         if (_octaveShifts.contains(desc.num)) {
             MxmlOctaveShiftDesc prevDesc = _octaveShifts.value(desc.num);
             if (prevDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
@@ -2797,8 +2797,8 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
  */
 
 void MusicXMLParserPass1::directionType(const Fraction cTime,
-                                        QList<MxmlOctaveShiftDesc>& starts,
-                                        QList<MxmlOctaveShiftDesc>& stops)
+                                        std::vector<MxmlOctaveShiftDesc>& starts,
+                                        std::vector<MxmlOctaveShiftDesc>& stops)
 {
     while (_e.readNextStartElement()) {
         if (_e.name() == "octave-shift") {
@@ -2822,9 +2822,9 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
                 osDesc.num = n;
                 if (osDesc.tp == MxmlOctaveShiftDesc::Type::UP
                     || osDesc.tp == MxmlOctaveShiftDesc::Type::DOWN) {
-                    starts.append(osDesc);
+                    starts.push_back(osDesc);
                 } else if (osDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
-                    stops.append(osDesc);
+                    stops.push_back(osDesc);
                 }
             } else {
                 _logger->logError(QString("invalid octave-shift number %1").arg(number), &_e);

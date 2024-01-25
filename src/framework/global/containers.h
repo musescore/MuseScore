@@ -73,6 +73,12 @@ inline bool remove_if(std::vector<T>& vec, Predicate p)
 }
 
 template<typename T>
+inline void removeFirst(std::vector<T>& vec)
+{
+    vec.erase(vec.begin());
+}
+
+template<typename T>
 inline T takeAt(std::vector<T>& vec, size_t idx)
 {
     T v = value(vec, idx);
