@@ -25,6 +25,8 @@
 
 #include <QXmlStreamReader>
 
+#include "containers.h"
+
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
 #include "musicxmlsupport.h"
@@ -50,7 +52,7 @@ struct PageFormat {
     bool twosided { false };
 };
 
-typedef QMap<QString, Part*> PartMap;
+typedef std::map<QString, Part*> PartMap;
 typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 //---------------------------------------------------------
@@ -167,9 +169,9 @@ public:
     int voiceToInt(const QString& voice);
     track_idx_t trackForPart(const QString& id) const;
     bool hasPart(const QString& id) const;
-    Part* getPart(const QString& id) const { return _partMap.value(id); }
-    MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
-    MusicXMLInstruments getInstruments(const QString& id) const { return _instruments.value(id); }
+    Part* getPart(const QString& id) const { return mu::value(_partMap, id); }
+    MusicXmlPart getMusicXmlPart(const QString& id) const { return mu::value(_parts, id); }
+    MusicXMLInstruments getInstruments(const QString& id) const { return mu::value(_instruments, id); }
     void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHeadGroup hg, const int line, const DirectionV sd);
     MusicXmlInstrList getInstrList(const QString id) const;
     MusicXmlIntervalList getIntervals(const QString id) const;
@@ -177,11 +179,11 @@ public:
     int octaveShift(const QString& id, const staff_idx_t staff, const Fraction f) const;
     const CreditWordsList& credits() const { return _credits; }
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
-    bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
+    bool isVocalStaff(const QString& id) const { return _parts.at(id).isVocalStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
     int maxDiff() const { return _maxDiff; }
-    void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert(key, value); }
-    QMap<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }
+    void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert({ key, value }); }
+    std::map<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }
     void insertSeenDenominator(int val) { _seenDenominators.emplace(val); }
 
 private:
@@ -191,14 +193,14 @@ private:
     // generic pass 1 data
     QXmlStreamReader _e;
     int _divs;                                  ///< Current MusicXML divisions value
-    QMap<QString, MusicXmlPart> _parts;         ///< Parts data, mapped on part id
+    std::map<QString, MusicXmlPart> _parts;         ///< Parts data, mapped on part id
     std::set<int> _systemStartMeasureNrs;       ///< Measure numbers of measures starting a page
     std::set<int> _pageStartMeasureNrs;         ///< Measure numbers of measures starting a page
     QVector<Fraction> _measureLength;           ///< Length of each measure
     QVector<Fraction> _measureStart;            ///< Start time of each measure
     CreditWordsList _credits;                   ///< All credits collected
     PartMap _partMap;                           ///< TODO merge into MusicXmlPart ??
-    QMap<QString, MusicXMLInstruments> _instruments;   ///< instruments for each part, mapped on part id
+    std::map<QString, MusicXMLInstruments> _instruments;   ///< instruments for each part, mapped on part id
     Score* _score;                              ///< MuseScore score
     MxmlLogger* _logger;                        ///< Error logger
     QString _errors;                            ///< Errors to present to the user
@@ -206,11 +208,11 @@ private:
 
     // part specific data (TODO: move to part-specific class)
     Fraction _timeSigDura;                      ///< Measure duration according to last timesig read
-    QMap<int, MxmlOctaveShiftDesc> _octaveShifts;   ///< Pending octave-shifts
+    std::map<int, MxmlOctaveShiftDesc> _octaveShifts;   ///< Pending octave-shifts
     QSize _pageSize;                            ///< Page width read from defaults
 
     const int _maxDiff = 5;                   ///< Duration rounding tick threshold;
-    QMap<Fraction, Fraction> _adjustedDurations;  ///< Rounded durations
+    std::map<Fraction, Fraction> _adjustedDurations;  ///< Rounded durations
     std::set<int> _seenDenominators;          ///< Denominators seen. Used for rounding errors.
 };
 } // namespace Ms
