@@ -75,8 +75,8 @@ public:
     QString getId() const { return id; }
     QString toString() const;
     VoiceList voicelist;           // the voice map information TODO: make private
-    Fraction measureDuration(int i) const;
-    int nMeasures() const { return measureDurations.size(); }
+    Fraction measureDuration(size_t i) const;
+    size_t nMeasures() const { return m_measureDurations.size(); }
     MusicXmlInstrList _instrList;   // TODO: make private
     MusicXmlIntervalList _intervals;                       ///< Transpositions
     Interval interval(const Fraction f) const;
@@ -106,8 +106,8 @@ private:
     bool _printName = true;
     QString abbr;
     bool _printAbbr = false;
-    QStringList measureNumbers;               // MusicXML measure number attribute
-    QList<Fraction> measureDurations;         // duration in fraction for every measure
+    std::vector<QString> m_measureNumbers;               // MusicXML measure number attribute
+    std::vector<Fraction> m_measureDurations;         // duration in fraction for every measure
     std::vector<MusicXmlOctaveShiftList> octaveShifts;   // octave shift list for every staff
     LyricNumberHandler _lyricNumberHandler;
     int _maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
