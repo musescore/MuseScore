@@ -3803,14 +3803,7 @@ void Score::cmdSlashRhythm()
             }
             chords.insert(c);
             // toggle slash setting
-            if (c->links()) {
-                for (EngravingObject* se : *c->links()) {
-                    Chord* lc = toChord(se);
-                    lc->setSlash(!lc->slash(), false);
-                }
-            } else {
-                c->setSlash(!c->slash(), false);
-            }
+            c->setSlash(!c->slash(), false);
         }
     }
 }
