@@ -1407,11 +1407,11 @@ void Note::updateFrettingForTiesAndBends()
 
 bool Note::shouldHideFret() const
 {
-    if (!tieBack() || shouldForceShowFret()) {
+    if (!tieBack() || shouldForceShowFret() || !staffType()->isTabStaff()) {
         return false;
     }
 
-    if (isContinuationOfBend()) {
+    if (isContinuationOfBend() && !rtick().isZero()) {
         return true;
     }
 

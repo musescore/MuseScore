@@ -3471,7 +3471,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     // the tie spans a system boundary. This can't be done in layout as the system of each note is not decided yet
     ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
     bool useParens = isTabStaff && !item->fixed() && item->tieBack()
-                     && showTiedFret != ShowTiedFret::TIE_AND_FRET && !item->shouldHideFret();
+                     && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
     if (useParens) {
         if (!item->fretString().startsWith(u'(')) { // Hack: don't add parentheses if already added
             item->setFretString(String(u"(%1)").arg(item->fretString()));

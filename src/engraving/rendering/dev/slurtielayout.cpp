@@ -1615,24 +1615,20 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
     const bool up = tie->up();
     const bool inside = tie->isInside();
+    const bool noteIsHiddenFret = note->shouldHideFret();
     const int upSign = up ? -1 : 1;
     const int leftRightSign = start ? +1 : -1;
     const double noteWidth = note->width();
     const double noteHeight = note->height();
     const double spatium = tie->spatium();
 
-    double baseX, baseY = 0.0;
-    if (inside) {
-        baseX = start ? noteWidth : 0.0;
-    } else {
-        baseX = noteOpticalCenterForTie(note, up);
-        baseY = upSign * noteHeight / 2;
-    }
+    double baseX = (inside && !noteIsHiddenFret) ? (start ? noteWidth : 0.0) : noteOpticalCenterForTie(note, up);
+    double baseY = inside ? 0.0 : upSign * noteHeight / 2;
 
     result += PointF(baseX, baseY);
 
     double visualInsetSp = 0.0;
-    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
+    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH || noteIsHiddenFret) {
         visualInsetSp = 0.2;
     } else if (note->hasAnotherStraightAboveOrBelow(up)) {
         visualInsetSp = 0.45;
@@ -1719,7 +1715,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     Tie* tie = tieSegment->tie();
     Note* note = start ? tie->startNote() : tie->endNote();
-    if (!note) {
+    if (!note || note->shouldHideFret()) {
         return;
     }
 
@@ -1881,7 +1877,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     const double halfLineThicknessCorrection = 0.5 * staffLineThickness * upSign;
     const double protrusion = abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
-    const double badIntersectionLimit = 0.20 * spatium; // TODO: style
+    const double badIntersectionLimit = 0.15 * spatium; // TODO: style
 
     bool badIntersection = protrusion < badIntersectionLimit && (isEndInsideStaff || isEndInsideLedgerLines);
     if (badIntersection) {
@@ -1909,8 +1905,8 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         return;
     }
 
-    double outwardMargin = -upSign * (yOuterApogee - (closestLineToArc * spatium - halfLineThicknessCorrection));
-    double inwardMargin = upSign * (yInnerApogee - (closestLineToArc * spatium + halfLineThicknessCorrection));
+    double outwardMargin = -upSign * (yOuterApogee - (closestLineToArc * staffLineDist - halfLineThicknessCorrection));
+    double inwardMargin = upSign * (yInnerApogee - (closestLineToArc * staffLineDist + halfLineThicknessCorrection));
     const double badArcIntersectionLimit = tieLength < 3 * spatium ? 0.1 * spatium : 0.15 * spatium;
 
     bool increaseArc = outwardMargin - 0.5 * badArcIntersectionLimit < inwardMargin;
@@ -1979,7 +1975,8 @@ bool SlurTieLayout::hasEndPointAboveNote(TieSegment* tieSegment)
     PointF tieStartPos = tieSegment->ups(Grip::START).pos();
     PointF tieEndPos = tieSegment->ups(Grip::END).pos();
 
-    return tieStartPos.x() < startNotePos.x() + startNote->width() || tieEndPos.x() > endNotePos.x();
+    return (tieStartPos.x() < startNotePos.x() + startNote->width() && !startNote->shouldHideFret())
+           || (tieEndPos.x() > endNotePos.x() && !endNote->shouldHideFret());
 }
 
 void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies)
