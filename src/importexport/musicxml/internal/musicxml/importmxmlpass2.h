@@ -42,7 +42,7 @@ class Tuplet;
 using GraceChordList = std::vector<Chord*>;
 using FiguredBassList = std::vector<FiguredBass*>;
 using Tuplets = std::map<QString, Tuplet*>;
-using Beams = QMap<QString, Beam*>;
+using Beams = std::map<QString, Beam*>;
 
 //---------------------------------------------------------
 //   MxmlStartStop
@@ -131,7 +131,7 @@ class MusicXMLParserLyric
 public:
     MusicXMLParserLyric(const LyricNumberHandler lyricNumberHandler, QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     QSet<Lyrics*> extendedLyrics() const { return _extendedLyrics; }
-    QMap<int, Lyrics*> numberedLyrics() const { return _numberedLyrics; }
+    std::map<int, Lyrics*> numberedLyrics() const { return _numberedLyrics; }
     void parse();
 private:
     void skipLogCurrElem();
@@ -139,7 +139,7 @@ private:
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
     MxmlLogger* _logger;                        ///< Error logger
-    QMap<int, Lyrics*> _numberedLyrics;   // lyrics with valid number
+    std::map<int, Lyrics*> _numberedLyrics;   // lyrics with valid number
     QSet<Lyrics*> _extendedLyrics;        // lyrics with the extend flag set
 };
 
@@ -297,7 +297,7 @@ private:
     FretDiagram* frame();
     void harmony(const QString& partId, Measure* measure, const Fraction sTime);
     Accidental* accidental();
-    void beam(QMap<int, QString>& beamTypes);
+    void beam(std::map<int, QString>& beamTypes);
     void duration(Fraction& dura);
     void forward(Fraction& dura);
     void backup(Fraction& dura);

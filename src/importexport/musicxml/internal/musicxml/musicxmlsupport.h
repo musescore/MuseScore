@@ -148,7 +148,7 @@ public:
     void newMeasure();
     bool stavesOverlap(const int& voice) const;
 private:
-    QMap<int, NoteList> _noteLists;   ///< The notelists for all the voices
+    std::map<int, NoteList> _noteLists;   ///< The notelists for all the voices
 };
 
 //---------------------------------------------------------
@@ -177,7 +177,7 @@ struct MusicXMLInstrument {
 
     QString toString() const;
 
-    MusicXMLInstrument()        // required by QMap
+    MusicXMLInstrument()        // required by std::map
         : unpitched(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHeadGroup::HEAD_INVALID), line(0), stemDirection(DirectionV::AUTO) {}
     MusicXMLInstrument(QString s)
@@ -194,8 +194,7 @@ struct MusicXMLInstrument {
  A MusicXML drumset or set of instruments in a multi-instrument part.
  */
 
-typedef QMap<QString, MusicXMLInstrument> MusicXMLInstruments;
-typedef QMapIterator<QString, MusicXMLInstrument> MusicXMLInstrumentsIterator;
+typedef std::map<QString, MusicXMLInstrument> MusicXMLInstruments;
 
 //---------------------------------------------------------
 //   MxmlSupport -- MusicXML import support functions

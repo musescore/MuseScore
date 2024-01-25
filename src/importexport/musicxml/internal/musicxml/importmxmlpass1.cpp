@@ -23,6 +23,7 @@
 #include <QRegularExpression>
 
 #include "engraving/dom/box.h"
+#include "engraving/dom/bracketItem.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/measure.h"
@@ -107,18 +108,18 @@ static void allocateStaves(VoiceList& vcLst)
 
     // handle regular (non-overlapping) voices
     // note: outer loop executed vcLst.size() times, as each inner loop handles exactly one item
-    for (int i = 0; i < vcLst.size(); ++i) {
+    for (size_t i = 0; i < vcLst.size(); ++i) {
         // find the regular voice containing the highest number of chords and rests that has not been handled yet
         int max = 0;
         int key = -1;
-        for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
-            if (!j.value().overlaps() && j.value().numberChordRests() > max && j.value().staff() == -1) {
-                max = j.value().numberChordRests();
-                key = j.key();
+        for (VoiceList::const_iterator j = vcLst.cbegin(); j != vcLst.cend(); ++j) {
+            if (!j->second.overlaps() && j->second.numberChordRests() > max && j->second.staff() == -1) {
+                max = j->second.numberChordRests();
+                key = j->first;
             }
         }
         if (key > 0) {
-            int prefSt = vcLst.value(key).preferredStaff();
+            int prefSt = mu::value(vcLst, key).preferredStaff();
             if (voicesAllocated[prefSt] < static_cast<int>(VOICES)) {
                 vcLst[key].setStaff(prefSt);
                 voicesAllocated[prefSt]++;
@@ -134,14 +135,14 @@ static void allocateStaves(VoiceList& vcLst)
     // the ones with the highest number of chords and rests get allocated first
     for (int h = 0; h < MAX_STAVES; ++h) {
         // note: middle loop executed vcLst.size() times, as each inner loop handles exactly one item
-        for (int i = 0; i < vcLst.size(); ++i) {
+        for (size_t i = 0; i < vcLst.size(); ++i) {
             // find the overlapping voice containing the highest number of chords and rests that has not been handled yet
             int max = 0;
             int key = -1;
-            for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
-                if (j.value().overlaps() && j.value().numberChordRests(h) > max && j.value().staffAlloc(h) == -1) {
-                    max = j.value().numberChordRests(h);
-                    key = j.key();
+            for (VoiceList::const_iterator j = vcLst.cbegin(); j != vcLst.cend(); ++j) {
+                if (j->second.overlaps() && j->second.numberChordRests(h) > max && j->second.staffAlloc(h) == -1) {
+                    max = j->second.numberChordRests(h);
+                    key = j->first;
                 }
             }
             if (key > 0) {
@@ -176,9 +177,9 @@ static void allocateVoices(VoiceList& vcLst)
     }
     // handle regular (non-overlapping) voices
     // a voice is allocated on one specific staff
-    for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
-        int staff = i.value().staff();
-        int key   = i.key();
+    for (VoiceList::const_iterator i = vcLst.cbegin(); i != vcLst.cend(); ++i) {
+        int staff = i->second.staff();
+        int key   = i->first;
         if (staff >= 0) {
             vcLst[key].setVoice(nextVoice[staff]);
             nextVoice[staff]++;
@@ -186,10 +187,10 @@ static void allocateVoices(VoiceList& vcLst)
     }
     // handle overlapping voices
     // each voice may be in every staff
-    for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
+    for (VoiceList::const_iterator i = vcLst.cbegin(); i != vcLst.cend(); ++i) {
         for (int j = 0; j < MAX_STAVES; ++j) {
-            int staffAlloc = i.value().staffAlloc(j);
-            int key   = i.key();
+            int staffAlloc = i->second.staffAlloc(j);
+            int key = i->first;
             if (staffAlloc >= 0) {
                 vcLst[key].setVoice(j, nextVoice[j]);
                 nextVoice[j]++;
@@ -208,8 +209,8 @@ static void allocateVoices(VoiceList& vcLst)
 
 static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
 {
-    for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
-        int key = i.key();
+    for (VoiceList::const_iterator i = vcLst.cbegin(); i != vcLst.cend(); ++i) {
+        int key = i->first;
         if (vod.stavesOverlap(key)) {
             vcLst[key].setOverlap(true);
         }
@@ -270,7 +271,7 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
 
     // determine number of measures: max number of measures in any part
     size_t nMeasures = 0;
-    for (const MusicXmlPart& part : _parts) {
+    for (const MusicXmlPart& part : mu::values(_parts)) {
         if (part.nMeasures() > nMeasures) {
             nMeasures = part.nMeasures();
         }
@@ -279,7 +280,7 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
     // determine max length of a specific measure in all parts
     for (size_t i = 0; i < nMeasures; ++i) {
         Fraction maxMeasDur;
-        foreach (const MusicXmlPart& part, _parts) {
+        for (const MusicXmlPart& part : mu::values(_parts)) {
             if (i < part.nMeasures()) {
                 Fraction measDurPartJ = part.measureDuration(i);
                 if (measDurPartJ > maxMeasDur) {
@@ -304,8 +305,8 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
 
 VoiceList MusicXMLParserPass1::getVoiceList(const QString id) const
 {
-    if (_parts.contains(id)) {
-        return _parts.value(id).voicelist;
+    if (mu::contains(_parts, id)) {
+        return _parts.at(id).voicelist;
     }
     return VoiceList();
 }
@@ -321,8 +322,8 @@ VoiceList MusicXMLParserPass1::getVoiceList(const QString id) const
 
 MusicXmlInstrList MusicXMLParserPass1::getInstrList(const QString id) const
 {
-    if (_parts.contains(id)) {
-        return _parts.value(id)._instrList;
+    if (mu::contains(_parts, id)) {
+        return _parts.at(id)._instrList;
     }
     return MusicXmlInstrList();
 }
@@ -338,8 +339,8 @@ MusicXmlInstrList MusicXMLParserPass1::getInstrList(const QString id) const
 
 MusicXmlIntervalList MusicXMLParserPass1::getIntervals(const QString id) const
 {
-    if (_parts.contains(id)) {
-        return _parts.value(id)._intervals;
+    if (mu::contains(_parts, id)) {
+        return _parts.at(id)._intervals;
     }
     return MusicXmlIntervalList();
 }
@@ -360,8 +361,7 @@ void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
                                             const int line,
                                             const DirectionV sd)
 {
-    if (_instruments.contains(id)
-        && _instruments[id].contains(instrId)) {
+    if (mu::contains(_instruments, id) && mu::contains(_instruments.at(id), instrId)) {
         _instruments[id][instrId].notehead = hg;
         _instruments[id][instrId].line = line;
         _instruments[id][instrId].stemDirection = sd;
@@ -401,16 +401,16 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
     //LOGD("voice mapper before: voice='%s' staff=%d", qPrintable(mxVoice), mxStaff);
     int s;   // staff mapped by voice mapper
     int v;   // voice mapped by voice mapper
-    if (voicelist.value(mxVoice).overlaps()) {
+    if (mu::value(voicelist, mxVoice).overlaps()) {
         // for overlapping voices, the staff does not change
         // and the voice is mapped and staff-dependent
         s = mxStaff;
-        v = voicelist.value(mxVoice).voice(s);
+        v = mu::value(voicelist, mxVoice).voice(s);
     } else {
         // for non-overlapping voices, both staff and voice are
         // set by the voice mapper
-        s = voicelist.value(mxVoice).staff();
-        v = voicelist.value(mxVoice).voice();
+        s = mu::value(voicelist, mxVoice).staff();
+        v = mu::value(voicelist, mxVoice).voice();
     }
 
     //LOGD("voice mapper mapped: s=%d v=%d", s, v);
@@ -424,7 +424,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
     msVoice = v;
 
     // make score-relative instead on part-relative
-    Part* part = _partMap.value(id);
+    Part* part = mu::value(_partMap, id);
     IF_ASSERT_FAILED(part) {
         return false;
     }
@@ -449,7 +449,7 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
 
 bool MusicXMLParserPass1::hasPart(const QString& id) const
 {
-    return _parts.contains(id);
+    return mu::contains(_parts, id);
 }
 
 //---------------------------------------------------------
@@ -462,7 +462,7 @@ bool MusicXMLParserPass1::hasPart(const QString& id) const
 
 track_idx_t MusicXMLParserPass1::trackForPart(const QString& id) const
 {
-    Part* part = _partMap.value(id);
+    Part* part = mu::value(_partMap, id);
     IF_ASSERT_FAILED(part) {
         return mu::nidx;
     }
@@ -497,8 +497,8 @@ Fraction MusicXMLParserPass1::getMeasureStart(const int i) const
 
 int MusicXMLParserPass1::octaveShift(const QString& id, const staff_idx_t staff, const Fraction f) const
 {
-    if (_parts.contains(id)) {
-        return _parts.value(id).octaveShift(staff, f);
+    if (mu::contains(_parts, id)) {
+        return _parts.at(id).octaveShift(staff, f);
     }
 
     return 0;
@@ -1238,7 +1238,7 @@ static QString text2syms(const QString& t)
     // caching does not gain much
 
     IEngravingFontPtr sf = engravingFonts()->fallbackFont();
-    QMap<QString, SymId> map;
+    std::map<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 
     for (int i = int(SymId::noSym); i < int(SymId::lastSym); ++i) {
@@ -1246,7 +1246,7 @@ static QString text2syms(const QString& t)
         QString string(sf->toString(id));
         // insert all syms except space to prevent matching all regular spaces
         if (id != SymId::space) {
-            map.insert(string, id);
+            map.insert({ string, id });
         }
         if (string.size() > maxStringSize) {
             maxStringSize = string.size();
@@ -1265,8 +1265,8 @@ static QString text2syms(const QString& t)
         AsciiStringView sym;
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
-            if (map.contains(toBeMatched)) {
-                sym = SymNames::nameForSymId(map.value(toBeMatched));
+            if (mu::contains(map, toBeMatched)) {
+                sym = SymNames::nameForSymId(map.at(toBeMatched));
                 break;
             }
             maxMatch--;
@@ -1862,7 +1862,7 @@ void MusicXMLParserPass1::partList(MusicXmlPartGroupList& partGroupList)
 static void createPart(Score* score, const QString& id, PartMap& pm)
 {
     Part* part = new Part(score);
-    pm.insert(id, part);
+    pm.insert({ id, part });
     score->appendPart(part);
     Staff* staff = Factory::createStaff(part);
     staff->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
@@ -2005,13 +2005,13 @@ void MusicXMLParserPass1::scorePart()
     _logger->logDebugTrace("MusicXMLParserPass1::scorePart", &_e);
     QString id = _e.attributes().value("id").toString().trimmed();
 
-    if (_parts.contains(id)) {
+    if (mu::contains(_parts, id)) {
         _logger->logError(QString("duplicate part id '%1'").arg(id), &_e);
         skipLogCurrElem();
         return;
     } else {
-        _parts.insert(id, MusicXmlPart(id));
-        _instruments.insert(id, MusicXMLInstruments());
+        _parts.insert({ id, MusicXmlPart(id) });
+        _instruments.insert({ id, MusicXMLInstruments() });
         createPart(_score, id, _partMap);
     }
 
@@ -2050,9 +2050,9 @@ void MusicXMLParserPass1::scorePart()
             // score-instrument elements in the score-part
             if (instrId.isEmpty()) {
                 for (auto it = _instruments[id].cbegin(); it != _instruments[id].cend(); ++it) {
-                    _instruments[id][it.key()].midiPort = port.toInt() - 1;
+                    _instruments[id][it->first].midiPort = port.toInt() - 1;
                 }
-            } else if (_instruments[id].contains(instrId)) {
+            } else if (mu::contains(_instruments.at(id), instrId)) {
                 _instruments[id][instrId].midiPort = port.toInt() - 1;
             }
 
@@ -2090,27 +2090,27 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
                    qPrintable(instrName)
                    );
              */
-            _instruments[partId].insert(instrId, MusicXMLInstrument(instrName));
+            _instruments[partId].insert({ instrId, MusicXMLInstrument(instrName) });
             // EngravingItem instrument-name is typically not displayed in the score,
             // but used only internally
-            if (_instruments[partId].contains(instrId)) {
+            if (mu::contains(_instruments.at(partId), instrId)) {
                 _instruments[partId][instrId].name = instrName;
             }
         } else if (_e.name() == "instrument-sound") {
             QString instrSound = _e.readElementText();
-            if (_instruments[partId].contains(instrId)) {
+            if (mu::contains(_instruments.at(partId), instrId)) {
                 _instruments[partId][instrId].sound = instrSound;
             }
         } else if (_e.name() == "virtual-instrument") {
             while (_e.readNextStartElement()) {
                 if (_e.name() == "virtual-library") {
                     QString virtualLibrary = _e.readElementText();
-                    if (_instruments[partId].contains(instrId)) {
+                    if (mu::contains(_instruments.at(partId), instrId)) {
                         _instruments[partId][instrId].virtLib = virtualLibrary;
                     }
                 } else if (_e.name() == "virtual-name") {
                     QString virtualName = _e.readElementText();
-                    if (_instruments[partId].contains(instrId)) {
+                    if (mu::contains(_instruments.at(partId), instrId)) {
                         _instruments[partId][instrId].virtName = virtualName;
                     }
                 } else {
@@ -2148,7 +2148,7 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
                 _logger->logError(QString("incorrect midi-channel: %1").arg(channel), &_e);
                 channel = 16;
             }
-            if (_instruments[partId].contains(instrId)) {
+            if (mu::contains(_instruments.at(partId), instrId)) {
                 _instruments[partId][instrId].midiChannel = channel - 1;
             }
         } else if (_e.name() == "midi-program") {
@@ -2162,17 +2162,17 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
                 _logger->logError(QString("incorrect midi-program: %1").arg(program), &_e);
                 program = 128;
             }
-            if (_instruments[partId].contains(instrId)) {
+            if (mu::contains(_instruments.at(partId), instrId)) {
                 _instruments[partId][instrId].midiProgram = program - 1;
             }
         } else if (_e.name() == "midi-unpitched") {
-            if (_instruments[partId].contains(instrId)) {
+            if (mu::contains(_instruments.at(partId), instrId)) {
                 _instruments[partId][instrId].unpitched = _e.readElementText().toInt() - 1;
             }
         } else if (_e.name() == "volume") {
             double vol = _e.readElementText().toDouble();
             if (vol >= 0 && vol <= 100) {
-                if (_instruments[partId].contains(instrId)) {
+                if (mu::contains(_instruments.at(partId), instrId)) {
                     _instruments[partId][instrId].midiVolume = static_cast<int>((vol / 100) * 127);
                 }
             } else {
@@ -2181,7 +2181,7 @@ void MusicXMLParserPass1::midiInstrument(const QString& partId)
         } else if (_e.name() == "pan") {
             double pan = _e.readElementText().toDouble();
             if (pan >= -90 && pan <= 90) {
-                if (_instruments[partId].contains(instrId)) {
+                if (mu::contains(_instruments.at(partId), instrId)) {
                     _instruments[partId][instrId].midiPan = static_cast<int>(((pan + 90) / 180) * 127);
                 }
             } else {
@@ -2242,7 +2242,7 @@ void MusicXMLParserPass1::part()
     _logger->logDebugTrace("MusicXMLParserPass1::part", &_e);
     const QString id = _e.attributes().value("id").toString().trimmed();
 
-    if (!_parts.contains(id)) {
+    if (!mu::contains(_parts, id)) {
         _logger->logError(QString("cannot find part '%1'").arg(id), &_e);
         skipLogCurrElem();
         return;
@@ -2266,7 +2266,7 @@ void MusicXMLParserPass1::part()
     }
 
     // Bug fix for Cubase 6.5.5..9.5.10 which generate <staff>2</staff> in a single staff part
-    setNumberOfStavesForPart(_partMap.value(id), _parts[id].maxStaff() + 1);
+    setNumberOfStavesForPart(mu::value(_partMap, id), _parts[id].maxStaff() + 1);
     // allocate MuseScore staff to MusicXML voices
     allocateStaves(_parts[id].voicelist);
     // allocate MuseScore voice to MusicXML voices
@@ -2527,31 +2527,31 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
         _logger->logError("staves exceed MAX_STAVES, but hidden staves can be discarded", &_e);
         // Some scores have parts with many staves (~10), but most are hidden
         // When this occurs, we can discard hidden staves
-        // and store a QMap between staffNumber and staffIndex.
+        // and store a std::map between staffNumber and staffIndex.
         int staffNumber = 1;
-        int staffIndex = 0;
+        size_t staffIndex = 0;
         for (; staffNumber <= staves; ++staffNumber) {
             if (hiddenStaves.find(staffNumber) != hiddenStaves.end()) {
                 _logger->logError(QString("removing hidden staff %1").arg(staffNumber), &_e);
                 continue;
             }
-            _parts[partId].insertStaffNumberToIndex(staffNumber, staffIndex);
+            _parts[partId].insertStaffNumberToIndex(staffNumber, static_cast<int>(staffIndex));
             ++staffIndex;
         }
         Q_ASSERT(staffIndex == _parts[partId].staffNumberToIndex().size());
 
-        setNumberOfStavesForPart(_partMap.value(partId), staves - static_cast<int>(hiddenStaves.size()));
+        setNumberOfStavesForPart(mu::value(_partMap, partId), staves - static_cast<int>(hiddenStaves.size()));
     } else {
         // Otherwise, don't discard any staves
         // And set hidden staves to HideMode::AUTO
         // (MuseScore doesn't currently have a mechanism
         // for hiding non-empty staves, so this is an approximation
         // of the correct implementation)
-        setNumberOfStavesForPart(_partMap.value(partId), staves);
+        setNumberOfStavesForPart(mu::value(_partMap, partId), staves);
         for (int hiddenStaff : hiddenStaves) {
-            int hiddenStaffIndex = _parts.value(partId).staffNumberToIndex(hiddenStaff);
+            int hiddenStaffIndex = mu::value(_parts, partId).staffNumberToIndex(hiddenStaff);
             if (hiddenStaffIndex >= 0) {
-                _partMap.value(partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO);
+                mu::value(_partMap, partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO);
             }
         }
     }
@@ -2754,8 +2754,8 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
 
     // handle the stops first
     for (const MxmlOctaveShiftDesc& desc : stops) {
-        if (_octaveShifts.contains(desc.num)) {
-            MxmlOctaveShiftDesc prevDesc = _octaveShifts.value(desc.num);
+        if (mu::contains(_octaveShifts, static_cast<int>(desc.num))) {
+            MxmlOctaveShiftDesc prevDesc = _octaveShifts.at(desc.num);
             if (prevDesc.tp == MxmlOctaveShiftDesc::Type::UP
                 || prevDesc.tp == MxmlOctaveShiftDesc::Type::DOWN) {
                 // a complete pair
@@ -2764,16 +2764,16 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
             } else {
                 _logger->logError("double octave-shift stop", &_e);
             }
-            _octaveShifts.remove(desc.num);
+            mu::remove(_octaveShifts, desc.num);
         } else {
-            _octaveShifts.insert(desc.num, desc);
+            _octaveShifts.insert({ desc.num, desc });
         }
     }
 
     // then handle the starts
     for (const MxmlOctaveShiftDesc& desc : starts) {
-        if (_octaveShifts.contains(desc.num)) {
-            MxmlOctaveShiftDesc prevDesc = _octaveShifts.value(desc.num);
+        if (mu::contains(_octaveShifts, static_cast<int>(desc.num))) {
+            MxmlOctaveShiftDesc prevDesc = _octaveShifts.at(desc.num);
             if (prevDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
                 // a complete pair
                 _parts[partId].addOctaveShift(staff, desc.size, desc.time);
@@ -2781,9 +2781,9 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
             } else {
                 _logger->logError("double octave-shift start", &_e);
             }
-            _octaveShifts.remove(desc.num);
+            mu::remove(_octaveShifts, desc.num);
         } else {
-            _octaveShifts.insert(desc.num, desc);
+            _octaveShifts.insert({ desc.num, desc });
         }
     }
 }
@@ -3342,7 +3342,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             auto strStaff = _e.readElementText();
             staff = _parts[partId].staffNumberToIndex(strStaff.toInt(&ok));
             _parts[partId].setMaxStaff(staff);
-            Part* part = _partMap.value(partId);
+            Part* part = mu::value(_partMap, partId);
             IF_ASSERT_FAILED(part) {
                 continue;
             }
@@ -3409,9 +3409,9 @@ void MusicXMLParserPass1::note(const QString& partId,
     if (dura.isValid() && dura > Fraction(0, 1)) {
         // count the chords
         int voiceInt = voiceToInt(voice);
-        if (!_parts.value(partId).voicelist.contains(voiceInt)) {
+        if (!mu::contains(mu::value(_parts, partId).voicelist, voiceInt)) {
             VoiceDesc vs;
-            _parts[partId].voicelist.insert(voiceInt, vs);
+            _parts[partId].voicelist.insert({ voiceInt, vs });
         }
         _parts[partId].voicelist[voiceInt].incrChordRests(staff);
         // determine note length for voiceInt overlap detection
@@ -3477,8 +3477,8 @@ Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const int& _divisio
         // There are two strategies:
         // 1. Use a lookup table of previous adjustments
         // 2. Check if within maxDiff of a seenDenominator
-        if (_adjustedDurations.contains(dura)) {
-            dura = _adjustedDurations.value(dura);
+        if (mu::contains(_adjustedDurations, dura)) {
+            dura = _adjustedDurations.at(dura);
         } else if (dura.reduced().denominator() > 64) {
             for (auto seenDenominator : _seenDenominators) {
                 int seenDenominatorTicks = Fraction(1, seenDenominator).ticks();

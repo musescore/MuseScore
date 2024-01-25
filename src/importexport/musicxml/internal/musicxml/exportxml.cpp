@@ -156,7 +156,7 @@ namespace mu::engraving {
 //   typedefs
 //---------------------------------------------------------
 
-typedef QMap<track_idx_t, const FiguredBass*> FigBassMap;
+typedef std::map<track_idx_t, const FiguredBass*> FigBassMap;
 
 //---------------------------------------------------------
 //   attributes -- prints <attributes> tag when necessary
@@ -345,7 +345,7 @@ struct MeasurePrintContext final
 //---------------------------------------------------------
 
 typedef QHash<const ChordRest* const, const Trill*> TrillHash;
-typedef QMap<const Instrument*, int> MxmlInstrumentMap;
+typedef std::map<const Instrument*, int> MxmlInstrumentMap;
 
 class ExportMusicXml
 {
@@ -2410,12 +2410,12 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
         // are in insertion order -> sorting required
 
         // first put the KeySyms in a map
-        QMap<qreal, KeySym> map;
+        std::map<qreal, KeySym> map;
         for (const KeySym& ksym : keysyms) {
-            map.insert(ksym.xPos, ksym);
+            map.insert({ ksym.xPos, ksym });
         }
         // then write them (automatically sorted on key)
-        for (const KeySym& ksym : map) {
+        for (const KeySym& ksym : mu::values(map)) {
             int step = (po - ksym.line) % 7;
             //LOGD(" keysym sym %d -> line %d step %d", ksym.sym, ksym.line, step);
             _xml.tag("key-step", QString(QChar(table2[step])));
@@ -4059,7 +4059,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 {
     Part* part = chord->score()->staff(chord->track() / VOICES)->part();
     size_t partNr = mu::indexOf(_score->parts(), part);
-    int instNr = instrMap.value(part->instrument(_tick), -1);
+    int instNr = mu::value(instrMap, part->instrument(_tick), -1);
     /*
     LOGD("chord() %p parent %p isgrace %d #gracenotes %d graceidx %d",
            chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
@@ -6255,9 +6255,9 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     if (extend) {
                         //LOGD("figuredbass() extend to %d + %d = %d",
                         //       cr->tick(), fb->ticks(), cr->tick() + fb->ticks());
-                        fbMap.insert(strack, fb);
+                        fbMap.insert({ strack, fb });
                     } else {
-                        fbMap.remove(strack);
+                        mu::remove(fbMap, strack);
                     }
                     const Fraction crEndTick = cr->tick() + cr->actualTicks();
                     const Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
@@ -6280,8 +6280,8 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
             }
         }
         // check for extend pending
-        if (fbMap.contains(strack)) {
-            const FiguredBass* fb = fbMap.value(strack);
+        if (mu::contains(fbMap, strack)) {
+            const FiguredBass* fb = fbMap.at(strack);
             Fraction crEndTick = cr->tick() + cr->actualTicks();
             Fraction fbEndTick = fb->segment()->tick() + fb->ticks();
             bool writeDuration = fb->ticks() < cr->actualTicks();
@@ -6291,7 +6291,7 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
             }
             if (fbEndTick <= crEndTick) {
                 //LOGD("figuredbass() at tick %d extend done", cr->tick() + cr->actualTicks());
-                fbMap.remove(strack);
+                mu::remove(fbMap, strack);
             }
         }
     }
@@ -6672,8 +6672,8 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList& il, const 
     im.clear();
     for (const auto& pair : il) {
         const Instrument* instr = pair.second;
-        if (!im.contains(instr)) {
-            im.insert(instr, im.size());
+        if (!mu::contains(im, instr)) {
+            im.insert({ instr, static_cast<int>(im.size()) });
         }
     }
 }
@@ -6682,7 +6682,7 @@ static void initInstrMap(MxmlInstrumentMap& im, const InstrumentList& il, const 
 //  initReverseInstrMap
 //---------------------------------------------------------
 
-typedef QMap<int, const Instrument*> MxmlReverseInstrumentMap;
+typedef std::map<int, const Instrument*> MxmlReverseInstrumentMap;
 
 /**
  Initialize the number t Instrument* map for a Part
@@ -6692,9 +6692,9 @@ typedef QMap<int, const Instrument*> MxmlReverseInstrumentMap;
 static void initReverseInstrMap(MxmlReverseInstrumentMap& rim, const MxmlInstrumentMap& im)
 {
     rim.clear();
-    for (const Instrument* i : im.keys()) {
-        int instNr = im.value(i);
-        rim.insert(instNr, i);
+    for (const Instrument* i : mu::keys(im)) {
+        int instNr = im.at(i);
+        rim.insert({ instNr, i });
     }
 }
 
@@ -7144,23 +7144,24 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
         } else {
             MxmlReverseInstrumentMap rim;
             initReverseInstrMap(rim, instrMap);
-            for (int instNr : rim.keys()) {
+            for (int instNr : mu::keys(rim)) {
+                const Instrument* instr = rim.at(instNr);
                 scoreInstrument(xml, static_cast<int>(idx) + 1, instNr + 1,
-                                MScoreTextToMXML::toPlainText(rim.value(instNr)->trackName()),
-                                rim.value(instNr));
+                                MScoreTextToMXML::toPlainText(instr->trackName()),
+                                instr);
             }
-            for (auto ii = rim.constBegin(); ii != rim.constEnd(); ii++) {
-                int instNr = ii.key();
+            for (auto ii = rim.cbegin(); ii != rim.cend(); ii++) {
+                int instNr = ii->first;
                 int midiPort = part->midiPort() + 1;
-                if (ii.value()->channel().size() > 0) {
-                    midiPort = score->masterScore()->midiMapping(ii.value()->channel(0)->channel())->port() + 1;
+                if (ii->second->channel().size() > 0) {
+                    midiPort = score->masterScore()->midiMapping(ii->second->channel(0)->channel())->port() + 1;
                 }
                 if (midiPort >= 1 && midiPort <= 16) {
                     xml.tagRaw(QString("midi-device %1 port=\"%2\"").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)).arg(midiPort), "");
                 } else {
                     xml.tagRaw(QString("midi-device %1").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)), "");
                 }
-                midiInstrument(xml, static_cast<int>(idx) + 1, instNr + 1, rim.value(instNr), score);
+                midiInstrument(xml, static_cast<int>(idx) + 1, instNr + 1, rim.at(instNr), score);
             }
         }
 
