@@ -2293,7 +2293,6 @@ void PianoView::compactMeasures(QList<Measure*> measures)
                         continue;
 
                   while (true) {
-                        Fraction crTick = cr->tick();
                         Fraction crTicks = cr->ticks();
 
                         Segment* segNext = cr->nextSegmentAfterCR(SegmentType::ChordRest);
@@ -2302,8 +2301,6 @@ void PianoView::compactMeasures(QList<Measure*> measures)
                         if (!crNext || crNext->measure() != m)
                               break;
 
-                        Measure* mNext = crNext->measure();
-                        Fraction crNextTick = crNext->tick();
                         Fraction crNextTicks = crNext->ticks();
 
                         if (cr->isRest() && crNext->isRest()) {
@@ -2348,8 +2345,6 @@ void PianoView::compactMeasures(QList<Measure*> measures)
 
 void PianoView::deleteSeletedNotes()
       {
-      ChordRest* cr = 0;            // select something after deleting notes
-
       Score* score = _staff->score();
 
       // deleteItem modifies selection().elements() list,
