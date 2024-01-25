@@ -152,6 +152,7 @@ void TextSettingsModel::loadProperties()
 
     updateFramePropertiesAvailability();
     updateStaffPropertiesAvailability();
+    updateSystemPropertiesAvailability();
     updateIsDynamicSpecificSettings();
     updateIsHorizontalAlignmentAvailable();
 }
@@ -214,6 +215,11 @@ void TextSettingsModel::insertSpecialCharacters()
 void TextSettingsModel::showStaffTextProperties()
 {
     dispatcher()->dispatch("staff-text-properties");
+}
+
+void TextSettingsModel::showSystemTextProperties()
+{
+    dispatcher()->dispatch("system-text-properties");
 }
 
 PropertyItem* TextSettingsModel::fontFamily() const
@@ -323,6 +329,11 @@ bool TextSettingsModel::areStaffTextPropertiesAvailable() const
     return m_areStaffTextPropertiesAvailable;
 }
 
+bool TextSettingsModel::areSystemTextPropertiesAvailable() const
+{
+    return m_areSystemTextPropertiesAvailable;
+}
+
 bool TextSettingsModel::isSpecialCharactersInsertionAvailable() const
 {
     return m_isSpecialCharactersInsertionAvailable;
@@ -346,6 +357,16 @@ void TextSettingsModel::setAreStaffTextPropertiesAvailable(bool areStaffTextProp
 
     m_areStaffTextPropertiesAvailable = areStaffTextPropertiesAvailable;
     emit areStaffTextPropertiesAvailableChanged(m_areStaffTextPropertiesAvailable);
+}
+
+void TextSettingsModel::setAreSystemTextPropertiesAvailable(bool areSystemTextPropertiesAvailable)
+{
+    if (m_areSystemTextPropertiesAvailable == areSystemTextPropertiesAvailable) {
+        return;
+    }
+
+    m_areSystemTextPropertiesAvailable = areSystemTextPropertiesAvailable;
+    emit areSystemTextPropertiesAvailableChanged(m_areSystemTextPropertiesAvailable);
 }
 
 void TextSettingsModel::setIsSpecialCharactersInsertionAvailable(bool isSpecialCharactersInsertionAvailable)
@@ -397,6 +418,14 @@ void TextSettingsModel::updateStaffPropertiesAvailability()
                        == TextTypes::TextType::TEXT_TYPE_STAFF;
 
     setAreStaffTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
+}
+
+void TextSettingsModel::updateSystemPropertiesAvailability()
+{
+    bool isAvailable = static_cast<TextTypes::TextType>(m_textType->value().toInt())
+                       == TextTypes::TextType::TEXT_TYPE_SYSTEM;
+
+    setAreSystemTextPropertiesAvailable(isAvailable && !m_textType->isUndefined());
 }
 
 void TextSettingsModel::updateIsDynamicSpecificSettings()

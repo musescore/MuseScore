@@ -57,6 +57,7 @@ class TextSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(QVariantList textStyles READ textStyles NOTIFY textStylesChanged)
 
     Q_PROPERTY(bool areStaffTextPropertiesAvailable READ areStaffTextPropertiesAvailable NOTIFY areStaffTextPropertiesAvailableChanged)
+    Q_PROPERTY(bool areSystemTextPropertiesAvailable READ areSystemTextPropertiesAvailable NOTIFY areSystemTextPropertiesAvailableChanged)
     Q_PROPERTY(
         bool isSpecialCharactersInsertionAvailable READ isSpecialCharactersInsertionAvailable NOTIFY isSpecialCharactersInsertionAvailableChanged)
     Q_PROPERTY(bool isDynamicSpecificSettings READ isDynamicSpecificSettings NOTIFY isDynamicSpecificSettingsChanged)
@@ -67,6 +68,7 @@ public:
 
     Q_INVOKABLE void insertSpecialCharacters();
     Q_INVOKABLE void showStaffTextProperties();
+    Q_INVOKABLE void showSystemTextProperties();
 
     void createProperties() override;
     void requestElements() override;
@@ -98,12 +100,14 @@ public:
     QVariantList textStyles();
 
     bool areStaffTextPropertiesAvailable() const;
+    bool areSystemTextPropertiesAvailable() const;
     bool isSpecialCharactersInsertionAvailable() const;
     bool isDynamicSpecificSettings() const;
     bool isHorizontalAlignmentAvailable() const;
 
 public slots:
     void setAreStaffTextPropertiesAvailable(bool areStaffTextPropertiesAvailable);
+    void setAreSystemTextPropertiesAvailable(bool areSystemTextPropertiesAvailable);
     void setIsSpecialCharactersInsertionAvailable(bool isSpecialCharactersInsertionAvailable);
     void setIsDynamicSpecificSettings(bool isOnlyDynamics);
     void setIsHorizontalAlignmentAvailable(bool isHorizontalAlignmentAvailable);
@@ -112,6 +116,7 @@ signals:
     void textStylesChanged();
 
     void areStaffTextPropertiesAvailableChanged(bool areStaffTextPropertiesAvailable);
+    void areSystemTextPropertiesAvailableChanged(bool areSystemTextPropertiesAvailable);
     void isSpecialCharactersInsertionAvailableChanged(bool isSpecialCharactersInsertionAvailable);
     void isDynamicSpecificSettingsChanged(bool isDynamicSpecificSettings);
     void isHorizontalAlignmentAvailableChanged(bool isHorizontalAlignmentAvailable);
@@ -122,6 +127,7 @@ private:
 
     void updateFramePropertiesAvailability();
     void updateStaffPropertiesAvailability();
+    void updateSystemPropertiesAvailability();
     void updateIsDynamicSpecificSettings();
     void updateIsHorizontalAlignmentAvailable();
 
@@ -147,6 +153,7 @@ private:
     QVariantList m_textStyles;
 
     bool m_areStaffTextPropertiesAvailable = false;
+    bool m_areSystemTextPropertiesAvailable = false;
     bool m_isSpecialCharactersInsertionAvailable = false;
     bool m_isDynamicSpecificSettings = false;
     bool m_isHorizontalAlignmentAvailable = true;

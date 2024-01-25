@@ -170,6 +170,7 @@ Column {
     }
 
     FlatButton {
+        id: staffTextPropertiesButton
         width: parent.width
 
         navigation.name: "Staff text properties"
@@ -182,6 +183,22 @@ Column {
 
         onClicked: {
             root.model.showStaffTextProperties()
+        }
+    }
+
+    FlatButton {
+        width: parent.width
+
+        navigation.name: "System text properties"
+        navigation.panel: root.navigationPanel
+        navigation.row: staffTextPropertiesButton.navigationRowEnd + 1
+
+        text: qsTrc("inspector", "System text properties")
+
+        visible: root.model ? root.model.areSystemTextPropertiesAvailable : false
+
+        onClicked: {
+            root.model.showSystemTextProperties()
         }
     }
 }
