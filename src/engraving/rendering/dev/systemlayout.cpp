@@ -1717,7 +1717,9 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 }
 
                 double squeezeFactor2 = ctx.state().segmentShapeSqueezeFactor();
-                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor2);
+                double minDist = HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor2);
+                minDist = std::max(minDist, 0.0);
+                double margin = segment.width() - minDist;
 
                 double reducedMargin = margin * (1 - std::max(squeezeFactor2, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
