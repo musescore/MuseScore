@@ -13479,7 +13479,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="title">
                   <string>Tied fret marks</string>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_59">
+                 <layout class="QVBoxLayout" name="verticalLayout_591">
                   <item>
                    <widget class="QRadioButton" name="tabShowTiesAndFret">
                     <property name="text">
@@ -13509,7 +13509,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <property name="title">
                   <string>Parenthesis indicating ties</string>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_60">
+                 <layout class="QVBoxLayout" name="verticalLayout_601">
                   <item>
                    <widget class="QRadioButton" name="tabParenthSystem">
                     <property name="text">
