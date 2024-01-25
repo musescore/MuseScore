@@ -36,7 +36,7 @@
 
 using AccidentalType = mu::engraving::AccidentalType;
 using SymId = mu::engraving::SymId;
-const static QMap<QString, AccidentalType> smuflAccidentalTypes {
+const static std::map<QString, AccidentalType> smuflAccidentalTypes {
     { "accidentalDoubleFlatOneArrowDown",                AccidentalType::DOUBLE_FLAT_ONE_ARROW_DOWN },
     { "accidentalFlatOneArrowDown",                      AccidentalType::FLAT_ONE_ARROW_DOWN },
     { "accidentalNaturalOneArrowDown",                   AccidentalType::NATURAL_ONE_ARROW_DOWN },
@@ -173,8 +173,8 @@ VoiceOverlapDetector::VoiceOverlapDetector()
 void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const int& voice, const int staff)
 {
     // if necessary, create the note list for voice
-    if (!_noteLists.contains(voice)) {
-        _noteLists.insert(voice, NoteList());
+    if (!mu::contains(_noteLists, voice)) {
+        _noteLists.insert({ voice, NoteList() });
     }
     _noteLists[voice].addNote(startTick, endTick, staff);
 }
@@ -182,10 +182,8 @@ void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const
 void VoiceOverlapDetector::dump() const
 {
     // LOGD("VoiceOverlapDetector::dump()");
-    QMapIterator<int, NoteList> i(_noteLists);
-    while (i.hasNext()) {
-        i.next();
-        i.value().dump(i.key());
+    for (auto p : _noteLists) {
+        p.second.dump(p.first);
     }
 }
 
@@ -197,8 +195,8 @@ void VoiceOverlapDetector::newMeasure()
 
 bool VoiceOverlapDetector::stavesOverlap(const int& voice) const
 {
-    if (_noteLists.contains(voice)) {
-        return _noteLists.value(voice).anyStaffOverlaps();
+    if (mu::contains(_noteLists, voice)) {
+        return _noteLists.at(voice).anyStaffOverlaps();
     } else {
         return false;
     }
@@ -588,58 +586,60 @@ QString accSymId2SmuflMxmlString(const SymId id)
 
 SymId mxmlString2accSymId(const QString mxmlName, const QString smufl)
 {
-    QMap<QString, SymId> map;   // map MusicXML accidental name to MuseScore enum SymId
-    map["sharp"] = SymId::accidentalSharp;
-    map["natural"] = SymId::accidentalNatural;
-    map["flat"] = SymId::accidentalFlat;
-    map["double-sharp"] = SymId::accidentalDoubleSharp;
-    map["sharp-sharp"] = SymId::accidentalDoubleSharp;
-    //map["double-flat"] = SymId::accidentalDoubleFlat; // shouldn't harm, but doesn't exist in MusicXML
-    map["flat-flat"] = SymId::accidentalDoubleFlat;
-    map["natural-sharp"] = SymId::accidentalNaturalSharp;
-    map["natural-flat"] = SymId::accidentalNaturalFlat;
+    static std::map<QString, SymId> map;   // map MusicXML accidental name to MuseScore enum SymId
+    if (map.empty()) {
+        map["sharp"] = SymId::accidentalSharp;
+        map["natural"] = SymId::accidentalNatural;
+        map["flat"] = SymId::accidentalFlat;
+        map["double-sharp"] = SymId::accidentalDoubleSharp;
+        map["sharp-sharp"] = SymId::accidentalDoubleSharp;
+        //map["double-flat"] = SymId::accidentalDoubleFlat; // shouldn't harm, but doesn't exist in MusicXML
+        map["flat-flat"] = SymId::accidentalDoubleFlat;
+        map["natural-sharp"] = SymId::accidentalNaturalSharp;
+        map["natural-flat"] = SymId::accidentalNaturalFlat;
 
-    map["quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
-    map["quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
-    map["three-quarters-flat"] = SymId::accidentalThreeQuarterTonesFlatZimmermann;
-    map["three-quarters-sharp"] = SymId::accidentalThreeQuarterTonesSharpStein;
+        map["quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
+        map["quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
+        map["three-quarters-flat"] = SymId::accidentalThreeQuarterTonesFlatZimmermann;
+        map["three-quarters-sharp"] = SymId::accidentalThreeQuarterTonesSharpStein;
 
-    map["sharp-down"] = SymId::accidentalQuarterToneSharpArrowDown;
-    map["sharp-up"] = SymId::accidentalThreeQuarterTonesSharpArrowUp;
-    map["natural-down"] = SymId::accidentalQuarterToneFlatNaturalArrowDown;
-    map["natural-up"] = SymId::accidentalQuarterToneSharpNaturalArrowUp;
-    map["flat-down"] = SymId::accidentalThreeQuarterTonesFlatArrowDown;
-    map["flat-up"] = SymId::accidentalQuarterToneFlatArrowUp;
-    map["double-sharp-down"] = SymId::accidentalThreeQuarterTonesSharpArrowDown;
-    map["double-sharp-up"] = SymId::accidentalFiveQuarterTonesSharpArrowUp;
-    map["flat-flat-down"] = SymId::accidentalFiveQuarterTonesFlatArrowDown;
-    map["flat-flat-up"] = SymId::accidentalThreeQuarterTonesFlatArrowUp;
+        map["sharp-down"] = SymId::accidentalQuarterToneSharpArrowDown;
+        map["sharp-up"] = SymId::accidentalThreeQuarterTonesSharpArrowUp;
+        map["natural-down"] = SymId::accidentalQuarterToneFlatNaturalArrowDown;
+        map["natural-up"] = SymId::accidentalQuarterToneSharpNaturalArrowUp;
+        map["flat-down"] = SymId::accidentalThreeQuarterTonesFlatArrowDown;
+        map["flat-up"] = SymId::accidentalQuarterToneFlatArrowUp;
+        map["double-sharp-down"] = SymId::accidentalThreeQuarterTonesSharpArrowDown;
+        map["double-sharp-up"] = SymId::accidentalFiveQuarterTonesSharpArrowUp;
+        map["flat-flat-down"] = SymId::accidentalFiveQuarterTonesFlatArrowDown;
+        map["flat-flat-up"] = SymId::accidentalThreeQuarterTonesFlatArrowUp;
 
-    map["arrow-down"] = SymId::accidentalArrowDown;
-    map["arrow-up"] = SymId::accidentalArrowUp;
+        map["arrow-down"] = SymId::accidentalArrowDown;
+        map["arrow-up"] = SymId::accidentalArrowUp;
 
-    map["triple-sharp"] = SymId::accidentalTripleSharp;
-    map["triple-flat"] = SymId::accidentalTripleFlat;
+        map["triple-sharp"] = SymId::accidentalTripleSharp;
+        map["triple-flat"] = SymId::accidentalTripleFlat;
 
-    map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
-    map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
-    map["slash-flat"] = SymId::accidentalBakiyeFlat;
-    map["double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
+        map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
+        map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
+        map["slash-flat"] = SymId::accidentalBakiyeFlat;
+        map["double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
 
-    map["sharp-1"] = SymId::accidental1CommaSharp;
-    map["sharp-2"] = SymId::accidental2CommaSharp;
-    map["sharp-3"] = SymId::accidental3CommaSharp;
-    map["sharp-5"] = SymId::accidental5CommaSharp;
-    map["flat-1"] = SymId::accidental1CommaFlat;
-    map["flat-2"] = SymId::accidental2CommaFlat;
-    map["flat-3"] = SymId::accidental3CommaFlat;
-    map["flat-4"] = SymId::accidental4CommaFlat;
+        map["sharp-1"] = SymId::accidental1CommaSharp;
+        map["sharp-2"] = SymId::accidental2CommaSharp;
+        map["sharp-3"] = SymId::accidental3CommaSharp;
+        map["sharp-5"] = SymId::accidental5CommaSharp;
+        map["flat-1"] = SymId::accidental1CommaFlat;
+        map["flat-2"] = SymId::accidental2CommaFlat;
+        map["flat-3"] = SymId::accidental3CommaFlat;
+        map["flat-4"] = SymId::accidental4CommaFlat;
 
-    map["sori"] = SymId::accidentalSori;
-    map["koron"] = SymId::accidentalKoron;
+        map["sori"] = SymId::accidentalSori;
+        map["koron"] = SymId::accidentalKoron;
+    }
 
-    if (map.contains(mxmlName)) {
-        return map.value(mxmlName);
+    if (mu::contains(map, mxmlName)) {
+        return map.at(mxmlName);
     } else if (mxmlName == "other") {
         return SymNames::symIdByName(smufl);
     } else {
@@ -756,7 +756,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
 
 QString accidentalType2SmuflMxmlString(const AccidentalType type)
 {
-    return smuflAccidentalTypes.key(type);
+    return mu::key(smuflAccidentalTypes, type);
 }
 
 //---------------------------------------------------------
@@ -770,60 +770,62 @@ QString accidentalType2SmuflMxmlString(const AccidentalType type)
 
 AccidentalType mxmlString2accidentalType(const QString mxmlName, const QString smufl)
 {
-    QMap<QString, AccidentalType> map;   // map MusicXML accidental name to MuseScore enum AccidentalType
-    map["sharp"] = AccidentalType::SHARP;
-    map["natural"] = AccidentalType::NATURAL;
-    map["flat"] = AccidentalType::FLAT;
-    map["double-sharp"] = AccidentalType::SHARP2;
-    map["sharp-sharp"] = AccidentalType::SHARP2;
-    //map["double-flat"] = AccidentalType::FLAT2; // shouldn't harm, but doesn't exist in MusicXML
-    map["flat-flat"] = AccidentalType::FLAT2;
-    map["natural-sharp"] = AccidentalType::SHARP;
-    map["natural-flat"] = AccidentalType::FLAT;
+    static std::map<QString, AccidentalType> map;   // map MusicXML accidental name to MuseScore enum AccidentalType
+    if (map.empty()) {
+        map["sharp"] = AccidentalType::SHARP;
+        map["natural"] = AccidentalType::NATURAL;
+        map["flat"] = AccidentalType::FLAT;
+        map["double-sharp"] = AccidentalType::SHARP2;
+        map["sharp-sharp"] = AccidentalType::SHARP2;
+        //map["double-flat"] = AccidentalType::FLAT2; // shouldn't harm, but doesn't exist in MusicXML
+        map["flat-flat"] = AccidentalType::FLAT2;
+        map["natural-sharp"] = AccidentalType::SHARP;
+        map["natural-flat"] = AccidentalType::FLAT;
 
-    map["quarter-flat"] = AccidentalType::MIRRORED_FLAT;
-    map["quarter-sharp"] = AccidentalType::SHARP_SLASH;
-    map["three-quarters-flat"] = AccidentalType::MIRRORED_FLAT2;
-    map["three-quarters-sharp"] = AccidentalType::SHARP_SLASH4;
+        map["quarter-flat"] = AccidentalType::MIRRORED_FLAT;
+        map["quarter-sharp"] = AccidentalType::SHARP_SLASH;
+        map["three-quarters-flat"] = AccidentalType::MIRRORED_FLAT2;
+        map["three-quarters-sharp"] = AccidentalType::SHARP_SLASH4;
 
-    map["sharp-up"] = AccidentalType::SHARP_ARROW_UP;
-    map["natural-down"] = AccidentalType::NATURAL_ARROW_DOWN;
-    map["natural-up"] = AccidentalType::NATURAL_ARROW_UP;
-    map["sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
-    map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
-    map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
-    map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
-    map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
-    map["flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
-    map["flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
+        map["sharp-up"] = AccidentalType::SHARP_ARROW_UP;
+        map["natural-down"] = AccidentalType::NATURAL_ARROW_DOWN;
+        map["natural-up"] = AccidentalType::NATURAL_ARROW_UP;
+        map["sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
+        map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
+        map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
+        map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
+        map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
+        map["flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
+        map["flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
 
-    map["arrow-down"] = AccidentalType::ARROW_DOWN;
-    map["arrow-up"] = AccidentalType::ARROW_UP;
+        map["arrow-down"] = AccidentalType::ARROW_DOWN;
+        map["arrow-up"] = AccidentalType::ARROW_UP;
 
-    map["triple-sharp"] = AccidentalType::SHARP3;
-    map["triple-flat"] = AccidentalType::FLAT3;
+        map["triple-sharp"] = AccidentalType::SHARP3;
+        map["triple-flat"] = AccidentalType::FLAT3;
 
-    map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3;   // MIRRORED_FLAT_SLASH; ?
-    map["slash-sharp"] = AccidentalType::SHARP_SLASH2;   // SHARP_SLASH; ?
-    map["slash-flat"] = AccidentalType::FLAT_SLASH;
-    map["double-slash-flat"] = AccidentalType::FLAT_SLASH2;
+        map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+        map["slash-sharp"] = AccidentalType::SHARP_SLASH2; // SHARP_SLASH; ?
+        map["slash-flat"] = AccidentalType::FLAT_SLASH;
+        map["double-slash-flat"] = AccidentalType::FLAT_SLASH2;
 
-    map["sharp-1"] = AccidentalType::ONE_COMMA_SHARP;
-    map["sharp-2"] = AccidentalType::TWO_COMMA_SHARP;
-    map["sharp-3"] = AccidentalType::THREE_COMMA_SHARP;
-    map["sharp-5"] = AccidentalType::FIVE_COMMA_SHARP;
-    map["flat-1"] = AccidentalType::ONE_COMMA_FLAT;
-    map["flat-2"] = AccidentalType::TWO_COMMA_FLAT;
-    map["flat-3"] = AccidentalType::THREE_COMMA_FLAT;
-    map["flat-4"] = AccidentalType::FOUR_COMMA_FLAT;
+        map["sharp-1"] = AccidentalType::ONE_COMMA_SHARP;
+        map["sharp-2"] = AccidentalType::TWO_COMMA_SHARP;
+        map["sharp-3"] = AccidentalType::THREE_COMMA_SHARP;
+        map["sharp-5"] = AccidentalType::FIVE_COMMA_SHARP;
+        map["flat-1"] = AccidentalType::ONE_COMMA_FLAT;
+        map["flat-2"] = AccidentalType::TWO_COMMA_FLAT;
+        map["flat-3"] = AccidentalType::THREE_COMMA_FLAT;
+        map["flat-4"] = AccidentalType::FOUR_COMMA_FLAT;
 
-    map["sori"] = AccidentalType::SORI;
-    map["koron"] = AccidentalType::KORON;
+        map["sori"] = AccidentalType::SORI;
+        map["koron"] = AccidentalType::KORON;
+    }
 
-    if (map.contains(mxmlName)) {
-        return map.value(mxmlName);
-    } else if (mxmlName == "other" && smuflAccidentalTypes.contains(smufl)) {
-        return smuflAccidentalTypes.value(smufl);
+    if (mu::contains(map, mxmlName)) {
+        return map.at(mxmlName);
+    } else if (mxmlName == "other" && mu::contains(smuflAccidentalTypes, smufl)) {
+        return smuflAccidentalTypes.at(smufl);
     } else {
         LOGD("mxmlString2accidentalType: unknown accidental '%s'", qPrintable(mxmlName));
     }

@@ -401,13 +401,11 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
 static bool hasDrumset(const MusicXMLInstruments& instruments)
 {
     bool res = false;
-    MusicXMLInstrumentsIterator ii(instruments);
-    while (ii.hasNext()) {
-        ii.next();
+    for (const auto& p : instruments) {
         // debug: dump the instruments
         //LOGD("instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
         // find valid unpitched values
-        int unpitched = ii.value().unpitched;
+        int unpitched = p.second.unpitched;
         if (0 <= unpitched && unpitched <= 127) {
             res = true;
         }
@@ -446,16 +444,15 @@ static bool hasDrumset(const MusicXMLInstruments& instruments)
 static void initDrumset(Drumset* drumset, const MusicXMLInstruments& instruments)
 {
     drumset->clear();
-    MusicXMLInstrumentsIterator ii(instruments);
-    while (ii.hasNext()) {
-        ii.next();
+
+    for (const auto& ii : instruments) {
         // debug: also dump the drumset for this part
         //LOGD("initDrumset: instrument: %s %s", qPrintable(ii.key()), qPrintable(ii.value().toString()));
-        int unpitched = ii.value().unpitched;
+        int unpitched = ii.second.unpitched;
         if (0 <= unpitched && unpitched <= 127) {
-            drumset->drum(ii.value().unpitched)
-                = DrumInstrument(ii.value().name.toLatin1().constData(),
-                                 ii.value().notehead, ii.value().line, ii.value().stemDirection);
+            drumset->drum(ii.second.unpitched)
+                = DrumInstrument(ii.second.name.toLatin1().constData(),
+                                 ii.second.notehead, ii.second.line, ii.second.stemDirection);
         }
     }
 }
@@ -614,7 +611,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
     if (hasDrumset(instruments)) {
         // do not create multiple instruments for a drum part
         //LOGD("hasDrumset");
-        MusicXMLInstrument mxmlInstr = instruments.first();
+        MusicXMLInstrument mxmlInstr = instruments.begin()->second;
         updatePartWithInstrument(part, mxmlInstr, {}, true);
         return;
     }
@@ -623,7 +620,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
         // instrument details found, but no instrument ids found
         // -> only a single instrument is playing in the part
         //LOGD("single instrument");
-        MusicXMLInstrument mxmlInstr = instruments.first();
+        MusicXMLInstrument mxmlInstr = instruments.begin()->second;
         updatePartWithInstrument(part, mxmlInstr, intervList.interval({ 0, 1 }));
         return;
     }
@@ -636,7 +633,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
         Fraction tick = (*it).first;
         if (it == instrList.cbegin()) {
             prevInstrId = (*it).second;              // first instrument id
-            MusicXMLInstrument mxmlInstr = instruments.value(prevInstrId);
+            MusicXMLInstrument mxmlInstr = mu::value(instruments, prevInstrId);
             updatePartWithInstrument(part, mxmlInstr, intervList.interval(tick));
         } else {
             auto instrId = (*it).second;
@@ -660,11 +657,11 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                 if (!segment) {
                     logger->logError(QString("segment for instrument change at tick %1 not found")
                                      .arg(tick.ticks()), xmlreader);
-                } else if (!instruments.contains(instrId)) {
+                } else if (!mu::contains(instruments, instrId)) {
                     logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
                                      .arg(instrId).arg(tick.ticks()).arg(partId), xmlreader);
                 } else {
-                    MusicXMLInstrument mxmlInstr = instruments.value(instrId);
+                    MusicXMLInstrument mxmlInstr = mu::value(instruments, instrId);
                     updatePartWithInstrumentChange(part, mxmlInstr, intervList.interval(tick), segment, track, tick);
                 }
             }
@@ -691,7 +688,7 @@ static QString text2syms(const QString& t)
     // caching does not gain much
 
     IEngravingFontPtr sf = engravingFonts()->fallbackFont();
-    QMap<QString, SymId> map;
+    std::map<QString, SymId> map;
     int maxStringSize = 0;          // maximum string size found
 
     for (int i = int(SymId::noSym); i < int(SymId::lastSym); ++i) {
@@ -699,7 +696,7 @@ static QString text2syms(const QString& t)
         QString string(sf->toString(id));
         // insert all syms except space to prevent matching all regular spaces
         if (id != SymId::space) {
-            map.insert(string, id);
+            map.insert({ string, id });
         }
         if (string.size() > maxStringSize) {
             maxStringSize = string.size();
@@ -707,8 +704,8 @@ static QString text2syms(const QString& t)
     }
 
     // Special case Dolet inference (TODO: put behind a setting or export type flag)
-    map.insert("$", SymId::segno);
-    map.insert("Ø", SymId::coda);
+    map.insert({ "$", SymId::segno });
+    map.insert({ "Ø", SymId::coda });
 
     //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
@@ -723,8 +720,8 @@ static QString text2syms(const QString& t)
         AsciiStringView sym;
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
-            if (map.contains(toBeMatched)) {
-                sym = SymNames::nameForSymId(map.value(toBeMatched));
+            if (mu::contains(map, toBeMatched)) {
+                sym = SymNames::nameForSymId(map.at(toBeMatched));
                 break;
             }
             maxMatch--;
@@ -893,12 +890,12 @@ static void addLyric(MxmlLogger* logger, const QXmlStreamReader* const xmlreader
 
 static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreader,
                       ChordRest* cr,
-                      const QMap<int, Lyrics*>& numbrdLyrics,
+                      const std::map<int, Lyrics*>& numbrdLyrics,
                       const QSet<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
-    for (const auto lyricNo : numbrdLyrics.keys()) {
-        const auto lyric = numbrdLyrics.value(lyricNo);
+    for (const auto lyricNo : mu::keys(numbrdLyrics)) {
+        const auto lyric = numbrdLyrics.at(lyricNo);
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
         if (extLyrics.contains(lyric)) {
             extendedLyrics.addLyric(lyric);
@@ -1215,31 +1212,33 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
 
 static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
 {
-    QMap<QString, SymId> map;         // map MusicXML articulation name to MuseScore symbol
-    map["accent"]           = SymId::articAccentAbove;
-    map["staccatissimo"]    = SymId::articStaccatissimoAbove;
-    map["staccato"]         = SymId::articStaccatoAbove;
-    map["tenuto"]           = SymId::articTenutoAbove;
-    map["strong-accent"]    = SymId::articMarcatoAbove;
-    map["delayed-turn"]     = SymId::ornamentTurn;
-    map["turn"]             = SymId::ornamentTurn;
-    map["inverted-turn"]    = SymId::ornamentTurnInverted;
-    map["stopped"]          = SymId::brassMuteClosed;
-    map["up-bow"]           = SymId::stringsUpBow;
-    map["down-bow"]         = SymId::stringsDownBow;
-    map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
-    map["spiccato"]         = SymId::articStaccatissimoAbove;
-    map["snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
-    map["schleifer"]        = SymId::ornamentPrecompSlide;
-    map["open"]             = SymId::brassMuteOpen;
-    map["open-string"]      = SymId::brassMuteOpen;
-    map["thumb-position"]   = SymId::stringsThumbPosition;
-    map["soft-accent"]      = SymId::articSoftAccentAbove;
-    map["stress"]           = SymId::articStressAbove;
-    map["unstress"]         = SymId::articUnstressAbove;
+    static std::map<QString, SymId> map;         // map MusicXML articulation name to MuseScore symbol
+    if (map.empty()) {
+        map["accent"]           = SymId::articAccentAbove;
+        map["staccatissimo"]    = SymId::articStaccatissimoAbove;
+        map["staccato"]         = SymId::articStaccatoAbove;
+        map["tenuto"]           = SymId::articTenutoAbove;
+        map["strong-accent"]    = SymId::articMarcatoAbove;
+        map["delayed-turn"]     = SymId::ornamentTurn;
+        map["turn"]             = SymId::ornamentTurn;
+        map["inverted-turn"]    = SymId::ornamentTurnInverted;
+        map["stopped"]          = SymId::brassMuteClosed;
+        map["up-bow"]           = SymId::stringsUpBow;
+        map["down-bow"]         = SymId::stringsDownBow;
+        map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
+        map["spiccato"]         = SymId::articStaccatissimoAbove;
+        map["snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
+        map["schleifer"]        = SymId::ornamentPrecompSlide;
+        map["open"]             = SymId::brassMuteOpen;
+        map["open-string"]      = SymId::brassMuteOpen;
+        map["thumb-position"]   = SymId::stringsThumbPosition;
+        map["soft-accent"]      = SymId::articSoftAccentAbove;
+        map["stress"]           = SymId::articStressAbove;
+        map["unstress"]         = SymId::articUnstressAbove;
+    }
 
-    if (map.contains(mxmlName)) {
-        id = map.value(mxmlName);
+    if (mu::contains(map, mxmlName)) {
+        id = map.at(mxmlName);
         return true;
     } else {
         id = SymId::noSym;
@@ -1257,18 +1256,20 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
 
 static SymId convertFermataToSymId(const QString& mxmlName)
 {
-    QMap<QString, SymId> map; // map MusicXML fermata name to MuseScore symbol
-    map["normal"]           = SymId::fermataAbove;
-    map["angled"]           = SymId::fermataShortAbove;
-    map["square"]           = SymId::fermataLongAbove;
-    map["double-angled"]    = SymId::fermataVeryShortAbove;
-    map["double-square"]    = SymId::fermataVeryLongAbove;
-    map["double-dot"]       = SymId::fermataLongHenzeAbove;
-    map["half-curve"]       = SymId::fermataShortHenzeAbove;
-    map["curlew"]           = SymId::curlewSign;
+    static std::map<QString, SymId> map; // map MusicXML fermata name to MuseScore symbol
+    if (map.empty()) {
+        map["normal"]           = SymId::fermataAbove;
+        map["angled"]           = SymId::fermataShortAbove;
+        map["square"]           = SymId::fermataLongAbove;
+        map["double-angled"]    = SymId::fermataVeryShortAbove;
+        map["double-square"]    = SymId::fermataVeryLongAbove;
+        map["double-dot"]       = SymId::fermataLongHenzeAbove;
+        map["half-curve"]       = SymId::fermataShortHenzeAbove;
+        map["curlew"]           = SymId::curlewSign;
+    }
 
-    if (map.contains(mxmlName)) {
-        return map.value(mxmlName);
+    if (mu::contains(map, mxmlName)) {
+        return map.at(mxmlName);
     } else {
         LOGD("unknown fermata %s", qPrintable(mxmlName));
     }
@@ -1285,28 +1286,30 @@ static SymId convertFermataToSymId(const QString& mxmlName)
 
 static NoteHeadGroup convertNotehead(QString mxmlName)
 {
-    QMap<QString, int> map;   // map MusicXML notehead name to a MuseScore headgroup
-    map["slash"] = int(NoteHeadGroup::HEAD_SLASH);
-    map["triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_UP);
-    map["diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
-    map["cross"] = int(NoteHeadGroup::HEAD_PLUS);
-    map["x"] = int(NoteHeadGroup::HEAD_CROSS);
-    map["circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
-    map["inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
-    map["slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
-    map["back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
-    map["normal"] = int(NoteHeadGroup::HEAD_NORMAL);
-    map["do"] = int(NoteHeadGroup::HEAD_DO);
-    map["re"] = int(NoteHeadGroup::HEAD_RE);
-    map["mi"] = int(NoteHeadGroup::HEAD_MI);
-    map["fa"] = int(NoteHeadGroup::HEAD_FA);
-    map["fa up"] = int(NoteHeadGroup::HEAD_FA);
-    map["so"] = int(NoteHeadGroup::HEAD_SOL);
-    map["la"] = int(NoteHeadGroup::HEAD_LA);
-    map["ti"] = int(NoteHeadGroup::HEAD_TI);
+    static std::map<QString, int> map;   // map MusicXML notehead name to a MuseScore headgroup
+    if (map.empty()) {
+        map["slash"] = int(NoteHeadGroup::HEAD_SLASH);
+        map["triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_UP);
+        map["diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
+        map["cross"] = int(NoteHeadGroup::HEAD_PLUS);
+        map["x"] = int(NoteHeadGroup::HEAD_CROSS);
+        map["circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
+        map["inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
+        map["slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
+        map["back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
+        map["normal"] = int(NoteHeadGroup::HEAD_NORMAL);
+        map["do"] = int(NoteHeadGroup::HEAD_DO);
+        map["re"] = int(NoteHeadGroup::HEAD_RE);
+        map["mi"] = int(NoteHeadGroup::HEAD_MI);
+        map["fa"] = int(NoteHeadGroup::HEAD_FA);
+        map["fa up"] = int(NoteHeadGroup::HEAD_FA);
+        map["so"] = int(NoteHeadGroup::HEAD_SOL);
+        map["la"] = int(NoteHeadGroup::HEAD_LA);
+        map["ti"] = int(NoteHeadGroup::HEAD_TI);
+    }
 
-    if (map.contains(mxmlName)) {
-        return NoteHeadGroup(map.value(mxmlName));
+    if (mu::contains(map, mxmlName)) {
+        return NoteHeadGroup(map.at(mxmlName));
     } else {
         LOGD("unknown notehead %s", qPrintable(mxmlName));      // TODO
     }
@@ -1378,7 +1381,7 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 //---------------------------------------------------------
 
 // note that in case of overlapping spanners, handleSpannerStart is called for every spanner
-// as spanners QMap allows only one value per key, this does not hurt at all
+// as spanners std::map allows only one value per key, this does not hurt at all
 
 static void handleSpannerStart(SLine* new_sp, track_idx_t track, QString& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
 {
@@ -1891,14 +1894,14 @@ void MusicXMLParserPass2::part()
     // try to prevent an empty track name
     if (part->partName() == "") {
         QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-        part->setPartName(instruments[instrId].name);
+        part->setPartName(instruments.at(instrId).name);
     }
 
 #ifdef DEBUG_VOICE_MAPPER
     VoiceList voicelist = _pass1.getVoiceList(id);
     // debug: print voice mapper contents
     LOGD("voiceMapperStats: part '%s'", qPrintable(id));
-    for (QMap<QString, mu::engraving::VoiceDesc>::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
+    for (std::map<QString, mu::engraving::VoiceDesc>::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
         LOGD("voiceMapperStats: voice %s staff data %s",
              qPrintable(i.key()), qPrintable(i.value().toString()));
     }
@@ -1935,11 +1938,11 @@ void MusicXMLParserPass2::part()
 
     const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
     //LOGD("spanner list:");
-    auto i = _spanners.constBegin();
-    while (i != _spanners.constEnd()) {
-        auto sp = i.key();
-        Fraction tick1 = Fraction::fromTicks(i.value().first);
-        Fraction tick2 = Fraction::fromTicks(i.value().second);
+    auto i = _spanners.cbegin();
+    while (i != _spanners.cend()) {
+        auto sp = i->first;
+        Fraction tick1 = Fraction::fromTicks(i->second.first);
+        Fraction tick2 = Fraction::fromTicks(i->second.second);
         if (sp->isPedal() && toPedal(sp)->endHookType() == HookType::HOOK_45) {
             // Handle pedal change end tick (slightly hacky)
             tick2 += _score->findCR(tick2, sp->track())->ticks();
@@ -2102,9 +2105,9 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
                                 const size_t staves,
                                 const Key key,
                                 const Measure* measure,
-                                const QMap<Note*, int>& alterMap)
+                                const std::map<Note*, int>& alterMap)
 {
-    QMap<int, bool> accTmp;
+    std::map<int, bool> accTmp;
 
     AccidentalState currAcc;
     currAcc.init(key);
@@ -2116,9 +2119,9 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
                 continue;
             }
             Chord* chord = static_cast<Chord*>(e);
-            foreach (Note* nt, chord->notes()) {
-                if (alterMap.contains(nt)) {
-                    int alter = alterMap.value(nt);
+            for (Note* nt : chord->notes()) {
+                if (mu::contains(alterMap, nt)) {
+                    int alter = alterMap.at(nt);
                     int ln  = absStep(nt->tpc(), nt->pitch());
                     bool error = false;
                     AccidentalVal currAccVal = currAcc.accidentalVal(ln, error);
@@ -2128,23 +2131,23 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
                     if ((alter == -1
                          && currAccVal == AccidentalVal::FLAT
                          && nt->accidental()->accidentalType() == AccidentalType::FLAT
-                         && !accTmp.value(ln, false))
+                         && !mu::value(accTmp, ln, false))
                         || (alter == 0
                             && currAccVal == AccidentalVal::NATURAL
                             && nt->accidental()->accidentalType() == AccidentalType::NATURAL
-                            && !accTmp.value(ln, false))
+                            && !mu::value(accTmp, ln, false))
                         || (alter == 1
                             && currAccVal == AccidentalVal::SHARP
                             && nt->accidental()->accidentalType() == AccidentalType::SHARP
-                            && !accTmp.value(ln, false))) {
+                            && !mu::value(accTmp, ln, false))) {
                         nt->accidental()->setRole(AccidentalRole::USER);
                     } else if (Accidental::isMicrotonal(nt->accidental()->accidentalType())
                                && nt->accidental()->accidentalType() < AccidentalType::END) {
                         // microtonal accidental
                         nt->accidental()->setRole(AccidentalRole::USER);
-                        accTmp.insert(ln, false);
+                        accTmp.insert({ ln, false });
                     } else {
-                        accTmp.insert(ln, true);
+                        accTmp.insert({ ln, true });
                     }
                 }
             }
@@ -2309,7 +2312,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
 
     // collect candidates for courtesy accidentals to work out at measure end
-    QMap<Note*, int> alterMap;
+    std::map<Note*, int> alterMap;
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "attributes") {
@@ -2337,7 +2340,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
                 prevChord = n->chord();          // remember last non-grace chord
             }
             if (n && n->accidental() && n->accidental()->accidentalType() != AccidentalType::NONE) {
-                alterMap.insert(n, alt);
+                alterMap.insert({ n, alt });
             }
             if (missingPrev.isValid()) {
                 mTime += missingPrev;
@@ -2434,7 +2437,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     fillGapsInFirstVoices(measure, part);
 
     // Prevent any beams from extending into the next measure
-    for (Beam* beam : beams.values()) {
+    for (Beam* beam : mu::values(beams)) {
         if (beam) {
             removeBeam(beam);
         }
@@ -3749,7 +3752,7 @@ void MusicXMLParserPass2::clearSpanner(const MusicXmlSpannerDesc& d)
 
 void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
 {
-    _spanners.remove(spanner);
+    mu::remove(_spanners, spanner);
     delete spanner;
 }
 
@@ -4806,23 +4809,23 @@ static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteh
  Calculate the beam mode based on the collected beamTypes.
  */
 
-static BeamMode computeBeamMode(const QMap<int, QString>& beamTypes)
+static BeamMode computeBeamMode(const std::map<int, QString>& beamTypes)
 {
     // Start with uniquely-handled beam modes
-    if (beamTypes.value(1) == "continue"
-        && beamTypes.value(2) == "begin") {
+    if (mu::value(beamTypes, 1) == "continue"
+        && mu::value(beamTypes, 2) == "begin") {
         return BeamMode::BEGIN16;
-    } else if (beamTypes.value(1) == "continue"
-               && beamTypes.value(2) == "continue"
-               && beamTypes.value(3) == "begin") {
+    } else if (mu::value(beamTypes, 1) == "continue"
+               && mu::value(beamTypes, 2) == "continue"
+               && mu::value(beamTypes, 3) == "begin") {
         return BeamMode::BEGIN32;
     }
     // Generic beam modes are naive to all except the first beam
-    else if (beamTypes.value(1) == "begin") {
+    else if (mu::value(beamTypes, 1) == "begin") {
         return BeamMode::BEGIN;
-    } else if (beamTypes.value(1) == "continue") {
+    } else if (mu::value(beamTypes, 1) == "continue") {
         return BeamMode::MID;
-    } else if (beamTypes.value(1) == "end") {
+    } else if (mu::value(beamTypes, 1) == "end") {
         return BeamMode::END;
     } else {
         // backward-hook, forward-hook, and other unknown combinations
@@ -4954,11 +4957,10 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& part
 {
     const auto& instruments = pass1.getInstruments(partId);
     if (mnp.unpitched()) {
-        if (hasDrumset(instruments)
-            && instruments.contains(instrumentId)) {
+        if (hasDrumset(instruments) && mu::contains(instruments, instrumentId)) {
             // step and oct are display-step and ...-oct
             // get pitch from instrument definition in drumset instead
-            int unpitched = instruments[instrumentId].unpitched;
+            int unpitched = instruments.at(instrumentId).unpitched;
             note->setPitch(std::clamp(unpitched, 0, 127));
             // TODO - does this need to be key-aware?
             note->setTpc(pitch2tpc(unpitched, Key::C, Prefer::NEAREST));             // TODO: necessary ?
@@ -5062,7 +5064,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     bool graceSlash = false;
     bool printObject = _e.attributes().value("print-object") != "no";
     BeamMode bm;
-    QMap<int, QString> beamTypes;
+    std::map<int, QString> beamTypes;
     QString instrumentId;
     QString tieType;
     MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
@@ -5151,8 +5153,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     }
 
     // Define currBeam based on currentVoice to handle multi-voice beaming (and instantiate if not already)
-    if (!currBeams.contains(currentVoice)) {
-        currBeams.insert(currentVoice, (Beam*)nullptr);
+    if (!mu::contains(currBeams, currentVoice)) {
+        currBeams.insert({ currentVoice, (Beam*)nullptr });
     }
     Beam*& currBeam = currBeams[currentVoice];
 
@@ -5968,13 +5970,13 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
  Collects beamTypes, used in computeBeamMode.
  */
 
-void MusicXMLParserPass2::beam(QMap<int, QString>& beamTypes)
+void MusicXMLParserPass2::beam(std::map<int, QString>& beamTypes)
 {
     bool hasBeamNo;
     int beamNo = _e.attributes().value("number").toInt(&hasBeamNo);
     QString s = _e.readElementText();
 
-    beamTypes.insert(hasBeamNo ? beamNo : 1, s);
+    beamTypes.insert({ hasBeamNo ? beamNo : 1, s });
 }
 
 //---------------------------------------------------------
@@ -6105,7 +6107,7 @@ void MusicXMLParserLyric::parse()
     } else if (lyricNo > MAX_LYRICS) {
         _logger->logError(QString("too much lyrics (>%1)").arg(MAX_LYRICS), &_e);
         return;
-    } else if (_numberedLyrics.contains(lyricNo)) {
+    } else if (mu::contains(_numberedLyrics, lyricNo)) {
         _logger->logError(QString("duplicate lyrics number (%1)").arg(lyricNumber), &_e);
         return;
     }

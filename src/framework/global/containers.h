@@ -317,9 +317,9 @@ inline auto value(const Map& m, const typename Map::key_type& k, const typename 
 }
 
 template<typename Map, typename T>
-inline bool remove(Map& c, const T& v)
+inline bool remove(Map& c, const T& k)
 {
-    auto it = c.find(v);
+    auto it = c.find(k);
     if (it != c.end()) {
         c.erase(it);
         return true;
