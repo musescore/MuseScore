@@ -334,17 +334,10 @@ Chord::Chord(const Chord& c, bool link)
             score()->undo(new Link(a, const_cast<Arpeggio*>(c.m_arpeggio)));
         }
     }
-    if (c.m_tremolo) {
+    if (c.m_tremolo && !c.m_tremolo->twoNotes()) {
         Tremolo* t = Factory::copyTremolo(*(c.m_tremolo));
         if (link) {
             score()->undo(new Link(t, const_cast<Tremolo*>(c.m_tremolo)));
-        }
-        if (c.m_tremolo->twoNotes()) {
-            if (c.m_tremolo->chord1() == &c) {
-                t->setChords(this, nullptr);
-            } else {
-                t->setChords(nullptr, this);
-            }
         }
         add(t);
     }
