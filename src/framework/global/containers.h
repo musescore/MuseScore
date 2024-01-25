@@ -211,7 +211,9 @@ inline std::pair<bool, T> take(std::list<T>& l, const T& v)
     return ret;
 }
 
-// set
+// ===========================
+// Set
+// ===========================
 template<typename T>
 inline bool contains(const std::set<T>& s, const T& v)
 {
@@ -223,6 +225,10 @@ inline bool contains(const std::unordered_set<T>& s, const T& v)
 {
     return s.find(v) != s.cend();
 }
+
+// ===========================
+// General
+// ===========================
 
 template<typename Container, typename T>
 inline size_t indexOf(const Container& c, const T& v)
@@ -435,6 +441,13 @@ inline void DeleteAll(const Container& c)
 {
     DeleteAll(c.begin(), c.end());
 }
+}
+
+template<typename T>
+inline std::set<T>& operator<<(std::set<T>& s, const T& v)
+{
+    s.insert(v);
+    return s;
 }
 
 #endif // MU_GLOBAL_CONTAINERS_H
