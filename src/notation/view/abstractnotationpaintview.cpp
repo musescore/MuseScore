@@ -34,7 +34,7 @@ using namespace muse::ui;
 using namespace muse::draw;
 using namespace muse::actions;
 
-static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.5;
+static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
 static void compensateFloatPart(RectF& rect)
 {
