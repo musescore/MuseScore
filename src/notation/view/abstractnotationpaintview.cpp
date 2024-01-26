@@ -786,9 +786,9 @@ RectF AbstractNotationPaintView::scrollableAreaRect() const
     qreal overscrollX = viewport.width() * overscrollFactor;
     qreal overscrollY = viewport.height() * overscrollFactor;
 
-    // contentRect is Vertically or Horizontally larger than viewport       
+    // contentRect is Vertically or Horizontally larger than viewport
     // 1) Continuous Horizontal View
-    if (notation()->viewMode() == engraving::LayoutMode::LINE && viewport.width() < contentRect.width()) {    
+    if (notation()->viewMode() == engraving::LayoutMode::LINE && viewport.width() < contentRect.width()) {
         return notationContentRect().adjusted(0, -overscrollY, 0, overscrollY);
     }
 
