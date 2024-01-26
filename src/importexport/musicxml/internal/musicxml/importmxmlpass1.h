@@ -26,6 +26,7 @@
 #include <QXmlStreamReader>
 
 #include "containers.h"
+#include "draw/types/geometry.h"
 
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // for the creditwords and MusicXmlPartGroupList definitions
@@ -41,15 +42,15 @@ class Score;
 //---------------------------------------------------------
 
 struct PageFormat {
-    QSizeF size;                         // automatically initialized (to invalid)
-    qreal printableWidth { 5 };          // _width - left margin - right margin
-    qreal evenLeftMargin { 0.2 };        // values in inch
-    qreal oddLeftMargin { 0.2 };
-    qreal evenTopMargin { 0.2 };
-    qreal evenBottomMargin { 0.2 };
-    qreal oddTopMargin { 0.2 };
-    qreal oddBottomMargin { 0.2 };
-    bool twosided { false };
+    SizeF size;                         // automatically initialized (to invalid)
+    double printableWidth = 5;          // _width - left margin - right margin
+    double evenLeftMargin = 0.2;        // values in inch
+    double oddLeftMargin = 0.2;
+    double evenTopMargin = 0.2;
+    double evenBottomMargin = 0.2;
+    double oddTopMargin = 0.2;
+    double oddBottomMargin = 0.2;
+    bool twosided = false;
 };
 
 typedef std::map<QString, Part*> PartMap;
@@ -131,7 +132,7 @@ public:
     void identification();
     void credit(CreditWordsList& credits);
     void defaults();
-    void pageLayout(PageFormat& pf, const qreal conversion);
+    void pageLayout(PageFormat& pf, const double conversion);
     void partList(MusicXmlPartGroupList& partGroupList);
     void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
     void scorePart();
@@ -180,7 +181,7 @@ public:
     const CreditWordsList& credits() const { return m_credits; }
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
     bool isVocalStaff(const QString& id) const { return m_parts.at(id).isVocalStaff(); }
-    static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+    static VBox* createAndAddVBoxForCreditWords(Score* score, const int miny = 0, const int maxy = 75);
     int maxDiff() const { return m_maxDiff; }
     void insertAdjustedDuration(Fraction key, Fraction value) { m_adjustedDurations.insert({ key, value }); }
     std::map<Fraction, Fraction>& adjustedDurations() { return m_adjustedDurations; }
@@ -209,7 +210,7 @@ private:
     // part specific data (TODO: move to part-specific class)
     Fraction m_timeSigDura;                      // Measure duration according to last timesig read
     std::map<int, MxmlOctaveShiftDesc> m_octaveShifts;   // Pending octave-shifts
-    QSize m_pageSize;                            // Page width read from defaults
+    Size m_pageSize;                             // Page width read from defaults
 
     const int m_maxDiff = 5;                   // Duration rounding tick threshold;
     std::map<Fraction, Fraction> m_adjustedDurations;  // Rounded durations
