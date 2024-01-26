@@ -23,11 +23,14 @@
 #ifndef MU_NOTATION_HARPPEDALPOPUPMODEL_H
 #define MU_NOTATION_HARPPEDALPOPUPMODEL_H
 
-#include "abstractelementpopupmodel.h"
+#include <QObject>
+
 #include "context/iglobalcontext.h"
+
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/undo.h"
-#include <QObject>
+
+#include "view/abstractelementpopupmodel.h"
 
 namespace mu::notation {
 class HarpPedalPopupModel : public AbstractElementPopupModel

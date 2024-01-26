@@ -26,6 +26,8 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
+import MuseScore.Playback 1.0
+
 Item {
     id: container
 
@@ -52,6 +54,7 @@ Item {
             case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
             case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case Notation.TYPE_SOUND_FLAG: return soundFlagComp
             }
 
             return null
@@ -127,6 +130,15 @@ Item {
     Component {
         id: stringTuningsComp
         StringTuningsPopup {
+            onClosed: {
+                prv.unloadPopup()
+            }
+        }
+    }
+
+    Component {
+        id: soundFlagComp
+        SoundFlagPopup {
             onClosed: {
                 prv.unloadPopup()
             }

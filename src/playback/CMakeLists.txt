@@ -57,6 +57,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/auxsenditem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/auxsenditem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/msbasicpresetscategories.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/soundflagsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/soundflagsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/musesoundsparamsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/musesoundsparamsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/vstparamsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/soundflag/vstparamsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.cpp
