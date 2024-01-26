@@ -39,33 +39,33 @@ class Score;
  Parse the note pitch related part of the /score-partwise/part/measure/note node.
  */
 
-class mxmlNotePitch
+class MxmlNotePitch
 {
 public:
-    mxmlNotePitch(MxmlLogger* logger)
-        : _logger(logger) { /* nothing so far */ }
+    MxmlNotePitch(MxmlLogger* logger)
+        : m_logger(logger) { /* nothing so far */ }
     void pitch(QXmlStreamReader& e);
     bool readProperties(QXmlStreamReader& e, Score* score);
-    Accidental* acc() const { return _acc; }
-    AccidentalType accType() const { return _accType; }
-    int alter() const { return _alter; }
-    int displayOctave() const { return _displayOctave; }
-    int displayStep() const { return _displayStep; }
+    Accidental* acc() const { return m_acc; }
+    AccidentalType accType() const { return m_accType; }
+    int alter() const { return m_alter; }
+    int displayOctave() const { return m_displayOctave; }
+    int displayStep() const { return m_displayStep; }
     void displayStepOctave(QXmlStreamReader& e);
-    int octave() const { return _octave; }
-    int step() const { return _step; }
-    bool unpitched() const { return _unpitched; }
+    int octave() const { return m_octave; }
+    int step() const { return m_step; }
+    bool unpitched() const { return m_unpitched; }
 
 private:
-    Accidental* _acc = 0;                                   // created based on accidental element
-    AccidentalType _accType = AccidentalType::NONE;         // set by pitch() based on alter value (can be microtonal)
-    int _alter = 0;
-    int _displayStep = -1;                                  // invalid
-    int _displayOctave = -1;                                // invalid
-    int _octave = -1;
-    int _step = 0;
-    bool _unpitched = false;
-    MxmlLogger* _logger;                                    ///< Error logger
+    Accidental* m_acc = nullptr;                             // created based on accidental element
+    AccidentalType m_accType = AccidentalType::NONE;         // set by pitch() based on alter value (can be microtonal)
+    int m_alter = 0;
+    int m_displayStep = -1;                                  // invalid
+    int m_displayOctave = -1;                                // invalid
+    int m_octave = -1;
+    int m_step = 0;
+    bool m_unpitched = false;
+    MxmlLogger* m_logger = nullptr;                          // Error logger
 };
 } // namespace Ms
 

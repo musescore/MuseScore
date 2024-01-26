@@ -38,9 +38,9 @@ public:
     void logDebugTrace(const QString& trace, const QXmlStreamReader* const xmlreader = 0);
     void logDebugInfo(const QString& info, const QXmlStreamReader* const xmlreader = 0);
     void logError(const QString& error, const QXmlStreamReader* const xmlreader = 0);
-    void setLoggingLevel(const Level level) { _level = level; }
+    void setLoggingLevel(const Level level) { m_level = level; }
 private:
-    Level _level = Level::MXML_INFO;
+    Level m_level = Level::MXML_INFO;
 };
 } // namespace Ms
 

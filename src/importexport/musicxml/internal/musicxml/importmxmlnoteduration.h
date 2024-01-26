@@ -38,32 +38,32 @@ class MxmlLogger;
  Parse the note time related part of the /score-partwise/part/measure/note node.
  */
 
-class mxmlNoteDuration
+class MxmlNoteDuration
 {
 public:
-    mxmlNoteDuration(int divs, MxmlLogger* logger, MusicXMLParserPass1* pass1)
-        : _divs(divs), _pass1(pass1), _logger(logger) { /* nothing so far */ }
+    MxmlNoteDuration(int divs, MxmlLogger* logger, MusicXMLParserPass1* pass1)
+        : m_divs(divs), m_pass1(pass1), m_logger(logger) { /* nothing so far */ }
     QString checkTiming(const QString& type, const bool rest, const bool grace);
-    Fraction duration() const { return _dura; } // duration to use
-    Fraction calculatedDuration() const { return _calcDura; }   // value calculated from note type etcetera
-    Fraction specifiedDuration() const { return _specDura; }    // value read from the duration element
-    int dots() const { return _dots; }
-    TDuration normalType() const { return _normalType; }
+    Fraction duration() const { return m_dura; } // duration to use
+    Fraction calculatedDuration() const { return m_calcDura; }   // value calculated from note type etcetera
+    Fraction specifiedDuration() const { return m_specDura; }    // value read from the duration element
+    int dots() const { return m_dots; }
+    TDuration normalType() const { return m_normalType; }
     bool readProperties(QXmlStreamReader& e);
-    Fraction timeMod() const { return _timeMod; }
+    Fraction timeMod() const { return m_timeMod; }
 
 private:
     void duration(QXmlStreamReader& e);
     void timeModification(QXmlStreamReader& e);
-    const int _divs;                                  // the current divisions value
-    int _dots = 0;
-    Fraction _calcDura;
-    Fraction _specDura;
-    Fraction _dura;
-    TDuration _normalType;
-    Fraction _timeMod { 1, 1 };                       // default to no time modification
-    MusicXMLParserPass1* _pass1;
-    MxmlLogger* _logger;                              ///< Error logger
+    const int m_divs;                                  // the current divisions value
+    int m_dots = 0;
+    Fraction m_calcDura;
+    Fraction m_specDura;
+    Fraction m_dura;
+    TDuration m_normalType;
+    Fraction m_timeMod { 1, 1 };                       // default to no time modification
+    MusicXMLParserPass1* m_pass1 = nullptr;
+    MxmlLogger* m_logger = nullptr;                              ///< Error logger
 };
 } // namespace Ms
 
