@@ -158,8 +158,8 @@ public:
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
     bool contains(const mu::PointF&) const;
-    bool intersects(const mu::RectF& rr) const;
-    bool intersects(const Shape&) const;
+    bool intersects(const mu::RectF& rr, double horClearance = 0.0, double vertClearance = 0.0) const;
+    bool intersects(const Shape& other, double horClearance = 0.0, double vertClearance = 0.0) const;
     bool clearsVertically(const Shape& a) const;
 
     void paint(mu::draw::Painter& painter) const;

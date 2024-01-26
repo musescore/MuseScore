@@ -53,6 +53,7 @@ public:
 
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2);
+    static double computeVerticalClearance(const EngravingItem* item1, const EngravingItem* item2, double spatium);
 
 private:
     static bool isSpecialNotePaddingType(ElementType type);

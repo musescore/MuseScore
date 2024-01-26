@@ -209,4 +209,9 @@ void PaddingTable::createTable(const MStyle& style)
         elem[ElementType::SYMBOL] = elem[ElementType::ACCIDENTAL];
     }
     table[ElementType::NOTEDOT][ElementType::SYMBOL] = 0.2 * spatium;
+
+    // Accidental -> padding (used by accidental placement algorithm)
+    table[ElementType::ACCIDENTAL][ElementType::NOTE] = style.styleMM(Sid::accidentalNoteDistance);
+    table[ElementType::ACCIDENTAL][ElementType::LEDGER_LINE] = 0.18 * spatium;
+    table[ElementType::ACCIDENTAL][ElementType::STEM] = 0.18 * spatium;
 }

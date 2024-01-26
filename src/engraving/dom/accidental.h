@@ -109,6 +109,8 @@ public:
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
 
+    int line() const;
+
     String accessibleInfo() const override;
 
     void computeMag();

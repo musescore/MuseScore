@@ -306,6 +306,11 @@ double Accidental::subtype2centOffset(AccidentalType st)
     return ACC_LIST[int(st)].centOffset;
 }
 
+int Accidental::line() const
+{
+    return note()->line();
+}
+
 //---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
