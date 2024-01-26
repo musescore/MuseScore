@@ -653,8 +653,6 @@ void MasterNotation::updateExcerpts()
             updatedExcerpts.push_back(excerptNotation);
             continue;
         }
-
-        impl->setIsOpen(false);
     }
 
     // create notations for new excerpts
@@ -664,8 +662,10 @@ void MasterNotation::updateExcerpts()
         }
 
         IExcerptNotationPtr excerptNotation = createAndInitExcerptNotation(excerpt);
-        excerptNotation->notation()->setIsOpen(true);
-        excerptNotation->notation()->elements()->msScore()->doLayout();
+        bool open = excerpt->excerptScore()->isOpen();
+        if (open) {
+            excerptNotation->notation()->elements()->msScore()->doLayout();
+        }
 
         updatedExcerpts.push_back(excerptNotation);
     }
