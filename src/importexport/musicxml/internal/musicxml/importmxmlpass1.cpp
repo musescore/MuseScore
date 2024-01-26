@@ -265,7 +265,7 @@ void MusicXMLParserPass1::initPartState(const QString& /* partId */)
  Return false on error.
  */
 
-bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
+bool MusicXMLParserPass1::determineMeasureLength(std::vector<Fraction>& ml) const
 {
     ml.clear();
 
@@ -289,7 +289,7 @@ bool MusicXMLParserPass1::determineMeasureLength(QVector<Fraction>& ml) const
             }
         }
         //LOGD("determineMeasureLength() measure %d %s (%d)", i, qPrintable(maxMeasDur.print()), maxMeasDur.ticks());
-        ml.append(maxMeasDur);
+        ml.push_back(maxMeasDur);
     }
     return true;
 }
@@ -864,7 +864,8 @@ static void createDefaultHeader(Score* score)
  */
 
 static void createMeasuresAndVboxes(Score* score,
-                                    const QVector<Fraction>& ml, const QVector<Fraction>& ms,
+                                    const std::vector<Fraction>& ml,
+                                    const std::vector<Fraction>& ms,
                                     const std::set<int>& systemStartMeasureNrs,
                                     const std::set<int>& pageStartMeasureNrs,
                                     const CreditWordsList& crWords,
@@ -922,7 +923,7 @@ static void createMeasuresAndVboxes(Score* score,
  or start tick measure equals start tick previous measure plus length previous measure
  */
 
-static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>& ms)
+static void determineMeasureStart(const std::vector<Fraction>& ml, std::vector<Fraction>& ms)
 {
     ms.resize(ml.size());
     if (!(ms.size() > 0)) {
@@ -945,7 +946,7 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
  Required by TimeSigMap::tickValues(), called (indirectly) by Segment::add().
  */
 
-static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction>& measureLength)
+static void fixupSigmap(MxmlLogger* logger, Score* score, const std::vector<Fraction>& measureLength)
 {
     auto it = score->sigmap()->find(0);
 
@@ -955,7 +956,7 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const QVector<Fraction
         // use length of first measure instead time signature.
         // if there is no first measure, we probably don't care,
         // but set a default anyway.
-        Fraction tsig = measureLength.isEmpty() ? Fraction(4, 4) : measureLength.at(0);
+        Fraction tsig = measureLength.empty() ? Fraction(4, 4) : measureLength.at(0);
         score->sigmap()->add(0, tsig);
     }
 }

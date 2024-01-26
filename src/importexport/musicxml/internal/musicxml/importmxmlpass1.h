@@ -164,7 +164,7 @@ public:
     void pitch(int& step, float& alter, int& oct);
     void rest();
     void skipLogCurrElem();
-    bool determineMeasureLength(QVector<Fraction>& ml) const;
+    bool determineMeasureLength(std::vector<Fraction>& ml) const;
     VoiceList getVoiceList(const QString id) const;
     bool determineStaffMoveVoice(const QString& id, const int mxStaff, const int& mxVoice, int& msMove, int& msTrack, int& msVoice) const;
     int voiceToInt(const QString& voice);
@@ -197,8 +197,8 @@ private:
     std::map<QString, MusicXmlPart> m_parts;     // Parts data, mapped on part id
     std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a page
     std::set<int> m_pageStartMeasureNrs;         // Measure numbers of measures starting a page
-    QVector<Fraction> m_measureLength;           // Length of each measure
-    QVector<Fraction> m_measureStart;            // Start time of each measure
+    std::vector<Fraction> m_measureLength;           // Length of each measure
+    std::vector<Fraction> m_measureStart;            // Start time of each measure
     CreditWordsList m_credits;                   // All credits collected
     PartMap m_partMap;                           // TODO merge into MusicXmlPart ??
     std::map<QString, MusicXMLInstruments> m_instruments;   // instruments for each part, mapped on part id
