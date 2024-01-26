@@ -139,6 +139,6 @@ private:
 //---------------------------------------------------------
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
-typedef std::map<SLine*, QPair<int, int> > MusicXmlSpannerMap;
+typedef std::map<SLine*, std::pair<int, int> > MusicXmlSpannerMap;
 } // namespace Ms
 #endif
