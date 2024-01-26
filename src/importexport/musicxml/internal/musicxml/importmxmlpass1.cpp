@@ -720,7 +720,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* const score, const int miny, const int maxy)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* score, const int miny, const int maxy)
 {
     auto vbox = Factory::createVBox(score->dummy()->system());
     qreal vboxHeight = 10;                           // default height in tenths
@@ -752,8 +752,8 @@ static bool mustAddWordToVbox(const QString& creditType)
 //   addCreditWords
 //---------------------------------------------------------
 
-static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
-                            const int pageNr, const QSize pageSize,
+static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
+                            const int pageNr, const Size& pageSize,
                             const bool top)
 {
     VBox* vbox = nullptr;
@@ -810,7 +810,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
 //   createMeasuresAndVboxes
 //---------------------------------------------------------
 
-static void createDefaultHeader(Score* const score)
+static void createDefaultHeader(Score* score)
 {
     QString strTitle;
     QString strSubTitle;
@@ -863,12 +863,12 @@ static void createDefaultHeader(Score* const score)
  Create required measures with correct number, start tick and length for Score \a score.
  */
 
-static void createMeasuresAndVboxes(Score* const score,
+static void createMeasuresAndVboxes(Score* score,
                                     const QVector<Fraction>& ml, const QVector<Fraction>& ms,
                                     const std::set<int>& systemStartMeasureNrs,
                                     const std::set<int>& pageStartMeasureNrs,
                                     const CreditWordsList& crWords,
-                                    const QSize pageSize)
+                                    const Size& pageSize)
 {
     if (crWords.empty()) {
         createDefaultHeader(score);
@@ -1761,13 +1761,13 @@ void MusicXMLParserPass1::setStyle(const QString& type, const double val)
  MusicXML file.
  */
 
-void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
+void MusicXMLParserPass1::pageLayout(PageFormat& pf, const double conversion)
 {
     m_logger->logDebugTrace("MusicXMLParserPass1::pageLayout", &m_e);
 
-    qreal _oddRightMargin  = 0.0;
-    qreal _evenRightMargin = 0.0;
-    QSizeF size;
+    double _oddRightMargin  = 0.0;
+    double _evenRightMargin = 0.0;
+    SizeF size;
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "page-margins") {
@@ -1804,12 +1804,12 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
             }
         } else if (m_e.name() == "page-height") {
             const double val = m_e.readElementText().toDouble();
-            size.rheight() = val * conversion;
+            size.setHeight(val * conversion);
             // set pageHeight and pageWidth for use by doCredits()
             m_pageSize.setHeight(static_cast<int>(val + 0.5));
         } else if (m_e.name() == "page-width") {
             const double val = m_e.readElementText().toDouble();
-            size.rwidth() = val * conversion;
+            size.setWidth(val * conversion);
             // set pageHeight and pageWidth for use by doCredits()
             m_pageSize.setWidth(static_cast<int>(val + 0.5));
         } else {
