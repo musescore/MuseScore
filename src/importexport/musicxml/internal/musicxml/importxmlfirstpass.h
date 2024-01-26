@@ -64,7 +64,7 @@ public:
     int getLyricNo(const QString& number) const;
     void determineLyricNos();
 private:
-    std::map<QString, int> _numberToNo;
+    std::map<QString, int> m_numberToNo;
 };
 
 class MusicXmlPart
@@ -72,7 +72,7 @@ class MusicXmlPart
 public:
     MusicXmlPart(QString id = "", QString name = "");
     void addMeasureNumberAndDuration(QString measureNumber, Fraction measureDuration);
-    QString getId() const { return id; }
+    QString getId() const { return m_id; }
     QString toString() const;
     VoiceList voicelist;           // the voice map information TODO: make private
     Fraction measureDuration(size_t i) const;
@@ -83,37 +83,37 @@ public:
     int octaveShift(const staff_idx_t staff, const Fraction f) const;
     void addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f);
     void calcOctaveShifts();
-    void setName(QString nm) { name = nm; }
-    QString getName() const { return name; }
-    void setPrintName(const bool b) { _printName = b; }
-    bool getPrintName() const { return _printName; }
-    void setAbbr(QString ab) { abbr = ab; }
-    QString getAbbr() const { return abbr; }
-    void setPrintAbbr(const bool b) { _printAbbr = b; }
-    bool getPrintAbbr() const { return _printAbbr; }
-    std::map<int, int> staffNumberToIndex() const { return _staffNumberToIndex; }
+    void setName(QString nm) { m_name = nm; }
+    QString getName() const { return m_name; }
+    void setPrintName(const bool b) { m_printName = b; }
+    bool getPrintName() const { return m_printName; }
+    void setAbbr(QString ab) { m_abbr = ab; }
+    QString getAbbr() const { return m_abbr; }
+    void setPrintAbbr(const bool b) { m_printAbbr = b; }
+    bool getPrintAbbr() const { return m_printAbbr; }
+    std::map<int, int> staffNumberToIndex() const { return m_staffNumberToIndex; }
     int staffNumberToIndex(const int staffNumber) const;
-    void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { _staffNumberToIndex.insert({ staffNumber, staffIndex }); }
-    LyricNumberHandler& lyricNumberHandler() { return _lyricNumberHandler; }
-    const LyricNumberHandler& lyricNumberHandler() const { return _lyricNumberHandler; }
+    void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { m_staffNumberToIndex.insert({ staffNumber, staffIndex }); }
+    LyricNumberHandler& lyricNumberHandler() { return m_lyricNumberHandler; }
+    const LyricNumberHandler& lyricNumberHandler() const { return m_lyricNumberHandler; }
     void setMaxStaff(const int staff);
-    int maxStaff() const { return _maxStaff; }
+    int maxStaff() const { return m_maxStaff; }
     bool isVocalStaff() const;
-    void hasLyrics(bool b) { _hasLyrics = b; }
+    void hasLyrics(bool b) { m_hasLyrics = b; }
 private:
-    QString id;
-    QString name;
-    bool _printName = true;
-    QString abbr;
-    bool _printAbbr = false;
+    QString m_id;
+    QString m_name;
+    bool m_printName = true;
+    QString m_abbr;
+    bool m_printAbbr = false;
     std::vector<QString> m_measureNumbers;               // MusicXML measure number attribute
     std::vector<Fraction> m_measureDurations;         // duration in fraction for every measure
-    std::vector<MusicXmlOctaveShiftList> octaveShifts;   // octave shift list for every staff
-    LyricNumberHandler _lyricNumberHandler;
-    int _maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
-    bool _hasLyrics = false;
-    std::map<int, int> _staffNumberToIndex;       // Mapping from staff number to index in staff list.
-                                                  // Only for when staves are discarded in MusicXMLParserPass1::attributes.
+    std::vector<MusicXmlOctaveShiftList> m_octaveShifts;   // octave shift list for every staff
+    LyricNumberHandler m_lyricNumberHandler;
+    int m_maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
+    bool m_hasLyrics = false;
+    std::map<int, int> m_staffNumberToIndex;       // Mapping from staff number to index in staff list.
+                                                   // Only for when staves are discarded in MusicXMLParserPass1::attributes.
 };
 } // namespace Ms
 #endif

@@ -74,7 +74,7 @@ static void to_xml_log(MxmlLogger::Level level, const QString& text, const QXmlS
 
 void MxmlLogger::logDebugTrace(const QString& trace, const QXmlStreamReader* const xmlreader)
 {
-    if (_level <= Level::MXML_TRACE) {
+    if (m_level <= Level::MXML_TRACE) {
         to_xml_log(Level::MXML_TRACE, trace, xmlreader);
     }
 }
@@ -89,7 +89,7 @@ void MxmlLogger::logDebugTrace(const QString& trace, const QXmlStreamReader* con
 
 void MxmlLogger::logDebugInfo(const QString& info, const QXmlStreamReader* const xmlreader)
 {
-    if (_level <= Level::MXML_INFO) {
+    if (m_level <= Level::MXML_INFO) {
         to_xml_log(Level::MXML_INFO, info, xmlreader);
     }
 }
@@ -104,7 +104,7 @@ void MxmlLogger::logDebugInfo(const QString& info, const QXmlStreamReader* const
 
 void MxmlLogger::logError(const QString& error, const QXmlStreamReader* const xmlreader)
 {
-    if (_level <= Level::MXML_ERROR) {
+    if (m_level <= Level::MXML_ERROR) {
         to_xml_log(Level::MXML_ERROR, error, xmlreader);
     }
 }

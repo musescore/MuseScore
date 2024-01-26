@@ -38,9 +38,9 @@ static const std::vector<QString> vocalInstrumentNames({ "Voice",
                                                          "Men" });
 
 MusicXmlPart::MusicXmlPart(QString id, QString name)
-    : id(id), name(name)
+    : m_id(id), m_name(name)
 {
-    octaveShifts.resize(MAX_STAVES);
+    m_octaveShifts.resize(MAX_STAVES);
 }
 
 void MusicXmlPart::addMeasureNumberAndDuration(QString measureNumber, Fraction measureDuration)
@@ -51,8 +51,8 @@ void MusicXmlPart::addMeasureNumberAndDuration(QString measureNumber, Fraction m
 
 void MusicXmlPart::setMaxStaff(const int staff)
 {
-    if (staff > _maxStaff) {
-        _maxStaff = staff;
+    if (staff > m_maxStaff) {
+        m_maxStaff = staff;
     }
 }
 
@@ -67,7 +67,7 @@ Fraction MusicXmlPart::measureDuration(size_t i) const
 QString MusicXmlPart::toString() const
 {
     auto res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
-               .arg(id, name).arg(_printName).arg(abbr).arg(_printAbbr, _maxStaff);
+               .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
 
     for (VoiceList::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
         res += QString("voice %1 map staff data %2\n")
@@ -98,7 +98,7 @@ int MusicXmlPart::octaveShift(const staff_idx_t staff, const Fraction f) const
     if (f < Fraction(0, 1)) {
         return 0;
     }
-    return octaveShifts[staff].octaveShift(f);
+    return m_octaveShifts[staff].octaveShift(f);
 }
 
 void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f)
@@ -109,13 +109,13 @@ void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, cons
     if (f < Fraction(0, 1)) {
         return;
     }
-    octaveShifts[staff].addOctaveShift(shift, f);
+    m_octaveShifts[staff].addOctaveShift(shift, f);
 }
 
 void MusicXmlPart::calcOctaveShifts()
 {
     for (staff_idx_t i = 0; i < MAX_STAVES; ++i) {
-        octaveShifts[i].calcOctaveShiftShifts();
+        m_octaveShifts[i].calcOctaveShiftShifts();
     }
 }
 
@@ -136,10 +136,10 @@ void MusicXmlPart::calcOctaveShifts()
 
 int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
 {
-    if (_staffNumberToIndex.size() == 0) {
+    if (m_staffNumberToIndex.size() == 0) {
         return staffNumber - 1;
-    } else if (mu::contains(_staffNumberToIndex, staffNumber)) {
-        return _staffNumberToIndex.at(staffNumber);
+    } else if (mu::contains(m_staffNumberToIndex, staffNumber)) {
+        return m_staffNumberToIndex.at(staffNumber);
     } else {
         return -1;
     }
@@ -147,8 +147,8 @@ int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
 
 bool MusicXmlPart::isVocalStaff() const
 {
-    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), name) != vocalInstrumentNames.end()
-           || _hasLyrics;
+    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), m_name) != vocalInstrumentNames.end()
+           || m_hasLyrics;
 }
 
 //---------------------------------------------------------
@@ -274,8 +274,8 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 
 void LyricNumberHandler::addNumber(const QString number)
 {
-    if (_numberToNo.find(number) == _numberToNo.end()) {
-        _numberToNo[number] = -1;           // unassigned
+    if (m_numberToNo.find(number) == m_numberToNo.end()) {
+        m_numberToNo[number] = -1;           // unassigned
     }
 }
 
@@ -286,7 +286,7 @@ void LyricNumberHandler::addNumber(const QString number)
 QString LyricNumberHandler::toString() const
 {
     QString res;
-    for (const auto& p : _numberToNo) {
+    for (const auto& p : m_numberToNo) {
         if (!res.isEmpty()) {
             res += " ";
         }
@@ -301,8 +301,8 @@ QString LyricNumberHandler::toString() const
 
 int LyricNumberHandler::getLyricNo(const QString& number) const
 {
-    const auto it = _numberToNo.find(number);
-    return it == _numberToNo.end() ? 0 : it->second;
+    const auto it = m_numberToNo.find(number);
+    return it == m_numberToNo.end() ? 0 : it->second;
 }
 
 //---------------------------------------------------------
@@ -312,7 +312,7 @@ int LyricNumberHandler::getLyricNo(const QString& number) const
 void LyricNumberHandler::determineLyricNos()
 {
     int i = 0;
-    for (auto& p : _numberToNo) {
+    for (auto& p : m_numberToNo) {
         p.second = i;
         ++i;
     }
