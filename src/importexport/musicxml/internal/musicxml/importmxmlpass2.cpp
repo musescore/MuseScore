@@ -1387,7 +1387,7 @@ static void handleSpannerStart(SLine* new_sp, track_idx_t track, QString& placem
 {
     new_sp->setTrack(track);
     setSLinePlacement(new_sp, placement);
-    spanners[new_sp] = QPair<int, int>(tick.ticks(), -1);
+    spanners[new_sp] = std::pair<int, int>(tick.ticks(), -1);
 }
 
 //---------------------------------------------------------
@@ -6588,7 +6588,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             }
             gliss->setText(glissandoText);
             gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
-            spanners[gliss] = QPair<int, int>(tick.ticks(), -1);
+            spanners[gliss] = std::pair<int, int>(tick.ticks(), -1);
             // LOGD("glissando/slide=%p inserted at first tick %d", gliss, tick);
         }
     } else if (glissandoType == "stop") {
@@ -6736,11 +6736,11 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
                 trill = Factory::createTrill(cr->score()->dummy());
                 trill->setTrack(trk);
                 if (wavyLineType == "start") {
-                    spanners[trill] = QPair<int, int>(tick.ticks(), -1);
+                    spanners[trill] = std::pair<int, int>(tick.ticks(), -1);
                     // LOGD("trill=%p inserted at first tick %d", trill, tick);
                 }
                 if (wavyLineType == "startstop") {
-                    spanners[trill] = QPair<int, int>(tick.ticks(), tick.ticks() + ticks.ticks());
+                    spanners[trill] = std::pair<int, int>(tick.ticks(), tick.ticks() + ticks.ticks());
                     trill = nullptr;
                     // LOGD("trill=%p inserted at first tick %d second tick %d", trill, tick, tick);
                 }
