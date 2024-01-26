@@ -3006,7 +3006,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 //   fermatas
 //---------------------------------------------------------
 
-static void fermatas(const QVector<EngravingItem*>& cra, XmlWriter& xml, Notations& notations)
+static void fermatas(const std::vector<EngravingItem*>& cra, XmlWriter& xml, Notations& notations)
 {
     for (const EngravingItem* e : cra) {
         if (!e->isFermata() || !ExportMusicXml::canWrite(e)) {
@@ -3339,7 +3339,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                                      TrillHash& trillStart, TrillHash& trillStop)
 {
     if (!chord->isGrace()) {
-        QVector<EngravingItem*> fl;
+        std::vector<EngravingItem*> fl;
         for (EngravingItem* e : chord->segment()->annotations()) {
             if (e->track() == chord->track() && e->isFermata()) {
                 fl.push_back(e);
@@ -4347,7 +4347,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
     }
 
     Notations notations;
-    QVector<EngravingItem*> fl;
+    std::vector<EngravingItem*> fl;
     for (EngravingItem* e : rest->segment()->annotations()) {
         if (e->isFermata() && e->track() == rest->track()) {
             fl.push_back(e);
