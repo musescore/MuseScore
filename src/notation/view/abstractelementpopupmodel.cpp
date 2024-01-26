@@ -29,6 +29,7 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::HARP_DIAGRAM, PopupModelType::TYPE_HARP_DIAGRAM },
     { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
     { mu::engraving::ElementType::STRING_TUNINGS, PopupModelType::TYPE_STRING_TUNINGS },
+    { mu::engraving::ElementType::SOUND_FLAG, PopupModelType::TYPE_SOUND_FLAG },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)

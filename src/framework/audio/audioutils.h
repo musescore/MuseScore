@@ -24,6 +24,7 @@
 #define MU_AUDIO_AUDIOUTILS_H
 
 #include "audiotypes.h"
+#include "soundfonttypes.h"
 
 namespace mu::audio {
 inline AudioResourceMeta makeReverbMeta()
@@ -51,6 +52,27 @@ inline AudioPluginType audioPluginTypeFromCategoriesString(const String& categor
     }
 
     return AudioPluginType::Undefined;
+}
+
+inline String audioSourceName(const AudioInputParams& params)
+{
+    if (params.type() == mu::audio::AudioSourceType::MuseSampler) {
+        return params.resourceMeta.attributeVal(u"museName");
+    }
+
+    if (params.resourceMeta.type == audio::AudioResourceType::FluidSoundfont) {
+        const String& presetName = params.resourceMeta.attributeVal(synth::PRESET_NAME_ATTRIBUTE);
+        if (!presetName.empty()) {
+            return presetName;
+        }
+
+        const String& soundFontName = params.resourceMeta.attributeVal(synth::SOUNDFONT_NAME_ATTRIBUTE);
+        if (!soundFontName.empty()) {
+            return soundFontName;
+        }
+    }
+
+    return String::fromStdString(params.resourceMeta.id);
 }
 }
 

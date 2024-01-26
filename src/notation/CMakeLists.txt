@@ -143,12 +143,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/noteflagstypeselectormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/noteflagstypeselectormodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractelementpopupmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractelementpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.cpp

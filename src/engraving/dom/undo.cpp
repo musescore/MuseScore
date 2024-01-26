@@ -3195,7 +3195,7 @@ void ChangeSoundFlag::flip(EditData*)
     SoundFlag::Params params = m_soundFlag->params();
     SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
 
-    m_soundFlag->setSoundPresets(presets);
+    m_soundFlag->setSoundPresets(m_presets);
     m_soundFlag->setParams(m_params);
 
     m_presets = std::move(presets);
