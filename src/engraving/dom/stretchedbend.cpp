@@ -462,6 +462,10 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
         }
     }
 
+    if (!untilNextSegment) {
+        return;
+    }
+
     /// adjust coordinate to bend of tied back note
     StretchedBend* backTiedBend = backTiedStretchedBend();
     if (backTiedBend) {
