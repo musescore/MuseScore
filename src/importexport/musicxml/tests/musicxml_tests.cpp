@@ -499,6 +499,9 @@ TEST_F(Musicxml_Tests, directions1) {
 TEST_F(Musicxml_Tests, directions2) {
     mxmlIoTest("testDirections2");
 }
+TEST_F(Musicxml_Tests, displayStepOctave) {
+    mxmlMscxExportTestRef("testDisplayStepOctave");
+}
 TEST_F(Musicxml_Tests, divisionsDefinedTooLate1) {
     mxmlIoTestRef("testDivsDefinedTooLate1");
 }
