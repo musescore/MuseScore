@@ -432,6 +432,7 @@ public:
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
 
+    bool hasAnotherStraightAboveOrBelow(bool above) const;
     mu::PointF posInStaffCoordinates();
 
     bool isTrillCueNote() const { return m_isTrillCueNote; }
