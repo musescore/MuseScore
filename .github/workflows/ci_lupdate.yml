@@ -86,7 +86,7 @@ jobs:
         labels: strings
         reviewers: cbjeukendrup
     - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MuseScore_tsfiles_${{ env.BUILD_NUMBER }}
         path: ./share/locale
