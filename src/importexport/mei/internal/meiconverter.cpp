@@ -755,6 +755,12 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
             default:
                 break;
             }
+        } else if (meiClef.GetGlyphName() == "cClefSquare") {
+            switch (meiClef.GetLine()) {
+            case 2: return engraving::ClefType::C_19C;
+            default:
+                break;
+            }
         } else if (meiClef.GetGlyphName() == "fClefFrench") {
             switch (meiClef.GetLine()) {
             case 4: return engraving::ClefType::F_F18C;
@@ -764,6 +770,12 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
         } else if (meiClef.GetGlyphName() == "fClef19thCentury") {
             switch (meiClef.GetLine()) {
             case 4: return engraving::ClefType::F_19C;
+            default:
+                break;
+            }
+        } else if (meiClef.GetGlyphName() == "gClef8vbParens") {
+            switch (meiClef.GetLine()) {
+            case 2: return engraving::ClefType::G8_VB_P;
             default:
                 break;
             }
@@ -876,8 +888,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(engraving::ClefInfo::symId(clef));
         meiClef.SetGlyphName(glyphName.ascii());
         meiClef.SetGlyphAuth(SMUFL_AUTH);
-        switch (glyphName.at(0).unicode())
-        {
+        switch (glyphName.at(0).unicode()) {
         case 'c':
             meiClef.SetShape(libmei::CLEFSHAPE_C);
             break;
