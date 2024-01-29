@@ -151,6 +151,7 @@
 
 #include "dom/whammybar.h"
 
+#include "accidentalslayout.h"
 #include "arpeggiolayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
@@ -4492,6 +4493,8 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
     }
 
     ChordLayout::layoutChords3(ctx.conf().style(), { cueNoteChord }, { cueNote }, item->staff(), ctx);
+    ChordLayout::layoutLedgerLines({ cueNoteChord });
+    AccidentalsLayout::layoutAccidentals({ cueNoteChord }, ctx);
     layoutChord(cueNoteChord, ctx);
 
     Shape noteShape = cueNoteChord->shape();
