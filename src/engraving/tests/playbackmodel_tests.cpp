@@ -842,7 +842,8 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelMap&) {
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelMap&,
+                                                                   const PlaybackParamMap&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 
@@ -1095,7 +1096,8 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     const mu::mpe::NoteEvent& expectedEvent = std::get<mu::mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents) {
+    result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
+                                                                         const PlaybackParamMap&) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& eventList = triggeredEvents.at(firstNoteTimestamp);
@@ -1159,7 +1161,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
 
     // [THEN] Triggered events map will match our expectations
-    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents) {
+    result.offStream.onReceive(this, [expectedEvents](const PlaybackEventsMap& triggeredEvents, const PlaybackParamMap&) {
         EXPECT_EQ(triggeredEvents.size(), 1);
 
         const PlaybackEventList& actualEvents = triggeredEvents.at(0);

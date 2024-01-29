@@ -22,6 +22,8 @@
 
 #include "soundflag.h"
 
+#include "undo.h"
+
 using namespace mu::engraving;
 
 static const ElementStyle SOUND_FLAG_STYLE {
@@ -29,8 +31,8 @@ static const ElementStyle SOUND_FLAG_STYLE {
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
 
-SoundFlag::SoundFlag(Segment* parent, TextStyleType tid)
-    : StaffTextBase(ElementType::SOUND_FLAG, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+SoundFlag::SoundFlag(Segment* parent)
+    : TextBase(ElementType::SOUND_FLAG, parent, TextStyleType::DEFAULT, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&SOUND_FLAG_STYLE);
 }
@@ -40,40 +42,27 @@ SoundFlag* SoundFlag::clone() const
     return new SoundFlag(*this);
 }
 
-PropertyValue SoundFlag::getProperty(Pid id) const
+const SoundFlag::PresetCodes& SoundFlag::soundPresets() const
 {
-    if (id == Pid::SOUND_PRESET) {
-        return m_soundPreset;
-    }
-
-    return StaffTextBase::getProperty(id);
+    return m_soundPresets;
 }
 
-PropertyValue SoundFlag::propertyDefault(Pid id) const
+void SoundFlag::setSoundPresets(const PresetCodes& soundPresets)
 {
-    if (id == Pid::SOUND_PRESET) {
-        return PropertyValue();
-    }
-
-    return StaffTextBase::propertyDefault(id);
+    m_soundPresets = soundPresets;
 }
 
-bool SoundFlag::setProperty(Pid id, const PropertyValue& val)
+const SoundFlag::Params& SoundFlag::params() const
 {
-    if (id == Pid::SOUND_PRESET) {
-        m_soundPreset = val.value<String>();
-        return true;
-    }
-
-    return StaffTextBase::setProperty(id, val);
+    return m_params;
 }
 
-const mu::String& SoundFlag::soundPreset() const
+void SoundFlag::setParams(const Params& params)
 {
-    return m_soundPreset;
+    m_params = params;
 }
 
-void SoundFlag::setSoundPreset(const String& val)
+void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params)
 {
-    m_soundPreset = val;
+    score()->undo(new ChangeSoundFlag(this, presets, params));
 }

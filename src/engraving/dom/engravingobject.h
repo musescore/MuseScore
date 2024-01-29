@@ -535,8 +535,7 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings()
-               || isSoundFlag();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
     }
 
     bool isArticulationFamily() const
@@ -824,6 +823,7 @@ CONVERT(GraceNotesGroup)
 CONVERT(FretCircle)
 CONVERT(DeadSlapped)
 CONVERT(StringTunings)
+CONVERT(SoundFlag)
 #undef CONVERT
 }
 

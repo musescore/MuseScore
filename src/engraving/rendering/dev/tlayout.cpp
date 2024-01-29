@@ -132,7 +132,6 @@
 #include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
-#include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -5400,7 +5399,7 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
 }
 
-void TLayout::layoutSoundFlag(const SoundFlag* item, StaffText::LayoutData* ldata)
+void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata)
 {
     LAYOUT_CALL_ITEM(item);
     layoutBaseTextBase(item, ldata);
