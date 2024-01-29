@@ -45,7 +45,7 @@ jobs:
       run: |
         sudo bash ./build/ci/lupdate/publish_to_tx.sh -u ${{ secrets.TRANSIFEX_USER }} -p ${{ secrets.TRANSIFEX_PASSWORD }}
     - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MuseScore_tsfiles_${{ github.run_id }}
         path: ./share/locale

@@ -28,7 +28,7 @@ jobs:
     runs-on: macos-11
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.11.0
+      uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
@@ -115,7 +115,7 @@ jobs:
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MuseScore_${{ github.run_id }}
         path: ./build.artifacts/
