@@ -75,7 +75,7 @@ jobs:
         sudo bash ./build/ci/translation/tx_push.sh
     - name: Create Pull Request
       if: env.DO_CREATE_PR == 'true'
-      uses: peter-evans/create-pull-request@v5
+      uses: peter-evans/create-pull-request@v6
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: "Run lupdate"
@@ -86,7 +86,7 @@ jobs:
         labels: strings
         reviewers: cbjeukendrup
     - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MuseScore_tsfiles_${{ env.BUILD_NUMBER }}
         path: ./share/locale

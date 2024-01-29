@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.11.0
+      uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
@@ -82,7 +82,7 @@ jobs:
 
     - name: Upload artifacts on GitHub
       if: ${{ always() }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.GITHUB_ARTIFACT_NAME }}
         path: ./build.artifacts/
