@@ -3752,7 +3752,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
         shape.add(arpeggio->shape().translate(arpeggio->pos()));
     }
 
-    if (spanArpeggio && !arpeggio && spanArpeggio->addToSkyline()) {
+    if (spanArpeggio && !arpeggio && spanArpeggio->vStaffIdx() == item->vStaffIdx() && spanArpeggio->addToSkyline()) {
         PointF spanArpPos = spanArpeggio->pos() - (item->pagePos() - spanArpeggio->chord()->pagePos());
         shape.add(spanArpeggio->shape().translate(spanArpPos));
     }
