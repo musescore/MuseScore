@@ -227,6 +227,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     // drumset
     case ElementType::CHORD:        layout(toChord(item), ctx);
         break;
+    case ElementType::STEM:         layout(toStem(item), ctx);
+        break;
     default:
         LOGE() << "Not handled: " << item->typeName();
         IF_ASSERT_FAILED(false) {
@@ -1485,6 +1487,12 @@ void SingleLayout::layout(SoundFlag* item, const Context& ctx)
 {
     UNUSED(item);
     UNUSED(ctx);
+}
+
+void SingleLayout::layout(Stem* item, const Context& ctx)
+{
+    LayoutContext tctx(ctx.dontUseScore());
+    TLayout::layoutStem(item, item->mutldata(), tctx.conf());
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)
