@@ -1909,7 +1909,7 @@ void MusicXMLParserPass2::part()
 #endif
 
     // read the measures
-    int nr = 0; // current measure sequence number (always increments by one for each measure)
+    size_t nr = 0; // current measure sequence number (always increments by one for each measure)
     m_measureNumber = 0; // written measure number (doesn't always increment by 1)
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "measure") {
