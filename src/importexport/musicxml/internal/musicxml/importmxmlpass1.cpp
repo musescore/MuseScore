@@ -480,7 +480,7 @@ track_idx_t MusicXMLParserPass1::trackForPart(const QString& id) const
 
 Fraction MusicXMLParserPass1::getMeasureStart(const int i) const
 {
-    if (0 <= i && i < m_measureStart.size()) {
+    if (0 <= i && i < static_cast<int>(m_measureStart.size())) {
         return m_measureStart.at(i);
     } else {
         return Fraction(0, 0);           // invalid
@@ -876,7 +876,7 @@ static void createMeasuresAndVboxes(Score* score,
     }
 
     int pageNr = 0;
-    for (int i = 0; i < ml.size(); ++i) {
+    for (size_t i = 0; i < ml.size(); ++i) {
         VBox* vbox = nullptr;
 
         // add a header vbox if the this measure is the first in the score or the first on a new page
@@ -932,7 +932,7 @@ static void determineMeasureStart(const std::vector<Fraction>& ml, std::vector<F
     // first measure starts at t = 0
     ms[0] = Fraction(0, 1);
     // all others start at start time previous measure plus length previous measure
-    for (int i = 1; i < ml.size(); i++) {
+    for (size_t i = 1; i < ml.size(); i++) {
         ms[i] = ms.at(i - 1) + ml.at(i - 1);
     }
 }
