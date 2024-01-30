@@ -62,6 +62,8 @@
 #include "sticking.h"
 #include "stringtunings.h"
 #include "tie.h"
+#include "guitarbend.h"
+#include "fret.h"
 
 #include "tremolotwochord.h"
 #include "tremolosinglechord.h"
@@ -530,6 +532,10 @@ void Selection::appendChord(Chord* chord)
                 Note* endNote = toNote(sp->endElement());
                 Segment* s = endNote->chord()->segment();
                 if (!s || s->tick() < tickEnd()) {
+                    if (sp->isGuitarBend()) {
+                        appendGuitarBend(toGuitarBend(sp));
+                        continue;
+                    }
                     m_el.push_back(sp);
                 }
             }
@@ -549,6 +555,27 @@ void Selection::appendTupletHierarchy(Tuplet* innermostTuplet)
     Tuplet* outerTuplet = innermostTuplet->tuplet();
     if (outerTuplet) {
         appendTupletHierarchy(outerTuplet);
+    }
+}
+
+void Selection::appendGuitarBend(GuitarBend* guitarBend)
+{
+    if (!guitarBend) {
+        return;
+    }
+
+    m_el.push_back(guitarBend);
+
+    if (GuitarBendHold* hold = guitarBend->holdLine()) {
+        if (hold->tick2() < tickEnd()) {
+            m_el.push_back(hold);
+        }
+    }
+
+    if (GuitarBendSegment* bendSeg = toGuitarBendSegment(guitarBend->frontSegment())) {
+        if (GuitarBendText* bendText = bendSeg->bendText()) {
+            m_el.push_back(bendText);
+        }
     }
 }
 
@@ -621,6 +648,12 @@ void Selection::updateSelectedElements()
             for (EngravingItem* e : s->annotations()) {
                 if (e->track() != st) {
                     continue;
+                }
+                if (e->isFretDiagram()) {
+                    FretDiagram* fd = toFretDiagram(e);
+                    if (Harmony* harm = fd->harmony()) {
+                        appendFiltered(harm);
+                    }
                 }
                 appendFiltered(e);
             }
