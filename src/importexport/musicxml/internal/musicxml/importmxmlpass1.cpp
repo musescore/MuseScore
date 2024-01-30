@@ -478,9 +478,9 @@ track_idx_t MusicXMLParserPass1::trackForPart(const String& id) const
  Return the measure start time for measure \a i.
  */
 
-Fraction MusicXMLParserPass1::getMeasureStart(const int i) const
+Fraction MusicXMLParserPass1::getMeasureStart(const size_t i) const
 {
-    if (0 <= i && i < static_cast<int>(m_measureStart.size())) {
+    if (i < m_measureStart.size()) {
         return m_measureStart.at(i);
     } else {
         return Fraction(0, 0);           // invalid

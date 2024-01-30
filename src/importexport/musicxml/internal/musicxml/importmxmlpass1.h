@@ -176,7 +176,7 @@ public:
     void setDrumsetDefault(const String& id, const String& instrId, const NoteHeadGroup hg, const int line, const DirectionV sd);
     MusicXmlInstrList getInstrList(const String& id) const;
     MusicXmlIntervalList getIntervals(const String& id) const;
-    Fraction getMeasureStart(const int i) const;
+    Fraction getMeasureStart(const size_t i) const;
     int octaveShift(const String& id, const staff_idx_t staff, const Fraction& f) const;
     const CreditWordsList& credits() const { return m_credits; }
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
