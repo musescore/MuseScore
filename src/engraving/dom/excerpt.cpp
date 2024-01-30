@@ -49,6 +49,7 @@
 #include "sig.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "system.h"
 #include "text.h"
 #include "textline.h"
 #include "tie.h"
@@ -893,6 +894,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 Beam* nb = ocr->beam()->clone();
                                 nb->clear();
                                 nb->setTrack(track);
+                                nb->setParent(nm->system());
                                 nb->setScore(score);
                                 nb->add(ncr);
                                 ncr->setBeam(nb);
