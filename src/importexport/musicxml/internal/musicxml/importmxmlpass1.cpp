@@ -880,7 +880,7 @@ static void createMeasuresAndVboxes(Score* score,
         VBox* vbox = nullptr;
 
         // add a header vbox if the this measure is the first in the score or the first on a new page
-        if (pageStartMeasureNrs.count(i) || i == 0) {
+        if (pageStartMeasureNrs.count(int(i)) || i == 0) {
             ++pageNr;
             vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
             if (i == 0 && vbox) {
@@ -892,7 +892,7 @@ static void createMeasuresAndVboxes(Score* score,
         Measure* measure  = Factory::createMeasure(score->dummy()->system());
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
-        measure->setNo(i);
+        measure->setNo(int(i));
         score->measures()->add(measure);
 
         // add break to previous measure or vbox
@@ -900,14 +900,14 @@ static void createMeasuresAndVboxes(Score* score,
         if (!mb) {
             mb = measure;
         }
-        if (pageStartMeasureNrs.count(i)) {
+        if (pageStartMeasureNrs.count(int(i))) {
             addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::PAGE);
-        } else if (systemStartMeasureNrs.count(i)) {
+        } else if (systemStartMeasureNrs.count(int(i))) {
             addBreakToPreviousMeasureBase(score, mb, LayoutBreakType::LINE);
         }
 
         // add a footer vbox if the next measure is on a new page or end of score has been reached
-        if (pageStartMeasureNrs.count(i + 1) || i == (ml.size() - 1)) {
+        if (pageStartMeasureNrs.count(int(i + 1)) || i == (ml.size() - 1)) {
             addCreditWords(score, crWords, pageNr, pageSize, false);
         }
     }
