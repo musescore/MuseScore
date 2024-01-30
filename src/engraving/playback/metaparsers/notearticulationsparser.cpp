@@ -80,6 +80,9 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
     case NoteHeadGroup::HEAD_CIRCLED:
         return mpe::ArticulationType::CircleNote;
 
+    case NoteHeadGroup::HEAD_XCIRCLE:
+        return mpe::ArticulationType::CircleCrossNote;
+
     case NoteHeadGroup::HEAD_TRIANGLE_DOWN:
     case NoteHeadGroup::HEAD_TRIANGLE_UP:
         return mpe::ArticulationType::TriangleNote;
@@ -87,6 +90,21 @@ ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteH
     case NoteHeadGroup::HEAD_DIAMOND:
     case NoteHeadGroup::HEAD_DIAMOND_OLD:
         return mpe::ArticulationType::DiamondNote;
+
+    case NoteHeadGroup::HEAD_PLUS:
+        return mpe::ArticulationType::PlusNote;
+
+    case NoteHeadGroup::HEAD_SLASH:
+        return mpe::ArticulationType::SlashNote;
+
+    case NoteHeadGroup::HEAD_SLASHED1:
+        return mpe::ArticulationType::SlashedForwardsNote;
+
+    case NoteHeadGroup::HEAD_SLASHED2:
+        return mpe::ArticulationType::SlashedBackwardsNote;
+
+    case NoteHeadGroup::HEAD_TI:
+        return mpe::ArticulationType::TriangleRoundDownNote;
 
     default:
         return mpe::ArticulationType::Undefined;
@@ -151,16 +169,18 @@ void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingCon
 
 void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
+    const Score* score = note->score();
+
     for (const Spanner* spanner : note->spannerFor()) {
         int spannerFrom = spanner->tick().ticks();
-        int spannerTo = spanner->tick().ticks() + std::abs(spanner->ticks().ticks());
+        int spannerTo = spannerFrom + std::abs(spanner->ticks().ticks());
         int spannerDurationTicks = spannerTo - spannerFrom;
 
         if (spannerDurationTicks == 0) {
             continue;
         }
 
-        auto spannerTnD = timestampAndDurationFromStartAndDurationTicks(note->score(), spannerFrom, spannerDurationTicks);
+        auto spannerTnD = timestampAndDurationFromStartAndDurationTicks(score, spannerFrom, spannerDurationTicks);
 
         RenderingContext spannerContext = ctx;
         spannerContext.nominalTimestamp = spannerTnD.timestamp;

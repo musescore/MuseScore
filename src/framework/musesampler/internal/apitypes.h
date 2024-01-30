@@ -137,6 +137,17 @@ enum ms_NoteArticulation : uint64_t
     ms_NoteArticulation_PullOff = 1LL << 47,
     ms_NoteArticulation_PalmMute = 1LL << 48,
     ms_NoteArticulation_PinchHarmonic = 1LL << 49,
+    ms_NoteArticulation_BuzzTremolo = 1LL << 50,
+
+    // More noteheads:
+    ms_NoteArticulation_OrnateXNote = 1LL << 51,
+    ms_NoteArticulation_CircleXNote = 1LL << 52,
+    ms_NoteArticulation_SlashRightFilled = 1LL << 53,
+    ms_NoteArticulation_SlashLeftFilled = 1LL << 54,
+    ms_NoteArticulation_Plus = 1LL << 55,
+    ms_NoteArticulation_Slash = 1LL << 56,
+    ms_NoteArticulation_TriangleRoundDown = 1LL << 57,
+    ms_NoteArticulation_CircleDot = 1LL << 58,
 };
 
 typedef struct ms_NoteEvent

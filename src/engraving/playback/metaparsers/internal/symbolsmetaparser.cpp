@@ -177,12 +177,15 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
         types.emplace(mpe::ArticulationType::Jete);
         break;
     case SymId::noteheadXWhole:
-    case SymId::noteheadXOrnate:
     case SymId::noteheadXBlack:
     case SymId::noteheadXDoubleWhole:
     case SymId::noteheadWholeWithX:
     case SymId::noteheadVoidWithX:
         types.emplace(mpe::ArticulationType::CrossNote);
+        break;
+    case SymId::noteheadXOrnate:
+    case SymId::noteheadXOrnateEllipse:
+        types.emplace(mpe::ArticulationType::CrossOrnateNote);
         break;
     case SymId::noteheadCircleSlash:
     case SymId::noteheadCircledBlack:
@@ -194,6 +197,16 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     case SymId::noteheadCircledWhole:
     case SymId::noteheadCircledWholeLarge:
         types.emplace(mpe::ArticulationType::CircleNote);
+        break;
+    case SymId::noteheadCircleX:
+    case SymId::noteheadCircleXDoubleWhole:
+    case SymId::noteheadCircleXHalf:
+    case SymId::noteheadCircleXWhole:
+        types.emplace(mpe::ArticulationType::CircleCrossNote);
+        break;
+    case SymId::noteheadRoundWhiteWithDot:
+    case SymId::noteheadRoundWhiteWithDotLarge:
+        types.emplace(mpe::ArticulationType::CircleDotNote);
         break;
     case SymId::noteheadDiamondBlack:
     case SymId::noteheadDiamondBlackOld:
@@ -217,8 +230,6 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     case SymId::noteheadTriangleLeftWhite:
     case SymId::noteheadTriangleRightBlack:
     case SymId::noteheadTriangleRightWhite:
-    case SymId::noteheadTriangleRoundDownBlack:
-    case SymId::noteheadTriangleRoundDownWhite:
     case SymId::noteheadTriangleUpBlack:
     case SymId::noteheadTriangleUpDoubleWhole:
     case SymId::noteheadTriangleUpHalf:
@@ -227,6 +238,37 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     case SymId::noteheadTriangleUpWhite:
     case SymId::noteheadTriangleUpWhole:
         types.emplace(mpe::ArticulationType::TriangleNote);
+        break;
+    case SymId::noteheadTriangleRoundDownBlack:
+    case SymId::noteheadTriangleRoundDownWhite:
+    case SymId::noteShapeTriangleRoundBlack:
+    case SymId::noteShapeTriangleRoundWhite:
+    case SymId::noteShapeTriangleRoundDoubleWhole:
+        types.emplace(mpe::ArticulationType::TriangleRoundDownNote);
+        break;
+    case SymId::noteheadPlusBlack:
+    case SymId::noteheadPlusDoubleWhole:
+    case SymId::noteheadPlusHalf:
+    case SymId::noteheadPlusWhole:
+        types.emplace(mpe::ArticulationType::PlusNote);
+        break;
+    case SymId::noteheadSlashWhiteWhole:
+    case SymId::noteheadSlashWhiteHalf:
+    case SymId::noteheadSlashHorizontalEnds:
+    case SymId::noteheadSlashWhiteDoubleWhole:
+        types.emplace(mpe::ArticulationType::SlashNote);
+        break;
+    case SymId::noteheadSlashedWhole1:
+    case SymId::noteheadSlashedHalf1:
+    case SymId::noteheadSlashedBlack1:
+    case SymId::noteheadSlashedDoubleWhole1:
+        types.emplace(mpe::ArticulationType::SlashedForwardsNote);
+        break;
+    case SymId::noteheadSlashedWhole2:
+    case SymId::noteheadSlashedHalf2:
+    case SymId::noteheadSlashedBlack2:
+    case SymId::noteheadSlashedDoubleWhole2:
+        types.emplace(mpe::ArticulationType::SlashedBackwardsNote);
         break;
     case SymId::brassScoop:
         types.emplace(mpe::ArticulationType::Scoop);
