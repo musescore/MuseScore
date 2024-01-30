@@ -43,6 +43,7 @@
 #include "engraving/style/textstyle.h"
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
+#include "engraving/dom/instrumentname.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetutils.h"
@@ -87,8 +88,8 @@ static const QStringList ALL_PAGE_CODES {
     "staff-text",
     "tempo-text",
     "lyrics",
-    "expression",
     "dynamics",
+    "expression",
     "rehearsal-marks",
     "figured-bass",
     "chord-symbols",
@@ -113,6 +114,7 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "measure-number",
     "multimeasure-rest-range",
     "tempo",
+    "tempo-change",
     "metronome",
     "repeat-text-left",
     "repeat-text-right",
@@ -120,7 +122,6 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "system",
     "staff",
     "expression",
-    "dynamics",
     "hairpin",
     "lyrics-odd-lines",
     "lyrics-even-lines",
@@ -134,6 +135,9 @@ static const QStringList ALL_TEXT_STYLE_SUBPAGE_CODES {
     "lh-guitar-fingering",
     "rh-guitar-fingering",
     "string-number",
+    "string-tunings",
+    "harp-pedal-diagram",
+    "harp-pedal-text-diagram",
     "text-line",
     "volta",
     "ottava",
@@ -1365,7 +1369,8 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "page";
 
     case ElementType::INSTRUMENT_NAME:
-    case ElementType::TEXT: {
+    case ElementType::TEXT:
+    case ElementType::HARP_DIAGRAM: {
         if (element->isText()) {
             if (toText(element)->textStyleType() == TextStyleType::FOOTER
                 || toText(element)->textStyleType() == TextStyleType::HEADER) {
@@ -1501,6 +1506,201 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
 
     default: return QString();
     }
+}
+
+QString EditStyle::subPageCodeForElement(const EngravingItem* element)
+{
+    IF_ASSERT_FAILED(element) {
+        return QString();
+    }
+
+    if (element->isTextBase()) {
+        switch (toTextBase(element)->textStyleType()) {
+        case TextStyleType::TITLE:
+            return "title";
+
+        case TextStyleType::SUBTITLE:
+            return "subtitle";
+
+        case TextStyleType::COMPOSER:
+            return "composer";
+
+        case TextStyleType::LYRICIST:
+            return "poet";
+
+        case TextStyleType::TRANSLATOR:
+            return "translator";
+
+        case TextStyleType::FRAME:
+            return "frame";
+
+        case TextStyleType::INSTRUMENT_EXCERPT:
+            return "instrument-name-part";
+
+        case TextStyleType::INSTRUMENT_LONG:
+            return "instrument-name-long";
+
+        case TextStyleType::INSTRUMENT_SHORT:
+            return "instrument-name-short";
+
+        case TextStyleType::INSTRUMENT_CHANGE:
+            return "instrument-change";
+
+        case TextStyleType::HEADER:
+            return "header";
+
+        case TextStyleType::FOOTER:
+            return "footer";
+
+        case TextStyleType::MEASURE_NUMBER:
+            return "measure-number";
+
+        case TextStyleType::MMREST_RANGE:
+            return "multimeasure-rest-range";
+
+        case TextStyleType::TEMPO:
+            return "tempo";
+
+        case TextStyleType::TEMPO_CHANGE:
+            return "tempo-change";
+
+        case TextStyleType::METRONOME:
+            return "metronome";
+
+        case TextStyleType::REPEAT_LEFT:
+            return "repeat-text-left";
+
+        case TextStyleType::REPEAT_RIGHT:
+            return "repeat-text-right";
+
+        case TextStyleType::REHEARSAL_MARK:
+            return "rehearsal-mark";
+
+        case TextStyleType::SYSTEM:
+            return "system";
+
+        case TextStyleType::STAFF:
+            return "staff";
+
+        case TextStyleType::EXPRESSION:
+            return "expression";
+
+        case TextStyleType::HAIRPIN:
+            return "hairpin";
+
+        case TextStyleType::LYRICS_ODD:
+            return "lyrics-odd-lines";
+
+        case TextStyleType::LYRICS_EVEN:
+            return "lyrics-even-lines";
+
+        case TextStyleType::HARMONY_A:
+            return "chord-symbols";
+
+        case TextStyleType::HARMONY_B:
+            return "chord-symbols-alternate";
+
+        case TextStyleType::HARMONY_ROMAN:
+            return "roman-numeral-analysis";
+
+        case TextStyleType::HARMONY_NASHVILLE:
+            return "nashville-number";
+
+        case TextStyleType::TUPLET:
+            return "tuplet";
+
+        case TextStyleType::STICKING:
+            return "sticking";
+
+        case TextStyleType::FINGERING:
+            return "fingering";
+
+        case TextStyleType::LH_GUITAR_FINGERING:
+            return "lh-guitar-fingering";
+
+        case TextStyleType::RH_GUITAR_FINGERING:
+            return "rh-guitar-fingering";
+
+        case TextStyleType::STRING_NUMBER:
+            return "string-number";
+
+        case TextStyleType::STRING_TUNINGS:
+            return "string-tunings";
+
+        case TextStyleType::HARP_PEDAL_DIAGRAM:
+            return "harp-pedal-diagram";
+
+        case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM:
+            return "harp-pedal-text-diagram";
+
+        case TextStyleType::TEXTLINE:
+            return "text-line";
+
+        case TextStyleType::VOLTA:
+            return "volta";
+
+        case TextStyleType::OTTAVA:
+            return "ottava";
+
+        case TextStyleType::GLISSANDO:
+            return "glissando";
+
+        case TextStyleType::PEDAL:
+            return "pedal";
+
+        case TextStyleType::BEND:
+            return "bend";
+
+        case TextStyleType::LET_RING:
+            return "let-ring";
+
+        case TextStyleType::PALM_MUTE:
+            return "palm-mute";
+
+        case TextStyleType::USER1:
+            return "user1";
+
+        case TextStyleType::USER2:
+            return "user2";
+
+        case TextStyleType::USER3:
+            return "user3";
+
+        case TextStyleType::USER4:
+            return "user4";
+
+        case TextStyleType::USER5:
+            return "user5";
+
+        case TextStyleType::USER6:
+            return "user6";
+
+        case TextStyleType::USER7:
+            return "user7";
+
+        case TextStyleType::USER8:
+            return "user8";
+
+        case TextStyleType::USER9:
+            return "user9";
+
+        case TextStyleType::USER10:
+            return "user10";
+
+        case TextStyleType::USER11:
+            return "user11";
+
+        case TextStyleType::USER12:
+            return "user12";
+
+        case TextStyleType::DYNAMICS:
+        case TextStyleType::DEFAULT:
+        case TextStyleType::TEXT_TYPES:
+        case TextStyleType::IGNORED_TYPES:
+            return QString();
+        }
+    }
+    return QString();
 }
 
 void EditStyle::setCurrentPageCode(const QString& code)
