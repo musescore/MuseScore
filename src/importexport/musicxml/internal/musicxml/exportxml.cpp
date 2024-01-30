@@ -316,7 +316,7 @@ class MeasureNumberStateHandler final
 public:
     MeasureNumberStateHandler();
     void updateForMeasure(const Measure* const m);
-    QString measureNumber() const;
+    String measureNumber() const;
     bool isFirstActualMeasure() const;
 private:
     void init();
@@ -324,7 +324,7 @@ private:
     int m_measureNoOffset = 0;                       // measure number offset
     int m_irregularMeasureNo = 0;                    // number of next irregular measure
     int m_pickupMeasureNo = 0;                       // number of next pickup measure
-    QString m_cachedAttributes;                  // attributes calculated by updateForMeasure()
+    String m_cachedAttributes;                  // attributes calculated by updateForMeasure()
 };
 
 //---------------------------------------------------------
@@ -385,8 +385,8 @@ public:
 
     static bool canWrite(const EngravingItem* e);
 
-    static QString positioningAttributes(EngravingItem const* const el, bool isSpanStart = true);
-    static QString fermataPosition(const Fermata* const fermata);
+    static String positioningAttributes(EngravingItem const* const el, bool isSpanStart = true);
+    static String fermataPosition(const Fermata* const fermata);
 
 private:
 
@@ -397,7 +397,7 @@ private:
     int findTrill(const Trill* tl) const;
     void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
     void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll);
-    void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
+    void clef(staff_idx_t staff, const ClefType ct, const String& extraAttributes = u"");
     void timesig(TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
     void barlineLeft(const Measure* const m, const track_idx_t track);
@@ -457,7 +457,7 @@ private:
 //   positionToQString
 //---------------------------------------------------------
 
-static QString positionToQString(const QPointF def, const QPointF rel, const float spatium)
+static String positionToString(const QPointF def, const QPointF rel, const float spatium)
 {
     // minimum value to export
     const float positionElipson = 0.1f;
@@ -492,10 +492,10 @@ static QString positionToQString(const QPointF def, const QPointF rel, const flo
 //   while all other elements are relative to their position or the nearest note.
 //---------------------------------------------------------
 
-QString ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool isSpanStart)
+String ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool isSpanStart)
 {
     if (!configuration()->musicxmlExportLayout()) {
-        return "";
+        return u"";
     }
 
     //LOGD("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
@@ -542,7 +542,7 @@ QString ExportMusicXml::positioningAttributes(EngravingItem const* const el, boo
         rel = el->offset().toQPointF();
     }
 
-    return positionToQString(def, rel, spatium);
+    return positionToString(def, rel, spatium);
 }
 
 //---------------------------------------------------------
@@ -1596,9 +1596,9 @@ void ExportMusicXml::credits(XmlWriter& xml)
 //---------------------------------------------------------
 
 static int alterTab[12] = { 0,   1,   0,   1,   0,  0,   1,   0,   1,   0,   1,   0 };
-static char noteTab[12] = { 'C', 'C', 'D', 'D', 'E', 'F', 'F', 'G', 'G', 'A', 'A', 'B' };
+static char16_t noteTab[12] = { u'C', u'C', u'D', u'D', u'E', u'F', u'F', u'G', u'G', u'A', u'A', u'B' };
 
-static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
+static void midipitch2xml(int pitch, char16_t& c, int& alter, int& octave)
 {
     // 60 = C 4
     c      = noteTab[pitch % 12];
@@ -1611,7 +1611,7 @@ static void midipitch2xml(int pitch, char& c, int& alter, int& octave)
 //   tabpitch2xml
 //---------------------------------------------------------
 
-static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter, int& octave)
+static void tabpitch2xml(const int pitch, const int tpc, String& s, int& alter, int& octave)
 {
     s      = tpc2stepName(tpc);
     alter  = tpc2alterByKey(tpc, Key::C);
@@ -1633,7 +1633,7 @@ static void tabpitch2xml(const int pitch, const int tpc, QString& s, int& alter,
 
 // TODO validation
 
-static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
+static void pitch2xml(const Note* note, String& s, int& alter, int& octave)
 {
     const auto st = note->staff();
     const auto tick = note->tick();
@@ -1686,9 +1686,9 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
 // Finale Notepad 2012 does not import a three line staff with percussion clef correctly
 // Same goes for Sibelius 6 in case of three or five line staff with percussion clef
 
-static void unpitch2xml(const Note* note, QString& s, int& octave)
+static void unpitch2xml(const Note* note, String& s, int& octave)
 {
-    static char table1[]  = "FEDCBAG";
+    static char16_t table1[]  = u"FEDCBAG";
 
     Fraction tick        = note->chord()->tick();
     Staff* st       = note->staff();
@@ -1715,7 +1715,7 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
     // index in table1 to get step
     int stepIdx     = (line5g + 700) % 7;
     // get step
-    s               = table1[stepIdx];
+    s               = Char(table1[stepIdx]);
     // calculate octave, offset "3" correcting for the fact that an octave starts
     // with C instead of F
     octave =(3 - line5g + 700) / 7 + 5 - 100;
@@ -1728,7 +1728,7 @@ static void unpitch2xml(const Note* note, QString& s, int& octave)
 //    set type + dots depending on tick len
 //---------------------------------------------------------
 
-static QString tick2xml(const Fraction& ticks, int* dots)
+static String tick2xml(const Fraction& ticks, int* dots)
 {
     TDuration t(ticks);
     *dots = t.dots();
@@ -1736,7 +1736,7 @@ static QString tick2xml(const Fraction& ticks, int* dots)
         t.setType(DurationType::V_MEASURE);
         *dots = 0;
     }
-    return TConv::toXml(t.type()).ascii();
+    return String::fromAscii(TConv::toXml(t.type()).ascii());
 }
 
 //---------------------------------------------------------
@@ -1769,35 +1769,35 @@ static Volta* findVolta(const Measure* const m, bool left, const track_idx_t tra
 
 static void ending(XmlWriter& xml, Volta* v, bool left)
 {
-    QString number = "";
-    QString type = "";
+    String number;
+    String type;
     for (int i : v->endings()) {
         if (!number.isEmpty()) {
-            number += ", ";
+            number += u", ";
         }
-        number += QString("%1").arg(i);
+        number += String::number(i);
     }
     if (left) {
-        type = "start";
+        type = u"start";
     } else {
         Volta::Type st = v->voltaType();
         switch (st) {
         case Volta::Type::OPEN:
-            type = "discontinue";
+            type = u"discontinue";
             break;
         case Volta::Type::CLOSED:
-            type = "stop";
+            type = u"stop";
             break;
         default:
             LOGD("unknown volta subtype %d", int(st));
             return;
         }
     }
-    QString voltaXml = QString("ending number=\"%1\" type=\"%2\"").arg(number, type);
+    String voltaXml = String(u"ending number=\"%1\" type=\"%2\"").arg(number, type);
     voltaXml += ExportMusicXml::positioningAttributes(v, left);
     if (left) {
         if (!v->visible()) {
-            voltaXml += " print-object=\"no\"";
+            voltaXml += u" print-object=\"no\"";
         }
         voltaXml += color2xml(v);
         xml.tagRaw(voltaXml, v->text().toXmlEscaped());
@@ -1820,7 +1820,7 @@ void ExportMusicXml::barlineLeft(const Measure* const m, const track_idx_t track
     m_attr.doAttr(m_xml, false);
     m_xml.startElement("barline", { { "location", "left" } });
     if (rs) {
-        m_xml.tag("bar-style", QString("heavy-light"));
+        m_xml.tag("bar-style", String(u"heavy-light"));
     }
     if (volta) {
         ending(m_xml, volta, true);
@@ -1835,54 +1835,54 @@ void ExportMusicXml::barlineLeft(const Measure* const m, const track_idx_t track
 //   shortBarlineStyle -- recognize normal but shorter barline styles
 //---------------------------------------------------------
 
-static QString shortBarlineStyle(const BarLine* bl)
+static String shortBarlineStyle(const BarLine* bl)
 {
     if (bl->barLineType() == BarLineType::NORMAL && !bl->spanStaff()) {
         if (bl->spanTo() < 0) {
             // lowest point of barline above lowest staff line
             if (bl->spanFrom() < 0) {
-                return "tick";               // highest point of barline above highest staff line
+                return u"tick";               // highest point of barline above highest staff line
             } else {
-                return "short";               // highest point of barline below highest staff line
+                return u"short";               // highest point of barline below highest staff line
             }
         }
     }
 
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
 //   normalBarlineStyle -- recognize other barline styles
 //---------------------------------------------------------
 
-static QString normalBarlineStyle(const BarLine* bl)
+static String normalBarlineStyle(const BarLine* bl)
 {
     const auto bst = bl->barLineType();
 
     switch (bst) {
     case BarLineType::NORMAL:
-        return "regular";
+        return u"regular";
     case BarLineType::DOUBLE:
-        return "light-light";
+        return u"light-light";
     case BarLineType::REVERSE_END:
-        return "heavy-light";
+        return u"heavy-light";
     case BarLineType::BROKEN:
-        return "dashed";
+        return u"dashed";
     case BarLineType::DOTTED:
-        return "dotted";
+        return u"dotted";
     case BarLineType::END:
     case BarLineType::END_REPEAT:
     case BarLineType::END_START_REPEAT:
-        return "light-heavy";
+        return u"light-heavy";
     case BarLineType::HEAVY:
-        return "heavy";
+        return u"heavy";
     case BarLineType::DOUBLE_HEAVY:
-        return "heavy-heavy";
+        return u"heavy-heavy";
     default:
         LOGD("bar subtype %d not supported", int(bst));
     }
 
-    return "";
+    return String();
 }
 
 //---------------------------------------------------------
@@ -1891,19 +1891,19 @@ static QString normalBarlineStyle(const BarLine* bl)
 
 void ExportMusicXml::barlineMiddle(const BarLine* bl)
 {
-    auto vis = bl->visible();
-    auto shortStyle = shortBarlineStyle(bl);
-    auto normalStyle = normalBarlineStyle(bl);
-    QString barStyle;
+    bool vis = bl->visible();
+    String shortStyle = shortBarlineStyle(bl);
+    String normalStyle = normalBarlineStyle(bl);
+    String barStyle;
     if (!vis) {
-        barStyle = "none";
-    } else if (shortStyle != "") {
+        barStyle = u"none";
+    } else if (shortStyle != u"") {
         barStyle = shortStyle;
     } else {
         barStyle = normalStyle;
     }
 
-    if (barStyle != "") {
+    if (barStyle != u"") {
         m_xml.startElement("barline", { { "location", "middle" } });
         m_xml.tag("bar-style", barStyle);
         m_xml.endElement();
@@ -1914,7 +1914,7 @@ void ExportMusicXml::barlineMiddle(const BarLine* bl)
 //   fermataPosition -  return fermata y position as MusicXML string
 //---------------------------------------------------------
 
-QString ExportMusicXml::fermataPosition(const Fermata* const fermata)
+String ExportMusicXml::fermataPosition(const Fermata* const fermata)
 {
     QString res;
 
@@ -1942,8 +1942,8 @@ QString ExportMusicXml::fermataPosition(const Fermata* const fermata)
 
 static void fermata(const Fermata* const a, XmlWriter& xml)
 {
-    QString tagName = "fermata";
-    tagName += QString(" type=\"%1\"").arg(a->placement() == PlacementV::ABOVE ? "upright" : "inverted");
+    String tagName = u"fermata";
+    tagName += String(" type=\"%1\"").arg(a->placement() == PlacementV::ABOVE ? u"upright" : u"inverted");
     tagName += ExportMusicXml::fermataPosition(a);
     tagName += color2xml(a);
     SymId id = a->symId();
@@ -2013,27 +2013,27 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
     // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
     BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
     const bool visible = m->endBarLineVisible();
-    QString color = "";
+    String color = u"";
 
     bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
     Volta* volta = findVolta(m, false, strack);
     // detect short and tick barlines
-    QString special = "";
+    String special = u"";
     const BarLine* bl = m->endBarLine();
     if (bl) {
         color = color2xml(bl);
         if (bst == BarLineType::NORMAL && !bl->spanStaff()) {
             if (bl->spanFrom() == BARLINE_SPAN_TICK1_FROM && bl->spanTo() == BARLINE_SPAN_TICK1_TO) {
-                special = "tick";
+                special = u"tick";
             }
             if (bl->spanFrom() == BARLINE_SPAN_TICK2_FROM && bl->spanTo() == BARLINE_SPAN_TICK2_TO) {
-                special = "tick";
+                special = u"tick";
             }
             if (bl->spanFrom() == BARLINE_SPAN_SHORT1_FROM && bl->spanTo() == BARLINE_SPAN_SHORT1_TO) {
-                special = "short";
+                special = u"short";
             }
             if (bl->spanFrom() == BARLINE_SPAN_SHORT2_FROM && bl->spanTo() == BARLINE_SPAN_SHORT2_FROM) {
-                special = "short";
+                special = u"short";
             }
         }
     }
@@ -2047,7 +2047,7 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
     }
 
     m_xml.startElement("barline", { { "location", "right" } });
-    QString tagName = "bar-style";
+    String tagName = u"bar-style";
     tagName += color;
     if (needBarStyle) {
         if (!visible) {
@@ -2151,7 +2151,7 @@ void ExportMusicXml::timesig(TimeSig* tsig)
     Fraction ts = tsig->sig();
     int z = ts.numerator();
     int n = ts.denominator();
-    QString ns = tsig->numeratorString();
+    String ns = tsig->numeratorString();
 
     m_attr.doAttr(m_xml, true);
     XmlWriter::Attributes attrs;
@@ -2389,7 +2389,7 @@ static double accSymId2alter(SymId id)
 
 void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bool visible)
 {
-    static char table2[]  = "CDEFGAB";
+    static char16_t table2[]  = u"CDEFGAB";
     int po = ClefInfo::pitchOffset(ct);   // actually 7 * oct + step for topmost staff line
     //LOGD("keysig st %d key %d custom %d ct %hhd st %d", staff, ks->key(), ks->isCustom(), ct, staff);
     //LOGD(" pitch offset clef %d stp %d oct %d ", po, po % 7, po / 7);
@@ -2424,11 +2424,11 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
         for (const KeySym& ksym : mu::values(map)) {
             int step = (po - ksym.line) % 7;
             //LOGD(" keysym sym %d -> line %d step %d", ksym.sym, ksym.line, step);
-            m_xml.tag("key-step", QString(QChar(table2[step])));
+            m_xml.tag("key-step", String(Char(table2[step])));
             m_xml.tag("key-alter", accSymId2alter(ksym.sym));
             XmlWriter::Attributes accidentalAttrs;
-            QString s = accSymId2MxmlString(ksym.sym);
-            if (s == "other") {
+            String s = accSymId2MxmlString(ksym.sym);
+            if (s == u"other") {
                 accidentalAttrs = { { "smufl", accSymId2SmuflMxmlString(ksym.sym) } };
             }
             m_xml.tag("key-accidental", accidentalAttrs, s);
@@ -2537,13 +2537,13 @@ static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)
     return *it;
 }
 
-void ExportMusicXml::clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes)
+void ExportMusicXml::clef(staff_idx_t staff, const ClefType ct, const String& extraAttributes)
 {
     clefDebug("ExportMusicXml::clef(staff %zu, clef %hhd)", staff, ct);
 
-    QString tagName = "clef";
+    String tagName = u"clef";
     if (staff) {
-        tagName += QString(" number=\"%1\"").arg(static_cast<int>(staff));
+        tagName += String(u" number=\"%1\"").arg(static_cast<int>(staff));
     }
     tagName += extraAttributes;
     m_attr.doAttr(m_xml, true);
@@ -2688,7 +2688,7 @@ static const Tuplet* stopTupletAtLevel(const DurationElement* const cr, const in
 //   tupletTypeAndDots
 //---------------------------------------------------------
 
-static void tupletTypeAndDots(const QString& type, const int dots, XmlWriter& xml)
+static void tupletTypeAndDots(const String& type, const int dots, XmlWriter& xml)
 {
     xml.tag("tuplet-type", type);
     for (int i = 0; i < dots; ++i) {
@@ -2728,22 +2728,22 @@ static void tupletActualAndNormal(const Tuplet* const t, XmlWriter& xml)
 static void tupletStart(const Tuplet* const t, const int number, const bool needActualAndNormal, Notations& notations, XmlWriter& xml)
 {
     notations.tag(xml, t);
-    QString tupletTag = "tuplet type=\"start\"";
+    String tupletTag = u"tuplet type=\"start\"";
     if (!isSimpleTuplet(t)) {
-        tupletTag += QString(" number=\"%1\"").arg(number);
+        tupletTag += String(u" number=\"%1\"").arg(number);
     }
-    tupletTag += " bracket=";
-    tupletTag += t->hasBracket() ? "\"yes\"" : "\"no\"";
+    tupletTag += u" bracket=";
+    tupletTag += t->hasBracket() ? u"\"yes\"" : u"\"no\"";
     if (t->numberType() == TupletNumberType::SHOW_RELATION) {
-        tupletTag += " show-number=\"both\"";
+        tupletTag += u" show-number=\"both\"";
     } else if (t->numberType() == TupletNumberType::NO_TEXT) {
-        tupletTag += " show-number=\"none\"";
+        tupletTag += u" show-number=\"none\"";
     }
     if (t->direction() != engraving::DirectionV::AUTO) {
         if (t->direction() == engraving::DirectionV::UP) {
-            tupletTag += " placement=\"above\"";
+            tupletTag += u" placement=\"above\"";
         } else if (t->direction() == engraving::DirectionV::DOWN) {
-            tupletTag += " placement=\"below\"";
+            tupletTag += u" placement=\"below\"";
         }
     }
     if (needActualAndNormal) {
@@ -2811,16 +2811,16 @@ int ExportMusicXml::findTrill(const Trill* tr) const
 //   writeAccidental
 //---------------------------------------------------------
 
-static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accidental* const acc)
+static void writeAccidental(XmlWriter& xml, const String& tagName, const Accidental* const acc)
 {
     if (acc) {
-        QString s = accidentalType2MxmlString(acc->accidentalType());
+        String s = accidentalType2MxmlString(acc->accidentalType());
         if (s != "") {
             XmlWriter::Attributes attrs;
             if (s == "other") {
                 attrs = { { "smufl", accidentalType2SmuflMxmlString(acc->accidentalType()) } };
             }
-            QString tag = tagName;
+            String tag = tagName;
             if (acc->bracket() == AccidentalBracket::BRACKET) {
                 attrs.emplace_back(std::make_pair("bracket", "yes"));
             } else if (acc->bracket() == AccidentalBracket::PARENTHESIS) {
@@ -2849,9 +2849,9 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
     notations.tag(xml, tr);
     ornaments.tag(xml);
     xml.tagRaw("trill-mark" + color2xml(tr));
-    writeAccidental(xml, "accidental-mark", tr->accidental());
-    QString tagName = "wavy-line type=\"start\"";
-    tagName += QString(" number=\"%1\"").arg(number + 1);
+    writeAccidental(xml, u"accidental-mark", tr->accidental());
+    String tagName = u"wavy-line type=\"start\"";
+    tagName += String(u" number=\"%1\"").arg(number + 1);
     tagName += color2xml(tr);
     tagName += ExportMusicXml::positioningAttributes(tr, true);
     xml.tagRaw(tagName);
@@ -2865,7 +2865,7 @@ static void wavyLineStop(const Trill* tr, const int number, Notations& notations
 {
     notations.tag(xml, tr);
     ornaments.tag(xml);
-    QString trillXml = QString("wavy-line type=\"stop\" number=\"%1\"").arg(number + 1);
+    String trillXml = String(u"wavy-line type=\"stop\" number=\"%1\"").arg(number + 1);
     trillXml += ExportMusicXml::positioningAttributes(tr, false);
     xml.tagRaw(trillXml);
 }
@@ -2942,7 +2942,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 
     if (st != TremoloType::INVALID_TREMOLO && ExportMusicXml::canWrite(tr)) {
         int count = 0;
-        QString type = "";
+        String type;
 
         if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
             type = "single";
@@ -3021,87 +3021,87 @@ static void fermatas(const std::vector<EngravingItem*>& cra, XmlWriter& xml, Not
 //   symIdToArtic
 //---------------------------------------------------------
 
-static std::vector<QString> symIdToArtic(const SymId sid)
+static std::vector<String> symIdToArtic(const SymId sid)
 {
     switch (sid) {
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
-        return { "accent" };
+        return { u"accent" };
         break;
 
     case SymId::articStaccatoAbove:
     case SymId::articStaccatoBelow:
-        return { "staccato" };
+        return { u"staccato" };
         break;
 
     case SymId::articStaccatissimoAbove:
     case SymId::articStaccatissimoBelow:
-        return { "staccatissimo" };
+        return { u"staccatissimo" };
         break;
 
     case SymId::articTenutoAbove:
     case SymId::articTenutoBelow:
-        return { "tenuto" };
+        return { u"tenuto" };
         break;
 
     case SymId::articMarcatoAbove:
     case SymId::articMarcatoBelow:
-        return { "strong-accent" };
+        return { u"strong-accent" };
         break;
 
     case SymId::articTenutoStaccatoAbove:
     case SymId::articTenutoStaccatoBelow:
-        return { "detached-legato" };
+        return { u"detached-legato" };
         break;
 
     case SymId::articSoftAccentAbove:
     case SymId::articSoftAccentBelow:
-        return { "soft-accent" };
+        return { u"soft-accent" };
         break;
 
     case SymId::articSoftAccentStaccatoAbove:
     case SymId::articSoftAccentStaccatoBelow:
-        return { "soft-accent", "staccato" };
+        return { u"soft-accent", u"staccato" };
         break;
 
     case SymId::articSoftAccentTenutoAbove:
     case SymId::articSoftAccentTenutoBelow:
-        return { "soft-accent", "tenuto" };
+        return { u"soft-accent", u"tenuto" };
         break;
 
     case SymId::articSoftAccentTenutoStaccatoAbove:
     case SymId::articSoftAccentTenutoStaccatoBelow:
-        return { "soft-accent", "detached-legato" };
+        return { u"soft-accent", u"detached-legato" };
         break;
 
     case SymId::articStressAbove:
     case SymId::articStressBelow:
-        return { "stress" };
+        return { u"stress" };
         break;
 
     case SymId::articUnstressAbove:
     case SymId::articUnstressBelow:
-        return { "unstress" };
+        return { u"unstress" };
         break;
 
     case SymId::articAccentStaccatoAbove:
     case SymId::articAccentStaccatoBelow:
-        return { "accent", "staccato" };
+        return { u"accent", u"staccato" };
         break;
 
     case SymId::articMarcatoStaccatoAbove:
     case SymId::articMarcatoStaccatoBelow:
-        return { "strong-accent", "staccato" };
+        return { u"strong-accent", u"staccato" };
         break;
 
     case SymId::articMarcatoTenutoAbove:
     case SymId::articMarcatoTenutoBelow:
-        return { "strong-accent", "tenuto" };
+        return { u"strong-accent", u"tenuto" };
         break;
 
     case SymId::articTenutoAccentAbove:
     case SymId::articTenutoAccentBelow:
-        return { "tenuto", "accent" };
+        return { u"tenuto", u"accent" };
         break;
 
     default:
@@ -3116,66 +3116,66 @@ static std::vector<QString> symIdToArtic(const SymId sid)
 //   symIdToOrnam
 //---------------------------------------------------------
 
-static QString symIdToOrnam(const SymId sid)
+static String symIdToOrnam(const SymId sid)
 {
     switch (sid) {
     case SymId::ornamentTurnInverted:
-        return "inverted-turn";
+        return u"inverted-turn";
         break;
     case SymId::ornamentTurnSlash:
-        return "turn slash=\"yes\"";
+        return u"turn slash=\"yes\"";
         break;
     case SymId::ornamentTurn:
-        return "turn";
+        return u"turn";
         break;
     case SymId::ornamentTrill:
     case SymId::ornamentShake3:
     case SymId::ornamentShakeMuffat1:
-        return "trill-mark";
+        return u"trill-mark";
         break;
     case SymId::ornamentMordent:
-        return "mordent";
+        return u"mordent";
         break;
     case SymId::ornamentShortTrill:
         // return "short-trill";
-        return "inverted-mordent";
+        return u"inverted-mordent";
         break;
     case SymId::ornamentTremblement:
-        return "inverted-mordent long=\"yes\"";
+        return u"inverted-mordent long=\"yes\"";
         break;
     case SymId::ornamentPrallMordent:
-        return "mordent long=\"yes\"";
+        return u"mordent long=\"yes\"";
         break;
     case SymId::ornamentUpPrall:
-        return "inverted-mordent long=\"yes\" approach=\"below\"";
+        return u"inverted-mordent long=\"yes\" approach=\"below\"";
         break;
     case SymId::ornamentPrecompMordentUpperPrefix:
-        return "inverted-mordent long=\"yes\" approach=\"above\"";
+        return u"inverted-mordent long=\"yes\" approach=\"above\"";
         break;
     case SymId::ornamentUpMordent:
-        return "mordent long=\"yes\" approach=\"below\"";
+        return u"mordent long=\"yes\" approach=\"below\"";
         break;
     case SymId::ornamentDownMordent:
-        return "mordent long=\"yes\" approach=\"above\"";
+        return u"mordent long=\"yes\" approach=\"above\"";
         break;
     case SymId::ornamentPrallDown:
-        return "inverted-mordent long=\"yes\" departure=\"below\"";
+        return u"inverted-mordent long=\"yes\" departure=\"below\"";
         break;
     case SymId::ornamentPrallUp:
-        return "inverted-mordent long=\"yes\" departure=\"above\"";
+        return u"inverted-mordent long=\"yes\" departure=\"above\"";
         break;
     case SymId::ornamentLinePrall:
         // MusicXML 3.0 does not distinguish between downprall and lineprall
-        return "inverted-mordent long=\"yes\" approach=\"above\"";
+        return u"inverted-mordent long=\"yes\" approach=\"above\"";
         break;
     case SymId::ornamentPrecompSlide:
-        return "schleifer";
+        return u"schleifer";
         break;
     case SymId::ornamentTremblementCouperin:
-        return "other-ornament smufl=\"ornamentTremblementCouperin\"";
+        return u"other-ornament smufl=\"ornamentTremblementCouperin\"";
         break;
     case SymId::ornamentPinceCouperin:
-        return "other-ornament smufl=\"ornamentPinceCouperin\"";
+        return u"other-ornament smufl=\"ornamentPinceCouperin\"";
         break;
 
     default:
@@ -3183,84 +3183,84 @@ static QString symIdToOrnam(const SymId sid)
         break;
     }
 
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
 //   symIdToTechn
 //---------------------------------------------------------
 
-static QString symIdToTechn(const SymId sid)
+static String symIdToTechn(const SymId sid)
 {
     switch (sid) {
     case SymId::stringsUpBow:
-        return "up-bow";
+        return u"up-bow";
         break;
     case SymId::stringsDownBow:
-        return "down-bow";
+        return u"down-bow";
         break;
     case SymId::stringsHarmonic:
-        return "harmonic";
+        return u"harmonic";
         break;
     case SymId::stringsThumbPosition:
     case SymId::stringsThumbPositionTurned:
-        return "thumb-position";
+        return u"thumb-position";
         break;
     case SymId::doubleTongueAbove:
     case SymId::doubleTongueBelow:
-        return "double-tongue";
+        return u"double-tongue";
         break;
     case SymId::tripleTongueAbove:
     case SymId::tripleTongueBelow:
-        return "triple-tongue";
+        return u"triple-tongue";
         break;
     case SymId::brassMuteClosed:
-        return "stopped";
+        return u"stopped";
         break;
     case SymId::pluckedSnapPizzicatoAbove:
     case SymId::pluckedSnapPizzicatoBelow:
-        return "snap-pizzicato";
+        return u"snap-pizzicato";
         break;
     case SymId::keyboardPedalHeel1:
     case SymId::keyboardPedalHeel2:
     case SymId::keyboardPedalHeel3:
-        return "heel";
+        return u"heel";
         break;
     case SymId::keyboardPedalToe1:
     case SymId::keyboardPedalToe2:
-        return "toe";
+        return u"toe";
         break;
     case SymId::pluckedWithFingernails:
-        return "fingernails";
+        return u"fingernails";
         break;
     case SymId::brassBend:
-        return "brass-bend";
+        return u"brass-bend";
         break;
     case SymId::brassFlip:
-        return "brass-flip";
+        return u"brass-flip";
         break;
     case SymId::brassSmear:
-        return "smear";
+        return u"smear";
         break;
     case SymId::brassMuteOpen:
         // return "open-string";
-        return "open";
+        return u"open";
         break;
     case SymId::brassMuteHalfClosed:
-        return "half-muted";
+        return u"half-muted";
         break;
     case SymId::brassHarmonMuteClosed:
-        return "harmon-mute";
+        return u"harmon-mute";
         break;
     case SymId::guitarGolpe:
-        return "golpe";
+        return u"golpe";
         break;
     default:
         ;           // nothing
         break;
     }
 
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
@@ -3273,19 +3273,19 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
         LOGD("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->typeName());
         if (e->type() == ElementType::CHORDLINE) {
             ChordLine const* const cl = static_cast<ChordLine*>(e);
-            QString subtype;
+            String subtype;
             switch (cl->chordLineType()) {
             case ChordLineType::FALL:
-                subtype = "falloff";
+                subtype = u"falloff";
                 break;
             case ChordLineType::DOIT:
-                subtype = "doit";
+                subtype = u"doit";
                 break;
             case ChordLineType::PLOP:
-                subtype = "plop";
+                subtype = u"plop";
                 break;
             case ChordLineType::SCOOP:
-                subtype = "scoop";
+                subtype = u"scoop";
                 break;
             default:
                 LOGD("unknown ChordLine subtype %d", int(cl->chordLineType()));
@@ -3311,19 +3311,19 @@ static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notation
         if (breath->isCaesura()) {
             xml.tag("caesura");
         } else {
-            QString breathMarkType;
+            String breathMarkType;
             switch (breath->symId()) {
             case SymId::breathMarkTick:
-                breathMarkType = "tick";
+                breathMarkType = u"tick";
                 break;
             case SymId::breathMarkUpbow:
-                breathMarkType = "upbow";
+                breathMarkType = u"upbow";
                 break;
             case SymId::breathMarkSalzedo:
-                breathMarkType = "salzedo";
+                breathMarkType = u"salzedo";
                 break;
             default:
-                breathMarkType = "comma";
+                breathMarkType = u"comma";
             }
 
             xml.tag("breath-mark", breathMarkType);
@@ -3356,21 +3356,21 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             continue;
         }
 
-        auto sid = a->symId();
-        auto mxmlArtics = symIdToArtic(sid);
+        SymId sid = a->symId();
+        std::vector<String> mxmlArtics = symIdToArtic(sid);
 
-        for (QString mxmlArtic : mxmlArtics) {
-            if (mxmlArtic == "strong-accent") {
+        for (String mxmlArtic : mxmlArtics) {
+            if (mxmlArtic == u"strong-accent") {
                 if (a->up()) {
-                    mxmlArtic += " type=\"up\"";
+                    mxmlArtic += u" type=\"up\"";
                 } else {
-                    mxmlArtic += " type=\"down\"";
+                    mxmlArtic += u" type=\"down\"";
                 }
             } else if (a->anchor() != ArticulationAnchor::AUTO) {
                 if (a->anchor() == ArticulationAnchor::TOP) {
-                    mxmlArtic += " placement=\"above\"";
+                    mxmlArtic += u" placement=\"above\"";
                 } else {
-                    mxmlArtic += " placement=\"below\"";
+                    mxmlArtic += u" placement=\"below\"";
                 }
             }
             mxmlArtic += color2xml(a);
@@ -3417,10 +3417,10 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
 
         auto sid = a->symId();
-        QString placement;
-        QString direction;
+        String placement;
+        String direction;
 
-        QString attr;
+        String attr;
         if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
             placement = (a->anchor() == ArticulationAnchor::BOTTOM) ? "below" : "above";
         } else if (!a->isStyled(Pid::DIRECTION) && a->direction() != DirectionV::AUTO) {
@@ -3428,9 +3428,9 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         }
         /* For future use if/when implemented font details for articulation
         if (!a->isStyled(Pid::FONT_FACE))
-              attr += QString(" font-family=\"%1\"").arg(a->getProperty(Pid::FONT_FACE).toString());
+              attr += String(" font-family=\"%1\"").arg(a->getProperty(Pid::FONT_FACE).toString());
         if (!a->isStyled(Pid::FONT_SIZE))
-              attr += QString(" font-size=\"%1\"").arg(a->getProperty(Pid::FONT_SIZE).toReal());
+              attr += String(" font-size=\"%1\"").arg(a->getProperty(Pid::FONT_SIZE).toReal());
         if (!a->isStyled(Pid::FONT_STYLE))
               attr += fontStyleToXML(static_cast<FontStyle>(a->getProperty(Pid::FONT_STYLE).toInt()), false);
         */
@@ -3443,14 +3443,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             mxmlTechn += ExportMusicXml::positioningAttributes(a);
             if (sid == SymId::stringsHarmonic) {
                 if (placement != "") {
-                    attr += QString(" placement=\"%1\"").arg(placement);
+                    attr += String(u" placement=\"%1\"").arg(placement);
                 }
                 m_xml.startElementRaw(mxmlTechn + attr);
                 m_xml.tag("natural");
                 m_xml.endElement();
             } else {
                 if (placement != "") {
-                    attr += QString(" placement=\"%1\"").arg(placement);
+                    attr += String(u" placement=\"%1\"").arg(placement);
                 }
                 m_xml.tagRaw(mxmlTechn + attr);
             }
@@ -3487,30 +3487,30 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
         return;
     }
 
-    QString tagName;
+    String tagName;
     switch (arp->arpeggioType()) {
     case ArpeggioType::NORMAL:
         notations.tag(xml, arp);
-        tagName = "arpeggiate";
+        tagName = u"arpeggiate";
         break;
     case ArpeggioType::UP:                  // fall through
     case ArpeggioType::UP_STRAIGHT:         // not supported by MusicXML, export as normal arpeggio
         notations.tag(xml, arp);
-        tagName = "arpeggiate direction=\"up\"";
+        tagName = u"arpeggiate direction=\"up\"";
         break;
     case ArpeggioType::DOWN:                  // fall through
     case ArpeggioType::DOWN_STRAIGHT:         // not supported by MusicXML, export as normal arpeggio
         notations.tag(xml, arp);
-        tagName = "arpeggiate direction=\"down\"";
+        tagName = u"arpeggiate direction=\"down\"";
         break;
     case ArpeggioType::BRACKET:
         if (front) {
             notations.tag(xml, arp);
-            tagName = "non-arpeggiate type=\"bottom\"";
+            tagName = u"non-arpeggiate type=\"bottom\"";
         }
         if (back) {
             notations.tag(xml, arp);
-            tagName = "non-arpeggiate type=\"top\"";
+            tagName = u"non-arpeggiate type=\"top\"";
         }
         break;
     default:
@@ -3518,7 +3518,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
         break;
     }
 
-    if (tagName != "") {
+    if (tagName != u"") {
         tagName += color2xml(arp);
         tagName += ExportMusicXml::positioningAttributes(arp);
         xml.tagRaw(tagName);
@@ -3563,24 +3563,24 @@ static int determineTupletNormalTicks(Tuplet const* const t)
 //   beamFanAttribute
 //---------------------------------------------------------
 
-static QString beamFanAttribute(const Beam* const b)
+static String beamFanAttribute(const Beam* const b)
 {
     const qreal epsilon = 0.1;
 
-    QString fan;
+    String fan;
     if ((b->growRight() - b->growLeft() > epsilon)) {
-        fan = "accel";
+        fan = u"accel";
     }
 
     if ((b->growLeft() - b->growRight() > epsilon)) {
-        fan = "rit";
+        fan = u"rit";
     }
 
-    if (fan != "") {
-        return QString(" fan=\"%1\"").arg(fan);
+    if (fan != u"") {
+        return String(u" fan=\"%1\"").arg(fan);
     }
 
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------
@@ -3629,18 +3629,18 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
     }
     // find beam type and write
     for (int i = 1; i <= blc; ++i) {
-        QString text;
+        String text;
         // TODO: correctly handle Beam::Mode::AUTO
         // when equivalent to BEGIN32 or BEGIN64
         if ((blp < i && bln >= i)
             || (bmc == BeamMode::BEGIN16 && i > 1)
             || (bmc == BeamMode::BEGIN32 && i > 2)) {
-            text = "begin";
+            text = u"begin";
         } else if (blp < i && bln < i) {
             if (bln > 0) {
-                text = "forward hook";
+                text = u"forward hook";
             } else if (blp > 0) {
-                text = "backward hook";
+                text = u"backward hook";
             }
         } else if ((blp >= i && bln < i)
                    || (bmn == BeamMode::BEGIN16 && i > 1)
@@ -3650,9 +3650,9 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             text = "continue";
         }
         if (text != "") {
-            QString tag = "beam";
-            tag += QString(" number=\"%1\"").arg(i);
-            if (text == "begin") {
+            String tag = u"beam";
+            tag += String(u" number=\"%1\"").arg(i);
+            if (text == u"begin") {
                 tag += beamFanAttribute(b);
             }
             xml.tagRaw(tag, text);
@@ -3664,9 +3664,9 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
 //   instrId
 //---------------------------------------------------------
 
-static QString instrId(int partNr, int instrNr)
+static String instrId(int partNr, int instrNr)
 {
-    return QString("id=\"P%1-I%2\"").arg(partNr).arg(instrNr);
+    return String(u"id=\"P%1-I%2\"").arg(partNr).arg(instrNr);
 }
 
 //---------------------------------------------------------
@@ -3685,7 +3685,7 @@ static bool isNoteheadParenthesis(const Symbol* symbol)
 
 static void writeNotehead(XmlWriter& xml, const Note* const note)
 {
-    QString noteheadTagname = QString("notehead");
+    String noteheadTagname = u"notehead";
     noteheadTagname += color2xml(note);
     bool leftParenthesis = false, rightParenthesis = false;
     for (EngravingItem* elem : note->el()) {
@@ -3699,12 +3699,12 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         }
     }
     if (rightParenthesis && leftParenthesis) {
-        noteheadTagname += " parentheses=\"yes\"";
+        noteheadTagname += u" parentheses=\"yes\"";
     }
     if (note->headType() == NoteHeadType::HEAD_QUARTER) {
-        noteheadTagname += " filled=\"yes\"";
+        noteheadTagname += u" filled=\"yes\"";
     } else if ((note->headType() == NoteHeadType::HEAD_HALF) || (note->headType() == NoteHeadType::HEAD_WHOLE)) {
-        noteheadTagname += " filled=\"no\"";
+        noteheadTagname += u" filled=\"no\"";
     }
     if (!note->visible()) {
         // The notehead is invisible but other parts of the note might
@@ -3754,7 +3754,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         xml.tagRaw(noteheadTagname, "normal");
     } else if (note->headGroup() != NoteHeadGroup::HEAD_NORMAL) {
         AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
-        noteheadTagname += QString(" smufl=\"%1\"").arg(noteheadName.ascii());
+        noteheadTagname += String(u" smufl=\"%1\"").arg(String::fromAscii(noteheadName.ascii()));
         xml.tagRaw(noteheadTagname, "other");
     }
 }
@@ -3774,16 +3774,16 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
             const TextBase* f = toTextBase(e);
             notations.tag(xml, e);
             technical.tag(xml);
-            QString t = MScoreTextToMXML::toPlainText(f->xmlText());
-            QString attr;
+            String t = MScoreTextToMXML::toPlainText(f->xmlText());
+            String attr;
             if (!f->isStyled(Pid::PLACEMENT) || f->placement() == PlacementV::BELOW) {
-                attr = QString(" placement=\"%1\"").arg((f->placement() == PlacementV::BELOW) ? "below" : "above");
+                attr = String(u" placement=\"%1\"").arg((f->placement() == PlacementV::BELOW) ? u"below" : u"above");
             }
             if (!f->isStyled(Pid::FONT_FACE)) {
-                attr += QString(" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).value<String>());
+                attr += String(u" font-family=\"%1\"").arg(f->getProperty(Pid::FONT_FACE).value<String>());
             }
             if (!f->isStyled(Pid::FONT_SIZE)) {
-                attr += QString(" font-size=\"%1\"").arg(f->getProperty(Pid::FONT_SIZE).toReal());
+                attr += String(u" font-size=\"%1\"").arg(f->getProperty(Pid::FONT_SIZE).toReal());
             }
             if (!f->isStyled(Pid::FONT_STYLE)) {
                 attr += fontStyleToXML(static_cast<FontStyle>(f->getProperty(Pid::FONT_STYLE).toInt()), false);
@@ -3791,26 +3791,26 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
             attr += color2xml(f);
 
             if (f->textStyleType() == TextStyleType::RH_GUITAR_FINGERING) {
-                xml.tagRaw("pluck" + attr, t);
+                xml.tagRaw(u"pluck" + attr, t);
             } else if (f->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
-                xml.tagRaw("fingering" + attr, t);
+                xml.tagRaw(u"fingering" + attr, t);
             } else if (f->textStyleType() == TextStyleType::FINGERING) {
                 // for generic fingering, try to detect plucking
                 // (backwards compatibility with MuseScore 1.x)
                 // p, i, m, a, c represent the plucking finger
                 if (t == "p" || t == "i" || t == "m" || t == "a" || t == "c") {
-                    xml.tagRaw("pluck" + attr, t);
+                    xml.tagRaw(u"pluck" + attr, t);
                 } else {
-                    xml.tagRaw("fingering" + attr, t);
+                    xml.tagRaw(u"fingering" + attr, t);
                 }
             } else if (f->textStyleType() == TextStyleType::STRING_NUMBER) {
                 bool ok;
                 int i = t.toInt(&ok);
                 if (ok) {
                     if (i == 0) {
-                        xml.tagRaw("open-string" + attr);
+                        xml.tagRaw(u"open-string" + attr);
                     } else if (i > 0) {
-                        xml.tagRaw("string" + attr, t);
+                        xml.tagRaw(u"string" + attr, t);
                     }
                 }
                 if (!ok || i < 0) {
@@ -3924,7 +3924,7 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
 
     const auto strActFraction = stretchCorrActFraction(note);
     const Fraction tt  = strActFraction * ratio * tremoloCorrection(note);
-    const QString s { tick2xml(tt, &dots) };
+    const String s = tick2xml(tt, &dots);
     if (s.isEmpty()) {
         LOGD("no note type found for fraction %d / %d", strActFraction.numerator(), strActFraction.denominator());
     }
@@ -3960,7 +3960,7 @@ static void writeTimeModification(XmlWriter& xml, const Tuplet* const tuplet, co
         //LOGD("nrmTicks %d", nrmTicks);
         if (nrmTicks > 0) {
             int nrmDots { 0 };
-            const QString nrmType { tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots) };
+            const String nrmType = tick2xml(Fraction::fromTicks(nrmTicks), &nrmDots);
             if (nrmType.isEmpty()) {
                 LOGD("no note type found for ticks %d", nrmTicks);
             } else {
@@ -3981,7 +3981,7 @@ static void writeTimeModification(XmlWriter& xml, const Tuplet* const tuplet, co
 static void writePitch(XmlWriter& xml, const Note* const note, const bool useDrumset)
 {
     // step / alter / octave
-    QString step;
+    String step;
     int alter = 0;
     int octave = 0;
     const auto chord = note->chord();
@@ -4087,7 +4087,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
     for (Note* note : nl) {
         m_attr.doAttr(m_xml, false);
-        QString noteTag = QString("note");
+        String noteTag = u"note";
 
         noteTag += elementPosition(this, note);
 
@@ -4131,10 +4131,10 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         // instrument for multi-instrument or unpitched parts
         if (!useDrumset) {
             if (m_instrMap.size() > 1 && instNr >= 0) {
-                m_xml.tagRaw(QString("instrument %1").arg(instrId(static_cast<int>(partNr) + 1, instNr + 1)));
+                m_xml.tagRaw(String(u"instrument %1").arg(instrId(static_cast<int>(partNr) + 1, instNr + 1)));
             }
         } else {
-            m_xml.tagRaw(QString("instrument %1").arg(instrId(static_cast<int>(partNr) + 1, note->pitch() + 1)));
+            m_xml.tagRaw(String(u"instrument %1").arg(instrId(static_cast<int>(partNr) + 1, note->pitch() + 1)));
         }
 
         // voice
@@ -4148,14 +4148,14 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         m_xml.tag("voice", static_cast<int>(voice));
 
         writeTypeAndDots(m_xml, note);
-        writeAccidental(m_xml, "accidental", note->accidental());
+        writeAccidental(m_xml, u"accidental", note->accidental());
         writeTimeModification(m_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
         // no stem for whole notes and beyond
         if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())) {
-            m_xml.tag("stem", QString("none"));
+            m_xml.tag("stem", "none");
         } else if (note->chord()->stem()) {
-            m_xml.tag("stem", QString(note->chord()->up() ? "up" : "down"));
+            m_xml.tag("stem", note->chord()->up() ? "up" : "down");
         }
 
         writeNotehead(m_xml, note);
@@ -4180,8 +4180,8 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         const Tie* tieFor = note->tieFor();
         if (tieFor && ExportMusicXml::canWrite(tieFor)) {
             notations.tag(m_xml, tieFor);
-            QString rest = slurTieLineStyle(tieFor);
-            m_xml.tagRaw(QString("tied type=\"start\"%1").arg(rest));
+            String rest = slurTieLineStyle(tieFor);
+            m_xml.tagRaw(String(u"tied type=\"start\"%1").arg(rest));
         }
         const Articulation* laissezVibrer = findLaissezVibrer(chord);
         if (laissezVibrer && ExportMusicXml::canWrite(laissezVibrer)) {
@@ -4257,17 +4257,17 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
 void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyrics*>& ll)
 {
-    static char table2[]  = "CDEFGAB";
+    static char16_t table2[]  = u"CDEFGAB";
 #ifdef DEBUG_TICK
     LOGD("ExportMusicXml::rest() oldtick=%d", tick);
 #endif
     m_attr.doAttr(m_xml, false);
 
-    QString noteTag = QString("note");
+    String noteTag = u"note";
     noteTag += color2xml(rest);
     noteTag += elementPosition(this, rest);
     if (!rest->visible()) {
-        noteTag += " print-object=\"no\"";
+        noteTag += u" print-object=\"no\"";
     }
     m_xml.startElementRaw(noteTag);
 
@@ -4290,10 +4290,10 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
         stp = po % 7;     // step
     }
 
-    QString restTag { "rest" };
+    String restTag = u"rest";
     const TDuration d = rest->durationType();
     if (d.type() == DurationType::V_MEASURE) {
-        restTag += " measure=\"yes\"";
+        restTag += u" measure=\"yes\"";
     }
     // Either <rest/>
     // or <rest><display-step>F</display-step><display-octave>5</display-octave></rest>
@@ -4301,7 +4301,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
         m_xml.tagRaw(restTag);
     } else {
         m_xml.startElementRaw(restTag);
-        m_xml.tag("display-step", QString(QChar(table2[stp])));
+        m_xml.tag("display-step", String(Char(table2[stp])));
         m_xml.tag("display-octave", oct - 1);
         m_xml.endElement();
     }
@@ -4382,7 +4382,7 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
 static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* const el = 0)
 {
     attr.doAttr(xml, false);
-    QString tagname = QString("direction");
+    String tagname = u"direction";
     if (el) {
         /*
          LOGD("directionTag() spatium=%g elem=%p tp=%d (%s)\ndirectionTag()  x=%g y=%g xsp,ysp=%g,%g w=%g h=%g userOff.y=%g",
@@ -4472,14 +4472,14 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                 // compare the segment's canvas ypos with the staff's center height
                 // if (seg->pagePos().y() < sys->pagePos().y() + bb.y() + bb.height() / 2)
                 if (el->placement() == PlacementV::ABOVE) {
-                    tagname += " placement=\"above\"";
+                    tagname += u" placement=\"above\"";
                 } else {
-                    tagname += " placement=\"below\"";
+                    tagname += u" placement=\"below\"";
                 }
             } else if (el->isDynamic()) {
-                tagname += " placement=\"";
-                tagname += el->placement() == PlacementV::ABOVE ? "above" : "below";
-                tagname += "\"";
+                tagname += u" placement=\"";
+                tagname += el->placement() == PlacementV::ABOVE ? u"above" : u"below";
+                tagname += u"\"";
             } else {
                 /*
                 LOGD("directionTag()  staff ely=%g elh=%g bby=%g bbh=%g",
@@ -4488,9 +4488,9 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                  */
                 // if (el->y() + el->height() / 2 < /*bb.y() +*/ bb.height() / 2)
                 if (el->placement() == PlacementV::ABOVE) {
-                    tagname += " placement=\"above\"";
+                    tagname += u" placement=\"above\"";
                 } else {
-                    tagname += " placement=\"below\"";
+                    tagname += u" placement=\"below\"";
                 }
             }
         }           // if (pel && ...
@@ -4520,27 +4520,27 @@ static void directionETag(XmlWriter& xml, staff_idx_t staff, int offs = 0)
 static void partGroupStart(XmlWriter& xml, int number, BracketType bracket)
 {
     xml.startElement("part-group", { { "type", "start" }, { "number", number } });
-    QString br = "";
+    String br;
     switch (bracket) {
     case BracketType::NO_BRACKET:
-        br = "none";
+        br = u"none";
         break;
     case BracketType::NORMAL:
-        br = "bracket";
+        br = u"bracket";
         break;
     case BracketType::BRACE:
-        br = "brace";
+        br = u"brace";
         break;
     case BracketType::LINE:
-        br = "line";
+        br = u"line";
         break;
     case BracketType::SQUARE:
-        br = "square";
+        br = u"square";
         break;
     default:
         LOGD("bracket subtype %d not understood", int(bracket));
     }
-    if (br != "") {
+    if (!br.empty()) {
         xml.tag("group-symbol", br);
     }
     xml.endElement();
@@ -4694,20 +4694,20 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
     std::list<TextFragment> wordsRight;         // words right of metronome
 
     // set the default words format
-    const QString mtf = s.styleSt(Sid::MusicalTextFont);
+    const String mtf = s.styleSt(Sid::MusicalTextFont);
     const CharFormat defFmt = formatForWords(s);
 
     if (findMetronome(list, wordsLeft, hasParen, metroLeft, metroRight, wordsRight)) {
         if (wordsLeft.size() > 0) {
             xml.startElement("direction-type");
-            QString attr = ExportMusicXml::positioningAttributes(text);
+            String attr = ExportMusicXml::positioningAttributes(text);
             MScoreTextToMXML mttm("words", attr, defFmt, mtf);
             mttm.writeTextFragments(wordsLeft, xml);
             xml.endElement();
         }
 
         xml.startElement("direction-type");
-        QString tagName = QString("metronome parentheses=\"%1\"").arg(hasParen ? "yes" : "no");
+        String tagName = String(u"metronome parentheses=\"%1\"").arg(hasParen ? u"yes" : u"no");
         tagName += color2xml(text);
         tagName += ExportMusicXml::positioningAttributes(text);
         xml.startElementRaw(tagName);
@@ -4727,14 +4727,14 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
 
         if (wordsRight.size() > 0) {
             xml.startElement("direction-type");
-            QString attr = ExportMusicXml::positioningAttributes(text);
+            String attr = ExportMusicXml::positioningAttributes(text);
             MScoreTextToMXML mttm("words", attr, defFmt, mtf);
             mttm.writeTextFragments(wordsRight, xml);
             xml.endElement();
         }
     } else {
         xml.startElement("direction-type");
-        QString attr;
+        String attr;
         if (text->hasFrame()) {
             if (text->circle()) {
                 attr = " enclosure=\"circle\"";
@@ -4823,7 +4823,7 @@ QString ExportMusicXml::positioningAttributesForTboxText(const QPointF position,
     }
 
     QPointF relative;         // use zero relative position
-    return positionToQString(position, relative, spatium);
+    return positionToString(position, relative, spatium);
 }
 
 //---------------------------------------------------------
@@ -5002,7 +5002,7 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
         if (dynamicPosition == 0) {
             // dynamic at front of text
             xml.startElement("direction-type");
-            QString tag = "dynamics";
+            String tag = u"dynamics";
             tag += color2xml(tlb);
             tag += ExportMusicXml::positioningAttributes(tlb, isStart);
             xml.startElementRaw(tag);
@@ -5062,38 +5062,38 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
         if (hp->lineVisible()) {
             if (hp->tick() == tick) {
                 m_xml.startElement("direction-type");
-                QString tag = "dashes type=\"start\"";
-                tag += QString(" number=\"%1\"").arg(n + 1);
+                String tag = u"dashes type=\"start\"";
+                tag += String(u" number=\"%1\"").arg(n + 1);
                 tag += color2xml(hp);
                 tag += positioningAttributes(hp, hp->tick() == tick);
                 m_xml.tagRaw(tag);
                 m_xml.endElement();
             } else {
                 m_xml.startElement("direction-type");
-                m_xml.tagRaw(QString("dashes type=\"stop\" number=\"%1\"").arg(n + 1));
+                m_xml.tagRaw(String("dashes type=\"stop\" number=\"%1\"").arg(n + 1));
                 m_xml.endElement();
             }
         }
     } else {
         m_xml.startElement("direction-type");
-        QString tag = "wedge type=";
+        String tag = u"wedge type=";
         if (hp->tick() == tick) {
             if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
-                tag += "\"crescendo\"";
+                tag += u"\"crescendo\"";
                 if (hp->hairpinCircledTip()) {
-                    tag += " niente=\"yes\"";
+                    tag += u" niente=\"yes\"";
                 }
             } else {
-                tag += "\"diminuendo\"";
+                tag += u"\"diminuendo\"";
             }
             tag += color2xml(hp);
         } else {
-            tag += "\"stop\"";
+            tag += u"\"stop\"";
             if (hp->hairpinCircledTip() && hp->hairpinType() == HairpinType::DECRESC_HAIRPIN) {
-                tag += " niente=\"yes\"";
+                tag += u" niente=\"yes\"";
             }
         }
-        tag += QString(" number=\"%1\"").arg(n + 1);
+        tag += String(u" number=\"%1\"").arg(n + 1);
         tag += positioningAttributes(hp, hp->tick() == tick);
         m_xml.tagRaw(tag);
         m_xml.endElement();
@@ -5140,39 +5140,39 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
         }
     }
 
-    QString octaveShiftXml;
+    String octaveShiftXml;
     const auto st = ot->ottavaType();
     if (ot->tick() == tick) {
-        const char* sz = 0;
-        const char* tp = 0;
+        String sz;
+        String tp;
         switch (st) {
         case OttavaType::OTTAVA_8VA:
-            sz = "8";
-            tp = "down";
+            sz = u"8";
+            tp = u"down";
             break;
         case OttavaType::OTTAVA_15MA:
-            sz = "15";
-            tp = "down";
+            sz = u"15";
+            tp = u"down";
             break;
         case OttavaType::OTTAVA_8VB:
-            sz = "8";
-            tp = "up";
+            sz = u"8";
+            tp = u"up";
             break;
         case OttavaType::OTTAVA_15MB:
-            sz = "15";
-            tp = "up";
+            sz = u"15";
+            tp = u"up";
             break;
         default:
             LOGD("ottava subtype %d not understood", int(st));
         }
-        if (sz && tp) {
-            octaveShiftXml = QString("octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp, sz).arg(n + 1);
+        if (!sz.empty() && !tp.empty()) {
+            octaveShiftXml = String(u"octave-shift type=\"%1\" size=\"%2\" number=\"%3\"").arg(tp, sz).arg(n + 1);
         }
     } else {
         if (st == OttavaType::OTTAVA_8VA || st == OttavaType::OTTAVA_8VB) {
-            octaveShiftXml = QString("octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1);
+            octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"8\" number=\"%1\"").arg(n + 1);
         } else if (st == OttavaType::OTTAVA_15MA || st == OttavaType::OTTAVA_15MB) {
-            octaveShiftXml = QString("octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1);
+            octaveShiftXml = String(u"octave-shift type=\"stop\" size=\"15\" number=\"%1\"").arg(n + 1);
         } else {
             LOGD("ottava subtype %d not understood", int(st));
         }
@@ -5202,36 +5202,36 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
 
     directionTag(m_xml, m_attr, pd);
     m_xml.startElement("direction-type");
-    QString pedalType;
-    QString pedalXml;
-    QString signText;
-    QString lineText = pd->lineVisible() ? " line=\"yes\"" : " line=\"no\"";
+    String pedalType;
+    String pedalXml;
+    String signText;
+    String lineText = pd->lineVisible() ? u" line=\"yes\"" : u" line=\"no\"";
     if (pd->tick() == tick) {
         switch (pd->beginHookType()) {
         case HookType::HOOK_45:
-            pedalType = "change";
+            pedalType = u"change";
             break;
         case HookType::NONE:
-            pedalType = pd->lineVisible() ? "resume" : "start";
+            pedalType = pd->lineVisible() ? u"resume" : u"start";
             break;
         default:
-            pedalType = "start";
+            pedalType = u"start";
         }
-        signText = pd->beginText().isEmpty() ? " sign=\"no\"" : " sign=\"yes\"";
+        signText = pd->beginText().isEmpty() ? u" sign=\"no\"" : u" sign=\"yes\"";
         if (pd->beginText() == u"<sym>keyboardPedalSost</sym>" || pd->beginText() == u"<sym>keyboardPedalS</sym>") {
-            pedalType = "sostenuto";
+            pedalType = u"sostenuto";
         }
     } else {
         if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90) {
-            pedalType = "stop";
+            pedalType = u"stop";
         } else {
-            pedalType = "discontinue";
+            pedalType = u"discontinue";
         }
         // "change" type is handled only on the beginning of pedal lines
 
         signText = pd->endText().isEmpty() ? " sign=\"no\"" : " sign=\"yes\"";
     }
-    pedalXml = QString("pedal type=\"%1\"").arg(pedalType);
+    pedalXml = String(u"pedal type=\"%1\"").arg(pedalType);
     pedalXml += lineText;
     pedalXml += signText;
     pedalXml += color2xml(pd);
@@ -5302,27 +5302,27 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         }
     }
 
-    QString rest;
+    String rest;
     QPointF p;
 
-    QString type;
+    String type;
     HookType hookType = HookType::NONE;
     double hookHeight = 0.0;
     if (tl->tick() == tick) {
         if (!isDashes) {
-            QString lineType;
+            String lineType;
             switch (tl->lineStyle()) {
             case LineType::SOLID:
-                lineType = "solid";
+                lineType = u"solid";
                 break;
             case LineType::DASHED:
-                lineType = "dashed";
+                lineType = u"dashed";
                 break;
             case LineType::DOTTED:
-                lineType = "dotted";
+                lineType = u"dotted";
                 break;
             }
-            rest += QString(" line-type=\"%1\"").arg(lineType);
+            rest += String(u" line-type=\"%1\"").arg(lineType);
         }
         hookType   = tl->beginHookType();
         hookHeight = tl->beginHookHeight().val();
@@ -5330,7 +5330,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
             p = tl->frontSegment()->offset().toQPointF();
         }
         // offs = tl->mxmlOff();
-        type = "start";
+        type = u"start";
     } else {
         hookType   = tl->endHookType();
         hookHeight = tl->endHookHeight().val();
@@ -5338,24 +5338,24 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
             p = (toLineSegment(tl->backSegment()))->userOff2().toQPointF();
         }
         // offs = tl->mxmlOff2();
-        type = "stop";
+        type = u"stop";
     }
 
-    QString lineEnd;
+    String lineEnd;
     switch (hookType) {
     case HookType::HOOK_90T:
-        lineEnd = "both";
-        rest += QString(" end-length=\"%1\"").arg(std::abs(hookHeight * 20));
+        lineEnd = u"both";
+        rest += String(u" end-length=\"%1\"").arg(std::abs(hookHeight * 20));
         break;
     case HookType::HOOK_90:
         lineEnd = (hookHeight < 0.0) ? "up" : "down";
-        rest += QString(" end-length=\"%1\"").arg(std::abs(hookHeight * 10));
+        rest += String(u" end-length=\"%1\"").arg(std::abs(hookHeight * 10));
         break;
     case HookType::NONE:
-        lineEnd = "none";
+        lineEnd = u"none";
         break;
     default:
-        lineEnd = "none";
+        lineEnd = u"none";
         LOGD("HookType %d not supported", int(hookType));
     }
 
@@ -5375,7 +5375,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         if (isDashes) {
             m_xml.tag("dashes", { { "type", type }, { "number", n + 1 } });
         } else {
-            m_xml.tagRaw(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
+            m_xml.tagRaw(String(u"bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, String::number(n + 1), lineEnd, rest));
         }
         m_xml.endElement();
     }
@@ -5403,7 +5403,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 // as MusicXML dynamics is written as other-dynamics.
 
 template<typename T>
-inline std::set<QString>& operator<<(std::set<QString>& s, const T& v)
+inline std::set<String>& operator<<(std::set<String>& s, const T& v)
 {
     s.insert(v);
     return s;
@@ -5411,38 +5411,38 @@ inline std::set<QString>& operator<<(std::set<QString>& s, const T& v)
 
 void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 {
-    static std::set<QString> set;   // the valid MusicXML dynamics
+    static std::set<String> set;   // the valid MusicXML dynamics
     if (set.empty()) {
-        set << "f" << "ff" << "fff" << "ffff" << "fffff" << "ffffff"
-            << "fp" << "fz"
-            << "mf" << "mp"
-            << "p" << "pp" << "ppp" << "pppp" << "ppppp" << "pppppp"
-            << "rf" << "rfz"
-            << "sf" << "sffz" << "sfp" << "sfpp" << "sfz";
+        set << u"f" << u"ff" << u"fff" << u"ffff" << u"fffff" << u"ffffff"
+            << u"fp" << u"fz"
+            << u"mf" << u"mp"
+            << u"p" << u"pp" << u"ppp" << u"pppp" << u"ppppp" << u"pppppp"
+            << u"rf" << u"rfz"
+            << u"sf" << u"sffz" << u"sfp" << u"sfpp" << u"sfz";
     }
 
     directionTag(m_xml, m_attr, dyn);
 
     m_xml.startElement("direction-type");
 
-    QString tagName = "dynamics";
+    String tagName = u"dynamics";
     tagName += color2xml(dyn);
     tagName += positioningAttributes(dyn);
     m_xml.startElementRaw(tagName);
-    const QString dynTypeName = TConv::toXml(dyn->dynamicType()).ascii();
+    const String dynTypeName = String::fromAscii(TConv::toXml(dyn->dynamicType()).ascii());
     bool hasCustomText = dyn->hasCustomText();
 
     if (mu::contains(set, dynTypeName) && !hasCustomText) {
         m_xml.tagRaw(dynTypeName);
     } else if (dynTypeName != "") {
-        std::map<ushort, QChar> map;
-        map[0xE520] = 'p';
-        map[0xE521] = 'm';
-        map[0xE522] = 'f';
-        map[0xE523] = 'r';
-        map[0xE524] = 's';
-        map[0xE525] = 'z';
-        map[0xE526] = 'n';
+        std::map<ushort, Char> map;
+        map[0xE520] = u'p';
+        map[0xE521] = u'm';
+        map[0xE522] = u'f';
+        map[0xE523] = u'r';
+        map[0xE524] = u's';
+        map[0xE525] = u'z';
+        map[0xE526] = u'n';
 
         QString dynText = dynTypeName;
         if (dyn->dynamicType() == DynamicType::OTHER || hasCustomText) {
@@ -5451,9 +5451,9 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 
         // collect consecutive runs of either dynamics glyphs
         // or other characters and write the runs.
-        QString text;
+        String text;
         bool inDynamicsSym = false;
-        for (const auto& ch : qAsConst(dynText)) {
+        for (const QChar& ch : qAsConst(dynText)) {
             const auto it = map.find(ch.unicode());
             if (it != map.end()) {
                 // found a SMUFL single letter dynamics glyph
@@ -5478,7 +5478,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                     }
                     inDynamicsSym = false;
                 }
-                text += ch;
+                text += ch.unicode();
             }
         }
         if (text != "") {
@@ -5520,13 +5520,13 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
 void ExportMusicXml::symbol(Symbol const* const sym, staff_idx_t staff)
 {
     AsciiStringView name = SymNames::nameForSymId(sym->sym());
-    QString mxmlName = "";
+    String mxmlName;
     if (name == "keyboardPedalPed") {
-        mxmlName = "pedal type=\"start\"";
+        mxmlName = u"pedal type=\"start\"";
     } else if (name == "keyboardPedalUp") {
-        mxmlName = "pedal type=\"stop\"";
+        mxmlName = u"pedal type=\"stop\"";
     } else {
-        mxmlName = QString("other-direction smufl=\"%1\"").arg(name.ascii());
+        mxmlName = String(u"other-direction smufl=\"%1\"").arg(String::fromAscii(name.ascii()));
     }
     directionTag(m_xml, m_attr, sym);
     mxmlName += color2xml(sym);
@@ -5550,28 +5550,28 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
     for (const Lyrics* l : ll) {
         if (l && !l->xmlText().isEmpty()) {
             if ((l)->track() == trk) {
-                QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
+                String lyricXml = String(u"lyric number=\"%1\"").arg((l)->no() + 1);
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
                 m_xml.startElementRaw(lyricXml);
                 LyricsSyllabic syl = (l)->syllabic();
-                QString s = "";
+                String s;
                 switch (syl) {
-                case LyricsSyllabic::SINGLE: s = "single";
+                case LyricsSyllabic::SINGLE: s = u"single";
                     break;
-                case LyricsSyllabic::BEGIN:  s = "begin";
+                case LyricsSyllabic::BEGIN:  s = u"begin";
                     break;
-                case LyricsSyllabic::END:    s = "end";
+                case LyricsSyllabic::END:    s = u"end";
                     break;
-                case LyricsSyllabic::MIDDLE: s = "middle";
+                case LyricsSyllabic::MIDDLE: s = u"middle";
                     break;
                 default:
                     LOGD("unknown syllabic %d", int(syl));
                 }
                 m_xml.tag("syllabic", s);
-                QString attr;         // TODO TBD
+                String attr;         // TODO TBD
                 // set the default words format
-                const QString mtf       = m_score->style().styleSt(Sid::MusicalTextFont);
+                const String mtf = m_score->style().styleSt(Sid::MusicalTextFont);
                 CharFormat defFmt;
                 defFmt.setFontFamily(m_score->style().styleSt(Sid::lyricsEvenFontFace));
                 defFmt.setFontSize(m_score->style().styleD(Sid::lyricsOddFontSize));
@@ -5690,7 +5690,7 @@ static MarkerType getEffectiveMarkerType(const Marker* const m, const std::vecto
     }
 
     // Try to guess marker type from its usage in jumps.
-    const QString label = m->label();
+    const String label = m->label();
 
     for (const Jump* j : jumps) {
         MarkerType guessedMarkerType = mtp;
@@ -5720,7 +5720,7 @@ static MarkerType getEffectiveMarkerType(const Marker* const m, const std::vecto
 //   findCodaLabel
 //---------------------------------------------------------
 
-static QString findCodaLabel(const std::vector<const Jump*>& jumps, const QString& toCodaLabel)
+static String findCodaLabel(const std::vector<const Jump*>& jumps, const String& toCodaLabel)
 {
     for (const Jump* j : jumps) {
         if (j->playUntil() == toCodaLabel) {
@@ -5728,7 +5728,7 @@ static QString findCodaLabel(const std::vector<const Jump*>& jumps, const QStrin
         }
     }
 
-    return QString();
+    return String();
 }
 
 //---------------------------------------------------------
@@ -5949,8 +5949,8 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, track_idx_t str
 
 void ExportMusicXml::work(const MeasureBase* /*measure*/)
 {
-    QString workTitle  = m_score->metaTag(u"workTitle");
-    QString workNumber = m_score->metaTag(u"workNumber");
+    String workTitle  = m_score->metaTag(u"workTitle");
+    String workNumber = m_score->metaTag(u"workNumber");
     if (!(workTitle.isEmpty() && workNumber.isEmpty())) {
         m_xml.startElement("work");
         if (!workNumber.isEmpty()) {
@@ -6570,11 +6570,10 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
 {
     xml.startElement("identification");
 
-    QStringList creators;
     // the creator types commonly found in MusicXML
-    creators << "arranger" << "composer" << "lyricist" << "poet" << "translator";
-    for (const QString& type : qAsConst(creators)) {
-        QString creator = score->metaTag(type);
+    std::vector<String> creators = { u"arranger", u"composer", u"lyricist", u"poet", u"translator" };
+    for (const String& type : creators) {
+        String creator = score->metaTag(type);
         if (!creator.isEmpty()) {
             xml.tag("creator", { { "type", type } }, creator);
         }
@@ -6587,10 +6586,10 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
     xml.startElement("encoding");
 
     if (MScore::debugMode) {
-        xml.tag("software", QString("MuseScore 0.7.0"));
-        xml.tag("encoding-date", QString("2007-09-10"));
+        xml.tag("software", String(u"MuseScore 0.7.0"));
+        xml.tag("encoding-date", String(u"2007-09-10"));
     } else {
-        xml.tag("software", QString("MuseScore ") + QString(MUSESCORE_VERSION));
+        xml.tag("software", String(u"MuseScore ") + String::fromAscii(MUSESCORE_VERSION));
         xml.tag("encoding-date", QDate::currentDate().toString(Qt::ISODate));
     }
 
@@ -6638,10 +6637,10 @@ static int findPartGroupNumber(int* partGroupEnd)
 //  scoreInstrument
 //---------------------------------------------------------
 
-static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr, const QString& instrName,
+static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr, const String& instrName,
                             const Instrument* instr = nullptr)
 {
-    xml.startElementRaw(QString("score-instrument %1").arg(instrId(partNr, instrNr)));
+    xml.startElementRaw(String(u"score-instrument %1").arg(instrId(partNr, instrNr)));
     xml.tag("instrument-name", instrName);
     if (instr && !instr->musicXmlId().isEmpty() && !MScore::testMode) {
         xml.tag("instrument-sound", instr->musicXmlId());
@@ -6656,7 +6655,7 @@ static void scoreInstrument(XmlWriter& xml, const int partNr, const int instrNr,
 static void midiInstrument(XmlWriter& xml, const int partNr, const int instrNr,
                            const Instrument* instr, const Score* score, const int unpitched = 0)
 {
-    xml.startElementRaw(QString("midi-instrument %1").arg(instrId(partNr, instrNr)));
+    xml.startElementRaw(String(u"midi-instrument %1").arg(instrId(partNr, instrNr)));
     int midiChannel = score->masterScore()->midiChannel(instr->channel(0)->channel());
     if (midiChannel >= 0 && midiChannel < 16) {
         xml.tag("midi-channel", midiChannel + 1);
@@ -6778,15 +6777,15 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
     const bool prevMeasSectionBreak = prevSysMB ? prevSysMB->sectionBreak() : false;
     const bool prevPageBreak = hasPageBreak(mpc.lastSystemPrevPage);
 
-    QString newSystemOrPage;               // new-[system|page]="yes" or empty
+    String newSystemOrPage;               // new-[system|page]="yes" or empty
     if (!mpc.scoreStart) {
         IMusicXmlConfiguration::MusicxmlExportBreaksType exportBreaksType = configuration()->musicxmlExportBreaksType();
 
         if (exportBreaksType == IMusicXmlConfiguration::MusicxmlExportBreaksType::All) {
             if (mpc.pageStart) {
-                newSystemOrPage = " new-page=\"yes\"";
+                newSystemOrPage = u" new-page=\"yes\"";
             } else if (mpc.systemStart) {
-                newSystemOrPage = " new-system=\"yes\"";
+                newSystemOrPage = u" new-system=\"yes\"";
             }
         } else if (exportBreaksType == IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual) {
             if (mpc.pageStart && prevPageBreak) {
@@ -6802,7 +6801,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
     if (doBreak) {
         if (doLayout) {
-            m_xml.startElementRaw(QString("print%1").arg(newSystemOrPage));
+            m_xml.startElementRaw(String(u"print%1").arg(newSystemOrPage));
             const MStyle& style = score()->style();
             const double pageWidth  = getTenthsFromInches(style.styleD(Sid::pageWidth));
             const double lm = getTenthsFromInches(style.styleD(Sid::pageOddLeftMargin));
@@ -6865,7 +6864,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
             m_xml.endElement();
         } else if (newSystemOrPage != "") {
-            m_xml.tagRaw(QString("print%1").arg(newSystemOrPage));
+            m_xml.tagRaw(String(u"print%1").arg(newSystemOrPage));
         }
     }
 }
@@ -6898,23 +6897,23 @@ void ExportMusicXml::exportDefaultClef(const Part* const part, const Measure* co
 
                 if (clefSeg->element(track) == nullptr) {
                     ClefType ct { ClefType::G };
-                    QString stafftype;
+                    String stafftype;
                     switch (part->staff(i)->staffType(Fraction(0, 1))->group()) {
                     case StaffGroup::TAB:
                         ct = ClefType::TAB;
-                        stafftype = "tab";
+                        stafftype = u"tab";
                         break;
                     case StaffGroup::STANDARD:
                         ct = ClefType::G;
-                        stafftype = "std";
+                        stafftype = u"std";
                         break;
                     case StaffGroup::PERCUSSION:
                         ct = ClefType::PERC;
-                        stafftype = "perc";
+                        stafftype = u"perc";
                         break;
                     }
                     LOGD("no clef found in first measure track %zu (stafftype %s)", track, qPrintable(stafftype));
-                    clef(sstaff, ct, " print-object=\"no\"");
+                    clef(sstaff, ct, u" print-object=\"no\"");
                 }
             }
         }
@@ -6988,9 +6987,9 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
                 if ((tick.isZero() || !cle->generated())
                     && ((seg->measure() != m) || ((seg->segmentType() == SegmentType::HeaderClef) && !cle->otherClef()))) {
                     clefDebug("exportxml: clef exported");
-                    QString clefAttr = color2xml(cle);
+                    String clefAttr = color2xml(cle);
                     if (!cle->visible()) {
-                        clefAttr += " print-object=\"no\"";
+                        clefAttr += u" print-object=\"no\"";
                     }
                     clef(sstaff, cle->clefType(), clefAttr);
                 } else {
@@ -7114,7 +7113,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             }
         }
 
-        xml.startElementRaw(QString("score-part id=\"P%1\"").arg(idx + 1));
+        xml.startElementRaw(String(u"score-part id=\"P%1\"").arg(idx + 1));
         initInstrMap(instrMap, part->instruments(), score);
         // by default export the parts long name as part-name
         if (part->longName() != "") {
@@ -7142,7 +7141,7 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                 if (di.notehead != NoteHeadGroup::HEAD_INVALID) {
                     scoreInstrument(xml, static_cast<int>(idx) + 1, i + 1, di.name);
                 } else if (mu::contains(pitches, i)) {
-                    scoreInstrument(xml, static_cast<int>(idx) + 1, i + 1, QString("Instrument %1").arg(i + 1));
+                    scoreInstrument(xml, static_cast<int>(idx) + 1, i + 1, String(u"Instrument %1").arg(i + 1));
                 }
             }
             int midiPort = part->midiPort() + 1;
@@ -7172,9 +7171,9 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
                     midiPort = score->masterScore()->midiMapping(ii->second->channel(0)->channel())->port() + 1;
                 }
                 if (midiPort >= 1 && midiPort <= 16) {
-                    xml.tagRaw(QString("midi-device %1 port=\"%2\"").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)).arg(midiPort), "");
+                    xml.tagRaw(String(u"midi-device %1 port=\"%2\"").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)).arg(midiPort), "");
                 } else {
-                    xml.tagRaw(QString("midi-device %1").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)), "");
+                    xml.tagRaw(String(u"midi-device %1").arg(instrId(static_cast<int>(idx) + 1, instNr + 1)), "");
                 }
                 midiInstrument(xml, static_cast<int>(idx) + 1, instNr + 1, rim.at(instNr), score);
             }
@@ -7223,14 +7222,14 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
         // these will be output at the start of the next measure
         const auto cle = toClef(el);
         const auto ti = cle->segment()->tick();
-        const QString visible = (!cle->visible()) ? " print-object=\"no\"" : "";
+        const String visible = (!cle->visible()) ? u" print-object=\"no\"" : u"";
         clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
         if (el->generated()) {
             clefDebug("exportxml: generated clef not exported");
         } else if (!el->generated() && tickIsInMiddleOfMeasure(ti, m)) {
             clef(sstaff, cle->clefType(), color2xml(cle) + visible);
         } else if (!el->generated() && (ti == m->tick()) && (cle->segment()->segmentType() != SegmentType::HeaderClef)) {
-            clef(sstaff, cle->clefType(), color2xml(cle) + visible + QString(" after-barline=\"yes\""));
+            clef(sstaff, cle->clefType(), color2xml(cle) + visible + String(u" after-barline=\"yes\""));
         } else {
             clefDebug("exportxml: clef not exported");
         }
@@ -7310,12 +7309,12 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
             if (st->isTabStaff(Fraction(0, 1)) && instrument->stringData()) {
                 std::vector<instrString> l = instrument->stringData()->stringList();
                 for (size_t ii = 0; ii < l.size(); ii++) {
-                    char step  = ' ';
+                    char16_t step  = u' ';
                     int alter  = 0;
                     int octave = 0;
                     midipitch2xml(l.at(ii).pitch, step, alter, octave);
                     xml.startElement("staff-tuning", { { "line", ii + 1 } });
-                    xml.tag("tuning-step", QString("%1").arg(step));
+                    xml.tag("tuning-step", String(Char(step)));
                     if (alter) {
                         xml.tag("tuning-alter", alter);
                     }
@@ -7418,16 +7417,16 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
     m_measureNo += m_measureNoOffset;
     m_cachedAttributes = " number=";
     if ((m_irregularMeasureNo + m_measureNo) == 2 && m->irregular()) {
-        m_cachedAttributes += "\"0\" implicit=\"yes\"";
+        m_cachedAttributes += u"\"0\" implicit=\"yes\"";
         m_pickupMeasureNo++;
     } else if (m->irregular()) {
-        m_cachedAttributes += QString("\"X%1\" implicit=\"yes\"").arg(m_irregularMeasureNo++);
+        m_cachedAttributes += String(u"\"X%1\" implicit=\"yes\"").arg(m_irregularMeasureNo++);
     } else {
-        m_cachedAttributes += QString("\"%1\"").arg(m_measureNo++);
+        m_cachedAttributes += String(u"\"%1\"").arg(m_measureNo++);
     }
 }
 
-QString MeasureNumberStateHandler::measureNumber() const
+String MeasureNumberStateHandler::measureNumber() const
 {
     return m_cachedAttributes;
 }
@@ -7841,7 +7840,7 @@ void ExportMusicXml::writeParts()
     for (size_t partIndex = 0; partIndex < parts.size(); ++partIndex) {
         const auto part = parts.at(partIndex);
         m_tick = { 0, 1 };
-        m_xml.startElementRaw(QString("part id=\"P%1\"").arg(partIndex + 1));
+        m_xml.startElementRaw(String("part id=\"P%1\"").arg(partIndex + 1));
 
         m_trillStart.clear();
         m_trillStop.clear();
