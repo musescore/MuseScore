@@ -5248,6 +5248,7 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
 
     LD_CONDITION(stem->ldata()->isSetPos());
     LD_CONDITION(stem->ldata()->isSetBbox());
+    //  Notes without a stem (including whole notes) don't draw a slash.
 
     static constexpr double heightReduction = 0.66;
     static constexpr double angleIncrease = 1.2;
@@ -5264,13 +5265,8 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
     double graceNoteMag = mag;
 
     double startX = stem->ldata()->bbox().translated(stem->pos()).right() - leftHang;
-
-    double startY;
-    if (straight || beam) {
-        startY = stemTipY - up * graceNoteMag * conf.styleMM(Sid::stemSlashPosition) * heightReduction;
-    } else {
-        startY = stemTipY - up * graceNoteMag * conf.styleMM(Sid::stemSlashPosition);
-    }
+    double startY = stemTipY - up * graceNoteMag * conf.styleMM(Sid::stemSlashPosition)
+                    * (straight || !hook ? heightReduction : 1);
 
     double endX = 0;
     double endY = 0;
@@ -5284,8 +5280,7 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
         }
         endX = hook->ldata()->bbox().translated(hook->ldata()->pos()).right(); // always ends at the right bbox margin of the hook
         endY = startY + up * (endX - startX) * tan(angle);
-    }
-    if (beam) {
+    } else if (beam) {
         PointF p1 = beam->startAnchor();
         PointF p2 = beam->endAnchor();
         double beamAngle = p2.x() > p1.x() ? atan((p2.y() - p1.y()) / (p2.x() - p1.x())) : 0;
@@ -5297,6 +5292,10 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
         }
         endX = startX + length * cos(angle);
         endY = startY + up * length * sin(angle);
+    } else {
+        double rightHang = (conf.noteHeadWidth() * mag / 2) - stem->width(); //  subtract the stem width so the slash is optically centered on the stem
+        endX = stem->ldata()->bbox().translated(stem->pos()).right() + rightHang;
+        endY = startY + up * (endX - startX) * tan(angle);
     }
 
     ldata->line = LineF(PointF(startX, startY), PointF(endX, endY));
