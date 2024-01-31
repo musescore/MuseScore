@@ -399,19 +399,19 @@ private:
     MusicXMLParserPass2& m_pass2;                // the pass2 results
     MxmlLogger* m_logger = nullptr;                        // Error logger
 
-    QStringList m_dynamicsList;
-    QString m_enclosure;
-    QString m_wordsText;
-    QString m_metroText;
-    QString m_rehearsalText;
-    QString m_dynaVelocity;
-    QString m_tempo;
-    QString m_sndCoda;
-    QString m_sndDacapo;
-    QString m_sndDalsegno;
-    QString m_sndFine;
-    QString m_sndSegno;
-    QString m_sndToCoda;
+    StringList m_dynamicsList;
+    String m_enclosure;
+    String m_wordsText;
+    String m_metroText;
+    String m_rehearsalText;
+    String m_dynaVelocity;
+    String m_tempo;
+    String m_sndCoda;
+    String m_sndDacapo;
+    String m_sndDalsegno;
+    String m_sndFine;
+    String m_sndSegno;
+    String m_sndToCoda;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
     bool m_hasRelativeY = false;
