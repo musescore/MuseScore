@@ -59,12 +59,12 @@ class LyricNumberHandler
 {
 public:
     LyricNumberHandler() {}
-    void addNumber(const QString number);
-    QString toString() const;
-    int getLyricNo(const QString& number) const;
+    void addNumber(const String& number);
+    String toString() const;
+    int getLyricNo(const String& number) const;
     void determineLyricNos();
 private:
-    std::map<QString, int> m_numberToNo;
+    std::map<String, int> m_numberToNo;
 };
 
 class MusicXmlPart

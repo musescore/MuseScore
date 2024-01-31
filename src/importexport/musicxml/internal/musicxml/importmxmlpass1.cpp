@@ -1250,8 +1250,8 @@ static String text2syms(const String& t)
         if (id != SymId::space) {
             map.insert({ string, id });
         }
-        if (string.size() > maxStringSize) {
-            maxStringSize = static_cast<int>(string.size());
+        if (int(string.size()) > maxStringSize) {
+            maxStringSize = int(string.size());
         }
     }
     //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
@@ -2609,20 +2609,20 @@ static bool determineTimeSig(MxmlLogger* logger, const QXmlStreamReader* const x
     } else if (timeSymbol == "common") {
         st = TimeSigType::FOUR_FOUR;
     } else if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
-        logger->logError(String("time symbol '%1' not recognized")
+        logger->logError(String(u"time symbol '%1' not recognized")
                          .arg(timeSymbol), xmlreader);
         return false;
     }
 
     btp = beatType.toInt();
     StringList list = beats.split(u'+');
-    for (int i = 0; i < list.size(); i++) {
+    for (size_t i = 0; i < list.size(); i++) {
         bts += list.at(i).toInt();
     }
 
     // determine if bts and btp are valid
     if (bts <= 0 || btp <= 0) {
-        logger->logError(String("beats=%1 and/or beat-type=%2 not recognized")
+        logger->logError(String(u"beats=%1 and/or beat-type=%2 not recognized")
                          .arg(beats, beatType), xmlreader);
         return false;
     }
