@@ -79,11 +79,13 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
 };
 
-void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, ms_Track track)
+void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, ms_Track track,
+                                std::string&& defaultPresetCode)
 {
     m_samplerLib = std::move(samplerLib);
     m_sampler = std::move(sampler);
     m_track = std::move(track);
+    m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
 void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params)
@@ -433,7 +435,7 @@ ms_NoteArticulation MuseSamplerSequencer::noteArticulationTypes(const mpe::NoteE
 std::string MuseSamplerSequencer::buildPresetsStr(const mpe::PlaybackParamMap& params) const
 {
     if (params.empty()) {
-        return std::string();
+        return m_defaultPresetCode;
     }
 
     StringList presets;
