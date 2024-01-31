@@ -206,7 +206,7 @@ Segment* Score::tick2segment(const Fraction& tick, bool first) const
 /// the first segment *before* this tick position
 //---------------------------------------------------------
 
-Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest, bool anySegmentType) const
+Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest, SegmentType segmentType) const
 {
     Measure* m = useMMrest ? tick2measureMM(tick) : tick2measure(tick);
     if (m == 0) {
@@ -215,7 +215,6 @@ Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest, bool anyS
     }
 
     // loop over all segments
-    SegmentType segmentType = anySegmentType ? SegmentType::All : SegmentType::ChordRest;
     Segment* ps = 0;
     for (Segment* s = m->first(segmentType); s; s = s->next(segmentType)) {
         if (tick < s->tick()) {
