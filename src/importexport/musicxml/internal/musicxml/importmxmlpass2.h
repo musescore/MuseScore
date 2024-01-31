@@ -152,30 +152,30 @@ private:
 class Notation
 {
 public:
-    Notation(const QString& name, const QString& parent = "",
+    Notation(const String& name, const String& parent = u"",
              const SymId& symId = SymId::noSym) { m_name = name; m_parent = parent; m_symId = symId; }
-    void addAttribute(const QString& name, const QString& value);
+    void addAttribute(const String& name, const String& value);
     void addAttribute(const QStringRef name, const QStringRef value);
-    QString attribute(const QString& name) const;
-    std::map<QString, QString> attributes() const { return m_attributes; }
-    QString name() const { return m_name; }
-    QString parent() const { return m_parent; }
+    String attribute(const String& name) const;
+    const std::map<String, String>& attributes() const { return m_attributes; }
+    String name() const { return m_name; }
+    String parent() const { return m_parent; }
     void setSymId(const SymId& symId) { m_symId = symId; }
     SymId symId() const { return m_symId; }
-    void setSubType(const QString& subType) { m_subType = subType; }
-    QString subType() const { return m_subType; }
-    QString print() const;
-    void setText(const QString& text) { m_text = text; }
-    QString text() const { return m_text; }
-    static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes, const QString& parent = "",
+    void setSubType(const String& subType) { m_subType = subType; }
+    String subType() const { return m_subType; }
+    String print() const;
+    void setText(const String& text) { m_text = text; }
+    String text() const { return m_text; }
+    static Notation notationWithAttributes(const String& name, const QXmlStreamAttributes attributes, const String& parent = u"",
                                            const SymId& symId = SymId::noSym);
 private:
-    QString m_name;
-    QString m_parent;
+    String m_name;
+    String m_parent;
     SymId m_symId = SymId::noSym;
-    QString m_subType;
-    QString m_text;
-    std::map<QString, QString> m_attributes;
+    String m_subType;
+    String m_text;
+    std::map<String, String> m_attributes;
 };
 
 //---------------------------------------------------------
@@ -306,7 +306,7 @@ private:
     void stem(DirectionV& sd, bool& nost);
     void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QColor color,
                   const QString& text, const bool print);
-    void staffDetails(const QString& partId, Measure* measure = nullptr);
+    void staffDetails(const String& partId, Measure* measure = nullptr);
     void staffTuning(StringData* t);
     void skipLogCurrElem();
 
@@ -369,7 +369,7 @@ class MusicXMLParserDirection
 {
 public:
     MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
+    void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
                    DelayedDirectionsList& delayedDirections);
     qreal totalY() const { return m_defaultY + m_relativeY; }
 
