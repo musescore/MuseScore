@@ -620,6 +620,11 @@ size_t String::indexOf(const Char& ch, size_t from) const
     return mu::nidx;
 }
 
+size_t String::indexOf(const String& str, size_t from) const
+{
+    return constStr().find(str.constStr(), from);
+}
+
 size_t String::indexOf(const char16_t* str, size_t from) const
 {
     return constStr().find(str, from);

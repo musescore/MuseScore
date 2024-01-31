@@ -37,13 +37,13 @@ static const std::vector<QString> vocalInstrumentNames({ "Voice",
                                                          "Women",
                                                          "Men" });
 
-MusicXmlPart::MusicXmlPart(QString id, QString name)
+MusicXmlPart::MusicXmlPart(String id, String name)
     : m_id(id), m_name(name)
 {
     m_octaveShifts.resize(MAX_STAVES);
 }
 
-void MusicXmlPart::addMeasureNumberAndDuration(QString measureNumber, Fraction measureDuration)
+void MusicXmlPart::addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration)
 {
     m_measureNumbers.push_back(measureNumber);
     m_measureDurations.push_back(measureDuration);
@@ -64,21 +64,21 @@ Fraction MusicXmlPart::measureDuration(size_t i) const
     return Fraction(0, 0);   // return invalid fraction
 }
 
-QString MusicXmlPart::toString() const
+String MusicXmlPart::toString() const
 {
-    auto res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
+    auto res = String("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
                .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
 
     for (VoiceList::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
-        res += QString("voice %1 map staff data %2\n")
-               .arg(QString(i->first + 1), i->second.toString());
+        res += String("voice %1 map staff data %2\n")
+               .arg(String(i->first + 1), i->second.toString());
     }
 
     for (size_t i = 0; i < m_measureNumbers.size(); ++i) {
         if (i > 0) {
-            res += "\n";
+            res += u"\n";
         }
-        res += QString("measure %1 duration %2 (%3)")
+        res += String("measure %1 duration %2 (%3)")
                .arg(m_measureNumbers.at(i), m_measureDurations.at(i).toString()).arg(m_measureDurations.at(i).ticks());
     }
 
@@ -172,14 +172,14 @@ Interval MusicXmlIntervalList::interval(const Fraction f) const
 //   instrument
 //---------------------------------------------------------
 
-const QString MusicXmlInstrList::instrument(const Fraction f) const
+const String MusicXmlInstrList::instrument(const Fraction f) const
 {
     if (empty()) {
-        return "";
+        return String();
     }
     auto i = upper_bound(f);
     if (i == begin()) {
-        return "";
+        return String();
     }
     --i;
     return i->second;
@@ -189,7 +189,7 @@ const QString MusicXmlInstrList::instrument(const Fraction f) const
 //   setInstrument
 //---------------------------------------------------------
 
-void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
+void MusicXmlInstrList::setInstrument(const String instr, const Fraction f)
 {
     // TODO determine how to handle multiple instrument changes at the same time
     // current implementation keeps the first one

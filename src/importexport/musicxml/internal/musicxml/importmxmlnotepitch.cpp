@@ -50,7 +50,7 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
     const bool parentheses = e.attributes().value("parentheses") == "yes";
     const bool brackets = e.attributes().value("bracket") == "yes";
     const QColor accColor { e.attributes().value("color").toString() };
-    QString smufl = e.attributes().value("smufl").toString();
+    String smufl = e.attributes().value("smufl").toString();
 
     const auto s = e.readElementText();
     const auto type = mxmlString2accidentalType(s, smufl);
@@ -86,8 +86,8 @@ void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "display-step") {
-            const auto step = e.readElementText();
-            int pos = QString("CDEFGAB").indexOf(step);
+            const String step = e.readElementText();
+            int pos = static_cast<int>(String(u"CDEFGAB").indexOf(step));
             if (step.size() == 1 && pos >= 0 && pos < 7) {
                 m_displayStep = pos;
             } else {
@@ -95,7 +95,7 @@ void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
                 LOGD("invalid step '%s'", qPrintable(step));                // TODO
             }
         } else if (e.name() == "display-octave") {
-            const auto oct = e.readElementText();
+            const String oct = e.readElementText();
             bool ok;
             m_displayOctave = oct.toInt(&ok);
             if (!ok || m_displayOctave < 0 || m_displayOctave > 9) {

@@ -194,7 +194,7 @@ struct MusicXMLInstrument {
  A MusicXML drumset or set of instruments in a multi-instrument part.
  */
 
-typedef std::map<QString, MusicXMLInstrument> MusicXMLInstruments;
+typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
 
 //---------------------------------------------------------
 //   MxmlSupport -- MusicXML import support functions
