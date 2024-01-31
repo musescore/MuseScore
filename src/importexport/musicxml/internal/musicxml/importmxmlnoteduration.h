@@ -43,7 +43,7 @@ class MxmlNoteDuration
 public:
     MxmlNoteDuration(int divs, MxmlLogger* logger, MusicXMLParserPass1* pass1)
         : m_divs(divs), m_pass1(pass1), m_logger(logger) { /* nothing so far */ }
-    QString checkTiming(const QString& type, const bool rest, const bool grace);
+    String checkTiming(const String& type, const bool rest, const bool grace);
     Fraction duration() const { return m_dura; } // duration to use
     Fraction calculatedDuration() const { return m_calcDura; }   // value calculated from note type etcetera
     Fraction specifiedDuration() const { return m_specDura; }    // value read from the duration element
