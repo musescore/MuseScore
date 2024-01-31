@@ -173,6 +173,10 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     item->addLedgerLines();
 
+    // A chord can have its own arpeggio and also be part of another arpeggio's span.  We need to lay out both of these arpeggios properly
+    Arpeggio* oldSpanArp = item->spanArpeggio();
+    Arpeggio* newSpanArp = nullptr;
+
     // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
         item->arpeggio()->findAndAttachToChords();
@@ -180,9 +184,16 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         item->arpeggio()->mutldata()->minChordX = DBL_MAX;
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
     }
+
+    if (item->spanArpeggio() != oldSpanArp) {
+        newSpanArp = item->spanArpeggio();
+    }
     // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
-    if (item->spanArpeggio()) {
-        Arpeggio* spanArp = item->spanArpeggio();
+    double lllMax = lll;
+    for (Arpeggio* spanArp : { oldSpanArp, newSpanArp }) {
+        if (!spanArp || !spanArp->chord()) {
+            continue;
+        }
         Arpeggio::LayoutData* arpldata = spanArp->mutldata();
         const Segment* seg = spanArp->chord()->segment();
         const EngravingItem* endItem = seg->elementAt(spanArp->endTrack());
@@ -247,11 +258,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                 double offset = -(xDiff + arpldata->maxChordPad);
                 spanArp->mutldata()->setPosX(offset);
                 if (spanArp->visible()) {
-                    lll = offset;
+                    lllMax = std::max(lllMax, offset);
                 }
             }
         }
     }
+
+    lll = lllMax;
 
     if (item->dots()) {
         double x = item->dotPosX() + dotNoteDistance
