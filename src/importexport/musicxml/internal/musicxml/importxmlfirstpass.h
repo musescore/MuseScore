@@ -38,12 +38,12 @@ public:
     Interval interval(const Fraction f) const;
 };
 
-class MusicXmlInstrList : public std::map<Fraction, QString>
+class MusicXmlInstrList : public std::map<Fraction, String>
 {
 public:
     MusicXmlInstrList() {}
-    const QString instrument(const Fraction f) const;
-    void setInstrument(const QString instr, const Fraction f);
+    const String instrument(const Fraction f) const;
+    void setInstrument(const String instr, const Fraction f);
 };
 
 class MusicXmlOctaveShiftList : public std::map<Fraction, int>
@@ -70,10 +70,10 @@ private:
 class MusicXmlPart
 {
 public:
-    MusicXmlPart(QString id = "", QString name = "");
-    void addMeasureNumberAndDuration(QString measureNumber, Fraction measureDuration);
-    QString getId() const { return m_id; }
-    QString toString() const;
+    MusicXmlPart(String id = u"", String name = u"");
+    void addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration);
+    String getId() const { return m_id; }
+    String toString() const;
     VoiceList voicelist;           // the voice map information TODO: make private
     Fraction measureDuration(size_t i) const;
     size_t nMeasures() const { return m_measureDurations.size(); }
@@ -83,12 +83,12 @@ public:
     int octaveShift(const staff_idx_t staff, const Fraction f) const;
     void addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f);
     void calcOctaveShifts();
-    void setName(QString nm) { m_name = nm; }
-    QString getName() const { return m_name; }
+    void setName(String nm) { m_name = nm; }
+    String getName() const { return m_name; }
     void setPrintName(const bool b) { m_printName = b; }
     bool getPrintName() const { return m_printName; }
-    void setAbbr(QString ab) { m_abbr = ab; }
-    QString getAbbr() const { return m_abbr; }
+    void setAbbr(String ab) { m_abbr = ab; }
+    String getAbbr() const { return m_abbr; }
     void setPrintAbbr(const bool b) { m_printAbbr = b; }
     bool getPrintAbbr() const { return m_printAbbr; }
     std::map<int, int> staffNumberToIndex() const { return m_staffNumberToIndex; }
@@ -101,12 +101,12 @@ public:
     bool isVocalStaff() const;
     void hasLyrics(bool b) { m_hasLyrics = b; }
 private:
-    QString m_id;
-    QString m_name;
+    String m_id;
+    String m_name;
     bool m_printName = true;
-    QString m_abbr;
+    String m_abbr;
     bool m_printAbbr = false;
-    std::vector<QString> m_measureNumbers;               // MusicXML measure number attribute
+    std::vector<String> m_measureNumbers;               // MusicXML measure number attribute
     std::vector<Fraction> m_measureDurations;         // duration in fraction for every measure
     std::vector<MusicXmlOctaveShiftList> m_octaveShifts;   // octave shift list for every staff
     LyricNumberHandler m_lyricNumberHandler;

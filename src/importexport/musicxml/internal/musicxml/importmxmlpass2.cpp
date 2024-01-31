@@ -655,10 +655,10 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
                 Segment* const segment = m->getSegment(SegmentType::ChordRest, tick);
 
                 if (!segment) {
-                    logger->logError(QString("segment for instrument change at tick %1 not found")
+                    logger->logError(String("segment for instrument change at tick %1 not found")
                                      .arg(tick.ticks()), xmlreader);
                 } else if (!mu::contains(instruments, instrId)) {
-                    logger->logError(QString("changed instrument '%1' at tick %2 not found in part '%3'")
+                    logger->logError(String("changed instrument '%1' at tick %2 not found in part '%3'")
                                      .arg(instrId).arg(tick.ticks()).arg(partId), xmlreader);
                 } else {
                     MusicXMLInstrument mxmlInstr = mu::value(instruments, instrId);
@@ -4952,7 +4952,7 @@ static void addTremolo(ChordRest* cr,
 
 // TODO: refactor: optimize parameters
 
-static void setPitch(Note* note, MusicXMLParserPass1& pass1, const QString& partId, const QString& instrumentId, const MxmlNotePitch& mnp,
+static void setPitch(Note* note, MusicXMLParserPass1& pass1, const String& partId, const String& instrumentId, const MxmlNotePitch& mnp,
                      const int octaveShift, const Instrument* const instrument)
 {
     const auto& instruments = pass1.getInstruments(partId);
