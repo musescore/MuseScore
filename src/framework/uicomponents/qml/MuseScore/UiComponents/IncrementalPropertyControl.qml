@@ -41,6 +41,7 @@ Item {
     property alias validator: textInputField.validator
 
     property alias measureUnitsSymbol: textInputField.measureUnitsSymbol
+    property alias hint: textInputField.hint
 
     property alias navigation: textInputField.navigation
 
