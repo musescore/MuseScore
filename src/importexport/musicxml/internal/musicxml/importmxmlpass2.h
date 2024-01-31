@@ -41,8 +41,8 @@ class Tuplet;
 
 using GraceChordList = std::vector<Chord*>;
 using FiguredBassList = std::vector<FiguredBass*>;
-using Tuplets = std::map<QString, Tuplet*>;
-using Beams = std::map<QString, Beam*>;
+using Tuplets = std::map<String, Tuplet*>;
+using Beams = std::map<String, Beam*>;
 
 //---------------------------------------------------------
 //   MxmlStartStop
@@ -289,16 +289,16 @@ private:
     void time(const QString& partId, Measure* measure, const Fraction& tick);
     void divisions();
     void transpose(const QString& partId, const Fraction& tick);
-    Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
-               Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams,
-               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+    Note* note(const String& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev, Fraction& dura,
+               Fraction& missingCurr, String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams, FiguredBassList& fbl,
+               int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
     FretDiagram* frame();
-    void harmony(const QString& partId, Measure* measure, const Fraction sTime);
+    void harmony(const String& partId, Measure* measure, const Fraction& sTime);
     Accidental* accidental();
-    void beam(std::map<int, QString>& beamTypes);
+    void beam(std::map<int, String>& beamTypes);
     void duration(Fraction& dura);
     void forward(Fraction& dura);
     void backup(Fraction& dura);
