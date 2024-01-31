@@ -127,7 +127,7 @@ public:
     void initPartState(const String& partId);
     Err parse(QIODevice* device);
     Err parse();
-    QString errors() const { return m_errors; }
+    String errors() const { return m_errors; }
     void scorePartwise();
     void identification();
     void credit(CreditWordsList& credits);
@@ -204,7 +204,7 @@ private:
     std::map<String, MusicXMLInstruments> m_instruments;   // instruments for each part, mapped on part id
     Score* m_score = nullptr;                    // MuseScore score
     MxmlLogger* m_logger = nullptr;              // Error logger
-    QString m_errors;                            // Errors to present to the user
+    String m_errors;                             // Errors to present to the user
     bool m_hasBeamingInfo = false;               // Whether the score supports or contains beaming info
 
     // part specific data (TODO: move to part-specific class)
