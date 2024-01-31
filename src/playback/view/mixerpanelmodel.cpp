@@ -55,6 +55,10 @@ void MixerPanelModel::load()
 
     m_currentTrackSequenceId = sequenceId;
 
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+
     controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
         onTrackAdded(trackId);
     });
@@ -163,6 +167,16 @@ void MixerPanelModel::loadItems()
     setupConnections();
 }
 
+void MixerPanelModel::onNotationChanged()
+{
+    auto instrumentTrackIdMap = controller()->instrumentTrackIdMap();
+    for (auto it = instrumentTrackIdMap.cbegin(); it != instrumentTrackIdMap.cend(); ++it) {
+        if (MixerChannelItem* item = findChannelItem(it->second)) {
+            item->loadSoloMuteState(controller()->trackSoloMuteState(it->first));
+        }
+    }
+}
+
 void MixerPanelModel::onTrackAdded(const TrackId& trackId)
 {
     TRACEFUNC;
@@ -269,20 +283,9 @@ void MixerPanelModel::clear()
 
 void MixerPanelModel::setupConnections()
 {
-    audioSettings()->trackSoloMuteStateChanged().onReceive(
-        this, [this](const engraving::InstrumentTrackId& changedInstrumentTrackId,
-                     project::IProjectAudioSettings::SoloMuteState newSoloMuteState) {
-        const IPlaybackController::InstrumentTrackIdMap& instrumentTrackIdMap = controller()->instrumentTrackIdMap();
-        TrackId trackId = mu::value(instrumentTrackIdMap, changedInstrumentTrackId);
-
-        if (MixerChannelItem* item = findChannelItem(trackId)) {
-            item->loadSoloMuteState(std::move(newSoloMuteState));
-        }
-    });
-
     audioSettings()->auxSoloMuteStateChanged().onReceive(
         this, [this](const aux_channel_idx_t index,
-                     project::IProjectAudioSettings::SoloMuteState newSoloMuteState) {
+                     notation::INotationSoloMuteState::SoloMuteState newSoloMuteState) {
         const IPlaybackController::AuxTrackIdMap& auxTrackIdMap = controller()->auxTrackIdMap();
         TrackId trackId = mu::value(auxTrackIdMap, index);
 
@@ -431,7 +434,7 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
     MixerChannelItem* item = new MixerChannelItem(this, type, false /*outputOnly*/, trackId);
     item->setInstrumentTrackId(instrumentTrackId);
     item->setPanelSection(m_navigationSection);
-    item->loadSoloMuteState(audioSettings()->trackSoloMuteState(instrumentTrackId));
+    item->loadSoloMuteState(controller()->trackSoloMuteState(instrumentTrackId));
 
     playback()->tracks()->inputParams(m_currentTrackSequenceId, trackId)
     .onResolve(this, [this, trackId](AudioInputParams inParams) {
@@ -493,8 +496,8 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
     });
 
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,
-            [this, instrumentTrackId](const project::IProjectAudioSettings::SoloMuteState& state) {
-        audioSettings()->setTrackSoloMuteState(instrumentTrackId, state);
+            [this, instrumentTrackId](const notation::INotationSoloMuteState::SoloMuteState& state) {
+        controller()->setTrackSoloMuteState(instrumentTrackId, state);
     });
 
     return item;
@@ -544,7 +547,7 @@ MixerChannelItem* MixerPanelModel::buildAuxChannelItem(aux_channel_idx_t index, 
     });
 
     connect(item, &MixerChannelItem::soloMuteStateChanged, this,
-            [this, index](const project::IProjectAudioSettings::SoloMuteState& state) {
+            [this, index](const notation::INotationSoloMuteState::SoloMuteState& state) {
         audioSettings()->setAuxSoloMuteState(index, state);
     });
 

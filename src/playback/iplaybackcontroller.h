@@ -73,6 +73,10 @@ public:
 
     virtual async::Promise<audio::SoundPresetList> availableSoundPresets(engraving::InstrumentTrackId instrumentTrackId) const = 0;
 
+    virtual notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
+    virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
+                                       const notation::INotationSoloMuteState::SoloMuteState& state) const = 0;
+
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
     virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;

@@ -59,6 +59,11 @@ public:
 
     MOCK_METHOD(async::Promise<audio::SoundPresetList>, availableSoundPresets, (engraving::InstrumentTrackId), (const, override));
 
+    MOCK_METHOD(notation::INotationSoloMuteState::SoloMuteState, trackSoloMuteState, (const engraving::InstrumentTrackId&),
+                (const, override));
+    MOCK_METHOD(void, setTrackSoloMuteState, (const engraving::InstrumentTrackId&, const notation::INotationSoloMuteState::SoloMuteState&),
+                (const, override));
+
     MOCK_METHOD(void, playElements, ((const std::vector<const notation::EngravingItem*>&)), (override));
     MOCK_METHOD(void, playMetronome, (int), (override));
     MOCK_METHOD(void, seekElement, (const notation::EngravingItem*), (override));

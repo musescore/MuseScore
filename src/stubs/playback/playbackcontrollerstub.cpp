@@ -119,6 +119,16 @@ mu::async::Promise<mu::audio::SoundPresetList> PlaybackControllerStub::available
     });
 }
 
+mu::notation::INotationSoloMuteState::SoloMuteState PlaybackControllerStub::trackSoloMuteState(const engraving::InstrumentTrackId&) const
+{
+    return notation::INotationSoloMuteState::SoloMuteState();
+}
+
+void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTrackId&,
+                                                   const notation::INotationSoloMuteState::SoloMuteState&) const
+{
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
 {
 }
