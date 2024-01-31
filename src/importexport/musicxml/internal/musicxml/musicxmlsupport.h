@@ -62,7 +62,7 @@ public:
     bool stavesOverlap(const int staff1, const int staff2) const;
     bool anyStaffOverlaps() const;
 private:
-    std::vector<StartStopList> _staffNoteLists;   ///< The note start/stop times in all staves
+    std::vector<StartStopList> _staffNoteLists;   // The note start/stop times in all staves
 };
 
 //---------------------------------------------------------
@@ -80,7 +80,7 @@ public:
     void incrChordRests(int s);
     int numberChordRests() const;
     int numberChordRests(int s) const { return (s >= 0 && s < MAX_STAVES) ? _chordRests[s] : 0; }
-    int preferredStaff() const;         ///< Determine preferred staff for this voice
+    int preferredStaff() const;         // Determine preferred staff for this voice
     void setStaff(int s)
     {
         if (s >= 0) {
@@ -117,12 +117,12 @@ public:
     int staffAlloc(int s) const { return (s >= 0 && s < MAX_STAVES) ? _staffAlloc[s] : -1; }
     QString toString() const;
 private:
-    int _chordRests[MAX_STAVES];        ///< The number of chordrests on each MusicXML staff
-    int _staff;                         ///< The MuseScore staff allocated
-    int _voice;                         ///< The MuseScore voice allocated
-    bool _overlaps;                     ///< This voice contains active notes in multiple staves at the same time
-    int _staffAlloc[MAX_STAVES];        ///< For overlapping voices: voice is allocated on these staves (note: -2=unalloc -1=undef 1=alloc)
-    int _voices[MAX_STAVES];            ///< For every voice allocated on the staff, the voice number
+    int _chordRests[MAX_STAVES];        // The number of chordrests on each MusicXML staff
+    int _staff;                         // The MuseScore staff allocated
+    int _voice;                         // The MuseScore voice allocated
+    bool _overlaps;                     // This voice contains active notes in multiple staves at the same time
+    int _staffAlloc[MAX_STAVES];        // For overlapping voices: voice is allocated on these staves (note: -2=unalloc -1=undef 1=alloc)
+    int _voices[MAX_STAVES];            // For every voice allocated on the staff, the voice number
 };
 
 //---------------------------------------------------------
@@ -148,7 +148,7 @@ public:
     void newMeasure();
     bool stavesOverlap(const int& voice) const;
 private:
-    std::map<int, NoteList> _noteLists;   ///< The notelists for all the voices
+    std::map<int, NoteList> _noteLists;   // The notelists for all the voices
 };
 
 //---------------------------------------------------------
@@ -162,29 +162,29 @@ private:
 
 struct MusicXMLInstrument {
     int unpitched;                     // midi-unpitched read from MusicXML
-    QString name;                      // instrument-name read from MusicXML
-    QString sound;                     // instrument-sound read from MusicXML
-    QString virtLib;                   // virtual-library read from MusicXML
-    QString virtName;                  // virtual-name read from MusicXML
+    String name;                       // instrument-name read from MusicXML
+    String sound;                      // instrument-sound read from MusicXML
+    String virtLib;                    // virtual-library read from MusicXML
+    String virtName;                   // virtual-name read from MusicXML
     int midiChannel;                   // midi-channel read from MusicXML
     int midiPort;                      // port read from MusicXML
     int midiProgram;                   // midi-program read from MusicXML
     int midiVolume;                    // volume read from MusicXML
     int midiPan;                       // pan value read from MusicXML
-    NoteHeadGroup notehead;          ///< notehead symbol set
-    int line;                          ///< place notehead onto this line
+    NoteHeadGroup notehead;            // notehead symbol set
+    int line = 0;                      // place notehead onto this line
     DirectionV stemDirection;
 
-    QString toString() const;
+    String toString() const;
 
     MusicXMLInstrument()        // required by std::map
         : unpitched(-1), name(), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHeadGroup::HEAD_INVALID), line(0), stemDirection(DirectionV::AUTO) {}
-    MusicXMLInstrument(QString s)
+    MusicXMLInstrument(String s)
         : unpitched(-1), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
         notehead(NoteHeadGroup::HEAD_NORMAL), line(0), stemDirection(DirectionV::AUTO) {}
     /*
-    MusicXMLInstrument(int p, QString s, NoteHead::Group nh, int l, Direction d)
+    MusicXMLInstrument(int p, String s, NoteHead::Group nh, int l, Direction d)
           : unpitched(p), name(s), midiChannel(-1), midiPort(-1), midiProgram(-1), midiVolume(100), midiPan(63),
           notehead(nh), line(l), stemDirection(d) {}
      */
