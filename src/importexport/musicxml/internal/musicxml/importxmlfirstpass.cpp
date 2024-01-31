@@ -27,15 +27,15 @@
 namespace mu::engraving {
 // TODO: move somewhere else
 
-static const std::vector<QString> vocalInstrumentNames({ "Voice",
-                                                         "Soprano",
-                                                         "Mezzo-Soprano",
-                                                         "Alto",
-                                                         "Tenor",
-                                                         "Baritone",
-                                                         "Bass",
-                                                         "Women",
-                                                         "Men" });
+static const std::vector<String> vocalInstrumentNames = { u"Voice",
+                                                          u"Soprano",
+                                                          u"Mezzo-Soprano",
+                                                          u"Alto",
+                                                          u"Tenor",
+                                                          u"Baritone",
+                                                          u"Bass",
+                                                          u"Women",
+                                                          u"Men" };
 
 MusicXmlPart::MusicXmlPart(String id, String name)
     : m_id(id), m_name(name)
@@ -272,7 +272,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 //   addNumber
 //---------------------------------------------------------
 
-void LyricNumberHandler::addNumber(const QString number)
+void LyricNumberHandler::addNumber(const String& number)
 {
     if (m_numberToNo.find(number) == m_numberToNo.end()) {
         m_numberToNo[number] = -1;           // unassigned
@@ -283,14 +283,14 @@ void LyricNumberHandler::addNumber(const QString number)
 //   toString
 //---------------------------------------------------------
 
-QString LyricNumberHandler::toString() const
+String LyricNumberHandler::toString() const
 {
-    QString res;
+    String res;
     for (const auto& p : m_numberToNo) {
         if (!res.isEmpty()) {
-            res += " ";
+            res += u" ";
         }
-        res += QString("%1:%2").arg(p.first, p.second);
+        res += String(u"%1:%2").arg(p.first).arg(p.second);
     }
     return res;
 }
@@ -299,7 +299,7 @@ QString LyricNumberHandler::toString() const
 //   getLyricNo
 //---------------------------------------------------------
 
-int LyricNumberHandler::getLyricNo(const QString& number) const
+int LyricNumberHandler::getLyricNo(const String& number) const
 {
     const auto it = m_numberToNo.find(number);
     return it == m_numberToNo.end() ? 0 : it->second;
