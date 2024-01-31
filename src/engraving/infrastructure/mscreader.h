@@ -70,8 +70,8 @@ public:
     ByteArray readImageFile(const String& fileName) const;
 
     ByteArray readAudioFile() const;
-    ByteArray readAudioSettingsJsonFile() const;
-    ByteArray readViewSettingsJsonFile(const io::path_t& pathPrefix) const;
+    ByteArray readAudioSettingsJsonFile(const io::path_t& pathPrefix = "") const;
+    ByteArray readViewSettingsJsonFile(const io::path_t& pathPrefix = "") const;
 
 private:
 

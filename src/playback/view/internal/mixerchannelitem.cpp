@@ -344,7 +344,7 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
     }
 }
 
-void MixerChannelItem::loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState)
+void MixerChannelItem::loadSoloMuteState(notation::INotationSoloMuteState::SoloMuteState&& newState)
 {
     if (m_soloMuteState.mute != newState.mute) {
         m_soloMuteState.mute = newState.mute;

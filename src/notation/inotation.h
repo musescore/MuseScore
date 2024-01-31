@@ -29,6 +29,7 @@
 #include "notationtypes.h"
 #include "inotationpainting.h"
 #include "inotationviewstate.h"
+#include "inotationsolomutestate.h"
 #include "inotationstyle.h"
 #include "inotationplayback.h"
 #include "inotationelements.h"
@@ -75,6 +76,9 @@ public:
 
     virtual INotationPaintingPtr painting() const = 0;
     virtual INotationViewStatePtr viewState() const = 0;
+
+    // solo-mute state
+    virtual INotationSoloMuteStatePtr soloMuteState() const = 0;
 
     // input (mouse)
     virtual INotationInteractionPtr interaction() const = 0;

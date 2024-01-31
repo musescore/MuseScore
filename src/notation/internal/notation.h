@@ -68,6 +68,7 @@ public:
 
     INotationPaintingPtr painting() const override;
     INotationViewStatePtr viewState() const override;
+    INotationSoloMuteStatePtr soloMuteState() const override;
     INotationInteractionPtr interaction() const override;
     INotationMidiInputPtr midiInput() const override;
     INotationUndoStackPtr undoStack() const override;
@@ -100,6 +101,7 @@ private:
 
     INotationPaintingPtr m_painting = nullptr;
     INotationViewStatePtr m_viewState = nullptr;
+    INotationSoloMuteStatePtr m_soloMuteState = nullptr;
     INotationInteractionPtr m_interaction = nullptr;
     INotationStylePtr m_style = nullptr;
     INotationMidiInputPtr m_midiInput = nullptr;
