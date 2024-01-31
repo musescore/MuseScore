@@ -78,7 +78,7 @@ AudioResourceMetaList FluidResolver::resolveResources() const
     return result;
 }
 
-SoundPresetList FluidResolver::resolveSoundPresets(const audio::AudioInputParams&) const
+SoundPresetList FluidResolver::resolveSoundPresets(const audio::AudioResourceMeta&) const
 {
     return SoundPresetList();
 }

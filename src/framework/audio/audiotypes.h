@@ -110,7 +110,6 @@ enum class AudioResourceType {
     VstPlugin,
     MusePlugin,
     MuseSamplerSoundPack,
-    SoundTrack,
 };
 
 struct AudioResourceMeta {
@@ -214,7 +213,6 @@ struct AudioFxParams {
         case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
         case AudioResourceType::FluidSoundfont:
         case AudioResourceType::MuseSamplerSoundPack:
-        case AudioResourceType::SoundTrack:
         case AudioResourceType::Undefined: break;
         }
 
@@ -291,19 +289,27 @@ enum class AudioSourceType {
     MuseSampler
 };
 
-struct AudioSourceParams {
-    AudioSourceType type() const
-    {
-        switch (resourceMeta.type) {
-        case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
-        case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
-        case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
-        default: return AudioSourceType::Undefined;
-        }
+inline AudioSourceType sourceTypeFromResourceType(AudioResourceType type)
+{
+    switch (type) {
+    case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
+    case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
+    case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
+    case AudioResourceType::MusePlugin:
+    case AudioResourceType::Undefined: break;
     }
 
+    return AudioSourceType::Undefined;
+}
+
+struct AudioSourceParams {
     AudioResourceMeta resourceMeta;
     AudioUnitConfig configuration;
+
+    AudioSourceType type() const
+    {
+        return sourceTypeFromResourceType(resourceMeta.type);
+    }
 
     bool isValid() const
     {

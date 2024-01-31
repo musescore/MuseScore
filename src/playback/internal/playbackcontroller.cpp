@@ -268,7 +268,7 @@ Channel<aux_channel_idx_t, std::string> PlaybackController::auxChannelNameChange
     return m_auxChannelNameChanged;
 }
 
-Promise<SoundPresetList> PlaybackController::availableSoundPresets(InstrumentTrackId instrumentTrackId) const
+Promise<SoundPresetList> PlaybackController::availableSoundPresets(const InstrumentTrackId& instrumentTrackId) const
 {
     auto it = m_instrumentTrackIdMap.find(instrumentTrackId);
     if (it == m_instrumentTrackIdMap.end()) {
@@ -277,7 +277,8 @@ Promise<SoundPresetList> PlaybackController::availableSoundPresets(InstrumentTra
         });
     }
 
-    return playback()->tracks()->availableSoundPresets(m_currentSequenceId, it->second);
+    const AudioInputParams& params = audioSettings()->trackInputParams(instrumentTrackId);
+    return playback()->tracks()->availableSoundPresets(params.resourceMeta);
 }
 
 void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)

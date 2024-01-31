@@ -104,7 +104,7 @@ AudioResourceMetaList SynthResolver::resolveAvailableResources() const
     return result;
 }
 
-SoundPresetList SynthResolver::resolveAvailableSoundPresets(const AudioInputParams& params) const
+SoundPresetList SynthResolver::resolveAvailableSoundPresets(const AudioResourceMeta& resourceMeta) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -112,12 +112,12 @@ SoundPresetList SynthResolver::resolveAvailableSoundPresets(const AudioInputPara
 
     std::lock_guard lock(m_mutex);
 
-    auto search = m_resolvers.find(params.type());
+    auto search = m_resolvers.find(audio::sourceTypeFromResourceType(resourceMeta.type));
     if (search == m_resolvers.end()) {
         return SoundPresetList();
     }
 
-    return search->second->resolveSoundPresets(params);
+    return search->second->resolveSoundPresets(resourceMeta);
 }
 
 void SynthResolver::registerResolver(const AudioSourceType type, IResolverPtr resolver)
