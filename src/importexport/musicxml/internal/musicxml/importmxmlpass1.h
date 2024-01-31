@@ -53,7 +53,7 @@ struct PageFormat {
     bool twosided = false;
 };
 
-typedef std::map<QString, Part*> PartMap;
+typedef std::map<String, Part*> PartMap;
 typedef std::map<int, MusicXmlPartGroup*> MusicXmlPartGroupMap;
 
 //---------------------------------------------------------
@@ -137,8 +137,8 @@ public:
     void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
     void scorePart();
     void scoreInstrument(const String& partId);
-    void setStyle(const QString& type, const double val);
-    void midiInstrument(const QString& partId);
+    void setStyle(const String& type, const double val);
+    void midiInstrument(const String& partId);
     void part();
     void measure(const String& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod, const int measureNr);
     void print(const int measureNr);
@@ -166,9 +166,9 @@ public:
     void skipLogCurrElem();
     bool determineMeasureLength(std::vector<Fraction>& ml) const;
     VoiceList getVoiceList(const String& id) const;
-    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const int& mxVoice, int& msMove, int& msTrack, int& msVoice) const;
+    bool determineStaffMoveVoice(const String& id, const int mxStaff, const int& mxVoice, int& msMove, int& msTrack, int& msVoice) const;
     int voiceToInt(const String& voice);
-    track_idx_t trackForPart(const QString& id) const;
+    track_idx_t trackForPart(const String& id) const;
     bool hasPart(const String& id) const;
     Part* getPart(const QString& id) const { return mu::value(m_partMap, id); }
     MusicXmlPart getMusicXmlPart(const QString& id) const { return mu::value(m_parts, id); }
