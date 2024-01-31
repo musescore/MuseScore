@@ -34,20 +34,20 @@ class XmlWriter;
 class MScoreTextToMXML
 {
 public:
-    MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf);
-    static QString toPlainText(const QString& text);
-    static QString toPlainTextPlusSymbols(const std::list<TextFragment>& list);
+    MScoreTextToMXML(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf);
+    static String toPlainText(const String& text);
+    static String toPlainTextPlusSymbols(const std::list<TextFragment>& list);
     static bool split(const std::list<TextFragment>& in, const int pos, const int len, std::list<TextFragment>& left,
                       std::list<TextFragment>& mid, std::list<TextFragment>& right);
     void writeTextFragments(const std::list<TextFragment>& fr, XmlWriter& xml);
 
 private:
-    QString updateFormat();
-    QString attribs;
-    QString tagname;
+    String updateFormat();
+    String attribs;
+    String tagname;
     CharFormat oldFormat;
     CharFormat newFormat;
-    QString musicalTextFont;
+    String musicalTextFont;
 };
 } // namespace Ms
 

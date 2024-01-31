@@ -1419,27 +1419,27 @@ static CharFormat formatForWords(const MStyle& s)
 //---------------------------------------------------------
 
 static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr,
-                        const double x, const double y, const QString& just, const QString& val,
-                        const std::list<TextFragment>& words, const QString& creditType)
+                        const double x, const double y, const String& just, const String& val,
+                        const std::list<TextFragment>& words, const String& creditType)
 {
     // prevent incorrect MusicXML for empty text
     if (words.empty()) {
         return;
     }
 
-    const QString mtf = s.styleSt(Sid::MusicalTextFont);
+    const String mtf = s.styleSt(Sid::MusicalTextFont);
     const CharFormat defFmt = formatForWords(s);
 
     // export formatted
     xml.startElement("credit", { { "page", pageNr } });
-    if (creditType != "") {
+    if (creditType != u"") {
         xml.tag("credit-type", creditType);
     }
-    QString attr = QString(" default-x=\"%1\"").arg(x);
-    attr += QString(" default-y=\"%1\"").arg(y);
-    attr += " justify=\"" + just + "\"";
-    attr += " valign=\"" + val + "\"";
-    MScoreTextToMXML mttm("credit-words", attr, defFmt, mtf);
+    String attr = String(u" default-x=\"%1\"").arg(x);
+    attr += String(u" default-y=\"%1\"").arg(y);
+    attr += u" justify=\"" + just + u"\"";
+    attr += u" valign=\"" + val + u"\"";
+    MScoreTextToMXML mttm(u"credit-words", attr, defFmt, mtf);
     mttm.writeTextFragments(words, xml);
     xml.endElement();
 }
@@ -1586,7 +1586,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
         std::list<TextFragment> list;
         list.push_back(f);
         for (page_idx_t pageIdx = 0; pageIdx < m_score->npages(); ++pageIdx) {
-            creditWords(xml, style, pageIdx + 1, w / 2, bm, "center", "bottom", list, "rights");
+            creditWords(xml, style, pageIdx + 1, w / 2, bm, u"center", u"bottom", list, u"rights");
         }
     }
 }
@@ -4701,7 +4701,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
         if (wordsLeft.size() > 0) {
             xml.startElement("direction-type");
             String attr = ExportMusicXml::positioningAttributes(text);
-            MScoreTextToMXML mttm("words", attr, defFmt, mtf);
+            MScoreTextToMXML mttm(u"words", attr, defFmt, mtf);
             mttm.writeTextFragments(wordsLeft, xml);
             xml.endElement();
         }
@@ -4728,7 +4728,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
         if (wordsRight.size() > 0) {
             xml.startElement("direction-type");
             String attr = ExportMusicXml::positioningAttributes(text);
-            MScoreTextToMXML mttm("words", attr, defFmt, mtf);
+            MScoreTextToMXML mttm(u"words", attr, defFmt, mtf);
             mttm.writeTextFragments(wordsRight, xml);
             xml.endElement();
         }
@@ -4744,7 +4744,7 @@ static void wordsMetronome(XmlWriter& xml, const MStyle& s, TextBase const* cons
         }
         attr += color2xml(text);
         attr += ExportMusicXml::positioningAttributes(text);
-        MScoreTextToMXML mttm("words", attr, defFmt, mtf);
+        MScoreTextToMXML mttm(u"words", attr, defFmt, mtf);
         //LOGD("words('%s')", qPrintable(text->text()));
         mttm.writeTextFragments(text->fragmentList(), xml);
         xml.endElement();
@@ -4840,22 +4840,22 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const staff_idx
 
     // set the default words format
     const MStyle& style = m_score->style();
-    const QString mtf = style.styleSt(Sid::MusicalTextFont);
+    const String mtf = style.styleSt(Sid::MusicalTextFont);
     const CharFormat defFmt = formatForWords(style);
 
     m_xml.startElement("direction", { { "placement", (relativePosition.y() < 0) ? "above" : "below" } });
     m_xml.startElement("direction-type");
-    QString attr;
+    String attr;
     if (text->hasFrame()) {
         if (text->circle()) {
-            attr = " enclosure=\"circle\"";
+            attr = u" enclosure=\"circle\"";
         } else {
-            attr = " enclosure=\"rectangle\"";
+            attr = u" enclosure=\"rectangle\"";
         }
     }
     attr += ExportMusicXml::positioningAttributesForTboxText(relativePosition, text->spatium());
-    attr += " valign=\"top\"";
-    MScoreTextToMXML mttm("words", attr, defFmt, mtf);
+    attr += u" valign=\"top\"";
+    MScoreTextToMXML mttm(u"words", attr, defFmt, mtf);
     mttm.writeTextFragments(text->fragmentList(), m_xml);
     m_xml.endElement();
     directionETag(m_xml, staff);
@@ -4885,10 +4885,10 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     attr += positioningAttributes(rmk);
     // set the default words format
     const MStyle& style = m_score->style();
-    const QString mtf = style.styleSt(Sid::MusicalTextFont);
+    const String mtf = style.styleSt(Sid::MusicalTextFont);
     const CharFormat defFmt = formatForWords(style);
     // write formatted
-    MScoreTextToMXML mttm("rehearsal", attr, defFmt, mtf);
+    MScoreTextToMXML mttm(u"rehearsal", attr, defFmt, mtf);
     mttm.writeTextFragments(rmk->fragmentList(), m_xml);
     m_xml.endElement();
     const auto offset = calculateTimeDeltaInDivisions(rmk->tick(), tick(), m_div);
@@ -5576,7 +5576,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 defFmt.setFontFamily(m_score->style().styleSt(Sid::lyricsEvenFontFace));
                 defFmt.setFontSize(m_score->style().styleD(Sid::lyricsOddFontSize));
                 // write formatted
-                MScoreTextToMXML mttm("text", attr, defFmt, mtf);
+                MScoreTextToMXML mttm(u"text", attr, defFmt, mtf);
                 mttm.writeTextFragments(l->fragmentList(), m_xml);
                 if (l->ticks().isNotZero()) {
                     m_xml.tag("extend");
