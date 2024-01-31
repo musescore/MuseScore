@@ -2890,7 +2890,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 t = Factory::createTempoText(m_score->dummy()->segment());
                 QString rawWordsText = m_wordsText;
                 rawWordsText.remove(QRegularExpression("(<.*?>)"));
-                QString sep = m_metroText != "" && m_wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
+                String sep = m_metroText != u"" && m_wordsText != u"" && rawWordsText.back() != ' ' ? u" " : u"";
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
@@ -2900,11 +2900,11 @@ void MusicXMLParserDirection::direction(const String& partId,
             if (m_wordsText != "" || m_metroText != "") {
                 t = Factory::createStaffText(m_score->dummy()->segment());
                 t->setXmlText(m_wordsText + m_metroText);
-                isExpressionText = m_wordsText.contains("<i>") && m_metroText.isEmpty();
+                isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.isEmpty();
             } else {
                 t = Factory::createRehearsalMark(m_score->dummy()->segment());
-                if (!m_rehearsalText.contains("<b>")) {
-                    m_rehearsalText = "<b></b>" + m_rehearsalText;            // explicitly turn bold off
+                if (!m_rehearsalText.contains(u"<b>")) {
+                    m_rehearsalText = u"<b></b>" + m_rehearsalText;            // explicitly turn bold off
                 }
                 t->setXmlText(m_rehearsalText);
                 if (!m_hasDefaultY) {
@@ -2969,7 +2969,7 @@ void MusicXMLParserDirection::direction(const String& partId,
 
     // do dynamics
     // LVIFIX: check import/export of <other-dynamics>unknown_text</...>
-    for (QStringList::Iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
+    for (StringList::iterator it = m_dynamicsList.begin(); it != m_dynamicsList.end(); ++it) {
         Dynamic* dyn = Factory::createDynamic(m_score->dummy()->segment());
         dyn->setDynamicType(*it);
         if (!m_dynaVelocity.isEmpty()) {
@@ -2982,10 +2982,10 @@ void MusicXMLParserDirection::direction(const String& partId,
             dyn->setVelocity(dynaValue);
         }
 
-        QString dynamicsPlacement = placement;
+        String dynamicsPlacement = placement;
         // Case-based defaults
         if (dynamicsPlacement.isEmpty()) {
-            dynamicsPlacement = isVocalStaff ? "above" : "below";
+            dynamicsPlacement = isVocalStaff ? u"above" : u"below";
         }
 
         // Add element to score later, after collecting all the others and sorting by default-y
@@ -3051,10 +3051,11 @@ void MusicXMLParserDirection::direction(const String& partId,
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 {
     return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
-           && m_rehearsalText == ""
-           && m_metroText == ""
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
            && m_tpoSound < 0.1
-           && m_wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
+           && m_wordsText.toQString().contains(QRegularExpression(
+                                                   "^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
 }
 
 //---------------------------------------------------------
@@ -3065,10 +3066,10 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 
 bool MusicXMLParserDirection::isLyricBracket() const
 {
-    return m_wordsText.contains(QRegularExpression("^}|{$"))
-           && m_rehearsalText == ""
-           && m_metroText == ""
-           && m_dynamicsList.isEmpty()
+    return m_wordsText.toQString().contains(QRegularExpression("^}|{$"))
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
+           && m_dynamicsList.empty()
            && m_tpoSound < 0.1;
 }
 
@@ -3085,17 +3086,17 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
 {
     while (m_e.readNextStartElement()) {
         m_defaultY = m_e.attributes().value("default-y").toDouble(&m_hasDefaultY) * -0.1;
-        QString number = m_e.attributes().value("number").toString();
+        String number = m_e.attributes().value("number").toString();
         int n = 0;
-        if (number != "") {
+        if (number != u"") {
             n = number.toInt();
             if (n <= 0) {
-                m_logger->logError(QString("invalid number %1").arg(number), &m_e);
+                m_logger->logError(String(u"invalid number %1").arg(number), &m_e);
             } else {
                 n--;          // make zero-based
             }
         }
-        QString type = m_e.attributes().value("type").toString();
+        String type = m_e.attributes().value("type").toString();
         if (m_e.name() == "metronome") {
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
@@ -3120,10 +3121,10 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         } else if (m_e.name() == "wedge") {
             wedge(type, n, starts, stops);
         } else if (m_e.name() == "coda") {
-            m_wordsText += "<sym>coda</sym>";
+            m_wordsText += u"<sym>coda</sym>";
             m_e.skipCurrentElement();
         } else if (m_e.name() == "segno") {
-            m_wordsText += "<sym>segno</sym>";
+            m_wordsText += u"<sym>segno</sym>";
             m_e.skipCurrentElement();
         } else {
             skipLogCurrElem();
@@ -3235,25 +3236,25 @@ QString MusicXMLParserDirection::matchRepeat() const
  Try to find a Jump in \a repeat.
  */
 
-static Jump* findJump(const QString& repeat, Score* score)
+static Jump* findJump(const String& repeat, Score* score)
 {
     Jump* jp = 0;
-    if (repeat == "daCapo") {
+    if (repeat == u"daCapo") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DC);
-    } else if (repeat == "daCapoAlCoda") {
+    } else if (repeat == u"daCapoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DC_AL_CODA);
-    } else if (repeat == "daCapoAlFine") {
+    } else if (repeat == u"daCapoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DC_AL_FINE);
-    } else if (repeat == "dalSegno") {
+    } else if (repeat == u"dalSegno") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DS);
-    } else if (repeat == "dalSegnoAlCoda") {
+    } else if (repeat == u"dalSegnoAlCoda") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DS_AL_CODA);
-    } else if (repeat == "dalSegnoAlFine") {
+    } else if (repeat == u"dalSegnoAlFine") {
         jp = Factory::createJump(score->dummy()->measure());
         jp->setJumpType(JumpType::DS_AL_FINE);
     }
@@ -3268,22 +3269,22 @@ static Jump* findJump(const QString& repeat, Score* score)
  Try to find a Marker in \a repeat.
  */
 
-static Marker* findMarker(const QString& repeat, Score* score)
+static Marker* findMarker(const String& repeat, Score* score)
 {
     Marker* m = 0;
-    if (repeat == "segno") {
+    if (repeat == u"segno") {
         m = Factory::createMarker(score->dummy());
         // note: Marker::read() also contains code to set text style based on type
         // avoid duplicated code
         // apparently this MUST be after setTextStyle
         m->setMarkerType(MarkerType::SEGNO);
-    } else if (repeat == "coda") {
+    } else if (repeat == u"coda") {
         m = Factory::createMarker(score->dummy());
         m->setMarkerType(MarkerType::CODA);
-    } else if (repeat == "fine") {
+    } else if (repeat == u"fine") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::FINE);
-    } else if (repeat == "toCoda") {
+    } else if (repeat == u"toCoda") {
         m = Factory::createMarker(score->dummy(), TextStyleType::REPEAT_RIGHT);
         m->setMarkerType(MarkerType::TOCODA);
     }
@@ -3297,30 +3298,30 @@ static Marker* findMarker(const QString& repeat, Score* score)
 void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick)
 {
     // Try to recognize the various repeats
-    QString repeat = "";
-    if (m_sndCoda != "") {
-        repeat = "coda";
-    } else if (m_sndDacapo != "") {
-        repeat = "daCapo";
-    } else if (m_sndDalsegno != "") {
-        repeat = "dalSegno";
-    } else if (m_sndFine != "") {
-        repeat = "fine";
-    } else if (m_sndSegno != "") {
-        repeat = "segno";
-    } else if (m_sndToCoda != "") {
-        repeat = "toCoda";
+    String repeat;
+    if (m_sndCoda != u"") {
+        repeat = u"coda";
+    } else if (m_sndDacapo != u"") {
+        repeat = u"daCapo";
+    } else if (m_sndDalsegno != u"") {
+        repeat = u"dalSegno";
+    } else if (m_sndFine != u"") {
+        repeat = u"fine";
+    } else if (m_sndSegno != u"") {
+        repeat = u"segno";
+    } else if (m_sndToCoda != u"") {
+        repeat = u"toCoda";
     } else {
         repeat = matchRepeat();
     }
 
-    if (repeat != "") {
+    if (repeat != u"") {
         TextBase* tb = nullptr;
         if ((tb = findJump(repeat, m_score)) || (tb = findMarker(repeat, m_score))) {
             tb->setTrack(track);
             if (!m_wordsText.isEmpty()) {
                 tb->setXmlText(m_wordsText);
-                m_wordsText = "";
+                m_wordsText = u"";
             } else {
                 tb->setVisible(false);
             }
@@ -3351,7 +3352,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
 void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick,
                                            DelayedDirectionsList& delayedDirections)
 {
-    if (!m_wordsText.contains("NmiCmi")) {
+    if (!m_wordsText.contains(u"NmiCmi")) {
         return;
     }
     Harmony* ha = new Harmony(m_score->dummy()->segment());
@@ -3361,7 +3362,7 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t t
     ha->setTrack(track);
     MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, "above", measure, tick);
     delayedDirections.push_back(delayedDirection);
-    m_wordsText.replace("NmiCmi", "N.C.");
+    m_wordsText.replace(u"NmiCmi", u"N.C.");
 }
 
 //---------------------------------------------------------
