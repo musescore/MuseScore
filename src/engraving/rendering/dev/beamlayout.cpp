@@ -692,6 +692,11 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                             && ctx.state().prevMeasure()
                             && !(prevCR->isChord() && prevCR->durationType().type() <= DurationType::V_QUARTER)) {
                             beam = prevBeam;
+                            if (prevCR->isChord()) {
+                                if (Hook* hook = toChord(prevCR)->hook()) {
+                                    ctx.mutDom().doUndoRemoveElement(hook);
+                                }
+                            }
                             //a1 = beam ? beam->elements().front() : prevCR;
                             a1 = beam ? nullptr : prevCR;               // when beam is found, a1 is no longer required.
                         } else if (prevBeam && prevBeam == cr->beam() && prevBeam->elements().front() == prevCR) {

@@ -36,6 +36,7 @@
 #include "figuredbass.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
+#include "hook.h"
 #include "instrchange.h"
 #include "keysig.h"
 #include "lyrics.h"
@@ -596,13 +597,21 @@ void ChordRest::removeDeleteBeam(bool beamed)
         Beam* b = m_beam;
         m_beam->remove(this);
         if (b->empty()) {
-            score()->undoRemoveElement(b);
+            score()->doUndoRemoveElement(b);
         } else {
             renderer()->layoutBeam1(b);
         }
     }
     if (!beamed && isChord()) {
-        renderer()->layoutStem(toChord(this));
+        Chord* c = toChord(this);
+        if (c->shouldHaveHook()) {
+            if (!c->hook()) {
+                c->createHook();
+            }
+        } else if (c->hook()) {
+            score()->doUndoRemoveElement(c->hook());
+        }
+        renderer()->layoutStem(c);
     }
 }
 
