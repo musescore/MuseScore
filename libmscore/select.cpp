@@ -583,6 +583,11 @@ void Selection::updateSelectedElements()
                   for (Element* e : s->annotations()) {
                         if (e->track() != st)
                               continue;
+                        if (e->isFretDiagram()) {
+                              FretDiagram* fd = toFretDiagram(e);
+                              if (Harmony* harm = fd->harmony())
+                                    appendFiltered(harm);
+                              }
                         appendFiltered(e);
                         }
                   Element* e = s->element(st);
