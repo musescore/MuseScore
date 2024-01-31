@@ -80,7 +80,7 @@ ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId
 {
     ms_InstrumentInfo instrument = findInstrument(m_libHandler, params);
     if (instrument) {
-        return std::make_shared<MuseSamplerWrapper>(m_libHandler, params);
+        return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params);
     }
 
     return nullptr;
