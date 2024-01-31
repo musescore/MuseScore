@@ -99,7 +99,7 @@ Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* d
     dev->seek(0);
     MusicXMLParserPass1 pass1(score, &logger);
     Err res = pass1.parse(dev);
-    const auto pass1_errors = pass1.errors();
+    const String pass1_errors = pass1.errors();
 
     // pass 2
     MusicXMLParserPass2 pass2(score, pass1, &logger);
@@ -116,11 +116,11 @@ Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* d
     }
 
     // report result
-    const auto pass2_errors = pass2.errors();
+    const String pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
         if (!MScore::noGui) {
-            const QString text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
-                                      nullptr, pass1_errors.count() + pass2_errors.count());
+            const String text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
+                                     nullptr, int(pass1_errors.size() + pass2_errors.size()));
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {
                 res = Err::UserAbort;
             }
