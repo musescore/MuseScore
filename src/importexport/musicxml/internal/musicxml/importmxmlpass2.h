@@ -104,7 +104,7 @@ struct MusicXmlExtendedSpannerDesc {
     bool isStarted = false;
     bool isStopped = false;
     MusicXmlExtendedSpannerDesc() {}
-    QString toString() const;
+    String toString() const;
 };
 
 //---------------------------------------------------------
@@ -210,13 +210,13 @@ public:
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
                     MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
-    QString errors() const { return m_errors; }
+    String errors() const { return m_errors; }
     MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
-    QString tremoloType() const { return m_tremoloType; }
+    String tremoloType() const { return m_tremoloType; }
     int tremoloNr() const { return m_tremoloNr; }
     bool mustStopGraceAFter() const { return m_slurStop || m_wavyLineStop; }
 private:
-    void addError(const QString& error);      // Add an error to be shown in the GUI
+    void addError(const String& error);      // Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
     void addTechnical(const Notation& notation, Note* note);
     void harmonic();
@@ -234,17 +234,17 @@ private:
     QXmlStreamReader& m_e;
     const Score* m_score = nullptr;                         // the score
     MxmlLogger* m_logger = nullptr;                              // the error logger
-    QString m_errors;                    // errors to present to the user
+    String m_errors;                    // errors to present to the user
     MusicXmlTupletDesc m_tupletDesc;
-    QString m_dynamicsPlacement;
-    QStringList m_dynamicsList;
+    String m_dynamicsPlacement;
+    StringList m_dynamicsList;
     std::vector<Notation> m_notations;
     SymId m_breath { SymId::noSym };
-    QString m_tremoloType;
+    String m_tremoloType;
     int m_tremoloNr = 0;
-    QString m_wavyLineType;
+    String m_wavyLineType;
     int m_wavyLineNo = 0;
-    QString m_arpeggioType;
+    String m_arpeggioType;
     bool m_slurStop = false;
     bool m_slurStart = false;
     bool m_wavyLineStop = false;
@@ -259,7 +259,7 @@ class MusicXMLParserPass2
 public:
     MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
     Err parse(QIODevice* device);
-    QString errors() const { return m_errors; }
+    String errors() const { return m_errors; }
 
     // part specific data interface functions
     void addSpanner(const MusicXmlSpannerDesc& desc);
@@ -269,8 +269,8 @@ public:
     int divs() { return m_divs; }
 
 private:
-    void addError(const QString& error);      // Add an error to be shown in the GUI
-    void initPartState(const QString& partId);
+    void addError(const String& error);      // Add an error to be shown in the GUI
+    void initPartState(const String& partId);
     SpannerSet findIncompleteSpannersAtPartEnd();
     Err parse();
     void scorePartwise();
@@ -279,16 +279,15 @@ private:
     void part();
     void measChordNote(/*, const MxmlPhase2Note note, ChordRest& currChord */);
     void measChordFlush(/*, ChordRest& currChord */);
-    void measure(const QString& partId, const Fraction time);
+    void measure(const String& partId, const Fraction time);
     void setMeasureRepeats(const staff_idx_t scoreRelStaff, Measure* measure);
-    void attributes(const QString& partId, Measure* measure, const Fraction& tick);
+    void attributes(const String& partId, Measure* measure, const Fraction& tick);
     void measureStyle(Measure* measure);
-    void barline(const QString& partId, Measure* measure, const Fraction& tick);
-    void key(const QString& partId, Measure* measure, const Fraction& tick);
-    void clef(const QString& partId, Measure* measure, const Fraction& tick);
-    void time(const QString& partId, Measure* measure, const Fraction& tick);
+    void barline(const String& partId, Measure* measure, const Fraction& tick);
+    void key(const String& partId, Measure* measure, const Fraction& tick);
+    void clef(const String& partId, Measure* measure, const Fraction& tick);
+    void time(const String& partId, Measure* measure, const Fraction& tick);
     void divisions();
-    void transpose(const QString& partId, const Fraction& tick);
     Note* note(const String& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev, Fraction& dura,
                Fraction& missingCurr, String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams, FiguredBassList& fbl,
                int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
@@ -304,8 +303,8 @@ private:
     void backup(Fraction& dura);
     void timeModification(Fraction& timeMod, TDuration& normalType);
     void stem(DirectionV& sd, bool& nost);
-    void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QColor color,
-                  const QString& text, const bool print);
+    void doEnding(const String& partId, Measure* measure, const String& number, const String& type, const QColor color, const String& text,
+                  const bool print);
     void staffDetails(const String& partId, Measure* measure = nullptr);
     void staffTuning(StringData* t);
     void skipLogCurrElem();
@@ -321,7 +320,7 @@ private:
     Score* m_score = nullptr;              // the score
     MusicXMLParserPass1& m_pass1;          // the pass1 results
     MxmlLogger* m_logger = nullptr;        // Error logger
-    QString m_errors;                      // Errors to present to the user
+    String m_errors;                       // Errors to present to the user
 
     // part specific data (TODO: move to part-specific class)
 
@@ -375,13 +374,13 @@ public:
 
 private:
     void directionType(std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
-    void bracket(const QString& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
-    void octaveShift(const QString& type, const int number, std::vector<MusicXmlSpannerDesc>& starts,
+    void bracket(const String& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
+    void octaveShift(const String& type, const int number, std::vector<MusicXmlSpannerDesc>& starts,
                      std::vector<MusicXmlSpannerDesc>& stops);
-    void pedal(const QString& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
-    void dashes(const QString& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
-    void wedge(const QString& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
-    QString metronome(double& r);
+    void pedal(const String& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
+    void dashes(const String& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
+    void wedge(const String& type, const int number, std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
+    String metronome(double& r);
     void sound();
     void dynamics();
     void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
@@ -434,7 +433,7 @@ class MusicXMLDelayedDirectionElement
 {
 public:
     MusicXMLDelayedDirectionElement(double totalY, EngravingItem* element, track_idx_t track,
-                                    QString placement, Measure* measure, Fraction tick)
+                                    String placement, Measure* measure, Fraction tick)
         : m_totalY(totalY),  m_element(element), m_track(track), m_placement(placement),
         m_measure(measure), m_tick(tick) {}
     void addElem();
@@ -444,7 +443,7 @@ private:
     double m_totalY = 0.0;
     EngravingItem* m_element = nullptr;
     track_idx_t m_track = 0;
-    QString m_placement;
+    String m_placement;
     Measure* m_measure = nullptr;
     Fraction m_tick;
 };
