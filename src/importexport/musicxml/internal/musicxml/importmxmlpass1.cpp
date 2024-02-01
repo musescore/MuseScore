@@ -952,7 +952,7 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const std::vector<Frac
 
     if (it == score->sigmap()->end()) {
         // no valid timesig at tick = 0
-        logger->logDebugInfo("no valid time signature at tick = 0");
+        logger->logDebugInfo(u"no valid time signature at tick = 0");
         // use length of first measure instead time signature.
         // if there is no first measure, we probably don't care,
         // but set a default anyway.
@@ -971,7 +971,7 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const std::vector<Frac
 
 Err MusicXMLParserPass1::parse(QIODevice* device)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::parse device");
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::parse device");
     m_parts.clear();
     m_e.setDevice(device);
     auto res = parse();
@@ -1001,7 +1001,7 @@ Err MusicXMLParserPass1::parse(QIODevice* device)
 
 Err MusicXMLParserPass1::parse()
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::parse");
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::parse");
 
     bool found = false;
     while (m_e.readNextStartElement()) {
@@ -1017,7 +1017,7 @@ Err MusicXMLParserPass1::parse()
     }
 
     if (!found) {
-        m_logger->logError("this is not a MusicXML score-partwise file, node <score-partwise> not found", &m_e);
+        m_logger->logError(u"this is not a MusicXML score-partwise file, node <score-partwise> not found", &m_e);
         return Err::FileBadFormat;
     }
 
@@ -1073,7 +1073,7 @@ static bool isRedundantBracket(Staff const* const staff, const BracketType brack
 
 void MusicXMLParserPass1::scorePartwise()
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::scorePartwise", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::scorePartwise", &m_e);
 
     MusicXmlPartGroupList partGroupList;
 
@@ -1189,7 +1189,7 @@ void MusicXMLParserPass1::scorePartwise()
 
 void MusicXMLParserPass1::identification()
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::identification", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::identification", &m_e);
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "creator") {
@@ -1414,7 +1414,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
 
 void MusicXMLParserPass1::credit(CreditWordsList& credits)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::credit", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::credit", &m_e);
 
     const auto page = m_e.attributes().value("page").toString().toInt();         // ignoring errors implies incorrect conversion defaults to the first page
     // multiple credit-words elements may be present,
@@ -1764,7 +1764,7 @@ void MusicXMLParserPass1::setStyle(const String& type, const double val)
 
 void MusicXMLParserPass1::pageLayout(PageFormat& pf, const double conversion)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::pageLayout", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::pageLayout", &m_e);
 
     double _oddRightMargin  = 0.0;
     double _evenRightMargin = 0.0;
@@ -1835,7 +1835,7 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const double conversion)
 
 void MusicXMLParserPass1::partList(MusicXmlPartGroupList& partGroupList)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::partList", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::partList", &m_e);
 
     int scoreParts = 0;   // number of score-parts read sofar
     MusicXmlPartGroupMap partGroups;
@@ -1957,7 +1957,7 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
                                     MusicXmlPartGroupList& partGroupList,
                                     MusicXmlPartGroupMap& partGroups)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::partGroup", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::partGroup", &m_e);
     bool barlineSpan = true;
     int number = m_e.attributes().value("number").toInt();
     if (number > 0) {
@@ -2004,7 +2004,7 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
 
 void MusicXMLParserPass1::scorePart()
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::scorePart", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::scorePart", &m_e);
     String id = m_e.attributes().value("id").toString().trimmed();
 
     if (mu::contains(m_parts, id)) {
@@ -2077,7 +2077,7 @@ void MusicXMLParserPass1::scorePart()
 
 void MusicXMLParserPass1::scoreInstrument(const String& partId)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::scoreInstrument", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::scoreInstrument", &m_e);
     String instrId = m_e.attributes().value("id").toString();
 
     while (m_e.readNextStartElement()) {
@@ -2135,7 +2135,7 @@ void MusicXMLParserPass1::scoreInstrument(const String& partId)
 
 void MusicXMLParserPass1::midiInstrument(const String& partId)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::midiInstrument", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::midiInstrument", &m_e);
     String instrId = m_e.attributes().value("id").toString();
 
     while (m_e.readNextStartElement()) {
@@ -2241,7 +2241,7 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
 
 void MusicXMLParserPass1::part()
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::part", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::part", &m_e);
     const String id = m_e.attributes().value("id").toString().trimmed();
 
     if (!mu::contains(m_parts, id)) {
@@ -2320,7 +2320,7 @@ void MusicXMLParserPass1::measure(const String& partId,
                                   VoiceOverlapDetector& vod,
                                   const int measureNr)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::measure", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::measure", &m_e);
     String number = m_e.attributes().value("number").toString();
 
     Fraction mTime;   // current time stamp within measure
@@ -2367,7 +2367,7 @@ void MusicXMLParserPass1::measure(const String& partId,
                 if (dura <= mTime) {
                     mTime -= dura;
                 } else {
-                    m_logger->logError("backup beyond measure start", &m_e);
+                    m_logger->logError(u"backup beyond measure start", &m_e);
                     mTime.set(0, 1);
                 }
             }
@@ -2466,7 +2466,7 @@ void MusicXMLParserPass1::measure(const String& partId,
 
 void MusicXMLParserPass1::print(const int measureNr)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::print", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::print", &m_e);
 
     const String newPage = m_e.attributes().value("new-page").toString();
     const String newSystem = m_e.attributes().value("new-system").toString();
@@ -2490,7 +2490,7 @@ void MusicXMLParserPass1::print(const int measureNr)
 
 void MusicXMLParserPass1::attributes(const String& partId, const Fraction cTime)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::attributes", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::attributes", &m_e);
 
     int staves = 0;
     std::set<int> hiddenStaves = {};
@@ -2521,12 +2521,12 @@ void MusicXMLParserPass1::attributes(const String& partId, const Fraction cTime)
     }
 
     if (staves - static_cast<int>(hiddenStaves.size()) > MAX_STAVES) {
-        m_logger->logError("staves exceed MAX_STAVES, even when discarding hidden staves", &m_e);
+        m_logger->logError(u"staves exceed MAX_STAVES, even when discarding hidden staves", &m_e);
         return;
     } else if (staves > MAX_STAVES
                && static_cast<int>(hiddenStaves.size()) > 0
                && m_parts[partId].staffNumberToIndex().size() == 0) {
-        m_logger->logError("staves exceed MAX_STAVES, but hidden staves can be discarded", &m_e);
+        m_logger->logError(u"staves exceed MAX_STAVES, but hidden staves can be discarded", &m_e);
         // Some scores have parts with many staves (~10), but most are hidden
         // When this occurs, we can discard hidden staves
         // and store a std::map between staffNumber and staffIndex.
@@ -2570,7 +2570,7 @@ void MusicXMLParserPass1::attributes(const String& partId, const Fraction cTime)
 
 void MusicXMLParserPass1::clef(const String& /* partId */)
 {
-    m_logger->logDebugTrace("MusicXMLParserPass1::clef", &m_e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::clef", &m_e);
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "line") {
@@ -2713,7 +2713,7 @@ void MusicXMLParserPass1::divisions()
 {
     m_divs = m_e.readElementText().toInt();
     if (!(m_divs > 0)) {
-        m_logger->logError("illegal divisions", &m_e);
+        m_logger->logError(u"illegal divisions", &m_e);
     }
 }
 
@@ -2764,7 +2764,7 @@ void MusicXMLParserPass1::direction(const String& partId, const Fraction& cTime)
                 m_parts[partId].addOctaveShift(staff, prevDesc.size, prevDesc.time);
                 m_parts[partId].addOctaveShift(staff, -prevDesc.size, desc.time);
             } else {
-                m_logger->logError("double octave-shift stop", &m_e);
+                m_logger->logError(u"double octave-shift stop", &m_e);
             }
             mu::remove(m_octaveShifts, desc.num);
         } else {
@@ -2781,7 +2781,7 @@ void MusicXMLParserPass1::direction(const String& partId, const Fraction& cTime)
                 m_parts[partId].addOctaveShift(staff, desc.size, desc.time);
                 m_parts[partId].addOctaveShift(staff, -desc.size, prevDesc.time);
             } else {
-                m_logger->logError("double octave-shift start", &m_e);
+                m_logger->logError(u"double octave-shift start", &m_e);
             }
             mu::remove(m_octaveShifts, desc.num);
         } else {
@@ -2860,7 +2860,7 @@ void MusicXMLParserPass1::handleOctaveShift(const Fraction& cTime,
     }
 
     if (!cTime.isValid() || cTime < Fraction(0, 1)) {
-        m_logger->logError("invalid current time", &m_e);
+        m_logger->logError(u"invalid current time", &m_e);
     }
 
     if (type == u"up") {
@@ -3496,7 +3496,7 @@ Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const int& _divisio
             }
         }
     } else {
-        m_logger->logError("illegal or uninitialized divisions", xmlReader);
+        m_logger->logError(u"illegal or uninitialized divisions", xmlReader);
     }
     //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
 
@@ -3514,7 +3514,7 @@ Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const int& _divisio
 void MusicXMLParserPass1::duration(Fraction& dura, QXmlStreamReader& e)
 {
     Q_ASSERT(e.isStartElement() && e.name() == "duration");
-    m_logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
     dura.set(0, 0);    // invalid unless set correctly
     int intDura = e.readElementText().toInt();

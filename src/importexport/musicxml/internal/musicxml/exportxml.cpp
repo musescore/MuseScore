@@ -4875,11 +4875,11 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
 
     directionTag(m_xml, m_attr, rmk);
     m_xml.startElement("direction-type");
-    QString attr;
+    String attr;
     if (rmk->circle()) {
-        attr = " enclosure=\"circle\"";
+        attr = u" enclosure=\"circle\"";
     } else if (!rmk->hasFrame()) {
-        attr = " enclosure=\"none\"";
+        attr = u" enclosure=\"none\"";
     }
     attr += color2xml(rmk);
     attr += positioningAttributes(rmk);
@@ -7734,7 +7734,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const track_idx_t etrack = part->endTrack();
 
     // pickup and other irregular measures need special care
-    QString measureTag = "measure";
+    String measureTag = u"measure";
     mnsh.updateForMeasure(m);
     measureTag += mnsh.measureNumber();
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
@@ -8028,7 +8028,7 @@ bool saveXml(Score* score, const String& name)
 //     </rootfiles>
 // </container>
 
-static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const QString& filename)
+static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const String& filename)
 {
     mu::io::Buffer cbuf;
     cbuf.open(mu::io::IODevice::ReadWrite);
@@ -8059,19 +8059,19 @@ bool saveMxl(Score* score, QIODevice* device)
     MQZipWriter uz(device);
 
     //anonymized filename since we don't know the actual one here
-    QString fn = "score.xml";
+    String fn = u"score.xml";
     writeMxlArchive(score, uz, fn);
     uz.close();
 
     return true;
 }
 
-bool saveMxl(Score* score, const QString& name)
+bool saveMxl(Score* score, const String& name)
 {
     MQZipWriter uz(name);
 
     FileInfo fi(name);
-    QString fn = fi.completeBaseName() + u".xml";
+    String fn = fi.completeBaseName() + u".xml";
     writeMxlArchive(score, uz, fn);
 
     return true;
@@ -8199,16 +8199,16 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         m_xml.endElement();
 
         if (!h->xmlKind().isEmpty()) {
-            QString s = "kind";
-            QString kindText = h->musicXmlText();
-            if (h->musicXmlText() != "") {
-                s += " text=\"" + kindText + "\"";
+            String s = u"kind";
+            String kindText = h->musicXmlText();
+            if (h->musicXmlText() != u"") {
+                s += u" text=\"" + kindText + u"\"";
             }
-            if (h->xmlSymbols() == "yes") {
-                s += " use-symbols=\"yes\"";
+            if (h->xmlSymbols() == u"yes") {
+                s += u" use-symbols=\"yes\"";
             }
-            if (h->xmlParens() == "yes") {
-                s += " parentheses-degrees=\"yes\"";
+            if (h->xmlParens() == u"yes") {
+                s += u" parentheses-degrees=\"yes\"";
             }
             m_xml.tagRaw(s, h->xmlKind());
 
@@ -8225,22 +8225,21 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
 
             StringList l = h->xmlDegrees();
             if (!l.empty()) {
-                for (const String& _tag : qAsConst(l)) {
-                    QString tag = _tag.toQString();
-                    QString degreeText;
+                for (const String& tag : qAsConst(l)) {
+                    String degreeText;
                     if (h->xmlKind().startsWith(u"suspended")
-                        && tag.startsWith("add") && tag[3].isDigit()
-                        && !kindText.isEmpty() && kindText[0].isDigit()) {
+                        && tag.startsWith(u"add") && tag.at(3).isDigit()
+                        && !kindText.isEmpty() && kindText.at(0).isDigit()) {
                         // hack to correct text for suspended chords whose kind text has degree information baked in
                         // (required by some other applications)
-                        int tagDegree = tag.midRef(3).toInt();
-                        QString kindTextExtension;
-                        for (int i = 0; i < kindText.length() && kindText[i].isDigit(); ++i) {
+                        int tagDegree = tag.mid(3).toInt();
+                        String kindTextExtension;
+                        for (size_t i = 0; i < kindText.size() && kindText.at(i).isDigit(); ++i) {
                             kindTextExtension[i] = kindText[i];
                         }
                         int kindExtension = kindTextExtension.toInt();
                         if (tagDegree <= kindExtension && (tagDegree & 1) && (kindExtension & 1)) {
-                            degreeText = " text=\"\"";
+                            degreeText = u" text=\"\"";
                         }
                     }
                     m_xml.startElement("degree");
@@ -8253,13 +8252,13 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                         alter = -1;
                         ++idx;
                     }
-                    m_xml.tagRaw(QString("degree-value%1").arg(degreeText), tag.mid(idx));
+                    m_xml.tagRaw(String(u"degree-value%1").arg(degreeText), tag.mid(idx));
                     m_xml.tag("degree-alter", alter);               // finale insists on this even if 0
-                    if (tag.startsWith("add")) {
-                        m_xml.tagRaw(QString("degree-type%1").arg(degreeText), "add");
-                    } else if (tag.startsWith("sub")) {
+                    if (tag.startsWith(u"add")) {
+                        m_xml.tagRaw(String(u"degree-type%1").arg(degreeText), "add");
+                    } else if (tag.startsWith(u"sub")) {
                         m_xml.tag("degree-type", "subtract");
-                    } else if (tag.startsWith("alt")) {
+                    } else if (tag.startsWith(u"alt")) {
                         m_xml.tag("degree-type", "alter");
                     }
                     m_xml.endElement();
