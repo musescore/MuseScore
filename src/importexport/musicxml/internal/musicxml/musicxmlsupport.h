@@ -203,10 +203,10 @@ typedef std::map<String, MusicXMLInstrument> MusicXMLInstruments;
 class MxmlSupport
 {
 public:
-    static int stringToInt(const QString& s, bool* ok);
+    static int stringToInt(const String& s, bool* ok);
     static Fraction durationAsFraction(const int divisions, const QDomElement e);
-    static Fraction noteTypeToFraction(QString type);
-    static Fraction calculateFraction(QString type, int dots, int normalNotes, int actualNotes);
+    static Fraction noteTypeToFraction(const String& type);
+    static Fraction calculateFraction(const String& type, int dots, int normalNotes, int actualNotes);
 };
 
 //---------------------------------------------------------
@@ -234,16 +234,16 @@ private:
 extern void domError(const QDomElement&);
 extern void domNotImplemented(const QDomElement&);
 
-extern QString accSymId2MxmlString(const SymId id);
-extern QString accSymId2SmuflMxmlString(const SymId id);
-extern QString accidentalType2MxmlString(const AccidentalType type);
-extern QString accidentalType2SmuflMxmlString(const AccidentalType type);
-extern AccidentalType mxmlString2accidentalType(const QString mxmlName, const QString smufl);
-extern SymId mxmlString2accSymId(const QString mxmlName, const QString smufl = "");
+extern String accSymId2MxmlString(const SymId id);
+extern String accSymId2SmuflMxmlString(const SymId id);
+extern String accidentalType2MxmlString(const AccidentalType type);
+extern String accidentalType2SmuflMxmlString(const AccidentalType type);
+extern AccidentalType mxmlString2accidentalType(const String mxmlName, const String smufl);
+extern SymId mxmlString2accSymId(const String mxmlName, const String smufl = u"");
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* const chord);
-extern QString errorStringWithLocation(int line, int col, const QString& error);
-extern QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName);
+extern String errorStringWithLocation(int line, int col, const String& error);
+extern String checkAtEndElement(const QXmlStreamReader& e, const String& expName);
 } // namespace Ms
 #endif

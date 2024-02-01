@@ -1175,7 +1175,7 @@ void MusicXMLParserPass1::scorePartwise()
             }
         }
     }
-    addError(checkAtEndElement(m_e, "score-partwise"));
+    addError(checkAtEndElement(m_e, u"score-partwise"));
 }
 
 //---------------------------------------------------------
@@ -2457,7 +2457,7 @@ void MusicXMLParserPass1::measure(const String& partId,
      */
     m_parts[partId].addMeasureNumberAndDuration(number, mdur);
 
-    addError(checkAtEndElement(m_e, "measure"));
+    addError(checkAtEndElement(m_e, u"measure"));
 }
 
 //---------------------------------------------------------
@@ -3420,7 +3420,7 @@ void MusicXMLParserPass1::note(const String& partId,
         vod.addNote((sTime + missingPrev).ticks(), (sTime + missingPrev + dura).ticks(), voiceInt, staff);
     }
 
-    addError(checkAtEndElement(m_e, "note"));
+    addError(checkAtEndElement(m_e, u"note"));
 }
 
 //---------------------------------------------------------
