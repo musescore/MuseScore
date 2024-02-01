@@ -678,7 +678,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
  Convert SMuFL code points to MuseScore <sym>...</sym>
  */
 namespace xmlpass2 {
-static QString text2syms(const QString& t)
+static String text2syms(const String& t)
 {
     //QTime time;
     //time.start();
@@ -688,12 +688,12 @@ static QString text2syms(const QString& t)
     // caching does not gain much
 
     IEngravingFontPtr sf = engravingFonts()->fallbackFont();
-    std::map<QString, SymId> map;
-    int maxStringSize = 0;          // maximum string size found
+    std::map<String, SymId> map;
+    size_t maxStringSize = 0;          // maximum string size found
 
     for (int i = int(SymId::noSym); i < int(SymId::lastSym); ++i) {
         SymId id((SymId(i)));
-        QString string(sf->toString(id));
+        String string = sf->toString(id);
         // insert all syms except space to prevent matching all regular spaces
         if (id != SymId::space) {
             map.insert({ string, id });
@@ -704,22 +704,22 @@ static QString text2syms(const QString& t)
     }
 
     // Special case Dolet inference (TODO: put behind a setting or export type flag)
-    map.insert({ "$", SymId::segno });
-    map.insert({ "Ø", SymId::coda });
+    map.insert({ u"$", SymId::segno });
+    map.insert({ u"Ø", SymId::coda });
 
     //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
 
     // then look for matches
-    QString in = t;
-    QString res;
+    String in = t;
+    String res;
 
-    while (in != "") {
+    while (in != u"") {
         // try to find the largest match possible
-        int maxMatch = qMin(in.size(), maxStringSize);
+        int maxMatch = int(qMin(in.size(), maxStringSize));
         AsciiStringView sym;
         while (maxMatch > 0) {
-            QString toBeMatched = in.left(maxMatch);
+            String toBeMatched = in.left(maxMatch);
             if (mu::contains(map, toBeMatched)) {
                 sym = SymNames::nameForSymId(map.at(toBeMatched));
                 break;
@@ -728,13 +728,13 @@ static QString text2syms(const QString& t)
         }
         if (maxMatch > 0) {
             // found a match, add sym to res and remove match from string in
-            res += "<sym>";
-            res += sym.ascii();
-            res += "</sym>";
+            res += u"<sym>";
+            res += String::fromAscii(sym.ascii());
+            res += u"</sym>";
             in.remove(0, maxMatch);
         } else {
             // not found, move one char from res to in
-            res += in.leftRef(1);
+            res += in.left(1);
             in.remove(0, 1);
         }
     }
@@ -835,8 +835,8 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
         }
     }
     if (txt == syms) {
-        txt.replace(String("\r"), String(""));     // convert Windows line break \r\n -> \n
-        importedtext += txt.toQString().toHtmlEscaped();
+        txt.replace(String(u"\r"), String(u""));     // convert Windows line break \r\n -> \n
+        importedtext += txt.toXmlEscaped();
     } else {
         // <sym> replacement made, should be no need for line break or other conversions
         importedtext += syms;
@@ -3696,10 +3696,9 @@ void MusicXMLParserDirection::wedge(const String& type, const int number,
 
 String MusicXmlExtendedSpannerDesc::toString() const
 {
-    QString string;
-    QTextStream(&string) << sp;
+    String spStr = sp ? String::number(size_t(sp->eid().id())) : u"null";
     return String(u"sp %1 tp %2 tick2 %3 track2 %4 %5 %6")
-           .arg(string, tick2.toString())
+           .arg(spStr, tick2.toString())
            .arg(static_cast<int>(track2))
            .arg(isStarted ? u"started" : u"", isStopped ? u"stopped" : u"")
     ;
@@ -4028,10 +4027,10 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
         } else if (type.isEmpty()) {
             m_logger->logError(u"empty ending type", &m_e);
         } else {
-            QStringList sl = number.toQString().split(",", Qt::SkipEmptyParts);
+            StringList sl = number.split(u',', SkipEmptyParts);
             std::vector<int> iEndingNumbers;
             bool unsupported = false;
-            foreach (const QString& s, sl) {
+            for (const String& s : sl) {
                 int iEndingNumber = s.toInt();
                 if (iEndingNumber <= 0) {
                     unsupported = true;
