@@ -427,8 +427,8 @@ private:
     void repeatAtMeasureStop(const Measure* const m, track_idx_t strack, track_idx_t etrack, track_idx_t track);
     void writeParts();
 
-    static QString elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
-    static QString positioningAttributesForTboxText(const QPointF position, float spatium);
+    static String elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm);
+    static String positioningAttributesForTboxText(const QPointF position, float spatium);
     static void identification(XmlWriter& xml, Score const* const score);
 
     Score* m_score = nullptr;
@@ -454,7 +454,7 @@ private:
 };
 
 //---------------------------------------------------------
-//   positionToQString
+//   positionToString
 //---------------------------------------------------------
 
 static String positionToString(const QPointF def, const QPointF rel, const float spatium)
@@ -469,18 +469,18 @@ static String positionToString(const QPointF def, const QPointF rel, const float
     const float relativeY =  -10 * rel.y() / spatium;
 
     // generate string representation
-    QString res;
+    String res;
     if (fabsf(defaultX) > positionElipson) {
-        res += QString(" default-x=\"%1\"").arg(QString::number(defaultX, 'f', 2));
+        res += String(u" default-x=\"%1\"").arg(String::number(defaultX, 2));
     }
     if (fabsf(defaultY) > positionElipson) {
-        res += QString(" default-y=\"%1\"").arg(QString::number(defaultY, 'f', 2));
+        res += String(u" default-y=\"%1\"").arg(String::number(defaultY, 2));
     }
     if (fabsf(relativeX) > positionElipson) {
-        res += QString(" relative-x=\"%1\"").arg(QString::number(relativeX, 'f', 2));
+        res += String(u" relative-x=\"%1\"").arg(String::number(relativeX, 2));
     }
     if (fabsf(relativeY) > positionElipson) {
-        res += QString(" relative-y=\"%1\"").arg(QString::number(relativeY, 'f', 2));
+        res += String(u" relative-y=\"%1\"").arg(String::number(relativeY, 2));
     }
 
     return res;
@@ -664,21 +664,21 @@ static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfigur
  Return \a el color.
  */
 
-static QString color2xml(const EngravingItem* el)
+static String color2xml(const EngravingItem* el)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
-        return QString(" color=\"%1\"").arg(QString::fromStdString(el->color().toString()).toUpper());
+        return String(u" color=\"%1\"").arg(String::fromStdString(el->color().toString()));
     } else if (el->isSLine() && ((SLine*)el)->lineColor() != engravingConfiguration()->defaultColor()) {
-        return QString(" color=\"%1\"").arg(QString::fromStdString(((SLine*)el)->lineColor().toString()).toUpper());
+        return String(u" color=\"%1\"").arg(String::fromStdString(((SLine*)el)->lineColor().toString()));
     } else {
-        return "";
+        return u"";
     }
 }
 
 static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
-        attrs.push_back({ "color", QString::fromStdString(el->color().toString()).toUpper() });
+        attrs.push_back({ "color", String::fromStdString(el->color().toString()) });
     }
 }
 
@@ -686,21 +686,21 @@ static void addColorAttr(const EngravingItem* el, XmlWriter::Attributes& attrs)
 //   fontStyleToXML
 //---------------------------------------------------------
 
-static QString fontStyleToXML(const FontStyle style, bool allowUnderline = true)
+static String fontStyleToXML(const FontStyle style, bool allowUnderline = true)
 {
-    QString res;
+    String res;
     if (style & FontStyle::Bold) {
-        res += " font-weight=\"bold\"";
+        res += u" font-weight=\"bold\"";
     }
     if (style & FontStyle::Italic) {
-        res += " font-style=\"italic\"";
+        res += u" font-style=\"italic\"";
     }
     if (allowUnderline && style & FontStyle::Underline) {
-        res += " underline=\"1\"";
+        res += u" underline=\"1\"";
     }
     // at places where underline is not wanted (e.g. fingering, pluck), strike is not wanted too
     if (allowUnderline && style & FontStyle::Strike) {
-        res += " line-through=\"1\"";
+        res += u" line-through=\"1\"";
     }
     return res;
 }
@@ -717,28 +717,28 @@ SlurHandler::SlurHandler()
     }
 }
 
-static QString slurTieLineStyle(const SlurTie* s)
+static String slurTieLineStyle(const SlurTie* s)
 {
-    QString lineType;
-    QString rest;
+    String lineType;
+    String rest;
     switch (s->styleType()) {
     case SlurStyleType::Dashed:
     case SlurStyleType::WideDashed:
-        lineType = "dashed";
+        lineType = u"dashed";
         break;
     case SlurStyleType::Dotted:
-        lineType = "dotted";
+        lineType = u"dotted";
         break;
     case SlurStyleType::Solid:
     default:
-        lineType = "";
+        lineType = u"";
     }
     if (!lineType.isEmpty()) {
-        rest = QString(" line-type=\"%1\"").arg(lineType);
+        rest = String(u" line-type=\"%1\"").arg(lineType);
     }
     if (s->slurDirection() != engraving::DirectionV::AUTO) {
-        rest += QString(" orientation=\"%1\"").arg(s->up() ? "over" : "under");
-        rest += QString(" placement=\"%1\"").arg(s->up() ? "above" : "below");
+        rest += String(u" orientation=\"%1\"").arg(s->up() ? u"over" : u"under");
+        rest += String(u" placement=\"%1\"").arg(s->up() ? u"above" : u"below");
     }
     rest += color2xml(s);
     return rest;
@@ -861,8 +861,8 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
     // check if on slur list (i.e. stop already seen)
     int i = findSlur(s);
     // compose tag
-    QString tagName = "slur";
-    tagName += QString(" type=\"start\"");
+    String tagName = u"slur";
+    tagName += u" type=\"start\"";
     tagName += slurTieLineStyle(s);
     tagName += ExportMusicXml::positioningAttributes(s, true);
 
@@ -871,7 +871,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
         m_slur[i] = 0;
         m_started[i] = false;
         notations.tag(xml, s);
-        tagName += QString(" number=\"%1\"").arg(i + 1);
+        tagName += String(u" number=\"%1\"").arg(i + 1);
         xml.tagRaw(tagName);
     } else {
         // find free slot to store it
@@ -880,7 +880,7 @@ void SlurHandler::doSlurStart(const Slur* s, Notations& notations, XmlWriter& xm
             m_slur[i] = s;
             m_started[i] = true;
             notations.tag(xml, s);
-            tagName += QString(" number=\"%1\"").arg(i + 1);
+            tagName += String(u" number=\"%1\"").arg(i + 1);
             xml.tagRaw(tagName);
         } else {
             LOGD("no free slur slot");
@@ -909,7 +909,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
             m_slur[i] = s;
             m_started[i] = false;
             notations.tag(xml, s);
-            QString tagName = QString("slur type=\"stop\" number=\"%1\"").arg(i + 1);
+            String tagName = String(u"slur type=\"stop\" number=\"%1\"").arg(i + 1);
             tagName += ExportMusicXml::positioningAttributes(s, false);
             xml.tagRaw(tagName);
         } else {
@@ -920,7 +920,7 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
         m_slur[i] = 0;
         m_started[i] = false;
         notations.tag(xml, s);
-        QString tagName = QString("slur type=\"stop\" number=\"%1\"").arg(i + 1);
+        String tagName = String(u"slur type=\"stop\" number=\"%1\"").arg(i + 1);
         tagName += ExportMusicXml::positioningAttributes(s, false);
         xml.tagRaw(tagName);
     }
@@ -941,20 +941,20 @@ void SlurHandler::doSlurStop(const Slur* s, Notations& notations, XmlWriter& xml
 static void glissando(const Glissando* gli, int number, bool start, Notations& notations, XmlWriter& xml)
 {
     GlissandoType st = gli->glissandoType();
-    QString tagName;
+    String tagName;
     switch (st) {
     case GlissandoType::STRAIGHT:
-        tagName = "slide line-type=\"solid\"";
+        tagName = u"slide line-type=\"solid\"";
         break;
     case GlissandoType::WAVY:
-        tagName = "glissando line-type=\"wavy\"";
+        tagName = u"glissando line-type=\"wavy\"";
         break;
     default:
         LOGD("unknown glissando subtype %d", int(st));
         return;
         break;
     }
-    tagName += QString(" number=\"%1\" type=\"%2\"").arg(number).arg(start ? "start" : "stop");
+    tagName += String(u" number=\"%1\" type=\"%2\"").arg(number).arg(start ? u"start" : u"stop");
     if (start) {
         tagName += color2xml(gli);
         tagName += ExportMusicXml::positioningAttributes(gli, start);
@@ -1300,16 +1300,16 @@ static void writePageFormat(const MStyle& s, XmlWriter& xml, double conversion)
     xml.tag("page-height", s.styleD(Sid::pageHeight) * conversion);
     xml.tag("page-width", s.styleD(Sid::pageWidth) * conversion);
 
-    QString type("both");
+    String type(u"both");
     if (s.styleB(Sid::pageTwosided)) {
-        type = "even";
+        type = u"even";
         xml.startElement("page-margins", { { "type", type } });
         xml.tag("left-margin",   s.styleD(Sid::pageEvenLeftMargin) * conversion);
         xml.tag("right-margin",  s.styleD(Sid::pageOddLeftMargin) * conversion);
         xml.tag("top-margin",    s.styleD(Sid::pageEvenTopMargin) * conversion);
         xml.tag("bottom-margin", s.styleD(Sid::pageEvenBottomMargin) * conversion);
         xml.endElement();
-        type = "odd";
+        type = u"odd";
     }
     xml.startElement("page-margins", { { "type", type } });
     xml.tag("left-margin",   s.styleD(Sid::pageOddLeftMargin) * conversion);
@@ -1467,21 +1467,21 @@ static double parentHeight(const EngravingItem* element)
 //   tidToCreditType
 //---------------------------------------------------------
 
-static QString tidToCreditType(const TextStyleType tid)
+static String tidToCreditType(const TextStyleType tid)
 {
-    QString res;
+    String res;
     switch (tid) {
     case TextStyleType::COMPOSER:
-        res = "composer";
+        res = u"composer";
         break;
     case TextStyleType::LYRICIST:
-        res = "lyricist";
+        res = u"lyricist";
         break;
     case TextStyleType::SUBTITLE:
-        res = "subtitle";
+        res = u"subtitle";
         break;
     case TextStyleType::TITLE:
-        res = "title";
+        res = u"title";
         break;
     default:
         break;
@@ -1509,35 +1509,35 @@ static void textAsCreditWords(const ExportMusicXml* const expMxml, XmlWriter& xm
     double ty = h - expMxml->getTenthsFromDots(text->pagePos().y());
 
     Align al = text->align();
-    QString just;
-    QString val;
+    String just;
+    String val;
 
     if (al == AlignH::RIGHT) {
-        just = "right";
+        just = u"right";
         tx   = w - rm;
     } else if (al == AlignH::HCENTER) {
-        just = "center";
+        just = u"center";
         // tx already set correctly
     } else {
-        just = "left";
+        just = u"left";
         tx   = lm;
     }
 
     if (al == AlignV::BOTTOM) {
-        val = "bottom";
+        val = u"bottom";
         ty -= ph;
     } else if (al == AlignV::VCENTER) {
-        val = "middle";
+        val = u"middle";
         ty -= ph / 2;
     } else if (al == AlignV::BASELINE) {
-        val = "baseline";
+        val = u"baseline";
         ty -= ph / 2;
     } else {
         val = "top";
         // ty already set correctly
     }
 
-    const QString creditType= tidToCreditType(text->textStyleType());
+    const String creditType = tidToCreditType(text->textStyleType());
 
     creditWords(xml, s, pageNr, tx, ty, just, val, text->fragmentList(), creditType);
 }
@@ -1568,7 +1568,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
     // put copyright at the bottom center of every page
     // note: as the copyright metatag contains plain text, special XML characters must be escaped
     // determine page formatting
-    const QString rights = m_score->metaTag(u"copyright");
+    const String rights = m_score->metaTag(u"copyright");
     if (!rights.isEmpty()) {
         const MStyle& style = m_score->style();
         const double bm = getTenthsFromInches(style.styleD(Sid::pageOddBottomMargin));
@@ -1581,7 +1581,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
         LOGD("page h=%g w=%g lm=%g rm=%g tm=%g bm=%g", h, w, lm, rm, tm, bm);
         */
         TextFragment f(XmlWriter::xmlString(rights));
-        f.changeFormat(FormatId::FontFamily, style.styleSt(Sid::footerFontFace).toQString());
+        f.changeFormat(FormatId::FontFamily, style.styleSt(Sid::footerFontFace));
         f.changeFormat(FormatId::FontSize, style.styleD(Sid::footerFontSize));
         std::list<TextFragment> list;
         list.push_back(f);
@@ -1916,7 +1916,7 @@ void ExportMusicXml::barlineMiddle(const BarLine* bl)
 
 String ExportMusicXml::fermataPosition(const Fermata* const fermata)
 {
-    QString res;
+    String res;
 
     if (configuration()->musicxmlExportLayout()) {
         constexpr qreal SPATIUM2TENTHS = 10;
@@ -1926,10 +1926,10 @@ String ExportMusicXml::fermataPosition(const Fermata* const fermata)
         const auto relY = -1 * SPATIUM2TENTHS * fermata->offset().y() / spatium;
 
         if (qAbs(defY) >= EPSILON) {
-            res += QString(" default-y=\"%1\"").arg(QString::number(defY, 'f', 2));
+            res += String(u" default-y=\"%1\"").arg(String::number(defY, 2));
         }
         if (qAbs(relY) >= EPSILON) {
-            res += QString(" relative-y=\"%1\"").arg(QString::number(relY, 'f', 2));
+            res += String(u" relative-y=\"%1\"").arg(String::number(relY, 2));
         }
     }
 
@@ -2848,7 +2848,7 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
     // mscore only supports wavy-line with trill-mark
     notations.tag(xml, tr);
     ornaments.tag(xml);
-    xml.tagRaw("trill-mark" + color2xml(tr));
+    xml.tagRaw(u"trill-mark" + color2xml(tr));
     writeAccidental(xml, u"accidental-mark", tr->accidental());
     String tagName = u"wavy-line type=\"start\"";
     tagName += String(u" number=\"%1\"").arg(number + 1);
@@ -4027,9 +4027,9 @@ static void writePitch(XmlWriter& xml, const Note* const note, const bool useDru
 //   elementPosition
 //---------------------------------------------------------
 
-QString ExportMusicXml::elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm)
+String ExportMusicXml::elementPosition(const ExportMusicXml* const expMxml, const EngravingItem* const elm)
 {
-    QString res;
+    String res;
 
     if (configuration()->musicxmlExportLayout()) {
         const double pageHeight  = expMxml->getTenthsFromInches(expMxml->score()->style().styleD(Sid::pageHeight));
@@ -4044,8 +4044,8 @@ QString ExportMusicXml::elementPosition(const ExportMusicXml* const expMxml, con
         double noteX = expMxml->getTenthsFromDots(elm->pagePos().x());
         double noteY = pageHeight - expMxml->getTenthsFromDots(elm->pagePos().y());
 
-        res += QString(" default-x=\"%1\"").arg(QString::number(noteX - measureX, 'f', 2));
-        res += QString(" default-y=\"%1\"").arg(QString::number(noteY - measureY, 'f', 2));
+        res += String(u" default-x=\"%1\"").arg(String::number(noteX - measureX, 2));
+        res += String(u" default-y=\"%1\"").arg(String::number(noteY - measureY, 2));
     }
 
     return res;
@@ -4093,7 +4093,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
         int velo = note->userVelocity();
         if (velo != 0) {
-            noteTag += QString(" dynamics=\"%1\"").arg(QString::number(velo * 100.0 / 90.0, 'f', 2));
+            noteTag += String(u" dynamics=\"%1\"").arg(String::number(velo * 100.0 / 90.0, 2));
         }
 
         m_xml.startElementRaw(noteTag);
@@ -4816,7 +4816,7 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 //   positioningAttributesForTboxText
 //---------------------------------------------------------
 
-QString ExportMusicXml::positioningAttributesForTboxText(const QPointF position, float spatium)
+String ExportMusicXml::positioningAttributesForTboxText(const QPointF position, float spatium)
 {
     if (!configuration()->musicxmlExportLayout()) {
         return "";
