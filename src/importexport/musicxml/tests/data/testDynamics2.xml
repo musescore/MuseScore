@@ -224,7 +224,7 @@
             </dynamics>
           </direction-type>
         <staff>2</staff>
-        <sound dynamics="140.00"/>
+        <sound dynamics="140"/>
         </direction>
       <note>
         <pitch>

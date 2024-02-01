@@ -196,7 +196,7 @@
             <fff/>
             </dynamics>
           </direction-type>
-        <sound dynamics="140.00"/>
+        <sound dynamics="140"/>
         </direction>
       <note>
         <pitch>
