@@ -36,7 +36,7 @@
 
 using AccidentalType = mu::engraving::AccidentalType;
 using SymId = mu::engraving::SymId;
-const static std::map<String, AccidentalType> smuflAccidentalTypes {
+const static std::map<mu::String, AccidentalType> smuflAccidentalTypes {
     { u"accidentalDoubleFlatOneArrowDown",                AccidentalType::DOUBLE_FLAT_ONE_ARROW_DOWN },
     { u"accidentalFlatOneArrowDown",                      AccidentalType::FLAT_ONE_ARROW_DOWN },
     { u"accidentalNaturalOneArrowDown",                   AccidentalType::NATURAL_ONE_ARROW_DOWN },
@@ -340,7 +340,7 @@ String errorStringWithLocation(int line, int col, const String& error)
 String checkAtEndElement(const QXmlStreamReader& e, const String& expName)
 {
     if (e.isEndElement() && e.name() == expName) {
-        return "";
+        return u"";
     }
 
     String res = mtrc("iex_musicxml", "expected token type and name ‘EndElement %1’, actual ‘%2 %3’")

@@ -4819,7 +4819,7 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 String ExportMusicXml::positioningAttributesForTboxText(const QPointF position, float spatium)
 {
     if (!configuration()->musicxmlExportLayout()) {
-        return "";
+        return u"";
     }
 
     QPointF relative;         // use zero relative position
@@ -4974,8 +4974,8 @@ static size_t findDynamicInString(const String& s, size_t& length, String& type)
 
 static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool isStart = true)
 {
-    auto text = isStart ? tlb->beginText() : tlb->endText();
-    while (text != "") {
+    String text = isStart ? tlb->beginText() : tlb->endText();
+    while (text != u"") {
         size_t dynamicLength = 0;
         String dynamicsType;
         size_t dynamicPosition = findDynamicInString(text, dynamicLength, dynamicsType);
@@ -4990,10 +4990,10 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
             tag += color2xml(tlb);
             tag += ExportMusicXml::positioningAttributes(tlb, isStart);
-            xml.tagRaw(tag, dynamicPosition == -1 ? text : text.left(dynamicPosition));
+            xml.tagRaw(tag, dynamicPosition == mu::nidx ? text : text.left(dynamicPosition));
             xml.endElement();
-            if (dynamicPosition == -1) {
-                text = "";
+            if (dynamicPosition == mu::nidx) {
+                text = u"";
             } else if (dynamicPosition > 0) {
                 text.remove(0, dynamicPosition);
                 dynamicPosition = 0;

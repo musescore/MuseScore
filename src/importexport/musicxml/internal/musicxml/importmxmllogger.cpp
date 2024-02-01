@@ -31,11 +31,13 @@ namespace mu::engraving {
 //   xmlLocation
 //---------------------------------------------------------
 
-static String xmlLocation(const QXmlStreamReader* const xmlreader)
+static String xmlLocation(const QXmlStreamReader* xmlreader)
 {
     String loc;
     if (xmlreader) {
-        loc = String(u" at line %1 col %2").arg(xmlreader->lineNumber()).arg(xmlreader->columnNumber());
+        loc = String(u" at line %1 col %2")
+              .arg(size_t(xmlreader->lineNumber()))
+              .arg(size_t(xmlreader->columnNumber()));
     }
     return loc;
 }
@@ -43,7 +45,7 @@ static String xmlLocation(const QXmlStreamReader* const xmlreader)
 //---------------------------------------------------------
 //   logDebugTrace
 //---------------------------------------------------------
-static void to_xml_log(MxmlLogger::Level level, const String& text, const QXmlStreamReader* const xmlreader)
+static void to_xml_log(MxmlLogger::Level level, const String& text, const QXmlStreamReader* xmlreader)
 {
     String str;
     switch (level) {
