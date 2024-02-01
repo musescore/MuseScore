@@ -22,6 +22,8 @@
 
 #include "soundflag.h"
 
+#include "draw/fontmetrics.h"
+
 #include "undo.h"
 
 using namespace mu::engraving;
@@ -35,6 +37,16 @@ SoundFlag::SoundFlag(Segment* parent)
     : TextBase(ElementType::SOUND_FLAG, parent, TextStyleType::DEFAULT, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&SOUND_FLAG_STYLE);
+
+    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+
+    static constexpr double DEFAULT_FONT_SIZE = 8.0;
+    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
+}
+
+bool SoundFlag::isEditable() const
+{
+    return false;
 }
 
 SoundFlag* SoundFlag::clone() const
@@ -62,7 +74,46 @@ void SoundFlag::setParams(const Params& params)
     m_params = params;
 }
 
-void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params)
+bool SoundFlag::isTextVisible() const
 {
-    score()->undo(new ChangeSoundFlag(this, presets, params));
+    return m_isTextVisible;
+}
+
+void SoundFlag::setIsTextVisible(bool visible)
+{
+    m_isTextVisible = visible;
+}
+
+void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params, bool isTextVisible)
+{
+    score()->undo(new ChangeSoundFlag(this, presets, params, isTextVisible));
+    triggerLayout();
+}
+
+char16_t SoundFlag::iconCode() const
+{
+    return 0xEF4E;
+}
+
+draw::Font SoundFlag::iconFont() const
+{
+    return m_iconFont;
+}
+
+mu::RectF SoundFlag::iconBBox() const
+{
+    RectF bbox = ldata()->bbox();
+    double textHeight = draw::FontMetrics::boundingRect(font(), xmlText()).height();
+    return RectF(bbox.x() - textHeight / 2.0, bbox.y() - textHeight / 2.0, textHeight * 1.5, textHeight * 1.5);
+}
+
+Color SoundFlag::iconBackgroundColor() const
+{
+    Color color = curColor();
+    if (!selected()) {
+        color = Color("#CFD5DD");
+        color.setAlpha(128);
+    }
+
+    return color;
 }

@@ -2304,6 +2304,16 @@ void SingleDraw::draw(const SystemText* item, Painter* painter)
 void SingleDraw::draw(const SoundFlag* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
+
+    const TextBase::LayoutData* ldata = item->ldata();
+
+    mu::draw::Font f(item->iconFont());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
+    painter->setPen(item->curColor());
+
+    painter->drawText(ldata->bbox(), draw::AlignLeft, Char(item->iconCode()));
+
     drawTextBase(item, painter);
 }
 
