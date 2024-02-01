@@ -1797,7 +1797,7 @@ void MusicXMLParserPass2::scorePartwise()
         }
     }
 
-    addError(checkAtEndElement(m_e, "score-partwise"));
+    addError(checkAtEndElement(m_e, u"score-partwise"));
 }
 
 //---------------------------------------------------------
@@ -1990,7 +1990,7 @@ void MusicXMLParserPass2::part()
 
     part->setShow(showPart);
 
-    addError(checkAtEndElement(m_e, "part"));
+    addError(checkAtEndElement(m_e, u"part"));
 }
 
 //---------------------------------------------------------
@@ -2476,7 +2476,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
 
     setMeasureRepeats(scoreRelStaff, measure);
 
-    addError(checkAtEndElement(m_e, "measure"));
+    addError(checkAtEndElement(m_e, u"measure"));
 }
 
 //---------------------------------------------------------
@@ -5186,7 +5186,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     int voiceInt = m_pass1.voiceToInt(voice);
     if (!m_pass1.determineStaffMoveVoice(partId, staff, voiceInt, msMove, msTrack, msVoice)) {
         m_logger->logDebugInfo(String("could not map staff %1 voice '%2'").arg(staff + 1).arg(voice), &m_e);
-        addError(checkAtEndElement(m_e, "note"));
+        addError(checkAtEndElement(m_e, u"note"));
         return 0;
     }
 
@@ -5463,7 +5463,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
         dura.set(0, 1);
     }
 
-    addError(checkAtEndElement(m_e, "note"));
+    addError(checkAtEndElement(m_e, u"note"));
 
     return note;
 }
@@ -5505,7 +5505,7 @@ void MusicXMLParserPass2::notePrintSpacingNo(Fraction& dura)
         dura.set(0, 1);
     }
 
-    addError(checkAtEndElement(m_e, "note"));
+    addError(checkAtEndElement(m_e, u"note"));
 }
 
 //---------------------------------------------------------
@@ -6965,7 +6965,7 @@ void MusicXMLParserNotations::parse()
           }
      */
 
-    addError(checkAtEndElement(m_e, "notations"));
+    addError(checkAtEndElement(m_e, u"notations"));
 }
 
 //---------------------------------------------------------
