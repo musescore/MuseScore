@@ -36,52 +36,52 @@
 
 using AccidentalType = mu::engraving::AccidentalType;
 using SymId = mu::engraving::SymId;
-const static std::map<QString, AccidentalType> smuflAccidentalTypes {
-    { "accidentalDoubleFlatOneArrowDown",                AccidentalType::DOUBLE_FLAT_ONE_ARROW_DOWN },
-    { "accidentalFlatOneArrowDown",                      AccidentalType::FLAT_ONE_ARROW_DOWN },
-    { "accidentalNaturalOneArrowDown",                   AccidentalType::NATURAL_ONE_ARROW_DOWN },
-    { "accidentalSharpOneArrowDown",                     AccidentalType::SHARP_ONE_ARROW_DOWN },
-    { "accidentalDoubleSharpOneArrowDown",               AccidentalType::DOUBLE_SHARP_ONE_ARROW_DOWN },
-    { "accidentalDoubleFlatOneArrowUp",                  AccidentalType::DOUBLE_FLAT_ONE_ARROW_UP },
-    { "accidentalFlatOneArrowUp",                        AccidentalType::FLAT_ONE_ARROW_UP },
-    { "accidentalNaturalOneArrowUp",                     AccidentalType::NATURAL_ONE_ARROW_UP },
-    { "accidentalSharpOneArrowUp",                       AccidentalType::SHARP_ONE_ARROW_UP },
-    { "accidentalDoubleSharpOneArrowUp",                 AccidentalType::DOUBLE_SHARP_ONE_ARROW_UP },
-    { "accidentalDoubleFlatTwoArrowsDown",               AccidentalType::DOUBLE_FLAT_TWO_ARROWS_DOWN },
-    { "accidentalFlatTwoArrowsDown",                     AccidentalType::FLAT_TWO_ARROWS_DOWN },
-    { "accidentalNaturalTwoArrowsDown",                  AccidentalType::NATURAL_TWO_ARROWS_DOWN },
-    { "accidentalSharpTwoArrowsDown",                    AccidentalType::SHARP_TWO_ARROWS_DOWN },
-    { "accidentalDoubleSharpTwoArrowsDown",              AccidentalType::DOUBLE_SHARP_TWO_ARROWS_DOWN },
-    { "accidentalDoubleFlatTwoArrowsUp",                 AccidentalType::DOUBLE_FLAT_TWO_ARROWS_UP },
-    { "accidentalFlatTwoArrowsUp",                       AccidentalType::FLAT_TWO_ARROWS_UP },
-    { "accidentalNaturalTwoArrowsUp",                    AccidentalType::NATURAL_TWO_ARROWS_UP },
-    { "accidentalSharpTwoArrowsUp",                      AccidentalType::SHARP_TWO_ARROWS_UP },
-    { "accidentalDoubleSharpTwoArrowsUp",                AccidentalType::DOUBLE_SHARP_TWO_ARROWS_UP },
-    { "accidentalDoubleFlatThreeArrowsDown",             AccidentalType::DOUBLE_FLAT_THREE_ARROWS_DOWN },
-    { "accidentalFlatThreeArrowsDown",                   AccidentalType::FLAT_THREE_ARROWS_DOWN },
-    { "accidentalNaturalThreeArrowsDown",                AccidentalType::NATURAL_THREE_ARROWS_DOWN },
-    { "accidentalSharpThreeArrowsDown",                  AccidentalType::SHARP_THREE_ARROWS_DOWN },
-    { "accidentalDoubleSharpThreeArrowsDown",            AccidentalType::DOUBLE_SHARP_THREE_ARROWS_DOWN },
-    { "accidentalDoubleFlatThreeArrowsUp",               AccidentalType::DOUBLE_FLAT_THREE_ARROWS_UP },
-    { "accidentalFlatThreeArrowsUp",                     AccidentalType::FLAT_THREE_ARROWS_UP },
-    { "accidentalNaturalThreeArrowsUp",                  AccidentalType::NATURAL_THREE_ARROWS_UP },
-    { "accidentalSharpThreeArrowsUp",                    AccidentalType::SHARP_THREE_ARROWS_UP },
-    { "accidentalDoubleSharpThreeArrowsUp",              AccidentalType::DOUBLE_SHARP_THREE_ARROWS_UP },
-    { "accidentalLowerOneSeptimalComma",                 AccidentalType::LOWER_ONE_SEPTIMAL_COMMA },
-    { "accidentalRaiseOneSeptimalComma",                 AccidentalType::RAISE_ONE_SEPTIMAL_COMMA },
-    { "accidentalLowerTwoSeptimalCommas",                AccidentalType::LOWER_TWO_SEPTIMAL_COMMAS },
-    { "accidentalRaiseTwoSeptimalCommas",                AccidentalType::RAISE_TWO_SEPTIMAL_COMMAS },
-    { "accidentalLowerOneUndecimalQuartertone",          AccidentalType::LOWER_ONE_UNDECIMAL_QUARTERTONE },
-    { "accidentalRaiseOneUndecimalQuartertone",          AccidentalType::RAISE_ONE_UNDECIMAL_QUARTERTONE },
-    { "accidentalLowerOneTridecimalQuartertone",         AccidentalType::LOWER_ONE_TRIDECIMAL_QUARTERTONE },
-    { "accidentalRaiseOneTridecimalQuartertone",         AccidentalType::RAISE_ONE_TRIDECIMAL_QUARTERTONE },
-    { "accidentalDoubleFlatEqualTempered",               AccidentalType::DOUBLE_FLAT_EQUAL_TEMPERED },
-    { "accidentalFlatEqualTempered",                     AccidentalType::FLAT_EQUAL_TEMPERED },
-    { "accidentalNaturalEqualTempered",                  AccidentalType::NATURAL_EQUAL_TEMPERED },
-    { "accidentalSharpEqualTempered",                    AccidentalType::SHARP_EQUAL_TEMPERED },
-    { "accidentalDoubleSharpEqualTempered",              AccidentalType::DOUBLE_SHARP_EQUAL_TEMPERED },
-    { "accidentalQuarterFlatEqualTempered",              AccidentalType::QUARTER_FLAT_EQUAL_TEMPERED },
-    { "accidentalQuarterSharpEqualTempered",             AccidentalType::QUARTER_SHARP_EQUAL_TEMPERED }
+const static std::map<String, AccidentalType> smuflAccidentalTypes {
+    { u"accidentalDoubleFlatOneArrowDown",                AccidentalType::DOUBLE_FLAT_ONE_ARROW_DOWN },
+    { u"accidentalFlatOneArrowDown",                      AccidentalType::FLAT_ONE_ARROW_DOWN },
+    { u"accidentalNaturalOneArrowDown",                   AccidentalType::NATURAL_ONE_ARROW_DOWN },
+    { u"accidentalSharpOneArrowDown",                     AccidentalType::SHARP_ONE_ARROW_DOWN },
+    { u"accidentalDoubleSharpOneArrowDown",               AccidentalType::DOUBLE_SHARP_ONE_ARROW_DOWN },
+    { u"accidentalDoubleFlatOneArrowUp",                  AccidentalType::DOUBLE_FLAT_ONE_ARROW_UP },
+    { u"accidentalFlatOneArrowUp",                        AccidentalType::FLAT_ONE_ARROW_UP },
+    { u"accidentalNaturalOneArrowUp",                     AccidentalType::NATURAL_ONE_ARROW_UP },
+    { u"accidentalSharpOneArrowUp",                       AccidentalType::SHARP_ONE_ARROW_UP },
+    { u"accidentalDoubleSharpOneArrowUp",                 AccidentalType::DOUBLE_SHARP_ONE_ARROW_UP },
+    { u"accidentalDoubleFlatTwoArrowsDown",               AccidentalType::DOUBLE_FLAT_TWO_ARROWS_DOWN },
+    { u"accidentalFlatTwoArrowsDown",                     AccidentalType::FLAT_TWO_ARROWS_DOWN },
+    { u"accidentalNaturalTwoArrowsDown",                  AccidentalType::NATURAL_TWO_ARROWS_DOWN },
+    { u"accidentalSharpTwoArrowsDown",                    AccidentalType::SHARP_TWO_ARROWS_DOWN },
+    { u"accidentalDoubleSharpTwoArrowsDown",              AccidentalType::DOUBLE_SHARP_TWO_ARROWS_DOWN },
+    { u"accidentalDoubleFlatTwoArrowsUp",                 AccidentalType::DOUBLE_FLAT_TWO_ARROWS_UP },
+    { u"accidentalFlatTwoArrowsUp",                       AccidentalType::FLAT_TWO_ARROWS_UP },
+    { u"accidentalNaturalTwoArrowsUp",                    AccidentalType::NATURAL_TWO_ARROWS_UP },
+    { u"accidentalSharpTwoArrowsUp",                      AccidentalType::SHARP_TWO_ARROWS_UP },
+    { u"accidentalDoubleSharpTwoArrowsUp",                AccidentalType::DOUBLE_SHARP_TWO_ARROWS_UP },
+    { u"accidentalDoubleFlatThreeArrowsDown",             AccidentalType::DOUBLE_FLAT_THREE_ARROWS_DOWN },
+    { u"accidentalFlatThreeArrowsDown",                   AccidentalType::FLAT_THREE_ARROWS_DOWN },
+    { u"accidentalNaturalThreeArrowsDown",                AccidentalType::NATURAL_THREE_ARROWS_DOWN },
+    { u"accidentalSharpThreeArrowsDown",                  AccidentalType::SHARP_THREE_ARROWS_DOWN },
+    { u"accidentalDoubleSharpThreeArrowsDown",            AccidentalType::DOUBLE_SHARP_THREE_ARROWS_DOWN },
+    { u"accidentalDoubleFlatThreeArrowsUp",               AccidentalType::DOUBLE_FLAT_THREE_ARROWS_UP },
+    { u"accidentalFlatThreeArrowsUp",                     AccidentalType::FLAT_THREE_ARROWS_UP },
+    { u"accidentalNaturalThreeArrowsUp",                  AccidentalType::NATURAL_THREE_ARROWS_UP },
+    { u"accidentalSharpThreeArrowsUp",                    AccidentalType::SHARP_THREE_ARROWS_UP },
+    { u"accidentalDoubleSharpThreeArrowsUp",              AccidentalType::DOUBLE_SHARP_THREE_ARROWS_UP },
+    { u"accidentalLowerOneSeptimalComma",                 AccidentalType::LOWER_ONE_SEPTIMAL_COMMA },
+    { u"accidentalRaiseOneSeptimalComma",                 AccidentalType::RAISE_ONE_SEPTIMAL_COMMA },
+    { u"accidentalLowerTwoSeptimalCommas",                AccidentalType::LOWER_TWO_SEPTIMAL_COMMAS },
+    { u"accidentalRaiseTwoSeptimalCommas",                AccidentalType::RAISE_TWO_SEPTIMAL_COMMAS },
+    { u"accidentalLowerOneUndecimalQuartertone",          AccidentalType::LOWER_ONE_UNDECIMAL_QUARTERTONE },
+    { u"accidentalRaiseOneUndecimalQuartertone",          AccidentalType::RAISE_ONE_UNDECIMAL_QUARTERTONE },
+    { u"accidentalLowerOneTridecimalQuartertone",         AccidentalType::LOWER_ONE_TRIDECIMAL_QUARTERTONE },
+    { u"accidentalRaiseOneTridecimalQuartertone",         AccidentalType::RAISE_ONE_TRIDECIMAL_QUARTERTONE },
+    { u"accidentalDoubleFlatEqualTempered",               AccidentalType::DOUBLE_FLAT_EQUAL_TEMPERED },
+    { u"accidentalFlatEqualTempered",                     AccidentalType::FLAT_EQUAL_TEMPERED },
+    { u"accidentalNaturalEqualTempered",                  AccidentalType::NATURAL_EQUAL_TEMPERED },
+    { u"accidentalSharpEqualTempered",                    AccidentalType::SHARP_EQUAL_TEMPERED },
+    { u"accidentalDoubleSharpEqualTempered",              AccidentalType::DOUBLE_SHARP_EQUAL_TEMPERED },
+    { u"accidentalQuarterFlatEqualTempered",              AccidentalType::QUARTER_FLAT_EQUAL_TEMPERED },
+    { u"accidentalQuarterSharpEqualTempered",             AccidentalType::QUARTER_SHARP_EQUAL_TEMPERED }
 };
 
 namespace mu::engraving {
@@ -328,25 +328,25 @@ void domNotImplemented(const QDomElement& e)
 //   errorStringWithLocation
 //---------------------------------------------------------
 
-QString errorStringWithLocation(int line, int col, const QString& error)
+String errorStringWithLocation(int line, int col, const String& error)
 {
-    return qtrc("iex_musicxml", "line %1, column %2:").arg(line).arg(col) + " " + error;
+    return mtrc("iex_musicxml", "line %1, column %2:").arg(line).arg(col) + u" " + error;
 }
 
 //---------------------------------------------------------
 //   checkAtEndElement
 //---------------------------------------------------------
 
-QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
+String checkAtEndElement(const QXmlStreamReader& e, const String& expName)
 {
     if (e.isEndElement() && e.name() == expName) {
         return "";
     }
 
-    QString res = qtrc("iex_musicxml", "expected token type and name ‘EndElement %1’, actual ‘%2 %3’")
-                  .arg(expName)
-                  .arg(e.tokenString())
-                  .arg(e.name().toString());
+    String res = mtrc("iex_musicxml", "expected token type and name ‘EndElement %1’, actual ‘%2 %3’")
+                 .arg(expName)
+                 .arg(e.tokenString())
+                 .arg(e.name().toString());
     return res;
 }
 
@@ -363,11 +363,11 @@ QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
  Note that non-integer values cannot be handled by mscore.
  */
 
-int MxmlSupport::stringToInt(const QString& s, bool* ok)
+int MxmlSupport::stringToInt(const String& s, bool* ok)
 {
     int res = 0;
-    QString str = s;
-    if (s.endsWith(".0")) {
+    String str = s;
+    if (s.endsWith(u".0")) {
         str = s.left(s.size() - 2);
     }
     res = str.toInt(ok);
@@ -405,35 +405,35 @@ Fraction MxmlSupport::durationAsFraction(const int divisions, const QDomElement 
  Convert MusicXML note type to fraction.
  */
 
-Fraction MxmlSupport::noteTypeToFraction(QString type)
+Fraction MxmlSupport::noteTypeToFraction(const String& type)
 {
-    if (type == "1024th") {
+    if (type == u"1024th") {
         return Fraction(1, 1024);
-    } else if (type == "512th") {
+    } else if (type == u"512th") {
         return Fraction(1, 512);
-    } else if (type == "256th") {
+    } else if (type == u"256th") {
         return Fraction(1, 256);
-    } else if (type == "128th") {
+    } else if (type == u"128th") {
         return Fraction(1, 128);
-    } else if (type == "64th") {
+    } else if (type == u"64th") {
         return Fraction(1, 64);
-    } else if (type == "32nd") {
+    } else if (type == u"32nd") {
         return Fraction(1, 32);
-    } else if (type == "16th") {
+    } else if (type == u"16th") {
         return Fraction(1, 16);
-    } else if (type == "eighth") {
+    } else if (type == u"eighth") {
         return Fraction(1, 8);
-    } else if (type == "quarter") {
+    } else if (type == u"quarter") {
         return Fraction(1, 4);
-    } else if (type == "half") {
+    } else if (type == u"half") {
         return Fraction(1, 2);
-    } else if (type == "whole") {
+    } else if (type == u"whole") {
         return Fraction(1, 1);
-    } else if (type == "breve") {
+    } else if (type == u"breve") {
         return Fraction(2, 1);
-    } else if (type == "long") {
+    } else if (type == u"long") {
         return Fraction(4, 1);
-    } else if (type == "maxima") {
+    } else if (type == u"maxima") {
         return Fraction(8, 1);
     } else {
         return Fraction(0, 0);
@@ -448,7 +448,7 @@ Fraction MxmlSupport::noteTypeToFraction(QString type)
  Convert note type, number of dots and actual and normal notes into a duration
  */
 
-Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes, int actualNotes)
+Fraction MxmlSupport::calculateFraction(const String& type, int dots, int normalNotes, int actualNotes)
 {
     // type
     Fraction f = MxmlSupport::noteTypeToFraction(type);
@@ -473,98 +473,98 @@ Fraction MxmlSupport::calculateFraction(QString type, int dots, int normalNotes,
 //   accSymId2MxmlString
 //---------------------------------------------------------
 
-QString accSymId2MxmlString(const SymId id)
+String accSymId2MxmlString(const SymId id)
 {
-    QString s;
+    String s;
     switch (id) {
-    case SymId::accidentalSharp:                 s = "sharp";
+    case SymId::accidentalSharp:                 s = u"sharp";
         break;
-    case SymId::accidentalNatural:               s = "natural";
+    case SymId::accidentalNatural:               s = u"natural";
         break;
-    case SymId::accidentalFlat:                  s = "flat";
+    case SymId::accidentalFlat:                  s = u"flat";
         break;
-    case SymId::accidentalDoubleSharp:           s = "double-sharp";
+    case SymId::accidentalDoubleSharp:           s = u"double-sharp";
         break;
-    //case SymId::accidentalDoubleSharp:           s = "sharp-sharp"; break; // see above
-    //case SymId::accidentalDoubleFlat:            s = "double-flat"; break; // doesn't exist in MusicXML, but see below
-    case SymId::accidentalDoubleFlat:            s = "flat-flat";
+    //case SymId::accidentalDoubleSharp:           s = u"sharp-sharp"; break; // see above
+    //case SymId::accidentalDoubleFlat:            s = u"double-flat"; break; // doesn't exist in MusicXML, but see below
+    case SymId::accidentalDoubleFlat:            s = u"flat-flat";
         break;
-    case SymId::accidentalNaturalSharp:          s = "natural-sharp";
+    case SymId::accidentalNaturalSharp:          s = u"natural-sharp";
         break;
-    case SymId::accidentalNaturalFlat:           s = "natural-flat";
+    case SymId::accidentalNaturalFlat:           s = u"natural-flat";
         break;
-    case SymId::accidentalQuarterToneFlatStein:  s = "quarter-flat";
+    case SymId::accidentalQuarterToneFlatStein:  s = u"quarter-flat";
         break;
-    case SymId::accidentalQuarterToneSharpStein: s = "quarter-sharp";
+    case SymId::accidentalQuarterToneSharpStein: s = u"quarter-sharp";
         break;
-    case SymId::accidentalThreeQuarterTonesFlatZimmermann: s = "three-quarters-flat";
+    case SymId::accidentalThreeQuarterTonesFlatZimmermann: s = u"three-quarters-flat";
         break;
-    //case SymId::noSym:                                     s = "three-quarters-flat";  break; // AccidentalType::FLAT_FLAT_SLASH, MuseScore 1?
-    case SymId::accidentalThreeQuarterTonesSharpStein:     s = "three-quarters-sharp";
+    //case SymId::noSym:                                     s = u"three-quarters-flat";  break; // AccidentalType::FLAT_FLAT_SLASH, MuseScore 1?
+    case SymId::accidentalThreeQuarterTonesSharpStein:     s = u"three-quarters-sharp";
         break;
-    case SymId::accidentalQuarterToneSharpArrowDown:       s = "sharp-down";
+    case SymId::accidentalQuarterToneSharpArrowDown:       s = u"sharp-down";
         break;
-    case SymId::accidentalThreeQuarterTonesSharpArrowUp:   s = "sharp-up";
+    case SymId::accidentalThreeQuarterTonesSharpArrowUp:   s = u"sharp-up";
         break;
-    case SymId::accidentalQuarterToneFlatNaturalArrowDown: s = "natural-down";
+    case SymId::accidentalQuarterToneFlatNaturalArrowDown: s = u"natural-down";
         break;
-    case SymId::accidentalQuarterToneSharpNaturalArrowUp:  s = "natural-up";
+    case SymId::accidentalQuarterToneSharpNaturalArrowUp:  s = u"natural-up";
         break;
-    case SymId::accidentalThreeQuarterTonesFlatArrowDown:  s = "flat-down";
+    case SymId::accidentalThreeQuarterTonesFlatArrowDown:  s = u"flat-down";
         break;
-    case SymId::accidentalQuarterToneFlatArrowUp:          s = "flat-up";
+    case SymId::accidentalQuarterToneFlatArrowUp:          s = u"flat-up";
         break;
-    case SymId::accidentalThreeQuarterTonesSharpArrowDown: s = "double-sharp-down";
+    case SymId::accidentalThreeQuarterTonesSharpArrowDown: s = u"double-sharp-down";
         break;
-    case SymId::accidentalFiveQuarterTonesSharpArrowUp:    s = "double-sharp-up";
+    case SymId::accidentalFiveQuarterTonesSharpArrowUp:    s = u"double-sharp-up";
         break;
-    case SymId::accidentalFiveQuarterTonesFlatArrowDown:   s = "flat-flat-down";
+    case SymId::accidentalFiveQuarterTonesFlatArrowDown:   s = u"flat-flat-down";
         break;
-    case SymId::accidentalThreeQuarterTonesFlatArrowUp:    s = "flat-flat-up";
-        break;
-
-    case SymId::accidentalArrowDown:             s = "arrow-down";
-        break;
-    case SymId::accidentalArrowUp:               s = "arrow-up";
+    case SymId::accidentalThreeQuarterTonesFlatArrowUp:    s = u"flat-flat-up";
         break;
 
-    case SymId::accidentalTripleSharp:           s = "triple-sharp";
+    case SymId::accidentalArrowDown:             s = u"arrow-down";
         break;
-    case SymId::accidentalTripleFlat:            s = "triple-flat";
-        break;
-
-    case SymId::accidentalKucukMucennebSharp:    s = "slash-quarter-sharp";
-        break;
-    case SymId::accidentalBuyukMucennebSharp:    s = "slash-sharp";
-        break;
-    case SymId::accidentalBakiyeFlat:            s = "slash-flat";
-        break;
-    case SymId::accidentalBuyukMucennebFlat:     s = "double-slash-flat";
+    case SymId::accidentalArrowUp:               s = u"arrow-up";
         break;
 
-    case SymId::accidental1CommaSharp:           s = "sharp-1";
+    case SymId::accidentalTripleSharp:           s = u"triple-sharp";
         break;
-    case SymId::accidental2CommaSharp:           s = "sharp-2";
-        break;
-    case SymId::accidental3CommaSharp:           s = "sharp-3";
-        break;
-    case SymId::accidental5CommaSharp:           s = "sharp-5";
-        break;
-    case SymId::accidental1CommaFlat:            s = "flat-1";
-        break;
-    case SymId::accidental2CommaFlat:            s = "flat-2";
-        break;
-    case SymId::accidental3CommaFlat:            s = "flat-3";
-        break;
-    case SymId::accidental4CommaFlat:            s = "flat-4";
+    case SymId::accidentalTripleFlat:            s = u"triple-flat";
         break;
 
-    case SymId::accidentalSori:                  s = "sori";
+    case SymId::accidentalKucukMucennebSharp:    s = u"slash-quarter-sharp";
         break;
-    case SymId::accidentalKoron:                 s = "koron";
+    case SymId::accidentalBuyukMucennebSharp:    s = u"slash-sharp";
+        break;
+    case SymId::accidentalBakiyeFlat:            s = u"slash-flat";
+        break;
+    case SymId::accidentalBuyukMucennebFlat:     s = u"double-slash-flat";
+        break;
+
+    case SymId::accidental1CommaSharp:           s = u"sharp-1";
+        break;
+    case SymId::accidental2CommaSharp:           s = u"sharp-2";
+        break;
+    case SymId::accidental3CommaSharp:           s = u"sharp-3";
+        break;
+    case SymId::accidental5CommaSharp:           s = u"sharp-5";
+        break;
+    case SymId::accidental1CommaFlat:            s = u"flat-1";
+        break;
+    case SymId::accidental2CommaFlat:            s = u"flat-2";
+        break;
+    case SymId::accidental3CommaFlat:            s = u"flat-3";
+        break;
+    case SymId::accidental4CommaFlat:            s = u"flat-4";
+        break;
+
+    case SymId::accidentalSori:                  s = u"sori";
+        break;
+    case SymId::accidentalKoron:                 s = u"koron";
         break;
     default:
-        s = "other";
+        s = u"other";
         LOGD("accSymId2MxmlString: unknown accidental %d", static_cast<int>(id));
     }
     return s;
@@ -574,9 +574,9 @@ QString accSymId2MxmlString(const SymId id)
 //   accSymId2SmuflMxmlString
 //---------------------------------------------------------
 
-QString accSymId2SmuflMxmlString(const SymId id)
+String accSymId2SmuflMxmlString(const SymId id)
 {
-    return SymNames::nameForSymId(id).ascii();
+    return String::fromAscii(SymNames::nameForSymId(id).ascii());
 }
 
 //---------------------------------------------------------
@@ -584,63 +584,63 @@ QString accSymId2SmuflMxmlString(const SymId id)
 // see https://github.com/w3c/musicxml/blob/6e3a667b85855b04d7e4548ea508b537bc29fc52/schema/musicxml.xsd#L1392-L1439
 //---------------------------------------------------------
 
-SymId mxmlString2accSymId(const QString mxmlName, const QString smufl)
+SymId mxmlString2accSymId(const String mxmlName, const String smufl)
 {
-    static std::map<QString, SymId> map;   // map MusicXML accidental name to MuseScore enum SymId
+    static std::map<String, SymId> map;   // map MusicXML accidental name to MuseScore enum SymId
     if (map.empty()) {
-        map["sharp"] = SymId::accidentalSharp;
-        map["natural"] = SymId::accidentalNatural;
-        map["flat"] = SymId::accidentalFlat;
-        map["double-sharp"] = SymId::accidentalDoubleSharp;
-        map["sharp-sharp"] = SymId::accidentalDoubleSharp;
-        //map["double-flat"] = SymId::accidentalDoubleFlat; // shouldn't harm, but doesn't exist in MusicXML
-        map["flat-flat"] = SymId::accidentalDoubleFlat;
-        map["natural-sharp"] = SymId::accidentalNaturalSharp;
-        map["natural-flat"] = SymId::accidentalNaturalFlat;
+        map[u"sharp"] = SymId::accidentalSharp;
+        map[u"natural"] = SymId::accidentalNatural;
+        map[u"flat"] = SymId::accidentalFlat;
+        map[u"double-sharp"] = SymId::accidentalDoubleSharp;
+        map[u"sharp-sharp"] = SymId::accidentalDoubleSharp;
+        //map[u"double-flat"] = SymId::accidentalDoubleFlat; // shouldn't harm, but doesn't exist in MusicXML
+        map[u"flat-flat"] = SymId::accidentalDoubleFlat;
+        map[u"natural-sharp"] = SymId::accidentalNaturalSharp;
+        map[u"natural-flat"] = SymId::accidentalNaturalFlat;
 
-        map["quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
-        map["quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
-        map["three-quarters-flat"] = SymId::accidentalThreeQuarterTonesFlatZimmermann;
-        map["three-quarters-sharp"] = SymId::accidentalThreeQuarterTonesSharpStein;
+        map[u"quarter-flat"] = SymId::accidentalQuarterToneFlatStein;
+        map[u"quarter-sharp"] = SymId::accidentalQuarterToneSharpStein;
+        map[u"three-quarters-flat"] = SymId::accidentalThreeQuarterTonesFlatZimmermann;
+        map[u"three-quarters-sharp"] = SymId::accidentalThreeQuarterTonesSharpStein;
 
-        map["sharp-down"] = SymId::accidentalQuarterToneSharpArrowDown;
-        map["sharp-up"] = SymId::accidentalThreeQuarterTonesSharpArrowUp;
-        map["natural-down"] = SymId::accidentalQuarterToneFlatNaturalArrowDown;
-        map["natural-up"] = SymId::accidentalQuarterToneSharpNaturalArrowUp;
-        map["flat-down"] = SymId::accidentalThreeQuarterTonesFlatArrowDown;
-        map["flat-up"] = SymId::accidentalQuarterToneFlatArrowUp;
-        map["double-sharp-down"] = SymId::accidentalThreeQuarterTonesSharpArrowDown;
-        map["double-sharp-up"] = SymId::accidentalFiveQuarterTonesSharpArrowUp;
-        map["flat-flat-down"] = SymId::accidentalFiveQuarterTonesFlatArrowDown;
-        map["flat-flat-up"] = SymId::accidentalThreeQuarterTonesFlatArrowUp;
+        map[u"sharp-down"] = SymId::accidentalQuarterToneSharpArrowDown;
+        map[u"sharp-up"] = SymId::accidentalThreeQuarterTonesSharpArrowUp;
+        map[u"natural-down"] = SymId::accidentalQuarterToneFlatNaturalArrowDown;
+        map[u"natural-up"] = SymId::accidentalQuarterToneSharpNaturalArrowUp;
+        map[u"flat-down"] = SymId::accidentalThreeQuarterTonesFlatArrowDown;
+        map[u"flat-up"] = SymId::accidentalQuarterToneFlatArrowUp;
+        map[u"double-sharp-down"] = SymId::accidentalThreeQuarterTonesSharpArrowDown;
+        map[u"double-sharp-up"] = SymId::accidentalFiveQuarterTonesSharpArrowUp;
+        map[u"flat-flat-down"] = SymId::accidentalFiveQuarterTonesFlatArrowDown;
+        map[u"flat-flat-up"] = SymId::accidentalThreeQuarterTonesFlatArrowUp;
 
-        map["arrow-down"] = SymId::accidentalArrowDown;
-        map["arrow-up"] = SymId::accidentalArrowUp;
+        map[u"arrow-down"] = SymId::accidentalArrowDown;
+        map[u"arrow-up"] = SymId::accidentalArrowUp;
 
-        map["triple-sharp"] = SymId::accidentalTripleSharp;
-        map["triple-flat"] = SymId::accidentalTripleFlat;
+        map[u"triple-sharp"] = SymId::accidentalTripleSharp;
+        map[u"triple-flat"] = SymId::accidentalTripleFlat;
 
-        map["slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
-        map["slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
-        map["slash-flat"] = SymId::accidentalBakiyeFlat;
-        map["double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
+        map[u"slash-quarter-sharp"] = SymId::accidentalKucukMucennebSharp;
+        map[u"slash-sharp"] = SymId::accidentalBuyukMucennebSharp;
+        map[u"slash-flat"] = SymId::accidentalBakiyeFlat;
+        map[u"double-slash-flat"] = SymId::accidentalBuyukMucennebFlat;
 
-        map["sharp-1"] = SymId::accidental1CommaSharp;
-        map["sharp-2"] = SymId::accidental2CommaSharp;
-        map["sharp-3"] = SymId::accidental3CommaSharp;
-        map["sharp-5"] = SymId::accidental5CommaSharp;
-        map["flat-1"] = SymId::accidental1CommaFlat;
-        map["flat-2"] = SymId::accidental2CommaFlat;
-        map["flat-3"] = SymId::accidental3CommaFlat;
-        map["flat-4"] = SymId::accidental4CommaFlat;
+        map[u"sharp-1"] = SymId::accidental1CommaSharp;
+        map[u"sharp-2"] = SymId::accidental2CommaSharp;
+        map[u"sharp-3"] = SymId::accidental3CommaSharp;
+        map[u"sharp-5"] = SymId::accidental5CommaSharp;
+        map[u"flat-1"] = SymId::accidental1CommaFlat;
+        map[u"flat-2"] = SymId::accidental2CommaFlat;
+        map[u"flat-3"] = SymId::accidental3CommaFlat;
+        map[u"flat-4"] = SymId::accidental4CommaFlat;
 
-        map["sori"] = SymId::accidentalSori;
-        map["koron"] = SymId::accidentalKoron;
+        map[u"sori"] = SymId::accidentalSori;
+        map[u"koron"] = SymId::accidentalKoron;
     }
 
     if (mu::contains(map, mxmlName)) {
         return map.at(mxmlName);
-    } else if (mxmlName == "other") {
+    } else if (mxmlName == u"other") {
         return SymNames::symIdByName(smufl);
     } else {
         LOGD("mxmlString2accSymId: unknown accidental '%s'", qPrintable(mxmlName));
@@ -654,98 +654,98 @@ SymId mxmlString2accSymId(const QString mxmlName, const QString smufl)
 //   accidentalType2MxmlString
 //---------------------------------------------------------
 
-QString accidentalType2MxmlString(const AccidentalType type)
+String accidentalType2MxmlString(const AccidentalType type)
 {
-    QString s;
+    String s;
     switch (type) {
-    case AccidentalType::SHARP:              s = "sharp";
+    case AccidentalType::SHARP:              s = u"sharp";
         break;
-    case AccidentalType::NATURAL:            s = "natural";
+    case AccidentalType::NATURAL:            s = u"natural";
         break;
-    case AccidentalType::FLAT:               s = "flat";
+    case AccidentalType::FLAT:               s = u"flat";
         break;
-    case AccidentalType::SHARP2:             s = "double-sharp";
+    case AccidentalType::SHARP2:             s = u"double-sharp";
         break;
-    //case AccidentalType::SHARP2:             s = "sharp-sharp"; break; // see above
-    //case AccidentalType::FLAT2:              s = "double-flat"; break; // doesn't exist in MusicXML, but see below
-    case AccidentalType::FLAT2:              s = "flat-flat";
+    //case AccidentalType::SHARP2:             s = u"sharp-sharp"; break; // see above
+    //case AccidentalType::FLAT2:              s = u"double-flat"; break; // doesn't exist in MusicXML, but see below
+    case AccidentalType::FLAT2:              s = u"flat-flat";
         break;
-    case AccidentalType::NATURAL_SHARP:      s = "natural-sharp";
+    case AccidentalType::NATURAL_SHARP:      s = u"natural-sharp";
         break;
-    case AccidentalType::NATURAL_FLAT:       s = "natural-flat";
+    case AccidentalType::NATURAL_FLAT:       s = u"natural-flat";
         break;
-    case AccidentalType::SHARP_ARROW_UP:     s = "sharp-up";
+    case AccidentalType::SHARP_ARROW_UP:     s = u"sharp-up";
         break;
-    case AccidentalType::MIRRORED_FLAT:      s = "quarter-flat";
+    case AccidentalType::MIRRORED_FLAT:      s = u"quarter-flat";
         break;
-    case AccidentalType::SHARP_SLASH:        s = "quarter-sharp";
+    case AccidentalType::SHARP_SLASH:        s = u"quarter-sharp";
         break;
-    case AccidentalType::MIRRORED_FLAT2:     s = "three-quarters-flat";
+    case AccidentalType::MIRRORED_FLAT2:     s = u"three-quarters-flat";
         break;
-    //case AccidentalType::FLAT_FLAT_SLASH:    s = "three-quarters-flat";  break; // MuseScore 1?
-    case AccidentalType::SHARP_SLASH4:       s = "three-quarters-sharp";
+    //case AccidentalType::FLAT_FLAT_SLASH:    s = u"three-quarters-flat";  break; // MuseScore 1?
+    case AccidentalType::SHARP_SLASH4:       s = u"three-quarters-sharp";
         break;
-    case AccidentalType::SHARP_ARROW_DOWN:   s = "sharp-down";
+    case AccidentalType::SHARP_ARROW_DOWN:   s = u"sharp-down";
         break;
-    case AccidentalType::NATURAL_ARROW_UP:   s = "natural-up";
+    case AccidentalType::NATURAL_ARROW_UP:   s = u"natural-up";
         break;
-    case AccidentalType::NATURAL_ARROW_DOWN: s = "natural-down";
+    case AccidentalType::NATURAL_ARROW_DOWN: s = u"natural-down";
         break;
-    case AccidentalType::FLAT_ARROW_DOWN:    s = "flat-down";
+    case AccidentalType::FLAT_ARROW_DOWN:    s = u"flat-down";
         break;
-    case AccidentalType::FLAT_ARROW_UP:      s = "flat-up";
+    case AccidentalType::FLAT_ARROW_UP:      s = u"flat-up";
         break;
-    case AccidentalType::SHARP2_ARROW_DOWN:  s = "double-sharp-down";
+    case AccidentalType::SHARP2_ARROW_DOWN:  s = u"double-sharp-down";
         break;
-    case AccidentalType::SHARP2_ARROW_UP:    s = "double-sharp-up";
+    case AccidentalType::SHARP2_ARROW_UP:    s = u"double-sharp-up";
         break;
-    case AccidentalType::FLAT2_ARROW_DOWN:   s = "flat-flat-down";
+    case AccidentalType::FLAT2_ARROW_DOWN:   s = u"flat-flat-down";
         break;
-    case AccidentalType::FLAT2_ARROW_UP:     s = "flat-flat-up";
-        break;
-
-    case AccidentalType::ARROW_DOWN:         s = "arrow-down";
-        break;
-    case AccidentalType::ARROW_UP:           s = "arrow-up";
+    case AccidentalType::FLAT2_ARROW_UP:     s = u"flat-flat-up";
         break;
 
-    case AccidentalType::SHARP3:             s = "triple-sharp";
+    case AccidentalType::ARROW_DOWN:         s = u"arrow-down";
         break;
-    case AccidentalType::FLAT3:              s = "triple-flat";
-        break;
-
-    case AccidentalType::SHARP_SLASH3:       s = "slash-quarter-sharp";
-        break;
-    case AccidentalType::SHARP_SLASH2:       s = "slash-sharp";
-        break;
-    case AccidentalType::FLAT_SLASH:         s = "slash-flat";
-        break;
-    case AccidentalType::FLAT_SLASH2:        s = "double-slash-flat";
+    case AccidentalType::ARROW_UP:           s = u"arrow-up";
         break;
 
-    case AccidentalType::ONE_COMMA_SHARP:    s = "sharp-1";
+    case AccidentalType::SHARP3:             s = u"triple-sharp";
         break;
-    case AccidentalType::TWO_COMMA_SHARP:    s = "sharp-2";
-        break;
-    case AccidentalType::THREE_COMMA_SHARP:  s = "sharp-3";
-        break;
-    case AccidentalType::FIVE_COMMA_SHARP:   s = "sharp-5";
-        break;
-    case AccidentalType::ONE_COMMA_FLAT:     s = "flat-1";
-        break;
-    case AccidentalType::TWO_COMMA_FLAT:     s = "flat-2";
-        break;
-    case AccidentalType::THREE_COMMA_FLAT:   s = "flat-3";
-        break;
-    case AccidentalType::FOUR_COMMA_FLAT:    s = "flat-4";
+    case AccidentalType::FLAT3:              s = u"triple-flat";
         break;
 
-    case AccidentalType::SORI:               s = "sori";
+    case AccidentalType::SHARP_SLASH3:       s = u"slash-quarter-sharp";
         break;
-    case AccidentalType::KORON:              s = "koron";
+    case AccidentalType::SHARP_SLASH2:       s = u"slash-sharp";
+        break;
+    case AccidentalType::FLAT_SLASH:         s = u"slash-flat";
+        break;
+    case AccidentalType::FLAT_SLASH2:        s = u"double-slash-flat";
+        break;
+
+    case AccidentalType::ONE_COMMA_SHARP:    s = u"sharp-1";
+        break;
+    case AccidentalType::TWO_COMMA_SHARP:    s = u"sharp-2";
+        break;
+    case AccidentalType::THREE_COMMA_SHARP:  s = u"sharp-3";
+        break;
+    case AccidentalType::FIVE_COMMA_SHARP:   s = u"sharp-5";
+        break;
+    case AccidentalType::ONE_COMMA_FLAT:     s = u"flat-1";
+        break;
+    case AccidentalType::TWO_COMMA_FLAT:     s = u"flat-2";
+        break;
+    case AccidentalType::THREE_COMMA_FLAT:   s = u"flat-3";
+        break;
+    case AccidentalType::FOUR_COMMA_FLAT:    s = u"flat-4";
+        break;
+
+    case AccidentalType::SORI:               s = u"sori";
+        break;
+    case AccidentalType::KORON:              s = u"koron";
         break;
     default:
-        s = "other";
+        s = u"other";
     }
     return s;
 }
@@ -754,7 +754,7 @@ QString accidentalType2MxmlString(const AccidentalType type)
 //   accidentalType2SmuflMxmlString
 //---------------------------------------------------------
 
-QString accidentalType2SmuflMxmlString(const AccidentalType type)
+String accidentalType2SmuflMxmlString(const AccidentalType type)
 {
     return mu::key(smuflAccidentalTypes, type);
 }
@@ -768,58 +768,58 @@ QString accidentalType2SmuflMxmlString(const AccidentalType type)
  see https://github.com/w3c/musicxml/blob/6e3a667b85855b04d7e4548ea508b537bc29fc52/schema/musicxml.xsd#L1392-L1439
  */
 
-AccidentalType mxmlString2accidentalType(const QString mxmlName, const QString smufl)
+AccidentalType mxmlString2accidentalType(const String mxmlName, const String smufl)
 {
-    static std::map<QString, AccidentalType> map;   // map MusicXML accidental name to MuseScore enum AccidentalType
+    static std::map<String, AccidentalType> map;   // map MusicXML accidental name to MuseScore enum AccidentalType
     if (map.empty()) {
-        map["sharp"] = AccidentalType::SHARP;
-        map["natural"] = AccidentalType::NATURAL;
-        map["flat"] = AccidentalType::FLAT;
-        map["double-sharp"] = AccidentalType::SHARP2;
-        map["sharp-sharp"] = AccidentalType::SHARP2;
-        //map["double-flat"] = AccidentalType::FLAT2; // shouldn't harm, but doesn't exist in MusicXML
-        map["flat-flat"] = AccidentalType::FLAT2;
-        map["natural-sharp"] = AccidentalType::SHARP;
-        map["natural-flat"] = AccidentalType::FLAT;
+        map[u"sharp"] = AccidentalType::SHARP;
+        map[u"natural"] = AccidentalType::NATURAL;
+        map[u"flat"] = AccidentalType::FLAT;
+        map[u"double-sharp"] = AccidentalType::SHARP2;
+        map[u"sharp-sharp"] = AccidentalType::SHARP2;
+        //map[u"double-flat"] = AccidentalType::FLAT2; // shouldn't harm, but doesn't exist in MusicXML
+        map[u"flat-flat"] = AccidentalType::FLAT2;
+        map[u"natural-sharp"] = AccidentalType::SHARP;
+        map[u"natural-flat"] = AccidentalType::FLAT;
 
-        map["quarter-flat"] = AccidentalType::MIRRORED_FLAT;
-        map["quarter-sharp"] = AccidentalType::SHARP_SLASH;
-        map["three-quarters-flat"] = AccidentalType::MIRRORED_FLAT2;
-        map["three-quarters-sharp"] = AccidentalType::SHARP_SLASH4;
+        map[u"quarter-flat"] = AccidentalType::MIRRORED_FLAT;
+        map[u"quarter-sharp"] = AccidentalType::SHARP_SLASH;
+        map[u"three-quarters-flat"] = AccidentalType::MIRRORED_FLAT2;
+        map[u"three-quarters-sharp"] = AccidentalType::SHARP_SLASH4;
 
-        map["sharp-up"] = AccidentalType::SHARP_ARROW_UP;
-        map["natural-down"] = AccidentalType::NATURAL_ARROW_DOWN;
-        map["natural-up"] = AccidentalType::NATURAL_ARROW_UP;
-        map["sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
-        map["flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
-        map["flat-up"] = AccidentalType::FLAT_ARROW_UP;
-        map["double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
-        map["double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
-        map["flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
-        map["flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
+        map[u"sharp-up"] = AccidentalType::SHARP_ARROW_UP;
+        map[u"natural-down"] = AccidentalType::NATURAL_ARROW_DOWN;
+        map[u"natural-up"] = AccidentalType::NATURAL_ARROW_UP;
+        map[u"sharp-down"] = AccidentalType::SHARP_ARROW_DOWN;
+        map[u"flat-down"] = AccidentalType::FLAT_ARROW_DOWN;
+        map[u"flat-up"] = AccidentalType::FLAT_ARROW_UP;
+        map[u"double-sharp-down"] = AccidentalType::SHARP2_ARROW_DOWN;
+        map[u"double-sharp-up"] = AccidentalType::SHARP2_ARROW_UP;
+        map[u"flat-flat-down"] = AccidentalType::FLAT2_ARROW_DOWN;
+        map[u"flat-flat-up"] = AccidentalType::FLAT2_ARROW_UP;
 
-        map["arrow-down"] = AccidentalType::ARROW_DOWN;
-        map["arrow-up"] = AccidentalType::ARROW_UP;
+        map[u"arrow-down"] = AccidentalType::ARROW_DOWN;
+        map[u"arrow-up"] = AccidentalType::ARROW_UP;
 
-        map["triple-sharp"] = AccidentalType::SHARP3;
-        map["triple-flat"] = AccidentalType::FLAT3;
+        map[u"triple-sharp"] = AccidentalType::SHARP3;
+        map[u"triple-flat"] = AccidentalType::FLAT3;
 
-        map["slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
-        map["slash-sharp"] = AccidentalType::SHARP_SLASH2; // SHARP_SLASH; ?
-        map["slash-flat"] = AccidentalType::FLAT_SLASH;
-        map["double-slash-flat"] = AccidentalType::FLAT_SLASH2;
+        map[u"slash-quarter-sharp"] = AccidentalType::SHARP_SLASH3; // MIRRORED_FLAT_SLASH; ?
+        map[u"slash-sharp"] = AccidentalType::SHARP_SLASH2; // SHARP_SLASH; ?
+        map[u"slash-flat"] = AccidentalType::FLAT_SLASH;
+        map[u"double-slash-flat"] = AccidentalType::FLAT_SLASH2;
 
-        map["sharp-1"] = AccidentalType::ONE_COMMA_SHARP;
-        map["sharp-2"] = AccidentalType::TWO_COMMA_SHARP;
-        map["sharp-3"] = AccidentalType::THREE_COMMA_SHARP;
-        map["sharp-5"] = AccidentalType::FIVE_COMMA_SHARP;
-        map["flat-1"] = AccidentalType::ONE_COMMA_FLAT;
-        map["flat-2"] = AccidentalType::TWO_COMMA_FLAT;
-        map["flat-3"] = AccidentalType::THREE_COMMA_FLAT;
-        map["flat-4"] = AccidentalType::FOUR_COMMA_FLAT;
+        map[u"sharp-1"] = AccidentalType::ONE_COMMA_SHARP;
+        map[u"sharp-2"] = AccidentalType::TWO_COMMA_SHARP;
+        map[u"sharp-3"] = AccidentalType::THREE_COMMA_SHARP;
+        map[u"sharp-5"] = AccidentalType::FIVE_COMMA_SHARP;
+        map[u"flat-1"] = AccidentalType::ONE_COMMA_FLAT;
+        map[u"flat-2"] = AccidentalType::TWO_COMMA_FLAT;
+        map[u"flat-3"] = AccidentalType::THREE_COMMA_FLAT;
+        map[u"flat-4"] = AccidentalType::FOUR_COMMA_FLAT;
 
-        map["sori"] = AccidentalType::SORI;
-        map["koron"] = AccidentalType::KORON;
+        map[u"sori"] = AccidentalType::SORI;
+        map[u"koron"] = AccidentalType::KORON;
     }
 
     if (mu::contains(map, mxmlName)) {
