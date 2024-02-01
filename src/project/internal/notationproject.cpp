@@ -221,9 +221,9 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     m_masterNotation->notation()->viewState()->read(reader);
     m_masterNotation->notation()->soloMuteState()->read(reader);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
-        io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
-        excerpt->notation()->viewState()->read(reader, path);
-        excerpt->notation()->soloMuteState()->read(reader, path);
+        io::path_t ePath = u"Excerpts/" + excerpt->fileName() + u"/";
+        excerpt->notation()->viewState()->read(reader, ePath);
+        excerpt->notation()->soloMuteState()->read(reader, ePath);
     }
 
     // Apply compat audio settings (needs to be done after notations are created)
