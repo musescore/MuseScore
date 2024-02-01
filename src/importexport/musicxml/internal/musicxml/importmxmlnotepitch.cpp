@@ -91,7 +91,7 @@ void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
             if (step.size() == 1 && pos >= 0 && pos < 7) {
                 m_displayStep = pos;
             } else {
-                //logError(QString("invalid step '%1'").arg(strStep));
+                //logError(String("invalid step '%1'").arg(strStep));
                 LOGD("invalid step '%s'", qPrintable(step));                // TODO
             }
         } else if (e.name() == "display-octave") {
@@ -99,7 +99,7 @@ void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
             bool ok;
             m_displayOctave = oct.toInt(&ok);
             if (!ok || m_displayOctave < 0 || m_displayOctave > 9) {
-                //logError(QString("invalid octave '%1'").arg(strOct));
+                //logError(String("invalid octave '%1'").arg(strOct));
                 LOGD("invalid octave '%s'", qPrintable(oct));               // TODO
                 m_displayOctave = -1;
             }
@@ -130,7 +130,7 @@ void MxmlNotePitch::pitch(QXmlStreamReader& e)
             bool ok;
             m_alter = MxmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
             if (!ok || m_alter < -2 || m_alter > 2) {
-                m_logger->logError(QString("invalid alter '%1'").arg(alter), &e);
+                m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
                 const auto altervalue = alter.toDouble(&ok2);
                 if (ok2 && (qAbs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
@@ -144,16 +144,16 @@ void MxmlNotePitch::pitch(QXmlStreamReader& e)
             bool ok;
             m_octave = oct.toInt(&ok);
             if (!ok || m_octave < 0 || m_octave > 9) {
-                m_logger->logError(QString("invalid octave '%1'").arg(oct), &e);
+                m_logger->logError(String(u"invalid octave '%1'").arg(oct), &e);
                 m_octave = -1;
             }
         } else if (e.name() == "step") {
-            const auto step = e.readElementText();
-            const auto pos = QString("CDEFGAB").indexOf(step);
-            if (step.size() == 1 && pos >= 0 && pos < 7) {
-                m_step = pos;
+            const String step = e.readElementText();
+            const size_t pos = String(u"CDEFGAB").indexOf(step);
+            if (step.size() == 1 && pos < 7) {
+                m_step = int(pos);
             } else {
-                m_logger->logError(QString("invalid step '%1'").arg(step), &e);
+                m_logger->logError(String(u"invalid step '%1'").arg(step), &e);
             }
         } else {
             // TODO skipLogCurrElem();

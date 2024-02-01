@@ -46,8 +46,8 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 extern bool saveMxl(Score*, const String&);
-extern engraving::Err importMusicXml(MasterScore*, const QString&);
-extern engraving::Err importCompressedMusicXml(MasterScore*, const QString&);
+extern engraving::Err importMusicXml(MasterScore*, const String&);
+extern engraving::Err importCompressedMusicXml(MasterScore*, const String&);
 }
 
 static const String XML_IO_DATA_DIR("data/");
