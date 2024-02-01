@@ -26,6 +26,7 @@
 #include "textbase.h"
 
 #include "global/types/val.h"
+#include "draw/types/font.h"
 
 namespace mu::engraving {
 class SoundFlag final : public TextBase
@@ -37,6 +38,7 @@ public:
     SoundFlag(Segment* parent = nullptr);
 
     SoundFlag* clone() const override;
+    bool isEditable() const override;
 
     using PresetCodes = StringList;
     using Params = std::map<String, Val>;
@@ -47,11 +49,23 @@ public:
     const Params& params() const;
     void setParams(const Params& params);
 
-    void undoChangeSoundFlag(const PresetCodes& presets, const Params& params);
+    bool isTextVisible() const;
+    void setIsTextVisible(bool visible);
+
+    void undoChangeSoundFlag(const PresetCodes& presets, const Params& params, bool isTextVisible);
+
+    char16_t iconCode() const;
+    draw::Font iconFont() const;
+    RectF iconBBox() const;
+    Color iconBackgroundColor() const;
 
 private:
     PresetCodes m_soundPresets;
     Params m_params;
+
+    bool m_isTextVisible = false;
+
+    draw::Font m_iconFont;
 };
 }
 

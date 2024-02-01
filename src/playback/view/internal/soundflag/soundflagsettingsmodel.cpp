@@ -145,17 +145,22 @@ void SoundFlagSettingsModel::setTitle(const QString& title)
 
 bool SoundFlagSettingsModel::showText() const
 {
-    // todo
-    return m_showText;
+    return m_item ? engraving::toSoundFlag(m_item)->isTextVisible() : false;
 }
 
 void SoundFlagSettingsModel::setShowText(bool show)
 {
-    if (m_showText == show) {
+    if (showText() == show) {
         return;
     }
 
-    m_showText = show;
+    beginCommand();
+    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), soundFlag->params(), show);
+    endCommand();
+
+    updateNotation();
+
     emit showTextChanged();
 }
 

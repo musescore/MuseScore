@@ -78,7 +78,7 @@ void MuseSoundsParamsModel::togglePreset(const QString& presetCode)
     }
 
     undoStack()->prepareChanges();
-    soundFlag->undoChangeSoundFlag(presetCodes, soundFlag->params());
+    soundFlag->undoChangeSoundFlag(presetCodes, soundFlag->params(), soundFlag->isTextVisible());
     undoStack()->commitChanges();
 
     emit presetCodesChanged();
