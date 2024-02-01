@@ -1380,7 +1380,7 @@ bool Note::isNoteName() const
 
 bool Note::shouldHideFret() const
 {
-    if (!tieBack() || shouldForceShowFret()) {
+    if (!tieBack() || shouldForceShowFret() || !staffType()->isTabStaff()) {
         return false;
     }
 
@@ -3536,6 +3536,34 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
+}
+
+bool Note::hasAnotherStraightAboveOrBelow(bool above) const
+{
+    if (!chord()) {
+        return false;
+    }
+
+    const std::vector<Note*>& notes = chord()->notes();
+
+    if ((above && this == notes.back()) || (!above && this == notes.front())) {
+        return false;
+    }
+
+    const double limitDiff = 0.5 * spatium();
+    for (Note* note : notes) {
+        if (note == this) {
+            continue;
+        }
+        if (abs(note->pos().x() - pos().x()) > limitDiff) {
+            return false;
+        }
+        if ((above && note->line() < m_line) || (!above && note->line() > m_line)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 mu::PointF Note::posInStaffCoordinates()
