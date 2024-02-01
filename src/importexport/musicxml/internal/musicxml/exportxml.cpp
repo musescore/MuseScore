@@ -5506,7 +5506,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     }
 
     if (dyn->velocity() > 0) {
-        m_xml.tagRaw(QString("sound dynamics=\"%1\"").arg(QString::number(dyn->velocity() * 100.0 / 90.0, 'f', 2)));
+        m_xml.tagRaw(String(u"sound dynamics=\"%1\"").arg(String::number(dyn->velocity() * 100.0 / 90.0, 2)));
     }
 
     m_xml.endElement();
@@ -6829,8 +6829,8 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                 m_xml.startElement("system-layout");
                 m_xml.startElement("system-margins");
-                m_xml.tag("left-margin", QString("%1").arg(QString::number(systemLM, 'f', 2)));
-                m_xml.tag("right-margin", QString("%1").arg(QString::number(systemRM, 'f', 2)));
+                m_xml.tag("left-margin", String::number(systemLM, 2));
+                m_xml.tag("right-margin", String::number(systemRM, 2));
                 m_xml.endElement();
 
                 if (mpc.systemStart && !mpc.pageStart) {
@@ -6841,12 +6841,12 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                                                              - prevSystemMeasure->ldata()->bbox().height()
                                                              + 2 * score()->style().spatium()
                                                              );
-                    m_xml.tag("system-distance", QString("%1").arg(QString::number(sysDist, 'f', 2)));
+                    m_xml.tag("system-distance", String::number(sysDist, 2));
                 }
 
                 if (mpc.pageStart || mpc.scoreStart) {
                     const double topSysDist = getTenthsFromDots(mmR1->pagePos().y()) - tm;
-                    m_xml.tag("top-system-distance", QString("%1").arg(QString::number(topSysDist, 'f', 2)));
+                    m_xml.tag("top-system-distance", String::number(topSysDist, 2));
                 }
 
                 m_xml.endElement();
@@ -6860,7 +6860,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                 const auto staffDist = system->staff(staffNr)->bbox().y() - prevBbox.y() - prevBbox.height();
 
                 m_xml.startElement("staff-layout", { { "number", staffIdx + 1 } });
-                m_xml.tag("staff-distance", QString("%1").arg(QString::number(getTenthsFromDots(staffDist), 'f', 2)));
+                m_xml.tag("staff-distance", String::number(getTenthsFromDots(staffDist), 2));
                 m_xml.endElement();
             }
 
@@ -7740,7 +7740,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
     if (configuration()->musicxmlExportLayout()) {
-        measureTag += QString(" width=\"%1\"").arg(QString::number(m->ldata()->bbox().width() / DPMM / m_millimeters * m_tenths, 'f', 2));
+        measureTag += String(u" width=\"%1\"").arg(String::number(m->ldata()->bbox().width() / DPMM / m_millimeters * m_tenths, 2));
     }
 
     m_xml.startElementRaw(measureTag);
@@ -8179,9 +8179,9 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     // and we don't generally export position info for other elements
     // it's just as well to not bother doing so here
     //double rx = h->offset().x()*10;
-    //QString relative;
+    //String relative;
     //if (rx > 0) {
-    //      relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
+    //      relative = String(" relative-x=\"%1\"").arg(String::number(rx, 2));
     //      }
     int rootTpc = h->rootTpc();
     if (rootTpc != Tpc::TPC_INVALID) {
