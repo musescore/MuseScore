@@ -31,7 +31,7 @@ class QIODevice;
 namespace mu::engraving {
 class Score;
 
-Err importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
+Err importMusicXMLfromBuffer(Score* score, const String &, QIODevice* dev);
 }
 
 #endif

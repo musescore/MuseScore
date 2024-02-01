@@ -1705,14 +1705,14 @@ Err MusicXMLParserPass2::parse()
             found = true;
             scorePartwise();
         } else {
-            m_logger->logError("this is not a MusicXML score-partwise file", &m_e);
+            m_logger->logError(u"this is not a MusicXML score-partwise file", &m_e);
             m_e.skipCurrentElement();
             return Err::FileBadFormat;
         }
     }
 
     if (!found) {
-        m_logger->logError("this is not a MusicXML score-partwise file", &m_e);
+        m_logger->logError(u"this is not a MusicXML score-partwise file", &m_e);
         return Err::FileBadFormat;
     }
 
@@ -2373,13 +2373,13 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
                 if (dura <= mTime) {
                     mTime -= dura;
                 } else {
-                    m_logger->logError("backup beyond measure start", &m_e);
+                    m_logger->logError(u"backup beyond measure start", &m_e);
                     mTime.set(0, 1);
                 }
                 // check if the tick position is smaller than the minimum division resolution
                 // (possibly caused by rounding errors) and in that case set position to 0
                 if (mTime.isNotZero() && (m_divs > 0) && (mTime < Fraction(1, 4 * m_divs))) {
-                    m_logger->logError("backup to a fractional tick smaller than the minimum division", &m_e);
+                    m_logger->logError(u"backup to a fractional tick smaller than the minimum division", &m_e);
                     mTime.set(0, 1);
                 }
             }
@@ -2666,7 +2666,7 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
         if (t->strings() > 0) {
             i->setStringData(*t);
         } else {
-            m_logger->logError("trying to change string data (not supported)", &m_e);
+            m_logger->logError(u"trying to change string data (not supported)", &m_e);
         }
     }
 }
@@ -2685,7 +2685,7 @@ void MusicXMLParserPass2::staffTuning(StringData* t)
 
     // ignore <staff-tuning> if not a TAB staff
     if (!t) {
-        m_logger->logError("<staff-tuning> on non-TAB staff", &m_e);
+        m_logger->logError(u"<staff-tuning> on non-TAB staff", &m_e);
         skipLogCurrElem();
         return;
     }
@@ -3006,7 +3006,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     foreach (auto desc, stops) {
         auto& spdesc = m_pass2.getSpanner({ desc.tp, desc.nr });
         if (spdesc.isStopped) {
-            m_logger->logError("spanner already stopped", &m_e);
+            m_logger->logError(u"spanner already stopped", &m_e);
             delete desc.sp;
         } else {
             if (spdesc.isStarted) {
@@ -3026,7 +3026,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     foreach (auto desc, starts) {
         auto& spdesc = m_pass2.getSpanner({ desc.tp, desc.nr });
         if (spdesc.isStarted) {
-            m_logger->logError("spanner already started", &m_e);
+            m_logger->logError(u"spanner already started", &m_e);
             delete desc.sp;
         } else {
             if (spdesc.isStopped) {
@@ -4024,9 +4024,9 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
 {
     if (!(number.isEmpty() && type.isEmpty())) {
         if (number.isEmpty()) {
-            m_logger->logError("empty ending number", &m_e);
+            m_logger->logError(u"empty ending number", &m_e);
         } else if (type.isEmpty()) {
-            m_logger->logError("empty ending type", &m_e);
+            m_logger->logError(u"empty ending type", &m_e);
         } else {
             QStringList sl = number.toQString().split(",", Qt::SkipEmptyParts);
             std::vector<int> iEndingNumbers;
@@ -4046,7 +4046,7 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
                 // Ignore if it is hidden and redundant
                 Volta* redundantVolta = findRedundantVolta(m_pass1.trackForPart(partId), measure);
                 if (!print && redundantVolta) {
-                    m_logger->logDebugInfo("Ignoring redundant hidden Volta", &m_e);
+                    m_logger->logDebugInfo(u"Ignoring redundant hidden Volta", &m_e);
                 } else if (type == u"start") {
                     Volta* volta = Factory::createVolta(m_score->dummy());
                     volta->setTrack(m_pass1.trackForPart(partId));
@@ -4068,7 +4068,7 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
                         // Assume print-object was handled at the start
                         m_lastVolta = 0;
                     } else if (!redundantVolta) {
-                        m_logger->logError("ending stop without start", &m_e);
+                        m_logger->logError(u"ending stop without start", &m_e);
                     }
                 } else if (type == u"discontinue") {
                     if (m_lastVolta) {
@@ -4077,7 +4077,7 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
                         // Assume print-object was handled at the start
                         m_lastVolta = 0;
                     } else if (!redundantVolta) {
-                        m_logger->logError("ending discontinue without start", &m_e);
+                        m_logger->logError(u"ending discontinue without start", &m_e);
                     }
                 } else {
                     m_logger->logError(String(u"unsupported ending type '%1'").arg(type), &m_e);
@@ -4563,7 +4563,7 @@ void MusicXMLParserPass2::divisions()
 {
     m_divs = m_e.readElementText().toInt();
     if (!(m_divs > 0)) {
-        m_logger->logError("illegal divisions", &m_e);
+        m_logger->logError(u"illegal divisions", &m_e);
     }
 }
 
@@ -4901,7 +4901,7 @@ static void addTremolo(ChordRest* cr,
                 }
             } else if (tremoloType == u"start") {
                 if (tremStart) {
-                    logger->logError("MusicXML::import: double tremolo start", xmlreader);
+                    logger->logError(u"MusicXML::import: double tremolo start", xmlreader);
                 }
                 tremStart = static_cast<Chord*>(cr);
                 // timeMod takes into account also the factor 2 of a two-note tremolo
@@ -4940,7 +4940,7 @@ static void addTremolo(ChordRest* cr,
                         timeMod.setDenominator(timeMod.denominator() / 2);
                     }
                 } else {
-                    logger->logError("MusicXML::import: double tremolo stop w/o start", xmlreader);
+                    logger->logError(u"MusicXML::import: double tremolo stop w/o start", xmlreader);
                 }
                 tremStart = nullptr;
             }
@@ -5102,7 +5102,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
             if (!grace) {
                 lyric.parse();
             } else {
-                m_logger->logDebugInfo("ignoring lyrics on grace notes", &m_e);
+                m_logger->logDebugInfo(u"ignoring lyrics on grace notes", &m_e);
                 skipLogCurrElem();
             }
         } else if (m_e.name() == "notations") {
@@ -6106,7 +6106,7 @@ void MusicXMLParserLyric::parse()
 
     const auto lyricNo = m_lyricNumberHandler.getLyricNo(lyricNumber);
     if (lyricNo < 0) {
-        m_logger->logError("invalid lyrics number (<0)", &m_e);
+        m_logger->logError(u"invalid lyrics number (<0)", &m_e);
         return;
     } else if (lyricNo > MAX_LYRICS) {
         m_logger->logError(String("too much lyrics (>%1)").arg(MAX_LYRICS), &m_e);
@@ -6502,7 +6502,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
                 note->setFret(fret);
             }
         } else {
-            m_logger->logError("no note for fret", &m_e);
+            m_logger->logError(u"no note for fret", &m_e);
         }
     } else if (notation.name() == "pluck") {
         addTextToNote(m_e.lineNumber(), m_e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
@@ -6516,7 +6516,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
                               TextStyleType::STRING_NUMBER, m_score, note);
             }
         } else {
-            m_logger->logError("no note for string", &m_e);
+            m_logger->logError(u"no note for string", &m_e);
         }
     }
 }

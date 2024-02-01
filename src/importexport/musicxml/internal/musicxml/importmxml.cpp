@@ -85,7 +85,7 @@ static void updateNamesForAccidentals(Instrument* inst)
 //   importMusicXMLfromBuffer
 //---------------------------------------------------------
 
-Err importMusicXMLfromBuffer(Score* score, const QString& /*name*/, QIODevice* dev)
+Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, QIODevice* dev)
 {
     //LOGD("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
     //       score, qPrintable(name), dev);
