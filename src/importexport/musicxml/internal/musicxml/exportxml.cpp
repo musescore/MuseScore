@@ -4937,29 +4937,29 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 // in spanner begin- or endtexts
 // return match's position and length and the dynamic type
 
-static int findDynamicInString(const QString& s, int& length, QString& type)
+static size_t findDynamicInString(const String& s, size_t& length, String& type)
 {
     length = 0;
-    type = "";
-    int matchIndex { -1 };
+    type = u"";
+    size_t matchIndex = mu::nidx;
     const int n = static_cast<int>(DynamicType::LAST) - 1;
 
     // for all dynamics, find their text in s
     for (int i = 0; i < n; ++i) {
         DynamicType t = static_cast<DynamicType>(i);
-        const QString dynamicText = Dynamic::dynamicText(t);
-        const int dynamicLength = dynamicText.length();
+        const String dynamicText = Dynamic::dynamicText(t);
+        const size_t dynamicLength = dynamicText.size();
         // note: skip entries with empty text
         if (dynamicLength > 0) {
-            const auto index = s.indexOf(dynamicText);
-            if (index >= 0) {
+            const size_t index = s.indexOf(dynamicText);
+            if (index != mu::nidx) {
                 // found a match, accept it if
                 // - it is the first one
                 // - or it starts a the same index but is longer ("pp" versus "p")
-                if (matchIndex == -1 || (index == matchIndex && dynamicLength > length)) {
+                if (matchIndex == mu::nidx || (index == matchIndex && dynamicLength > length)) {
                     matchIndex = index;
                     length = dynamicLength;
-                    type = TConv::toXml(t).ascii();
+                    type = String::fromAscii(TConv::toXml(t).ascii());
                 }
             }
         }
@@ -4976,17 +4976,17 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
 {
     auto text = isStart ? tlb->beginText() : tlb->endText();
     while (text != "") {
-        int dynamicLength { 0 };
-        QString dynamicsType;
-        auto dynamicPosition = findDynamicInString(text, dynamicLength, dynamicsType);
-        if (dynamicPosition == -1 || dynamicPosition > 0) {
+        size_t dynamicLength = 0;
+        String dynamicsType;
+        size_t dynamicPosition = findDynamicInString(text, dynamicLength, dynamicsType);
+        if (dynamicPosition == mu::nidx || dynamicPosition > 0) {
             // text remaining and either no dynamic of not at front of text
             xml.startElement("direction-type");
-            QString tag = "words";
-            tag
-                += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE
+            String tag = u"words";
+            tag += String(u" font-family=\"%1\"").arg(tlb->getProperty(isStart
+                                                                       ? Pid::BEGIN_FONT_FACE
                                                                        : Pid::END_FONT_FACE).value<String>());
-            tag += QString(" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
+            tag += String(u" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
             tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
             tag += color2xml(tlb);
             tag += ExportMusicXml::positioningAttributes(tlb, isStart);
@@ -5435,16 +5435,17 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
     if (mu::contains(set, dynTypeName) && !hasCustomText) {
         m_xml.tagRaw(dynTypeName);
     } else if (dynTypeName != "") {
-        std::map<ushort, Char> map;
-        map[0xE520] = u'p';
-        map[0xE521] = u'm';
-        map[0xE522] = u'f';
-        map[0xE523] = u'r';
-        map[0xE524] = u's';
-        map[0xE525] = u'z';
-        map[0xE526] = u'n';
+        static std::map<ushort, Char> map = {
+            { 0xE520, u'p' },
+            { 0xE521, u'm' },
+            { 0xE522, u'f' },
+            { 0xE523, u'r' },
+            { 0xE524, u's' },
+            { 0xE525, u'z' },
+            { 0xE526, u'n' }
+        };
 
-        QString dynText = dynTypeName;
+        String dynText = dynTypeName;
         if (dyn->dynamicType() == DynamicType::OTHER || hasCustomText) {
             dynText = dyn->plainText();
         }
@@ -5453,14 +5454,15 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
         // or other characters and write the runs.
         String text;
         bool inDynamicsSym = false;
-        for (const QChar& ch : qAsConst(dynText)) {
+        for (size_t i = 0; i < dynText.size(); ++i) {
+            Char ch = dynText.at(i);
             const auto it = map.find(ch.unicode());
             if (it != map.end()) {
                 // found a SMUFL single letter dynamics glyph
                 if (!inDynamicsSym) {
-                    if (text != "") {
+                    if (text != u"") {
                         m_xml.tag("other-dynamics", text);
-                        text = "";
+                        text = u"";
                     }
                     inDynamicsSym = true;
                 }
@@ -5468,20 +5470,20 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             } else {
                 // found a non-dynamics character
                 if (inDynamicsSym) {
-                    if (text != "") {
+                    if (text != u"") {
                         if (mu::contains(set, text)) {
                             m_xml.tagRaw(text);
                         } else {
                             m_xml.tag("other-dynamics", text);
                         }
-                        text = "";
+                        text = u"";
                     }
                     inDynamicsSym = false;
                 }
                 text += ch.unicode();
             }
         }
-        if (text != "") {
+        if (text != u"") {
             if (inDynamicsSym && mu::contains(set, text)) {
                 m_xml.tagRaw(text);
             } else {
