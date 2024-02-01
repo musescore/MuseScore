@@ -385,7 +385,7 @@ public:
     void setScore(Score* s) override;
     void setDotRelativeLine(int);
 
-    void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true);
+    void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true, bool generated = false);
     bool headHasParentheses() const { return m_hasHeadParentheses; }
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
@@ -449,6 +449,8 @@ public:
     void updateFrettingForTiesAndBends();
     bool shouldHideFret() const;
     bool shouldForceShowFret() const;
+
+    void setVisible(bool v) override;
 
     struct LayoutData : public EngravingItem::LayoutData {
         ld_field<bool> useTablature = { "[Note] useTablature", false };

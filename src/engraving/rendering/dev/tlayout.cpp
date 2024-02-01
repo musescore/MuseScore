@@ -4331,7 +4331,9 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if ((item->ghost() && !Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround())) {
-            const_cast<Note*>(item)->setFretString(String(u"(%1)").arg(item->fretString()));
+            const_cast<Note*>(item)->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
+        } else {
+            const_cast<Note*>(item)->setHeadHasParentheses(false, /* addToLinked= */ false);
         }
 
         double w = item->tabHeadWidth(tab);     // !! use _fretString
@@ -5436,6 +5438,14 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
         return;
     }
 
+    if (item->parentItem()->isNote()) {
+        double parenScale
+            = (item->onTabStaff()
+               && (item->sym() == SymId::noteheadParenthesisLeft || item->sym() == SymId::noteheadParenthesisRight)) ? 0.8 : 1;
+        ldata->setMag(item->parentItem()->mag() * parenScale);
+    } else if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(item->tick()));
+    }
     ldata->setBbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
     double w = ldata->bbox().width();
     PointF p;
@@ -5452,12 +5462,6 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
         p.setX(-(w * .5));
     }
     ldata->setPos(p);
-
-    if (item->parentItem()->isNote()) {
-        ldata->setMag(item->parentItem()->mag());
-    } else if (item->staff()) {
-        ldata->setMag(item->staff()->staffMag(item->tick()));
-    }
 
     // see BSymbol::add
     for (EngravingItem* e : item->leafs()) {

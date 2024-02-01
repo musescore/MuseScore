@@ -2805,7 +2805,27 @@ void TDraw::draw(const StringTunings* item, draw::Painter* painter)
 void TDraw::draw(const Symbol* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    if (!item->isNoteDot() || !item->staff()->isTabStaff(item->tick())) {
+    bool tabStaff = item->staff() ? item->staff()->isTabStaff(item->tick()) : false;
+    if (tabStaff && (item->sym() == SymId::noteheadParenthesisLeft || item->sym() == SymId::noteheadParenthesisRight)) {
+        // Draw background for parentheses on TAB staves
+        auto config = item->engravingConfiguration();
+        const Symbol::LayoutData* ldata = item->ldata();
+        double d = item->spatium() * .1;
+        RectF bb = RectF(ldata->bbox().x() - d,
+                         ldata->bbox().y() - d,
+                         ldata->bbox().width() + 2 * d,
+                         ldata->bbox().height() + 2 * d
+                         );
+        if (!item->score()->getViewer().empty()) {
+            for (MuseScoreView* view : item->score()->getViewer()) {
+                view->drawBackground(painter, bb);
+            }
+        } else {
+            painter->fillRect(bb, config->noteBackgroundColor());
+        }
+    }
+
+    if (!item->isNoteDot() || !tabStaff) {
         painter->setPen(item->curColor());
         if (item->scoreFont()) {
             item->scoreFont()->draw(item->sym(), painter, item->magS(), PointF());

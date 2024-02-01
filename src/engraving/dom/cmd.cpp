@@ -2993,6 +2993,7 @@ void Score::cmdMirrorNoteHead()
         if (e->isNote()) {
             Note* note = toNote(e);
             if (note->staff() && note->staff()->isTabStaff(note->chord()->tick())) {
+                // Set to DEAD NOTE
                 e->undoChangeProperty(Pid::GHOST, !note->ghost());
             } else {
                 DirectionH d = note->userMirror();
@@ -3098,21 +3099,26 @@ void Score::cmdAddBracket()
 void Score::cmdAddParentheses()
 {
     for (EngravingItem* el : selection().elements()) {
-        if (el->type() == ElementType::NOTE) {
-            Note* n = toNote(el);
-            n->setHeadHasParentheses(true);
-        } else if (el->type() == ElementType::ACCIDENTAL) {
-            Accidental* acc = toAccidental(el);
-            acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
-        } else if (el->type() == ElementType::HARMONY) {
-            Harmony* h = toHarmony(el);
-            h->setLeftParen(true);
-            h->setRightParen(true);
-            h->render();
-        } else if (el->type() == ElementType::TIMESIG) {
-            TimeSig* ts = toTimeSig(el);
-            ts->setLargeParentheses(true);
-        }
+        cmdAddParentheses(el);
+    }
+}
+
+void Score::cmdAddParentheses(EngravingItem* el)
+{
+    if (el->type() == ElementType::NOTE) {
+        Note* n = toNote(el);
+        n->undoChangeProperty(Pid::HEAD_HAS_PARENTHESES, !n->headHasParentheses());
+    } else if (el->type() == ElementType::ACCIDENTAL) {
+        Accidental* acc = toAccidental(el);
+        acc->undoChangeProperty(Pid::ACCIDENTAL_BRACKET, int(AccidentalBracket::PARENTHESIS));
+    } else if (el->type() == ElementType::HARMONY) {
+        Harmony* h = toHarmony(el);
+        h->setLeftParen(true);
+        h->setRightParen(true);
+        h->render();
+    } else if (el->type() == ElementType::TIMESIG) {
+        TimeSig* ts = toTimeSig(el);
+        ts->setLargeParentheses(true);
     }
 }
 

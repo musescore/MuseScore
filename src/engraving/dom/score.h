@@ -299,6 +299,7 @@ public:
 
     void cmdAddBracket();
     void cmdAddParentheses();
+    void cmdAddParentheses(EngravingItem* el);
     void cmdAddBraces();
     void cmdAddFret(int fret);
     void cmdSetBeamMode(BeamMode);

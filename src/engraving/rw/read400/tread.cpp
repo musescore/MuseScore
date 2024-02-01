@@ -2303,6 +2303,10 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "small" || tag == "subtype") {    // obsolete
             e.skipCurrentElement();
+        } else if (tag == "offset" && sym->score()->mscVersion() < 400 && sym->onTabStaff()
+                   && (symId == SymId::noteheadParenthesisLeft || symId == SymId::noteheadParenthesisRight)) {
+            // Reset mu3 TAB parentheses offset
+            e.skipCurrentElement();
         } else if (!TRead::readProperties(static_cast<BSymbol*>(sym), e, ctx)) {
             e.unknown();
         }
