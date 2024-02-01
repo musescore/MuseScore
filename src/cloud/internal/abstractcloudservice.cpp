@@ -322,7 +322,7 @@ mu::Ret AbstractCloudService::checkCloudIsAvailable() const
 {
     QBuffer receivedData;
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    Ret ret = manager->get(m_serverConfig.serverUrl, &receivedData, m_serverConfig.headers);
+    Ret ret = manager->get(m_serverConfig.serverAvailabilityUrl, &receivedData, m_serverConfig.headers);
 
     if (!ret) {
         printServerReply(receivedData);
