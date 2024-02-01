@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.02">
+  <programVersion>3.6.3</programVersion>
+  <programRevision></programRevision>
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="audioComUrl"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2024-01-21</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="platform">Apple Macintosh</metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
+    <metaTag name="subtitle">Subtitle</metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Order id="orchestral" customized="1">
+      <name>Orchestral</name>
+      <instrument id="piano">
+        <family id="keyboards">Tasteninstrumente</family>
+        </instrument>
+      <section id="woodwind" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
+        <family>flutes</family>
+        <family>oboes</family>
+        <family>clarinets</family>
+        <family>saxophones</family>
+        <family>bassoons</family>
+        <unsorted group="woodwinds"/>
+        </section>
+      <section id="brass" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>horns</family>
+        <family>trumpets</family>
+        <family>cornets</family>
+        <family>flugelhorns</family>
+        <family>trombones</family>
+        <family>baritone-horns</family>
+        <family>euphoniums</family>
+        <family>tubas</family>
+        </section>
+      <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>timpani</family>
+        </section>
+      <section id="percussion" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>keyboard-percussion</family>
+        <family>drums</family>
+        <family>unpitched-metal-percussion</family>
+        <family>unpitched-wooden-percussion</family>
+        <family>other-percussion</family>
+        </section>
+      <family>keyboards</family>
+      <family>harps</family>
+      <family>organs</family>
+      <family>synths</family>
+      <section id="plucked-strings" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
+        <family>plucked-strings</family>
+        </section>
+      <soloists/>
+      <section id="voices" brackets="true" showSystemMarkings="false" barLineSpan="false" thinBrackets="true">
+        <family>voices</family>
+        </section>
+      <section id="strings" brackets="true" showSystemMarkings="true" barLineSpan="true" thinBrackets="true">
+        <family>orchestral-strings</family>
+        </section>
+      <unsorted/>
+      </Order>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <bracket type="1" span="2" col="2"/>
+        <barLineSpan>1</barLineSpan>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <synti>Fluid</synti>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>Title</style>
+          <text>Rest scale C4-C6</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <TimeSig>
+            <sigN>5</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <StaffText>
+            <text>C4</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C4</text>
+              </Lyrics>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <StaffText>
+            <text>Rest vertical offset +3..-0.5</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="3"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="2.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="2"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="1.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="1"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="0.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-0.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <StaffText>
+            <text>C5</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C5</text>
+              </Lyrics>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text>C5</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C5</text>
+              </Lyrics>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <StaffText>
+            <text>Rest vertical offset -0.5..-4</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="-0.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-1"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-1.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-2"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-2.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-3"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-3.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-4"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <StaffText>
+            <text>C6</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C6</text>
+              </Lyrics>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
+        <voice>
+          <StaffText>
+            <text>offset 18..16</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="18"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="17.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="17"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="16.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="16"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <StaffText>
+            <text>offset -16.5..-18.5</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="-16.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-17"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-17.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-18"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-18.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
+          </voice>
+        </Measure>
+      <VBox>
+        <height>15</height>
+        <boxAutoSize>0</boxAutoSize>
+        </VBox>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text>C2</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C2</text>
+              </Lyrics>
+            <Note>
+              <pitch>36</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <StaffText>
+            <text>Rest vertical offset +4..+0.5</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="4"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="3.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="3"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="2.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="2"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="1.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="1"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="0.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <StaffText>
+            <text>C3</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C3</text>
+              </Lyrics>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text>C3</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C3</text>
+              </Lyrics>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <StaffText>
+            <text>Rest vertical offset +0.5..-3</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="0.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-0.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-1"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-1.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-2"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-2.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-3"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <StaffText>
+            <text>C4</text>
+            </StaffText>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Lyrics>
+              <text>C4</text>
+              </Lyrics>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text>offset 12..10</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="12"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="11.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="11"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="10.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="10"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <StaffText>
+            <text>offset -22.5..-24.5</text>
+            </StaffText>
+          <Rest>
+            <offset x="0" y="-22.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-23"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-23.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-24"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          <Rest>
+            <offset x="0" y="-24.5"/>
+            <durationType>eighth</durationType>
+            </Rest>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

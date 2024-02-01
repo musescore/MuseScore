@@ -3921,13 +3921,35 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
       // as no display-step or display-octave should be written for a tablature staff,
 
       if (clef != ClefType::TAB && clef != ClefType::TAB_SERIF && clef != ClefType::TAB4 && clef != ClefType::TAB4_SERIF) {
-            double yOffsSp = rest->offset().y() / rest->spatium();              // y offset in spatium (negative = up)
-            yOffsSt = -2 * int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5); // same rounded to int (positive = up)
+            double yOffsSp = -2 * rest->offset().y() / rest->spatium();              // positive = up, one spatium is two pitches
+            yOffsSt = int(yOffsSp > 0.0 ? yOffsSp + 0.5 : yOffsSp - 0.5);            // same rounded to int
 
             po -= 4;    // pitch middle staff line (two lines times two steps lower than top line)
-            po += yOffsSt; // rest "pitch"
-            oct = po / 7; // octave
-            stp = po % 7; // step
+            po += yOffsSt;  // rest "pitch"
+            po -= 7;        // correct octave
+            // at this point:
+            // C0 (lowest value allowed in MusicXML) has po == 0   (y offset = 17 (treble clef) 11 (bass clef))
+            // B9 (highest value allowed in MusicXML) has po == 69 (y offset = -17.5 (treble clef) -23.5 (bass clef))
+
+            if (po < 0)
+                  po = 0;     // apply limits
+            if (po > 69)
+                  po = 69;    // apply limits
+            oct = po / 7;   // octave (MusicXML spec: must be 0..9, C4 is middle C)
+            stp = po % 7;   // step (must be 0..6, as display-step must be A..G)
+#if 0
+            std::cout << "ExportMusicXml::rest()"
+                      << " pitchOffset (initial po) " << ClefInfo::pitchOffset(clef)
+                      << " offset().y() " << rest->offset().y()
+                      << " spatium() " << rest->spatium()
+                      << " yOffsSp " << yOffsSp
+                      << " yOffsSt " << yOffsSt
+                      << " po " << po
+                      << " oct " << oct
+                      << " stp " << stp
+                      << " (" << table2[stp] << oct << ")"
+                      << "\n";
+#endif
             }
 
       QString restTag { "rest" };
@@ -3942,7 +3964,7 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
       else {
             _xml.stag(restTag);
             _xml.tag("display-step", QString(QChar(table2[stp])));
-            _xml.tag("display-octave", oct - 1);
+            _xml.tag("display-octave", oct);
             _xml.etag();
             }
 

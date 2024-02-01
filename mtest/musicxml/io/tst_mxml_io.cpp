@@ -107,6 +107,7 @@ private slots:
       void dcalFine() { mxmlIoTest("testDCalFine"); }
       void directions1() { mxmlIoTestRef("testDirections1"); }
       void directions2() { mxmlIoTest("testDirections2"); }
+      void displayStepOctave() {  mxmlMscxExportTestRef("testDisplayStepOctave"); }
       void divisionsDefinedTooLate1() { mxmlIoTestRef("testDivsDefinedTooLate1"); }
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
       void doubleClefError() { mxmlIoTestRef("testDoubleClefError"); }
