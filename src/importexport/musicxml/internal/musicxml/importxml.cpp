@@ -143,7 +143,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
     int line, column;
     QString err;
     if (!container.setContent(data, false, &err, &line, &column)) {
-        LOGE() << QString("Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
+        LOGE() << String(u"Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
         return false;
     }
 
@@ -228,7 +228,7 @@ static Err doValidate(const QString& name, QIODevice* dev)
  Validate and import MusicXML data from file \a name contained in QIODevice \a dev into score \a score.
  */
 
-static Err doValidateAndImport(Score* score, const QString& name, QIODevice* dev)
+static Err doValidateAndImport(Score* score, const String& name, QIODevice* dev)
 {
     // validate the file
     Err res = doValidate(name, dev);
@@ -251,7 +251,7 @@ static Err doValidateAndImport(Score* score, const QString& name, QIODevice* dev
  Import MusicXML file \a name into the Score.
  */
 
-Err importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
+Err importMusicXml(MasterScore* score, QIODevice* dev, const String& name)
 {
     ScoreLoad sl;       // suppress warnings for undo push/pop
 
@@ -264,7 +264,7 @@ Err importMusicXml(MasterScore* score, QIODevice* dev, const QString& name)
     return doValidateAndImport(score, name, dev);
 }
 
-Err importMusicXml(MasterScore* score, const QString& name)
+Err importMusicXml(MasterScore* score, const String& name)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
@@ -293,7 +293,7 @@ Err importMusicXml(MasterScore* score, const QString& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Err importCompressedMusicXml(MasterScore* score, const QString& name)
+Err importCompressedMusicXml(MasterScore* score, const String& name)
 {
     //LOGD("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
 
@@ -326,19 +326,19 @@ Err importCompressedMusicXml(MasterScore* score, const QString& name)
 // TODO: move somewhere else
 
 VoiceDesc::VoiceDesc()
-    : _staff(-1), _voice(-1), _overlaps(false)
+    : m_staff(-1), m_voice(-1), m_overlaps(false)
 {
     for (int i = 0; i < MAX_STAVES; ++i) {
-        _chordRests[i] =  0;
-        _staffAlloc[i] = -1;
-        _voices[i]     = -1;
+        m_chordRests[i] =  0;
+        m_staffAlloc[i] = -1;
+        m_voices[i]     = -1;
     }
 }
 
 void VoiceDesc::incrChordRests(int s)
 {
     if (0 <= s && s < MAX_STAVES) {
-        _chordRests[s]++;
+        m_chordRests[s]++;
     }
 }
 
@@ -346,7 +346,7 @@ int VoiceDesc::numberChordRests() const
 {
     int res = 0;
     for (int i = 0; i < MAX_STAVES; ++i) {
-        res += _chordRests[i];
+        res += m_chordRests[i];
     }
     return res;
 }
@@ -356,33 +356,33 @@ int VoiceDesc::preferredStaff() const
     int max = 0;
     int res = 0;
     for (int i = 0; i < MAX_STAVES; ++i) {
-        if (_chordRests[i] > max) {
-            max = _chordRests[i];
+        if (m_chordRests[i] > max) {
+            max = m_chordRests[i];
             res = i;
         }
     }
     return res;
 }
 
-QString VoiceDesc::toString() const
+String VoiceDesc::toString() const
 {
-    QString res = "[";
+    String res = u"[";
     for (int i = 0; i < MAX_STAVES; ++i) {
-        res += QString(" %1").arg(_chordRests[i]);
+        res += String(u" %1").arg(m_chordRests[i]);
     }
-    res += QString(" ] overlaps %1").arg(_overlaps);
-    if (_overlaps) {
-        res += " staffAlloc [";
+    res += String(u" ] overlaps %1").arg(m_overlaps);
+    if (m_overlaps) {
+        res += u" staffAlloc [";
         for (int i = 0; i < MAX_STAVES; ++i) {
-            res += QString(" %1").arg(_staffAlloc[i]);
+            res += String(u" %1").arg(m_staffAlloc[i]);
         }
-        res += " ] voices [";
+        res += u" ] voices [";
         for (int i = 0; i < MAX_STAVES; ++i) {
-            res += QString(" %1").arg(_voices[i]);
+            res += String(u" %1").arg(m_voices[i]);
         }
-        res += " ]";
+        res += u" ]";
     } else {
-        res += QString(" staff %1 voice %2").arg(_staff + 1).arg(_voice + 1);
+        res += String(u" staff %1 voice %2").arg(m_staff + 1).arg(m_voice + 1);
     }
     return res;
 }

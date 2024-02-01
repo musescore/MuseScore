@@ -812,11 +812,11 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
 
 static void createDefaultHeader(Score* score)
 {
-    QString strTitle;
-    QString strSubTitle;
-    QString strComposer;
-    QString strLyricist;
-    QString strTranslator;
+    String strTitle;
+    String strSubTitle;
+    String strComposer;
+    String strLyricist;
+    String strTranslator;
 
     if (!(score->metaTag(u"movementTitle").isEmpty() && score->metaTag(u"workTitle").isEmpty())) {
         strTitle = score->metaTag(u"movementTitle");
@@ -848,11 +848,11 @@ static void createDefaultHeader(Score* score)
 
     const auto vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
     vbox->setExcludeFromOtherParts(false);
-    addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
-    addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
-    addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
-    addText(vbox, score, strLyricist.toHtmlEscaped(),   TextStyleType::LYRICIST);
-    addText(vbox, score, strTranslator.toHtmlEscaped(), TextStyleType::TRANSLATOR);
+    addText(vbox, score, strTitle.toXmlEscaped(),      TextStyleType::TITLE);
+    addText(vbox, score, strSubTitle.toXmlEscaped(),   TextStyleType::SUBTITLE);
+    addText(vbox, score, strComposer.toXmlEscaped(),   TextStyleType::COMPOSER);
+    addText(vbox, score, strLyricist.toXmlEscaped(),   TextStyleType::LYRICIST);
+    addText(vbox, score, strTranslator.toXmlEscaped(), TextStyleType::TRANSLATOR);
 }
 
 //---------------------------------------------------------
@@ -1241,7 +1241,7 @@ static String text2syms(const String& t)
 
     IEngravingFontPtr sf = engravingFonts()->fallbackFont();
     std::map<String, SymId> map;
-    int maxStringSize = 0;          // maximum string size found
+    size_t maxStringSize = 0;          // maximum string size found
 
     for (int i = int(SymId::noSym); i < int(SymId::lastSym); ++i) {
         SymId id = SymId(i);
@@ -1250,20 +1250,20 @@ static String text2syms(const String& t)
         if (id != SymId::space) {
             map.insert({ string, id });
         }
-        if (int(string.size()) > maxStringSize) {
-            maxStringSize = int(string.size());
+        if (string.size() > maxStringSize) {
+            maxStringSize = string.size();
         }
     }
     //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
 
     // then look for matches
-    QString in = t;
-    QString res;
+    String in = t;
+    String res;
 
     while (in != u"") {
         // try to find the largest match possible
-        int maxMatch = qMin(in.size(), maxStringSize);
+        int maxMatch = int(qMin(in.size(), maxStringSize));
         AsciiStringView sym;
         while (maxMatch > 0) {
             String toBeMatched = in.left(maxMatch);
@@ -1275,13 +1275,13 @@ static String text2syms(const String& t)
         }
         if (maxMatch > 0) {
             // found a match, add sym to res and remove match from string in
-            res += "<sym>";
-            res += sym.ascii();
-            res += "</sym>";
+            res += u"<sym>";
+            res += String::fromAscii(sym.ascii());
+            res += u"</sym>";
             in.remove(0, maxMatch);
         } else {
             // not found, move one char from res to in
-            res += in.leftRef(1);
+            res += in.left(1);
             in.remove(0, 1);
         }
     }
@@ -1333,7 +1333,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
     String fontFamily = e.attributes().value("font-family").toString();
     // TODO: color, enclosure, yoffset in only part of the text, ...
 
-    QString txt        = e.readElementText();
+    String txt = e.readElementText();
     // replace HTML entities
     txt = decodeEntities(txt);
     String syms       = text2syms(txt);
@@ -1382,7 +1382,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
     }
     if (txt == syms) {
         txt.replace(String(u"\r"), String(u""));     // convert Windows line break \r\n -> \n
-        importedtext += txt.toHtmlEscaped();
+        importedtext += txt.toXmlEscaped();
     } else {
         // <sym> replacement made, should be no need for line break or other conversions
         importedtext += syms;

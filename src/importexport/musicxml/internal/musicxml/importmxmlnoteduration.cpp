@@ -256,13 +256,13 @@ void MxmlNoteDuration::timeModification(QXmlStreamReader& e)
         } else if (tag == "normal-type") {
             // "measure" is not a valid normal-type,
             // but would be accepted by setType()
-            QString strNormalType = e.readElementText();
-            if (strNormalType != "measure") {
-                QByteArray ba = strNormalType.toLatin1();
-                m_normalType.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
+            String strNormalType = e.readElementText();
+            if (strNormalType != u"measure") {
+                ByteArray ba = strNormalType.toAscii();
+                m_normalType.setType(TConv::fromXml(ba.constChar(), DurationType::V_INVALID));
             }
         } else {
-            m_logger->logDebugInfo(String("skipping '%1'").arg(e.name().toString()), &e);
+            m_logger->logDebugInfo(String(u"skipping '%1'").arg(e.name().toString()), &e);
             e.skipCurrentElement();
         }
     }
