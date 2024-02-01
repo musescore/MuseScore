@@ -128,7 +128,7 @@ void VSTParamsModel::setKeySwitchStr(const QString& str)
     params[KEYSWITCH_USE_FLAT_PARAM_CODE] = Val(m_useFlat);
 
     undoStack()->prepareChanges();
-    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), params);
+    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), params, soundFlag->isTextVisible());
     undoStack()->commitChanges();
 
     emit keySwitchChanged();
