@@ -232,9 +232,9 @@ ByteArray MscReader::readAudioFile() const
     return fileData(u"audio.ogg");
 }
 
-ByteArray MscReader::readAudioSettingsJsonFile() const
+ByteArray MscReader::readAudioSettingsJsonFile(const io::path_t& pathPrefix) const
 {
-    return fileData(u"audiosettings.json");
+    return fileData(pathPrefix.toString() + u"audiosettings.json");
 }
 
 ByteArray MscReader::readViewSettingsJsonFile(const io::path_t& pathPrefix) const

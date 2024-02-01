@@ -52,10 +52,6 @@ public:
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
 
-    SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
-    void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
-    async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const override;
-
     SoloMuteState auxSoloMuteState(audio::aux_channel_idx_t index) const override;
     void setAuxSoloMuteState(audio::aux_channel_idx_t index, const SoloMuteState& state) override;
     async::Channel<audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const override;
@@ -68,7 +64,7 @@ public:
     async::Notification settingsChanged() const override;
 
     Ret read(const engraving::MscReader& reader);
-    Ret write(engraving::MscWriter& writer);
+    Ret write(engraving::MscWriter& writer, notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr);
 
     //! NOTE Used for new or imported project (score)
     void makeDefault();
@@ -106,7 +102,7 @@ private:
     QString resourceTypeToString(const audio::AudioResourceType& type) const;
 
     QJsonObject buildAuxObject(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) const;
-    QJsonObject buildTrackObject(const engraving::InstrumentTrackId& id) const;
+    QJsonObject buildTrackObject(notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr, const engraving::InstrumentTrackId& id) const;
 
     audio::AudioOutputParams m_masterOutputParams;
 
@@ -116,8 +112,6 @@ private:
 
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
-    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStatesMap;
-    async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStateChanged;
 
     async::Notification m_settingsChanged;
 

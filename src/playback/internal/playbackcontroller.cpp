@@ -283,6 +283,17 @@ Promise<SoundPresetList> PlaybackController::availableSoundPresets(InstrumentTra
     return playback()->tracks()->availableSoundPresets(m_currentSequenceId, it->second);
 }
 
+mu::notation::INotationSoloMuteState::SoloMuteState PlaybackController::trackSoloMuteState(const InstrumentTrackId& trackId) const
+{
+    return m_notation->soloMuteState()->trackSoloMuteState(trackId);
+}
+
+void PlaybackController::setTrackSoloMuteState(const InstrumentTrackId& trackId,
+                                               const notation::INotationSoloMuteState::SoloMuteState& state) const
+{
+    m_notation->soloMuteState()->setTrackSoloMuteState(trackId, state);
+}
+
 void PlaybackController::playElements(const std::vector<const notation::EngravingItem*>& elements)
 {
     IF_ASSERT_FAILED(notationPlayback()) {
@@ -1003,6 +1014,7 @@ void PlaybackController::removeTrack(const InstrumentTrackId& instrumentTrackId)
 
     playback()->tracks()->removeTrack(m_currentSequenceId, search->second);
     audioSettings()->removeTrackParams(instrumentTrackId);
+    m_notation->soloMuteState()->removeTrackSoloMuteState(instrumentTrackId);
 
     m_trackRemoved.send(search->second);
     m_instrumentTrackIdMap.erase(instrumentTrackId);
@@ -1143,13 +1155,8 @@ void PlaybackController::setupSequenceTracks()
         updateMuteStates();
     });
 
-    audioSettings()->trackSoloMuteStateChanged().onReceive(
-        this, [this](const InstrumentTrackId&, const project::IProjectAudioSettings::SoloMuteState&) {
-        updateMuteStates();
-    });
-
     audioSettings()->auxSoloMuteStateChanged().onReceive(
-        this, [this](aux_channel_idx_t, const project::IProjectAudioSettings::SoloMuteState&) {
+        this, [this](aux_channel_idx_t, const notation::INotationSoloMuteState::SoloMuteState&) {
         updateMuteStates();
     });
 
@@ -1184,7 +1191,7 @@ void PlaybackController::setupSequencePlayer()
 
 void PlaybackController::updateMuteStates()
 {
-    if (!audioSettings() || !playback()) {
+    if (!audioSettings() || !playback() || !m_notation) {
         return;
     }
 
@@ -1194,7 +1201,7 @@ void PlaybackController::updateMuteStates()
     bool hasSolo = false;
 
     for (const InstrumentTrackId& instrumentTrackId : existingTrackIdSet) {
-        if (audioSettings()->trackSoloMuteState(instrumentTrackId).solo) {
+        if (m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId).solo) {
             hasSolo = true;
             break;
         }
@@ -1216,7 +1223,7 @@ void PlaybackController::updateMuteStates()
         const Part* part = notationParts->part(instrumentTrackId.partId);
         bool isPartVisible = part && part->show();
 
-        auto soloMuteState = audioSettings()->trackSoloMuteState(instrumentTrackId);
+        auto soloMuteState = m_notation->soloMuteState()->trackSoloMuteState(instrumentTrackId);
 
         bool shouldBeMuted = soloMuteState.mute
                              || (hasSolo && !soloMuteState.solo)
@@ -1429,6 +1436,11 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
         if (text->isHarmony()) {
             playElements({ text });
         }
+    });
+
+    m_notation->soloMuteState()->trackSoloMuteStateChanged().onReceive(
+        this, [this](const InstrumentTrackId&, const notation::INotationSoloMuteState::SoloMuteState&) {
+        updateMuteStates();
     });
 }
 
