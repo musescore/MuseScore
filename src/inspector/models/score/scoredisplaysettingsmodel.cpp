@@ -103,6 +103,11 @@ bool ScoreSettingsModel::shouldShowPageMargins() const
     return m_shouldShowPageMargins;
 }
 
+bool ScoreSettingsModel::shouldShowSoundFlags() const
+{
+    return m_shouldShowSoundFlags;
+}
+
 void ScoreSettingsModel::setShouldShowInvisible(bool shouldShowInvisible)
 {
     if (m_shouldShowInvisible == shouldShowInvisible) {
@@ -141,6 +146,16 @@ void ScoreSettingsModel::setShouldShowPageMargins(bool shouldShowPageMargins)
 
     dispatcher()->dispatch("show-pageborders");
     updateShouldShowPageMargins(shouldShowPageMargins);
+}
+
+void ScoreSettingsModel::setShouldShowSoundFlags(bool shouldShowSoundFlags)
+{
+    if (m_shouldShowSoundFlags == shouldShowSoundFlags) {
+        return;
+    }
+
+    dispatcher()->dispatch("show-soundflags");
+    updateShouldShowSoundFlags(shouldShowSoundFlags);
 }
 
 void ScoreSettingsModel::updateShouldShowInvisible(bool isVisible)
@@ -183,6 +198,16 @@ void ScoreSettingsModel::updateShouldShowPageMargins(bool isVisible)
     emit shouldShowPageMarginsChanged(isVisible);
 }
 
+void ScoreSettingsModel::updateShouldShowSoundFlags(bool isVisible)
+{
+    if (isVisible == m_shouldShowSoundFlags) {
+        return;
+    }
+
+    m_shouldShowSoundFlags = isVisible;
+    emit shouldShowSoundFlagsChanged(isVisible);
+}
+
 void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
 {
     switch (configType) {
@@ -198,6 +223,9 @@ void ScoreSettingsModel::updateFromConfig(ScoreConfigType configType)
     case notation::ScoreConfigType::ShowPageMargins:
         updateShouldShowPageMargins(scoreConfig().isShowPageMargins);
         break;
+    case notation::ScoreConfigType::ShowSoundFlags:
+        updateShouldShowSoundFlags(scoreConfig().isShowSoundFlags);
+        break;
     default:
         break;
     }
@@ -210,5 +238,6 @@ void ScoreSettingsModel::updateAll()
     updateShouldShowInvisible(config.isShowInvisibleElements);
     updateShouldShowFormatting(config.isShowUnprintableElements);
     updateShouldShowFrames(config.isShowFrames);
+    updateShouldShowSoundFlags(config.isShowSoundFlags);
     updateShouldShowPageMargins(config.isShowPageMargins);
 }
