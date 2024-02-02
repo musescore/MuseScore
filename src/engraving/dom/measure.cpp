@@ -533,10 +533,13 @@ bool Measure::showsMeasureNumberInAutoMode()
         return false;
     }
 
+    int interval = style().styleI(Sid::measureNumberInterval);
     Measure* prevMeasure = this->prevMeasure();
 
     // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
-    if (!prevMeasure || prevMeasure->sectionBreak() || (prevMeasure->irregular() && prevMeasure->isFirstInSection())) {
+    // except, when showing numbers on each measure, and first measure is after anacrusis - then show always
+    if (!prevMeasure || prevMeasure->sectionBreak()
+        || (prevMeasure->irregular() && prevMeasure->isFirstInSection() && interval != 1)) {
         return style().styleB(Sid::showMeasureNumberOne);
     }
 
@@ -549,7 +552,6 @@ bool Measure::showsMeasureNumberInAutoMode()
     } else {
         // In the case of an interval, we should show the measure number either if:
         //   1) We should show them every measure
-        int interval = style().styleI(Sid::measureNumberInterval);
         if (interval == 1) {
             return true;
         }
@@ -557,7 +559,7 @@ bool Measure::showsMeasureNumberInAutoMode()
         //   2) (measureNumber + 1) % interval == 0 (or 1 if measure number one is numbered.)
         // If measure number 1 is numbered, and the interval is let's say 5, then we should number #1, 6, 11, 16, etc.
         // If measure number 1 is not numbered, with the same interval (5), then we should number #5, 10, 15, 20, etc.
-        return ((no() + 1) % style().styleI(Sid::measureNumberInterval)) == (style().styleB(Sid::showMeasureNumberOne) ? 1 : 0);
+        return ((no() + 1) % interval) == (style().styleB(Sid::showMeasureNumberOne) ? 1 : 0);
     }
 }
 
