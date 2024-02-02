@@ -531,11 +531,40 @@ void Score::expandVoice()
 void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
       {
       startCmd();
-      for (Note* on : nl) {
-            Note* note = new Note(this);
+      // Prepare note selection in case there are not selected tied notes and sort them
+      std::vector<Note*> tmpnl;
+      std::vector<Note*> _nl = nl;
+      bool selIsList = selection().isList();
+      bool selIsSingle = _nl.size() == 1 && selIsList;
+      bool shouldSelectFirstNote = selIsSingle && _nl[0]->tieFor();
+
+      std::sort(_nl.begin(), _nl.end(), [](const Note* a, const Note* b) -> bool {
+            return a->tick() < b->tick();
+            });
+      for (auto n : _nl) {
+            if (std::find(tmpnl.begin(), tmpnl.end(), n) != tmpnl.end())
+                  continue;
+            tmpnl.push_back(n);
+            if (n->tieFor()
+                && (std::find(tmpnl.begin(), tmpnl.end(), n->tieFor()->endNote()) == tmpnl.end())) {
+                  Note* currNote = n->tieFor()->endNote();
+                  do {
+                        tmpnl.push_back(currNote);
+                        currNote = currNote->tieFor() ? currNote->tieFor()->endNote() : nullptr;
+                        }while (currNote);
+                  }
+            if (n->selected())
+                  deselect(n);
+            }
+
+
+      Note* prevTied = nullptr;
+      Chord* firstChord = nullptr;
+      std::vector<Element*> notesToSelect;
+      for (Note* on : tmpnl) {
             Chord* chord = on->chord();
-            note->setParent(chord);
-            note->setTrack(chord->track());
+            if (!firstChord)
+                  firstChord = chord;
             int valTmp = val < 0 ? val+1 : val-1;
 
             int npitch;
@@ -588,10 +617,13 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
                   ntpc2 = on->tpc2();
                   }
             if (npitch < 0 || npitch > 127) {
-                  delete note;
-                  endCmd();
-                  return;
+                  notesToSelect.push_back(dynamic_cast<Element*>(on));
+                  continue;
                   }
+
+            Note* note = new Note(this);
+            note->setParent(chord);
+            note->setTrack(chord->track());
             note->setPitch(npitch, ntpc1, ntpc2);
 
             undoAddElement(note);
@@ -602,13 +634,40 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
                   a->setParent(note);
                   undoAddElement(a);
                   }
+            if (on->tieBack() && prevTied) {
+                  Tie* tie = prevTied->tieFor();
+                  tie->setEndNote(note);
+                  tie->setTick2(note->tick());
+                  note->setTieBack(tie);
+                  undoAddElement(tie);
+                  prevTied = nullptr;
+                  }
+            if (on->tieFor()) {
+                  Tie* tie = new Tie(this);
+                  tie->setStartNote(note);
+                  tie->setTick(note->tick());
+                  tie->setTrack(note->track());
+                  note->setTieFor(tie);
+                  prevTied = note;
+                  }
+
             setPlayNote(true);
 
-            select(note, SelectType::SINGLE, 0);
+            if (shouldSelectFirstNote && firstChord && !firstChord->notes().empty()) {
+                Note* noteToSelect = firstChord->notes()[firstChord->notes().size() - 1];
+                select(noteToSelect, SelectType::SINGLE, 0);
+                  }
+            else if (selIsList && note)
+                      notesToSelect.push_back(dynamic_cast<Element*>(note));
             }
       if (_is.noteEntryMode())
             _is.setAccidentalType(AccidentalType::NONE);
-      _is.moveToNextInputPos();
+      if (!notesToSelect.empty()) {
+            for (Element* noteToSelect : notesToSelect)
+                  select(noteToSelect, SelectType::ADD, 0);
+            }
+      if (_is.cr() == toChordRest(_nl[0]->chord()) && selIsSingle)
+            _is.moveToNextInputPos();
       endCmd();
       }
 
