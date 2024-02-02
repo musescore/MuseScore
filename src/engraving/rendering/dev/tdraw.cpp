@@ -2840,20 +2840,22 @@ void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
 
     const ActionIcon::LayoutData* ldata = item->ldata();
 
-    RectF bbox = ldata->bbox();
-    RectF iconBBox = item->iconBBox();
-    iconBBox.moveCenter(bbox.center());
-    iconBBox.setX(bbox.x());
+    if (item->selected() || item->score()->showSoundFlags()) {
+        RectF bbox = ldata->bbox();
+        RectF iconBBox = item->iconBBox();
+        iconBBox.moveCenter(bbox.center());
+        iconBBox.setX(bbox.x());
 
-    painter->setNoPen();
-    painter->setBrush(item->iconBackgroundColor());
-    painter->drawEllipse(iconBBox);
+        painter->setNoPen();
+        painter->setBrush(item->iconBackgroundColor());
+        painter->drawEllipse(iconBBox);
 
-    mu::draw::Font f(item->iconFont());
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-    painter->setFont(f);
-    painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
-    painter->drawText(iconBBox, draw::AlignCenter, Char(item->iconCode()));
+        mu::draw::Font f(item->iconFont());
+        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+        painter->setFont(f);
+        painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
+        painter->drawText(iconBBox, draw::AlignCenter, Char(item->iconCode()));
+    }
 
     if (item->isTextVisible()) {
         drawTextBase(item, painter);

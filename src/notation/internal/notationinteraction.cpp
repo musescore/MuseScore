@@ -4486,6 +4486,7 @@ ScoreConfig NotationInteraction::scoreConfig() const
     config.isShowUnprintableElements = score()->showUnprintable();
     config.isShowFrames = score()->showFrames();
     config.isShowPageMargins = score()->showPageborders();
+    config.isShowSoundFlags = score()->showSoundFlags();
     config.isMarkIrregularMeasures = score()->markIrregularMeasures();
 
     return config;
@@ -4502,6 +4503,7 @@ void NotationInteraction::setScoreConfig(const ScoreConfig& config)
     score()->setShowUnprintable(config.isShowUnprintableElements);
     score()->setShowFrames(config.isShowFrames);
     score()->setShowPageborders(config.isShowPageMargins);
+    score()->setShowSoundFlags(config.isShowSoundFlags);
     score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
 
     EngravingItem* selectedElement = selection()->element();
