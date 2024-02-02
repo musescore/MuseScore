@@ -2847,10 +2847,15 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
 
 static void wavyLineStart(const Trill* tr, const int number, Notations& notations, Ornaments& ornaments, XmlWriter& xml)
 {
-    // mscore only supports wavy-line with trill-mark
     notations.tag(xml, tr);
     ornaments.tag(xml);
-    xml.tagRaw(u"trill-mark" + color2xml(tr));
+    if (tr->trillType() == TrillType::TRILL_LINE) {
+        xml.tagRaw(u"trill-mark" + color2xml(tr));
+    } else if (tr->trillType() == TrillType::UPPRALL_LINE) {
+        xml.tagRaw(u"other-ornament smufl=\"ornamentBottomLeftConcaveStroke\"" + color2xml(tr));
+    } else if (tr->trillType() == TrillType::DOWNPRALL_LINE) {
+        xml.tagRaw(u"other-ornament smufl=\"ornamentLeftVerticalStroke\"" + color2xml(tr));
+    }
     writeAccidental(xml, u"accidental-mark", tr->accidental());
     String tagName = u"wavy-line type=\"start\"";
     tagName += String(u" number=\"%1\"").arg(number + 1);
@@ -3038,6 +3043,8 @@ static std::vector<String> symIdToArtic(const SymId sid)
 
     case SymId::articStaccatissimoAbove:
     case SymId::articStaccatissimoBelow:
+    case SymId::articStaccatissimoWedgeAbove:
+    case SymId::articStaccatissimoWedgeBelow:
         return { u"staccatissimo" };
         break;
 
@@ -3104,6 +3111,11 @@ static std::vector<String> symIdToArtic(const SymId sid)
     case SymId::articTenutoAccentAbove:
     case SymId::articTenutoAccentBelow:
         return { u"tenuto", u"accent" };
+        break;
+
+    case SymId::articStaccatissimoStrokeAbove:
+    case SymId::articStaccatissimoStrokeBelow:
+        return { u"spiccato" };
         break;
 
     default:
