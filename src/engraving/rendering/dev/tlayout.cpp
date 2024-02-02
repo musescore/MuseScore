@@ -5412,29 +5412,33 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, StaffText::LayoutData* ldat
     LAYOUT_CALL_ITEM(item);
     bool isTextVisible = item->isTextVisible();
 
+    ldata->clearBbox();
+
     if (isTextVisible) {
         layoutBaseTextBase(item, ldata);
     }
 
-    RectF bbox = ldata->bbox();
-    RectF iconBBox = item->iconBBox();
+    if (item->selected() || item->score()->showSoundFlags()) {
+        RectF bbox = ldata->bbox();
+        RectF iconBBox = item->iconBBox();
 
-    // <icon><space><text>
-    double textHeight = draw::FontMetrics::boundingRect(item->font(), item->xmlText()).height();
-    bbox.setWidth(bbox.width() + iconBBox.width() + (isTextVisible ? textHeight / 4.0 : 0));
+        // <icon><space><text>
+        double textHeight = draw::FontMetrics::boundingRect(item->font(), item->xmlText()).height();
+        bbox.setWidth(bbox.width() + iconBBox.width() + (isTextVisible ? textHeight / 4.0 : 0));
 
-    if (!isTextVisible) {
-        bbox.setHeight(textHeight);
-    }
+        if (!isTextVisible) {
+            bbox.setHeight(textHeight);
+        }
 
-    ldata->setBbox(bbox);
+        ldata->setBbox(bbox);
 
-    if (isTextVisible) {
-        double xMove = iconBBox.width() + textHeight / 4.0;
-        for (TextBlock& block : ldata->blocks) {
-            auto& fragments = block.fragments();
-            for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
-                it->pos.setX(it->pos.x() + xMove);
+        if (isTextVisible) {
+            double xMove = iconBBox.width() + textHeight / 4.0;
+            for (TextBlock& block : ldata->blocks) {
+                auto& fragments = block.fragments();
+                for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
+                    it->pos.setX(it->pos.x() + xMove);
+                }
             }
         }
     }

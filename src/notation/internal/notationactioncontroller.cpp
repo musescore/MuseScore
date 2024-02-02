@@ -345,6 +345,7 @@ void NotationActionController::init()
     registerAction("show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
     registerAction("show-frames", [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
     registerAction("show-pageborders", [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
+    registerAction("show-soundflags", [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
     registerAction("show-irregular", [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
 
     registerAction("concert-pitch", &Controller::toggleConcertPitch);
@@ -1893,6 +1894,9 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
         break;
     case ScoreConfigType::ShowPageMargins:
         config.isShowPageMargins = !config.isShowPageMargins;
+        break;
+    case ScoreConfigType::ShowSoundFlags:
+        config.isShowSoundFlags = !config.isShowSoundFlags;
         break;
     case ScoreConfigType::MarkIrregularMeasures:
         config.isMarkIrregularMeasures = !config.isMarkIrregularMeasures;
