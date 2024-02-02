@@ -232,6 +232,7 @@ class Measure final : public MeasureBase {
       bool isFinalMeasureOfSection() const;
       bool isAnacrusis() const;
       bool isFirstInSystem() const;
+      bool isFirstInSection() const;
 
       bool breakMultiMeasureRest() const        { return _breakMultiMeasureRest; }
       void setBreakMultiMeasureRest(bool val)   { _breakMultiMeasureRest = val;  }
