@@ -1377,6 +1377,7 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
         layoutItem(e, const_cast<LayoutContext&>(ctx));
     }
     bool boxAutoSize = item->getProperty(Pid::BOX_AUTOSIZE).toBool();
+    bool heightChanged = false;
     if (boxAutoSize) {
         double contentHeight = item->contentRect().height();
 
@@ -1385,6 +1386,7 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
         }
 
         ldata->setHeight(contentHeight);
+        heightChanged = true;
     }
 
     if (boxAutoSize && MScore::noImages) {
@@ -1407,6 +1409,12 @@ void TLayout::layoutVBox(const VBox* item, VBox::LayoutData* ldata, const Layout
         }
 
         ldata->setHeight(calculatedVBoxHeight);
+        heightChanged = true;
+    }
+    if (heightChanged) {
+        for (EngravingItem* e : item->el()) {
+            layoutItem(e, const_cast<LayoutContext&>(ctx));
+        }
     }
 }
 
