@@ -533,8 +533,10 @@ bool Measure::showsMeasureNumberInAutoMode()
         return false;
     }
 
+    Measure* prevMeasure = this->prevMeasure();
+
     // Measure numbers should not show on first measure unless specified with Sid::showMeasureNumberOne
-    if (!no()) {
+    if (!prevMeasure || prevMeasure->sectionBreak() || (prevMeasure->irregular() && prevMeasure->isFirstInSection())) {
         return style().styleB(Sid::showMeasureNumberOne);
     }
 
@@ -543,7 +545,7 @@ bool Measure::showsMeasureNumberInAutoMode()
         //   1) This is the first measure of the system OR
         //   2) The previous measure in the system is the first, and is irregular.
         return isFirstInSystem()
-               || (prevMeasure() && prevMeasure()->irregular() && prevMeasure()->isFirstInSystem());
+               || (prevMeasure && prevMeasure->irregular() && prevMeasure->isFirstInSystem());
     } else {
         // In the case of an interval, we should show the measure number either if:
         //   1) We should show them every measure
@@ -1928,6 +1930,16 @@ bool Measure::isFirstInSystem() const
         return false;
     }
     return system()->firstMeasure() == this;
+}
+
+//---------------------------------------------------------
+//   isFirstInSection
+//---------------------------------------------------------
+
+bool Measure::isFirstInSection() const
+{
+    Measure* prevMeasure = this->prevMeasure();
+    return !prevMeasure || prevMeasure->sectionBreak();
 }
 
 //---------------------------------------------------------
