@@ -22,9 +22,11 @@
 
 #include "mxlwriter.h"
 
-#include "log.h"
+#include "io/buffer.h"
 
 #include "musicxml/exportxml.h"
+
+#include "log.h"
 
 using namespace mu::iex::musicxml;
 using namespace mu::io;
@@ -40,5 +42,11 @@ mu::Ret MxlWriter::write(notation::INotationPtr notation, QIODevice& destination
         return make_ret(Ret::Code::UnknownError);
     }
 
-    return mu::engraving::saveMxl(score, &destinationDevice);
+    io::Buffer buf;
+    Ret ret = mu::engraving::saveMxl(score, &buf);
+    if (ret) {
+        destinationDevice.write(buf.data().toQByteArrayNoCopy());
+    }
+
+    return ret;
 }

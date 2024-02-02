@@ -48,8 +48,9 @@
 #include "containers.h"
 #include "io/iodevice.h"
 #include "io/buffer.h"
+#include "io/file.h"
 #include "io/fileinfo.h"
-#include "global/deprecated/qzipwriter_p.h"
+#include "global/serialization/zipwriter.h"
 
 #include "engraving/style/style.h"
 #include "engraving/rw/xmlwriter.h"
@@ -8011,24 +8012,24 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
  Return false on error.
  */
 
-bool saveXml(Score* score, QIODevice* device)
+bool saveXml(Score* score, IODevice* device)
 {
     mu::io::Buffer buf;
     buf.open(mu::io::IODevice::WriteOnly);
     ExportMusicXml em(score);
     em.write(&buf);
-    device->write(buf.data().toQByteArrayNoCopy());
+    device->write(buf.data());
     return true;
 }
 
 bool saveXml(Score* score, const String& name)
 {
-    QFile f(name.toQString());
-    if (!f.open(QIODevice::WriteOnly)) {
+    File f(name.toQString());
+    if (!f.open(IODevice::WriteOnly)) {
         return false;
     }
 
-    bool res = saveXml(score, &f) && (f.error() == QFile::NoError);
+    bool res = saveXml(score, &f) && !f.hasError();
     f.close();
     return res;
 }
@@ -8052,7 +8053,7 @@ bool saveXml(Score* score, const String& name)
 //     </rootfiles>
 // </container>
 
-static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const String& filename)
+static void writeMxlArchive(Score* score, ZipWriter& zip, const String& filename)
 {
     mu::io::Buffer cbuf;
     cbuf.open(mu::io::IODevice::ReadWrite);
@@ -8068,35 +8069,36 @@ static void writeMxlArchive(Score* score, MQZipWriter& zipwriter, const String& 
     xml.endElement();
     cbuf.seek(0);
 
-    zipwriter.addFile("META-INF/container.xml", cbuf.data().toQByteArrayNoCopy());
+    zip.addFile("META-INF/container.xml", cbuf.data());
 
     mu::io::Buffer dbuf;
     dbuf.open(mu::io::IODevice::ReadWrite);
     ExportMusicXml em(score);
     em.write(&dbuf);
     dbuf.seek(0);
-    zipwriter.addFile(filename, dbuf.data().toQByteArrayNoCopy());
+    zip.addFile(filename.toStdString(), dbuf.data());
 }
 
-bool saveMxl(Score* score, QIODevice* device)
+bool saveMxl(Score* score, IODevice* device)
 {
-    MQZipWriter uz(device);
+    ZipWriter zip(device);
 
     //anonymized filename since we don't know the actual one here
     String fn = u"score.xml";
-    writeMxlArchive(score, uz, fn);
-    uz.close();
+    writeMxlArchive(score, zip, fn);
+    zip.close();
 
     return true;
 }
 
 bool saveMxl(Score* score, const String& name)
 {
-    MQZipWriter uz(name);
+    ZipWriter zip(name);
 
     FileInfo fi(name);
     String fn = fi.completeBaseName() + u".xml";
-    writeMxlArchive(score, uz, fn);
+    writeMxlArchive(score, zip, fn);
+    zip.close();
 
     return true;
 }
