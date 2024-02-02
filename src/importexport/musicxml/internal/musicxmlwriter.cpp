@@ -22,10 +22,12 @@
 
 #include "musicxmlwriter.h"
 
-#include "log.h"
+#include "global/io/buffer.h"
 
 #include "engraving/dom/masterscore.h"
 #include "musicxml/exportxml.h"
+
+#include "log.h"
 
 using namespace mu::iex::musicxml;
 using namespace mu::project;
@@ -52,7 +54,13 @@ mu::Ret MusicXmlWriter::write(notation::INotationPtr notation, QIODevice& destin
         return make_ret(Ret::Code::UnknownError);
     }
 
-    return mu::engraving::saveXml(score, &destinationDevice);
+    io::Buffer buf;
+    Ret ret = mu::engraving::saveXml(score, &buf);
+    if (ret) {
+        destinationDevice.write(buf.data().toQByteArrayNoCopy());
+    }
+
+    return ret;
 }
 
 mu::Ret MusicXmlWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)

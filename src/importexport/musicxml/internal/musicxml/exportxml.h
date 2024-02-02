@@ -26,13 +26,11 @@
 #include "io/iodevice.h"
 #include "global/types/string.h"
 
-class QIODevice;
-
 namespace mu::engraving {
 class Score;
 
-bool saveMxl(Score*, QIODevice*);
-bool saveXml(Score*, QIODevice*);
+bool saveMxl(Score*, io::IODevice*);
+bool saveXml(Score*, io::IODevice*);
 bool saveXml(Score*, const String&);
 }
 
