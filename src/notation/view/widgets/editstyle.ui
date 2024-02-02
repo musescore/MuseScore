@@ -13668,7 +13668,7 @@ By default, they will be placed such as that their right end are at the same lev
                       </widget>
                      </item>
                      <item row="1" column="3">
-                      <spacer name="horizontalSpacer_66">
+                      <spacer name="horizontalSpacer_661">
                        <property name="orientation">
                         <enum>Qt::Horizontal</enum>
                        </property>
