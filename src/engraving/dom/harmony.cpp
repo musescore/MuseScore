@@ -1016,6 +1016,10 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
         // Move segment reference to next measure
         if (currentMeasure != endMeasure) {
             currentMeasure = currentMeasure->nextMeasure();
+            if (currentMeasure && currentMeasure->mmRest()) {
+                duration += currentMeasure->mmRest()->ticks();
+                currentMeasure = currentMeasure->mmRest()->nextMeasure();
+            }
             cur = (currentMeasure) ? currentMeasure->first() : nullptr;
         } else {
             // End of repeatSegment or search boundary reached
