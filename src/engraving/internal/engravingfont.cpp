@@ -438,8 +438,8 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         { "legerLineExtension",         { { Sid::ledgerLineLength } } },
         { "slurEndpointThickness",      { { Sid::SlurEndWidth } } },
         { "slurMidpointThickness",      { { Sid::SlurMidWidth } } },
-        // "tieEndpointThickness" not supported
-        // "tieMidpointThickness" not supported
+        { "tieEndpointThickness",       { { Sid::TieEndWidth } } },
+        { "tieMidpointThickness",       { { Sid::TieMidWidth } } },
         { "thinBarlineThickness",       { { Sid::barWidth, Sid::doubleBarWidth } } },
         { "thickBarlineThickness",      { { Sid::endBarWidth } } },
         // "dashedBarlineThickness" not supported
