@@ -1157,7 +1157,7 @@ double Note::headHeight() const
 double Note::tabHeadHeight(const StaffType* tab) const
 {
     if (tab && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
-        return tab->fretBoxH() * magS();
+        return tab->fretBoxH(style()) * magS();
     }
     return headHeight();
 }

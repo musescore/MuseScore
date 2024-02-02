@@ -4338,7 +4338,13 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         double w = item->tabHeadWidth(tab);     // !! use _fretString
         double mags = item->magS();
-        noteBBox = RectF(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+
+        const MStyle& style = item->style();
+
+        double y = item->deadNote() ? tab->deadFretBoxY(style) : tab->fretBoxY(style);
+        double height = item->deadNote() ? tab->deadFretBoxH(style) : tab->fretBoxH(style);
+
+        noteBBox = RectF(0, y * mags, w, height * mags);
 
         if (item->ghost() && Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
             noteBBox.setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));

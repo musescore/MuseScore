@@ -292,8 +292,12 @@ public:
     double durationFontUserY() const { return m_durationFontUserY; }
     double durationFontYOffset() const { setDurationMetrics(); return m_durationYOffset + m_durationFontUserY * SPATIUM20; }
     double durationGridYOffset() const { setDurationMetrics(); return m_durationGridYOffset; }
-    double fretBoxH() const { setFretMetrics(); return m_fretBoxH; }
-    double fretBoxY() const { setFretMetrics(); return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
+    double fretBoxH(const MStyle& style) const { setFretMetrics(style); return m_fretBoxH; }
+    double fretBoxH() const { UNREACHABLE; return 0.0; }
+    double deadFretBoxH(const MStyle& style) const { setFretMetrics(style); return m_deadFretBoxH; }
+    double fretBoxY(const MStyle& style) const { setFretMetrics(style); return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
+    double fretBoxY() const { UNREACHABLE; return 0.0; }
+    double deadFretBoxY(const MStyle& style) const { setFretMetrics(style); return m_deadFretBoxY + m_fretFontUserY * SPATIUM20; }
 
     // 2 methods to return the size of a box masking lines under a fret mark
     double fretMaskH() const { return m_lineDistance.val() * SPATIUM20; }
@@ -303,7 +307,8 @@ public:
     const String fretFontName() const { return m_fretFonts[m_fretFontIdx].displayName; }
     double fretFontSize() const { return m_fretFontSize; }
     double fretFontUserY() const { return m_fretFontUserY; }
-    double fretFontYOffset() const { setFretMetrics(); return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
+    double fretFontYOffset(const MStyle& style) const { setFretMetrics(style); return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
+    double fretFontYOffset() const { UNREACHABLE; return 0.0; }
     bool  genDurations() const { return m_genDurations; }
     bool  linesThrough() const { return m_linesThrough; }
     TablatureMinimStyle minimStyle() const { return m_minimStyle; }
@@ -363,7 +368,7 @@ private:
     friend class TabDurationSymbol;
 
     void  setDurationMetrics() const;
-    void  setFretMetrics() const;
+    void  setFretMetrics(const MStyle& style) const;
 
     static bool readConfigFile(const String& fileName);
 
@@ -429,11 +434,14 @@ private:
     mutable bool m_durationMetricsValid = false;     // whether duration font metrics are valid or not
     mutable double m_fretBoxH = 0.0;
     mutable double m_fretBoxY = 0.0;                // the height and the y rect.coord. (relative to staff line)
+    mutable double m_deadFretBoxH = 0.0;
+    mutable double m_deadFretBoxY = 0.0;
     // of a box bounding all fret characters (raster units) internally computed:
     // depends upon _onString, _useNumbers and the metrics of the fret font
     mu::draw::Font m_fretFont;                      // font used to draw fret marks; cached for efficiency
     size_t m_fretFontIdx = 0;                 // the index of current fret font in fret font array
     mutable double m_fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
+    mutable double m_deadFretYOffset = 0.0;
     // (raster units); internally computed: depends upon _onString, _useNumbers
     // and the metrics of the fret font
     mutable bool m_fretMetricsValid = false;       // whether fret font metrics are valid or not

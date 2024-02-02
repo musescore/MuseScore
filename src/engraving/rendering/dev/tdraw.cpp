@@ -2264,7 +2264,9 @@ void TDraw::draw(const Note* item, Painter* painter)
             startPosX += item->symWidth(SymId::noteheadParenthesisLeft);
         }
 
-        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), item->fretString());
+        const MStyle& style = item->style();
+        double yOffset = tab->fretFontYOffset(style);
+        painter->drawText(PointF(startPosX, yOffset * item->magS()), item->fretString());
     }
     // NOT tablature
     else {

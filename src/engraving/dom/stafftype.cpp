@@ -194,7 +194,9 @@ bool StaffType::operator==(const StaffType& st) const
     equal &= (m_durationGridYOffset == st.m_durationGridYOffset);
     equal &= (m_durationMetricsValid == st.m_durationMetricsValid);
     equal &= (m_fretBoxH == st.m_fretBoxH);
+    equal &= (m_deadFretBoxH == st.m_deadFretBoxH);
     equal &= (m_fretBoxY == st.m_fretBoxY);
+    equal &= (m_deadFretBoxY == st.m_deadFretBoxY);
     equal &= (m_fretFont == st.m_fretFont);
     equal &= (m_fretFontIdx == st.m_fretFontIdx);
     equal &= (m_fretYOffset == st.m_fretYOffset);
@@ -356,7 +358,7 @@ void StaffType::setDurationMetrics() const
     m_durationMetricsValid = true;
 }
 
-void StaffType::setFretMetrics() const
+void StaffType::setFretMetrics(const MStyle& style) const
 {
     if (m_fretMetricsValid && m_refDPI == DPI) {
         return;
@@ -385,14 +387,25 @@ void StaffType::setFretMetrics() const
         RectF bx(fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].displayLetter[0]));
         m_fretYOffset = -bx.y() / 2.0;
     }
+
+    // Calculate position for dead fret marks - these must be centred separately based on their glyph
+    RectF deadBb = fm.tightBoundingRect(m_fretFonts[m_fretFontIdx].xChar);
+    double lineThickness = style.styleS(Sid::staffLineWidth).val() * SPATIUM20 * 0.5;
+    m_deadFretYOffset = -deadBb.y() / 2.0 + lineThickness;
+
     // if on string, we are done; if between strings, raise by half line distance
     if (!m_onLines) {
-        m_fretYOffset -= lineDistance().val() * SPATIUM20 * 0.5;
+        double lineAdj = lineDistance().val() * SPATIUM20 * 0.5;
+        m_fretYOffset -= lineAdj;
+        m_deadFretYOffset -= lineAdj;
     }
 
     // from _fretYOffset, compute _fretBoxH and _fretBoxY
     m_fretBoxH = bb.height();
     m_fretBoxY = bb.y() + m_fretYOffset;
+
+    m_deadFretBoxH = deadBb.height();
+    m_deadFretBoxY = deadBb.y() + m_deadFretYOffset;
 
     // keep track of the conditions under which metrics have been computed
     m_refDPI = DPI;
@@ -583,7 +596,7 @@ String StaffType::fretString(int fret, int string, bool deadNote) const
         return unknownFret;
     }
     if (deadNote) {
-        return m_fretFonts[m_fretFontIdx].deadNoteChar;
+        return String(m_fretFonts[m_fretFontIdx].xChar);
     } else {
         bool hasFret;
         String text  = tabBassStringPrefix(string, &hasFret);
