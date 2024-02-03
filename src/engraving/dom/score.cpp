@@ -186,8 +186,6 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
         // inherit most style settings from parent
         m_style = parent->style();
 
-        checkChordList();
-
         static const Sid styles[] = {
             Sid::pageWidth,
             Sid::pageHeight,
@@ -215,6 +213,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     }
     // update style values
     m_style.precomputeValues();
+    checkChordList();
     m_synthesizerState = parent->m_synthesizerState;
     m_mscVersion = parent->m_mscVersion;
     createPaddingTable();
