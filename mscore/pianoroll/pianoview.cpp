@@ -2699,7 +2699,7 @@ void PianoView::drawDraggedNotes(QPainter* painter)
                   if (xml.name().toString() == "note") {
                         int sn = xml.attributes().value("startN").toString().toInt();
                         int sd = xml.attributes().value("startD").toString().toInt();
-                        Fraction startTick = Fraction(sn, sd);
+                        Fraction fStartTick = Fraction(sn, sd);
 
                         int tn = xml.attributes().value("lenN").toString().toInt();
                         int td = xml.attributes().value("lenD").toString().toInt();
@@ -2714,7 +2714,7 @@ void PianoView::drawDraggedNotes(QPainter* painter)
 
                         int track = _staff->idx() * VOICES + voice;
 
-                        drawDraggedNote(painter, startTick + pasteTickOffset, tickLen, pitch + pitchOffset, track, noteColor);
+                        drawDraggedNote(painter, fStartTick + pasteTickOffset, tickLen, pitch + pitchOffset, track, noteColor);
                         }
                   }
             }

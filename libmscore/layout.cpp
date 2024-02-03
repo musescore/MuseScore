@@ -4266,8 +4266,8 @@ System* Score::collectSystem(LayoutContext& lc)
             }
       system->setWidth(pos.x());
 
-      for (System *system : brokenSystems)
-            system->clear();
+      for (System *bSystem : brokenSystems)
+            bSystem->clear();
 
       layoutSystemElements(system, lc);
       system->layout2();   // compute staff distances
