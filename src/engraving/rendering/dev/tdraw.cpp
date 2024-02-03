@@ -1451,7 +1451,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
     double _spatium = item->spatium();
     const Glissando* glissando = item->glissando();
 
-    Pen pen(item->curColor(item->visible(), glissando->lineColor()));
+    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
     pen.setWidthF(glissando->lineWidth());
     pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
@@ -2547,7 +2547,7 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    Pen pen(item->curColor());
+    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
     double mag = item->staff() ? item->staff()->staffMag(item->slur()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)
@@ -2930,7 +2930,7 @@ void TDraw::draw(const TieSegment* item, Painter* painter)
         return;
     }
 
-    Pen pen(item->curColor());
+    Pen pen(item->curColor(item->getProperty(Pid::VISIBLE).toBool(), item->getProperty(Pid::COLOR).value<Color>()));
     double mag = item->staff() ? item->staff()->staffMag(item->tie()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
