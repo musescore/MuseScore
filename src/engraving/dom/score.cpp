@@ -178,6 +178,8 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
     m_masterScore = parent;
     if (DefaultStyle::defaultStyleForParts()) {
         m_style = *DefaultStyle::defaultStyleForParts();
+
+        checkChordList();
     } else {
         // inherit most style settings from parent
         m_style = parent->style();
