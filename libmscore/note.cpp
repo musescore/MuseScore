@@ -2638,7 +2638,14 @@ void Note::verticalDrag(EditData &ed)
       else {
             Key key = staff()->key(_tick);
             int idx = chord()->vStaffIdx();
-            int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
+            bool error = false;
+            AccidentalVal accOffs = firstTiedNote()->chord()->measure()->findAccidental(
+                              firstTiedNote()->chord()->segment(), idx, ned->line + lineOffset, error);
+            if (error)
+                  accOffs = Accidental::subtype2value(AccidentalType::NONE);
+            int nStep = absStep(ned->line + lineOffset, score()->staff(idx)->clef(_tick));
+            int octave = nStep / 7;
+            int newPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
 
             if (!concertPitch()) {
                   Interval interval = staff()->part()->instrument(_tick)->transpose();
@@ -2648,10 +2655,12 @@ void Note::verticalDrag(EditData &ed)
             int newTpc1 = pitch2tpc(newPitch, key, Prefer::NEAREST);
             int newTpc2 = pitch2tpc(newPitch - transposition(), key, Prefer::NEAREST);
             for (Note* nn : tiedNotes()) {
+                  nn->setAccidentalType(AccidentalType::NONE);
                   nn->setPitch(newPitch, newTpc1, newTpc2);
                   nn->triggerLayout();
                   }
             }
+      score()->inputState().setAccidentalType(AccidentalType::NONE);
       }
 
 //---------------------------------------------------------
