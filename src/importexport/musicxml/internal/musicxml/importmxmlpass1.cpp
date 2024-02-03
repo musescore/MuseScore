@@ -1600,6 +1600,9 @@ void MusicXMLParserPass1::defaults()
             if (isImportLayout) {
                 m_score->style().setSpatium(_spatium);
             }
+        } else if (m_e.name() == "concert-score") {
+            m_score->style().set(Sid::concertPitch, true);
+            m_e.skipCurrentElement();            // skip but don't log
         } else if (m_e.name() == "page-layout") {
             PageFormat pf;
             pageLayout(pf, millimeter / (tenths * INCH));
