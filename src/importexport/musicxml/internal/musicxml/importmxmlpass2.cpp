@@ -5812,7 +5812,9 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
 {
     track_idx_t track = m_pass1.trackForPart(partId);
 
-    bool printObject = m_e.asciiAttribute("print-object") != "no";
+    const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
+    const String placement = m_e.asciiAttribute("placement").toString();
+    const bool printObject = m_e.asciiAttribute("print-object") != "no";
 
     String kind, kindText, functionText, symbols, parens;
     std::list<HDegree> degreeList;
@@ -5820,6 +5822,10 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     FretDiagram* fd = 0;
     Harmony* ha = Factory::createHarmony(m_score->dummy()->segment());
     Fraction offset;
+    if (!placement.isEmpty()) {
+        ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
+        ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "root") {
             String step;
@@ -5956,6 +5962,9 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     ha->render();
 
     ha->setVisible(printObject);
+    if (color.isValid()) {
+        ha->setColor(color);
+    }
 
     // TODO-LV: do this only if ha points to a valid harmony
     // harmony = ha;
@@ -6068,7 +6077,7 @@ void MusicXMLParserLyric::parse()
         if (m_e.name() == "elision") {
             // TODO verify elision handling
             /*
-             String text = _e.readText();
+             String text = m_e.readText();
              if (text.empty())
              formattedText += " ";
              else
