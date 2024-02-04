@@ -561,7 +561,7 @@ static InstrumentChange* createInstrumentChange(Score* score, const MusicXMLInst
 
     // for text use instrument name (if known) else use "Instrument change"
     const String text = mxmlInstr.name;
-    instrChange->setXmlText(text.isEmpty() ? "Instrument change" : text.toUtf8().constChar());
+    instrChange->setXmlText(text.empty() ? "Instrument change" : text.toUtf8().constChar());
     instrChange->setVisible(false);
 
     return instrChange;
@@ -714,7 +714,7 @@ static String text2syms(const String& t)
     String in = t;
     String res;
 
-    while (in != u"") {
+    while (!in.empty()) {
         // try to find the largest match possible
         int maxMatch = int(qMin(in.size(), maxStringSize));
         AsciiStringView sym;
@@ -797,7 +797,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
 
     String importedtext;
 
-    if (!fontSize.isEmpty()) {
+    if (!fontSize.empty()) {
         bool ok = true;
         float size = fontSize.toFloat(&ok);
         if (ok) {
@@ -806,7 +806,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
     }
 
     bool needUseDefaultFont = configuration()->needUseDefaultFont();
-    if (!fontFamily.isEmpty() && txt == syms && !needUseDefaultFont) {
+    if (!fontFamily.empty() && txt == syms && !needUseDefaultFont) {
         // add font family only if no <sym> replacement made
         importedtext += String(u"<font face=\"%1\"/>").arg(fontFamily);
     }
@@ -816,7 +816,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
     if (fontStyle == u"italic") {
         importedtext += u"<i>";
     }
-    if (!underline.isEmpty()) {
+    if (!underline.empty()) {
         bool ok = true;
         int lines = underline.toInt(&ok);
         if (ok && (lines > 0)) {    // 1, 2, or 3 underlines are imported as single underline
@@ -825,7 +825,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
             underline = u"";
         }
     }
-    if (!strike.isEmpty()) {
+    if (!strike.empty()) {
         bool ok = true;
         int lines = strike.toInt(&ok);
         if (ok && (lines > 0)) {    // 1, 2, or 3 strikes are imported as single strike
@@ -841,10 +841,10 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
         // <sym> replacement made, should be no need for line break or other conversions
         importedtext += syms;
     }
-    if (strike != u"") {
+    if (!strike.empty()) {
         importedtext += u"</s>";
     }
-    if (underline != u"") {
+    if (!underline.empty()) {
         importedtext += u"</u>";
     }
     if (fontStyle == u"italic") {
@@ -913,7 +913,7 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const String& pl
         return;
     }
 
-    if (placement != u"") {
+    if (!placement.empty()) {
         el->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
         el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     }
@@ -1041,9 +1041,9 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
 static void setElementPropertyFlags(EngravingObject* element, const Pid propertyId,
                                     const String value1, const String value2 = String())
 {
-    if (value1.isEmpty()) { // Set as an implicit value
+    if (value1.empty()) { // Set as an implicit value
         element->setPropertyFlags(propertyId, PropertyFlags::STYLED);
-    } else if (!value1.isEmpty() || !value2.isEmpty()) { // Set as an explicit value
+    } else if (!value1.empty() || !value2.empty()) { // Set as an explicit value
         element->setPropertyFlags(propertyId, PropertyFlags::UNSTYLED);
     }
 }
@@ -1102,7 +1102,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     if (color.isValid()) {
         na->setColor(color);
     }
-    if (!direction.empty()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
+    if (!direction.empty()) {
         na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
     }
     setElementPropertyFlags(na, Pid::PLACEMENT, direction);
@@ -1330,11 +1330,11 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
                           TextStyleType subType, const Score*, Note* note)
 {
     if (note) {
-        if (!txt.isEmpty()) {
+        if (!txt.empty()) {
             TextBase* t = Factory::createFingering(note, subType);
             t->setPlainText(txt);
             bool needUseDefaultFont = configuration()->needUseDefaultFont();
-            if (!fontFamily.isEmpty() && !needUseDefaultFont) {
+            if (!fontFamily.empty() && !needUseDefaultFont) {
                 t->setFamily(fontFamily);
                 t->setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
             }
@@ -1342,15 +1342,15 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
                 t->setSize(fontSize);
                 t->setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
             }
-            if (!fontWeight.isEmpty()) {
+            if (!fontWeight.empty()) {
                 t->setBold(fontWeight == u"bold");
                 t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
-            if (!fontStyle.isEmpty()) {
+            if (!fontStyle.empty()) {
                 t->setItalic(fontStyle == u"italic");
                 t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
             }
-            if (!placement.isEmpty()) {
+            if (!placement.empty()) {
                 t->setPlacement(placement == u"below" ? PlacementV::BELOW : PlacementV::ABOVE);
                 t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
             }
@@ -2386,7 +2386,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
         } else if (m_e.name() == "sound") {
             String tempo = m_e.attributes().value("tempo").toString();
 
-            if (!tempo.isEmpty()) {
+            if (!tempo.empty()) {
                 // sound tempo="..."
                 // create an invisible default TempoText
                 // to prevent duplicates, only if none is present yet
@@ -2891,7 +2891,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 t = Factory::createTempoText(m_score->dummy()->segment());
                 QString rawWordsText = m_wordsText;
                 rawWordsText.remove(QRegularExpression("(<.*?>)"));
-                String sep = m_metroText != u"" && m_wordsText != u"" && rawWordsText.back() != ' ' ? u" " : u"";
+                String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : u"";
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
@@ -2901,7 +2901,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             if (m_wordsText != "" || m_metroText != "") {
                 t = Factory::createStaffText(m_score->dummy()->segment());
                 t->setXmlText(m_wordsText + m_metroText);
-                isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.isEmpty();
+                isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty();
             } else {
                 t = Factory::createRehearsalMark(m_score->dummy()->segment());
                 if (!m_rehearsalText.contains(u"<b>")) {
@@ -2927,7 +2927,7 @@ void MusicXMLParserDirection::direction(const String& partId,
 
             String wordsPlacement = placement;
             // Case-based defaults
-            if (wordsPlacement.isEmpty()) {
+            if (wordsPlacement.empty()) {
                 if (isVocalStaff) {
                     wordsPlacement = u"above";
                 } else if (isExpressionText) {
@@ -2985,7 +2985,7 @@ void MusicXMLParserDirection::direction(const String& partId,
 
         String dynamicsPlacement = placement;
         // Case-based defaults
-        if (dynamicsPlacement.isEmpty()) {
+        if (dynamicsPlacement.empty()) {
             dynamicsPlacement = isVocalStaff ? u"above" : u"below";
         }
 
@@ -3089,7 +3089,7 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         m_defaultY = m_e.attributes().value("default-y").toDouble(&m_hasDefaultY) * -0.1;
         String number = m_e.attributes().value("number").toString();
         int n = 0;
-        if (number != u"") {
+        if (!number.empty()) {
             n = number.toInt();
             if (n <= 0) {
                 m_logger->logError(String(u"invalid number %1").arg(number), &m_e);
@@ -3300,27 +3300,27 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
 {
     // Try to recognize the various repeats
     String repeat;
-    if (m_sndCoda != u"") {
+    if (!m_sndCoda.empty()) {
         repeat = u"coda";
-    } else if (m_sndDacapo != u"") {
+    } else if (!m_sndDacapo.empty()) {
         repeat = u"daCapo";
-    } else if (m_sndDalsegno != u"") {
+    } else if (!m_sndDalsegno.empty()) {
         repeat = u"dalSegno";
-    } else if (m_sndFine != u"") {
+    } else if (!m_sndFine.empty()) {
         repeat = u"fine";
-    } else if (m_sndSegno != u"") {
+    } else if (!m_sndSegno.empty()) {
         repeat = u"segno";
-    } else if (m_sndToCoda != u"") {
+    } else if (!m_sndToCoda.empty()) {
         repeat = u"toCoda";
     } else {
         repeat = matchRepeat();
     }
 
-    if (repeat != u"") {
+    if (!repeat.empty()) {
         TextBase* tb = nullptr;
         if ((tb = findJump(repeat, m_score)) || (tb = findMarker(repeat, m_score))) {
             tb->setTrack(track);
-            if (!m_wordsText.isEmpty()) {
+            if (!m_wordsText.empty()) {
                 tb->setXmlText(m_wordsText);
                 m_wordsText = u"";
             } else {
@@ -3408,7 +3408,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
             }
 
             // hack: combine with a previous words element
-            if (!m_wordsText.isEmpty()) {
+            if (!m_wordsText.empty()) {
                 // TextLine supports only limited formatting, remove all (compatible with 1.3)
                 textLine->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
                 m_wordsText = "";
@@ -3473,7 +3473,7 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
         // if (placement == "") placement = "above";  // TODO ? set default
 
         // hack: combine with a previous words element
-        if (!m_wordsText.isEmpty()) {
+        if (!m_wordsText.empty()) {
             // TextLine supports only limited formatting, remove all (compatible with 1.3)
             b->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
             m_wordsText = "";
@@ -3813,7 +3813,7 @@ String MusicXMLParserDirection::metronome(double& r)
     if (dur2.isValid()) {
         tempoText += u" = ";
         tempoText += TempoText::duration2tempoTextString(dur2);
-    } else if (perMinute != u"") {
+    } else if (!perMinute.empty()) {
         tempoText += u" = ";
         tempoText += perMinute;
     }
@@ -3848,9 +3848,9 @@ static bool determineBarLineType(const String& barStyle, const String& repeat,
         type = BarLineType::END_REPEAT;
     } else if (barStyle == u"heavy-light" && repeat == u"forward") {
         type = BarLineType::START_REPEAT;
-    } else if (barStyle == u"light-heavy" && repeat.isEmpty()) {
+    } else if (barStyle == u"light-heavy" && repeat.empty()) {
         type = BarLineType::END;
-    } else if (barStyle == u"heavy-light" && repeat.isEmpty()) {
+    } else if (barStyle == u"heavy-light" && repeat.empty()) {
         type = BarLineType::REVERSE_END;
     } else if (barStyle == u"regular") {
         type = BarLineType::NORMAL;
@@ -3958,7 +3958,7 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
         } else if (m_e.name() == "repeat") {
             repeat = m_e.attributes().value("direction").toString();
             count = m_e.attributes().value("times").toString();
-            if (count.isEmpty()) {
+            if (count.empty()) {
                 count = "2";
             }
             measure->setRepeatCount(count.toInt());
@@ -4021,10 +4021,10 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
                                    const String& type, const QColor color,
                                    const String& text, const bool print)
 {
-    if (!(number.isEmpty() && type.isEmpty())) {
-        if (number.isEmpty()) {
+    if (!(number.empty() && type.empty())) {
+        if (number.empty()) {
             m_logger->logError(u"empty ending number", &m_e);
-        } else if (type.isEmpty()) {
+        } else if (type.empty()) {
             m_logger->logError(u"empty ending type", &m_e);
         } else {
             StringList sl = number.split(u',', SkipEmptyParts);
@@ -4049,7 +4049,7 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
                 } else if (type == u"start") {
                     Volta* volta = Factory::createVolta(m_score->dummy());
                     volta->setTrack(m_pass1.trackForPart(partId));
-                    volta->setText(text.isEmpty() ? number : text);
+                    volta->setText(text.empty() ? number : text);
                     // LVIFIX TODO also support endings "1 - 3"
                     volta->endings().clear();
                     mu::join(volta->endings(), iEndingNumbers);
@@ -4474,7 +4474,7 @@ static bool determineTimeSig(const String& beats, const String& beatType, const 
         st = TimeSigType::ALLA_BREVE;
     } else if (timeSymbol == u"common") {
         st = TimeSigType::FOUR_FOUR;
-    } else if (!timeSymbol.isEmpty() && timeSymbol != u"normal") {
+    } else if (!timeSymbol.empty() && timeSymbol != u"normal") {
         LOGD("determineTimeSig: time symbol <%s> not recognized", qPrintable(timeSymbol)); // TODO
         return false;
     }
@@ -4521,7 +4521,7 @@ void MusicXMLParserPass2::time(const String& partId, Measure* measure, const Fra
         }
     }
 
-    if (beats != u"" && beatType != u"") {
+    if (!beats.empty() && !beatType.empty()) {
         // determine if timesig is valid
         TimeSigType st  = TimeSigType::NORMAL;
         int bts = 0;     // total beats as integer (beats may contain multiple numbers, separated by "+")
@@ -5385,7 +5385,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
         notations.addToScore(cr, note, noteStartTime.ticks(), m_slurs, m_glissandi, m_spanners, m_trills, m_tie);
 
         // if no tie added yet, convert the "tie" into "tied" and add it.
-        if (note && !note->tieFor() && !tieType.isEmpty()) {
+        if (note && !note->tieFor() && !tieType.empty()) {
             Notation notation = Notation(u"tied");
             const String type2 = u"type";
             notation.addAttribute(type2, tieType);
@@ -5669,7 +5669,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
             pItem->setParent(fb);
             fb->appendItem(pItem);
             // add item normalized text
-            if (!normalizedText.isEmpty()) {
+            if (!normalizedText.empty()) {
                 normalizedText.append('\n');
             }
             normalizedText.append(pItem->normalizedText());
@@ -5685,7 +5685,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
     fb->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
     fb->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 
-    if (normalizedText.isEmpty()) {
+    if (normalizedText.empty()) {
         delete fb;
         return 0;
     }
@@ -6072,7 +6072,7 @@ void MusicXMLParserLyric::parse()
             // TODO verify elision handling
             /*
              String text = _e.readElementText();
-             if (text.isEmpty())
+             if (text.empty())
              formattedText += " ";
              else
              */
@@ -6623,7 +6623,7 @@ static void addArpeggio(ChordRest* cr, const String& arpeggioType,
                         MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
 {
     // no support for arpeggio on rest
-    if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
+    if (!arpeggioType.empty() && cr->type() == ElementType::CHORD) {
         Arpeggio* arpeggio = Factory::createArpeggio(mu::engraving::toChord(cr));
         arpeggio->setArpeggioType(ArpeggioType::NORMAL);
         if (arpeggioType == "up") {
@@ -6730,7 +6730,7 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
                         MusicXmlSpannerMap& spanners, TrillStack& trills,
                         MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
 {
-    if (!wavyLineType.isEmpty()) {
+    if (!wavyLineType.empty()) {
         const auto ticks = cr->ticks();
         const auto track = cr->track();
         const auto trk = (track / VOICES) * VOICES;           // first track of staff
@@ -6790,7 +6790,7 @@ static void addChordLine(const Notation& notation, Note* note,
                          MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
 {
     const String chordLineType = notation.subType();
-    if (chordLineType != u"") {
+    if (!chordLineType.empty()) {
         if (note) {
             const auto chordline = Factory::createChordLine(note->chord());
             if (chordLineType == u"falloff") {
@@ -6873,7 +6873,7 @@ String Notation::print() const
         res += pair.second;
     }
 
-    if (m_text != u"") {
+    if (!m_text.empty()) {
         res += u" ";
         res += m_text;
     }
@@ -6981,14 +6981,14 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
         String notationType = notation.attribute(u"type");
         String placement = notation.attribute(u"placement");
         if (notation.name() == u"fermata") {
-            if (notationType != u"" && notationType != u"upright" && notationType != u"inverted") {
+            if (!notationType.empty() && notationType != u"upright" && notationType != u"inverted") {
                 notationType = String();
                 m_logger->logError(String(u"unknown fermata type %1").arg(notationType), &m_e);
             }
             addFermataToChord(notation, cr);
         } else {
             if (notation.name() == u"strong-accent") {
-                if (notationType != u"" && notationType != u"up" && notationType != u"down") {
+                if (!notationType.empty() && notationType != u"up" && notationType != u"down") {
                     notationType = String();
                     m_logger->logError(String(u"unknown %1 type %2").arg(notation.name(), notationType), &m_e);
                 }
@@ -7136,7 +7136,7 @@ void MusicXMLParserNotations::tuplet()
         m_tupletDesc.type = MxmlStartStop::START;
     } else if (tupletType == u"stop") {
         m_tupletDesc.type = MxmlStartStop::STOP;
-    } else if (tupletType != u"" && tupletType != u"start" && tupletType != u"stop") {
+    } else if (!tupletType.empty() && tupletType != u"start" && tupletType != u"stop") {
         m_logger->logError(String(u"unknown tuplet type '%1'").arg(tupletType), &m_e);
     }
 

@@ -1261,7 +1261,7 @@ static String text2syms(const String& t)
     String in = t;
     String res;
 
-    while (in != u"") {
+    while (!in.empty()) {
         // try to find the largest match possible
         int maxMatch = int(qMin(in.size(), maxStringSize));
         AsciiStringView sym;
@@ -1387,10 +1387,10 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
         // <sym> replacement made, should be no need for line break or other conversions
         importedtext += syms;
     }
-    if (strike != u"") {
+    if (!strike.empty()) {
         importedtext += u"</s>";
     }
-    if (underline != u"") {
+    if (!underline.empty()) {
         importedtext += u"</u>";
     }
     if (fontStyle == u"italic") {
