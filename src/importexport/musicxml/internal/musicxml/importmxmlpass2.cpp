@@ -5799,7 +5799,9 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
 {
     track_idx_t track = _pass1.trackForPart(partId);
 
-    bool printObject = _e.attributes().value("print-object") != "no";
+    const Color color = Color::fromString(_e.attributes().value("color").ascii());
+    const String placement = _e.attributes().value("placement").toString();
+    const bool printObject = _e.attributes().value("print-object") != "no";
 
     QString kind, kindText, functionText, symbols, parens;
     std::list<HDegree> degreeList;
@@ -5807,6 +5809,10 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     FretDiagram* fd = 0;
     Harmony* ha = Factory::createHarmony(_score->dummy()->segment());
     Fraction offset;
+    if (!placement.isEmpty()) {
+        ha->setPlacement(placement == "below" ? PlacementV::BELOW : PlacementV::ABOVE);
+        ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
     while (_e.readNextStartElement()) {
         if (_e.name() == "root") {
             QString step;
@@ -5942,6 +5948,9 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
     ha->render();
 
     ha->setVisible(printObject);
+    if (color.isValid()) {
+        ha->setColor(color);
+    }
 
     // TODO-LV: do this only if ha points to a valid harmony
     // harmony = ha;
