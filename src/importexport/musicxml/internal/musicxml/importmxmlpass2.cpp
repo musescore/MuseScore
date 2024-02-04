@@ -5854,6 +5854,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
                 ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
             }
         } else if (m_e.name() == "function") {
+            // deprecated in MusicXML 4.0
             // attributes: print-style
             ha->setRootTpc(Tpc::TPC_INVALID);
             ha->setBaseTpc(Tpc::TPC_INVALID);
