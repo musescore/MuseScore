@@ -216,7 +216,7 @@ static String attribute(bool needed, bool value, String trueString, String false
     if (needed) {
         res = value ? trueString : falseString;
     }
-    if (res != u"") {
+    if (!res.empty()) {
         res = u" " + res;
     }
     return res;
