@@ -1432,7 +1432,7 @@ static void creditWords(XmlWriter& xml, const MStyle& s, const page_idx_t pageNr
 
     // export formatted
     xml.startElement("credit", { { "page", pageNr } });
-    if (creditType != u"") {
+    if (!creditType.empty()) {
         xml.tag("credit-type", creditType);
     }
     String attr = String(u" default-x=\"%1\"").arg(x);
@@ -1897,13 +1897,13 @@ void ExportMusicXml::barlineMiddle(const BarLine* bl)
     String barStyle;
     if (!vis) {
         barStyle = u"none";
-    } else if (shortStyle != u"") {
+    } else if (!shortStyle.empty()) {
         barStyle = shortStyle;
     } else {
         barStyle = normalStyle;
     }
 
-    if (barStyle != u"") {
+    if (!barStyle.empty()) {
         m_xml.startElement("barline", { { "location", "middle" } });
         m_xml.tag("bar-style", barStyle);
         m_xml.endElement();
@@ -3518,7 +3518,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
         break;
     }
 
-    if (tagName != u"") {
+    if (!tagName.empty()) {
         tagName += color2xml(arp);
         tagName += ExportMusicXml::positioningAttributes(arp);
         xml.tagRaw(tagName);
@@ -3576,7 +3576,7 @@ static String beamFanAttribute(const Beam* const b)
         fan = u"rit";
     }
 
-    if (fan != u"") {
+    if (!fan.empty()) {
         return String(u" fan=\"%1\"").arg(fan);
     }
 
@@ -4996,7 +4996,7 @@ static size_t findDynamicInString(const String& s, size_t& length, String& type)
 static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool isStart = true)
 {
     String text = isStart ? tlb->beginText() : tlb->endText();
-    while (text != u"") {
+    while (!text.empty()) {
         size_t dynamicLength = 0;
         String dynamicsType;
         size_t dynamicPosition = findDynamicInString(text, dynamicLength, dynamicsType);
@@ -5481,7 +5481,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             if (it != map.end()) {
                 // found a SMUFL single letter dynamics glyph
                 if (!inDynamicsSym) {
-                    if (text != u"") {
+                    if (!text.empty()) {
                         m_xml.tag("other-dynamics", text);
                         text = u"";
                     }
@@ -5491,7 +5491,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
             } else {
                 // found a non-dynamics character
                 if (inDynamicsSym) {
-                    if (text != u"") {
+                    if (!text.empty()) {
                         if (mu::contains(set, text)) {
                             m_xml.tagRaw(text);
                         } else {
@@ -5504,7 +5504,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                 text += ch.unicode();
             }
         }
-        if (text != u"") {
+        if (!text.empty()) {
             if (inDynamicsSym && mu::contains(set, text)) {
                 m_xml.tagRaw(text);
             } else {
@@ -5811,18 +5811,18 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
         break;
     }
 
-    if (sound != u"") {
+    if (!sound.empty()) {
         xml.startElement("direction", { { "placement", (m->placement() == PlacementV::BELOW) ? "below" : "above" } });
         xml.startElement("direction-type");
         String positioning = ExportMusicXml::positioningAttributes(m);
-        if (type != u"") {
+        if (!type.empty()) {
             xml.tagRaw(type + positioning);
         }
-        if (words != u"") {
+        if (!words.empty()) {
             xml.tagRaw(u"words" + positioning, words);
         }
         xml.endElement();
-        if (sound != u"") {
+        if (!sound.empty()) {
             xml.tagRaw(String("sound ") + sound);
         }
         xml.endElement();
