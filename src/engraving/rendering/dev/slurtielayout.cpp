@@ -2420,15 +2420,46 @@ bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutC
     return false;
 }
 
+bool SlurTieLayout::shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx)
+{
+    if (Slur::engravingConfiguration()->specificSlursLayoutWorkaround()) {
+        Slur* slur = item->slur();
+        if (slur->connectedElement() == Slur::ConnectedElement::GLISSANDO) {
+            return false;
+        }
+
+        /// not showing hammer-on slur if the up notes of chords are connected with tie
+        if (slur->connectedElement() == Slur::ConnectedElement::HAMMER_ON) {
+            EngravingItem* start = slur->startElement();
+            EngravingItem* end = slur->endElement();
+            if (start && end && start->isChord() && end->isChord()) {
+                Note* upStartNote = toChord(start)->upNote();
+                Note* upEndChord = toChord(end)->upNote();
+                Tie* startTie = upStartNote->tieFor();
+                Tie* endTie = upEndChord->tieBack();
+                if (startTie && startTie == endTie) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    const StaffType* stType = item->staffType();
+    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
+        return true;
+    }
+
+    return false;
+}
+
 void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2)
 {
     SlurSegment::LayoutData* ldata = item->mutldata();
-    const StaffType* stType = item->staffType();
-
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {
+    if (shouldHideSlurSegment(item, ctx)) {
         ldata->setIsSkipDraw(true);
         return;
     }
+
     ldata->setIsSkipDraw(false);
 
     ldata->setPos(PointF());
