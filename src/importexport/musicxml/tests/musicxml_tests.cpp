@@ -620,6 +620,9 @@ TEST_F(Musicxml_Tests, harmony5) {
 TEST_F(Musicxml_Tests, harmony6) {
     mxmlMscxExportTestRef("testHarmony6");
 }
+TEST_F(Musicxml_Tests, harmony8) {
+    mxmlIoTest("testHarmony8");
+}
 TEST_F(Musicxml_Tests, hello) {
     mxmlIoTest("testHello");
 }
