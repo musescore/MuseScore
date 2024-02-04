@@ -1000,9 +1000,22 @@ bool GuitarPro5::read(IODevice* io)
                         s->setTrack(n->track());
                         s->setParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
+                        s->setGlissandoShift(true);
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());
                         s->setTrack2(n->track());
+
+                        for (Spanner* spanner : n->chord()->startingSpanners()) {
+                            if (spanner && spanner->isSlur()) {
+                                Slur* slur = toSlur(spanner);
+                                if (slur->endElement() == nt->chord()) {
+                                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::GLISSANDO);
+                                    s->setGlissandoShift(false);
+                                    break;
+                                }
+                            }
+                        }
+
                         score->addElement(s);
                         br = true;
                         break;

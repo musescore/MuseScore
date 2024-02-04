@@ -814,6 +814,7 @@ Slur::Slur(const Slur& s)
     : SlurTie(s)
 {
     m_sourceStemArrangement = s.m_sourceStemArrangement;
+    m_connectedElement = s.m_connectedElement;
 }
 
 //---------------------------------------------------------

@@ -1331,6 +1331,12 @@ void GPConverter::addContinuousSlideHammerOn()
         if (slide.second == SlideHammerOn::LegatoSlide || slide.second == SlideHammerOn::HammerOn) {
             if (legatoSlides.count(startNote) == 0) {
                 Slur* slur = mu::engraving::Factory::createSlur(_score->dummy());
+                if (slide.second == SlideHammerOn::LegatoSlide) {
+                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::GLISSANDO);
+                } else if (slide.second == SlideHammerOn::HammerOn) {
+                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::HAMMER_ON);
+                }
+
                 slur->setStartElement(startNote->chord());
                 slur->setTrack(track);
                 slur->setTick(startTick);

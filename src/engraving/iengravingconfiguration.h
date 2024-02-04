@@ -102,6 +102,7 @@ public:
     virtual void setGuitarProMultivoiceEnabled(bool multiVoice) = 0;
     virtual bool guitarProMultivoiceEnabled() const = 0;
     virtual bool minDistanceForPartialSkylineCalculated() const = 0;
+    virtual bool specificSlursLayoutWorkaround() const = 0;
 };
 }
 

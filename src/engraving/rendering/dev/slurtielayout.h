@@ -70,6 +70,7 @@ private:
     static double defaultStemLengthEnd(Tremolo* tremolo);
 
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+    static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
 };
 }
 

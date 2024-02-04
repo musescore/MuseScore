@@ -81,6 +81,7 @@ public:
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
     MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));
+    MOCK_METHOD(bool, specificSlursLayoutWorkaround, (), (const, override));
 };
 }
 
