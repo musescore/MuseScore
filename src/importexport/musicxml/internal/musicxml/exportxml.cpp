@@ -8250,7 +8250,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             }
         } else {
             if (h->extensionName().empty()) {
-                _xml.tag("kind", "");
+                _xml.tag("kind", "none");
             } else {
                 _xml.tag("kind", { { "text", h->extensionName() } }, "");
             }
