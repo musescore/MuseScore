@@ -92,6 +92,7 @@
 #include "engraving/dom/measurerepeat.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/ornament.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/palmmute.h"
@@ -3402,7 +3403,12 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             notations.tag(m_xml, a);
             ornaments.tag(m_xml);
             m_xml.tagRaw(mxmlOrnam);
-            // accidental-mark is missing
+            if (a->isOrnament()) {
+                const Ornament* ornam = toOrnament(a);
+                for (const Accidental* accidental : ornam->accidentalsAboveAndBelow()) {
+                    writeAccidental(m_xml, u"accidental-mark", accidental);
+                }
+            }
         }
     }
 
