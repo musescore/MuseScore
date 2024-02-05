@@ -225,6 +225,8 @@ bool SigEvent::operator==(const SigEvent& e) const
 //   add
 //---------------------------------------------------------
 
+const TimeSigFrac TimeSigMap::DEFAULT_TIME_SIGNATURE(4, 4);
+
 void TimeSigMap::add(int tick, const Fraction& f)
 {
     if (!f.isValid()) {
@@ -294,7 +296,7 @@ void TimeSigMap::normalize()
 
 const SigEvent& TimeSigMap::timesig(int tick) const
 {
-    static const SigEvent ev(TimeSigFrac(4, 4));
+    static const SigEvent ev(DEFAULT_TIME_SIGNATURE);
     if (empty()) {
         return ev;
     }

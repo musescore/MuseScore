@@ -145,6 +145,8 @@ class TimeSigMap : public std::map<int, SigEvent>
 public:
     TimeSigMap() {}
 
+    static const TimeSigFrac DEFAULT_TIME_SIGNATURE;
+
     void add(int tick, const Fraction&);
     void add(int tick, const SigEvent& ev);
 
