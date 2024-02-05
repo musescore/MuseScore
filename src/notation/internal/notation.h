@@ -56,6 +56,8 @@ public:
     QString projectWorkTitle() const override;
     QString projectWorkTitleAndPartName() const override;
 
+    QString firstTitleText() const override;
+
     bool isOpen() const override;
     void setIsOpen(bool open) override;
     async::Notification openChanged() const override;

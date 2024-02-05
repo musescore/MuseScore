@@ -203,6 +203,20 @@ QString Notation::projectWorkTitleAndPartName() const
     return result;
 }
 
+QString Notation::firstTitleText() const
+{
+    if (!m_score) {
+        return QString();
+    }
+
+    engraving::Text* text = m_score->getText(TextStyleType::TITLE);
+    if (!text) {
+        return QString();
+    }
+
+    return io::escapeFileName(text->plainText().toStdString(), false).toQString();
+}
+
 bool Notation::isOpen() const
 {
     const Score* s = score();

@@ -58,6 +58,8 @@ class NotationProject : public INotationProject, public async::Asyncable
 public:
     ~NotationProject() override;
 
+    static QString scoreDefaultTitle();
+
     Ret load(const io::path_t& path, const io::path_t& stylePath = io::path_t(), bool forceMode = false,
              const std::string& format = "") override;
     Ret createNew(const ProjectCreateOptions& projectInfo) override;
