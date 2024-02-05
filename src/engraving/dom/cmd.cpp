@@ -847,6 +847,7 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     chord->setDurationType(d);
     chord->setTicks(d.fraction());
     chord->setNoteType(type);
+    chord->setShowStemSlashInAdvance();
     chord->mutldata()->setMag(ch->staff()->staffMag(chord->tick()) * style().styleD(Sid::graceNoteMag));
 
     undoAddElement(chord);

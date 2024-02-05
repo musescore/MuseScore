@@ -152,6 +152,7 @@ enum class Pid {
     BEAM_MODE,
     BEAM_NO_SLOPE,
     USER_LEN,         // used for stems
+    SHOW_STEM_SLASH,  // used for grace notes
 
     SPACE,            // used for spacer
     TEMPO,
