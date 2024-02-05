@@ -324,3 +324,8 @@ bool EngravingConfiguration::minDistanceForPartialSkylineCalculated() const
 {
     return guitarProImportExperimental();
 }
+
+bool EngravingConfiguration::specificSlursLayoutWorkaround() const
+{
+    return guitarProImportExperimental();
+}

@@ -72,6 +72,7 @@
               <Spanner type="Glissando">
                 <Glissando>
                   <text>gliss.</text>
+                  <glissandoShift>1</glissandoShift>
                   <diagonal>1</diagonal>
                   <anchor>3</anchor>
                   </Glissando>
