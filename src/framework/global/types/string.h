@@ -264,8 +264,11 @@ public:
     inline bool isEmpty() const { return empty(); }
     void clear();
     Char at(size_t i) const;
+    Char front() const { return at(0); }
+    Char back() const { return at(size() - 1); }
     bool contains(const Char& ch) const;
     bool contains(const String& str, CaseSensitivity cs = CaseSensitive) const;
+    bool contains(const std::regex& re) const;
     int count(const Char& ch) const;
     size_t indexOf(const Char& ch, size_t from = 0) const;
     size_t indexOf(const String& str, size_t from = 0) const;
@@ -324,6 +327,7 @@ public:
     String toXmlEscaped() const;
     static String toXmlEscaped(const String& str);
     static String toXmlEscaped(char16_t c);
+    static String decodeXmlEntities(const String& src);
 
     String toLower() const;
     String toUpper() const;

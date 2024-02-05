@@ -23,10 +23,16 @@
 #ifndef MU_IMPORTEXPORT_EXPORTXML_H
 #define MU_IMPORTEXPORT_EXPORTXML_H
 
+#include <sstream>
+
 #include "io/iodevice.h"
 #include "global/types/string.h"
 
 namespace mu::engraving {
+struct Debugger {
+    static std::stringstream ss;
+};
+
 class Score;
 
 bool saveMxl(Score*, io::IODevice*);
