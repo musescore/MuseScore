@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QRegularExpression>
-
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracketItem.h"
 #include "engraving/dom/factory.h"
@@ -558,11 +556,12 @@ static void addText(VBox* vbx, Score*, const String& strTxt, const TextStyleType
     }
 }
 
-static bool overrideTextStyleForComposer(const QString& creditString)
+static bool overrideTextStyleForComposer(const String& creditString)
 {
     // HACK: check if the string is likely to contain composer credit, so the proper text style can be applied.
     // TODO: introduce a flag to decide if we want to do this or not.
-    return creditString.contains(QRegularExpression("\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
+    static const std::regex re("\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+");
+    return creditString.contains(re);
 }
 
 //---------------------------------------------------------
@@ -1291,28 +1290,6 @@ static String text2syms(const String& t)
 }
 
 //---------------------------------------------------------
-//   decodeEntities
-//---------------------------------------------------------
-
-/**
- Decode &#...; in string \a src into UNICODE (utf8) character.
- */
-
-static QString decodeEntities(const QString& src)
-{
-    QString ret(src);
-    QRegularExpression re("&#([0-9]+);", QRegularExpression::InvertedGreedinessOption);
-
-    int pos = 0;
-    QRegularExpressionMatch match;
-    while ((pos = src.indexOf(re, pos, &match)) != -1) {
-        ret = ret.replace(match.capturedTexts()[0], QChar(match.capturedTexts()[1].toInt(0, 10)));
-        pos += match.capturedLength();
-    }
-    return ret;
-}
-
-//---------------------------------------------------------
 //   nextPartOfFormattedString
 //---------------------------------------------------------
 
@@ -1335,7 +1312,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
 
     String txt = e.readElementText();
     // replace HTML entities
-    txt = decodeEntities(txt);
+    txt = String::decodeXmlEntities(txt);
     String syms       = text2syms(txt);
     if (overrideTextStyleForComposer(syms)) {
         return syms;
