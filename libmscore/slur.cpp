@@ -30,7 +30,7 @@ namespace Ms {
 
 void SlurSegment::draw(QPainter* painter) const
       {
-      QPen pen(curColor());
+      QPen pen(curColor(getProperty(Pid::VISIBLE).toBool(), getProperty(Pid::COLOR).value<QColor>()));
       qreal mag = staff() ? staff()->mag(slur()->tick()) : 1.0;
 
       //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)

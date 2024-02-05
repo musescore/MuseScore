@@ -36,7 +36,7 @@ void TieSegment::draw(QPainter* painter) const
       if (tie()->endNote() && tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND)
             return;
 
-      QPen pen(curColor());
+      QPen pen(curColor(getProperty(Pid::VISIBLE).toBool(), getProperty(Pid::COLOR).value<QColor>()));
       qreal mag = staff() ? staff()->mag(tie()->tick()) : 1.0;
 
       //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
