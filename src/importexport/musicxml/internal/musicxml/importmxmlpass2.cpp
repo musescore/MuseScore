@@ -24,8 +24,6 @@
 #include <memory>
 #include <utility>
 
-#include <QRegularExpression>
-
 #include "containers.h"
 
 #include "engraving/types/symnames.h"
@@ -745,30 +743,6 @@ static String text2syms(const String& t)
 }
 
 //---------------------------------------------------------
-//   decodeEntities
-//---------------------------------------------------------
-
-/**
- Decode &#...; in string \a src into UNICODE (utf8) character.
- */
-
-namespace xmlpass2 {
-static QString decodeEntities(const QString& src)
-{
-    QString ret(src);
-    QRegularExpression re("&#([0-9]+);", QRegularExpression::InvertedGreedinessOption);
-
-    int pos = 0;
-    QRegularExpressionMatch match;
-    while ((pos = src.indexOf(re, pos, &match)) != -1) {
-        ret = ret.replace(match.capturedTexts()[0], QChar(match.capturedTexts()[1].toInt(0, 10)));
-        pos += match.capturedLength();
-    }
-    return ret;
-}
-}
-
-//---------------------------------------------------------
 //   nextPartOfFormattedString
 //---------------------------------------------------------
 
@@ -792,7 +766,7 @@ static String nextPartOfFormattedString(QXmlStreamReader& e)
 
     String txt = e.readElementText();
     // replace HTML entities
-    txt = xmlpass2::decodeEntities(txt);
+    txt = String::decodeXmlEntities(txt);
     String syms = xmlpass2::text2syms(txt);
 
     String importedtext;
@@ -1598,9 +1572,10 @@ SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
  specifying print-object="no". This finds those.
  */
 
-static bool isLikelyIncorrectPartName(const QString& partName)
+static bool isLikelyIncorrectPartName(const String& partName)
 {
-    return partName.contains(QRegularExpression("^P[0-9]+$"));
+    static const std::regex re("^P[0-9]+$");
+    return partName.contains(re);
 }
 
 //---------------------------------------------------------
@@ -2889,8 +2864,9 @@ void MusicXMLParserDirection::direction(const String& partId,
             if (canAddTempoText(m_score->tempomap(), tick.ticks())) {
                 m_tpoSound /= 60;
                 t = Factory::createTempoText(m_score->dummy()->segment());
-                QString rawWordsText = m_wordsText;
-                rawWordsText.remove(QRegularExpression("(<.*?>)"));
+                String rawWordsText = m_wordsText;
+                static const std::regex re("(<.*?>)");
+                rawWordsText.remove(re);
                 String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : u"";
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
@@ -3051,12 +3027,13 @@ void MusicXMLParserDirection::direction(const String& partId,
 
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 {
+    static const std::regex re("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+");
+
     return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1
-           && m_wordsText.toQString().contains(QRegularExpression(
-                                                   "^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
+           && m_wordsText.contains(re);
 }
 
 //---------------------------------------------------------
@@ -3067,8 +3044,15 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 
 bool MusicXMLParserDirection::isLyricBracket() const
 {
-    return m_wordsText.toQString().contains(QRegularExpression("^}|{$"))
-           && m_rehearsalText.empty()
+    if (m_wordsText.empty()) {
+        return false;
+    }
+
+    if (!(m_wordsText.front() == u'}' || m_wordsText.back() == u'{')) {
+        return false;
+    }
+
+    return m_rehearsalText.empty()
            && m_metroText.empty()
            && m_dynamicsList.empty()
            && m_tpoSound < 0.1;
@@ -3183,50 +3167,51 @@ void MusicXMLParserDirection::dynamics()
  Do a wild-card match with known repeat texts.
  */
 
-QString MusicXMLParserDirection::matchRepeat() const
+String MusicXMLParserDirection::matchRepeat() const
 {
-    QString plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
-    QRegularExpression daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
-    QRegularExpression daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
-    QRegularExpression daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
-    QRegularExpression dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
-    QRegularExpression dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
-    QRegularExpression dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
-    QRegularExpression fine("^fine$");
-    QRegularExpression segno("^segno( segno)?$");
-    QRegularExpression toCoda("^to coda( coda)?$");
-    QRegularExpression coda("^coda( coda)?$");
+    String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
+    static const std::regex daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
+    static const std::regex daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
+    static const std::regex daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
+    static const std::regex dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
+    static const std::regex dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
+    static const std::regex dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+    static const std::regex fine("^fine$");
+    static const std::regex segno("^segno( segno)?$");
+    static const std::regex toCoda("^to coda( coda)?$");
+    static const std::regex coda("^coda( coda)?$");
+
     if (plainWords.contains(daCapo)) {
-        return "daCapo";
+        return u"daCapo";
     }
     if (plainWords.contains(daCapoAlFine)) {
-        return "daCapoAlFine";
+        return u"daCapoAlFine";
     }
     if (plainWords.contains(daCapoAlCoda)) {
-        return "daCapoAlCoda";
+        return u"daCapoAlCoda";
     }
     if (plainWords.contains(dalSegno)) {
-        return "dalSegno";
+        return u"dalSegno";
     }
     if (plainWords.contains(dalSegnoAlFine)) {
-        return "dalSegnoAlFine";
+        return u"dalSegnoAlFine";
     }
     if (plainWords.contains(dalSegnoAlCoda)) {
-        return "dalSegnoAlCoda";
+        return u"dalSegnoAlCoda";
     }
     if (plainWords.contains(segno)) {
-        return "segno";
+        return u"segno";
     }
     if (plainWords.contains(fine)) {
-        return "fine";
+        return u"fine";
     }
     if (plainWords.contains(toCoda)) {
-        return "toCoda";
+        return u"toCoda";
     }
     if (plainWords.contains(coda)) {
-        return "coda";
+        return u"coda";
     }
-    return "";
+    return u"";
 }
 
 //---------------------------------------------------------

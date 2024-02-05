@@ -599,6 +599,17 @@ bool String::contains(const String& str, CaseSensitivity cs) const
     }
 }
 
+bool String::contains(const std::regex& re) const
+{
+    std::string selfU8;
+    UtfCodec::utf16to8(std::u16string_view(constStr()), selfU8);
+    auto words_begin = std::sregex_iterator(selfU8.begin(), selfU8.end(), re);
+    if (words_begin != std::sregex_iterator()) {
+        return true;
+    }
+    return false;
+}
+
 int String::count(const Char& ch) const
 {
     int count = 0;
@@ -1051,6 +1062,23 @@ String String::toXmlEscaped(const String& s)
 String String::toXmlEscaped() const
 {
     return toXmlEscaped(*this);
+}
+
+String String::decodeXmlEntities(const String& src_)
+{
+    std::string src = src_.toStdString();
+    String ret = src_;
+    static const std::regex re("&#([0-9]+);");
+
+    auto begin = std::sregex_iterator(src.begin(), src.end(), re);
+    auto end = std::sregex_iterator();
+    for (auto it = begin; it != end; ++it) {
+        std::smatch match = *it;
+        std::string str0 = match[0];
+        std::string str1 = match[1];
+        ret.replace(String::fromStdString(str0), String(Char(std::stoi(str1))));
+    }
+    return ret;
 }
 
 String String::toLower() const
