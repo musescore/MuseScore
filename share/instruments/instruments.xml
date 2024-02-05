@@ -7693,10 +7693,10 @@
             </Instrument>
             <Instrument id="crash-cymbal">
                   <family>unpitched-metal-percussion</family>
-                  <trackName>Crash Cymbal</trackName>
-                  <longName>Crash Cymbal</longName>
-                  <shortName>Cr. Cym.</shortName>
-                  <description>Crash cymbal.</description>
+                  <trackName>Suspended Cymbal</trackName>
+                  <longName>Suspended Cymbal</longName>
+                  <shortName>Sus. Cym.</shortName>
+                  <description>Suspended Cymbal</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -7721,10 +7721,10 @@
             </Instrument>
             <Instrument id="cymbal">
                   <family>unpitched-metal-percussion</family>
-                  <trackName>Cymbals</trackName>
-                  <longName>Cymbals</longName>
+                  <trackName>Hand Cymbals</trackName>
+                  <longName>Hand Cymbals</longName>
                   <shortName>Cym.</shortName>
-                  <description>Cymbals.</description>
+                  <description>Hand Cymbals</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
