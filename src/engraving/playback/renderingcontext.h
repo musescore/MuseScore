@@ -216,20 +216,6 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
                           ctx.tempo.val,
                           ctx.userVelocityFraction);
 }
-
-inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp,
-                                          const mpe::duration_t actualDuration, const mpe::dynamic_level_t actualDynamicLevel,
-                                          const mpe::ArticulationMap& articulations)
-{
-    return mpe::NoteEvent(actualTimestamp,
-                          actualDuration,
-                          static_cast<mpe::voice_layer_idx_t>(note->voice()),
-                          static_cast<mpe::staff_layer_idx_t>(note->staffIdx()),
-                          notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
-                          actualDynamicLevel,
-                          articulations,
-                          1);
-}
 }
 
 #endif // MU_ENGRAVING_RENDERINGCONTEXT_H
