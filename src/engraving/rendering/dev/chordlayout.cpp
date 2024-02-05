@@ -3172,6 +3172,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
 
             Shape chordShape = chord->shape().translate(chord->pos());
             chordShape.removeInvisibles();
+            chordShape.removeTypes({ ElementType::ARPEGGIO });
             if (chordShape.empty()) {
                 continue;
             }
