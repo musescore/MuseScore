@@ -2925,7 +2925,13 @@ void Score::cmdExplode()
       Segment* startSegment = selection().startSegment();
       Segment* endSegment = selection().endSegment();
       Measure* startMeasure = startSegment->measure();
-      Measure* endMeasure = endSegment ? endSegment->measure() : lastMeasure();
+      Measure* endMeasure = nullptr;
+      if (!endSegment)
+            endMeasure = lastMeasure();
+      else if (endSegment->tick() == endSegment->measure()->tick())
+            endMeasure = endSegment->measure()->prevMeasure() ? endSegment->measure()->prevMeasure() : firstMeasure();
+      else
+            endMeasure = endSegment->measure();
 
       Fraction lTick = endMeasure->endTick();
       bool voice = false;
@@ -2952,6 +2958,8 @@ void Score::cmdExplode()
                         if (e && e->type() == ElementType::CHORD) {
                               Chord* c = toChord(e);
                               n = qMax(n, int(c->notes().size()));
+                              for (Chord* graceChord : c->graceNotes())
+                                    n = qMax(n, int(graceChord->notes().size()));
                               }
                         }
                   lastStaff = qMin(nstaves(), srcStaff + n);
@@ -2970,24 +2978,31 @@ void Score::cmdExplode()
                         }
                   }
 
+            auto doExplode = [this](Chord* c, size_t lastStaff, size_t srcStaff, size_t i) -> void
+                  {
+                  std::vector<Note*> notes = c->notes();
+                  size_t nnotes = notes.size();
+                  // keep note "i" from top, which is backwards from nnotes - 1
+                  // reuse notes if there are more instruments than notes
+                  size_t stavesPerNote = std::max((lastStaff - srcStaff) / nnotes, static_cast<size_t>(1));
+                  size_t keepIndex = static_cast<size_t>(std::max(static_cast<int>(nnotes) - 1 - static_cast<int>(i / stavesPerNote), 0));
+                  Note* keepNote = c->notes()[keepIndex];
+                  for (Note* n : notes) {
+                        if (n != keepNote)
+                              undoRemoveElement(n);
+                        }
+                  };
+
             // loop through each staff removing all but one note from each chord
             for (int i = 0; srcStaff + i < lastStaff; ++i) {
                   int track = (srcStaff + i) * VOICES;
                   for (Segment* s = startSegment; s && s != endSegment; s = s->next1()) {
                         Element* e = s->element(track);
                         if (e && e->type() == ElementType::CHORD) {
-                              Chord* c = toChord(e);
-                              std::vector<Note*> notes = c->notes();
-                              int nnotes = int(notes.size());
-                              // keep note "i" from top, which is backwards from nnotes - 1
-                              // reuse notes if there are more instruments than notes
-                              int stavesPerNote = qMax((lastStaff - srcStaff) / nnotes, 1);
-                              int keepIndex = qMax(nnotes - 1 - (i / stavesPerNote), 0);
-                              Note* keepNote = c->notes()[keepIndex];
-                              foreach (Note* n, notes) {
-                                    if (n != keepNote)
-                                          undoRemoveElement(n);
-                                    }
+                              Chord* c = toChord(e); //chord, laststaff, srcstaff
+                              doExplode(c, lastStaff, srcStaff, i);
+                              for (Chord* graceChord : c->graceNotes())
+                                    doExplode(graceChord, lastStaff, srcStaff, i);
                               }
                         }
                   }
