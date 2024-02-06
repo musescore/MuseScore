@@ -24,6 +24,7 @@
 #define MU_UI_UIMODULE_H
 
 #include "modularity/imodulesetup.h"
+#include <QtGlobal>
 
 namespace mu::ui {
 class UiConfiguration;

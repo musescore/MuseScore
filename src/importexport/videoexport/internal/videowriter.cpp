@@ -32,6 +32,8 @@
 
 #include "log.h"
 
+#include <QPainter>
+
 using namespace mu::iex::videoexport;
 using namespace mu::project;
 using namespace mu::notation;

@@ -23,6 +23,8 @@
 #define MU_PROJECT_EXPORTTYPE_H
 
 #include <unordered_set>
+#include <QList>
+#include <QVariant>
 
 #include "containers.h"
 
