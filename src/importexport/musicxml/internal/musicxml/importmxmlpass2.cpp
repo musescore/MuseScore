@@ -1366,8 +1366,10 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
 
 static void setSLinePlacement(SLine* sli, const QString placement)
 {
-    sli->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
-    sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    if (placement == u"above" || placement == u"below") {
+        sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+        sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
 }
 
 //---------------------------------------------------------
