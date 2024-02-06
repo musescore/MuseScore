@@ -34,6 +34,8 @@
 
 #include "log.h"
 
+#include <QXmlStreamReader>
+
 using AccidentalType = mu::engraving::AccidentalType;
 using SymId = mu::engraving::SymId;
 const static std::map<mu::String, AccidentalType> smuflAccidentalTypes {
