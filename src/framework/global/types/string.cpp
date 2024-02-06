@@ -599,12 +599,20 @@ bool String::contains(const String& str, CaseSensitivity cs) const
     }
 }
 
-bool String::contains(const std::regex& re) const
+bool String::contains(const std::wregex& re) const
 {
-    std::string selfU8;
-    UtfCodec::utf16to8(std::u16string_view(constStr()), selfU8);
-    auto words_begin = std::sregex_iterator(selfU8.begin(), selfU8.end(), re);
-    if (words_begin != std::sregex_iterator()) {
+    const std::u16string& u16 = constStr();
+    std::wstring ws;
+    ws.resize(u16.size());
+
+    static_assert(sizeof(wchar_t) >= sizeof(char16_t));
+
+    for (size_t i = 0; i < ws.size(); ++i) {
+        ws[i] = static_cast<wchar_t>(u16.at(i));
+    }
+
+    auto words_begin = std::wsregex_iterator(ws.begin(), ws.end(), re);
+    if (words_begin != std::wsregex_iterator()) {
         return true;
     }
     return false;

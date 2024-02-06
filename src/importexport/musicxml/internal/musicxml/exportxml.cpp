@@ -4695,8 +4695,8 @@ static bool findMetronome(const std::list<TextFragment>& list,
             // determine if metronome has parentheses
             // left part of string must end with parenthesis plus optional spaces
             // right part of string must have parenthesis (but not in first pos)
-            int lparen = s1.indexOf(u'(');
-            int rparen = s6.indexOf(u')');
+            size_t lparen = s1.indexOf(u'(');
+            size_t rparen = s6.indexOf(u')');
             hasParen = (lparen == s1.size() - 1 && rparen == 0);
 
             metroLeft = s2;

@@ -1574,7 +1574,7 @@ SpannerSet MusicXMLParserPass2::findIncompleteSpannersAtPartEnd()
 
 static bool isLikelyIncorrectPartName(const String& partName)
 {
-    static const std::regex re("^P[0-9]+$");
+    static const std::wregex re(L"^P[0-9]+$");
     return partName.contains(re);
 }
 
@@ -3027,7 +3027,7 @@ void MusicXMLParserDirection::direction(const String& partId,
 
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 {
-    static const std::regex re("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+");
+    static const std::wregex re(L"^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+");
 
     return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
            && m_rehearsalText.empty()
@@ -3170,16 +3170,16 @@ void MusicXMLParserDirection::dynamics()
 String MusicXMLParserDirection::matchRepeat() const
 {
     String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.toLower().simplified());
-    static const std::regex daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
-    static const std::regex daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
-    static const std::regex daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
-    static const std::regex dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
-    static const std::regex dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
-    static const std::regex dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
-    static const std::regex fine("^fine$");
-    static const std::regex segno("^segno( segno)?$");
-    static const std::regex toCoda("^to coda( coda)?$");
-    static const std::regex coda("^coda( coda)?$");
+    static const std::wregex daCapo(L"^(d\\.? ?|da )(c\\.?|capo)$");
+    static const std::wregex daCapoAlFine(L"^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
+    static const std::wregex daCapoAlCoda(L"^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
+    static const std::wregex dalSegno(L"^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
+    static const std::wregex dalSegnoAlFine(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
+    static const std::wregex dalSegnoAlCoda(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+    static const std::wregex fine(L"^fine$");
+    static const std::wregex segno(L"^segno( segno)?$");
+    static const std::wregex toCoda(L"^to coda( coda)?$");
+    static const std::wregex coda(L"^coda( coda)?$");
 
     if (plainWords.contains(daCapo)) {
         return u"daCapo";
