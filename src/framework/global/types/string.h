@@ -268,7 +268,7 @@ public:
     Char back() const { return at(size() - 1); }
     bool contains(const Char& ch) const;
     bool contains(const String& str, CaseSensitivity cs = CaseSensitive) const;
-    bool contains(const std::regex& re) const;
+    bool contains(const std::wregex& re) const;
     int count(const Char& ch) const;
     size_t indexOf(const Char& ch, size_t from = 0) const;
     size_t indexOf(const String& str, size_t from = 0) const;
