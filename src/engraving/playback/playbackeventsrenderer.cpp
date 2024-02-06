@@ -133,10 +133,13 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     duration_t duration = timestampFromTicks(score, positionTick + ticksPositionOffset + durationTicks) - eventTimestamp;
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
+    staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
     Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
     ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
                                                       eventTimestamp, duration);
+
+    double bps = score->tempomap()->tempo(positionTick).val;
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
@@ -147,10 +150,11 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
         events.emplace_back(mpe::NoteEvent(eventTimestamp,
                                            duration,
                                            voiceIdx,
+                                           staffIdx,
                                            pitchLevel,
                                            dynamicLevelFromType(mpe::DynamicType::Natural),
                                            articulations,
-                                           score->tempomap()->tempo(positionTick).val));
+                                           bps));
     }
 }
 
@@ -168,6 +172,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
     PlaybackEventList& events = result[actualTimestamp];
 
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
+    staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
+
     Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
     ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
@@ -182,10 +188,11 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
         events.emplace_back(mpe::NoteEvent(actualTimestamp,
                                            actualDuration,
                                            voiceIdx,
+                                           staffIdx,
                                            pitchLevel,
                                            dynamicLevelFromType(mpe::DynamicType::Natural),
                                            articulations,
-                                           2.0));
+                                           Constants::DEFAULT_TEMPO.val));
     }
 }
 
@@ -232,6 +239,7 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
 
     result[actualTimestamp].emplace_back(mpe::NoteEvent(actualTimestamp,
                                                         duration,
+                                                        0,
                                                         0,
                                                         eventPitchLevel,
                                                         dynamicLevelFromType(mpe::DynamicType::Natural),
