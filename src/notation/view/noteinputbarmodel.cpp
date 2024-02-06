@@ -634,7 +634,8 @@ MenuItemList NoteInputBarModel::makeAddItems()
         makeMenu(TranslatableString("notation", "Measures"), makeMeasuresItems()),
         makeMenu(TranslatableString("notation", "Frames"), makeFramesItems()),
         makeMenu(TranslatableString("notation", "Text"), makeTextItems()),
-        makeMenu(TranslatableString("notation", "Lines"), makeLinesItems())
+        makeMenu(TranslatableString("notation", "Lines"), makeLinesItems()),
+        makeMenu(TranslatableString("notation", "Playback"), makePlaybackItems())
     };
 
     return items;
@@ -754,6 +755,15 @@ MenuItemList NoteInputBarModel::makeLinesItems()
         makeMenuItem("add-8va"),
         makeMenuItem("add-8vb"),
         makeMenuItem("add-noteline")
+    };
+
+    return items;
+}
+
+MenuItemList NoteInputBarModel::makePlaybackItems()
+{
+    MenuItemList items {
+        makeMenuItem("add-sound-flag")
     };
 
     return items;
