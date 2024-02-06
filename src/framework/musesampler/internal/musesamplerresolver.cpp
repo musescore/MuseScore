@@ -34,16 +34,16 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::musesampler;
 
-ms_InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const audio::AudioResourceMeta& resourceMeta)
+InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const audio::AudioResourceMeta& resourceMeta)
 {
     if (!libHandler) {
-        return nullptr;
+        return InstrumentInfo();
     }
 
     auto instrumentList = libHandler->getInstrumentList();
 
     while (auto instrument = libHandler->getNextInstrument(instrumentList)) {
-        String uniqueId = String::fromStdString(std::to_string(libHandler->getInstrumentId(instrument)));
+        int instrumentId = libHandler->getInstrumentId(instrument);
         String internalName = String::fromUtf8(libHandler->getInstrumentName(instrument));
         String internalCategory = String::fromUtf8(libHandler->getInstrumentCategory(instrument));
         String instrumentSoundId = String::fromUtf8(libHandler->getMpeSoundId(instrument));
@@ -51,12 +51,12 @@ ms_InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const audi
         if (resourceMeta.attributeVal(u"playbackSetupData") == instrumentSoundId
             && resourceMeta.attributeVal(u"museCategory") == internalCategory
             && resourceMeta.attributeVal(u"museName") == internalName
-            && resourceMeta.attributeVal(u"museUID") == uniqueId) {
-            return instrument;
+            && resourceMeta.attributeVal(u"museUID") == String::fromStdString(std::to_string(instrumentId))) {
+            return { instrumentId, instrument };
         }
     }
 
-    return nullptr;
+    return InstrumentInfo();
 }
 
 void MuseSamplerResolver::init()
@@ -77,8 +77,8 @@ void MuseSamplerResolver::init()
 
 ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId*/, const audio::AudioInputParams& params) const
 {
-    ms_InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
-    if (instrument) {
+    InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
+    if (instrument.isValid()) {
         return std::make_shared<MuseSamplerWrapper>(m_libHandler, instrument, params);
     }
 
@@ -136,12 +136,12 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
 
 SoundPresetList MuseSamplerResolver::resolveSoundPresets(const audio::AudioResourceMeta& resourceMeta) const
 {
-    ms_InstrumentInfo instrument = findInstrument(m_libHandler, resourceMeta);
-    if (!instrument) {
+    InstrumentInfo instrument = findInstrument(m_libHandler, resourceMeta);
+    if (!instrument.msInstrument) {
         return SoundPresetList();
     }
 
-    ms_PresetList presets = m_libHandler->getPresetList(instrument);
+    ms_PresetList presets = m_libHandler->getPresetList(instrument.msInstrument);
     SoundPresetList result;
 
     int num = 0;

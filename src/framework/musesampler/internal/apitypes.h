@@ -329,4 +329,30 @@ typedef ms_Result (* ms_MuseSampler_all_notes_off)(ms_MuseSampler);
 typedef ms_PresetChange (* ms_MuseSampler_create_preset_change)(ms_MuseSampler ms, ms_Track track, long long location_us);
 
 typedef ms_Result (* ms_MuseSampler_add_preset)(ms_MuseSampler ms, ms_Track track, ms_PresetChange preset_change, const char* preset_name);
+
+namespace mu::musesampler {
+using track_idx_t = size_t;
+using TrackList = std::vector<ms_Track>;
+
+struct InstrumentInfo {
+    int instrumentId = -1;
+    ms_InstrumentInfo msInstrument = nullptr;
+
+    bool isValid() const
+    {
+        return instrumentId != -1 && msInstrument != nullptr;
+    }
+};
+
+struct AuditionStartNoteEvent {
+    ms_AuditionStartNoteEvent_3 msEvent;
+    ms_Track msTrack = nullptr;
+};
+
+struct AuditionStopNoteEvent {
+    ms_AuditionStopNoteEvent msEvent;
+    ms_Track msTrack = nullptr;
+};
+}
+
 #endif // MU_MUSESAMPLER_APITYPES_H
