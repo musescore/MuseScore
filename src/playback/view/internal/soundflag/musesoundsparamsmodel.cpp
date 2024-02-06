@@ -62,10 +62,7 @@ void MuseSoundsParamsModel::togglePreset(const QString& presetCode, bool forceMu
         return;
     }
 
-    String presetCodeStr = String::fromQString(presetCode);
-
-    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
-    engraving::SoundFlag::PresetCodes presetCodes = soundFlag->soundPresets();
+    QStringList presetCodes = this->presetCodes();
 
     if (forceMultiSelection || playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
         if (presetCodes.contains(presetCode)) {
@@ -73,16 +70,18 @@ void MuseSoundsParamsModel::togglePreset(const QString& presetCode, bool forceMu
                 return;
             }
 
-            presetCodes.removeAll(presetCodeStr);
+            presetCodes.removeAll(presetCode);
         } else {
-            presetCodes.emplace_back(presetCodeStr);
+            presetCodes.push_back(presetCode);
         }
     } else {
-        presetCodes = { presetCodeStr };
+        presetCodes = QStringList{ presetCode };
     }
 
+    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+
     undoStack()->prepareChanges();
-    soundFlag->undoChangeSoundFlag(presetCodes, soundFlag->params(), soundFlag->isTextVisible());
+    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->params(), soundFlag->isTextVisible());
     undoStack()->commitChanges();
 
     emit presetCodesChanged();
@@ -118,7 +117,24 @@ QStringList MuseSoundsParamsModel::presetCodes() const
         return {};
     }
 
-    return engraving::toSoundFlag(m_item)->soundPresets().toQStringList();
+    QStringList availablePresetCodes;
+    for (const QVariant& presetVar : m_availablePresets) {
+        availablePresetCodes << presetVar.toMap()["code"].toString();
+    }
+
+    QStringList result;
+    for (const String& presetCode : engraving::toSoundFlag(m_item)->soundPresets()) {
+        QString code = presetCode.toQString();
+        if (availablePresetCodes.contains(code)) {
+            result.push_back(code);
+        }
+    }
+
+    if (result.empty() && !availablePresetCodes.empty()) {
+        result = QStringList{ availablePresetCodes.first() };
+    }
+
+    return result;
 }
 
 notation::INotationSelectionPtr MuseSoundsParamsModel::selection() const
