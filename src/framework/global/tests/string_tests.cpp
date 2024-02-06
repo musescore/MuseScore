@@ -916,11 +916,11 @@ TEST_F(Global_Types_StringTests, String_IndexOfRegex)
 TEST_F(Global_Types_StringTests, String_Contains)
 {
     //! GIVEN Regex: "^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$"
-    std::regex re("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+    std::wregex re(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
 
     {
         //! GIVEN String:
-        String str("d.segno. al coda");
+        String str(u"d.segno. al coda");
 
         //! DO
         bool ret = str.contains(re);
@@ -931,7 +931,7 @@ TEST_F(Global_Types_StringTests, String_Contains)
 
     {
         //! GIVEN String:
-        String str("d.segno. alcoda");
+        String str(u"d.segno. alcoda");
 
         //! DO
         bool ret = str.contains(re);
