@@ -1373,8 +1373,10 @@ static void addTextToNote(int l, int c, String txt, String placement, String fon
 
 static void setSLinePlacement(SLine* sli, const String& placement)
 {
-    sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
-    sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    if (placement == u"above" || placement == u"below") {
+        sli->setPlacement(placement == u"above" ? PlacementV::ABOVE : PlacementV::BELOW);
+        sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
 }
 
 //---------------------------------------------------------
