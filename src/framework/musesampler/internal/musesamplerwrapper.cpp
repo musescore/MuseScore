@@ -32,7 +32,7 @@ using namespace mu::musesampler;
 
 static constexpr int AUDIO_CHANNELS_COUNT = 2;
 
-MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, ms_InstrumentInfo instrument,
+MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument,
                                        const audio::AudioSourceParams& params)
     : AbstractSynthesizer(params), m_samplerLib(samplerLib), m_instrument(instrument)
 {
@@ -101,7 +101,7 @@ async::Channel<unsigned int> MuseSamplerWrapper::audioChannelsCountChanged() con
 
 samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPerChannel)
 {
-    if (!m_samplerLib || !m_sampler || !m_track) {
+    if (!m_samplerLib || !m_sampler) {
         return 0;
     }
 
@@ -163,71 +163,21 @@ bool MuseSamplerWrapper::isValid() const
 
 void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 {
-    // Check by exact info:
-    int unique_id = params().resourceMeta.attributeVal(u"museUID").toInt();
-    m_track = m_samplerLib->addTrack(m_sampler, unique_id);
-    if (m_track != nullptr) {
-        m_sequencer.init(m_samplerLib, m_sampler, m_track, resolveDefaultPresetCode(m_instrument));
-        return;
-    } else {
-        LOGE() << "Could not add instrument with ID of " << unique_id;
-    }
+    m_tracks.clear();
 
-    LOGE() << "Something went wrong; falling back to MPE info.";
-    IF_ASSERT_FAILED(m_samplerLib) {
-        return;
-    }
+    ms_Track track = addTrack();
+    if (!track) {
+        LOGE() << "Could not add track for instrument: " << m_instrument.instrumentId << "; falling back to MPE info";
+        m_instrument = resolveInstrument(setupData);
 
-    if (!setupData.musicXmlSoundId.has_value()) {
-        LOGE() << "Unable to setup MuseSampler";
-        return;
-    }
-
-    String soundId = setupData.toString();
-
-    auto matchingInstrumentList = m_samplerLib->getMatchingInstrumentList(soundId.toAscii().constChar(),
-                                                                          setupData.musicXmlSoundId->c_str());
-
-    if (matchingInstrumentList == nullptr) {
-        LOGE() << "Unable to get instrument list";
-        return;
-    } else {
-        LOGD() << "Successfully got instrument list";
-    }
-
-    int firstInternalId = -1;
-    int internalId = -1;
-
-    // TODO: display all of these in MuseScore, and let the user choose!
-    while (auto instrument = m_samplerLib->getNextInstrument(matchingInstrumentList))
-    {
-        internalId = m_samplerLib->getInstrumentId(instrument);
-        const char* internalName = m_samplerLib->getInstrumentName(instrument);
-        const char* internalCategory = m_samplerLib->getInstrumentCategory(instrument);
-        const char* instrumentPack = m_samplerLib->getInstrumentPackage(instrument);
-        const char* musicXmlId = m_samplerLib->getMusicXmlSoundId(instrument);
-
-        LOGD() << internalId
-               << ": " << instrumentPack
-               << ": " << internalCategory
-               << ": " << internalName
-               << " - " << musicXmlId;
-
-        // For now, hack to just choose first instrument:
-        if (firstInternalId == -1) {
-            firstInternalId = internalId;
-            m_instrument = instrument;
+        track = addTrack();
+        if (!track) {
+            LOGE() << "Could not init instrument: " << m_instrument.instrumentId;
+            return;
         }
     }
 
-    if (firstInternalId == -1) {
-        LOGE() << "Unable to find sound for " << soundId;
-        return;
-    }
-
-    m_track = m_samplerLib->addTrack(m_sampler, firstInternalId);
-
-    m_sequencer.init(m_samplerLib, m_sampler, m_track, resolveDefaultPresetCode(m_instrument));
+    m_sequencer.init(m_samplerLib, m_sampler, shared_from_this(), resolveDefaultPresetCode(m_instrument));
 }
 
 void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
@@ -251,6 +201,31 @@ void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
     }
 }
 
+const TrackList& MuseSamplerWrapper::allTracks() const
+{
+    return m_tracks;
+}
+
+ms_Track MuseSamplerWrapper::addTrack()
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
+        return nullptr;
+    }
+
+    if (!m_samplerLib->supportsMultipleTracks() && !m_tracks.empty()) {
+        return nullptr;
+    }
+
+    ms_Track track = m_samplerLib->addTrack(m_sampler, m_instrument.instrumentId);
+    if (track) {
+        m_tracks.push_back(track);
+    }
+
+    return track;
+}
+
 msecs_t MuseSamplerWrapper::playbackPosition() const
 {
     return samplesToMsecs(m_currentPosition, m_sampleRate);
@@ -270,7 +245,7 @@ bool MuseSamplerWrapper::isActive() const
 
 void MuseSamplerWrapper::setIsActive(bool arg)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
@@ -290,13 +265,52 @@ void MuseSamplerWrapper::setIsActive(bool arg)
     LOGD() << "Toggled playing status, isPlaying: " << arg;
 }
 
-std::string MuseSamplerWrapper::resolveDefaultPresetCode(ms_InstrumentInfo instrument) const
+InstrumentInfo MuseSamplerWrapper::resolveInstrument(const mpe::PlaybackSetupData& setupData) const
 {
-    if (!instrument) {
+    IF_ASSERT_FAILED(m_samplerLib) {
+        return InstrumentInfo();
+    }
+
+    if (!setupData.musicXmlSoundId.has_value()) {
+        return InstrumentInfo();
+    }
+
+    String soundId = setupData.toString();
+
+    auto matchingInstrumentList = m_samplerLib->getMatchingInstrumentList(soundId.toAscii().constChar(),
+                                                                          setupData.musicXmlSoundId->c_str());
+
+    if (matchingInstrumentList == nullptr) {
+        LOGE() << "Unable to get instrument list";
+        return InstrumentInfo();
+    } else {
+        LOGD() << "Successfully got instrument list";
+    }
+
+    // TODO: display all of these in MuseScore, and let the user choose!
+    while (auto instrument = m_samplerLib->getNextInstrument(matchingInstrumentList)) {
+        InstrumentInfo info;
+        info.instrumentId = m_samplerLib->getInstrumentId(instrument);
+        info.msInstrument = instrument;
+
+        // For now, hack to just choose first instrument:
+        if (info.isValid()) {
+            return info;
+        }
+    }
+
+    LOGE() << "Unable to find sound for " << soundId;
+
+    return InstrumentInfo();
+}
+
+std::string MuseSamplerWrapper::resolveDefaultPresetCode(const InstrumentInfo& instrument) const
+{
+    if (!instrument.isValid()) {
         return std::string();
     }
 
-    ms_PresetList presets = m_samplerLib->getPresetList(instrument);
+    ms_PresetList presets = m_samplerLib->getPresetList(instrument.msInstrument);
 
     if (const char* presetCode = m_samplerLib->getNextPreset(presets)) {
         return presetCode;
@@ -307,24 +321,34 @@ std::string MuseSamplerWrapper::resolveDefaultPresetCode(ms_InstrumentInfo instr
 
 void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventType& event)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
-    if (std::holds_alternative<ms_AuditionStartNoteEvent_3>(event)) {
-        m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent_3>(event));
+    if (std::holds_alternative<AuditionStartNoteEvent>(event)) {
+        const AuditionStartNoteEvent& noteOn = std::get<AuditionStartNoteEvent>(event);
+        IF_ASSERT_FAILED(noteOn.msTrack) {
+            return;
+        }
+
+        m_samplerLib->startAuditionNote(m_sampler, noteOn.msTrack, noteOn.msEvent);
         return;
     }
 
-    if (std::holds_alternative<ms_AuditionStopNoteEvent>(event)) {
-        m_samplerLib->stopAuditionNote(m_sampler, m_track, std::get<ms_AuditionStopNoteEvent>(event));
+    if (std::holds_alternative<AuditionStopNoteEvent>(event)) {
+        const AuditionStopNoteEvent& noteOff = std::get<AuditionStopNoteEvent>(event);
+        IF_ASSERT_FAILED(noteOff.msTrack) {
+            return;
+        }
+
+        m_samplerLib->stopAuditionNote(m_sampler, noteOff.msTrack, noteOff.msEvent);
         return;
     }
 }
 
 void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
