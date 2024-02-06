@@ -886,36 +886,9 @@ TEST_F(Global_Types_StringTests, String_DecodeXmlEntities)
     EXPECT_EQ(ret, String(u"gg ! %%"));
 }
 
-static size_t indexOf(const String& src_, const std::regex& re, size_t from, std::smatch* m)
-{
-    std::string src = src_.toStdString();
-    auto begin = std::sregex_iterator(src.begin(), src.end(), re);
-    auto end = std::sregex_iterator();
-    for (auto it = begin; it != end; ++it) {
-        std::smatch match = *it;
-        size_t pos = src.find(match.str(), from);
-        if (pos != std::string::npos) {
-            if (m) {
-                *m = match;
-            }
-            return pos;
-        }
-    }
-    return std::string::npos;
-}
-
-TEST_F(Global_Types_StringTests, String_IndexOfRegex)
-{
-    String str = u"gg &#33; &#37;&#37;";
-    static const std::regex re("&#([0-9]+);");
-    std::smatch m;
-    size_t pos = indexOf(str, re, 4, &m);
-    EXPECT_EQ(pos, 9);
-}
-
 TEST_F(Global_Types_StringTests, String_Contains)
 {
-    //! GIVEN Regex: "^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$"
+    //! GIVEN Regex (taken from musicxml parsing, for determining coda, segno, etc):
     std::wregex re(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
 
     {
