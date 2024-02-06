@@ -1472,6 +1472,61 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
     delete ts;
 }
 
+std::vector<EngravingItem*> Score::addSoundFlagToSelection()
+{
+    const std::vector<EngravingItem*>& elements = selection().elements();
+    if (elements.empty()) {
+        return {};
+    }
+
+    std::vector<EngravingItem*> addedElements;
+
+    for (EngravingItem* element : elements) {
+        if (!element) {
+            continue;
+        }
+
+        if (element->isStaffText()) {
+            StaffText* staffText = toStaffText(element);
+            Segment* segment = staffText->segment();
+
+            SoundFlag* flag = Factory::createSoundFlag(segment);
+            flag->setXmlText(staffText->xmlText());
+
+            flag->setTrack(staffText->track());
+            flag->setIsTextVisible(!staffText->xmlText().empty());
+
+            flag->setParent(segment);
+
+            //! try to predict preset id by text
+            flag->setSoundPresets({ staffText->xmlText().simplified().remove(Char(' ')) });
+
+            score()->undoRemoveElement(staffText);
+            score()->undoAddElement(flag);
+
+            addedElements.push_back(flag);
+        } else if (element->isNote() || element->isRest()) {
+            ChordRest* chordRest = chordOrRest(element);
+            if (!chordRest) {
+                continue;
+            }
+
+            Segment* segment = chordRest->segment();
+
+            SoundFlag* flag = Factory::createSoundFlag(segment);
+            flag->setXmlText(mtrc("engraving", "Sound flag"));
+            flag->setTrack(trackZeroVoice(chordRest->track()));
+            flag->setParent(segment);
+
+            score()->undoAddElement(flag);
+
+            addedElements.push_back(flag);
+        }
+    }
+
+    return addedElements;
+}
+
 //---------------------------------------------------------
 //   cmdRemoveTimeSig
 //---------------------------------------------------------

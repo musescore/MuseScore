@@ -266,6 +266,9 @@ public:
     Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
 
+    Ret canAddSoundFlag() const override;
+    void addSoundFlag() override;
+
     void toggleBold() override;
     void toggleItalic() override;
     void toggleUnderline() override;

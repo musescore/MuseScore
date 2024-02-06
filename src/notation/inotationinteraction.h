@@ -248,6 +248,9 @@ public:
     virtual Ret canAddGuitarBend() const = 0;
     virtual void addGuitarBend(GuitarBendType bendType) = 0;
 
+    virtual Ret canAddSoundFlag() const = 0;
+    virtual void addSoundFlag() = 0;
+
     // Text navigation
     virtual void navigateToLyrics(MoveDirection direction, bool moveOnly = false) = 0;
     virtual void navigateToLyricsVerse(MoveDirection direction) = 0;
