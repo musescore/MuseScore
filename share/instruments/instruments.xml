@@ -7696,7 +7696,7 @@
                   <trackName>Suspended Cymbal</trackName>
                   <longName>Suspended Cymbal</longName>
                   <shortName>Sus. Cym.</shortName>
-                  <description>Suspended Cymbal</description>
+                  <description>Suspended Cymbal.</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
@@ -7721,10 +7721,10 @@
             </Instrument>
             <Instrument id="cymbal">
                   <family>unpitched-metal-percussion</family>
-                  <trackName>Hand Cymbals</trackName>
-                  <longName>Hand Cymbals</longName>
+                  <trackName>Cymbals</trackName>
+                  <longName>Cymbals</longName>
                   <shortName>Cym.</shortName>
-                  <description>Hand Cymbals</description>
+                  <description>Hand Cymbals.</description>
                   <musicXMLid>metal.cymbal.crash</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>

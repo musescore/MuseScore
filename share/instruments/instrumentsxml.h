@@ -4006,7 +4006,7 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cowbell", "cowbell longName"),
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cwb.", "cowbell shortName"),
 
 //: description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Suspended Cymbal", "crash-cymbal description"),
+QT_TRANSLATE_NOOP3("engraving/instruments", "Suspended Cymbal.", "crash-cymbal description"),
 //: trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Suspended Cymbal", "crash-cymbal trackName"),
 //: longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -4014,13 +4014,13 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Suspended Cymbal", "crash-cymbal lo
 //: shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Sus. Cym.", "crash-cymbal shortName"),
 
-//: description for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Hand Cymbals", "cymbal description"),
-//: trackName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Hand Cymbals", "cymbal trackName"),
-//: longName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Hand Cymbals", "cymbal longName"),
-//: shortName for Hand Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Hand Cymbals.", "cymbal description"),
+//: trackName for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Cymbals", "cymbal trackName"),
+//: longName for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Cymbals", "cymbal longName"),
+//: shortName for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cym.", "cymbal shortName"),
 
 //: description for Finger Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
