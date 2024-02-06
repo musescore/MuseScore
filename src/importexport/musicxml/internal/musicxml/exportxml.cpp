@@ -43,7 +43,6 @@
 #include <QString>
 #include <QBuffer>
 #include <QDate>
-#include <QRegularExpression>
 
 #include "containers.h"
 #include "io/iodevice.h"
@@ -139,8 +138,6 @@ using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-std::stringstream Debugger::ss = std::stringstream();
-
 //---------------------------------------------------------
 //   local defines for debug output
 //---------------------------------------------------------
@@ -4629,8 +4626,6 @@ static bool findMetronome(const std::list<TextFragment>& list,
     int pos1 = TempoText::findTempoDuration(words.left(indEq), len1, dur);
     static const std::wregex equationRegEx(L"\\s*=\\s*");
     std::wsmatch equationMatch;
-    Debugger::ss << "===========================" << std::endl;
-    Debugger::ss << "words: " << words.toStdString() << std::endl;
     size_t pos2 = indexOf(words, equationRegEx, pos1 + len1, &equationMatch);
     if (pos1 != -1 && pos2 == pos1 + len1) {
         int len2 = equationMatch.length();
@@ -4639,23 +4634,6 @@ static bool findMetronome(const std::list<TextFragment>& list,
             String s2 = words.mid(pos1, len1);        // first note
             String s3 = words.mid(pos2, len2);        // equals sign
             String s4 = words.mid(pos2 + len2);       // string to the right of equals sign
-
-            Debugger::ss
-                << "s1: " << s1.toStdString() << std::endl
-                << "s2: " << s2.toStdString() << std::endl
-                << "s3: " << s3.toStdString() << std::endl
-                << "s4: " << s4.toStdString() << std::endl;
-            // LOGDA() << "s1: " << s1 << " s2: " << s2
-            //         << " s3: " << s3 << " s4: " << s4;
-
-            /*
-            LOGD("found note and equals: '%s'%s'%s'%s'",
-                   qPrintable(s1),
-                   qPrintable(s2),
-                   qPrintable(s3),
-                   qPrintable(s4)
-                   );
-             */
 
             // now determine what is to the right of the equals sign
             // must have either a (dotted) note or a number at start of s4
@@ -4678,19 +4656,6 @@ static bool findMetronome(const std::list<TextFragment>& list,
 
             String s5 = s4.mid(0, len3);       // number or second note
             String s6 = s4.mid(len3);          // string to the right of metronome
-
-            //LOGDA() << "s5: " << s5 << " s6: " << s6;
-
-            Debugger::ss
-                << "s5: " << s5.toStdString() << std::endl
-                << "s6: " << s6.toStdString() << std::endl;
-
-            /*
-            LOGD("found right part: '%s'%s'",
-                   qPrintable(s5),
-                   qPrintable(s6)
-                   );
-             */
 
             // determine if metronome has parentheses
             // left part of string must end with parenthesis plus optional spaces
@@ -4719,13 +4684,6 @@ static bool findMetronome(const std::list<TextFragment>& list,
             }
             metroPos = corrPos;
 
-            /*
-            LOGD("-> found '%s'%s' hasParen %d metro pos %d len %d",
-                   qPrintable(metroLeft),
-                   qPrintable(metroRight),
-                   hasParen, metroPos, metroLen
-                   );
-             */
             std::list<TextFragment> mid;       // not used
             MScoreTextToMXML::split(list, metroPos, metroLen, wordsLeft, mid, wordsRight);
             return true;
@@ -8123,8 +8081,6 @@ static void writeMxlArchive(Score* score, ZipWriter& zip, const String& filename
     em.write(&dbuf);
     dbuf.seek(0);
     zip.addFile(filename.toStdString(), dbuf.data());
-
-    LOGDA() << Debugger::ss.str();
 }
 
 bool saveMxl(Score* score, IODevice* device)
