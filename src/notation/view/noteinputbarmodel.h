@@ -99,6 +99,7 @@ private:
     uicomponents::MenuItemList makeFramesItems();
     uicomponents::MenuItemList makeTextItems();
     uicomponents::MenuItemList makeLinesItems();
+    uicomponents::MenuItemList makePlaybackItems();
 
     bool isMenuSecondary(const actions::ActionCode& actionCode) const;
 

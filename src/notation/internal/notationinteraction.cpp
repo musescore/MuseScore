@@ -1463,7 +1463,15 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             }
         }
 
-        EngravingItem* dropElement = el->drop(m_dropData.ed);
+        EngravingItem* dropElement = nullptr;
+
+        if (el->isStaffText() && m_dropData.ed.dropElement->isSoundFlag()) {
+            std::vector<EngravingItem*> addedElements = score()->addSoundFlagToSelection();
+            dropElement = !addedElements.empty() ? addedElements.front() : nullptr;
+        } else {
+            dropElement = el->drop(m_dropData.ed);
+        }
+
         if (dropElement && dropElement->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(dropElement))) {
                 rollback();
@@ -1935,7 +1943,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
     dropData->modifiers   = keyboardModifier(modifiers);
     dropData->dropElement = e;
 
-    if (target->acceptDrop(*dropData)) {
+    if (target->acceptDrop(*dropData) || (target->isStaffText() && e && e->isSoundFlag())) {
         // use same code path as drag&drop
 
         ByteArray a = e->mimeData();
@@ -1949,7 +1957,15 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         rw::RWRegister::reader()->readItem(dropData->dropElement, n);
         dropData->dropElement->styleChanged();       // update to local style
 
-        mu::engraving::EngravingItem* el = target->drop(*dropData);
+        EngravingItem* el = nullptr;
+
+        if (target->isStaffText() && type == ElementType::SOUND_FLAG) {
+            std::vector<EngravingItem*> addedElements = score->addSoundFlagToSelection();
+            el = !addedElements.empty() ? addedElements.front() : nullptr;
+        } else {
+            el = target->drop(*dropData);
+        }
+
         if (el && el->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(el))) {
                 rollback();
@@ -2185,6 +2201,11 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
             }
             e = mu::engraving::toStaffLines(e)->measure();
         }
+
+        if (e->isStaffText() && ed.dropElement && ed.dropElement->isSoundFlag()) {
+            return e;
+        }
+
         if (e->acceptDrop(ed)) {
             return e;
         }
@@ -5519,6 +5540,38 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
     } else {
         rollback();
     }
+}
+
+Ret NotationInteraction::canAddSoundFlag() const
+{
+    static const std::set<ElementType> requiredTypes {
+        ElementType::NOTE,
+        ElementType::REST,
+        ElementType::STAFF_TEXT
+    };
+
+    bool isNoteOrRestOrStaffTextSelected = elementsSelected(requiredTypes);
+    return isNoteOrRestOrStaffTextSelected ? make_ok() : make_ret(Err::NoteOrRestOrStaffTextIsNotSelected);
+}
+
+void NotationInteraction::addSoundFlag()
+{
+    if (!score() || score()->selection().isNone()) {
+        return;
+    }
+
+    startEdit();
+
+    std::vector<EngravingItem*> elementsForSelect = score()->addSoundFlagToSelection();
+
+    if (elementsForSelect.empty()) {
+        rollback();
+        return;
+    }
+
+    apply();
+
+    select(elementsForSelect);
 }
 
 mu::engraving::Harmony* NotationInteraction::editedHarmony() const
