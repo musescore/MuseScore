@@ -171,11 +171,11 @@ void MusicXmlLyricsExtend::addLyric(Lyrics* const lyric)
 
 // find the duration of the chord starting at or after s and ending at tick
 
-static Fraction lastChordTicks(const Segment* s, const Fraction& tick)
+static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const track_idx_t track)
 {
     while (s && s->tick() < tick) {
         for (EngravingItem* el : s->elist()) {
-            if (el && el->isChordRest()) {
+            if (el && el->isChordRest() && el->track() == track) {
                 ChordRest* cr = static_cast<ChordRest*>(el);
                 if (cr->tick() + cr->actualTicks() == tick) {
                     return cr->actualTicks();
@@ -204,7 +204,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, cons
             ChordRest* const par = static_cast<ChordRest*>(el);
             if ((no == -1 && par->track() == track)
                 || (l->no() == no && track2staff(par->track()) == track2staff(track))) {
-                Fraction lct = lastChordTicks(l->segment(), tick);
+                Fraction lct = lastChordTicks(l->segment(), tick, track);
                 if (lct > Fraction(0, 1)) {
                     // set lyric tick to the total length from the lyric note
                     // plus all notes covered by the melisma minus the last note length
