@@ -6565,6 +6565,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       Element* se;
       if (fd) {
             fd->setTrack(track);
+            ha->setProperty(Pid::ALIGN, int(Align::HCENTER | Align::TOP));
             fd->add(ha);
             se = fd;
             }
