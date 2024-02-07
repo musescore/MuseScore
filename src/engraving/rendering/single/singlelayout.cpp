@@ -1467,14 +1467,16 @@ void SingleLayout::layout(SoundFlag* item, const Context& ctx)
     SoundFlag::LayoutData* ldata = item->mutldata();
     RectF bbox = ldata->bbox();
 
-    double iconWidth = item->iconBBox().width();
-    bbox.setWidth(bbox.width() + iconWidth);
+    // <icon><space><text>
+    double iconWidth = draw::FontMetrics::boundingRect(item->iconFont(), String(item->iconCode())).width();
+    double xMove = iconWidth + iconWidth / 2;
+    bbox.setWidth(xMove + bbox.width());
     ldata->setBbox(bbox);
 
     for (TextBlock& block : item->mutldata()->blocks) {
         auto& fragments = block.fragments();
         for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
-            it->pos.setX(it->pos.x() + iconWidth);
+            it->pos.setX(it->pos.x() + xMove);
         }
     }
 }

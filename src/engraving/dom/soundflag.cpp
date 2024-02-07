@@ -100,13 +100,6 @@ draw::Font SoundFlag::iconFont() const
     return m_iconFont;
 }
 
-mu::RectF SoundFlag::iconBBox() const
-{
-    RectF bbox = ldata()->bbox();
-    double textHeight = draw::FontMetrics::boundingRect(font(), xmlText()).height();
-    return RectF(bbox.x() - textHeight / 2.0, bbox.y() - textHeight / 2.0, textHeight * 1.5, textHeight * 1.5);
-}
-
 Color SoundFlag::iconBackgroundColor() const
 {
     Color color = curColor();
@@ -116,4 +109,9 @@ Color SoundFlag::iconBackgroundColor() const
     }
 
     return color;
+}
+
+RectF SoundFlag::canvasBoundingIconRect() const
+{
+    return ldata()->iconBBox.translated(canvasPos());
 }
