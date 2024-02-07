@@ -36,15 +36,22 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: navPanel.order
 
-    contentWidth: content.width
-    contentHeight: content.height
+    contentWidth: content.childrenRect.width
+    contentHeight: content.childrenRect.height
+    onContentHeightChanged: {
+        root.updatePosition()
+    }
 
-    showArrow: false
+    function updatePosition() {
+        var iconRect = soundFlagModel.iconRect
 
-    function updatePosition(elementRect) {
-        var h = Math.max(root.contentHeight, 360)
-        root.x = elementRect.x + elementRect.width + 12
-        root.y = elementRect.y - h / 2
+        var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
+        var popupHalfWidth = root.contentWidth / 2 + root.margins + root.padding
+
+        root.x = iconRect.x + iconRect.width / 2 - popupHalfWidth
+        root.y = iconRect.y - popupHeight
+
+        root.setOpensUpward(true)
     }
 
     Column {
@@ -56,10 +63,6 @@ StyledPopupView {
 
         SoundFlagSettingsModel {
             id: soundFlagModel
-
-            onItemRectChanged: function(rect) {
-                updatePosition(rect)
-            }
         }
 
         Component.onCompleted: {
@@ -99,7 +102,7 @@ StyledPopupView {
             id: loader
 
             width: parent.width
-            height: Boolean(loader.item) ? loader.item.height : 0
+            height: Boolean(loader.item) ? loader.item.height : 50
 
             sourceComponent: {
                 switch (soundFlagModel.sourceType) {

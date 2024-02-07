@@ -699,8 +699,6 @@ void PopupView::updateGeometry()
     QRectF anchorRect = anchorGeometry();
     QRectF viewRect = viewGeometry();
 
-    setOpensUpward(false);
-
     auto movePos = [this, &viewRect](qreal x, qreal y) {
         m_globalPos.setX(x);
         m_globalPos.setY(y);
