@@ -2838,11 +2838,11 @@ void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const ActionIcon::LayoutData* ldata = item->ldata();
+    const SoundFlag::LayoutData* ldata = item->ldata();
 
     if (item->selected() || item->score()->showSoundFlags()) {
         RectF bbox = ldata->bbox();
-        RectF iconBBox = item->iconBBox();
+        RectF iconBBox = ldata->iconBBox;
         iconBBox.moveCenter(bbox.center());
         iconBBox.setX(bbox.x());
 
@@ -2851,7 +2851,7 @@ void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
         painter->drawEllipse(iconBBox);
 
         mu::draw::Font f(item->iconFont());
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+        f.setPointSizeF(item->font().pointSizeF() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
         painter->drawText(iconBBox, draw::AlignCenter, Char(item->iconCode()));

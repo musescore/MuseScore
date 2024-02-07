@@ -5266,27 +5266,33 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
         layoutBaseTextBase(item, ldata);
     }
 
-    if (item->selected() || item->score()->showSoundFlags()) {
-        RectF bbox = ldata->bbox();
-        RectF iconBBox = item->iconBBox();
+    RectF bbox = ldata->bbox();
 
-        // <icon><space><text>
-        double textHeight = draw::FontMetrics::boundingRect(item->font(), item->xmlText()).height();
-        bbox.setWidth(bbox.width() + iconBBox.width() + (isTextVisible ? textHeight / 4.0 : 0));
+    double textHeight = draw::FontMetrics::boundingRect(item->font(), item->xmlText()).height();
+    RectF iconBBox = RectF(bbox.x(), bbox.y(), textHeight * 1.5, textHeight * 1.5);
+    iconBBox.moveCenter(bbox.center());
+    iconBBox.setX(bbox.x());
+    ldata->iconBBox = iconBBox;
 
-        if (!isTextVisible) {
-            bbox.setHeight(textHeight);
-        }
+    // <icon><space><text>
+    bbox.setWidth(iconBBox.width() + (isTextVisible ? textHeight / 4.0 + bbox.width() : 0));
 
-        ldata->setBbox(bbox);
+    if (!isTextVisible || item->xmlText().empty()) {
+        bbox.setHeight(textHeight);
 
-        if (isTextVisible) {
-            double xMove = iconBBox.width() + textHeight / 4.0;
-            for (TextBlock& block : ldata->blocks) {
-                auto& fragments = block.fragments();
-                for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
-                    it->pos.setX(it->pos.x() + xMove);
-                }
+        iconBBox.moveCenter(bbox.center());
+        iconBBox.setX(bbox.x());
+        ldata->iconBBox = iconBBox;
+    }
+
+    ldata->setBbox(bbox);
+
+    if (isTextVisible) {
+        double xMove = iconBBox.width() + textHeight / 4.0;
+        for (TextBlock& block : ldata->blocks) {
+            auto& fragments = block.fragments();
+            for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
+                it->pos.setX(it->pos.x() + xMove);
             }
         }
     }

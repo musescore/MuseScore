@@ -41,6 +41,10 @@ void SoundFlagSettingsModel::init()
 {
     TRACEFUNC;
 
+    connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRect&) {
+        emit iconRectChanged();
+    });
+
     AbstractElementPopupModel::init();
 
     IF_ASSERT_FAILED(m_item || m_item->isSoundFlag()) {
@@ -166,7 +170,7 @@ void SoundFlagSettingsModel::setShowText(bool show)
 
 QString SoundFlagSettingsModel::text() const
 {
-    return m_item ? m_item->getProperty(mu::engraving::Pid::TEXT).toQVariant().toString() : QString();
+    return m_item ? engraving::toSoundFlag(m_item)->xmlText().toQString() : QString();
 }
 
 void SoundFlagSettingsModel::setText(const QString& text)
@@ -177,4 +181,9 @@ void SoundFlagSettingsModel::setText(const QString& text)
 
     changeItemProperty(mu::engraving::Pid::TEXT, text);
     emit textChanged();
+}
+
+QRect SoundFlagSettingsModel::iconRect() const
+{
+    return m_item ? fromLogical(engraving::toSoundFlag(m_item)->canvasBoundingIconRect()).toQRect() : QRect();
 }
