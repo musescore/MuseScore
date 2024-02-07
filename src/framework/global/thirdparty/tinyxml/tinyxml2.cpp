@@ -1046,9 +1046,9 @@ char* XMLNode::ParseDeep(char* p, StrPair* parentEndTag, int* curLineNumPtr)
                 }
             }
             if (!wellLocated) {
-                _document->SetError(XML_ERROR_PARSING_DECLARATION, initialLineNum, "XMLDeclaration value=%s", decl->Value());
+                //_document->SetError(XML_ERROR_PARSING_DECLARATION, initialLineNum, "XMLDeclaration value=%s", decl->Value());
                 DeleteNode(node);
-                break;
+                continue;
             }
         }
 
