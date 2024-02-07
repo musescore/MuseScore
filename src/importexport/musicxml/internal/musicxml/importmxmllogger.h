@@ -25,7 +25,9 @@
 
 #include "global/types/string.h"
 
-class QXmlStreamReader;
+namespace mu {
+class XmlStreamReader;
+}
 
 namespace mu::engraving {
 class MxmlLogger
@@ -35,9 +37,9 @@ public:
         MXML_TRACE, MXML_INFO, MXML_ERROR
     };
     MxmlLogger() {}
-    void logDebugTrace(const mu::String& trace, const QXmlStreamReader* const xmlreader = 0);
-    void logDebugInfo(const String& info, const QXmlStreamReader* const xmlreader = 0);
-    void logError(const String& error, const QXmlStreamReader* const xmlreader = 0);
+    void logDebugTrace(const mu::String& trace, const XmlStreamReader* xmlreader = 0);
+    void logDebugInfo(const String& info, const XmlStreamReader* xmlreader = 0);
+    void logError(const String& error, const XmlStreamReader* xmlreader = 0);
     void setLoggingLevel(const Level level) { m_level = level; }
 private:
     Level m_level = Level::MXML_INFO;

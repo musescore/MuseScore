@@ -43,17 +43,17 @@ namespace mu::engraving {
 
 // TODO: split in reading parameters versus creation
 
-static Accidental* accidental(QXmlStreamReader& e, Score* score)
+static Accidental* accidental(XmlStreamReader& e, Score* score)
 {
-    const bool cautionary = e.attributes().value("cautionary") == "yes";
-    const bool editorial = e.attributes().value("editorial") == "yes";
-    const bool parentheses = e.attributes().value("parentheses") == "yes";
-    const bool brackets = e.attributes().value("bracket") == "yes";
-    const QColor accColor { e.attributes().value("color").toString() };
-    String smufl = e.attributes().value("smufl").toString();
+    const bool cautionary = e.asciiAttribute("cautionary") == "yes";
+    const bool editorial = e.asciiAttribute("editorial") == "yes";
+    const bool parentheses = e.asciiAttribute("parentheses") == "yes";
+    const bool brackets = e.asciiAttribute("bracket") == "yes";
+    const QColor accColor { e.attribute("color").toQString() };
+    String smufl = e.attribute("smufl");
 
-    const auto s = e.readElementText();
-    const auto type = mxmlString2accidentalType(s, smufl);
+    const String s = e.readText();
+    const AccidentalType type = mxmlString2accidentalType(s, smufl);
 
     if (type != AccidentalType::NONE) {
         auto a = Factory::createAccidental(score->dummy());
@@ -82,11 +82,11 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
  Handle <display-step> and <display-octave> for <rest> and <unpitched>
  */
 
-void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
+void MxmlNotePitch::displayStepOctave(XmlStreamReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "display-step") {
-            const String step = e.readElementText();
+            const String step = e.readText();
             int pos = static_cast<int>(String(u"CDEFGAB").indexOf(step));
             if (step.size() == 1 && pos >= 0 && pos < 7) {
                 m_displayStep = pos;
@@ -95,7 +95,7 @@ void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
                 LOGD("invalid step '%s'", qPrintable(step));                // TODO
             }
         } else if (e.name() == "display-octave") {
-            const String oct = e.readElementText();
+            const String oct = e.readText();
             bool ok;
             m_displayOctave = oct.toInt(&ok);
             if (!ok || m_displayOctave < 0 || m_displayOctave > 9) {
@@ -117,7 +117,7 @@ void MxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/pitch node.
  */
 
-void MxmlNotePitch::pitch(QXmlStreamReader& e)
+void MxmlNotePitch::pitch(XmlStreamReader& e)
 {
     // defaults
     m_step = -1;
@@ -126,7 +126,7 @@ void MxmlNotePitch::pitch(QXmlStreamReader& e)
 
     while (e.readNextStartElement()) {
         if (e.name() == "alter") {
-            const auto alter = e.readElementText();
+            const String alter = e.readText();
             bool ok;
             m_alter = MxmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
             if (!ok || m_alter < -2 || m_alter > 2) {
@@ -140,7 +140,7 @@ void MxmlNotePitch::pitch(QXmlStreamReader& e)
                 m_alter = 0;
             }
         } else if (e.name() == "octave") {
-            const auto oct = e.readElementText();
+            const String oct = e.readText();
             bool ok;
             m_octave = oct.toInt(&ok);
             if (!ok || m_octave < 0 || m_octave > 9) {
@@ -148,7 +148,7 @@ void MxmlNotePitch::pitch(QXmlStreamReader& e)
                 m_octave = -1;
             }
         } else if (e.name() == "step") {
-            const String step = e.readElementText();
+            const String step = e.readText();
             const size_t pos = String(u"CDEFGAB").indexOf(step);
             if (step.size() == 1 && pos < 7) {
                 m_step = int(pos);
@@ -171,9 +171,9 @@ void MxmlNotePitch::pitch(QXmlStreamReader& e)
  Return true if handled.
  */
 
-bool MxmlNotePitch::readProperties(QXmlStreamReader& e, Score* score)
+bool MxmlNotePitch::readProperties(XmlStreamReader& e, Score* score)
 {
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "accidental") {
         m_acc = accidental(e, score);
