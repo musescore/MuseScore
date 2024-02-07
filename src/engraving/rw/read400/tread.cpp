@@ -3136,7 +3136,11 @@ bool TRead::readProperties(Note* n, XmlReader& e, ReadContext& ctx)
     } else if (tag == "string") {
         n->setString(e.readInt());
     } else if (tag == "ghost") {
-        n->setGhost(e.readInt());
+        if (n->score()->mscVersion() < 400) {
+            n->setDeadNote(e.readInt());
+        } else {
+            n->setGhost(e.readInt());
+        }
     } else if (tag == "dead") {
         n->setDeadNote(e.readInt());
     } else if (tag == "headType") {

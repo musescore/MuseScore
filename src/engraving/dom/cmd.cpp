@@ -2993,8 +2993,7 @@ void Score::cmdMirrorNoteHead()
         if (e->isNote()) {
             Note* note = toNote(e);
             if (note->staff() && note->staff()->isTabStaff(note->chord()->tick())) {
-                // Set to DEAD NOTE
-                e->undoChangeProperty(Pid::GHOST, !note->ghost());
+                e->undoChangeProperty(Pid::DEAD, !note->deadNote());
             } else {
                 DirectionH d = note->userMirror();
                 if (d == DirectionH::AUTO) {
