@@ -23,8 +23,7 @@
 #ifndef __IMPORTMXMLNOTEPITCH_H__
 #define __IMPORTMXMLNOTEPITCH_H__
 
-#include <QXmlStreamReader>
-
+#include "global/serialization/xmlstreamreader.h"
 #include "engraving/dom/accidental.h"
 
 namespace mu::engraving {
@@ -44,14 +43,14 @@ class MxmlNotePitch
 public:
     MxmlNotePitch(MxmlLogger* logger)
         : m_logger(logger) { /* nothing so far */ }
-    void pitch(QXmlStreamReader& e);
-    bool readProperties(QXmlStreamReader& e, Score* score);
+    void pitch(XmlStreamReader& e);
+    bool readProperties(XmlStreamReader& e, Score* score);
     Accidental* acc() const { return m_acc; }
     AccidentalType accType() const { return m_accType; }
     int alter() const { return m_alter; }
     int displayOctave() const { return m_displayOctave; }
     int displayStep() const { return m_displayStep; }
-    void displayStepOctave(QXmlStreamReader& e);
+    void displayStepOctave(XmlStreamReader& e);
     int octave() const { return m_octave; }
     int step() const { return m_step; }
     bool unpitched() const { return m_unpitched; }

@@ -22,7 +22,7 @@
 
 #include "importmxmllogger.h"
 
-#include <QXmlStreamReader>
+#include "global/serialization/xmlstreamreader.h"
 
 #include "log.h"
 
@@ -31,7 +31,7 @@ namespace mu::engraving {
 //   xmlLocation
 //---------------------------------------------------------
 
-static String xmlLocation(const QXmlStreamReader* xmlreader)
+static String xmlLocation(const XmlStreamReader* xmlreader)
 {
     String loc;
     if (xmlreader) {
@@ -45,7 +45,7 @@ static String xmlLocation(const QXmlStreamReader* xmlreader)
 //---------------------------------------------------------
 //   logDebugTrace
 //---------------------------------------------------------
-static void to_xml_log(MxmlLogger::Level level, const String& text, const QXmlStreamReader* xmlreader)
+static void to_xml_log(MxmlLogger::Level level, const String& text, const XmlStreamReader* xmlreader)
 {
     String str;
     switch (level) {
@@ -74,7 +74,7 @@ static void to_xml_log(MxmlLogger::Level level, const String& text, const QXmlSt
  Log debug (function) trace.
  */
 
-void MxmlLogger::logDebugTrace(const String& trace, const QXmlStreamReader* const xmlreader)
+void MxmlLogger::logDebugTrace(const String& trace, const XmlStreamReader* xmlreader)
 {
     if (m_level <= Level::MXML_TRACE) {
         to_xml_log(Level::MXML_TRACE, trace, xmlreader);
@@ -89,7 +89,7 @@ void MxmlLogger::logDebugTrace(const String& trace, const QXmlStreamReader* cons
  Log debug \a info (non-fatal events relevant for debugging).
  */
 
-void MxmlLogger::logDebugInfo(const String& info, const QXmlStreamReader* const xmlreader)
+void MxmlLogger::logDebugInfo(const String& info, const XmlStreamReader* xmlreader)
 {
     if (m_level <= Level::MXML_INFO) {
         to_xml_log(Level::MXML_INFO, info, xmlreader);
@@ -104,7 +104,7 @@ void MxmlLogger::logDebugInfo(const String& info, const QXmlStreamReader* const 
  Log \a error (possibly non-fatal but to be reported to the user anyway).
  */
 
-void MxmlLogger::logError(const String& error, const QXmlStreamReader* const xmlreader)
+void MxmlLogger::logError(const String& error, const XmlStreamReader* xmlreader)
 {
     if (m_level <= Level::MXML_ERROR) {
         to_xml_log(Level::MXML_ERROR, error, xmlreader);

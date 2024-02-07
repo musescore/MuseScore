@@ -24,6 +24,8 @@
  MusicXML support.
  */
 
+#include "global/serialization/xmlstreamreader.h"
+
 #include "translation.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/articulation.h"
@@ -33,8 +35,6 @@
 #include "musicxmlsupport.h"
 
 #include "log.h"
-
-#include <QXmlStreamReader>
 
 using AccidentalType = mu::engraving::AccidentalType;
 using SymId = mu::engraving::SymId;
@@ -339,16 +339,16 @@ String errorStringWithLocation(int line, int col, const String& error)
 //   checkAtEndElement
 //---------------------------------------------------------
 
-String checkAtEndElement(const QXmlStreamReader& e, const String& expName)
+String checkAtEndElement(const XmlStreamReader& e, const String& expName)
 {
-    if (e.isEndElement() && e.name() == expName) {
+    if (e.isEndElement() && e.name() == expName.toAscii().constChar()) {
         return u"";
     }
 
     String res = mtrc("iex_musicxml", "expected token type and name ‘EndElement %1’, actual ‘%2 %3’")
                  .arg(expName)
-                 .arg(e.tokenString())
-                 .arg(e.name().toString());
+                 .arg(String::fromAscii(e.tokenString().ascii()))
+                 .arg(String::fromAscii(e.name().ascii()));
     return res;
 }
 
@@ -900,7 +900,7 @@ bool isLaissezVibrer(const SymId id)
 
 // TODO: there should be a lambda hiding somewhere ...
 
-const Articulation* findLaissezVibrer(const Chord* const chord)
+const Articulation* findLaissezVibrer(const Chord* chord)
 {
     for (const Articulation* a : chord->articulations()) {
         if (isLaissezVibrer(a->symId())) {

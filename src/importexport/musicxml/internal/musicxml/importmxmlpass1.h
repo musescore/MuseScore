@@ -23,7 +23,7 @@
 #ifndef __IMPORTMXMLPASS1_H__
 #define __IMPORTMXMLPASS1_H__
 
-#include <QXmlStreamReader>
+#include "global/serialization/xmlstreamreader.h"
 
 #include "containers.h"
 #include "draw/types/geometry.h"
@@ -154,9 +154,9 @@ public:
     void note(const String& partId, const Fraction& cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr,
               VoiceOverlapDetector& vod, MxmlTupletStates& tupletStates);
     void notePrintSpacingNo(Fraction& dura);
-    Fraction calcTicks(const int& intTicks, const int& _divisions, const QXmlStreamReader* const xmlReader);
+    Fraction calcTicks(const int& intTicks, const int& _divisions, const XmlStreamReader* xmlReader);
     Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, m_divs, &m_e); }
-    void duration(Fraction& dura, QXmlStreamReader& e);
+    void duration(Fraction& dura, XmlStreamReader& e);
     void duration(Fraction& dura) { duration(dura, m_e); }
     void forward(Fraction& dura);
     void backup(Fraction& dura);
@@ -192,7 +192,7 @@ private:
     void addError(const String& error);        // Add an error to be shown in the GUI
 
     // generic pass 1 data
-    QXmlStreamReader m_e;
+    XmlStreamReader m_e;
     int m_divs = 0;                              // Current MusicXML divisions value
     std::map<String, MusicXmlPart> m_parts;     // Parts data, mapped on part id
     std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a page
