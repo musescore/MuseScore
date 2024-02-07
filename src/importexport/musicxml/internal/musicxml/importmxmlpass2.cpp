@@ -2232,8 +2232,18 @@ static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
 
 void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
 {
-    bool isNumericMeasureNumber; // "measure numbers" don't have to be actual numbers in MusicXML
-    int parsedMeasureNumber = m_e.asciiAttribute("number").toInt(&isNumericMeasureNumber);
+    // "measure numbers" don't have to be actual numbers in MusicXML
+    bool isNumericMeasureNumber = false;
+    int parsedMeasureNumber = 0;
+
+    AsciiStringView numberA = m_e.asciiAttribute("number");
+    if (!numberA.empty()) {
+        if (numberA.at(0).ascii() == 'X') {
+            isNumericMeasureNumber = false;
+        } else {
+            parsedMeasureNumber = numberA.toInt(&isNumericMeasureNumber);
+        }
+    }
 
     //LOGD("measure %d start", parsedMeasureNumber);
 
