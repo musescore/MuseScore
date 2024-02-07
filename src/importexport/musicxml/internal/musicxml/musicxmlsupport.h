@@ -31,9 +31,13 @@
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/note.h"
 
-class Chord;
+namespace mu {
+class XmlStreamReader;
+}
 
 namespace mu::engraving {
+class Chord;
+
 //---------------------------------------------------------
 //   NoteList
 //---------------------------------------------------------
@@ -242,8 +246,8 @@ extern AccidentalType mxmlString2accidentalType(const String mxmlName, const Str
 extern SymId mxmlString2accSymId(const String mxmlName, const String smufl = u"");
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
-extern const Articulation* findLaissezVibrer(const Chord* const chord);
+extern const Articulation* findLaissezVibrer(const Chord* chord);
 extern String errorStringWithLocation(int line, int col, const String& error);
-extern String checkAtEndElement(const QXmlStreamReader& e, const String& expName);
+extern String checkAtEndElement(const XmlStreamReader& e, const String& expName);
 } // namespace Ms
 #endif

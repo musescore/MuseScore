@@ -194,12 +194,12 @@ String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const 
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void MxmlNoteDuration::duration(QXmlStreamReader& e)
+void MxmlNoteDuration::duration(XmlStreamReader& e)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
     m_specDura.set(0, 0);          // invalid unless set correctly
-    int intDura = e.readElementText().toInt();
+    int intDura = e.readAsciiText().toInt();
     m_specDura = m_pass1->calcTicks(intDura, m_divs, &e); // Duration reading (and rounding) code consolidated to pass1
 }
 
@@ -212,9 +212,9 @@ void MxmlNoteDuration::duration(QXmlStreamReader& e)
  Return true if handled.
  */
 
-bool MxmlNoteDuration::readProperties(QXmlStreamReader& e)
+bool MxmlNoteDuration::readProperties(XmlStreamReader& e)
 {
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
     //LOGD("tag %s", qPrintable(tag.toString()));
     if (tag == "dot") {
         m_dots++;
@@ -238,7 +238,7 @@ bool MxmlNoteDuration::readProperties(QXmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/time-modification node.
  */
 
-void MxmlNoteDuration::timeModification(QXmlStreamReader& e)
+void MxmlNoteDuration::timeModification(XmlStreamReader& e)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::timeModification", &e);
 
@@ -248,21 +248,21 @@ void MxmlNoteDuration::timeModification(QXmlStreamReader& e)
     String strNormal;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "actual-notes") {
-            strActual = e.readElementText();
+            strActual = e.readText();
         } else if (tag == "normal-notes") {
-            strNormal = e.readElementText();
+            strNormal = e.readText();
         } else if (tag == "normal-type") {
             // "measure" is not a valid normal-type,
             // but would be accepted by setType()
-            String strNormalType = e.readElementText();
+            String strNormalType = e.readText();
             if (strNormalType != u"measure") {
                 ByteArray ba = strNormalType.toAscii();
                 m_normalType.setType(TConv::fromXml(ba.constChar(), DurationType::V_INVALID));
             }
         } else {
-            m_logger->logDebugInfo(String(u"skipping '%1'").arg(e.name().toString()), &e);
+            m_logger->logDebugInfo(String(u"skipping '%1'").arg(String::fromAscii(e.name().ascii())), &e);
             e.skipCurrentElement();
         }
     }
