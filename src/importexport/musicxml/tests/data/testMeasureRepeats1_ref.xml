@@ -18,10 +18,9 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name> </part-name>
-      <part-abbreviation> </part-abbreviation>
+      <part-name></part-name>
       <score-instrument id="P1-I1">
-        <instrument-name> </instrument-name>
+        <instrument-name></instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
