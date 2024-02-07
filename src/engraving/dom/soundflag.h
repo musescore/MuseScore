@@ -56,8 +56,14 @@ public:
 
     char16_t iconCode() const;
     draw::Font iconFont() const;
-    RectF iconBBox() const;
     Color iconBackgroundColor() const;
+
+    RectF canvasBoundingIconRect() const;
+
+    struct LayoutData : public TextBase::LayoutData {
+        RectF iconBBox;
+    };
+    DECLARE_LAYOUTDATA_METHODS(SoundFlag)
 
 private:
     PresetCodes m_soundPresets;
