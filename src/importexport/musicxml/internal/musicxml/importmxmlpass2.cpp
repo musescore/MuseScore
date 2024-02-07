@@ -5941,6 +5941,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     if (fd) {
         fd->setTrack(track);
         Segment* s = measure->getSegment(SegmentType::ChordRest, sTime + offset);
+        ha->setProperty(Pid::ALIGN, Align(AlignH::HCENTER, AlignV::TOP));
         s->add(fd);
     }
 
