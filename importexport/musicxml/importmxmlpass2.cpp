@@ -1399,8 +1399,10 @@ static void setSLinePlacement(SLine* sli, const QString placement)
             sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             }
 #endif
-      sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
-      sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+      if (placement == "above" || placement == "below") {
+            sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
+            sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            }
       }
 
 //---------------------------------------------------------
