@@ -25,20 +25,19 @@
  */
 
 #include <QBuffer>
-#include <QDomDocument>
 #include <QMessageBox>
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
 
+#include "global/translation.h"
+#include "global/io/file.h"
+#include "global/serialization/zipreader.h"
+#include "global/serialization/xmlstreamreader.h"
+
 #include "importmxml.h"
 #include "musicxmlsupport.h"
 
-#include "translation.h"
-
-#include "global/deprecated/qzipreader_p.h"
-
 #include "engraving/types/types.h"
-
 #include "engraving/dom/masterscore.h"
 
 #include "log.h"
@@ -134,50 +133,33 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
 Extract rootfile from compressed MusicXML file \a qf, return true if OK and false on error.
 */
 
-static bool extractRootfile(QFile* qf, QByteArray& data)
+static bool extractRootfile(const String& name, ByteArray& data)
 {
-    MQZipReader f(qf->fileName());
-    data = f.fileData("META-INF/container.xml");
+    ZipReader zip(name);
 
-    QDomDocument container;
-    int line, column;
-    QString err;
-    if (!container.setContent(data, false, &err, &line, &column)) {
-        LOGE() << String(u"Error reading container.xml at line %1 column %2: %3\n").arg(line).arg(column).arg(err);
-        return false;
-    }
+    ByteArray ba = zip.fileData("META-INF/container.xml");
 
-    // extract first rootfile
-    QString rootfile = "";
-    for (QDomElement e = container.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
-        if (e.tagName() == "container") {
-            for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
-                if (ee.tagName() == "rootfiles") {
-                    for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
-                        if (eee.tagName() == "rootfile") {
-                            if (rootfile == "") {
-                                rootfile = eee.attribute(QString("full-path"));
-                            }
-                        } else {
-                            domError(eee);
-                        }
-                    }
-                } else {
-                    domError(ee);
+    XmlStreamReader e(ba);
+
+    String rootfile;
+    while (e.readNextStartElement()) {
+        if (e.name() != "container") {
+            break;
+        }
+        while (e.readNextStartElement()) {
+            if (e.name() != "rootfiles") {
+                break;
+            }
+            while (e.readNextStartElement()) {
+                if (e.name() == "rootfile") {
+                    rootfile = e.attribute("full-path");
+                    break;
                 }
             }
-        } else {
-            domError(e);
         }
     }
 
-    if (rootfile == "") {
-        LOGE("can't find rootfile in: %s", qPrintable(qf->fileName()));
-        return false;
-    }
-
-    // read the rootfile
-    data = f.fileData(rootfile);
+    data = zip.fileData(rootfile.toStdString());
     return true;
 }
 
@@ -189,7 +171,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
  Validate MusicXML data from file \a name contained in QIODevice \a dev.
  */
 
-static Err doValidate(const QString& name, QIODevice* dev)
+static Err doValidate(const String& name, const ByteArray& data)
 {
     //QElapsedTimer t;
     //t.start();
@@ -203,7 +185,8 @@ static Err doValidate(const QString& name, QIODevice* dev)
     }
     // validate the data
     QXmlSchemaValidator validator(schema);
-    bool valid = validator.validate(dev, QUrl::fromLocalFile(name));
+    const QByteArray qdata = data.toQByteArrayNoCopy();
+    bool valid = validator.validate(qdata, QUrl::fromLocalFile(name));
     //LOGD("Validation time elapsed: %d ms", t.elapsed());
 
     if (!valid) {
@@ -225,19 +208,19 @@ static Err doValidate(const QString& name, QIODevice* dev)
 //---------------------------------------------------------
 
 /**
- Validate and import MusicXML data from file \a name contained in QIODevice \a dev into score \a score.
+ Validate and import MusicXML data from file \a name contained in ByteArray \a data into score \a score.
  */
 
-static Err doValidateAndImport(Score* score, const String& name, QIODevice* dev)
+static Err doValidateAndImport(Score* score, const String& name, const ByteArray& data)
 {
     // validate the file
-    Err res = doValidate(name, dev);
+    Err res = doValidate(name, data);
     if (res != Err::NoError) {
         return res;
     }
 
     // actually do the import
-    res = importMusicXMLfromBuffer(score, name, dev);
+    res = importMusicXMLfromBuffer(score, name, data);
     //LOGD("res %d", static_cast<int>(res));
     return res;
 }
@@ -247,23 +230,6 @@ static Err doValidateAndImport(Score* score, const String& name, QIODevice* dev)
 //    return Err::File* errors
 //---------------------------------------------------------
 
-/**
- Import MusicXML file \a name into the Score.
- */
-
-Err importMusicXml(MasterScore* score, QIODevice* dev, const String& name)
-{
-    ScoreLoad sl;       // suppress warnings for undo push/pop
-
-    if (!dev->open(QIODevice::ReadOnly)) {
-        LOGE("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
-        return Err::FileOpenError;
-    }
-
-    // and import it
-    return doValidateAndImport(score, name, dev);
-}
-
 Err importMusicXml(MasterScore* score, const String& name)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
@@ -271,17 +237,21 @@ Err importMusicXml(MasterScore* score, const String& name)
     //LOGD("importMusicXml(%p, %s)", score, qPrintable(name));
 
     // open the MusicXML file
-    QFile xmlFile(name);
+    io::File xmlFile(name);
     if (!xmlFile.exists()) {
         return Err::FileNotFound;
     }
-    if (!xmlFile.open(QIODevice::ReadOnly)) {
-        LOGE("importMusicXml() could not open MusicXML file '%s'", qPrintable(name));
+
+    if (!xmlFile.open(io::IODevice::ReadOnly)) {
+        LOGE() << "could not open MusicXML file: " << name;
         return Err::FileOpenError;
     }
 
+    const ByteArray data = xmlFile.readAll();
+    xmlFile.close();
+
     // and import it
-    return doValidateAndImport(score, name, &xmlFile);
+    return doValidateAndImport(score, name, data);
 }
 
 //---------------------------------------------------------
@@ -297,26 +267,18 @@ Err importCompressedMusicXml(MasterScore* score, const String& name)
 {
     //LOGD("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
 
-    // open the compressed MusicXML file
-    QFile mxlFile(name);
-    if (!mxlFile.exists()) {
+    if (!io::File::exists(name)) {
         return Err::FileNotFound;
-    }
-    if (!mxlFile.open(QIODevice::ReadOnly)) {
-        LOGE("importCompressedMusicXml() could not open compressed MusicXML file '%s'", qPrintable(name));
-        return Err::FileOpenError;
     }
 
     // extract the root file
-    QByteArray data;
-    if (!extractRootfile(&mxlFile, data)) {
+    ByteArray data;
+    if (!extractRootfile(name, data)) {
         return Err::FileBadFormat;      // appropriate error message has been printed by extractRootfile
     }
-    QBuffer buffer(&data);
-    buffer.open(QIODevice::ReadOnly);
 
     // and import it
-    return doValidateAndImport(score, name, &buffer);
+    return doValidateAndImport(score, name, data);
 }
 
 //---------------------------------------------------------

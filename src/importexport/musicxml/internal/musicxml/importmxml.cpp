@@ -85,7 +85,7 @@ static void updateNamesForAccidentals(Instrument* inst)
 //   importMusicXMLfromBuffer
 //---------------------------------------------------------
 
-Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, QIODevice* dev)
+Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
 {
     //LOGD("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
     //       score, qPrintable(name), dev);
@@ -96,16 +96,14 @@ Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, QIODevice* de
     //logger.setLoggingLevel(MxmlLogger::Level::MXML_TRACE); // also include tracing
 
     // pass 1
-    dev->seek(0);
     MusicXMLParserPass1 pass1(score, &logger);
-    Err res = pass1.parse(dev);
+    Err res = pass1.parse(data);
     const String pass1_errors = pass1.errors();
 
     // pass 2
     MusicXMLParserPass2 pass2(score, pass1, &logger);
     if (res == Err::NoError) {
-        dev->seek(0);
-        res = pass2.parse(dev);
+        res = pass2.parse(data);
     }
 
     for (const Part* part : score->parts()) {

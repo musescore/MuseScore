@@ -125,7 +125,7 @@ class MusicXMLParserPass1
 public:
     MusicXMLParserPass1(Score* score, MxmlLogger* logger);
     void initPartState(const String& partId);
-    Err parse(QIODevice* device);
+    Err parse(const ByteArray& data);
     Err parse();
     String errors() const { return m_errors; }
     void scorePartwise();
