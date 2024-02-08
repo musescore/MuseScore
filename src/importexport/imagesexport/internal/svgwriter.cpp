@@ -67,7 +67,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     const std::vector<mu::engraving::Page*>& pages = score->pages();
     double pixelRationBackup = mu::engraving::MScore::pixelRatio;
 
-    const size_t PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    const size_t PAGE_NUMBER = mu::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     if (PAGE_NUMBER >= pages.size()) {
         return false;
     }
@@ -99,8 +99,8 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / printer.logicalDpiX();
 
-    const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND,
-                                                      Val(configuration()->exportSvgWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                  Val(configuration()->exportSvgWithTransparentBackground())).toBool();
     if (!TRANSPARENT_BACKGROUND) {
         painter.fillRect(pageRect, mu::draw::Color::WHITE);
     }
@@ -170,7 +170,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         }
     }
 
-    BeatsColors beatsColors = parseBeatsColors(options.value(OptionKey::BEATS_COLORS, Val()).toQVariant());
+    BeatsColors beatsColors = parseBeatsColors(mu::value(options, OptionKey::BEATS_COLORS, Val()).toQVariant());
 
     // 2nd pass: Set color for elements on beats
     int beatIndex = 0;
