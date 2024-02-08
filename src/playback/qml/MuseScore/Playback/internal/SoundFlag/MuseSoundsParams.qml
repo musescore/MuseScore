@@ -86,7 +86,7 @@ Item {
                     navigation.column: 1
 
                     onClicked: {
-                        museSoundsParamsModel.togglePreset(modelData["code"])
+                        museSoundsParamsModel.togglePreset(modelData["code"], mouse.modifiers & Qt.ControlModifier)
                     }
                 }
             }
