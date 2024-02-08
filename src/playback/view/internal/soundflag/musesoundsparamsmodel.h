@@ -30,6 +30,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
+#include "playback/iplaybackconfiguration.h"
 
 #include "notation/notationtypes.h"
 
@@ -40,6 +41,7 @@ class MuseSoundsParamsModel : public QObject, public async::Asyncable
 
     INJECT(context::IGlobalContext, globalContext)
     INJECT(IPlaybackController, playbackController)
+    INJECT(IPlaybackConfiguration, playbackConfiguration)
 
     Q_PROPERTY(QVariantList availablePresets READ availablePresets NOTIFY availablePresetsChanged FINAL)
     Q_PROPERTY(QStringList presetCodes READ presetCodes NOTIFY presetCodesChanged FINAL)
@@ -48,7 +50,7 @@ public:
     MuseSoundsParamsModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
-    Q_INVOKABLE void togglePreset(const QString& presetCode);
+    Q_INVOKABLE void togglePreset(const QString& presetCode, bool forceMultiSelection);
 
     QVariantList availablePresets() const;
     void setAvailablePresets(const audio::SoundPresetList& presets);

@@ -56,7 +56,7 @@ void MuseSoundsParamsModel::init()
     emit presetCodesChanged();
 }
 
-void MuseSoundsParamsModel::togglePreset(const QString& presetCode)
+void MuseSoundsParamsModel::togglePreset(const QString& presetCode, bool forceMultiSelection)
 {
     if (!m_item) {
         return;
@@ -67,14 +67,18 @@ void MuseSoundsParamsModel::togglePreset(const QString& presetCode)
     engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
     engraving::SoundFlag::PresetCodes presetCodes = soundFlag->soundPresets();
 
-    if (presetCodes.contains(presetCode)) {
-        if (presetCodes.size() == 1) {
-            return;
-        }
+    if (forceMultiSelection || playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
+        if (presetCodes.contains(presetCode)) {
+            if (presetCodes.size() == 1) {
+                return;
+            }
 
-        presetCodes.removeAll(presetCodeStr);
+            presetCodes.removeAll(presetCodeStr);
+        } else {
+            presetCodes.emplace_back(presetCodeStr);
+        }
     } else {
-        presetCodes.emplace_back(presetCodeStr);
+        presetCodes = { presetCodeStr };
     }
 
     undoStack()->prepareChanges();
