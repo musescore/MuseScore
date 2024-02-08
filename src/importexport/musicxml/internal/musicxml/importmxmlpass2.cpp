@@ -1657,10 +1657,9 @@ void MusicXMLParserPass2::skipLogCurrElem()
  Parse MusicXML in \a device and extract pass 2 data.
  */
 
-Err MusicXMLParserPass2::parse(QIODevice* device)
+Err MusicXMLParserPass2::parse(const ByteArray& data)
 {
     //LOGD("MusicXMLParserPass2::parse()");
-    ByteArray data = ByteArray::fromQByteArray(device->readAll());
     m_e.setData(data);
     Err res = parse();
     //LOGD("MusicXMLParserPass2::parse() res %d", int(res));
