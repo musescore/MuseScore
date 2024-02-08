@@ -213,28 +213,6 @@ public:
     static Fraction calculateFraction(const String& type, int dots, int normalNotes, int actualNotes);
 };
 
-//---------------------------------------------------------
-//   ValidatorMessageHandler
-//---------------------------------------------------------
-
-/**
- Message handler for the MusicXML schema validator QXmlSchemaValidator.
- */
-
-class ValidatorMessageHandler : public QAbstractMessageHandler
-{
-    Q_OBJECT
-
-public:
-    ValidatorMessageHandler()
-        : QAbstractMessageHandler(0) {}
-    QString getErrors() const { return m_errors; }
-protected:
-    virtual void handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation);
-private:
-    QString m_errors;
-};
-
 extern void domError(const QDomElement&);
 extern void domNotImplemented(const QDomElement&);
 
