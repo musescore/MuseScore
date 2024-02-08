@@ -98,6 +98,11 @@ Version::Version(const mu::String& versionStr)
     setSuffix(versionStr.right(versionStr.size() - versionStr.indexOf(SUFFIX_DELIMITER) - 1));
 }
 
+Version::Version(const std::string& versionStr)
+    : Version(mu::String::fromStdString(versionStr))
+{
+}
+
 int Version::majorVersion() const
 {
     return m_major;

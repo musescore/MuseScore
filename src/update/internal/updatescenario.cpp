@@ -37,23 +37,49 @@ static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 using namespace mu;
 using namespace mu::update;
 
+static ValList releasesNotesToValList(const PrevReleasesNotesList& list)
+{
+    ValList valList;
+    for (const PrevReleaseNotes& release : list) {
+        valList.emplace_back(Val(ValMap {
+            { "version", Val(release.version) },
+            { "notes", Val(release.notes) }
+        }));
+    }
+
+    return valList;
+}
+
+static PrevReleasesNotesList releasesNotesFromValList(const ValList& list)
+{
+    PrevReleasesNotesList notes;
+    for (const Val& val : list) {
+        ValMap releaseMap = val.toMap();
+        notes.emplace_back(releaseMap.at("version").toString(), releaseMap.at("notes").toString());
+    }
+
+    return notes;
+}
+
 static ValMap releaseInfoToValMap(const ReleaseInfo& info)
 {
     return {
-        { "notes", Val(info.notes) },
+        { "version", Val(info.version) },
         { "fileName", Val(info.fileName) },
         { "fileUrl", Val(info.fileUrl) },
-        { "version", Val(info.version) }
+        { "notes", Val(info.notes) },
+        { "previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)) }
     };
 }
 
 static ReleaseInfo releaseInfoFromValMap(const ValMap& map)
 {
     ReleaseInfo info;
-    info.notes = map.at("notes").toString();
+    info.version = map.at("version").toString();
     info.fileName = map.at("fileName").toString();
     info.fileUrl = map.at("fileUrl").toString();
-    info.version = map.at("version").toString();
+    info.notes = map.at("notes").toString();
+    info.previousReleasesNotes = releasesNotesFromValList(map.at("previousReleasesNotes").toList());
 
     return info;
 }
@@ -169,11 +195,11 @@ void UpdateScenario::showNoUpdateMsg()
 
 void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 {
-    QStringList params = {
-        "notes=" + QString::fromStdString(info.notes)
-    };
+    UriQuery query("musescore://update/releaseinfo");
+    query.addParam("notes", Val(info.notes));
+    query.addParam("previousReleasesNotes", Val(releasesNotesToValList(info.previousReleasesNotes)));
 
-    RetVal<Val> rv = interactive()->open(QString("musescore://update/releaseinfo?%1").arg(params.join('&')).toStdString());
+    RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
         LOGD() << rv.ret.toString();
         return;

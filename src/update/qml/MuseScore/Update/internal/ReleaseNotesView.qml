@@ -30,6 +30,7 @@ Item {
     id: root
 
     property alias notes: notesLabel.text
+    property alias previousReleasesNotes: previousReleasesNotesRepeater.model
 
     QtObject {
         id: prv
@@ -42,7 +43,9 @@ Item {
 
         anchors.fill: parent
 
-        contentHeight: notesLabel.implicitHeight
+        property int notesSpacing: 12
+
+        contentHeight: notesLabel.implicitHeight + notesSpacing + previousReleasesNotesColumn.childrenRect.height
 
         StyledTextLabel {
             id: notesLabel
@@ -57,6 +60,48 @@ Item {
             lineHeight: 1.2
         }
 
+        Column {
+            id: previousReleasesNotesColumn
+
+            anchors.top: notesLabel.bottom
+            anchors.topMargin: flickable.notesSpacing
+
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            spacing: flickable.notesSpacing
+
+            Repeater {
+                id: previousReleasesNotesRepeater
+
+                ExpandableBlank {
+                    width: parent.width
+
+                    title: qsTrc("update", "Read the %1 release notes").arg(modelData["version"])
+                    titleFont: ui.theme.largeBodyBoldFont
+
+                    isExpanded: false
+
+                    contentItemComponent: Column {
+                        height: implicitHeight
+                        width: parent.width
+
+                        StyledTextLabel {
+                            width: parent.width
+
+                            horizontalAlignment: Text.AlignLeft
+                            font: ui.theme.largeBodyFont
+                            wrapMode: Text.WordWrap
+                            textFormat: Text.MarkdownText
+                            lineHeight: 1.2
+
+                            text: modelData["notes"]
+                        }
+                    }
+                }
+            }
+        }
+
         ScrollBar.vertical: scrollBar
     }
 
@@ -66,5 +111,7 @@ Item {
         anchors.right: flickable.right
         anchors.rightMargin: -prv.sideMargin
         anchors.bottom: flickable.bottom
+
+        policy: ScrollBar.AlwaysOn
     }
 }

@@ -49,7 +49,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
     Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
-                                              configuration()->checkForUpdateHeaders());
+                                              configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
         result.ret = make_ret(Err::NetworkError);
@@ -58,17 +58,17 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     QByteArray json = buff.data();
 
-    RetVal<ReleaseInfo> releaseInfo = parseRelease(json);
-    if (!releaseInfo.ret) {
+    RetVal<ReleaseInfo> releaseInfoRetVal = parseRelease(json);
+    if (!releaseInfoRetVal.ret) {
         return result;
     }
 
-    if (!releaseInfo.val.isValid()) {
+    if (!releaseInfoRetVal.val.isValid()) {
         return result;
     }
 
     Version current(MUVersion::fullVersion());
-    Version update(String::fromStdString(releaseInfo.val.version));
+    Version update(releaseInfoRetVal.val.version);
 
     bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
     bool isPreRelease = update.preRelease();
@@ -81,10 +81,14 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
         return result;
     }
 
+    ReleaseInfo releaseInfo = releaseInfoRetVal.val;
+    releaseInfo.previousReleasesNotes = previousReleasesNotes(update);
+
     result.ret = make_ok();
-    result.val = releaseInfo.val;
+    result.val = std::move(releaseInfo);
 
     m_lastCheckResult = result.val;
+
     return result;
 }
 
@@ -224,6 +228,84 @@ QJsonObject UpdateService::resolveReleaseAsset(const QJsonObject& release) const
     }
 
     return QJsonObject();
+}
+
+PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& updateVersion) const
+{
+    PrevReleasesNotesList result;
+
+    QBuffer buff;
+    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousReleasesNotesUrl()), &buff,
+                                                        configuration()->updateHeaders());
+    if (!getPreviousReleaseNotes) {
+        LOGE() << "failed to get previous release notes: " << getPreviousReleaseNotes.toString();
+        return result;
+    }
+
+    QByteArray json = buff.data();
+
+    PrevReleasesNotesList previousReleasesNotes = parsePreviousReleasesNotes(json);
+    if (previousReleasesNotes.empty()) {
+        return result;
+    }
+
+    Version currentVersion = Version(MUVersion::fullVersion());
+
+    for (const PrevReleaseNotes& releaseNotes : previousReleasesNotes) {
+        Version previousVersion = Version(releaseNotes.version);
+        if (updateVersion == previousVersion) {
+            continue;
+        }
+
+        if (currentVersion < previousVersion) {
+            String notesStr = String::fromStdString(releaseNotes.notes);
+            if (notesStr.startsWith(u"###")) {
+                //! Release notes may be in the format of: ### MuseScore x.y.z is now available!\r\n...notes...\r\n
+                //! We need to remove the title of the release notes to get the actual notes.
+                static const std::regex titleRegex(R"(^###.*?\r\n)");
+                std::string notesWithoutTitle = notesStr.remove(titleRegex).toStdString();
+                result.emplace_back(releaseNotes.version, notesWithoutTitle);
+            } else {
+                result.emplace_back(releaseNotes.version, releaseNotes.notes);
+            }
+        }
+    }
+
+    std::sort(result.begin(), result.end(), [](const PrevReleaseNotes& a,
+                                               const PrevReleaseNotes& b) {
+        return Version(a.version) < Version(b.version);
+    });
+
+    return result;
+}
+
+PrevReleasesNotesList UpdateService::parsePreviousReleasesNotes(const QByteArray& json) const
+{
+    PrevReleasesNotesList result;
+
+    QJsonParseError err;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(json, &err);
+    if (err.error != QJsonParseError::NoError || !jsonDoc.isObject()) {
+        LOGE() << "failed parse, err: " << err.errorString();
+        return result;
+    }
+
+    QJsonObject jsonObject = jsonDoc.object();
+
+    if (jsonObject.empty()) {
+        LOGE() << "failed parse, no jsonObject";
+        return result;
+    }
+
+    QJsonArray releases = jsonObject.value("releases").toArray();
+    for (const QJsonValue& release : releases) {
+        QJsonObject releaseObj = release.toObject();
+        std::string version = releaseObj.value("version").toString().toStdString();
+
+        result.push_back({ version, releaseObj.value("notes").toString().toStdString() });
+    }
+
+    return result;
 }
 
 void UpdateService::clear()

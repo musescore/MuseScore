@@ -25,11 +25,28 @@
 #include <string>
 
 namespace mu::update {
-struct ReleaseInfo {
+struct PrevReleaseNotes {
+    std::string version;
     std::string notes;
+
+    PrevReleaseNotes() = default;
+    PrevReleaseNotes(const std::string& version, const std::string& notes)
+        : version(version), notes(notes) {}
+
+    bool operator ==(const PrevReleaseNotes& other) const
+    {
+        return version == other.version && notes == other.notes;
+    }
+};
+using PrevReleasesNotesList = std::vector<PrevReleaseNotes>;
+
+struct ReleaseInfo {
+    std::string version;
     std::string fileName;
     std::string fileUrl;
-    std::string version;
+
+    std::string notes;
+    PrevReleasesNotesList previousReleasesNotes;
 
     bool isValid() const
     {

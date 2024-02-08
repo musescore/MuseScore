@@ -28,6 +28,7 @@ FocusScope {
     id: root
 
     property alias title: titleLabel.text
+    property alias titleFont: titleLabel.font
 
     property alias menuItemComponent: menuLoader.sourceComponent
 
