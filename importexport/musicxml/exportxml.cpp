@@ -390,7 +390,7 @@ public:
       double getTenthsFromInches(double) const;
       double getTenthsFromDots(double) const;
       Fraction tick() const { return _tick; }
-      void writeInstrumentDetails(const Instrument* instrument);
+      void writeInstrumentDetails(const Instrument* instrument, const bool concertPitch);
       };
 
 //---------------------------------------------------------
@@ -1218,6 +1218,9 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
       xml.tag("tenths", tenths);
       xml.etag();
 
+      if (s->styleB(Sid::concertPitch))
+            xml.tagE("concert-score");
+
       writePageFormat(s, xml, INCH / millimeters * tenths);
 
       // when exporting only manual or no breaks, system-distance is not written at all
@@ -1518,7 +1521,7 @@ static void pitch2xml(const Note* note, QString& s, int& alter, int& octave)
       const auto st = note->staff();
       const auto tick = note->tick();
       const auto instr = st->part()->instrument(tick);
-      const auto intval = instr->transpose();
+      const auto intval = note->concertPitch() ? 0 : instr->transpose();
 
       s      = tpc2stepName(note->tpc());
       alter  = tpc2alterByKey(note->tpc(), Key::C);
@@ -5553,7 +5556,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
       // optionally writing the associated staff text is done below
       if (e->isInstrumentChange()) {
             const auto instrChange = toInstrumentChange(e);
-            exp->writeInstrumentDetails(instrChange->instrument());
+            exp->writeInstrumentDetails(instrChange->instrument(), false);
             instrChangeHandled = true;
             }
 
@@ -6696,17 +6699,25 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
  Write the instrument details for \a instrument.
  */
 
-void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument)
+void ExportMusicXml::writeInstrumentDetails(const Instrument* instrument, const bool concertPitch)
       {
       if (instrument->transpose().chromatic) {
             _attr.doAttr(_xml, true);
-            _xml.stag("transpose");
+            if (concertPitch) {
+                  _xml.stag("for-part");
+                  _xml.stag("part-transpose");
+                  }
+            else {
+                  _xml.stag("transpose");
+                  }
             _xml.tag("diatonic",  instrument->transpose().diatonic % 7);
             _xml.tag("chromatic", instrument->transpose().chromatic % 12);
             int octaveChange = instrument->transpose().chromatic / 12;
             if (octaveChange != 0)
                   _xml.tag("octave-change", octaveChange);
             _xml.etag();
+            if (concertPitch)
+                _xml.etag();
             _attr.doAttr(_xml, false);
             }
       }
@@ -7062,7 +7073,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
       // output attributes with the first actual measure (pickup or regular) only
       if (isFirstActualMeasure) {
             writeStaffDetails(_xml, part);
-            writeInstrumentDetails(part->instrument());
+            writeInstrumentDetails(part->instrument(), _score->styleB(Sid::concertPitch));
             }
 
       // output attribute at start of measure: measure-style
@@ -7210,17 +7221,6 @@ static std::vector<const Jump*> findJumpElements(const Score* score)
 
 void ExportMusicXml::write(QIODevice* dev)
       {
-      // must export in transposed pitch to prevent
-      // losing the transposition information
-      // if necessary, switch concert pitch mode off
-      // before export and restore it after export
-      bool concertPitch = score()->styleB(Sid::concertPitch);
-      if (concertPitch) {
-            score()->startCmd();
-            score()->undo(new ChangeStyleVal(score(), Sid::concertPitch, false));
-            score()->doLayout();    // this is only allowed in a cmd context to not corrupt the undo/redo stack
-            }
-
       calcDivisions();
 
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i) {
@@ -7247,16 +7247,16 @@ void ExportMusicXml::write(QIODevice* dev)
             defaults(_xml, _score, millimeters, tenths);
             credits(_xml);
             }
+      else if (_score->styleB(Sid::concertPitch)) {
+            _xml.stag("defaults");
+            _xml.tagE("concert-score");
+            _xml.etag();
+            }
 
       partList(_xml, _score, instrMap);
       writeParts();
 
       _xml.etag();
-
-      if (concertPitch) {
-            // restore concert pitch
-            score()->endCmd(true);        // rollback
-            }
       }
 
 //---------------------------------------------------------
