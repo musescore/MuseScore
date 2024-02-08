@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QXmlStreamReader>
-
 #include "engraving/types/fraction.h"
 #include "engraving/types/typesconv.h"
 
@@ -114,7 +112,7 @@ static Fraction calculateFraction(const String& type, const int dots, const Frac
 
 String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const bool grace)
 {
-    //LOGD("type %s rest %d grace %d", qPrintable(type), rest, grace);
+    //LOGD("type %s rest %d grace %d", muPrintable(type), rest, grace);
     String errorStr;
 
     // normalize duration
@@ -130,20 +128,20 @@ String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const 
 
     if (m_specDura.isValid() && m_calcDura.isValid()) {
         if (m_specDura != m_calcDura) {
-            errorStr = String("calculated duration (%1) not equal to specified duration (%2)")
+            errorStr = String(u"calculated duration (%1) not equal to specified duration (%2)")
                        .arg(m_calcDura.toString(), m_specDura.toString());
-            //LOGD("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
+            //LOGD("rest %d type '%s' timemod %s", rest, muPrintable(type), muPrintable(_timeMod.print()));
 
             if (rest && type == "whole" && m_specDura.isValid()) {
                 // Sibelius whole measure rest (not an error)
-                errorStr = "";
+                errorStr = u"";
                 m_dura = m_specDura;
             } else if (grace && m_specDura == Fraction(0, 1)) {
                 // grace note (not an error)
-                errorStr = "";
+                errorStr = u"";
                 m_dura = m_specDura;
             } else {
-                if (qAbs(m_calcDura.ticks() - m_specDura.ticks()) <= m_pass1->maxDiff()) {
+                if (std::abs(m_calcDura.ticks() - m_specDura.ticks()) <= m_pass1->maxDiff()) {
                     errorStr += u" -> assuming rounding error";
                     m_pass1->insertAdjustedDuration(m_dura, m_calcDura);
                     m_dura = m_calcDura;
@@ -170,15 +168,15 @@ String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const 
     } else if (m_specDura.isValid() && !m_calcDura.isValid()) {
         // do not report an error for typeless (whole measure) rests
         if (!(rest && type == "")) {
-            errorStr = "calculated duration invalid, using specified duration";
+            errorStr = u"calculated duration invalid, using specified duration";
         }
         m_dura = m_specDura;
     } else if (!m_specDura.isValid() && m_calcDura.isValid()) {
         if (!grace) {
-            errorStr = "specified duration invalid, using calculated duration";
+            errorStr = u"specified duration invalid, using calculated duration";
         }
     } else {
-        errorStr = "calculated and specified duration invalid, using 4/4";
+        errorStr = u"calculated and specified duration invalid, using 4/4";
         m_dura = Fraction(4, 4);
     }
 
@@ -215,7 +213,7 @@ void MxmlNoteDuration::duration(XmlStreamReader& e)
 bool MxmlNoteDuration::readProperties(XmlStreamReader& e)
 {
     const AsciiStringView tag(e.name());
-    //LOGD("tag %s", qPrintable(tag.toString()));
+    //LOGD("tag %s", muPrintable(tag.toString()));
     if (tag == "dot") {
         m_dots++;
         e.skipCurrentElement();  // skip but don't log
@@ -273,7 +271,7 @@ void MxmlNoteDuration::timeModification(XmlStreamReader& e)
         m_timeMod.set(intNormal, intActual);
     } else {
         m_timeMod.set(1, 1);
-        m_logger->logError(String("illegal time-modification: actual-notes %1 normal-notes %2")
+        m_logger->logError(String(u"illegal time-modification: actual-notes %1 normal-notes %2")
                            .arg(strActual, strNormal), &e);
     }
 }

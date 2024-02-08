@@ -24,11 +24,6 @@
  MusicXML import.
  */
 
-#include <QBuffer>
-#include <QMessageBox>
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
-
 #include "global/translation.h"
 #include "global/io/file.h"
 #include "global/serialization/zipreader.h"
@@ -137,7 +132,7 @@ Err importMusicXml(MasterScore* score, const String& name)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
-    //LOGD("importMusicXml(%p, %s)", score, qPrintable(name));
+    //LOGD("importMusicXml(%p, %s)", score, muPrintable(name));
 
     // open the MusicXML file
     io::File xmlFile(name);
@@ -168,7 +163,7 @@ Err importMusicXml(MasterScore* score, const String& name)
 
 Err importCompressedMusicXml(MasterScore* score, const String& name)
 {
-    //LOGD("importCompressedMusicXml(%p, %s)", score, qPrintable(name));
+    //LOGD("importCompressedMusicXml(%p, %s)", score, muPrintable(name));
 
     if (!io::File::exists(name)) {
         return Err::FileNotFound;

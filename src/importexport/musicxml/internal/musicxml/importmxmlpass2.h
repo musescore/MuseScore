@@ -369,7 +369,7 @@ public:
     MusicXMLParserDirection(XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
                    DelayedDirectionsList& delayedDirections);
-    qreal totalY() const { return m_defaultY + m_relativeY; }
+    double totalY() const { return m_defaultY + m_relativeY; }
 
 private:
     void directionType(std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);

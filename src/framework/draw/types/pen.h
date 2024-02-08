@@ -168,7 +168,7 @@ public:
               static_cast<PenCapStyle>(pen.capStyle()),
               static_cast<PenJoinStyle>(pen.joinStyle()));
 
-        QVector<qreal> dp = pen.dashPattern();
+        QVector<double> dp = pen.dashPattern();
         p.m_dashPattern = std::vector<double>(dp.cbegin(), dp.cend());
         return p;
     }

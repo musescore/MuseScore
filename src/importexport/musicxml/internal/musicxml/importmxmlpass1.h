@@ -105,7 +105,7 @@ struct MxmlTupletState {
     int tupletCount = 0;   // number of smallest notes in the tuplet // TODO_NOW rename ?
 };
 
-using MxmlTupletStates = std::map<QString, MxmlTupletState>;
+using MxmlTupletStates = std::map<String, MxmlTupletState>;
 
 //---------------------------------------------------------
 //   declarations

@@ -67,7 +67,7 @@ String MScoreTextToMXML::toPlainText(const String& text)
             }
         }
     }
-    //LOGD("MScoreTextToMXML::toPlainText('%s') res '%s'", qPrintable(text), qPrintable(res));
+    //LOGD("MScoreTextToMXML::toPlainText('%s') res '%s'", muPrintable(text), muPrintable(res));
     return res;
 }
 
@@ -243,7 +243,7 @@ String MScoreTextToMXML::updateFormat()
                      String(u"font-family=\"%1\"").arg(newFormat.fontFamily()), u"");
     bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize() || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
     res += attribute(needSize, true, String(u"font-size=\"%1\"").arg(newFormat.fontSize()), u"");
-    //LOGD("updateFormat() res '%s'", qPrintable(res));
+    //LOGD("updateFormat() res '%s'", muPrintable(res));
     oldFormat = newFormat;
     return res;
 }
