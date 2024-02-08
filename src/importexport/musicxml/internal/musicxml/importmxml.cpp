@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QMessageBox>
-
-#include "translation.h"
+#include "global/translation.h"
+#include "modularity/ioc.h"
+#include "global/iinteractive.h"
 
 #include "importmxml.h"
 #include "importmxmllogger.h"
@@ -31,6 +31,8 @@
 
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
+
+using namespace mu::framework;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -41,16 +43,24 @@ namespace mu::engraving {
  Show a dialog displaying the MusicXML import error(s).
  */
 
-static int musicXMLImportErrorDialog(QString text, QString detailedText)
+static IInteractive::Button musicXMLImportErrorDialog(const String& text, const String& detailedText)
 {
-    QMessageBox errorDialog;
-    errorDialog.setIcon(QMessageBox::Question);
-    errorDialog.setText(text);
-    errorDialog.setInformativeText(qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
-    errorDialog.setDetailedText(detailedText);
-    errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    errorDialog.setDefaultButton(QMessageBox::No);
-    return errorDialog.exec();
+    auto interactive = modularity::ioc()->resolve<framework::IInteractive>("musicxml");
+
+    std::string msg = text.toStdString();
+    msg += '\n';
+    msg += trc("iex_musicxml", "Do you want to try to load this file anyway?");
+    msg += '\n';
+    msg += '\n';
+    msg += detailedText.toStdString();
+
+    IInteractive::Result ret = interactive->question(text.toStdString(),
+                                                     msg,
+                                                     { IInteractive::Button::Yes, IInteractive::Button::No },
+                                                     IInteractive::Button::No
+                                                     );
+
+    return ret.standardButton();
 }
 
 static void updateNamesForAccidentals(Instrument* inst)
@@ -119,7 +129,7 @@ Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArr
         if (!MScore::noGui) {
             const String text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                      nullptr, int(pass1_errors.size() + pass2_errors.size()));
-            if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != QMessageBox::Yes) {
+            if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
                 res = Err::UserAbort;
             }
         }
