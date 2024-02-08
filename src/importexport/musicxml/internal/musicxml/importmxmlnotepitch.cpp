@@ -20,12 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "importmxmllogger.h"
 #include "importmxmlnotepitch.h"
-#include "musicxmlsupport.h"
+
+#include "draw/types/color.h"
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/score.h"
+
+#include "musicxmlsupport.h"
+#include "importmxmllogger.h"
 
 #include "log.h"
 
@@ -49,7 +52,7 @@ static Accidental* accidental(XmlStreamReader& e, Score* score)
     const bool editorial = e.asciiAttribute("editorial") == "yes";
     const bool parentheses = e.asciiAttribute("parentheses") == "yes";
     const bool brackets = e.asciiAttribute("bracket") == "yes";
-    const QColor accColor { e.attribute("color").toQString() };
+    const Color accColor = Color(e.asciiAttribute("color").ascii());
     String smufl = e.attribute("smufl");
 
     const String s = e.readText();
