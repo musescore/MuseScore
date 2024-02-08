@@ -877,6 +877,19 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
     }
 }
 
+static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
+                               std::vector<GraceNoteLyrics>& gnLyrics)
+{
+    for (const auto lyricNo : mu::keys(numberedLyrics)) {
+        const auto lyric = numberedLyrics.at(lyricNo);
+        if (lyric) {
+            bool extend = mu::contains(extendedLyrics, lyric);
+            const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
+            gnLyrics.push_back(gnl);
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   addElemOffset
 //---------------------------------------------------------
@@ -1526,6 +1539,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
     m_multiMeasureRestCount = -1;
     m_measureStyleSlash = MusicXmlSlash::NONE;
     m_extendedLyrics.init();
+    m_graceNoteLyrics.clear();
 
     m_nstaves = m_pass1.getPart(partId)->nstaves();
     m_measureRepeatNumMeasures.assign(m_nstaves, 0);
@@ -5095,12 +5109,8 @@ Note* MusicXMLParserPass2::note(const String& partId,
             m_e.skipCurrentElement();  // skip but don't log
         } else if (m_e.name() == "lyric") {
             // lyrics on grace notes not (yet) supported by MuseScore
-            if (!grace) {
-                lyric.parse();
-            } else {
-                m_logger->logDebugInfo(u"ignoring lyrics on grace notes", &m_e);
-                skipLogCurrElem();
-            }
+            // add to main note instead
+            lyric.parse();
         } else if (m_e.name() == "notations") {
             notations.parse();
             addError(notations.errors());
@@ -5436,14 +5446,30 @@ Note* MusicXMLParserPass2::note(const String& partId,
         }
     }
 
+    // Add all lyrics from grace notes attached to this chord
+    if (c && !c->graceNotes().empty() && !m_graceNoteLyrics.empty()) {
+        for (GraceNoteLyrics gnl : m_graceNoteLyrics) {
+            if (gnl.lyric) {
+                addLyric(m_logger, &m_e, cr, gnl.lyric, gnl.no, m_extendedLyrics);
+                if (gnl.extend) {
+                    m_extendedLyrics.addLyric(gnl.lyric);
+                }
+            }
+        }
+        m_graceNoteLyrics.clear();
+    }
+
     // add lyrics found by lyric
-    if (cr) {
+    if (cr && !grace) {
         // add lyrics and stop corresponding extends
         addLyrics(m_logger, &m_e, cr, lyric.numberedLyrics(), lyric.extendedLyrics(), m_extendedLyrics);
         if (rest) {
             // stop all extends
             m_extendedLyrics.setExtend(-1, cr->track(), cr->tick());
         }
+    } else if (c && grace) {
+        // Add grace note lyrics to main chord later
+        addGraceNoteLyrics(lyric.numberedLyrics(), lyric.extendedLyrics(), m_graceNoteLyrics);
     }
 
     // add figured bass element
