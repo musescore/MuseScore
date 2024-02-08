@@ -103,6 +103,7 @@
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spanner.h"
 #include "engraving/dom/staff.h"
+#include "engraving/dom/stem.h"
 #include "engraving/dom/stringdata.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/tempotext.h"
@@ -4155,7 +4156,9 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())) {
             m_xml.tag("stem", "none");
         } else if (note->chord()->stem()) {
-            m_xml.tag("stem", note->chord()->up() ? "up" : "down");
+            String stemTag = u"stem";
+            stemTag += color2xml(toStem(note->chord()->stem()));
+            m_xml.tagRaw(stemTag, note->chord()->up() ? "up" : "down");
         }
 
         writeNotehead(m_xml, note);
