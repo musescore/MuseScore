@@ -1031,7 +1031,7 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const String dir = notation.attribute(u"type");
     const String place = notation.attribute(u"placement");
-    const QColor color { notation.attribute(u"color").toQString() };
+    const Color color = Color::fromString(notation.attribute(u"color"));
     Articulation* na = Factory::createArticulation(cr);
     na->setSymId(articSym);
     if (color.isValid()) {
@@ -1069,7 +1069,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
 {
     const SymId articSym = notation.symId();
     const String direction = notation.attribute(u"type");
-    const QColor color { notation.attribute(u"color").toQString() };
+    const Color color = Color::fromString(notation.attribute(u"color"));
     Fermata* na = Factory::createFermata(cr);
     na->setSymIdAndTimeStretch(articSym);
     na->setTrack(cr->track());
@@ -1128,7 +1128,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         }
     }
     if (articSym != SymId::noSym) {
-        const QColor color { notation.attribute(u"color").toQString() };
+        const Color color = Color::fromString(notation.attribute(u"color"));
         Articulation* na = Factory::createArticulation(cr);
         na->setSymId(articSym);
         if (color.isValid()) {
@@ -1157,7 +1157,7 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
     sym = SymNames::symIdByName(symname);
 
     if (sym != SymId::noSym) {
-        const QColor color { notation.attribute(u"color").toQString() };
+        const Color color = Color::fromString(notation.attribute(u"color"));
         Articulation* na = Factory::createArticulation(cr);
         na->setSymId(sym);
         if (color.isValid()) {
@@ -3420,7 +3420,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
             } else if (lineType != "wavy") {
                 m_logger->logError(String(u"unsupported line-type: %1").arg(String::fromAscii(lineType.ascii())), &m_e);
             }
-            const QColor color { m_e.attribute("color").toQString() };
+            const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
             if (color.isValid()) {
                 textLine->setLineColor(color);
             }
@@ -3525,7 +3525,7 @@ void MusicXMLParserDirection::octaveShift(const String& type, const int number,
                 o->setOttavaType(OttavaType::OTTAVA_15MB);
             }
 
-            const QColor color { m_e.attribute("color").toQString() };
+            const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
             if (color.isValid()) {
                 o->setLineColor(color);
             }
@@ -3554,7 +3554,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
     const int number { 0 };
     AsciiStringView line = m_e.asciiAttribute("line");
     String sign = m_e.attribute("sign");
-    const QColor color { m_e.attribute("color").toQString() };
+    const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
 
     // We have found that many exporters omit "sign" even when one is originally present,
     // therefore we will default to "yes", even though this is technically against the spec.
@@ -3672,7 +3672,7 @@ void MusicXMLParserDirection::wedge(const String& type, const int number,
         if (niente == "yes") {
             h->setHairpinCircledTip(true);
         }
-        const QColor color { m_e.attribute("color").toQString() };
+        const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
         if (color.isValid()) {
             h->setLineColor(color);
         }
@@ -3918,10 +3918,10 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
         loc = u"right";
     }
     String barStyle;
-    QColor barlineColor;
+    Color barlineColor;
     String endingNumber;
     String endingType;
-    QColor endingColor;
+    Color endingColor;
     String endingText;
     String repeat;
     String count;
@@ -3929,16 +3929,16 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "bar-style") {
-            barlineColor = m_e.attribute("color").toQString();
+            barlineColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             barStyle = m_e.readText();
         } else if (m_e.name() == "ending") {
             endingNumber = m_e.attribute("number");
             endingType   = m_e.attribute("type");
-            endingColor = m_e.attribute("color").toQString();
+            endingColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             printEnding = m_e.asciiAttribute("print-object") != "no";
             endingText = m_e.readText();
         } else if (m_e.name() == "fermata") {
-            const QColor fermataColor = m_e.attribute("color").toQString();
+            const Color fermataColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             const String fermataType = m_e.attribute("type");
             const auto segment = measure->getSegment(SegmentType::EndBarLine, tick);
             const track_idx_t track = m_pass1.trackForPart(partId);
@@ -4015,7 +4015,7 @@ static Volta* findRedundantVolta(const track_idx_t track, const Measure* measure
 //---------------------------------------------------------
 
 void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const String& number,
-                                   const String& type, const QColor color,
+                                   const String& type, const Color color,
                                    const String& text, const bool print)
 {
     if (!(number.empty() && type.empty())) {
@@ -4138,7 +4138,7 @@ static void addSymToSig(KeySigEvent& sig, const String& step, const String& alte
  Add a KeySigEvent to the score.
  */
 
-static void addKey(const KeySigEvent key, const QColor keyColor, const bool printObj, Score* score,
+static void addKey(const KeySigEvent key, const Color keyColor, const bool printObj, Score* score,
                    Measure* measure, const staff_idx_t staffIdx, const Fraction& tick)
 {
     Key oldkey = score->staff(staffIdx)->key(tick);
@@ -4214,7 +4214,7 @@ void MusicXMLParserPass2::key(const String& partId, Measure* measure, const Frac
         }
     }
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
-    const QColor keyColor { m_e.attribute("color").toQString() };
+    const Color keyColor = Color::fromString(m_e.asciiAttribute("color").ascii());
 
     // for custom keys, a single altered tone is described by
     // key-step (required),  key-alter (required) and key-accidental (optional)
@@ -4315,7 +4315,7 @@ void MusicXMLParserPass2::clef(const String& partId, Measure* measure, const Fra
     const String strClefno = m_e.attribute("number");
     const bool afterBarline = m_e.asciiAttribute("after-barline") == "yes";
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
-    const QColor clefColor { m_e.attribute("color").toQString() };
+    const Color clefColor = Color::fromString(m_e.asciiAttribute("color").ascii());
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "sign") {
@@ -4506,7 +4506,7 @@ void MusicXMLParserPass2::time(const String& partId, Measure* measure, const Fra
     String beatType;
     String timeSymbol = m_e.attribute("symbol");
     bool printObject = m_e.asciiAttribute("print-object") != "no";
-    const QColor timeColor { m_e.attribute("color").toQString() };
+    const Color timeColor = Color::fromString(m_e.asciiAttribute("color").ascii());
 
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "beats") {
@@ -4776,7 +4776,7 @@ static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
  Set the notehead parameters.
  */
 
-static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteheadParentheses, const String& noteheadFilled)
+static void setNoteHead(Note* note, const Color noteheadColor, const bool noteheadParentheses, const String& noteheadFilled)
 {
     const auto score = note->score();
 
@@ -5057,8 +5057,8 @@ Note* MusicXMLParserPass2::note(const String& partId,
     bool noStem = false;
     bool hasHead = true;
     NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
-    const QColor noteColor { m_e.attribute("color").toQString() };
-    QColor noteheadColor = QColor::Invalid;
+    const Color noteColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+    Color noteheadColor;
     bool noteheadParentheses = false;
     String noteheadFilled;
     int velocity = round(m_e.doubleAttribute("dynamics") * 0.9);
@@ -5106,7 +5106,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
             notations.parse();
             addError(notations.errors());
         } else if (m_e.name() == "notehead") {
-            noteheadColor.setNamedColor(m_e.attribute("color").toQString());
+            noteheadColor = Color::fromString(m_e.asciiAttribute("color").ascii());
             noteheadParentheses = m_e.asciiAttribute("parentheses") == "yes";
             noteheadFilled = m_e.attribute("filled");
             auto noteheadValue = m_e.readText();
@@ -5579,7 +5579,7 @@ FiguredBassItem* MusicXMLParserPass2::figure(const int idx, const bool paren, Fi
             }
             m_e.skipCurrentElement();
         } else if (m_e.name() == "figure-number") {
-            const QColor color { m_e.attribute("color").toQString() };
+            const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
             String val = m_e.readText();
             int iVal = val.toInt();
             // MusicXML spec states figure-number is a number
@@ -5644,7 +5644,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
     const bool parentheses = m_e.asciiAttribute("parentheses") == "yes";
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
     const String placement = m_e.attribute("placement");
-    const QColor color { m_e.attribute("color").toQString() };
+    const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
 
     fb->setVisible(printObject);
     if (color.isValid()) {
@@ -6061,7 +6061,7 @@ void MusicXMLParserLyric::parse()
 
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
-    const QColor lyricColor { m_e.attribute("color").toQString() };
+    const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     String extendType;
     String formattedText;
 
@@ -6119,7 +6119,7 @@ void MusicXMLParserLyric::parse()
     //LOGD("formatted lyric '%s'", qPrintable(formattedText));
     lyric->setXmlText(formattedText);
     if (lyricColor.isValid()) {
-        lyric->setProperty(Pid::COLOR, mu::draw::Color::fromQColor(lyricColor));
+        lyric->setProperty(Pid::COLOR, lyricColor);
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 
@@ -6205,7 +6205,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             } else if (lineType == u"solid" || lineType == u"") {
                 newSlur->setStyleType(SlurStyleType::Solid);
             }
-            const QColor color { notation.attribute(u"color").toQString() };
+            const Color color = Color::fromString(notation.attribute(u"color"));
             if (color.isValid()) {
                 newSlur->setColor(color);
             }
@@ -6576,7 +6576,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
     const auto track = note->track();
 
     if (glissandoType == u"start") {
-        const QColor glissandoColor { notation.attribute(u"color") };
+        const Color glissandoColor = Color::fromString(notation.attribute(u"color"));
         const auto glissandoText = notation.text();
         if (gliss) {
             logger->logError(String(u"overlapping glissando/slide number %1").arg(glissandoNumber + 1), xmlreader);
@@ -6687,7 +6687,7 @@ static void addTie(const Notation& notation, const Score* score, Note* note, con
         tie->setStartNote(note);
         tie->setTrack(track);
 
-        const QColor color { notation.attribute(u"color").toQString() };
+        const Color color = Color::fromString(notation.attribute(u"color"));
         if (color.isValid()) {
             tie->setColor(color);
         }

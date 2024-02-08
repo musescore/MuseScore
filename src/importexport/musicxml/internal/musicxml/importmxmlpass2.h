@@ -303,7 +303,7 @@ private:
     void backup(Fraction& dura);
     void timeModification(Fraction& timeMod, TDuration& normalType);
     void stem(DirectionV& sd, bool& nost);
-    void doEnding(const String& partId, Measure* measure, const String& number, const String& type, const QColor color, const String& text,
+    void doEnding(const String& partId, Measure* measure, const String& number, const String& type, const Color color, const String& text,
                   const bool print);
     void staffDetails(const String& partId, Measure* measure = nullptr);
     void staffTuning(StringData* t);
