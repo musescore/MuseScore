@@ -310,6 +310,7 @@ struct String::Mutator {
     void reserve(size_t n) { s.reserve(n); }
     void resize(size_t n) { s.resize(n); }
     void clear() { s.clear(); }
+    void push_back(char16_t c) { s.push_back(c); }
     void insert(size_t p, const std::u16string& v) { s.insert(p, v); }
     void erase(size_t p, size_t n) { s.erase(p, n); }
 
@@ -428,6 +429,29 @@ String& String::prepend(const String& s)
 {
     mutStr() = s.constStr() + constStr();
     return *this;
+}
+
+String String::fromUtf16(const ByteArray& data)
+{
+    //make sure len is divisible by 2
+    size_t len = data.size();
+    if (len % 2) {
+        len--;
+    }
+
+    String u16;
+    u16.reserve(len / 2);
+    String::Mutator mut = u16.mutStr();
+
+    const uint8_t* d = data.constData();
+    for (size_t i = 0; i < len;) {
+        //little-endian
+        int lo = d[i++] & 0xFF;
+        int hi = d[i++] & 0xFF;
+        mut.push_back(hi << 8 | lo);
+    }
+
+    return u16;
 }
 
 String String::fromUtf8(const char* str)

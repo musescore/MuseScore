@@ -123,6 +123,15 @@ public:
 private:
     struct Xml;
 
+    enum class Encoding {
+        Unknown,
+        UTF_8,
+        UTF_16LE,
+        UTF_16BE,
+    };
+
+    Encoding encoding(const ByteArray& data) const;
+
     void tryParseEntity(Xml* xml);
     String nodeValue(Xml* xml) const;
 
