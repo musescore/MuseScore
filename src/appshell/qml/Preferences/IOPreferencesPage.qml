@@ -93,5 +93,16 @@ PreferencesPage {
             }
         }
          */
+
+        SoundFlagsSection {
+            isMultiSelection: ioModel.soundFlagsMultiSelection
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
+            onIsMultiSelectionChangeRequested: function(enabled) {
+                ioModel.soundFlagsMultiSelection = enabled
+            }
+        }
     }
 }
