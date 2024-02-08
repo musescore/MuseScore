@@ -5799,7 +5799,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
 {
     track_idx_t track = _pass1.trackForPart(partId);
 
-    const Color color = Color::fromString(_e.attributes().value("color").ascii());
+    const Color color(_e.attributes().value("color").toString());
     const String placement = _e.attributes().value("placement").toString();
     const bool printObject = _e.attributes().value("print-object") != "no";
 
