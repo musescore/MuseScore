@@ -300,7 +300,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
         QBuffer pngDevice(&pngData);
         pngDevice.open(QIODevice::ReadWrite);
 
-        INotationWriter::Options options {
+        INotationWriter::Options options = {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(false) }
         };

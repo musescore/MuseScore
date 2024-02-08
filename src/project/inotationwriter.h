@@ -23,6 +23,8 @@
 #ifndef MU_PROJECT_INOTATIONWRITER_H
 #define MU_PROJECT_INOTATIONWRITER_H
 
+#include <map>
+
 #include "types/ret.h"
 #include "types/val.h"
 
@@ -50,7 +52,7 @@ public:
         BEATS_COLORS
     };
 
-    using Options = QMap<OptionKey, Val>;
+    using Options = std::map<OptionKey, Val>;
 
     virtual std::vector<UnitType> supportedUnitTypes() const = 0;
     virtual bool supportsUnitType(UnitType unitType) const = 0;

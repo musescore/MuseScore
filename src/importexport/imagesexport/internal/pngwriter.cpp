@@ -46,7 +46,7 @@ mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();
 
     INotationPainting::Options opt;
-    opt.fromPage = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    opt.fromPage = mu::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
@@ -61,8 +61,8 @@ mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
     image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
 
-    const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND,
-                                                      Val(configuration()->exportPngWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                  Val(configuration()->exportPngWithTransparentBackground())).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
     mu::draw::Painter painter(&image, "pngwriter");
