@@ -25,8 +25,11 @@ jobs:
       - name: Update info about the release in musescore-updates
         run: |
           S3_URL="s3://musescore-updates/feed/latest.xml"
+          S3_ALL_URL="s3://musescore-updates/feed/all.xml"
+          
           if [ ${{ github.event.inputs.mode }} == "testing" ]; then
             S3_URL="s3://musescore-updates/feed/latest.test.xml"
+            S3_ALL_URL="s3://musescore-updates/feed/all.test.xml"
           fi
 
           sudo bash ./build/ci/release/make_release_info_file.sh \
@@ -40,3 +43,18 @@ jobs:
             --s3_url ${S3_URL} \
             --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
             --file_name "release_info.json"
+
+          sudo bash ./build/ci/release/make_previous_releases_notes.sh \
+            --s3_key ${{ secrets.S3_KEY_UPDATE }} \
+            --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
+            --s3_url ${S3_ALL_URL} \
+            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
+            --current_file_name "release_info.json" \
+            --previous_file_name "previous_releases_notes.json"
+          
+          sudo bash ./build/ci/release/push_file_to_s3.sh \
+            --s3_key ${{ secrets.S3_KEY_UPDATE }} \
+            --s3_secret ${{ secrets.S3_SECRET_UPDATE }} \
+            --s3_url ${S3_ALL_URL} \
+            --s3_bucket ${{ secrets.S3_BUCKET_UPDATE }} \
+            --file_name "previous_releases_notes.json"
