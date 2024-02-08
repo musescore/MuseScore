@@ -21,8 +21,11 @@
  */
 
 #include "global/translation.h"
+
+#ifndef MUSICXML_NO_INTERACTIVE
 #include "modularity/ioc.h"
 #include "global/iinteractive.h"
+#endif
 
 #include "importmxml.h"
 #include "importmxmllogger.h"
@@ -32,7 +35,9 @@
 #include "engraving/dom/part.h"
 #include "engraving/dom/score.h"
 
+#ifndef MUSICXML_NO_INTERACTIVE
 using namespace mu::framework;
+#endif
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -42,7 +47,7 @@ namespace mu::engraving {
 /**
  Show a dialog displaying the MusicXML import error(s).
  */
-
+#ifndef MUSICXML_NO_INTERACTIVE
 static IInteractive::Button musicXMLImportErrorDialog(const String& text, const String& detailedText)
 {
     auto interactive = modularity::ioc()->resolve<framework::IInteractive>("musicxml");
@@ -62,6 +67,8 @@ static IInteractive::Button musicXMLImportErrorDialog(const String& text, const 
 
     return ret.standardButton();
 }
+
+#endif
 
 static void updateNamesForAccidentals(Instrument* inst)
 {
@@ -123,6 +130,7 @@ Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArr
     // report result
     const String pass2_errors = pass2.errors();
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
+#ifndef MUSICXML_NO_INTERACTIVE
         if (!MScore::noGui) {
             const String text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                      nullptr, int(pass1_errors.size() + pass2_errors.size()));
@@ -130,6 +138,7 @@ Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArr
                 res = Err::UserAbort;
             }
         }
+#endif
     }
 
     return res;

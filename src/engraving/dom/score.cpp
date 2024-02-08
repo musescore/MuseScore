@@ -3289,6 +3289,8 @@ static void onFocusedItemChanged(EngravingItem* item)
 
         accRoot->setFocusedElement(nullptr);
     }
+#else
+    UNUSED(item);
 #endif
 }
 

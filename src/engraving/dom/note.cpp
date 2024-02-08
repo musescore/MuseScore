@@ -3716,7 +3716,7 @@ bool Note::hasAnotherStraightAboveOrBelow(bool above) const
         if (note == this) {
             continue;
         }
-        if (abs(note->pos().x() - pos().x()) > limitDiff) {
+        if (std::fabs(note->pos().x() - pos().x()) > limitDiff) {
             return false;
         }
         if ((above && note->line() < m_line) || (!above && note->line() > m_line)) {

@@ -514,7 +514,7 @@ SymId mxmlString2accSymId(const String mxmlName, const String smufl)
     } else if (mxmlName == u"other") {
         return SymNames::symIdByName(smufl);
     } else {
-        LOGD("mxmlString2accSymId: unknown accidental '%s'", qPrintable(mxmlName));
+        LOGD("mxmlString2accSymId: unknown accidental '%s'", muPrintable(mxmlName));
     }
 
     // default
@@ -698,7 +698,7 @@ AccidentalType mxmlString2accidentalType(const String mxmlName, const String smu
     } else if (mxmlName == "other" && mu::contains(smuflAccidentalTypes, smufl)) {
         return smuflAccidentalTypes.at(smufl);
     } else {
-        LOGD("mxmlString2accidentalType: unknown accidental '%s'", qPrintable(mxmlName));
+        LOGD("mxmlString2accidentalType: unknown accidental '%s'", muPrintable(mxmlName));
     }
     return AccidentalType::NONE;
 }

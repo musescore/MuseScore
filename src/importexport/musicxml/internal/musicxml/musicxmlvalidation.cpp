@@ -22,6 +22,18 @@
 
 #include "musicxmlvalidation.h"
 
+#ifdef MUSICXML_NO_VALIDATION
+using namespace mu;
+using namespace mu::iex::musicxml;
+using namespace mu::engraving;
+
+Err MusicxmlValidation::validate(const String&, const ByteArray&)
+{
+    return Err::NoError;
+}
+
+#else
+
 #include <QAbstractMessageHandler>
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
@@ -181,7 +193,7 @@ Err MusicxmlValidation::validate(const String& name, const ByteArray& data)
     //LOGD("Validation time elapsed: %d ms", t.elapsed());
 
     if (!valid) {
-        LOGD("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
+        LOGD("importMusicXml() file '%s' is not a valid MusicXML file", muPrintable(name));
         QString strErr = qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
             return Err::NoError;         // might as well try anyhow in converter mode
@@ -193,3 +205,5 @@ Err MusicxmlValidation::validate(const String& name, const ByteArray& data)
 
     return Err::NoError;
 }
+
+#endif // MUSICXML_NO_VALIDATION
