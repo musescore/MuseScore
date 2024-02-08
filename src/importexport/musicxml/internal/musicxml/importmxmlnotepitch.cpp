@@ -95,7 +95,7 @@ void MxmlNotePitch::displayStepOctave(XmlStreamReader& e)
                 m_displayStep = pos;
             } else {
                 //logError(String("invalid step '%1'").arg(strStep));
-                LOGD("invalid step '%s'", qPrintable(step));                // TODO
+                LOGD("invalid step '%s'", muPrintable(step));                // TODO
             }
         } else if (e.name() == "display-octave") {
             const String oct = e.readText();
@@ -103,7 +103,7 @@ void MxmlNotePitch::displayStepOctave(XmlStreamReader& e)
             m_displayOctave = oct.toInt(&ok);
             if (!ok || m_displayOctave < 0 || m_displayOctave > 9) {
                 //logError(String("invalid octave '%1'").arg(strOct));
-                LOGD("invalid octave '%s'", qPrintable(oct));               // TODO
+                LOGD("invalid octave '%s'", muPrintable(oct));               // TODO
                 m_displayOctave = -1;
             }
         } else {
@@ -136,7 +136,7 @@ void MxmlNotePitch::pitch(XmlStreamReader& e)
                 m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
                 const auto altervalue = alter.toDouble(&ok2);
-                if (ok2 && (qAbs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
+                if (ok2 && (std::abs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
                     // try to see if a microtonal accidental is needed
                     m_accType = microtonalGuess(altervalue);
                 }

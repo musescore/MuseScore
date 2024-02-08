@@ -66,11 +66,11 @@ Fraction MusicXmlPart::measureDuration(size_t i) const
 
 String MusicXmlPart::toString() const
 {
-    auto res = String("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
+    auto res = String(u"part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
                .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
 
     for (VoiceList::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
-        res += String("voice %1 map staff data %2\n")
+        res += String(u"voice %1 map staff data %2\n")
                .arg(String(i->first + 1), i->second.toString());
     }
 
@@ -78,7 +78,7 @@ String MusicXmlPart::toString() const
         if (i > 0) {
             res += u"\n";
         }
-        res += String("measure %1 duration %2 (%3)")
+        res += String(u"measure %1 duration %2 (%3)")
                .arg(m_measureNumbers.at(i), m_measureDurations.at(i).toString()).arg(m_measureDurations.at(i).ticks());
     }
 
@@ -194,8 +194,8 @@ void MusicXmlInstrList::setInstrument(const String instr, const Fraction f)
     // TODO determine how to handle multiple instrument changes at the same time
     // current implementation keeps the first one
     if (!insert({ f, instr }).second) {
-        LOGD("instr '%s', tick %s (%d): element already exists",
-             qPrintable(instr), qPrintable(f.toString()), f.ticks());
+        LOGD() << "element already exists, instr: " << instr
+               << ", tick: " << f.toString() << "(" << f.ticks() << ")";
     }
     //(*this)[f] = instr;
 }
@@ -219,7 +219,7 @@ void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
         return;
     }
 
-    //LOGD("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
+    //LOGD("addOctaveShift(shift %d f %s)", shift, muPrintable(f.print()));
     auto i = find(f);
     if (i == end()) {
         //LOGD("addOctaveShift: not found, inserting");
@@ -235,7 +235,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 {
     /*
     for (auto i = cbegin(); i != cend(); ++i)
-          LOGD(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+          LOGD(" [%s : %d]", muPrintable((*i).first.print()), (*i).second);
      */
 
     // to each MusicXmlOctaveShiftList entry, add the sum of all previous ones
@@ -247,7 +247,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 
     /*
     for (auto i = cbegin(); i != cend(); ++i)
-          LOGD(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+          LOGD(" [%s : %d]", muPrintable((*i).first.print()), (*i).second);
      */
 }
 
