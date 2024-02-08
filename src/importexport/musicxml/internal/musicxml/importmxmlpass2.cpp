@@ -1501,12 +1501,11 @@ static void resetTuplets(Tuplets& tuplets)
  Initialize members as required for reading the MusicXML part element.
  TODO: factor out part reading into a separate class
  TODO: preferably use automatically initialized variables
- Note that Qt automatically initializes new elements in QVector (tuplets).
  */
 
 void MusicXMLParserPass2::initPartState(const String& partId)
 {
-    Q_UNUSED(partId);
+    UNUSED(partId);
     m_timeSigDura = Fraction(0, 0);               // invalid
     m_tie    = 0;
     m_lastVolta = 0;
@@ -6828,15 +6827,6 @@ Notation Notation::notationWithAttributes(const String& name, const std::vector<
         notation.addAttribute(String::fromAscii(attr.name.ascii()), attr.value);
     }
     return notation;
-}
-
-//---------------------------------------------------------
-//   addAttribute
-//---------------------------------------------------------
-
-void Notation::addAttribute(const QStringRef name, const QStringRef value)
-{
-    m_attributes.emplace(name.toString(), value.toString());
 }
 
 //---------------------------------------------------------
