@@ -23,8 +23,6 @@
 #ifndef __MUSICXMLSUPPORT_H__
 #define __MUSICXMLSUPPORT_H__
 
-#include <QDomElement>
-#include <QAbstractMessageHandler>
 #include <QSourceLocation>
 
 #include "engraving/types/fraction.h"
@@ -208,13 +206,9 @@ class MxmlSupport
 {
 public:
     static int stringToInt(const String& s, bool* ok);
-    static Fraction durationAsFraction(const int divisions, const QDomElement e);
     static Fraction noteTypeToFraction(const String& type);
     static Fraction calculateFraction(const String& type, int dots, int normalNotes, int actualNotes);
 };
-
-extern void domError(const QDomElement&);
-extern void domNotImplemented(const QDomElement&);
 
 extern String accSymId2MxmlString(const SymId id);
 extern String accSymId2SmuflMxmlString(const SymId id);
