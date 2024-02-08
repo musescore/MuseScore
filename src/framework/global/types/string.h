@@ -245,6 +245,8 @@ public:
     String& prepend(Char ch);
     String& prepend(const String& s);
 
+    static String fromUtf16(const ByteArray& data);
+
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
 
