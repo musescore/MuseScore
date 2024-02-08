@@ -296,9 +296,9 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
 
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
-        QByteArray pngData;
-        QBuffer pngDevice(&pngData);
-        pngDevice.open(QIODevice::ReadWrite);
+        ByteArray pngData;
+        Buffer pngDevice(&pngData);
+        pngDevice.open(IODevice::ReadWrite);
 
         INotationWriter::Options options = {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
@@ -312,7 +312,7 @@ Ret BackendApi::exportScorePngs(const INotationPtr notation, BackendJsonWriter& 
         }
 
         bool lastArrayValue = ((notationPages.size() - 1) == i);
-        jsonWriter.addValue(pngData.toBase64(), !lastArrayValue);
+        jsonWriter.addValue(pngData.toQByteArrayNoCopy().toBase64(), !lastArrayValue);
     }
 
     jsonWriter.closeArray(addSeparator);
@@ -339,9 +339,9 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& h
 
     bool result = true;
     for (size_t i = 0; i < notationPages.size(); ++i) {
-        QByteArray svgData;
-        QBuffer svgDevice(&svgData);
-        svgDevice.open(QIODevice::ReadWrite);
+        ByteArray svgData;
+        Buffer svgDevice(&svgData);
+        svgDevice.open(IODevice::ReadWrite);
 
         INotationWriter::Options options {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
@@ -356,7 +356,7 @@ Ret BackendApi::exportScoreSvgs(const INotationPtr notation, const io::path_t& h
         }
 
         bool lastArrayValue = ((notationPages.size() - 1) == i);
-        jsonWriter.addValue(svgData.toBase64(), !lastArrayValue);
+        jsonWriter.addValue(svgData.toQByteArrayNoCopy().toBase64(), !lastArrayValue);
     }
 
     jsonWriter.closeArray(addSeparator);
@@ -480,9 +480,9 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
         return make_ret(Ret::Code::InternalError);
     }
 
-    QByteArray data;
-    QBuffer device(&data);
-    device.open(QIODevice::ReadWrite);
+    ByteArray data;
+    Buffer device(&data);
+    device.open(IODevice::ReadWrite);
 
     Ret writeRet = writer->write(notation, device);
     if (!writeRet) {
@@ -492,7 +492,7 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
 
     RetVal<QByteArray> result;
     result.ret = make_ret(Ret::Code::Ok);
-    result.val = data.toBase64();
+    result.val = data.toQByteArrayNoCopy().toBase64();
 
     device.close();
 
@@ -508,9 +508,9 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
         return make_ret(Ret::Code::InternalError);
     }
 
-    QByteArray data;
-    QBuffer device(&data);
-    device.open(QIODevice::ReadWrite);
+    ByteArray data;
+    Buffer device(&data);
+    device.open(IODevice::ReadWrite);
 
     Ret writeRet = writer->writeList(notations, device, options);
     if (!writeRet) {
@@ -520,7 +520,7 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
 
     RetVal<QByteArray> result;
     result.ret = make_ret(Ret::Code::Ok);
-    result.val = data.toBase64();
+    result.val = data.toQByteArrayNoCopy().toBase64();
 
     device.close();
 

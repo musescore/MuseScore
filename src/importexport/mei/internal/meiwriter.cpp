@@ -45,7 +45,7 @@ bool MeiWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MeiWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
+mu::Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -59,10 +59,8 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, QIODevice& destination
     MeiExporter exporter(score);
     std::string meiData;
     if (exporter.write(meiData)) {
-        // Still using QTextStream since we have a QIODevice
-        QTextStream out(&destinationDevice);
-        out << String::fromStdString(meiData);
-        out.flush();
+        ByteArray data = ByteArray::fromRawData(meiData.c_str(), meiData.size());
+        destinationDevice.write(data);
         return make_ok();
     } else {
         return make_ret(Ret::Code::UnknownError);
@@ -82,7 +80,7 @@ mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const io::
     }
 }
 
-mu::Ret MeiWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
+mu::Ret MeiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);
