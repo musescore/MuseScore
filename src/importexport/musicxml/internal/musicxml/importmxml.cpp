@@ -97,9 +97,6 @@ static void updateNamesForAccidentals(Instrument* inst)
 
 Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArray& data)
 {
-    //LOGD("importMusicXMLfromBuffer(score %p, name '%s', dev %p)",
-    //       score, qPrintable(name), dev);
-
     MxmlLogger logger;
     logger.setLoggingLevel(MxmlLogger::Level::MXML_ERROR);   // errors only
     //logger.setLoggingLevel(MxmlLogger::Level::MXML_INFO);
