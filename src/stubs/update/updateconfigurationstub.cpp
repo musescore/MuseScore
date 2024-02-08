@@ -55,12 +55,17 @@ void UpdateConfigurationStub::setSkippedReleaseVersion(const std::string&) const
 {
 }
 
+std::string UpdateConfigurationStub::previousReleasesNotesUrl() const
+{
+    return "";
+}
+
 std::string UpdateConfigurationStub::checkForUpdateUrl() const
 {
     return "";
 }
 
-mu::network::RequestHeaders UpdateConfigurationStub::checkForUpdateHeaders() const
+mu::network::RequestHeaders UpdateConfigurationStub::updateHeaders() const
 {
     return network::RequestHeaders();
 }

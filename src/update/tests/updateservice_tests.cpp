@@ -34,6 +34,7 @@ using ::testing::Return;
 #include "global/tests/mocks/systeminfomock.h"
 
 #include "update/internal/updateservice.h"
+#include "muversion.h"
 
 using namespace mu;
 using namespace mu::update;
@@ -57,6 +58,9 @@ public:
 
         m_systemInfoMock = std::make_shared<SystemInfoMock>();
         m_service->setsystemInfo(m_systemInfoMock);
+
+        ON_CALL(*m_systemInfoMock, productType())
+        .WillByDefault(Return(ISystemInfo::ProductType::Linux));
     }
 
     void TearDown() override
@@ -66,24 +70,55 @@ public:
 
     void makeReleaseInfo() const
     {
-        QString releaseInfo = "{"
-                              "\"tag_name\": \"v5.0\","
-                              "\"assets\": ["
-                              "{ \"name\": \"MuseScore.dmg\", \"browser_download_url\": \"blabla\" },"
-                              "{ \"name\": \"MuseScore.msi\", \"browser_download_url\": \"blabla\" },"
-                              "{ \"name\": \"MuseScore.AppImage\", \"browser_download_url\": \"blabla\" }"
-                              "],"
-                              "\"assetsNew\": ["
-                              "{ \"name\": \"MuseScore-arm.AppImage\", \"browser_download_url\": \"blabla\" },"
-                              "{ \"name\": \"MuseScore-aarch64.AppImage\", \"browser_download_url\": \"blabla\" }"
-                              "]"
-                              "}";
+        std::string checkForUpdateUrl = "checkForUpdateUrl";
+        EXPECT_CALL(*m_configuration, checkForUpdateUrl())
+        .WillOnce(Return(checkForUpdateUrl));
 
-        EXPECT_CALL(*m_networkManager, get(_, _, _))
+        QString releasesNotes = "{"
+                                "\"tag_name\": \"v5.0\","
+                                "\"assets\": ["
+                                "{ \"name\": \"MuseScore.dmg\", \"browser_download_url\": \"blabla\" },"
+                                "{ \"name\": \"MuseScore.msi\", \"browser_download_url\": \"blabla\" },"
+                                "{ \"name\": \"MuseScore.AppImage\", \"browser_download_url\": \"blabla\" }"
+                                "],"
+                                "\"assetsNew\": ["
+                                "{ \"name\": \"MuseScore-arm.AppImage\", \"browser_download_url\": \"blabla\" },"
+                                "{ \"name\": \"MuseScore-aarch64.AppImage\", \"browser_download_url\": \"blabla\" }"
+                                "]"
+                                "}";
+
+        EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(checkForUpdateUrl)), _, _))
         .WillOnce(testing::Invoke(
-                      [releaseInfo](const QUrl&, network::IncomingDevice* buf, const network::RequestHeaders&) {
+                      [releasesNotes](const QUrl&, network::IncomingDevice* buf, const network::RequestHeaders&) {
             buf->open(network::IncomingDevice::WriteOnly);
-            buf->write(releaseInfo.toUtf8());
+            buf->write(releasesNotes.toUtf8());
+            buf->close();
+
+            return make_ok();
+        }));
+    }
+
+    void makePreviousReleasesNotes() const
+    {
+        std::string previousReleasesNotesUrl = "previousReleasesNotesUrl";
+        EXPECT_CALL(*m_configuration, previousReleasesNotesUrl())
+        .WillOnce(Return(previousReleasesNotesUrl));
+
+        //! [GIVEN] Previous releases notes. Contains chaotic order of versions
+        QString releasesNotes = QString("{"
+                                        "\"releases\": ["
+                                        "{ \"version\": \"40000.3\", \"notes\": \"blabla3\" },"
+                                        "{ \"version\": \"40000.4\", \"notes\": \"blabla4\" },"
+                                        "{ \"version\": \"%1\", \"notes\": \"blabla2\" },"
+                                        "{ \"version\": \"0.4.1\", \"notes\": \"blabla1\" }"
+                                        "]"
+                                        "}").arg(MUVersion::fullVersion());
+
+        EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousReleasesNotesUrl)), _, _))
+        .WillOnce(testing::Invoke(
+                      [releasesNotes](const QUrl&, network::IncomingDevice* buf, const network::RequestHeaders&) {
+            buf->open(network::IncomingDevice::WriteOnly);
+            buf->write(releasesNotes.toUtf8());
             buf->close();
 
             return make_ok();
@@ -102,6 +137,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_x86_64)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
+    makePreviousReleasesNotes();
 
     //! [GIVEN] System is Linux x86_64
     ON_CALL(*m_systemInfoMock, productType())
@@ -122,6 +158,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_arm)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
+    makePreviousReleasesNotes();
 
     //! [GIVEN] System is Linux arm
     ON_CALL(*m_systemInfoMock, productType())
@@ -142,6 +179,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_aarch64)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
+    makePreviousReleasesNotes();
 
     //! [GIVEN] System is Linux arm64
     ON_CALL(*m_systemInfoMock, productType())
@@ -162,6 +200,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Linux_Unknown)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
+    makePreviousReleasesNotes();
 
     //! [GIVEN] System is Linux Unknown
     ON_CALL(*m_systemInfoMock, productType())
@@ -182,6 +221,7 @@ TEST_F(UpdateServiceTests, ParseRelease_Windows)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
+    makePreviousReleasesNotes();
 
     //! [GIVEN] System is Windows, cpuArchitecture isn't important
     ON_CALL(*m_systemInfoMock, productType())
@@ -202,6 +242,7 @@ TEST_F(UpdateServiceTests, ParseRelease_MacOS)
 {
     //! [GIVEN] Release info
     makeReleaseInfo();
+    makePreviousReleasesNotes();
 
     //! [GIVEN] System is MacOS, cpuArchitecture isn't important
     ON_CALL(*m_systemInfoMock, productType())
@@ -216,4 +257,24 @@ TEST_F(UpdateServiceTests, ParseRelease_MacOS)
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
     EXPECT_EQ(retVal.val.fileName, "MuseScore.dmg");
+}
+
+TEST_F(UpdateServiceTests, CheckForUpdate_ReleasesNotes)
+{
+    //! [GIVEN] Release info
+    makeReleaseInfo();
+    makePreviousReleasesNotes();
+
+    //! [THEN] Versions should be in correct order and don't contain current version
+    PrevReleasesNotesList expectedReleasesNotes = {
+        { "40000.3", "blabla3" },
+        { "40000.4", "blabla4" },
+    };
+
+    //! [WHEN] Check for update
+    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+
+    //! [THEN] Should return correct release file
+    EXPECT_TRUE(retVal.ret);
+    EXPECT_EQ(retVal.val.previousReleasesNotes, expectedReleasesNotes);
 }

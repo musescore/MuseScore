@@ -32,6 +32,7 @@ StyledDialogView {
     id: root
 
     property alias notes: view.notes
+    property alias previousReleasesNotes: view.previousReleasesNotes
 
     contentWidth: 644
     contentHeight: 474
