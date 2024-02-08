@@ -219,7 +219,7 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
             return make_ret(Err::OutFileFailedOpen);
         }
 
-        INotationWriter::Options options {
+        INotationWriter::Options options = {
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
         };
 
