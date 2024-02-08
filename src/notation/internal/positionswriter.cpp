@@ -23,6 +23,7 @@
 #include "positionswriter.h"
 
 #include <cmath>
+#include <QBuffer>
 
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/repeatlist.h"
@@ -30,8 +31,9 @@
 
 #include "engraving/types/types.h"
 
-#include "log.h"
 #include "global/deprecated/xmlwriter.h"
+
+#include "log.h"
 
 using namespace mu::project;
 using namespace mu::notation;
@@ -94,7 +96,7 @@ bool PositionsWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret PositionsWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options&)
+mu::Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -106,7 +108,11 @@ mu::Ret PositionsWriter::write(INotationPtr notation, QIODevice& destinationDevi
         return make_ret(Ret::Code::UnknownError);
     }
 
-    mu::framework::XmlWriter writer(&destinationDevice);
+    QByteArray qdata;
+    QBuffer buf(&qdata);
+    buf.open(QIODevice::WriteOnly);
+
+    mu::framework::XmlWriter writer(&buf);
 
     writer.writeStartDocument();
     writer.writeStartElement(SCORE_TAG);
@@ -117,10 +123,13 @@ mu::Ret PositionsWriter::write(INotationPtr notation, QIODevice& destinationDevi
     writer.writeEndElement();
     writer.writeEndDocument();
 
+    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+    destinationDevice.write(data);
+
     return true;
 }
 
-mu::Ret PositionsWriter::writeList(const INotationPtrList&, QIODevice&, const Options&)
+mu::Ret PositionsWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

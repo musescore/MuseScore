@@ -21,14 +21,14 @@
  */
 #include "convertercontroller.h"
 
-#include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonParseError>
 
-#include "io/dir.h"
-#include "stringutils.h"
+#include "global/io/file.h"
+#include "global/io/dir.h"
+#include "global/stringutils.h"
 
 #include "convertercodes.h"
 #include "compat/backendapi.h"
@@ -38,6 +38,7 @@
 using namespace mu::converter;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::io;
 
 static const std::string PDF_SUFFIX = "pdf";
 static const std::string PNG_SUFFIX = "png";
@@ -211,11 +212,12 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
     TRACEFUNC;
 
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
-        const QString filePath
-            = io::path_t(io::dirpath(out) + "/" + io::completeBasename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
+        const String filePath = io::path_t(io::dirpath(out) + "/"
+                                           + io::completeBasename(out) + "-%1."
+                                           + io::suffix(out)).toString().arg(i + 1);
 
-        QFile file(filePath);
-        if (!file.open(QFile::WriteOnly)) {
+        File file(filePath);
+        if (!file.open(File::WriteOnly)) {
             return make_ret(Err::OutFileFailedOpen);
         }
 
@@ -223,7 +225,8 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
             { INotationWriter::OptionKey::PAGE_NUMBER, Val(static_cast<int>(i)) },
         };
 
-        file.setProperty("path", out.toQString());
+        file.setMeta("dir_path", out.toStdString());
+        file.setMeta("file_path", filePath.toStdString());
 
         Ret ret = writer->write(notation, file, options);
         if (!ret) {
@@ -239,12 +242,12 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
 
 mu::Ret ConverterController::convertFullNotation(INotationWriterPtr writer, INotationPtr notation, const mu::io::path_t& out) const
 {
-    QFile file(out.toQString());
-    if (!file.open(QFile::WriteOnly)) {
+    File file(out);
+    if (!file.open(File::WriteOnly)) {
         return make_ret(Err::OutFileFailedOpen);
     }
 
-    file.setProperty("path", out.toQString());
+    file.setMeta("file_path", out.toStdString());
     Ret ret = writer->write(notation, file);
     if (!ret) {
         LOGE() << "failed write, err: " << ret.toString() << ", path: " << out;
@@ -268,8 +271,8 @@ mu::Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, I
         notations.push_back(e->notation());
     }
 
-    QFile file(out.toQString());
-    if (!file.open(QFile::WriteOnly)) {
+    File file(out);
+    if (!file.open(File::WriteOnly)) {
         return make_ret(Err::OutFileFailedOpen);
     }
 

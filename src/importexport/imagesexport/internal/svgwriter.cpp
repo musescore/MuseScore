@@ -22,6 +22,8 @@
 
 #include "svgwriter.h"
 
+#include <QBuffer>
+
 #include "draw/painter.h"
 
 #include "engraving/dom/measure.h"
@@ -46,7 +48,7 @@ std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     TRACEFUNC;
 
@@ -74,10 +76,14 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
 
     mu::engraving::Page* page = pages.at(PAGE_NUMBER);
 
+    QByteArray qdata;
+    QBuffer buf(&qdata);
+    buf.open(QIODevice::WriteOnly);
+
     SvgGenerator printer;
     QString title(score->name());
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
-    printer.setOutputDevice(&destinationDevice);
+    printer.setOutputDevice(&buf);
 
     const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
@@ -228,7 +234,10 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         scoreRenderer()->paintItem(painter, element);
     }
 
-    painter.endDraw(); // Writes MuseScore SVG file to disk, finally
+    painter.endDraw();
+
+    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+    destinationDevice.write(data);
 
     // Clean up and return
     mu::engraving::MScore::pixelRatio = pixelRationBackup;
