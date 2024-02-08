@@ -82,7 +82,7 @@ private:
     bool shouldReplaceFile(const QString& filename) const;
     bool askForRetry(const QString& filename) const;
 
-    Ret doExportLoop(const io::path_t& path, std::function<Ret(QIODevice&)> exportFunction) const;
+    Ret doExportLoop(const io::path_t& path, std::function<Ret(io::IODevice&)> exportFunction) const;
 
     void showExportProgress(bool isAudioExport) const;
 

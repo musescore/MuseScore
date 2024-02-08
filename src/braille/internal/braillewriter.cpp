@@ -22,6 +22,8 @@
 
 #include "braillewriter.h"
 
+#include <QBuffer>
+
 #include "braille.h"
 
 using namespace mu::project;
@@ -38,7 +40,7 @@ bool BrailleWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret BrailleWriter::write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options&)
+mu::Ret BrailleWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -49,10 +51,19 @@ mu::Ret BrailleWriter::write(notation::INotationPtr notation, QIODevice& destina
         return make_ret(Ret::Code::UnknownError);
     }
 
-    return Braille(score).write(destinationDevice);
+    QByteArray qdata;
+    QBuffer buf(&qdata);
+    buf.open(QIODevice::WriteOnly);
+
+    mu::Ret ret = Braille(score).write(buf);
+    if (ret) {
+        ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+        destinationDevice.write(data);
+    }
+    return ret;
 }
 
-mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
+mu::Ret BrailleWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

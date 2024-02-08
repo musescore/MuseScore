@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <QImage>
+#include <QBuffer>
 
 #include "log.h"
 
@@ -37,7 +38,7 @@ std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -69,7 +70,13 @@ mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
 
     notation->painting()->paintPng(&painter, opt);
 
-    image.save(&destinationDevice, "png");
+    QByteArray qdata;
+    QBuffer buf(&qdata);
+    buf.open(QIODevice::WriteOnly);
+    image.save(&buf, "png");
+
+    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+    destinationDevice.write(data);
 
     return true;
 }

@@ -25,7 +25,8 @@
 #include <QDir>
 #include <QFile>
 
-#include "io/buffer.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
 
 #include "engraving/dom/undo.h"
 
@@ -773,8 +774,8 @@ mu::Ret NotationProject::exportProject(const io::path_t& path, const std::string
 {
     TRACEFUNC;
 
-    QFile file(path.toQString());
-    file.open(QFile::WriteOnly);
+    File file(path);
+    file.open(File::WriteOnly);
 
     auto writer = writers()->writer(suffix);
     if (!writer) {

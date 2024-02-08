@@ -29,7 +29,7 @@ namespace mu::iex::musicxml {
 class MxlWriter : public MusicXmlWriter
 {
 public:
-    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::IODevice& dstDevice, const Options& options = Options()) override;
 };
 }
 
