@@ -25,6 +25,7 @@
 
 #include <cstdint>
 #include <string>
+#include <map>
 
 #include "types/bytearray.h"
 
@@ -66,6 +67,9 @@ public:
     size_t write(const QByteArray& ba);
 #endif
 
+    std::string meta(const std::string& key) const;
+    void setMeta(const std::string& key, const std::string& val);
+
     bool hasError() const;
     int error() const;
     std::string errorString() const;
@@ -89,6 +93,7 @@ private:
 
     OpenMode m_mode = OpenMode::Unknown;
     size_t m_pos = 0;
+    std::map<std::string, std::string> m_meta;
 
     int m_error = 0;
     std::string m_errorString;
