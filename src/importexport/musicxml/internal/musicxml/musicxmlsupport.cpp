@@ -218,50 +218,6 @@ String MusicXMLInstrument::toString() const
            .arg(int(stemDirection));
 }
 
-void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& description,
-                                            const QUrl& /* identifier */, const QSourceLocation& sourceLocation)
-{
-    // convert description from html to text
-    QDomDocument desc;
-    QString contentError;
-    int contentLine;
-    int contentColumn;
-    if (!desc.setContent(description, false, &contentError, &contentLine,
-                         &contentColumn)) {
-        LOGD("ValidatorMessageHandler: could not parse validation error line %d column %d: %s",
-             contentLine, contentColumn, qPrintable(contentError));
-        return;
-    }
-
-    QDomElement e = desc.documentElement();
-    if (e.tagName() != "html") {
-        LOGD("ValidatorMessageHandler: description is not html");
-        return;
-    }
-
-    QString typeStr;
-    switch (type) {
-    case 0:  typeStr = qtrc("iex_musicxml", "Debug message:");
-        break;
-    case 1:  typeStr = qtrc("iex_musicxml", "Warning:");
-        break;
-    case 2:  typeStr = qtrc("iex_musicxml", "Critical error:");
-        break;
-    case 3:  typeStr = qtrc("iex_musicxml", "Fatal error:");
-        break;
-    default: typeStr = qtrc("iex_musicxml", "Unknown error:");
-        break;
-    }
-
-    QString errorStr = typeStr + " " + errorStringWithLocation(sourceLocation.line(), sourceLocation.column(), e.text());
-
-    // append error, separated by newline if necessary
-    if (!m_errors.isEmpty()) {
-        m_errors += "\n";
-    }
-    m_errors += errorStr;
-}
-
 //---------------------------------------------------------
 //   printDomElementPath
 //---------------------------------------------------------
