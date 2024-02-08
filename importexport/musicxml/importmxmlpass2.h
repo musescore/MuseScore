@@ -117,6 +117,15 @@ private:
       QSet<Lyrics*> _lyrics;
       };
 
+struct GraceNoteLyrics {
+      Lyrics* lyric = nullptr;
+      bool extend = false;
+      int no = 0;
+
+      GraceNoteLyrics(Lyrics* lyric, bool extend, int no)
+            : lyric(lyric), extend(extend), no(no) {}
+      };
+
 //---------------------------------------------------------
 //   MusicXMLParserLyric
 //---------------------------------------------------------
@@ -354,6 +363,7 @@ private:
       int _multiMeasureRestCount;
       int _measureNumber;                         ///< Current measure number as written in the score
       MusicXmlLyricsExtend _extendedLyrics;       ///< Lyrics with "extend" requiring fixup
+      std::vector<GraceNoteLyrics> _graceNoteLyrics; ///< Lyrics to be moved from grace note to main note
 
       MusicXmlSlash _measureStyleSlash;           ///< Are we inside a measure to be displayed as slashes?
       };
