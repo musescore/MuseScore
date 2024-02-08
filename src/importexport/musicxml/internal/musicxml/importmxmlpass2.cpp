@@ -5813,7 +5813,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     track_idx_t track = m_pass1.trackForPart(partId);
 
     const Color color = Color::fromString(m_e.asciiAttribute("color").ascii());
-    const String placement = m_e.asciiAttribute("placement").toString();
+    const String placement = m_e.attribute("placement");
     const bool printObject = m_e.asciiAttribute("print-object") != "no";
 
     String kind, kindText, functionText, symbols, parens;
