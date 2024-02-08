@@ -219,70 +219,6 @@ String MusicXMLInstrument::toString() const
 }
 
 //---------------------------------------------------------
-//   printDomElementPath
-//---------------------------------------------------------
-
-static QString domElementPath(const QDomElement& e)
-{
-    QString s;
-    QDomNode dn(e);
-    while (!dn.parentNode().isNull()) {
-        dn = dn.parentNode();
-        const QDomElement& de = dn.toElement();
-        const QString k(de.tagName());
-        if (!s.isEmpty()) {
-            s += ":";
-        }
-        s += k;
-    }
-    return s;
-}
-
-//---------------------------------------------------------
-//   domError
-//---------------------------------------------------------
-
-void domError(const QDomElement& e)
-{
-    QString m;
-    QString s = domElementPath(e);
-//      if (!docName.isEmpty())
-//            m = QString("<%1>:").arg(docName);
-    int ln = e.lineNumber();
-    if (ln != -1) {
-        m += QString("line:%1 ").arg(ln);
-    }
-    int col = e.columnNumber();
-    if (col != -1) {
-        m += QString("col:%1 ").arg(col);
-    }
-    m += QString("%1: Unknown Node <%2>, type %3").arg(s, e.tagName()).arg(e.nodeType());
-    if (e.isText()) {
-        m += QString("  text node <%1>").arg(e.toText().data());
-    }
-    LOGD("%s", qPrintable(m));
-}
-
-//---------------------------------------------------------
-//   domNotImplemented
-//---------------------------------------------------------
-
-void domNotImplemented(const QDomElement& e)
-{
-    if (!MScore::debugMode) {
-        return;
-    }
-    QString s = domElementPath(e);
-//      if (!docName.isEmpty())
-//            LOGD("<%s>:", qPrintable(docName));
-    LOGD("%s: Node not implemented: <%s>, type %d",
-         qPrintable(s), qPrintable(e.tagName()), e.nodeType());
-    if (e.isText()) {
-        LOGD("  text node <%s>", qPrintable(e.toText().data()));
-    }
-}
-
-//---------------------------------------------------------
 //   errorStringWithLocation
 //---------------------------------------------------------
 
@@ -330,29 +266,6 @@ int MxmlSupport::stringToInt(const String& s, bool* ok)
     }
     res = str.toInt(ok);
     return res;
-}
-
-//---------------------------------------------------------
-//   durationAsFraction
-//---------------------------------------------------------
-
-/**
- Return duration specified in the element e as Fraction.
- Caller must ensure divisions is valid.
- */
-
-Fraction MxmlSupport::durationAsFraction(const int divisions, const QDomElement e)
-{
-    Fraction f;
-    if (e.tagName() == "duration") {
-        bool ok;
-        int val = MxmlSupport::stringToInt(e.text(), &ok);
-        f = Fraction(val, 4 * divisions);     // note divisions = ticks / quarter note
-        f.reduce();
-    } else {
-        LOGD() << "durationAsFraction tagname error" << f.toString();
-    }
-    return f;
 }
 
 //---------------------------------------------------------
