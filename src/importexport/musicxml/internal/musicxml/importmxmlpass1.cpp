@@ -245,7 +245,6 @@ void MusicXMLParserPass1::addError(const String& error)
  Initialize members as required for reading the MusicXML part element.
  TODO: factor out part reading into a separate class
  TODO: preferably use automatically initialized variables
- Note that Qt automatically initializes new elements in QVector (tuplets).
  */
 
 void MusicXMLParserPass1::initPartState(const String& /* partId */)
@@ -2521,7 +2520,7 @@ void MusicXMLParserPass1::attributes(const String& partId, const Fraction cTime)
             m_parts[partId].insertStaffNumberToIndex(staffNumber, static_cast<int>(staffIndex));
             ++staffIndex;
         }
-        Q_ASSERT(staffIndex == m_parts[partId].staffNumberToIndex().size());
+        DO_ASSERT(staffIndex == m_parts[partId].staffNumberToIndex().size());
 
         setNumberOfStavesForPart(mu::value(m_partMap, partId), staves - static_cast<int>(hiddenStaves.size()));
     } else {
@@ -3075,8 +3074,8 @@ void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& f
 
 static bool isTupletFilled(const MxmlTupletState& state, const TDuration normalType, const Fraction timeMod)
 {
-    Q_UNUSED(timeMod);
-    bool res { false };
+    UNUSED(timeMod);
+    bool res = false;
     const auto actualNotes = state.actualNotes;
     /*
     const auto normalNotes = state.m_normalNotes;
@@ -3494,7 +3493,7 @@ Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const int& _divisio
 
 void MusicXMLParserPass1::duration(Fraction& dura, XmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "duration");
+    DO_ASSERT(e.isStartElement() && e.name() == "duration");
     m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
     dura.set(0, 0);    // invalid unless set correctly

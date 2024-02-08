@@ -155,7 +155,6 @@ public:
     Notation(const String& name, const String& parent = u"",
              const SymId& symId = SymId::noSym) { m_name = name; m_parent = parent; m_symId = symId; }
     void addAttribute(const String& name, const String& value);
-    void addAttribute(const QStringRef name, const QStringRef value);
     String attribute(const String& name) const;
     const std::map<String, String>& attributes() const { return m_attributes; }
     String name() const { return m_name; }
