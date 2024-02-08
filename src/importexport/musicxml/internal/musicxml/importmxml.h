@@ -26,12 +26,10 @@
 #include "global/types/string.h"
 #include "engravingerrors.h"
 
-class QIODevice;
-
 namespace mu::engraving {
 class Score;
 
-Err importMusicXMLfromBuffer(Score* score, const String&, QIODevice* dev);
+Err importMusicXMLfromBuffer(Score* score, const String&, const ByteArray& data);
 }
 
 #endif

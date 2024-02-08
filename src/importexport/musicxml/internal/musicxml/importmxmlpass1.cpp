@@ -968,11 +968,10 @@ static void fixupSigmap(MxmlLogger* logger, Score* score, const std::vector<Frac
  Parse MusicXML in \a device and extract pass 1 data.
  */
 
-Err MusicXMLParserPass1::parse(QIODevice* device)
+Err MusicXMLParserPass1::parse(const ByteArray& data)
 {
     m_logger->logDebugTrace(u"MusicXMLParserPass1::parse device");
     m_parts.clear();
-    ByteArray data = ByteArray::fromQByteArray(device->readAll());
     m_e.setData(data);
     auto res = parse();
     if (res != Err::NoError) {

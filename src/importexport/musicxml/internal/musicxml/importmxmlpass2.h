@@ -258,7 +258,7 @@ class MusicXMLParserPass2
 {
 public:
     MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
-    Err parse(QIODevice* device);
+    Err parse(const ByteArray& data);
     String errors() const { return m_errors; }
 
     // part specific data interface functions
