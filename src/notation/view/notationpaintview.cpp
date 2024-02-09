@@ -32,13 +32,15 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
 
 void NotationPaintView::onLoadNotation(INotationPtr notation)
 {
-    m_isLoadingNotation = true;
+    m_isLocalMatrixUpdate = true;
     setMatrix(notation->viewState()->matrix());
-    m_isLoadingNotation = false;
+    m_isLocalMatrixUpdate = false;
 
     notation->viewState()->matrixChanged().onReceive(this, [this](const Transform& matrix, NotationPaintView* sender) {
         if (sender != this) {
+            m_isLocalMatrixUpdate = true;
             setMatrix(matrix);
+            m_isLocalMatrixUpdate = false;
         }
     });
 
@@ -56,7 +58,7 @@ void NotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transf
 {
     AbstractNotationPaintView::onMatrixChanged(oldMatrix, newMatrix, overrideZoomType);
 
-    if (!m_isLoadingNotation && notation()) {
+    if (!m_isLocalMatrixUpdate && notation()) {
         notation()->viewState()->setMatrix(newMatrix, this);
 
         if (overrideZoomType) {

@@ -36,7 +36,7 @@ private:
 
     void onMatrixChanged(const draw::Transform& oldMatrix, const draw::Transform& newMatrix, bool overrideZoomType = true) override;
 
-    bool m_isLoadingNotation = false;
+    bool m_isLocalMatrixUpdate = false;
 };
 }
 
