@@ -594,7 +594,6 @@ void Segment::add(EngravingItem* el)
     case ElementType::FRET_DIAGRAM:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
-    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -781,7 +780,6 @@ void Segment::remove(EngravingItem* el)
     case ElementType::REHEARSAL_MARK:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
-    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -916,7 +914,6 @@ void Segment::sortStaves(std::vector<staff_idx_t>& dst)
         static const std::set<ElementType> allowedTypes {
             ElementType::REHEARSAL_MARK,
             ElementType::SYSTEM_TEXT,
-            ElementType::SOUND_FLAG,
             ElementType::TRIPLET_FEEL,
             ElementType::PLAYTECH_ANNOTATION,
             ElementType::CAPO,
@@ -1840,7 +1837,6 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
-    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -1988,7 +1984,6 @@ EngravingItem* Segment::prevElement(staff_idx_t activeStaff)
     case ElementType::TEMPO_TEXT:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
-    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -2380,7 +2375,6 @@ void Segment::createShape(staff_idx_t staffIdx)
                    && !e->isSymbol()
                    && !e->isFSymbol()
                    && !e->isSystemText()
-                   && !e->isSoundFlag()
                    && !e->isTripletFeel()
                    && !e->isInstrumentChange()
                    && !e->isArticulationFamily()

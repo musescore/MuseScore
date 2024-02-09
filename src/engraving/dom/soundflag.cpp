@@ -28,20 +28,9 @@
 
 using namespace mu::engraving;
 
-static const ElementStyle SOUND_FLAG_STYLE {
-    { Sid::staffTextPlacement, Pid::PLACEMENT },
-    { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
-};
-
-SoundFlag::SoundFlag(Segment* parent)
-    : TextBase(ElementType::SOUND_FLAG, parent, TextStyleType::DEFAULT, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+SoundFlag::SoundFlag(EngravingItem* parent)
+    : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
-    initElementStyle(&SOUND_FLAG_STYLE);
-
-    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
-
-    static constexpr double DEFAULT_FONT_SIZE = 8.0;
-    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 
 bool SoundFlag::isEditable() const

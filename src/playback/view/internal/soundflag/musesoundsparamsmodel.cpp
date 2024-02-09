@@ -22,6 +22,7 @@
 
 #include "musesoundsparamsmodel.h"
 
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
 
 #include "audio/audiotypes.h"
@@ -40,9 +41,18 @@ void MuseSoundsParamsModel::init()
         return;
     }
 
-    m_item = selection()->element();
-    if (!m_item) {
+    engraving::EngravingItem* selectedItem = selection()->element();
+    if (!selectedItem) {
         return;
+    }
+
+    if (selectedItem->isStaffText()) {
+        m_item = toStaffText(selectedItem)->soundFlag();
+        IF_ASSERT_FAILED(m_item) {
+            return;
+        }
+    } else if (selectedItem->isSoundFlag()) {
+        m_item = selectedItem;
     }
 
     engraving::Part* part = m_item->part();
