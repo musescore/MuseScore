@@ -267,6 +267,8 @@ typedef int (* ms_Instrument_get_id)(ms_InstrumentInfo instrument);
 typedef const char*(* ms_Instrument_get_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
+typedef const char*(* ms_Instrument_get_pack_name)(ms_InstrumentInfo);
+typedef const char*(* ms_Instrument_get_vendor_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
 typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);

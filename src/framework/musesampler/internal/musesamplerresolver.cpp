@@ -111,20 +111,27 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
         int uniqueId = m_libHandler->getInstrumentId(instrument);
         String internalName = String::fromUtf8(m_libHandler->getInstrumentName(instrument));
         String internalCategory = String::fromUtf8(m_libHandler->getInstrumentCategory(instrument));
-        String instrumentPack = String::fromUtf8(m_libHandler->getInstrumentPackage(instrument));
+        String instrumentPackName = String::fromUtf8(m_libHandler->getInstrumentPackName(instrument));
         String instrumentSoundId = String::fromUtf8(m_libHandler->getMpeSoundId(instrument));
+        String vendorName = String::fromUtf8(m_libHandler->getInstrumentVendorName(instrument));
 
         if (instrumentSoundId.empty()) {
             LOGE() << "MISSING INSTRUMENT ID for: " << internalName;
         }
 
+        if (instrumentPackName.empty()) {
+            instrumentPackName = internalCategory;
+        }
+
         AudioResourceMeta meta;
         meta.id = buildMuseInstrumentId(internalCategory, internalName, uniqueId).toStdString();
         meta.type = AudioResourceType::MuseSamplerSoundPack;
-        meta.vendor = instrumentPack.toStdString();
+        meta.vendor = "MuseSounds";
         meta.attributes = {
             { u"playbackSetupData", instrumentSoundId },
             { u"museCategory", internalCategory },
+            { u"musePack", instrumentPackName },
+            { u"museVendorName", vendorName },
             { u"museName", internalName },
             { u"museUID", String::fromStdString(std::to_string(uniqueId)) },
         };
