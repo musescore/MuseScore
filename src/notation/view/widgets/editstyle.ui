@@ -5259,7 +5259,7 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="title">
            <string>Use double barlines before key signatures</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_61">
+          <layout class="QVBoxLayout" name="verticalLayout_611">
            <item>
             <widget class="QRadioButton" name="radioKeySigCourtesyBarlineAlwaysDouble">
              <property name="text">
