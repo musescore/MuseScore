@@ -439,8 +439,12 @@ enum class Sid {
       SlurEndWidth,
       SlurMidWidth,
       SlurDottedWidth,
+      TieEndWidth,
+      TieMidWidth,
+      TieDottedWidth,
       MinTieLength,
       SlurMinDistance,
+      TieMinDistance,
 
       SectionPause,
       MusicalSymbolFont,

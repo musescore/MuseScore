@@ -1261,8 +1261,8 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
             xml.tag("line-width type=\"slur tip\"", s->styleS(Sid::SlurEndWidth) * 10);
             xml.tag("line-width type=\"staff\"", s->styleS(Sid::staffLineWidth) * 10);
             xml.tag("line-width type=\"stem\"", s->styleS(Sid::stemWidth) * 10);
-            xml.tag("line-width type=\"tie middle\"", s->styleS(Sid::SlurMidWidth) * 10);
-            xml.tag("line-width type=\"tie tip\"", s->styleS(Sid::SlurEndWidth) * 10);
+            xml.tag("line-width type=\"tie middle\"", s->styleS(Sid::TieMidWidth) * 10);
+            xml.tag("line-width type=\"tie tip\"", s->styleS(Sid::TieEndWidth) * 10);
             xml.tag("line-width type=\"tuplet bracket\"", s->styleS(Sid::tupletBracketWidth) * 10);
             xml.tag("line-width type=\"wedge\"", s->styleS(Sid::hairpinLineWidth) * 10);
             // note size values in percent

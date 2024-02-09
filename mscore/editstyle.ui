@@ -6649,233 +6649,497 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="flat">
            <bool>false</bool>
           </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="slurEndLineWidth">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+          <layout class="QGridLayout" name="gridLayout_64">
+           <item row="0" column="0" colspan="2">
+            <widget class="QGroupBox" name="groupBox_slurs">
+             <property name="title">
+              <string>Slurs</string>
              </property>
-             <property name="suffix">
-              <string>sp</string>
+             <property name="flat">
+              <bool>false</bool>
              </property>
-             <property name="singleStep">
-              <double>0.050000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_33">
-             <property name="text">
-              <string>Dotted line thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>slurDottedLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QDoubleSpinBox" name="slurDottedLineWidth">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.050000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_158">
-             <property name="text">
-              <string>Autoplace min. distance:</string>
-             </property>
-             <property name="buddy">
-              <cstring>slurMinDistance</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_30">
-             <property name="text">
-              <string>Line thickness at end:</string>
-             </property>
-             <property name="buddy">
-              <cstring>slurEndLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QDoubleSpinBox" name="minTieLength">
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="3">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="slurMidLineWidth">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="singleStep">
-              <double>0.050000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_31">
-             <property name="text">
-              <string>Line thickness middle:</string>
-             </property>
-             <property name="buddy">
-              <cstring>slurMidLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="minTieLengthLabel">
-             <property name="text">
-              <string>Minimum tie length:</string>
-             </property>
-             <property name="buddy">
-              <cstring>minTieLength</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QDoubleSpinBox" name="slurMinDistance">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="decimals">
-              <number>2</number>
-             </property>
-             <property name="minimum">
-              <double>-100.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QToolButton" name="resetSlurMinDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
+             <property name="icon" stdset="0">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="slurDottedLineWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetSlurMidLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line thickness middle' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QDoubleSpinBox" name="slurMinDistance">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="decimals">
+                 <number>2</number>
+                </property>
+                <property name="minimum">
+                 <double>-100.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.500000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_33">
+                <property name="text">
+                 <string>Dotted line thickness:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>slurDottedLineWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_30">
+                <property name="text">
+                 <string>Line thickness at end:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>slurEndLineWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QToolButton" name="resetSlurDottedLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Dotted line thickness' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="slurMidLineWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QToolButton" name="resetSlurMinDistance">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Autoplace min. distance' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="slurEndLineWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_158">
+                <property name="text">
+                 <string>Autoplace min. distance:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>slurMinDistance</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_31">
+                <property name="text">
+                 <string>Line thickness middle:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>slurMidLineWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetSlurEndLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line thickness at end' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <spacer name="verticalSpacer_36">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </widget>
            </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetSlurEndLineWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
+           <item row="0" column="2" colspan="2">
+            <widget class="QGroupBox" name="groupBox_ties_2">
+             <property name="title">
+              <string>Ties</string>
              </property>
-             <property name="accessibleName">
-              <string>Reset 'Line thickness at end' value</string>
+             <property name="flat">
+              <bool>false</bool>
              </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
+             <property name="icon" stdset="0">
               <iconset resource="musescore.qrc">
                <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
              </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
-            <widget class="QToolButton" name="resetSlurMidLineWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line thickness middle' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetSlurDottedLineWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Dotted line thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetMinTieLength">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Minimum tie length' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-             <property name="icon">
-              <iconset resource="musescore.qrc">
-               <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
-             </property>
+             <layout class="QGridLayout" name="gridLayout_65">
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="tieEndLineWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_217">
+                <property name="text">
+                 <string>Autoplace min. distance:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>tieMinDistance</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QToolButton" name="resetTieMinDistance">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Autoplace min. distance' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QToolButton" name="resetMinTieLength">
+                <property name="accessibleName">
+                 <string>Reset 'Minimum tie length' value</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_218">
+                <property name="text">
+                 <string>Line thickness at end:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>tieEndLineWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="tieMidLineWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QDoubleSpinBox" name="tieMinDistance">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="decimals">
+                 <number>2</number>
+                </property>
+                <property name="minimum">
+                 <double>-100.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.500000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QToolButton" name="resetTieDottedLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Dotted line thickness' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_219">
+                <property name="text">
+                 <string>Line thickness middle:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>tieMidLineWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QDoubleSpinBox" name="minTieLength">
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetTieMidLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line thickness middle' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <spacer name="horizontalSpacer_66">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_216">
+                <property name="text">
+                 <string>Dotted line thickness:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>tieDottedLineWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetTieEndLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line thickness at end' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+                <property name="icon">
+                 <iconset resource="musescore.qrc">
+                  <normaloff>:/data/icons/edit-reset.svg</normaloff>:/data/icons/edit-reset.svg</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_148">
+                <property name="text">
+                 <string>Minimum tie length:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QDoubleSpinBox" name="tieDottedLineWidth">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <spacer name="verticalSpacer_37">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>

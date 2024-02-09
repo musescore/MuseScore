@@ -6827,27 +6827,36 @@ void ScoreFont::load(bool system)
             }
       oo = metadataJson.value("engravingDefaults").toObject();
       static std::list<std::pair<QString, Sid>> engravingDefaultsMapping = {
-            { "staffLineThickness",            Sid::staffLineWidth },
-            { "stemThickness",                 Sid::stemWidth },
-            { "beamThickness",                 Sid::beamWidth },
-            { "beamSpacing",                   Sid::beamDistance },
-            { "legerLineThickness",            Sid::ledgerLineWidth },
-            { "legerLineExtension",            Sid::ledgerLineLength },
-            { "slurEndpointThickness",         Sid::SlurEndWidth },
-            { "slurMidpointThickness",         Sid::SlurMidWidth },
-            { "thinBarlineThickness",          Sid::barWidth },
-            { "thinBarlineThickness",          Sid::doubleBarWidth },
-            { "thickBarlineThickness",         Sid::endBarWidth },
-            { "dashedBarlineThickness",        Sid::barWidth },
+            // "arrowShaftThickness" not supported
             { "barlineSeparation",             Sid::doubleBarDistance },
             { "barlineSeparation",             Sid::endBarDistance },
-            { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
+            { "beamSpacing",                   Sid::beamDistance },
+            { "beamThickness",                 Sid::beamWidth },
             { "bracketThickness",              Sid::bracketWidth },
+            // "dashedBarlineDashLength" not supported
+            // "dashedBarlineGapLength" not supported
+            { "dashedBarlineThickness",        Sid::barWidth },
+            // "hBarThickness" not supported
             { "hairpinThickness",              Sid::hairpinLineWidth },
+            { "legerLineExtension",            Sid::ledgerLineLength },
+            { "legerLineThickness",            Sid::ledgerLineWidth },
+            { "lyricLineThickness",            Sid::lyricsLineThickness },
             { "octaveLineThickness",           Sid::ottavaLineWidth },
             { "pedalLineThickness",            Sid::pedalLineWidth },
+            { "repeatBarlineDotSeparation",    Sid::repeatBarlineDotSeparation },
             { "repeatEndingLineThickness",     Sid::voltaLineWidth },
-            { "lyricLineThickness",            Sid::lyricsLineThickness },
+            { "slurEndpointThickness",         Sid::SlurEndWidth },
+            { "slurMidpointThickness",         Sid::SlurMidWidth },
+            { "staffLineThickness",            Sid::staffLineWidth },
+            { "stemThickness",                 Sid::stemWidth },
+            // "subBracketThickness" not supported
+            // "textEnclosureThickness" not supported
+            // "textFontFamily" not supported
+            { "thickBarlineThickness",         Sid::endBarWidth },
+            { "thinBarlineThickness",          Sid::barWidth },
+            { "thinBarlineThickness",          Sid::doubleBarWidth },
+            { "tieEndpointThickness",          Sid::TieEndWidth },
+            { "tieMidpointThickness",          Sid::TieMidWidth },
             { "tupletBracketThickness",        Sid::tupletBracketWidth }
             };
       for (const auto &i : oo.keys()) {

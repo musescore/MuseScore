@@ -49,23 +49,23 @@ void TieSegment::draw(QPainter* painter) const
                   painter->setBrush(QBrush(pen.color()));
                   pen.setCapStyle(Qt::RoundCap);
                   pen.setJoinStyle(Qt::RoundJoin);
-                  pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::TieEndWidth) * mag);
                   break;
             case 1:
                   painter->setBrush(Qt::NoBrush);
                   pen.setCapStyle(Qt::RoundCap); // True dots
                   pen.setDashPattern(dotted);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::TieDottedWidth) * mag);
                   break;
             case 2:
                   painter->setBrush(Qt::NoBrush);
                   pen.setDashPattern(dashed);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::TieDottedWidth) * mag);
                   break;
             case 3:
                   painter->setBrush(Qt::NoBrush);
                   pen.setDashPattern(wideDashed);
-                  pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
+                  pen.setWidthF(score()->styleP(Sid::TieDottedWidth) * mag);
                   break;
             }
       painter->setPen(pen);
@@ -237,7 +237,7 @@ void TieSegment::computeBezier(QPointF shoulderOffset)
       QPointF bezier1(bezier1X, -shoulderH);
       QPointF bezier2(bezier2X, -shoulderH);
 
-      qreal w = score()->styleP(Sid::SlurMidWidth) - score()->styleP(Sid::SlurEndWidth);
+      qreal w = score()->styleP(Sid::TieMidWidth) - score()->styleP(Sid::TieEndWidth);
       if (staff())
             w *= staff()->mag(tie()->tick());
       QPointF tieThickness(0.0, w);

@@ -1743,10 +1743,14 @@ void MusicXMLParserPass1::setStyle(const QString& type, const double val)
             _score->style().set(Sid::tupletBracketWidth, Spatium(val / 10));
       else if (type == "wedge")
             _score->style().set(Sid::hairpinLineWidth, Spatium(val / 10));
-      else if ((type == "slur middle") || (type == "tie middle"))
+      else if (type == "slur middle")
             _score->style().set(Sid::SlurMidWidth, Spatium(val / 10));
-      else if ((type == "slur tip") || (type == "tie tip"))
+      else if (type == "tie middle")
+            _score->style().set(Sid::TieMidWidth, Spatium(val / 10));
+      else if (type == "slur tip")
             _score->style().set(Sid::SlurEndWidth, Spatium(val / 10));
+      else if (type == "tie tip")
+            _score->style().set(Sid::TieEndWidth, Spatium(val / 10));
       else if (type == "cue")
             _score->style().set(Sid::smallNoteMag, val / 100);
       else if (type == "grace")
