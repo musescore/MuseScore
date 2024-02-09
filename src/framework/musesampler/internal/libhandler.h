@@ -192,6 +192,8 @@ struct MuseSamplerLibHandler
     ms_Instrument_get_name getInstrumentName = nullptr;
     ms_Instrument_get_category getInstrumentCategory = nullptr;
     ms_Instrument_get_package getInstrumentPackage = nullptr;
+    ms_Instrument_get_pack_name getInstrumentPackName = nullptr;
+    ms_Instrument_get_vendor_name getInstrumentVendorName = nullptr;
     ms_Instrument_get_musicxml_sound getMusicXmlSoundId = nullptr;
     ms_Instrument_get_mpe_sound getMpeSoundId = nullptr;
     ms_Instrument_get_reverb_level getReverbLevel = nullptr;
@@ -314,6 +316,14 @@ public:
         getInstrumentName = (ms_Instrument_get_name)getLibFunc(m_lib, "ms_Instrument_get_name");
         getInstrumentCategory = (ms_Instrument_get_category)getLibFunc(m_lib, "ms_Instrument_get_category");
         getInstrumentPackage = (ms_Instrument_get_package)getLibFunc(m_lib, "ms_Instrument_get_package");
+        if (at_least_v_0_6) {
+            getInstrumentVendorName = (ms_Instrument_get_vendor_name)getLibFunc(m_lib, "ms_Instrument_get_vendor_name");
+            getInstrumentPackName = (ms_Instrument_get_pack_name)getLibFunc(m_lib, "ms_Instrument_get_pack_name");
+        } else {
+            getInstrumentVendorName = [](ms_InstrumentInfo) { return ""; };
+            getInstrumentPackName = [](ms_InstrumentInfo) { return ""; };
+        }
+
         getMusicXmlSoundId = (ms_Instrument_get_musicxml_sound)getLibFunc(m_lib, "ms_Instrument_get_musicxml_sound");
         getMpeSoundId = (ms_Instrument_get_mpe_sound)getLibFunc(m_lib, "ms_Instrument_get_mpe_sound");
 
@@ -524,6 +534,8 @@ public:
                && getInstrumentName
                && getInstrumentCategory
                && getInstrumentPackage
+               && getInstrumentPackName
+               && getInstrumentVendorName
                && getMusicXmlSoundId
                && getMpeSoundId
                && getPresetList

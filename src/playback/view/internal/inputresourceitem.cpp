@@ -151,35 +151,52 @@ bool InputResourceItem::hasNativeEditorSupport() const
 
 QVariantMap InputResourceItem::buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
-    String currentCategory = m_currentInputParams.resourceMeta.attributeVal(u"museCategory");
+    String currentPack = m_currentInputParams.resourceMeta.attributeVal(u"musePack");
+    String currentVendorName = m_currentInputParams.resourceMeta.attributeVal(u"museVendorName");
 
     QVariantList subItemsByType;
-
     for (const auto& pair : resourcesByVendor) {
-        std::map<String, std::vector<std::tuple<int, String, const AudioResourceMeta&> > > categoryMap;
+        std::map<String, std::map<String, std::vector<std::tuple<int, String, const AudioResourceMeta&> > > > vendorMap;
         for (const AudioResourceMeta& resourceMeta : pair.second) {
-            const String& category = resourceMeta.attributeVal(u"museCategory");
+            const String& pack = resourceMeta.attributeVal(u"musePack");
             const String& name = resourceMeta.attributeVal(u"museName");
+            const String& vendorName = resourceMeta.attributeVal(u"museVendorName");
             int unique_id = resourceMeta.attributeVal(u"museUID").toInt();
 
-            categoryMap[category].push_back({ unique_id, name, resourceMeta });
+            vendorMap[vendorName][pack].push_back({ unique_id, name, resourceMeta });
         }
-
-        for (const auto& category : categoryMap) {
-            QVariantList subItemsByCategory;
-            for (const auto& inst : category.second) {
-                QString instName = std::get<1>(inst).toQString();
-                auto instId = std::get<2>(inst).id;
-                subItemsByCategory << buildMenuItem(QString::fromStdString(instId),
+        for (const auto& vendor : vendorMap) {
+            QVariantList subItemsByVendor;
+            bool isCurrentVendor = false;
+            for (const auto& pack : vendor.second) {
+                QVariantList subItemsByPack;
+                bool isCurrentPack = false;
+                for (const auto& inst : pack.second) {
+                    QString instName = std::get<1>(inst).toQString();
+                    auto instId = std::get<2>(inst).id;
+                    bool isCurrentInstrument = m_currentInputParams.resourceMeta.id == instId;
+                    subItemsByPack << buildMenuItem(QString::fromStdString(instId),
                                                     instName,
-                                                    m_currentInputParams.resourceMeta.id == instId);
-            }
+                                                    isCurrentInstrument);
+                    isCurrentPack = isCurrentPack || isCurrentInstrument;
+                }
+                isCurrentVendor = isCurrentVendor || isCurrentPack;
 
-            QString categoryString = category.first.toQString();
-            subItemsByType << buildMenuItem(categoryString,
-                                            categoryString,
-                                            currentCategory == category.first,
-                                            subItemsByCategory);
+                QString packString = pack.first.toQString();
+                subItemsByVendor << buildMenuItem(packString,
+                                                  packString,
+                                                  isCurrentPack,
+                                                  subItemsByPack);
+            }
+            // In case we don't have a vendor name, we just add the packages to the top level
+            if (vendor.first.empty()) {
+                subItemsByType << subItemsByVendor;
+            } else {
+                subItemsByType << buildMenuItem(vendor.first.toQString(),
+                                                vendor.first.toQString(),
+                                                isCurrentVendor,
+                                                subItemsByVendor);
+            }
         }
     }
 
