@@ -7374,24 +7374,18 @@ double ExportMusicXml::getTenthsFromDots(double dots) const
 
 void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd, int offset)
       {
-      // this code was probably in place to allow chord symbols shifted *right* to export with offset
-      // since this was at once time the only way to get a chord to appear over beat 3 in an empty 4/4 measure
-      // but the value was calculated incorrectly (should be divided by spatium) and would be better off using offset anyhow
-      // since we now support placement of chord symbols over "empty" beats directly,
-      // and we don't generally export position info for other elements
-      // it's just as well to not bother doing so here
-      //double rx = h->offset().x()*10;
-      //QString relative;
-      //if (rx > 0) {
-      //      relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
-      //      }
       int rootTpc = h->rootTpc();
+      QString tagName = "harmony";
+      if (!h->isStyled(Pid::PLACEMENT))
+            tagName += QString(" placement=\"%1\"").arg(h->placement() == Placement::BELOW ? "below" : "above");
+      //if (h->hasFrame())
+            //tagName += " print-frame=\"yes\"";
+      tagName += QString(" print-frame=\"%1\"").arg(h->hasFrame() ? "yes" : "no"); // .append(relative));
+      if (!h->visible())
+            tagName += " print-object=\"no\"";
+      tagName += color2xml(h);
+      _xml.stag(tagName);
       if (rootTpc != Tpc::TPC_INVALID) {
-            QString tagName = "harmony";
-            bool frame = h->hasFrame();
-            tagName += QString(" print-frame=\"%1\"").arg(frame ? "yes" : "no"); // .append(relative));
-            tagName += color2xml(h);
-            _xml.stag(tagName);
             _xml.stag("root");
             _xml.tag("root-step", tpc2stepName(rootTpc));
             int alter = int(tpc2alter(rootTpc));
@@ -7463,7 +7457,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                   }
             else {
                   if (h->extensionName() == 0)
-                        _xml.tag("kind", "");
+                        _xml.tag("kind", "none");
                   else
                         _xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), "");
 
@@ -7484,17 +7478,12 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             if (fd)
                   fd->writeMusicXML(_xml);
 
-            _xml.etag();
             }
       else {
             //
             // export an unrecognized Chord
             // which may contain arbitrary text
             //
-            if (h->hasFrame())
-                  _xml.stag(QString("harmony print-frame=\"yes\""));     // .append(relative));
-            else
-                  _xml.stag(QString("harmony print-frame=\"no\""));      // .append(relative));
             const auto textNameEscaped = h->hTextName().toHtmlEscaped();
             switch (h->harmonyType()) {
                   case HarmonyType::NASHVILLE: {
@@ -7520,43 +7509,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
                         }
                         break;
                   }
-            _xml.etag();       // harmony
-#if 0
-            // prior to 2.0, MuseScore exported unrecognized chords as plain text
-            xml.stag("direction");
-            xml.stag("direction-type");
-            xml.tag("words", h->text());
-            xml.etag();
-            xml.etag();
-#endif
             }
-#if 0
-      // this is very old code that may never have actually been used
-      xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), extension);
-      for (int i = 0; i < h->numberOfDegrees(); i++) {
-            HDegree hd = h->degree(i);
-            HDegreeType tp = hd.type();
-            if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
-                  xml.stag("degree");
-                  xml.tag("degree-value", hd.value());
-                  xml.tag("degree-alter", hd.alter());
-                  switch (tp) {
-                        case HDegreeType::ADD:
-                              xml.tag("degree-type", "add");
-                              break;
-                        case HDegreeType::ALTER:
-                              xml.tag("degree-type", "alter");
-                              break;
-                        case HDegreeType::SUBTRACT:
-                              xml.tag("degree-type", "subtract");
-                              break;
-                        default:
-                              break;
-                        }
-                  xml.etag();
-                  }
-            }
-#endif
+      _xml.etag();       // harmony
       }
 
 }

@@ -6378,52 +6378,38 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       {
       int track = _pass1.trackForPart(partId);
 
-      // placement:
-      // in order to work correctly, this should probably be adjusted to account for spatium
-      // but in any case, we don't support import relative-x/y for other elements
-      // no reason to do so for chord symbols
-#if 0 // TODO:ws
-      double rx = 0.0;        // 0.1 * e.attribute("relative-x", "0").toDouble();
-      double ry = 0.0;        // -0.1 * e.attribute("relative-y", "0").toDouble();
 
-      double styleYOff = _score->textStyle(Tid::HARMONY).offset().y();
-      OffsetType offsetType = _score->textStyle(Tid::HARMONY).offsetType();
-      if (offsetType == OffsetType::ABS) {
-            styleYOff = styleYOff * DPMM / _score->spatium();
-            }
-
-      // TODO: check correct dy handling
-      // previous code: double dy = -0.1 * e.attribute("default-y", QString::number(styleYOff* -10)).toDouble();
-      double dy = -0.1 * _e.attributes().value("default-y").toDouble();
-#endif
-      QString placement = _e.attributes().value("placement").toString();
       qreal defaultY = 0;
       qreal relativeY = 0;
-      //bool hasTotalY = false;
+      bool hasTotalY = false;
       bool tempHasY = false;
       defaultY += _e.attributes().value("default-y").toDouble(&tempHasY) * -0.1;
-      //hasTotalY |= tempHasY;
+      hasTotalY |= tempHasY;
       relativeY += _e.attributes().value("relative-y").toDouble(&tempHasY) * -0.1;
-      //hasTotalY |= tempHasY;
+      hasTotalY |= tempHasY;
+      qreal totalY = defaultY + relativeY;
 
-      bool printObject = _e.attributes().value("print-object") != "no";
+      const QString placement = _e.attributes().value("placement").toString();
+      const bool printObject = _e.attributes().value("print-object") != "no";
       //QString printFrame = _e.attributes().value("print-frame").toString();
       //QString printStyle = _e.attributes().value("print-style").toString();
+      const QColor color { _e.attributes().value("color").toString() };
 
       QString kind, kindText, functionText, symbols, parens;
       QList<HDegree> degreeList;
 
-      /* TODO ?
-      if (harmony) {
-            qDebug("MusicXML::import: more than one harmony");
-            return;
-      }
-       */
-
       FretDiagram* fd = 0;
       Harmony* ha = new Harmony(_score);
-//TODO:ws      ha->setUserOff(QPointF(rx, ry + dy - styleYOff));
       Fraction offset;
+      if (!placement.isEmpty()) {
+            ha->setPlacement(placement == "below" ? Placement::BELOW : Placement::ABOVE);
+            ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            }
+      else if (hasTotalY) {
+            ha->setPlacement(totalY > 0 ? Placement::BELOW : Placement::ABOVE);
+            ha->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+            }
+
       while (_e.readNextStartElement()) {
             if (_e.name() == "root") {
                   QString step;
@@ -6431,7 +6417,6 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   bool invalidRoot = false;
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "root-step") {
-                              // attributes: print-style
                               step = _e.readElementText();
                               if (_e.attributes().hasAttribute("text")) {
                                     if (_e.attributes().value("text").toString() == "") {
@@ -6440,7 +6425,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                                     }
                               }
                         else if (_e.name() == "root-alter") {
-                              // attributes: print-object, print-style
+                              // attributes: print-object
                               //             location (left-right)
                               alter = _e.readElementText().toInt();
                               }
@@ -6453,17 +6438,18 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         ha->setRootTpc(step2tpc(step, AccidentalVal(alter)));
                   }
             else if (_e.name() == "function") {
-                  // attributes: print-style
+                  // deprecated in MusicXML 4.0
                   ha->setRootTpc(Tpc::TPC_INVALID);
                   ha->setBaseTpc(Tpc::TPC_INVALID);
                   functionText = _e.readElementText();
-                  // TODO: parse to decide between ROMAN and NASHVILLE
                   ha->setHarmonyType(HarmonyType::ROMAN);
                   }
+            //else if (_e.name() == "function") { // MusicXML 4.0 replacement for "function"
+            // TODO: parse to decide between ROMAN and NASHVILLE
             else if (_e.name() == "kind") {
                   // attributes: use-symbols  yes-no
                   //             text, stack-degrees, parentheses-degree, bracket-degrees,
-                  //             print-style, halign, valign
+                  //             halign, valign
                   kindText = _e.attributes().value("text").toString();
                   symbols = _e.attributes().value("use-symbols").toString();
                   parens = _e.attributes().value("parentheses-degrees").toString();
@@ -6473,7 +6459,6 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                         }
                   }
             else if (_e.name() == "inversion") {
-                  // attributes: print-style
                   skipLogCurrElem();
                   }
             else if (_e.name() == "bass") {
@@ -6481,11 +6466,10 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   int alter = 0;
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "bass-step") {
-                              // attributes: print-style
                               step = _e.readElementText();
                               }
                         else if (_e.name() == "bass-alter") {
-                              // attributes: print-object, print-style
+                              // attributes: print-object
                               //             location (left-right)
                               alter = _e.readElementText().toInt();
                               }
@@ -6562,6 +6546,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       ha->render();
 
       ha->setVisible(printObject);
+      if (color.isValid())
+            ha->setColor(color);
 
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
@@ -6579,10 +6565,6 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             se = ha;
             }
 
-      qreal totalY = defaultY + relativeY;
-      if (placement == "") {
-            placement = totalY > 0 ? "below" : "above";
-      }
       // Add element to score later, after collecting all the others and sorting by default-y
       // This allows default-y to be at least respected by the order of elements
       MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY, se, track, placement, measure, sTime + offset, false);
