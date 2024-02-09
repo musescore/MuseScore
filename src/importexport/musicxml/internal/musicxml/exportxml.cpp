@@ -3651,7 +3651,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             text = u"continue";
         }
         if (text != "") {
-            String tag = u"beam";
+            String tag = u"beam";            
             tag += String(u" number=\"%1\"").arg(i);
             if (text == u"begin") {
                 tag += beamFanAttribute(b);
@@ -3915,10 +3915,10 @@ static Fraction timeModification(const Tuplet* const tuplet, const int tremolo =
 }
 
 //---------------------------------------------------------
-//   writeTypeAndDots
+//   writeType
 //---------------------------------------------------------
 
-static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
+static void writeType(XmlWriter& xml, const Note* const note)
 {
     int dots = 0;
     const auto ratio = timeModification(note->chord()->tuplet());
@@ -3937,9 +3937,6 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
         xml.tag("type", { { "size", "grace-cue" } }, s);
     } else {
         xml.tag("type", s);
-    }
-    for (int ni = dots; ni > 0; ni--) {
-        xml.tag("dot");
     }
 }
 
@@ -4148,7 +4145,13 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
         m_xml.tag("voice", static_cast<int>(voice));
 
-        writeTypeAndDots(m_xml, note);
+        writeType(m_xml, note);
+        for (NoteDot* dot : note->dots()) {
+            String dotTag = u"dot";
+            dotTag += color2xml(dot);
+            dotTag += elementPosition(this, dot);
+            m_xml.tagRaw(dotTag);
+        }
         writeAccidental(m_xml, u"accidental", note->accidental());
         writeTimeModification(m_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
@@ -4348,14 +4351,16 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
     // do not output a "type" element for whole measure rest
     if (d.type() != DurationType::V_MEASURE) {
         AsciiStringView s = TConv::toXml(d.type());
-        int dots  = rest->dots();
         if (rest->isSmall()) {
             m_xml.tag("type", { { "size", "cue" } }, s);
         } else {
             m_xml.tag("type", s);
         }
-        for (int i = dots; i > 0; i--) {
-            m_xml.tag("dot");
+        for (NoteDot* dot : rest->dotList()) {
+            String dotTag = u"dot";
+            dotTag += color2xml(dot);
+            dotTag += elementPosition(this, dot);
+            m_xml.tagRaw(dotTag);
         }
     }
 
