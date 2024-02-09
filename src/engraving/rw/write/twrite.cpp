@@ -2651,6 +2651,11 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
         int swingRatio = item->swingParameters().swingRatio;
         xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
     }
+
+    if (const SoundFlag* flag = item->soundFlag()) {
+        writeItem(flag, xml, ctx);
+    }
+
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 
     xml.endElement();
@@ -2855,7 +2860,7 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
     write(static_cast<const StaffTextBase*>(item), xml, ctx);
 }
 
-void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(item);
 
@@ -2875,7 +2880,6 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext& ctx)
         xml.endElement();
     }
 
-    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
@@ -3244,7 +3248,6 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     ElementType et = e1->type();
                     if ((et == ElementType::REHEARSAL_MARK)
                         || (et == ElementType::SYSTEM_TEXT)
-                        || (et == ElementType::SOUND_FLAG)
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::CAPO)

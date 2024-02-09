@@ -1462,23 +1462,9 @@ void SingleLayout::layout(SystemText* item, const Context& ctx)
 
 void SingleLayout::layout(SoundFlag* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx, item->mutldata());
-
-    SoundFlag::LayoutData* ldata = item->mutldata();
-    RectF bbox = ldata->bbox();
-
-    // <icon><space><text>
-    double iconWidth = draw::FontMetrics::boundingRect(item->iconFont(), String(item->iconCode())).width();
-    double xMove = iconWidth + iconWidth / 2;
-    bbox.setWidth(xMove + bbox.width());
-    ldata->setBbox(bbox);
-
-    for (TextBlock& block : item->mutldata()->blocks) {
-        auto& fragments = block.fragments();
-        for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
-            it->pos.setX(it->pos.x() + xMove);
-        }
-    }
+    UNUSED(item);
+    UNUSED(ctx);
+    NOT_IMPLEMENTED;
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)

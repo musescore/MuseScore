@@ -26,6 +26,7 @@
 
 #include "segment.h"
 #include "staff.h"
+#include "soundflag.h"
 
 #include "log.h"
 
@@ -106,5 +107,38 @@ Segment* StaffTextBase::segment() const
     }
     Segment* s = toSegment(explicitParent());
     return s;
+}
+
+bool StaffTextBase::hasSoundFlag() const
+{
+    return m_soundFlag != nullptr;
+}
+
+SoundFlag* StaffTextBase::soundFlag() const
+{
+    return m_soundFlag;
+}
+
+void StaffTextBase::setSoundFlag(SoundFlag* flag)
+{
+    if (m_soundFlag == flag) {
+        return;
+    }
+
+    m_soundFlag = flag;
+
+    if (m_soundFlag) {
+        m_soundFlag->setParent(this);
+        m_soundFlag->setTrack(track());
+    }
+}
+
+void StaffTextBase::setTrack(track_idx_t idx)
+{
+    TextBase::setTrack(idx);
+
+    if (m_soundFlag) {
+        m_soundFlag->setTrack(idx);
+    }
 }
 }

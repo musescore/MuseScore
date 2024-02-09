@@ -27,6 +27,7 @@
 #include "staff.h"
 
 namespace mu::engraving {
+class SoundFlag;
 //---------------------------------------------------------
 //   ChannelActions
 //---------------------------------------------------------
@@ -73,6 +74,12 @@ public:
     bool swing() const { return m_swing; }
     int capo() const { return m_capo; }
 
+    bool hasSoundFlag() const;
+    SoundFlag* soundFlag() const;
+    void setSoundFlag(SoundFlag* flag);
+
+    void setTrack(track_idx_t idx) override;
+
 private:
 
     String m_channelNames[4];
@@ -82,6 +89,7 @@ private:
     int m_aeolusStops[4] { 0, 0, 0, 0 };
     bool m_swing = false;
     int m_capo = 0;
+    SoundFlag* m_soundFlag = nullptr;
 };
 } // namespace mu::engraving
 #endif
