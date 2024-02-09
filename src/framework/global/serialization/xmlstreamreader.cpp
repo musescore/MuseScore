@@ -73,42 +73,6 @@ XmlStreamReader::~XmlStreamReader()
     delete m_xml;
 }
 
-XmlStreamReader::Encoding XmlStreamReader::encoding(const ByteArray& data) const
-{
-    constexpr unsigned char u8Bom[] = { 239, 187, 191 };
-    constexpr unsigned char u16BEBom[] = { 254, 255 };
-    constexpr unsigned char u16LEBom[] = { 255, 254 };
-
-    // check Bom
-    if (std::memcmp(data.constChar(), u8Bom, 3) == 0) {
-        return Encoding::UTF_8;
-    }
-
-    if (std::memcmp(data.constChar(), u16LEBom, 2) == 0) {
-        return Encoding::UTF_16LE;
-    }
-
-    if (std::memcmp(data.constChar(), u16BEBom, 2) == 0) {
-        return Encoding::UTF_16BE;
-    }
-
-    // check content
-    const uint8_t* d = data.constData();
-    if (d[0] != 0 && d[1] != 0) {
-        return Encoding::UTF_8;
-    }
-
-    if (d[0] != 0 && d[1] == 0) {
-        return Encoding::UTF_16LE;
-    }
-
-    if (d[0] == 0 && d[1] != 0) {
-        return Encoding::UTF_16BE;
-    }
-
-    return Encoding::Unknown;
-}
-
 void XmlStreamReader::setData(const ByteArray& data_)
 {
     if (data_.size() < 4) {
@@ -116,20 +80,20 @@ void XmlStreamReader::setData(const ByteArray& data_)
         return;
     }
 
-    Encoding enc = encoding(data_);
-    if (enc == Encoding::Unknown) {
+    UtfCodec::Encoding enc = UtfCodec::xmlEncoding(data_);
+    if (enc == UtfCodec::Encoding::Unknown) {
         LOGE() << "unknown encoding";
         return;
     }
 
-    if (enc == Encoding::UTF_16BE) {
+    if (enc == UtfCodec::Encoding::UTF_16BE) {
         LOGE() << "unsupported encoding UTF-16BE";
         return;
     }
 
     ByteArray data = data_; // no copy, implicit sharing
-    if (enc == Encoding::UTF_16LE) {
-        String u16 = String::fromUtf16(data_);
+    if (enc == UtfCodec::Encoding::UTF_16LE) {
+        String u16 = String::fromUtf16LE(data_);
         data = u16.toUtf8();
     }
 
