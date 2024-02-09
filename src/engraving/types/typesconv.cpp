@@ -2586,7 +2586,7 @@ LyricsSyllabic TConv::fromXml(const AsciiStringView& tag, LyricsSyllabic def)
     return findTypeByXmlTag<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, tag, def);
 }
 
-const std::array<const TranslatableString>, 17> KEY_NAMES = { {
+const std::array<const TranslatableString, 17> KEY_NAMES = { {
     TranslatableString("engraving", "C♭ major, A♭ minor"),
     TranslatableString("engraving", "G♭ major, E♭ minor"),
     TranslatableString("engraving", "D♭ major, B♭ minor"),
@@ -2620,5 +2620,5 @@ const TranslatableString& TConv::userName(Key v, bool isAtonal, bool isCustom)
 
 String TConv::translatedUserName(Key v, bool isAtonal, bool isCustom)
 {
-    return mtrc("engraving", userName(v, isAtonal, isCustom));
+    return userName(v, isAtonal, isCustom).translated();
 }
