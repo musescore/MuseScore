@@ -692,13 +692,9 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
     }
 
     Note* prevTied = nullptr;
-    Chord* firstChord = nullptr;
     std::vector<EngravingItem*> notesToSelect;
     for (Note* on : tmpnl) {
         Chord* chord = on->chord();
-        if (!firstChord) {
-            firstChord = chord;
-        }
         int valTmp = val < 0 ? val + 1 : val - 1;
 
         int npitch;
@@ -784,10 +780,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         }
 
         setPlayNote(true);
-        if (shouldSelectFirstNote && firstChord && !firstChord->notes().empty()) {
-            Note* noteToSelect = firstChord->notes()[firstChord->notes().size() - 1];
-            select(noteToSelect, SelectType::SINGLE, 0);
-        } else if (selIsList && note) {
+        if (note && selIsList) {
             notesToSelect.push_back(dynamic_cast<EngravingItem*>(note));
         }
     }
@@ -795,7 +788,11 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         m_is.setAccidentalType(AccidentalType::NONE);
     }
     if (!notesToSelect.empty()) {
-        select(notesToSelect, SelectType::ADD, 0);
+        if (shouldSelectFirstNote) {
+            select(notesToSelect.front(), SelectType::SINGLE, 0);
+        } else {
+            select(notesToSelect, SelectType::ADD, 0);
+        }
     }
     if (m_is.cr() == toChordRest(_nl[0]->chord()) && selIsSingle) {
         m_is.moveToNextInputPos();
