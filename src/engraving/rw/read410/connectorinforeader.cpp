@@ -260,15 +260,15 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
             spanner->setStartElement(item);
             if (pasteMode) {
                 item->score()->undoAddElement(spanner);
-                for (EngravingObject* ee : spanner->linkList()) {
-                    if (ee == spanner) {
+                for (EngravingObject* linkedSpanner : spanner->linkList()) {
+                    if (linkedSpanner == spanner) {
                         continue;
                     }
-                    Spanner* ls = toSpanner(ee);
+                    Spanner* ls = toSpanner(linkedSpanner);
                     ls->setTick(spanner->tick());
-                    for (EngravingObject* eee : item->linkList()) {
-                        ChordRest* cr = toChordRest(eee);
-                        if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
+                    for (EngravingObject* linkedCR : item->linkList()) {
+                        ChordRest* cr = toChordRest(linkedCR);
+                        if (cr->score() == linkedSpanner->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack(cr->track());
                             if (ls->isSlur()) {
                                 ls->setStartElement(cr);
@@ -285,15 +285,15 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
             spanner->setTick2(item->tick());
             spanner->setEndElement(item);
             if (pasteMode) {
-                for (EngravingObject* ee : spanner->linkList()) {
-                    if (ee == spanner) {
+                for (EngravingObject* linkedSpanner : spanner->linkList()) {
+                    if (linkedSpanner == spanner) {
                         continue;
                     }
-                    Spanner* ls = static_cast<Spanner*>(ee);
+                    Spanner* ls = static_cast<Spanner*>(linkedSpanner);
                     ls->setTick2(spanner->tick2());
-                    for (EngravingObject* eee : item->linkList()) {
-                        ChordRest* cr = toChordRest(eee);
-                        if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
+                    for (EngravingObject* linkedCR : item->linkList()) {
+                        ChordRest* cr = toChordRest(linkedCR);
+                        if (cr->score() == linkedSpanner->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack2(cr->track());
                             if (ls->type() == ElementType::SLUR) {
                                 ls->setEndElement(cr);
