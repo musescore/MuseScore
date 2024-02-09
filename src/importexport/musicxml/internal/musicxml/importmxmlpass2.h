@@ -230,6 +230,7 @@ private:
     void technical();
     void tied();
     void tuplet();
+    void otherNotation();
     XmlStreamReader& m_e;
     const Score* m_score = nullptr;                         // the score
     MxmlLogger* m_logger = nullptr;                              // the error logger

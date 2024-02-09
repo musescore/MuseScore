@@ -6957,6 +6957,8 @@ void MusicXMLParserNotations::parse()
             tied();
         } else if (m_e.name() == "tuplet") {
             tuplet();
+        } else if (m_e.name() == "other-notation") {
+            otherNotation();
         } else {
             skipLogCurrElem();
         }
@@ -7165,6 +7167,20 @@ void MusicXMLParserNotations::tuplet()
         // ignore
     } else {
         m_logger->logError(String(u"unknown tuplet placement: %1").arg(tupletPlacement), &m_e);
+    }
+}
+
+void MusicXMLParserNotations::otherNotation()
+{
+    const String type = m_e.attribute("type");
+    const String smufl = m_e.attribute("smufl");
+
+    if (!smufl.empty()) {
+        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                             m_e.attributes(), u"notations", id);
+        m_notations.push_back(notation);
+        m_e.skipCurrentElement();
     }
 }
 
