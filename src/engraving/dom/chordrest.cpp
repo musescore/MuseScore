@@ -294,7 +294,6 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::CAPO:
     case ElementType::STRING_TUNINGS:
     case ElementType::STICKING:
-    case ElementType::SOUND_FLAG:
     case ElementType::STAFF_STATE:
     case ElementType::HARP_DIAGRAM:
     // fall through

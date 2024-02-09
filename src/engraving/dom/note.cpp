@@ -1688,7 +1688,6 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::TIMESIG)
            || (type == ElementType::BAR_LINE)
            || (type == ElementType::STAFF_TEXT)
-           || (type == ElementType::SOUND_FLAG)
            || (type == ElementType::PLAYTECH_ANNOTATION)
            || (type == ElementType::CAPO)
            || (type == ElementType::SYSTEM_TEXT)

@@ -23,7 +23,7 @@
 #include "soundflagsettingsmodel.h"
 
 #include "engraving/types/types.h"
-#include "engraving/dom/soundflag.h"
+#include "engraving/dom/stafftext.h"
 
 #include "audio/audioutils.h"
 
@@ -47,7 +47,11 @@ void SoundFlagSettingsModel::init()
 
     AbstractElementPopupModel::init();
 
-    IF_ASSERT_FAILED(m_item || m_item->isSoundFlag()) {
+    IF_ASSERT_FAILED(m_item && m_item->isStaffText()) {
+        return;
+    }
+
+    IF_ASSERT_FAILED(toStaffText(m_item)->hasSoundFlag()) {
         return;
     }
 

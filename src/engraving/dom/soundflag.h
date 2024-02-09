@@ -23,19 +23,19 @@
 #ifndef MU_ENGRAVING_SOUNDFLAG_H
 #define MU_ENGRAVING_SOUNDFLAG_H
 
-#include "textbase.h"
+#include "engravingitem.h"
 
 #include "global/types/val.h"
 #include "draw/types/font.h"
 
 namespace mu::engraving {
-class SoundFlag final : public TextBase
+class SoundFlag final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, SoundFlag)
     DECLARE_CLASSOF(ElementType::SOUND_FLAG)
 
 public:
-    SoundFlag(Segment* parent = nullptr);
+    SoundFlag(EngravingItem* parent = nullptr);
 
     SoundFlag* clone() const override;
     bool isEditable() const override;

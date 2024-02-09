@@ -2840,29 +2840,9 @@ void TDraw::draw(const SystemText* item, Painter* painter)
 void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
-    const SoundFlag::LayoutData* ldata = item->ldata();
-
-    if (item->selected() || item->score()->showSoundFlags()) {
-        RectF bbox = ldata->bbox();
-        RectF iconBBox = ldata->iconBBox;
-        iconBBox.moveCenter(bbox.center());
-        iconBBox.setX(bbox.x());
-
-        painter->setNoPen();
-        painter->setBrush(item->iconBackgroundColor());
-        painter->drawEllipse(iconBBox);
-
-        mu::draw::Font f(item->iconFont());
-        f.setPointSizeF(item->font().pointSizeF() * MScore::pixelRatio);
-        painter->setFont(f);
-        painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
-        painter->drawText(iconBBox, draw::AlignCenter, Char(item->iconCode()));
-    }
-
-    if (item->isTextVisible()) {
-        drawTextBase(item, painter);
-    }
+    UNUSED(item);
+    UNUSED(painter);
+    NOT_IMPLEMENTED;
 }
 
 void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
