@@ -2571,8 +2571,12 @@ static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
 void MusicXMLParserPass2::measure(const QString& partId,
                                   const Fraction time)
       {
-      bool isNumericMeasureNumber; // "measure numbers" don't have to be actual numbers in MusicXML
-      int parsedMeasureNumber = _e.attributes().value("number").toInt(&isNumericMeasureNumber);
+      // "measure numbers" don't have to be actual numbers in MusicXML
+      bool isNumericMeasureNumber = false;
+      int parsedMeasureNumber = 0;
+      QStringRef numberA = _e.attributes().value("number");
+      if (!numberA.isEmpty() && numberA.at(0).toLatin1() != 'X')
+            parsedMeasureNumber = numberA.toInt(&isNumericMeasureNumber);
 
       //qDebug("measure %d start", parsedMeasureNumber);
 
