@@ -442,6 +442,9 @@
             </Spanner>
           <Chord>
             <durationType>quarter</durationType>
+            <Stem>
+              <color r="255" g="64" b="255" a="255"/>
+              </Stem>
             <StemDirection>down</StemDirection>
             <Note>
               <pitch>67</pitch>
@@ -543,17 +546,24 @@
               </next>
             </Spanner>
           <Chord>
+            <dots>2</dots>
             <durationType>half</durationType>
             <Note>
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
+              <NoteDot>
+                <color r="0" g="249" b="0" a="255"/>
+                </NoteDot>
+              <NoteDot>
+                <color r="0" g="253" b="255" a="255"/>
+                </NoteDot>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
-            <durationType>half</durationType>
+            <durationType>eighth</durationType>
             <StemDirection>up</StemDirection>
             <Note>
               <pitch>72</pitch>
