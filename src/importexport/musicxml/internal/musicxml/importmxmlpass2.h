@@ -233,6 +233,7 @@ private:
     void technical();
     void tied();
     void tuplet();
+    void otherNotation();
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
     MxmlLogger* _logger;                              // the error logger
