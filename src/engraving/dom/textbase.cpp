@@ -872,15 +872,28 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
-            || t->isStringTunings()) {
+            || t->textStyleType() == TextStyleType::TUPLET || t->textStyleType() == TextStyleType::PEDAL || t->isStringTunings()) {
             std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::MusicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;
-            if (t->isDynamic()) {
-                m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
-                if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                    std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
-                    family = String::fromStdString(fontName2);
+            if (!t->isStringTunings()) {
+                m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+                if (t->isDynamic()) {
+                    m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
+                    if (t->style().styleB(Sid::dynamicsOverrideFont)) {
+                        std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                        family = String::fromStdString(fontName2);
+                    }
+                } else {
+                    for (const auto& a : *textStyle(t->textStyleType())) {
+                        if (a.type == TextStylePropertyType::MusicalSymbolsScale) {
+                            m *= t->style().styleD(a.sid);
+                            if (t->sizeIsSpatiumDependent()) {
+                                m *= spatiumScaling;
+                            }
+                            break;
+                        }
+                    }
                 }
             }
             // We use a default font size of 10pt for historical reasons,
