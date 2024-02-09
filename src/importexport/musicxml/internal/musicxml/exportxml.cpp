@@ -3651,10 +3651,11 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             text = "continue";
         }
         if (text != "") {
-            String tag = u"beam";            
+            String tag = u"beam";
             tag += String(u" number=\"%1\"").arg(i);
             if (text == u"begin") {
                 tag += beamFanAttribute(b);
+                tag += color2xml(b);
             }
             xml.tagRaw(tag, text);
         }
