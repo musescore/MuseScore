@@ -34,6 +34,10 @@
 
 using namespace mu;
 
+constexpr unsigned char U8_BOM[] = { 239, 187, 191 };
+constexpr unsigned char U16LE_BOM[] = { 255, 254 };
+constexpr unsigned char U16BE_BOM[] = { 254, 255 };
+
 // Helpers
 
 static long int toInt_helper(const char* str, bool* ok, int base)
@@ -186,6 +190,45 @@ char16_t Char::toUpper(char16_t ch)
 // ============================
 // UtfCodec
 // ============================
+UtfCodec::Encoding UtfCodec::xmlEncoding(const ByteArray& data)
+{
+    if (data.size() < 3) {
+        return Encoding::Unknown;
+    }
+
+    // Check Bom
+    if (std::memcmp(data.constChar(), U8_BOM, 3) == 0) {
+        return Encoding::UTF_8;
+    }
+
+    if (std::memcmp(data.constChar(), U16LE_BOM, 2) == 0) {
+        return Encoding::UTF_16LE;
+    }
+
+    if (std::memcmp(data.constChar(), U16BE_BOM, 2) == 0) {
+        return Encoding::UTF_16BE;
+    }
+
+    // Check content
+    //! NOTE For XML we know that the content starts with an ascii character '<',
+    //! it takes up 8 bits, so the remaining bits will be zero if the encoding is greater than UTF-8
+    //! (for other content type this may not be true)
+    const uint8_t* d = data.constData();
+    if (d[0] != 0 && d[1] != 0) {
+        return Encoding::UTF_8;
+    }
+
+    if (d[0] != 0 && d[1] == 0) {
+        return Encoding::UTF_16LE;
+    }
+
+    if (d[0] == 0 && d[1] != 0) {
+        return Encoding::UTF_16BE;
+    }
+
+    return Encoding::Unknown;
+}
+
 void UtfCodec::utf8to16(std::string_view src, std::u16string& dst)
 {
     try {
@@ -431,7 +474,7 @@ String& String::prepend(const String& s)
     return *this;
 }
 
-String String::fromUtf16(const ByteArray& data)
+String String::fromUtf16LE(const ByteArray& data)
 {
     //make sure len is divisible by 2
     size_t len = data.size();
@@ -439,12 +482,21 @@ String String::fromUtf16(const ByteArray& data)
         len--;
     }
 
+    if (len < 2) {
+        return String();
+    }
+
     String u16;
     u16.reserve(len / 2);
     String::Mutator mut = u16.mutStr();
 
     const uint8_t* d = data.constData();
-    for (size_t i = 0; i < len;) {
+    size_t start = 0;
+    if (std::memcmp(d, U16LE_BOM, 2) == 0) {
+        start += 2;
+    }
+
+    for (size_t i = start; i < len;) {
         //little-endian
         int lo = d[i++] & 0xFF;
         int hi = d[i++] & 0xFF;

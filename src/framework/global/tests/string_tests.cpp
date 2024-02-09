@@ -929,3 +929,90 @@ TEST_F(Global_Types_StringTests, String_Remove)
     //! CHECK
     EXPECT_EQ(s, "13abc");
 }
+
+TEST_F(Global_Types_StringTests, UtfCodec_Encoding)
+{
+    {
+        //! GIVEN UTF-8 data with BOM
+        const uint8_t data[] = { 239, 187, 191, '<', ' ', 'x', 'm', 'l' };
+        ByteArray ba(&data[0], 8);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_8);
+    }
+    {
+        //! GIVEN UTF-8 data no BOM
+        const uint8_t data[] = { '<', ' ', 'x', 'm', 'l' };
+        ByteArray ba(&data[0], 5);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_8);
+    }
+
+    {
+        //! GIVEN UTF-16 LE data with BOM
+        const uint8_t data[] = { 255, 254, '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 12);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16LE);
+    }
+
+    {
+        //! GIVEN UTF-16 LE data no BOM
+        const uint8_t data[] = { '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 10);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16LE);
+    }
+
+    {
+        //! GIVEN UTF-16 BE data with BOM
+        const uint8_t data[] = { 254, 255, '\0', '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l' };
+        ByteArray ba(&data[0], 12);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16BE);
+    }
+
+    {
+        //! GIVEN UTF-16 BE data no BOM
+        const uint8_t data[] = { '\0', '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l' };
+        ByteArray ba(&data[0], 10);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16BE);
+    }
+
+    //! NOTE At the moment others not implemented
+}
+
+TEST_F(Global_Types_StringTests, String_FromUtf16LE)
+{
+    {
+        //! GIVEN UTF-16 LE data no BOM
+        const uint8_t data[] = { '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 10);
+        //! DO
+        String str = String::fromUtf16LE(ba);
+        //! CHECK
+        EXPECT_EQ(str, u"< xml");
+    }
+
+    {
+        //! GIVEN UTF-16 LE data with BOM
+        const uint8_t data[] = { 255, 254, '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 12);
+        //! DO
+        String str = String::fromUtf16LE(ba);
+        //! CHECK
+        EXPECT_EQ(str, u"< xml");
+    }
+}

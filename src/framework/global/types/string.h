@@ -177,6 +177,15 @@ private:
 class UtfCodec
 {
 public:
+    enum class Encoding {
+        Unknown,
+        UTF_8,
+        UTF_16LE,
+        UTF_16BE,
+    };
+
+    static Encoding xmlEncoding(const ByteArray& data);
+
     static void utf8to16(std::string_view src, std::u16string& dst);
     static void utf16to8(std::u16string_view src, std::string& dst);
     static void utf8to32(std::string_view src, std::u32string& dst);
@@ -245,7 +254,7 @@ public:
     String& prepend(Char ch);
     String& prepend(const String& s);
 
-    static String fromUtf16(const ByteArray& data);
+    static String fromUtf16LE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
     ByteArray toUtf8() const;
