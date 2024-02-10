@@ -396,7 +396,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         // but the allocation of space needs to be performed here
         Tie* tie;
         tie = note->tieBack();
-        if (tie) {
+        if (tie && tie->addToSkyline()) {
             tie->calculateDirection();
             double overlap = 0.0;                // how much tie can overlap start and end notes
             bool shortStart = false;            // whether tie should clear start note or not

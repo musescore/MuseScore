@@ -181,6 +181,9 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
                     continue;
                 }
                 const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
+                if (!attachedLine->addToSkyline()) {
+                    continue;
+                }
                 double minLength = 0.0;
                 if (attachedLine->isTie()) {
                     minLength = f->style().styleMM(Sid::MinTieLength);
@@ -408,8 +411,11 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
         return;
     }
 
-    // Allocate space for minTieLenght and minGlissandoLength
+    // Allocate space for minTieLength, minGlissandoLength & minBendLength
     for (LineAttachPoint laPoint1 : note->lineAttachPoints()) {
+        if (!laPoint1.line()->addToSkyline()) {
+            continue;
+        }
         for (LineAttachPoint laPoint2 : note2->lineAttachPoints()) {
             if (laPoint1.line() != laPoint2.line()) {
                 continue;
