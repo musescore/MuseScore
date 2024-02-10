@@ -751,32 +751,37 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
 
 static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
 {
-    if (!e1->selectable())
+    if (!e1->selectable()) {
         return false;
-    if (!e2->selectable())
+    }
+    if (!e2->selectable()) {
         return true;
-    if (e1->isNote() && e2->isStem())
+    }
+    if (e1->isNote() && e2->isStem()) {
         return true;
-    if (e2->isNote() && e1->isStem())
+    }
+    if (e2->isNote() && e1->isStem()) {
         return false;
+    }
     if (e1->z() == e2->z()) {
         // same stacking order, prefer non-hidden elements
         if (e1->type() == e2->type()) {
             if (e1->type() == ElementType::NOTEDOT) {
                 const NoteDot* n1 = static_cast<const NoteDot*>(e1);
                 const NoteDot* n2 = static_cast<const NoteDot*>(e2);
-                if (n1->note() && n1->note()->hidden())
+                if (n1->note() && n1->note()->hidden()) {
                     return false;
-                else if (n2->note() && n2->note()->hidden())
+                } else if (n2->note() && n2->note()->hidden()) {
                     return true;
-            }
-            else if (e1->type() == ElementType::NOTE) {
+                }
+            } else if (e1->type() == ElementType::NOTE) {
                 const Note* n1 = static_cast<const Note*>(e1);
                 const Note* n2 = static_cast<const Note*>(e2);
-                if (n1->hidden())
+                if (n1->hidden()) {
                     return false;
-                else if (n2->hidden())
+                } else if (n2->hidden()) {
                     return true;
+                }
             }
         }
         // different types, or same type but nothing hidden - use track
@@ -787,7 +792,7 @@ static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
     return e1->z() <= e2->z();
 }
 
-std::vector<EngravingItem *> NotationInteraction::elementsNear(const mu::PointF& pos) const
+std::vector<EngravingItem*> NotationInteraction::elementsNear(const mu::PointF& pos) const
 {
     std::vector<EngravingItem*> ll;
     Page* page = point2page(pos);
@@ -886,8 +891,7 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
             if (elements.front()->selected()) {
                 score()->deselect(elements.front());
                 return;
-            }
-            else {
+            } else {
                 score()->select(elements.front(), type, staffIndex);
                 return;
             }
@@ -904,11 +908,10 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
         for (size_t i = 0; i <= ll.size(); ++i) {
             if (found) {
                 e = ll[currTop];
-                if (!e->isMeasure()){
+                if (!e->isMeasure()) {
                     break;
                 }
-            }
-            else if (ll[currTop]->selected()) {
+            } else if (ll[currTop]->selected()) {
                 found = true;
                 score()->deselect(ll[currTop]);
                 e = nullptr;
