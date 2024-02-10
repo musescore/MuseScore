@@ -4648,7 +4648,7 @@ void Score::cmdAddPitch(int step, bool addFlag, bool insert)
             Chord* chord  = selectedNote->chord();
             Segment* seg  = chord->segment();
             pos.segment   = seg;
-            pos.staffIdx  = selectedNote->track() / VOICES;
+            pos.staffIdx  = chord->vStaffIdx();
             ClefType clef = staff(pos.staffIdx)->clef(seg->tick());
             pos.line      = relStep(step, clef);
             bool error;
