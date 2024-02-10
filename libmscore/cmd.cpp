@@ -559,12 +559,9 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
 
 
       Note* prevTied = nullptr;
-      Chord* firstChord = nullptr;
       std::vector<Element*> notesToSelect;
       for (Note* on : tmpnl) {
             Chord* chord = on->chord();
-            if (!firstChord)
-                  firstChord = chord;
             int valTmp = val < 0 ? val+1 : val-1;
 
             int npitch;
@@ -653,18 +650,18 @@ void Score::cmdAddInterval(int val, const std::vector<Note*>& nl)
 
             setPlayNote(true);
 
-            if (shouldSelectFirstNote && firstChord && !firstChord->notes().empty()) {
-                Note* noteToSelect = firstChord->notes()[firstChord->notes().size() - 1];
-                select(noteToSelect, SelectType::SINGLE, 0);
-                  }
-            else if (selIsList && note)
-                      notesToSelect.push_back(dynamic_cast<Element*>(note));
+            if (selIsList && note)
+                  notesToSelect.push_back(dynamic_cast<Element*>(note));
             }
       if (_is.noteEntryMode())
             _is.setAccidentalType(AccidentalType::NONE);
       if (!notesToSelect.empty()) {
-            for (Element* noteToSelect : notesToSelect)
-                  select(noteToSelect, SelectType::ADD, 0);
+            for (Element* noteToSelect : notesToSelect) {
+                  if (shouldSelectFirstNote)
+                      select(notesToSelect.front(), SelectType::SINGLE, 0);
+                  else
+                      select(noteToSelect, SelectType::ADD, 0);
+                  }
             }
       if (_is.cr() == toChordRest(_nl[0]->chord()) && selIsSingle)
             _is.moveToNextInputPos();
