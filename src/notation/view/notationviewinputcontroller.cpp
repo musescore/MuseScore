@@ -637,6 +637,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         } else if (keyState & Qt::ControlModifier) {
             selectType = SelectType::ADD;
         }
+        viewInteraction()->setLogicClickPos(ctx.logicClickPos);
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
     }
 

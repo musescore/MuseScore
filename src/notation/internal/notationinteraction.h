@@ -291,6 +291,8 @@ public:
 
     void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;
 
+    void setLogicClickPos(const muse::PointF& logicPos) override;
+
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
@@ -306,7 +308,7 @@ private:
     void doEndDrag();
 
     bool doDropStandard();
-    bool doDropTextBaseAndSymbols(const PointF& pos, bool applyUserOffset);
+    bool doDropTextBaseAndSymbols(const muse::PointF& pos, bool applyUserOffset);
 
     void onElementDestroyed(EngravingItem* element);
 
@@ -342,6 +344,8 @@ private:
     std::vector<EngravingItem*> hitElements(const muse::PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const muse::PointF& p) const;
     EngravingItem* elementAt(const muse::PointF& p) const;
+
+    std::vector<EngravingItem*> elementsNear(const muse::PointF& pos) const;
 
     // Sorting using this function will place the elements that are the most
     // interesting to be selected at the end of the list
@@ -450,6 +454,8 @@ private:
     HitElementContext m_hitElementContext;
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
+
+    muse::PointF m_logicClickPos;
 };
 }
 

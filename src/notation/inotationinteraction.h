@@ -294,6 +294,8 @@ public:
     virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;
 
     virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;
+
+    virtual void setLogicClickPos(const muse::PointF& logicPos) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
