@@ -289,6 +289,8 @@ public:
 
     void setGetViewRectFunc(const std::function<RectF()>& func) override;
 
+    void setLogicClickPos(const PointF& logicPos) override;
+
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
@@ -337,6 +339,8 @@ private:
     std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const PointF& p) const;
     EngravingItem* elementAt(const PointF& p) const;
+
+    std::vector<EngravingItem*> elementsNear(const mu::PointF& pos) const;
 
     // Sorting using this function will place the elements that are the most
     // interesting to be selected at the end of the list
@@ -440,6 +444,8 @@ private:
     HitElementContext m_hitElementContext;
 
     async::Channel<ShowItemRequest> m_showItemRequested;
+
+    PointF m_logicClickPos;
 };
 }
 

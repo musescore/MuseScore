@@ -247,6 +247,8 @@ public:
     MOCK_METHOD(async::Channel<ShowItemRequest>, showItemRequested, (), (const, override));
 
     MOCK_METHOD(void, setGetViewRectFunc, (const std::function<RectF()>&), (override));
+
+    MOCK_METHOD(void, setLogicClickPos, (const PointF&), (override));
 };
 }
 
