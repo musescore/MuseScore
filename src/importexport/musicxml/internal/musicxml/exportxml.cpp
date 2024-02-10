@@ -4159,9 +4159,9 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         // no stem for whole notes and beyond
         if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())) {
             m_xml.tag("stem", "none");
-        } else if (note->chord()->stem()) {
+        } else if (const Stem* stem = note->chord()->stem()) {
             String stemTag = u"stem";
-            stemTag += color2xml(toStem(note->chord()->stem()));
+            stemTag += color2xml(stem);
             m_xml.tagRaw(stemTag, note->chord()->up() ? "up" : "down");
         }
 
