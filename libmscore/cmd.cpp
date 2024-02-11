@@ -1468,7 +1468,6 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             if (m1 == 0)
                   break;
             Segment* s = m1->first(SegmentType::ChordRest);
-            expandVoice(s, track);
             cr1 = toChordRest(s->element(track));
             }
       connectTies();
