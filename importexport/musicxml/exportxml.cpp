@@ -103,6 +103,7 @@
 #include "libmscore/letring.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/vibrato.h"
+#include "libmscore/stem.h"
 
 #include "musicxml.h"
 #include "musicxmlfonthandler.h"
@@ -3361,8 +3362,10 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             if (text != "") {
                   QString tag = "beam";
                   tag += QString(" number=\"%1\"").arg(i);
-                  if (text == "begin")
+                  if (text == "begin") {
                         tag += beamFanAttribute(b);
+                        tag += color2xml(b);
+                        }
                   xml.tag(tag, text);
                   }
             }
@@ -3576,10 +3579,10 @@ static Fraction timeModification(const Tuplet* const tuplet, const int tremolo =
       }
 
 //---------------------------------------------------------
-//   writeTypeAndDots
+//   writeType
 //---------------------------------------------------------
 
-static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
+static void writeType(XmlWriter& xml, const Note* const note)
       {
       // type
       int dots { 0 };
@@ -3598,8 +3601,6 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
             xml.tag("type size=\"grace-cue\"", s);
       else
             xml.tag("type", s);
-      for (int ni = dots; ni > 0; ni--)
-            xml.tagE("dot");
       }
 
 //---------------------------------------------------------
@@ -3798,7 +3799,13 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
 
             _xml.tag("voice", voice);
 
-            writeTypeAndDots(_xml, note);
+            writeType(_xml, note);
+            for (NoteDot* dot : note->dots()) {
+                QString dotTag = "dot";
+                dotTag += color2xml(dot);
+                dotTag += elementPosition(this, dot);
+                _xml.tagE(dotTag);
+            }
             writeAccidental(_xml, "accidental", note->accidental());
             writeTimeModification(_xml, note->chord()->tuplet(), tremoloCorrection(note));
 
@@ -3806,8 +3813,10 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
             if (chord->noStem() || chord->measure()->stemless(chord->staffIdx())) {
                   _xml.tag("stem", QString("none"));
                   }
-            else if (note->chord()->stem()) {
-                  _xml.tag("stem", QString(note->chord()->up() ? "up" : "down"));
+            else if (const Stem* stem = note->chord()->stem()) {
+                  QString stemTag = "stem";
+                  stemTag += color2xml(stem);
+                  _xml.tag(stemTag, note->chord()->up() ? "up" : "down");
                   }
 
             writeNotehead(_xml, note);
@@ -3993,13 +4002,17 @@ void ExportMusicXml::rest(Rest* rest, int staff, const std::vector<Lyrics*>* ll)
       // do not output a "type" element for whole measure rest
       if (d.type() != TDuration::DurationType::V_MEASURE) {
             QString s = d.name();
-            int dots  = rest->dots();
             if (rest->isSmall())
                   _xml.tag("type size=\"cue\"", s);
             else
                   _xml.tag("type", s);
-            for (int i = dots; i > 0; i--)
-                  _xml.tagE("dot");
+            for (int i = rest->dots() - 1; i >= 0; i--) {
+                  NoteDot* dot = rest->dot(i);
+                  QString dotTag = "dot";
+                  dotTag += color2xml(dot);
+                  dotTag += elementPosition(this, dot);
+                  _xml.tagE(dotTag);
+                  }
             }
 
       writeTimeModification(_xml, rest->tuplet());
