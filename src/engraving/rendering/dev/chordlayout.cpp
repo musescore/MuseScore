@@ -2097,6 +2097,23 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
     return maxWidth;
 }
 
+static inline bool chordHasDotsAllInvisible(Chord* chord)
+{
+    if (!chord->dots()) {
+        return false;
+    }
+
+    for (Note* note : chord->notes()) {
+        for (NoteDot* dot : note->dots()) {
+            if (dot->visible()) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   placeDots
 //---------------------------------------------------------
@@ -2201,7 +2218,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
 
 //---------------------------------------------------------
 //   layoutChords3
-//    - calculate positions of notes, accidentals, dots
+//    - calculate positions of dots
 //---------------------------------------------------------
 
 void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& chords,
@@ -2222,62 +2239,8 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
 
     for (int i = nNotes - 1; i >= 0; --i) {
         Note* note     = notes[i];
-
-        Chord* chord = note->chord();
-        bool _up     = chord->up();
-
-        if (chord->stemSlash()) {
-            TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutldata(), ctx.conf());
-        }
-
-        double overlapMirror;
-        Stem* stem = chord->stem();
-        if (stem) {
-            overlapMirror = stem->lineWidth() * chord->mag();
-        } else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE) {
-            overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
-        } else {
-            overlapMirror = 0.0;
-        }
-
-        double x = 0.0;
-        if (note->ldata()->mirror()) {
-            if (_up) {
-                x = chord->stemPosX() - overlapMirror;
-            } else {
-                x = -note->headBodyWidth() + overlapMirror;
-            }
-        } else if (_up) {
-            x = chord->stemPosX() - note->headBodyWidth();
-        }
-
-        double ny = (note->line() + stepOffset) * stepDistance;
-        if (note->ldata()->pos().y() != ny) {
-            note->mutldata()->setPosY(ny);
-            if (chord->stem()) {
-                TLayout::layoutStem(chord->stem(), chord->stem()->mutldata(), ctx.conf());
-                if (chord->hook()) {
-                    chord->hook()->mutldata()->setPosY(chord->stem()->flagPosition().y());
-                }
-            }
-        }
-        note->mutldata()->setPosX(x);
-
-        double xx = x + note->headBodyWidth() + chord->pos().x();
-
-        //---------------------------------------------------
-        //    layout dots simply
-        //     we will check for conflicts after all the notes have been processed
-        //---------------------------------------------------
-
         DirectionV dotPosition = note->userDotPosition();
-        if (chord->dots()) {
-            if (chord->up()) {
-                upDotPosX = std::max(upDotPosX, xx);
-            } else {
-                downDotPosX = std::max(downDotPosX, xx);
-            }
-
+        if (note->chord()->dots()) {
             if (dotPosition == DirectionV::AUTO && nNotes > 1 && note->visible() && !note->dotsHidden()) {
                 // resolve dot conflicts
                 int line = note->line();
@@ -2323,6 +2286,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         }
         note->setDotPosition(dotPosition);
     }
+
     // Now, we can resolve note conflicts as a superchord
     placeDots(chords, notes);
 
@@ -2342,13 +2306,85 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             break;
         }
     }
+
+    // Calculate the chords' dotPosX, and find the leftmost point for accidental layout
+    for (Chord* chord : chords) {
+        bool _up = chord->up();
+
+        if (chord->stemSlash()) {
+            TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutldata(), ctx.conf());
+        }
+
+        double overlapMirror;
+        Stem* stem = chord->stem();
+        if (stem) {
+            overlapMirror = stem->lineWidth() * chord->mag();
+        } else if (chord->durationType().headType() == NoteHeadType::HEAD_WHOLE) {
+            overlapMirror = style.styleMM(Sid::stemWidth) * chord->mag();
+        } else {
+            overlapMirror = 0.0;
+        }
+
+        double minDotPosX = 0.0;
+
+        std::vector<Note*> chordNotes = chord->notes();
+        std::sort(chordNotes.begin(), chordNotes.end(),
+                  [](Note* n1, const Note* n2) ->bool { return n1->line() <= n2->line(); });
+        for (Note* note : chordNotes) {
+            double noteX = 0.0;
+            if (note->ldata()->mirror()) {
+                if (_up) {
+                    noteX = chord->stemPosX() - overlapMirror;
+                } else {
+                    noteX = -note->headBodyWidth() + overlapMirror;
+                }
+            } else if (_up) {
+                noteX = chord->stemPosX() - note->headBodyWidth();
+            }
+
+            double ny = (note->line() + stepOffset) * stepDistance;
+            if (note->ldata()->pos().y() != ny) {
+                note->mutldata()->setPosY(ny);
+                if (stem) {
+                    TLayout::layoutStem(chord->stem(), chord->stem()->mutldata(), ctx.conf());
+                    if (chord->hook()) {
+                        chord->hook()->mutldata()->setPosY(chord->stem()->flagPosition().y());
+                    }
+                }
+            }
+            note->mutldata()->setPosX(noteX);
+            minDotPosX = std::max(minDotPosX, noteX + note->headBodyWidth() + chord->pos().x());
+        }
+
+        //---------------------------------------------------
+        //    layout dots simply
+        //     we will check for conflicts after all the notes have been processed
+        //---------------------------------------------------
+
+        if (chord->dots()) {
+            if (chordHasDotsAllInvisible(chord)) {
+                chord->setDotPosX(minDotPosX);
+            } else if (chord->up()) {
+                upDotPosX = std::max(upDotPosX, minDotPosX);
+            } else {
+                downDotPosX = std::max(downDotPosX, minDotPosX);
+            }
+        }
+    }
+
     if (conflict) {
         double maxPosX = std::max(upDotPosX, downDotPosX);
         for (Chord* chord : chords) {
+            if (chordHasDotsAllInvisible(chord)) {
+                continue;
+            }
             chord->setDotPosX(maxPosX);
         }
     } else {
         for (Chord* chord : chords) {
+            if (chordHasDotsAllInvisible(chord)) {
+                continue;
+            }
             if (chord->up()) {
                 chord->setDotPosX(upDotPosX);
             } else {
@@ -2997,6 +3033,7 @@ void ChordLayout::crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx)
 // called after final position of note is set
 void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 {
+    Chord* chord = item->chord();
     const Staff* staff = item->staff();
     if (!staff) {
         return;
@@ -3023,31 +3060,32 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
         item->setHeadHasParentheses(false, /*addToLinked=*/ false);
     }
-    int dots = item->chord()->dots();
+    int dots = chord->dots();
     if (dots && !item->dots().empty()) {
-        if (item->chord()->slash() && !item->visible()) {
+        if (chord->slash() && !item->visible()) {
             item->setDotsHidden(true);
         }
         // if chords have notes with different mag, dots must still  align
-        double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
+        double correctMag = chord->notes().size() > 1 ? chord->mag() : item->mag();
         double d  = ctx.conf().point(ctx.conf().styleS(Sid::dotNoteDistance)) * correctMag;
         double dd = ctx.conf().point(ctx.conf().styleS(Sid::dotDotDistance)) * correctMag;
-        double x  = item->chord()->dotPosX() - item->pos().x() - item->chord()->pos().x();
+        double x  = chord->dotPosX() - item->pos().x() - chord->pos().x();
         // in case of dots with different size, center-align them
-        if (item->mag() != item->chord()->mag() && item->chord()->notes().size() > 1) {
-            double relativeMag = item->mag() / item->chord()->mag();
+        if (item->mag() != chord->mag() && chord->notes().size() > 1) {
+            double relativeMag = item->mag() / chord->mag();
             double centerAlignOffset = item->dot(0)->width() * (1 / relativeMag - 1) / 2;
             x += centerAlignOffset;
         }
         // adjust dot distance for hooks
-        if (item->chord()->hook() && item->chord()->up()) {
-            double hookRight = item->chord()->hook()->width() + item->chord()->hook()->x() + item->chord()->pos().x();
-            double hookBottom = item->chord()->hook()->height() + item->chord()->hook()->y() + item->chord()->pos().y()
+        Hook* hook = chord->hook();
+        if (chord->up() && hook && hook->visible()) {
+            double hookRight = hook->width() + hook->x() + chord->pos().x();
+            double hookBottom = hook->height() + hook->y() + chord->pos().y()
                                 + (0.25 * item->spatium());
             // the top dot in the chord, not the dot for this particular note:
-            double dotY = item->chord()->notes().back()->y() + item->chord()->notes().back()->dots().front()->pos().y();
-            if (item->chord()->dotPosX() < hookRight && dotY < hookBottom) {
-                d = item->chord()->hook()->width();
+            double dotY = chord->notes().back()->y() + chord->notes().back()->dots().front()->pos().y();
+            if (chord->dotPosX() < hookRight && dotY < hookBottom) {
+                d = hook->width();
             }
         }
         // if TAB and stems through staff
@@ -3061,11 +3099,22 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             dd = STAFFTYPE_TAB_DEFAULTDOTDIST_X * item->spatium();
             d = dd * 0.5;
         }
+
         // apply to dots
-        double xx = x + d;
+        // Invisible dots are laid out separately,
+        // with a distance of 0.1sp to distinguish from visible ones
+        double visibleX = x + d;
+        double invisibleX = x;
+
         for (NoteDot* dot : item->dots()) {
-            dot->mutldata()->setPosX(xx);
-            xx += dd;
+            if (dot->visible()) {
+                dot->mutldata()->setPosX(visibleX);
+                visibleX += dd;
+            } else {
+                invisibleX += (0.1 * item->spatium());
+                dot->mutldata()->setPosX(invisibleX);
+                invisibleX += item->symWidth(SymId::augmentationDot) * dot->mag();
+            }
         }
     }
 
@@ -3076,7 +3125,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             Shape noteShape = item->shape();
             noteShape.remove_if([e](ShapeElement& s) { return s.item() == e || s.item()->isBend(); });
             LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
-                                 ? item->chord()->ledgerLines() : nullptr;
+                                 ? chord->ledgerLines() : nullptr;
             if (ledger) {
                 noteShape.add(ledger->shape().translate(ledger->pos() - item->pos()));
             }
@@ -3312,7 +3361,9 @@ void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
         shape.add(chordRestShape(item));
         shape.add(item->symBbox(ldata->sym), item);
         for (const NoteDot* dot : item->dotList()) {
-            shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
+            if (dot->addToSkyline()) {
+                shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
+            }
         }
     }
 
