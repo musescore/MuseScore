@@ -31,6 +31,15 @@ using namespace mu::engraving;
 SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
+    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+
+    static constexpr double DEFAULT_FONT_SIZE = 8.0;
+    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
+}
+
+SoundFlag* SoundFlag::clone() const
+{
+    return new SoundFlag(*this);
 }
 
 bool SoundFlag::isEditable() const
@@ -38,9 +47,14 @@ bool SoundFlag::isEditable() const
     return false;
 }
 
-SoundFlag* SoundFlag::clone() const
+void SoundFlag::setSelected(bool f)
 {
-    return new SoundFlag(*this);
+    EngravingItem* parent = this->parentItem();
+    if (parent) {
+        parent->setSelected(f);
+    }
+
+    EngravingItem::setSelected(f);
 }
 
 const SoundFlag::PresetCodes& SoundFlag::soundPresets() const
@@ -63,19 +77,9 @@ void SoundFlag::setParams(const Params& params)
     m_params = params;
 }
 
-bool SoundFlag::isTextVisible() const
+void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params)
 {
-    return m_isTextVisible;
-}
-
-void SoundFlag::setIsTextVisible(bool visible)
-{
-    m_isTextVisible = visible;
-}
-
-void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params, bool isTextVisible)
-{
-    score()->undo(new ChangeSoundFlag(this, presets, params, isTextVisible));
+    score()->undo(new ChangeSoundFlag(this, presets, params));
     triggerLayout();
 }
 
@@ -89,6 +93,11 @@ draw::Font SoundFlag::iconFont() const
     return m_iconFont;
 }
 
+void SoundFlag::setIconFontSize(double size)
+{
+    m_iconFont.setPointSizeF(size);
+}
+
 Color SoundFlag::iconBackgroundColor() const
 {
     Color color = curColor();
@@ -98,9 +107,4 @@ Color SoundFlag::iconBackgroundColor() const
     }
 
     return color;
-}
-
-RectF SoundFlag::canvasBoundingIconRect() const
-{
-    return ldata()->iconBBox.translated(canvasPos());
 }

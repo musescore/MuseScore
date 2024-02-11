@@ -136,34 +136,5 @@ StyledPopupView {
             }
 
         }
-
-        SeparatorLine {}
-
-        Column {
-            width: parent.width
-
-            spacing: 12
-
-            CheckBox {
-                id: showTextCheckbox
-                text: qsTrc("notation", "Show text")
-                checked: soundFlagModel.showText
-
-                onClicked: {
-                    soundFlagModel.showText = !checked
-                }
-            }
-
-            TextInputField {
-                Layout.preferredWidth: parent.width
-
-                currentText: soundFlagModel.text
-                visible: showTextCheckbox.checked
-
-                onTextEditingFinished: function(newTextValue) {
-                    soundFlagModel.text = newTextValue
-                }
-            }
-        }
     }
 }
