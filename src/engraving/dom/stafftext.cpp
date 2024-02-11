@@ -22,6 +22,10 @@
 
 #include "stafftext.h"
 
+#include "soundflag.h"
+#include "segment.h"
+#include "score.h"
+
 using namespace mu;
 
 namespace mu::engraving {
@@ -56,5 +60,63 @@ engraving::PropertyValue StaffText::propertyDefault(Pid id) const
     default:
         return StaffTextBase::propertyDefault(id);
     }
+}
+
+bool StaffText::acceptDrop(EditData& data) const
+{
+    ElementType type = data.dropElement->type();
+    if (type == ElementType::STAFF_TEXT) {
+        return true;
+    }
+
+    return TextBase::acceptDrop(data);
+}
+
+EngravingItem* StaffText::drop(EditData& data)
+{
+    ElementType type = data.dropElement->type();
+    if (type == ElementType::STAFF_TEXT) {
+        std::vector<EngravingItem*> items = score()->addSoundFlagToSelection();
+        return !items.empty() ? items.front() : nullptr;
+    }
+
+    return StaffTextBase::drop(data);
+}
+
+void StaffText::add(EngravingItem* e)
+{
+    e->setParent(this);
+    e->setTrack(track());
+
+    switch (e->type()) {
+    case ElementType::SOUND_FLAG:
+        setSoundFlag(toSoundFlag(e));
+        e->added();
+        return;
+    default:
+        break;
+    }
+
+    StaffTextBase::add(e);
+}
+
+void StaffText::remove(EngravingItem* e)
+{
+    switch (e->type()) {
+    case ElementType::SOUND_FLAG: {
+        if (soundFlag() == e) {
+            setSoundFlag(nullptr);
+            e->removed();
+            return;
+        } else {
+            LOGD("StaffText::remove: %s %p there is already another sound flag", e->typeName(), e);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+
+    StaffTextBase::remove(e);
 }
 }

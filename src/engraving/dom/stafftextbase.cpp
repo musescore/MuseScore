@@ -27,6 +27,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "soundflag.h"
+#include "score.h"
 
 #include "log.h"
 
@@ -42,6 +43,27 @@ StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyle
     : TextBase(type, parent, tid, flags)
 {
     setSwingParameters(Constants::DIVISION / 2, 60);
+}
+
+void StaffTextBase::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+{
+    for (EngravingObject* child: scanChildren()) {
+        child->scanElements(data, func, all);
+    }
+    if (all || visible() || score()->isShowInvisible()) {
+        func(data, this);
+    }
+}
+
+EngravingObjectList StaffTextBase::scanChildren() const
+{
+    EngravingObjectList children;
+
+    if (m_soundFlag) {
+        children.push_back(m_soundFlag);
+    }
+
+    return children;
 }
 
 void StaffTextBase::clear()
