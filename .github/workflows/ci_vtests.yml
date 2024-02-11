@@ -3,7 +3,7 @@ name: CI_vtests
 on:
   pull_request:
     branches:
-    - 3.x_off
+    - 3.x
 
 jobs:
   run_vtests:

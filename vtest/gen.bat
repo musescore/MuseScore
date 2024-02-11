@@ -24,11 +24,11 @@ set SRC=bravura-mmrest,gonville-mmrest, ^
  emmentaler-text-3,gonville-text-3,bravura-text-3,musejazz-text-3, ^
  flag, flag-straight, ledger-lines-2, ledger-lines-3, frame,frametext,ottava,bend-1, ^
  barline-1,barline-2,instrument-1,instrument-names-1,symbol-1, ^
- slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,line-6,line-7,line-colored,line-dashed,gliss-1,gliss-2,gliss-3, ^
+ slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,line-6,line-7,line-colour,line-dashed,gliss-1,gliss-2,gliss-3, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,chord-layout-15,chord-layout-16,chord-layout-17, ^
- cross-1,cross-2,cross-3,cross-4, cross-staff-accent, ^
+ cross-1,cross-2,cross-3,cross-4, cross-staff-accents, ^
  accidental-1,accidental-2,accidental-3,accidental-4,accidental-5, ^
  accidental-6,accidental-7,accidental-8,accidental-9,accidental-10, ^
  accidental-11,accidental-12,accidental-13,accidental-14,accidental-15, ^
@@ -57,7 +57,7 @@ set SRC=bravura-mmrest,gonville-mmrest, ^
  layout-sequence-9, layout-sequence-10, layout-sequence-11, layout-sequence-12, ^
  layout-sequence-13, layout-sequence-14, layout-sequence-15, layout-sequence-16, ^
  measure-number-1, measure-number-2, measure-number-3, measure-number-4, measure-number-5 ^
- custom-keysig-1, custom-keysig-2, custom-keysig-2, custom-keysig-3, timesig-1
+ custom-keysig-1, custom-keysig-2, custom-keysig-2, custom-keysig-3
 
 IF NOT "%1"=="" (
    SET INSTALL_PATH=%1
