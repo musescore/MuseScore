@@ -501,7 +501,11 @@ bool Tie::isCrossStaff() const
 {
     const Note* startN = startNote();
     const Note* endN = endNote();
+    const Chord* startChord = startN ? startN->chord() : nullptr;
+    const Chord* endChord = endN ? endN->chord() : nullptr;
+    const staff_idx_t staff = staffIdx();
 
-    return (startN && startN->chord()->staffMove() != 0) || (endN && endN->chord()->staffMove() != 0);
+    return (startChord && (startChord->staffMove() != 0 || startChord->vStaffIdx() != staff))
+           || (endChord && (endChord->staffMove() != 0 || endChord->vStaffIdx() != staff));
 }
 }

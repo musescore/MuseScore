@@ -106,8 +106,8 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     //    layout cross-staff ties
     //---------------------------------------------------
 
-    Fraction stick = item->system()->measures().front()->tick();
-    size_t tracks = ctx.dom().ntracks();
+    const Fraction stick = item->system()->measures().front()->tick();
+    const size_t tracks = ctx.dom().ntracks();
     static const SegmentType st { SegmentType::ChordRest };
     for (track_idx_t track = 0; track < tracks; ++track) {
         if (!ctx.dom().staff(track / VOICES)->show()) {
