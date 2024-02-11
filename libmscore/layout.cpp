@@ -3140,7 +3140,8 @@ void Score::getNextMeasure(LayoutContext& lc)
                   //if (!segment.enabled())
                   //      continue;
                   if (segment.isKeySigType()) {
-                        KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
+                        int mainTrack = staffIdx * VOICES;
+                        KeySig* ks = toKeySig(segment.element(mainTrack));
                         if (!ks)
                               continue;
                         Fraction tick = segment.tick();
@@ -3149,10 +3150,10 @@ void Score::getNextMeasure(LayoutContext& lc)
                         }
                   else if (segment.isChordRestType()) {
                         const StaffType* st = staff->staffTypeForElement(&segment);
-                        int track     = staffIdx * VOICES;
-                        int endTrack  = track + VOICES;
+                        int startTrack = staff->part()->startTrack();
+                        int endTrack  = staff->part()->endTrack();
 
-                        for (int t = track; t < endTrack; ++t) {
+                        for (int t = startTrack; t < endTrack; ++t) {
                               ChordRest* cr = segment.cr(t);
                               if (!cr)
                                     continue;
@@ -3160,7 +3161,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                               if (cr->isSmall())
                                     m *= score()->styleD(Sid::smallNoteMag);
 
-                              if (cr->isChord()) {
+                              if (cr->isChord() && cr->vStaffIdx() == staffIdx) {
                                     Chord* chord = toChord(cr);
                                     chord->cmdUpdateNotes(&as);
                                     for (Chord* c : chord->graceNotes()) {
