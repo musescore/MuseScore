@@ -3222,7 +3222,7 @@ String MusicXMLParserDirection::matchRepeat() const
     if (plainWords.contains(coda)) {
         return u"coda";
     }
-    return u"";
+    return String();
 }
 
 //---------------------------------------------------------

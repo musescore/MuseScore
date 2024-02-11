@@ -234,7 +234,7 @@ String errorStringWithLocation(int line, int col, const String& error)
 String checkAtEndElement(const XmlStreamReader& e, const String& expName)
 {
     if (e.isEndElement() && e.name() == expName.toAscii().constChar()) {
-        return u"";
+        return String();
     }
 
     String res = mtrc("iex_musicxml", "expected token type and name ‘EndElement %1’, actual ‘%2 %3’")

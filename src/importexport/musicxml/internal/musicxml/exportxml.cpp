@@ -492,7 +492,7 @@ static String positionToString(const PointF def, const PointF rel, const float s
 String ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool isSpanStart)
 {
     if (!configuration()->musicxmlExportLayout()) {
-        return u"";
+        return String();
     }
 
     //LOGD("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
@@ -668,7 +668,7 @@ static String color2xml(const EngravingItem* el)
     } else if (el->isSLine() && ((SLine*)el)->lineColor() != engravingConfiguration()->defaultColor()) {
         return String(u" color=\"%1\"").arg(String::fromStdString(((SLine*)el)->lineColor().toString()));
     } else {
-        return u"";
+        return String();
     }
 }
 
@@ -1849,7 +1849,7 @@ static String shortBarlineStyle(const BarLine* bl)
         }
     }
 
-    return u"";
+    return String();
 }
 
 //---------------------------------------------------------
@@ -3184,7 +3184,7 @@ static String symIdToOrnam(const SymId sid)
         break;
     }
 
-    return u"";
+    return String();
 }
 
 //---------------------------------------------------------
@@ -3261,7 +3261,7 @@ static String symIdToTechn(const SymId sid)
         break;
     }
 
-    return u"";
+    return String();
 }
 
 //---------------------------------------------------------
@@ -3581,7 +3581,7 @@ static String beamFanAttribute(const Beam* const b)
         return String(u" fan=\"%1\"").arg(fan);
     }
 
-    return u"";
+    return String();
 }
 
 //---------------------------------------------------------
@@ -4854,7 +4854,7 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 String ExportMusicXml::positioningAttributesForTboxText(const PointF position, float spatium)
 {
     if (!configuration()->musicxmlExportLayout()) {
-        return u"";
+        return String();
     }
 
     PointF relative;         // use zero relative position
@@ -6196,7 +6196,7 @@ static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
 static String Modifier2MusicXML(FiguredBassItem::Modifier prefix)
 {
     switch (prefix) {
-    case FiguredBassItem::Modifier::NONE:        return u"";
+    case FiguredBassItem::Modifier::NONE:        return String();
     case FiguredBassItem::Modifier::DOUBLEFLAT:  return u"flat-flat";
     case FiguredBassItem::Modifier::FLAT:        return u"flat";
     case FiguredBassItem::Modifier::NATURAL:     return u"natural";
@@ -6205,9 +6205,9 @@ static String Modifier2MusicXML(FiguredBassItem::Modifier prefix)
     case FiguredBassItem::Modifier::CROSS:       return u"cross";
     case FiguredBassItem::Modifier::BACKSLASH:   return u"backslash";
     case FiguredBassItem::Modifier::SLASH:       return u"slash";
-    case FiguredBassItem::Modifier::NUMOF:       return u"";         // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
+    case FiguredBassItem::Modifier::NUMOF:       return String();         // prevent gcc "‘FBINumOfAccid’ not handled in switch" warning
     }
-    return u"";
+    return String();
 }
 
 static void writeMusicXML(const FiguredBassItem* item, XmlWriter& xml, bool isOriginalFigure, int crEndTick, int fbEndTick)
