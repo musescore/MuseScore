@@ -1659,11 +1659,10 @@ class ChangeSoundFlag : public UndoCommand
     SoundFlag* m_soundFlag = nullptr;
     SoundFlag::PresetCodes m_presets;
     SoundFlag::Params m_params;
-    bool m_isTextVisible = false;
 
 public:
-    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::Params& params, bool isTextVisible)
-        : m_soundFlag(soundFlag), m_presets(presets), m_params(params), m_isTextVisible(isTextVisible) {}
+    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::Params& params)
+        : m_soundFlag(soundFlag), m_presets(presets), m_params(params) {}
 
     void flip(EditData*) override;
     UNDO_NAME("ChangeSoundFlag")

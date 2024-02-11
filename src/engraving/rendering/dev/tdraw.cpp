@@ -2628,7 +2628,15 @@ void TDraw::draw(const StaffState* item, Painter* painter)
 void TDraw::draw(const StaffText* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+
     drawTextBase(item, painter);
+
+    if (item->hasSoundFlag()) {
+        SoundFlag* soundFlag = item->soundFlag();
+        soundFlag->setIconFontSize(item->font().pointSizeF() * MScore::pixelRatio);
+
+        draw(item->soundFlag(), painter);
+    }
 }
 
 void TDraw::draw(const StaffTypeChange* item, Painter* painter)
@@ -2840,9 +2848,19 @@ void TDraw::draw(const SystemText* item, Painter* painter)
 void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    UNUSED(item);
-    UNUSED(painter);
-    NOT_IMPLEMENTED;
+
+    if (!item->score()->showSoundFlags()) {
+        return;
+    }
+
+    painter->setNoPen();
+    painter->setBrush(item->iconBackgroundColor());
+    painter->drawEllipse(item->ldata()->bbox());
+
+    mu::draw::Font f(item->iconFont());
+    painter->setFont(f);
+    painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
+    painter->drawText(item->ldata()->bbox(), draw::AlignCenter, Char(item->iconCode()));
 }
 
 void TDraw::draw(const TabDurationSymbol* item, Painter* painter)

@@ -24,6 +24,7 @@
 
 #include "engraving/types/types.h"
 #include "engraving/dom/stafftext.h"
+#include "engraving/dom/soundflag.h"
 
 #include "audio/audioutils.h"
 
@@ -47,11 +48,7 @@ void SoundFlagSettingsModel::init()
 
     AbstractElementPopupModel::init();
 
-    IF_ASSERT_FAILED(m_item && m_item->isStaffText()) {
-        return;
-    }
-
-    IF_ASSERT_FAILED(toStaffText(m_item)->hasSoundFlag()) {
+    IF_ASSERT_FAILED(m_item && m_item->isSoundFlag()) {
         return;
     }
 
@@ -95,6 +92,12 @@ void SoundFlagSettingsModel::initTitle()
     }
 
     setTitle(title);
+}
+
+engraving::StaffText* SoundFlagSettingsModel::staffText() const
+{
+    engraving::EngravingItem* parent = m_item->parentItem();
+    return parent && parent->isStaffText() ? engraving::toStaffText(parent) : nullptr;
 }
 
 project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
@@ -151,30 +154,10 @@ void SoundFlagSettingsModel::setTitle(const QString& title)
     emit titleChanged();
 }
 
-bool SoundFlagSettingsModel::showText() const
-{
-    return m_item ? engraving::toSoundFlag(m_item)->isTextVisible() : false;
-}
-
-void SoundFlagSettingsModel::setShowText(bool show)
-{
-    if (showText() == show) {
-        return;
-    }
-
-    beginCommand();
-    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
-    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), soundFlag->params(), show);
-    endCommand();
-
-    updateNotation();
-
-    emit showTextChanged();
-}
-
 QString SoundFlagSettingsModel::text() const
 {
-    return m_item ? engraving::toSoundFlag(m_item)->xmlText().toQString() : QString();
+    engraving::StaffText* staffText = this->staffText();
+    return staffText ? staffText->xmlText().toQString() : QString();
 }
 
 void SoundFlagSettingsModel::setText(const QString& text)
@@ -189,5 +172,5 @@ void SoundFlagSettingsModel::setText(const QString& text)
 
 QRect SoundFlagSettingsModel::iconRect() const
 {
-    return m_item ? fromLogical(engraving::toSoundFlag(m_item)->canvasBoundingIconRect()).toQRect() : QRect();
+    return m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
 }

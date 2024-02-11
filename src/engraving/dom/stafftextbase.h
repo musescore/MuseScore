@@ -48,6 +48,9 @@ class StaffTextBase : public TextBase
 public:
     StaffTextBase(const ElementType& type, Segment* parent, TextStyleType tid, ElementFlags = ElementFlag::NOTHING);
 
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    EngravingObjectList scanChildren() const override;
+
     void clear();
 
     Segment* segment() const;
