@@ -1559,7 +1559,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContex
     segment->resetAdjustmentOffset();
 
     if (chord) {
-        segment->setStaffMove(chord->vStaffIdx() - segment->staffIdx());
+        segment->setStaffMove(static_cast<int>(chord->vStaffIdx() - segment->staffIdx()));
     }
 
     adjustY(segment);
