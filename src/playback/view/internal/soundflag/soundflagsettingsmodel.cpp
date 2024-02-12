@@ -79,9 +79,10 @@ void SoundFlagSettingsModel::initTitle()
 
     QString title;
     QString name = audio::audioSourceName(params).toQString();
+    QString category = audio::audioSourceCategoryName(params).toQString();
 
     if (audio::AudioSourceType::MuseSampler == type) {
-        title = qtrc("playback", "Muse Sounds:") + " " + name;
+        title = category + ": " + name;
     }
 
     setTitle(title);
