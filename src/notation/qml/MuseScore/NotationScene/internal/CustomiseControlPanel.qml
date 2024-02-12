@@ -72,7 +72,6 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.alignment: Qt.AlignRight
         Layout.preferredWidth: 30
 
         icon: IconCode.DELETE_TANK
@@ -89,7 +88,6 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.alignment: Qt.AlignRight
         Layout.preferredWidth: 30
 
         icon: IconCode.ARROW_UP
@@ -106,7 +104,6 @@ RowLayout {
     }
 
     FlatButton {
-        Layout.alignment: Qt.AlignRight
         Layout.preferredWidth: 30
 
         icon: IconCode.ARROW_DOWN
