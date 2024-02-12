@@ -30,6 +30,7 @@ SOFTWARE.
 
 #ifdef KORS_LOGGER_QT_SUPPORT
 #include <QDebug>
+#include <QVariant>
 #endif
 
 //! NOTE Example add operator for custom types
