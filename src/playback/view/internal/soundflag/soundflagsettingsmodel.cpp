@@ -23,6 +23,7 @@
 #include "soundflagsettingsmodel.h"
 
 #include "engraving/types/types.h"
+#include "engraving/dom/utils.h"
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
 
@@ -103,17 +104,7 @@ project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
 
 const audio::AudioInputParams& SoundFlagSettingsModel::currentAudioInputParams() const
 {
-    engraving::Part* part = m_item->part();
-    IF_ASSERT_FAILED(part) {
-        return {};
-    }
-
-    engraving::Instrument* instrument = part->instrument(m_item->tick());
-    IF_ASSERT_FAILED(instrument) {
-        return {};
-    }
-
-    return audioSettings()->trackInputParams({ part->id(), instrument->id().toStdString() });
+    return audioSettings()->trackInputParams(mu::engraving::makeInstrumentTrackId(m_item));
 }
 
 SoundFlagSettingsModel::SourceType SoundFlagSettingsModel::sourceType() const

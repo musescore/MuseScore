@@ -108,6 +108,7 @@ public:
     MOCK_METHOD(async::Notification, textEditingStarted, (), (const, override));
     MOCK_METHOD(async::Notification, textEditingChanged, (), (const, override));
     MOCK_METHOD(async::Channel<TextBase*>, textEditingEnded, (), (const, override));
+    MOCK_METHOD(async::Channel<TextBase*>, textAdded, (), (const, override));
 
     MOCK_METHOD(async::Channel<ScoreConfigType>, scoreConfigChanged, (), (const, override));
     MOCK_METHOD(bool, isGripEditStarted, (), (const, override));

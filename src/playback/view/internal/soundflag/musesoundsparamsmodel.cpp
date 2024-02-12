@@ -24,6 +24,7 @@
 
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
+#include "engraving/dom/utils.h"
 
 #include "audio/audiotypes.h"
 
@@ -55,10 +56,7 @@ void MuseSoundsParamsModel::init()
         m_item = selectedItem;
     }
 
-    engraving::Part* part = m_item->part();
-    engraving::Instrument* instrument = part->instrument(m_item->tick());
-
-    playbackController()->availableSoundPresets({ part->id(), instrument->id().toStdString() })
+    playbackController()->availableSoundPresets(mu::engraving::makeInstrumentTrackId(m_item))
     .onResolve(this, [this](audio::SoundPresetList presets) {
         setAvailablePresets(presets);
     });
