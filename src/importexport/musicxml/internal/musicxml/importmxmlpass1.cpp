@@ -1342,7 +1342,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 underlines are imported as single underline
             importedtext += u"<u>";
         } else {
-            underline = u"";
+            underline = String();
         }
     }
     if (!strike.isEmpty()) {
@@ -1351,7 +1351,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 strikes are imported as single strike
             importedtext += u"<s>";
         } else {
-            underline = u"";
+            underline = String();
         }
     }
     if (txt == syms) {
@@ -1428,7 +1428,7 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
     if (crwords != "") {
         // as the meaning of multiple credit-types is undocumented,
         // use credit-type only if exactly one was found
-        String crtype = (crtypes.size() == 1) ? crtypes.at(0) : u"";
+        String crtype = (crtypes.size() == 1) ? crtypes.at(0) : String();
         CreditWords* cw = new CreditWords(page, crtype, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
         credits.push_back(cw);
     }

@@ -796,7 +796,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 underlines are imported as single underline
             importedtext += u"<u>";
         } else {
-            underline = u"";
+            underline = String();
         }
     }
     if (!strike.empty()) {
@@ -805,7 +805,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 strikes are imported as single strike
             importedtext += u"<s>";
         } else {
-            strike = u"";
+            strike = String();
         }
     }
     if (txt == syms) {
@@ -2878,7 +2878,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 String rawWordsText = m_wordsText;
                 static const std::regex re("(<.*?>)");
                 rawWordsText.remove(re);
-                String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : u"";
+                String sep = !m_metroText.empty() && !m_wordsText.empty() && rawWordsText.back() != ' ' ? u" " : String();
                 t->setXmlText(m_wordsText + sep + m_metroText);
                 ((TempoText*)t)->setTempo(m_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
@@ -3318,7 +3318,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
             tb->setTrack(track);
             if (!m_wordsText.empty()) {
                 tb->setXmlText(m_wordsText);
-                m_wordsText = u"";
+                m_wordsText = String();
             } else {
                 tb->setVisible(false);
             }
@@ -3407,7 +3407,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
             if (!m_wordsText.empty()) {
                 // TextLine supports only limited formatting, remove all (compatible with 1.3)
                 textLine->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
-                m_wordsText = u"";
+                m_wordsText = String();
             }
 
             if (lineType == "solid") {
@@ -3472,7 +3472,7 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
         if (!m_wordsText.empty()) {
             // TextLine supports only limited formatting, remove all (compatible with 1.3)
             b->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
-            m_wordsText = u"";
+            m_wordsText = String();
         }
 
         b->setBeginHookType(HookType::NONE);
@@ -4185,9 +4185,9 @@ static void flushAlteredTone(KeySigEvent& kse, String& step, String& alt, String
     }
 
     // clean up
-    step = u"";
-    alt  = u"";
-    acc  = u"";
+    step = String();
+    alt  = String();
+    acc  = String();
 }
 
 //---------------------------------------------------------
