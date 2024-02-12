@@ -1255,7 +1255,6 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::PLAYTECH_ANNOTATION:
                         case ElementType::CAPO:
                         case ElementType::STRING_TUNINGS:
-                        case ElementType::SOUND_FLAG:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
                         case ElementType::FIGURED_BASS:

@@ -26,20 +26,33 @@
 
 using namespace mu::engraving;
 
-static const ElementStyle SOUND_FLAG_STYLE {
-    { Sid::staffTextPlacement, Pid::PLACEMENT },
-    { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
-};
-
-SoundFlag::SoundFlag(Segment* parent)
-    : TextBase(ElementType::SOUND_FLAG, parent, TextStyleType::DEFAULT, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+SoundFlag::SoundFlag(EngravingItem* parent)
+    : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
-    initElementStyle(&SOUND_FLAG_STYLE);
+    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+
+    static constexpr double DEFAULT_FONT_SIZE = 8.0;
+    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
 }
 
 SoundFlag* SoundFlag::clone() const
 {
     return new SoundFlag(*this);
+}
+
+bool SoundFlag::isEditable() const
+{
+    return false;
+}
+
+void SoundFlag::setSelected(bool f)
+{
+    EngravingItem* parent = this->parentItem();
+    if (parent) {
+        parent->setSelected(f);
+    }
+
+    EngravingItem::setSelected(f);
 }
 
 const SoundFlag::PresetCodes& SoundFlag::soundPresets() const
@@ -65,4 +78,31 @@ void SoundFlag::setParams(const Params& params)
 void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params)
 {
     score()->undo(new ChangeSoundFlag(this, presets, params));
+    triggerLayout();
+}
+
+char16_t SoundFlag::iconCode() const
+{
+    return 0xEF4E;
+}
+
+draw::Font SoundFlag::iconFont() const
+{
+    return m_iconFont;
+}
+
+void SoundFlag::setIconFontSize(double size)
+{
+    m_iconFont.setPointSizeF(size);
+}
+
+Color SoundFlag::iconBackgroundColor() const
+{
+    Color color = curColor();
+    if (!selected()) {
+        color = Color("#CFD5DD");
+        color.setAlpha(128);
+    }
+
+    return color;
 }

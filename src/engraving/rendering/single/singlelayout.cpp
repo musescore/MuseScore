@@ -1422,6 +1422,26 @@ void SingleLayout::layout(Spacer* item, const Context&)
 void SingleLayout::layout(StaffText* item, const Context& ctx)
 {
     layoutTextBase(item, ctx, item->mutldata());
+
+    if (item->hasSoundFlag()) {
+        RectF bbox = item->ldata()->bbox();
+        double iconHeight = bbox.height();
+        RectF iconBBox = RectF(bbox.x(), bbox.y(), iconHeight, iconHeight);
+        item->soundFlag()->mutldata()->setBbox(iconBBox);
+
+        double xMove = iconBBox.width() + iconBBox.width() / 2.0;
+        bbox.setWidth(bbox.width() + xMove);
+        item->setbbox(bbox);
+
+        layout(item->soundFlag(), ctx);
+
+        for (TextBlock& block : item->mutldata()->blocks) {
+            auto& fragments = block.fragments();
+            for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
+                it->pos.setX(it->pos.x() + xMove);
+            }
+        }
+    }
 }
 
 void SingleLayout::layout(StaffTypeChange* item, const Context& ctx)
@@ -1462,7 +1482,8 @@ void SingleLayout::layout(SystemText* item, const Context& ctx)
 
 void SingleLayout::layout(SoundFlag* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx, item->mutldata());
+    UNUSED(item);
+    UNUSED(ctx);
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)

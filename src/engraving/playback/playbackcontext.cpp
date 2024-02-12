@@ -27,6 +27,7 @@
 #include "dom/measure.h"
 #include "dom/part.h"
 #include "dom/playtechannotation.h"
+#include "dom/stafftext.h"
 #include "dom/soundflag.h"
 #include "dom/repeatlist.h"
 #include "dom/score.h"
@@ -331,9 +332,11 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
             continue;
         }
 
-        if (annotation->isSoundFlag()) {
-            updatePlaybackParamMap(toSoundFlag(annotation), segmentPositionTick);
-            continue;
+        if (annotation->isStaffText()) {
+            if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
+                updatePlaybackParamMap(flag, segmentPositionTick);
+                continue;
+            }
         }
     }
 

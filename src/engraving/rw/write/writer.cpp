@@ -153,6 +153,8 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     xml.tag("showUnprintable", score->m_showUnprintable);
     xml.tag("showFrames", score->m_showFrames);
     xml.tag("showMargins", score->m_showPageborders);
+    //! TODO: temporary disabled
+    //xml.tag("showSoundFlags", score->m_showSoundFlags);
     xml.tag("markIrregularMeasures", score->m_markIrregularMeasures, true);
 
     if (score->m_isOpen) {

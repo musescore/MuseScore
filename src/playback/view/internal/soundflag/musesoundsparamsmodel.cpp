@@ -22,6 +22,7 @@
 
 #include "musesoundsparamsmodel.h"
 
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
 
 #include "audio/audiotypes.h"
@@ -40,9 +41,18 @@ void MuseSoundsParamsModel::init()
         return;
     }
 
-    m_item = selection()->element();
-    if (!m_item) {
+    engraving::EngravingItem* selectedItem = selection()->element();
+    if (!selectedItem) {
         return;
+    }
+
+    if (selectedItem->isStaffText()) {
+        m_item = toStaffText(selectedItem)->soundFlag();
+        IF_ASSERT_FAILED(m_item) {
+            return;
+        }
+    } else if (selectedItem->isSoundFlag()) {
+        m_item = selectedItem;
     }
 
     engraving::Part* part = m_item->part();
@@ -56,29 +66,32 @@ void MuseSoundsParamsModel::init()
     emit presetCodesChanged();
 }
 
-void MuseSoundsParamsModel::togglePreset(const QString& presetCode)
+void MuseSoundsParamsModel::togglePreset(const QString& presetCode, bool forceMultiSelection)
 {
     if (!m_item) {
         return;
     }
 
-    String presetCodeStr = String::fromQString(presetCode);
+    QStringList presetCodes = this->presetCodes();
 
-    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
-    engraving::SoundFlag::PresetCodes presetCodes = soundFlag->soundPresets();
+    if (forceMultiSelection || playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
+        if (presetCodes.contains(presetCode)) {
+            if (presetCodes.size() == 1) {
+                return;
+            }
 
-    if (presetCodes.contains(presetCode)) {
-        if (presetCodes.size() == 1) {
-            return;
+            presetCodes.removeAll(presetCode);
+        } else {
+            presetCodes.push_back(presetCode);
         }
-
-        presetCodes.removeAll(presetCodeStr);
     } else {
-        presetCodes.emplace_back(presetCodeStr);
+        presetCodes = QStringList{ presetCode };
     }
 
+    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+
     undoStack()->prepareChanges();
-    soundFlag->undoChangeSoundFlag(presetCodes, soundFlag->params());
+    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->params());
     undoStack()->commitChanges();
 
     emit presetCodesChanged();
@@ -114,7 +127,24 @@ QStringList MuseSoundsParamsModel::presetCodes() const
         return {};
     }
 
-    return engraving::toSoundFlag(m_item)->soundPresets().toQStringList();
+    QStringList availablePresetCodes;
+    for (const QVariant& presetVar : m_availablePresets) {
+        availablePresetCodes << presetVar.toMap()["code"].toString();
+    }
+
+    QStringList result;
+    for (const String& presetCode : engraving::toSoundFlag(m_item)->soundPresets()) {
+        QString code = presetCode.toQString();
+        if (availablePresetCodes.contains(code)) {
+            result.push_back(code);
+        }
+    }
+
+    if (result.empty() && !availablePresetCodes.empty()) {
+        result = QStringList{ availablePresetCodes.first() };
+    }
+
+    return result;
 }
 
 notation::INotationSelectionPtr MuseSoundsParamsModel::selection() const

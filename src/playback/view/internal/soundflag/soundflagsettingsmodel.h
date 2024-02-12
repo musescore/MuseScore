@@ -30,6 +30,10 @@
 
 #include "notation/view/abstractelementpopupmodel.h"
 
+namespace mu::engraving {
+class StaffText;
+}
+
 namespace mu::playback {
 class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 {
@@ -40,15 +44,14 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
     enum class SourceType {
         Undefined,
         MuseSounds,
-        VST,
-        SoundFonts
     };
     Q_ENUM(SourceType)
 
     Q_PROPERTY(SourceType sourceType READ sourceType NOTIFY sourceTypeChanged FINAL)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
-    Q_PROPERTY(bool showText READ showText WRITE setShowText NOTIFY showTextChanged FINAL)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged FINAL)
+
+    Q_PROPERTY(QRect iconRect READ iconRect NOTIFY iconRectChanged FINAL)
 
 public:
     explicit SoundFlagSettingsModel(QObject* parent = nullptr);
@@ -61,17 +64,18 @@ public:
     QString title() const;
     void setTitle(const QString& title);
 
-    bool showText() const;
-    void setShowText(bool show);
-
     QString text() const;
     void setText(const QString& text);
+
+    QRect iconRect() const;
 
 signals:
     void sourceTypeChanged();
     void titleChanged();
     void showTextChanged();
     void textChanged();
+
+    void iconRectChanged();
 
 private:
     project::IProjectAudioSettingsPtr audioSettings() const;
@@ -81,10 +85,10 @@ private:
     void initSourceType();
     void initTitle();
 
+    engraving::StaffText* staffText() const;
+
     SourceType m_sourceType = SourceType::Undefined;
     QString m_title;
-    bool m_showText = false;
-    QString m_customText;
 };
 }
 

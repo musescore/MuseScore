@@ -1259,7 +1259,6 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::EXPRESSION:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
-    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -1420,7 +1419,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::EXPRESSION:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
-    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -1464,6 +1462,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         }
 
         EngravingItem* dropElement = el->drop(m_dropData.ed);
+
         if (dropElement && dropElement->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(dropElement))) {
                 rollback();
@@ -1949,7 +1948,8 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         rw::RWRegister::reader()->readItem(dropData->dropElement, n);
         dropData->dropElement->styleChanged();       // update to local style
 
-        mu::engraving::EngravingItem* el = target->drop(*dropData);
+        EngravingItem* el = target->drop(*dropData);
+
         if (el && el->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(el))) {
                 rollback();
@@ -2185,6 +2185,7 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
             }
             e = mu::engraving::toStaffLines(e)->measure();
         }
+
         if (e->acceptDrop(ed)) {
             return e;
         }
@@ -4497,6 +4498,7 @@ ScoreConfig NotationInteraction::scoreConfig() const
     config.isShowUnprintableElements = score()->showUnprintable();
     config.isShowFrames = score()->showFrames();
     config.isShowPageMargins = score()->showPageborders();
+    config.isShowSoundFlags = score()->showSoundFlags();
     config.isMarkIrregularMeasures = score()->markIrregularMeasures();
 
     return config;
@@ -4513,6 +4515,7 @@ void NotationInteraction::setScoreConfig(const ScoreConfig& config)
     score()->setShowUnprintable(config.isShowUnprintableElements);
     score()->setShowFrames(config.isShowFrames);
     score()->setShowPageborders(config.isShowPageMargins);
+    score()->setShowSoundFlags(config.isShowSoundFlags);
     score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
 
     EngravingItem* selectedElement = selection()->element();

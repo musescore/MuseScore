@@ -118,3 +118,12 @@ SoundProfileName PlaybackConfigurationStub::defaultProfileForNewProjects() const
 void PlaybackConfigurationStub::setDefaultProfileForNewProjects(const SoundProfileName&)
 {
 }
+
+bool PlaybackConfigurationStub::isSoundFlagsMultiSelectionEnabled() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setIsSoundFlagsMultiSelectionEnabled(bool)
+{
+}

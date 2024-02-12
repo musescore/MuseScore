@@ -663,7 +663,16 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(StaffText* t, XmlReader& xml, ReadContext& ctx)
 {
-    read(static_cast<StaffTextBase*>(t), xml, ctx);
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+        if (tag == "SoundFlag") {
+            SoundFlag* flag = Factory::createSoundFlag(t);
+            read(flag, xml, ctx);
+            t->setSoundFlag(flag);
+        } else if (!readProperties(static_cast<StaffTextBase*>(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(StaffTextBase* t, XmlReader& xml, ReadContext& ctx)
@@ -2481,7 +2490,7 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
     sym->setSym(symId, scoreFont);
 }
 
-void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext& ctx)
+void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext&)
 {
     while (xml.readNextStartElement()) {
         const AsciiStringView tag(xml.name());
@@ -2497,7 +2506,7 @@ void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext& ctx)
             }
 
             item->setParams(params);
-        } else if (!readProperties(static_cast<TextBase*>(item), xml, ctx)) {
+        } else {
             xml.unknown();
         }
     }

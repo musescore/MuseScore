@@ -23,6 +23,7 @@
 #include "soundflagsettingsmodel.h"
 
 #include "engraving/types/types.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/soundflag.h"
 
 #include "audio/audioutils.h"
@@ -41,9 +42,13 @@ void SoundFlagSettingsModel::init()
 {
     TRACEFUNC;
 
+    connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRect&) {
+        emit iconRectChanged();
+    });
+
     AbstractElementPopupModel::init();
 
-    IF_ASSERT_FAILED(m_item || m_item->isSoundFlag()) {
+    IF_ASSERT_FAILED(m_item && m_item->isSoundFlag()) {
         return;
     }
 
@@ -61,10 +66,6 @@ void SoundFlagSettingsModel::initSourceType()
 
     if (audio::AudioSourceType::MuseSampler == type) {
         sourceType = SourceType::MuseSounds;
-    } else if (audio::AudioSourceType::Vsti == type) {
-        sourceType = SourceType::VST;
-    } else if (audio::AudioSourceType::Fluid == type) {
-        sourceType = SourceType::SoundFonts;
     }
 
     setSourceType(sourceType);
@@ -80,13 +81,15 @@ void SoundFlagSettingsModel::initTitle()
 
     if (audio::AudioSourceType::MuseSampler == type) {
         title = qtrc("playback", "Muse Sounds:") + " " + name;
-    } else if (audio::AudioSourceType::Vsti == type) {
-        title = qtrc("playback", "VST:") + " " + name;
-    } else if (audio::AudioSourceType::Fluid == type) {
-        title = qtrc("playback", "SoundFonts:") + " " + name;
     }
 
     setTitle(title);
+}
+
+engraving::StaffText* SoundFlagSettingsModel::staffText() const
+{
+    engraving::EngravingItem* parent = m_item->parentItem();
+    return parent && parent->isStaffText() ? engraving::toStaffText(parent) : nullptr;
 }
 
 project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
@@ -143,25 +146,10 @@ void SoundFlagSettingsModel::setTitle(const QString& title)
     emit titleChanged();
 }
 
-bool SoundFlagSettingsModel::showText() const
-{
-    // todo
-    return m_showText;
-}
-
-void SoundFlagSettingsModel::setShowText(bool show)
-{
-    if (m_showText == show) {
-        return;
-    }
-
-    m_showText = show;
-    emit showTextChanged();
-}
-
 QString SoundFlagSettingsModel::text() const
 {
-    return m_item ? m_item->getProperty(mu::engraving::Pid::TEXT).toQVariant().toString() : QString();
+    engraving::StaffText* staffText = this->staffText();
+    return staffText ? staffText->xmlText().toQString() : QString();
 }
 
 void SoundFlagSettingsModel::setText(const QString& text)
@@ -172,4 +160,9 @@ void SoundFlagSettingsModel::setText(const QString& text)
 
     changeItemProperty(mu::engraving::Pid::TEXT, text);
     emit textChanged();
+}
+
+QRect SoundFlagSettingsModel::iconRect() const
+{
+    return m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
 }

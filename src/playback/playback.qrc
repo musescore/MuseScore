@@ -21,7 +21,5 @@
         <file>qml/MuseScore/Playback/SoundProfilesDialog.qml</file>
         <file>qml/MuseScore/Playback/SoundFlagPopup.qml</file>
         <file>qml/MuseScore/Playback/internal/SoundFlag/MuseSoundsParams.qml</file>
-        <file>qml/MuseScore/Playback/internal/SoundFlag/SoundFontsParams.qml</file>
-        <file>qml/MuseScore/Playback/internal/SoundFlag/VSTParams.qml</file>
     </qresource>
 </RCC>

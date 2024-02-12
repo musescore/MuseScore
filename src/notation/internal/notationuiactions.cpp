@@ -37,6 +37,7 @@ static const ActionCode SHOW_INVISIBLE_CODE("show-invisible");
 static const ActionCode SHOW_UNPRINTABLE_CODE("show-unprintable");
 static const ActionCode SHOW_FRAMES_CODE("show-frames");
 static const ActionCode SHOW_PAGEBORDERS_CODE("show-pageborders");
+static const ActionCode SHOW_SOUND_FLAGS("show-soundflags");
 static const ActionCode SHOW_IRREGULAR_CODE("show-irregular");
 
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
@@ -2348,7 +2349,7 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
-             )
+             ),
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {
@@ -2378,6 +2379,13 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Show page &margins"),
              TranslatableString("action", "Show/hide page margins"),
+             Checkable::Yes
+             ),
+    UiAction(SHOW_SOUND_FLAGS,
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Show sound flags"), // todo &
+             TranslatableString("action", "Show/hide sound flags"),
              Checkable::Yes
              ),
     UiAction(SHOW_IRREGULAR_CODE,
@@ -2463,7 +2471,8 @@ void NotationUiActions::init()
                     { ScoreConfigType::ShowUnprintableElements, SHOW_UNPRINTABLE_CODE },
                     { ScoreConfigType::ShowFrames, SHOW_FRAMES_CODE },
                     { ScoreConfigType::ShowPageMargins, SHOW_PAGEBORDERS_CODE },
-                    { ScoreConfigType::MarkIrregularMeasures, SHOW_IRREGULAR_CODE }
+                    { ScoreConfigType::MarkIrregularMeasures, SHOW_IRREGULAR_CODE },
+                    { ScoreConfigType::ShowSoundFlags, SHOW_SOUND_FLAGS },
                 };
 
                 m_actionCheckedChanged.send({ configActions.at(configType) });
@@ -2527,6 +2536,9 @@ bool NotationUiActions::isScoreConfigChecked(const actions::ActionCode& code, co
         return cfg.isShowFrames;
     }
     if (SHOW_PAGEBORDERS_CODE == code) {
+        return cfg.isShowPageMargins;
+    }
+    if (SHOW_SOUND_FLAGS == code) {
         return cfg.isShowPageMargins;
     }
     if (SHOW_IRREGULAR_CODE == code) {

@@ -36,14 +36,28 @@ class StaffText final : public StaffTextBase
     DECLARE_CLASSOF(ElementType::STAFF_TEXT)
 
 public:
-    StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);
+    StaffText(Segment* parent = nullptr, TextStyleType = TextStyleType::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
 
     bool canBeExcludedFromOtherParts() const override { return true; }
 
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    EngravingObjectList scanChildren() const override;
+
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+
+    void setTrack(track_idx_t idx) override;
+
+    bool hasSoundFlag() const;
+    SoundFlag* soundFlag() const;
+    void setSoundFlag(SoundFlag* flag);
+
 private:
     PropertyValue propertyDefault(Pid id) const override;
+
+    SoundFlag* m_soundFlag = nullptr;
 };
 } // namespace mu::engraving
 #endif
