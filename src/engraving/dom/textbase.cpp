@@ -1737,10 +1737,8 @@ void TextBase::insert(TextCursor* cursor, char32_t code, LayoutData* ldata) cons
         code = ' ';
     }
 
-    String s = String::fromUcs4(code);
-
     if (cursor->row() < ldata->blocks.size()) {
-        ldata->blocks[cursor->row()].insert(cursor, s);
+        ldata->blocks[cursor->row()].insert(cursor, String::fromUcs4(code));
     }
 
     cursor->setColumn(cursor->column() + 1);

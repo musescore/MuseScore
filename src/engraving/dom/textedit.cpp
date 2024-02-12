@@ -973,11 +973,11 @@ void TextBase::endHexState(EditData& ed)
             TextBlock& t = mutldata()->blocks[cursor->row()];
             String ss   = t.remove(static_cast<int>(c1), m_hexState + 1, cursor);
             bool ok;
-            char16_t code = ss.mid(1).toInt(&ok, 16);
+            char32_t code = ss.mid(1).toInt(&ok, 16);
             cursor->setColumn(c1);
             cursor->clearSelection();
             if (ok) {
-                editInsertText(cursor, String(code));
+                editInsertText(cursor, String::fromUcs4(code));
             } else {
                 LOGD("cannot convert hex string <%s>, state %d (%zu-%zu)",
                      muPrintable(ss.mid(1)), m_hexState, c1, c2);
