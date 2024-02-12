@@ -46,7 +46,6 @@
 #include "bracket.h"
 #include "breath.h"
 #include "capo.h"
-#include "compat/midi/compatmidirender.h"
 #include "chord.h"
 #include "clef.h"
 #include "excerpt.h"
@@ -98,7 +97,6 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
-#include "hairpin.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -266,14 +264,14 @@ Score::~Score()
     delete m_rootItem;
 }
 
-mu::async::Channel<POS, unsigned> Score::posChanged() const
+mu::async::Channel<LoopBoundaryType, unsigned> Score::loopBoundaryTickChanged() const
 {
-    return m_posChanged;
+    return m_loopBoundaryTickChanged;
 }
 
-void Score::notifyPosChanged(POS pos, unsigned ticks)
+void Score::notifyLoopBoundaryTickChanged(LoopBoundaryType type, unsigned ticks)
 {
-    m_posChanged.send(pos, ticks);
+    m_loopBoundaryTickChanged.send(type, ticks);
 }
 
 mu::async::Channel<EngravingItem*> Score::elementDestroyed()
@@ -3329,14 +3327,6 @@ void Score::select(const std::vector<EngravingItem*>& items, SelectType type, st
 
 void Score::doSelect(EngravingItem* e, SelectType type, staff_idx_t staffIdx)
 {
-    // Move the playhead to the selected element's preferred play position.
-    if (e) {
-        const auto playTick = e->playTick();
-        if (masterScore()->playPos() != playTick) {
-            masterScore()->setPlayPos(playTick);
-        }
-    }
-
     if (MScore::debugMode) {
         LOGD("select element <%s> type %d(state %d) staff %zu",
              e ? e->typeName() : "", int(type), int(selection().state()), e ? e->staffIdx() : -1);
@@ -3591,15 +3581,6 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
     }
 
     m_selection.setActiveTrack(activeTrack);
-
-    // doing this in note entry mode can clear selection
-    if (m_selection.startSegment() && !noteEntryMode()) {
-        Fraction tick = m_selection.startSegment()->tick();
-        if (masterScore()->playPos() != tick) {
-            masterScore()->setPlayPos(tick);
-        }
-    }
-
     m_selection.updateSelectedElements();
 }
 
@@ -5867,8 +5848,8 @@ const CmdState& Score::cmdState() const { return m_masterScore->cmdState(); }
 void Score::addLayoutFlags(LayoutFlags f) { m_masterScore->addLayoutFlags(f); }
 void Score::setInstrumentsChanged(bool v) { m_masterScore->setInstrumentsChanged(v); }
 
-Fraction Score::pos(POS pos) const { return m_masterScore->pos(pos); }
-void Score::setPos(POS pos, Fraction tick) { m_masterScore->setPos(pos, tick); }
+Fraction Score::loopBoundaryTick(LoopBoundaryType type) const { return m_masterScore->loopBoundaryTick(type); }
+void Score::setLoopBoundaryTick(LoopBoundaryType type, Fraction tick) { m_masterScore->setLoopBoundaryTick(type, tick); }
 
 //---------------------------------------------------------
 //   ScoreLoad::_loading

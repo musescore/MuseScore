@@ -93,7 +93,6 @@ private:
     const engraving::TempoText* tempoText(int tick) const;
 
     IGetScore* m_getScore = nullptr;
-    async::Channel<int> m_playPositionTickChanged;
 
     LoopBoundaries m_loopBoundaries;
     async::Notification m_loopBoundariesChanged;

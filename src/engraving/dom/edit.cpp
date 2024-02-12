@@ -3987,7 +3987,6 @@ void Score::nextInputPos(ChordRest* cr, bool doSelect)
         if (doSelect) {
             select(ncr, SelectType::SINGLE, 0);
         }
-        setPlayPos(ncr->tick());
         for (MuseScoreView* v : m_viewer) {
             v->moveCursor();
         }

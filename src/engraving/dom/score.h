@@ -150,8 +150,10 @@ enum class HDuration : signed char;
 enum class AccidentalType;
 enum class LayoutBreakType;
 
-enum class POS : char {
-    CURRENT, LEFT, RIGHT
+enum class LoopBoundaryType : signed char {
+    Unknown = -1,
+    LoopIn = 0,
+    LoopOut = 1
 };
 
 enum class Pad : char {
@@ -271,8 +273,8 @@ public:
 
     ShadowNote* shadowNote() const;
 
-    mu::async::Channel<POS, unsigned> posChanged() const;
-    void notifyPosChanged(POS pos, unsigned ticks);
+    mu::async::Channel<LoopBoundaryType, unsigned> loopBoundaryTickChanged() const;
+    void notifyLoopBoundaryTickChanged(LoopBoundaryType type, unsigned ticks);
 
     mu::async::Channel<EngravingItem*> elementDestroyed();
 
@@ -628,15 +630,13 @@ public:
     TranslatableString getTextStyleUserName(TextStyleType tid);
 
     // These position are in ticks and not uticks
-    Fraction playPos() const { return pos(POS::CURRENT); }
-    void setPlayPos(const Fraction& tick) { setPos(POS::CURRENT, tick); }
-    Fraction loopInTick() const { return pos(POS::LEFT); }
-    Fraction loopOutTick() const { return pos(POS::RIGHT); }
-    void setLoopInTick(const Fraction& tick) { setPos(POS::LEFT, tick); }
-    void setLoopOutTick(const Fraction& tick) { setPos(POS::RIGHT, tick); }
+    Fraction loopInTick() const { return loopBoundaryTick(LoopBoundaryType::LoopIn); }
+    Fraction loopOutTick() const { return loopBoundaryTick(LoopBoundaryType::LoopOut); }
+    void setLoopInTick(const Fraction& tick) { setLoopBoundaryTick(LoopBoundaryType::LoopIn, tick); }
+    void setLoopOutTick(const Fraction& tick) { setLoopBoundaryTick(LoopBoundaryType::LoopOut, tick); }
 
-    Fraction pos(POS pos) const;
-    void setPos(POS pos, Fraction tick);
+    Fraction loopBoundaryTick(LoopBoundaryType type) const;
+    void setLoopBoundaryTick(LoopBoundaryType type, Fraction tick);
 
     bool noteEntryMode() const { return inputState().noteEntryMode(); }
     void setNoteEntryMode(bool val) { inputState().setNoteEntryMode(val); }
@@ -1088,7 +1088,7 @@ private:
 
     ShadowNote* m_shadowNote = nullptr;
 
-    mu::async::Channel<POS, unsigned> m_posChanged;
+    mu::async::Channel<LoopBoundaryType, unsigned> m_loopBoundaryTickChanged;
 
     PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;

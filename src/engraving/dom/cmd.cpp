@@ -464,10 +464,6 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
             }
             m_updateState.refresh = RectF();
         }
-        const InputState& is = inputState();
-        if (is.noteEntryMode() && is.segment()) {
-            setPlayPos(is.segment()->tick());
-        }
         if (playlistDirty()) {
             masterScore()->setPlaylistClean();
         }
