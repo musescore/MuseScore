@@ -185,7 +185,7 @@ Item {
                 required property int row
                 required property int column
 
-                readonly property var item: model ? model.itemRole : null
+                readonly property var modelItem: model ? model.itemRole : null
                 readonly property var modelIndex: instrumentsTreeView.index(row, column)
 
                 width: parent.width
@@ -194,8 +194,7 @@ Item {
                 Loader {
                     id: treeItemDelegateLoader
 
-                    readonly property alias item: dropArea.item
-                    readonly property var delegateType: item ? item.type : InstrumentsTreeItemType.UNDEFINED
+                    readonly property var delegateType: dropArea.modelItem ? dropArea.modelItem.type : InstrumentsTreeItemType.UNDEFINED
 
                     anchors.fill: parent
 
@@ -208,7 +207,7 @@ Item {
                         InstrumentsTreeItemDelegate {
                             treeView: instrumentsTreeView
 
-                            item: dropArea.item
+                            item: dropArea.modelItem
                             row: dropArea.row
                             modelIndex: dropArea.modelIndex
                             isExpanded: dropArea.expanded
@@ -277,7 +276,7 @@ Item {
                         id: controlItemDelegateComponent
 
                         InstrumentsTreeItemControl {
-                            item: treeItemDelegateLoader.item
+                            item: dropArea.modelItem
                             depth: dropArea.depth
 
                             navigation.panel: instrumentsTreeView.navigationTreePanel
