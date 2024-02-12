@@ -672,7 +672,7 @@ void SpecialCharactersDialog::populateCommon()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(id);
         fs->setFont(m_font);
-        m_pCommon->appendElement(fs, QString(id));
+        m_pCommon->appendElement(fs, QChar(id));
     }
 
     for (SymId id : commonScoreSymbols) {
@@ -685,7 +685,7 @@ void SpecialCharactersDialog::populateCommon()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore->dummy());
         fs->setCode(id);
         fs->setFont(m_font);
-        m_pCommon->appendElement(fs, QString(id));
+        m_pCommon->appendElement(fs, QChar(id));
     }
 }
 
