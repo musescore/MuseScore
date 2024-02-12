@@ -494,8 +494,6 @@ public:
     void cmdRemoveTimeSig(TimeSig*);
     void cmdAddTimeSig(Measure*, staff_idx_t staffIdx, TimeSig*, bool local);
 
-    std::vector<EngravingItem*> addSoundFlagToSelection();
-
     virtual void setUpdateAll();
     void setLayoutAll(staff_idx_t staff = mu::nidx, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);

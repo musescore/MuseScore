@@ -92,7 +92,6 @@ private:
     uicomponents::MenuItemList makeFramesItems();
     uicomponents::MenuItemList makeTextItems();
     uicomponents::MenuItemList makeLinesItems();
-    uicomponents::MenuItemList makePlaybackItems();
     uicomponents::MenuItemList makeToolbarsItems();
     uicomponents::MenuItemList makeWorkspacesItems();
     uicomponents::MenuItemList makeShowItems();

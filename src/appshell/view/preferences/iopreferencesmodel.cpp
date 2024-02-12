@@ -151,11 +151,6 @@ bool IOPreferencesModel::useMIDI20Output() const
     return midiConfiguration()->useMIDI20Output();
 }
 
-bool IOPreferencesModel::soundFlagsMultiSelection() const
-{
-    return playbackConfiguration()->isSoundFlagsMultiSelectionEnabled();
-}
-
 void IOPreferencesModel::setUseMIDI20Output(bool use)
 {
     if (use == useMIDI20Output()) {
@@ -164,16 +159,6 @@ void IOPreferencesModel::setUseMIDI20Output(bool use)
 
     midiConfiguration()->setUseMIDI20Output(use);
     emit useMIDI20OutputChanged();
-}
-
-void IOPreferencesModel::setSoundFlagsMultiSelection(bool enabled)
-{
-    if (enabled == soundFlagsMultiSelection()) {
-        return;
-    }
-
-    playbackConfiguration()->setIsSoundFlagsMultiSelectionEnabled(enabled);
-    emit soundFlagsMultiSelectionChanged();
 }
 
 void IOPreferencesModel::showMidiError(const MidiDeviceID& deviceId, const std::string& text) const

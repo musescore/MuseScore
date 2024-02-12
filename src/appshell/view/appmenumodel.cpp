@@ -222,7 +222,6 @@ MenuItem* AppMenuModel::makeAddMenu()
         makeMenu(TranslatableString("appshell/menu/add", "&Frames"), makeFramesItems(), "menu-frames"),
         makeMenu(TranslatableString("appshell/menu/add", "&Text"), makeTextItems(), "menu-notes"),
         makeMenu(TranslatableString("appshell/menu/add", "&Lines"), makeLinesItems(), "menu-lines"),
-        makeMenu(TranslatableString("appshell/menu/add", "&Playback"), makePlaybackItems(), "menu-playback"),
     };
 
     return makeMenu(TranslatableString("appshell/menu/add", "&Add"), addItems, "menu-add");
@@ -566,15 +565,6 @@ MenuItemList AppMenuModel::makeLinesItems()
         makeMenuItem("add-8va"),
         makeMenuItem("add-8vb"),
         makeMenuItem("add-noteline")
-    };
-
-    return items;
-}
-
-MenuItemList AppMenuModel::makePlaybackItems()
-{
-    MenuItemList items {
-        makeMenuItem("add-sound-flag"),
     };
 
     return items;

@@ -108,10 +108,6 @@ StyledPopupView {
                 switch (soundFlagModel.sourceType) {
                 case SoundFlagSettingsModel.MuseSounds:
                     return museSoundsComp
-                case SoundFlagSettingsModel.VST:
-                    return vstComp
-                case SoundFlagSettingsModel.SoundFonts:
-                    return soundFontsComp
                 case SoundFlagSettingsModel.Undefined:
                     return undefined
                 }
@@ -122,19 +118,6 @@ StyledPopupView {
                 MuseSoundsParams {
                 }
             }
-
-            Component {
-                id: vstComp
-                VSTParams {
-                }
-            }
-
-            Component {
-                id: soundFontsComp
-                SoundFontsParams {
-                }
-            }
-
         }
     }
 }

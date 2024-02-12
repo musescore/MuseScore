@@ -41,7 +41,6 @@
 #include "view/soundprofilesmodel.h"
 #include "view/internal/soundflag/soundflagsettingsmodel.h"
 #include "view/internal/soundflag/musesoundsparamsmodel.h"
-#include "view/internal/soundflag/vstparamsmodel.h"
 
 using namespace mu::playback;
 using namespace mu::modularity;
@@ -99,7 +98,6 @@ void PlaybackModule::registerUiTypes()
 
     qmlRegisterType<SoundFlagSettingsModel>("MuseScore.Playback", 1, 0, "SoundFlagSettingsModel");
     qmlRegisterType<MuseSoundsParamsModel>("MuseScore.Playback", 1, 0, "MuseSoundsParamsModel");
-    qmlRegisterType<VSTParamsModel>("MuseScore.Playback", 1, 0, "VSTParamsModel");
 
     qmlRegisterUncreatableType<MixerChannelItem>("MuseScore.Playback", 1, 0, "MixerChannelItem", "Cannot create a MixerChannelItem");
 

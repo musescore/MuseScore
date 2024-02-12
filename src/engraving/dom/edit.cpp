@@ -1469,65 +1469,6 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
     delete ts;
 }
 
-std::vector<EngravingItem*> Score::addSoundFlagToSelection()
-{
-    const std::vector<EngravingItem*>& elements = selection().elements();
-    if (elements.empty()) {
-        return {};
-    }
-
-    std::vector<EngravingItem*> addedElements;
-
-    for (EngravingItem* element : elements) {
-        if (!element) {
-            continue;
-        }
-
-        if (element->isStaffText()) {
-            StaffText* staffText = toStaffText(element);
-
-            SoundFlag* flag = Factory::createSoundFlag(staffText);
-
-            flag->setTrack(staffText->track());
-            flag->setParent(staffText);
-
-            //! try to predict preset id by text
-            if (flag->soundPresets().empty() && !staffText->xmlText().empty()) {
-                flag->setSoundPresets({ staffText->xmlText().simplified().remove(Char(' ')) });
-            }
-
-            score()->undoAddElement(flag);
-
-            addedElements.push_back(flag);
-        } else if (element->isNote() || element->isRest()) {
-            ChordRest* chordRest = chordOrRest(element);
-            if (!chordRest) {
-                continue;
-            }
-
-            Segment* segment = chordRest->segment();
-
-            StaffText* staffText = Factory::createStaffText(segment);
-            staffText->setTrack(trackZeroVoice(chordRest->track()));
-            staffText->setParent(segment);
-
-            staffText->setXmlText(mtrc("engraving", "Sound flag"));
-
-            score()->undoAddElement(staffText);
-
-            SoundFlag* flag = Factory::createSoundFlag(staffText);
-            flag->setTrack(staffText->track());
-            flag->setParent(staffText);
-
-            score()->undoAddElement(flag);
-
-            addedElements.push_back(flag);
-        }
-    }
-
-    return addedElements;
-}
-
 //---------------------------------------------------------
 //   cmdRemoveTimeSig
 //---------------------------------------------------------
