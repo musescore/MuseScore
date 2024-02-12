@@ -145,12 +145,16 @@ SoundPresetList MuseSamplerResolver::resolveSoundPresets(const audio::AudioResou
     ms_PresetList presets = m_libHandler->getPresetList(instrument);
     SoundPresetList result;
 
+    int num = 0;
+
     while (auto msPreset = m_libHandler->getNextPreset(presets)) {
         SoundPreset soundPreset;
         soundPreset.code = msPreset;
         soundPreset.name = msPreset;
-
+        soundPreset.isDefault = num == 0;
         result.emplace_back(std::move(soundPreset));
+
+        ++num;
     }
 
     return result;

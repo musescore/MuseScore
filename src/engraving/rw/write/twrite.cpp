@@ -2706,18 +2706,18 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 {
+    if (item->soundPresets().empty() && item->playingTechniques().empty()) {
+        return;
+    }
+
     xml.startElement(item);
 
     if (!item->soundPresets().empty()) {
         xml.tag("presets", item->soundPresets().join(u","));
     }
 
-    if (!item->params().empty()) {
-        xml.startElement("Params");
-        for (const auto& pair : item->params()) {
-            xml.tag(pair.first.toStdString(), pair.second.toString().c_str());
-        }
-        xml.endElement();
+    if (!item->playingTechniques().empty()) {
+        xml.tag("playingTechniques", item->playingTechniques().join(u","));
     }
 
     xml.endElement();

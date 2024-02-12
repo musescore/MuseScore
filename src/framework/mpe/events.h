@@ -390,6 +390,7 @@ struct PlaybackParam {
 };
 
 static const String SOUND_PRESET_PARAM_CODE(u"sound_preset");
+static const String PLAY_TECHNIQUE_PARAM_CODE(u"playing_technique");
 
 struct PlaybackData {
     PlaybackEventsMap originEvents;
