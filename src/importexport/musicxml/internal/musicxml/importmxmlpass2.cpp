@@ -796,7 +796,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 underlines are imported as single underline
             importedtext += u"<u>";
         } else {
-            underline = String();
+            underline.clear();
         }
     }
     if (!strike.empty()) {
@@ -805,7 +805,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 strikes are imported as single strike
             importedtext += u"<s>";
         } else {
-            strike = String();
+            strike.clear();
         }
     }
     if (txt == syms) {
@@ -3318,7 +3318,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
             tb->setTrack(track);
             if (!m_wordsText.empty()) {
                 tb->setXmlText(m_wordsText);
-                m_wordsText = String();
+                m_wordsText.clear();
             } else {
                 tb->setVisible(false);
             }
@@ -3407,7 +3407,7 @@ void MusicXMLParserDirection::bracket(const String& type, const int number,
             if (!m_wordsText.empty()) {
                 // TextLine supports only limited formatting, remove all (compatible with 1.3)
                 textLine->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
-                m_wordsText = String();
+                m_wordsText.clear();
             }
 
             if (lineType == "solid") {
@@ -3472,7 +3472,7 @@ void MusicXMLParserDirection::dashes(const String& type, const int number,
         if (!m_wordsText.empty()) {
             // TextLine supports only limited formatting, remove all (compatible with 1.3)
             b->setBeginText(MScoreTextToMXML::toPlainText(m_wordsText));
-            m_wordsText = String();
+            m_wordsText.clear();
         }
 
         b->setBeginHookType(HookType::NONE);
@@ -4185,9 +4185,9 @@ static void flushAlteredTone(KeySigEvent& kse, String& step, String& alt, String
     }
 
     // clean up
-    step = String();
-    alt  = String();
-    acc  = String();
+    step.clear();
+    alt.clear();
+    acc.clear();
 }
 
 //---------------------------------------------------------
@@ -6982,14 +6982,14 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
         String placement = notation.attribute(u"placement");
         if (notation.name() == u"fermata") {
             if (!notationType.empty() && notationType != u"upright" && notationType != u"inverted") {
-                notationType = String();
+                notationType.clear();
                 m_logger->logError(String(u"unknown fermata type %1").arg(notationType), &m_e);
             }
             addFermataToChord(notation, cr);
         } else {
             if (notation.name() == u"strong-accent") {
                 if (!notationType.empty() && notationType != u"up" && notationType != u"down") {
-                    notationType = String();
+                    notationType.clear();
                     m_logger->logError(String(u"unknown %1 type %2").arg(notation.name(), notationType), &m_e);
                 }
             } else if (notation.name() == u"harmonic" || notation.name() == u"delayed-turn"
@@ -6998,12 +6998,12 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
                     // TODO: actually this should be offset a bit to the right
                 }
                 if (placement != u"above" && placement != u"below") {
-                    placement = String();
+                    placement.clear();
                     m_logger->logError(String(u"unknown %1 placement %2").arg(notation.name(), placement), &m_e);
                 }
             } else {
-                notationType = String();           // TODO: Check for other symbols that have type
-                placement = String();           // TODO: Check for other symbols that have placement
+                notationType.clear();           // TODO: Check for other symbols that have type
+                placement.clear();           // TODO: Check for other symbols that have placement
             }
             addArticulationToChord(notation, cr);
         }

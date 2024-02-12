@@ -1342,7 +1342,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 underlines are imported as single underline
             importedtext += u"<u>";
         } else {
-            underline = String();
+            underline.clear();
         }
     }
     if (!strike.isEmpty()) {
@@ -1351,7 +1351,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         if (ok && (lines > 0)) {    // 1, 2, or 3 strikes are imported as single strike
             importedtext += u"<s>";
         } else {
-            underline = String();
+            underline.clear();
         }
     }
     if (txt == syms) {
