@@ -74,6 +74,19 @@ inline String audioSourceName(const AudioInputParams& params)
 
     return String::fromStdString(params.resourceMeta.id);
 }
+
+inline String audioSourceCategoryName(const AudioInputParams& params)
+{
+    if (params.type() == mu::audio::AudioSourceType::MuseSampler) {
+        return params.resourceMeta.attributeVal(u"museCategory");
+    }
+
+    if (params.resourceMeta.type == audio::AudioResourceType::FluidSoundfont) {
+        return params.resourceMeta.attributeVal(synth::SOUNDFONT_NAME_ATTRIBUTE);
+    }
+
+    return String::fromStdString(params.resourceMeta.id);
+}
 }
 
 #endif // MU_AUDIO_AUDIOUTILS_H
