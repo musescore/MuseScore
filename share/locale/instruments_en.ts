@@ -11926,31 +11926,38 @@
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4009"/>
-        <source>Crash cymbal.</source>
+        <source>Suspended Cymbal.</source>
         <comment>crash-cymbal description</comment>
-        <extracomment>description for Crash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Crash cymbal.</translation>
+        <extracomment>description for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Suspended Cymbal.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4011"/>
-        <source>Crash Cymbal</source>
+        <source>Suspended Cymbal</source>
         <comment>crash-cymbal trackName</comment>
-        <extracomment>trackName for Crash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Crash Cymbal</translation>
+        <extracomment>trackName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Suspended Cymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4013"/>
-        <source>Crash Cymbal</source>
+        <source>Suspended Cymbal</source>
         <comment>crash-cymbal longName</comment>
-        <extracomment>longName for Crash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Crash Cymbal</translation>
+        <extracomment>longName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Suspended Cymbal</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4015"/>
-        <source>Cr. Cym.</source>
+        <source>Sus. Cym.</source>
         <comment>crash-cymbal shortName</comment>
-        <extracomment>shortName for Crash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Cr. Cym.</translation>
+        <extracomment>shortName for Suspended Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Sus. Cym.</translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4018"/>
+        <source>Hand Cymbals.</source>
+        <comment>cymbal description</comment>
+        <extracomment>description for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished">Hand Cymbals.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4024"/>
@@ -15423,13 +15430,6 @@
         <comment>snare-drum trackName</comment>
         <extracomment>trackName for Snare Drum; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished">Snare Drum</translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4018"/>
-        <source>Cymbals.</source>
-        <comment>cymbal description</comment>
-        <extracomment>description for Cymbals; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished">Cymbals.</translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4020"/>
