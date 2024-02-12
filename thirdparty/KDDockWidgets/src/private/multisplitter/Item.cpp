@@ -1564,7 +1564,7 @@ void ItemBoxContainer::positionItems()
 void ItemBoxContainer::positionItems_recursive()
 {
     positionItems();
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isVisible()) {
             if (auto c = item->asBoxContainer())
                 c->positionItems_recursive();
@@ -1621,7 +1621,7 @@ void ItemBoxContainer::positionItems(SizingInfo::List &sizes)
 
 void ItemBoxContainer::clear()
 {
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (ItemBoxContainer *container = item->asBoxContainer())
             container->clear();
 
@@ -1633,7 +1633,7 @@ void ItemBoxContainer::clear()
 
 Item *ItemBoxContainer::itemAt(QPoint p) const
 {
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isVisible() && item->geometry().contains(p))
             return item;
     }
@@ -1658,7 +1658,7 @@ void ItemBoxContainer::setHostWidget(Widget *host)
 {
     Item::setHostWidget(host);
     d->deleteSeparators_recursive();
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         item->setHostWidget(host);
     }
 
@@ -2090,7 +2090,7 @@ void ItemBoxContainer::dumpLayout(int level)
     }
 
     int i = 0;
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         item->dumpLayout(level + 1);
         if (item->isVisible()) {
             if (i < d->m_separators.size()) {
@@ -2111,7 +2111,7 @@ void ItemBoxContainer::updateChildPercentages()
         return;
 
     const int usable = usableLength();
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isVisible() && !item->isBeingInserted()) {
             item->m_sizingInfo.percentageWithinParent = (1.0 * item->length(d->m_orientation)) / usable;
         } else {
@@ -2123,7 +2123,7 @@ void ItemBoxContainer::updateChildPercentages()
 void ItemBoxContainer::updateChildPercentages_recursive()
 {
     updateChildPercentages();
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (auto c = item->asBoxContainer())
             c->updateChildPercentages_recursive();
     }
@@ -2134,7 +2134,7 @@ QVector<double> ItemBoxContainer::Private::childPercentages() const
     QVector<double> percentages;
     percentages.reserve(q->m_children.size());
 
-    for (Item *item : qAsConst(q->m_children)) {
+    for (Item *item : std::as_const(q->m_children)) {
         if (item->isVisible() && !item->isBeingInserted())
             percentages << item->m_sizingInfo.percentageWithinParent;
     }
@@ -2202,7 +2202,7 @@ void ItemBoxContainer::restoreChild(Item *item, NeighbourSqueezeStrategy neighbo
 
 void ItemBoxContainer::updateWidgetGeometries()
 {
-    for (Item *item : qAsConst(m_children))
+    for (Item *item : std::as_const(m_children))
         item->updateWidgetGeometries();
 }
 
@@ -2454,7 +2454,7 @@ void ItemBoxContainer::layoutEqually(SizingInfo::List &sizes)
 void ItemBoxContainer::layoutEqually_recursive()
 {
     layoutEqually();
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isVisible()) {
             if (auto c = item->asBoxContainer())
                 c->layoutEqually_recursive();
@@ -2990,7 +2990,7 @@ QVector<int> ItemBoxContainer::Private::requiredSeparatorPositions() const
     QVector<int> positions;
     positions.reserve(numSeparators);
 
-    for (Item *item : qAsConst(q->m_children)) {
+    for (Item *item : std::as_const(q->m_children)) {
         if (positions.size() == numSeparators)
             break;
 
@@ -3061,7 +3061,7 @@ void ItemBoxContainer::Private::deleteSeparators_recursive()
     deleteSeparators();
 
     // recurse into the children:
-    for (Item *item : qAsConst(q->m_children)) {
+    for (Item *item : std::as_const(q->m_children)) {
         if (auto c = item->asBoxContainer())
             c->d->deleteSeparators_recursive();
     }
@@ -3095,7 +3095,7 @@ void ItemBoxContainer::simplify()
     Item::List newChildren;
     newChildren.reserve(m_children.size() + 20); // over-reserve a bit
 
-    for (Item *child : qAsConst(m_children)) {
+    for (Item *child : std::as_const(m_children)) {
         if (ItemBoxContainer *childContainer = child->asBoxContainer()) {
             childContainer->simplify(); // recurse down the hierarchy
 
@@ -3216,7 +3216,7 @@ QVariantMap ItemBoxContainer::toVariantMap() const
 
     QVariantList childrenV;
     childrenV.reserve(m_children.size());
-    for (Item *child : qAsConst(m_children)) {
+    for (Item *child : std::as_const(m_children)) {
         childrenV.push_back(child->toVariantMap());
     }
 
@@ -3309,7 +3309,7 @@ QVector<Separator *> ItemBoxContainer::separators_recursive() const
 {
     Layouting::Separator::List separators = d->m_separators;
 
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (auto c = item->asBoxContainer())
             separators << c->separators_recursive();
     }
@@ -3329,7 +3329,7 @@ bool ItemBoxContainer::Private::isOverflowing() const
 
     int contentsLength = 0;
     int numVisible = 0;
-    for (Item *item : qAsConst(q->m_children)) {
+    for (Item *item : std::as_const(q->m_children)) {
         if (item->isVisible()) {
             contentsLength += item->length(m_orientation);
             numVisible++;
@@ -3357,7 +3357,7 @@ void ItemBoxContainer::Private::relayoutIfNeeded()
     }
 
     // Let's see our children too:
-    for (Item *item : qAsConst(q->m_children)) {
+    for (Item *item : std::as_const(q->m_children)) {
         if (item->isVisible()) {
             if (auto c = item->asBoxContainer())
                 c->d->relayoutIfNeeded();
@@ -3438,7 +3438,7 @@ Separator *ItemBoxContainer::Private::neighbourSeparator_recursive(const Item *i
 
 void ItemBoxContainer::Private::updateWidgets_recursive()
 {
-    for (Item *item : qAsConst(q->m_children)) {
+    for (Item *item : std::as_const(q->m_children)) {
         if (auto c = item->asBoxContainer()) {
             c->d->updateWidgets_recursive();
         } else {
@@ -3533,13 +3533,13 @@ ItemContainer::ItemContainer(Widget *hostWidget, ItemContainer *parent)
     , d(new Private(this))
 {
     connect(this, &Item::xChanged, this, [this] {
-        for (Item *item : qAsConst(m_children)) {
+        for (Item *item : std::as_const(m_children)) {
             Q_EMIT item->xChanged();
         }
     });
 
     connect(this, &Item::yChanged, this, [this] {
-        for (Item *item : qAsConst(m_children)) {
+        for (Item *item : std::as_const(m_children)) {
             Q_EMIT item->yChanged();
         }
     });
@@ -3568,7 +3568,7 @@ bool ItemContainer::hasChildren() const
 
 bool ItemContainer::hasVisibleChildren(bool excludeBeingInserted) const
 {
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isVisible(excludeBeingInserted))
             return true;
     }
@@ -3584,7 +3584,7 @@ int ItemContainer::numChildren() const
 int ItemContainer::numVisibleChildren() const
 {
     int num = 0;
-    for (Item *child : qAsConst(m_children)) {
+    for (Item *child : std::as_const(m_children)) {
         if (child->isVisible())
             num++;
     }
@@ -3608,7 +3608,7 @@ bool ItemContainer::contains(const Item *item) const
 
 Item *ItemContainer::itemForObject(const QObject *o) const
 {
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isContainer()) {
             if (Item *result = item->asContainer()->itemForObject(o))
                 return result;
@@ -3623,7 +3623,7 @@ Item *ItemContainer::itemForObject(const QObject *o) const
 
 Item *ItemContainer::itemForWidget(const Widget *w) const
 {
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (item->isContainer()) {
             if (Item *result = item->asContainer()->itemForWidget(w))
                 return result;
@@ -3639,7 +3639,7 @@ Item::List ItemContainer::visibleChildren(bool includeBeingInserted) const
 {
     Item::List items;
     items.reserve(m_children.size());
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (includeBeingInserted) {
             if (item->isVisible() || item->isBeingInserted())
                 items << item;
@@ -3656,7 +3656,7 @@ Item::List ItemContainer::items_recursive() const
 {
     Item::List items;
     items.reserve(30); // sounds like a good upper number to minimize allocations
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (auto c = item->asContainer()) {
             items << c->items_recursive();
         } else {
@@ -3669,7 +3669,7 @@ Item::List ItemContainer::items_recursive() const
 
 bool ItemContainer::contains_recursive(const Item *item) const
 {
-    for (Item *it : qAsConst(m_children)) {
+    for (Item *it : std::as_const(m_children)) {
         if (it == item) {
             return true;
         } else if (it->isContainer()) {
@@ -3685,7 +3685,7 @@ bool ItemContainer::contains_recursive(const Item *item) const
 int ItemContainer::visibleCount_recursive() const
 {
     int count = 0;
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         count += item->visibleCount_recursive();
     }
 
@@ -3695,7 +3695,7 @@ int ItemContainer::visibleCount_recursive() const
 int ItemContainer::count_recursive() const
 {
     int count = 0;
-    for (Item *item : qAsConst(m_children)) {
+    for (Item *item : std::as_const(m_children)) {
         if (auto c = item->asContainer()) {
             count += c->count_recursive();
         } else {

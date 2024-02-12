@@ -127,7 +127,7 @@ bool ShortcutsModel::apply()
 {
     ShortcutList shortcuts;
 
-    for (const Shortcut& shortcut : qAsConst(m_shortcuts)) {
+    for (const Shortcut& shortcut : std::as_const(m_shortcuts)) {
         shortcuts.push_back(shortcut);
     }
 
@@ -283,7 +283,7 @@ QVariantList ShortcutsModel::shortcuts() const
 {
     QVariantList result;
 
-    for (const Shortcut& shortcut : qAsConst(m_shortcuts)) {
+    for (const Shortcut& shortcut : std::as_const(m_shortcuts)) {
         result << shortcutToObject(shortcut);
     }
 
