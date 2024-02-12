@@ -50,19 +50,11 @@ static long int toInt_helper(const char* str, bool* ok, int base)
     }
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
     char* end = nullptr;
-    long v = std::strtol(str, &end, base);
+    long int v = static_cast<int>(std::strtol(str, &end, base));
     setlocale(LC_NUMERIC, currentLoc);
     bool myOk = std::strlen(end) == 0;
     if (!myOk) {
-        end++;
-        if (std::strlen(end) != 0) {
-            char* frEnd = nullptr;
-            std::strtol(end, &frEnd, base);
-            myOk = std::strlen(frEnd) == 0;
-            if (!myOk) {
-                v = 0;
-            }
-        }
+        v = 0;
     }
 
     if (ok) {
