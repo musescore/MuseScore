@@ -2014,12 +2014,12 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
     // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
     BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
     const bool visible = m->endBarLineVisible();
-    String color = String();
+    String color;
 
     bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
     Volta* volta = findVolta(m, false, strack);
     // detect short and tick barlines
-    String special = String();
+    String special;
     const BarLine* bl = m->endBarLine();
     if (bl) {
         color = color2xml(bl);
