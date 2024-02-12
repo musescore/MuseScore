@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.8
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQml.Models 2.2
 
@@ -210,7 +210,7 @@ StyledGridView {
         interval: 400
     }
 
-    PaletteGrid {
+    PaletteGridLinesCanvas {
         id: grid
         z: 1
         anchors.fill: parent
@@ -257,7 +257,7 @@ StyledGridView {
                 placeholder.makePlaceholder(idx, { decoration: ui.theme.textFieldColor, toolTip: "placeholder", accessibleText: "", cellActive: false, mimeData: {} });
             }
 
-            onEntered: {
+            onEntered: function(drag) {
                 onDragOverPaletteFinished();
 
                 // first check if controller allows dropping this item here
@@ -270,7 +270,7 @@ StyledGridView {
                     internal = false;
                 }
 
-                const accept = (action & drag.supportedActions) && (internal || !externalDropBlocked);
+                const accept = (action & drag.supportedActions) && (internal || !paletteView.externalDropBlocked);
 
                 if (accept) {
                     drag.accept(action);
@@ -284,7 +284,9 @@ StyledGridView {
                 }
             }
 
-            onPositionChanged: onDrag(drag)
+            onPositionChanged: function(drag) {
+                onDrag(drag)
+            }
 
             function onDragOverPaletteFinished() {
                 if (placeholder.active) {
@@ -299,7 +301,7 @@ StyledGridView {
 
             onExited: onDragOverPaletteFinished();
 
-            onDropped: {
+            onDropped: function(drop) {
                 if (!action) {
                     onDragOverPaletteFinished();
                     return;
@@ -617,7 +619,7 @@ StyledGridView {
                     { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
                 ]
 
-                onHandleMenuItem: {
+                onHandleMenuItem: function(itemId) {
                     switch(itemId) {
                     case "delete":
                         paletteView.paletteController.remove(contextMenu.modelIndex)
