@@ -728,7 +728,7 @@ static String slurTieLineStyle(const SlurTie* s)
         break;
     case SlurStyleType::Solid:
     default:
-        lineType = String();
+        lineType.clear();
     }
     if (!lineType.isEmpty()) {
         rest = String(u" line-type=\"%1\"").arg(lineType);
@@ -4616,9 +4616,9 @@ static bool findMetronome(const std::list<TextFragment>& list,
 {
     String words = MScoreTextToMXML::toPlainTextPlusSymbols(list);
     //LOGD("findMetronome('%s')", muPrintable(words));
-    hasParen   = false;
-    metroLeft  = String();
-    metroRight = String();
+    hasParen = false;
+    metroLeft.clear();
+    metroRight.clear();
     int metroPos = -1;     // metronome start position
     int metroLen = 0;      // metronome length
 
@@ -4975,7 +4975,7 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 static size_t findDynamicInString(const String& s, size_t& length, String& type)
 {
     length = 0;
-    type = String();
+    type.clear();
     size_t matchIndex = mu::nidx;
     const int n = static_cast<int>(DynamicType::LAST) - 1;
 
@@ -5028,7 +5028,7 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             xml.tagRaw(tag, dynamicPosition == mu::nidx ? text : text.left(dynamicPosition));
             xml.endElement();
             if (dynamicPosition == mu::nidx) {
-                text = String();
+                text.clear();
             } else if (dynamicPosition > 0) {
                 text.remove(0, dynamicPosition);
                 dynamicPosition = 0;
@@ -5497,7 +5497,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                 if (!inDynamicsSym) {
                     if (!text.empty()) {
                         m_xml.tag("other-dynamics", text);
-                        text = String();
+                        text.clear();
                     }
                     inDynamicsSym = true;
                 }
@@ -5511,7 +5511,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                         } else {
                             m_xml.tag("other-dynamics", text);
                         }
-                        text = String();
+                        text.clear();
                     }
                     inDynamicsSym = false;
                 }
