@@ -264,7 +264,7 @@ bool BBFile::read(const QString& name)
     _measures = ((maxbeat + timesigZ() - 1) / timesigZ()) + 1;
 
     if (roots != _chords.size()) {
-        LOGD("import bb: roots %d != extensions %d", roots, _chords.size());
+        LOGD("import bb: roots %d != extensions %lld", roots, _chords.size());
         return false;
     }
     LOGD("Measures %d", _measures);

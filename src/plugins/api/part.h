@@ -40,8 +40,8 @@ class InstrumentListProperty : public QQmlListProperty<Instrument>
 public:
     InstrumentListProperty(Part* p);
 
-    static int count(QQmlListProperty<Instrument>* l);
-    static Instrument* at(QQmlListProperty<Instrument>* l, int i);
+    static qsizetype count(QQmlListProperty<Instrument>* l);
+    static Instrument* at(QQmlListProperty<Instrument>* l, qsizetype i);
 };
 
 //---------------------------------------------------------
