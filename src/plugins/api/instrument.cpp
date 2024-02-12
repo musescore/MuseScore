@@ -108,7 +108,7 @@ QVariantList StringData::stringList() const
 //---------------------------------------------------------
 
 ChannelListProperty::ChannelListProperty(Instrument* i)
-    : QQmlListProperty<Channel>(i, i, nullptr, &count, &at, nullptr) {}
+    : QmlListProperty<Channel>(i, i, nullptr, &count, &at, nullptr) {}
 
 //---------------------------------------------------------
 //   ChannelListProperty::count
