@@ -396,6 +396,7 @@ private:
     QString _sndFine;
     QString _sndSegno;
     QString _sndToCoda;
+    bool visible = true;
     bool _hasDefaultY;
     qreal _defaultY;
     bool _hasRelativeY;
@@ -415,6 +416,7 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
+    void otherDirection();
     void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     void handleTempo();

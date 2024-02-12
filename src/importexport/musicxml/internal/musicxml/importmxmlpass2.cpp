@@ -3000,7 +3000,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
     // handle the elems
     foreach (auto elem, _elems) {
         // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
-        addElemOffset(elem, track, placement, measure, tick + _offset);
+        if (hasTotalY()) {
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
+                totalY(), elem, track, placement, measure, tick + _offset);
+            delayedDirections.push_back(delayedDirection);
+        } else {
+            addElemOffset(elem, track, placement, measure, tick + _offset);
+        }
     }
 
     // handle the spanner stops first
@@ -3132,6 +3138,8 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             if (!smufl.empty()) {
                 _wordsText += u"<sym>" + smufl + u"</sym>";
             }
+        } else if (_e.name() == "other-direction") {
+            otherDirection();
         } else {
             skipLogCurrElem();
         }
@@ -3176,6 +3184,61 @@ void MusicXMLParserDirection::dynamics()
         } else {
             _dynamicsList.push_back(_e.name().toString());
             _e.skipCurrentElement();
+        }
+    }
+}
+
+void MusicXMLParserDirection::otherDirection()
+{
+    // <other-direction> element is used to define any <direction> symbols not yet in the MusicXML format
+
+    const String smufl = _e.attributes().value("smufl").toString();
+    const String colorStr = _e.attributes().value("color").toString();
+    const Color color = Color::fromString(colorStr.toStdString());
+
+    // Read smufl symbol
+    if (!smufl.empty()) {
+        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+        if (id != SymId::noSym) {
+            Symbol* smuflSym = Factory::createSymbol(_score->dummy());
+            smuflSym->setSym(id);
+            if (color.isValid()) {
+                smuflSym->setColor(color);
+            }
+            _elems.push_back(smuflSym);
+        }
+        _e.skipCurrentElement();
+    } else {
+        // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
+        // TODO: Add more symbols from Sibelius
+        std::map<String, String> otherDirectionStrings;
+        if (_pass1.exporterString().contains(u"Dolet")) {
+            otherDirectionStrings = {
+                { String(u"To Coda"), String(u"To Coda") },
+                { String(u"Segno"), String(u"<sym>segno</sym>") },
+                { String(u"CODA"), String(u"<sym>coda</sym>") },
+            };
+        }
+        std::map<String, SymId> otherDirectionSyms;
+        otherDirectionSyms = { { String(u"Rhythm dot"), SymId::augmentationDot },
+            { String(u"Whole rest"), SymId::restWhole },
+            { String(u"l.v. down"), SymId::articLaissezVibrerBelow },
+            { String(u"8vb"), SymId::ottavaBassaVb },
+            { String(u"Treble clef"), SymId::gClef },
+            { String(u"Bass clef"), SymId::fClef }
+        };
+        String t = _e.readElementText();
+        String val = mu::value(otherDirectionStrings, t);
+        if (!val.empty()) {
+            _wordsText += val;
+        } else {
+            SymId sym = mu::value(otherDirectionSyms, t);
+            Symbol* smuflSym = Factory::createSymbol(_score->dummy());
+            smuflSym->setSym(sym);
+            if (color.isValid()) {
+                smuflSym->setColor(color);
+            }
+            _elems.push_back(smuflSym);
         }
     }
 }

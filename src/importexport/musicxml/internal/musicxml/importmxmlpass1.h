@@ -183,6 +183,7 @@ public:
     void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert(key, value); }
     QMap<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }
     void insertSeenDenominator(int val) { _seenDenominators.emplace(val); }
+    String exporterString() const { return _exporterString; }
 
 private:
     // functions
@@ -190,6 +191,7 @@ private:
 
     // generic pass 1 data
     QXmlStreamReader _e;
+    String _exporterString;                    // Name of the software which exported the file
     int _divs;                                  ///< Current MusicXML divisions value
     QMap<QString, MusicXmlPart> _parts;         ///< Parts data, mapped on part id
     std::set<int> _systemStartMeasureNrs;       ///< Measure numbers of measures starting a page
