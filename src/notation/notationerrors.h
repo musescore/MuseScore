@@ -34,7 +34,6 @@ enum class Err {
     // selection
     NoteIsNotSelected = 1050,
     NoteOrRestIsNotSelected,
-    NoteOrRestOrStaffTextIsNotSelected,
     NoteOrFiguredBassIsNotSelected,
     MeasureIsNotSelected,
     SelectCompleteTupletOrTremolo,
@@ -56,10 +55,6 @@ inline Ret make_ret(Err err)
     case Err::NoteOrRestIsNotSelected:
         text = trc("notation", "No note or rest selected")
                + "\n" + trc("notation", "Please select a note or rest and retry");
-        break;
-    case Err::NoteOrRestOrStaffTextIsNotSelected:
-        text = trc("notation", "No note, rest or staff text selected")
-               + "\n" + trc("notation", "Please select a note, a rest or staff text and retry");
         break;
     case Err::NoteOrFiguredBassIsNotSelected:
         text = trc("notation", "No note or figured bass selected")

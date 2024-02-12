@@ -22,8 +22,6 @@
 
 #include "soundflag.h"
 
-#include "draw/fontmetrics.h"
-
 #include "undo.h"
 
 using namespace mu::engraving;

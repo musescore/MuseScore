@@ -111,6 +111,5 @@
         <file>qml/Preferences/internal/BrailleAdvancedSection.qml</file>
         <file>qml/Preferences/internal/MeiSection.qml</file>
         <file>qml/Preferences/internal/PublishMuseScoreComSection.qml</file>
-        <file>qml/Preferences/internal/SoundFlagsSection.qml</file>
     </qresource>
 </RCC>

@@ -5522,38 +5522,6 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
     }
 }
 
-Ret NotationInteraction::canAddSoundFlag() const
-{
-    static const std::set<ElementType> requiredTypes {
-        ElementType::NOTE,
-        ElementType::REST,
-        ElementType::STAFF_TEXT
-    };
-
-    bool isNoteOrRestOrStaffTextSelected = elementsSelected(requiredTypes);
-    return isNoteOrRestOrStaffTextSelected ? make_ok() : make_ret(Err::NoteOrRestOrStaffTextIsNotSelected);
-}
-
-void NotationInteraction::addSoundFlag()
-{
-    if (!score() || score()->selection().isNone()) {
-        return;
-    }
-
-    startEdit();
-
-    std::vector<EngravingItem*> elementsForSelect = score()->addSoundFlagToSelection();
-
-    if (elementsForSelect.empty()) {
-        rollback();
-        return;
-    }
-
-    apply();
-
-    select(elementsForSelect);
-}
-
 mu::engraving::Harmony* NotationInteraction::editedHarmony() const
 {
     Harmony* harmony = static_cast<Harmony*>(m_editData.element);

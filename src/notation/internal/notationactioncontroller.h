@@ -122,8 +122,6 @@ private:
     void addFiguredBass();
     void addGuitarBend(GuitarBendType bendType);
 
-    void addSoundFlag();
-
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
     void selectAllSimilarElementsInRange();
