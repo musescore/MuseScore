@@ -202,10 +202,6 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         items << makeMenuItem("edit-element");
     }
 
-    if (hitElement && hitElement->isStaffText()) {
-        items << makeMenuItem("add-sound-flag", TranslatableString("notation", "Add sound flag"));
-    }
-
     items << makeSeparator();
 
     MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);

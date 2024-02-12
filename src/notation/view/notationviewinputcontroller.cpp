@@ -31,8 +31,6 @@
 #include "commonscene/commonscenetypes.h"
 #include "abstractelementpopupmodel.h"
 
-#include "engraving/dom/stafftext.h"
-
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;

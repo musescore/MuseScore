@@ -210,9 +210,6 @@ public:
     MOCK_METHOD(Ret, canAddGuitarBend, (), (const, override));
     MOCK_METHOD(void, addGuitarBend, (GuitarBendType), (override));
 
-    MOCK_METHOD(Ret, canAddSoundFlag, (), (const, override));
-    MOCK_METHOD(void, addSoundFlag, (), (override));
-
     MOCK_METHOD(void, navigateToLyrics, (MoveDirection, bool), (override));
     MOCK_METHOD(void, navigateToLyricsVerse, (MoveDirection), (override));
 

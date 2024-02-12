@@ -44,8 +44,6 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
     enum class SourceType {
         Undefined,
         MuseSounds,
-        VST,
-        SoundFonts
     };
     Q_ENUM(SourceType)
 

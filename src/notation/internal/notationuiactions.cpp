@@ -2350,12 +2350,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Slight bend"),
              IconCode::Code::GUITAR_SLIGHT_BEND
              ),
-    UiAction("add-sound-flag",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Sound flag"),
-             TranslatableString("action", "Sound flag")
-             ),
 };
 
 const UiActionList NotationUiActions::m_scoreConfigActions = {

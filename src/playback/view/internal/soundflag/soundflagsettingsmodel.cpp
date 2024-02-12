@@ -66,10 +66,6 @@ void SoundFlagSettingsModel::initSourceType()
 
     if (audio::AudioSourceType::MuseSampler == type) {
         sourceType = SourceType::MuseSounds;
-    } else if (audio::AudioSourceType::Vsti == type) {
-        sourceType = SourceType::VST;
-    } else if (audio::AudioSourceType::Fluid == type) {
-        sourceType = SourceType::SoundFonts;
     }
 
     setSourceType(sourceType);
@@ -85,10 +81,6 @@ void SoundFlagSettingsModel::initTitle()
 
     if (audio::AudioSourceType::MuseSampler == type) {
         title = qtrc("playback", "Muse Sounds:") + " " + name;
-    } else if (audio::AudioSourceType::Vsti == type) {
-        title = qtrc("playback", "VST:") + " " + name;
-    } else if (audio::AudioSourceType::Fluid == type) {
-        title = qtrc("playback", "SoundFonts:") + " " + name;
     }
 
     setTitle(title);
