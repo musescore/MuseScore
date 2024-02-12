@@ -239,7 +239,7 @@ void LayoutWidget::updateSizeConstraints()
 bool LayoutWidget::deserialize(const LayoutSaver::MultiSplitter &l)
 {
     QHash<QString, Layouting::Widget *> frames;
-    for (const LayoutSaver::Frame &frame : qAsConst(l.frames)) {
+    for (const LayoutSaver::Frame &frame : std::as_const(l.frames)) {
         Frame *f = Frame::deserialize(frame);
         Q_ASSERT(!frame.id.isEmpty());
         frames.insert(frame.id, f);

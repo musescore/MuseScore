@@ -687,7 +687,7 @@ Frame *Frame::deserialize(const LayoutSaver::Frame &f)
 
     frame->setObjectName(f.objectName);
 
-    for (const auto &savedDock : qAsConst(f.dockWidgets)) {
+    for (const auto &savedDock : std::as_const(f.dockWidgets)) {
         if (DockWidgetBase *dw = DockWidgetBase::deserialize(savedDock)) {
             frame->addWidget(dw);
         }

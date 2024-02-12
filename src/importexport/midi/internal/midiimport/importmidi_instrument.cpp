@@ -173,7 +173,7 @@ static const InstrumentTemplate* findInstrument(const String& groupId, const Str
 {
     const InstrumentTemplate* instr = nullptr;
 
-    for (const InstrumentGroup* group: qAsConst(instrumentGroups)) {
+    for (const InstrumentGroup* group: std::as_const(instrumentGroups)) {
         if (group->id == groupId) {
             for (const InstrumentTemplate* templ: group->instrumentTemplates) {
                 if (templ->id == instrId) {
@@ -194,7 +194,7 @@ const InstrumentTemplate* findClosestInstrument(const MTrack& track)
     int maxLessProgram = -1;
     const InstrumentTemplate* closestTemplate = nullptr;
 
-    for (const InstrumentGroup* group: qAsConst(instrumentGroups)) {
+    for (const InstrumentGroup* group: std::as_const(instrumentGroups)) {
         for (const InstrumentTemplate* templ: group->instrumentTemplates) {
             if (templ->staffGroup == StaffGroup::TAB) {
                 continue;
@@ -226,7 +226,7 @@ std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& t
         trackPitches = findAllPitches(track);
     }
 
-    for (const InstrumentGroup* group: qAsConst(instrumentGroups)) {
+    for (const InstrumentGroup* group: std::as_const(instrumentGroups)) {
         for (const InstrumentTemplate* templ: group->instrumentTemplates) {
             if (templ->staffGroup == StaffGroup::TAB) {
                 continue;
@@ -428,7 +428,7 @@ void findInstrumentsForAllTracks(const QList<MTrack>& tracks, bool forceReload)
 void instrumentTemplatesChanged()
 {
     QStringList files(midiImportOperations.allMidiFiles());
-    for (const QString& file : qAsConst(files)) {
+    for (const QString& file : std::as_const(files)) {
         MidiOperations::CurrentMidiFileSetter s(midiImportOperations, file);
         MidiOperations::FileData* data = midiImportOperations.data();
         if (data) {
