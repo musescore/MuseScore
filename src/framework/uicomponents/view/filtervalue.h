@@ -23,7 +23,6 @@
 #define MU_UICOMPONENTS_FILTERVALUE_H
 
 #include <QObject>
-#include <QMetaType>
 #include <QVariant>
 
 namespace mu::uicomponents {
