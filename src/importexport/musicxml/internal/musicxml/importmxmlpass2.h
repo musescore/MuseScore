@@ -383,6 +383,7 @@ private:
     String metronome(double& r);
     void sound();
     void dynamics();
+    void otherDirection();
     void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     String matchRepeat() const;
@@ -411,6 +412,7 @@ private:
     String m_sndFine;
     String m_sndSegno;
     String m_sndToCoda;
+    bool visible = true;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
     bool m_hasRelativeY = false;
