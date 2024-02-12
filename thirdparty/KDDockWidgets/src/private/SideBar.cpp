@@ -120,6 +120,6 @@ QStringList SideBar::serialize() const
 
 void SideBar::clear()
 {
-    for (DockWidgetBase *dw : qAsConst(m_dockWidgets))
+    for (DockWidgetBase *dw : std::as_const(m_dockWidgets))
         removeDockWidget(dw);
 }

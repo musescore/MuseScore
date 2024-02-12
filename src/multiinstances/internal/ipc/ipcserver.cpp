@@ -227,7 +227,7 @@ void IpcServer::sendMetaInfoToAllIncoming()
     msg.method = IPC_METAINFO;
 
     msg.args << QString::number(m_incomingSockets.count());
-    for (const IncomingSocket& s : qAsConst(m_incomingSockets)) {
+    for (const IncomingSocket& s : std::as_const(m_incomingSockets)) {
         msg.args << s.id;
     }
 
