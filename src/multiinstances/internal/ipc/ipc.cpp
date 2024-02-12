@@ -41,7 +41,7 @@ void mu::ipc::serialize(const Msg& msg, QByteArray& data)
     msgObj["method"] = msg.method;
 
     QJsonArray argsArr;
-    for (const QString& arg : qAsConst(msg.args)) {
+    for (const QString& arg : std::as_const(msg.args)) {
         argsArr.append(arg);
     }
     msgObj["args"] = argsArr;

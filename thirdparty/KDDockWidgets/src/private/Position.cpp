@@ -121,7 +121,7 @@ void Position::removePlaceholder(Layouting::Item *placeholder)
 
 void Position::deserialize(const LayoutSaver::Position &lp)
 {
-    for (const auto &placeholder : qAsConst(lp.placeholders)) {
+    for (const auto &placeholder : std::as_const(lp.placeholders)) {
         LayoutWidget *layout;
         int itemIndex = placeholder.itemIndex;
         if (placeholder.isFloatingWindow) {
