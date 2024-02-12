@@ -19,7 +19,7 @@ public:
     qreal descent(const Font& f) const override;
 
     bool inFont(const Font& f, QChar ch) const override;
-    bool inFontUcs4(const Font& f, uint ucs4) const override;
+    bool inFontUcs4(const Font& f, char32_t ucs4) const override;
 
     // Text
     qreal horizontalAdvance(const Font& f, const QString& string) const override;
@@ -31,8 +31,8 @@ public:
     RectF tightBoundingRect(const Font& f, const QString& string) const override;
 
     // Score symbols
-    RectF symBBox(const Font& f, uint ucs4, qreal DPI_F) const override;
-    qreal symAdvance(const Font& f, uint ucs4, qreal DPI_F) const override;
+    RectF symBBox(const Font& f, char32_t ucs4, qreal DPI_F) const override;
+    qreal symAdvance(const Font& f, char32_t ucs4, qreal DPI_F) const override;
 };
 }
 
