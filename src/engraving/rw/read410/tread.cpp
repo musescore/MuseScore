@@ -2497,15 +2497,8 @@ void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext&)
 
         if (tag == "presets") {
             item->setSoundPresets(xml.readText().split(u","));
-        } else if (tag == "Params") {
-            SoundFlag::Params params;
-
-            while (xml.readNextStartElement()) {
-                String paramKey = String::fromStdString(std::string(xml.name()));
-                params.insert_or_assign(std::move(paramKey), Val(xml.readText().toStdString()));
-            }
-
-            item->setParams(params);
+        } else if (tag == "playingTechniques") {
+            item->setPlayingTechniques(xml.readText().split(u","));
         } else {
             xml.unknown();
         }

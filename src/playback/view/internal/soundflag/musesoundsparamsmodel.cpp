@@ -91,7 +91,7 @@ void MuseSoundsParamsModel::togglePreset(const QString& presetCode, bool forceMu
     engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
 
     undoStack()->prepareChanges();
-    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->params());
+    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->playingTechniques());
     undoStack()->commitChanges();
 
     emit presetCodesChanged();
