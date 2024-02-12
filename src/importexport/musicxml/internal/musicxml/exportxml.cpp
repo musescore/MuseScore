@@ -729,7 +729,7 @@ static String slurTieLineStyle(const SlurTie* s)
         break;
     case SlurStyleType::Solid:
     default:
-        lineType = u"";
+        lineType = String();
     }
     if (!lineType.isEmpty()) {
         rest = String(u" line-type=\"%1\"").arg(lineType);
@@ -2015,12 +2015,12 @@ void ExportMusicXml::barlineRight(const Measure* const m, const track_idx_t stra
     // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
     BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
     const bool visible = m->endBarLineVisible();
-    String color = u"";
+    String color = String();
 
     bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
     Volta* volta = findVolta(m, false, strack);
     // detect short and tick barlines
-    String special = u"";
+    String special = String();
     const BarLine* bl = m->endBarLine();
     if (bl) {
         color = color2xml(bl);
@@ -4623,8 +4623,8 @@ static bool findMetronome(const std::list<TextFragment>& list,
     String words = MScoreTextToMXML::toPlainTextPlusSymbols(list);
     //LOGD("findMetronome('%s')", muPrintable(words));
     hasParen   = false;
-    metroLeft  = u"";
-    metroRight = u"";
+    metroLeft  = String();
+    metroRight = String();
     int metroPos = -1;     // metronome start position
     int metroLen = 0;      // metronome length
 
@@ -4981,7 +4981,7 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 static size_t findDynamicInString(const String& s, size_t& length, String& type)
 {
     length = 0;
-    type = u"";
+    type = String();
     size_t matchIndex = mu::nidx;
     const int n = static_cast<int>(DynamicType::LAST) - 1;
 
@@ -5034,7 +5034,7 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             xml.tagRaw(tag, dynamicPosition == mu::nidx ? text : text.left(dynamicPosition));
             xml.endElement();
             if (dynamicPosition == mu::nidx) {
-                text = u"";
+                text = String();
             } else if (dynamicPosition > 0) {
                 text.remove(0, dynamicPosition);
                 dynamicPosition = 0;
@@ -5503,7 +5503,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                 if (!inDynamicsSym) {
                     if (!text.empty()) {
                         m_xml.tag("other-dynamics", text);
-                        text = u"";
+                        text = String();
                     }
                     inDynamicsSym = true;
                 }
@@ -5517,7 +5517,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, staff_idx_t staff)
                         } else {
                             m_xml.tag("other-dynamics", text);
                         }
-                        text = u"";
+                        text = String();
                     }
                     inDynamicsSym = false;
                 }
@@ -7268,7 +7268,7 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
         // these will be output at the start of the next measure
         const auto cle = toClef(el);
         const auto ti = cle->segment()->tick();
-        const String visible = (!cle->visible()) ? u" print-object=\"no\"" : u"";
+        const String visible = (!cle->visible()) ? u" print-object=\"no\"" : String();
         clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
         if (el->generated()) {
             clefDebug("exportxml: generated clef not exported");
