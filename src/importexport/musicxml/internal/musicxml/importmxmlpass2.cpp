@@ -2607,7 +2607,7 @@ void MusicXMLParserPass2::staffDetails(const String& partId, Measure* measure)
             // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
             m_score->staff(staffIdx)->setVisible(false);
         }
-    } else if (visible == u"yes" || visible == u"") {
+    } else if (visible == u"yes" || visible.empty()) {
         if (measure) {
             m_score->staff(staffIdx)->setVisible(true);
             measure->setStaffVisible(staffIdx, true);
@@ -2922,7 +2922,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 }
             }
 
-            if (placement == u"" && hasTotalY()) {
+            if (placement.empty() && hasTotalY()) {
                 placement = totalY() < 0 ? u"above" : u"below";
             }
             if (hasTotalY()) {
@@ -3558,7 +3558,7 @@ void MusicXMLParserDirection::pedal(const String& type, const int /* number */,
     // We have found that many exporters omit "sign" even when one is originally present,
     // therefore we will default to "yes", even though this is technically against the spec.
     bool overrideDefaultSign = true; // TODO: set this flag based on the exporting software
-    if (sign == u"") {
+    if (sign.empty()) {
         if (line != "yes" || (overrideDefaultSign && type == "start")) {
             sign = u"yes";                           // MusicXML 2.0 compatibility
         } else if (line == "yes") {
@@ -3866,7 +3866,7 @@ static bool determineBarLineType(const String& barStyle, const String& repeat,
         type = BarLineType::HEAVY;
     } else if (barStyle == u"none") {
         visible = false;
-    } else if (barStyle == u"") {
+    } else if (barStyle.empty()) {
         if (repeat == u"backward") {
             type = BarLineType::END_REPEAT;
         } else if (repeat == u"forward") {
@@ -4592,7 +4592,7 @@ static bool isWholeMeasureRest(const bool rest, const String& type, const Fracti
         return false;
     }
 
-    return (type == u"" && dura == mDura)
+    return (type.empty() && dura == mDura)
            || (type == u"whole" && dura == mDura && dura != Fraction(1, 1));
 }
 
@@ -4614,7 +4614,7 @@ static TDuration determineDuration(const bool rest, const String& type, const in
     if (rest) {
         if (isWholeMeasureRest(rest, type, dura, mDura)) {
             res.setType(DurationType::V_MEASURE);
-        } else if (type == u"") {
+        } else if (type.empty()) {
             // If no type, set duration type based on duration.
             // Note that sometimes unusual duration (e.g. 261/256) are found.
             res.setVal(dura.ticks());
@@ -4876,7 +4876,7 @@ static void addTremolo(ChordRest* cr,
     if (tremoloNr) {
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, muPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
-            if (tremoloType == u"" || tremoloType == u"single") {
+            if (tremoloType.empty() || tremoloType == u"single") {
                 TremoloType type = TremoloType::INVALID_TREMOLO;
                 switch (tremoloNr) {
                 case 1: type = TremoloType::R8;
@@ -5836,7 +5836,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
                     // attributes: print-style
                     step = m_e.readText();
                     if (m_e.hasAttribute("text")) {
-                        if (m_e.attribute("text") == u"") {
+                        if (m_e.attribute("text").empty()) {
                             invalidRoot = true;
                         }
                     }
@@ -6211,7 +6211,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
                 newSlur->setStyleType(SlurStyleType::Dashed);
             } else if (lineType == u"dotted") {
                 newSlur->setStyleType(SlurStyleType::Dotted);
-            } else if (lineType == u"solid" || lineType == u"") {
+            } else if (lineType == u"solid" || lineType.empty()) {
                 newSlur->setStyleType(SlurStyleType::Solid);
             }
             const Color color = Color::fromString(notation.attribute(u"color"));
@@ -6227,7 +6227,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
                     newSlur->setSlurDirection(DirectionV::UP);
                 } else if (orientation == u"under" || placement == u"below") {
                     newSlur->setSlurDirection(DirectionV::DOWN);
-                } else if (orientation == u"" || placement == u"") {
+                } else if (orientation.empty() || placement.empty()) {
                     // ignore
                 } else {
                     logger->logError(String(u"unknown slur orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
@@ -6685,7 +6685,7 @@ static void addTie(const Notation& notation, const Score* score, Note* note, con
     const String placement = notation.attribute(u"placement");
     const String lineType = notation.attribute(u"line-type");
 
-    if (type == u"") {
+    if (type.empty()) {
         // ignore, nothing to do
     } else if (type == u"start") {
         if (tie) {
@@ -6706,7 +6706,7 @@ static void addTie(const Notation& notation, const Score* score, Note* note, con
                 tie->setSlurDirection(DirectionV::UP);
             } else if (orientation == u"under" || placement == u"below") {
                 tie->setSlurDirection(DirectionV::DOWN);
-            } else if (orientation == u"" || placement == u"") {
+            } else if (orientation.empty() || placement.empty()) {
                 // ignore
             } else {
                 logger->logError(String(u"unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
@@ -6717,7 +6717,7 @@ static void addTie(const Notation& notation, const Score* score, Note* note, con
             tie->setStyleType(SlurStyleType::Dashed);
         } else if (lineType == u"dotted") {
             tie->setStyleType(SlurStyleType::Dotted);
-        } else if (lineType == u"solid" || lineType == u"") {
+        } else if (lineType == u"solid" || lineType.empty()) {
             tie->setStyleType(SlurStyleType::Solid);
         }
         tie = nullptr;
@@ -7161,7 +7161,7 @@ void MusicXMLParserNotations::tuplet()
         m_tupletDesc.direction = DirectionV::UP;
     } else if (tupletPlacement == u"below") {
         m_tupletDesc.direction = DirectionV::DOWN;
-    } else if (tupletPlacement == u"") {
+    } else if (tupletPlacement.empty()) {
         // ignore
     } else {
         m_logger->logError(String(u"unknown tuplet placement: %1").arg(tupletPlacement), &m_e);
