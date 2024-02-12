@@ -310,6 +310,10 @@ if (QT_SUPPORT)
     add_definitions(-DQT_SUPPORT)
     add_definitions(-DKORS_LOGGER_QT_SUPPORT)
     add_definitions(-DSCRIPT_INTERFACE)
+
+    # Preparation for switching to Qt6
+    add_definitions(-DMU_QT5_COMPAT)
+
 else()
     add_definitions(-DNO_QT_SUPPORT)
 endif()
