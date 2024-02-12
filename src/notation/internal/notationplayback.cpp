@@ -94,12 +94,8 @@ void NotationPlayback::init()
         }
     });
 
-    score()->posChanged().onReceive(this, [this](mu::engraving::POS pos, int tick) {
-        if (mu::engraving::POS::CURRENT == pos) {
-            m_playPositionTickChanged.send(tick);
-        } else {
-            updateLoopBoundaries();
-        }
+    score()->loopBoundaryTickChanged().onReceive(this, [this](LoopBoundaryType, unsigned) {
+        updateLoopBoundaries();
     });
 }
 
