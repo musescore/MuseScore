@@ -52,13 +52,31 @@ public:
     {}
     ~QmlListProperty() { delete _notifier; }
 
+#ifdef MU_QT5_COMPAT
+    static int s_count_qt5(QQmlListProperty<T>* list)
+    {
+        return static_cast<int>(QmlListProperty::s_count(list));
+    }
+
+    static T* s_at_qt5(QQmlListProperty<T>* list, int index)
+    {
+        return QmlListProperty::s_at(list, static_cast<int>(index));
+    }
+
+#endif
+
     QQmlListProperty<T> property()
     {
         return QQmlListProperty<T>(_parent,
                                    this,
                                    &QmlListProperty::s_append,
+#ifdef MU_QT5_COMPAT
+                                   &s_count_qt5,
+                                   &s_at_qt5,
+#else
                                    &QmlListProperty::s_count,
                                    &QmlListProperty::s_at,
+#endif
                                    &QmlListProperty::s_clear);
     }
 
@@ -106,14 +124,14 @@ private:
         get(list)->append(t);
     }
 
-    static int s_count(QQmlListProperty<T>* list)
+    static qsizetype s_count(QQmlListProperty<T>* list)
     {
         return get(list)->count();
     }
 
-    static T* s_at(QQmlListProperty<T>* list, int index)
+    static T* s_at(QQmlListProperty<T>* list, qsizetype index)
     {
-        return get(list)->at(index);
+        return get(list)->at(static_cast<int>(index));
     }
 
     static void s_clear(QQmlListProperty<T>* list)

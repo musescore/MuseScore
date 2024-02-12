@@ -150,10 +150,17 @@ class QmlListAccess : public QQmlListProperty<T>
 public:
     /// \cond MS_INTERNAL
     QmlListAccess(QObject* obj, Container& container)
-        : QQmlListProperty<T>(obj, const_cast<void*>(static_cast<const void*>(&container)), &count, &at) {}
+        : QQmlListProperty<T>(obj,
+                              const_cast<void*>(static_cast<const void*>(&container)),
+                              &count,
+                              &at) {}
 
-    static int count(QQmlListProperty<T>* l) { return int(static_cast<Container*>(l->data)->size()); }
-    static T* at(QQmlListProperty<T>* l, int i)
+    static qsizetype count(QQmlListProperty<T>* l)
+    {
+        return static_cast<Container*>(l->data)->size();
+    }
+
+    static T* at(QQmlListProperty<T>* l, qsizetype i)
     {
         auto el = static_cast<Container*>(l->data)->at(i);
         // If a polymorphic wrap() function is available

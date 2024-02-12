@@ -669,7 +669,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     Fraction nn = (ticks * tupletCount) / f;
                     tuplet->setTicks(nn);
                 }
-                LOGD("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
+                LOGD("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
                      tick.ticks(), o->count, o->tripartite, o->isProlonging, ticks.ticks(),
                      o->objects.size());
             }
@@ -1206,7 +1206,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     // associated with a CapStaffLayout
     //
     if (staves != cap->staffLayouts().size()) {
-        LOGD("Capella: max number of staves != number of staff layouts (%d, %d)",
+        LOGD("Capella: max number of staves != number of staff layouts (%d, %lld)",
              staves, cap->staffLayouts().size());
         staves = qMax(staves, cap->staffLayouts().size());
     }
@@ -1545,7 +1545,7 @@ void TransposableObj::read()
     }
     variants = cap->readDrawObjectArray();
     if (variants.size() != b) {
-        LOGD("variants.size %d, expected %d", variants.size(), b);
+        LOGD("variants.size %lld, expected %d", variants.size(), b);
     }
     Q_ASSERT(variants.size() == b);
     /*int nRefNote =*/ cap->readInt();
@@ -2242,7 +2242,7 @@ QFont Capella::readFont()
     }
     index -= 1;
     if (index >= fonts.size()) {
-        LOGD("illegal font index %d (max %d)", index, fonts.size() - 1);
+        LOGD("illegal font index %d (max %lld)", index, fonts.size() - 1);
     }
     return fonts[index];
 }
