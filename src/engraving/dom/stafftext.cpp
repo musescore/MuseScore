@@ -62,25 +62,25 @@ engraving::PropertyValue StaffText::propertyDefault(Pid id) const
     }
 }
 
-bool StaffText::acceptDrop(EditData& data) const
+void StaffText::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    ElementType type = data.dropElement->type();
-    if (type == ElementType::STAFF_TEXT) {
-        return true;
+    for (EngravingObject* child: scanChildren()) {
+        child->scanElements(data, func, all);
     }
-
-    return TextBase::acceptDrop(data);
+    if (all || visible() || score()->isShowInvisible()) {
+        func(data, this);
+    }
 }
 
-EngravingItem* StaffText::drop(EditData& data)
+EngravingObjectList StaffText::scanChildren() const
 {
-    ElementType type = data.dropElement->type();
-    if (type == ElementType::STAFF_TEXT) {
-        std::vector<EngravingItem*> items = score()->addSoundFlagToSelection();
-        return !items.empty() ? items.front() : nullptr;
+    EngravingObjectList children;
+
+    if (m_soundFlag) {
+        children.push_back(m_soundFlag);
     }
 
-    return StaffTextBase::drop(data);
+    return children;
 }
 
 void StaffText::add(EngravingItem* e)
@@ -118,5 +118,38 @@ void StaffText::remove(EngravingItem* e)
     }
 
     StaffTextBase::remove(e);
+}
+
+void StaffText::setTrack(track_idx_t idx)
+{
+    StaffTextBase::setTrack(idx);
+
+    if (m_soundFlag) {
+        m_soundFlag->setTrack(idx);
+    }
+}
+
+bool StaffText::hasSoundFlag() const
+{
+    return m_soundFlag != nullptr;
+}
+
+SoundFlag* StaffText::soundFlag() const
+{
+    return m_soundFlag;
+}
+
+void StaffText::setSoundFlag(SoundFlag* flag)
+{
+    if (m_soundFlag == flag) {
+        return;
+    }
+
+    m_soundFlag = flag;
+
+    if (m_soundFlag) {
+        m_soundFlag->setParent(this);
+        m_soundFlag->setTrack(track());
+    }
 }
 }

@@ -30,7 +30,6 @@
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
-#include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
 class IOPreferencesModel : public QObject, public async::Asyncable
@@ -41,7 +40,6 @@ class IOPreferencesModel : public QObject, public async::Asyncable
     INJECT(midi::IMidiConfiguration, midiConfiguration)
     INJECT(midi::IMidiOutPort, midiOutPort)
     INJECT(midi::IMidiInPort, midiInPort)
-    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
 
@@ -53,9 +51,6 @@ class IOPreferencesModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(bool isMIDI20OutputSupported READ isMIDI20OutputSupported CONSTANT)
     Q_PROPERTY(bool useMIDI20Output READ useMIDI20Output WRITE setUseMIDI20Output NOTIFY useMIDI20OutputChanged)
-
-    Q_PROPERTY(
-        bool soundFlagsMultiSelection READ soundFlagsMultiSelection WRITE setSoundFlagsMultiSelection NOTIFY soundFlagsMultiSelectionChanged)
 
 public:
     explicit IOPreferencesModel(QObject* parent = nullptr);
@@ -80,14 +75,10 @@ public:
     bool isMIDI20OutputSupported() const;
     bool useMIDI20Output() const;
 
-    bool soundFlagsMultiSelection() const;
-
 public slots:
     void setCurrentAudioApiIndex(int index);
 
     void setUseMIDI20Output(bool use);
-
-    void setSoundFlagsMultiSelection(bool enabled);
 
 signals:
     void currentAudioApiIndexChanged(int index);
@@ -98,8 +89,6 @@ signals:
     void midiOutputDevicesChanged();
 
     void useMIDI20OutputChanged();
-
-    void soundFlagsMultiSelectionChanged();
 
 private:
     midi::MidiDeviceID midiInputDeviceId(int index) const;
