@@ -2849,19 +2849,27 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
 {
     notations.tag(xml, tr);
     ornaments.tag(xml);
-    if (tr->trillType() == TrillType::TRILL_LINE) {
+    switch (tr->trillType())
+    {
+    case TrillType::TRILL_LINE:
         xml.tagRaw(u"trill-mark" + color2xml(tr));
-    } else if (tr->trillType() == TrillType::UPPRALL_LINE) {
+        break;
+    case TrillType::UPPRALL_LINE:
         xml.tagRaw(u"other-ornament smufl=\"ornamentBottomLeftConcaveStroke\"" + color2xml(tr));
-    } else if (tr->trillType() == TrillType::DOWNPRALL_LINE) {
+        break;
+    case TrillType::DOWNPRALL_LINE:
         xml.tagRaw(u"other-ornament smufl=\"ornamentLeftVerticalStroke\"" + color2xml(tr));
+        break;
+    case TrillType::PRALLPRALL_LINE:
+    default:
+        break;
     }
-    writeAccidental(xml, u"accidental-mark", tr->accidental());
     String tagName = u"wavy-line type=\"start\"";
     tagName += String(u" number=\"%1\"").arg(number + 1);
     tagName += color2xml(tr);
     tagName += ExportMusicXml::positioningAttributes(tr, true);
     xml.tagRaw(tagName);
+    writeAccidental(xml, u"accidental-mark", tr->accidental());
 }
 
 //---------------------------------------------------------
