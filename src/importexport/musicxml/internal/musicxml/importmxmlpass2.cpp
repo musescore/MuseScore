@@ -3127,6 +3127,11 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
         } else if (_e.name() == "segno") {
             _wordsText += "<sym>segno</sym>";
             _e.skipCurrentElement();
+        } else if (_e.name() == "symbol") {
+            const String smufl = _e.readElementText();
+            if (!smufl.empty()) {
+                _wordsText += u"<sym>" + smufl + u"</sym>";
+            }
         } else {
             skipLogCurrElem();
         }
