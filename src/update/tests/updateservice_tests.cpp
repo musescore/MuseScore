@@ -23,6 +23,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <QIODevice>
+
 using ::testing::_;
 using ::testing::Return;
 
