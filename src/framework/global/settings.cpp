@@ -118,6 +118,7 @@ static Val compat_QVariantToVal(const QVariant& var)
         return Val();
     }
 
+#ifdef MU_QT5_COMPAT
     switch (var.type()) {
     case QVariant::ByteArray: return Val(var.toByteArray().toStdString());
     case QVariant::DateTime: return Val(var.toDateTime().toString(Qt::ISODate));
@@ -132,6 +133,22 @@ static Val compat_QVariantToVal(const QVariant& var)
     default:
         break;
     }
+#else
+    switch (var.typeId()) {
+    case QMetaType::QByteArray: return Val(var.toByteArray().toStdString());
+    case QMetaType::QDateTime: return Val(var.toDateTime().toString(Qt::ISODate));
+    case QMetaType::QStringList: {
+        QStringList sl = var.toStringList();
+        ValList vl;
+        for (const QString& s : sl) {
+            vl.push_back(Val(s));
+        }
+        return Val(vl);
+    }
+    default:
+        break;
+    }
+#endif
 
     return Val::fromQVariant(var);
 }

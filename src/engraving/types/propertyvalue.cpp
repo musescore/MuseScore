@@ -275,6 +275,7 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     }
 
     //! NOTE Try determinate type by QVariant type
+#ifdef MU_QT5_COMPAT
     switch (v.type()) {
     case QVariant::Invalid:     return PropertyValue();
     case QVariant::Bool:        return PropertyValue(v.toBool());
@@ -293,6 +294,26 @@ PropertyValue PropertyValue::fromQVariant(const QVariant& v, P_TYPE type)
     default:
         break;
     }
+#else
+    switch (v.typeId()) {
+    case QMetaType::UnknownType: return PropertyValue();
+    case QMetaType::Bool:        return PropertyValue(v.toBool());
+    case QMetaType::Int:         return PropertyValue(v.toInt());
+    case QMetaType::UInt:        return PropertyValue(v.toInt());
+    case QMetaType::LongLong:    return PropertyValue(v.toInt());
+    case QMetaType::ULongLong:   return PropertyValue(v.toInt());
+    case QMetaType::Double:      return PropertyValue(v.toReal());
+    case QMetaType::Char:        return PropertyValue(v.toInt());
+    case QMetaType::QString:     return PropertyValue(v.toString());
+    case QMetaType::QSize:       return PropertyValue(SizeF::fromQSizeF(QSizeF(v.toSize())));
+    case QMetaType::QSizeF:      return PropertyValue(SizeF::fromQSizeF(v.toSizeF()));
+    case QMetaType::QPoint:      return PropertyValue(PointF::fromQPointF(QPointF(v.toPoint())));
+    case QMetaType::QPointF:     return PropertyValue(PointF::fromQPointF(v.toPointF()));
+    case QMetaType::QColor:      return PropertyValue(Color::fromQColor(v.value<QColor>()));
+    default:
+        break;
+    }
+#endif
 
     return PropertyValue();
 }
