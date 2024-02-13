@@ -53,14 +53,20 @@ target_compile_definitions(${MODULE_TEST} PRIVATE
     ${MODULE_TEST}_DATA_ROOT="${MODULE_TEST_DATA_ROOT}"
 )
 
-find_package(Qt5Test REQUIRED)
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+if (MUE_COMPILE_QT5_COMPAT)
+    find_package(Qt5Test REQUIRED)
+    find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+    set(QtLibs Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Test)
+else()
+    find_package(Qt6Test REQUIRED)
+    find_package(Qt6Core REQUIRED)
+    find_package(Qt6Gui REQUIRED)
+    find_package(Qt6Widgets REQUIRED)
+    set(QtLibs Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Test)
+endif()
 
 target_link_libraries(${MODULE_TEST}
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Test
+    ${QtLibs}
     global
     ${MODULE_TEST_LINK}
     )
