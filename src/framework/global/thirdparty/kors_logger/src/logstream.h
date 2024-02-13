@@ -102,7 +102,6 @@ public:
 #ifdef KORS_LOGGER_QT_SUPPORT
     inline Stream& operator<<(QChar t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(const QString& t) { qt_to_ss(t); return *this; }
-    inline Stream& operator<<(const QStringRef& t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(QStringView t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(QLatin1String t) { qt_to_ss(t); return *this; }
     inline Stream& operator<<(const QByteArray& t) { qt_to_ss(t); return *this; }
