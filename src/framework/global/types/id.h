@@ -85,11 +85,13 @@ inline uint qHash(const ID& id)
 {
     return ::qHash(id.toUint64());
 }
+
 #else
 inline size_t qHash(const ID& id)
 {
     return ::qHash(id.toUint64());
 }
+
 #endif // MU_QT5_COMPAT
 
 #endif // NO_QT_SUPPORT
