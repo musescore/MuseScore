@@ -112,6 +112,7 @@ void DockWindow::componentComplete()
     connect(this, &QQuickItem::windowChanged, this, &DockWindow::windowPropertyChanged);
 }
 
+#ifdef MU_QT5_COMPAT
 void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry)
 {
     if (!m_currentPage) {
@@ -131,6 +132,29 @@ void DockWindow::geometryChanged(const QRectF& newGeometry, const QRectF& oldGeo
 
     alignTopLevelToolBars(m_currentPage);
 }
+
+#else
+void DockWindow::geometryChange(const QRectF& newGeometry, const QRectF& oldGeometry)
+{
+    if (!m_currentPage) {
+        QQuickItem::geometryChange(newGeometry, oldGeometry);
+        return;
+    }
+
+    //! NOTE: it is important to reset the current minimum width for all top-level toolbars
+    //! Otherwise, the window content can be displaced after LayoutWidget::onResize(QSize newSize)
+    //! due to lack of free space
+    QList<DockToolBarView*> topToolBars = topLevelToolBars(m_currentPage);
+    for (DockToolBarView* toolBar : topToolBars) {
+        toolBar->setMinimumWidth(toolBar->contentWidth());
+    }
+
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+
+    alignTopLevelToolBars(m_currentPage);
+}
+
+#endif // MU_QT5_COMPAT
 
 void DockWindow::onQuit()
 {
