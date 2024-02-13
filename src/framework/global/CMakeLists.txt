@@ -130,6 +130,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
 
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
+    ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
 )
 
 if (GLOBAL_NO_INTERNAL)

@@ -29,12 +29,12 @@
 #include <QJsonParseError>
 #include <QQmlEngine>
 #include <QTranslator>
-#include <QtConcurrent>
 
 #include "languageserrors.h"
 
-#include "io/buffer.h"
-#include "serialization/zipreader.h"
+#include "global/io/buffer.h"
+#include "global/serialization/zipreader.h"
+#include "global/concurrency/concurrent.h"
 
 #include "multiinstances/resourcelockguard.h"
 
@@ -334,7 +334,7 @@ Progress LanguagesService::update(const QString& languageCode)
         m_updateOperationsHash.remove(effectiveLanguageCode);
     });
 
-    QtConcurrent::run(this, &LanguagesService::th_update, effectiveLanguageCode, progress);
+    Concurrent::run(this, &LanguagesService::th_update, effectiveLanguageCode, progress);
 
     return progress;
 }
