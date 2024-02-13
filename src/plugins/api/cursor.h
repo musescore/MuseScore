@@ -28,6 +28,11 @@
 #include "engraving/dom/input.h"
 #include "engraving/dom/types.h"
 
+#ifndef MU_QT5_COMPAT
+Q_MOC_INCLUDE("plugins/api/elements.h")
+Q_MOC_INCLUDE("plugins/api/score.h")
+#endif
+
 namespace mu::engraving {
 class EngravingItem;
 class InputState;
