@@ -1436,6 +1436,7 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
     case ElementType::STEM:
     case ElementType::STEM_SLASH:
     case ElementType::LEDGER_LINE:
+    case ElementType::NOTEDOT:
         return "notes";
 
     case ElementType::REST:
