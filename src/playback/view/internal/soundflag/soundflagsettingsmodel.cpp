@@ -73,7 +73,7 @@ void SoundFlagSettingsModel::initSourceType()
 
 void SoundFlagSettingsModel::initTitle()
 {
-    audio::AudioInputParams params = currentAudioInputParams();
+    const audio::AudioInputParams& params = currentAudioInputParams();
     audio::AudioSourceType type = params.type();
 
     QString title;
@@ -101,7 +101,7 @@ project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
     return globalContext()->currentProject()->audioSettings();
 }
 
-audio::AudioInputParams SoundFlagSettingsModel::currentAudioInputParams() const
+const audio::AudioInputParams& SoundFlagSettingsModel::currentAudioInputParams() const
 {
     engraving::Part* part = m_item->part();
     IF_ASSERT_FAILED(part) {

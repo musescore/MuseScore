@@ -80,7 +80,7 @@ signals:
 private:
     project::IProjectAudioSettingsPtr audioSettings() const;
 
-    audio::AudioInputParams currentAudioInputParams() const;
+    const audio::AudioInputParams& currentAudioInputParams() const;
 
     void initSourceType();
     void initTitle();
