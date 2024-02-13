@@ -140,14 +140,14 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
             }
 
       // extract first rootfile
-      QString rootfile = "";
+      QString rootfile;
       for (QDomElement e = container.documentElement(); !e.isNull(); e = e.nextSiblingElement()) {
             if (e.tagName() == "container") {
                   for (QDomElement ee = e.firstChildElement(); !ee.isNull(); ee = ee.nextSiblingElement()) {
                         if (ee.tagName() == "rootfiles") {
                               for (QDomElement eee = ee.firstChildElement(); !eee.isNull(); eee = eee.nextSiblingElement()) {
                                     if (eee.tagName() == "rootfile") {
-                                          if (rootfile == "")
+                                          if (rootfile.isEmpty())
                                                 rootfile = eee.attribute(QString("full-path"));
                                           }
                                     else
@@ -162,7 +162,7 @@ static bool extractRootfile(QFile* qf, QByteArray& data)
                   domError(e);
             }
 
-      if (rootfile == "") {
+      if (rootfile.isEmpty()) {
             qDebug("can't find rootfile in: %s", qPrintable(qf->fileName()));
             MScore::lastError = QObject::tr("Can't find rootfile\n%1").arg(qf->fileName());
             return false;

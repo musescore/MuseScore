@@ -341,7 +341,7 @@ class ExportMusicXml {
       int findTrill(const Trill* tl) const;
       void chord(Chord* chord, int staff, const std::vector<Lyrics*>* ll, bool useDrumset);
       void rest(Rest* chord, int staff, const std::vector<Lyrics*>* ll);
-      void clef(int staff, const ClefType ct, const QString& extraAttributes = "");
+      void clef(int staff, const ClefType ct, const QString& extraAttributes = QString());
       void timesig(TimeSig* tsig);
       void keysig(const KeySig* ks, ClefType ct, int staff = 0, bool visible = true);
       void barlineLeft(const Measure* const m, const int track);
@@ -637,7 +637,7 @@ static QString slurTieLineStyle(const SlurTie* s)
                   break;
             case 0: // fallthrough ("solid")
             default:
-                  lineType = "";
+                  lineType.clear();
             }
       if (!lineType.isEmpty()/* && preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)*/)
             rest = QString(" line-type=\"%1\"").arg(lineType);
@@ -861,7 +861,7 @@ static void glissando(const Glissando* gli, int number, bool start, Notations& n
             tagName += positioningAttributes(gli, start);
             }
       notations.tag(xml);
-      if (start && gli->showText() && gli->text() != "")
+      if (start && gli->showText() && !gli->text().isEmpty())
             xml.tag(tagName, gli->text());
       else
             xml.tagE(tagName);
@@ -1317,7 +1317,7 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
 
       // export formatted
       xml.stag(QString("credit page=\"%1\"").arg(pageNr));
-      if (creditType != "")
+      if (!creditType.isEmpty())
             xml.tag("credit-type", creditType);
       QString attr = QString(" default-x=\"%1\"").arg(x);
       attr += QString(" default-y=\"%1\"").arg(y);
@@ -1642,8 +1642,8 @@ static Volta* findVolta(const Measure* const m, bool left, const int track)
 
 static void ending(XmlWriter& xml, Volta* v, bool left)
       {
-      QString number = "";
-      QString type = "";
+      QString number;
+      QString type;
       for (int i : v->endings()) {
             if (!number.isEmpty())
                   number += ", ";
@@ -1764,12 +1764,12 @@ void ExportMusicXml::barlineMiddle(const BarLine* bl)
       QString barStyle;
       if (!vis)
             barStyle = "none";
-      else if (shortStyle != "")
+      else if (!shortStyle.isEmpty())
             barStyle = shortStyle;
       else
             barStyle = normalStyle;
 
-      if (barStyle != "") {
+      if (!barStyle.isEmpty()) {
             _xml.stag(QString("barline location=\"middle\""));
             _xml.tag("bar-style", barStyle);
             _xml.etag();
@@ -1881,12 +1881,12 @@ void ExportMusicXml::barlineRight(const Measure* const m, const int strack, cons
       // note: use barlinetype as found in multi measure rest for last measure of replaced sequence
       BarLineType bst = m == mmRLst ? mmR1->endBarLineType() : m->endBarLineType();
       const bool visible = m->endBarLineVisible();
-      QString color = "";
+      QString color;
 
       bool needBarStyle = (bst != BarLineType::NORMAL && bst != BarLineType::START_REPEAT) || !visible;
       Volta* volta = findVolta(m, false, strack);
       // detect short and tick barlines
-      QString special = "";
+      QString special;
       const BarLine* bl = m->endBarLine();
       if (bl) {
             color = color2xml(bl);
@@ -2550,7 +2550,7 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
       {
       if (acc) {
             QString s = accidentalType2MxmlString(acc->accidentalType());
-            if (s != "") {
+            if (!s.isEmpty()) {
                   QString tag = tagName;
                   if (s == "other")
                         tag += " smufl=\"" + accidentalType2SmuflMxmlString(acc->accidentalType()) + "\"";
@@ -2670,7 +2670,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             Tremolo* tr = chord->tremolo();
             int count = 0;
             TremoloType st = tr->tremoloType();
-            QString type = "";
+            QString type;
 
             if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
                   type = "single";
@@ -2705,7 +2705,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             else qDebug("unknown tremolo subtype %d", int(st));
 
 
-            if (type != "" && count > 0) {
+            if (!type.isEmpty() && count > 0) {
                   notations.tag(xml);
                   ornaments.tag(xml);
                   QString tagName = "tremolo";
@@ -3012,7 +3012,7 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
                         default:
                               qDebug("unknown ChordLine subtype %d", int(cl->chordLineType()));
                         }
-                  if (subtype != "") {
+                  if (!subtype.isEmpty()) {
                         notations.tag(xml);
                         articulations.tag(xml);
                         xml.tagE(subtype);
@@ -3109,7 +3109,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             auto sid = a->symId();
             auto mxmlOrnam = symIdToOrnam(sid);
 
-            if (mxmlOrnam != "") {
+            if (!mxmlOrnam.isEmpty()) {
                   mxmlOrnam += color2xml(a);
 
                   notations.tag(_xml);
@@ -3146,20 +3146,20 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             */
 
             auto mxmlTechn = symIdToTechn(sid);
-            if (mxmlTechn != "") {
+            if (!mxmlTechn.isEmpty()) {
                   notations.tag(_xml);
                   technical.tag(_xml);
                   mxmlTechn += color2xml(a);
                   mxmlTechn += positioningAttributes(a);
                   if (sid == SymId::stringsHarmonic) {
-                        if (placement != "")
+                        if (!placement.isEmpty())
                               attr += QString(" placement=\"%1\"").arg(placement);
                         _xml.stag(mxmlTechn + attr);
                         _xml.tagE("natural");
                         _xml.etag();
                         }
                   else {
-                        if (placement != "")
+                        if (!placement.isEmpty())
                               attr += QString(" placement=\"%1\"").arg(placement);
                         _xml.tagE(mxmlTechn + attr);
                         }
@@ -3170,8 +3170,8 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
       for (const Articulation* a : na) {
             auto sid = a->symId();
             if (symIdToArtics(sid).empty()
-                && symIdToOrnam(sid) == ""
-                && symIdToTechn(sid) == ""
+                && symIdToOrnam(sid).isEmpty()
+                && symIdToTechn(sid).isEmpty()
                 && !isLaissezVibrer(sid)) {
                   qDebug("unknown chord attribute %d %s", int(sid), qPrintable(a->userName()));
                   }
@@ -3239,7 +3239,7 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
                   break;
             }
 
-      if (tagName != "") {
+      if (!tagName.isEmpty()) {
             tagName += positioningAttributes(arp);
             tagName += color2xml(arp);
             xml.tagE(tagName);
@@ -3291,7 +3291,7 @@ static QString beamFanAttribute(const Beam* const b)
       if ((b->growLeft() - b->growRight() > epsilon))
             fan = "rit";
 
-      if (fan != "")
+      if (!fan.isEmpty())
             return QString(" fan=\"%1\"").arg(fan);
 
       return QString();
@@ -3359,7 +3359,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
                   text = "end";
             else if (blp >= i && bln >= i)
                   text = "continue";
-            if (text != "") {
+            if (!text.isEmpty()) {
                   QString tag = "beam";
                   tag += QString(" number=\"%1\"").arg(i);
                   if (text == "begin") {
@@ -4182,7 +4182,7 @@ static void directionETag(XmlWriter& xml, int staff, int offs = 0)
 static void partGroupStart(XmlWriter& xml, int number, BracketType bracket)
       {
       xml.stag(QString("part-group type=\"start\" number=\"%1\"").arg(number));
-      QString br = "";
+      QString br;
       switch (bracket) {
             case BracketType::NO_BRACKET:
                   br = "none";
@@ -4202,7 +4202,7 @@ static void partGroupStart(XmlWriter& xml, int number, BracketType bracket)
             default:
                   qDebug("bracket subtype %d not understood", int(bracket));
             }
-      if (br != "")
+      if (!br.isEmpty())
             xml.tag("group-symbol", br);
       xml.etag();
       }
@@ -4221,9 +4221,9 @@ static bool findMetronome(const QList<TextFragment>& list,
       {
       QString words = MScoreTextToMXML::toPlainTextPlusSymbols(list);
       //qDebug("findMetronome('%s')", qPrintable(words));
-      hasParen   = false;
-      metroLeft  = "";
-      metroRight = "";
+      hasParen = false;
+      metroLeft.clear();
+      metroRight.clear();
       int metroPos = -1;   // metronome start position
       int metroLen = 0;    // metronome length
 
@@ -4460,7 +4460,7 @@ void ExportMusicXml::words(TextBase const* const text, int staff)
              qPrintable(text->plainText()));
       */
 
-      if (text->plainText() == "") {
+      if (text->plainText().isEmpty()) {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -4490,7 +4490,7 @@ static QString positioningAttributesForTboxText(const QPointF position, float sp
 
 void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff, const QPointF relativePosition)
       {
-      if (text->plainText() == "") {
+      if (text->plainText().isEmpty()) {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -4526,7 +4526,7 @@ void ExportMusicXml::tboxTextAsWords(TextBase const* const text, const int staff
 
 void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, int staff)
       {
-      if (rmk->plainText() == "") {
+      if (rmk->plainText().isEmpty()) {
             // sometimes empty Texts are present, exporting would result
             // in invalid MusicXML (as an empty direction-type would be created)
             return;
@@ -4585,7 +4585,7 @@ int ExportMusicXml::findHairpin(const Hairpin* hp) const
 static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool isStart = true)
       {
       auto text = isStart ? tlb->beginText() : tlb->endText();
-      while (text != "") {
+      while (!text.isEmpty()) {
             int dynamicLength { 0 };
             QString dynamicsType;
             auto dynamicPosition = Dynamic::findInString(text, dynamicLength, dynamicsType);
@@ -4601,7 +4601,7 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
                   xml.tag(tag, dynamicPosition == -1 ? text : text.left(dynamicPosition));
                   xml.etag();
                   if (dynamicPosition == -1)
-                        text = "";
+                        text.clear();
                   else if (dynamicPosition > 0) {
                         text.remove(0, dynamicPosition);
                         dynamicPosition = 0;
@@ -4784,7 +4784,7 @@ void ExportMusicXml::ottava(Ottava const* const ot, int staff, const Fraction& t
                   qDebug("ottava subtype %d not understood", int(st));
             }
 
-      if (octaveShiftXml != "") {
+      if (!octaveShiftXml.isEmpty()) {
             directionTag(_xml, _attr, ot);
             _xml.stag("direction-type");
             octaveShiftXml += color2xml(ot);
@@ -4816,7 +4816,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
                         pedalType = "change";
                         break;
                   case HookType::NONE:
-                        if (pd->beginText() == "") {
+                        if (pd->beginText().isEmpty()) {
                               pedalType = pd->lineVisible() ? "resume" : "start";
                               break;
                               }
@@ -5025,7 +5025,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
       if (set.contains(dynTypeName)) {
             _xml.tagE(dynTypeName);
             }
-      else if (dynTypeName != "") {
+      else if (!dynTypeName.isEmpty()) {
             std::map<ushort, QChar> map;
             map[0xE520] = 'p';
             map[0xE521] = 'm';
@@ -5048,9 +5048,9 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
                   if (it != map.end()) {
                         // found a SMUFL single letter dynamics glyph
                         if (!inDynamicsSym) {
-                              if (text != "") {
+                              if (!text.isEmpty()) {
                                     _xml.tag("other-dynamics", text);
-                                    text = "";
+                                    text.clear();
                                     }
                               inDynamicsSym = true;
                               }
@@ -5059,19 +5059,19 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
                   else {
                         // found a non-dynamics character
                         if (inDynamicsSym) {
-                              if (text != "") {
+                              if (!text.isEmpty()) {
                                     if (set.contains(text))
                                           _xml.tagE(text);
                                     else
                                           _xml.tag("other-dynamics", text);
-                                    text = "";
+                                    text.clear();
                                     }
                               inDynamicsSym = false;
                               }
                         text += ch;
                         }
                   }
-            if (text != "") {
+            if (!text.isEmpty()) {
                   if (inDynamicsSym && set.contains(text))
                         _xml.tagE(text);
                   else
@@ -5106,7 +5106,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 void ExportMusicXml::symbol(Symbol const* const sym, int staff)
       {
       QString name = Sym::id2name(sym->sym());
-      QString mxmlName = "";
+      QString mxmlName;
       if (name == "keyboardPedalPed")
             mxmlName = "pedal type=\"start\"";
       else if (name == "keyboardPedalUp")
@@ -5141,7 +5141,7 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                         lyricXml += positioningAttributes(l);
                         _xml.stag(lyricXml);
                         Lyrics::Syllabic syl = (l)->syllabic();
-                        QString s = "";
+                        QString s;
                         switch (syl) {
                               case Lyrics::Syllabic::SINGLE: s = "single"; break;
                               case Lyrics::Syllabic::BEGIN:  s = "begin";  break;
@@ -5186,41 +5186,41 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
 static void directionJump(XmlWriter& xml, const Jump* const jp)
       {
       Jump::Type jtp = jp->jumpType();
-      QString words = "";
-      QString type  = "";
-      QString sound = "";
+      QString words;
+      QString type;
+      QString sound;
       bool isDaCapo = false;
       bool isDalSegno = false;
       if (jtp == Jump::Type::DC) {
-            if (jp->xmlText() == "")
+            if (jp->xmlText().isEmpty())
                   words = "D.C.";
             else
                   words = jp->xmlText();
             isDaCapo = true;
             }
       else if (jtp == Jump::Type::DC_AL_FINE) {
-            if (jp->xmlText() == "")
+            if (jp->xmlText().isEmpty())
                   words = "D.C. al Fine";
             else
                   words = jp->xmlText();
             isDaCapo = true;
             }
       else if (jtp == Jump::Type::DC_AL_CODA) {
-            if (jp->xmlText() == "")
+            if (jp->xmlText().isEmpty())
                   words = "D.C. al Coda";
             else
                   words = jp->xmlText();
             isDaCapo = true;
             }
       else if (jtp == Jump::Type::DS_AL_CODA) {
-            if (jp->xmlText() == "")
+            if (jp->xmlText().isEmpty())
                   words = "D.S. al Coda";
             else
                   words = jp->xmlText();
             isDalSegno = true;
             }
       else if (jtp == Jump::Type::DS_AL_FINE) {
-            if (jp->xmlText() == "")
+            if (jp->xmlText().isEmpty())
                   words = "D.S. al Fine";
             else
                   words = jp->xmlText();
@@ -5242,20 +5242,23 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       if (isDaCapo)
             sound = "dacapo=\"yes\"";
       else if (isDalSegno) {
-            if (jp->jumpTo() == "")
+            if (jp->jumpTo().isEmpty())
                   sound = "dalsegno=\"1\"";
             else
                   sound = "dalsegno=\"" + jp->jumpTo() + "\"";
             }
 
-      if (sound != "") {
+      if (!sound.isEmpty()) {
             xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
             QString positioning = positioningAttributes(jp);
-            if (type != "") xml.tagE(type + positioning);
-            if (words != "") xml.tag("words" + positioning, words);
+            if (!type.isEmpty())
+                  xml.tagE(type + positioning);
+            if (!words.isEmpty())
+                  xml.tag("words" + positioning, words);
             xml.etag();
-            if (sound != "") xml.tagE(QString("sound ") + sound);
+            if (!sound.isEmpty())
+                  xml.tagE(QString("sound ") + sound);
             xml.etag();
             }
       }
@@ -5318,16 +5321,16 @@ static QString findCodaLabel(const std::vector<const Jump*>& jumps, const QStrin
 static void directionMarker(XmlWriter& xml, const Marker* const m, const std::vector<const Jump*>& jumps)
       {
       const Marker::Type mtp = getEffectiveMarkerType(m, jumps);
-      QString words = "";
-      QString type  = "";
-      QString sound = "";
+      QString words;
+      QString type;
+      QString sound;
 
       switch (mtp) {
             case Marker::Type::CODA:
             case Marker::Type::VARCODA:
             case Marker::Type::CODETTA:
                   type = "coda";
-                  if (m->label() == "")
+                  if (m->label().isEmpty())
                         sound = "coda=\"1\"";
                   else
                         sound = "coda=\"" + m->label() + "\"";
@@ -5335,7 +5338,7 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
             case Marker::Type::SEGNO:
             case Marker::Type::VARSEGNO:
                   type = "segno";
-                  if (m->label() == "")
+                  if (m->label().isEmpty())
                         sound = "segno=\"1\"";
                   else
                         sound = "segno=\"" + m->label() + "\"";
@@ -5346,12 +5349,12 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
                   break;
             case Marker::Type::TOCODA:
             case Marker::Type::TOCODASYM: {
-                  if (m->xmlText() == "")
+                  if (m->xmlText().isEmpty())
                         words = "To Coda";
                   else
                         words = m->xmlText();
                   const QString codaLabel = findCodaLabel(jumps, m->label());
-                  if (codaLabel == "")
+                  if (codaLabel.isEmpty())
                         sound = "tocoda=\"1\"";
                   else
                         sound = "tocoda=\"" + codaLabel + "\"";
@@ -5362,14 +5365,17 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
                   break;
             }
 
-      if (sound != "") {
+      if (!sound.isEmpty()) {
             xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
             QString positioning = positioningAttributes(m);
-            if (type != "") xml.tagE(type + positioning);
-            if (words != "") xml.tag("words" + positioning, words);
+            if (!type.isEmpty())
+                  xml.tagE(type + positioning);
+            if (!words.isEmpty())
+                  xml.tag("words" + positioning, words);
             xml.etag();
-            if (sound != "") xml.tagE(QString("sound ") + sound);
+            if (!sound.isEmpty())
+                  xml.tagE(QString("sound ") + sound);
             xml.etag();
             }
       }
@@ -6177,7 +6183,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                   }
             }
 
-      bool doBreak = mpc.scoreStart || (newSystemOrPage != "");
+      bool doBreak = mpc.scoreStart || (!newSystemOrPage.isEmpty());
       bool doLayout = preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT);
 
       if (doBreak) {
@@ -6245,7 +6251,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                   _xml.etag();
                   }
-            else if (newSystemOrPage != "") {
+            else if (!newSystemOrPage.isEmpty()) {
                   _xml.tagE(QString("print%1").arg(newSystemOrPage));
                   }
             }
@@ -6496,10 +6502,10 @@ static void partList(XmlWriter& xml, Score* score, MxmlInstrumentMap& instrMap)
             xml.stag(QString("score-part id=\"P%1\"").arg(idx+1));
             initInstrMap(instrMap, part->instruments(), score);
             // by default export the parts long name as part-name
-            if (part->longName() != "")
+            if (!part->longName().isEmpty())
                   xml.tag("part-name", MScoreTextToMXML::toPlainText(part->longName()));
             else {
-                  if (part->partName() != "") {
+                  if (!part->partName().isEmpty()) {
                         // use the track name if no part long name
                         // to prevent an empty track name on import
                         xml.tag("part-name print-object=\"no\"", MScoreTextToMXML::toPlainText(part->partName()));
@@ -6595,7 +6601,7 @@ void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, boo
             // these will be output at the start of the next measure
             const auto cle = toClef(el);
             const auto ti = cle->segment()->tick();
-            const QString visible = (!cle->visible()) ? " print-object=\"no\"" : "";
+            const QString visible = (!cle->visible()) ? " print-object=\"no\"" : QString();
             clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
             if (el->generated()) {
                   clefDebug("exportxml: generated clef not exported");
@@ -7409,7 +7415,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             if (!h->xmlKind().isEmpty()) {
                   QString s = "kind";
                   QString kindText = h->musicXmlText();
-                  if (h->musicXmlText() != "")
+                  if (!h->musicXmlText().isEmpty())
                         s += " text=\"" + kindText + "\"";
                   if (h->xmlSymbols() == "yes")
                         s += " use-symbols=\"yes\"";

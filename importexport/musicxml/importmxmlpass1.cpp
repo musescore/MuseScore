@@ -195,7 +195,7 @@ MusicXMLParserPass1::MusicXMLParserPass1(Score* score, MxmlLogger* logger)
 
 void MusicXMLParserPass1::addError(const QString& error)
       {
-      if (error != "") {
+      if (!error.isEmpty()) {
             _logger->logError(error, &_e);
             QString errorWithLocation = xmlReaderLocation(_e) + ' ' + error + '\n';
             _errors += errorWithLocation;
@@ -1280,7 +1280,7 @@ static QString text2syms(const QString& t)
       QString in = t;
       QString res;
 
-      while (in != "") {
+      while (!in.isEmpty()) {
             // try to find the largest match possible
             int maxMatch = qMin(in.size(), maxStringSize);
             QString sym;
@@ -1383,7 +1383,7 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
             if (ok && (lines > 0))  // 1, 2, or 3 underlines are imported as single underline
                   importedtext += "<u>";
             else
-                  underline = "";
+                  underline.clear();
             }
       if (!strike.isEmpty()) {
             bool ok = true;
@@ -1391,7 +1391,7 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
             if (ok && (lines > 0))  // 1, 2, or 3 strikes are imported as single strike
                   importedtext += "<s>";
             else
-                  strike = "";
+                  strike.clear();
             }
       if (txt == syms) {
             txt.replace(QString("\r"), QString("")); // convert Windows line break \r\n -> \n
@@ -1401,9 +1401,9 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
             // <sym> replacement made, should be no need for line break or other conversions
             importedtext += syms;
             }
-      if (strike != "")
+      if (!strike.isEmpty())
             importedtext += "</s>";
-      if (underline != "")
+      if (!underline.isEmpty())
             importedtext += "</u>";
       if (fontStyle == "italic")
             importedtext += "</i>";
@@ -1462,10 +1462,10 @@ void MusicXMLParserPass1::credit(CreditWordsList& credits)
             else
                   skipLogCurrElem();
             }
-      if (crwords != "") {
+      if (!crwords.isEmpty()) {
             // as the meaning of multiple credit-types is undocumented,
             // use credit-type only if exactly one was found
-            QString crtype = (crtypes.size() == 1) ? crtypes.at(0) : "";
+            QString crtype = (crtypes.size() == 1) ? crtypes.at(0) : QString();
             CreditWords* cw = new CreditWords(page, crtype, defaultx, defaulty, fontSize, justify, halign, valign, crwords);
             credits.append(cw);
             }
@@ -1524,7 +1524,7 @@ static void updateStyles(Score* score,
                   continue;
             const TextStyle* ts = textStyle(tid);
             for (const StyledProperty& a :* ts) {
-                  if (a.pid == Pid::FONT_FACE && wordFamily != "" && !needUseDefaultFont)
+                  if (a.pid == Pid::FONT_FACE && !wordFamily.isEmpty() && !needUseDefaultFont)
                         score->style().set(a.sid, wordFamily);
                   else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon)
                         score->style().set(a.sid, dblWordSize);
@@ -1532,7 +1532,7 @@ static void updateStyles(Score* score,
             }
 
       // handle lyrics odd and even lines separately
-      if (lyricFamily != "" && !needUseDefaultFont) {
+      if (!lyricFamily.isEmpty() && !needUseDefaultFont) {
             score->style().set(Sid::lyricsOddFontFace, lyricFamily);
             score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
@@ -1785,7 +1785,7 @@ void MusicXMLParserPass1::pageLayout(MxmlPageFormat& pf, const qreal conversion)
       while (_e.readNextStartElement()) {
             if (_e.name() == "page-margins") {
                   QString type = _e.attributes().value("type").toString();
-                  if (type == "")
+                  if (type.isEmpty())
                         type = "both";
                   qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
                   while (_e.readNextStartElement()) {
@@ -1909,7 +1909,7 @@ static void partGroupStart(MusicXmlPartGroupMap& pgs, int n, int p, QString s, b
             }
 
       BracketType bracketType = BracketType::NO_BRACKET;
-      if (s == "")
+      if (s.isEmpty())
             ;        // ignore (handle as NO_BRACKET)
       else if (s == "none")
             ;        // already set to NO_BRACKET
@@ -1976,8 +1976,9 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
       _logger->logDebugTrace("MusicXMLParserPass1::partGroup", &_e);
       bool barlineSpan = true;
       int number = _e.attributes().value("number").toInt();
-      if (number > 0) number--;
-      QString symbol = "";
+      if (number > 0)
+            number--;
+      QString symbol;
       QString type = _e.attributes().value("type").toString();
 
       while (_e.readNextStartElement()) {
@@ -2745,7 +2746,7 @@ void MusicXMLParserPass1::time(const Fraction cTime)
                   skipLogCurrElem();
             }
 
-      if (beats != "" && beatType != "") {
+      if (!beats.isEmpty() && !beatType.isEmpty()) {
             // determine if timesig is valid
             TimeSigType st  = TimeSigType::NORMAL;
             int bts = 0;       // total beats as integer (beats may contain multiple numbers, separated by "+")
@@ -2897,7 +2898,7 @@ void MusicXMLParserPass1::directionType(const Fraction cTime,
             if (_e.name() == "octave-shift") {
                   QString number = _e.attributes().value("number").toString();
                   int n = 0;
-                  if (number != "") {
+                  if (!number .isEmpty()) {
                         n = number.toInt();
                         if (n <= 0)
                               _logger->logError(QString("invalid number %1").arg(number), &_e);
@@ -2989,7 +2990,7 @@ void MusicXMLParserPass1::notations(MxmlStartStop& tupletStartStop)
                         tupletStartStop = MxmlStartStop::START;
                   else if (tupletType == "stop")
                         tupletStartStop = MxmlStartStop::STOP;
-                  else if (tupletType != "" && tupletType != "start" && tupletType != "stop") {
+                  else if (!tupletType.isEmpty() && tupletType != "start" && tupletType != "stop") {
                         _logger->logError(QString("unknown tuplet type '%1'").arg(tupletType), &_e);
                         }
                   }
@@ -3255,7 +3256,7 @@ int MusicXMLParserPass1::voiceToInt(const QString& voice)
       {
       bool ok;
       int voiceInt = voice.toInt(&ok);
-      if (voice == "")
+      if (voice.isEmpty())
             voiceInt = 1;
       else if (!ok)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
@@ -3488,7 +3489,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       // keep in this order as checkTiming() might change dura
       auto errorStr = mnd.checkTiming(type, bRest, grace);
       dura = mnd.duration();
-      if (errorStr != "")
+      if (!errorStr.isEmpty())
             _logger->logError(errorStr, &_e);
 
       // don't count chord or grace note duration
