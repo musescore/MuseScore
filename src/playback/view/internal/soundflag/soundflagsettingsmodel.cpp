@@ -28,6 +28,7 @@
 #include "engraving/dom/soundflag.h"
 
 #include "audio/audioutils.h"
+#include "actions/actiontypes.h"
 
 #include "translation.h"
 #include "log.h"
@@ -126,6 +127,8 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
     updateStaffText();
     endCommand();
 
+    updateNotation();
+
     emit presetCodesChanged();
 }
 
@@ -172,12 +175,12 @@ uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& act
     uicomponents::MenuItem* item = new uicomponents::MenuItem(this);
     item->setId(actionCode);
 
-    UiAction action;
-    action.code = codeFromQString(actionCode);
+    ui::UiAction action;
+    action.code = actions::codeFromQString(actionCode);
     action.title = title;
     item->setAction(action);
 
-    UiActionState state;
+    ui::UiActionState state;
     state.enabled = true;
     item->setState(state);
 
@@ -190,7 +193,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
 
     uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset"));
 
-    UiAction resetAction = resetItem->action();
+    ui::UiAction resetAction = resetItem->action();
     resetAction.iconCode = ui::IconCode::Code::UNDO;
     resetItem->setAction(resetAction);
 
@@ -217,9 +220,16 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
     if (menuId == RESET_MENU_ID) {
         engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
 
-        undoStack()->prepareChanges();
+        beginCommand();
+
         soundFlag->undoChangeSoundFlag(StringList(), StringList());
-        undoStack()->commitChanges();
+        bool needUpdateNotation = updateStaffText();
+
+        endCommand();
+
+        if (needUpdateNotation) {
+            updateNotation();
+        }
 
         emit presetCodesChanged();
         emit playingTechniquesCodesChanged();
@@ -235,10 +245,32 @@ engraving::StaffText* SoundFlagSettingsModel::staffText() const
     return parent && parent->isStaffText() ? engraving::toStaffText(parent) : nullptr;
 }
 
-notation::INotationUndoStackPtr SoundFlagSettingsModel::undoStack() const
+bool SoundFlagSettingsModel::updateStaffText()
 {
-    IF_ASSERT_FAILED(globalContext()->currentNotation()) {
-        return nullptr;
+    String oldStaffText = this->text();
+
+    String newText = mtrc("engraving", "Staff text");
+
+    auto getParamsNames = [](const QVariantList& params, const StringList& selectedParams) -> String {
+        if (selectedParams.empty()) {
+            return {};
+        }
+
+        StringList paramsNames;
+        for (const String& paramCode : selectedParams) {
+            for (const QVariant& paramVar : params) {
+                if (paramVar.toMap()["code"].toString() == paramCode) {
+                    paramsNames.push_back(paramVar.toMap()["name"].toString().toLower());
+                }
+            }
+        }
+
+        return !paramsNames.empty() ? paramsNames.join(u", ") : u"";
+    };
+
+    String presetsNames = getParamsNames(m_availablePresets, engraving::toSoundFlag(m_item)->soundPresets());
+    if (!presetsNames.empty()) {
+        newText = presetsNames;
     }
 
     String playingTechniquesNames = getParamsNames(m_availablePlayingTechniques, engraving::toSoundFlag(m_item)->playingTechniques());
