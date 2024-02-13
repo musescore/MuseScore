@@ -97,10 +97,19 @@ private:
 }
 
 namespace std {
+#ifdef MU_QT5_COMPAT
 inline uint qHash(const std::string& key, uint seed = 0)
 {
     return ::qHash(QByteArray::fromRawData(key.data(), static_cast<int>(key.length())), seed);
 }
+
+#else
+inline size_t qHash(const std::string& key, uint seed = 0)
+{
+    return ::qHash(QByteArray::fromRawData(key.data(), static_cast<int>(key.length())), seed);
+}
+
+#endif
 }
 
 #endif // MU_SHORTCUTS_SHORTCUTSREGISTER_H
