@@ -1376,12 +1376,14 @@ void fillHairpinVelocities(const Hairpin* h, std::unordered_map<staff_idx_t, Vel
 
 void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context& context)
 {
-    if (!score->firstMeasure()) {
+    Score* mainScore = score->masterScore();
+
+    if (!mainScore->firstMeasure()) {
         return;
     }
 
-    for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
-        Staff* st = score->staff(staffIdx);
+    for (size_t staffIdx = 0; staffIdx < mainScore->nstaves(); staffIdx++) {
+        Staff* st = mainScore->staff(staffIdx);
         if (!st->isPrimaryStaff()) {
             continue;
         }
@@ -1390,9 +1392,9 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
         VelocityMap& mult = context.velocityMultiplicationsByStaff[st->idx()];
         Part* prt = st->part();
         size_t partStaves = prt->nstaves();
-        staff_idx_t partStaff = score->staffIdx(prt);
+        staff_idx_t partStaff = mainScore->staffIdx(prt);
 
-        for (Segment* s = score->firstMeasure()->first(); s; s = s->next1()) {
+        for (Segment* s = mainScore->firstMeasure()->first(); s; s = s->next1()) {
             Fraction tick = s->tick();
             for (const EngravingItem* e : s->annotations()) {
                 if (e->staffIdx() != staffIdx) {
@@ -1435,7 +1437,7 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                 case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
                         for (staff_idx_t i = partStaff; i < partStaff + partStaves; ++i) {
-                            Staff* stp = score->staff(i);
+                            Staff* stp = mainScore->staff(i);
                             if (!stp->isPrimaryStaff()) {
                                 continue;
                             }
@@ -1451,13 +1453,13 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                     }
                     break;
                 case DynamicRange::SYSTEM:
-                    for (size_t i = 0; i < score->nstaves(); ++i) {
-                        Staff* sts = score->staff(i);
+                    for (size_t i = 0; i < mainScore->nstaves(); ++i) {
+                        Staff* sts = mainScore->staff(i);
                         if (!sts->isPrimaryStaff()) {
                             continue;
                         }
 
-                        VelocityMap& stVelo = context.velocitiesByStaff[score->staff(i)->idx()];
+                        VelocityMap& stVelo = context.velocitiesByStaff[mainScore->staff(i)->idx()];
                         stVelo.addDynamic(tick, v);
                         if (change != 0) {
                             Fraction etick = tick + d->velocityChangeLength();
@@ -1496,7 +1498,7 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
             }
         }
 
-        for (const auto& sp : score->spannerMap().map()) {
+        for (const auto& sp : mainScore->spannerMap().map()) {
             Spanner* s = sp.second;
             if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx) {
                 continue;
@@ -1506,14 +1508,14 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
         }
     }
 
-    for (Staff* st : score->staves()) {
+    for (Staff* st : mainScore->staves()) {
         if (st->isPrimaryStaff()) {
             context.velocitiesByStaff[st->idx()].setup();
             context.velocityMultiplicationsByStaff[st->idx()].setup();
         }
     }
 
-    for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
+    for (auto it = mainScore->spanner().cbegin(); it != mainScore->spanner().cend(); ++it) {
         Spanner* spanner = (*it).second;
         if (!spanner->isVolta()) {
             continue;
