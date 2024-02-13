@@ -27,6 +27,10 @@
 
 #include "abstractnavigation.h"
 
+#ifndef MU_QT5_COMPAT
+Q_MOC_INCLUDE("ui/view/navigationpanel.h")
+#endif
+
 namespace mu::ui {
 class NavigationPanel;
 class NavigationControl : public AbstractNavigation, public INavigationControl
