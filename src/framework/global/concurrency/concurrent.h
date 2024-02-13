@@ -25,6 +25,7 @@
 
 #ifndef NO_QT_SUPPORT
 #include <QtConcurrent>
+#include "log.h"
 
 namespace mu {
 class Concurrent
