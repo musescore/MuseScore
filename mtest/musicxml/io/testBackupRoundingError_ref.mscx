@@ -946,7 +946,7 @@
             <Articulation>
               <subtype>articLaissezVibrerBelow</subtype>
               <autoplace>0</autoplace>
-              <offset x="1.06594" y="-6.09301"/>
+              <offset x="1.06594" y="-6.11334"/>
               </Articulation>
             <Note>
               <Accidental>
@@ -1833,6 +1833,15 @@
             <visible>0</visible>
             <durationType>half</durationType>
             </Rest>
+          <location>
+            <fractions>-103/1024</fractions>
+            </location>
+          <Symbol>
+            <name>gClef</name>
+            </Symbol>
+          <location>
+            <fractions>103/1024</fractions>
+            </location>
           <BarLine>
             <visible>0</visible>
             </BarLine>
@@ -1999,6 +2008,15 @@
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
+          <location>
+            <fractions>-1/12</fractions>
+            </location>
+          <Symbol>
+            <name>fClef</name>
+            </Symbol>
+          <location>
+            <fractions>1/12</fractions>
+            </location>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

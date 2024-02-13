@@ -3355,8 +3355,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
       for (auto elem : _elems) {
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, elem, track, placement(), measure, tick + _offset, _isBold);
-            delayedDirections.push_back(delayedDirection);
+            if (hasTotalY()) {
+                  MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
+                                    totalY(), elem, track, placement(), measure, tick + _offset, _isBold);
+                  delayedDirections.push_back(delayedDirection);
+                  }
+            else
+                  addElemOffset(elem, track, placement(), measure, tick + _offset);
             }
 
       // handle the spanner stops first
@@ -3474,6 +3479,13 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                   _wordsText += "<sym>segno</sym>";
                   _e.skipCurrentElement();
                   }
+            else if (_e.name() == "symbol") {
+                  const QString smufl = _e.readElementText();
+                  if (!smufl.isEmpty())
+                        _wordsText += "<sym>" + smufl + "</sym>";
+                  }
+            else if (_e.name() == "other-direction")
+                  otherDirection();
             else
                   skipLogCurrElem();
             }
@@ -3517,6 +3529,58 @@ void MusicXMLParserDirection::dynamics()
             else {
                   _dynamicsList.push_back(_e.name().toString());
                   _e.skipCurrentElement();
+                  }
+            }
+      }
+
+void MusicXMLParserDirection::otherDirection()
+      {
+      // <other-direction> element is used to define any <direction> symbols not yet in the MusicXML format
+      const QString smufl = { _e.attributes().value("smufl").toString() };
+      const QColor color = { _e.attributes().value("color").toString() };
+
+      // Read smufl symbol
+      if (!smufl.isEmpty()) {
+            SymId id { SymId::noSym };
+            if (convertArticulationToSymId(_e.name().toString(), id) && id != SymId::noSym) {
+                  Symbol* smuflSym = new Symbol(_score);
+                  smuflSym->setSym(id);
+                  if (color.isValid())
+                        smuflSym->setColor(color);
+                  _elems.push_back(smuflSym);
+                  }
+            _e.skipCurrentElement();
+            }
+      else {
+            // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
+            // TODO: Add more symbols from Sibelius
+            QMap<QString, QString> otherDirectionStrings;
+            if (_pass1.exporterString().contains("Dolet")) {
+                  otherDirectionStrings = {
+                        { QString("To Coda"), QString("To Coda") },
+                        { QString("Segno"), QString("<sym>segno</sym>") },
+                        { QString("CODA"), QString("<sym>coda</sym>") },
+                  };
+                  }
+            QMap<QString, SymId> otherDirectionSyms;
+            otherDirectionSyms = { { QString("Rhythm dot"), SymId::augmentationDot },
+                                   { QString("Whole rest"), SymId::restWhole },
+                                   { QString("l.v. down"), SymId::articLaissezVibrerBelow },
+                                   { QString("8vb"), SymId::ottavaBassaVb },
+                                   { QString("Treble clef"), SymId::gClef },
+                                   { QString("Bass clef"), SymId::fClef }
+                                 };
+            QString t = _e.readElementText();
+            QString val = otherDirectionStrings.value(t);
+            if (!val.isEmpty())
+                  _wordsText += val;
+            else {
+                  SymId sym = otherDirectionSyms.value(t);
+                  Symbol* smuflSym = new Symbol(_score);
+                  smuflSym->setSym(sym);
+                  if (color.isValid())
+                        smuflSym->setColor(color);
+                  _elems.push_back(smuflSym);
                   }
             }
       }
@@ -7613,6 +7677,8 @@ void MusicXMLParserNotations::parse()
             else if (_e.name() == "tuplet") {
                   tuplet();
                   }
+            else if (_e.name() == "other-notation")
+                  otherNotation();
             else {
                   skipLogCurrElem();
                   }
@@ -7829,6 +7895,21 @@ void MusicXMLParserNotations::tuplet()
             ; // ignore
       else
             _logger->logError(QString("unknown tuplet placement: %1").arg(tupletPlacement), &_e);
+      }
+
+void MusicXMLParserNotations::otherNotation()
+      {
+      const QString type = { _e.attributes().value("type").toString() };
+      const QString smufl = { _e.attributes().value("smufl").toString() };
+      if (!smufl.isEmpty()) {
+            SymId id { SymId::noSym };
+            if (convertArticulationToSymId(_e.name().toString(), id) && id != SymId::noSym) {
+                  Notation notation = Notation::notationWithAttributes(_e.name().toString(),
+                                                                       _e.attributes(), "notations", id);
+                  _notations.push_back(notation);
+                  _e.skipCurrentElement();
+                  }
+            }
       }
 
 //---------------------------------------------------------

@@ -191,6 +191,7 @@ public:
       void addInferredTranspose(const QString& partId);
       void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
       bool hasInferredHeaderText() const { return _hasInferredHeaderText; }
+      QString exporterString() const { return _exporterString; }
 
 private:
       // functions
@@ -198,6 +199,7 @@ private:
 
       // generic pass 1 data
       QXmlStreamReader _e;
+      QString _exporterString;                  ///< Name of the software which exported the file
       int _divs;                                ///< Current MusicXML divisions value
       QMap<QString, MusicXmlPart> _parts;       ///< Parts data, mapped on part id
       std::set<int> _systemStartMeasureNrs;     ///< Measure numbers of measures starting a page

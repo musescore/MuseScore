@@ -1220,13 +1220,18 @@ void MusicXMLParserPass1::identification()
             else if (_e.name() == "encoding") {
                   // TODO
                   while (_e.readNextStartElement()) {
-                        if (_e.name() == "supports" ) {
-                              if (_e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes")
-                                    _hasBeamingInfo = true;
-                              else if (_e.attributes().value("element") == "transpose")
-                                    _supportsTranspose = _e.attributes().value("type").toString();
+                        if (_e.name() == "software")
+                            _exporterString += _e.readElementText();
+                        else if (_e.name() == "supports" && _e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes") {
+                              _hasBeamingInfo = true;
+                              _e.skipCurrentElement();
                               }
-                        _e.skipCurrentElement();
+                        else if (_e.name() == "supports" && _e.attributes().value("element") == "transpose") {
+                              _supportsTranspose = _e.attributes().value("type").toString();
+                              _e.skipCurrentElement();
+                              }
+                        else
+                              _e.skipCurrentElement();
                         }
                   // _score->setMetaTag("encoding", _e.readElementText()); works with DOM but not with pull parser
                   // temporarily fake the encoding tag (compliant with DOM parser) to help the autotester
