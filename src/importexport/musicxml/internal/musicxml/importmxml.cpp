@@ -132,7 +132,7 @@ Err importMusicXMLfromBuffer(Score* score, const String& /*name*/, const ByteArr
     if (!(pass1_errors.isEmpty() && pass2_errors.isEmpty())) {
 #ifndef MUSICXML_NO_INTERACTIVE
         if (!MScore::noGui) {
-            const String text = qtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
+            const String text = mtrc("iex_musicxml", "%n error(s) found, import may be incomplete.",
                                      nullptr, int(pass1_errors.size() + pass2_errors.size()));
             if (musicXMLImportErrorDialog(text, pass1.errors() + pass2.errors()) != IInteractive::Button::Yes) {
                 res = Err::UserAbort;
