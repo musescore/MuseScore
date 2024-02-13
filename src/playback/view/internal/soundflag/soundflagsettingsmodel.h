@@ -102,7 +102,6 @@ signals:
     void contextMenuModelChanged();
 
 private:
-    notation::INotationUndoStackPtr undoStack() const;
     project::IProjectAudioSettingsPtr audioSettings() const;
 
     const audio::AudioInputParams& currentAudioInputParams() const;
@@ -114,6 +113,8 @@ private:
     engraving::StaffText* staffText() const;
 
     uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title);
+
+    bool updateStaffText();
 
     QString m_title;
 
