@@ -102,7 +102,7 @@ void TextInputFieldModel::loadShortcuts()
 
 Shortcut TextInputFieldModel::shortcut(int key, Qt::KeyboardModifiers modifiers) const
 {
-    QKeySequence keySequence(modifiers + key);
+    QKeySequence keySequence(modifiers | key);
     for (const Shortcut& shortcut : m_notAllowedForOverrideShortcuts) {
         for (const std::string& seq : shortcut.sequences) {
             QKeySequence shortcutSequence(QString::fromStdString(seq));
