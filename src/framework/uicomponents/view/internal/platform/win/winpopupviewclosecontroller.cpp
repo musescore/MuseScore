@@ -42,7 +42,11 @@ void WinPopupViewCloseController::doUpdateEventFilters()
     PopupViewCloseController::doUpdateEventFilters();
 }
 
+#ifdef MU_QT5_COMPAT
 bool WinPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, long*)
+#else
+bool WinPopupViewCloseController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr*)
+#endif
 {
     if (eventType != "windows_generic_MSG") {
         return false;
