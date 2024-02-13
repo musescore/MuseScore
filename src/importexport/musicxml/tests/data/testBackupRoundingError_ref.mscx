@@ -2007,8 +2007,7 @@
               </Note>
             </Chord>
           <Fermata>
-            <subtype>fermataAbove</subtype>
-            <placement>above</placement>
+            <subtype>fermataBelow</subtype>
             </Fermata>
           <Chord>
             <durationType>half</durationType>
