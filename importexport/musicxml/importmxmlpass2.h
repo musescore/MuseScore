@@ -145,7 +145,7 @@ private:
 
 class Notation {
 public:
-      Notation(const QString& name, const QString& parent = "",
+      Notation(const QString& name, const QString& parent = QString(),
                   const SymId& symId = SymId::noSym) { _name = name; _parent = parent; _symId = symId; }
       void addAttribute(const QString& name, const QString& value);
       void addAttribute(const QStringRef name, const QStringRef value);
@@ -161,7 +161,7 @@ public:
       void setText(const QString& text) { _text = text; }
       QString text() const { return _text; }
       static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,
-                                const QString& parent = "", const SymId& symId = SymId::noSym);
+                                const QString& parent = QString(), const SymId& symId = SymId::noSym);
 private:
       QString _name;
       QString _parent;

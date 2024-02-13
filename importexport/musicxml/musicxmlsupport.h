@@ -212,7 +212,7 @@ extern QString accSymId2SmuflMxmlString(const SymId id);
 extern QString accidentalType2MxmlString(const AccidentalType type);
 extern QString accidentalType2SmuflMxmlString(const AccidentalType type);
 extern AccidentalType mxmlString2accidentalType(const QString mxmlName, const QString smufl);
-extern SymId mxmlString2accSymId(const QString mxmlName, const QString smufl = "");
+extern SymId mxmlString2accSymId(const QString mxmlName, const QString smufl = QString());
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern bool hasLaissezVibrer(const Chord* const chord);

@@ -119,12 +119,12 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
 
                   if (rest && type == "whole" && _specDura.isValid()) {
                         // Sibelius whole measure rest (not an error)
-                        errorStr = "";
+                        errorStr.clear();
                         _dura = _specDura;
                         }
                   else if (grace && _specDura == Fraction(0, 1)) {
                         // grace note (not an error)
-                        errorStr = "";
+                        errorStr.clear();
                         _dura = _specDura;
                         }
                   else {
@@ -155,7 +155,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
             }
       else if (_specDura.isValid() && !_calcDura.isValid()) {
             // do not report an error for typeless (whole measure) rests
-            if (!(rest && type == "")) {
+            if (!(rest && type.isEmpty())) {
                   errorStr = "calculated duration invalid, using specified duration";
                   }
             _dura = _specDura;

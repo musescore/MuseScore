@@ -254,7 +254,7 @@ static QString attribute(bool needed, bool value, QString trueString, QString fa
       QString res;
       if (needed)
             res = value ? trueString : falseString;
-      if (res != "")
+      if (!res.isEmpty())
             res = " " + res;
       return res;
       }

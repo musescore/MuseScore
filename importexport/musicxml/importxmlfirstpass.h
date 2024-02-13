@@ -56,7 +56,7 @@ private:
 
 class MusicXmlPart {
 public:
-      MusicXmlPart(QString id = "", QString name = "");
+      MusicXmlPart(QString id = QString(), QString name = QString());
       void addMeasureNumberAndDuration(QString measureNumber, Fraction measureDuration);
       QString getId() const { return id; }
       QString toString() const;

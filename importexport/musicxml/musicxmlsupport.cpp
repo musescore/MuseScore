@@ -236,7 +236,7 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
             .arg(descText);
 
       // append error, separated by newline if necessary
-      if (errors != "")
+      if (!errors.isEmpty())
             errors += "\n";
       errors += errorStr;
       }
