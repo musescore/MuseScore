@@ -35,6 +35,7 @@
 #include "style/style.h"
 #include "types/constants.h"
 
+#include "dom/accidental.h"
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
 #include "dom/bend.h"
@@ -243,6 +244,23 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     }
 
     events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
+    Accidental* acc = note->accidental();
+    if (acc) {
+        AccidentalType type = acc->accidentalType();
+        double cents = Accidental::subtype2centOffset(type);
+        if (!RealIsNull(cents)) {
+            double pwValue = cents / 100.0 * (double)wheelSpec.mLimit / (double)wheelSpec.mAmplitude;
+            PitchWheelRenderer::PitchWheelFunction func;
+            func.mStartTick = params.onTime - params.offset;
+            func.mEndTick = params.offTime - params.offset;
+            auto microtonalPW = [pwValue](uint32_t tick) {
+                UNUSED(tick);
+                return static_cast<int>(std::round(pwValue));
+            };
+            func.func = microtonalPW;
+            pitchWheelRenderer.addPitchWheelFunction(func, params.channel, params.staffIdx, MidiInstrumentEffect::NONE);
+        }
+    }
     // adds portamento for continuous glissando
     for (Spanner* spanner : note->spannerFor()) {
         if (spanner->type() == ElementType::GLISSANDO) {
