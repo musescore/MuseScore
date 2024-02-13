@@ -20,11 +20,12 @@ set(_components
     QuickTemplates2
     QuickWidgets
     Xml
-#    XmlPatterns
     Svg
     PrintSupport
     OpenGL
     LinguistTools
+
+    Core5Compat
 )
 
 if (NOT OS_IS_WASM)
