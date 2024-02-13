@@ -78,6 +78,7 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
 
     connect(this, &SortFilterProxyModel::sourceModelRoleNamesChanged, this, [this]() {
         invalidate();
+        fillRoleIds();
     });
 }
 
