@@ -285,8 +285,13 @@ if (NOT CC_IS_EMSCRIPTEN)
 else()
     target_link_libraries(mscore PRIVATE ${QT_LIBRARIES})
 
-    find_package(Qt5QmlImportScanner REQUIRED)
-    qt5_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+    if (MUE_COMPILE_QT5_COMPAT)
+        find_package(Qt5QmlImportScanner REQUIRED)
+        qt5_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+    else()
+        find_package(Qt6QmlImportScanner REQUIRED)
+        qt6_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
+    endif()
 endif()
 
 
@@ -337,6 +342,30 @@ if (OS_IS_WIN)
             ${QT_INSTALL_BINS}/Qt5QmlModels.dll
             ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
             DESTINATION bin)
+
+    if (MUE_COMPILE_QT5_COMPAT)
+        install(FILES
+                ${PROJECT_SOURCE_DIR}/build/qt.conf
+                ${QtInstallLibraries}
+                ${QT_INSTALL_BINS}/libEGL.dll
+                ${QT_INSTALL_BINS}/libGLESv2.dll
+                ${QT_INSTALL_BINS}/opengl32sw.dll
+                ${QT_INSTALL_BINS}/d3dcompiler_47.dll
+                ${QT_INSTALL_BINS}/Qt5QmlModels.dll
+                ${QT_INSTALL_BINS}/Qt5QmlWorkerScript.dll
+                DESTINATION bin)
+    else()
+        install(FILES
+                ${PROJECT_SOURCE_DIR}/build/qt.conf
+                ${QtInstallLibraries}
+                ${QT_INSTALL_BINS}/libEGL.dll
+                ${QT_INSTALL_BINS}/libGLESv2.dll
+                ${QT_INSTALL_BINS}/opengl32sw.dll
+                ${QT_INSTALL_BINS}/d3dcompiler_47.dll
+                ${QT_INSTALL_BINS}/Qt6QmlModels.dll
+                ${QT_INSTALL_BINS}/Qt6QmlWorkerScript.dll
+                DESTINATION bin)
+    endif()
 
     install(FILES
             ${QT_INSTALL_PLUGINS}/iconengines/qsvgicon.dll
@@ -469,9 +498,15 @@ elseif(OS_IS_WASM)
 
     function(copy_html_js_launch_files target)
         set(APPNAME ${target})
-        configure_file("${_qt5Core_install_prefix}/plugins/platforms/wasm_shell.html" "public_html/${target}.qt.html")
-        configure_file("${_qt5Core_install_prefix}/plugins/platforms/qtloader.js" public_html/qtloader.js COPYONLY)
-        configure_file("${_qt5Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
+        if (MUE_COMPILE_QT5_COMPAT)
+            configure_file("${_qt5Core_install_prefix}/plugins/platforms/wasm_shell.html" "public_html/${target}.qt.html")
+            configure_file("${_qt5Core_install_prefix}/plugins/platforms/qtloader.js" public_html/qtloader.js COPYONLY)
+            configure_file("${_qt5Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
+        else()
+            configure_file("${_qt6Core_install_prefix}/plugins/platforms/wasm_shell.html" "public_html/${target}.qt.html")
+            configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtloader.js" public_html/qtloader.js COPYONLY)
+            configure_file("${_qt6Core_install_prefix}/plugins/platforms/qtlogo.svg" public_html/qtlogo.svg COPYONLY)
+        endif()
     endfunction()
 
     copy_html_js_launch_files(mscore)

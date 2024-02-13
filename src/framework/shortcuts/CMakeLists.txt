@@ -68,9 +68,14 @@ if (OS_IS_MAC)
     )
 
     set(MODULE_INCLUDE
-        ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
         ${CARBON_LIBRARY}
     )
+
+    if (MUE_COMPILE_QT5_COMPAT)
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${Qt5Gui_PRIVATE_INCLUDE_DIRS} )
+    else()
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
+    endif()
 endif(OS_IS_MAC)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

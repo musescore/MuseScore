@@ -55,11 +55,17 @@ target_compile_definitions(${MODULE_TEST} PRIVATE
     ${MODULE_TEST}_DATA_ROOT="${MODULE_TEST_DATA_ROOT}"
 )
 
-find_package(Qt5 COMPONENTS Core Gui REQUIRED)
+if (MUE_COMPILE_QT5_COMPAT)
+    find_package(Qt5 COMPONENTS Core Gui REQUIRED)
+    set(QtLibs Qt5::Core Qt5::Gui)
+else()
+    find_package(Qt6Core REQUIRED)
+    find_package(Qt6Gui REQUIRED)
+    set(QtLibs Qt6::Core Qt6::Gui)
+endif()
 
 target_link_libraries(${MODULE_TEST}
-    Qt5::Core
-    Qt5::Gui
+    ${QtLibs}
     gmock
     global
     ${MODULE_TEST_LINK}
