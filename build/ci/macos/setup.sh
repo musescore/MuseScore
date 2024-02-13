@@ -93,6 +93,8 @@ installBottleManually libsndfile
 rm '/usr/local/bin/2to3'
 brew install ninja pkg-config
 
+brew install cmake
+
 # Qt
 export QT_SHORT_VERSION=5.15.9
 export QT_PATH=$HOME/Qt
