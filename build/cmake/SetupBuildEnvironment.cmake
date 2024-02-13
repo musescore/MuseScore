@@ -125,17 +125,19 @@ endif()
 
 # APPLE specific
 if (OS_IS_MAC)
-    if (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
-        set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
-    else()
-        set(CMAKE_OSX_ARCHITECTURES x86_64)
-    endif()
+    if (MUE_COMPILE_QT5_COMPAT)
+        if (MUE_COMPILE_BUILD_MACOS_APPLE_SILICON)
+            set(CMAKE_OSX_ARCHITECTURES ) # leave empty, use default
+        else()
+            set(CMAKE_OSX_ARCHITECTURES x86_64)
+        endif()
 
-    if (CMAKE_OSX_ARCHITECTURES)
-        message(STATUS "Building for architecture(s) ${CMAKE_OSX_ARCHITECTURES}")
-    else()
-        message(STATUS "Building for default architecture(s)")
-    endif()
+        if (CMAKE_OSX_ARCHITECTURES)
+            message(STATUS "Building for architecture(s) ${CMAKE_OSX_ARCHITECTURES}")
+        else()
+            message(STATUS "Building for default architecture(s)")
+        endif()
+    endif() #MUE_COMPILE_QT5_COMPAT
 
     set(MACOSX_DEPLOYMENT_TARGET 10.14)
     set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
