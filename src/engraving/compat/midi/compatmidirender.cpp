@@ -115,7 +115,7 @@ void CompatMidiRender::createPlayEvents(const Score* score, const CompatMidiRend
     // gateTime is 100% for slurred notes
     if (!slur) {
         Instrument* instr = chord->part()->instrument(tick);
-        instr->updateGateTime(&gateTime, u"");
+        instr->updateGateTime(&gateTime, String());
     }
 
     int ontime    = 0;

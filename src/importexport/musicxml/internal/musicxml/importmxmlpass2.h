@@ -152,7 +152,7 @@ private:
 class Notation
 {
 public:
-    Notation(const String& name, const String& parent = u"",
+    Notation(const String& name, const String& parent = {},
              const SymId& symId = SymId::noSym) { m_name = name; m_parent = parent; m_symId = symId; }
     void addAttribute(const String& name, const String& value);
     String attribute(const String& name) const;
@@ -167,7 +167,7 @@ public:
     void setText(const String& text) { m_text = text; }
     String text() const { return m_text; }
     static Notation notationWithAttributes(const String& name, const std::vector<XmlStreamReader::Attribute>& attributes,
-                                           const String& parent = u"", const SymId& symId = SymId::noSym);
+                                           const String& parent = {}, const SymId& symId = SymId::noSym);
 private:
     String m_name;
     String m_parent;
