@@ -64,10 +64,8 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 #include <QString> //771
 #include <QList> //465
 #include <QVariant> //376
-#include <QByteArrayData> //266
 #include <QByteArray> //257
 #include <QPointF> //249
-#include <QStringRef> //218
 #include <QRectF> //191
 #include <QStringList> //164
 #include <QObject> //152
@@ -84,7 +82,6 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 #include <QApplication> //61
 #include <QWidget> //52
 #include <QVariantMap> //51
-#include <QCharRef> //42
 #include <QModelIndex> //41
 #include <QFont> //40
 #include <QFileInfo> //40
@@ -101,7 +98,6 @@ See https://github.com/musescore/musescore_devtools/tree/main/include-what-you-u
 #include <QMetaType> //25
 #include <QFontMetricsF> //24
 #include <QMultiMap> //22
-#include <QHashNode> //22
 #include <QPushButton> //22
 #include <QPixmap> //22
 #include <QXmlStreamAttributes> //22

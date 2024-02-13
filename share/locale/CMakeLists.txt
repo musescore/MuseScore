@@ -21,12 +21,19 @@
 file(GLOB TS_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/*.ts)
 
 if (MUE_RUN_LRELEASE)
-    qt5_add_translation(QM_FILES ${TS_FILES})
 
-    add_custom_target(lrelease ALL
-        DEPENDS ${QM_FILES}
-        COMMENT "Generating .qm files" VERBATIM
-    )
+    if (MUE_COMPILE_QT5_COMPAT)
+        qt5_add_translation(QM_FILES ${TS_FILES})
+        add_custom_target(lrelease ALL
+            DEPENDS ${QM_FILES}
+            COMMENT "Generating .qm files" VERBATIM
+        )
+    else()
+        add_custom_target(translations ALL
+            COMMENT "Generating .qm files" VERBATIM
+        )
+        qt_add_lrelease(translations TS_FILES ${TS_FILES} NO_GLOBAL_TARGET QM_FILES_OUTPUT_VARIABLE QM_FILES)
+    endif()
 endif()
 
 install(FILES

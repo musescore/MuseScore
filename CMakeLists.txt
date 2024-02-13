@@ -131,6 +131,7 @@ option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (op
 option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)" OFF)
 
 # === Compile ===
+option(MUE_COMPILE_QT5_COMPAT "Build with Qt5" ON)
 option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
 option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
@@ -176,9 +177,13 @@ endif(MUE_COMPILE_USE_CCACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
-
-set(QT_MIN_VERSION    "5.15.0")
-include(FindQt5)
+if (MUE_COMPILE_QT5_COMPAT)
+    set(QT_MIN_VERSION "5.15.0")
+    include(FindQt5)
+else()
+    set(QT_MIN_VERSION "6.2.4")
+    include(FindQt6)
+endif()
 
 if (OS_IS_WIN)
     set(DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
@@ -220,6 +225,9 @@ if (NOT BUILD_SHARED_LIBS)
     set(KDDockWidgets_STATIC ON CACHE BOOL "Build static versions of the libraries" FORCE)
 endif(NOT BUILD_SHARED_LIBS)
 
+if (NOT MUE_COMPILE_QT5_COMPAT)
+    set(KDDockWidgets_QT6 ON CACHE BOOL "Build against Qt 6" FORCE)
+endif()
 set(KDDockWidgets_QTQUICK ON CACHE BOOL "Build for QtQuick instead of QtWidgets" FORCE)
 set(KDDockWidgets_EXAMPLES OFF CACHE BOOL "Build the examples" FORCE)
 add_subdirectory(thirdparty/KDDockWidgets)
