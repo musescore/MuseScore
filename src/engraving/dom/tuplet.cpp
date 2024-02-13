@@ -621,7 +621,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
-        return String(u"");
+        return String();
     case Pid::NORMAL_NOTES:
     case Pid::ACTUAL_NOTES:
         return 0;

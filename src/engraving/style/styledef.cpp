@@ -422,7 +422,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::keySigCourtesyBarlineMode, "keySigCourtesyBarlineMode", PropertyValue(int(CourtesyBarlineMode::DOUBLE_BEFORE_COURTESY)) },
     { Sid::timeSigCourtesyBarlineMode, "timeSigCourtesyBarlineMode", PropertyValue(int(CourtesyBarlineMode::ALWAYS_SINGLE)) },
     { Sid::swingRatio,              "swingRatio",              PropertyValue(60) },
-    { Sid::swingUnit,               "swingUnit",               PropertyValue(String(u"")) },
+    { Sid::swingUnit,               "swingUnit",               PropertyValue(String()) },
     { Sid::useStandardNoteNames,    "useStandardNoteNames",    true },
     { Sid::useGermanNoteNames,      "useGermanNoteNames",      false },
     { Sid::useFullGermanNoteNames,  "useFullGermanNoteNames",  false },
@@ -705,7 +705,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::defaultOffset,                 "defaultOffset",                 PointF() },
     { Sid::defaultOffsetType,             "defaultOffsetType",             int(OffsetType::SPATIUM) },
     { Sid::defaultSystemFlag,             "defaultSystemFlag",             false },
-    { Sid::defaultText,                   "defaultText",                   String(u"") },
+    { Sid::defaultText,                   "defaultText",                   String() },
 
     { Sid::titleFontFace,                 "titleFontFace",                 "Edwin" },
     { Sid::titleFontSize,                 "titleFontSize",                 22.0 },

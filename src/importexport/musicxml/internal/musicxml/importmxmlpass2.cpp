@@ -809,7 +809,7 @@ static String nextPartOfFormattedString(XmlStreamReader& e)
         }
     }
     if (txt == syms) {
-        txt.replace(String(u"\r"), String(u""));     // convert Windows line break \r\n -> \n
+        txt.replace(String(u"\r"), String());     // convert Windows line break \r\n -> \n
         importedtext += txt.toXmlEscaped();
     } else {
         // <sym> replacement made, should be no need for line break or other conversions

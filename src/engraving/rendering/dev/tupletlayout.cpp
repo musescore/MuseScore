@@ -77,7 +77,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                               ? String(u"%1").arg(item->ratio().numerator())
                               : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
         if (style.styleB(Sid::tupletUseSymbols)) {
-            String smuflNum = String(u"");
+            String smuflNum;
             for (size_t i = 0; i < numberString.size(); ++i) {
                 smuflNum.append(u"<sym>tuplet");
                 smuflNum.append(numberString.at(i).unicode());
