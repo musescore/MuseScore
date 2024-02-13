@@ -23,7 +23,8 @@
 #include "updatescenario.h"
 
 #include <QTimer>
-#include <QtConcurrent>
+
+#include "global/concurrency/concurrent.h"
 
 #include "updateerrors.h"
 
@@ -118,7 +119,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
         showReleaseInfo(info);
     });
 
-    QtConcurrent::run(this, &UpdateScenario::th_heckForUpdate);
+    Concurrent::run(this, &UpdateScenario::th_heckForUpdate);
 }
 
 void UpdateScenario::th_heckForUpdate()
