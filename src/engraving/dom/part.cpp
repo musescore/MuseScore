@@ -101,7 +101,7 @@ Staff* Part::staff(staff_idx_t idx) const
 String Part::familyId() const
 {
     if (m_instruments.empty()) {
-        return String(u"");
+        return String();
     }
 
     InstrumentIndex ii = searchTemplateIndexForId(instrumentId());

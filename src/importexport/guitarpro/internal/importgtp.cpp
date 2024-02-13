@@ -886,7 +886,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
             case GP_VOLTA_FLAGS:
                 count++;
                 if (*iter == 1) {                 // we want this number to be displayed in the volta
-                    if (voltaTextString == u"") {
+                    if (voltaTextString.empty()) {
                         voltaTextString += String::number(count);
                     } else {
                         voltaTextString += u',' + String::number(count);
@@ -905,7 +905,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                 if (iter == gpVolta->voltaInfo.end()) {
                     // display all numbers in the volta from voltaSequence to the decimal
                     while (voltaSequence <= binaryNumber) {
-                        if (voltaTextString == u"") {
+                        if (voltaTextString.empty()) {
                             voltaTextString = String::number(voltaSequence);
                         } else {
                             voltaTextString += u',' + String::number(voltaSequence);

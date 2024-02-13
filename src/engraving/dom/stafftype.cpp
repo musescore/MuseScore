@@ -367,7 +367,7 @@ void StaffType::setFretMetrics() const
     // compute vertical displacement
     if (m_useNumbers) {
         // compute total height of used characters
-        String txt = String();
+        String txt;
         for (int idx = 0; idx < 10; idx++) {    // use only first 10 digits
             txt.append(m_fretFonts[m_fretFontIdx].displayDigit[idx]);
         }
@@ -1143,8 +1143,6 @@ static const int _defaultPreset[STAFF_GROUP_MAX] =
   4,                    // default percussion preset is "perc5lines"
   5                     // default tab preset is "tab6StrCommon"
 };
-
-static const String _emptyString = String();
 
 //---------------------------------------------------------
 //   Static functions for StaffType presets

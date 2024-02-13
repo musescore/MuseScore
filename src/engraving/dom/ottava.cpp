@@ -354,7 +354,7 @@ PropertyValue Ottava::propertyDefault(Pid pid) const
     case Pid::BEGIN_HOOK_HEIGHT:
         return Spatium(.0);
     case Pid::END_TEXT:
-        return String(u"");
+        return String();
     case Pid::PLACEMENT:
         return styleValue(Pid::PLACEMENT, getPropertyStyle(Pid::PLACEMENT));
 
