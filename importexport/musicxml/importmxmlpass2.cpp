@@ -1115,8 +1115,10 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
       na->setTrack(cr->track());
       if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
             na->setColor(color);
-      if (!direction.isNull()) // Only for case where XML attribute is present (isEmpty wouldn't work)
+      if (!direction.isEmpty())
             na->setPlacement(direction == "inverted" ? Placement::BELOW : Placement::ABOVE);
+      else
+            na->setPlacement(na->propertyDefault(Pid::PLACEMENT).value<Placement>());
       setElementPropertyFlags(na, Pid::PLACEMENT, direction);
       if (cr->segment() == nullptr && cr->isGrace())
             cr->el().push_back(na);       // store for later move to segment
@@ -4549,18 +4551,22 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                   endingText   = _e.readElementText();
                   }
             else if (_e.name() == "fermata") {
-                        const QColor fermataColor = _e.attributes().value("color").toString();
-                        const QString fermataType = _e.attributes().value("type").toString();
-                        const auto segment = measure->getSegment(SegmentType::EndBarLine, tick);
-                        const int track = _pass1.trackForPart(partId);
-                        Fermata* fermata = new Fermata(measure->score());
-                        fermata->setSymId(convertFermataToSymId(_e.readElementText()));
-                        fermata->setTrack(track);
-                        segment->add(fermata);
-                        if (fermataColor.isValid())
-                            fermata->setColor(fermataColor);
-                        if (fermataType == "inverted")
-                            fermata->setPlacement(Placement::BELOW);
+                  const QColor fermataColor = _e.attributes().value("color").toString();
+                  const QString fermataType = _e.attributes().value("type").toString();
+                  const auto segment = measure->getSegment(SegmentType::EndBarLine, tick);
+                  const int track = _pass1.trackForPart(partId);
+                  Fermata* fermata = new Fermata(measure->score());
+                  fermata->setSymId(convertFermataToSymId(_e.readElementText()));
+                  fermata->setTrack(track);
+                  segment->add(fermata);
+                  if (fermataColor.isValid())
+                        fermata->setColor(fermataColor);
+                  if (fermataType == "inverted")
+                        fermata->setPlacement(Placement::BELOW);
+                  else if (fermataType.isEmpty()) {
+                        qDebug() << "Set placement: " << (int)fermata->propertyDefault(Pid::PLACEMENT).value<Placement>();
+                        fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<Placement>());
+                        }
                   }
             else if (_e.name() == "repeat") {
                   repeat       = _e.attributes().value("direction").toString();
