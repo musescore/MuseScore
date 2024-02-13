@@ -3536,7 +3536,7 @@ QString MusicXMLParserDirection::matchRepeat() const
       if (plainWords.contains(fine))            return "fine";
       if (plainWords.contains(toCoda))          return "toCoda";
       if (plainWords.contains(coda))            return "coda";
-      return "";
+      return QString();
       }
 
 //---------------------------------------------------------

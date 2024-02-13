@@ -316,7 +316,7 @@ QString xmlReaderLocation(const QXmlStreamReader& e)
 QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
       {
       if (e.isEndElement() && e.name() == expName)
-            return "";
+            return QString();
 
       QString res = QObject::tr("expected token type and name 'EndElement %1', actual '%2 %3'")
                     .arg(expName)

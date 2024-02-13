@@ -130,10 +130,10 @@ Interval MusicXmlIntervalList::interval(const Fraction f) const
 const QString MusicXmlInstrList::instrument(const Fraction f) const
       {
       if (empty())
-            return "";
+            return QString();
       auto i = upper_bound(f);
       if (i == begin())
-            return "";
+            return QString();
       --i;
       return i->second;
       }

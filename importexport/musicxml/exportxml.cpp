@@ -432,7 +432,7 @@ static QString positionToQString(const QPointF def, const QPointF rel, const flo
 static QString positioningAttributes(Element const* const el, bool isSpanStart = true)
       {
       if (!preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
-            return "";
+            return QString();
 
       //qDebug("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
       //       el, el->ipos().x(), el->ipos().y(), el->offset().x(), el->offset().y(), el->spatium());
@@ -1715,7 +1715,7 @@ static QString shortBarlineStyle(const BarLine* bl)
                   }
             }
 
-      return "";
+      return QString();
       }
 
 //---------------------------------------------------------
@@ -1749,7 +1749,7 @@ static QString normalBarlineStyle(const BarLine* bl)
                   qDebug("bar subtype %d not supported", int(bst));
             }
 
-      return "";
+      return QString();
       }
 
 //---------------------------------------------------------
@@ -2905,7 +2905,7 @@ static QString symIdToOrnam(const SymId sid)
                   break;
             }
 
-      return "";
+      return QString();
       }
 
 //---------------------------------------------------------
@@ -2982,7 +2982,7 @@ static QString symIdToTechn(const SymId sid)
                   break;
             }
 
-      return "";
+      return QString();
       }
 
 //---------------------------------------------------------
@@ -3294,7 +3294,7 @@ static QString beamFanAttribute(const Beam* const b)
       if (fan != "")
             return QString(" fan=\"%1\"").arg(fan);
 
-      return "";
+      return QString();
       }
 
 //---------------------------------------------------------
@@ -4478,7 +4478,7 @@ void ExportMusicXml::words(TextBase const* const text, int staff)
 static QString positioningAttributesForTboxText(const QPointF position, float spatium)
       {
       if (!preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
-            return "";
+            return QString();
 
       QPointF relative;       // use zero relative position
       return positionToQString(position, relative, spatium);
