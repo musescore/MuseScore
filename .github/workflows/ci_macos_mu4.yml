@@ -43,6 +43,10 @@ jobs:
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
+    - name: Update Homebrew packages
+      # run: | # temporary, because build fails with CMake 3.28.2 specifically
+      #   brew update; brew upgrade   
+      run: cmake --version      
     - name: Ccache cache files
       uses: actions/cache@v4
       with:
