@@ -25,9 +25,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QBuffer>
-#include <QtConcurrent>
 #include <QLocale>
 
+#include "global/concurrency/concurrent.h"
 #include "dataformatter.h"
 #include "learnerrors.h"
 #include "log.h"
@@ -72,8 +72,8 @@ void LearnService::refreshPlaylists()
         m_advancedPlaylistChannel.send(m_advancedPlaylist);
     };
 
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
-    QtConcurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
+    Concurrent::run(this, &LearnService::th_requestPlaylist, configuration()->startedPlaylistUrl(), startedPlaylistCallBack);
+    Concurrent::run(this, &LearnService::th_requestPlaylist, configuration()->advancedPlaylistUrl(), advancedPlaylistCallBack);
 }
 
 Playlist LearnService::startedPlaylist() const
