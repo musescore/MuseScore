@@ -199,7 +199,7 @@ PropertyValue Jump::propertyDefault(Pid propertyId) const
     case Pid::JUMP_TO:
     case Pid::PLAY_UNTIL:
     case Pid::CONTINUE_AT:
-        return String(u"");
+        return String();
     case Pid::PLAY_REPEATS:
         return false;
     case Pid::PLACEMENT:
