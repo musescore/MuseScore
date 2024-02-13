@@ -38,7 +38,11 @@ void FramelessWindowController::setWindowTitleBarMoveArea(const QRect& area)
     m_windowTitleBarMoveArea = area;
 }
 
+#ifdef MU_QT5_COMPAT
 bool FramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
+#else
+bool FramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, qintptr* result)
+#endif
 {
     Q_UNUSED(eventType)
     Q_UNUSED(message)
