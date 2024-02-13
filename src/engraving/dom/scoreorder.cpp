@@ -161,7 +161,7 @@ void ScoreOrder::readSection(XmlReader& reader)
             sg.thinBracket = thinBrackets;
             groups.push_back(sg);
         } else if (reader.name() == "unsorted") {
-            String group { reader.attribute("group", String(u"")) };
+            String group { reader.attribute("group", String()) };
 
             if (hasGroup(UNSORTED_ID, group)) {
                 reader.skipCurrentElement();
@@ -513,7 +513,7 @@ void ScoreOrder::read(XmlReader& reader)
         } else if (reader.name() == "soloists") {
             readSoloists(reader, sectionId);
         } else if (reader.name() == "unsorted") {
-            String group { reader.attribute("group", String(u"")) };
+            String group { reader.attribute("group", String()) };
 
             if (!hasGroup(UNSORTED_ID, group)) {
                 groups.push_back(newUnsortedGroup(group, sectionId));
@@ -525,7 +525,7 @@ void ScoreOrder::read(XmlReader& reader)
         }
     }
 
-    String group { String(u"") };
+    String group;
     if (!hasGroup(UNSORTED_ID, group)) {
         groups.push_back(newUnsortedGroup(group, id));
     }
