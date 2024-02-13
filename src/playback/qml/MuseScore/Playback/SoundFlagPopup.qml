@@ -34,7 +34,7 @@ StyledPopupView {
 
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: navPanel.order
+    property int navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
 
     contentWidth: content.childrenRect.width
     contentHeight: content.childrenRect.height
@@ -69,15 +69,6 @@ StyledPopupView {
             soundFlagModel.init()
         }
 
-        NavigationPanel {
-            id: navPanel
-            name: "SoundFlagSettings"
-            direction: NavigationPanel.Vertical
-            section: root.notationViewNavigationSection
-            order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "Sound flag settings")
-        }
-
         RowLayout {
             width: parent.width
 
@@ -103,6 +94,15 @@ StyledPopupView {
 
                 menuModel: soundFlagModel.contextMenuModel
 
+                navigation.panel: NavigationPanel {
+                    id: menuNavPanel
+                    name: "SoundFlagMenu"
+                    direction: NavigationPanel.Vertical
+                    section: root.notationViewNavigationSection
+                    order: museSoundsParams.navigationPanelOrderEnd + 1
+                    accessible.name: qsTrc("notation", "Sound flag menu")
+                }
+
                 onHandleMenuItem: function(itemId) {
                     soundFlagModel.handleContextMenuItem(itemId)
                 }
@@ -110,9 +110,14 @@ StyledPopupView {
         }
 
         MuseSoundsParams {
+            id: museSoundsParams
+
             width: parent.width
 
             model: soundFlagModel
+
+            navigationPanelSection: root.notationViewNavigationSection
+            navigationPanelOrderStart: root.navigationOrderStart
         }
     }
 }

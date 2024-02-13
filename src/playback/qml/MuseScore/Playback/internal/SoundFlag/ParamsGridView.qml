@@ -30,10 +30,14 @@ Column {
 
     property alias title: titleLabel.text
 
-    property NavigationPanel navigationPanel: null
-
     property alias model: repeaterPreset.model
     property var selectionModel: null
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "SoundFlagParams" + title
+        direction: NavigationPanel.Vertical
+        accessible.name: title
+    }
 
     signal toggleParamRequested(string paramCode)
 
@@ -73,6 +77,8 @@ Column {
                 height: parent.height
 
                 FlatButton {
+                    id: button
+
                     Layout.preferredWidth: (gridView.width - gridView.rowSpacing) / 2
                     Layout.preferredHeight: implicitHeight
 
@@ -80,10 +86,19 @@ Column {
 
                     accentButton: root.selectionModel.indexOf(modelData["code"]) !== -1
 
+                    drawFocusBorderInsideRect: true
+
                     navigation.name: "Param" + index
                     navigation.panel: root.navigationPanel
                     navigation.row: index
                     navigation.column: 1
+                    navigation.onHighlightChanged: {
+                        if (navigation.highlight) {
+                            var pos = button.mapToItem(gridView, 0, 0)
+                            var rect = Qt.rect(pos.x, pos.y, button.width, button.height)
+                            Utils.ensureContentVisible(flickable, rect, 0)
+                        }
+                    }
 
                     onClicked: {
                         root.toggleParamRequested(modelData["code"])

@@ -28,8 +28,6 @@ import MuseScore.UiComponents 1.0
 Item {
     id: root
 
-    property NavigationPanel navigationPanel: null
-
     property var model: null
 
     property NavigationSection navigationPanelSection: null
