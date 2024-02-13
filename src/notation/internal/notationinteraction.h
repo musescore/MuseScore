@@ -73,6 +73,7 @@ public:
 
     // Hit
     EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
+    std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const override;
     Staff* hitStaff(const muse::PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
@@ -90,6 +91,9 @@ public:
     muse::async::Notification selectionChanged() const override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void moveSegmentSelection(MoveDirection d) override;
+
+    // Deselect
+    void deselect(EngravingItem* element) override;
 
     // SelectionFilter
     bool isSelectionTypeFiltered(SelectionFilterType type) const override;
@@ -291,8 +295,6 @@ public:
 
     void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;
 
-    void setLogicClickPos(const muse::PointF& logicPos) override;
-
 private:
     mu::engraving::Score* score() const;
     void onScoreInited();
@@ -341,11 +343,8 @@ private:
     bool needEndTextEdit() const;
 
     mu::engraving::Page* point2page(const muse::PointF& p, bool useNearestPage = false) const;
-    std::vector<EngravingItem*> hitElements(const muse::PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const muse::PointF& p) const;
     EngravingItem* elementAt(const muse::PointF& p) const;
-
-    std::vector<EngravingItem*> elementsNear(const muse::PointF& pos) const;
 
     // Sorting using this function will place the elements that are the most
     // interesting to be selected at the end of the list
@@ -454,8 +453,6 @@ private:
     HitElementContext m_hitElementContext;
 
     muse::async::Channel<ShowItemRequest> m_showItemRequested;
-
-    muse::PointF m_logicClickPos;
 };
 }
 

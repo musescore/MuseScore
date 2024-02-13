@@ -749,107 +749,6 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
     showItem(target);
 }
 
-static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
-{
-    if (!e1->selectable()) {
-        return false;
-    }
-    if (!e2->selectable()) {
-        return true;
-    }
-    if (e1->isNote() && e2->isStem()) {
-        return true;
-    }
-    if (e2->isNote() && e1->isStem()) {
-        return false;
-    }
-    if (e1->z() == e2->z()) {
-        // same stacking order, prefer non-hidden elements
-        if (e1->type() == e2->type()) {
-            if (e1->type() == ElementType::NOTEDOT) {
-                const NoteDot* n1 = static_cast<const NoteDot*>(e1);
-                const NoteDot* n2 = static_cast<const NoteDot*>(e2);
-                if (n1->note() && n1->note()->hidden()) {
-                    return false;
-                } else if (n2->note() && n2->note()->hidden()) {
-                    return true;
-                }
-            } else if (e1->type() == ElementType::NOTE) {
-                const Note* n1 = static_cast<const Note*>(e1);
-                const Note* n2 = static_cast<const Note*>(e2);
-                if (n1->hidden()) {
-                    return false;
-                } else if (n2->hidden()) {
-                    return true;
-                }
-            }
-        }
-        // different types, or same type but nothing hidden - use track
-        return e1->track() <= e2->track();
-    }
-
-    // default case, use stacking order
-    return e1->z() <= e2->z();
-}
-
-std::vector<EngravingItem*> NotationInteraction::elementsNear(const mu::PointF& pos) const
-{
-    std::vector<EngravingItem*> ll;
-    Page* page = point2page(pos);
-    if (!page) {
-        return ll;
-    }
-
-    mu::PointF p = pos - page->pos();
-    double w = configuration()->selectionProximity();
-    RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
-
-    std::vector<EngravingItem*> el = page->items(r);
-    for (int i = 0; i < MAX_HEADERS; i++) {
-        if (score()->headerText(i) != nullptr) {
-            el.push_back(score()->headerText(i));
-        }
-    }
-    for (int i = 0; i < MAX_FOOTERS; i++) {
-        if (score()->footerText(i) != nullptr) {
-            el.push_back(score()->footerText(i));
-        }
-    }
-    for (EngravingItem* e : el) {
-        e->itemDiscovered = 0;
-        if (!e->selectable() || e->isPage()) {
-            continue;
-        }
-        if (e->contains(p)) {
-            ll.push_back(e);
-        }
-    }
-    size_t n = ll.size();
-    if ((n == 0) || ((n == 1) && (ll[0]->isMeasure()))) {
-        //
-        // if no relevant element hit, look nearby
-        //
-        for (EngravingItem* e : el) {
-            if (e->isPage() || !e->selectable()) {
-                continue;
-            }
-            if (e->intersects(r)) {
-                ll.push_back(e);
-            }
-        }
-    }
-    if (!ll.empty()) {
-        std::sort(ll.begin(), ll.end(), elementLower);
-    }
-    return ll;
-}
-
-void NotationInteraction::setLogicClickPos(const PointF& logicPos)
-{
-    m_logicClickPos = logicPos;
-    return;
-}
-
 void NotationInteraction::select(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;
@@ -859,6 +758,25 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
     mu::engraving::SelState oldSelectionState = selection.state();
 
     doSelect(elements, type, staffIndex);
+
+    if (oldSelectedElements != selection.elements() || oldSelectionState != selection.state()) {
+        notifyAboutSelectionChangedIfNeed();
+    } else {
+        score()->setSelectionChanged(false);
+    }
+}
+
+void NotationInteraction::deselect(EngravingItem* element)
+{
+    TRACEFUNC;
+
+    const mu::engraving::Selection& selection = score()->selection();
+    std::vector<EngravingItem*> oldSelectedElements = selection.elements();
+    mu::engraving::SelState oldSelectionState = selection.state();
+
+    if (element->selected()) {
+        score()->deselect(element);
+    }
 
     if (oldSelectedElements != selection.elements() || oldSelectionState != selection.state()) {
         notifyAboutSelectionChangedIfNeed();
@@ -883,44 +801,8 @@ void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, 
             score()->setUpdateAll();
         }
 
-        std::vector<EngravingItem*> ll = elementsNear(m_logicClickPos);
-        int n = ll.size();
-
-        // if there is only one element and its selected simply deselect it or select it if not selected
-        if (n == 1) {
-            if (elements.front()->selected()) {
-                score()->deselect(elements.front());
-                return;
-            } else {
-                score()->select(elements.front(), type, staffIndex);
-                return;
-            }
-        }
-
-        // we start loop from the topmost element
-        int currTop = n - 1;
-        EngravingItem* e = ll[currTop];
-        bool found = false;
-
-        // e is the topmost element in stacking order,
-        // but we want to replace it with "first non-measure element after a selected element"
-        // (if such an element exists)
-        for (size_t i = 0; i <= ll.size(); ++i) {
-            if (found) {
-                e = ll[currTop];
-                if (!e->isMeasure()) {
-                    break;
-                }
-            } else if (ll[currTop]->selected()) {
-                found = true;
-                score()->deselect(ll[currTop]);
-                e = nullptr;
-            }
-            currTop = (currTop + 1) % n;
-        }
-
-        if (e && !e->selected()) {
-            score()->select(e, type, staffIndex);
+        if (elements.front()->selected()) {
+            score()->deselect(elements.front());
             return;
         }
     }

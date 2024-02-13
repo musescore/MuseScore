@@ -39,6 +39,7 @@ public:
     MOCK_METHOD(void, toggleVisible, (), (override));
 
     MOCK_METHOD(EngravingItem*, hitElement, (const muse::PointF&, float), (const, override));
+    MOCK_METHOD(std::vector<EngravingItem*>, hitElements, (const muse::PointF&, float), (const, override));
     MOCK_METHOD(Staff*, hitStaff, (const muse::PointF&), (const, override));
 
     MOCK_METHOD(const HitElementContext&, hitElementContext, (), (const, override));
@@ -46,6 +47,7 @@ public:
 
     MOCK_METHOD(void, moveChordNoteSelection, (MoveDirection), (override));
     MOCK_METHOD(void, select, (const std::vector<EngravingItem*>&, SelectType, engraving::staff_idx_t), (override));
+    MOCK_METHOD(void, deselect, (EngravingItem * element), (override));
     MOCK_METHOD(void, selectAll, (), (override));
     MOCK_METHOD(void, selectSection, (), (override));
     MOCK_METHOD(void, selectFirstElement, (bool), (override));
@@ -249,8 +251,6 @@ public:
     MOCK_METHOD(muse::async::Channel<ShowItemRequest>, showItemRequested, (), (const, override));
 
     MOCK_METHOD(void, setGetViewRectFunc, (const std::function<muse::RectF()>&), (override));
-
-    MOCK_METHOD(void, setLogicClickPos, (const muse::PointF&), (override));
 };
 }
 

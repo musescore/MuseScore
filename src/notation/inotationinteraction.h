@@ -53,6 +53,7 @@ public:
 
     // Hit
     virtual EngravingItem* hitElement(const muse::PointF& pos, float width) const = 0;
+    virtual std::vector<EngravingItem*> hitElements(const muse::PointF& pos, float width) const = 0;
     virtual Staff* hitStaff(const muse::PointF& pos) const = 0;
 
     struct HitElementContext
@@ -81,6 +82,9 @@ public:
     virtual void clearSelection() = 0;
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
+
+    // Deselect
+    virtual void deselect(EngravingItem* element) = 0;
 
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
@@ -294,8 +298,6 @@ public:
     virtual muse::async::Channel<ShowItemRequest> showItemRequested() const = 0;
 
     virtual void setGetViewRectFunc(const std::function<muse::RectF()>& func) = 0;
-
-    virtual void setLogicClickPos(const muse::PointF& logicPos) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;
