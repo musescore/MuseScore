@@ -153,6 +153,7 @@ using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using ChangesRange = mu::engraving::ScoreChangesRange;
 using GuitarBendType = mu::engraving::GuitarBendType;
+using engraving::LoopBoundaryType;
 
 static const String COMMON_GENRE_ID("common");
 
@@ -521,13 +522,6 @@ struct TupletOptions
     TupletNumberType numberType = TupletNumberType::SHOW_NUMBER;
     TupletBracketType bracketType = TupletBracketType::AUTO_BRACKET;
     bool autoBaseLen = false;
-};
-
-enum class LoopBoundaryType
-{
-    Unknown,
-    LoopIn,
-    LoopOut
 };
 
 struct LoopBoundaries
