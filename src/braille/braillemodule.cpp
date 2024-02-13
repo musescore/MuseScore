@@ -40,6 +40,11 @@ using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
 
+static void braille_init_qrc()
+{
+    Q_INIT_RESOURCE(braille);
+}
+
 namespace mu::braille {
 std::string BrailleModule::moduleName() const
 {
@@ -52,6 +57,11 @@ void BrailleModule::resolveImports()
     if (writers) {
         writers->reg({ "brf" }, std::make_shared<BrailleWriter>());
     }
+}
+
+void BrailleModule::registerResources()
+{
+    braille_init_qrc();
 }
 
 void BrailleModule::registerExports()
