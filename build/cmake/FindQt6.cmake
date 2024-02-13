@@ -26,6 +26,10 @@ set(_components
     LinguistTools
 
     Core5Compat
+
+    # Note: only used in ExampleView class.
+    # When that class is removed, don't forget to remove this dependency.
+    StateMachine
 )
 
 if (NOT OS_IS_WASM)
