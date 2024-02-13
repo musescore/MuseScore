@@ -23,9 +23,11 @@
 #ifndef OVE_DATA_H
 #define OVE_DATA_H
 
+#include <cmath>
+
 #include <QList>
 #include <QString>
-#include <cmath>
+#include <QTextCodec>
 
 #ifdef WIN32
 #define DLL_EXPORT extern "C" __declspec(dllexport)
