@@ -23,6 +23,7 @@
 #ifndef MU_GLOBAL_CONCURRENT_H
 #define MU_GLOBAL_CONCURRENT_H
 
+#ifndef NO_QT_SUPPORT
 #include <QtConcurrent>
 
 namespace mu {
@@ -40,40 +41,66 @@ public:
     template<typename Class>
     static void run(Class* object, void (Class::* fn)())
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(object, fn);
+#else
+        UNUSED(QtConcurrent::run(fn, object));
+#endif
     }
 
     template<typename Class, typename Param1, typename Arg1>
     static void run(Class* object, void (Class::* fn)(Param1), const Arg1& arg1)
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(object, fn, arg1);
+#else
+        UNUSED(QtConcurrent::run(object, fn, arg1));
+#endif
     }
 
     template<typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2>
     static void run(Class* object, void (Class::* fn)(Param1, Param2), const Arg1& arg1, const Arg2& arg2)
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(object, fn, arg1, arg2);
+#else
+        UNUSED(QtConcurrent::run(fn, object, arg1, arg2));
+#endif
     }
 
     // not const object, const fn
     template<typename Class>
     static void run(Class* object, void (Class::* fn)() const)
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(object, fn);
+#else
+        UNUSED(QtConcurrent::run(fn, object));
+#endif
     }
 
     template<typename Class, typename Param1, typename Arg1>
     static void run(Class* object, void (Class::* fn)(Param1) const, const Arg1& arg1)
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(object, fn, arg1);
+#else
+        UNUSED(QtConcurrent::run(object, fn, arg1));
+#endif
     }
 
     template<typename Class, typename Param1, typename Arg1, typename Param2, typename Arg2>
     static void run(Class* object, void (Class::* fn)(Param1, Param2) const, const Arg1& arg1, const Arg2& arg2)
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(object, fn, arg1, arg2);
+#else
+        UNUSED(QtConcurrent::run(fn, object, arg1, arg2));
+#endif
     }
 };
 }
+
+#endif // NO_QT_SUPPORT
 
 #endif // MU_GLOBAL_CONCURRENT_H
