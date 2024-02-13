@@ -2852,8 +2852,7 @@ static void wavyLineStart(const Trill* tr, const int number, Notations& notation
 {
     notations.tag(xml, tr);
     ornaments.tag(xml);
-    switch (tr->trillType())
-    {
+    switch (tr->trillType()) {
     case TrillType::TRILL_LINE:
         xml.tagRaw(u"trill-mark" + color2xml(tr));
         break;
