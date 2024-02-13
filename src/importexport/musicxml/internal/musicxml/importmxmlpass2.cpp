@@ -1538,6 +1538,7 @@ void MusicXMLParserPass2::initPartState(const String& partId)
     m_harmony = 0;
     m_tremStart = 0;
     m_figBass = 0;
+    m_delayedOttava = 0;
     m_multiMeasureRestCount = -1;
     m_measureStyleSlash = MusicXmlSlash::NONE;
     m_extendedLyrics.init();
@@ -1918,7 +1919,7 @@ void MusicXMLParserPass2::part()
         }
     }
 
-    // stop all remaining extends for this part
+    // stop all remaining extends for this part and add remaining ottava if present
     Measure* lm = part->score()->lastMeasure();
     if (lm) {
         track_idx_t strack = m_pass1.trackForPart(id);
@@ -1926,6 +1927,10 @@ void MusicXMLParserPass2::part()
         Fraction lastTick = lm->endTick();
         for (track_idx_t trk = strack; trk < etrack; trk++) {
             m_extendedLyrics.setExtend(-1, trk, lastTick);
+        }
+        if (m_delayedOttava && m_delayedOttava->tick2() < lastTick) {
+            handleSpannerStop(m_delayedOttava, m_delayedOttava->track2(), lastTick, m_spanners);
+            m_delayedOttava = nullptr;
         }
     }
 
@@ -2331,6 +2336,11 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
         } else if (m_e.name() == "harmony") {
             harmony(partId, measure, time + mTime);
         } else if (m_e.name() == "note") {
+            // Correct delayed ottava tick
+            if (m_delayedOttava && m_delayedOttava->tick2() < time + mTime) {
+                handleSpannerStop(m_delayedOttava, m_delayedOttava->track2(), time + mTime, m_spanners);
+                m_delayedOttava = nullptr;
+            }
             Fraction missingPrev;
             Fraction dura;
             Fraction missingCurr;
@@ -2831,6 +2841,7 @@ void MusicXMLParserDirection::direction(const String& partId,
     track_idx_t track = m_pass1.trackForPart(partId);
     bool isVocalStaff = m_pass1.isVocalStaff(partId);
     bool isExpressionText = false;
+    bool delayOttava = m_pass1.exporterString().contains(u"sibelius");
     //LOGD("direction track %d", track);
     std::vector<MusicXmlSpannerDesc> starts;
     std::vector<MusicXmlSpannerDesc> stops;
@@ -3020,8 +3031,16 @@ void MusicXMLParserDirection::direction(const String& partId,
             delete desc.sp;
         } else {
             if (spdesc.isStarted) {
-                handleSpannerStop(spdesc.sp, track, tick + m_offset, spanners);
-                m_pass2.clearSpanner(desc);
+                if (spdesc.sp && spdesc.sp->isOttava() && delayOttava) {
+                    // Sibelius writes ottava ends 1 note too early
+                    m_pass2.setDelayedOttava(spdesc.sp);
+                    m_pass2.delayedOttava()->setTrack2(track);
+                    m_pass2.delayedOttava()->setTick2(tick + m_offset);
+                    m_pass2.clearSpanner(desc);
+                } else {
+                    handleSpannerStop(spdesc.sp, track, tick + m_offset, spanners);
+                    m_pass2.clearSpanner(desc);
+                }
             } else {
                 spdesc.sp = desc.sp;
                 spdesc.tick2 = tick + m_offset;
@@ -3222,15 +3241,14 @@ void MusicXMLParserDirection::otherDirection()
         // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
         // TODO: Add more symbols from Sibelius
         std::map<String, String> otherDirectionStrings;
-        if (m_pass1.exporterString().contains(u"Dolet")) {
+        if (m_pass1.exporterString().contains(u"dolet")) {
             otherDirectionStrings = {
                 { String(u"To Coda"), String(u"To Coda") },
                 { String(u"Segno"), String(u"<sym>segno</sym>") },
                 { String(u"CODA"), String(u"<sym>coda</sym>") },
             };
         }
-        std::map<String, SymId> otherDirectionSyms;
-        otherDirectionSyms = { { String(u"Rhythm dot"), SymId::augmentationDot },
+        static const std::map<String, SymId> otherDirectionSyms = { { String(u"Rhythm dot"), SymId::augmentationDot },
             { String(u"Whole rest"), SymId::restWhole },
             { String(u"l.v. down"), SymId::articLaissezVibrerBelow },
             { String(u"8vb"), SymId::ottavaBassaVb },
