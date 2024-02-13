@@ -70,7 +70,7 @@ private:
 class MusicXmlPart
 {
 public:
-    MusicXmlPart(String id = u"", String name = u"");
+    MusicXmlPart(String id = {}, String name = {});
     void addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration);
     String getId() const { return m_id; }
     String toString() const;

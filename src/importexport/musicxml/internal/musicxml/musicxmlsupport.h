@@ -213,7 +213,7 @@ extern String accSymId2SmuflMxmlString(const SymId id);
 extern String accidentalType2MxmlString(const AccidentalType type);
 extern String accidentalType2SmuflMxmlString(const AccidentalType type);
 extern AccidentalType mxmlString2accidentalType(const String mxmlName, const String smufl);
-extern SymId mxmlString2accSymId(const String mxmlName, const String smufl = u"");
+extern SymId mxmlString2accSymId(const String mxmlName, const String smufl = {});
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* chord);

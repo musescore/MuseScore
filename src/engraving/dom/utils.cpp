@@ -1378,10 +1378,7 @@ bool isFirstSystemKeySig(const KeySig* ks)
 
 String bendAmountToString(int fulls, int quarts)
 {
-    String string = String::number(fulls);
-    if (fulls == 0 && quarts != 0) {
-        string = u"";
-    }
+    String string = (fulls != 0 || quarts == 0) ? String::number(fulls) : String();
 
     switch (quarts) {
     case 1:
