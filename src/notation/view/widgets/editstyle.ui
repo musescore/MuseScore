@@ -243,9 +243,6 @@
      <widget class="QStackedWidget" name="pageStack">
       <widget class="QWidget" name="PageScore">
        <layout class="QVBoxLayout" name="verticalLayout_20">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_score">
           <property name="title">
@@ -836,9 +833,6 @@
       </widget>
       <widget class="QWidget" name="PagePage">
        <layout class="QVBoxLayout" name="verticalLayout_21">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_page">
           <property name="title">
@@ -1935,9 +1929,6 @@
       </widget>
       <widget class="QWidget" name="PageSizes">
        <layout class="QVBoxLayout" name="verticalLayout_18">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_sizes">
           <property name="title">
@@ -4044,9 +4035,6 @@ By default, they will be placed such as that their right end are at the same lev
         </sizepolicy>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <property name="sizeConstraint">
          <enum>QLayout::SetMinimumSize</enum>
         </property>
@@ -5331,9 +5319,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageNotes">
        <layout class="QVBoxLayout" name="verticalLayout_7">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_noteFlags">
           <property name="title">
@@ -6270,9 +6255,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageBeams">
        <layout class="QVBoxLayout" name="verticalLayout_14">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_beams">
           <property name="title">
@@ -6315,9 +6297,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageTuplets">
        <layout class="QVBoxLayout" name="verticalLayout_301">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_tuplets">
           <property name="title">
@@ -7080,9 +7059,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageArpeggios">
        <layout class="QVBoxLayout" name="verticalLayout_15">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_arpeggios">
           <property name="title">
@@ -7717,9 +7693,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageHairpins">
        <layout class="QVBoxLayout" name="verticalLayout_19">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_hairpins">
           <property name="title">
@@ -9940,9 +9913,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageArticulationsOrnaments">
        <layout class="QVBoxLayout" name="verticalLayout_24">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_articulationsOrnaments">
           <property name="title">
@@ -12264,9 +12234,6 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
       <widget class="QWidget" name="PageChordSymbols">
        <layout class="QVBoxLayout" name="verticalLayout_12">
-        <property name="spacing">
-         <number>0</number>
-        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_chordSymbols">
           <property name="title">
