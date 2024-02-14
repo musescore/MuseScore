@@ -3489,13 +3489,14 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
                      && (showTiedFret != ShowTiedFret::TIE_AND_FRET || item->isContinuationOfBend()) && !item->shouldHideFret();
     if (useParens) {
         double widthWithoutParens = item->tabHeadWidth(staffType);
-        if (!item->fretString().startsWith(u'(')) { // Hack: don't add parentheses if already added
-            item->setFretString(String(u"(%1)").arg(item->fretString()));
-        }
+        item->setHeadHasParentheses(true, /* addToLinked= */ false, /* generated= */ true);
         double w = item->tabHeadWidth(staffType);
         double xOff = 0.5 * (w - widthWithoutParens);
         ldata->moveX(-xOff);
-        ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
+        ldata->setBbox(0, staffType->fretBoxY(ctx.conf().style()) * item->magS(), w,
+                       staffType->fretBoxH(ctx.conf().style()) * item->magS());
+    } else if (isTabStaff && (!item->ghost() || item->shouldHideFret())) {
+        item->setHeadHasParentheses(false, /*addToLinked=*/ false);
     }
     int dots = item->chord()->dots();
     if (dots && !item->dots().empty()) {
@@ -3565,7 +3566,6 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
                     const StaffType* tab = st->staffTypeForElement(item);
                     right = item->tabHeadWidth(tab);
                 }
-
                 if (Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && item->staff()->isTabStaff(e->tick())) {
                     e->mutldata()->moveX(right + item->symWidth(SymId::noteheadParenthesisRight));
                 } else {

@@ -518,7 +518,7 @@ void SingleDraw::draw(const Note* item, Painter* painter)
             startPosX += item->symWidth(SymId::noteheadParenthesisLeft);
         }
 
-        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), item->fretString());
+        painter->drawText(PointF(startPosX, tab->fretFontYOffset(item->style()) * item->magS()), item->fretString());
     }
     // NOT tablature
     else {
