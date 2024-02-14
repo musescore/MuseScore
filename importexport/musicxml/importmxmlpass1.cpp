@@ -1589,6 +1589,32 @@ static void setPageFormat(Score* score, const MxmlPageFormat& pf)
       score->style().set(Sid::pageTwosided, pf.twosided);
       }
 
+static void scaleCopyrightText(Score* score)
+      {
+      // Scale text to fit within margins
+      QString copyright = score->metaTag("copyright");
+      if (copyright.isEmpty())
+            return;
+
+      //MStyle style = score->style();
+      QString fontFace = score->styleV(Sid::footerFontFace).toString();
+      QFont footerFont(fontFace);
+      qreal footerFontSize = score->styleD(Sid::footerFontSize);
+      footerFont.setPointSizeF(footerFontSize);
+      QFontMetrics fm(footerFont);
+
+      qreal pagePrintableWidth = score->styleD(Sid::pagePrintableWidth) * DPI;
+      qreal pageWidth = score->styleD(Sid::pageWidth) * DPI;
+      qreal pageHeight = score->styleD(Sid::pageHeight) * DPI;
+      qreal textWidth = fm.boundingRect(QRect(0, 0, pageWidth, pageHeight), Qt::TextShowMnemonic, copyright).width();
+      qreal sizeRatio = pagePrintableWidth / textWidth;
+
+      if (sizeRatio < 1) {
+            qreal newSize = floor(footerFontSize * sizeRatio * 10) / 10;
+            score->style().set(Sid::footerFontSize, newSize);
+            }
+      }
+
 //---------------------------------------------------------
 //   defaults
 //---------------------------------------------------------
@@ -1734,6 +1760,7 @@ void MusicXMLParserPass1::defaults()
       wordFontFamily = wordFontFamily.isEmpty() ? "Edwin" : wordFontFamily;
       lyricFontFamily = lyricFontFamily.isEmpty() ? wordFontFamily : lyricFontFamily;
       updateStyles(_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
+      scaleCopyrightText(_score);
 
       _score->setDefaultsRead(true); // TODO only if actually succeeded ?
       }

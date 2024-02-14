@@ -92,6 +92,7 @@ private slots:
       void colorExport() { mxmlMscxExportTestRef("testColorExport"); }
       void colors() { mxmlIoTest("testColors"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
+      void copyrightScale() { mxmlImportTestRef("testCopyrightScale"); }
       void connectedArpeggios1() { mxmlImportTestRef("testConnectedArpeggios"); }
       void connectedArpeggios2() { mxmlIoTestRef("testConnectedArpeggios"); }
       void cueGraceNotes1() { mxmlImportTestRef("testCueGraceNotes"); }

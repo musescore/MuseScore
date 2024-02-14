@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="3.02">
+  <Score>
+    <LayerTag id="0" tag="default"></LayerTag>
+    <currentLayer>0</currentLayer>
+    <Division>480</Division>
+    <Style>
+      <pageWidth>2.05</pageWidth>
+      <pageHeight>2.91</pageHeight>
+      <pagePrintableWidth>1.6563</pagePrintableWidth>
+      <pageEvenLeftMargin>0.19685</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.19685</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.19685</pageOddTopMargin>
+      <pageOddBottomMargin>0.19685</pageOddBottomMargin>
+      <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
+      <bracketWidth>0.45</bracketWidth>
+      <stemWidth>0.1</stemWidth>
+      <staffLineWidth>0.11</staffLineWidth>
+      <pedalLineWidth>0.11</pedalLineWidth>
+      <chordSymbolAFontSize>10</chordSymbolAFontSize>
+      <chordSymbolBFontSize>10</chordSymbolBFontSize>
+      <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <slurEndWidth>0.05</slurEndWidth>
+      <slurMidWidth>0.21</slurMidWidth>
+      <tieEndWidth>0.05</tieEndWidth>
+      <tieMidWidth>0.21</tieMidWidth>
+      <evenFooterC>$C</evenFooterC>
+      <oddFooterC>$C</oddFooterC>
+      <voltaLineWidth>0.11</voltaLineWidth>
+      <ottavaLineWidth>0.11</ottavaLineWidth>
+      <tupletFontSize>10</tupletFontSize>
+      <fingeringFontSize>10</fingeringFontSize>
+      <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
+      <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <stringNumberFontSize>10</stringNumberFontSize>
+      <partInstrumentFontSize>10</partInstrumentFontSize>
+      <dynamicsFontSize>10</dynamicsFontSize>
+      <tempoFontSize>10</tempoFontSize>
+      <metronomeFontSize>10</metronomeFontSize>
+      <measureNumberFontSize>10</measureNumberFontSize>
+      <mmRestRangeFontSize>10</mmRestRangeFontSize>
+      <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
+      <repeatLeftFontSize>10</repeatLeftFontSize>
+      <repeatRightFontSize>10</repeatRightFontSize>
+      <glissandoFontSize>10</glissandoFontSize>
+      <bendFontSize>10</bendFontSize>
+      <headerFontSize>10</headerFontSize>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Composer / arranger</metaTag>
+    <metaTag name="copyright">Copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright copyright 
+copyright copyright copyright copyright copyright copyright copyright copyright 
+copyright copyright copyright copyright 
+copyright copyright</metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Untitled score</metaTag>
+    <Part>
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="73"/>
+          <controller ctrl="10" value="63"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>1/1</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
