@@ -75,5 +75,16 @@
         <file>qml/MuseScore/UiComponents/treeview/TreeView.qml</file>
         <file>qml/MuseScore/UiComponents/treeview/TableViewColumn.qml</file>
         <file>qml/MuseScore/UiComponents/treeview/TreeViewStyle.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/BasicTableViewStyle.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/ScrollViewStyle.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/BasicTableView.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/ScrollView.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/Style.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/AbstractStyle.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/ScrollViewHelper.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/TreeViewItemDelegateLoader.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/TableViewItemDelegateLoader.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/TreeModelAdaptor.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/ScrollBar.qml</file>
     </qresource>
 </RCC>
