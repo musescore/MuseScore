@@ -2871,7 +2871,12 @@ void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    if (!item->score()->showSoundFlags()) {
+    const Score* score = item->score();
+    if (score && score->printing()) {
+        return;
+    }
+
+    if (item->shouldHide()) {
         return;
     }
 
