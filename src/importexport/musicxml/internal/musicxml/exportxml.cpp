@@ -374,6 +374,7 @@ public:
     void textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick);
     void dynamic(Dynamic const* const dyn, staff_idx_t staff);
     void symbol(Symbol const* const sym, staff_idx_t staff);
+    void systemText(StaffTextBase const* const text, staff_idx_t staff);
     void tempoText(TempoText const* const text, staff_idx_t staff);
     void harmony(Harmony const* const, FretDiagram const* const fd, int offset = 0);
     Score* score() const { return m_score; }
@@ -4850,6 +4851,47 @@ void ExportMusicXml::words(TextBase const* const text, staff_idx_t staff)
 
     directionTag(m_xml, m_attr, text);
     wordsMetronome(m_xml, m_score->style(), text, offset);
+
+    directionETag(m_xml, staff);
+}
+
+//---------------------------------------------------------
+//   systemText
+//---------------------------------------------------------
+
+void ExportMusicXml::systemText(StaffTextBase const* const text, staff_idx_t staff)
+{
+    const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), m_div);
+
+    if (text->plainText() == "") {
+        // sometimes empty Texts are present, exporting would result
+        // in invalid MusicXML (as an empty direction-type would be created)
+        return;
+    }
+
+    directionTag(m_xml, m_attr, text);
+    wordsMetronome(m_xml, m_score->style(), text, offset);
+
+    if (text->swing()) {
+        m_xml.startElement("sound");
+        m_xml.startElement("swing");
+        if (!text->swingParameters().swingUnit) {
+            m_xml.tag("straight");
+        } else {
+            const int swingPercentage = text->swingParameters().swingRatio;
+            const int swingDivisor = std::gcd(text->swingParameters().swingRatio, 100);
+            m_xml.tag("first",  100 / swingDivisor);
+            m_xml.tag("second", swingPercentage / swingDivisor);
+            if (text->swingParameters().swingUnit == Constants::DIVISION / 2) {
+                m_xml.tag("swing-type", TConv::toXml(DurationType::V_EIGHTH));
+            } else {
+                m_xml.tag("swing-type", TConv::toXml(DurationType::V_16TH));
+            }
+        }
+        m_xml.endElement();
+        m_xml.endElement();
+    }
+
     directionETag(m_xml, staff);
 }
 
@@ -6118,7 +6160,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->symbol(toSymbol(e), sstaff);
     } else if (e->isTempoText()) {
         exp->tempoText(toTempoText(e), sstaff);
-    } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isStaffText() || e->isSystemText()
+    } else if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isStaffText()
                || e->isTripletFeel() || e->isText()
                || e->isExpression() || (e->isInstrumentChange() && e->visible())) {
         exp->words(toTextBase(e), sstaff);
@@ -6126,6 +6168,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->dynamic(toDynamic(e), sstaff);
     } else if (e->isRehearsalMark()) {
         exp->rehearsal(toRehearsalMark(e), sstaff);
+    } else if (e->isSystemText()) {
+        exp->systemText(toStaffTextBase(e), sstaff);
     } else {
         return instrChangeHandled;
     }
