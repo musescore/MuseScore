@@ -56,3 +56,6 @@ SelectMultipleDirectoriesDialog 1.0 SelectMultipleDirectoriesDialog.qml
 StyledBusyIndicator 1.0 StyledBusyIndicator.qml
 GradientRectangle 1.0 GradientRectangle.qml
 ButtonBox 1.0 ButtonBox.qml
+TreeView 1.0 treeview/TreeView.qml
+TableViewColumn 1.0 treeview/TableViewColumn.qml
+TreeViewStyle 1.0 treeview/TreeViewStyle.qml

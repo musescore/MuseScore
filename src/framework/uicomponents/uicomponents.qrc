@@ -72,5 +72,8 @@
         <file>qml/MuseScore/UiComponents/internal/MenuMetrics.qml</file>
         <file>qml/MuseScore/UiComponents/StyledBusyIndicator.qml</file>
         <file>qml/MuseScore/UiComponents/ButtonBox.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/TreeView.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/TableViewColumn.qml</file>
+        <file>qml/MuseScore/UiComponents/treeview/TreeViewStyle.qml</file>
     </qresource>
 </RCC>
