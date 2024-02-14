@@ -927,10 +927,11 @@ EditStylePage EditStyle::pageForElement(Element* e)
                   return &EditStyle::PageScore;
             case ElementType::PAGE:
                   return &EditStyle::PagePage;
+            case ElementType::INSTRUMENT_NAME:
             case ElementType::TEXT:
                   if (toText(e)->tid() == Tid::FOOTER || toText(e)->tid() == Tid::HEADER)
                         return &EditStyle::PageHeaderFooter;
-                  return nullptr;
+                  return &EditStyle::PageTextStyles;
             case ElementType::MEASURE_NUMBER:
             case ElementType::MMREST_RANGE:
                   return &EditStyle::PageMeasureNumbers;
@@ -953,6 +954,7 @@ EditStylePage EditStyle::pageForElement(Element* e)
             case ElementType::STEM:
             case ElementType::STEM_SLASH:
             case ElementType::LEDGER_LINE:
+            case ElementType::NOTEDOT:
                   return &EditStyle::PageNotes;
             case ElementType::BEAM:
                   return &EditStyle::PageBeams;
