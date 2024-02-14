@@ -21,10 +21,10 @@
  */
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.GraphicalEffects 1.0
 import MuseScore.AppShell 1.0
 
 Page {
@@ -47,7 +47,7 @@ Page {
         sourceSize: Qt.size(width * Screen.devicePixelRatio, height * Screen.devicePixelRatio)
 
         layer.enabled: true
-        layer.effect: OpacityMask {
+        layer.effect: EffectOpacityMask {
             maskSource: Rectangle {
                 width: image.width
                 height: image.height

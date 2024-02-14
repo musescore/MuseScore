@@ -21,7 +21,6 @@
  */
 
 import QtQuick 2.15
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0

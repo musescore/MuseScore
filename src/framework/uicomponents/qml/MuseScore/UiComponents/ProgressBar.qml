@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+import MuseScore.GraphicalEffects 1.0
 
 FocusScope {
     id: root
@@ -88,7 +87,7 @@ FocusScope {
         border.width: Math.max(ui.theme.borderWidth, 1)
 
         layer.enabled: true
-        layer.effect: OpacityMask {
+        layer.effect: EffectOpacityMask {
             maskSource: Item {
                 width: backgroundRect.width
                 height: backgroundRect.height

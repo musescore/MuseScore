@@ -21,10 +21,10 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
-import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.GraphicalEffects 1.0
 import MuseScore.Cloud 1.0
 
 StyledDialogView {
@@ -93,7 +93,7 @@ StyledDialogView {
                         sourceSize.height: 20
                     }
 
-                    ColorOverlay {
+                    EffectColorOverlay {
                         visible: root.isPublishShare
 
                         anchors.fill: cloudLogo
