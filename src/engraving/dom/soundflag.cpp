@@ -75,9 +75,22 @@ void SoundFlag::setPlayingTechniques(const PlayingTechniqueCodes& techniques)
     m_playingTechniques = techniques;
 }
 
-bool SoundFlag::isCustomized() const
+bool SoundFlag::shouldHide() const
 {
-    return !m_soundPresets.empty() || !m_playingTechniques.empty();
+    if (!m_soundPresets.empty() || !m_playingTechniques.empty()) {
+        return false;
+    }
+
+    if (selected()) {
+        return false;
+    }
+
+    const EngravingItem* parent = parentItem();
+    if (parent && parent->selected()) {
+        return false;
+    }
+
+    return true;
 }
 
 void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCodes& techniques)
