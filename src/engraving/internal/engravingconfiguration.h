@@ -91,7 +91,6 @@ public:
 
     bool guitarProImportExperimental() const override;
     bool negativeFretsAllowed() const override;
-    bool tablatureParenthesesZIndexWorkaround() const override;
     bool crossNoteHeadAlwaysBlack() const override;
     bool enableExperimentalFretCircle() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;

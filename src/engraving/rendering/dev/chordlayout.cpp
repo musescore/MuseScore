@@ -3566,15 +3566,10 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
                     const StaffType* tab = st->staffTypeForElement(item);
                     right = item->tabHeadWidth(tab);
                 }
-                if (Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && item->staff()->isTabStaff(e->tick())) {
-                    e->mutldata()->moveX(right + item->symWidth(SymId::noteheadParenthesisRight));
-                } else {
-                    e->mutldata()->setPosX(right + parenthesisPadding);
-                }
+
+                e->mutldata()->setPosX(right + parenthesisPadding);
             } else if (sym->sym() == SymId::noteheadParenthesisLeft) {
-                if (!Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() || !item->staff()->isTabStaff(e->tick())) {
-                    e->mutldata()->setPosX(-left - e->width() - parenthesisPadding);
-                }
+                e->mutldata()->setPosX(-left - e->width() - parenthesisPadding);
             }
         } else if (e->isFingering()) {
             // don't set mag; fingerings should not scale with note

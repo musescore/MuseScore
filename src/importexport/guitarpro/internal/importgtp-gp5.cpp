@@ -1383,9 +1383,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
 
     if (noteBits & NOTE_GHOST) {
         note->setGhost(true);
-        if (engravingConfiguration()->guitarProImportExperimental()) {
-            note->setHeadHasParentheses(true);
-        }
     }
 
     bool tieNote = false;

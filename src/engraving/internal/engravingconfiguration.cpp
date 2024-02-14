@@ -299,11 +299,6 @@ bool EngravingConfiguration::negativeFretsAllowed() const
     return guitarProImportExperimental();
 }
 
-bool EngravingConfiguration::tablatureParenthesesZIndexWorkaround() const
-{
-    return guitarProImportExperimental();
-}
-
 bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
 {
     return guitarProImportExperimental();

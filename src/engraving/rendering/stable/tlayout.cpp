@@ -4235,19 +4235,13 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             }
         }
 
-        if ((item->ghost() && !Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround())) {
+        if (item->ghost()) {
             const_cast<Note*>(item)->setFretString(String(u"(%1)").arg(item->fretString()));
         }
 
         double w = item->tabHeadWidth(tab);     // !! use _fretString
         double mags = item->magS();
         noteBBox = RectF(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
-
-        if (item->ghost() && Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
-            noteBBox.setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
-        } else {
-            noteBBox.setWidth(w);
-        }
     } else {
         if (item->deadNote()) {
             const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
