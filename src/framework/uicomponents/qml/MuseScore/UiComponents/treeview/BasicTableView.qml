@@ -606,7 +606,7 @@ ScrollView {
 
                         delegate: __itemDelegateLoader
 
-                        onItemAdded: {
+                        onItemAdded: function(index, item) {
                             var columnItem = columnModel.get(index).columnItem
                             item.__rowItem = rowitem
                             item.__column = columnItem

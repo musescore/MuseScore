@@ -9,4 +9,5 @@ set(TREEVIEW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/qquickabstractstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qquickabstractstyle_p.h
     ${CMAKE_CURRENT_LIST_DIR}/qquickpadding_p.h
+    ${CMAKE_CURRENT_LIST_DIR}/qquickselectionmode_p.h
 )

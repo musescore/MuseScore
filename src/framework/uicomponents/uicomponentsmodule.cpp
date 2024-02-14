@@ -42,6 +42,7 @@
 #include "view/treeview/qquickrangemodel_p.h"
 #include "view/treeview/qquickwheelarea_p.h"
 #include "view/treeview/qquickabstractstyle_p.h"
+#include "view/treeview/qquickselectionmode_p.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -123,6 +124,8 @@ void UiComponentsModule::registerUiTypes()
     qmlRegisterType<QQuickWheelArea1>("MuseScore.UiComponents.Private", 1, 0, "WheelArea");
     qmlRegisterType<QQuickAbstractStyle1>("MuseScore.UiComponents.Private", 1, 0, "AbstractStyle");
     qmlRegisterType<QQuickPadding1>("MuseScore.UiComponents.Private", 1, 0, "Padding");
+    qmlRegisterUncreatableType<QQuickSelectionMode1>("MuseScore.UiComponents.Private", 1, 0, "SelectionMode",
+                                                     QLatin1String("Do not create objects of type SelectionMode"));
 
     auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {

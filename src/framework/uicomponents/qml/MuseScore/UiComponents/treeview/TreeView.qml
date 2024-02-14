@@ -40,7 +40,7 @@
 import QtQuick 2.4
 import QtQml.Models 2.2
 
-import MuseScore.UiComponents.Private 1.0
+import MuseScore.UiComponents.Private 1.0 as P
 
 BasicTableView {
     id: root
@@ -91,7 +91,7 @@ BasicTableView {
 
     __viewTypeName: "TreeView"
 
-    __model: TreeModelAdaptor {
+    __model: P.TreeModelAdaptor {
         id: modelAdaptor
         model: root.model
 
@@ -101,8 +101,8 @@ BasicTableView {
         onRowsInserted: updateCount++
         onRowsRemoved: updateCount++
 
-        onExpanded: root.expanded(index)
-        onCollapsed: root.collapsed(index)
+        onExpanded: function (index) { root.expanded(index) }
+        onCollapsed: function (index) { root.collapsed(index) }
     }
 
     __itemDelegateLoader: TreeViewItemDelegateLoader {
@@ -172,18 +172,18 @@ BasicTableView {
 
             if (selectionMode) {
                 selection.setCurrentIndex(modelIndex, ItemSelectionModel.NoUpdate)
-                if (selectionMode === SelectionMode.SingleSelection) {
+                if (selectionMode === P.SelectionMode.SingleSelection) {
                     selection.select(modelIndex, ItemSelectionModel.ClearAndSelect)
                 } else {
-                    var selectRowRange = (drag && (selectionMode === SelectionMode.MultiSelection
-                                                   || (selectionMode === SelectionMode.ExtendedSelection
+                    var selectRowRange = (drag && (selectionMode === P.SelectionMode.MultiSelection
+                                                   || (selectionMode === P.SelectionMode.ExtendedSelection
                                                        && modifiers & Qt.ControlModifier)))
                                          || modifiers & Qt.ShiftModifier
                     var itemSelection = !selectRowRange || clickedIndex === modelIndex ? modelIndex
                                         : modelAdaptor.selectionForRowRange(clickedIndex, modelIndex)
 
-                    if (selectionMode === SelectionMode.MultiSelection
-                        || selectionMode === SelectionMode.ExtendedSelection && modifiers & Qt.ControlModifier) {
+                    if (selectionMode === P.SelectionMode.MultiSelection
+                        || selectionMode === P.SelectionMode.ExtendedSelection && modifiers & Qt.ControlModifier) {
                         if (drag)
                             selection.select(itemSelection, ItemSelectionModel.ToggleCurrent)
                         else
@@ -208,14 +208,14 @@ BasicTableView {
         }
 
         function selected(row) {
-            if (selectionMode === SelectionMode.NoSelection)
+            if (selectionMode === P.SelectionMode.NoSelection)
                 return false
 
             var modelIndex = null
             if (!!selection) {
                 modelIndex = modelAdaptor.mapRowToModelIndex(row)
                 if (modelIndex.valid) {
-                    if (selectionMode === SelectionMode.SingleSelection)
+                    if (selectionMode === P.SelectionMode.SingleSelection)
                         return selection.currentIndex === modelIndex
                     return selection.hasSelection && selection.isSelected(modelIndex)
                 } else {
@@ -224,8 +224,8 @@ BasicTableView {
             }
 
             return row === currentRow
-                   && (selectionMode === SelectionMode.SingleSelection
-                       || (selectionMode > SelectionMode.SingleSelection && !selection))
+                   && (selectionMode === P.SelectionMode.SingleSelection
+                       || (selectionMode > P.SelectionMode.SingleSelection && !selection))
         }
 
         function branchDecorationContains(x, y) {
@@ -240,7 +240,7 @@ BasicTableView {
         }
 
         function maybeWarnAboutSelectionMode() {
-            if (selectionMode > SelectionMode.SingleSelection)
+            if (selectionMode > P.SelectionMode.SingleSelection)
                 console.warn("TreeView: Non-single selection is not supported without an ItemSelectionModel.")
         }
 
@@ -255,7 +255,7 @@ BasicTableView {
                 || branchDecorationContains(mouse.x, mouse.y)) {
                 return
             }
-            if (selectionMode === SelectionMode.ExtendedSelection
+            if (selectionMode === P.SelectionMode.ExtendedSelection
                 && selection.isSelected(pressedIndex)) {
                 selectOnRelease = true
                 return
@@ -404,7 +404,7 @@ BasicTableView {
             __listView.scrollIfNeeded(event.key)
 
             if (event.key === Qt.Key_A && event.modifiers & Qt.ControlModifier
-                && !!selection && selectionMode > SelectionMode.SingleSelection) {
+                && !!selection && selectionMode > P.SelectionMode.SingleSelection) {
                 var sel = modelAdaptor.selectionForRowRange(0, __listView.count - 1)
                 selection.select(sel, ItemSelectionModel.SelectCurrent)
             } else if (event.key === Qt.Key_Shift) {

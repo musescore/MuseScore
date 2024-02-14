@@ -39,7 +39,7 @@
 
 import QtQuick 2.2
 
-import MuseScore.UiComponents.Private 1.0
+import MuseScore.UiComponents.Private 1.0 as P
 
 /*!
         \qmltype ScrollBar
@@ -224,7 +224,7 @@ Item {
             return step
         }
 
-        RangeModel {
+        P.RangeModel {
             id: slider
             minimumValue: 0.0
             maximumValue: 1.0

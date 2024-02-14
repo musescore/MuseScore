@@ -39,7 +39,7 @@
 
 import QtQuick 2.2
 
-import MuseScore.UiComponents.Private 1.0
+import MuseScore.UiComponents.Private 1.0 as P
 
 /*!
     \qmltype Style
@@ -47,7 +47,7 @@ import MuseScore.UiComponents.Private 1.0
     \inqmlmodule QtQuick.Controls.Private
 */
 
-AbstractStyle {
+P.AbstractStyle {
     /*! The control this style is attached to. */
     readonly property Item control: __control
 }
