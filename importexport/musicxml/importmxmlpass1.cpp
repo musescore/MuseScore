@@ -1221,7 +1221,7 @@ void MusicXMLParserPass1::identification()
                   // TODO
                   while (_e.readNextStartElement()) {
                         if (_e.name() == "software")
-                            _exporterString += _e.readElementText();
+                              _exporterString += _e.readElementText().toLower();
                         else if (_e.name() == "supports" && _e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes") {
                               _hasBeamingInfo = true;
                               _e.skipCurrentElement();

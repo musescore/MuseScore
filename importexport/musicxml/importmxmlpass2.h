@@ -281,6 +281,9 @@ public:
       void deleteHandledSpanner(SLine* const& spanner);
       int divs() { return _divs; }
 
+      SLine* delayedOttava() { return _delayedOttava; }
+      void setDelayedOttava(SLine* ottava) { _delayedOttava = ottava; }
+
 private:
       void addError(const QString& error);      ///< Add an error to be shown in the GUI
       void initPartState(const QString& partId);
@@ -362,6 +365,7 @@ private:
       Harmony* _harmony;                          ///< Current harmony
       Chord* _tremStart;                          ///< Starting chord for current tremolo
       FiguredBass* _figBass;                      ///< Current figured bass element (to attach to next note)
+      SLine* _delayedOttava = nullptr;            ///< Current delayed ottava
       int _multiMeasureRestCount;
       int _measureNumber;                         ///< Current measure number as written in the score
       MusicXmlLyricsExtend _extendedLyrics;       ///< Lyrics with "extend" requiring fixup
@@ -403,7 +407,6 @@ private:
       QString _sndSegno;
       QString _sndToCoda;
       QString _placement;
-      bool visible = true;
       bool _hasDefaultY;
       qreal _defaultY;
       bool _hasRelativeY;

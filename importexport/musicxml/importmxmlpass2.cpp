@@ -1683,6 +1683,7 @@ void MusicXMLParserPass2::initPartState(const QString& partId)
       _harmony = 0;
       _tremStart = 0;
       _figBass = 0;
+      _delayedOttava = 0;
       _multiMeasureRestCount = -1;
       _measureStyleSlash = MusicXmlSlash::NONE;
       _extendedLyrics.init();
@@ -2252,7 +2253,7 @@ void MusicXMLParserPass2::part()
                   skipLogCurrElem();
             }
 
-      // stop all remaining extends for this part
+      // stop all remaining extends for this part and add remaining ottava if present
       Measure* lm = msPart->score()->lastMeasure();
       if (lm) {
             int strack = _pass1.trackForPart(id);
@@ -2260,6 +2261,10 @@ void MusicXMLParserPass2::part()
             Fraction lastTick = lm->endTick();
             for (int trk = strack; trk < etrack; trk++)
                   _extendedLyrics.setExtend(-1, trk, lastTick);
+            if (_delayedOttava && _delayedOttava->tick2() < lastTick) {
+                  handleSpannerStop(_delayedOttava, _delayedOttava->track2(), lastTick, _spanners);
+                 _delayedOttava = nullptr;
+                  }
             }
 
       const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
@@ -2668,6 +2673,11 @@ void MusicXMLParserPass2::measure(const QString& partId,
             else if (_e.name() == "harmony")
                   harmony(partId, measure, time + mTime, delayedDirections);
             else if (_e.name() == "note") {
+                  // Correct delayed ottava tick
+                  if (_delayedOttava && _delayedOttava->tick2() < time + mTime) {
+                        handleSpannerStop(_delayedOttava, _delayedOttava->track2(), time + mTime, _spanners);
+                        _delayedOttava = nullptr;
+                        }
                   Fraction missingPrev;
                   Fraction dura;
                   Fraction missingCurr;
@@ -3155,6 +3165,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       int track = _pass1.trackForPart(partId);
       bool isVocalStaff = _pass1.isVocalStaff(partId);
       bool isExpressionText = false;
+      bool delayOttava = _pass1.exporterString().contains("sibelius");
       //qDebug("direction track %d", track);
       QList<MusicXmlSpannerDesc> starts;
       QList<MusicXmlSpannerDesc> stops;
@@ -3373,8 +3384,17 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
             else {
                   if (spdesc._isStarted) {
-                        handleSpannerStop(spdesc._sp, track, tick + _offset, spanners);
-                        _pass2.clearSpanner(desc);
+                        if (spdesc._sp && spdesc._sp->isOttava() && delayOttava) {
+                              // Sibelius writes ottava ends 1 note too early
+                              _pass2.setDelayedOttava(spdesc._sp);
+                              _pass2.delayedOttava()->setTrack2(track);
+                              _pass2.delayedOttava()->setTick2(tick + _offset);
+                              _pass2.clearSpanner(desc);
+                              }
+                        else {
+                              handleSpannerStop(spdesc._sp, track, tick + _offset, spanners);
+                              _pass2.clearSpanner(desc);
+                              }
                         }
                   else {
                         spdesc._sp = desc._sp;
@@ -3555,21 +3575,21 @@ void MusicXMLParserDirection::otherDirection()
             // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
             // TODO: Add more symbols from Sibelius
             QMap<QString, QString> otherDirectionStrings;
-            if (_pass1.exporterString().contains("Dolet")) {
+            if (_pass1.exporterString().contains("dolet")) {
                   otherDirectionStrings = {
                         { QString("To Coda"), QString("To Coda") },
                         { QString("Segno"), QString("<sym>segno</sym>") },
                         { QString("CODA"), QString("<sym>coda</sym>") },
                   };
                   }
-            QMap<QString, SymId> otherDirectionSyms;
-            otherDirectionSyms = { { QString("Rhythm dot"), SymId::augmentationDot },
-                                   { QString("Whole rest"), SymId::restWhole },
-                                   { QString("l.v. down"), SymId::articLaissezVibrerBelow },
-                                   { QString("8vb"), SymId::ottavaBassaVb },
-                                   { QString("Treble clef"), SymId::gClef },
-                                   { QString("Bass clef"), SymId::fClef }
-                                 };
+            static const QMap<QString, SymId> otherDirectionSyms = {
+                  { QString("Rhythm dot"), SymId::augmentationDot },
+                  { QString("Whole rest"), SymId::restWhole },
+                  { QString("l.v. down"), SymId::articLaissezVibrerBelow },
+                  { QString("8vb"), SymId::ottavaBassaVb },
+                  { QString("Treble clef"), SymId::gClef },
+                  { QString("Bass clef"), SymId::fClef }
+                  };
             QString t = _e.readElementText();
             QString val = otherDirectionStrings.value(t);
             if (!val.isEmpty())
