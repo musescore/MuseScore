@@ -205,9 +205,18 @@ ListView {
         id: menuLoader
 
         property string menuId: ""
+        property bool hasSiblingMenus: true
 
         onHandleMenuItem: function(itemId) {
             Qt.callLater(appMenuModel.handleMenuItem, itemId)
+        }
+
+        onOpenPrevMenu: {
+            appMenuModel.openPrevMenu()
+        }
+
+        onOpenNextMenu: {
+            appMenuModel.openNextMenu()
         }
 
         onOpened: {
