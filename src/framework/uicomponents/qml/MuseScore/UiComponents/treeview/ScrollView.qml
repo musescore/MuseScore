@@ -40,7 +40,7 @@
 import QtQml 2.14 as Qml
 import QtQuick 2.2
 
-import MuseScore.UiComponents.Private 1.0
+import MuseScore.UiComponents.Private 1.0 as P
 
 /*!
     \qmltype ScrollView
@@ -204,8 +204,8 @@ FocusScope {
             contentItem.parent = internal.flickableItem.contentItem
         }
         internal.flickableItem.anchors.fill = viewportItem
-        if (!Settings.hasTouchScreen)
-            internal.flickableItem.interactive = false
+        //if (!Settings.hasTouchScreen)
+        internal.flickableItem.interactive = false
     }
 
 
@@ -264,7 +264,7 @@ FocusScope {
             Flickable {}
         }
 
-        WheelArea {
+        P.WheelArea {
             id: wheelArea
             parent: flickableItem
             z: -1

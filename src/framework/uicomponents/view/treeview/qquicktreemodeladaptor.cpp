@@ -261,7 +261,7 @@ bool QQuickTreeModelAdaptor1::childrenVisible(const QModelIndex &index)
            || (m_expandedItems.contains(index) && isVisible(index));
 }
 
-const QModelIndex &QQuickTreeModelAdaptor1::mapToModel(const QModelIndex &index) const
+QModelIndex QQuickTreeModelAdaptor1::mapToModel(const QModelIndex &index) const
 {
     return m_items.at(index.row()).index;
 }
