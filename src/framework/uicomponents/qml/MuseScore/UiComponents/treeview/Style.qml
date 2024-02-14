@@ -37,30 +37,17 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
+import QtQuick 2.2
 
-BasicTableViewStyle {
-    id: root
+import MuseScore.UiComponents.Private 1.0
 
-    readonly property TreeView control: __control
+/*!
+    \qmltype Style
+    \internal
+    \inqmlmodule QtQuick.Controls.Private
+*/
 
-    property int indentation: 16
-
-    property Component branchDelegate: Item {
-        width: indentation
-        height: 16
-        Text {
-            visible: styleData.column === 0 && styleData.hasChildren
-            text: styleData.isExpanded ? "\u25bc" : "\u25b6"
-            color: !control.activeFocus || styleData.selected ? styleData.textColor : "#666"
-            font.pointSize: 10
-            renderType: Text.NativeRendering
-            style: Text.PlainText
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: 2
-        }
-    }
-
-    __branchDelegate: branchDelegate
-    __indentation: indentation
+AbstractStyle {
+    /*! The control this style is attached to. */
+    readonly property Item control: __control
 }

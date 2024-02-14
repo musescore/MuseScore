@@ -28,6 +28,8 @@ endif()
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
+include(${CMAKE_CURRENT_LIST_DIR}/view/treeview/treeview.cmake)
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uicomponentsmodule.h
@@ -87,6 +89,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/buttonboxmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/buttonboxmodel.cpp
+    ${TREEVIEW_SRC}
     )
 
 if (OS_IS_MAC)

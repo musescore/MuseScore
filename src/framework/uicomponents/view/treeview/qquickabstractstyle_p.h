@@ -37,30 +37,40 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
+#ifndef QQUICKABSTRACTSTYLE_H
+#define QQUICKABSTRACTSTYLE_H
 
-BasicTableViewStyle {
-    id: root
+#include <QtCore/qobject.h>
+#include <QtQml/qqmllist.h>
+#include "qquickpadding_p.h"
 
-    readonly property TreeView control: __control
+QT_BEGIN_NAMESPACE
 
-    property int indentation: 16
+class QQuickAbstractStyle1 : public QObject
+{
+    Q_OBJECT
 
-    property Component branchDelegate: Item {
-        width: indentation
-        height: 16
-        Text {
-            visible: styleData.column === 0 && styleData.hasChildren
-            text: styleData.isExpanded ? "\u25bc" : "\u25b6"
-            color: !control.activeFocus || styleData.selected ? styleData.textColor : "#666"
-            font.pointSize: 10
-            renderType: Text.NativeRendering
-            style: Text.PlainText
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: 2
-        }
-    }
+    Q_PROPERTY(QQuickPadding1* padding READ padding CONSTANT)
+    Q_PROPERTY(QQmlListProperty<QObject> data READ data DESIGNABLE false)
+    Q_CLASSINFO("DefaultProperty", "data")
 
-    __branchDelegate: branchDelegate
-    __indentation: indentation
-}
+public:
+    QQuickAbstractStyle1(QObject *parent = 0);
+
+    QQuickPadding1* padding() { return &m_padding; }
+
+    QQmlListProperty<QObject> data();
+
+private:
+    static void data_append(QQmlListProperty<QObject> *list, QObject *object);
+    static int data_count(QQmlListProperty<QObject> *list);
+    static QObject *data_at(QQmlListProperty<QObject> *list, int index);
+    static void data_clear(QQmlListProperty<QObject> *list);
+
+    QQuickPadding1 m_padding;
+    QList<QObject *> m_data;
+};
+
+QT_END_NAMESPACE
+
+#endif // QQUICKABSTRACTSTYLE_H

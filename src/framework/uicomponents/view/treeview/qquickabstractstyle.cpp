@@ -37,30 +37,62 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
+#include "qquickabstractstyle_p.h"
 
-BasicTableViewStyle {
-    id: root
+QT_BEGIN_NAMESPACE
 
-    readonly property TreeView control: __control
+/*!
+    \qmltype AbstractStyle
+    \instantiates QQuickAbstractStyle1
+    \inqmlmodule QtQuick.Controls.Styles
+    \qmlabstract
+    \internal
+*/
 
-    property int indentation: 16
+/*!
+    \qmlpropertygroup QtQuick.Controls.Styles::AbstractStyle::padding
+    \qmlproperty int AbstractStyle::padding.top
+    \qmlproperty int AbstractStyle::padding.left
+    \qmlproperty int AbstractStyle::padding.right
+    \qmlproperty int AbstractStyle::padding.bottom
 
-    property Component branchDelegate: Item {
-        width: indentation
-        height: 16
-        Text {
-            visible: styleData.column === 0 && styleData.hasChildren
-            text: styleData.isExpanded ? "\u25bc" : "\u25b6"
-            color: !control.activeFocus || styleData.selected ? styleData.textColor : "#666"
-            font.pointSize: 10
-            renderType: Text.NativeRendering
-            style: Text.PlainText
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: 2
-        }
-    }
+    This grouped property holds the \c top, \c left, \c right and \c bottom padding.
+*/
 
-    __branchDelegate: branchDelegate
-    __indentation: indentation
+QQuickAbstractStyle1::QQuickAbstractStyle1(QObject *parent) : QObject(parent)
+{
 }
+
+QQmlListProperty<QObject> QQuickAbstractStyle1::data()
+{
+    return QQmlListProperty<QObject>(this, 0, &QQuickAbstractStyle1::data_append, &QQuickAbstractStyle1::data_count,
+                                     &QQuickAbstractStyle1::data_at, &QQuickAbstractStyle1::data_clear);
+}
+
+void QQuickAbstractStyle1::data_append(QQmlListProperty<QObject> *list, QObject *object)
+{
+    if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
+        style->m_data.append(object);
+}
+
+int QQuickAbstractStyle1::data_count(QQmlListProperty<QObject> *list)
+{
+    if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
+        return style->m_data.count();
+    return 0;
+}
+
+QObject *QQuickAbstractStyle1::data_at(QQmlListProperty<QObject> *list, int index)
+{
+    if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
+        return style->m_data.at(index);
+    return 0;
+}
+
+void QQuickAbstractStyle1::data_clear(QQmlListProperty<QObject> *list)
+{
+    if (QQuickAbstractStyle1 *style = qobject_cast<QQuickAbstractStyle1 *>(list->object))
+        style->m_data.clear();
+}
+
+QT_END_NAMESPACE

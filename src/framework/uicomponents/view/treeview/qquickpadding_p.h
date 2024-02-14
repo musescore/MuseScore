@@ -37,30 +37,53 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.5
+#ifndef QQUICKPADDING_H
+#define QQUICKPADDING_H
 
-BasicTableViewStyle {
-    id: root
+#include <QtCore/qobject.h>
 
-    readonly property TreeView control: __control
+QT_BEGIN_NAMESPACE
 
-    property int indentation: 16
+class QQuickPadding1 : public QObject
+{
+    Q_OBJECT
 
-    property Component branchDelegate: Item {
-        width: indentation
-        height: 16
-        Text {
-            visible: styleData.column === 0 && styleData.hasChildren
-            text: styleData.isExpanded ? "\u25bc" : "\u25b6"
-            color: !control.activeFocus || styleData.selected ? styleData.textColor : "#666"
-            font.pointSize: 10
-            renderType: Text.NativeRendering
-            style: Text.PlainText
-            anchors.centerIn: parent
-            anchors.verticalCenterOffset: 2
-        }
-    }
+    Q_PROPERTY(int left READ left WRITE setLeft NOTIFY leftChanged)
+    Q_PROPERTY(int top READ top WRITE setTop NOTIFY topChanged)
+    Q_PROPERTY(int right READ right WRITE setRight NOTIFY rightChanged)
+    Q_PROPERTY(int bottom READ bottom WRITE setBottom NOTIFY bottomChanged)
 
-    __branchDelegate: branchDelegate
-    __indentation: indentation
-}
+    int m_left;
+    int m_top;
+    int m_right;
+    int m_bottom;
+
+public:
+    QQuickPadding1(QObject *parent = 0) :
+        QObject(parent),
+        m_left(0),
+        m_top(0),
+        m_right(0),
+        m_bottom(0) {}
+
+    int left() const { return m_left; }
+    int top() const { return m_top; }
+    int right() const { return m_right; }
+    int bottom() const { return m_bottom; }
+
+public slots:
+    void setLeft(int arg) { if (m_left != arg) {m_left = arg; emit leftChanged();}}
+    void setTop(int arg) { if (m_top != arg) {m_top = arg; emit topChanged();}}
+    void setRight(int arg) { if (m_right != arg) {m_right = arg; emit rightChanged();}}
+    void setBottom(int arg) {if (m_bottom != arg) {m_bottom = arg; emit bottomChanged();}}
+
+signals:
+    void leftChanged();
+    void topChanged();
+    void rightChanged();
+    void bottomChanged();
+};
+
+QT_END_NAMESPACE
+
+#endif // QQUICKPADDING_H
