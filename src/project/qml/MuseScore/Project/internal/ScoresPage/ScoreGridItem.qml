@@ -21,10 +21,10 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.GraphicalEffects 1.0
 import MuseScore.Project 1.0
 
 FocusScope {
@@ -109,7 +109,7 @@ FocusScope {
                     }
 
                     layer.enabled: true
-                    layer.effect: OpacityMask {
+                    layer.effect: EffectOpacityMask {
                         maskSource: Rectangle {
                             width: thumbnail.width
                             height: thumbnail.height
@@ -167,7 +167,7 @@ FocusScope {
                     }
                 ]
 
-                RectangularGlow {
+                EffectRectangularGlow {
                     anchors.fill: thumbnail
                     z: -1
 

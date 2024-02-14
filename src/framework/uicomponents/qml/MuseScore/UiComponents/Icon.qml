@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.1
-import QtGraphicalEffects 1.0
+
+import MuseScore.GraphicalEffects 1.0
 
 Item {
     id: root
@@ -44,7 +45,7 @@ Item {
         fillMode: Image.PreserveAspectFit
     }
 
-    ColorOverlay {
+    EffectColorOverlay {
         id: colorOverlay
 
         anchors.fill: image

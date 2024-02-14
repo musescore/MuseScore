@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
+import MuseScore.GraphicalEffects 1.0
 
 Rectangle {
     id: root
@@ -132,7 +132,7 @@ Rectangle {
         }
     }
 
-    FastBlur {
+    EffectFastBlur {
         anchors.fill: effectSource
 
         source: effectSource

@@ -21,10 +21,10 @@
  */
 
 import QtQuick 2.15
-import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.GraphicalEffects 1.0
 
 Item {
     id: root
@@ -63,7 +63,7 @@ Item {
 
         // Clip content to our beautiful rounded rect
         layer.enabled: true
-        layer.effect: OpacityMask {
+        layer.effect: EffectOpacityMask {
             maskSource: Rectangle {
                 width: dropArea.width
                 height: dropArea.height
