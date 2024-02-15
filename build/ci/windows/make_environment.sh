@@ -22,10 +22,23 @@
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 
+QT5_COMPAT="OFF"
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --qt5_compat) QT5_COMPAT="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 mkdir -p $BUILD_TOOLS
 rm -f $ENV_FILE
 
-QT_DIR="/c/Qt/5.15.2"
+QT_DIR="/c/Qt/6.2.4"
+if [[ "$QT5_COMPAT" == "ON" ]]; then
+    QT_DIR="/c/Qt/5.15.2" 
+fi
 
 echo export PATH="${QT_DIR}/msvc2019_64/bin:\${PATH}" >> ${ENV_FILE}
 
