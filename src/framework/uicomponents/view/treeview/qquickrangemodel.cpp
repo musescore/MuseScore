@@ -508,7 +508,7 @@ void QQuickRangeModel1::setValue(qreal newValue)
 void QQuickRangeModel1::setInverted(bool inverted)
 {
     Q_D(QQuickRangeModel1);
-    if (inverted == d->inverted)
+    if (inverted == bool(d->inverted))
         return;
 
     d->inverted = inverted;
