@@ -86,11 +86,11 @@ public:
     PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const override;
 
     // Draw
-    void draw(SymId id, draw::Painter* p, double mag, const PointF& pos) const override;
-    void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos) const override;
+    void draw(SymId id, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
+    void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
 
-    void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos) const override;
-    void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos) const override;
+    void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
+    void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
 
     void ensureLoad();
 

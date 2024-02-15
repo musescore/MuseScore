@@ -2835,7 +2835,7 @@ void TDraw::draw(const Symbol* item, Painter* painter)
     if (!item->isNoteDot() || !tabStaff) {
         painter->setPen(item->curColor());
         if (item->scoreFont()) {
-            item->scoreFont()->draw(item->sym(), painter, item->magS(), PointF());
+            item->scoreFont()->draw(item->sym(), painter, item->magS() * item->symbolsSize(), PointF(), item->symAngle());
         } else {
             item->drawSymbol(item->sym(), painter);
         }

@@ -426,6 +426,10 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STRINGTUNINGS_PRESET,    true,  "preset",                P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "strings preset") },
     { Pid::STRINGTUNINGS_VISIBLE_STRINGS,   true,  "visibleStrings",P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visible strings") },
 
+    { Pid::SCORE_FONT,              true,  "scoreFont",             P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "score font") },
+    { Pid::SYMBOLS_SIZE,            false, "symbolsSize",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "symbols size") },
+    { Pid::SYMBOL_ANGLE,            false, "symbolAngle",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "symbol angle") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */

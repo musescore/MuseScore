@@ -39,6 +39,7 @@ Item {
     property real maxValue: 999
     property real minValue: -999
     property alias validator: textInputField.validator
+    property bool wrap: false
 
     property alias measureUnitsSymbol: textInputField.measureUnitsSymbol
     property alias hint: textInputField.hint
@@ -47,10 +48,10 @@ Item {
 
     readonly property int spacing: 8
 
-    property bool canIncrease: root.currentValue < root.maxValue
+    property bool canIncrease: root.wrap || root.currentValue < root.maxValue
     property var onIncrement: null
 
-    property bool canDecrease: root.currentValue > root.minValue
+    property bool canDecrease: root.wrap || root.currentValue > root.minValue
     property var onDecrement: null
 
     signal valueEdited(var newValue)
@@ -67,7 +68,11 @@ Item {
             newValue = onIncrement()
         } else {
             var value = root.isIndeterminate ? 0.0 : currentValue
-            newValue = Math.min(value + step, root.maxValue)
+            if (value + step >= root.maxValue) {
+                newValue = wrap ? root.minValue + (value + step - root.maxValue) : root.maxValue
+            } else {
+                newValue = value + step
+            }
 
             if (newValue === value) {
                 return
@@ -86,7 +91,11 @@ Item {
             newValue = onDecrement()
         } else {
             var value = root.isIndeterminate ? 0.0 : currentValue
-            newValue = Math.max(value - step, root.minValue)
+            if (value - step < root.minValue) {
+                newValue = wrap ? root.maxValue + (value - step + root.minValue) : root.minValue
+            } else {
+                newValue = value - step
+            }
 
             if (newValue === value) {
                 return

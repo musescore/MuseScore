@@ -5452,7 +5452,9 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
     } else if (item->staff()) {
         ldata->setMag(item->staff()->staffMag(item->tick()));
     }
-    ldata->setBbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
+    ldata->setBbox(item->scoreFont()
+                   ? item->scoreFont()->bbox(item->sym(), item->magS() * item->symbolsSize())
+                   : item->symBbox(item->sym()));
     double w = ldata->bbox().width();
     PointF p;
     if (item->align() == AlignV::BOTTOM) {
