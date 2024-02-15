@@ -751,8 +751,8 @@ void QQuickTreeModelAdaptor1::modelRowsAboutToBeMoved(const QModelIndex & source
 
         int destIndex = -1;
         if (destinationRow == m_model->rowCount(destinationParent)) {
-            const QModelIndex &emi = m_model->index(destinationRow - 1, 0, destinationParent);
-            destIndex = lastChildIndex(emi) + 1;
+            const QModelIndex &emi1 = m_model->index(destinationRow - 1, 0, destinationParent);
+            destIndex = lastChildIndex(emi1) + 1;
         } else {
             destIndex = itemIndex(m_model->index(destinationRow, 0, destinationParent));
         }
@@ -810,10 +810,10 @@ void QQuickTreeModelAdaptor1::modelRowsAboutToBeMoved(const QModelIndex & source
         queueDataChanged(topLeft, bottomRight, changedRole);
 
         if (depthDifference != 0) {
-            const QModelIndex &topLeft = index(bufferCopyOffset, 0, QModelIndex());
-            const QModelIndex &bottomRight = index(bufferCopyOffset + totalMovedCount - 1, 0, QModelIndex());
-            const QVector<int> changedRole(1, DepthRole);
-            queueDataChanged(topLeft, bottomRight, changedRole);
+            const QModelIndex &topLeft1 = index(bufferCopyOffset, 0, QModelIndex());
+            const QModelIndex &bottomRight1 = index(bufferCopyOffset + totalMovedCount - 1, 0, QModelIndex());
+            const QVector<int> changedRole1(1, DepthRole);
+            queueDataChanged(topLeft1, bottomRight1, changedRole1);
         }
     }
 }
