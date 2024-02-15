@@ -148,7 +148,7 @@
             <durationType>eighth</durationType>
             </Rest>
           <SystemText>
-            <swing unit="eighth" ratio= "60"/>
+            <swing unit="eighth" ratio="60"/>
             <style>Tempo</style>
             <text>Swing</text>
             </SystemText>

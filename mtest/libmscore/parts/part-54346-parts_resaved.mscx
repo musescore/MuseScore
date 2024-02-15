@@ -155,7 +155,7 @@
             <durationType>eighth</durationType>
             </Rest>
           <StaffText>
-            <swing unit="eighth" ratio= "60"/>
+            <swing unit="eighth" ratio="60"/>
             <linkedMain/>
             <style>Tempo</style>
             <text>Swing</text>
@@ -377,7 +377,7 @@
               <durationType>eighth</durationType>
               </Rest>
             <StaffText>
-              <swing unit="eighth" ratio= "60"/>
+              <swing unit="eighth" ratio="60"/>
               <linked>
                 </linked>
               <style>Tempo</style>
@@ -561,7 +561,7 @@
               <fractions>-1/8</fractions>
               </location>
             <StaffText>
-              <swing unit="eighth" ratio= "60"/>
+              <swing unit="eighth" ratio="60"/>
               <linked>
                 <location>
                   <staves>-1</staves>

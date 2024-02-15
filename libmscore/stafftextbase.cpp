@@ -61,7 +61,7 @@ void StaffTextBase::write(XmlWriter& xml) const
             else
                   swingUnit = TDuration(TDuration::DurationType::V_ZERO).name();
             int swingRatio = swingParameters()->swingRatio;
-            xml.tagE(QString("swing unit=\"%1\" ratio= \"%2\"").arg(swingUnit).arg(swingRatio));
+            xml.tagE(QString("swing unit=\"%1\" ratio=\"%2\"").arg(swingUnit).arg(swingRatio));
             }
       if (capo() != 0)
             xml.tagE(QString("capo fretId=\"%1\"").arg(capo()));

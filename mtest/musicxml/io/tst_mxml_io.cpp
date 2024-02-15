@@ -245,6 +245,7 @@ private slots:
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringData()      { mxmlIoTest("testStringData"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }
+      void swing() { mxmlMscxExportTestRef("testSwing"); }
       void systemBrackets1() { mxmlIoTest("testSystemBrackets1"); }
       void systemBrackets2() { mxmlIoTest("testSystemBrackets2"); }
       void systemBrackets3() { mxmlImportTestRef("testSystemBrackets3"); }

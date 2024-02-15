@@ -385,6 +385,7 @@ public:
       void textLine(TextLineBase const* const tl, int staff, const Fraction& tick);
       void dynamic(Dynamic const* const dyn, int staff);
       void symbol(Symbol const* const sym, int staff);
+      void systemText(StaffTextBase const* const text, int staff);
       void tempoText(TempoText const* const text, int staff);
       void harmony(Harmony const* const, FretDiagram const* const fd, int offset = 0);
       Score* score() const { return _score; };
@@ -4351,9 +4352,9 @@ static void beatUnit(XmlWriter& xml, const TDuration dur)
 //   wordsMetrome
 //---------------------------------------------------------
 
-static void wordsMetrome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
+static void wordsMetronome(XmlWriter& xml, Score* s, TextBase const* const text, const int offset)
       {
-      //qDebug("wordsMetrome('%s')", qPrintable(text->xmlText()));
+      //qDebug("wordsMetronome('%s')", qPrintable(text->xmlText()));
       //qDebug("isTextInvalid %d isLayoutInvalid %d", text->isTextInvalid(), text->isLayoutInvalid());
       const QList<TextFragment> list = text->fragmentList();
       QList<TextFragment>       wordsLeft;  // words left of metronome
@@ -4440,7 +4441,7 @@ void ExportMusicXml::tempoText(TempoText const* const text, int staff)
       _attr.doAttr(_xml, false);
       if (text->visible()) {
             _xml.stag(QString("direction placement=\"%1\"").arg((text->placement() == Placement::BELOW ) ? "below" : "above"));
-            wordsMetrome(_xml, _score, text, offset);
+            wordsMetronome(_xml, _score, text, offset);
 
             if (staff)
                   _xml.tag("staff", staff);
@@ -4480,7 +4481,46 @@ void ExportMusicXml::words(TextBase const* const text, int staff)
             }
 
       directionTag(_xml, _attr, text);
-      wordsMetrome(_xml, _score, text, offset);
+      wordsMetronome(_xml, _score, text, offset);
+      directionETag(_xml, staff);
+      }
+
+
+//---------------------------------------------------------
+//   systemText
+//---------------------------------------------------------
+
+void ExportMusicXml::systemText(StaffTextBase const* const text, int staff)
+      {
+      const auto offset = calculateTimeDeltaInDivisions(text->tick(), tick(), div);
+
+      if (text->plainText() == "") {
+            // sometimes empty Texts are present, exporting would result
+            // in invalid MusicXML (as an empty direction-type would be created)
+            return;
+            }
+
+      directionTag(_xml, _attr, text);
+      wordsMetronome(_xml, _score, text, offset);
+
+      if (text->swing()) {
+            _xml.stag("sound");
+            _xml.stag("swing");
+            if (!text->swingParameters()->swingUnit)
+                  _xml.tagE("straight");
+            else {
+                  const int swingPercentage = text->swingParameters()->swingRatio;
+                  const int swingDivisor = gcd(text->swingParameters()->swingRatio, 100);
+                  _xml.tag("first",  100 / swingDivisor);
+                  _xml.tag("second", swingPercentage / swingDivisor);
+                  if (text->swingParameters()->swingUnit == MScore::division / 2)
+                        _xml.tag("swing-type", TDuration(TDuration::DurationType::V_EIGHTH).name());
+                  else
+                        _xml.tag("swing-type", TDuration(TDuration::DurationType::V_16TH).name());
+                  }
+            _xml.etag();
+            _xml.etag();
+            }
       directionETag(_xml, staff);
       }
 
@@ -5600,12 +5640,14 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
             exp->symbol(toSymbol(e), sstaff);
       else if (e->isTempoText())
             exp->tempoText(toTempoText(e), sstaff);
-      else if (e->isStaffText() || e->isSystemText() || e->isText() || (e->isInstrumentChange() && e->visible()))
+      else if (e->isStaffText()|| e->isText() || (e->isInstrumentChange() && e->visible()))
             exp->words(toTextBase(e), sstaff);
       else if (e->isDynamic())
             exp->dynamic(toDynamic(e), sstaff);
       else if (e->isRehearsalMark())
             exp->rehearsal(toRehearsalMark(e), sstaff);
+      else if (e->isSystemText())
+            exp->systemText(toStaffTextBase(e), sstaff);
       else
             return instrChangeHandled;
 
