@@ -5267,11 +5267,18 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
     }
 
     StaffText* staffText = toStaffText(item->parentItem());
-    RectF parentBbox = staffText->ldata()->bbox();
 
-    double iconHeight = parentBbox.height() * 1.5;
+    draw::FontMetrics fontMetrics = draw::FontMetrics(staffText->font());
+    double iconHeight = (fontMetrics.xHeight() + fontMetrics.descent()) * 2;
+
+    RectF parentBbox = staffText->ldata()->bbox();
+    RectF iconBBox = RectF(parentBbox.x(), parentBbox.y(), iconHeight, iconHeight);
+
+    iconBBox.moveCenter(parentBbox.center());
+
+    // <icon><space><text>
     double space = iconHeight / 6.0;
-    RectF iconBBox = RectF(parentBbox.x() - (iconHeight + space), parentBbox.y() - space, iconHeight, iconHeight);
+    iconBBox.setX(parentBbox.x() - iconBBox.width() - space);
 
     ldata->setBbox(iconBBox);
 }
