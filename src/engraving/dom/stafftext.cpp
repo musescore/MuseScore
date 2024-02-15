@@ -26,33 +26,28 @@
 #include "segment.h"
 #include "score.h"
 
-using namespace mu;
+using namespace mu::engraving;
 
-namespace mu::engraving {
-//---------------------------------------------------------
-//   staffStyle
-//---------------------------------------------------------
-
-static const ElementStyle staffStyle {
+static const ElementStyle STAFF_STYLE {
     { Sid::staffTextPlacement, Pid::PLACEMENT },
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
 
-//---------------------------------------------------------
-//   StaffText
-//---------------------------------------------------------
-
 StaffText::StaffText(Segment* parent, TextStyleType tid)
     : StaffTextBase(ElementType::STAFF_TEXT, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    initElementStyle(&staffStyle);
+    initElementStyle(&STAFF_STYLE);
 }
 
-//---------------------------------------------------------
-//   propertyDefault
-//---------------------------------------------------------
+StaffText::StaffText(const StaffText& t)
+    : StaffTextBase(t)
+{
+    if (t.m_soundFlag) {
+        setSoundFlag(t.m_soundFlag->clone());
+    }
+}
 
-engraving::PropertyValue StaffText::propertyDefault(Pid id) const
+PropertyValue StaffText::propertyDefault(Pid id) const
 {
     switch (id) {
     case Pid::TEXT_STYLE:
@@ -155,5 +150,4 @@ void StaffText::setSoundFlag(SoundFlag* flag)
     if (explicitParent()) {
         renderer()->layoutItem(this);
     }
-}
 }

@@ -5427,7 +5427,10 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
         return;
     }
 
-    StaffText* staffText = toStaffText(item->parentItem());
+    const StaffText* staffText = toStaffText(item->parentItem());
+    if (!staffText) {
+        return;
+    }
 
     draw::FontMetrics fontMetrics = draw::FontMetrics(staffText->font());
     double iconHeight = (fontMetrics.xHeight() + fontMetrics.descent()) * 2;
