@@ -34,6 +34,7 @@ class Dynamic;
 class PlayTechAnnotation;
 class SoundFlag;
 class Score;
+class MeasureRepeat;
 
 class PlaybackContext
 {
@@ -63,6 +64,10 @@ private:
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);
     void handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
+    void handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset);
+
+    void copyDynamicsInRange(const int rangeStartTick, const int rangeEndTick, const int newDynamicsOffsetTick);
+    void copyPlayTechniquesInRange(const int rangeStartTick, const int rangeEndTick, const int newPlayTechOffsetTick);
 
     void removeDynamicData(const int from, const int to);
     void removePlayTechniqueData(const int from, const int to);
