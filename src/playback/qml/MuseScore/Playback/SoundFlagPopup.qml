@@ -96,28 +96,23 @@ StyledPopupView {
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
+
+            MenuButton {
+                Layout.preferredWidth: 20
+                Layout.preferredHeight: width
+
+                menuModel: soundFlagModel.contextMenuModel
+
+                onHandleMenuItem: function(itemId) {
+                    soundFlagModel.handleContextMenuItem(itemId)
+                }
+            }
         }
 
-        Loader {
-            id: loader
-
+        MuseSoundsParams {
             width: parent.width
-            height: Boolean(loader.item) ? loader.item.height : 50
 
-            sourceComponent: {
-                switch (soundFlagModel.sourceType) {
-                case SoundFlagSettingsModel.MuseSounds:
-                    return museSoundsComp
-                case SoundFlagSettingsModel.Undefined:
-                    return undefined
-                }
-            }
-
-            Component {
-                id: museSoundsComp
-                MuseSoundsParams {
-                }
-            }
+            model: soundFlagModel
         }
     }
 }

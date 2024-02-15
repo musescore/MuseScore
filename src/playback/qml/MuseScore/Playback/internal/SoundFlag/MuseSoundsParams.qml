@@ -24,27 +24,20 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Playback 1.0
 
 Item {
     id: root
 
     property NavigationPanel navigationPanel: null
 
+    property var model: null
+
     height: !prv.noOptions ? Math.min(flickable.contentHeight, 132) : noOptionsLabel.implicitHeight
-
-    MuseSoundsParamsModel {
-        id: museSoundsParamsModel
-    }
-
-    Component.onCompleted: {
-        museSoundsParamsModel.init()
-    }
 
     QtObject {
         id: prv
 
-        property bool noOptions: museSoundsParamsModel.availablePresets.length === 0
+        property bool noOptions: root.model.availablePresets.length === 0
     }
 
     StyledFlickable {
@@ -60,7 +53,7 @@ Item {
             width: parent.width
 
             columns: 2
-            rows: Math.ceil(museSoundsParamsModel.availablePresets.length / 2)
+            rows: Math.ceil(root.model.availablePresets.length / 2)
             columnSpacing: 4
             rowSpacing: 4
 
@@ -70,7 +63,7 @@ Item {
                 width: parent.width
                 height: parent.height
 
-                model: museSoundsParamsModel.availablePresets
+                model: root.model.availablePresets
 
                 FlatButton {
                     Layout.preferredWidth: (gridView.width - gridView.rowSpacing) / 2
@@ -78,7 +71,7 @@ Item {
 
                     text: modelData["name"]
 
-                    accentButton: museSoundsParamsModel.presetCodes.indexOf(modelData["code"]) !== -1
+                    accentButton: root.model.presetCodes.indexOf(modelData["code"]) !== -1
 
                     navigation.name: "Preset" + index
                     navigation.panel: root.navigationPanel
@@ -86,7 +79,7 @@ Item {
                     navigation.column: 1
 
                     onClicked: {
-                        museSoundsParamsModel.togglePreset(modelData["code"], mouse.modifiers & Qt.ControlModifier)
+                        root.model.togglePreset(modelData["code"], mouse.modifiers & Qt.ControlModifier)
                     }
                 }
             }
