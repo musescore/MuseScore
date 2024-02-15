@@ -116,6 +116,8 @@ StyledPopupView {
 
             model: soundFlagModel
 
+            visible: soundFlagModel.inited
+
             navigationPanelSection: root.notationViewNavigationSection
             navigationPanelOrderStart: root.navigationOrderStart
         }

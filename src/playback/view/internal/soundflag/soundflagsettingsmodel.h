@@ -45,6 +45,8 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
     INJECT(IPlaybackController, playbackController)
     INJECT(IPlaybackConfiguration, playbackConfiguration)
 
+    Q_PROPERTY(bool inited READ inited NOTIFY initedChanged FINAL)
+
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged FINAL)
 
@@ -60,6 +62,8 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 
 public:
     explicit SoundFlagSettingsModel(QObject* parent = nullptr);
+
+    bool inited() const;
 
     Q_INVOKABLE void init() override;
     Q_INVOKABLE void togglePreset(const QString& presetCode);
@@ -101,6 +105,8 @@ signals:
 
     void contextMenuModelChanged();
 
+    void initedChanged();
+
 private:
     project::IProjectAudioSettingsPtr audioSettings() const;
 
@@ -120,6 +126,9 @@ private:
 
     QVariantList m_availablePresets;
     QVariantList m_availablePlayingTechniques;
+
+    bool m_isPresetsInited = false;
+    bool m_isPlayingTechniquesInited = false;
 };
 }
 
