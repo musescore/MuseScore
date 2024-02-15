@@ -389,6 +389,7 @@ void NotationPlayback::addSoundFlag(StaffText* staffText)
     TRACEFUNC;
 
     if (doAddSoundFlag(staffText)) {
+        score()->update();
         m_notationChanged.notify();
     }
 }
@@ -436,6 +437,7 @@ void NotationPlayback::addSoundFlags(const engraving::InstrumentTrackIdSet& trac
     }
 
     if (notationChanged) {
+        score()->update();
         m_notationChanged.notify();
     }
 }
@@ -464,6 +466,8 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
             }
         }
     }
+
+    score()->update();
 
     m_playbackModel.reload();
     m_notationChanged.notify();
