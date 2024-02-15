@@ -48,6 +48,7 @@
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/drumset.h"
+#include "engraving/dom/dynamic.h"
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
@@ -3834,6 +3835,30 @@ void NotationInteraction::addAccidentalToSelection(AccidentalType type)
     score()->toggleAccidental(type, editData);
     apply();
 }
+
+void NotationInteraction::addDynamicToSelection(DynamicType type) 
+{
+    if (selection()->isNone()) {
+        return;
+    }
+
+    mu::engraving::EditData editData(&m_scoreCallbacks);
+
+    EngravingItem* dynamicItem = 0;
+    for (EngravingItem* item : selection()->elements()) {
+        if (item->type() == ElementType::NOTE) {
+            dynamicItem->setParent(item);
+            break;
+        }
+    }
+    Dynamic* dynamic = toDynamic(dynamicItem);
+    dynamic->setDynamicType(type);
+
+    startEdit();
+    score()->addElement(dynamicItem);
+    apply();
+}
+
 
 void NotationInteraction::putRestToSelection()
 {

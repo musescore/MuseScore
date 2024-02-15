@@ -25,6 +25,7 @@
 #include "async/notification.h"
 #include "notationtypes.h"
 #include "types/retval.h"
+#include "engraving\types\types.h"
 
 namespace mu::notation {
 class INotationNoteInput
@@ -57,6 +58,7 @@ public:
     virtual void addTie() = 0;
 
     virtual void setAccidental(AccidentalType accidentalType) = 0;
+    virtual void setDynamic(DynamicType dynamicType) = 0;
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
     virtual void setDrumNote(int note) = 0;
     virtual void setCurrentVoice(voice_idx_t voiceIndex) = 0;

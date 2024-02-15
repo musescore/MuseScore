@@ -1695,6 +1695,20 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Add lyric verse"),
              TranslatableString("action", "Add lyric verse")
              ),
+     UiAction("add-piano",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Add piano dynamic"),
+             TranslatableString("action", "Add piano dynamic"),
+             Checkable::Yes
+             ),
+     UiAction("add-forte",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Add forte dynamic"),
+             TranslatableString("action", "Add forte dynamic"),
+             Checkable::Yes
+),
     UiAction("text-b",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,

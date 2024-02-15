@@ -96,6 +96,7 @@ class Bracket;
 class Chord;
 class ChordRest;
 class Clef;
+class Dynamic;
 class Element;
 class EventsHolder;
 class Excerpt;
@@ -445,6 +446,8 @@ public:
     // undo/redo ops
     void toggleArticulation(SymId);
     bool toggleArticulation(EngravingItem*, Articulation* atr);
+    void toggleDynamic(DynamicType, EditData& ed);
+    void changeDynamic(DynamicType, EditData& ed);
     void toggleAccidental(AccidentalType, const EditData& ed);
     void changeAccidental(AccidentalType);
     void changeAccidental(Note* oNote, AccidentalType);

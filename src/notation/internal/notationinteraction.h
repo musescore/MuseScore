@@ -184,6 +184,7 @@ public:
     void addOttavaToSelection(OttavaType type) override;
     void addHairpinsToSelection(HairpinType type) override;
     void addAccidentalToSelection(AccidentalType type) override;
+    void addDynamicToSelection(DynamicType type) override;
     void putRestToSelection() override;
     void putRest(Duration duration) override;
     void addBracketsToSelection(BracketsType type) override;

@@ -70,6 +70,7 @@ public:
     void halveNoteInputDuration() override;
 
     void setAccidental(AccidentalType accidentalType) override;
+    void setDynamic(DynamicType dynamicType) override;
     void setArticulation(SymbolId articulationSymbolId) override;
     void setDrumNote(int note) override;
     void setCurrentVoice(voice_idx_t voiceIndex) override;

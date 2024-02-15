@@ -34,6 +34,7 @@
 namespace mu::engraving {
 class ChordRest;
 class Drumset;
+class Dynamic;
 class EngravingItem;
 class Note;
 class Score;
@@ -110,6 +111,9 @@ public:
     AccidentalType accidentalType() const { return m_accidentalType; }
     void setAccidentalType(AccidentalType val) { m_accidentalType = val; }
 
+    DynamicType dynamicType() const { return m_dynamicType; }
+    void setDynamicType(DynamicType val) { m_dynamicType = val; }
+
     std::set<SymId> articulationIds() const { return m_articulationIds; }
     void setArticulationIds(const std::set<SymId>& ids) { m_articulationIds = ids; }
 
@@ -149,6 +153,8 @@ private:
 
     AccidentalType m_accidentalType = AccidentalType::NONE;
     Slur* m_slur = nullptr;
+
+    DynamicType m_dynamicType = DynamicType::M;
 
     std::set<SymId> m_articulationIds;
 };

@@ -151,6 +151,10 @@ void NotationActionController::init()
     registerAction("add-melisma", &Interaction::addMelisma, PlayMode::NoPlay, &Controller::isEditingLyrics);
     registerAction("add-lyric-verse", &Interaction::addLyricsVerse, PlayMode::NoPlay, &Controller::isEditingLyrics);
 
+    //registerAction("add-dynamic", &Interaction::addDynamic, PlayMode::NoPlay);
+    registerAction("add-piano", [this]() { addDynamic(DynamicType::P); });
+    registerAction("add-forte", [this]() { addDynamic(DynamicType::F); });
+
     registerAction("flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });
     registerAction("flat", [this]() { toggleAccidental(AccidentalType::FLAT); });
     registerAction("nat", [this]() { toggleAccidental(AccidentalType::NATURAL); });
@@ -796,6 +800,30 @@ void NotationActionController::toggleAccidental(AccidentalType type)
         noteInput->setAccidental(type);
     } else {
         interaction->addAccidentalToSelection(type);
+        playSelectedElement();
+    }
+}
+
+void NotationActionController::addDynamic(DynamicType type) 
+{
+    TRACEFUNC;
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    auto noteInput = currentNotationNoteInput();
+    if (!noteInput) {
+        return;
+    }
+
+    startNoteInputIfNeed();
+
+    if (noteInput->isNoteInputMode()) {
+        noteInput->setDynamic(type);
+    }
+    else {
+        interaction->addDynamicToSelection(type);
         playSelectedElement();
     }
 }

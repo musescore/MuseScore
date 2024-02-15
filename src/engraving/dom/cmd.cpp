@@ -2076,6 +2076,68 @@ void Score::toggleArticulation(SymId attr)
 }
 
 //---------------------------------------------------------
+//   toggleDynamic
+//---------------------------------------------------------
+
+void Score::toggleDynamic(DynamicType dt, EditData& ed)
+{
+    /*if (m_is.dynamicType() == dt) {
+        dt = DynamicType::M;
+    }
+    if (noteEntryMode()) {
+        m_is.setDynamicType(dt);
+        m_is.setRest(false);
+    }
+    else {
+        if (selection().isNone()) {
+            ed.view()->startNoteEntryMode();
+            m_is.setDynamicType(dt);
+            m_is.setDuration(DurationType::V_QUARTER);
+            m_is.setRest(false);
+        }
+        else {
+            changeDynamic(dt, ed);
+        }
+    }*/
+}
+
+//---------------------------------------------------------
+//   changeDynamic
+//---------------------------------------------------------
+
+void Score::changeDynamic(DynamicType dt, EditData& ed)
+{
+    /*for (EngravingItem* item : selection().elements()) {
+        Dynamic* dynamic = 0;
+        Note* note = 0;
+        switch (item->type()) {
+        case ElementType::DYNAMIC:
+            dynamic = toDynamic(item);
+
+            if (dynamic->dynamicType() == dt) {
+                dynamic->startEdit(ed);
+                dynamic->measure()->add(dynamic);
+            }
+            else {
+                dynamic->setDynamicType(dt);
+                dynamic->startEdit(ed);
+                dynamic->measure()->add(dynamic);
+            }
+            break;
+        case ElementType::NOTE:
+            note = toNote(item);
+            dynamic->setDynamicType(dt);
+            dynamic->startEdit(ed);
+            note->add(dynamic);
+            break;
+        default:
+            break;
+        }
+    }*/
+}
+
+
+//---------------------------------------------------------
 //   toggleAccidental
 //---------------------------------------------------------
 
