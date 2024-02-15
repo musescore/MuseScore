@@ -5000,10 +5000,6 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
 {
     layoutBaseTextBase(item, ldata);
 
-    if (item->soundFlag() && item->score()->showSoundFlags()) {
-        layoutSoundFlag(item->soundFlag(), item->soundFlag()->mutldata());
-    }
-
     if (item->autoplace()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();
@@ -5013,6 +5009,10 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     }
 
     Autoplace::autoplaceSegmentElement(item, ldata);
+
+    if (item->soundFlag() && item->score()->showSoundFlags()) {
+        layoutSoundFlag(item->soundFlag(), item->soundFlag()->mutldata());
+    }
 }
 
 void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)

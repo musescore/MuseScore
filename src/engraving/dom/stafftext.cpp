@@ -147,7 +147,5 @@ void StaffText::setSoundFlag(SoundFlag* flag)
         m_soundFlag->setTrack(track());
     }
 
-    if (explicitParent()) {
-        renderer()->layoutItem(this);
-    }
+    triggerLayout();
 }

@@ -102,6 +102,5 @@ extern bool isFirstSystemKeySig(const KeySig* ks);
 extern String bendAmountToString(int fulls, int quarts);
 
 extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
-
 } // namespace mu::engraving
 #endif
