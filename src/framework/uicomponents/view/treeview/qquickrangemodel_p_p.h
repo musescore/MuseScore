@@ -82,17 +82,17 @@ public:
         return inverted ? posatmin : posatmax;
     }
 
-    inline qreal equivalentPosition(qreal value) const {
+    inline qreal equivalentPosition(qreal aValue) const {
         // Return absolute position from absolute value
         const qreal valueRange = maximum - minimum;
         if (valueRange == 0)
             return effectivePosAtMin();
 
         const qreal scale = (effectivePosAtMax() - effectivePosAtMin()) / valueRange;
-        return (value - minimum) * scale + effectivePosAtMin();
+        return (aValue - minimum) * scale + effectivePosAtMin();
     }
 
-    inline qreal equivalentValue(qreal pos) const {
+    inline qreal equivalentValue(qreal aPos) const {
         // Return absolute value from absolute position
         const qreal posRange = effectivePosAtMax() - effectivePosAtMin();
         if (posRange == 0)
@@ -101,9 +101,9 @@ public:
         const qreal scale = (maximum - minimum) / posRange;
         // Avoid perverse rounding glitches when at an end:
         const qreal mid = (effectivePosAtMax() + effectivePosAtMin()) * 0.5;
-        if (pos < mid)
-            return (pos - effectivePosAtMin()) * scale + minimum;
-        return maximum - scale * (effectivePosAtMax() - pos);
+        if (aPos < mid)
+            return (aPos - effectivePosAtMin()) * scale + minimum;
+        return maximum - scale * (effectivePosAtMax() - aPos);
     }
 
     qreal publicPosition(qreal position) const;
