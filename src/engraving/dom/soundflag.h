@@ -25,7 +25,6 @@
 
 #include "engravingitem.h"
 
-#include "global/types/val.h"
 #include "draw/types/font.h"
 
 namespace mu::engraving {

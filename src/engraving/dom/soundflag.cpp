@@ -47,7 +47,7 @@ bool SoundFlag::isEditable() const
 
 void SoundFlag::setSelected(bool f)
 {
-    EngravingItem* parent = this->parentItem();
+    EngravingItem* parent = parentItem();
     if (parent) {
         parent->setSelected(f);
     }
