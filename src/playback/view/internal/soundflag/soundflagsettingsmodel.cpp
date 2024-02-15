@@ -44,6 +44,11 @@ SoundFlagSettingsModel::SoundFlagSettingsModel(QObject* parent)
 {
 }
 
+bool SoundFlagSettingsModel::inited() const
+{
+    return m_isPresetsInited && m_isPlayingTechniquesInited;
+}
+
 void SoundFlagSettingsModel::init()
 {
     TRACEFUNC;
@@ -88,6 +93,9 @@ void SoundFlagSettingsModel::initAvailablePresets()
     playbackController()->availableSoundPresets(makeInstrumentTrackId(m_item))
     .onResolve(this, [this](const audio::SoundPresetList& presets) {
         setAvailablePresets(presets);
+
+        m_isPresetsInited = true;
+        emit initedChanged();
     });
 
     emit presetCodesChanged();
@@ -96,6 +104,9 @@ void SoundFlagSettingsModel::initAvailablePresets()
 void SoundFlagSettingsModel::initAvailablePlayingTechniques()
 {
     NOT_IMPLEMENTED;
+
+    m_isPlayingTechniquesInited = true;
+    emit initedChanged();
 }
 
 void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
