@@ -1078,6 +1078,8 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     }
     if (!direction.empty()) {
         na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
+    } else {
+        na->setPlacement(na->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
     }
     setElementPropertyFlags(na, Pid::PLACEMENT, direction);
     if (cr->segment() == nullptr && cr->isGrace()) {
@@ -3950,6 +3952,9 @@ void MusicXMLParserPass2::barline(const String& partId, Measure* measure, const 
             }
             if (fermataType == u"inverted") {
                 fermata->setPlacement(PlacementV::BELOW);
+            } else if (fermataType == u"") {
+                LOGI() << "Set placement: " << (int)fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
+                fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
             }
         } else if (m_e.name() == "repeat") {
             repeat = m_e.attribute("direction");
