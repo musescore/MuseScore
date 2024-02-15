@@ -729,7 +729,12 @@ void Score::setShowPageborders(bool v)
 
 void Score::setShowSoundFlags(bool v)
 {
+    if (m_showSoundFlags == v) {
+        return;
+    }
+
     m_showSoundFlags = v;
+    setLayoutAll();
 }
 
 //---------------------------------------------------------

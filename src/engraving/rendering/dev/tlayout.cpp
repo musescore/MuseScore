@@ -5162,8 +5162,8 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
 
     Autoplace::autoplaceSegmentElement(item, ldata);
 
-    if (item->soundFlag() && item->score()->showSoundFlags()) {
-        layoutSoundFlag(item->soundFlag(), item->soundFlag()->mutldata());
+    if (SoundFlag* flag = item->soundFlag()) {
+        layoutSoundFlag(flag, flag->mutldata());
     }
 }
 
@@ -5423,7 +5423,8 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
 {
     LAYOUT_CALL_ITEM(item);
 
-    if (!item->score()->showSoundFlags()) {
+    const Score* score = item->score();
+    if (score && !score->showSoundFlags()) {
         return;
     }
 

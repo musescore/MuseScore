@@ -77,6 +77,16 @@ void SoundFlag::setPlayingTechniques(const PlayingTechniqueCodes& techniques)
 
 bool SoundFlag::shouldHide() const
 {
+    if (const Score* score = this->score()) {
+        if (!score->showSoundFlags()) {
+            return true;
+        }
+
+        if (score->printing()) {
+            return true;
+        }
+    }
+
     if (!m_soundPresets.empty() || !m_playingTechniques.empty()) {
         return false;
     }
