@@ -2263,9 +2263,6 @@ void TDraw::draw(const Note* item, Painter* painter)
         painter->setFont(f);
         painter->setPen(c);
         double startPosX = ldata->bbox().x();
-        if (item->ghost() && config->tablatureParenthesesZIndexWorkaround()) {
-            startPosX += item->symWidth(SymId::noteheadParenthesisLeft);
-        }
 
         painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), item->fretString());
     }
