@@ -30,6 +30,7 @@
 #include "audio/audioutils.h"
 
 #include "translation.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::playback;
@@ -58,6 +59,7 @@ void SoundFlagSettingsModel::init()
 
     initTitle();
     initAvailablePresets();
+    initAvailablePlayingTechniques();
 
     emit showTextChanged();
     emit textChanged();
@@ -90,7 +92,12 @@ void SoundFlagSettingsModel::initAvailablePresets()
     emit presetCodesChanged();
 }
 
-void SoundFlagSettingsModel::togglePreset(const QString& presetCode, bool forceMultiSelection)
+void SoundFlagSettingsModel::initAvailablePlayingTechniques()
+{
+    NOT_IMPLEMENTED;
+}
+
+void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
 {
     if (!m_item) {
         return;
@@ -98,7 +105,7 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode, bool forceM
 
     QStringList presetCodes = this->presetCodes();
 
-    if (forceMultiSelection || playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
+    if (playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
         if (presetCodes.contains(presetCode)) {
             if (presetCodes.size() == 1) {
                 return;
@@ -114,11 +121,50 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode, bool forceM
 
     engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
 
-    undoStack()->prepareChanges();
-    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->articulations());
-    undoStack()->commitChanges();
+    beginCommand();
+    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->playingTechniques());
+    updateStaffText();
+    endCommand();
 
     emit presetCodesChanged();
+}
+
+void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechniqueCode)
+{
+    if (!m_item) {
+        return;
+    }
+
+    QStringList playingTechniquesCodes = this->playingTechniquesCodes();
+
+    if (playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
+        if (playingTechniquesCodes.contains(playingTechniqueCode)) {
+            if (playingTechniquesCodes.size() == 1) {
+                return;
+            }
+
+            playingTechniquesCodes.removeAll(playingTechniqueCode);
+        } else {
+            playingTechniquesCodes.push_back(playingTechniqueCode);
+        }
+    } else {
+        playingTechniquesCodes = QStringList{ playingTechniqueCode };
+    }
+
+    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+
+    beginCommand();
+
+    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), StringList(playingTechniquesCodes));
+    bool needUpdateNotation = updateStaffText();
+
+    endCommand();
+
+    if (needUpdateNotation) {
+        updateNotation();
+    }
+
+    emit playingTechniquesCodesChanged();
 }
 
 uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title)
@@ -169,6 +215,14 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
 void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
 {
     if (menuId == RESET_MENU_ID) {
+        engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+
+        undoStack()->prepareChanges();
+        soundFlag->undoChangeSoundFlag(StringList(), StringList());
+        undoStack()->commitChanges();
+
+        emit presetCodesChanged();
+        emit playingTechniquesCodesChanged();
     } else if (menuId == MULTI_SELECTION_MENU_ID) {
         playbackConfiguration()->setIsSoundFlagsMultiSelectionEnabled(!playbackConfiguration()->isSoundFlagsMultiSelectionEnabled());
         emit contextMenuModelChanged();
@@ -187,7 +241,17 @@ notation::INotationUndoStackPtr SoundFlagSettingsModel::undoStack() const
         return nullptr;
     }
 
-    return globalContext()->currentNotation()->undoStack();
+    String playingTechniquesNames = getParamsNames(m_availablePlayingTechniques, engraving::toSoundFlag(m_item)->playingTechniques());
+    if (!playingTechniquesNames.empty()) {
+        newText = !presetsNames.empty() ? (presetsNames + u", " + playingTechniquesNames) : playingTechniquesNames;
+    }
+
+    bool isTextChanged = oldStaffText != newText;
+    if (isTextChanged) {
+        staffText()->undoChangeProperty(mu::engraving::Pid::TEXT, newText);
+    }
+
+    return isTextChanged;
 }
 
 project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
@@ -285,6 +349,56 @@ QStringList SoundFlagSettingsModel::presetCodes() const
 
     if (result.empty() && !availablePresetCodes.empty()) {
         result = QStringList{ availablePresetCodes.first() };
+    }
+
+    return result;
+}
+
+QVariantList SoundFlagSettingsModel::availablePlayingTechniques() const
+{
+    return m_availablePlayingTechniques;
+}
+
+void SoundFlagSettingsModel::setAvailablePlayingTechniques(const audio::SoundPreset::PlayingTechniqueList& playingTechniques)
+{
+    QVariantList playingTechniquesList;
+    for (const audio::SoundPreset::PlayingTechnique& playingTechnique : playingTechniques) {
+        QVariantMap map;
+        map["code"] = QString::fromStdString(playingTechnique.code);
+        map["name"] = QString::fromStdString(playingTechnique.name);
+
+        playingTechniquesList << map;
+    }
+
+    if (m_availablePlayingTechniques == playingTechniquesList) {
+        return;
+    }
+
+    m_availablePlayingTechniques = playingTechniquesList;
+    emit availablePlayingTechniquesChanged();
+}
+
+QStringList SoundFlagSettingsModel::playingTechniquesCodes() const
+{
+    if (!m_item) {
+        return {};
+    }
+
+    QStringList availablePlayingTechniquesCodes;
+    for (const QVariant& playingTechniqueVar : m_availablePlayingTechniques) {
+        availablePlayingTechniquesCodes << playingTechniqueVar.toMap()["code"].toString();
+    }
+
+    QStringList result;
+    for (const String& playingTechniqueCode : engraving::toSoundFlag(m_item)->playingTechniques()) {
+        QString code = playingTechniqueCode.toQString();
+        if (availablePlayingTechniquesCodes.contains(code)) {
+            result.push_back(code);
+        }
+    }
+
+    if (result.empty() && !availablePlayingTechniquesCodes.empty()) {
+        result = QStringList{ availablePlayingTechniquesCodes.first() };
     }
 
     return result;

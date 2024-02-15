@@ -53,13 +53,17 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
     Q_PROPERTY(QVariantList availablePresets READ availablePresets NOTIFY availablePresetsChanged FINAL)
     Q_PROPERTY(QStringList presetCodes READ presetCodes NOTIFY presetCodesChanged FINAL)
 
+    Q_PROPERTY(QVariantList availablePlayingTechniques READ availablePlayingTechniques NOTIFY availablePlayingTechniquesChanged FINAL)
+    Q_PROPERTY(QStringList playingTechniquesCodes READ playingTechniquesCodes NOTIFY playingTechniquesCodesChanged FINAL)
+
     Q_PROPERTY(QVariantList contextMenuModel READ contextMenuModel NOTIFY contextMenuModelChanged FINAL)
 
 public:
     explicit SoundFlagSettingsModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init() override;
-    Q_INVOKABLE void togglePreset(const QString& presetCode, bool forceMultiSelection);
+    Q_INVOKABLE void togglePreset(const QString& presetCode);
+    Q_INVOKABLE void togglePlayingTechnique(const QString& playingTechniqueCode);
 
     QVariantList contextMenuModel();
     Q_INVOKABLE void handleContextMenuItem(const QString& menuId);
@@ -77,6 +81,11 @@ public:
 
     QStringList presetCodes() const;
 
+    QVariantList availablePlayingTechniques() const;
+    void setAvailablePlayingTechniques(const audio::SoundPreset::PlayingTechniqueList& playingTechniques);
+
+    QStringList playingTechniquesCodes() const;
+
 signals:
     void titleChanged();
     void showTextChanged();
@@ -86,6 +95,9 @@ signals:
 
     void availablePresetsChanged();
     void presetCodesChanged();
+
+    void availablePlayingTechniquesChanged();
+    void playingTechniquesCodesChanged();
 
     void contextMenuModelChanged();
 
@@ -97,6 +109,7 @@ private:
 
     void initTitle();
     void initAvailablePresets();
+    void initAvailablePlayingTechniques();
 
     engraving::StaffText* staffText() const;
 
@@ -105,6 +118,7 @@ private:
     QString m_title;
 
     QVariantList m_availablePresets;
+    QVariantList m_availablePlayingTechniques;
 };
 }
 
