@@ -18,14 +18,14 @@
 #include "libmscore/tempo.h"
 #include "libmscore/sig.h"
 #include "libmscore/key.h"
-#include "libmscore/text.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/chordrest.h"
 #include "libmscore/measure.h"
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
 
 #include "audio/midi/midifile.h"
 #include "audio/midi/event.h"
-#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -348,10 +348,10 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
 
                               if (event.type() == ME_NOTEON) {
                                     // use the note values instead of the event values if portamento is suppressed
-                                    if (!exportRPNs && event.portamento()) 
+                                    if (!exportRPNs && event.portamento())
                                           track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
                                                 event.note()->pitch(), event.velo()));
-                                    else  
+                                    else
                                           track.insert(pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
                                                 event.pitch(), event.velo()));
                                     }
@@ -365,6 +365,31 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                                     }
                               else {
                                     qDebug("writeMidi: unknown midi event 0x%02x", event.type());
+                                    }
+                              }
+                        }
+                  }
+
+            // Export lyrics
+            SegmentType st = SegmentType::ChordRest;
+            for (Segment* seg = cs->firstMeasure()->first(st); seg; seg = seg->next1(st)) {
+                  for (int i = part->startTrack(); i < part->endTrack(); ++i) {
+                        ChordRest* cr = toChordRest(seg->element(i));
+                        if (cr) {
+                              for (const auto& lyric : cr->lyrics()) {
+                                    QByteArray lyricText = lyric->plainText().toUtf8();
+                                    size_t len = lyricText.size() + 1;
+                                    unsigned char* data = new unsigned char[len];
+
+                                    memcpy(data, lyricText.constData(), len);
+
+                                    MidiEvent ev;
+                                    ev.setType(ME_META);
+                                    ev.setMetaType(META_LYRIC);
+                                    ev.setEData(data);
+                                    ev.setLen(static_cast<int>(len));
+
+                                    track.insert(cr->tick().ticks(), ev);
                                     }
                               }
                         }
