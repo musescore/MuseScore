@@ -7264,10 +7264,10 @@
             <Instrument id="drumset">
                   <family>drums</family>
                   <!--Drums for the basic drumset are hard-coded in instrument.cpp for some reason.-->
-                  <trackName>Large Drum Set</trackName>
-                  <longName>Drum Set</longName>
-                  <shortName>D. Set</shortName>
-                  <description>Drum Set.</description>
+                  <trackName>Large Drum Kit</trackName>
+                  <longName>Drum Kit</longName>
+                  <shortName>D. Kit</shortName>
+                  <description>Drum Kit.</description>
                   <musicXMLid>drum.group.set</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc5Line">percussion</stafftype>

@@ -3870,14 +3870,14 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Cuica", "cuica longName"),
 //: shortName for Cuica; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Cu.", "cuica shortName"),
 
-//: description for Large Drum Set; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Set.", "drumset description"),
-//: trackName for Large Drum Set; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Large Drum Set", "drumset trackName"),
-//: longName for Large Drum Set; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Set", "drumset longName"),
-//: shortName for Large Drum Set; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "D. Set", "drumset shortName"),
+//: description for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit.", "drumset description"),
+//: trackName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Large Drum Kit", "drumset trackName"),
+//: longName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Drum Kit", "drumset longName"),
+//: shortName for Large Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "D. Kit", "drumset shortName"),
 
 //: description for 4-Piece Drum Kit; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "4 piece drum kit.", "drum-kit-4 description"),
