@@ -42,14 +42,11 @@ StyledPopupView {
         root.updatePosition()
     }
 
+    signal elementRectChanged(var elementRect)
+
     function updatePosition() {
-        var iconRect = soundFlagModel.iconRect
-
         var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
-        var popupHalfWidth = root.contentWidth / 2 + root.margins + root.padding
-
-        root.x = iconRect.x + iconRect.width / 2 - popupHalfWidth
-        root.y = iconRect.y - popupHeight
+        root.y = -popupHeight
 
         root.setOpensUpward(true)
     }
@@ -63,6 +60,10 @@ StyledPopupView {
 
         SoundFlagSettingsModel {
             id: soundFlagModel
+
+            onIconRectChanged: function(rect) {
+                root.elementRectChanged(rect)
+            }
         }
 
         Component.onCompleted: {
