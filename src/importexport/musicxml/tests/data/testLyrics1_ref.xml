@@ -110,6 +110,10 @@
         <type>whole</type>
         <lyric number="1">
           <syllabic>single</syllabic>
+          <text>lyr3</text>
+          </lyric>
+        <lyric number="1">
+          <syllabic>single</syllabic>
           <text>lyr4</text>
           </lyric>
         </note>
@@ -133,6 +137,10 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>whole</type>
+        <lyric number="1">
+          <syllabic>single</syllabic>
+          <text>lyr5</text>
+          </lyric>
         </note>
       </measure>
     <measure number="5">
