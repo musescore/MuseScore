@@ -1764,7 +1764,8 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         ElementType::LYRICS
     };
     chordShape.remove_if([&](ShapeElement& s) {
-        return !s.item() || s.item() == note || mu::contains(IGNORED_TYPES, s.item()->type()) || (s.item()->isNoteDot() && ignoreDot);
+        return !s.item() || s.item() == note || mu::contains(IGNORED_TYPES, s.item()->type())
+               || (s.item()->isNoteDot() && ignoreDot) || !s.item()->addToSkyline();
     });
 
     const double arcSideMargin = 0.3 * spatium;
@@ -1819,7 +1820,9 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
         return;
     }
 
-    Shape noteShape = note->shape().translate(note->pos() + chordSystemPos);
+    Shape noteShape = note->shape();
+    noteShape.remove_if([&](ShapeElement& s) { return !s.item()->addToSkyline(); });
+    noteShape.translate(note->pos() + chordSystemPos);
     double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
 
     resultingX = start ? std::max(resultingX, xNoteEdge) : std::min(resultingX, xNoteEdge);
