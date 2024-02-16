@@ -74,8 +74,8 @@ const mu::audio::AudioOutputParams& ProjectAudioSettings::auxOutputParams(audio:
         return m_auxOutputParams.at(index);
     }
 
-    static const AudioOutputParams dummy;
-    return dummy;
+    static const AudioOutputParams _dummy;
+    return _dummy;
 }
 
 void ProjectAudioSettings::setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params)
@@ -94,8 +94,8 @@ const AudioInputParams& ProjectAudioSettings::trackInputParams(const InstrumentT
     auto search = m_trackInputParamsMap.find(partId);
 
     if (search == m_trackInputParamsMap.end()) {
-        static const AudioInputParams dummy;
-        return dummy;
+        static const AudioInputParams _dummy;
+        return _dummy;
     }
 
     return search->second;
@@ -127,8 +127,8 @@ const AudioOutputParams& ProjectAudioSettings::trackOutputParams(const Instrumen
     auto search = m_trackOutputParamsMap.find(partId);
 
     if (search == m_trackOutputParamsMap.end()) {
-        static const AudioOutputParams dummy;
-        return dummy;
+        static const AudioOutputParams _dummy;
+        return _dummy;
     }
 
     return search->second;
@@ -157,8 +157,8 @@ const IProjectAudioSettings::SoloMuteState& ProjectAudioSettings::auxSoloMuteSta
 {
     auto it = m_auxSoloMuteStatesMap.find(index);
     if (it == m_auxSoloMuteStatesMap.end()) {
-        static const IProjectAudioSettings::SoloMuteState dummy;
-        return dummy;
+        static const IProjectAudioSettings::SoloMuteState _dummy;
+        return _dummy;
     }
 
     return it->second;
