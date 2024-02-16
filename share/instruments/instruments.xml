@@ -7505,7 +7505,6 @@
                         <voice>0</voice>
                         <name>Crash Cymbal 2</name>
                         <stem>1</stem>
-                        <shortcut>C</shortcut>
                   </Drum>
                   <Drum pitch="52"> <!--Chinese Cymbal-->
                         <head>cross</head>
