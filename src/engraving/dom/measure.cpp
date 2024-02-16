@@ -364,17 +364,18 @@ struct AcEl {
 AccidentalVal Measure::findAccidental(Note* note) const
 {
     Chord* chord = note->chord();
+    Staff* vStaff = chord->score()->staff(chord->vStaffIdx());
     AccidentalState tversatz;    // state of already set accidentals for this measure
-    tversatz.init(chord->staff()->keySigEvent(tick()));
+    tversatz.init(vStaff->keySigEvent(tick()));
 
     for (Segment* segment = first(); segment; segment = segment->next()) {
-        track_idx_t startTrack = chord->staffIdx() * VOICES;
+        track_idx_t startTrack = chord->vStaffIdx() * VOICES;
         if (segment->isKeySigType()) {
             KeySig* ks = toKeySig(segment->element(startTrack));
             if (!ks) {
                 continue;
             }
-            tversatz.init(chord->staff()->keySigEvent(segment->tick()));
+            tversatz.init(vStaff->keySigEvent(segment->tick()));
         } else if (segment->segmentType() == SegmentType::ChordRest) {
             track_idx_t endTrack   = startTrack + VOICES;
             for (track_idx_t track = startTrack; track < endTrack; ++track) {
