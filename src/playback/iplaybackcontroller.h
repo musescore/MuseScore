@@ -71,7 +71,7 @@ public:
     virtual std::string auxChannelName(audio::aux_channel_idx_t index) const = 0;
     virtual async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
 
-    virtual async::Promise<audio::SoundPresetList> availableSoundPresets(engraving::InstrumentTrackId instrumentTrackId) const = 0;
+    virtual async::Promise<audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const = 0;
 
     virtual notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,

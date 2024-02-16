@@ -102,15 +102,12 @@ using AudioUnitConfig = std::map<std::string, std::string>;
 static const String PLAYBACK_SETUP_DATA_ATTRIBUTE("playbackSetupData");
 static const String CATEGORIES_ATTRIBUTE("categories");
 
-static const String KEYSWITCH_PARAM_CODE("keyswitch");
-
 enum class AudioResourceType {
     Undefined = -1,
     FluidSoundfont,
     VstPlugin,
     MusePlugin,
     MuseSamplerSoundPack,
-    SoundTrack,
 };
 
 struct AudioResourceMeta {
@@ -214,7 +211,6 @@ struct AudioFxParams {
         case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
         case AudioResourceType::FluidSoundfont:
         case AudioResourceType::MuseSamplerSoundPack:
-        case AudioResourceType::SoundTrack:
         case AudioResourceType::Undefined: break;
         }
 
@@ -291,19 +287,27 @@ enum class AudioSourceType {
     MuseSampler
 };
 
-struct AudioSourceParams {
-    AudioSourceType type() const
-    {
-        switch (resourceMeta.type) {
-        case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
-        case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
-        case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
-        default: return AudioSourceType::Undefined;
-        }
+inline AudioSourceType sourceTypeFromResourceType(AudioResourceType type)
+{
+    switch (type) {
+    case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
+    case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
+    case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
+    case AudioResourceType::MusePlugin:
+    case AudioResourceType::Undefined: break;
     }
 
+    return AudioSourceType::Undefined;
+}
+
+struct AudioSourceParams {
     AudioResourceMeta resourceMeta;
     AudioUnitConfig configuration;
+
+    AudioSourceType type() const
+    {
+        return sourceTypeFromResourceType(resourceMeta.type);
+    }
 
     bool isValid() const
     {
@@ -384,12 +388,26 @@ using AudioDeviceList = std::vector<AudioDevice>;
 
 struct SoundPreset
 {
+    struct PlayingTechnique {
+        std::string code;
+        std::string name;
+        bool isDefault = false;
+
+        bool operator==(const PlayingTechnique& other) const
+        {
+            return code == other.code && name == other.name && isDefault == other.isDefault;
+        }
+    };
+    using PlayingTechniqueList = std::vector<PlayingTechnique>;
+
     std::string code;
     std::string name;
+    bool isDefault = false;
+    PlayingTechniqueList playingTechniques;
 
     bool operator==(const SoundPreset& other) const
     {
-        return code == other.code && name == other.name;
+        return code == other.code && name == other.name && isDefault == other.isDefault && playingTechniques == other.playingTechniques;
     }
 
     bool isValid() const

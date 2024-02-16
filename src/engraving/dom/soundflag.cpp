@@ -47,7 +47,7 @@ bool SoundFlag::isEditable() const
 
 void SoundFlag::setSelected(bool f)
 {
-    EngravingItem* parent = this->parentItem();
+    EngravingItem* parent = parentItem();
     if (parent) {
         parent->setSelected(f);
     }
@@ -65,20 +65,51 @@ void SoundFlag::setSoundPresets(const PresetCodes& soundPresets)
     m_soundPresets = soundPresets;
 }
 
-const SoundFlag::Params& SoundFlag::params() const
+const SoundFlag::PlayingTechniqueCodes& SoundFlag::playingTechniques() const
 {
-    return m_params;
+    return m_playingTechniques;
 }
 
-void SoundFlag::setParams(const Params& params)
+void SoundFlag::setPlayingTechniques(const PlayingTechniqueCodes& techniques)
 {
-    m_params = params;
+    m_playingTechniques = techniques;
 }
 
-void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const Params& params)
+bool SoundFlag::shouldHide() const
 {
-    score()->undo(new ChangeSoundFlag(this, presets, params));
-    triggerLayout();
+    if (const Score* score = this->score()) {
+        if (!score->showSoundFlags()) {
+            return true;
+        }
+
+        if (score->printing()) {
+            return true;
+        }
+    }
+
+    if (!m_soundPresets.empty() || !m_playingTechniques.empty()) {
+        return false;
+    }
+
+    if (selected()) {
+        return false;
+    }
+
+    const EngravingItem* parent = parentItem();
+    if (parent && parent->selected()) {
+        return false;
+    }
+
+    return true;
+}
+
+void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCodes& techniques)
+{
+    if (m_soundPresets == presets && m_playingTechniques == techniques) {
+        return;
+    }
+
+    score()->undo(new ChangeSoundFlag(this, presets, techniques));
 }
 
 char16_t SoundFlag::iconCode() const

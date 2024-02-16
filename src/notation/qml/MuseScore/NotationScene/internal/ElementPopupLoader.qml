@@ -31,8 +31,6 @@ import MuseScore.Playback 1.0
 Item {
     id: container
 
-    anchors.fill: parent
-
     property var popup: loader.item
     property bool isPopupOpened: Boolean(popup) && popup.isOpened
 
@@ -70,6 +68,15 @@ Item {
 
             Qt.callLater(container.closed)
         }
+
+        function updateContainerPosition(elementRect) {
+            container.x = elementRect.x
+            container.y = elementRect.y
+            container.height = elementRect.height
+            container.width = elementRect.width
+
+            loader.item.updatePosition()
+        }
     }
 
     function show(elementType, elementRect) {
@@ -90,12 +97,17 @@ Item {
     Loader {
         id: loader
 
+        anchors.fill: parent
         active: false
 
         function createPopup(comp, elementRect) {
             loader.sourceComponent = comp
-            loader.item.parent = loader
-            loader.item.updatePosition(elementRect)
+            loader.item.parent = container
+
+            prv.updateContainerPosition(elementRect)
+            loader.item.elementRectChanged.connect(function(elementRect) {
+                prv.updateContainerPosition(elementRect)
+            })
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,

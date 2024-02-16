@@ -1470,6 +1470,11 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
                 break;
             }
         }
+
+        if (dropElement && dropElement->isTextBase()) {
+            m_textAdded.send(toTextBase(dropElement));
+        }
+
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             if (!score()->noteEntryMode()) {
@@ -1955,6 +1960,10 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                 rollback();
                 return;
             }
+        }
+
+        if (el && el->isTextBase()) {
+            m_textAdded.send(toTextBase(el));
         }
 
         if (el && !score->inputState().noteEntryMode()) {
@@ -3109,6 +3118,11 @@ mu::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
     return m_textEditingEnded;
 }
 
+async::Channel<TextBase*> NotationInteraction::textAdded() const
+{
+    return m_textAdded;
+}
+
 mu::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
 {
     return m_scoreConfigChanged;
@@ -4198,25 +4212,26 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     }
 
     startEdit();
-    mu::engraving::TextBase* textBox = score()->addText(type, item);
+    mu::engraving::TextBase* text = score()->addText(type, item);
 
-    if (!textBox) {
+    if (!text) {
         rollback();
         return;
     }
 
-    if (textBox->isInstrumentChange()) {
-        if (!selectInstrument(toInstrumentChange(textBox))) {
+    if (text->isInstrumentChange()) {
+        if (!selectInstrument(toInstrumentChange(text))) {
             rollback();
             return;
         }
     }
 
     apply();
-    showItem(textBox);
+    m_textAdded.send(text);
+    showItem(text);
 
-    if (!textBox->isInstrumentChange()) {
-        startEditText(textBox);
+    if (!text->isInstrumentChange()) {
+        startEditText(text);
     }
 }
 

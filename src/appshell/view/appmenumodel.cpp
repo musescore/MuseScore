@@ -626,7 +626,8 @@ MenuItemList AppMenuModel::makeShowItems()
         makeMenuItem("show-unprintable"),
         makeMenuItem("show-frames"),
         makeMenuItem("show-pageborders"),
-        makeMenuItem("show-irregular")
+        makeMenuItem("show-irregular"),
+        makeMenuItem("show-soundflags"),
     };
 
     return items;

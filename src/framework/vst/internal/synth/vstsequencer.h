@@ -66,10 +66,8 @@ public:
     audio::gain_t currentGain() const;
 
 private:
-    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params);
+    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events);
     void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics);
-
-    void appendKeySwitches(EventSequenceMap& destination, const mpe::PlaybackParamMap& params);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                              const ControllIdx controlIdx);
@@ -88,7 +86,6 @@ private:
     bool m_inited = false;
     ParamsMapping m_mapping;
     mpe::PlaybackEventsMap m_playbackEventsMap;
-    mpe::PlaybackParamMap m_playbackParamsMap;
 };
 }
 

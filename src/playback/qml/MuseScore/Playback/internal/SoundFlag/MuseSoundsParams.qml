@@ -24,71 +24,70 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Playback 1.0
 
 Item {
     id: root
 
-    property NavigationPanel navigationPanel: null
+    property var model: null
 
-    height: !prv.noOptions ? Math.min(flickable.contentHeight, 132) : noOptionsLabel.implicitHeight
+    property NavigationSection navigationPanelSection: null
+    property int navigationPanelOrderStart: 0
+    property int navigationPanelOrderEnd: playingTechniquesGridView.navigationPanel.order
 
-    MuseSoundsParamsModel {
-        id: museSoundsParamsModel
-    }
-
-    Component.onCompleted: {
-        museSoundsParamsModel.init()
-    }
+    height: !prv.noOptions ? content.childrenRect.height : noOptionsLabel.implicitHeight
 
     QtObject {
         id: prv
 
-        property bool noOptions: museSoundsParamsModel.availablePresets.length === 0
+        property bool noOptions: !modifySoundView.hasPresets && !playingTechniquesGridView.hasPlayingTechniques
     }
 
-    StyledFlickable {
-        id: flickable
+    Column {
+        id: content
 
-        anchors.fill: parent
+        width: parent.width
 
-        contentHeight: gridView.implicitHeight
+        spacing: 12
 
-        GridLayout {
-            id: gridView
+        ParamsGridView {
+            id: modifySoundView
+
+            property bool hasPresets: Boolean(model) && model.length !== 0
 
             width: parent.width
 
-            columns: 2
-            rows: Math.ceil(museSoundsParamsModel.availablePresets.length / 2)
-            columnSpacing: 4
-            rowSpacing: 4
+            title: qsTrc("playback", "Modify sound")
+            model: root.model.availablePresets
+            selectionModel: root.model.presetCodes
 
-            Repeater {
-                id: repeaterPreset
+            navigationPanel.section: root.navigationPanelSection
+            navigationPanel.order: root.navigationPanelOrderStart
 
-                width: parent.width
-                height: parent.height
+            visible: hasPresets
 
-                model: museSoundsParamsModel.availablePresets
+            onToggleParamRequested: {
+                root.model.togglePreset(paramCode)
+            }
+        }
 
-                FlatButton {
-                    Layout.preferredWidth: (gridView.width - gridView.rowSpacing) / 2
-                    Layout.preferredHeight: implicitHeight
+        ParamsGridView {
+            id: playingTechniquesGridView
 
-                    text: modelData["name"]
+            property bool hasPlayingTechniques: Boolean(model) && model.length !== 0
 
-                    accentButton: museSoundsParamsModel.presetCodes.indexOf(modelData["code"]) !== -1
+            width: parent.width
 
-                    navigation.name: "Preset" + index
-                    navigation.panel: root.navigationPanel
-                    navigation.row: index
-                    navigation.column: 1
+            title: qsTrc("playback", "Choose playing technique")
+            model: root.model.availablePlayingTechniques
+            selectionModel: root.model.playingTechniquesCodes
 
-                    onClicked: {
-                        museSoundsParamsModel.togglePreset(modelData["code"], mouse.modifiers & Qt.ControlModifier)
-                    }
-                }
+            navigationPanel.section: root.navigationPanelSection
+            navigationPanel.order: root.navigationPanelOrderStart + 1
+
+            visible: hasPlayingTechniques
+
+            onToggleParamRequested: {
+                root.model.togglePlayingTechnique(paramCode)
             }
         }
     }

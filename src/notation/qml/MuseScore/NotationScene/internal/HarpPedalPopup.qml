@@ -45,16 +45,17 @@ StyledPopupView {
 
     showArrow: false
 
-    function updatePosition(elementRect) {
-        root.x = elementRect.x + (elementRect.width - contentWidth) / 2
+    signal elementRectChanged(var elementRect)
 
+    function updatePosition() {
         const marginFromElement = 12
+        var popupHeight = root.contentHeight + root.padding * 2
 
         // Above diagram
-        let yUp = Math.min(elementRect.y - contentHeight - marginFromElement,
-                           harpModel.staffPos.y - contentHeight - marginFromElement)
-        let yDown = Math.max(elementRect.y + elementRect.height + marginFromElement,
-                             harpModel.staffPos.y + harpModel.staffPos.height + marginFromElement)
+        let yUp = Math.min(-popupHeight - marginFromElement,
+                           (harpModel.staffPos.y - root.parent.y) - contentHeight - marginFromElement)
+        let yDown = Math.max(root.parent.height + marginFromElement,
+                             (harpModel.staffPos.y - root.parent.y) + harpModel.staffPos.height + marginFromElement)
 
         // not enough room on window to open above so open below stave
         let opensUp = true
@@ -108,7 +109,7 @@ StyledPopupView {
             id: harpModel
 
             onItemRectChanged: function(rect) {
-                updatePosition(rect)
+                root.elementRectChanged(rect)
             }
         }
 

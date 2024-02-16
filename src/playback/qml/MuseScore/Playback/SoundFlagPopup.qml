@@ -34,7 +34,7 @@ StyledPopupView {
 
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: navPanel.order
+    property int navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
 
     contentWidth: content.childrenRect.width
     contentHeight: content.childrenRect.height
@@ -42,14 +42,11 @@ StyledPopupView {
         root.updatePosition()
     }
 
+    signal elementRectChanged(var elementRect)
+
     function updatePosition() {
-        var iconRect = soundFlagModel.iconRect
-
         var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
-        var popupHalfWidth = root.contentWidth / 2 + root.margins + root.padding
-
-        root.x = iconRect.x + iconRect.width / 2 - popupHalfWidth
-        root.y = iconRect.y - popupHeight
+        root.y = -popupHeight
 
         root.setOpensUpward(true)
     }
@@ -63,19 +60,14 @@ StyledPopupView {
 
         SoundFlagSettingsModel {
             id: soundFlagModel
+
+            onIconRectChanged: function(rect) {
+                root.elementRectChanged(rect)
+            }
         }
 
         Component.onCompleted: {
             soundFlagModel.init()
-        }
-
-        NavigationPanel {
-            id: navPanel
-            name: "SoundFlagSettings"
-            direction: NavigationPanel.Vertical
-            section: root.notationViewNavigationSection
-            order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "Sound flag settings")
         }
 
         RowLayout {
@@ -96,28 +88,39 @@ StyledPopupView {
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
+
+            MenuButton {
+                Layout.preferredWidth: 20
+                Layout.preferredHeight: width
+
+                menuModel: soundFlagModel.contextMenuModel
+
+                navigation.panel: NavigationPanel {
+                    id: menuNavPanel
+                    name: "SoundFlagMenu"
+                    direction: NavigationPanel.Vertical
+                    section: root.notationViewNavigationSection
+                    order: museSoundsParams.navigationPanelOrderEnd + 1
+                    accessible.name: qsTrc("notation", "Sound flag menu")
+                }
+
+                onHandleMenuItem: function(itemId) {
+                    soundFlagModel.handleContextMenuItem(itemId)
+                }
+            }
         }
 
-        Loader {
-            id: loader
+        MuseSoundsParams {
+            id: museSoundsParams
 
             width: parent.width
-            height: Boolean(loader.item) ? loader.item.height : 50
 
-            sourceComponent: {
-                switch (soundFlagModel.sourceType) {
-                case SoundFlagSettingsModel.MuseSounds:
-                    return museSoundsComp
-                case SoundFlagSettingsModel.Undefined:
-                    return undefined
-                }
-            }
+            model: soundFlagModel
 
-            Component {
-                id: museSoundsComp
-                MuseSoundsParams {
-                }
-            }
+            visible: soundFlagModel.inited
+
+            navigationPanelSection: root.notationViewNavigationSection
+            navigationPanelOrderStart: root.navigationOrderStart
         }
     }
 }

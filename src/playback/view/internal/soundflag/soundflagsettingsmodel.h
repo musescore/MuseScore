@@ -26,7 +26,10 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
+#include "playback/iplaybackcontroller.h"
+#include "playback/iplaybackconfiguration.h"
+
+#include "uicomponents/view/menuitem.h"
 
 #include "notation/view/abstractelementpopupmodel.h"
 
@@ -39,27 +42,35 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 {
     Q_OBJECT
 
-    INJECT(context::IGlobalContext, globalContext)
+    INJECT(IPlaybackController, playbackController)
+    INJECT(IPlaybackConfiguration, playbackConfiguration)
 
-    enum class SourceType {
-        Undefined,
-        MuseSounds,
-    };
-    Q_ENUM(SourceType)
+    Q_PROPERTY(bool inited READ inited NOTIFY initedChanged FINAL)
 
-    Q_PROPERTY(SourceType sourceType READ sourceType NOTIFY sourceTypeChanged FINAL)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged FINAL)
 
     Q_PROPERTY(QRect iconRect READ iconRect NOTIFY iconRectChanged FINAL)
 
+    Q_PROPERTY(QVariantList availablePresets READ availablePresets NOTIFY availablePresetsChanged FINAL)
+    Q_PROPERTY(QStringList presetCodes READ presetCodes NOTIFY presetCodesChanged FINAL)
+
+    Q_PROPERTY(QVariantList availablePlayingTechniques READ availablePlayingTechniques NOTIFY availablePlayingTechniquesChanged FINAL)
+    Q_PROPERTY(QStringList playingTechniquesCodes READ playingTechniquesCodes NOTIFY playingTechniquesCodesChanged FINAL)
+
+    Q_PROPERTY(QVariantList contextMenuModel READ contextMenuModel NOTIFY contextMenuModelChanged FINAL)
+
 public:
     explicit SoundFlagSettingsModel(QObject* parent = nullptr);
 
-    Q_INVOKABLE void init() override;
+    bool inited() const;
 
-    SourceType sourceType() const;
-    void setSourceType(SourceType type);
+    Q_INVOKABLE void init() override;
+    Q_INVOKABLE void togglePreset(const QString& presetCode);
+    Q_INVOKABLE void togglePlayingTechnique(const QString& playingTechniqueCode);
+
+    QVariantList contextMenuModel();
+    Q_INVOKABLE void handleContextMenuItem(const QString& menuId);
 
     QString title() const;
     void setTitle(const QString& title);
@@ -69,26 +80,55 @@ public:
 
     QRect iconRect() const;
 
+    QVariantList availablePresets() const;
+    void setAvailablePresets(const audio::SoundPresetList& presets);
+
+    QStringList presetCodes() const;
+
+    QVariantList availablePlayingTechniques() const;
+    void setAvailablePlayingTechniques(const audio::SoundPreset::PlayingTechniqueList& playingTechniques);
+
+    QStringList playingTechniquesCodes() const;
+
 signals:
-    void sourceTypeChanged();
     void titleChanged();
     void showTextChanged();
     void textChanged();
 
     void iconRectChanged();
 
+    void availablePresetsChanged();
+    void presetCodesChanged();
+
+    void availablePlayingTechniquesChanged();
+    void playingTechniquesCodesChanged();
+
+    void contextMenuModelChanged();
+
+    void initedChanged();
+
 private:
     project::IProjectAudioSettingsPtr audioSettings() const;
 
-    audio::AudioInputParams currentAudioInputParams() const;
+    const audio::AudioInputParams& currentAudioInputParams() const;
 
-    void initSourceType();
     void initTitle();
+    void initAvailablePresets();
+    void initAvailablePlayingTechniques();
 
     engraving::StaffText* staffText() const;
 
-    SourceType m_sourceType = SourceType::Undefined;
+    uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title);
+
+    bool updateStaffText();
+
     QString m_title;
+
+    QVariantList m_availablePresets;
+    QVariantList m_availablePlayingTechniques;
+
+    bool m_isPresetsInited = false;
+    bool m_isPlayingTechniquesInited = false;
 };
 }
 

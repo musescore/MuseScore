@@ -3192,14 +3192,14 @@ void ChangeSoundFlag::flip(EditData*)
         return;
     }
 
-    SoundFlag::Params params = m_soundFlag->params();
     SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
+    SoundFlag::PlayingTechniqueCodes techniques = m_soundFlag->playingTechniques();
 
     m_soundFlag->setSoundPresets(m_presets);
-    m_soundFlag->setParams(m_params);
+    m_soundFlag->setPlayingTechniques(m_playingTechniques);
 
     m_presets = std::move(presets);
-    m_params = std::move(params);
+    m_playingTechniques = std::move(techniques);
 }
 
 void ChangeSpanArpeggio::flip(EditData*)

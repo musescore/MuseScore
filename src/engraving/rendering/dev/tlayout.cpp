@@ -5146,10 +5146,6 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     LAYOUT_CALL_ITEM(item);
     layoutBaseTextBase(item, ldata);
 
-    if (item->soundFlag() && item->score()->showSoundFlags()) {
-        layoutSoundFlag(item->soundFlag(), item->soundFlag()->mutldata());
-    }
-
     if (item->autoplace()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();
@@ -5159,6 +5155,10 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     }
 
     Autoplace::autoplaceSegmentElement(item, ldata);
+
+    if (SoundFlag* flag = item->soundFlag()) {
+        layoutSoundFlag(flag, flag->mutldata());
+    }
 }
 
 void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -5417,16 +5417,27 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
 {
     LAYOUT_CALL_ITEM(item);
 
-    if (!item->score()->showSoundFlags()) {
+    const Score* score = item->score();
+    if (score && !score->showSoundFlags()) {
         return;
     }
 
-    StaffText* staffText = toStaffText(item->parentItem());
-    RectF parentBbox = staffText->ldata()->bbox();
+    const StaffText* staffText = toStaffText(item->parentItem());
+    if (!staffText) {
+        return;
+    }
 
-    double iconHeight = parentBbox.height() * 1.5;
+    draw::FontMetrics fontMetrics = draw::FontMetrics(staffText->font());
+    double iconHeight = (fontMetrics.xHeight() + fontMetrics.descent()) * 2;
+
+    RectF parentBbox = staffText->ldata()->bbox();
+    RectF iconBBox = RectF(parentBbox.x(), parentBbox.y(), iconHeight, iconHeight);
+
+    iconBBox.moveCenter(parentBbox.center());
+
+    // <icon><space><text>
     double space = iconHeight / 6.0;
-    RectF iconBBox = RectF(parentBbox.x() - (iconHeight + space), parentBbox.y() - space, iconHeight, iconHeight);
+    iconBBox.setX(parentBbox.x() - iconBBox.width() - space);
 
     ldata->setBbox(iconBBox);
 }

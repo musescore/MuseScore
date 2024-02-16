@@ -25,7 +25,6 @@
 
 #include "engravingitem.h"
 
-#include "global/types/val.h"
 #include "draw/types/font.h"
 
 namespace mu::engraving {
@@ -43,15 +42,17 @@ public:
     void setSelected(bool f) override;
 
     using PresetCodes = StringList;
-    using Params = std::map<String, Val>;
+    using PlayingTechniqueCodes = StringList;
 
     const PresetCodes& soundPresets() const;
     void setSoundPresets(const PresetCodes& soundPresets);
 
-    const Params& params() const;
-    void setParams(const Params& params);
+    const PlayingTechniqueCodes& playingTechniques() const;
+    void setPlayingTechniques(const PlayingTechniqueCodes& techniques);
 
-    void undoChangeSoundFlag(const PresetCodes& presets, const Params& params);
+    bool shouldHide() const;
+
+    void undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCodes& techniques);
 
     char16_t iconCode() const;
     draw::Font iconFont() const;
@@ -60,7 +61,7 @@ public:
 
 private:
     PresetCodes m_soundPresets;
-    Params m_params;
+    PlayingTechniqueCodes m_playingTechniques;
 
     draw::Font m_iconFont;
 };

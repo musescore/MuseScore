@@ -26,10 +26,6 @@
 #include "stafftextbase.h"
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   StaffText
-//---------------------------------------------------------
-
 class StaffText final : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, StaffText)
@@ -37,6 +33,7 @@ class StaffText final : public StaffTextBase
 
 public:
     StaffText(Segment* parent = nullptr, TextStyleType = TextStyleType::STAFF);
+    StaffText(const StaffText&);
 
     StaffText* clone() const override { return new StaffText(*this); }
 
@@ -60,4 +57,4 @@ private:
     SoundFlag* m_soundFlag = nullptr;
 };
 } // namespace mu::engraving
-#endif
+#endif // MU_ENGRAVING_STAFFTEXT_H

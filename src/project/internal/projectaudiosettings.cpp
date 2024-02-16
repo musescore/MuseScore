@@ -48,7 +48,7 @@ static const std::map<AudioResourceType, QString> RESOURCE_TYPE_MAP = {
     { AudioResourceType::MusePlugin, "muse_plugin" },
 };
 
-AudioOutputParams ProjectAudioSettings::masterAudioOutputParams() const
+const AudioOutputParams& ProjectAudioSettings::masterAudioOutputParams() const
 {
     return m_masterOutputParams;
 }
@@ -68,9 +68,14 @@ bool ProjectAudioSettings::containsAuxOutputParams(audio::aux_channel_idx_t inde
     return mu::contains(m_auxOutputParams, index);
 }
 
-mu::audio::AudioOutputParams ProjectAudioSettings::auxOutputParams(audio::aux_channel_idx_t index) const
+const mu::audio::AudioOutputParams& ProjectAudioSettings::auxOutputParams(audio::aux_channel_idx_t index) const
 {
-    return mu::value(m_auxOutputParams, index);
+    if (index < m_auxOutputParams.size()) {
+        return m_auxOutputParams.at(index);
+    }
+
+    static const AudioOutputParams dummy;
+    return dummy;
 }
 
 void ProjectAudioSettings::setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params)
@@ -84,12 +89,13 @@ void ProjectAudioSettings::setAuxOutputParams(audio::aux_channel_idx_t index, co
     m_settingsChanged.notify();
 }
 
-AudioInputParams ProjectAudioSettings::trackInputParams(const InstrumentTrackId& partId) const
+const AudioInputParams& ProjectAudioSettings::trackInputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackInputParamsMap.find(partId);
 
     if (search == m_trackInputParamsMap.end()) {
-        return {};
+        static const AudioInputParams dummy;
+        return dummy;
     }
 
     return search->second;
@@ -116,12 +122,13 @@ void ProjectAudioSettings::clearTrackInputParams()
     m_settingsChanged.notify();
 }
 
-AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
+const AudioOutputParams& ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackOutputParamsMap.find(partId);
 
     if (search == m_trackOutputParamsMap.end()) {
-        return {};
+        static const AudioOutputParams dummy;
+        return dummy;
     }
 
     return search->second;
@@ -146,11 +153,12 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     }
 }
 
-IProjectAudioSettings::SoloMuteState ProjectAudioSettings::auxSoloMuteState(aux_channel_idx_t index) const
+const IProjectAudioSettings::SoloMuteState& ProjectAudioSettings::auxSoloMuteState(aux_channel_idx_t index) const
 {
     auto it = m_auxSoloMuteStatesMap.find(index);
     if (it == m_auxSoloMuteStatesMap.end()) {
-        return {};
+        static const IProjectAudioSettings::SoloMuteState dummy;
+        return dummy;
     }
 
     return it->second;

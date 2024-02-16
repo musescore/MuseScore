@@ -23,6 +23,9 @@
 
 #include "playbacktypes.h"
 
+#include "engraving/dom/stafftext.h"
+#include "engraving/dom/utils.h"
+
 #include "audio/audioutils.h"
 #include "containers.h"
 #include "defer.h"
@@ -75,6 +78,11 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     }
 
     return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
+}
+
+static bool supportsSoundFlags(AudioSourceType type)
+{
+    return type == AudioSourceType::MuseSampler;
 }
 
 void PlaybackController::init()
@@ -271,7 +279,7 @@ Channel<aux_channel_idx_t, std::string> PlaybackController::auxChannelNameChange
     return m_auxChannelNameChanged;
 }
 
-Promise<SoundPresetList> PlaybackController::availableSoundPresets(InstrumentTrackId instrumentTrackId) const
+Promise<SoundPresetList> PlaybackController::availableSoundPresets(const InstrumentTrackId& instrumentTrackId) const
 {
     auto it = m_instrumentTrackIdMap.find(instrumentTrackId);
     if (it == m_instrumentTrackIdMap.end()) {
@@ -280,7 +288,8 @@ Promise<SoundPresetList> PlaybackController::availableSoundPresets(InstrumentTra
         });
     }
 
-    return playback()->tracks()->availableSoundPresets(m_currentSequenceId, it->second);
+    const AudioInputParams& params = audioSettings()->trackInputParams(instrumentTrackId);
+    return playback()->tracks()->availableSoundPresets(params.resourceMeta);
 }
 
 mu::notation::INotationSoloMuteState::SoloMuteState PlaybackController::trackSoloMuteState(const InstrumentTrackId& trackId) const
@@ -375,6 +384,61 @@ void PlaybackController::seekRangeSelection()
     }
 
     seek(tick.val);
+}
+
+void PlaybackController::addSoundFlagsToExistingTracks()
+{
+    TRACEFUNC;
+
+    INotationPlaybackPtr notationPlayback = this->notationPlayback();
+    if (!notationPlayback) {
+        return;
+    }
+
+    InstrumentTrackIdSet trackIdSet;
+
+    for (const InstrumentTrackId& trackId : notationPlayback->existingTrackIdSet()) {
+        const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
+
+        if (supportsSoundFlags(params.type())) {
+            trackIdSet.insert(trackId);
+        }
+    }
+
+    if (!trackIdSet.empty()) {
+        notationPlayback->addSoundFlags(trackIdSet);
+    }
+}
+
+void PlaybackController::updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, AudioSourceType sourceType)
+{
+    TRACEFUNC;
+
+    INotationPlaybackPtr notationPlayback = this->notationPlayback();
+    if (!notationPlayback) {
+        return;
+    }
+
+    if (supportsSoundFlags(sourceType)) {
+        notationPlayback->addSoundFlags({ trackId });
+    } else {
+        notationPlayback->removeSoundFlags({ trackId });
+    }
+}
+
+void PlaybackController::addSoundFlagIfNeed(mu::engraving::StaffText* staffText)
+{
+    INotationPlaybackPtr notationPlayback = this->notationPlayback();
+    if (!staffText || !notationPlayback) {
+        return;
+    }
+
+    mu::engraving::InstrumentTrackId trackId = mu::engraving::makeInstrumentTrackId(staffText);
+    const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
+
+    if (supportsSoundFlags(params.type())) {
+        notationPlayback->addSoundFlag(staffText);
+    }
 }
 
 INotationPlaybackPtr PlaybackController::notationPlayback() const
@@ -1030,7 +1094,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
         return;
     }
 
-    audio::AudioOutputParams masterOutputParams = audioSettings()->masterAudioOutputParams();
+    const audio::AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
     playback()->audioOutput()->setMasterOutputParams(masterOutputParams);
 
     subscribeOnAudioParamsChanges();
@@ -1059,7 +1123,12 @@ void PlaybackController::subscribeOnAudioParamsChanges()
         });
 
         if (search != m_instrumentTrackIdMap.end()) {
+            bool audioSourceChanged = audioSettings()->trackInputParams(search->first).type() != params.type();
             audioSettings()->setTrackInputParams(search->first, params);
+
+            if (audioSourceChanged) {
+                updateSoundFlags(search->first, params.type());
+            }
         }
     });
 
@@ -1121,6 +1190,8 @@ void PlaybackController::setupSequenceTracks()
         if (m_loadingTrackCount == 0) {
             m_loadingProgress.finished.send(make_ok());
             m_isPlayAllowedChanged.notify();
+
+            addSoundFlagsToExistingTracks();
         }
     };
 
@@ -1435,6 +1506,12 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     m_notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase* text) {
         if (text->isHarmony()) {
             playElements({ text });
+        }
+    });
+
+    m_notation->interaction()->textAdded().onReceive(this, [this](engraving::TextBase* text) {
+        if (text->isStaffText()) {
+            addSoundFlagIfNeed(toStaffText(text));
         }
     });
 
