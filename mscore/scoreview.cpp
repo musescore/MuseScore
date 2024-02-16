@@ -1021,7 +1021,6 @@ void ScoreView::setShadowNote(const QPointF& p)
       qreal mag     = score()->staff(pos.staffIdx)->mag(Fraction(0,1));
       qreal relX    = pos.pos.x() - pos.segment->measure()->canvasPos().x();
       pos.pos.rx() -= qMin(relX - score()->styleP(Sid::barNoteDistance) * mag, 0.0);
-
       shadowNote->setVisible(true);
       Staff* staff = score()->staff(pos.staffIdx);
       shadowNote->setMag(staff->mag(Fraction(0,1)));
@@ -3206,7 +3205,8 @@ void ScoreView::startNoteEntry()
 
       getAction("pad-rest")->setChecked(false);
       setMouseTracking(true);
-      shadowNote->setVisible(true);
+      if (!MScore::disableMouseEntry)
+            shadowNote->setVisible(true);
       _score->setUpdateAll();
       _score->update();
 

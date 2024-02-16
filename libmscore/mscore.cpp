@@ -95,6 +95,7 @@ QColor  MScore::frameMarginColor;
 QColor  MScore::bgColor;
 QColor  MScore::dropColor;
 bool    MScore::warnPitchRange;
+bool    MScore::disableMouseEntry;
 int     MScore::pedalEventsMinTicks;
 
 bool    MScore::harmonyPlayDisableCompatibility;

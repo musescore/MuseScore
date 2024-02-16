@@ -119,6 +119,7 @@
 #define PREF_SCORE_NOTE_PLAYONCLICK                         "score/note/playOnClick"
 #define PREF_SCORE_NOTE_DEFAULTPLAYDURATION                 "score/note/defaultPlayDuration"
 #define PREF_SCORE_NOTE_WARNPITCHRANGE                      "score/note/warnPitchRange"
+#define PREF_SCORE_NOTE_INPUT_DISABLE_MOUSE_INPUT           "ui/score/noteEntry/disableMouseEntry"
 #define PREF_SCORE_STYLE_DEFAULTSTYLEFILE                   "score/style/defaultStyleFile"
 #define PREF_SCORE_STYLE_PARTSTYLEFILE                      "score/style/partStyleFile"
 #define PREF_UI_CANVAS_BG_USECOLOR                          "ui/canvas/background/useColor"

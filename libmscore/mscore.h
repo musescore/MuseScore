@@ -341,6 +341,7 @@ class MScore {
       static QColor frameMarginColor;
       static QColor bgColor;
       static bool warnPitchRange;
+      static bool disableMouseEntry;
       static int pedalEventsMinTicks;
 
       static bool harmonyPlayDisableCompatibility;

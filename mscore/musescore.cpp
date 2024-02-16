@@ -432,6 +432,7 @@ void updateExternalValuesFromPreferences() {
       MScore::playRepeats = preferences.getBool(PREF_APP_PLAYBACK_PLAYREPEATS);
       MScore::playbackSpeedIncrement = preferences.getInt(PREF_APP_PLAYBACK_SPEEDINCREMENT);
       MScore::warnPitchRange = preferences.getBool(PREF_SCORE_NOTE_WARNPITCHRANGE);
+      MScore::disableMouseEntry = preferences.getBool(PREF_SCORE_NOTE_INPUT_DISABLE_MOUSE_INPUT);
       MScore::pedalEventsMinTicks = preferences.getInt(PREF_IO_MIDI_PEDAL_EVENTS_MIN_TICKS);
       MScore::layoutBreakColor = preferences.getColor(PREF_UI_SCORE_LAYOUTBREAKCOLOR);
       MScore::frameMarginColor = preferences.getColor(PREF_UI_SCORE_FRAMEMARGINCOLOR);

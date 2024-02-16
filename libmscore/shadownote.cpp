@@ -115,7 +115,7 @@ bool ShadowNote::computeUp() const
 
 void ShadowNote::draw(QPainter* painter) const
       {
-      if (!visible() || !isValid())
+      if (!visible() || !isValid() || MScore::disableMouseEntry)
             return;
 
       QPointF ap(pagePos());

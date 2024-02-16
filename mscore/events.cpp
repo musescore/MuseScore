@@ -572,7 +572,19 @@ void ScoreView::mousePressEvent(QMouseEvent* ev)
                   bool restMode = _score->inputState().rest();
                   if (ev->button() == Qt::RightButton)
                         _score->inputState().setRest(!restMode);
-                  _score->putNote(editData.startMove, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
+                  if (MScore::disableMouseEntry) {
+                        if (auto el = elementAt(editData.pos)) {
+                              if (!el->isStaffLines()) {
+                                    _score->select(el);
+                                    if (el->isNote() || el->isRest())
+                                          _score->inputState().moveInputPos(el);
+                                    else changeState(ViewState::NORMAL);
+                                    //adjustCanvasPosition(el, true);
+                                    }
+                              }
+                        }
+                  else _score->putNote(editData.startMove, ev->modifiers() & Qt::ShiftModifier, ev->modifiers() & Qt::ControlModifier);
+
                   if (ev->button() == Qt::RightButton)
                         _score->inputState().setRest(restMode);
                   _score->endCmd();
