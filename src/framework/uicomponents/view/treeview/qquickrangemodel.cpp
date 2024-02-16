@@ -53,6 +53,8 @@
 
 QT_BEGIN_NAMESPACE
 
+#define Q_PD(Class) Class##Private * const pd = d_func()
+
 QQuickRangeModel1Private::QQuickRangeModel1Private(QQuickRangeModel1 *qq)
     : q_ptr(qq)
 {
@@ -180,8 +182,8 @@ void QQuickRangeModel1Private::emitValueAndPositionIfChanged(const qreal oldValu
 QQuickRangeModel1::QQuickRangeModel1(QObject *parent)
     : QObject(parent), d_ptr(new QQuickRangeModel1Private(this))
 {
-    Q_D(QQuickRangeModel1);
-    d->init();
+    Q_PD(QQuickRangeModel1);
+    pd->init();
 }
 
 /*!
@@ -192,8 +194,8 @@ QQuickRangeModel1::QQuickRangeModel1(QObject *parent)
 QQuickRangeModel1::QQuickRangeModel1(QQuickRangeModel1Private &dd, QObject *parent)
     : QObject(parent), d_ptr(&dd)
 {
-    Q_D(QQuickRangeModel1);
-    d->init();
+    Q_PD(QQuickRangeModel1);
+    pd->init();
 }
 
 /*!
@@ -214,17 +216,17 @@ QQuickRangeModel1::~QQuickRangeModel1()
 
 void QQuickRangeModel1::setPositionRange(qreal min, qreal max)
 {
-    Q_D(QQuickRangeModel1);
+    Q_PD(QQuickRangeModel1);
 
-    bool emitPosAtMinChanged = !qFuzzyCompare(min, d->posatmin);
-    bool emitPosAtMaxChanged = !qFuzzyCompare(max, d->posatmax);
+    bool emitPosAtMinChanged = !qFuzzyCompare(min, pd->posatmin);
+    bool emitPosAtMaxChanged = !qFuzzyCompare(max, pd->posatmax);
 
     if (!(emitPosAtMinChanged || emitPosAtMaxChanged))
         return;
 
     const qreal oldPosition = position();
-    d->posatmin = min;
-    d->posatmax = max;
+    pd->posatmin = min;
+    pd->posatmax = max;
 
     // When a new positionRange is defined, the position property must be updated based on the value property.
     // For instance, imagine that you have a valueRange of [0,100] and a position range of [20,100],
@@ -232,14 +234,14 @@ void QQuickRangeModel1::setPositionRange(qreal min, qreal max)
     // the new position, based on the value (50), will be 50.
     // If the newPosition is different than the old one, it must be updated, in order to emit
     // the positionChanged signal.
-    d->pos = d->equivalentPosition(d->value);
+    pd->pos = pd->equivalentPosition(pd->value);
 
     if (emitPosAtMinChanged)
-        emit positionAtMinimumChanged(d->posatmin);
+        emit positionAtMinimumChanged(pd->posatmin);
     if (emitPosAtMaxChanged)
-        emit positionAtMaximumChanged(d->posatmax);
+        emit positionAtMaximumChanged(pd->posatmax);
 
-    d->emitValueAndPositionIfChanged(value(), oldPosition);
+    pd->emitValueAndPositionIfChanged(value(), oldPosition);
 }
 /*!
     Sets the range of valid values, that \l value can assume externally, with
@@ -249,10 +251,10 @@ void QQuickRangeModel1::setPositionRange(qreal min, qreal max)
 
 void QQuickRangeModel1::setRange(qreal min, qreal max)
 {
-    Q_D(QQuickRangeModel1);
+    Q_PD(QQuickRangeModel1);
 
-    bool emitMinimumChanged = !qFuzzyCompare(min, d->minimum);
-    bool emitMaximumChanged = !qFuzzyCompare(max, d->maximum);
+    bool emitMinimumChanged = !qFuzzyCompare(min, pd->minimum);
+    bool emitMaximumChanged = !qFuzzyCompare(max, pd->maximum);
 
     if (!(emitMinimumChanged || emitMaximumChanged))
         return;
@@ -260,18 +262,18 @@ void QQuickRangeModel1::setRange(qreal min, qreal max)
     const qreal oldValue = value();
     const qreal oldPosition = position();
 
-    d->minimum = min;
-    d->maximum = qMax(min, max);
+    pd->minimum = min;
+    pd->maximum = qMax(min, max);
 
     // Update internal position if it was changed. It can occur if internal value changes, due to range update
-    d->pos = d->equivalentPosition(d->value);
+    pd->pos = pd->equivalentPosition(pd->value);
 
     if (emitMinimumChanged)
-        emit minimumChanged(d->minimum);
+        emit minimumChanged(pd->minimum);
     if (emitMaximumChanged)
-        emit maximumChanged(d->maximum);
+        emit maximumChanged(pd->maximum);
 
-    d->emitValueAndPositionIfChanged(oldValue, oldPosition);
+    pd->emitValueAndPositionIfChanged(oldValue, oldPosition);
 }
 
 /*!
@@ -283,14 +285,14 @@ void QQuickRangeModel1::setRange(qreal min, qreal max)
 
 void QQuickRangeModel1::setMinimum(qreal min)
 {
-    Q_D(const QQuickRangeModel1);
-    setRange(min, d->maximum);
+    Q_PD(const QQuickRangeModel1);
+    setRange(min, pd->maximum);
 }
 
 qreal QQuickRangeModel1::minimum() const
 {
-    Q_D(const QQuickRangeModel1);
-    return d->minimum;
+    Q_PD(const QQuickRangeModel1);
+    return pd->minimum;
 }
 
 /*!
@@ -302,16 +304,16 @@ qreal QQuickRangeModel1::minimum() const
 
 void QQuickRangeModel1::setMaximum(qreal max)
 {
-    Q_D(const QQuickRangeModel1);
+    Q_PD(const QQuickRangeModel1);
     // if the new maximum value is smaller than
     // minimum, update minimum too
-    setRange(qMin(d->minimum, max), max);
+    setRange(qMin(pd->minimum, max), max);
 }
 
 qreal QQuickRangeModel1::maximum() const
 {
-    Q_D(const QQuickRangeModel1);
-    return d->maximum;
+    Q_PD(const QQuickRangeModel1);
+    return pd->maximum;
 }
 
 /*!
@@ -324,24 +326,24 @@ qreal QQuickRangeModel1::maximum() const
 
 void QQuickRangeModel1::setStepSize(qreal stepSize)
 {
-    Q_D(QQuickRangeModel1);
+    Q_PD(QQuickRangeModel1);
 
     stepSize = qMax(qreal(0.0), stepSize);
-    if (qFuzzyCompare(stepSize, d->stepSize))
+    if (qFuzzyCompare(stepSize, pd->stepSize))
         return;
 
     const qreal oldValue = value();
     const qreal oldPosition = position();
-    d->stepSize = stepSize;
+    pd->stepSize = stepSize;
 
-    emit stepSizeChanged(d->stepSize);
-    d->emitValueAndPositionIfChanged(oldValue, oldPosition);
+    emit stepSizeChanged(pd->stepSize);
+    pd->emitValueAndPositionIfChanged(oldValue, oldPosition);
 }
 
 qreal QQuickRangeModel1::stepSize() const
 {
-    Q_D(const QQuickRangeModel1);
-    return d->stepSize;
+    Q_PD(const QQuickRangeModel1);
+    return pd->stepSize;
 }
 
 /*!
@@ -352,10 +354,10 @@ qreal QQuickRangeModel1::stepSize() const
 
 qreal QQuickRangeModel1::positionForValue(qreal value) const
 {
-    Q_D(const QQuickRangeModel1);
+    Q_PD(const QQuickRangeModel1);
 
-    const qreal unconstrainedPosition = d->equivalentPosition(value);
-    return d->publicPosition(unconstrainedPosition);
+    const qreal unconstrainedPosition = pd->equivalentPosition(value);
+    return pd->publicPosition(unconstrainedPosition);
 }
 
 void QQuickRangeModel1::classBegin()
@@ -364,13 +366,13 @@ void QQuickRangeModel1::classBegin()
 
 void QQuickRangeModel1::componentComplete()
 {
-    Q_D(QQuickRangeModel1);
-    d->isComplete = true;
+    Q_PD(QQuickRangeModel1);
+    pd->isComplete = true;
     emit minimumChanged(minimum());
     emit maximumChanged(maximum());
-    if (d->valueChanged)
+    if (pd->valueChanged)
         emit valueChanged(value());
-    if (d->positionChanged)
+    if (pd->positionChanged)
         emit positionChanged(position());
 }
 
@@ -386,27 +388,27 @@ void QQuickRangeModel1::componentComplete()
 
 qreal QQuickRangeModel1::position() const
 {
-    Q_D(const QQuickRangeModel1);
+    Q_PD(const QQuickRangeModel1);
 
     // Return the internal position but observe boundaries and
     // stepSize restrictions.
-    return d->publicPosition(d->pos);
+    return pd->publicPosition(pd->pos);
 }
 
 void QQuickRangeModel1::setPosition(qreal newPosition)
 {
-    Q_D(QQuickRangeModel1);
+    Q_PD(QQuickRangeModel1);
 
-    if (qFuzzyCompare(newPosition, d->pos))
+    if (qFuzzyCompare(newPosition, pd->pos))
         return;
 
     const qreal oldPosition = position();
     const qreal oldValue = value();
 
     // Update position and calculate new value
-    d->pos = newPosition;
-    d->value = d->equivalentValue(d->pos);
-    d->emitValueAndPositionIfChanged(oldValue, oldPosition);
+    pd->pos = newPosition;
+    pd->value = pd->equivalentValue(pd->pos);
+    pd->emitValueAndPositionIfChanged(oldValue, oldPosition);
 }
 
 /*!
@@ -418,14 +420,14 @@ void QQuickRangeModel1::setPosition(qreal newPosition)
 
 void QQuickRangeModel1::setPositionAtMinimum(qreal min)
 {
-    Q_D(QQuickRangeModel1);
-    setPositionRange(min, d->posatmax);
+    Q_PD(QQuickRangeModel1);
+    setPositionRange(min, pd->posatmax);
 }
 
 qreal QQuickRangeModel1::positionAtMinimum() const
 {
-    Q_D(const QQuickRangeModel1);
-    return d->posatmin;
+    Q_PD(const QQuickRangeModel1);
+    return pd->posatmin;
 }
 
 /*!
@@ -437,14 +439,14 @@ qreal QQuickRangeModel1::positionAtMinimum() const
 
 void QQuickRangeModel1::setPositionAtMaximum(qreal max)
 {
-    Q_D(QQuickRangeModel1);
-    setPositionRange(d->posatmin, max);
+    Q_PD(QQuickRangeModel1);
+    setPositionRange(pd->posatmin, max);
 }
 
 qreal QQuickRangeModel1::positionAtMaximum() const
 {
-    Q_D(const QQuickRangeModel1);
-    return d->posatmax;
+    Q_PD(const QQuickRangeModel1);
+    return pd->posatmax;
 }
 
 /*!
@@ -455,10 +457,10 @@ qreal QQuickRangeModel1::positionAtMaximum() const
 
 qreal QQuickRangeModel1::valueForPosition(qreal position) const
 {
-    Q_D(const QQuickRangeModel1);
+    Q_PD(const QQuickRangeModel1);
 
-    const qreal unconstrainedValue = d->equivalentValue(position);
-    return d->publicValue(unconstrainedValue);
+    const qreal unconstrainedValue = pd->equivalentValue(position);
+    return pd->publicValue(unconstrainedValue);
 }
 
 /*!
@@ -473,27 +475,27 @@ qreal QQuickRangeModel1::valueForPosition(qreal position) const
 
 qreal QQuickRangeModel1::value() const
 {
-    Q_D(const QQuickRangeModel1);
+    Q_PD(const QQuickRangeModel1);
 
     // Return internal value but observe boundaries and
     // stepSize restrictions
-    return d->publicValue(d->value);
+    return pd->publicValue(pd->value);
 }
 
 void QQuickRangeModel1::setValue(qreal newValue)
 {
-    Q_D(QQuickRangeModel1);
+    Q_PD(QQuickRangeModel1);
 
-    if (qFuzzyCompare(newValue, d->value))
+    if (qFuzzyCompare(newValue, pd->value))
         return;
 
     const qreal oldValue = value();
     const qreal oldPosition = position();
 
     // Update relative value and position
-    d->value = newValue;
-    d->pos = d->equivalentPosition(d->value);
-    d->emitValueAndPositionIfChanged(oldValue, oldPosition);
+    pd->value = newValue;
+    pd->pos = pd->equivalentPosition(pd->value);
+    pd->emitValueAndPositionIfChanged(oldValue, oldPosition);
 }
 
 /*!
@@ -507,21 +509,21 @@ void QQuickRangeModel1::setValue(qreal newValue)
 
 void QQuickRangeModel1::setInverted(bool inverted)
 {
-    Q_D(QQuickRangeModel1);
-    if (inverted == bool(d->inverted))
+    Q_PD(QQuickRangeModel1);
+    if (inverted == bool(pd->inverted))
         return;
 
-    d->inverted = inverted;
-    emit invertedChanged(d->inverted);
+    pd->inverted = inverted;
+    emit invertedChanged(pd->inverted);
 
     // After updating the internal value, the position property can change.
-    setPosition(d->equivalentPosition(d->value));
+    setPosition(pd->equivalentPosition(pd->value));
 }
 
 bool QQuickRangeModel1::inverted() const
 {
-    Q_D(const QQuickRangeModel1);
-    return d->inverted;
+    Q_PD(const QQuickRangeModel1);
+    return pd->inverted;
 }
 
 /*!
@@ -530,8 +532,8 @@ bool QQuickRangeModel1::inverted() const
 
 void QQuickRangeModel1::toMinimum()
 {
-    Q_D(const QQuickRangeModel1);
-    setValue(d->minimum);
+    Q_PD(const QQuickRangeModel1);
+    setValue(pd->minimum);
 }
 
 /*!
@@ -540,26 +542,26 @@ void QQuickRangeModel1::toMinimum()
 
 void QQuickRangeModel1::toMaximum()
 {
-    Q_D(const QQuickRangeModel1);
-    setValue(d->maximum);
+    Q_PD(const QQuickRangeModel1);
+    setValue(pd->maximum);
 }
 
 void QQuickRangeModel1::increaseSingleStep()
 {
-    Q_D(const QQuickRangeModel1);
-    if (qFuzzyIsNull(d->stepSize))
-        setValue(value() + (d->maximum - d->minimum)/10.0);
+    Q_PD(const QQuickRangeModel1);
+    if (qFuzzyIsNull(pd->stepSize))
+        setValue(value() + (pd->maximum - pd->minimum)/10.0);
     else
-        setValue(value() + d->stepSize);
+        setValue(value() + pd->stepSize);
 }
 
 void QQuickRangeModel1::decreaseSingleStep()
 {
-    Q_D(const QQuickRangeModel1);
-    if (qFuzzyIsNull(d->stepSize))
-        setValue(value() - (d->maximum - d->minimum)/10.0);
+    Q_PD(const QQuickRangeModel1);
+    if (qFuzzyIsNull(pd->stepSize))
+        setValue(value() - (pd->maximum - pd->minimum)/10.0);
     else
-        setValue(value() - d->stepSize);
+        setValue(value() - pd->stepSize);
 }
 
 QT_END_NAMESPACE
