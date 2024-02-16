@@ -114,7 +114,7 @@ class AccidentalState
 public:
     AccidentalState() {}
     void init(Key key);
-    void init(const KeySigEvent&);
+    void init(const KeySigEvent&, ClefType clef);
     AccidentalVal accidentalVal(int line, bool& error) const;
     AccidentalVal accidentalVal(int line) const;
     bool forceRestateAccidental(int line) const;

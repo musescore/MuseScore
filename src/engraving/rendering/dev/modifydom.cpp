@@ -50,7 +50,7 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
         AccidentalState as;          // list of already set accidentals for this measure
         // initAccidentalState
         {
-            as.init(staff->keySigEvent(measure->tick()));
+            as.init(staff->keySigEvent(measure->tick()), staff->clef(measure->tick()));
 
             // Trills may carry an accidental into this measure that requires a force-restate
             int ticks = measure->tick().ticks();
@@ -78,7 +78,7 @@ void ModifyDom::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
                 KeySig* ks = item_cast<KeySig*>(segment.element(track));
                 if (ks) {
                     Fraction tick = segment.tick();
-                    as.init(staff->keySigEvent(tick));
+                    as.init(staff->keySigEvent(tick), staff->clef(tick));
                 }
             } else if (segment.isJustType(SegmentType::ChordRest)) {
                 for (track_idx_t t = track; t < endTrack; ++t) {
