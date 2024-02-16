@@ -116,7 +116,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
         size_t stavesCount = system->staves().size();
 
         for (size_t staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
-            if (score->staff(staffIndex)->isLinesInvisible(mu::engraving::Fraction(0, 1)) || !score->staff(staffIndex)->show()) {
+            if (!score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
 
