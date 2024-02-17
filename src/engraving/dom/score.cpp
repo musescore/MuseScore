@@ -3174,6 +3174,7 @@ void Score::padToggle(Pad p, const EditData& ed)
     }
 
     std::vector<ChordRest*> crs;
+    std::list<EngravingItem*> elementsToSelect;
 
     if (selection().isSingle()) {
         EngravingItem* e = selection().element();
@@ -3208,6 +3209,12 @@ void Score::padToggle(Pad p, const EditData& ed)
         m_is.setAccidentalType(AccidentalType::NONE);
     } else {
         const auto elements = selection().uniqueElements();
+        for (EngravingItem* e : elements) {
+            if (selection().isList() || e->isRest() || e->isNote()) {
+                elementsToSelect.push_back(e);
+                deselect(e);
+            }
+        }
         bool canAdjustLength = true;
         for (EngravingItem* e : elements) {
             ChordRest* cr = InputState::chordRest(e);
@@ -3245,6 +3252,17 @@ void Score::padToggle(Pad p, const EditData& ed)
         } else {
             changeCRlen(cr, m_is.duration());
         }
+    }
+
+    if (!elementsToSelect.empty()) {
+        std::vector<EngravingItem*> selectList;
+        for (EngravingItem* e : elementsToSelect) {
+            if (e && !e->selected()) {
+                selectList.push_back(e);
+            }
+        }
+        select(selectList, SelectType::ADD, 0);
+        selection().updateSelectedElements();
     }
 }
 

@@ -439,7 +439,9 @@ public:
     Tuplet* addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-    Rest* setRest(const Fraction& tick,  track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+    Rest* setRest(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+    std::vector<Rest*> setRests(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet,
+                                bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
     void upDownDelta(int pitchDelta);
@@ -1013,7 +1015,8 @@ private:
                                  const SelectionFilter& filter);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                     const SelectionFilter& filter);
-    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd, const SelectionFilter& filter);
+    std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
+                                        const SelectionFilter& filter);
 
     void update(bool resetCmdState, bool layoutAllParts = false);
 
