@@ -185,7 +185,7 @@ bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& in
         multiInstancesProvider()->notifyAboutInstanceWasQuited();
     }
 
-    QCoreApplication::quit();
+    QCoreApplication::exit();
     return true;
 }
 
@@ -197,7 +197,7 @@ void ApplicationActionController::restart()
         } else {
             multiInstancesProvider()->quitAllAndRestartLast();
 
-            QCoreApplication::quit();
+            QCoreApplication::exit();
         }
     }
 }
