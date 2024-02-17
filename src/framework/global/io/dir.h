@@ -33,7 +33,7 @@ namespace mu::io {
 class IFileSystem;
 class Dir
 {
-    INJECT_STATIC(IFileSystem, fileSystem)
+    static Inject<IFileSystem> fileSystem;
 
 public:
     Dir() = default;

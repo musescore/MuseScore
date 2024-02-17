@@ -42,7 +42,7 @@ class QSettings;
 namespace mu::framework {
 class Settings
 {
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     static Settings* instance();

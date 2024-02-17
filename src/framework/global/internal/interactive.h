@@ -30,8 +30,8 @@
 namespace mu::framework {
 class Interactive : public IInteractive
 {
-    INJECT(ui::IInteractiveProvider, provider)
-    INJECT(ui::IMainWindow, mainWindow)
+    Inject<ui::IInteractiveProvider> provider;
+    Inject<ui::IMainWindow> mainWindow;
 
 public:
     // question
