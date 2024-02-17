@@ -13,10 +13,11 @@ MuseScore is an open source and free music notation software. For support, contr
 - Many editing functions
 - MusicXML import/export
 - MIDI (SMF) import/export
+- MEI import/export
 - MuseData import
 - MIDI input for note entry
 - Integrated sequencer and software synthesizer to play the score
-- Print or create pdf files
+- Print or create PDF files
 
 ## More info
 - [MuseScore Homepage](https://musescore.org)
@@ -28,7 +29,6 @@ MuseScore is licensed under GPL version 3.0. See [license file](https://github.c
 
 ## Packages
 See [Code Structure on Wiki](https://github.com/musescore/MuseScore/wiki/CodeStructure)
-
 
 ## Building
 **Read the [Compilation section](https://github.com/musescore/MuseScore/wiki/Set-up-developer-environment) of the [MuseScore Wiki](https://github.com/musescore/MuseScore/wiki) for a complete build walkthrough and a list of dependencies.**
