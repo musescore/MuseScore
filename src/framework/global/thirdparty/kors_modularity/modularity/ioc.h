@@ -71,6 +71,11 @@ inline ModulesIoC* ioc()
     return ModulesIoC::instance();
 }
 
+struct StaticMutex
+{
+    static std::mutex mutex;
+};
+
 template<class I>
 class Inject
 {
@@ -82,8 +87,7 @@ public:
     const std::shared_ptr<I>& get() const
     {
         if (!m_i) {
-            static std::mutex mutex;
-            const std::lock_guard<std::mutex> lock(mutex);
+            const std::lock_guard<std::mutex> lock(StaticMutex::mutex);
             if (!m_i) {
                 m_i = ioc()->resolve<I>(m_module);
             }
