@@ -157,7 +157,7 @@ Settings::Items Settings::readItems() const
 {
     Items result;
 
-    mi::ReadResourceLockGuard resource_lock(multiInstancesProvider(), SETTINGS_RESOURCE_NAME);
+    mi::ReadResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
 
     for (const QString& key : m_settings->allKeys()) {
         Item item;
@@ -221,7 +221,7 @@ void Settings::setLocalValue(const Key& key, const Val& value)
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
-    mi::WriteResourceLockGuard resource_lock(multiInstancesProvider(), SETTINGS_RESOURCE_NAME);
+    mi::WriteResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
 
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());

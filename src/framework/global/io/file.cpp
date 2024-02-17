@@ -27,6 +27,8 @@
 
 using namespace mu::io;
 
+mu::Inject<IFileSystem> File::fileSystem;
+
 File::File(const path_t& filePath)
     : m_filePath(filePath)
 {

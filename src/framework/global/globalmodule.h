@@ -40,7 +40,8 @@ class Invoker;
 class GlobalConfiguration;
 class GlobalModule : public modularity::IModuleSetup
 {
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<io::IFileSystem> fileSystem;
+
 public:
 
     std::string moduleName() const override;
