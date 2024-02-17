@@ -6102,6 +6102,7 @@ void MusicXMLParserLyric::parse()
     bool hasExtend = false;
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
+    const bool printLyric = m_e.asciiAttribute("print-object") != "no";
     String extendType;
     String formattedText;
 
@@ -6162,6 +6163,7 @@ void MusicXMLParserLyric::parse()
         lyric->setProperty(Pid::COLOR, lyricColor);
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
+    lyric->setVisible(printLyric);
 
     const auto l = lyric.release();
     m_numberedLyrics[lyricNo] = l;

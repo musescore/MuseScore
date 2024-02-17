@@ -5596,6 +5596,9 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 String lyricXml = String(u"lyric number=\"%1\"").arg((l)->no() + 1);
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
+                if (!l->visible()) {
+                    lyricXml += u" print-object=\"no\"";
+                }
                 m_xml.startElementRaw(lyricXml);
                 LyricsSyllabic syl = (l)->syllabic();
                 String s;
