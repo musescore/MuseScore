@@ -24,8 +24,6 @@
 using namespace mu;
 using namespace mu::io;
 
-Inject<IFileSystem> FileInfo::fileSystem;
-
 FileInfo::FileInfo(const path_t& filePath)
     : m_filePath(filePath.toString())
 {
