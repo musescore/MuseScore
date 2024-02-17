@@ -49,10 +49,11 @@ namespace mu::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
-    INJECT(framework::IApplication, application)
-    INJECT(ui::IMainWindow, mainWindow)
-    INJECT(ui::IInteractiveProvider, interactiveProvider)
-    INJECT(IAccessibilityConfiguration, configuration)
+public:
+    Inject<framework::IApplication> application;
+    Inject<ui::IMainWindow> mainWindow;
+    Inject<ui::IInteractiveProvider> interactiveProvider;
+    Inject<IAccessibilityConfiguration> configuration;
 
 public:
     AccessibilityController() = default;
