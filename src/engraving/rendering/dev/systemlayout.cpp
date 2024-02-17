@@ -459,9 +459,31 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     // JUSTIFY SYSTEM
     // Do not justify last system of a section if curSysWidth is < lastSystemFillLimit
-    if (!((ctx.state().curMeasure() == nullptr || (lm && lm->sectionBreak()))
-          && ((curSysWidth / targetSystemWidth) < ctx.conf().styleD(Sid::lastSystemFillLimit)))
-        && !MScore::noHorizontalStretch) { // debug feature
+    bool shouldJustify = true;
+    if ((curSysWidth / targetSystemWidth) < ctx.conf().styleD(Sid::lastSystemFillLimit)) {
+        shouldJustify = false;
+        const MeasureBase* lastMb = ctx.state().curMeasure();
+
+        // For systems with a section break, don't justify
+        if (lm && lm->sectionBreak()) {
+            lastMb = nullptr;
+        }
+
+        // Justify if system is followed by a measure or HBox
+        while (lastMb) {
+            if (lastMb->isMeasure() || lastMb->isHBox()) {
+                shouldJustify = true;
+                break;
+            }
+            // Frames can contain section breaks too, account for that here
+            if (lastMb->sectionBreak()) {
+                shouldJustify = false;
+                break;
+            }
+            lastMb = lastMb->nextMeasure();
+        }
+    }
+    if (shouldJustify && !MScore::noHorizontalStretch) { // debug feature
         justifySystem(system, curSysWidth, targetSystemWidth);
     }
 
