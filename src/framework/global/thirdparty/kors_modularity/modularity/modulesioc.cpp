@@ -23,7 +23,11 @@ SOFTWARE.
 */
 #include "modulesioc.h"
 
+#include "ioc.h"
+
 using namespace kors::modularity;
+
+std::mutex StaticMutex::mutex;
 
 ModulesIoC* ModulesIoC::instance()
 {
