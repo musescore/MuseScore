@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,83 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #ifndef MU_MODULARITY_IMODULEINTERFACE_H
 #define MU_MODULARITY_IMODULEINTERFACE_H
 
-#include <memory>
-#include <string_view>
-
-#include "moduleinfo.h"
-
-namespace mu::modularity {
-class IModuleInterface
-{
-public:
-    virtual ~IModuleInterface() = default;
-};
-
-class IModuleExportInterface : public IModuleInterface
-{
-public:
-    virtual ~IModuleExportInterface() = default;
-
-    static constexpr bool isInternalInterface() { return false; }
-};
-
-class IModuleInternalInterface : public IModuleInterface
-{
-public:
-    virtual ~IModuleInternalInterface() = default;
-
-    static constexpr bool isInternalInterface() { return true; }
-};
-
-class IModuleCreator
-{
-public:
-    virtual ~IModuleCreator() = default;
-    virtual std::shared_ptr<IModuleInterface> create() = 0;
-};
-
-struct IModuleExportCreator : public IModuleCreator {
-    virtual ~IModuleExportCreator() = default;
-    static constexpr bool isInternalInterface() { return false; }
-};
-
-struct IModuleInternalCreator : public IModuleCreator {
-    virtual ~IModuleInternalCreator() = default;
-    static constexpr bool isInternalInterface() { return true; }
-};
-}
-
-#ifndef IOC_NO_STRING_VIEW_CONSTEXPR_METHODS
-
-#define INTERFACE_ID(id)                                                \
-public:                                                                 \
-    static constexpr mu::modularity::InterfaceInfo interfaceInfo() {    \
-        constexpr std::string_view sig(IOC_FUNC_SIG);                   \
-        constexpr mu::modularity::InterfaceInfo info(#id, mu::modularity::moduleNameBySig(sig), isInternalInterface());    \
-        return info;                                                    \
-    }                                                                   \
-private:                                                                \
-
-#else
-#define INTERFACE_ID(id)                                                \
-public:                                                                 \
-    static const mu::modularity::InterfaceInfo& interfaceInfo() {       \
-        static const std::string_view sig(IOC_FUNC_SIG);                \
-        static const mu::modularity::InterfaceInfo info(#id, mu::modularity::moduleNameBySig(sig), isInternalInterface());    \
-        return info;                                                    \
-    }                                                                   \
-private:                                                                \
-
-#endif
-
-#define MODULE_EXPORT_INTERFACE public mu::modularity::IModuleExportInterface
-#define MODULE_EXPORT_CREATOR public mu::modularity::IModuleExportCreator
-
-#define MODULE_INTERNAL_INTERFACE public mu::modularity::IModuleInternalInterface
-#define MODULE_INTERNAL_CREATOR public mu::modularity::IModuleInternalCreator
+#include "../thirdparty/kors_modularity/modularity/imoduleinterface.h"
 
 #endif // MU_MODULARITY_IMODULEINTERFACE_H

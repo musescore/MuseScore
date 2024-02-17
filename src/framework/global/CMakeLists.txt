@@ -20,10 +20,10 @@
 
 set(MODULE global)
 
-include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
 
 set(MODULE_SRC
     ${MODULARITY_SRC}
@@ -66,6 +66,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/dlib.h
     ${CMAKE_CURRENT_LIST_DIR}/iprocess.h
     ${CMAKE_CURRENT_LIST_DIR}/isysteminfo.h
+
+    ${KORS_MODULARITY_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/ioc.h
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/imoduleinterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/imodulesetup.h
 
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
