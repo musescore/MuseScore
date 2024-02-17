@@ -26,8 +26,6 @@
 using namespace mu;
 using namespace mu::io;
 
-Inject<IFileSystem> Dir::fileSystem;
-
 Dir::Dir(const path_t& path)
     : m_path(path)
 {
