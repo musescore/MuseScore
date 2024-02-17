@@ -272,15 +272,27 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
 
 //---------------------------------------------------------
 //   setRest
-//    create one or more rests to fill "l"
+//    sets rests and returns the first one
 //---------------------------------------------------------
 
 Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool useDots, Tuplet* tuplet, bool useFullMeasureRest)
       {
+      std::vector<Rest*> rests = setRests(_tick, track, _l, useDots, tuplet, useFullMeasureRest);
+      return rests.empty() ? nullptr : rests.front();
+      }
+
+//---------------------------------------------------------
+//   setRests
+//    create one or more rests to fill "l"
+//---------------------------------------------------------
+
+std::vector<Rest*> Score::setRests(const Fraction& _tick, int track, const Fraction& _l, bool useDots, Tuplet* tuplet,
+                                   bool useFullMeasureRest)
+      {
       Fraction l       = _l;
       Fraction tick    = _tick;
       Measure* measure = tick2measure(tick);
-      Rest* r          = 0;
+      std::vector<Rest*> rests;
       Staff* staff     = Score::staff(track / VOICES);
 
       while (!l.isZero()) {
@@ -328,8 +340,7 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
                && (useFullMeasureRest)) {
                   Rest* rest = addRest(tick, track, TDuration(TDuration::DurationType::V_MEASURE), tuplet);
                   tick += rest->actualTicks();
-                  if (r == 0)
-                        r = rest;
+                  rests.push_back(rest);
                   }
             else {
                   //
@@ -344,13 +355,12 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
                         dList = toRhythmicDurationList(f, true, tick - measure->tick(), sigmap()->timesig(tick).nominal(), measure, useDots ? 1 : 0);
                         }
                   if (dList.empty())
-                        return 0;
+                        return rests;
 
                   Rest* rest = 0;
                   for (const TDuration& d : dList) {
                         rest = addRest(tick, track, d, tuplet);
-                        if (r == 0)
-                              r = rest;
+                        rests.push_back(rest);
                         tick += rest->actualTicks();
                         }
                   }
@@ -361,7 +371,7 @@ Rest* Score::setRest(const Fraction& _tick, int track, const Fraction& _l, bool 
                   break;
             tick = measure->tick();
             }
-      return r;
+      return rests;
       }
 
 //---------------------------------------------------------
@@ -2343,9 +2353,9 @@ void Score::deleteAnnotationsFromRange(Segment* s1, Segment* s2, int track1, int
 ///   deletion operation.
 //---------------------------------------------------------
 
-ChordRest* Score::deleteRange(Segment* s1, Segment* s2, int track1, int track2, const SelectionFilter& filter)
+std::vector<ChordRest*> Score::deleteRange(Segment* s1, Segment* s2, int track1, int track2, const SelectionFilter& filter)
       {
-      ChordRest* cr = nullptr;
+      std::vector<ChordRest*> crs;
 
       if (s1) {
             // delete content from measures underlying mmrests
@@ -2451,21 +2461,20 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, int track1, int track2, 
                                     Fraction tick3   = m->tick();
                                     Fraction ff = m->stretchedLen(staff);
                                     Rest* r = setRest(tick3, track, ff, false, 0);
-                                    if (!cr)
-                                          cr = r;
+                                    crs.push_back(r);
                                     if (s2 && (m == s2->measure()))
                                           break;
                                     }
                               }
                         else {
-                              Rest* r = setRest(tick, track, f, false, tuplet);
-                              if (!cr)
-                                    cr = r;
+                              std::vector<Rest*> rests = setRests(tick, track, f, false, tuplet);
+                              for (Rest* r : rests)
+                                  crs.push_back(r);
                               }
                         }
                   }
             }
-      return cr;
+      return crs;
       }
 
 //---------------------------------------------------------
@@ -2474,23 +2483,12 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, int track1, int track2, 
 
 void Score::cmdDeleteSelection()
       {
-      ChordRest* cr = 0;            // select something after deleting notes
+      std::vector<ChordRest*> crsSelectedAfterDeletion;            // select something after deleting notes
 
       if (selection().isRange()) {
-            Segment* s1 = selection().startSegment();
-            Segment* s2 = selection().endSegment();
-            const Fraction stick1 = selection().tickStart();
-            const Fraction stick2 = selection().tickEnd();
-            cr = deleteRange(s1, s2, staff2track(selection().staffStart()), staff2track(selection().staffEnd()), selectionFilter());
-            s1 = tick2segment(stick1);
-            s2 = tick2segment(stick2, true);
-            if (s1 == 0 || s2 == 0)
-                  deselectAll();
-            else {
-                  _selection.setStartSegment(s1);
-                  _selection.setEndSegment(s2);
-                  _selection.updateSelectedElements();
-                  }
+            crsSelectedAfterDeletion = deleteRange(selection().startSegment(), selection().endSegment(),
+                                                   staff2track(selection().staffStart()), staff2track(selection().staffEnd()),
+                                                   selectionFilter());
             }
       else {
             // deleteItem modifies selection().elements() list,
@@ -2515,28 +2513,26 @@ void Score::cmdDeleteSelection()
                   // or of spanner or parent if that is more valid
                   Fraction tick  = { -1, 1 };
                   int track = -1;
-                  if (!cr) {
-                        if (e->isNote())
-                              tick = toNote(e)->chord()->tick();
-                        else if (e->isRest())
-                              tick = toRest(e)->tick();
-                        else if (e->isSpannerSegment())
-                              tick = toSpannerSegment(e)->spanner()->tick();
-                        else if (e->isBreath()) {
-                              // we want the tick of the ChordRest that precedes the breath mark (in the same track)
-                              for (Segment* s = toBreath(e)->segment()->prev(); s; s = s->prev()) {
-                                    if (s->isChordRestType() && s->element(e->track())) {
-                                          tick = s->tick();
-                                          break;
-                                          }
+                  if (e->isNote())
+                        tick = toNote(e)->chord()->tick();
+                  else if (e->isRest())
+                        tick = toRest(e)->tick();
+                  else if (e->isSpannerSegment())
+                        tick = toSpannerSegment(e)->spanner()->tick();
+                  else if (e->isBreath()) {
+                        // we want the tick of the ChordRest that precedes the breath mark (in the same track)
+                        for (Segment* s = toBreath(e)->segment()->prev(); s; s = s->prev()) {
+                              if (s->isChordRestType() && s->element(e->track())) {
+                                    tick = s->tick();
+                                    break;
                                     }
                               }
-                        else if (e->parent()
-                           && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest()))
-                              tick = e->parent()->tick();
-                        //else tick < 0
-                        track = e->track();
                         }
+                  else if (e->parent()
+                           && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest()))
+                        tick = e->parent()->tick();
+                  //else tick < 0
+                  track = e->track();
 
                   // delete element if we have not done so already
                   if (!deletedElements.contains(e)) {
@@ -2559,8 +2555,7 @@ void Score::cmdDeleteSelection()
                         }
 
                   // find element to select
-                  if (!cr && tick >= Fraction(0,1) && track >= 0)
-                        cr = findCR(tick, track);
+                  crsSelectedAfterDeletion.push_back(findCR(tick, track));
 
                   // add these linked elements to list of already-deleted elements
                   for (ScoreElement* se : qAsConst(links))
@@ -2571,13 +2566,24 @@ void Score::cmdDeleteSelection()
 
       deselectAll();
       // make new selection if appropriate
-      if (noteEntryMode())
-            cr = _is.cr();
-      if (cr) {
-            if (cr->isChord())
-                  select(toChord(cr)->upNote(), SelectType::SINGLE);
+      if (noteEntryMode()) {
+            if (!crsSelectedAfterDeletion.empty())
+                  _is.setSegment(crsSelectedAfterDeletion[0]->segment());
             else
-                  select(cr, SelectType::SINGLE);
+                  crsSelectedAfterDeletion.push_back(_is.cr());
+            }
+      if (!crsSelectedAfterDeletion.empty()) {
+            std::vector<Element*> elementsToSelect;
+            for (ChordRest* cr : crsSelectedAfterDeletion) {
+                  if (cr) {
+                        if (cr->isChord())
+                              elementsToSelect.push_back(dynamic_cast<Element*>(toChord(cr)->upNote()));
+                        if (cr->isRest())
+                              elementsToSelect.push_back(dynamic_cast<Element*>(cr));
+                        }
+                  }
+            for (Element* element : elementsToSelect)
+                  select(element, SelectType::ADD, 0);
             }
       }
 

@@ -553,7 +553,8 @@ class Score : public QObject, public ScoreElement {
 
       void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, int trackStart, int trackEnd, const SelectionFilter& filter);
       void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
-      ChordRest* deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd, const SelectionFilter& filter);
+      std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, int trackStart, int trackEnd,
+                                          const SelectionFilter& filter);
 
       void update(bool resetCmdState);
 
@@ -710,7 +711,9 @@ class Score : public QObject, public ScoreElement {
       Chord* addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie, Tuplet* tuplet);
 
       ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-      Rest* setRest(const Fraction& tick,  int track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+      Rest* setRest(const Fraction& tick, int track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+      std::vector<Rest*> setRests(const Fraction& tick, int track, const Fraction&, bool useDots, Tuplet* tuplet,
+                                  bool useFullMeasureRest = true);
 
       void upDown(bool up, UpDownMode);
       void upDownDelta(int pitchDelta);

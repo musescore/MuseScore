@@ -2951,6 +2951,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             return;
 
       std::vector<ChordRest*> crs;
+      std::list<Element*> elementsToSelect;
 
       if (selection().isSingle()) {
             Element* e = selection().element();
@@ -2986,6 +2987,12 @@ void Score::padToggle(Pad p, const EditData& ed)
             }
       else {
             const auto elements = selection().uniqueElements();
+            for (Element* e : elements) {
+                  if (selection().isList() || e->isRest() || e->isNote()) {
+                        elementsToSelect.push_back(e);
+                        deselect(e);
+                        }
+                  }
             bool canAdjustLength = true;
             for (Element* e : elements) {
                   ChordRest* cr = InputState::chordRest(e);
@@ -3021,6 +3028,18 @@ void Score::padToggle(Pad p, const EditData& ed)
                   }
             else
                   changeCRlen(cr, _is.duration());
+            }
+
+      if (!elementsToSelect.empty()) {
+            std::vector<Element*> selectList;
+            for (Element* e : elementsToSelect) {
+                  if (e && !e->selected()) {
+                        selectList.push_back(e);
+                        }
+                  }
+            for (Element* element : selectList)
+                  select(element, SelectType::ADD, 0);
+            selection().updateSelectedElements();
             }
       }
 
