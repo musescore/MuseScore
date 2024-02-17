@@ -4561,7 +4561,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                   endingNumber = _e.attributes().value("number").toString();
                   endingType   = _e.attributes().value("type").toString();
                   endingColor  = _e.attributes().value("color").toString();
-                  printEnding  = _e.attributes().value("print-object").toString() != "no";
+                  printEnding  = _e.attributes().value("print-object") != "no";
                   endingText   = _e.readElementText();
                   }
             else if (_e.name() == "fermata") {
@@ -6697,6 +6697,7 @@ void MusicXMLParserLyric::parse()
       bool hasExtend = false;
       const auto lyricNumber = _e.attributes().value("number").toString();
       const QColor lyricColor { _e.attributes().value("color").toString() };
+      const bool printLyric = _e.attributes().value("print-object") != "no";
       QString extendType;
       QString formattedText;
 
@@ -6760,6 +6761,7 @@ void MusicXMLParserLyric::parse()
             lyric->setProperty(Pid::COLOR, lyricColor);
             lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
             }
+      lyric->setVisible(printLyric);
 
       const auto l = lyric.release();
       _numberedLyrics[lyricNo] = l;
