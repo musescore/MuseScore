@@ -5163,10 +5163,10 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 clef->setScore(score);
             } else {
                 clef = Factory::createClef(score->dummy()->segment());
+                clef->setClefType(ct);
                 gclef = clef;
             }
             clef->setTrack(track);
-            clef->setClefType(ct);
             clef->setParent(destSeg);
             clef->setIsHeader(st == SegmentType::HeaderClef);
             score->doUndoAddElement(clef);
