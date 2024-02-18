@@ -265,6 +265,7 @@ const std::list<const char*> MuseScore::_allNoteInputMenuEntries {
             "flat",
             "flat2",
             "flip",
+            "toggle-mouse-entry",
             "",
             "voice-1",
             "voice-2",

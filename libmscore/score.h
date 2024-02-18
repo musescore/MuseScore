@@ -786,6 +786,7 @@ class Score : public QObject, public ScoreElement {
       void deletePostponed();
 
       void changeVoice(int);
+      void cmdToggleMouseEntry(void);
 
       void colorItem(Element*);
       QList<Part*>& parts()                { return _parts; }

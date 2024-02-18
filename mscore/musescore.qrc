@@ -216,5 +216,6 @@
         <file>data/icons/png/dockwidget-float-dark@2x.png</file>
         <file>data/icons/png/dockwidget-float.png</file>
         <file>data/icons/png/dockwidget-float@2x.png</file>
+        <file>data/icons/mouse-entry.svg</file>
     </qresource>
 </RCC>

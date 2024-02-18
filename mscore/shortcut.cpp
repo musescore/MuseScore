@@ -1935,6 +1935,17 @@ Shortcut Shortcut::_sc[] = {
          0,
          },
       {
+         MsWidget::SCORE_TAB,
+         STATE_NORMAL | STATE_NOTE_ENTRY,
+         "toggle-mouse-entry",
+         QT_TRANSLATE_NOOP("action","Toggle mouse for note entry"),
+         QT_TRANSLATE_NOOP("action","Toggle mouse for note entry"),
+         0,
+         Icons::mouseEntry_ICON,
+         Qt::WindowShortcut,
+         ShortcutFlags::A_CHECKABLE
+         },
+      {
          MsWidget::MAIN_WINDOW,
          STATE_NORMAL | STATE_NOTE_ENTRY,
          "midi-on",
