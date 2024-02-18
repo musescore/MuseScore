@@ -1359,10 +1359,7 @@ void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutCont
                 TLayout::layoutGuitarBend(bendBack, ctx);
             }
 
-            Note* startOfTie = note;
-            while (startOfTie->tieBack() && startOfTie->tieBack()->startNote()) {
-                startOfTie = startOfTie->tieBack()->startNote();
-            }
+            Note* startOfTie = note->firstTiedNote();
             if (startOfTie != note) {
                 GuitarBend* bendBack2 = startOfTie->bendBack();
                 if (bendBack2) {
