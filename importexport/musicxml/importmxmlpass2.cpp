@@ -5503,6 +5503,14 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fractio
 //   handleSmallness
 //---------------------------------------------------------
 
+/**
+ * Handle the distinction between small notes and a small
+ * chord, to ensure a chord with all small notes is small.
+ * This also handles the fact that a small note being added
+ * to a small chord should not itself be small.
+ * I.e. a chord is "small until proven otherwise".
+ */
+
 static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
       {
       if (cueOrSmall)
@@ -6028,6 +6036,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             }
       else {
+            handleSmallness(cue || isSmall, note, c);
+            note->setPlay(!cue);          // cue notes don't play
+            note->setHeadGroup(headGroup);
+            if (noteColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                  note->setColor(noteColor);
+            setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+            note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
+
             if (!grace) {
                   handleSmallness(cue || isSmall, note, c);
                   note->setPlay(!cue);          // cue notes don't play
