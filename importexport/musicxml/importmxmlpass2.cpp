@@ -6694,6 +6694,8 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       ha->render();
 
       ha->setVisible(printObject);
+      if (placement == "below")
+            ha->setPlacement(Placement::BELOW);
       if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
             ha->setColor(color);
             ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
