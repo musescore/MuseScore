@@ -788,6 +788,42 @@ TEST_F(Musicxml_Tests, lines3) {
 TEST_F(Musicxml_Tests, lines4) {
     mxmlMscxExportTestRef("testLines4");
 }
+TEST_F(Musicxml_Tests, localTimesig1) {
+    mxmlMscxExportTestRef("testLocalTimesig1");
+}
+TEST_F(Musicxml_Tests, localTimesig2) {
+    mxmlMscxExportTestRef("testLocalTimesig2");
+}
+TEST_F(Musicxml_Tests, localTimesig3) {
+    mxmlMscxExportTestRef("testLocalTimesig3");
+}
+TEST_F(Musicxml_Tests, localTimesig4) {
+    mxmlMscxExportTestRef("testLocalTimesig4");
+}
+TEST_F(Musicxml_Tests, localTimesig5) {
+    mxmlMscxExportTestRef("testLocalTimesig5");
+}
+TEST_F(Musicxml_Tests, localTimesig6) {
+    mxmlMscxExportTestRef("testLocalTimesig6");
+}
+TEST_F(Musicxml_Tests, localTimesig8) {
+    mxmlMscxExportTestRef("testLocalTimesig8");
+}
+TEST_F(Musicxml_Tests, localTimesig9) {
+    mxmlMscxExportTestRef("testLocalTimesig9");
+}
+TEST_F(Musicxml_Tests, localTimesig10) {
+    mxmlMscxExportTestRef("testLocalTimesig10");
+}
+TEST_F(Musicxml_Tests, localTimesig11) {
+    mxmlMscxExportTestRef("testLocalTimesig11");
+}
+TEST_F(Musicxml_Tests, localTimesig12) {
+    mxmlMscxExportTestRef("testLocalTimesig12");
+}
+TEST_F(Musicxml_Tests, localTimesig14) {
+    mxmlMscxExportTestRef("testLocalTimesig14");
+}
 TEST_F(Musicxml_Tests, lyricBracket) {
     mxmlImportTestRef("testLyricBracket");
 }
