@@ -68,10 +68,7 @@ private:
 
     static void createBeamSegments(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests);
     static bool calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int level, bool isAfter32Break, bool isAfter64Break);
-    static void createBeamSegment(Beam* item, ChordRest* startChord, ChordRest* endChord, int level, bool shortStems,
-                                  std::set<ChordRest*>& stemShortenedCrs);
-    static int computeStemShortenAmount(ChordRest* cr, const Beam* beam, const BeamSegment* beamSegment, int level,
-                                        const ChordRest* startCr, const ChordRest* endCr, std::set<ChordRest*>& stemShortenedCrs);
+    static void createBeamSegment(Beam* item, ChordRest* startChord, ChordRest* endChord, int level, bool shortStems);
     static void createBeamletSegment(Beam* item, const LayoutContext& ctx, ChordRest* chord, bool isBefore, int level);
 
     static bool computeUpForMovedCross(Beam* item);
