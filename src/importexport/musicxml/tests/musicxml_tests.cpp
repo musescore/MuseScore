@@ -784,6 +784,42 @@ TEST_F(MusicXml_Tests, inferSegnoII) {
 TEST_F(MusicXml_Tests, inferFraction) {
     musicXmlImportTestRef("testInferFraction");
 }
+TEST_F(MusicXml_Tests, localTimesig1) {
+    musicXmlMscxExportTestRef("testLocalTimesig1");
+}
+TEST_F(MusicXml_Tests, localTimesig2) {
+    musicXmlMscxExportTestRef("testLocalTimesig2");
+}
+TEST_F(MusicXml_Tests, localTimesig3) {
+    musicXmlMscxExportTestRef("testLocalTimesig3");
+}
+TEST_F(MusicXml_Tests, localTimesig4) {
+    musicXmlMscxExportTestRef("testLocalTimesig4");
+}
+TEST_F(MusicXml_Tests, localTimesig5) {
+    musicXmlMscxExportTestRef("testLocalTimesig5");
+}
+TEST_F(MusicXml_Tests, localTimesig6) {
+    musicXmlMscxExportTestRef("testLocalTimesig6");
+}
+TEST_F(MusicXml_Tests, localTimesig8) {
+    musicXmlMscxExportTestRef("testLocalTimesig8");
+}
+TEST_F(MusicXml_Tests, localTimesig9) {
+    musicXmlMscxExportTestRef("testLocalTimesig9");
+}
+TEST_F(MusicXml_Tests, localTimesig10) {
+    musicXmlMscxExportTestRef("testLocalTimesig10");
+}
+TEST_F(MusicXml_Tests, localTimesig11) {
+    musicXmlMscxExportTestRef("testLocalTimesig11");
+}
+TEST_F(MusicXml_Tests, localTimesig12) {
+    musicXmlMscxExportTestRef("testLocalTimesig12");
+}
+TEST_F(MusicXml_Tests, localTimesig14) {
+    musicXmlMscxExportTestRef("testLocalTimesig14");
+}
 TEST_F(MusicXml_Tests, inferredFingerings) {
     musicXmlImportTestRef("testInferredFingerings");
 }
