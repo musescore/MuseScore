@@ -5083,6 +5083,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         }
     }
 
+    bool concertPitch = score()->style().styleB(Sid::concertPitch);
     Clef* gclef = 0;
     Fraction tick = e->tick();
     Fraction rtick = e->rtick();
@@ -5131,7 +5132,6 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 cp = ct;
                 tp = ct;
             } else {
-                bool concertPitch = clef->concertPitch();
                 if (concertPitch) {
                     cp = ct;
                     tp = clef->transposingClef();
