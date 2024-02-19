@@ -1065,7 +1065,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     PointF pos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
 #else
-    PointF pos = m_view->toLogical(event->position().toPoint());
+    PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
 #endif
 
@@ -1088,7 +1088,7 @@ void NotationViewInputController::dropEvent(QDropEvent* event)
     PointF pos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
 #else
-    PointF pos = m_view->toLogical(event->position().toPoint());
+    PointF pos = m_view->toLogical(event->position());
     Qt::KeyboardModifiers modifiers = event->modifiers();
 #endif
 

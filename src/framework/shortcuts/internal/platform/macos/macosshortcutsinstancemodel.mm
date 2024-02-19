@@ -230,6 +230,7 @@ quint32 nativeModifiers(UCKeyboardLayout* keyboard, int key, Qt::KeyboardModifie
     return result;
 }
 
+#ifdef MU_QT5_COMPAT
 Qt::KeyboardModifiers qtModifiers(int keys)
 {
     static QMap<int, Qt::KeyboardModifier> qtModifiers = {
@@ -343,3 +344,122 @@ void MacOSShortcutsInstanceModel::doActivate(const QString& key)
 {
     ShortcutsInstanceModel::doActivate(m_shortcutMap.value(key));
 }
+
+#else // MU_QT5_COMPAT
+
+Qt::KeyboardModifiers qtModifiers(int keys)
+{
+    static QMap<int, Qt::KeyboardModifier> qtModifiers = {
+        { shiftKey, Qt::ShiftModifier },
+        { rightShiftKey, Qt::ShiftModifier },
+        { controlKey, Qt::MetaModifier },
+        { rightControlKey, Qt::MetaModifier },
+        { cmdKey, Qt::ControlModifier },
+        { optionKey, Qt::AltModifier },
+        { rightOptionKey, Qt::AltModifier },
+        { kEventKeyModifierNumLockMask, Qt::KeypadModifier },
+        { 0, Qt::NoModifier }
+    };
+
+    Qt::KeyboardModifiers result = Qt::NoModifier;
+    QMapIterator<int, Qt::KeyboardModifier> it(qtModifiers);
+    while (it.hasNext()) {
+        it.next();
+
+        if (keys & it.key()) {
+            result |= it.value();
+        }
+    }
+
+    return result;
+}
+
+QSet<QKeyCombination> possibleKeys(const QKeySequence& sequence)
+{
+    const QKeyCombination keyCombination = sequence[0];
+
+    const Qt::Key qKey = keyCombination.key();
+    if (qKey == Qt::Key_Insert) {
+        return { keyCombination };
+    }
+
+    UCKeyboardLayout* keyboard = keyboardLayout();
+    if (!keyboard) {
+        LOGE() << "The keyboard layout is not valid";
+        return {};
+    }
+
+    Qt::KeyboardModifiers modifiers = keyCombination.keyboardModifiers();
+
+    quint32 keyNativeCode = nativeKeycode(keyboard, qKey);
+    quint32 keyNativeModifiers = nativeModifiers(keyboard, qKey, modifiers, keyNativeCode);
+
+    //! NOTE: It may be that we resolved modifiers through the native key,
+    //! then we should update the qt modifiers
+    modifiers = qtModifiers(keyNativeModifiers);
+
+    QKeyEvent fakeKey(QKeyEvent::None, keyCombination.toCombined(), modifiers, keyNativeCode, keyNativeCode, keyNativeModifiers);
+    QList<int> keys = QGuiApplicationPrivate::platformIntegration()->possibleKeys(&fakeKey);
+
+    QSet<QKeyCombination> result;
+    for (int key : keys) {
+        QKeyCombination combination = QKeyCombination::fromCombined(key);
+        if (modifiers != Qt::NoModifier) {
+            if (combination.keyboardModifiers() == Qt::NoModifier) {
+                combination = QKeyCombination(modifiers, combination.key());
+            }
+
+            if (combination.keyboardModifiers() != modifiers) {
+                continue;
+            }
+        }
+
+        result << combination;
+    }
+
+    return result;
+}
+
+MacOSShortcutsInstanceModel::MacOSShortcutsInstanceModel(QObject* parent)
+    : ShortcutsInstanceModel(parent)
+{
+    connect(qApp->inputMethod(), &QInputMethod::localeChanged, this, [this]() {
+        doLoadShortcuts();
+    });
+}
+
+void MacOSShortcutsInstanceModel::doLoadShortcuts()
+{
+    m_shortcuts.clear();
+    m_shortcutMap.clear();
+
+    ShortcutList shortcuts = shortcutsRegister()->shortcuts();
+
+    for (const Shortcut& sc : shortcuts) {
+        for (const std::string& seq : sc.sequences) {
+            QString sequence = QString::fromStdString(seq);
+
+            QSet<QKeyCombination> keys = possibleKeys(QKeySequence::fromString(sequence, QKeySequence::PortableText));
+            for (QKeyCombination key : keys) {
+                QKeySequence keySeq(key);
+                QString seqStr = keySeq.toString(QKeySequence::PortableText);
+
+                //! NOTE There may be several identical shortcuts for different contexts.
+                //! We only need a list of unique ones.
+                if (!m_shortcuts.contains(seqStr)) {
+                    m_shortcuts << seqStr;
+                    m_shortcutMap.insert(seqStr, sequence);
+                }
+            }
+        }
+    }
+
+    emit shortcutsChanged();
+}
+
+void MacOSShortcutsInstanceModel::doActivate(const QString& key)
+{
+    ShortcutsInstanceModel::doActivate(m_shortcutMap.value(key));
+}
+
+#endif // else MU_QT5_COMPAT
