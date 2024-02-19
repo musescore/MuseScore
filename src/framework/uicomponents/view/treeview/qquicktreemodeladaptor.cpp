@@ -124,7 +124,7 @@ void QQuickTreeModelAdaptor1::clearModelData()
     endResetModel();
 }
 
-const QModelIndex &QQuickTreeModelAdaptor1::rootIndex() const
+const QModelIndex QQuickTreeModelAdaptor1::rootIndex() const
 {
     return m_rootIndex;
 }

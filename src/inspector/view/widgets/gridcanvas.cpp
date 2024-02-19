@@ -243,8 +243,13 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
     const qreal rowHeight = qreal(height()) / m_rows;
 
     // Half a column/row of margin around
-    const int x = ev->x() - columnWidth * .5;
-    const int y = ev->y() - rowHeight * .5;
+#ifdef MU_QT5_COMPAT
+    QPoint pos = ev->pos();
+#else
+    QPoint pos = ev->position().toPoint();
+#endif
+    const int x = pos.x() - columnWidth * .5;
+    const int y = pos.y() - rowHeight * .5;
 
     int column = round(qreal(x) / columnWidth);
     int row = round(qreal(y) / rowHeight);

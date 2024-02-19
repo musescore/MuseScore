@@ -72,7 +72,7 @@ public:
     explicit QQuickTreeModelAdaptor1(QObject *parent = 0);
 
     QAbstractItemModel *model() const;
-    const QModelIndex &rootIndex() const;
+    const QModelIndex rootIndex() const;
     void setRootIndex(const QModelIndex &idx);
     void resetRootIndex();
 
