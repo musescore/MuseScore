@@ -2847,6 +2847,7 @@ void MusicXMLParserDirection::direction(const String& partId,
         }
     }
 
+    handleTempo();
     handleRepeats(measure, track, tick + m_offset);
     handleNmiCmi(measure, track, tick + m_offset, delayedDirections);
 
@@ -3362,6 +3363,57 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t t
     MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, u"above", measure, tick);
     delayedDirections.push_back(delayedDirection);
     m_wordsText.replace(u"NmiCmi", u"N.C.");
+}
+
+void MusicXMLParserDirection::handleTempo()
+{
+    // Pick up any tempo markings which may have been exported from Sibelius as <words>
+    // eg. andante (q = c. 90)
+    // Sibelius uses a symbol font with the characters 'yxeqhVwW' each drawn as a different duration
+    // which we need to map to SMuFL syms
+    String plainWords = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
+
+    static const std::regex tempo(".*([yxeqhVwW])(\\.?)\\s*=[^0-9]*([0-9]+).*");
+    StringList tempoMatches = plainWords.search(tempo, { 1, 2, 3 }, SplitBehavior::SkipEmptyParts);
+
+    // Not a tempo
+    if (tempoMatches.size() < 2) {
+        return;
+    }
+
+    const String dur = tempoMatches.at(0);
+    const bool dot = tempoMatches.size() == 3;
+    const String val = tempoMatches.at(dot ? 2 : 1);
+
+    const String dotStr = dot ? u"<sym>space</sym><sym>metAugmentationDot</sym>" : u"";
+    // Map Sibelius' representation of note types to their SMuFL counterparts and duration types
+    static const std::map<String, std::pair<String, DurationType> > syms = {
+        { u"y", { u"<sym>metNote32ndUp</sym>", DurationType::V_32ND } },
+        { u"x", { u"<sym>metNote16thUp</sym>", DurationType::V_16TH } },
+        { u"e", { u"<sym>metNote8thUp</sym>", DurationType::V_EIGHTH } },
+        { u"q", { u"<sym>metNoteQuarterUp</sym>", DurationType::V_QUARTER } },
+        { u"h", { u"<sym>metNoteHalfUp</sym>", DurationType::V_HALF } },
+        { u"w", { u"<sym>metNoteWhole</sym>", DurationType::V_WHOLE } },
+        { u"V", { u"<sym>metNoteDoubleWholeSquare</sym>", DurationType::V_BREVE } },
+        { u"W", { u"<sym>metNoteDoubleWhole</sym>", DurationType::V_BREVE } }
+    };
+
+    static const std::regex replace("(.*)[yxeqhVwW]\\.?(\\s*=[^0-9]*[0-9]+.*)");
+    const String newStr = u"$1" + syms.at(dur).first + dotStr + u"$2";
+    plainWords.replace(replace, newStr);
+    m_wordsText = plainWords;
+
+    if (!val.empty() && !dur.empty()) {
+        bool ok;
+        double d = val.toDouble(&ok);
+        TDuration duration = TDuration(syms.at(dur).second);
+        duration.setDots(dot);
+
+        if (ok && duration.isValid()) {
+            // convert fraction to beats per minute
+            m_tpoMetro = 4 * duration.fraction().numerator() * d / duration.fraction().denominator();
+        }
+    }
 }
 
 //---------------------------------------------------------
