@@ -47,10 +47,10 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
 
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
+#ifdef MU_QT5_COMPAT
     TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other);
+#endif
     ~TimeSignaturePropertiesDialog() override;
-
-    static int static_metaTypeId();
 
 private slots:
     void accept() override;
@@ -64,7 +64,5 @@ private:
     engraving::TimeSig* m_editedTimeSig = nullptr;
 };
 }
-
-Q_DECLARE_METATYPE(mu::palette::TimeSignaturePropertiesDialog)
 
 #endif // MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H

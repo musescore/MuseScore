@@ -100,15 +100,13 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 SelectNoteDialog::SelectNoteDialog(const SelectNoteDialog& other)
     : QDialog(other.parentWidget())
 {
 }
 
-int SelectNoteDialog::metaTypeId()
-{
-    return QMetaType::type("SelectNoteDialog");
-}
+#endif
 
 FilterNotesOptions SelectNoteDialog::noteOptions() const
 {

@@ -158,10 +158,13 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
+#ifdef MU_QT5_COMPAT
 TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other)
     : QDialog(other.parentWidget())
 {
 }
+
+#endif
 
 TimeSignaturePropertiesDialog::~TimeSignaturePropertiesDialog()
 {
@@ -172,11 +175,6 @@ void TimeSignaturePropertiesDialog::hideEvent(QHideEvent* event)
 {
     WidgetStateStore::saveGeometry(this);
     QDialog::hideEvent(event);
-}
-
-int TimeSignaturePropertiesDialog::static_metaTypeId()
-{
-    return QMetaType::type(TIME_SIGNATURE_PROPERTIES_DIALOG_NAME.toStdString().c_str());
 }
 
 //---------------------------------------------------------

@@ -96,10 +96,13 @@ PageSettings::PageSettings(QWidget* parent)
             this, &PageSettings::pageOffsetChanged);
 }
 
+#ifdef MU_QT5_COMPAT
 PageSettings::PageSettings(const PageSettings& other)
     : QDialog(other.parentWidget())
 {
 }
+
+#endif
 
 void PageSettings::showEvent(QShowEvent* event)
 {

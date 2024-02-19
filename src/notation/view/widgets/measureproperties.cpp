@@ -79,10 +79,13 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     qApp->installEventFilter(this);
 }
 
+#ifdef MU_QT5_COMPAT
 MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog)
     : MeasurePropertiesDialog(dialog.parentWidget())
 {
 }
+
+#endif
 
 void MeasurePropertiesDialog::initMeasure()
 {
