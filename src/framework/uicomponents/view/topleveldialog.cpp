@@ -60,10 +60,13 @@ TopLevelDialog::TopLevelDialog(QWidget* parent)
 #endif
 }
 
+#ifdef MU_QT5_COMPAT
 TopLevelDialog::TopLevelDialog(const TopLevelDialog& dialog)
     : QDialog(dialog.parentWidget())
 {
 }
+
+#endif
 
 bool TopLevelDialog::event(QEvent* e)
 {

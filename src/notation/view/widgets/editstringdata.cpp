@@ -72,18 +72,16 @@ EditStringData::EditStringData(QWidget* parent, const std::vector<instrString>& 
     qApp->installEventFilter(this);
 }
 
+#ifdef MU_QT5_COMPAT
 EditStringData::EditStringData(const EditStringData& other)
     : QDialog(other.parentWidget())
 {
 }
 
+#endif
+
 EditStringData::~EditStringData()
 {
-}
-
-int EditStringData::metaTypeId()
-{
-    return QMetaType::type("EditStringData");
 }
 
 std::vector<instrString> EditStringData::strings() const

@@ -44,7 +44,9 @@ class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBas
 
 public:
     MeasurePropertiesDialog(QWidget* parent = nullptr);
+#ifdef MU_QT5_COMPAT
     MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog);
+#endif
 
 private slots:
     void bboxClicked(QAbstractButton* button);
@@ -72,6 +74,4 @@ private:
     std::shared_ptr<INotation> m_notation;
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::MeasurePropertiesDialog)
 #endif

@@ -35,7 +35,9 @@ class TopLevelDialog : public QDialog
 
 public:
     explicit TopLevelDialog(QWidget* parent = nullptr);
+#ifdef MU_QT5_COMPAT
     TopLevelDialog(const TopLevelDialog& dialog);
+#endif
 
 protected:
     bool event(QEvent* e) override;

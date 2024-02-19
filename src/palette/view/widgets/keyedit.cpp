@@ -372,11 +372,13 @@ KeyEditor::KeyEditor(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 KeyEditor::KeyEditor(const KeyEditor& widget)
     : KeyEditor(widget.parentWidget())
 {
 }
 
+#endif
 //---------------------------------------------------------
 //   addClicked
 //---------------------------------------------------------

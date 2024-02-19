@@ -43,10 +43,10 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase
 
 public:
     EditStringData(QWidget* parent = nullptr, const std::vector<engraving::instrString>& strings = {}, int frets = 0);
+#ifdef MU_QT5_COMPAT
     EditStringData(const EditStringData&);
+#endif
     ~EditStringData();
-
-    static int metaTypeId();
 
     std::vector<mu::engraving::instrString> strings() const;
     int frets() const;
@@ -81,7 +81,5 @@ private:
     Instrument* m_instrument = nullptr;
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::EditStringData)
 
 #endif // MU_NOTATION_EDITSTRINGDATA_H

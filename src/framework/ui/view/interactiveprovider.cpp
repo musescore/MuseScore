@@ -564,8 +564,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
     static int count(0);
     QString objectId = QString("%1_%2").arg(widgetMetaTypeId).arg(++count);
 
-    void* widgetClassPtr = QMetaType::create(widgetMetaTypeId);
-    QDialog* dialog = static_cast<QDialog*>(widgetClassPtr);
+    QMetaType metaType = QMetaType(widgetMetaTypeId);
+    QDialog* dialog = static_cast<QDialog*>(metaType.create());
 
     if (!dialog) {
         result.ret = make_ret(Ret::Code::UnknownError);

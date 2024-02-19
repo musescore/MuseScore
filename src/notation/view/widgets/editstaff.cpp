@@ -109,15 +109,13 @@ EditStaff::EditStaff(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 EditStaff::EditStaff(const EditStaff& other)
     : QDialog(other.parentWidget())
 {
 }
 
-int EditStaff::metaTypeId()
-{
-    return QMetaType::type("EditStaff");
-}
+#endif
 
 void EditStaff::setStaff(Staff* s, const Fraction& tick)
 {

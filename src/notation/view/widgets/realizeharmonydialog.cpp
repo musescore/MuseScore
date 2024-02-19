@@ -60,10 +60,13 @@ RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
     setChordList(selectedHarmonyList);
 }
 
+#ifdef MU_QT5_COMPAT
 RealizeHarmonyDialog::RealizeHarmonyDialog(const RealizeHarmonyDialog& dialog)
     : RealizeHarmonyDialog(dialog.parentWidget())
 {
 }
+
+#endif
 
 INotationInteractionPtr RealizeHarmonyDialog::interaction() const
 {

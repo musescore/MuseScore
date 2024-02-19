@@ -50,7 +50,10 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 
 public:
     EditStyle(QWidget* = nullptr);
+
+#ifdef MU_QT5_COMPAT
     EditStyle(const EditStyle&);
+#endif
 
     QString currentPageCode() const;
     QString currentSubPageCode() const;
@@ -152,7 +155,5 @@ private:
     static int s_lastSubPageRow;
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::EditStyle)
 
 #endif // MU_NOTATION_EDITSTYLE_H

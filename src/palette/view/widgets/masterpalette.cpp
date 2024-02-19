@@ -159,10 +159,13 @@ MasterPalette::MasterPalette(QWidget* parent)
     WidgetStateStore::restoreGeometry(this);
 }
 
-int MasterPalette::static_metaTypeId()
+#ifdef MU_QT5_COMPAT
+MasterPalette::MasterPalette(const MasterPalette& other)
+    : TopLevelDialog(other.parentWidget())
 {
-    return qRegisterMetaType<MasterPalette>("MasterPalette");
 }
+
+#endif
 
 //---------------------------------------------------------
 //   retranslate

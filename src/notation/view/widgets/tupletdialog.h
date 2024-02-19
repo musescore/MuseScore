@@ -45,7 +45,10 @@ class TupletDialog : public QDialog, Ui::TupletDialog
 
 public:
     TupletDialog(QWidget* parent = nullptr);
+
+#ifdef MU_QT5_COMPAT
     TupletDialog(const TupletDialog&);
+#endif
 
     void defaultToStyleSettings();
 
@@ -61,7 +64,5 @@ private slots:
     void bboxClicked(QAbstractButton* button);
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::TupletDialog)
 
 #endif // MU_NOTATION_TUPLETDIALOG_H
