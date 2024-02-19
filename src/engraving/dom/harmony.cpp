@@ -778,6 +778,8 @@ void Harmony::endEdit(EditData& ed)
     // disable spell check
     m_isMisspelled = false;
 
+    TextBase::endEdit(ed);
+
     if (links()) {
         for (EngravingObject* e : *links()) {
             if (e == this) {
@@ -797,8 +799,8 @@ void Harmony::endEdit(EditData& ed)
                     if (!h->style().styleB(Sid::concertPitch)) {
                         interval.flip();
                     }
-                    int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                    int baseTpc = transposeTpc(h->baseTpc(), interval, true);
+                    int rootTpc = transposeTpc(m_rootTpc, interval, true);
+                    int baseTpc = transposeTpc(m_baseTpc, interval, true);
                     //score()->undoTransposeHarmony(h, rootTpc, baseTpc);
                     h->setRootTpc(rootTpc);
                     h->setBaseTpc(baseTpc);
@@ -809,8 +811,6 @@ void Harmony::endEdit(EditData& ed)
             }
         }
     }
-
-    TextBase::endEdit(ed);
 }
 
 //---------------------------------------------------------
