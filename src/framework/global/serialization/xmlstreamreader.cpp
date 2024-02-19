@@ -75,18 +75,25 @@ XmlStreamReader::~XmlStreamReader()
 
 void XmlStreamReader::setData(const ByteArray& data_)
 {
+    m_xml->doc.Clear();
+    m_xml->customErr.clear();
+    m_token = TokenType::Invalid;
+
     if (data_.size() < 4) {
-        LOGE() << "empty data";
+        m_xml->err = XML_ERROR_EMPTY_DOCUMENT;
+        LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
         return;
     }
 
     UtfCodec::Encoding enc = UtfCodec::xmlEncoding(data_);
     if (enc == UtfCodec::Encoding::Unknown) {
+        m_xml->err = XML_CAN_NOT_CONVERT_TEXT;
         LOGE() << "unknown encoding";
         return;
     }
 
     if (enc == UtfCodec::Encoding::UTF_16BE) {
+        m_xml->err = XML_CAN_NOT_CONVERT_TEXT;
         LOGE() << "unsupported encoding UTF-16BE";
         return;
     }
@@ -97,13 +104,12 @@ void XmlStreamReader::setData(const ByteArray& data_)
         data = u16.toUtf8();
     }
 
-    m_xml->doc.Clear();
     m_xml->err = m_xml->doc.Parse(reinterpret_cast<const char*>(data.constData()), data.size());
-    m_token = m_xml->err == XML_SUCCESS ? TokenType::NoToken : TokenType::Invalid;
-    m_xml->customErr.clear();
 
-    if (m_xml->err != XML_SUCCESS) {
-        LOGE() << errorString();
+    if (m_xml->err == XML_SUCCESS) {
+        m_token = TokenType::NoToken;
+    } else {
+        LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
     }
 }
 
