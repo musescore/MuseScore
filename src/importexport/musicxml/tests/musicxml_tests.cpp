@@ -860,6 +860,9 @@ TEST_F(Musicxml_Tests, restsTypeWhole) {
 TEST_F(Musicxml_Tests, secondVoiceMelismata) {
     mxmlImportTestRef("testSecondVoiceMelismata");
 }
+TEST_F(Musicxml_Tests, sibMetronomeMarks) {
+    mxmlImportTestRef("testSibMetronomeMarks");
+}
 TEST_F(Musicxml_Tests, slurTieDirection) {
     mxmlIoTest("testSlurTieDirection");
 }

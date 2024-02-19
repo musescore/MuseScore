@@ -2859,6 +2859,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         }
     }
 
+    handleTempo();
     handleRepeats(measure, track, tick + _offset);
     handleNmiCmi(measure, track, tick + _offset, delayedDirections);
 
@@ -3340,7 +3341,7 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t 
             }
             // Temporary solution to indent codas - add a horizontal frame at start of system or midway through
             if (tb->isMarker() && toMarker(tb)->markerType() == MarkerType::CODA) {
-                MeasureBase* gap = m_score->insertBox(ElementType::HBOX, measure);
+                MeasureBase* gap = _score->insertBox(ElementType::HBOX, measure);
                 toHBox(gap)->setBoxWidth(Spatium(10));
             }
             measure->add(tb);
@@ -3368,6 +3369,61 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t t
     MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, "above", measure, tick);
     delayedDirections.push_back(delayedDirection);
     _wordsText.replace("NmiCmi", "N.C.");
+}
+
+void MusicXMLParserDirection::handleTempo()
+{
+    // Pick up any tempo markings which may have been exported from Sibelius as <words>
+    // eg. andante (q = c. 90)
+    // Sibelius uses a symbol font with the characters 'yxeqhVwW' each drawn as a different duration
+    // which we need to map to SMuFL syms
+    QString plainWords = MScoreTextToMXML::toPlainText(_wordsText.simplified());
+
+    static const QRegularExpression tempo(".*([yxeqhVwW])(\\.?)\\s*=[^0-9]*([0-9]+).*");
+    QRegularExpressionMatch match = tempo.match(plainWords);
+    QStringList tempoMatches = match.capturedTexts();
+    if (tempoMatches.size() > 0) {
+        tempoMatches.removeFirst();
+    }
+
+    // Not a tempo
+    if (tempoMatches.size() < 2) {
+        return;
+    }
+
+    const QString dur = tempoMatches.at(0);
+    const bool dot = !tempoMatches.at(1).isEmpty();
+    const QString val = tempoMatches.at(2);
+
+    const QString dotStr = dot ? QString("<sym>space</sym><sym>metAugmentationDot</sym>") : QString();
+    // Map Sibelius' representation of note types to their SMuFL counterparts and duration types
+    static const std::map<QString, std::pair<QString, DurationType> > syms = {
+        { QString("y"), { QString("<sym>metNote32ndUp</sym>"), DurationType::V_32ND } },
+        { QString("x"), { QString("<sym>metNote16thUp</sym>"), DurationType::V_16TH } },
+        { QString("e"), { QString("<sym>metNote8thUp</sym>"), DurationType::V_EIGHTH } },
+        { QString("q"), { QString("<sym>metNoteQuarterUp</sym>"), DurationType::V_QUARTER } },
+        { QString("h"), { QString("<sym>metNoteHalfUp</sym>"), DurationType::V_HALF } },
+        { QString("w"), { QString("<sym>metNoteWhole</sym>"), DurationType::V_WHOLE } },
+        { QString("V"), { QString("<sym>metNoteDoubleWholeSquare</sym>"), DurationType::V_BREVE } },
+        { QString("W"), { QString("<sym>metNoteDoubleWhole</sym>"), DurationType::V_BREVE } }
+    };
+
+    static const QRegularExpression replace("(.*)[yxeqhVwW]\\.?(\\s*=[^0-9]*[0-9]+.*)");
+    const QString newStr = QString("\\1") + syms.at(dur).first + dotStr + QString("\\2");
+    plainWords.replace(replace, newStr);
+    _wordsText = plainWords;
+
+    if (!val.isEmpty() && !dur.isEmpty()) {
+        bool ok;
+        double d = val.toDouble(&ok);
+        TDuration duration = TDuration(syms.at(dur).second);
+        duration.setDots(dot);
+
+        if (ok && duration.isValid()) {
+            // convert fraction to beats per minute
+            _tpoMetro = 4 * duration.fraction().numerator() * d / duration.fraction().denominator();
+        }
+    }
 }
 
 //---------------------------------------------------------
