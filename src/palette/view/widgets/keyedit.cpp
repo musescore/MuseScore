@@ -249,7 +249,11 @@ void KeyCanvas::dragMoveEvent(QDragMoveEvent* event)
 {
     if (dragElement) {
         event->acceptProposedAction();
+#ifdef MU_QT5_COMPAT
         PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
+#else
+        PointF pos = PointF::fromQPointF(imatrix.map(event->position()));
+#endif
         dragElement->setPos(pos);
         update();
     }

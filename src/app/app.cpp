@@ -87,7 +87,9 @@ int App::run(int argc, char** argv)
     }
 #endif
 
+#ifdef MU_QT5_COMPAT
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
     //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
     //!       Because of this, some elements are drawn with a shift on the score.

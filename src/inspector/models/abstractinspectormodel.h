@@ -246,6 +246,7 @@ using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
 using InspectorModelTypeSet = QSet<InspectorModelType>;
 using InspectorSectionTypeSet = QSet<InspectorSectionType>;
 
+#ifdef MU_QT5_COMPAT
 inline uint qHash(InspectorSectionType key)
 {
     return ::qHash(QString::number(static_cast<int>(key)));
@@ -255,6 +256,19 @@ inline uint qHash(InspectorModelType key)
 {
     return ::qHash(QString::number(static_cast<int>(key)));
 }
+
+#else
+inline size_t qHash(InspectorSectionType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+
+inline size_t qHash(InspectorModelType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+
+#endif
 }
 
 #endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H

@@ -35,7 +35,11 @@ public:
     template<typename Functor>
     static void run(Functor functor)
     {
+#ifdef MU_QT5_COMPAT
         QtConcurrent::run(functor);
+#else
+        UNUSED(QtConcurrent::run(functor));
+#endif
     }
 
     // not const object, not const fn

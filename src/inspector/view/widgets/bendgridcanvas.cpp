@@ -420,7 +420,12 @@ void BendGridCanvas::hoverMoveEvent(QHoverEvent* event)
     auto oldPointIndex = m_hoverPointIndex;
 
     QRectF frameRect = this->frameRect();
-    QPointF coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
+#ifdef MU_QT5_COMPAT
+    QPoint pos = event->pos();
+#else
+    QPoint pos = event->position().toPoint();
+#endif
+    QPointF coord = this->frameCoord(frameRect, pos.x(), pos.y());
     CurvePoint point = this->point(frameRect, coord.x(), coord.y());
 
     m_hoverPointIndex = this->pointIndex(point);

@@ -846,7 +846,12 @@ void PaletteWidget::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this) {
         if (m_currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
-            int targetIdx = cellIndexForPoint(event->pos());
+#ifdef MU_QT5_COMPAT
+            QPoint pos = event->pos();
+#else
+            QPoint pos = event->position().toPoint();
+#endif
+            int targetIdx = cellIndexForPoint(pos);
             if (targetIdx != -1 && targetIdx != m_currentIdx) {
                 PaletteCellPtr cell = m_palette->takeCell(m_currentIdx);
                 m_palette->insertCell(targetIdx, cell);
@@ -928,7 +933,12 @@ void PaletteWidget::dropEvent(QDropEvent* event)
     }
 
     element->setSelected(false);
-    int i = cellIndexForPoint(event->pos());
+#ifdef MU_QT5_COMPAT
+    QPoint pos = event->pos();
+#else
+    QPoint pos = event->position().toPoint();
+#endif
+    int i = cellIndexForPoint(pos);
     if (i == -1 || cells()[i]) {
         appendElement(element, name);
     } else {
@@ -1022,13 +1032,13 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         }
 
         if (idx == m_selectedIdx) {
-            c.setAlphaF(0.5);
+            c.setAlphaF(0.5f);
             painter.fillRect(r, c);
         } else if (idx == m_pressedIndex) {
-            c.setAlphaF(0.75);
+            c.setAlphaF(0.75f);
             painter.fillRect(r, c);
         } else if (idx == m_currentIdx) {
-            c.setAlphaF(0.2);
+            c.setAlphaF(0.2f);
             painter.fillRect(r, c);
         }
 
