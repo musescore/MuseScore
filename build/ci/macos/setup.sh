@@ -25,6 +25,20 @@ SKIP_ERR_FLAG=true
 
 export MACOSX_DEPLOYMENT_TARGET=10.14
 
+QT5_COMPAT="ON"
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --qt5_compat) QT5_COMPAT="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ "$QT5_COMPAT" != "ON" ]; then 
+    echo "for 4.3 branch only Qt5 (QT5_COMPAT == 'ON')"
+fi
+
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/2020-02/bottles-MuseScore-3.0-yosemite.zip
 unzip bottles.zip
@@ -92,6 +106,8 @@ installBottleManually libsndfile
 # fixing install python 3.9 error (it is a dependency for ninja)
 rm '/usr/local/bin/2to3'
 brew install ninja pkg-config
+
+brew install cmake
 
 # Qt
 export QT_SHORT_VERSION=5.15.9

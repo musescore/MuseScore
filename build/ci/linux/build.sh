@@ -31,6 +31,7 @@ CRASH_REPORT_URL=""
 BUILD_MODE=""
 SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
 YOUTUBE_API_KEY=""
+QT5_COMPAT="ON"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -39,10 +40,15 @@ while [[ "$#" -gt 0 ]]; do
         --build_mode) BUILD_MODE="$2"; shift ;;
         --youtube_api_key) YOUTUBE_API_KEY="$2"; shift ;;
         --arch) PACKARCH="$2"; shift ;;
+        --qt5_compat) QT5_COMPAT="$2"; shift ;; 
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
+
+if [ "$QT5_COMPAT" != "ON" ]; then 
+    echo "for 4.3 branch only Qt5 (QT5_COMPAT == 'ON')"
+fi
 
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi

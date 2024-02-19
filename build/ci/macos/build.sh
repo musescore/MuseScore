@@ -26,16 +26,22 @@ SKIP_ERR=true
 ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
 YOUTUBE_API_KEY=""
+QT5_COMPAT="ON"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --youtube_api_key) YOUTUBE_API_KEY="$2"; shift ;;
+        --qt5_compat) QT5_COMPAT="$2"; shift ;; 
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
+
+if [ "$QT5_COMPAT" != "ON" ]; then 
+    echo "for 4.3 branch only Qt5 (QT5_COMPAT == 'ON')"
+fi
 
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
