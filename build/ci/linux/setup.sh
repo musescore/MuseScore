@@ -30,6 +30,20 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 
+QT5_COMPAT="ON"
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --qt5_compat) QT5_COMPAT="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
+if [ "$QT5_COMPAT" != "ON" ]; then 
+    echo "for 4.3 branch only Qt5 (QT5_COMPAT == 'ON')"
+fi
+
 mkdir -p $BUILD_TOOLS
 
 # Let's remove the file with environment variables to recreate it
