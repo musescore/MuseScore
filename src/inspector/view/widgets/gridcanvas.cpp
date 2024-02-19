@@ -244,9 +244,9 @@ void GridCanvas::mousePressEvent(QMouseEvent* ev)
 
     // Half a column/row of margin around
 #ifdef MU_QT5_COMPAT
-    QPoint pos = ev->pos();
+    QPointF pos = ev->pos();
 #else
-    QPoint pos = ev->position().toPoint();
+    QPointF pos = ev->position();
 #endif
     const int x = pos.x() - columnWidth * .5;
     const int y = pos.y() - rowHeight * .5;

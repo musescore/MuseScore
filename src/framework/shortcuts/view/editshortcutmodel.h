@@ -48,7 +48,7 @@ public:
     QString conflictWarning() const;
 
     Q_INVOKABLE void load(const QVariant& shortcut, const QVariantList& allShortcuts);
-    Q_INVOKABLE void inputKey(int key, Qt::KeyboardModifiers modifiers);
+    Q_INVOKABLE void inputKey(Qt::Key key, Qt::KeyboardModifiers modifiers);
     Q_INVOKABLE void applyNewSequence();
 
 signals:

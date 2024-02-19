@@ -158,12 +158,8 @@ inline RemoteEvent remoteEventFromMidiEvent(const midi::Event& midiEvent)
     return event;
 }
 
-inline bool needIgnoreKey(int key)
+inline bool needIgnoreKey(Qt::Key key)
 {
-    if (key == 0) {
-        return true;
-    }
-
     static const std::set<Qt::Key> ignoredKeys {
         Qt::Key_Shift,
         Qt::Key_Control,
@@ -176,10 +172,10 @@ inline bool needIgnoreKey(int key)
         Qt::Key_unknown
     };
 
-    return ignoredKeys.find(static_cast<Qt::Key>(key)) != ignoredKeys.end();
+    return ignoredKeys.find(key) != ignoredKeys.end();
 }
 
-inline std::pair<int, Qt::KeyboardModifiers> correctKeyInput(int key, Qt::KeyboardModifiers modifiers)
+inline std::pair<Qt::Key, Qt::KeyboardModifiers> correctKeyInput(Qt::Key key, Qt::KeyboardModifiers modifiers)
 {
     // replace Backtab with Shift+Tab
     if (key == Qt::Key_Backtab && modifiers == Qt::ShiftModifier) {

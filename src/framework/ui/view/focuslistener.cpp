@@ -68,12 +68,12 @@ bool FocusListener::eventFilter(QObject* watched, QEvent* event)
     if (m_item && watched && m_item->hasActiveFocus() && event->type() == QEvent::MouseButtonPress) {
         QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
         QPointF globalItemPos = m_item->mapToGlobal(QPoint(0, 0));
-        QRect globalItemGeometry = QRect(globalItemPos.x(), globalItemPos.y(), m_item->width(), m_item->height());
+        QRectF globalItemGeometry = QRect(globalItemPos.x(), globalItemPos.y(), m_item->width(), m_item->height());
 
 #ifdef MU_QT5_COMPAT
-        QPoint globalPos = mouseEvent->globalPos();
+        QPointF globalPos = mouseEvent->globalPos();
 #else
-        QPoint globalPos = mouseEvent->globalPosition().toPoint();
+        QPointF globalPos = mouseEvent->globalPosition();
 #endif
         bool needResetFocus = !globalItemGeometry.contains(globalPos);
         if (needResetFocus) {

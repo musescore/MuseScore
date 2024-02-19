@@ -306,9 +306,9 @@ void FretCanvas::hoverMoveEvent(QHoverEvent* ev)
     int fret = 0;
 
 #ifdef MU_QT5_COMPAT
-    QPoint pos = ev->pos();
+    QPointF pos = ev->pos();
 #else
-    QPoint pos = ev->position().toPoint();
+    QPointF pos = ev->position();
 #endif
 
     getPosition(pos, &string, &fret);
