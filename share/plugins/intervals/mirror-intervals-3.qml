@@ -14,12 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
 import MuseScore 3.0
-import QtQuick 2.2
-import QtQuick.Controls 1.1
-import QtQuick.Controls.Styles 1.3
-import QtQuick.Layouts 1.1
-import QtQuick.Dialogs 1.1
+import MuseScore.UiComponents 1.0
 
 MuseScore {
     version: "3.0.2"
@@ -55,9 +55,9 @@ MuseScore {
         selection.cursor.rewind(1)
         for (
             var segment = selection.cursor.segment;
-                segment && segment.tick < selection.endTick;
-                segment = segment.next
-        ) {
+            segment && segment.tick < selection.endTick;
+            segment = segment.next
+            ) {
             for (var track = selection.startTrack; track < selection.endTrack; track++) {
                 var element = segment.elementAt(track)
                 if (element) {
@@ -160,7 +160,7 @@ MuseScore {
 
     function getPivotNote()
     {
-        return pivotNote.model.get(pivotNote.currentIndex).note
+        return pivotNote.model[pivotNote.currentIndex].note
     }
 
     function error(errorMessage) {
@@ -199,27 +199,25 @@ MuseScore {
             Label {
                 text: "Pivot"
             }
-            ComboBox {
+            StyledDropdown {
                 id: pivotNote
-                model: ListModel {
-                    id: pivotNoteList
-                    ListElement { text: "G";  note: 7;  }
-                    ListElement { text: "G♯"; note: 8;  }
-                    ListElement { text: "A";  note: 9;  }
-                    ListElement { text: "B♭"; note: 10; }
-                    ListElement { text: "B";  note: 11; }
-                    ListElement { text: "C";  note: 0;  }
-                    ListElement { text: "C♯"; note: 1;  }
-                    ListElement { text: "D";  note: 2;  }
-                    ListElement { text: "E♭"; note: 3;  }
-                    ListElement { text: "E";  note: 4;  }
-                    ListElement { text: "F";  note: 5;  }
-                    ListElement { text: "F♯"; note: 6;  }
-                }
+                model: [
+                    { 'text': "G",  'note': 7  },
+                    { 'text': "G♯", 'note': 8  },
+                    { 'text': "A",  'note': 9  },
+                    { 'text': "B♭", 'note': 10 },
+                    { 'text': "B",  'note': 11 },
+                    { 'text': "C",  'note': 0 },
+                    { 'text': "C♯", 'note': 1  },
+                    { 'text': "D",  'note': 2  },
+                    { 'text': "E♭", 'note': 3  },
+                    { 'text': "E",  'note': 4  },
+                    { 'text': "F",  'note': 5  },
+                    { 'text': "F♯", 'note': 6  }
+                ]
                 currentIndex: 5
-                style: ComboBoxStyle {
-                    font.family: 'MScore Text'
-                    font.pointSize: 14
+                onActivated: function(index, value) {
+                    currentIndex = index
                 }
             }
             Button {

@@ -56,6 +56,8 @@ signals:
     void visibleChanged();
     void titleChanged();
 
+    void accepted();
+
 private:
 
     void doOpen(const QString& title, const QString& text);

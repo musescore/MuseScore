@@ -28,6 +28,7 @@ MessageDialog::MessageDialog() {}
 void MessageDialog::doOpen(const QString& title, const QString& text)
 {
     interactive()->error(title.toStdString(), text.toStdString());
+    emit accepted();
 }
 
 void MessageDialog::open()

@@ -132,7 +132,7 @@ Item {
 
             visibleItemsCount: root.popupItemsCount
 
-            onHandleItem: {
+            onHandleItem: function(index, value) {
                 root.activated(index, value)
             }
         }
