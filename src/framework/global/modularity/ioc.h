@@ -32,6 +32,9 @@ using Inject = kors::modularity::Inject<I>;
 namespace mu::modularity {
 using ModulesIoC = kors::modularity::ModulesIoC;
 
+template<class T>
+using Creator = kors::modularity::Creator<T>;
+
 inline ModulesIoC* ioc()
 {
     return kors::modularity::ModulesIoC::instance();
