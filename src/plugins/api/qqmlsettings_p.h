@@ -69,21 +69,21 @@ class QQmlSettings : public QObject, public QQmlParserStatus
     QML_NAMED_ELEMENT(Settings)
 
 public:
-    explicit QQmlSettings(QObject *parent = 0);
+    explicit QQmlSettings(QObject* parent = 0);
     ~QQmlSettings();
 
     QString category() const;
-    void setCategory(const QString &category);
+    void setCategory(const QString& category);
 
     QString fileName() const;
-    void setFileName(const QString &fileName);
+    void setFileName(const QString& fileName);
 
-    Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
-    Q_INVOKABLE void setValue(const QString &key, const QVariant &value);
+    Q_INVOKABLE QVariant value(const QString& key, const QVariant& defaultValue = QVariant()) const;
+    Q_INVOKABLE void setValue(const QString& key, const QVariant& value);
     Q_INVOKABLE void sync();
 
 protected:
-    void timerEvent(QTimerEvent *event) override;
+    void timerEvent(QTimerEvent* event) override;
 
     void classBegin() override;
     void componentComplete() override;
