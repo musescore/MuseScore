@@ -1420,6 +1420,13 @@ qreal System::minDistance(System* s2) const
       dist = qMax(dist, score()->staff(firstStaff)->userDist());
       fixedDownDistance = false;
 
+      const SysStaff* sysStaff = staff(lastStaff);
+      qreal sld = sysStaff ? sysStaff->skyline().minDistance(s2->staff(firstStaff)->skyline()) : 0;
+      sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
+
+      if (score()->floatMode())
+            return qMax(dist, sld);
+
       for (MeasureBase* mb1 : ml) {
             if (mb1->isMeasure()) {
                   Measure* m = toMeasure(mb1);
@@ -1444,10 +1451,7 @@ qreal System::minDistance(System* s2) const
                               dist = qMax(dist, sp->gap());
                         }
                   }
-            qreal sld = staff(lastStaff)->skyline().minDistance(s2->staff(firstStaff)->skyline());
-            sld -=  staff(lastStaff)->bbox().height() - minVerticalDistance;
             dist = qMax(dist, sld);
-//            dist = dist - staff(lastStaff)->bbox().height() + minVerticalDistance;
             }
       return dist;
       }
