@@ -2511,8 +2511,8 @@
                   <aPitchRange>34-62</aPitchRange>
                   <pPitchRange>34-65</pPitchRange>
                   <Channel>
-                        <!--MIDI: Bank 0, Prog 67; MS General: Baritone Sax-->
-                        <program value="67"/> <!--Baritone Sax-->
+                        <!--MIDI: Bank 0, Prog 70; MS General: Bassoon-->
+                        <program value="70"/> <!--Bassoon-->
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
@@ -4787,7 +4787,7 @@
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
                   <aPitchRange>36-65</aPitchRange>
-                  <pPitchRange>36-69</pPitchRange>
+                  <pPitchRange>33-69</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 56; MS General: Trumpet-->
                         <program value="56"/> <!--Trumpet-->
