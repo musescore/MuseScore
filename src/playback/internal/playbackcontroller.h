@@ -145,7 +145,8 @@ private:
     void seekRangeSelection();
 
     void addSoundFlagsToExistingTracks();
-    void updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, audio::AudioSourceType sourceType);
+    void updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, const audio::AudioResourceMeta& oldMeta,
+                          const audio::AudioResourceMeta& newMeta);
     void addSoundFlagIfNeed(mu::engraving::StaffText* staffText);
 
     void togglePlay();
