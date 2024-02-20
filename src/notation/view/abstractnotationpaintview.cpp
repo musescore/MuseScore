@@ -44,7 +44,6 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);
-    setFlag(ItemAcceptsInputMethod, true);
     setAcceptedMouseButtons(Qt::AllButtons);
 
     connect(this, &QQuickPaintedItem::widthChanged, this, &AbstractNotationPaintView::onViewSizeChanged);
@@ -256,9 +255,15 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     interaction->textEditingStarted().onNotify(this, [this]() {
-        if (!hasActiveFocus()) {
-            forceFocusIn();
-        }
+        setFlag(ItemAcceptsInputMethod, true);
+        setFocus(false); // Remove focus once so that the IME reloads the state
+        forceFocusIn();
+    });
+
+    interaction->textEditingEnded().onReceive(this, [this](const engraving::TextBase*) {
+        setFlag(ItemAcceptsInputMethod, false);
+        setFocus(false); // Remove focus once so that the IME reloads the state
+        forceFocusIn();
     });
 
     interaction->dropChanged().onNotify(this, [this]() {
