@@ -235,7 +235,7 @@ QT_BEGIN_NAMESPACE
     \sa QSettings
 */
 
-Q_LOGGING_CATEGORY(lcSettings, "qt.labs.settings")
+    Q_LOGGING_CATEGORY(lcSettings, "qt.labs.settings")
 
 static const int settingsWriteDelay = 500;
 
@@ -246,7 +246,7 @@ class QQmlSettingsPrivate
 public:
     QQmlSettingsPrivate();
 
-    QSettings *instance() const;
+    QSettings* instance() const;
 
     void init();
     void reset();
@@ -255,23 +255,23 @@ public:
     void store();
 
     void _q_propertyChanged();
-    QVariant readProperty(const QMetaProperty &property) const;
+    QVariant readProperty(const QMetaProperty& property) const;
 
-    QQmlSettings *q_ptr = nullptr;
+    QQmlSettings* q_ptr = nullptr;
     int timerId = 0;
     bool initialized = false;
     QString category;
     QString fileName;
     mutable QPointer<QSettings> settings;
-    QHash<const char *, QVariant> changedProperties;
+    QHash<const char*, QVariant> changedProperties;
 };
 
 QQmlSettingsPrivate::QQmlSettingsPrivate() {}
 
-QSettings *QQmlSettingsPrivate::instance() const
+QSettings* QQmlSettingsPrivate::instance() const
 {
     if (!settings) {
-        QQmlSettings *q = const_cast<QQmlSettings*>(q_func());
+        QQmlSettings* q = const_cast<QQmlSettings*>(q_func());
         settings = fileName.isEmpty() ? new QSettings(q) : new QSettings(fileName, QSettings::IniFormat, q);
         if (settings->status() != QSettings::NoError) {
             // TODO: can't print out the enum due to the following error:
@@ -280,23 +280,29 @@ QSettings *QQmlSettingsPrivate::instance() const
 
             if (settings->status() == QSettings::AccessError) {
                 QVector<QString> missingIdentifiers;
-                if (QCoreApplication::organizationName().isEmpty())
+                if (QCoreApplication::organizationName().isEmpty()) {
                     missingIdentifiers.append(QLatin1String("organizationName"));
-                if (QCoreApplication::organizationDomain().isEmpty())
+                }
+                if (QCoreApplication::organizationDomain().isEmpty()) {
                     missingIdentifiers.append(QLatin1String("organizationDomain"));
-                if (QCoreApplication::applicationName().isEmpty())
+                }
+                if (QCoreApplication::applicationName().isEmpty()) {
                     missingIdentifiers.append(QLatin1String("applicationName"));
+                }
 
-                if (!missingIdentifiers.isEmpty())
+                if (!missingIdentifiers.isEmpty()) {
                     qmlWarning(q) << "The following application identifiers have not been set: " << missingIdentifiers;
+                }
             }
             return settings;
         }
 
-        if (!category.isEmpty())
+        if (!category.isEmpty()) {
             settings->beginGroup(category);
-        if (initialized)
+        }
+        if (initialized) {
             q->d_func()->load();
+        }
     }
     return settings;
 }
@@ -312,21 +318,23 @@ void QQmlSettingsPrivate::init()
 
 void QQmlSettingsPrivate::reset()
 {
-    if (initialized && settings && !changedProperties.isEmpty())
+    if (initialized && settings && !changedProperties.isEmpty()) {
         store();
+    }
     delete settings;
 }
 
 void QQmlSettingsPrivate::load()
 {
     Q_Q(QQmlSettings);
-    const QMetaObject *mo = q->metaObject();
+    const QMetaObject* mo = q->metaObject();
     const int offset = mo->propertyOffset();
     const int count = mo->propertyCount();
 
     // don't save built-in properties if there aren't any qml properties
-    if (offset == 1)
+    if (offset == 1) {
         return;
+    }
 
     for (int i = offset; i < count; ++i) {
         QMetaProperty property = mo->property(i);
@@ -335,15 +343,16 @@ void QQmlSettingsPrivate::load()
         const QVariant currentValue = instance()->value(property.name(), previousValue);
 
         if (!currentValue.isNull() && (!previousValue.isValid()
-                || (currentValue.canConvert(previousValue.userType()) && previousValue != currentValue))) {
+                                       || (currentValue.canConvert(previousValue.userType()) && previousValue != currentValue))) {
             property.write(q, currentValue);
             qCDebug(lcSettings) << "QQmlSettings: load" << property.name() << "setting:" << currentValue << "default:" << previousValue;
         }
 
         // ensure that a non-existent setting gets written
         // even if the property wouldn't change later
-        if (!instance()->contains(property.name()))
+        if (!instance()->contains(property.name())) {
             _q_propertyChanged();
+        }
 
         // setup change notifications on first load
         if (!initialized && property.hasNotifySignal()) {
@@ -355,7 +364,7 @@ void QQmlSettingsPrivate::load()
 
 void QQmlSettingsPrivate::store()
 {
-    QHash<const char *, QVariant>::const_iterator it = changedProperties.constBegin();
+    QHash<const char*, QVariant>::const_iterator it = changedProperties.constBegin();
     while (it != changedProperties.constEnd()) {
         instance()->setValue(it.key(), it.value());
         qCDebug(lcSettings) << "QQmlSettings: store" << it.key() << ":" << it.value();
@@ -367,40 +376,44 @@ void QQmlSettingsPrivate::store()
 void QQmlSettingsPrivate::_q_propertyChanged()
 {
     Q_Q(QQmlSettings);
-    const QMetaObject *mo = q->metaObject();
+    const QMetaObject* mo = q->metaObject();
     const int offset = mo->propertyOffset();
     const int count = mo->propertyCount();
     for (int i = offset; i < count; ++i) {
-        const QMetaProperty &property = mo->property(i);
+        const QMetaProperty& property = mo->property(i);
         const QVariant value = readProperty(property);
         changedProperties.insert(property.name(), value);
         qCDebug(lcSettings) << "QQmlSettings: cache" << property.name() << ":" << value;
     }
-    if (timerId != 0)
+    if (timerId != 0) {
         q->killTimer(timerId);
+    }
     timerId = q->startTimer(settingsWriteDelay);
 }
 
-QVariant QQmlSettingsPrivate::readProperty(const QMetaProperty &property) const
+QVariant QQmlSettingsPrivate::readProperty(const QMetaProperty& property) const
 {
     Q_Q(const QQmlSettings);
     QVariant var = property.read(q);
-    if (var.userType() == qMetaTypeId<QJSValue>())
+    if (var.userType() == qMetaTypeId<QJSValue>()) {
         var = var.value<QJSValue>().toVariant();
+    }
     return var;
 }
 
-QQmlSettings::QQmlSettings(QObject *parent)
+#define Q_PD(Class) Class##Private* const pd = d_func()
+
+QQmlSettings::QQmlSettings(QObject* parent)
     : QObject(parent), d_ptr(new QQmlSettingsPrivate)
 {
-    Q_D(QQmlSettings);
-    d->q_ptr = this;
+    Q_PD(QQmlSettings);
+    pd->q_ptr = this;
 }
 
 QQmlSettings::~QQmlSettings()
 {
-    Q_D(QQmlSettings);
-    d->reset(); // flush pending changes
+    Q_PD(QQmlSettings);
+    pd->reset(); // flush pending changes
 }
 
 /*!
@@ -412,18 +425,19 @@ QQmlSettings::~QQmlSettings()
 */
 QString QQmlSettings::category() const
 {
-    Q_D(const QQmlSettings);
-    return d->category;
+    Q_PD(const QQmlSettings);
+    return pd->category;
 }
 
-void QQmlSettings::setCategory(const QString &category)
+void QQmlSettings::setCategory(const QString& category)
 {
-    Q_D(QQmlSettings);
-    if (d->category != category) {
-        d->reset();
-        d->category = category;
-        if (d->initialized)
-            d->load();
+    Q_PD(QQmlSettings);
+    if (pd->category != category) {
+        pd->reset();
+        pd->category = category;
+        if (pd->initialized) {
+            pd->load();
+        }
     }
 }
 
@@ -439,18 +453,19 @@ void QQmlSettings::setCategory(const QString &category)
 */
 QString QQmlSettings::fileName() const
 {
-    Q_D(const QQmlSettings);
-    return d->fileName;
+    Q_PD(const QQmlSettings);
+    return pd->fileName;
 }
 
-void QQmlSettings::setFileName(const QString &fileName)
+void QQmlSettings::setFileName(const QString& fileName)
 {
-    Q_D(QQmlSettings);
-    if (d->fileName != fileName) {
-        d->reset();
-        d->fileName = fileName;
-        if (d->initialized)
-            d->load();
+    Q_PD(QQmlSettings);
+    if (pd->fileName != fileName) {
+        pd->reset();
+        pd->fileName = fileName;
+        if (pd->initialized) {
+            pd->load();
+        }
     }
 }
 
@@ -464,10 +479,10 @@ void QQmlSettings::setFileName(const QString &fileName)
 
    \sa QSettings::value
 */
-QVariant QQmlSettings::value(const QString &key, const QVariant &defaultValue) const
+QVariant QQmlSettings::value(const QString& key, const QVariant& defaultValue) const
 {
-    Q_D(const QQmlSettings);
-    return d->instance()->value(key, defaultValue);
+    Q_PD(const QQmlSettings);
+    return pd->instance()->value(key, defaultValue);
 }
 
 /*!
@@ -480,10 +495,10 @@ QVariant QQmlSettings::value(const QString &key, const QVariant &defaultValue) c
 
    \sa QSettings::setValue
 */
-void QQmlSettings::setValue(const QString &key, const QVariant &value)
+void QQmlSettings::setValue(const QString& key, const QVariant& value)
 {
-    Q_D(const QQmlSettings);
-    d->instance()->setValue(key, value);
+    Q_PD(const QQmlSettings);
+    pd->instance()->setValue(key, value);
     qCDebug(lcSettings) << "QQmlSettings: setValue" << key << ":" << value;
 }
 
@@ -502,8 +517,8 @@ void QQmlSettings::setValue(const QString &key, const QVariant &value)
 */
 void QQmlSettings::sync()
 {
-    Q_D(QQmlSettings);
-    d->instance()->sync();
+    Q_PD(QQmlSettings);
+    pd->instance()->sync();
 }
 
 void QQmlSettings::classBegin()
@@ -512,18 +527,18 @@ void QQmlSettings::classBegin()
 
 void QQmlSettings::componentComplete()
 {
-    Q_D(QQmlSettings);
-    d->init();
+    Q_PD(QQmlSettings);
+    pd->init();
 }
 
-void QQmlSettings::timerEvent(QTimerEvent *event)
+void QQmlSettings::timerEvent(QTimerEvent* event)
 {
-    Q_D(QQmlSettings);
-    if (event->timerId() == d->timerId) {
-        killTimer(d->timerId);
-        d->timerId = 0;
+    Q_PD(QQmlSettings);
+    if (event->timerId() == pd->timerId) {
+        killTimer(pd->timerId);
+        pd->timerId = 0;
 
-        d->store();
+        pd->store();
     }
     QObject::timerEvent(event);
 }
