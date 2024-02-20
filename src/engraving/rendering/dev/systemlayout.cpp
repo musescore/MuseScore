@@ -2611,6 +2611,14 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
     dist = std::max(dist, userDist);
     top->setFixedDownDistance(false);
 
+    const SysStaff* sysStaff = top->staff(lastStaff);
+    double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline()) : 0;
+    sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
+
+    if (conf.isFloatMode()) {
+        return std::max(dist, sld);
+    }
+
     for (const MeasureBase* mb1 : top->measures()) {
         if (mb1->isMeasure()) {
             const Measure* m = toMeasure(mb1);
@@ -2637,9 +2645,6 @@ double SystemLayout::minDistance(const System* top, const System* bottom, const 
             }
         }
 
-        const SysStaff* sysStaff = top->staff(lastStaff);
-        double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline()) : 0;
-        sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
         dist = std::max(dist, sld);
     }
     return dist;
