@@ -396,11 +396,50 @@ void PlaybackController::addSoundFlagsToExistingTracks()
     }
 }
 
+void PlaybackController::updateSoundFlagsForExistingTracks()
+{
+    TRACEFUNC;
+
+    if (m_blockSoundFlagsUpdate) {
+        return;
+    }
+
+    INotationPlaybackPtr notationPlayback = this->notationPlayback();
+    if (!notationPlayback) {
+        return;
+    }
+
+    InstrumentTrackIdSet addSoundFlagsTrackIdSet;
+    InstrumentTrackIdSet removeSoundFlagsTrackIdSet;
+
+    for (const InstrumentTrackId& trackId : notationPlayback->existingTrackIdSet()) {
+        const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
+
+        if (supportsSoundFlags(params.resourceMeta.type)) {
+            addSoundFlagsTrackIdSet.insert(trackId);
+        } else {
+            removeSoundFlagsTrackIdSet.insert(trackId);
+        }
+    }
+
+    if (!addSoundFlagsTrackIdSet.empty()) {
+        notationPlayback->addSoundFlags(addSoundFlagsTrackIdSet);
+    }
+
+    if (!removeSoundFlagsTrackIdSet.empty()) {
+        notationPlayback->removeSoundFlags(removeSoundFlagsTrackIdSet);
+    }
+}
+
 void PlaybackController::updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId,
                                           const AudioResourceMeta& oldMeta,
                                           const AudioResourceMeta& newMeta)
 {
     TRACEFUNC;
+
+    if (m_blockSoundFlagsUpdate) {
+        return;
+    }
 
     if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
         return;
@@ -1443,6 +1482,12 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
     if (!profile.isValid()) {
         return;
     }
+
+    m_blockSoundFlagsUpdate = true;
+    DEFER {
+        m_blockSoundFlagsUpdate = false;
+        updateSoundFlagsForExistingTracks();
+    };
 
     const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
 
