@@ -891,12 +891,10 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
                   masterScore()->setLayoutMode(LayoutMode::LINE);
             else if ( viewMode == "continuous_h")
                   masterScore()->setLayoutMode(LayoutMode::SYSTEM);
-#if 0
-            else if (viewMode == "page") // not neeed, is the default anyhow
+            else if (viewMode == "page") // not really neeed, is the default anyhow
                   masterScore()->setLayoutMode(LayoutMode::PAGE);
-            else // should never happen!
+            else // may never happen
                   masterScore()->setLayoutMode(LayoutMode::FLOAT);
-#endif
             }
 
 #ifdef OMR
