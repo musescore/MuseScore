@@ -77,6 +77,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/api/util.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/util.h
     ${CMAKE_CURRENT_LIST_DIR}/api/qmllistproperty.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/messagedialog.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/messagedialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/qqmlsettings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/qqmlsettings_p.h
     )
 
 set(MODULE_LINK
