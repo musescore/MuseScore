@@ -225,7 +225,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     const PlaybackContext& ctx = m_playbackCtxMap[trackId];
 
-    int minTick = std::numeric_limits<int>::min();
+    int minTick = std::numeric_limits<int>::max();
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
