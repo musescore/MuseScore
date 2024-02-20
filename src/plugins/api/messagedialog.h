@@ -29,17 +29,32 @@
 #include "global/iinteractive.h"
 
 namespace mu::plugins::api {
+class StandardButton
+{
+    Q_GADGET
+public:
+    enum Button {
+        Ok = static_cast<int>(framework::IInteractive::Button::Ok),
+        Cancel = static_cast<int>(framework::IInteractive::Button::Cancel),
+    };
+    Q_ENUM(Button)
+};
+
 class MessageDialog : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged FINAL)
+    Q_PROPERTY(QString detailedText READ detailedText WRITE setDetailedText NOTIFY detailedTextChanged FINAL)
+    Q_PROPERTY(QVariantList standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged FINAL)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
 
     Inject<framework::IInteractive> interactive;
 
 public:
-    MessageDialog();
+
+    MessageDialog(QObject* parent = nullptr);
+
     QString text() const;
     void setText(const QString& newText);
 
@@ -49,22 +64,34 @@ public:
     QString title() const;
     void setTitle(const QString& newTitle);
 
+    QString detailedText() const;
+    void setDetailedText(const QString& newDetailedText);
+
+    QVariantList standardButtons() const;
+    void setStandardButtons(const QVariantList& newStandardButtons);
+
     Q_INVOKABLE void open();
+    Q_INVOKABLE void close();
 
 signals:
     void textChanged();
     void visibleChanged();
     void titleChanged();
+    void detailedTextChanged();
+    void standardButtonsChanged();
 
     void accepted();
+    void rejected();
 
 private:
 
-    void doOpen(const QString& title, const QString& text);
+    void doOpen(const QString& title, const QString& text, const QString& detailed, const QVariantList& buttons);
 
     QString m_text;
     bool m_visible = false;
     QString m_title;
+    QString m_detailedText;
+    QVariantList m_standardButtons;
 };
 }
 

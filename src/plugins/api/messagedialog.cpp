@@ -22,18 +22,52 @@
 #include "messagedialog.h"
 
 using namespace mu::plugins::api;
+using namespace mu::framework;
 
-MessageDialog::MessageDialog() {}
+MessageDialog::MessageDialog(QObject* parent)
+    : QObject(parent) {}
 
-void MessageDialog::doOpen(const QString& title, const QString& text)
+void MessageDialog::doOpen(const QString& title, const QString& text, const QString& detailed, const QVariantList& buttons)
 {
-    interactive()->error(title.toStdString(), text.toStdString());
-    emit accepted();
+    //! NOTE Minimum compatibility for the current ones to work.
+    //! It would be nice to change a lot of things.
+
+    IInteractive::Buttons btns;
+    for (const QVariant& b : buttons) {
+        btns.push_back(static_cast<IInteractive::Button>(b.toInt()));
+    }
+
+    // info
+    if (btns.size() <= 1) {
+        interactive()->error(title.toStdString(), text.toStdString(), detailed.toStdString());
+        emit accepted();
+    }
+    //
+    else {
+        std::string txt = text.toStdString();
+        if (!detailed.isEmpty()) {
+            txt += "\n\n";
+            txt += detailed.toStdString();
+        }
+
+        IInteractive::Result res = interactive()->question(title.toStdString(), txt, btns);
+
+        if (res.standardButton() == IInteractive::Button::Ok) {
+            emit accepted();
+        } else {
+            emit rejected();
+        }
+    }
 }
 
 void MessageDialog::open()
 {
     setVisible(true);
+}
+
+void MessageDialog::close()
+{
+    setVisible(false);
 }
 
 QString MessageDialog::text() const
@@ -64,7 +98,7 @@ void MessageDialog::setVisible(bool newVisible)
     emit visibleChanged();
 
     if (m_visible) {
-        doOpen(m_title, m_text);
+        doOpen(m_title, m_text, m_detailedText, m_standardButtons);
     }
 }
 
@@ -80,4 +114,32 @@ void MessageDialog::setTitle(const QString& newTitle)
     }
     m_title = newTitle;
     emit titleChanged();
+}
+
+QString MessageDialog::detailedText() const
+{
+    return m_detailedText;
+}
+
+void MessageDialog::setDetailedText(const QString& newDetailedText)
+{
+    if (m_detailedText == newDetailedText) {
+        return;
+    }
+    m_detailedText = newDetailedText;
+    emit detailedTextChanged();
+}
+
+QVariantList MessageDialog::standardButtons() const
+{
+    return m_standardButtons;
+}
+
+void MessageDialog::setStandardButtons(const QVariantList& newStandardButtons)
+{
+    if (m_standardButtons == newStandardButtons) {
+        return;
+    }
+    m_standardButtons = newStandardButtons;
+    emit standardButtonsChanged();
 }

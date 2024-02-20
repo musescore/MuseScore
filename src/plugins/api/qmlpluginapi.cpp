@@ -42,6 +42,7 @@
 
 #include "messagedialog.h"
 #include "qqmlsettings_p.h"
+#include "filedialog.h"
 
 using namespace mu::engraving;
 
@@ -389,8 +390,10 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
+    qmlRegisterUncreatableType<StandardButton>("MuseScore", 3, 0, "StandardButton", "Cannot create an enumeration");
     qmlRegisterType<MessageDialog>("MuseScore", 3, 0, "MessageDialog");
     qmlRegisterType<QQmlSettings>("MuseScore", 3, 0, "Settings");
+    qmlRegisterType<FileDialog>("MuseScore", 3, 0, "FileDialog");
 
     qmlTypesRegistered = true;
 }
