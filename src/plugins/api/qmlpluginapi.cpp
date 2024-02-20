@@ -40,6 +40,9 @@
 #include "tie.h"
 #include "util.h"
 
+#include "messagedialog.h"
+#include "qqmlsettings_p.h"
+
 using namespace mu::engraving;
 
 namespace mu::plugins::api {
@@ -385,6 +388,9 @@ void PluginAPI::registerQmlTypes()
 
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
+
+    qmlRegisterType<MessageDialog>("MuseScore", 3, 0, "MessageDialog");
+    qmlRegisterType<QQmlSettings>("MuseScore", 3, 0, "Settings");
 
     qmlTypesRegistered = true;
 }

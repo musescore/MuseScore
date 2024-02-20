@@ -17,12 +17,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //==============================================
 
-import QtQuick 2.2
-import QtQuick.Layouts 1.1
-import QtQuick.Controls 1.3
-import QtQuick.Dialogs 1.2
-import Qt.labs.settings 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+
 import MuseScore 3.0
+import MuseScore.UiComponents 1.0
 
 MuseScore {
     version: "1.0"
@@ -54,23 +54,12 @@ MuseScore {
     property var numMeasures;
     property var eventTypes;
 
-    MessageDialog {
-        id: versionError
-        visible: false
-        title: "Unsupported MuseScore Version"
-        text: "This plugin needs MuseScore v3.0.5 or higher"
-        onAccepted: {
-            versionError.close()
-            quit()
-        }
-    }
-
     // Error dialog
 
     MessageDialog {
         id: errorDialog
         visible: false
-        icon: StandardIcon.Warning
+        //icon: StandardIcon.Warning
     }
 
     // Dialog window
@@ -89,13 +78,14 @@ MuseScore {
     Item {
         id: rect1
         anchors.fill: parent
+        anchors.margins: 8
 
         ColumnLayout {
             id: col1
             anchors.left: parent.left
             anchors.right: parent.right
 
-            ExclusiveGroup {id: typeGroup}
+            ButtonGroup {id: typeGroup}
 
             Label {
                 text: "Add courtesy accidentals for"
@@ -113,7 +103,7 @@ MuseScore {
                         id: optNextMeasure
                         text: "notes up to the next measure"
                         checked: true
-                        exclusiveGroup: typeGroup
+                        ButtonGroup.group: typeGroup
                         onClicked: { setUseBracketState(); }
                     }
 
@@ -122,17 +112,15 @@ MuseScore {
                         RadioButton {
                             id: optNumMeasures
                             text: "notes up to the next"
-                            exclusiveGroup: typeGroup
+                            ButtonGroup.group: typeGroup
                             onClicked: { setUseBracketState(); }
                         }
 
                         SpinBox {
                             id: valNumMeasures
                             implicitWidth: 45
-                            horizontalAlignment: Qt.AlignRight
-                            decimals: 0
-                            minimumValue: 2
-                            maximumValue: 99
+                            from: 2
+                            to: 99
                         }
 
                         Label {
@@ -145,7 +133,7 @@ MuseScore {
                             Layout.alignment: Qt.AlignTop | Qt.AlignLeft
                             id: optEvent
                             text: "notes up to the"
-                            exclusiveGroup: typeGroup
+                            ButtonGroup.group: typeGroup
                             onClicked: { setUseBracketState(); }
                         }
 
@@ -177,7 +165,7 @@ MuseScore {
                     RadioButton {
                         id: optDodecaphonic
                         text:"all notes (dodecaphonic style)"
-                        exclusiveGroup: typeGroup
+                        ButtonGroup.group: typeGroup
                         onClicked: { setUseBracketState(); }
                     }
                 }
@@ -209,7 +197,7 @@ MuseScore {
         }
         // The buttons
 
-        Button {
+        FlatButton {
             text:"Add accidentals"
             anchors {
                 top: col1.bottom
@@ -264,7 +252,7 @@ MuseScore {
             }
         }
 
-        Button {
+        FlatButton {
             text: "Cancel"
             anchors {
                 top: col1.bottom
@@ -639,11 +627,6 @@ MuseScore {
         console.log("MajorVersion = "+mscoreMajorVersion);
         console.log("MinorVersion = "+mscoreMinorVersion);
         console.log("UpdateVersion= "+mscoreUpdateVersion);
-
-        if (mscoreMajorVersion == 3 && mscoreMinorVersion == 0
-                && mscoreUpdateVersion < 5) {
-            versionError.open();
-        }
 
         // These options don't work in MuseScore v3
         optDoubleBar.checked = false;
