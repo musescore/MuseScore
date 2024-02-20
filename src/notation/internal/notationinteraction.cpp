@@ -3691,7 +3691,13 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-        score()->cmdPaste(&ma, nullptr, scale);
+        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
+
+        for (EngravingItem* element : pastedElements) {
+            if (element->isTextBase()) {
+                m_textAdded.send(toTextBase(element));
+            }
+        }
     }
 
     apply();
