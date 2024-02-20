@@ -460,6 +460,9 @@ TEST_F(Musicxml_Tests, clefs1) {
 TEST_F(Musicxml_Tests, clefs2) {
     mxmlIoTest("testClefs2");
 }
+TEST_F(Musicxml_Tests, codaHBox) {
+    mxmlImportTestRef("testCodaHBox");
+}
 TEST_F(Musicxml_Tests, colorExport) {
     mxmlMscxExportTestRef("testColorExport");
 }

@@ -552,7 +552,7 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>38</l1>
+            <l1>36</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
@@ -671,6 +671,9 @@
             </Rest>
           </voice>
         </Measure>
+      <HBox>
+        <width>10</width>
+        </HBox>
       <Measure>
         <Marker>
           <style>repeat_left</style>
