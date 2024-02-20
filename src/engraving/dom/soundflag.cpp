@@ -23,6 +23,7 @@
 #include "soundflag.h"
 
 #include "undo.h"
+#include "linkedobjects.h"
 
 using namespace mu::engraving;
 
@@ -123,6 +124,19 @@ void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTec
 
     score()->undo(new ChangeSoundFlag(this, presets, techniques));
     triggerLayout();
+
+    const LinkedObjects* links = this->links();
+    if (!links) {
+        return;
+    }
+
+    for (EngravingObject* obj : *links) {
+        if (obj->isSoundFlag()) {
+            SoundFlag* linkedSoundFlag = toSoundFlag(obj);
+            score()->undo(new ChangeSoundFlag(linkedSoundFlag, presets, techniques));
+            linkedSoundFlag->triggerLayout();
+        }
+    }
 }
 
 char16_t SoundFlag::iconCode() const
