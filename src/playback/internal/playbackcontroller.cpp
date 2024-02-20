@@ -80,9 +80,9 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
-static bool supportsSoundFlags(AudioSourceType type)
+static bool supportsSoundFlags(AudioResourceType type)
 {
-    return type == AudioSourceType::MuseSampler;
+    return type == AudioResourceType::MuseSamplerSoundPack;
 }
 
 void PlaybackController::init()
@@ -386,7 +386,7 @@ void PlaybackController::addSoundFlagsToExistingTracks()
     for (const InstrumentTrackId& trackId : notationPlayback->existingTrackIdSet()) {
         const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
 
-        if (supportsSoundFlags(params.type())) {
+        if (supportsSoundFlags(params.resourceMeta.type)) {
             trackIdSet.insert(trackId);
         }
     }
@@ -396,19 +396,30 @@ void PlaybackController::addSoundFlagsToExistingTracks()
     }
 }
 
-void PlaybackController::updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, AudioSourceType sourceType)
+void PlaybackController::updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId,
+                                          const AudioResourceMeta& oldMeta,
+                                          const AudioResourceMeta& newMeta)
 {
     TRACEFUNC;
+
+    if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
+        return;
+    }
 
     INotationPlaybackPtr notationPlayback = this->notationPlayback();
     if (!notationPlayback) {
         return;
     }
 
-    if (supportsSoundFlags(sourceType)) {
-        notationPlayback->addSoundFlags({ trackId });
-    } else {
+    if (!supportsSoundFlags(newMeta.type)) {
         notationPlayback->removeSoundFlags({ trackId });
+        return;
+    }
+
+    if (oldMeta.type == newMeta.type) { // same audio source but different sounds
+        notationPlayback->clearSoundFlags({ trackId });
+    } else {
+        notationPlayback->addSoundFlags({ trackId });
     }
 }
 
@@ -422,7 +433,7 @@ void PlaybackController::addSoundFlagIfNeed(mu::engraving::StaffText* staffText)
     mu::engraving::InstrumentTrackId trackId = mu::engraving::makeInstrumentTrackId(staffText);
     const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
 
-    if (supportsSoundFlags(params.type())) {
+    if (supportsSoundFlags(params.resourceMeta.type)) {
         notationPlayback->addSoundFlag(staffText);
     }
 }
@@ -1108,12 +1119,10 @@ void PlaybackController::subscribeOnAudioParamsChanges()
         });
 
         if (search != m_instrumentTrackIdMap.end()) {
-            bool audioSourceChanged = audioSettings()->trackInputParams(search->first).type() != params.type();
-            audioSettings()->setTrackInputParams(search->first, params);
+            const AudioResourceMeta& oldMeta = audioSettings()->trackInputParams(search->first).resourceMeta;
+            updateSoundFlags(search->first, oldMeta, params.resourceMeta);
 
-            if (audioSourceChanged) {
-                updateSoundFlags(search->first, params.type());
-            }
+            audioSettings()->setTrackInputParams(search->first, params);
         }
     });
 

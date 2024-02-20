@@ -75,6 +75,18 @@ void SoundFlag::setPlayingTechniques(const PlayingTechniqueCodes& techniques)
     m_playingTechniques = techniques;
 }
 
+void SoundFlag::clear()
+{
+    if (m_soundPresets.empty() && m_playingTechniques.empty()) {
+        return;
+    }
+
+    m_soundPresets.clear();
+    m_playingTechniques.clear();
+
+    triggerLayout();
+}
+
 bool SoundFlag::shouldHide() const
 {
     if (const Score* score = this->score()) {
@@ -110,6 +122,7 @@ void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTec
     }
 
     score()->undo(new ChangeSoundFlag(this, presets, techniques));
+    triggerLayout();
 }
 
 char16_t SoundFlag::iconCode() const

@@ -81,6 +81,7 @@ public:
 
     virtual void addSoundFlag(mu::engraving::StaffText* staffText) = 0;
     virtual void addSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
+    virtual void clearSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
     virtual void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
 };
 

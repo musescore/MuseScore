@@ -50,6 +50,8 @@ public:
     const PlayingTechniqueCodes& playingTechniques() const;
     void setPlayingTechniques(const PlayingTechniqueCodes& techniques);
 
+    void clear();
+
     bool shouldHide() const;
 
     void undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCodes& techniques);
