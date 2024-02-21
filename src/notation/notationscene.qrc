@@ -18,6 +18,8 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/ItemWithTitle.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/beam_style_french.svg</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/beam_style_regular.svg</file>
         <file>view/resources/data/std_sample.mscx</file>
         <file>view/resources/data/tab_sample.mscx</file>
         <file>qml/MuseScore/NotationScene/NoteInputBar.qml</file>
