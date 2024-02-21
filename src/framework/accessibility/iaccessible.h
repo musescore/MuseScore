@@ -22,15 +22,13 @@
 #ifndef MU_ACCESSIBILITY_IACCESSIBLE_H
 #define MU_ACCESSIBILITY_IACCESSIBLE_H
 
-#include <utility>
-
 #include <QString>
 #include <QRect>
 #include <QVariant>
 #include <QMap>
 
-#include "async/channel.h"
-#include "types/val.h"
+#include "global/async/channel.h"
+#include "global/types/val.h"
 
 class QWindow;
 
