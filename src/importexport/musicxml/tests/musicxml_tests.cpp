@@ -373,6 +373,9 @@ TEST_F(Musicxml_Tests, accidentals2) {
 TEST_F(Musicxml_Tests, accidentals3) {
     mxmlIoTest("testAccidentals3");
 }
+TEST_F(Musicxml_Tests, arpCrossVoice) {
+    mxmlImportTestRef("testArpCrossVoice");
+}
 TEST_F(Musicxml_Tests, arpGliss1) {
     mxmlIoTest("testArpGliss1");
 }
