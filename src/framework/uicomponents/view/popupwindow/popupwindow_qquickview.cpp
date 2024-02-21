@@ -277,3 +277,21 @@ void PopupWindow_QQuickView::updateSize(const QSize& newSize)
         m_view->resize(newSize);
     }
 }
+
+void PopupWindow_QQuickView::setAlwaysOnTop(const bool& alwaysOnTop)
+{
+    if (!m_view) {
+        return;
+    }
+
+    Qt::WindowFlags flags = m_view->flags();
+    if (alwaysOnTop) {
+        // From Qt5 documentation: Note that on some window managers on X11 you
+        // also have to pass Qt::X11BypassWindowManagerHint for this flag to work
+        // correctly.
+        flags |= Qt::WindowStaysOnTopHint;
+    } else {
+        flags &= (~Qt::WindowStaysOnTopHint);
+    }
+    m_view->setFlags(flags);
+}
