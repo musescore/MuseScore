@@ -22,9 +22,9 @@
 
 #include "eventaudiosource.h"
 
-#include "log.h"
-
 #include "internal/audiosanitizer.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;

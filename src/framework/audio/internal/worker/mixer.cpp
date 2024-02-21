@@ -21,17 +21,13 @@
  */
 #include "mixer.h"
 
-#include "async/async.h"
-#include "log.h"
-
-#include <limits>
-
 #include "concurrency/taskscheduler.h"
 
 #include "internal/audiosanitizer.h"
-#include "internal/audiothread.h"
 #include "internal/dsp/audiomathutils.h"
 #include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;

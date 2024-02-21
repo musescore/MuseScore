@@ -26,7 +26,7 @@
 #include <memory>
 #include <vector>
 
-#include "async/channel.h"
+#include "global/async/channel.h"
 
 #include "audiotypes.h"
 

@@ -24,12 +24,11 @@
 #define MU_AUDIO_SOUNDTRACKWRITER_H
 
 #include <vector>
-#include <cstdio>
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
+#include "global/async/asyncable.h"
+#include "global/modularity/ioc.h"
 
-#include "audio/iaudioconfiguration.h"
+#include "iaudioconfiguration.h"
 #include "audiotypes.h"
 #include "iaudiosource.h"
 #include "internal/encoders/abstractaudioencoder.h"

@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_SEQUENCEPLAYER_H
 #define MU_AUDIO_SEQUENCEPLAYER_H
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
 #include "isequenceplayer.h"
 #include "igettracks.h"

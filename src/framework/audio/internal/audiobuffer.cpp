@@ -21,8 +21,8 @@
  */
 #include "audiobuffer.h"
 
-#include "log.h"
 #include "audiosanitizer.h"
+#include "log.h"
 
 using namespace mu::audio;
 

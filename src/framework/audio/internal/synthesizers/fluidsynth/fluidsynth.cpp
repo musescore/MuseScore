@@ -22,18 +22,13 @@
 
 #include "fluidsynth.h"
 
-#include <thread>
-#include <sstream>
-#include <algorithm>
-#include <cmath>
 #include <fluidsynth.h>
-
-#include "log.h"
-#include "realfn.h"
 
 #include "sfcachedloader.h"
 #include "audioerrors.h"
 #include "audiotypes.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::midi;

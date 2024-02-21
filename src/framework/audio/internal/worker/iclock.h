@@ -25,9 +25,9 @@
 
 #include <memory>
 
-#include "types/ret.h"
-#include "async/channel.h"
-#include "async/notification.h"
+#include "global/types/ret.h"
+#include "global/async/channel.h"
+#include "global/async/notification.h"
 
 #include "../../audiotypes.h"
 

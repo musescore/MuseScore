@@ -23,11 +23,10 @@
 #ifndef MU_AUDIO_ITRACKSEQUENCE_H
 #define MU_AUDIO_ITRACKSEQUENCE_H
 
-#include "async/channel.h"
-#include "types/retval.h"
+#include "global/async/channel.h"
+#include "global/types/retval.h"
 #include "mpe/events.h"
 
-#include "iaudiosource.h"
 #include "isequenceplayer.h"
 #include "isequenceio.h"
 #include "audiotypes.h"

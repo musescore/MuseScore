@@ -28,7 +28,7 @@
 
 #include <MacTypes.h>
 
-#include "modularity/ioc.h"
+#include "global/modularity/ioc.h"
 #include "iaudioconfiguration.h"
 
 #include "iaudiodriver.h"

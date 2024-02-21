@@ -25,9 +25,9 @@
 #include <memory>
 #include <map>
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "types/retval.h"
+#include "global/modularity/ioc.h"
+#include "global/async/asyncable.h"
+#include "global/types/retval.h"
 
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
@@ -39,8 +39,9 @@
 namespace mu::audio {
 class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
-    INJECT(fx::IFxResolver, fxResolver)
-    INJECT(IAudioConfiguration, configuration)
+    Inject<fx::IFxResolver> fxResolver;
+    Inject<IAudioConfiguration> configuration;
+
 public:
     Mixer();
     ~Mixer();

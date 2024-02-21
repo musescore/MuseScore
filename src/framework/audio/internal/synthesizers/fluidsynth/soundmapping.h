@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_SOUNDMAPPING_H
 #define MU_AUDIO_SOUNDMAPPING_H
 
-#include "async/channel.h"
+#include "global/async/channel.h"
 #include "mpe/events.h"
 #include "midi/miditypes.h"
 

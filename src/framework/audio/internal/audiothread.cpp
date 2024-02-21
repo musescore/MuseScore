@@ -21,13 +21,14 @@
  */
 #include "audiothread.h"
 
-#include "log.h"
-#include "runtime.h"
-#include "async/processevents.h"
+#include "global/runtime.h"
+#include "global/async/processevents.h"
 
 #ifdef Q_OS_WASM
 #include <emscripten/html5.h>
 #endif
+
+#include "log.h"
 
 using namespace mu::audio;
 

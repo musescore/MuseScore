@@ -22,16 +22,15 @@
 
 #include "tracksequence.h"
 
-#include "log.h"
-
 #include "internal/audiosanitizer.h"
-#include "internal/audiothread.h"
 #include "clock.h"
 #include "eventaudiosource.h"
 #include "sequenceplayer.h"
 #include "sequenceio.h"
 #include "audioengine.h"
 #include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::async;

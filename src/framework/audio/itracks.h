@@ -25,10 +25,10 @@
 
 #include <memory>
 
-#include "async/promise.h"
-#include "async/channel.h"
+#include "global/async/promise.h"
+#include "global/async/channel.h"
+
 #include "mpe/events.h"
-#include "io/path.h"
 
 #include "audiotypes.h"
 

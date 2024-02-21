@@ -19,13 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "playback.h"
 
 #include <utility>
 
-#include "playback.h"
-
-#include "log.h"
-#include "async/async.h"
+#include "global/async/async.h"
 
 #include "internal/audiothread.h"
 #include "internal/audiosanitizer.h"
@@ -36,6 +34,8 @@
 #include "internal/worker/tracksequence.h"
 
 #include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;

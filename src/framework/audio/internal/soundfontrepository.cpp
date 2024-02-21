@@ -21,10 +21,11 @@
  */
 #include "soundfontrepository.h"
 
-#include "log.h"
-#include "translation.h"
+#include "global/translation.h"
 
 #include "synthesizers/fluidsynth/fluidsoundfontparser.h"
+
+#include "log.h"
 
 using namespace mu::audio;
 using namespace mu::audio::synth;

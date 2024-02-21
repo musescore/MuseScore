@@ -22,10 +22,10 @@
 
 #include "sequenceio.h"
 
-#include "log.h"
-
 #include "internal/audiosanitizer.h"
 #include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;

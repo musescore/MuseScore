@@ -23,10 +23,10 @@
 
 #include <algorithm>
 
-#include "log.h"
-
 #include "internal/dsp/audiomathutils.h"
 #include "internal/audiosanitizer.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;

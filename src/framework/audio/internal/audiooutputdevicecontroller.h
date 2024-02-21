@@ -22,17 +22,17 @@
 #ifndef MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
 #define MU_NOTATION_AUDIOOUTPUTDEVICECONTROLLER_H
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
+#include "global/modularity/ioc.h"
 
-#include "modularity/ioc.h"
 #include "../iaudioconfiguration.h"
 #include "../iaudiodriver.h"
 
 namespace mu::audio {
 class AudioOutputDeviceController : public async::Asyncable
 {
-    INJECT(IAudioConfiguration, configuration)
-    INJECT(IAudioDriver, audioDriver)
+    Inject<IAudioConfiguration> configuration;
+    Inject<IAudioDriver> audioDriver;
 
 public:
     void init();

@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_SEQUENCEIO_H
 #define MU_AUDIO_SEQUENCEIO_H
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
 #include "isequenceio.h"
 #include "igettracks.h"

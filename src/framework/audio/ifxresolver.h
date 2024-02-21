@@ -26,7 +26,6 @@
 #include <memory>
 
 #include "modularity/imoduleinterface.h"
-#include "async/promise.h"
 
 #include "ifxprocessor.h"
 #include "audiotypes.h"

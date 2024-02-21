@@ -26,7 +26,7 @@
 #include <cassert>
 #include <thread>
 
-#include "modularity/ioc.h"
+#include "global/modularity/ioc.h"
 
 namespace mu::audio {
 class IAudioThreadSecurer : MODULE_EXPORT_INTERFACE

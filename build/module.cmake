@@ -20,6 +20,7 @@
 
 ## Setup
 # set(MODULE somename)                        - set module (target) name
+# set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})  - set module root
 # set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
 # set(MODULE_DEF ...)                         - set definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
@@ -131,6 +132,7 @@ target_sources(${MODULE} PRIVATE
 target_include_directories(${MODULE} PUBLIC
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${MODULE_ROOT}
     ${PROJECT_ROOT_DIR}
     ${PROJECT_ROOT_DIR}/src
     ${PROJECT_ROOT_DIR}/src/framework
