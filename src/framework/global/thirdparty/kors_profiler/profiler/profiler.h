@@ -34,6 +34,7 @@ SOFTWARE.
 #include <mutex>
 #include <chrono>
 #include <sstream>
+#include <atomic>
 
 #include "funcinfo.h"
 
@@ -94,10 +95,18 @@ public:
     struct Options {
         Options() {}
         bool stepTimeEnabled = true;
-        bool funcsTimeEnabled = true;
+        std::atomic<bool> funcsTimeEnabled = true;
         bool funcsTraceEnabled = false;
         size_t funcsMaxThreadCount = 100;
         int statTopCount = 150;
+
+        void assign(const Options& o) {
+            stepTimeEnabled = o.stepTimeEnabled;
+            funcsTimeEnabled = o.funcsTimeEnabled.load();
+            funcsTraceEnabled = o.funcsTraceEnabled;
+            funcsMaxThreadCount = o.funcsMaxThreadCount;
+            statTopCount = o.statTopCount;
+        }
     };
 
     struct Data {
@@ -161,6 +170,7 @@ public:
             : func(f), callcount(0), sumtimeMs(0) {}
     };
 
+    void setupDefault();
     void setup(const Options& opt = Options(), Printer* printer = nullptr);
 
     static const Options& options();
@@ -212,12 +222,12 @@ private:
     typedef std::unordered_map<const std::string*, FuncTimer* > FuncTimers;
     struct FuncsData {
         std::mutex mutex;
+        std::atomic<size_t> lastIndex = 0;
         std::vector<std::thread::id> threads;
         std::vector<FuncTimers> timers;
         std::set<std::string> staticInfo;
 
-        int threadIndex(std::thread::id th) const;
-        int addThread(std::thread::id th);
+        int threadIndex(std::thread::id th);
     };
 
     bool save_file(const std::string& path, const std::string& content);
