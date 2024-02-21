@@ -22,9 +22,9 @@
 #ifndef MU_ASYNC_ASYNCABLE_H
 #define MU_ASYNC_ASYNCABLE_H
 
-#include "thirdparty/deto_async/async/asyncable.h"
+#include "thirdparty/kors_async/async/asyncable.h"
 namespace mu::async {
-using Asyncable = deto::async::Asyncable;
+using Asyncable = kors::async::Asyncable;
 }
 
 #endif // MU_ASYNC_ASYNCABLE_H
