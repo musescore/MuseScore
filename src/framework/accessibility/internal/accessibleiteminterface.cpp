@@ -23,9 +23,10 @@
 
 #include <QWindow>
 
+#include "global/translation.h"
+
 #include "accessibilitycontroller.h"
 
-#include "translation.h"
 #include "log.h"
 
 //#define MUE_ENABLE_ACCESSIBILITY_TRACE

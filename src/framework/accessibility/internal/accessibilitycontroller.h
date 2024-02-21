@@ -27,7 +27,7 @@
 #include <QList>
 #include <QHash>
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 #include "global/iapplication.h"
 
 #include "modularity/ioc.h"

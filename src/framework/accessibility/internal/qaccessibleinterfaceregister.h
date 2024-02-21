@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_QACCESSIBLEINTERFACEREGISTER_H
-#define MU_UI_QACCESSIBLEINTERFACEREGISTER_H
+#ifndef MU_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
+#define MU_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
 
 #include "iqaccessibleinterfaceregister.h"
 
@@ -36,4 +36,4 @@ private:
 };
 }
 
-#endif // MU_UI_QACCESSIBLEINTERFACEREGISTER_H
+#endif // MU_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H

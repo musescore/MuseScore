@@ -24,11 +24,12 @@
 #include <QtQml>
 
 #include "modularity/ioc.h"
-#include "log.h"
 
 #include "internal/accessibilitycontroller.h"
 #include "internal/accessibilityconfiguration.h"
 #include "internal/qaccessibleinterfaceregister.h"
+
+#include "log.h"
 
 using namespace mu::accessibility;
 using namespace mu::modularity;
