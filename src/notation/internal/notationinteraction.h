@@ -241,6 +241,7 @@ public:
     void resetTextStyleOverrides() override;
     void resetBeamMode() override;
     void resetShapesAndPosition() override;
+    void resetToDefaultLayout() override;
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(const ScoreConfig& config) override;
