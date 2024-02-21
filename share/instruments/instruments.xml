@@ -7883,13 +7883,6 @@
                         <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
-                  <Drum pitch="39"> <!--Hand Clap-->
-                        <head>normal</head>
-                        <line>1</line>
-                        <voice>0</voice>
-                        <name>Hand Clap</name>
-                        <stem>1</stem>
-                  </Drum>
                   <Drum pitch="54"> <!--Tambourine-->
                         <head>diamond</head>
                         <line>2</line>
