@@ -39,13 +39,13 @@ public:
     static int count_qt5(QQmlListProperty<T>* list)
     {
         QmlListProperty<T>* me = static_cast<QmlListProperty<T>*>(list);
-        return static_cast<int>(me->count(list));
+        return me->count ? static_cast<int>(me->count(list)) : 0;
     }
 
     static T* at_qt5(QQmlListProperty<T>* list, int index)
     {
         QmlListProperty<T>* me = static_cast<QmlListProperty<T>*>(list);
-        return me->at(list, static_cast<int>(index));
+        return me->at ? me->at(list, static_cast<int>(index)) : nullptr;
     }
 
 #endif
@@ -55,7 +55,7 @@ public:
 #ifndef MU_QT5_COMPAT
         : QQmlListProperty<T>(o, d, a, c, t, r)
 #else
-        : QQmlListProperty<T>(o, d, a, &count_qt5, &at_qt5, r), count(c), at(t)
+        : QQmlListProperty<T>(o, d, a, (c ? &count_qt5 : nullptr), (a ? &at_qt5 : nullptr), r), count(c), at(t)
 #endif
     {}
 
@@ -63,7 +63,7 @@ public:
 #ifndef MU_QT5_COMPAT
         : QQmlListProperty<T>(o, d, c, a)
 #else
-        : QQmlListProperty<T>(o, d, &count_qt5, &at_qt5), count(c), at(a)
+        : QQmlListProperty<T>(o, d, (c ? &count_qt5 : nullptr), (a ? &at_qt5 : nullptr)), count(c), at(a)
 #endif
     {}
 
