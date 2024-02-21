@@ -22,7 +22,7 @@ set(MODULE global)
 
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler/profiler.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
 
 set(MODULE_SRC

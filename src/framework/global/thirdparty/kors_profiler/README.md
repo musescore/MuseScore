@@ -17,15 +17,25 @@ Features:
 Used in at least two private commercial projects and one [open source](https://github.com/musescore/MuseScore).
 
 ## Integration 
+
+### Add source 
 To use Profiler within your software project include the Profiler source into your project
 
 Source:
 * profiler.h/cpp - profiler and macros
 * funcinfo.h - macros for parsing signatures
 
-or see and include `profiler.cmake` in the cmake project
+or see and include `profiler.cmake` in the cmake project (see [example/CMakeLists.txt](example/CMakeLists.txt))
+
+### Add aliases 
+Recommended add own aliases to use profiler
+See example:
+* [profiler.h](example/profiler.h)
 
 ## ChangeLog
+
+### v1.2
+* Fixed thread data race 
 
 ### v1.1
 * Improved parsing of function signatures

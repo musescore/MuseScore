@@ -22,7 +22,7 @@
 #ifndef MU_PROFILER_H
 #define MU_PROFILER_H
 
-#include "thirdparty/kors_profiler/src/profiler.h"
+#include "thirdparty/kors_profiler/profiler/profiler.h"
 
 namespace mu::profiler {
 using Profiler = kors::profiler::Profiler;
