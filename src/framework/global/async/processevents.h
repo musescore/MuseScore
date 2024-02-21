@@ -22,16 +22,17 @@
 #ifndef MU_ASYNC_PROCESSEVENTS_H
 #define MU_ASYNC_PROCESSEVENTS_H
 
-#include "thirdparty/deto_async/async/channel.h"
+#include "thirdparty/kors_async/async/processevents.h"
+
 namespace mu::async {
 inline void processEvents()
 {
-    deto::async::processEvents();
+    kors::async::processEvents();
 }
 
 inline void onMainThreadInvoke(const std::function<void(const std::function<void()>&, bool)>& f)
 {
-    deto::async::onMainThreadInvoke(f);
+    kors::async::onMainThreadInvoke(f);
 }
 }
 
