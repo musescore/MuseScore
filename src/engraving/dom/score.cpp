@@ -5331,7 +5331,23 @@ PropertyValue Score::propertyDefault(Pid /*id*/) const
 void Score::resetStyleValue(Sid styleToReset)
 {
     const MStyle& defStyle = DefaultStyle::defaultStyle();
-    undo(new ChangeStyleVal(this, styleToReset, defStyle.value(styleToReset)));
+    undoChangeStyleVal(styleToReset, defStyle.value(styleToReset));
+}
+
+void Score::resetStyleValues(const StyleIdSet& styleIdSet)
+{
+    if (styleIdSet.empty()) {
+        return;
+    }
+
+    std::unordered_map<Sid, PropertyValue> values;
+    const MStyle& defStyle = DefaultStyle::defaultStyle();
+
+    for (Sid sid : styleIdSet) {
+        values.emplace(sid, defStyle.value(sid));
+    }
+
+    undoChangeStyleValues(std::move(values));
 }
 
 //---------------------------------------------------------

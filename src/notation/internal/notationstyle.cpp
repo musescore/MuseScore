@@ -90,7 +90,7 @@ void NotationStyle::applyToAllParts()
     }
 }
 
-void NotationStyle::resetAllStyleValues(const std::unordered_set<StyleId>& exceptTheseOnes)
+void NotationStyle::resetAllStyleValues(const StyleIdSet& exceptTheseOnes)
 {
     score()->cmdResetAllStyles(exceptTheseOnes);
     score()->update();
