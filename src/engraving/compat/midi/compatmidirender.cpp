@@ -1149,6 +1149,13 @@ int CompatMidiRender::slideTicks(Chord* chord)
 
 int CompatMidiRender::tick(const CompatMidiRendererInternal::Context& ctx, int tick)
 {
-    return ctx.applyCaesuras ? ctx.pauseMap->tickWithPauses(tick) : tick;
+    return ctx.usePauses ? ctx.pauseMap->tickWithPauses(tick) : tick;
+}
+
+uint32_t CompatMidiRender::lengthInTicks(const CompatMidiRendererInternal::Context& ctx, const Score* score)
+{
+    const RepeatList& rl = score->repeatList();
+    uint32_t ticksWithoutPauses = std::accumulate(rl.begin(), rl.end(), 0, [](uint32_t cur, RepeatSegment* rs) { return cur + rs->len(); });
+    return tick(ctx, ticksWithoutPauses);
 }
 }

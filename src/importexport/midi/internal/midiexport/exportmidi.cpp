@@ -186,7 +186,7 @@ void ExportMidi::writeHeader(const CompatMidiRendererInternal::Context& context)
     //     don't need to unwind or add pauses as this was done already
     //--------------------------------------------
 
-    if (!context.applyCaesuras) {
+    if (!context.usePauses) {
         return;
     }
 
@@ -240,7 +240,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     context.harmonyChannelSetting = CompatMidiRendererInternal::HarmonyChannelSetting::DISABLED;
     context.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
     context.useDefaultArticulations = false;
-    context.applyCaesuras = true;
+    context.usePauses = true;
 
     CompatMidiRender::renderScore(m_score, events, context, midiExpandRepeats);
 

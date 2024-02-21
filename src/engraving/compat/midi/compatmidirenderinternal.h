@@ -158,7 +158,7 @@ public:
         bool eachStringHasChannel = false; //!to better display the guitar instrument, each string has its own channel
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
         bool useDefaultArticulations = false; //!using default articulations means ignoring the ones stored for each instrument
-        bool applyCaesuras = false; //! to add pauses (caesura) between midi events
+        bool usePauses = false; //! to add pauses (caesura) between midi events
         HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
         std::unordered_set<std::string> partsWithMutedHarmony;
 

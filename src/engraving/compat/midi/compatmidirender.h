@@ -78,6 +78,8 @@ public:
                                  const CompatMidiRendererInternal::Context& context = CompatMidiRendererInternal::Context());
 
     static int tick(const CompatMidiRendererInternal::Context& ctx, int tick);
+    static uint32_t lengthInTicks(const CompatMidiRendererInternal::Context& ctx, const Score* score);
+
 private:
     static void createPlayEvents(const Score* score, const CompatMidiRendererInternal::Context& context, Chord* chord,
                                  Chord* prevChord = nullptr, Chord* nextChord = nullptr);

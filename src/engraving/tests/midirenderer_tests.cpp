@@ -97,7 +97,7 @@ static EventsHolder renderMidiEventsWithPause(const String& fileName,
     EXPECT_TRUE(score);
 
     EventsHolder events;
-    ctx.applyCaesuras = true;
+    ctx.usePauses = true;
 
     CompatMidiRender::renderScore(score, events, ctx, true);
 
