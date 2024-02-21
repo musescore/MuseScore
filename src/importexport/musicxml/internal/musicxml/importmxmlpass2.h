@@ -220,7 +220,7 @@ public:
     MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap);
     QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
@@ -230,6 +230,7 @@ private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
     void addTechnical(const Notation& notation, Note* note);
+    void arpeggio();
     void harmonic();
     void articulations();
     void dynamics();
@@ -257,6 +258,7 @@ private:
     QString _wavyLineType;
     int _wavyLineNo { 0 };
     QString _arpeggioType;
+    int _arpeggioNo = 0;
     bool _slurStop { false };
     bool _slurStart { false };
     bool _wavyLineStop { false };
@@ -306,7 +308,7 @@ private:
     void transpose(const QString& partId, const Fraction& tick);
     Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
                Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beams& currBeams,
-               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
