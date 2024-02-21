@@ -82,10 +82,12 @@ MixerPanelSection {
             hoverEnabled: true
 
             onContainsMouseChanged: {
-                if (mouseArea.containsMouse) {
-                    ui.tooltip.show(root, channelItem.title)
+                var instrumentName = channelItem.title
+                if (mouseArea.containsMouse && instrumentName.length > 14) {
+                    instrumentName = channelItem.title
+                    ui.tooltip.show(mouseArea, instrumentName)
                 } else {
-                    ui.tooltip.hide(root)
+                    ui.tooltip.hide(mouseArea)
                 }
             }
         }
