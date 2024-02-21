@@ -2673,18 +2673,23 @@ void Score::cmdResetTextStyleOverrides()
     scanElements(nullptr, resetTextProperties);
 }
 
-void Score::cmdResetAllStyles(const std::unordered_set<Sid>& exceptTheseOnes)
+void Score::cmdResetAllStyles(const StyleIdSet& exceptTheseOnes)
 {
     TRACEFUNC;
 
     int beginIdx = int(Sid::NOSTYLE) + 1;
     int endIdx = int(Sid::STYLES);
+
+    StyleIdSet stylesToReset;
+
     for (int idx = beginIdx; idx < endIdx; idx++) {
         Sid styleId = Sid(idx);
         if (!mu::contains(exceptTheseOnes, styleId)) {
-            score()->resetStyleValue(styleId);
+            stylesToReset.insert(styleId);
         }
     }
+
+    score()->resetStyleValues(stylesToReset);
 }
 
 // Removes system/page breaks and spacers
@@ -4652,7 +4657,7 @@ void Score::cmdToggleMmrest()
 {
     bool val = !style().styleB(Sid::createMultiMeasureRests);
     deselectAll();
-    undo(new ChangeStyleVal(this, Sid::createMultiMeasureRests, val));
+    undoChangeStyleVal(Sid::createMultiMeasureRests, val);
 }
 
 //---------------------------------------------------------
@@ -4663,7 +4668,7 @@ void Score::cmdToggleHideEmpty()
 {
     bool val = !style().styleB(Sid::hideEmptyStaves);
     deselectAll();
-    undo(new ChangeStyleVal(this, Sid::hideEmptyStaves, val));
+    undoChangeStyleVal(Sid::hideEmptyStaves, val);
 }
 
 //---------------------------------------------------------

@@ -7913,7 +7913,7 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
     bool concertPitch = score()->style().styleB(Sid::concertPitch);
     if (concertPitch) {
         score()->startCmd();
-        score()->undo(new ChangeStyleVal(score(), Sid::concertPitch, false));
+        score()->undoChangeStyleVal(Sid::concertPitch, false);
         score()->doLayout();        // this is only allowed in a cmd context to not corrupt the undo/redo stack
     }
 

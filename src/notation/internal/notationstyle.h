@@ -42,7 +42,7 @@ public:
     bool canApplyToAllParts() const override;
     void applyToAllParts() override;
 
-    void resetAllStyleValues(const std::unordered_set<StyleId>& exceptTheseOnes = {}) override;
+    void resetAllStyleValues(const StyleIdSet& exceptTheseOnes = {}) override;
 
     async::Notification styleChanged() const override;
 
