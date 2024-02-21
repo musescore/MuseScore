@@ -4520,6 +4520,15 @@ void NotationInteraction::resetShapesAndPosition()
     }
 }
 
+void NotationInteraction::resetToDefaultLayout()
+{
+    TRACEFUNC;
+
+    startEdit();
+    score()->cmdResetToDefaultLayout();
+    apply();
+}
+
 ScoreConfig NotationInteraction::scoreConfig() const
 {
     ScoreConfig config;

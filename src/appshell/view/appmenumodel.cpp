@@ -245,6 +245,7 @@ MenuItem* AppMenuModel::makeFormatMenu()
         makeMenuItem("reset-text-style-overrides"),
         makeMenuItem("reset-beammode"),
         makeMenuItem("reset"),
+        makeMenuItem("reset-to-default-layout"),
         makeSeparator(),
         makeMenuItem("load-style"),
         makeMenuItem("save-style")

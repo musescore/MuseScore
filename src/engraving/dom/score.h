@@ -326,8 +326,10 @@ public:
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
     void cmdFlip();
     void resetUserStretch();
+    void cmdResetToDefaultLayout();
     void cmdResetBeamMode();
     void cmdResetTextStyleOverrides();
+    void cmdResetAllStyles(const std::unordered_set<Sid>& exceptTheseOnes = {});
     bool canInsertClef(ClefType) const;
     void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
@@ -981,6 +983,8 @@ private:
     friend class write::Writer;
 
     static std::set<Score*> validScores;
+
+    void cmdResetMeasuresLayout();
 
     ScoreChangesRange changesRange() const;
 

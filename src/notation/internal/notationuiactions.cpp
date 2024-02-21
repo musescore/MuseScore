@@ -1402,6 +1402,12 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Reset shapes and &positions"),
              TranslatableString("action", "Reset shapes and positions")
              ),
+    UiAction("reset-to-default-layout",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Reset entire score to default layout"),
+             TranslatableString("action", "Reset entire score to default layout")
+             ),
     UiAction("zoomin",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
