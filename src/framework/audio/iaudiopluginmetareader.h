@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_IAUDIOPLUGINMETAREADER_H
 #define MU_AUDIO_IAUDIOPLUGINMETAREADER_H
 
-#include "types/retval.h"
+#include "global/types/retval.h"
 #include "audiotypes.h"
 
 namespace mu::audio {

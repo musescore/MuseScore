@@ -22,11 +22,9 @@
 
 #include "fxresolver.h"
 
-#include "log.h"
-
-#include "audioerrors.h"
-#include "internal/audiothread.h"
 #include "internal/audiosanitizer.h"
+
+#include "log.h"
 
 using namespace mu::async;
 using namespace mu::audio;

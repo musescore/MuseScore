@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "io/path.h"
+#include "global/io/path.h"
 
 namespace mu::audio {
 class IAudioPluginsScanner

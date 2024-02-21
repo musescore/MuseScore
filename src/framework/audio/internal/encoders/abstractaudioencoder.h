@@ -27,9 +27,8 @@
 #include <vector>
 #include <memory>
 
-#include "log.h"
-#include "io/path.h"
-#include "progress.h"
+#include "global/progress.h"
+#include "global/io/path.h"
 
 #include "audiotypes.h"
 

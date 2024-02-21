@@ -28,7 +28,7 @@
 #include <utility>
 #include <vector>
 
-#include "audio/ifxprocessor.h"
+#include "ifxprocessor.h"
 
 namespace mu::audio::fx {
 class ReverbProcessor : public IFxProcessor

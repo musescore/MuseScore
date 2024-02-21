@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_AUDIOERRORS_H
 #define MU_AUDIO_AUDIOERRORS_H
 
-#include "types/ret.h"
+#include "global/types/ret.h"
 
 namespace mu::audio {
 enum class Err {

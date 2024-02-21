@@ -25,8 +25,8 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "types/ret.h"
-#include "io/path.h"
+#include "global/types/ret.h"
+#include "global/io/path.h"
 
 namespace mu::audio {
 class IRegisterAudioPluginsScenario : MODULE_EXPORT_INTERFACE

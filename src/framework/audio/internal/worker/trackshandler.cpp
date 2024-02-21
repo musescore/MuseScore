@@ -22,13 +22,13 @@
 
 #include "trackshandler.h"
 
-#include "log.h"
-#include "async/async.h"
-#include "midi/miditypes.h"
+#include "global/async/async.h"
 
 #include "internal/audiothread.h"
 #include "internal/audiosanitizer.h"
 #include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu::audio;
 using namespace mu::async;

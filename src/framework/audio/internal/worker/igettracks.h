@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_IGETTRACKS_H
 #define MU_AUDIO_IGETTRACKS_H
 
-#include "async/channel.h"
+#include "global/async/channel.h"
 
 #include "track.h"
 #include "audiotypes.h"

@@ -26,8 +26,8 @@
 #include <map>
 #include <unordered_map>
 
-#include "audio/ifxresolver.h"
-#include "audio/ifxprocessor.h"
+#include "ifxresolver.h"
+#include "ifxprocessor.h"
 
 namespace mu::audio::fx {
 class AbstractFxResolver : public IFxResolver::IResolver

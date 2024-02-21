@@ -24,12 +24,10 @@
 
 #include <memory>
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "async/notification.h"
-#include "types/retval.h"
+#include "global/async/asyncable.h"
+#include "global/async/notification.h"
+#include "global/types/ret.h"
 
-#include "../../iaudiodriver.h"
 #include "internal/worker/mixer.h"
 
 namespace mu::audio {

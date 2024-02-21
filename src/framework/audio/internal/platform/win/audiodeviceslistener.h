@@ -24,7 +24,7 @@
 
 #include "wasapitypes.h"
 
-#include "async/notification.h"
+#include "global/async/notification.h"
 
 namespace mu::audio {
 class AudioDevicesListener : public IMMNotificationClient

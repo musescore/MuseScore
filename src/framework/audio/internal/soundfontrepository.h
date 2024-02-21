@@ -22,20 +22,20 @@
 #ifndef MU_AUDIO_SOUNDFONTREPOSITORY_H
 #define MU_AUDIO_SOUNDFONTREPOSITORY_H
 
-#include "audio/isoundfontrepository.h"
+#include "global/modularity/ioc.h"
+#include "global/iinteractive.h"
+#include "global/io/ifilesystem.h"
+#include "global/async/asyncable.h"
 
-#include "modularity/ioc.h"
-#include "iinteractive.h"
-#include "audio/iaudioconfiguration.h"
-#include "io/ifilesystem.h"
-#include "async/asyncable.h"
+#include "isoundfontrepository.h"
+#include "iaudioconfiguration.h"
 
 namespace mu::audio {
 class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
 {
-    INJECT(framework::IInteractive, interactive)
-    INJECT(IAudioConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<framework::IInteractive> interactive;
+    Inject<IAudioConfiguration> configuration;
+    Inject<io::IFileSystem> fileSystem;
 
 public:
     void init();

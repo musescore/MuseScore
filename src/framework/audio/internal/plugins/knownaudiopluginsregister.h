@@ -23,17 +23,18 @@
 #ifndef MU_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
 #define MU_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
 
-#include "audio/iknownaudiopluginsregister.h"
+#include "global/modularity/ioc.h"
+#include "global/io/ifilesystem.h"
 
-#include "modularity/ioc.h"
-#include "audio/iaudioconfiguration.h"
-#include "io/ifilesystem.h"
+#include "iknownaudiopluginsregister.h"
+#include "iaudioconfiguration.h"
 
 namespace mu::audio {
 class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
 {
-    INJECT(IAudioConfiguration, configuration)
-    INJECT(io::IFileSystem, fileSystem)
+public:
+    Inject<IAudioConfiguration> configuration;
+    Inject<io::IFileSystem> fileSystem;
 
 public:
     Ret load() override;

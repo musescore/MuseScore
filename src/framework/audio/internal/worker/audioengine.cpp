@@ -22,12 +22,10 @@
 
 #include "audioengine.h"
 
-#include "log.h"
-#include "ptrutils.h"
-
 #include "internal/audiobuffer.h"
 #include "internal/audiosanitizer.h"
-#include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu::audio;
 

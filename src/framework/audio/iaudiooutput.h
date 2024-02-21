@@ -25,9 +25,9 @@
 
 #include <memory>
 
-#include "progress.h"
-#include "async/promise.h"
-#include "async/channel.h"
+#include "global/progress.h"
+#include "global/async/promise.h"
+#include "global/async/channel.h"
 
 #include "audiotypes.h"
 

@@ -22,7 +22,7 @@
 #ifndef MU_AUDIO_IAUDIOSTREAM_H
 #define MU_AUDIO_IAUDIOSTREAM_H
 
-#include "io/path.h"
+#include "global/io/path.h"
 
 namespace mu::audio {
 class IAudioStream

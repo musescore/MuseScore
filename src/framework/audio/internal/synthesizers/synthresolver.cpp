@@ -22,12 +22,9 @@
 
 #include "synthresolver.h"
 
-#include "log.h"
-#include "async/async.h"
-
-#include "audioerrors.h"
-#include "internal/audiothread.h"
 #include "internal/audiosanitizer.h"
+
+#include "log.h"
 
 using namespace mu::async;
 using namespace mu::audio;

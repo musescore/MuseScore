@@ -23,12 +23,10 @@
 #ifndef MU_AUDIO_TRACK_H
 #define MU_AUDIO_TRACK_H
 
-#include <unordered_map>
 #include <memory>
-#include <vector>
 
-#include "async/asyncable.h"
-#include "async/channel.h"
+#include "global/async/asyncable.h"
+#include "global/async/channel.h"
 
 #include "iaudiosource.h"
 #include "audiotypes.h"

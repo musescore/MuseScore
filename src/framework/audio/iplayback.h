@@ -23,8 +23,8 @@
 #define MU_AUDIO_ISEQUENCER_H
 
 #include "modularity/imoduleinterface.h"
-#include "async/channel.h"
-#include "async/promise.h"
+#include "global/async/channel.h"
+#include "global/async/promise.h"
 
 #include "audiotypes.h"
 

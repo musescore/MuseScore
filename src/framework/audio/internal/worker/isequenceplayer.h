@@ -23,8 +23,8 @@
 #ifndef MU_AUDIO_ISEQUENCEPLAYER_H
 #define MU_AUDIO_ISEQUENCEPLAYER_H
 
-#include "types/ret.h"
-#include "async/channel.h"
+#include "global/types/ret.h"
+#include "global/async/channel.h"
 
 #include "audiotypes.h"
 

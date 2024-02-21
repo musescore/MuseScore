@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "sinesource.h"
+
 #include <cmath>
 
 using namespace mu::audio;

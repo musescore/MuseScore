@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_FLUIDSEQUENCER_H
 #define MU_AUDIO_FLUIDSEQUENCER_H
 
-#include "async/channel.h"
+#include "global/async/channel.h"
 #include "midi/midievent.h"
 #include "mpe/events.h"
 

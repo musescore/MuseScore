@@ -26,7 +26,7 @@
 #include <map>
 #include <set>
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 #include "mpe/events.h"
 
 #include "audiosanitizer.h"

@@ -24,10 +24,11 @@
 //TODO: remove with global clearing of Q_OS_*** defines
 #include <QtGlobal>
 
-#include "log.h"
-#include "settings.h"
+#include "global/settings.h"
 
 #include "soundfonttypes.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::framework;

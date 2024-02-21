@@ -23,8 +23,8 @@
 #ifndef MU_AUDIO_EVENTAUDIOSOURCE_H
 #define MU_AUDIO_EVENTAUDIOSOURCE_H
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
+#include "global/async/asyncable.h"
+#include "global/modularity/ioc.h"
 #include "mpe/events.h"
 
 #include "audiotypes.h"
@@ -34,7 +34,7 @@
 namespace mu::audio {
 class EventAudioSource : public ITrackAudioInput, public async::Asyncable
 {
-    INJECT(synth::ISynthResolver, synthResolver)
+    Inject<synth::ISynthResolver> synthResolver;
 
 public:
     using OnOffStreamEventsReceived = std::function<void (const TrackId)>;

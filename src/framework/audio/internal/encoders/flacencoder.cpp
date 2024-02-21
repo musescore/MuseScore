@@ -24,10 +24,9 @@
 
 #include "FLAC++/encoder.h"
 
-#include "log.h"
-#include "realfn.h"
-
 #include "internal/dsp/audiomathutils.h"
+
+#include "log.h"
 
 using namespace mu::audio;
 using namespace mu::audio::encode;

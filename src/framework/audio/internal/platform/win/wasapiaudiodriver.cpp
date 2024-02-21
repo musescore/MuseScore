@@ -22,11 +22,12 @@
 
 #include "wasapiaudiodriver.h"
 
-#include "log.h"
-#include "translation.h"
+#include "global/translation.h"
 
 #include "wasapiaudioclient.h"
 #include "audiodeviceslistener.h"
+
+#include "log.h"
 
 using namespace winrt;
 using namespace mu::audio;

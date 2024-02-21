@@ -24,7 +24,7 @@
 
 #include <map>
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
 #include "iplayer.h"
 #include "itracks.h"
