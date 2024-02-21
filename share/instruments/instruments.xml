@@ -12636,6 +12636,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <!--MIDI: Bank 0, Prog 40; MS General: Violin-->
                         <program value="40"/> <!--Violin-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="viola">
@@ -12693,6 +12694,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <!--MIDI: Bank 0, Prog 41; MS General: Viola-->
                         <program value="41"/> <!--Viola-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="violoncello">
@@ -12751,6 +12753,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <!--MIDI: Bank 0, Prog 42; MS General: Cello-->
                         <program value="42"/> <!--Cello-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="contrabass">
@@ -12815,6 +12818,7 @@ Aeolus organ synthesizer, currently disabled -->
                         <!--MIDI: Bank 0, Prog 43; MS General: Contrabass-->
                         <program value="43"/> <!--Contrabass-->
                   </Channel>
+                  <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="double-bass">
