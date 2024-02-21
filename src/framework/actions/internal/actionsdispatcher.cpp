@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "actionsdispatcher.h"
-#include "log.h"
+
 #include "actionable.h"
+
+#include "log.h"
 
 using namespace mu::actions;
 
