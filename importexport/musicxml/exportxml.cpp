@@ -5141,6 +5141,8 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                         lyricXml += positioningAttributes(l);
                         if (!l->visible())
                               lyricXml += " print-object=\"no\"";
+                        if (l->placeAbove())
+                              lyricXml += " placement=\"above\"";
                         _xml.stag(lyricXml);
                         Lyrics::Syllabic syl = (l)->syllabic();
                         QString s;

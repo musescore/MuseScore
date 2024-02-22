@@ -182,6 +182,7 @@ private slots:
       void lyricColor() { mxmlIoTest("testLyricColor"); }
       void lyricExtensions1() { mxmlIoTest("testLyricExtensions"); }
       void lyricExtensions2() { mxmlImportTestRef("testLyricExtensions"); }
+      void lyricPos() { mxmlImportTestRef("testLyricPos"); }
       void lyrics1() { mxmlIoTestRef("testLyrics1"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
