@@ -5599,6 +5599,9 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 if (!l->visible()) {
                     lyricXml += u" print-object=\"no\"";
                 }
+                if (l->placeAbove()) {
+                    lyricXml += u" placement=\"above\"";
+                }
                 m_xml.startElementRaw(lyricXml);
                 LyricsSyllabic syl = (l)->syllabic();
                 String s;
