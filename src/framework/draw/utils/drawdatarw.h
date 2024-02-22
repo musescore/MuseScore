@@ -22,9 +22,10 @@
 #ifndef MU_DRAW_DRAWDATARW_H
 #define MU_DRAW_DRAWDATARW_H
 
-#include "../types/drawdata.h"
 #include "global/io/path.h"
 #include "global/types/retval.h"
+
+#include "../types/drawdata.h"
 
 namespace mu::draw {
 class DrawDataRW

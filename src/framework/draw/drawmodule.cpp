@@ -21,7 +21,7 @@
  */
 #include "drawmodule.h"
 
-#include "modularity/ioc.h"
+#include "global/modularity/ioc.h"
 
 #ifndef DRAW_NO_INTERNAL
 #include "internal/qfontprovider.h"

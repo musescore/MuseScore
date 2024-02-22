@@ -24,7 +24,7 @@
 
 #include <QRectF>
 
-#include "io/path.h"
+#include "global/io/path.h"
 
 namespace mu::draw {
 struct FTData;

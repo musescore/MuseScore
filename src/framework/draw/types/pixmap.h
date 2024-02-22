@@ -22,7 +22,8 @@
 #ifndef MU_DRAW_PIXMAP_H
 #define MU_DRAW_PIXMAP_H
 
-#include "types/bytearray.h"
+#include "global/types/bytearray.h"
+
 #include "geometry.h"
 
 #ifndef NO_QT_SUPPORT

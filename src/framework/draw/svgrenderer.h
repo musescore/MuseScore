@@ -22,7 +22,8 @@
 #ifndef MU_DRAW_SVGRENDERER_H
 #define MU_DRAW_SVGRENDERER_H
 
-#include "types/bytearray.h"
+#include "global/types/bytearray.h"
+
 #include "types/geometry.h"
 #include "painter.h"
 

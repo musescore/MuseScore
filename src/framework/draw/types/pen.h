@@ -26,9 +26,10 @@
 #include <QPen>
 #endif
 
+#include "global/realfn.h"
+
 #include "color.h"
 #include "drawtypes.h"
-#include "realfn.h"
 
 namespace mu::draw {
 class Pen

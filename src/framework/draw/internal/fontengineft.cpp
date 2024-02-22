@@ -23,7 +23,7 @@
 
 #include <QHash>
 
-#include "io/file.h"
+#include "global/io/file.h"
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
