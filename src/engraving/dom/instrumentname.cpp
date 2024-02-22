@@ -23,6 +23,9 @@
 #include "instrumentname.h"
 
 #include "measure.h"
+#include "part.h"
+#include "staff.h"
+#include "style/style.h"
 #include "system.h"
 
 #include "log.h"
@@ -80,13 +83,35 @@ void InstrumentName::setInstrumentNameType(const String& s)
     }
 }
 
+double InstrumentName::largestStaffSpatium() const
+{
+    if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
+        return style().spatium();
+    }
+
+    // Get spatium for instrument names from largest staff of part,
+    // instead of staff it is attached to
+    Part* p = part();
+    if (!part()) {
+        return style().spatium();
+    }
+    double largestSpatium = 0;
+    for (Staff* s: p->staves()) {
+        double sp = s->spatium(tick());
+        if (sp > largestSpatium) {
+            largestSpatium = sp;
+        }
+    }
+    return largestSpatium;
+}
+
 //---------------------------------------------------------
 //   setInstrumentNameType
 //---------------------------------------------------------
 
 void InstrumentName::setInstrumentNameType(InstrumentNameType st)
 {
-    _instrumentNameType = st;
+    m_instrumentNameType = st;
     if (st == InstrumentNameType::SHORT) {
         setTextStyleType(TextStyleType::INSTRUMENT_SHORT);
         initElementStyle(&shortInstrumentStyle);
@@ -122,7 +147,7 @@ PropertyValue InstrumentName::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::INAME_LAYOUT_POSITION:
-        return _layoutPos;
+        return m_layoutPos;
     default:
         return TextBase::getProperty(id);
     }
@@ -137,7 +162,7 @@ bool InstrumentName::setProperty(Pid id, const PropertyValue& v)
     bool rv = true;
     switch (id) {
     case Pid::INAME_LAYOUT_POSITION:
-        _layoutPos = v.toInt();
+        m_layoutPos = v.toInt();
         break;
     case Pid::VISIBLE:
     case Pid::COLOR:

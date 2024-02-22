@@ -21,8 +21,6 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.15
 import QtQml.Models 2.15
 
@@ -38,6 +36,10 @@ Item {
     property NavigationSection navigationSection: null
     property NavigationPanel navigationPanel: controlPanel.navigation // first panel
     property alias contextMenuModel: contextMenuModel
+
+    onVisibleChanged: {
+        instrumentsTreeModel.setInstrumentsPanelVisible(root.visible)
+    }
 
     Rectangle {
         id: background
@@ -57,6 +59,10 @@ Item {
 
     InstrumentsPanelContextMenuModel {
         id: contextMenuModel
+
+        onExpandCollapseAllRequested: function(expand) {
+            instrumentsTreeView.expandCollapseAll(expand)
+        }
     }
 
     Component.onCompleted: {
@@ -161,6 +167,21 @@ Item {
                 backgroundVisible: false
                 headerVisible: false
                 frameVisible: false
+
+                function expandCollapseAll(expand) {
+                    for (let row = 0; row < instrumentsTreeView.model.rowCount(); row++) {
+                        const instrumentIndex = instrumentsTreeView.model.index(row, 0);
+                        const instrumentsTreeItemDelegate = instrumentsTreeView.model.data(instrumentIndex);
+                        if (instrumentsTreeItemDelegate.isExpandable){
+                            if (expand) {
+                                instrumentsTreeView.expand(instrumentIndex)
+                            } else {
+                                instrumentsTreeView.collapse(instrumentIndex)
+                            }
+                        }
+                    }
+                    flickable.returnToBounds();
+                }
 
                 property NavigationPanel navigationTreePanel : NavigationPanel {
                     name: "InstrumentsTree"
@@ -280,6 +301,14 @@ Item {
 
                                 onVisibilityChanged: function(visible) {
                                     instrumentsTreeModel.toggleVisibilityOfSelectedRows(visible);
+                                }
+
+                                onDragStarted: {
+                                    instrumentsTreeModel.startActiveDrag()
+                                }
+
+                                onDropped: {
+                                    instrumentsTreeModel.endActiveDrag()
                                 }
                             }
                         }

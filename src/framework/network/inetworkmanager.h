@@ -41,6 +41,8 @@ public:
                      const RequestHeaders& headers = RequestHeaders()) = 0;
     virtual Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
                     const RequestHeaders& headers = RequestHeaders()) = 0;
+    virtual Ret patch(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
+                      const RequestHeaders& headers = RequestHeaders()) = 0;
     virtual Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) = 0;
 
     virtual framework::Progress progress() const = 0;

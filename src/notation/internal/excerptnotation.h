@@ -45,7 +45,10 @@ public:
 
     QString name() const override;
     void setName(const QString& name) override;
+    void undoSetName(const QString& name) override;
     async::Notification nameChanged() const override;
+
+    const String& fileName() const override;
 
     INotationPtr notation() override;
     IExcerptNotationPtr clone() const override;

@@ -108,9 +108,9 @@ public:
 
     void setOutputResourceItemCount(size_t count);
 
-    void loadInputParams(audio::AudioInputParams&& newParams);
-    void loadOutputParams(audio::AudioOutputParams&& newParams);
-    void loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState);
+    void loadInputParams(const audio::AudioInputParams& newParams);
+    void loadOutputParams(const audio::AudioOutputParams& newParams);
+    void loadSoloMuteState(const notation::INotationSoloMuteState::SoloMuteState& newState);
 
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 
@@ -153,7 +153,7 @@ signals:
 
     void inputParamsChanged(const audio::AudioInputParams& params);
     void outputParamsChanged(const audio::AudioOutputParams& params);
-    void soloMuteStateChanged(const project::IProjectAudioSettings::SoloMuteState& state);
+    void soloMuteStateChanged(const notation::INotationSoloMuteState::SoloMuteState& state);
 
     void inputResourceItemChanged();
     void outputResourceItemListChanged();
@@ -187,7 +187,7 @@ protected:
 
     audio::AudioInputParams m_inputParams;
     audio::AudioOutputParams m_outParams;
-    project::IProjectAudioSettings::SoloMuteState m_soloMuteState;
+    notation::INotationSoloMuteState::SoloMuteState m_soloMuteState;
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;

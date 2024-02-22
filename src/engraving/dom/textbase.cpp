@@ -43,6 +43,7 @@
 #endif
 
 #include "box.h"
+#include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"
 #include "page.h"
@@ -139,8 +140,8 @@ CharFormat& CharFormat::operator=(const CharFormat& cf)
 
 void TextCursor::clearSelection()
 {
-    _selectLine   = _row;
-    _selectColumn = _column;
+    m_selectLine   = m_row;
+    m_selectColumn = m_column;
 }
 
 void TextCursor::startEdit()
@@ -148,7 +149,7 @@ void TextCursor::startEdit()
     setRow(0);
     setColumn(0);
     clearSelection();
-    _editing = true;
+    m_editing = true;
 }
 
 void TextCursor::endEdit()
@@ -156,7 +157,7 @@ void TextCursor::endEdit()
     setRow(0);
     setColumn(0);
     clearSelection();
-    _editing = false;
+    m_editing = false;
 }
 
 //---------------------------------------------------------
@@ -165,22 +166,22 @@ void TextCursor::endEdit()
 
 void TextCursor::init()
 {
-    PropertyValue family = _text->propertyDefault(Pid::FONT_FACE);
-    _format.setFontFamily(family.value<String>());
+    PropertyValue family = m_text->propertyDefault(Pid::FONT_FACE);
+    m_format.setFontFamily(family.value<String>());
 
-    PropertyValue size = _text->propertyDefault(Pid::FONT_SIZE);
-    _format.setFontSize(size.toReal());
+    PropertyValue size = m_text->propertyDefault(Pid::FONT_SIZE);
+    m_format.setFontSize(size.toReal());
 
-    PropertyValue style = _text->propertyDefault(Pid::FONT_STYLE);
-    _format.setStyle(static_cast<FontStyle>(style.toInt()));
+    PropertyValue style = m_text->propertyDefault(Pid::FONT_STYLE);
+    m_format.setStyle(static_cast<FontStyle>(style.toInt()));
 
-    PropertyValue verticalAlign = _text->propertyDefault(Pid::TEXT_SCRIPT_ALIGN);
-    _format.setValign(static_cast<VerticalAlignment>(verticalAlign.toInt()));
+    PropertyValue verticalAlign = m_text->propertyDefault(Pid::TEXT_SCRIPT_ALIGN);
+    m_format.setValign(static_cast<VerticalAlignment>(verticalAlign.toInt()));
 }
 
 std::pair<size_t, size_t> TextCursor::positionToLocalCoord(int position) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return { mu::nidx, mu::nidx };
     }
@@ -223,7 +224,7 @@ TextCursor::Range TextCursor::selectionRange() const
 
 size_t TextCursor::columns() const
 {
-    return _text->layoutData()->textBlock(static_cast<int>(_row)).columns();
+    return m_text->ldata()->textBlock(static_cast<int>(m_row)).columns();
 }
 
 //---------------------------------------------------------
@@ -232,7 +233,7 @@ size_t TextCursor::columns() const
 
 Char TextCursor::currentCharacter() const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return Char();
     }
@@ -251,11 +252,11 @@ Char TextCursor::currentCharacter() const
 
 void TextCursor::updateCursorFormat()
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
-    const TextBlock& block = ldata->blocks.at(_row);
+    const TextBlock& block = ldata->blocks.at(m_row);
 
     size_t col = hasSelection() ? selectColumn() : column();
     // Get format at the LEFT of the cursor position
@@ -276,16 +277,16 @@ RectF TextCursor::cursorRect() const
     const TextBlock& tline       = curLine();
     const TextFragment* fragment = tline.fragment(static_cast<int>(column()));
 
-    mu::draw::Font _font  = fragment ? fragment->font(_text) : _text->font();
-    if (_font.family() == _text->style().styleSt(Sid::MusicalSymbolFont)) {
-        _font.setFamily(_text->style().styleSt(Sid::MusicalTextFont), draw::Font::Type::MusicSymbolText);
+    mu::draw::Font _font  = fragment ? fragment->font(m_text) : m_text->font();
+    if (_font.family() == m_text->style().styleSt(Sid::MusicalSymbolFont)) {
+        _font.setFamily(m_text->style().styleSt(Sid::MusicalTextFont), draw::Font::Type::MusicSymbolText);
         if (fragment) {
             _font.setPointSizeF(fragment->format.fontSize());
         }
     }
     double ascent = mu::draw::FontMetrics::ascent(_font);
     double h = ascent;
-    double x = tline.xpos(column(), _text);
+    double x = tline.xpos(column(), m_text);
     double y = tline.y() - ascent * .9;
     return RectF(x, y, 4.0, h);
 }
@@ -297,19 +298,19 @@ RectF TextCursor::cursorRect() const
 
 const TextBlock& TextCursor::curLine() const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         static TextBlock dummy;
         return dummy;
     }
 
-    return ldata->blocks.at(_row);
+    return ldata->blocks.at(m_row);
 }
 
 TextBlock& TextCursor::curLine()
 {
-    TextBase::LayoutData* ldata = _text->mutLayoutData();
-    return ldata->blocks[_row];
+    TextBase::LayoutData* ldata = m_text->mutldata();
+    return ldata->blocks[m_row];
 }
 
 //---------------------------------------------------------
@@ -318,7 +319,7 @@ TextBlock& TextCursor::curLine()
 
 void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
 {
-    TextBase::LayoutData* ldata = _text->mutLayoutData();
+    TextBase::LayoutData* ldata = m_text->mutldata();
 
     size_t r1 = selectLine();
     size_t r2 = row();
@@ -346,24 +347,28 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
         }
     }
 
-    EngravingItem::renderer()->layoutText1(_text);
+    EngravingItem::renderer()->layoutText1(m_text);
 }
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
 {
-    if (!_text || _text->fragmentList().empty() || (!hasSelection() && editing())) {
-        return _format;
+    if (!m_text || (!hasSelection() && editing())) {
+        return m_format;
     }
 
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return CharFormat();
     }
 
-    size_t startColumn = hasSelection() ? std::min(selectColumn(), _column) : 0;
-    size_t startRow = hasSelection() ? std::min(selectLine(), _row) : 0;
+    if (ldata->blocks.empty()) {
+        return m_format;
+    }
 
-    size_t endSelectionRow = hasSelection() ? std::max(selectLine(), _row) : ldata->blocks.size() - 1;
+    size_t startColumn = hasSelection() ? std::min(selectColumn(), m_column) : 0;
+    size_t startRow = hasSelection() ? std::min(selectLine(), m_row) : 0;
+
+    size_t endSelectionRow = hasSelection() ? std::max(selectLine(), m_row) : ldata->blocks.size() - 1;
 
     const TextFragment* tf = ldata->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(startColumn));
     CharFormat resultFormat = tf ? tf->format : CharFormat();
@@ -375,7 +380,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
             continue;
         }
 
-        size_t endSelectionColumn = hasSelection() ? std::max(selectColumn(), _column) : block.columns();
+        size_t endSelectionColumn = hasSelection() ? std::max(selectColumn(), m_column) : block.columns();
 
         for (size_t column = startColumn; column < endSelectionColumn; column++) {
             const TextFragment* fragment = block.fragment(static_cast<int>(column));
@@ -412,7 +417,7 @@ void TextCursor::setFormat(FormatId id, FormatValue val)
 {
     if (!hasSelection()) {
         if (!editing()) {
-            _text->selectAll(this);
+            m_text->selectAll(this);
         } else if (format()->formatValue(id) == val) {
             return;
         }
@@ -437,116 +442,116 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
         switch (op) {
         case TextCursor::MoveOperation::Left:
             if (hasSelection() && mode == TextCursor::MoveMode::MoveAnchor) {
-                size_t r1 = _selectLine;
-                size_t r2 = _row;
-                size_t c1 = _selectColumn;
-                size_t c2 = _column;
+                size_t r1 = m_selectLine;
+                size_t r2 = m_row;
+                size_t c1 = m_selectColumn;
+                size_t c2 = m_column;
 
                 sort(r1, c1, r2, c2);
                 clearSelection();
-                _row    = r1;
-                _column = c1;
-            } else if (_column == 0) {
-                if (_row == 0) {
+                m_row    = r1;
+                m_column = c1;
+            } else if (m_column == 0) {
+                if (m_row == 0) {
                     return false;
                 }
-                --_row;
-                _column = curLine().columns();
+                --m_row;
+                m_column = curLine().columns();
             } else {
-                --_column;
+                --m_column;
             }
             break;
 
         case TextCursor::MoveOperation::Right:
             if (hasSelection() && mode == TextCursor::MoveMode::MoveAnchor) {
-                size_t r1 = _selectLine;
-                size_t r2 = _row;
-                size_t c1 = _selectColumn;
-                size_t c2 = _column;
+                size_t r1 = m_selectLine;
+                size_t r2 = m_row;
+                size_t c1 = m_selectColumn;
+                size_t c2 = m_column;
 
                 sort(r1, c1, r2, c2);
                 clearSelection();
-                _row    = r2;
-                _column = c2;
+                m_row    = r2;
+                m_column = c2;
             } else if (column() >= curLine().columns()) {
-                if (_row >= _text->layoutData()->rows() - 1) {
+                if (m_row >= m_text->ldata()->rows() - 1) {
                     return false;
                 }
-                ++_row;
-                _column = 0;
+                ++m_row;
+                m_column = 0;
             } else {
-                ++_column;
+                ++m_column;
             }
             break;
 
         case TextCursor::MoveOperation::Up:
-            if (_row == 0) {
+            if (m_row == 0) {
                 return false;
             }
-            --_row;
-            if (_column > curLine().columns()) {
-                _column = curLine().columns();
+            --m_row;
+            if (m_column > curLine().columns()) {
+                m_column = curLine().columns();
             }
 
             break;
 
         case TextCursor::MoveOperation::Down:
-            if (_row >= _text->layoutData()->rows() - 1) {
+            if (m_row >= m_text->ldata()->rows() - 1) {
                 return false;
             }
-            ++_row;
-            if (_column > curLine().columns()) {
-                _column = curLine().columns();
+            ++m_row;
+            if (m_column > curLine().columns()) {
+                m_column = curLine().columns();
             }
 
             break;
 
         case TextCursor::MoveOperation::Start:
-            _row    = 0;
-            _column = 0;
+            m_row    = 0;
+            m_column = 0;
 
             break;
 
         case TextCursor::MoveOperation::End:
-            _row    = _text->layoutData()->rows() - 1;
-            _column = curLine().columns();
+            m_row    = m_text->ldata()->rows() - 1;
+            m_column = curLine().columns();
 
             break;
 
         case TextCursor::MoveOperation::StartOfLine:
-            _column = 0;
+            m_column = 0;
 
             break;
 
         case TextCursor::MoveOperation::EndOfLine:
-            _column = curLine().columns();
+            m_column = curLine().columns();
 
             break;
 
         case TextCursor::MoveOperation::WordLeft:
-            if (_column > 0) {
-                --_column;
-                while (_column > 0 && currentCharacter().isSpace()) {
-                    --_column;
+            if (m_column > 0) {
+                --m_column;
+                while (m_column > 0 && currentCharacter().isSpace()) {
+                    --m_column;
                 }
-                while (_column > 0 && !currentCharacter().isSpace()) {
-                    --_column;
+                while (m_column > 0 && !currentCharacter().isSpace()) {
+                    --m_column;
                 }
                 if (currentCharacter().isSpace()) {
-                    ++_column;
+                    ++m_column;
                 }
             }
             break;
 
         case TextCursor::MoveOperation::NextWord: {
             size_t cols =  columns();
-            if (_column < cols) {
-                ++_column;
-                while (_column < cols && !currentCharacter().isSpace()) {
-                    ++_column;
+            if (m_column < cols) {
+                ++m_column;
+                while (m_column < cols && !currentCharacter().isSpace()) {
+                    ++m_column;
                 }
-                while (_column < cols && currentCharacter().isSpace()) {
-                    ++_column;
+                while (m_column < cols && currentCharacter().isSpace()) {
+                    ++m_column;
                 }
             }
         }
@@ -562,7 +567,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
     }
 
     updateCursorFormat();
-    _text->score()->addRefresh(_text->canvasBoundingRect());
+    m_text->score()->addRefresh(m_text->canvasBoundingRect());
 
     return true;
 }
@@ -580,25 +585,25 @@ void TextCursor::selectWord()
     const bool selectSpaces = currentCharacter().isSpace();
 
     //handle double-clicking inside a word
-    size_t startPosition = _column;
+    size_t startPosition = m_column;
 
-    while (_column > 0 && currentCharacter().isSpace() == selectSpaces) {
-        --_column;
+    while (m_column > 0 && currentCharacter().isSpace() == selectSpaces) {
+        --m_column;
     }
 
     if (currentCharacter().isSpace() != selectSpaces) {
-        ++_column;
+        ++m_column;
     }
 
-    _selectColumn = _column;
+    m_selectColumn = m_column;
 
-    _column = startPosition;
-    while (_column < curLine().columns() && currentCharacter().isSpace() == selectSpaces) {
-        ++_column;
+    m_column = startPosition;
+    while (m_column < curLine().columns() && currentCharacter().isSpace() == selectSpaces) {
+        ++m_column;
     }
 
     updateCursorFormat();
-    _text->score()->addRefresh(_text->canvasBoundingRect());
+    m_text->score()->addRefresh(m_text->canvasBoundingRect());
 }
 
 //---------------------------------------------------------
@@ -607,18 +612,18 @@ void TextCursor::selectWord()
 
 bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 {
-    PointF pt  = p - _text->canvasPos();
-    if (!_text->layoutData()->bbox().contains(pt)) {
+    PointF pt  = p - m_text->canvasPos();
+    if (!m_text->ldata()->bbox().contains(pt)) {
         return false;
     }
-    size_t oldRow    = _row;
-    size_t oldColumn = _column;
+    size_t oldRow    = m_row;
+    size_t oldColumn = m_column;
 
 //      if (_text->_layout.empty())
 //            _text->_layout.append(TextBlock());
-    _row = 0;
+    m_row = 0;
 
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return false;
     }
@@ -626,14 +631,14 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
     for (size_t row = 0; row < ldata->blocks.size(); ++row) {
         const TextBlock& l = ldata->blocks.at(row);
         if (l.y() > pt.y()) {
-            _row = row;
+            m_row = row;
             break;
         }
     }
-    _column = curLine().column(pt.x(), _text);
+    m_column = curLine().column(pt.x(), m_text);
 
-    if (oldRow != _row || oldColumn != _column) {
-        _text->score()->setUpdateAll();
+    if (oldRow != m_row || oldColumn != m_column) {
+        m_text->score()->setUpdateAll();
         if (mode == TextCursor::MoveMode::MoveAnchor) {
             clearSelection();
         }
@@ -650,7 +655,7 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 String TextCursor::selectedText(bool withFormat) const
 {
     size_t r1 = selectLine();
-    size_t r2 = _row;
+    size_t r2 = m_row;
     size_t c1 = selectColumn();
     size_t c2 = column();
     sort(r1, c1, r2, c2);
@@ -664,7 +669,7 @@ String TextCursor::selectedText(bool withFormat) const
 
 String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return String();
     }
@@ -688,7 +693,7 @@ String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) 
 
 TextCursor::Range TextCursor::range(int start, int end) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return Range();
     }
@@ -716,7 +721,7 @@ TextCursor::Range TextCursor::range(int start, int end) const
 
 int TextCursor::position(int row, int column) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return 0;
     }
@@ -848,7 +853,13 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     mu::draw::Font font;
 
     double m = format.fontSize();
-    double spatiumScaling = t->spatium() / SPATIUM20;
+    double spatiumScaling = 0.0;
+
+    if (t->isInstrumentName()) {
+        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / SPATIUM20;
+    } else {
+        spatiumScaling = t->spatium() / SPATIUM20;
+    }
 
     if (t->sizeIsSpatiumDependent()) {
         m *= spatiumScaling;
@@ -860,15 +871,29 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     String family;
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
-        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM) {
+        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
+            || t->textStyleType() == TextStyleType::TUPLET || t->textStyleType() == TextStyleType::PEDAL || t->isStringTunings()) {
             std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::MusicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;
-            if (t->isDynamic()) {
-                m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
-                if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                    std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
-                    family = String::fromStdString(fontName);
+            if (!t->isStringTunings()) {
+                m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
+                if (t->isDynamic()) {
+                    m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
+                    if (t->style().styleB(Sid::dynamicsOverrideFont)) {
+                        std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                        family = String::fromStdString(fontName2);
+                    }
+                } else {
+                    for (const auto& a : *textStyle(t->textStyleType())) {
+                        if (a.type == TextStylePropertyType::MusicalSymbolsScale) {
+                            m *= t->style().styleD(a.sid);
+                            if (t->sizeIsSpatiumDependent()) {
+                                m *= spatiumScaling;
+                            }
+                            break;
+                        }
+                    }
                 }
             }
             // We use a default font size of 10pt for historical reasons,
@@ -938,11 +963,11 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
 void TextBlock::draw(mu::draw::Painter* p, const TextBase* t) const
 {
-    p->translate(0.0, _y);
-    for (const TextFragment& f : _fragments) {
+    p->translate(0.0, m_y);
+    for (const TextFragment& f : m_fragments) {
         f.draw(p, t);
     }
-    p->translate(0.0, -_y);
+    p->translate(0.0, -m_y);
 }
 
 //---------------------------------------------------------
@@ -951,9 +976,9 @@ void TextBlock::draw(mu::draw::Painter* p, const TextBase* t) const
 
 void TextBlock::layout(const TextBase* t)
 {
-    _bbox        = RectF();
+    m_bbox        = RectF();
     double x      = 0.0;
-    _lineSpacing = 0.0;
+    m_lineSpacing = 0.0;
     double lm     = 0.0;
 
     double layoutWidth = 0;
@@ -977,7 +1002,7 @@ void TextBlock::layout(const TextBase* t)
         break;
         case ElementType::MEASURE: {
             Measure* m = toMeasure(e);
-            layoutWidth = m->layoutData()->bbox().width();
+            layoutWidth = m->ldata()->bbox().width();
         }
         break;
         default:
@@ -985,12 +1010,12 @@ void TextBlock::layout(const TextBase* t)
         }
     }
 
-    if (_fragments.empty()) {
+    if (m_fragments.empty()) {
         mu::draw::FontMetrics fm = t->fontMetrics();
-        _bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
-        _lineSpacing = fm.lineSpacing();
-    } else if (_fragments.size() == 1 && _fragments.front().text.isEmpty()) {
-        auto fi = _fragments.begin();
+        m_bbox.setRect(0.0, -fm.ascent(), 1.0, fm.descent());
+        m_lineSpacing = fm.lineSpacing();
+    } else if (m_fragments.size() == 1 && m_fragments.front().text.isEmpty()) {
+        auto fi = m_fragments.begin();
         TextFragment& f = *fi;
         f.pos.setX(x);
         mu::draw::FontMetrics fm(f.font(t));
@@ -1008,11 +1033,11 @@ void TextBlock::layout(const TextBase* t)
         }
 
         RectF temp(0.0, -fm.ascent(), 1.0, fm.descent());
-        _bbox |= temp;
-        _lineSpacing = std::max(_lineSpacing, fm.lineSpacing());
+        m_bbox |= temp;
+        m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
     } else {
-        const auto fiLast = --_fragments.end();
-        for (auto fi = _fragments.begin(); fi != _fragments.end(); ++fi) {
+        const auto fiLast = --m_fragments.end();
+        for (auto fi = m_fragments.begin(); fi != m_fragments.end(); ++fi) {
             TextFragment& f = *fi;
             f.pos.setX(x);
             mu::draw::FontMetrics fm(f.font(t));
@@ -1035,32 +1060,39 @@ void TextBlock::layout(const TextBase* t)
                 x += w;
             }
 
-            _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
-            _lineSpacing = std::max(_lineSpacing, fm.lineSpacing());
+            m_bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
+            mu::draw::Font font = f.font(t);
+            if (font.type() == mu::draw::Font::Type::MusicSymbol || font.type() == mu::draw::Font::Type::MusicSymbolText) {
+                // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
+                // font linespacing value we just use the height of the individual fragment with some added margin
+                m_lineSpacing = std::max(m_lineSpacing, 1.25 * m_bbox.height());
+            } else {
+                m_lineSpacing = std::max(m_lineSpacing, fm.lineSpacing());
+            }
         }
     }
 
     // Apply style/custom line spacing
-    _lineSpacing *= t->textLineSpacing();
+    m_lineSpacing *= t->textLineSpacing();
 
     double rx = 0;
     AlignH alignH = t->align().horizontal;
     bool dynamicAlwaysCentered = t->isDynamic() && t->getProperty(Pid::CENTER_ON_NOTEHEAD).toBool();
 
     if (alignH == AlignH::HCENTER || dynamicAlwaysCentered) {
-        rx = (layoutWidth - (_bbox.left() + _bbox.right())) * .5;
+        rx = (layoutWidth - (m_bbox.left() + m_bbox.right())) * .5;
     } else if (alignH == AlignH::LEFT) {
-        rx = -_bbox.left();
+        rx = -m_bbox.left();
     } else if (alignH == AlignH::RIGHT) {
-        rx = layoutWidth - _bbox.right();
+        rx = layoutWidth - m_bbox.right();
     }
 
     rx += lm;
 
-    for (TextFragment& f : _fragments) {
+    for (TextFragment& f : m_fragments) {
         f.pos.rx() += rx;
     }
-    _bbox.translate(rx, 0.0);
+    m_bbox.translate(rx, 0.0);
 }
 
 //---------------------------------------------------------
@@ -1070,7 +1102,7 @@ void TextBlock::layout(const TextBase* t)
 std::list<TextFragment> TextBlock::fragmentsWithoutEmpty()
 {
     std::list<TextFragment> list;
-    for (const auto& x : _fragments) {
+    for (const auto& x : m_fragments) {
         if (!x.text.isEmpty()) {
             list.push_back(x);
         }
@@ -1086,7 +1118,7 @@ std::list<TextFragment> TextBlock::fragmentsWithoutEmpty()
 double TextBlock::xpos(size_t column, const TextBase* t) const
 {
     size_t col = 0;
-    for (const TextFragment& f : _fragments) {
+    for (const TextFragment& f : m_fragments) {
         if (column == col) {
             return f.pos.x();
         }
@@ -1103,7 +1135,7 @@ double TextBlock::xpos(size_t column, const TextBase* t) const
             }
         }
     }
-    return _bbox.x();
+    return m_bbox.x();
 }
 
 //---------------------------------------------------------
@@ -1112,12 +1144,12 @@ double TextBlock::xpos(size_t column, const TextBase* t) const
 
 const TextFragment* TextBlock::fragment(int column) const
 {
-    if (_fragments.empty()) {
+    if (m_fragments.empty()) {
         return nullptr;
     }
     int col = 0;
-    auto f = _fragments.begin();
-    for (; f != _fragments.end(); ++f) {
+    auto f = m_fragments.begin();
+    for (; f != m_fragments.end(); ++f) {
         for (size_t i = 0; i < f->text.size(); ++i) {
             if (f->text.at(i).isHighSurrogate()) {
                 continue;
@@ -1155,7 +1187,7 @@ RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 {
     double x1 = xpos(col1, t);
     double x2 = xpos(col2, t);
-    return RectF(x1, _bbox.y(), x2 - x1, _bbox.height());
+    return RectF(x1, m_bbox.y(), x2 - x1, m_bbox.height());
 }
 
 //---------------------------------------------------------
@@ -1165,7 +1197,7 @@ RectF TextBlock::boundingRect(int col1, int col2, const TextBase* t) const
 size_t TextBlock::columns() const
 {
     size_t col = 0;
-    for (const TextFragment& f : _fragments) {
+    for (const TextFragment& f : m_fragments) {
         for (size_t i = 0; i < f.text.size(); ++i) {
             if (!f.text.at(i).isHighSurrogate()) {
                 ++col;
@@ -1184,7 +1216,7 @@ size_t TextBlock::columns() const
 int TextBlock::column(double x, TextBase* t) const
 {
     int col = 0;
-    for (const TextFragment& f : _fragments) {
+    for (const TextFragment& f : m_fragments) {
         int idx = 0;
         if (x <= f.pos.x()) {
             return col;
@@ -1216,23 +1248,23 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
     int rcol, ridx;
     removeEmptyFragment();   // since we are going to write text, we don't need an empty fragment to hold format info. if such exists, delete it
     auto i = fragment(static_cast<int>(cursor->column()), &rcol, &ridx);
-    if (i != _fragments.end()) {
+    if (i != m_fragments.end()) {
         if (!(i->format == *cursor->format())) {
             if (rcol == 0) {
-                _fragments.insert(i, TextFragment(cursor, s));
+                m_fragments.insert(i, TextFragment(cursor, s));
             } else {
                 TextFragment f2 = i->split(rcol);
-                i = _fragments.insert(std::next(i), TextFragment(cursor, s));
-                _fragments.insert(std::next(i), f2);
+                i = m_fragments.insert(std::next(i), TextFragment(cursor, s));
+                m_fragments.insert(std::next(i), f2);
             }
         } else {
             i->text.insert(ridx, s);
         }
     } else {
-        if (!_fragments.empty() && _fragments.back().format == *cursor->format()) {
-            _fragments.back().text.append(s);
+        if (!m_fragments.empty() && m_fragments.back().format == *cursor->format()) {
+            m_fragments.back().text.append(s);
         } else {
-            _fragments.push_back(TextFragment(cursor, s));
+            m_fragments.push_back(TextFragment(cursor, s));
         }
     }
 }
@@ -1247,8 +1279,8 @@ void TextBlock::insert(TextCursor* cursor, const String& s)
 
 void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 {
-    if (_fragments.size() == 0 || _fragments.front().text.isEmpty()) {
-        _fragments.insert(_fragments.begin(), TextFragment(cursor, u""));
+    if (m_fragments.size() == 0 || m_fragments.front().text.isEmpty()) {
+        m_fragments.insert(m_fragments.begin(), TextFragment(cursor, u""));
     }
 }
 
@@ -1258,8 +1290,8 @@ void TextBlock::insertEmptyFragmentIfNeeded(TextCursor* cursor)
 
 void TextBlock::removeEmptyFragment()
 {
-    if (_fragments.size() > 0 && _fragments.front().text.isEmpty()) {
-        _fragments.pop_back();
+    if (m_fragments.size() > 0 && m_fragments.front().text.isEmpty()) {
+        m_fragments.pop_back();
     }
 }
 
@@ -1276,7 +1308,7 @@ void TextBlock::removeEmptyFragment()
 std::list<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int* ridx)
 {
     int col = 0;
-    for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
+    for (auto it = m_fragments.begin(); it != m_fragments.end(); ++it) {
         *rcol = 0;
         *ridx = 0;
         for (size_t i = 0; i < it->text.size(); ++i) {
@@ -1291,7 +1323,7 @@ std::list<TextFragment>::iterator TextBlock::fragment(int column, int* rcol, int
             ++*rcol;
         }
     }
-    return _fragments.end();
+    return m_fragments.end();
 }
 
 //---------------------------------------------------------
@@ -1302,7 +1334,7 @@ String TextBlock::remove(int column, TextCursor* cursor)
 {
     int col = 0;
     String s;
-    for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
+    for (auto it = m_fragments.begin(); it != m_fragments.end(); ++it) {
         size_t idx = 0;
 
         for (size_t i = 0; i < it->text.size(); ++i) {
@@ -1315,7 +1347,7 @@ String TextBlock::remove(int column, TextCursor* cursor)
                     it->text.remove(idx, 1);
                 }
                 if (it->text.isEmpty()) {
-                    _fragments.erase(it);
+                    m_fragments.erase(it);
                 }
                 simplify();
                 insertEmptyFragmentIfNeeded(cursor);         // without this, cursorRect can't calculate the y position of the cursor correctly
@@ -1339,18 +1371,18 @@ String TextBlock::remove(int column, TextCursor* cursor)
 
 void TextBlock::simplify()
 {
-    if (_fragments.size() < 2) {
+    if (m_fragments.size() < 2) {
         return;
     }
-    auto i = _fragments.begin();
+    auto i = m_fragments.begin();
     TextFragment* f = &*i;
     ++i;
-    for (; i != _fragments.end(); ++i) {
-        while (i != _fragments.end() && (i->format == f->format)) {
+    for (; i != m_fragments.end(); ++i) {
+        while (i != m_fragments.end() && (i->format == f->format)) {
             f->text.append(i->text);
-            i = _fragments.erase(i);
+            i = m_fragments.erase(i);
         }
-        if (i == _fragments.end()) {
+        if (i == m_fragments.end()) {
             break;
         }
         f = &*i;
@@ -1368,7 +1400,7 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
     }
     int col = 0;
     String s;
-    for (auto i = _fragments.begin(); i != _fragments.end();) {
+    for (auto i = m_fragments.begin(); i != m_fragments.end();) {
         bool inc = true;
         for (size_t idx = 0; idx < i->text.size();) {
             Char c = i->text.at(idx);
@@ -1380,8 +1412,8 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
                 }
                 s += c;
                 i->text.remove(idx, 1);
-                if (i->text.isEmpty() && (_fragments.size() > 1)) {
-                    i = _fragments.erase(i);
+                if (i->text.isEmpty() && (m_fragments.size() > 1)) {
+                    i = m_fragments.erase(i);
                     inc = false;
                 }
                 --n;
@@ -1412,7 +1444,7 @@ String TextBlock::remove(int start, int n, TextCursor* cursor)
 void TextBlock::changeFormat(FormatId id, const FormatValue& data, int start, int n)
 {
     int col = 0;
-    for (auto i = _fragments.begin(); i != _fragments.end(); ++i) {
+    for (auto i = m_fragments.begin(); i != m_fragments.end(); ++i) {
         int columns = i->columns();
         if (start + n <= col) {
             break;
@@ -1427,19 +1459,19 @@ void TextBlock::changeFormat(FormatId id, const FormatValue& data, int start, in
             // left
             TextFragment f = i->split(start + n - col);
             i->changeFormat(id, data);
-            i = _fragments.insert(std::next(i), f);
+            i = m_fragments.insert(std::next(i), f);
         } else if (start > col && ((start + n) < endCol)) {
             // middle
             TextFragment lf = i->split(start + n - col);
             TextFragment mf = i->split(start - col);
             mf.changeFormat(id, data);
-            i = _fragments.insert(std::next(i), mf);
-            i = _fragments.insert(std::next(i), lf);
+            i = m_fragments.insert(std::next(i), mf);
+            i = m_fragments.insert(std::next(i), lf);
         } else if (start > col) {
             // right
             TextFragment f = i->split(start - col);
             f.changeFormat(id, data);
-            i = _fragments.insert(std::next(i), f);
+            i = m_fragments.insert(std::next(i), f);
         } else {
             if (id == FormatId::FontFamily && i->format.fontFamily() == "ScoreText") {
                 void(0);// do nothing, we need to leave that as is
@@ -1490,13 +1522,13 @@ void CharFormat::setFormatValue(FormatId id, const FormatValue& val)
         setStrike(std::get<bool>(val));
         break;
     case FormatId::Valign:
-        _valign = static_cast<VerticalAlignment>(std::get<int>(val));
+        m_valign = static_cast<VerticalAlignment>(std::get<int>(val));
         break;
     case FormatId::FontSize:
-        _fontSize = std::get<double>(val);
+        m_fontSize = std::get<double>(val);
         break;
     case FormatId::FontFamily:
-        _fontFamily = std::get<String>(val);
+        m_fontFamily = std::get<String>(val);
         break;
     }
 }
@@ -1519,7 +1551,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     TextBlock tl;
 
     int col = 0;
-    for (auto it = _fragments.begin(); it != _fragments.end(); ++it) {
+    for (auto it = m_fragments.begin(); it != m_fragments.end(); ++it) {
         size_t idx = 0;
         for (size_t i = 0; i < it->text.size(); ++i) {
             if (col == column) {
@@ -1527,16 +1559,16 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
                     if (idx < it->text.size()) {
                         TextFragment tf(it->text.mid(idx));
                         tf.format = it->format;
-                        tl._fragments.push_back(tf);
+                        tl.m_fragments.push_back(tf);
                         it->text = it->text.left(idx);
                         ++it;
                     }
                 }
-                for (; it != _fragments.end(); it = _fragments.erase(it)) {
-                    tl._fragments.push_back(*it);
+                for (; it != m_fragments.end(); it = m_fragments.erase(it)) {
+                    tl.m_fragments.push_back(*it);
                 }
 
-                if (_fragments.size() == 0) {
+                if (m_fragments.size() == 0) {
                     insertEmptyFragmentIfNeeded(cursor);
                 }
                 return tl;
@@ -1550,13 +1582,13 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
     }
 
     TextFragment tf(u"");
-    if (_fragments.size() > 0) {
-        tf.format = _fragments.back().format;
-    } else if (_fragments.size() == 0) {
+    if (m_fragments.size() > 0) {
+        tf.format = m_fragments.back().format;
+    } else if (m_fragments.size() == 0) {
         insertEmptyFragmentIfNeeded(cursor);
     }
 
-    tl._fragments.push_back(tf);
+    tl.m_fragments.push_back(tf);
     return tl;
 }
 
@@ -1579,7 +1611,7 @@ String TextBlock::text(int col1, int len, bool withFormat) const
     int col = 0;
     double size;
     String family;
-    for (const auto& f : _fragments) {
+    for (const auto& f : m_fragments) {
         if (f.text.isEmpty()) {
             continue;
         }
@@ -1705,10 +1737,8 @@ void TextBase::insert(TextCursor* cursor, char32_t code, LayoutData* ldata) cons
         code = ' ';
     }
 
-    String s = String::fromUcs4(code);
-
     if (cursor->row() < ldata->blocks.size()) {
-        ldata->blocks[cursor->row()].insert(cursor, s);
+        ldata->blocks[cursor->row()].insert(cursor, String::fromUcs4(code));
     }
 
     cursor->setColumn(cursor->column() + 1);
@@ -1747,7 +1777,7 @@ static double parseNumProperty(const String& s)
 //---------------------------------------------------------
 void TextBase::createBlocks()
 {
-    createBlocks(mutLayoutData());
+    createBlocks(mutldata());
 }
 
 void TextBase::createBlocks(LayoutData* ldata) const
@@ -1924,7 +1954,7 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 void TextBase::layoutFrame()
 {
-    layoutFrame(mutLayoutData());
+    layoutFrame(mutldata());
 }
 
 void TextBase::layoutFrame(LayoutData* ldata) const
@@ -2210,7 +2240,7 @@ String TextBase::genText(const LayoutData* ldata) const
 
 void TextBase::genText()
 {
-    m_text = genText(layoutData());
+    m_text = genText(ldata());
     m_textInvalid = false;
 }
 
@@ -2220,7 +2250,7 @@ void TextBase::genText()
 
 void TextBase::selectAll(TextCursor* cursor)
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->blocks.empty()) {
         return;
     }
@@ -2297,7 +2327,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 
     if (layoutToParentWidth() && !result.empty()) {
         LineF& line = result[0];
-        line.setP2(line.p2() + layoutData()->bbox().topLeft());
+        line.setP2(line.p2() + ldata()->bbox().topLeft());
     }
 
     return result;
@@ -2343,7 +2373,7 @@ void TextBase::setXmlText(const String& s)
 {
     m_text = s;
     m_textInvalid = false;
-    mutLayoutData()->layoutInvalid = true;
+    mutldata()->layoutInvalid = true;
 }
 
 void TextBase::checkCustomFormatting(const String& s)
@@ -2380,7 +2410,7 @@ std::list<TextFragment> TextBase::fragmentList() const
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->layoutInvalid) {
         // Create temporary text object to avoid side effects
         // of createLayout() call.
@@ -2389,7 +2419,7 @@ std::list<TextFragment> TextBase::fragmentList() const
         text = tmpText.get();
     }
 
-    const LayoutData* tmlldata = text->layoutData();
+    const LayoutData* tmlldata = text->ldata();
     for (const TextBlock& block : tmlldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             /* TODO TBD
@@ -2417,7 +2447,7 @@ String TextBase::plainText() const
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->layoutInvalid) {
         // Create temporary text object to avoid side effects
         // of createLayout() call.
@@ -2426,7 +2456,7 @@ String TextBase::plainText() const
         text = tmpText.get();
     }
 
-    const LayoutData* tmlldata = text->layoutData();
+    const LayoutData* tmlldata = text->ldata();
     for (const TextBlock& block : tmlldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             s += f.text;
@@ -2448,7 +2478,7 @@ String TextBase::xmlText() const
         return m_text;
     }
 
-    String text = genText(layoutData());
+    String text = genText(ldata());
     return text;
 }
 
@@ -2489,7 +2519,7 @@ String TextBase::accessibleInfo() const
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
-    case TextStyleType::POET:
+    case TextStyleType::LYRICIST:
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
@@ -2519,7 +2549,7 @@ String TextBase::screenReaderInfo() const
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
-    case TextStyleType::POET:
+    case TextStyleType::LYRICIST:
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
@@ -2650,6 +2680,25 @@ mu::draw::FontMetrics TextBase::fontMetrics() const
     return mu::draw::FontMetrics(font());
 }
 
+bool TextBase::isPropertyLinkedToMaster(Pid id) const
+{
+    if (propertyGroup(id) == PropertyGroup::TEXT) {
+        return isTextLinkedToMaster();
+    }
+
+    return EngravingItem::isPropertyLinkedToMaster(id);
+}
+
+bool TextBase::isUnlinkedFromMaster() const
+{
+    EngravingItem* parent = parentItem();
+    if (parent && parent->isUnlinkedFromMaster()) {
+        return true;
+    }
+
+    return !getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool() || EngravingItem::isUnlinkedFromMaster();
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -2685,6 +2734,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return static_cast<int>(m_cursor->selectedFragmentsFormat().valign());
     case Pid::TEXT:
         return xmlText();
+    case Pid::TEXT_LINKED_TO_MASTER:
+        return isTextLinkedToMaster();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -2744,6 +2795,15 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::TEXT_SCRIPT_ALIGN:
         m_cursor->setFormat(FormatId::Valign, v.toInt());
         break;
+    case Pid::TEXT_LINKED_TO_MASTER:
+        if (isTextLinkedToMaster() == v.toBool()) {
+            break;
+        }
+        if (!isTextLinkedToMaster()) {
+            relinkPropertiesToMaster(PropertyGroup::TEXT);
+        }
+        setTextLinkedToMaster(v.toBool());
+        break;
     default:
         rv = EngravingItem::setProperty(pid, v);
         break;
@@ -2783,6 +2843,8 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return String();
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(VerticalAlignment::AlignNormal);
+    case Pid::TEXT_LINKED_TO_MASTER:
+        return true;
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
@@ -3124,7 +3186,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVi
     }
     TextCursor* cursor = ted->cursor();
 
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -3185,7 +3247,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVi
 
 bool TextBase::hasCustomFormatting() const
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return false;
     }
@@ -3230,7 +3292,7 @@ bool TextBase::hasCustomFormatting() const
 
 String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return String();
     }
@@ -3370,11 +3432,42 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
             undoChangeProperty(Pid::TEXT, stripText(false, false, true), propertyFlags(id));
         }
     }
-    if (id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE || id == Pid::TEXT_SCRIPT_ALIGN) {
-        // can't use standard change property as Undo might set to "undefined"
-        score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
-    } else {
+
+    static const PropertyIdSet CHARACTER_SPECIFIC_PROPERTIES {
+        Pid::FONT_STYLE,
+        Pid::FONT_FACE,
+        Pid::FONT_SIZE,
+        Pid::TEXT_SCRIPT_ALIGN
+    };
+
+    if (!mu::contains(CHARACTER_SPECIFIC_PROPERTIES, id)) {
         EngravingItem::undoChangeProperty(id, v, ps);
+        return;
+    }
+
+    const std::list<EngravingObject*> linkedObjects = linkListForPropertyPropagation();
+    for (EngravingObject* linkedObject : linkedObjects) {
+        TextBase* linkedText = toTextBase(linkedObject);
+        if (linkedText == this) {
+            // can't use standard change property as Undo might set to "undefined"
+            score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
+            continue;
+        }
+
+        Score* linkedScore = linkedText->score();
+        TextCursor* linkedCursor = linkedText->cursor();
+        PropertyPropagation propertyPropagate = propertyPropagation(linkedText, id);
+
+        switch (propertyPropagate) {
+        case PropertyPropagation::PROPAGATE:
+            linkedScore->undo(new ChangeTextProperties(linkedCursor, id, v, ps));
+            break;
+        case PropertyPropagation::UNLINK:
+            unlinkPropertyFromMaster(id);
+            break;
+        default:
+            break;
+        }
     }
 }
 }

@@ -28,12 +28,12 @@ using namespace mu::engraving;
 
 void EditData::clear()
 {
-    *this = EditData(view_);
+    *this = EditData(m_view);
 }
 
 std::shared_ptr<ElementEditData> EditData::getData(const EngravingItem* e) const
 {
-    for (std::shared_ptr<ElementEditData> ed : data) {
+    for (std::shared_ptr<ElementEditData> ed : m_data) {
         if (ed->e == e) {
             return ed;
         }

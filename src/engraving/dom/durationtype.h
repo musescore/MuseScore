@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DURATIONTYPE_H__
-#define __DURATIONTYPE_H__
+#ifndef MU_ENGRAVING_DURATIONTYPE_H
+#define MU_ENGRAVING_DURATIONTYPE_H
 
 #include "types/types.h"
 
@@ -108,7 +108,7 @@ void splitCompoundBeatsForList(std::vector<TDuration>* dList, const Fraction& l,
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::TDuration);
+Q_DECLARE_METATYPE(mu::engraving::TDuration)
 #endif
 
 #endif

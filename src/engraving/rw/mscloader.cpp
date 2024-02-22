@@ -64,7 +64,7 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
         }
     }
 
-    if (version > 302 && MScore::testMode) {
+    if (version > 302 && MScore::testMode && MScore::useRead302InTestMode) {
         version = 302;
     }
 
@@ -133,24 +133,25 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
     // Read excerpts
     if (ret && masterScore->mscVersion() >= 400) {
-        std::vector<String> excerptNames = mscReader.excerptNames();
-        for (const String& excerptName : excerptNames) {
+        std::vector<String> excerptFileNames = mscReader.excerptFileNames();
+        for (const String& excerptFileName : excerptFileNames) {
             Score* partScore = masterScore->createScore();
 
             compat::ReadStyleHook::setupDefaultStyle(partScore);
 
             Excerpt* ex = new Excerpt(masterScore);
             ex->setExcerptScore(partScore);
+            ex->setFileName(excerptFileName);
 
-            ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptName);
+            ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
             Buffer excerptStyleBuf(&excerptStyleData);
             excerptStyleBuf.open(IODevice::ReadOnly);
             partScore->style().read(&excerptStyleBuf);
 
-            ByteArray excerptData = mscReader.readExcerptFile(excerptName);
+            ByteArray excerptData = mscReader.readExcerptFile(excerptFileName);
 
             XmlReader xml(excerptData);
-            xml.setDocName(excerptName);
+            xml.setDocName(excerptFileName);
 
             ReadInOutData partReadInData;
             partReadInData.links = masterReadOutData.links;
@@ -169,7 +170,17 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
             partScore->linkMeasures(masterScore);
 
-            ex->setName(excerptName);
+            if (ex->name().empty()) {
+                // If no excerpt name tag was found while reading, try the "partName" meta tag
+                const String nameFromMeta = partScore->metaTag(u"partName");
+
+                if (nameFromMeta.empty()) {
+                    // If that's also empty, fall back to the filename
+                    ex->setName(excerptFileName, /*saveAndNotify=*/ false);
+                } else {
+                    ex->setName(nameFromMeta, /*saveAndNotify=*/ false);
+                }
+            }
 
             masterScore->addExcerpt(ex);
         }

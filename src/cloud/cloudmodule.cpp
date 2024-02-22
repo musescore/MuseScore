@@ -81,6 +81,9 @@ void CloudModule::registerUiTypes()
     qmlRegisterUncreatableType<QMLCloudVisibility>("MuseScore.Cloud", 1, 0, "CloudVisibility",
                                                    "Not creatable as it is an enum type");
 
+    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Cloud", 1, 0, "SaveToCloudResponse",
+                                                       "Not creatable as it is an enum type");
+
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 

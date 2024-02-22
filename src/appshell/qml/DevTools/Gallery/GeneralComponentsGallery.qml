@@ -85,7 +85,8 @@ Rectangle {
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
                     { textRole: "TimeInputField", componentRole: timeInputFieldSample },
                     { textRole: "ValueList", componentRole: valueListSample },
-                    { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample }
+                    { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample },
+                    { textRole: "DialogButtonBox", componentRole: dialogButtonBoxSample }
                 ]
 
                 delegate: Column {
@@ -515,6 +516,67 @@ Rectangle {
     }
 
     Component {
+        id: dialogButtonBoxSample
+
+        Column {
+            spacing: 8
+
+            Row {
+                spacing: 8
+                anchors.right: parent.right
+
+                FlatButton {
+                    text: "Windows"
+                    onClicked: {
+                        dialogButtonBox.buttonLayout = ButtonBoxModel.WinLayout
+                    }
+                }
+                FlatButton {
+                    text: "Mac"
+                    onClicked: {
+                        dialogButtonBox.buttonLayout = ButtonBoxModel.MacLayout
+                    }
+                }
+                FlatButton {
+                    text: "Linux"
+                    onClicked: {
+                        dialogButtonBox.buttonLayout = ButtonBoxModel.LinuxLayout
+                    }
+                }
+            }
+
+            ButtonBox {
+                id: dialogButtonBox
+                buttonLayout: ButtonBoxModel.WinLayout
+
+                FlatButton {
+                    text: "Details"
+                    buttonRole: ButtonBoxModel.CustomRole
+                    buttonId: ButtonBoxModel.CustomButton + 1
+                    isLeftSide: true
+                }
+
+                FlatButton {
+                    text: "Save"
+                    buttonRole: ButtonBoxModel.AcceptRole
+                    buttonId: ButtonBoxModel.Save
+                }
+                FlatButton {
+                    text: "Close"
+                    buttonRole: ButtonBoxModel.DestructiveRole
+                    buttonId: ButtonBoxModel.Close
+                }
+                FlatButton {
+                    text: "Details 2"
+                    buttonRole: ButtonBoxModel.CustomRole
+                    buttonId: ButtonBoxModel.CustomButton + 2
+                    isLeftSide: false
+                }
+            }
+        }
+    }
+
+    Component {
         id: roundedRadioButtonSample
 
         Row {
@@ -693,7 +755,7 @@ Rectangle {
 
             path: "/some/test/path/foo.txt"
 
-            onPathEdited: {
+            onPathEdited: function(newPath) {
                 path = newPath
             }
         }
@@ -709,7 +771,7 @@ Rectangle {
 
             path: "/some/test/path1;/some/test/path2"
 
-            onPathEdited: {
+            onPathEdited: function(newPath) {
                 path = newPath
             }
         }

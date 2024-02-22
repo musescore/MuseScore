@@ -200,8 +200,8 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     if (isMainInstrument) {
         if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {
             StringList allExcerptLowerNames;
-            for (const mu::engraving::Excerpt* excerpt : score()->masterScore()->excerpts()) {
-                allExcerptLowerNames.push_back(excerpt->name().toLower());
+            for (const mu::engraving::Excerpt* excerpt2 : score()->masterScore()->excerpts()) {
+                allExcerptLowerNames.push_back(excerpt2->name().toLower());
             }
 
             String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);

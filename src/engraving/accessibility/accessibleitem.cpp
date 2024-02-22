@@ -86,6 +86,10 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
         return nullptr;
     }
 
+    if (m_element->isType(ElementType::ROOT_ITEM)) {
+        return dynamic_cast<AccessibleRoot*>(m_element->accessible().get());
+    }
+
     Score* score = m_element->score();
     if (!score) {
         return nullptr;
@@ -366,6 +370,12 @@ int AccessibleItem::accessibleCharacterCount() const
 
     TextBase* text = toTextBase(m_element);
     return static_cast<int>(text->plainText().size());
+}
+
+int AccessibleItem::accessibleRowIndex() const
+{
+    NOT_IMPLEMENTED;
+    return 0;
 }
 
 bool AccessibleItem::accessibleState(State st) const

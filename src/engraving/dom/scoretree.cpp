@@ -55,7 +55,9 @@
 #include "systemdivider.h"
 #include "text.h"
 #include "tie.h"
-#include "tremolo.h"
+
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
 
@@ -263,13 +265,13 @@ EngravingObjectList Segment::scanChildren() const
 {
     EngravingObjectList children;
 
-    for (EngravingItem* element : _elist) {
+    for (EngravingItem* element : m_elist) {
         if (element) {
             children.push_back(element);
         }
     }
 
-    for (EngravingItem* annotation : _annotations) {
+    for (EngravingItem* annotation : m_annotations) {
         children.push_back(annotation);
     }
 
@@ -373,8 +375,12 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(m_arpeggio);
     }
 
-    if (m_tremolo && m_tremolo->chord1() == this) {
-        children.push_back(m_tremolo);
+    if (m_tremoloSingleChord && m_tremoloSingleChord->chord() == this) {
+        children.push_back(m_tremoloSingleChord);
+    }
+
+    if (m_tremoloTwoChord && m_tremoloTwoChord->chord1() == this) {
+        children.push_back(m_tremoloTwoChord);
     }
 
     for (Chord* chord : graceNotes()) {
@@ -650,8 +656,8 @@ EngravingObjectList Trill::scanChildren() const
 {
     EngravingObjectList children;
 
-    if (_accidental) {
-        children.push_back(_accidental);
+    if (m_accidental) {
+        children.push_back(m_accidental);
     }
 
     for (EngravingObject* child : Spanner::scanChildren()) {

@@ -24,10 +24,11 @@
 //TODO: remove with global clearing of Q_OS_*** defines
 #include <QtGlobal>
 
-#include "log.h"
-#include "settings.h"
+#include "global/settings.h"
 
 #include "soundfonttypes.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -45,8 +46,12 @@ static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
 static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
+static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
+    { PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING },
+    { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(DEFAULT_SOUND_FONT_NAME) } };
+
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
-    = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", {}, false /*hasNativeEditor*/ };
+    = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", DEFAULT_AUDIO_RESOURCE_ATTRIBUTES, false /*hasNativeEditor*/ };
 
 void AudioConfiguration::init()
 {
@@ -157,6 +162,12 @@ void AudioConfiguration::setSampleRate(unsigned int sampleRate)
 async::Notification AudioConfiguration::sampleRateChanged() const
 {
     return m_driverSampleRateChanged;
+}
+
+size_t AudioConfiguration::minTrackCountForMultithreading() const
+{
+    // Start mutlithreading-processing only when there are more or equal number of tracks
+    return 3;
 }
 
 AudioInputParams AudioConfiguration::defaultAudioInputParams() const

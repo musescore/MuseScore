@@ -25,7 +25,8 @@
 
 #include "chord.h"
 #include "hook.h"
-#include "tremolo.h"
+
+#include "tremolosinglechord.h"
 
 #include "log.h"
 
@@ -62,7 +63,6 @@ bool Stem::up() const
 void Stem::setBaseLength(Millimetre baseLength)
 {
     m_baseLength = Millimetre(std::abs(baseLength.val()));
-    renderer()->layoutItem(this);
 }
 
 void Stem::spatiumChanged(double oldValue, double newValue)
@@ -74,12 +74,12 @@ void Stem::spatiumChanged(double oldValue, double newValue)
 //! In chord coordinates
 PointF Stem::flagPosition() const
 {
-    return pos() + PointF(layoutData()->bbox().left(), up() ? -length() : length());
+    return pos() + PointF(ldata()->bbox().left(), up() ? -length() : length());
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
-    return { pagePos() + layoutData()->line.p2() };
+    return { pagePos() + ldata()->line.p2() };
 }
 
 void Stem::startEdit(EditData& ed)
@@ -115,10 +115,14 @@ void Stem::reset()
 
 bool Stem::acceptDrop(EditData& data) const
 {
-    EngravingItem* e = data.dropElement;
-    if ((e->type() == ElementType::TREMOLO) && (toTremolo(e)->tremoloType() <= TremoloType::R64)) {
-        return true;
+    const EngravingItem* e = data.dropElement;
+    switch (e->type()) {
+    case ElementType::TREMOLO_SINGLECHORD:
+        return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R64;
+    default:
+        break;
     }
+
     return false;
 }
 
@@ -128,8 +132,8 @@ EngravingItem* Stem::drop(EditData& data)
     Chord* ch  = chord();
 
     switch (e->type()) {
-    case ElementType::TREMOLO:
-        toTremolo(e)->setParent(ch);
+    case ElementType::TREMOLO_SINGLECHORD:
+        item_cast<TremoloSingleChord*>(e)->setParent(ch);
         undoAddElement(e);
         return e;
     default:
@@ -148,6 +152,8 @@ PropertyValue Stem::getProperty(Pid propertyId) const
         return userLength();
     case Pid::STEM_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(chord()->stemDirection());
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        return chord() ? chord()->isPropertyLinkedToMaster(Pid::STEM_DIRECTION) : true;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -165,6 +171,11 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STEM_DIRECTION:
         chord()->setStemDirection(v.value<DirectionV>());
         break;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (chord() && v.toBool() == true) {
+            chord()->relinkPropertyToMaster(Pid::STEM_DIRECTION);
+            break;
+        }
     default:
         return EngravingItem::setProperty(propertyId, v);
     }

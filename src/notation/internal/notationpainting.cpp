@@ -58,6 +58,7 @@ void NotationPainting::setViewMode(const ViewMode& viewMode)
     score()->setLayoutMode(viewMode);
     score()->doLayout();
 
+    m_viewModeChanged.notify();
     m_notation->notifyAboutNotationChanged();
 }
 
@@ -68,6 +69,11 @@ ViewMode NotationPainting::viewMode() const
     }
 
     return score()->layoutMode();
+}
+
+async::Notification NotationPainting::viewModeChanged() const
+{
+    return m_viewModeChanged;
 }
 
 int NotationPainting::pageCount() const
@@ -161,7 +167,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
         return;
     }
 
-    RectF pageContentRect = page->layoutData()->bbox().adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
+    RectF pageContentRect = page->ldata()->bbox().adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
 
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(engravingConfiguration()->formattingMarksColor());

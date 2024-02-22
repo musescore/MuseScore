@@ -24,8 +24,8 @@
 
 #include <QIODevice>
 
-#include "engraving/types/types.h"
 #include "engraving/dom/types.h"
+#include "engraving/types/types.h"
 
 namespace mu::engraving {
 class Arpeggio;
@@ -44,10 +44,10 @@ class Hairpin;
 class Jump;
 class KeySig;
 class Lyrics;
+class MMRest;
 class Marker;
 class Measure;
 class MeasureRepeat;
-class MMRest;
 class Note;
 class Rest;
 class Score;
@@ -57,34 +57,75 @@ class TimeSig;
 class Tuplet;
 class Volta;
 
-class BrailleEngravingItems
+#define MAX_LIVE_BRAILLE_LENGTH 10240
+
+enum class BEIType
+{
+    Undefined = 0,
+    EngravingItem,
+    LyricItem,
+    LineIndicator,
+    VoiceInAccord,
+    EndOfLine,
+};
+
+class BrailleEngravingItem
 {
 public:
-    BrailleEngravingItems();
-    ~BrailleEngravingItems();
+    BrailleEngravingItem(BEIType, EngravingItem* e, QString b);
+    BrailleEngravingItem(BEIType, EngravingItem* e, QString b, QString extra_info, int extra_val);
+    ~BrailleEngravingItem();
+
+    BEIType type();
+    EngravingItem* el();
+    QString braille();
+    int start();
+    int end();
+    QString extra_info();
+    int extra_val();
+
+    void setBraille(QString b);
+    void setPos(int s, int e);
+    void setExtra(QString info, int val);
+
+private:
+    BEIType m_type;
+    EngravingItem* m_el;
+    QString m_braille;
+    int m_start, m_end;
+    QString m_extra_info;
+    int m_extra_val;
+};
+
+class BrailleEngravingItemList
+{
+public:
+    BrailleEngravingItemList();
+    ~BrailleEngravingItemList();
 
     void clear();
 
-    void join(BrailleEngravingItems*, bool newline = true, bool del = true);
-    void join(const std::vector<BrailleEngravingItems*>&, bool newline = true, bool del = true);
+    void join(BrailleEngravingItemList*, bool newline = true, bool del = true);
+    void join(std::vector<BrailleEngravingItemList*>, bool newline = true, bool del = true);
 
     QString brailleStr();
-    std::vector<std::pair<EngravingItem*, std::pair<int, int> > >* items();
+    std::vector<BrailleEngravingItem>* items();
 
-    void setBrailleStr(const QString& str);
-    void addPrefixStr(const QString& str);
+    void setBrailleStr(QString str);
+    void insert(int pos, BrailleEngravingItem bei);
+    int pos(BEIType type);
 
     void addEngravingItem(EngravingItem*, const QString& braille);
     void addLyricsItem(Lyrics*);
 
-    bool isEmpty() { return m_braille_str.isEmpty(); }
-    EngravingItem* getEngravingItem(int pos);
-    std::pair<int, int> getBraillePos(EngravingItem* e);
+    bool isEmpty();
+    BrailleEngravingItem* getItem(int pos);
+    BrailleEngravingItem* getItem(EngravingItem* e);
 
     void log();
 private:
     QString m_braille_str;
-    std::vector<std::pair<EngravingItem*, std::pair<int, int> > > m_items;
+    std::vector<BrailleEngravingItem> m_items;
 };
 
 //This class currently supports just a limited conversion from text to braille
@@ -122,8 +163,8 @@ class Braille
 public:
     Braille(Score* s);
     bool write(QIODevice& device);
-    bool convertMeasure(Measure* m, BrailleEngravingItems* beis);
-    bool convertItem(EngravingItem* el, BrailleEngravingItems* beis);
+    bool convertMeasure(Measure* m, BrailleEngravingItemList* beis);
+    bool convertItem(EngravingItem* el, BrailleEngravingItemList* beis);
 
 private:
     static constexpr int MAX_CHARS_PER_LINE = 40;
@@ -152,10 +193,10 @@ private:
     BarLine* lastBarline(Measure* measure, track_idx_t track);
     /* --------------------------------------------------------------- */
 
-    void brailleMeasure(BrailleEngravingItems* res, Measure* measure, int staffCount);
-    bool brailleSingleItem(BrailleEngravingItems* beiz, EngravingItem* el);
-    void brailleMeasureItems(BrailleEngravingItems* res, Measure* measure, int staffCount);
-    void brailleMeasureLyrics(BrailleEngravingItems* res, Measure* measure, int staffCount);
+    void brailleMeasure(BrailleEngravingItemList* res, Measure* measure, int staffCount);
+    bool brailleSingleItem(BrailleEngravingItemList* beiz, EngravingItem* el);
+    void brailleMeasureItems(BrailleEngravingItemList* res, Measure* measure, int staffCount);
+    void brailleMeasureLyrics(BrailleEngravingItemList* res, Measure* measure, int staffCount);
 
     QString brailleAccidentalType(AccidentalType accidental);
     QString brailleArpeggio(Arpeggio* arpeggio);

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __WHAMMYBAR_H__
-#define __WHAMMYBAR_H__
+#ifndef MU_ENGRAVING_WHAMMYBAR_H
+#define MU_ENGRAVING_WHAMMYBAR_H
 
 #include "chordtextlinebase.h"
 

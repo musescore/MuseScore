@@ -30,126 +30,131 @@
 #include "../../infrastructure/ifileinfoprovider.h"
 #include "../../infrastructure/rtti.h"
 
-#include "../../dom/score.h"
-#include "../../dom/masterscore.h"
-#include "../../dom/factory.h"
-#include "../../dom/linkedobjects.h"
-#include "../../dom/mscore.h"
-#include "../../dom/staff.h"
-#include "../../dom/part.h"
-#include "../../dom/utils.h"
+#include "dom/score.h"
+#include "dom/masterscore.h"
+#include "dom/factory.h"
+#include "dom/linkedobjects.h"
+#include "dom/mscore.h"
+#include "dom/staff.h"
+#include "dom/part.h"
+#include "dom/utils.h"
 
-#include "../../dom/accidental.h"
-#include "../../dom/actionicon.h"
-#include "../../dom/ambitus.h"
-#include "../../dom/arpeggio.h"
-#include "../../dom/articulation.h"
-#include "../../dom/audio.h"
+#include "dom/accidental.h"
+#include "dom/actionicon.h"
+#include "dom/ambitus.h"
+#include "dom/arpeggio.h"
+#include "dom/articulation.h"
+#include "dom/audio.h"
 
-#include "../../dom/bagpembell.h"
-#include "../../dom/barline.h"
-#include "../../dom/beam.h"
-#include "../../dom/bend.h"
-#include "../../dom/stretchedbend.h"
-#include "../../dom/box.h"
-#include "../../dom/bracket.h"
-#include "../../dom/breath.h"
+#include "dom/bagpembell.h"
+#include "dom/barline.h"
+#include "dom/beam.h"
+#include "dom/bend.h"
+#include "dom/stretchedbend.h"
+#include "dom/box.h"
+#include "dom/bracket.h"
+#include "dom/breath.h"
 
-#include "../../dom/chord.h"
-#include "../../dom/chordline.h"
-#include "../../dom/chordrest.h"
-#include "../../dom/clef.h"
-#include "../../dom/capo.h"
+#include "dom/chord.h"
+#include "dom/chordline.h"
+#include "dom/chordrest.h"
+#include "dom/clef.h"
+#include "dom/capo.h"
 
-#include "../../dom/drumset.h"
-#include "../../dom/dynamic.h"
-#include "../../dom/expression.h"
-#include "../../dom/fermata.h"
-#include "../../dom/figuredbass.h"
-#include "../../dom/fingering.h"
-#include "../../dom/fret.h"
+#include "dom/drumset.h"
+#include "dom/dynamic.h"
+#include "dom/expression.h"
+#include "dom/fermata.h"
+#include "dom/figuredbass.h"
+#include "dom/fingering.h"
+#include "dom/fret.h"
 
-#include "../../dom/glissando.h"
-#include "../../dom/gradualtempochange.h"
-#include "../../dom/groups.h"
+#include "dom/glissando.h"
+#include "dom/gradualtempochange.h"
+#include "dom/groups.h"
+#include "dom/guitarbend.h"
 
-#include "../../dom/hairpin.h"
-#include "../../dom/harmony.h"
-#include "../../dom/harmonicmark.h"
-#include "../../dom/harppedaldiagram.h"
-#include "../../dom/hook.h"
+#include "dom/hairpin.h"
+#include "dom/harmony.h"
+#include "dom/harmonicmark.h"
+#include "dom/harppedaldiagram.h"
+#include "dom/hook.h"
 
-#include "../../dom/image.h"
-#include "../../dom/imageStore.h"
-#include "../../dom/instrument.h"
-#include "../../dom/instrchange.h"
+#include "dom/image.h"
+#include "dom/imageStore.h"
+#include "dom/instrument.h"
+#include "dom/instrchange.h"
 
-#include "../../dom/jump.h"
+#include "dom/jump.h"
 
-#include "../../dom/keysig.h"
+#include "dom/keysig.h"
 
-#include "../../dom/layoutbreak.h"
-#include "../../dom/ledgerline.h"
-#include "../../dom/letring.h"
-#include "../../dom/location.h"
-#include "../../dom/lyrics.h"
+#include "dom/layoutbreak.h"
+#include "dom/ledgerline.h"
+#include "dom/letring.h"
+#include "dom/location.h"
+#include "dom/lyrics.h"
 
-#include "../../dom/marker.h"
-#include "../../dom/measurenumber.h"
-#include "../../dom/measurerepeat.h"
-#include "../../dom/mmrest.h"
-#include "../../dom/mmrestrange.h"
+#include "dom/marker.h"
+#include "dom/measurenumber.h"
+#include "dom/measurerepeat.h"
+#include "dom/mmrest.h"
+#include "dom/mmrestrange.h"
 
-#include "../../dom/note.h"
-#include "../../dom/notedot.h"
-#include "../../dom/noteline.h"
-#include "../../dom/ornament.h"
-#include "../../dom/ottava.h"
+#include "dom/note.h"
+#include "dom/notedot.h"
+#include "dom/noteline.h"
+#include "dom/ornament.h"
+#include "dom/ottava.h"
 
-#include "../../dom/page.h"
-#include "../../dom/palmmute.h"
-#include "../../dom/part.h"
-#include "../../dom/pedal.h"
-#include "../../dom/playtechannotation.h"
+#include "dom/page.h"
+#include "dom/palmmute.h"
+#include "dom/part.h"
+#include "dom/pedal.h"
+#include "dom/pickscrape.h"
+#include "dom/playtechannotation.h"
 
-#include "../../dom/rasgueado.h"
-#include "../../dom/rehearsalmark.h"
-#include "../../dom/rest.h"
+#include "dom/rasgueado.h"
+#include "dom/rehearsalmark.h"
+#include "dom/rest.h"
 
-#include "../../dom/sig.h"
-#include "../../dom/segment.h"
-#include "../../dom/slur.h"
-#include "../../dom/spacer.h"
-#include "../../dom/staffstate.h"
-#include "../../dom/stafftext.h"
-#include "../../dom/stafftype.h"
-#include "../../dom/stafftypechange.h"
-#include "../../dom/stem.h"
-#include "../../dom/stemslash.h"
-#include "../../dom/sticking.h"
-#include "../../dom/stringdata.h"
-#include "../../dom/symbol.h"
-#include "../../dom/bsymbol.h"
-#include "../../dom/system.h"
-#include "../../dom/systemdivider.h"
-#include "../../dom/systemtext.h"
+#include "dom/sig.h"
+#include "dom/segment.h"
+#include "dom/slur.h"
+#include "dom/spacer.h"
+#include "dom/staffstate.h"
+#include "dom/stafftext.h"
+#include "dom/stafftype.h"
+#include "dom/stafftypechange.h"
+#include "dom/stem.h"
+#include "dom/stemslash.h"
+#include "dom/sticking.h"
+#include "dom/stringdata.h"
+#include "dom/stringtunings.h"
+#include "dom/symbol.h"
+#include "dom/bsymbol.h"
+#include "dom/system.h"
+#include "dom/systemdivider.h"
+#include "dom/systemtext.h"
+#include "dom/soundflag.h"
 
-#include "../../dom/tempotext.h"
-#include "../../dom/text.h"
-#include "../../dom/textbase.h"
-#include "../../dom/textline.h"
-#include "../../dom/textlinebase.h"
-#include "../../dom/tie.h"
-#include "../../dom/timesig.h"
-#include "../../dom/tremolo.h"
-#include "../../dom/tremolobar.h"
-#include "../../dom/trill.h"
-#include "../../dom/tuplet.h"
+#include "dom/tempotext.h"
+#include "dom/text.h"
+#include "dom/textbase.h"
+#include "dom/textline.h"
+#include "dom/textlinebase.h"
+#include "dom/tie.h"
+#include "dom/timesig.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolobar.h"
+#include "dom/trill.h"
+#include "dom/tuplet.h"
 
-#include "../../dom/vibrato.h"
-#include "../../dom/volta.h"
+#include "dom/vibrato.h"
+#include "dom/volta.h"
 
-#include "../../dom/whammybar.h"
+#include "dom/whammybar.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -160,46 +165,194 @@
 using namespace mu::engraving;
 using namespace mu::engraving::write;
 
-using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
-                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                  Chord, ChordLine, Clef, Capo,
-                                  Dynamic, Expression,
-                                  Fermata, FiguredBass, Fingering, FretDiagram,
-                                  Glissando, GradualTempoChange,
-                                  Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
-                                  Image, InstrumentChange,
-                                  Jump,
-                                  KeySig,
-                                  LayoutBreak, LedgerLine, LetRing, Lyrics,
-                                  Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                  Note, NoteDot, NoteHead, NoteLine,
-                                  Ornament, Ottava,
-                                  Page, PalmMute, Pedal, PlayTechAnnotation,
-                                  Rasgueado, RehearsalMark, Rest,
-                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
-                                  Symbol, FSymbol, System, SystemDivider, SystemText,
-                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
-                                  Vibrato, Volta,
-                                  WhammyBar>;
-
-class WriteVisitor : public rtti::Visitor<WriteVisitor>
-{
-public:
-    template<typename T>
-    static bool doVisit(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
-    {
-        if (T::classof(item)) {
-            TWrite::write(static_cast<const T*>(item), xml, ctx);
-            return true;
-        }
-        return false;
-    }
-};
-
 void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    bool found = WriteVisitor::visit(WriteTypes {}, item, xml, ctx);
-    DO_ASSERT(found);
+    switch (item->type()) {
+    case ElementType::ACCIDENTAL:   write(item_cast<const Accidental*>(item), xml, ctx);
+        break;
+    case ElementType::ACTION_ICON:  write(item_cast<const ActionIcon*>(item), xml, ctx);
+        break;
+    case ElementType::AMBITUS:      write(item_cast<const Ambitus*>(item), xml, ctx);
+        break;
+    case ElementType::ARPEGGIO:     write(item_cast<const Arpeggio*>(item), xml, ctx);
+        break;
+    case ElementType::ARTICULATION: write(item_cast<const Articulation*>(item), xml, ctx);
+        break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: write(item_cast<const BagpipeEmbellishment*>(item), xml, ctx);
+        break;
+    case ElementType::BAR_LINE:     write(item_cast<const BarLine*>(item), xml, ctx);
+        break;
+    case ElementType::BEAM:         write(item_cast<const Beam*>(item), xml, ctx);
+        break;
+    case ElementType::BEND:         write(item_cast<const Bend*>(item), xml, ctx);
+        break;
+    case ElementType::STRETCHED_BEND: write(item_cast<const StretchedBend*>(item), xml, ctx);
+        break;
+    case ElementType::HBOX:         write(item_cast<const HBox*>(item), xml, ctx);
+        break;
+    case ElementType::VBOX:         write(item_cast<const VBox*>(item), xml, ctx);
+        break;
+    case ElementType::FBOX:         write(item_cast<const FBox*>(item), xml, ctx);
+        break;
+    case ElementType::TBOX:         write(item_cast<const TBox*>(item), xml, ctx);
+        break;
+    case ElementType::BRACKET:      write(item_cast<const Bracket*>(item), xml, ctx);
+        break;
+    case ElementType::BREATH:       write(item_cast<const Breath*>(item), xml, ctx);
+        break;
+    case ElementType::CHORD:        write(item_cast<const Chord*>(item), xml, ctx);
+        break;
+    case ElementType::CHORDLINE:    write(item_cast<const ChordLine*>(item), xml, ctx);
+        break;
+    case ElementType::CLEF:         write(item_cast<const Clef*>(item), xml, ctx);
+        break;
+    case ElementType::CAPO:         write(item_cast<const Capo*>(item), xml, ctx);
+        break;
+    case ElementType::DYNAMIC:      write(item_cast<const Dynamic*>(item), xml, ctx);
+        break;
+    case ElementType::EXPRESSION:   write(item_cast<const Expression*>(item), xml, ctx);
+        break;
+    case ElementType::FERMATA:      write(item_cast<const Fermata*>(item), xml, ctx);
+        break;
+    case ElementType::FIGURED_BASS: write(item_cast<const FiguredBass*>(item), xml, ctx);
+        break;
+    case ElementType::FINGERING:    write(item_cast<const Fingering*>(item), xml, ctx);
+        break;
+    case ElementType::FRET_DIAGRAM: write(item_cast<const FretDiagram*>(item), xml, ctx);
+        break;
+    case ElementType::GLISSANDO:    write(item_cast<const Glissando*>(item), xml, ctx);
+        break;
+    case ElementType::GRADUAL_TEMPO_CHANGE: write(item_cast<const GradualTempoChange*>(item), xml, ctx);
+        break;
+    case ElementType::GUITAR_BEND:  write(item_cast<const GuitarBend*>(item), xml, ctx);
+        break;
+    case ElementType::HAIRPIN:      write(item_cast<const Hairpin*>(item), xml, ctx);
+        break;
+    case ElementType::HARMONY:      write(item_cast<const Harmony*>(item), xml, ctx);
+        break;
+    case ElementType::HARMONIC_MARK: write(item_cast<const HarmonicMark*>(item), xml, ctx);
+        break;
+    case ElementType::HARP_DIAGRAM: write(item_cast<const HarpPedalDiagram*>(item), xml, ctx);
+        break;
+    case ElementType::HOOK:         write(item_cast<const Hook*>(item), xml, ctx);
+        break;
+    case ElementType::IMAGE:        write(item_cast<const Image*>(item), xml, ctx);
+        break;
+    case ElementType::INSTRUMENT_CHANGE: write(item_cast<const InstrumentChange*>(item), xml, ctx);
+        break;
+    case ElementType::JUMP:         write(item_cast<const Jump*>(item), xml, ctx);
+        break;
+    case ElementType::KEYSIG:       write(item_cast<const KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAYOUT_BREAK: write(item_cast<const LayoutBreak*>(item), xml, ctx);
+        break;
+    case ElementType::LEDGER_LINE:  write(item_cast<const LedgerLine*>(item), xml, ctx);
+        break;
+    case ElementType::LET_RING:     write(item_cast<const LetRing*>(item), xml, ctx);
+        break;
+    case ElementType::LYRICS:       write(item_cast<const Lyrics*>(item), xml, ctx);
+        break;
+    case ElementType::MARKER:       write(item_cast<const Marker*>(item), xml, ctx);
+        break;
+    case ElementType::MEASURE_NUMBER: write(item_cast<const MeasureNumber*>(item), xml, ctx);
+        break;
+    case ElementType::MEASURE_REPEAT: write(item_cast<const MeasureRepeat*>(item), xml, ctx);
+        break;
+    case ElementType::MMREST:       write(item_cast<const MMRest*>(item), xml, ctx);
+        break;
+    case ElementType::MMREST_RANGE: write(item_cast<const MMRestRange*>(item), xml, ctx);
+        break;
+    case ElementType::NOTE:         write(item_cast<const Note*>(item), xml, ctx);
+        break;
+    case ElementType::NOTEDOT:      write(item_cast<const NoteDot*>(item), xml, ctx);
+        break;
+    case ElementType::NOTEHEAD:     write(item_cast<const NoteHead*>(item), xml, ctx);
+        break;
+    case ElementType::NOTELINE:     write(item_cast<const NoteLine*>(item), xml, ctx);
+        break;
+    case ElementType::ORNAMENT:     write(item_cast<const Ornament*>(item), xml, ctx);
+        break;
+    case ElementType::OTTAVA:       write(item_cast<const Ottava*>(item), xml, ctx);
+        break;
+    case ElementType::PAGE:         write(item_cast<const Page*>(item), xml, ctx);
+        break;
+    case ElementType::PALM_MUTE:    write(item_cast<const PalmMute*>(item), xml, ctx);
+        break;
+    case ElementType::PEDAL:        write(item_cast<const Pedal*>(item), xml, ctx);
+        break;
+    case ElementType::PICK_SCRAPE:  write(item_cast<const PickScrape*>(item), xml, ctx);
+        break;
+    case ElementType::PLAYTECH_ANNOTATION: write(item_cast<const PlayTechAnnotation*>(item), xml, ctx);
+        break;
+    case ElementType::RASGUEADO:    write(item_cast<const Rasgueado*>(item), xml, ctx);
+        break;
+    case ElementType::REHEARSAL_MARK: write(item_cast<const RehearsalMark*>(item), xml, ctx);
+        break;
+    case ElementType::REST:         write(item_cast<const Rest*>(item), xml, ctx);
+        break;
+    case ElementType::SEGMENT:      write(item_cast<const Segment*>(item), xml, ctx);
+        break;
+    case ElementType::SLUR:         write(item_cast<const Slur*>(item), xml, ctx);
+        break;
+    case ElementType::SPACER:       write(item_cast<const Spacer*>(item), xml, ctx);
+        break;
+    case ElementType::STAFF_STATE:  write(item_cast<const StaffState*>(item), xml, ctx);
+        break;
+    case ElementType::STAFF_TEXT:   write(item_cast<const StaffText*>(item), xml, ctx);
+        break;
+    case ElementType::STAFFTYPE_CHANGE: write(item_cast<const StaffTypeChange*>(item), xml, ctx);
+        break;
+    case ElementType::STEM:         write(item_cast<const Stem*>(item), xml, ctx);
+        break;
+    case ElementType::STEM_SLASH:   write(item_cast<const StemSlash*>(item), xml, ctx);
+        break;
+    case ElementType::STICKING:     write(item_cast<const Sticking*>(item), xml, ctx);
+        break;
+    case ElementType::STRING_TUNINGS: write(item_cast<const StringTunings*>(item), xml, ctx);
+        break;
+    case ElementType::SYMBOL:       write(item_cast<const Symbol*>(item), xml, ctx);
+        break;
+    case ElementType::FSYMBOL:      write(item_cast<const FSymbol*>(item), xml, ctx);
+        break;
+    case ElementType::SYSTEM:       write(item_cast<const System*>(item), xml, ctx);
+        break;
+    case ElementType::SYSTEM_DIVIDER: write(item_cast<const SystemDivider*>(item), xml, ctx);
+        break;
+    case ElementType::SYSTEM_TEXT:  write(item_cast<const SystemText*>(item), xml, ctx);
+        break;
+    case ElementType::SOUND_FLAG:   write(item_cast<const SoundFlag*>(item), xml, ctx);
+        break;
+    case ElementType::TEMPO_TEXT:   write(item_cast<const TempoText*>(item), xml, ctx);
+        break;
+    case ElementType::TEXT:         write(item_cast<const Text*>(item), xml, ctx);
+        break;
+    case ElementType::TEXTLINE:     write(item_cast<const TextLine*>(item), xml, ctx);
+        break;
+    case ElementType::TIE:          write(item_cast<const Tie*>(item), xml, ctx);
+        break;
+    case ElementType::TIMESIG:      write(item_cast<const TimeSig*>(item), xml, ctx);
+        break;
+    case ElementType::TREMOLO_SINGLECHORD: write(item_cast<const TremoloSingleChord*>(item), xml, ctx);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:    write(item_cast<const TremoloTwoChord*>(item), xml, ctx);
+        break;
+    case ElementType::TREMOLOBAR:   write(item_cast<const TremoloBar*>(item), xml, ctx);
+        break;
+    case ElementType::TRILL:        write(item_cast<const Trill*>(item), xml, ctx);
+        break;
+    case ElementType::TUPLET:       write(item_cast<const Tuplet*>(item), xml, ctx);
+        break;
+    case ElementType::VIBRATO:      write(item_cast<const Vibrato*>(item), xml, ctx);
+        break;
+    case ElementType::VOLTA:        write(item_cast<const Volta*>(item), xml, ctx);
+        break;
+    case ElementType::WHAMMY_BAR:   write(item_cast<const WhammyBar*>(item), xml, ctx);
+        break;
+    default: {
+        UNREACHABLE;
+        LOGE() << "not implemented write for type: " << item->typeName();
+    }
+    }
 }
 
 void TWrite::writeItems(const ElementList& items, XmlWriter& xml, WriteContext& ctx)
@@ -209,7 +362,7 @@ void TWrite::writeItems(const ElementList& items, XmlWriter& xml, WriteContext& 
     }
 }
 
-void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
+void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid, bool force)
 {
     if (item->isStyled(pid)) {
         return;
@@ -220,7 +373,7 @@ void TWrite::writeProperty(const EngravingItem* item, XmlWriter& xml, Pid pid)
         return;
     }
     PropertyFlags f = item->propertyFlags(pid);
-    PropertyValue d = (f != PropertyFlags::STYLED) ? item->propertyDefault(pid) : PropertyValue();
+    PropertyValue d = !force && (f != PropertyFlags::STYLED) ? item->propertyDefault(pid) : PropertyValue();
 
     if (pid == Pid::FONT_STYLE) {
         FontStyle ds = FontStyle(d.isValid() ? d.toInt() : 0);
@@ -272,6 +425,10 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
+    if (!MScore::testMode && !item->score()->isPaletteScore()) {
+        xml.tag("eid", item->eid().toUint64());
+    }
+
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
         item->score()->style().set(Sid::autoplaceEnabled, true);
@@ -344,6 +501,10 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
             writeProperty(item, xml, pid);
         }
     }
+
+    writeProperty(item, xml, Pid::POSITION_LINKED_TO_MASTER);
+    writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
+    writeProperty(item, xml, Pid::EXCLUDE_FROM_OTHER_PARTS);
 }
 
 void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)
@@ -582,8 +743,10 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
-        writeProperty(item, xml, id);
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE
+    }) {
+        bool force = (item->isVBox() && id == Pid::BOX_HEIGHT) || (item->isHBox() && id == Pid::BOX_WIDTH);
+        writeProperty(item, xml, id, force);
     }
     writeItemProperties(item, xml, ctx);
     for (const EngravingItem* e : item->el()) {
@@ -715,6 +878,9 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     if (item->hook() && item->hook()->isUserModified()) {
         write(item->hook(), xml, ctx);
     }
+    if (item->showStemSlash() && item->isUserModified()) {
+        xml.tag("showStemSlash", item->showStemSlash());
+    }
     if (item->stemSlash() && item->stemSlash()->isUserModified()) {
         write(item->stemSlash(), xml, ctx);
     }
@@ -725,9 +891,13 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }
-    if (item->tremolo() && item->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-        write(item->tremolo(), xml, ctx);
+
+    if (item->tremoloSingleChord()) {
+        write(item->tremoloSingleChord(), xml, ctx);
+    } else if (item->tremoloTwoChord() && item->tremoloChordType() != TremoloChordType::TremoloSecondChord) {
+        write(item->tremoloTwoChord(), xml, ctx);
     }
+
     for (EngravingItem* e : item->el()) {
         if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
             continue;
@@ -824,6 +994,27 @@ void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, co
 void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track, Fraction tick)
 {
     Fraction frac = fraction(ctx.clipboardmode(), current, tick);
+    if (frac == s->score()->endTick()) {
+        // Write a location tag if the spanner ends on the last tick of the score
+        Location spannerEndLoc = Location::absolute();
+        spannerEndLoc.setFrac(frac);
+        spannerEndLoc.setMeasure(0);
+        spannerEndLoc.setTrack(static_cast<int>(track));
+        spannerEndLoc.setVoice(static_cast<int>(track2voice(track)));
+        spannerEndLoc.setStaff(static_cast<int>(s->staffIdx()));
+
+        Location prevLoc = Location::absolute();
+        prevLoc.setFrac(ctx.curTick());
+        prevLoc.setMeasure(0);
+        prevLoc.setTrack(static_cast<int>(track));
+        prevLoc.setVoice(static_cast<int>(track2voice(track)));
+        prevLoc.setStaff(static_cast<int>(s->staffIdx()));
+
+        spannerEndLoc.toRelative(prevLoc);
+        if (spannerEndLoc.frac() != Fraction(0, 1)) {
+            write(&spannerEndLoc, xml, ctx);
+        }
+    }
     SpannerWriter w(xml, &ctx, current, s, static_cast<int>(track), frac, false);
     w.write();
 }
@@ -856,7 +1047,7 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
     writeItemProperties(item, xml, ctx);
     if (item->modified()) {
         //! NOTE Need separated "given" data and layout data
-        const ChordLine::LayoutData* ldata = item->layoutData();
+        const ChordLine::LayoutData* ldata = item->ldata();
         const draw::PainterPath& path = ldata->path;
         size_t n = path.elementCount();
         xml.startElement("Path");
@@ -965,6 +1156,8 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
     if (writeText) {
         xml.writeXml(u"text", item->xmlText());
     }
+
+    writeProperty(item, xml, Pid::TEXT_LINKED_TO_MASTER);
 }
 
 void TWrite::write(const Fermata* item, XmlWriter& xml, WriteContext& ctx)
@@ -1238,6 +1431,10 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("text", item->text());
     }
 
+    if (ctx.clipboardmode() && item->isHarpGliss().has_value()) {
+        xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
+    }
+
     for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(item, xml, id);
     }
@@ -1247,6 +1444,41 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
 
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
     xml.endElement();
+}
+
+void TWrite::write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    xml.tag("guitarBendType", static_cast<int>(item->type()));
+    xml.tag("bendStartTimeFactor", item->startTimeFactor());
+    xml.tag("bendEndTimeFactor", item->endTimeFactor());
+    writeProperty(item, xml, Pid::DIRECTION);
+    writeProperty(item, xml, Pid::BEND_SHOW_HOLD_LINE);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+
+    GuitarBendHold* hold = item->holdLine();
+    if (hold) {
+        xml.startElement(hold);
+        writeProperties(static_cast<const SLine*>(hold), xml, ctx);
+        xml.endElement();
+    }
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const GuitarBendSegment* item, XmlWriter& xml, WriteContext& ctx)
+{
+    writeProperty(item, xml, Pid::BEND_VERTEX_OFF);
+
+    GuitarBendText* text = item->bendText();
+    if (text && text->isUserModified()) {
+        xml.startElement(text);
+        writeProperties(toTextBase(text), xml, ctx, false);
+        xml.endElement();
+    }
 }
 
 void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ctx)
@@ -1278,38 +1510,21 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
         }
         return;
     }
-    //
-    // check if user has modified the default layout
-    //
-    bool modified = false;
-    for (const SpannerSegment* seg : item->spannerSegments()) {
-        if (!seg->autoplace() || !seg->visible()
-            || (seg->propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
-                || seg->getProperty(Pid::MIN_DISTANCE) != seg->propertyDefault(Pid::MIN_DISTANCE))
-            || (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
-            modified = true;
-            break;
-        }
-    }
-    if (!modified) {
+
+    if (!item->isUserModified()) {
         return;
     }
 
-    //
-    // write user modified layout and other segment properties
-    //
     double _spatium = item->style().spatium();
     for (const SpannerSegment* seg : item->spannerSegments()) {
         xml.startElement("Segment", seg);
         xml.tag("subtype", int(seg->spannerSegmentType()));
-        // TODO:
-        // NOSTYLE offset written in EngravingItem::writeProperties,
-        // so we probably don't need to duplicate it here
-        // see https://musescore.org/en/node/286848
-        //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
         xml.tagPoint("offset", seg->offset() / _spatium);
         xml.tagPoint("off2", seg->userOff2() / _spatium);
         writeProperty(seg, xml, Pid::MIN_DISTANCE);
+        if (seg->isGuitarBendSegment()) {
+            writeProperties(static_cast<const GuitarBendSegment*>(seg), xml, ctx);
+        }
         writeItemProperties(seg, xml, ctx);
         xml.endElement();
     }
@@ -1370,6 +1585,9 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
     writeProperty(item, xml, Pid::PLAY);
+    writeProperty(item, xml, Pid::BEGIN_TEXT_OFFSET);
+    writeProperty(item, xml, Pid::CONTINUE_TEXT_OFFSET);
+    writeProperty(item, xml, Pid::END_TEXT_OFFSET);
 
     for (const StyledProperty& spp : *item->styledProperties()) {
         if (!item->isStyled(spp.pid)) {
@@ -1614,21 +1832,21 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     }
     for (size_t i = 0; i < item->cleffTypeCount(); ++i) {
         ClefTypeList ct = item->clefType(i);
-        if (ct._concertClef == ct._transposingClef) {
-            if (ct._concertClef != ClefType::G) {
+        if (ct.concertClef == ct.transposingClef) {
+            if (ct.concertClef != ClefType::G) {
                 if (i) {
-                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct.concertClef));
                 } else {
-                    xml.tag("clef", TConv::toXml(ct._concertClef));
+                    xml.tag("clef", TConv::toXml(ct.concertClef));
                 }
             }
         } else {
             if (i) {
-                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
-                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct._transposingClef));
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct.concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct.transposingClef));
             } else {
-                xml.tag("concertClef", TConv::toXml(ct._concertClef));
-                xml.tag("transposingClef", TConv::toXml(ct._transposingClef));
+                xml.tag("concertClef", TConv::toXml(ct.concertClef));
+                xml.tag("transposingClef", TConv::toXml(ct.transposingClef));
             }
         }
     }
@@ -2139,7 +2357,10 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
     for (auto i : {
         Pid::END_HOOK_TYPE,
         Pid::LINE_VISIBLE,
-        Pid::BEGIN_HOOK_TYPE
+        Pid::BEGIN_HOOK_TYPE,
+        Pid::BEGIN_TEXT_OFFSET,
+        Pid::CONTINUE_TEXT_OFFSET,
+        Pid::END_TEXT_OFFSET
     }) {
         writeProperty(item, xml, i);
     }
@@ -2148,6 +2369,16 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
     }
 
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
     xml.endElement();
 }
 
@@ -2315,13 +2546,13 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
 
     write(item->staffType(Fraction(0, 1)), xml, ctx);
     ClefTypeList ct = item->defaultClefType();
-    if (ct._concertClef == ct._transposingClef) {
-        if (ct._concertClef != ClefType::G) {
-            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
+    if (ct.concertClef == ct.transposingClef) {
+        if (ct.concertClef != ClefType::G) {
+            xml.tag("defaultClef", TConv::toXml(ct.concertClef));
         }
     } else {
-        xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
-        xml.tag("defaultTransposingClef", TConv::toXml(ct._transposingClef));
+        xml.tag("defaultConcertClef", TConv::toXml(ct.concertClef));
+        xml.tag("defaultTransposingClef", TConv::toXml(ct.transposingClef));
     }
 
     if (item->isLinesInvisible(Fraction(0, 1))) {
@@ -2382,7 +2613,19 @@ void TWrite::write(const StaffState* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const StaffText* item, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<const StaffTextBase*>(item), xml, ctx);
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx);
+
+    if (const SoundFlag* flag = item->soundFlag()) {
+        writeItem(flag, xml, ctx);
+    }
+
+    xml.endElement();
 }
 
 void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
@@ -2390,8 +2633,14 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
     if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(item);
 
+    xml.startElement(item);
+    writeProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
+{
     for (const ChannelActions& s : item->channelActions()) {
         int channel = s.channel;
         for (const String& name : s.midiActionNames) {
@@ -2420,9 +2669,8 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
         int swingRatio = item->swingParameters().swingRatio;
         xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
     }
-    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 
-    xml.endElement();
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 }
 
 void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
@@ -2548,12 +2796,34 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.startElement("StringData");
     xml.tag("frets", item->frets());
     for (const instrString& strg : item->stringList()) {
+        XmlWriter::Attributes attrs;
+
         if (strg.open) {
-            xml.tag("string open=\"1\"", strg.pitch);
-        } else {
-            xml.tag("string", strg.pitch);
+            attrs.push_back({ "open", "1" });
         }
+
+        if (strg.useFlat) {
+            attrs.push_back({ "useFlat", "1" });
+        }
+
+        xml.tag("string", attrs, strg.pitch);
     }
+    xml.endElement();
+}
+
+void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::STRINGTUNINGS_PRESET);
+
+    xml.tag("visibleStrings", TConv::toXml(item->visibleStrings()));
+
+    if (!item->stringData()->isNull()) {
+        write(item->stringData(), xml);
+    }
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
@@ -2563,6 +2833,8 @@ void TWrite::write(const Symbol* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("name", SymNames::nameForSymId(item->sym()));
     if (item->scoreFont()) {
         xml.tag("font", item->scoreFont()->name());
+        writeProperty(item, xml, Pid::SYMBOLS_SIZE);
+        writeProperty(item, xml, Pid::SYMBOL_ANGLE);
     }
     writeProperties(static_cast<const BSymbol*>(item), xml, ctx);
     xml.endElement();
@@ -2602,12 +2874,41 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
     write(static_cast<const StaffTextBase*>(item), xml, ctx);
 }
 
+void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
+{
+    if (item->soundPresets().empty() && item->playingTechniques().empty()) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    if (!item->soundPresets().empty()) {
+        xml.tag("presets", item->soundPresets().join(u","));
+    }
+
+    if (!item->playingTechniques().empty()) {
+        xml.tag("playingTechniques", item->playingTechniques().join(u","));
+    }
+
+    xml.endElement();
+}
+
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
     xml.tag("tempo", TConv::toXml(item->tempo()));
     if (item->followText()) {
         xml.tag("followText", item->followText());
+    }
+    switch (item->tempoTextType()) {
+    case TempoTextType::NORMAL:
+        break;
+    case TempoTextType::A_TEMPO:
+        xml.tag("type", "aTempo");
+        break;
+    case TempoTextType::TEMPO_PRIMO:
+        xml.tag("type", "tempoPrimo");
+        break;
     }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();
@@ -2643,6 +2944,7 @@ void TWrite::write(const TextLine* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const Tie* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }
@@ -2670,20 +2972,43 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const TremoloSingleChord* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(item);
+
+    if (ctx.clipboardmode()) {
+        xml.startElement(item);
+    } else {
+        // for compatible reason
+        xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+    }
+
+    writeProperty(item, xml, Pid::TREMOLO_TYPE);
+    writeProperty(item, xml, Pid::PLAY);
+    writeItemProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    if (ctx.clipboardmode()) {
+        xml.startElement(item);
+    } else {
+        // for compatible reason
+        xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+    }
+
     writeProperty(item, xml, Pid::TREMOLO_TYPE);
     writeProperty(item, xml, Pid::TREMOLO_STYLE);
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
-    if (!item->twoNotes()) {
-        xml.endElement();
-        return;
-    }
+
     // write manual adjustments to file
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
     if (item->userModified()) {
@@ -2936,6 +3261,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::CAPO)
+                        || (et == ElementType::STRING_TUNINGS)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)

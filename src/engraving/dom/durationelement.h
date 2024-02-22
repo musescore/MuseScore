@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DURATION_H__
-#define __DURATION_H__
+#ifndef MU_ENGRAVING_DURATION_H
+#define MU_ENGRAVING_DURATION_H
 
 #include "engravingitem.h"
 #include "durationtype.h"
@@ -53,6 +53,7 @@ public:
     Tuplet* topTuplet() const;
     virtual Beam* beam() const { return nullptr; }
 
+    Fraction actualTicksAt(const Fraction& tick) const;
     Fraction actualTicks() const;
 
     // Length expressed as a fraction of a whole note

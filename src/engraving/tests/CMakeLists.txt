@@ -63,6 +63,8 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrender_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackeventsrendering_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodel_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playbackcontext_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/bendsrenderer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/readwriteundoreset_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeat_tests.cpp
@@ -73,6 +75,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/spanners_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/split_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/splitstaff_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/staffmove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tempomap_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textbase_tests.cpp
     #${CMAKE_CURRENT_LIST_DIR}/textedit_tests.cpp doesn't compile and needs actualization

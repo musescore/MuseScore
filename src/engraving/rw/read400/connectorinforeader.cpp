@@ -82,17 +82,17 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *m_reader;
     const AsciiStringView name(e.asciiAttribute("type"));
-    _type = TConv::fromXml(name, ElementType::INVALID);
+    m_type = TConv::fromXml(name, ElementType::INVALID);
 
-    m_ctx->fillLocation(_currentLoc);
+    m_ctx->fillLocation(m_currentLoc);
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
         if (tag == "prev") {
-            readEndpointLocation(_prevLoc);
+            readEndpointLocation(m_prevLoc);
         } else if (tag == "next") {
-            readEndpointLocation(_nextLoc);
+            readEndpointLocation(m_nextLoc);
         } else {
             if (tag == name) {
                 m_connector = Factory::createItemByName(tag, m_connectorReceiver->score()->dummy());
@@ -105,7 +105,7 @@ bool ConnectorInfoReader::read()
                 e.unknown();
                 return false;
             }
-            m_connector->setTrack(_currentLoc.track());
+            m_connector->setTrack(m_currentLoc.track());
             read400::TRead::readItem(m_connector, e, *m_ctx);
         }
     }
@@ -140,10 +140,10 @@ void ConnectorInfoReader::update()
         updateCurrentInfo(m_ctx->pasteMode());
     }
     if (hasPrevious()) {
-        _prevLoc.toAbsolute(_currentLoc);
+        m_prevLoc.toAbsolute(m_currentLoc);
     }
     if (hasNext()) {
-        _nextLoc.toAbsolute(_currentLoc);
+        m_nextLoc.toAbsolute(m_currentLoc);
     }
 }
 
@@ -372,7 +372,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 Tie* tie = toTie(sp);
                 tie->setParent(n);
                 tie->setStartNote(n);
-                item->setTieFor(tie);
+                n->setTieFor(tie);
             } else {
                 sp->setAnchor(Spanner::Anchor::NOTE);
                 sp->setStartElement(item);
@@ -387,7 +387,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 item->setTieBack(toTie(sp));
             } else {
                 if (sp->isGlissando() && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissando(true);
+                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
                 }
                 item->addSpannerBack(sp);
             }

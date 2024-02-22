@@ -87,7 +87,9 @@ int App::run(int argc, char** argv)
     }
 #endif
 
+#ifdef MU_QT5_COMPAT
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
     //! NOTE: For unknown reasons, Linux scaling for 1 is defined as 1.003 in fractional scaling.
     //!       Because of this, some elements are drawn with a shift on the score.
@@ -99,6 +101,12 @@ int App::run(int argc, char** argv)
 #endif
 
     QGuiApplication::styleHints()->setMousePressAndHoldInterval(250);
+
+#ifndef MU_QT5_COMPAT
+    // Necessary for QQuickWidget, but potentially suboptimal for performance.
+    // Remove as soon as possible.
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+#endif
 
     // ====================================================
     // Parse command line options
@@ -169,11 +177,15 @@ int App::run(int argc, char** argv)
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
-            project::ProjectFile file = startupScenario()->startupScoreFile();
+            const project::ProjectFile& file = startupScenario()->startupScoreFile();
             if (file.isValid()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, file.displayName(true /* includingExtension */));
+                if (file.hasDisplayName()) {
+                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+                } else {
+                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+                }
             } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance);
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
             } else {
                 splashScreen = new SplashScreen(SplashScreen::Default);
             }
@@ -432,8 +444,8 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
     if (runMode == framework::IApplication::RunMode::GuiApp) {
         startupScenario()->setStartupType(options.startup.type);
 
-        if (options.startup.scorePath.has_value()) {
-            project::ProjectFile file { options.startup.scorePath.value() };
+        if (options.startup.scoreUrl.has_value()) {
+            project::ProjectFile file { options.startup.scoreUrl.value() };
 
             if (options.startup.scoreDisplayNameOverride.has_value()) {
                 file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();
@@ -453,16 +465,22 @@ int App::processConverter(const CommandLineParser::ConverterTask& task)
     Ret ret = make_ret(Ret::Code::Ok);
     io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
     bool forceMode = task.params[CommandLineParser::ParamKey::ForceMode].toBool();
+    String soundProfile = task.params[CommandLineParser::ParamKey::SoundProfile].toString();
+
+    if (!soundProfile.isEmpty() && !soundProfilesRepository()->containsProfile(soundProfile)) {
+        LOGE() << "Unknown sound profile: " << soundProfile;
+        soundProfile.clear();
+    }
 
     switch (task.type) {
     case CommandLineParser::ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode);
+        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile);
+        break;
+    case CommandLineParser::ConvertType::File:
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile);
         break;
     case CommandLineParser::ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
-        break;
-    case CommandLineParser::ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
     case CommandLineParser::ConvertType::ExportScoreMedia: {
         io::path_t highlightConfigPath = task.params[CommandLineParser::ParamKey::HighlightConfigPath].toString();

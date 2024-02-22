@@ -22,11 +22,21 @@
 
 #include "vstsequencer.h"
 
+#include "global/interpolation.h"
+
 using namespace mu;
 using namespace mu::vst;
 
 static constexpr ControllIdx SUSTAIN_IDX = static_cast<ControllIdx>(Steinberg::Vst::kCtrlSustainOnOff);
-static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES { mpe::ArticulationType::Pedal };
+static constexpr ControllIdx PITCH_BEND_IDX = static_cast<ControllIdx>(Steinberg::Vst::kPitchBend);
+
+static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES {
+    mpe::ArticulationType::Pedal,
+};
+
+static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES {
+    mpe::ArticulationType::Multibend,
+};
 
 static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
 static constexpr int MIN_SUPPORTED_NOTE = 12; // VST equivalent for C0
@@ -36,12 +46,14 @@ static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
 void VstSequencer::init(ParamsMapping&& mapping)
 {
     m_mapping = std::move(mapping);
+    m_inited = true;
 
-    updateDynamicChanges(m_dynamicLevelMap);
-    updateMainStreamEvents(m_playbackEventsMap);
+    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelMap, {});
+
+    m_playbackEventsMap.clear();
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap&)
 {
     m_offStreamEvents.clear();
 
@@ -49,30 +61,31 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
         m_onOffStreamFlushed();
     }
 
-    updatePlaybackEvents(m_offStreamEvents, changes);
+    updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                          const mpe::PlaybackParamMap&)
 {
+    m_dynamicLevelMap = dynamics;
+
+    if (!m_inited) {
+        m_playbackEventsMap = events;
+        return;
+    }
+
     m_mainStreamEvents.clear();
+    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, changes);
+    updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
-}
 
-void VstSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
-{
-    m_dynamicEvents.clear();
-
-    for (const auto& pair : changes) {
-        m_dynamicEvents[pair.first].emplace(expressionLevel(pair.second));
-    }
-
+    updateDynamicEvents(m_dynamicEvents, dynamics);
     updateDynamicChangesIterator();
 }
 
@@ -82,9 +95,9 @@ audio::gain_t VstSequencer::currentGain() const
     return expressionLevel(currentDynamicLevel);
 }
 
-void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
 {
-    for (const auto& pair : changes) {
+    for (const auto& pair : events) {
         for (const mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
@@ -103,7 +116,15 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             destination[timestampTo].emplace(buildEvent(VstEvent::kNoteOffEvent, noteId, velocityFraction, tuning));
 
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, SUSTAIN_IDX);
+            appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES);
         }
+    }
+}
+
+void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics)
+{
+    for (const auto& pair : dynamics) {
+        destination[pair.first].emplace(expressionLevel(pair.second));
     }
 }
 
@@ -132,6 +153,78 @@ void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe:
         destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
     } else {
         destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
+    }
+}
+
+void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                                   const mpe::ArticulationTypeSet& appliableTypes)
+{
+    auto pitchBendIt = m_mapping.find(PITCH_BEND_IDX);
+    if (pitchBendIt == m_mapping.cend()) {
+        return;
+    }
+
+    mpe::ArticulationType currentType = mpe::ArticulationType::Undefined;
+
+    for (const mpe::ArticulationType type : appliableTypes) {
+        if (noteEvent.expressionCtx().articulations.contains(type)) {
+            currentType = type;
+            break;
+        }
+    }
+
+    mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+
+    PluginParamInfo event;
+    event.id = pitchBendIt->second;
+
+    if (currentType == mpe::ArticulationType::Undefined || noteEvent.pitchCtx().pitchCurve.empty()) {
+        event.defaultNormalizedValue = 0.5f;
+        destination[timestampFrom].emplace(std::move(event));
+        return;
+    }
+
+    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+
+    auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
+    auto nextIt = std::next(currIt);
+    auto endIt = noteEvent.pitchCtx().pitchCurve.cend();
+
+    if (nextIt == endIt) {
+        mpe::timestamp_t time = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
+        event.defaultNormalizedValue = pitchBendLevel(currIt->second);
+        destination[time].insert(std::move(event));
+        return;
+    }
+
+    auto makePoint = [](mpe::timestamp_t time, float value) {
+        return mu::Interpolation::Point { static_cast<double>(time), value };
+    };
+
+    for (; nextIt != endIt; currIt = nextIt, nextIt = std::next(currIt)) {
+        float currBendValue = pitchBendLevel(currIt->second);
+        float nextBendValue = pitchBendLevel(nextIt->second);
+
+        mpe::timestamp_t currTime = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
+        mpe::timestamp_t nextTime = timestampFrom + duration * mpe::percentageToFactor(nextIt->first);
+
+        mu::Interpolation::Point p0 = makePoint(currTime, currBendValue);
+        mu::Interpolation::Point p1 = makePoint(nextTime, currBendValue);
+        mu::Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
+
+        //! NOTE: Increasing this number results in fewer points being interpolated
+        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 5;
+        size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
+        pointCount = std::max(pointCount, size_t(1));
+
+        std::vector<mu::Interpolation::Point> points = mu::Interpolation::quadraticBezierCurve(p0, p1, p2, pointCount);
+
+        for (const mu::Interpolation::Point& point : points) {
+            mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
+            float bendValue = static_cast<float>(point.y);
+            event.defaultNormalizedValue = bendValue;
+            destination[time].insert(event);
+        }
     }
 }
 
@@ -216,4 +309,15 @@ float VstSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) con
     }
 
     return RealRound((dynamicLevel - MIN_SUPPORTED_DYNAMIC_LEVEL) / static_cast<float>(AVAILABLE_RANGE), 2);
+}
+
+float VstSequencer::pitchBendLevel(const mpe::pitch_level_t pitchLevel) const
+{
+    static constexpr float SEMITONE_RANGE = 2.f;
+    static constexpr float PITCH_BEND_SEMITONE_STEP = 0.5f / SEMITONE_RANGE;
+
+    float pitchLevelSteps = pitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
+    float offset = pitchLevelSteps * PITCH_BEND_SEMITONE_STEP;
+
+    return std::clamp(0.5f + offset, 0.f, 1.f);
 }

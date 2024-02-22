@@ -27,49 +27,59 @@
 namespace mu::engraving {
 // TODO: move somewhere else
 
-MusicXmlPart::MusicXmlPart(QString id, QString name)
-    : id(id), name(name)
+static const std::vector<String> vocalInstrumentNames = { u"Voice",
+                                                          u"Soprano",
+                                                          u"Mezzo-Soprano",
+                                                          u"Alto",
+                                                          u"Tenor",
+                                                          u"Baritone",
+                                                          u"Bass",
+                                                          u"Women",
+                                                          u"Men" };
+
+MusicXmlPart::MusicXmlPart(String id, String name)
+    : m_id(id), m_name(name)
 {
-    octaveShifts.resize(MAX_STAVES);
+    m_octaveShifts.resize(MAX_STAVES);
 }
 
-void MusicXmlPart::addMeasureNumberAndDuration(QString measureNumber, Fraction measureDuration)
+void MusicXmlPart::addMeasureNumberAndDuration(String measureNumber, Fraction measureDuration)
 {
-    measureNumbers.append(measureNumber);
-    measureDurations.append(measureDuration);
+    m_measureNumbers.push_back(measureNumber);
+    m_measureDurations.push_back(measureDuration);
 }
 
 void MusicXmlPart::setMaxStaff(const int staff)
 {
-    if (staff > _maxStaff) {
-        _maxStaff = staff;
+    if (staff > m_maxStaff) {
+        m_maxStaff = staff;
     }
 }
 
-Fraction MusicXmlPart::measureDuration(int i) const
+Fraction MusicXmlPart::measureDuration(size_t i) const
 {
-    if (i >= 0 && i < measureDurations.size()) {
-        return measureDurations.at(i);
+    if (i < m_measureDurations.size()) {
+        return m_measureDurations.at(i);
     }
     return Fraction(0, 0);   // return invalid fraction
 }
 
-QString MusicXmlPart::toString() const
+String MusicXmlPart::toString() const
 {
-    auto res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
-               .arg(id, name).arg(printName).arg(abbr).arg(printAbbr, _maxStaff);
+    auto res = String(u"part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
+               .arg(m_id, m_name).arg(m_printName).arg(m_abbr).arg(m_printAbbr, m_maxStaff);
 
-    for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
-        res += QString("voice %1 map staff data %2\n")
-               .arg(i.key() + 1, i.value().toString());
+    for (VoiceList::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
+        res += String(u"voice %1 map staff data %2\n")
+               .arg(String(i->first + 1), i->second.toString());
     }
 
-    for (int i = 0; i < measureNumbers.size(); ++i) {
+    for (size_t i = 0; i < m_measureNumbers.size(); ++i) {
         if (i > 0) {
-            res += "\n";
+            res += u"\n";
         }
-        res += QString("measure %1 duration %2 (%3)")
-               .arg(measureNumbers.at(i), measureDurations.at(i).toString()).arg(measureDurations.at(i).ticks());
+        res += String(u"measure %1 duration %2 (%3)")
+               .arg(m_measureNumbers.at(i), m_measureDurations.at(i).toString()).arg(m_measureDurations.at(i).ticks());
     }
 
     return res;
@@ -88,7 +98,7 @@ int MusicXmlPart::octaveShift(const staff_idx_t staff, const Fraction f) const
     if (f < Fraction(0, 1)) {
         return 0;
     }
-    return octaveShifts[staff].octaveShift(f);
+    return m_octaveShifts[staff].octaveShift(f);
 }
 
 void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, const Fraction f)
@@ -99,14 +109,46 @@ void MusicXmlPart::addOctaveShift(const staff_idx_t staff, const int shift, cons
     if (f < Fraction(0, 1)) {
         return;
     }
-    octaveShifts[staff].addOctaveShift(shift, f);
+    m_octaveShifts[staff].addOctaveShift(shift, f);
 }
 
 void MusicXmlPart::calcOctaveShifts()
 {
     for (staff_idx_t i = 0; i < MAX_STAVES; ++i) {
-        octaveShifts[i].calcOctaveShiftShifts();
+        m_octaveShifts[i].calcOctaveShiftShifts();
     }
+}
+
+//---------------------------------------------------------
+//   staffNumberToIndex
+//---------------------------------------------------------
+
+/**
+ This handles the mapping from MusicXML staff number to the index
+ in a Part's Staff list.
+ In most cases, this is a simple decrement from the 1-based staff number
+ to the 0-based index.
+ However, in some parts some MusicXML staves are discarded, and a mapping
+ must be stored from MusicXML staff number to index. When this mapping is
+ defined (i.e. size() != 0), it is used. See MusicXMLParserPass1::attributes()
+ for more information.
+ */
+
+int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
+{
+    if (m_staffNumberToIndex.size() == 0) {
+        return staffNumber - 1;
+    } else if (mu::contains(m_staffNumberToIndex, staffNumber)) {
+        return m_staffNumberToIndex.at(staffNumber);
+    } else {
+        return -1;
+    }
+}
+
+bool MusicXmlPart::isVocalStaff() const
+{
+    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), m_name) != vocalInstrumentNames.end()
+           || m_hasLyrics;
 }
 
 //---------------------------------------------------------
@@ -130,14 +172,14 @@ Interval MusicXmlIntervalList::interval(const Fraction f) const
 //   instrument
 //---------------------------------------------------------
 
-const QString MusicXmlInstrList::instrument(const Fraction f) const
+const String MusicXmlInstrList::instrument(const Fraction f) const
 {
     if (empty()) {
-        return "";
+        return String();
     }
     auto i = upper_bound(f);
     if (i == begin()) {
-        return "";
+        return String();
     }
     --i;
     return i->second;
@@ -147,13 +189,13 @@ const QString MusicXmlInstrList::instrument(const Fraction f) const
 //   setInstrument
 //---------------------------------------------------------
 
-void MusicXmlInstrList::setInstrument(const QString instr, const Fraction f)
+void MusicXmlInstrList::setInstrument(const String instr, const Fraction f)
 {
     // TODO determine how to handle multiple instrument changes at the same time
     // current implementation keeps the first one
     if (!insert({ f, instr }).second) {
-        LOGD("instr '%s', tick %s (%d): element already exists",
-             qPrintable(instr), qPrintable(f.toString()), f.ticks());
+        LOGD() << "element already exists, instr: " << instr
+               << ", tick: " << f.toString() << "(" << f.ticks() << ")";
     }
     //(*this)[f] = instr;
 }
@@ -177,7 +219,7 @@ void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
         return;
     }
 
-    //LOGD("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
+    //LOGD("addOctaveShift(shift %d f %s)", shift, muPrintable(f.print()));
     auto i = find(f);
     if (i == end()) {
         //LOGD("addOctaveShift: not found, inserting");
@@ -193,7 +235,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 {
     /*
     for (auto i = cbegin(); i != cend(); ++i)
-          LOGD(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+          LOGD(" [%s : %d]", muPrintable((*i).first.print()), (*i).second);
      */
 
     // to each MusicXmlOctaveShiftList entry, add the sum of all previous ones
@@ -205,7 +247,7 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 
     /*
     for (auto i = cbegin(); i != cend(); ++i)
-          LOGD(" [%s : %d]", qPrintable((*i).first.print()), (*i).second);
+          LOGD(" [%s : %d]", muPrintable((*i).first.print()), (*i).second);
      */
 }
 
@@ -230,10 +272,10 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 //   addNumber
 //---------------------------------------------------------
 
-void LyricNumberHandler::addNumber(const QString number)
+void LyricNumberHandler::addNumber(const String& number)
 {
-    if (_numberToNo.find(number) == _numberToNo.end()) {
-        _numberToNo[number] = -1;           // unassigned
+    if (m_numberToNo.find(number) == m_numberToNo.end()) {
+        m_numberToNo[number] = -1;           // unassigned
     }
 }
 
@@ -241,14 +283,14 @@ void LyricNumberHandler::addNumber(const QString number)
 //   toString
 //---------------------------------------------------------
 
-QString LyricNumberHandler::toString() const
+String LyricNumberHandler::toString() const
 {
-    QString res;
-    for (const auto& p : _numberToNo) {
+    String res;
+    for (const auto& p : m_numberToNo) {
         if (!res.isEmpty()) {
-            res += " ";
+            res += u" ";
         }
-        res += QString("%1:%2").arg(p.first, p.second);
+        res += String(u"%1:%2").arg(p.first).arg(p.second);
     }
     return res;
 }
@@ -257,10 +299,10 @@ QString LyricNumberHandler::toString() const
 //   getLyricNo
 //---------------------------------------------------------
 
-int LyricNumberHandler::getLyricNo(const QString& number) const
+int LyricNumberHandler::getLyricNo(const String& number) const
 {
-    const auto it = _numberToNo.find(number);
-    return it == _numberToNo.end() ? 0 : it->second;
+    const auto it = m_numberToNo.find(number);
+    return it == m_numberToNo.end() ? 0 : it->second;
 }
 
 //---------------------------------------------------------
@@ -270,7 +312,7 @@ int LyricNumberHandler::getLyricNo(const QString& number) const
 void LyricNumberHandler::determineLyricNos()
 {
     int i = 0;
-    for (auto& p : _numberToNo) {
+    for (auto& p : m_numberToNo) {
         p.second = i;
         ++i;
     }

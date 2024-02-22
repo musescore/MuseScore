@@ -98,6 +98,7 @@ void VstPlugin::load()
         }
 
         if (!m_module) {
+            LOGE() << "Unable to find vst plugin module, resourceId: " << m_resourceId;
             return;
         }
 
@@ -115,6 +116,11 @@ void VstPlugin::load()
 
         if (!m_pluginProvider) {
             LOGE() << "Unable to load vst plugin provider";
+            return;
+        }
+
+        if (!m_pluginProvider->init()) {
+            LOGE() << "Unable to initialize vst plugin provider";
             return;
         }
 
@@ -170,10 +176,8 @@ void VstPlugin::stateBufferFromString(VstMemoryStream& buffer, char* strData, co
         return;
     }
 
-    static Steinberg::int32 numBytesRead = 0;
-
-    buffer.write(strData, strSize, &numBytesRead);
-    buffer.seek(0, static_cast<size_t>(Steinberg::IBStream::kIBSeekSet), nullptr);
+    buffer.write(strData, static_cast<Steinberg::int32>(strSize), nullptr);
+    buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 }
 
 PluginViewPtr VstPlugin::createView() const

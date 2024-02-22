@@ -36,7 +36,7 @@ Item {
     property int currentGenreIndex: -1
     property int currentGroupIndex: -1
 
-    property alias navigation: navPanel
+    property alias navigation: groupsView.navigation
 
     signal genreSelected(int newIndex)
     signal groupSelected(int newIndex)
@@ -60,25 +60,6 @@ Item {
         }
     }
 
-    NavigationPanel {
-        id: navPanel
-        name: "FamilyView"
-        direction: NavigationPanel.Vertical
-        enabled: root.enabled && root.visible
-
-        onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.AboutActive) {
-                for (var i = 0; i < groupsView.count; ++i) {
-                    var item = groupsView.itemAtIndex(i)
-                    if (item.isSelected) {
-                        event.setData("controlIndex", [item.navigation.row, item.navigation.column])
-                        return
-                    }
-                }
-            }
-        }
-    }
-
     StyledTextLabel {
         id: titleLabel
 
@@ -98,7 +79,7 @@ Item {
         anchors.right: parent.right
 
         navigation.name: "genreBox"
-        navigation.panel: navPanel
+        navigation.panel: groupsView.navigation
         navigation.row: 1
 
         currentIndex: root.currentGenreIndex
@@ -117,6 +98,8 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
 
+        accessible.name: titleLabel.text
+
         onModelChanged: {
             groupsView.currentIndex = Qt.binding(() => (root.currentGroupIndex))
         }
@@ -129,9 +112,10 @@ Item {
             isSelected: groupsView.currentIndex === model.index
 
             navigation.name: modelData
-            navigation.panel: navPanel
+            navigation.panel: groupsView.navigation
             navigation.row: 2 + model.index
             navigation.accessible.name: itemTitleLabel.text
+            navigation.accessible.row: model.index
 
             StyledTextLabel {
                 id: itemTitleLabel

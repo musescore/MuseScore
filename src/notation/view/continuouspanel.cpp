@@ -170,7 +170,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     qreal widthTimeSig = 0;
     qreal xPosTimeSig  = 0;
 
-    for (const mu::engraving::EngravingItem* e : qAsConst(el)) {
+    for (const mu::engraving::EngravingItem* e : std::as_const(el)) {
         e->itemDiscovered = false;
         if (!e->visible() && !showInvisible) {
             continue;
@@ -339,7 +339,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     delete newElement;
 
     // This second pass draws the elements spaced evenly using the width of the largest element
-    for (const mu::engraving::EngravingItem* e : qAsConst(el)) {
+    for (const mu::engraving::EngravingItem* e : std::as_const(el)) {
         if (!e->visible() && !showInvisible) {
             continue;
         }
@@ -402,8 +402,8 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             scoreRender()->layoutItem(newName);
 
             if (currentStaff->part()->staff(0) == currentStaff) {
-                const double spatium = score->style().spatium();
-                pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, -spatium * 2);
+                const double spatium2 = score->style().spatium();
+                pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, -spatium2 * 2);
                 painter.translate(pos);
                 EngravingItem::renderer()->drawItem(newName, &painter);
 

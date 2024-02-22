@@ -92,6 +92,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/trill.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
@@ -263,7 +265,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         { "Title",                   TextStyleType::TITLE },
         { "Subtitle",                TextStyleType::SUBTITLE },
         { "Composer",                TextStyleType::COMPOSER },
-        { "Lyricist",                TextStyleType::POET },
+        { "Lyricist",                TextStyleType::LYRICIST },
         { "Lyrics Odd Lines",        TextStyleType::LYRICS_ODD },
         { "Lyrics Even Lines",       TextStyleType::LYRICS_EVEN },
         { "Fingering",               TextStyleType::FINGERING },
@@ -752,7 +754,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Instrument") {
-            Instrument* i = part->_instruments.instrument(/* tick */ -1);
+            Instrument* i = part->m_instruments.instrument(/* tick */ -1);
             readInstrument206(i, part, e, ctx);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);
@@ -883,7 +885,7 @@ static void adjustPlacement(EngravingItem* e)
 
     // determine placement based on offset
     // anything below staff will be set to below
-    double staffHeight = e->staff()->height();
+    double staffHeight = e->staff()->staffHeight();
     double threshold = staffHeight;
     double offsetAdjust = 0.0;
     PlacementV defaultPlacement = e->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
@@ -1061,7 +1063,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                 note->setTieBack(toTie(sp));
             } else {
                 if (sp->isGlissando() && note->explicitParent() && note->explicitParent()->isChord()) {
-                    toChord(note->explicitParent())->setEndsGlissando(true);
+                    toChord(note->explicitParent())->setEndsGlissandoOrGuitarBend(true);
                 }
                 note->addSpannerBack(sp);
             }
@@ -1407,9 +1409,15 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
             d->setDynRange(TConv::fromXml(tctx.reader().readAsciiText(), DynamicRange::STAFF));
+        } else if (tag == "size") {
+            e.skipCurrentElement();
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
             tctx.reader().unknown();
         }
+    }
+    d->setSize(10.0);
+    if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
+        d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
     }
 }
 
@@ -1573,11 +1581,6 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
                 ch->setDurationType(DurationType::V_MEASURE);
             } else {    // not from old score: set duration fraction from duration type
                 ch->setTicks(ch->actualDurationType().fraction());
-            }
-        } else {
-            if (ctx.mscVersion() <= 114) {
-                SigEvent event = ctx.compatTimeSigMap()->timesig(ctx.tick());
-                ch->setTicks(event.timesig());
             }
         }
     } else if (tag == "BeamMode") {
@@ -1812,12 +1815,20 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         }
         finalNote->addSpannerBack(gliss);
     } else if (tag == "Tremolo") {
-        Tremolo* tremolo = Factory::createTremolo(ch);
-        tremolo->setTrack(ch->track());
-        read400::TRead::read(tremolo, e, ctx);
-        tremolo->setParent(ch);
-        tremolo->setDurationType(ch->durationType());
-        ch->setTremolo(tremolo);
+        read400::TRead::TremoloCompat tcompat;
+        tcompat.parent = ch;
+        read400::TRead::read(tcompat, e, ctx);
+        if (tcompat.two) {
+            tcompat.two->setParent(ch);
+            tcompat.two->setDurationType(ch->durationType());
+            ch->setTremoloTwoChord(tcompat.two, false);
+        } else if (tcompat.single) {
+            tcompat.single->setParent(ch);
+            tcompat.single->setDurationType(ch->durationType());
+            ch->setTremoloSingleChord(tcompat.single);
+        } else {
+            UNREACHABLE;
+        }
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
@@ -2008,8 +2019,8 @@ static bool readTextLineProperties(XmlReader& e, ReadContext& ctx, TextLineBase*
         tl->setBeginHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
     } else if (tag == "endHookType") {
         tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
-    } else if (read400::TRead::readProperties(tl, e, ctx)) {
-        return true;
+    } else if (!read400::TRead::readProperties(tl, e, ctx)) {
+        return false;
     }
     return true;
 }
@@ -2045,11 +2056,42 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
 
 static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 {
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
     while (e.readNextStartElement()) {
-        if (!readTextLineProperties(e, ctx, pedal)) {
+        const AsciiStringView tag(e.name());
+        if (readTextLineProperties(e, ctx, pedal)) {
+            beginTextTag = beginTextTag || tag == "beginText";
+            continueTextTag = continueTextTag || tag == "continueText";
+            endTextTag = endTextTag || tag == "endText";
+        } else {
             e.unknown();
         }
     }
+
+    // Set to the 206 defaults if no value was specified;
+    // or follow the new style setting if the specified value matches it
+    if (!beginTextTag) {
+        pedal->setBeginText(String());
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->beginText() == pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::STYLED);
+    }
+    if (!continueTextTag) {
+        pedal->setContinueText(String());
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->continueText() == pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::STYLED);
+    }
+    if (!endTextTag) {
+        pedal->setEndText(String());
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->endText() == pedal->propertyDefault(Pid::END_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
+    }
+
     adjustPlacement(pedal);
 }
 
@@ -2869,14 +2911,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 read400::TRead::readItem(el, e, ctx);
                 segment->add(el);
             }
-        }
-        //----------------------------------------------------
-        else if (tag == "stretch") {
-            double val = e.readDouble();
-            if (val < 0.0) {
-                val = 0;
-            }
-            m->setUserStretch(val);
+        } else if (tag == "stretch") {
+            // Ignore measure stretch pre 4.0
+            e.skipCurrentElement();
         } else if (tag == "noOffset") {
             m->setNoOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
@@ -3332,7 +3369,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "name") {
             String n = e.readText();
             if (!score->isMaster()) {                 //ignore the name if it's not a child score
-                score->excerpt()->setName(n);
+                score->excerpt()->setName(n, /*saveAndNotify=*/ false);
             }
         } else if (tag == "layoutMode") {
             String s = e.readText();
@@ -3459,6 +3496,11 @@ bool Read206::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
 }
 
 void Read206::pasteSymbols(XmlReader&, ChordRest*)
+{
+    UNREACHABLE;
+}
+
+void Read206::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
 {
     UNREACHABLE;
 }

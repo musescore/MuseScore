@@ -23,9 +23,11 @@
 #ifndef MU_IMPORTEXPORT_MEICONVERTER_H
 #define MU_IMPORTEXPORT_MEICONVERTER_H
 
+#include "engraving/dom/articulation.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 
 #include "iengravingfontsprovider.h"
@@ -85,7 +87,7 @@ class Convert
 {
     // The fallback font is used to convert smufl codes (char32_t) to engraving::SymId
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
-    INJECT_STATIC(engraving::IEngravingConfiguration, engravingConfiguration);
+    INJECT_STATIC(engraving::IEngravingConfiguration, engravingConfiguration)
 public:
 
     /**
@@ -148,6 +150,12 @@ public:
     static engraving::ArticulationAnchor anchorFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL anchorToMEI(engraving::ArticulationAnchor anchor);
 
+    static void arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& meiArpeg, bool& warning);
+    static libmei::Arpeg arpegToMEI(const engraving::Arpeggio* arpeggio);
+
+    static void articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning);
+    static libmei::Artic articToMEI(const engraving::Articulation* articulation);
+
     static engraving::BarLineType barlineFromMEI(const libmei::data_BARRENDITION meiBarline, bool& warning);
     static libmei::data_BARRENDITION barlineToMEI(engraving::BarLineType barline);
 
@@ -194,6 +202,12 @@ public:
     static void endingFromMEI(engraving::Volta* volta, const libmei::Ending& meiEnding, bool& warning);
     static libmei::Ending endingToMEI(const engraving::Volta* volta);
 
+    static void fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF, bool& warning);
+    static libmei::F fToMEI(const engraving::FiguredBassItem* figuredBassItem, StringList& meiLines);
+
+    static void fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning);
+    static std::pair<libmei::Harm, libmei::Fb> fbToMEI(const engraving::FiguredBass* figuredBass);
+
     static void fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning);
     static libmei::Fermata fermataToMEI(const engraving::Fermata* fermata);
 
@@ -239,6 +253,9 @@ public:
     static void ornamintervaleFromMEI(engraving::Ornament* ornament, const std::string& meiType);
     static String ornamintervalToMEI(const engraving::Ornament* ornament);
 
+    static void pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPedal, bool& warning);
+    static libmei::Pedal pedalToMEI(const engraving::Pedal* pedal);
+
     static PitchStruct pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
                                     bool& warning);
     static std::pair<libmei::Note, libmei::Accid> pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,
@@ -258,6 +275,9 @@ public:
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);
+
+    static engraving::TremoloType stemModFromMEI(const libmei::data_STEMMODIFIER meiStemMod);
+    static libmei::data_STEMMODIFIER stemModToMEI(const engraving::TremoloSingleChord* tremolo);
 
     static void sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning);
     static libmei::Syl sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision);

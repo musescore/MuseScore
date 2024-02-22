@@ -1,25 +1,28 @@
-corruption:
-    - "File corruption"
 crash:
     - "Crash or freeze"
 engraving:
-    - "Engraving bug"
+    - "Engraving bug \\(incorrect score rendering\\)"
+"UX/interaction":
+    - "UX/Interaction bug \\(incorrect behaviour\\)"
+UI:
+    - "UI bug \\(incorrect info or interface appearance\\)"
+accessibility:
+    - "Accessibility issue \\(e\\.g\\. for keyboard-only or screen reader users\\)"
 VST:
     - "VST bug"
 "Muse Sounds":
     - "Muse Sounds bug"
 playback:
     - "General playback bug"
-UI:
-    - "UI bug"
 cloud:
-    - "Cloud saving/loading issue"
+    - "Cloud issue \\(opening, saving, logging in/out\\)"
+corruption:
+    - "File corruption"
 "needs review":
     - "Other type of issue"
 
 regression:
     - "Yes, this used to work in a previous version of MuseScore 4.x"
-
 regression_ms3:
     - "Yes, this used to work in MuseScore 3.x and now is broken"
 

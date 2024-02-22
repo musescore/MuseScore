@@ -27,9 +27,9 @@
 #include "io/path.h"
 #include "types/ret.h"
 
-#include "projecttypes.h"
-#include "notation/imasternotation.h"
 #include "iprojectaudiosettings.h"
+#include "notation/imasternotation.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
 class INotationProject
@@ -51,6 +51,9 @@ public:
     virtual bool isCloudProject() const = 0;
     virtual const CloudProjectInfo& cloudInfo() const = 0;
     virtual void setCloudInfo(const CloudProjectInfo& info) = 0;
+
+    virtual const CloudAudioInfo& cloudAudioInfo() const = 0;
+    virtual void setCloudAudioInfo(const CloudAudioInfo& audioInfo) = 0;
 
     virtual bool isNewlyCreated() const = 0;
     virtual void markAsNewlyCreated() = 0;

@@ -47,12 +47,18 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pagelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.h
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.cpp
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.h
     ${CMAKE_CURRENT_LIST_DIR}/autoplace.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autoplace.h
+    ${CMAKE_CURRENT_LIST_DIR}/segmentlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/segmentlayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/modifydom.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/modifydom.h
 
     ${CMAKE_CURRENT_LIST_DIR}/passbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passbase.h
@@ -60,4 +66,7 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/passresetlayoutdata.h
     ${CMAKE_CURRENT_LIST_DIR}/passlayoutindependentitems.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passlayoutindependentitems.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/dumplayoutdata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dumplayoutdata.h
 )

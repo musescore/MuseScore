@@ -38,32 +38,34 @@ StyledPopupView {
 
     showArrow: false
 
-    function updatePosition(elementRect) {
+    signal elementRectChanged(var elementRect)
+
+    function updatePosition() {
         var h = Math.max(root.contentHeight, capoModel.capoIsOn ? 360 : 160)
-        root.x = elementRect.x + elementRect.width + 12
-        root.y = elementRect.y - h / 2
-    }
-
-    CapoSettingsModel {
-        id: capoModel
-
-        onItemRectChanged: function(rect) {
-            updatePosition(rect)
-        }
-    }
-
-    Component.onCompleted: {
-        capoModel.init()
+        root.x = root.parent.width + 12
+        root.y = (root.parent.y + root.parent.height / 2) - root.parent.y - h / 2
     }
 
     ColumnLayout {
         id: content
 
+        readonly property int columnsSpacing: 6
+
         width: 294
 
         spacing: 12
 
-        readonly property int columnsSpacing: 6
+        CapoSettingsModel {
+            id: capoModel
+
+            onItemRectChanged: function(rect) {
+                root.elementRectChanged(rect)
+            }
+        }
+
+        Component.onCompleted: {
+            capoModel.init()
+        }
 
         NavigationPanel {
             id: capoSettingsNavPanel

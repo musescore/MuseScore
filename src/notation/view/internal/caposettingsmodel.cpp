@@ -82,12 +82,7 @@ void CapoSettingsModel::init()
         return;
     }
 
-    const mu::engraving::Instrument* instrument = part->instrument(m_item->tick());
-    IF_ASSERT_FAILED(instrument) {
-        return;
-    }
-
-    const mu::engraving::StringData* stringData = instrument->stringData();
+    const mu::engraving::StringData* stringData = part->stringData(m_item->tick(), m_item->staff()->idx());
     IF_ASSERT_FAILED(stringData) {
         return;
     }
@@ -120,9 +115,9 @@ void CapoSettingsModel::toggleCapoForString(int stringIndex)
 
     std::vector<int> ignoredStrings;
     for (int i = 0; i < m_strings.size(); ++i) {
-        const StringItem* item = m_strings.at(i);
+        const StringItem* item2 = m_strings.at(i);
 
-        if (!item->applyCapo()) {
+        if (!item2->applyCapo()) {
             ignoredStrings.push_back(i);
         }
     }

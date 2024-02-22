@@ -112,7 +112,7 @@
         <voice>1</voice>
         <type>quarter</type>
         <stem>up</stem>
-        <lyric number="1">
+        <lyric number="1" print-object="no">
           <syllabic>single</syllabic>
           <text>and</text>
           </lyric>

@@ -19,39 +19,61 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
+# Usage:
+# - use the LUPDATE_ARGS environment variable to specify arguments for `lupdate`
+# - use the POSTPROCESS_ARGS environment variable to specify arugments for the postprocessing script
 
-if [[ "$@" = *"-no-obsolete"* ]]; then
+set -eo pipefail
+
+cd "${BASH_SOURCE%/*}/../.." # go to repository root
+
+if [[ "$LUPDATE_ARGS" = *"-no-obsolete"* ]]; then
     echo "Note: cleaning up obsolete strings"
 else
-    echo "Note: preserving obsolete strings (use -no-obsolete to clean them up)"
+    echo "Note: preserving obsolete strings (set LUPDATE_ARGS to \"-no-obsolete\" to clean them up)"
 fi
 
 LUPDATE=lupdate
-SRC_DIR=$HERE/../../src
-TS_FILE=$HERE/../../share/locale/musescore_en.ts
-ARGS="-recursive \
-    -tr-function-alias translate+=trc \
-    -tr-function-alias translate+=mtrc \
-    -tr-function-alias translate+=qtrc \
-    -tr-function-alias translate+=TranslatableString \
-    -tr-function-alias qsTranslate+=qsTrc \
-    -extensions cpp,h,mm,ui,qml,js \
-    $@"
+SRC_DIR=src
+TS_FILE=share/locale/musescore_en.ts
+DEFAULT_LUPDATE_ARGS=(
+    -recursive
+    -tr-function-alias translate+=trc
+    -tr-function-alias translate+=mtrc
+    -tr-function-alias translate+=qtrc
+    -tr-function-alias translate+=TranslatableString
+    -tr-function-alias qsTranslate+=qsTrc
+    -extensions cpp,h,mm,ui,qml,js
+)
+
+run_indented() {
+    "$@" > >(sed 's/^/    /') 2> >(sed 's/^/    /' >&2)
+}
 
 # We only need to update one ts file per "resource", that will be sent to Transifex.
 # We get .ts files for other languages from Transifex.
 
 # musescore
 echo "MuseScore:"
-$LUPDATE $ARGS $SRC_DIR -ts $TS_FILE
+echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}"
+run_indented "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}"
 
 echo ""
 
 # instruments (and templates, and score orders, currently)
-FAKE_HEADER_FILE=$HERE/../../share/instruments/instrumentsxml.h
-TS_FILE=$HERE/../../share/locale/instruments_en.ts
-ARGS="$0"
+FAKE_HEADER_FILE=share/instruments/instrumentsxml.h
+TS_FILE=share/locale/instruments_en.ts
+DEFAULT_LUPDATE_ARGS=()
 
 echo "Instruments:"
-$LUPDATE $ARGS $FAKE_HEADER_FILE -ts $TS_FILE
+echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
+run_indented "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
+
+echo ""
+
+echo "Postprocessing:"
+
+POSTPROCESS="tools/translations/process_source_ts_files.py"
+
+echo "Running" $POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS}
+run_indented $POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS}

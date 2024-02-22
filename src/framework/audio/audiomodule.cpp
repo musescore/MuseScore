@@ -24,8 +24,7 @@
 #include <QQmlEngine>
 
 #include "ui/iuiengine.h"
-#include "modularity/ioc.h"
-#include "log.h"
+#include "global/modularity/ioc.h"
 
 #include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"

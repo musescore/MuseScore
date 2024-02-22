@@ -30,14 +30,6 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
-    HarpPedalPopupModel {
-        id: harpModel
-
-        onItemRectChanged: function(rect) {
-            updatePosition(rect)
-        }
-    }
-
     property QtObject model: harpModel
 
     property variant pedalState: harpModel.pedalState
@@ -53,16 +45,17 @@ StyledPopupView {
 
     showArrow: false
 
-    function updatePosition(elementRect) {
-        root.x = elementRect.x + (elementRect.width - contentWidth) / 2
+    signal elementRectChanged(var elementRect)
 
+    function updatePosition() {
         const marginFromElement = 12
+        var popupHeight = root.contentHeight + root.padding * 2
 
         // Above diagram
-        let yUp = Math.min(elementRect.y - contentHeight - marginFromElement,
-                           harpModel.staffPos.y - contentHeight - marginFromElement)
-        let yDown = Math.max(elementRect.y + elementRect.height + marginFromElement,
-                             harpModel.staffPos.y + harpModel.staffPos.height + marginFromElement)
+        let yUp = Math.min(-popupHeight - marginFromElement,
+                           (harpModel.staffPos.y - root.parent.y) - contentHeight - marginFromElement)
+        let yDown = Math.max(root.parent.height + marginFromElement,
+                             (harpModel.staffPos.y - root.parent.y) + harpModel.staffPos.height + marginFromElement)
 
         // not enough room on window to open above so open below stave
         let opensUp = true
@@ -105,16 +98,24 @@ StyledPopupView {
         return noteNames[string][state]
     }
 
-    Component.onCompleted: {
-        harpModel.init()
-    }
-
     GridLayout {
         id: menuItems
         rows: 5
         flow: GridLayout.TopToBottom
         columnSpacing: 10
         rowSpacing: 10
+
+        HarpPedalPopupModel {
+            id: harpModel
+
+            onItemRectChanged: function(rect) {
+                root.elementRectChanged(rect)
+            }
+        }
+
+        Component.onCompleted: {
+            harpModel.init()
+        }
 
         NavigationPanel {
             id: pedalSettingsNavPanel

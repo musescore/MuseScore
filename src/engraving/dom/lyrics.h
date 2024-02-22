@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __LYRICS_H__
-#define __LYRICS_H__
+#ifndef MU_ENGRAVING_LYRICS_H
+#define MU_ENGRAVING_LYRICS_H
 
 #include "../types/types.h"
 #include "line.h"
@@ -52,7 +52,6 @@ public:
     // WORD_MIN_DISTANCE has never been implemented
     // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
 
-public:
     ~Lyrics();
 
     Lyrics* clone() const override { return new Lyrics(*this); }

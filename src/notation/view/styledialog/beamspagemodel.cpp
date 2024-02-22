@@ -28,7 +28,8 @@ BeamsPageModel::BeamsPageModel(QObject* parent)
     StyleId::useWideBeams,
     StyleId::beamWidth,
     StyleId::beamMinLen,
-    StyleId::beamNoSlope
+    StyleId::beamNoSlope,
+    StyleId::frenchStyleBeams
 })
 {
 }
@@ -51,4 +52,9 @@ StyleItem* BeamsPageModel::beamMinLen() const
 StyleItem* BeamsPageModel::beamNoSlope() const
 {
     return styleItem(StyleId::beamNoSlope);
+}
+
+StyleItem* BeamsPageModel::frenchStyleBeams() const
+{
+    return styleItem(StyleId::frenchStyleBeams);
 }

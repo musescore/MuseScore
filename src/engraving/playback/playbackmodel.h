@@ -114,7 +114,7 @@ private:
                               const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges);
 
     bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
-    bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;
+    bool hasToReloadScore(const ScoreChangesRange& changesRange) const;
 
     bool containsTrack(const InstrumentTrackId& trackId) const;
     void clearExpiredTracks();
@@ -133,7 +133,7 @@ private:
 
     const RepeatList& repeatList() const;
 
-    std::vector<const EngravingItem*> filterPlaybleItems(const std::vector<const EngravingItem*>& items) const;
+    std::vector<const EngravingItem*> filterPlayableItems(const std::vector<const EngravingItem*>& items) const;
 
     mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
 

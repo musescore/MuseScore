@@ -120,6 +120,7 @@ private:
     void addText(TextStyleType type);
     void addImage();
     void addFiguredBass();
+    void addGuitarBend(GuitarBendType bendType);
 
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();
@@ -143,6 +144,7 @@ private:
     void openEditStyleDialog(const actions::ActionData& args);
     void openPageSettingsDialog();
     void openStaffProperties();
+    void openEditStringsDialog();
     void openBreaksDialog();
     void openTransposeDialog();
     void openPartsDialog();

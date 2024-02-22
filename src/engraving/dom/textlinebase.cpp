@@ -91,32 +91,6 @@ RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2,
     return RectF(p1 - b, p1 + b).normalized().united(RectF(p2 - b, p2 + b).normalized());
 }
 
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape TextLineBaseSegment::shape() const
-{
-    Shape shape;
-    if (!m_text->empty()) {
-        shape.add(m_text->layoutData()->bbox().translated(m_text->pos()));
-    }
-    if (!m_endText->empty()) {
-        shape.add(m_endText->layoutData()->bbox().translated(m_endText->pos()));
-    }
-    double lw2 = 0.5 * textLineBase()->lineWidth();
-    bool isDottedLine = textLineBase()->lineStyle() == LineType::DOTTED;
-    if (m_twoLines) {     // hairpins
-        shape.add(boundingBoxOfLine(m_points[0], m_points[1], lw2, isDottedLine));
-        shape.add(boundingBoxOfLine(m_points[2], m_points[3], lw2, isDottedLine));
-    } else if (textLineBase()->lineVisible()) {
-        for (int i = 0; i < m_npoints - 1; ++i) {
-            shape.add(boundingBoxOfLine(m_points[i], m_points[i + 1], lw2, isDottedLine));
-        }
-    }
-    return shape;
-}
-
 bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 {
     if (id == Pid::COLOR) {
@@ -180,6 +154,27 @@ static constexpr std::array<Pid, 27> TextLineBasePropertyId = { {
 const std::array<Pid, 27>& TextLineBase::textLineBasePropertyIds()
 {
     return TextLineBasePropertyId;
+}
+
+void TextLineBase::reset()
+{
+    String beginText = _beginText;
+    String contText = _continueText;
+    String endText = _endText;
+    bool beginStyled = isStyled(Pid::BEGIN_TEXT);
+    bool contStyled = isStyled(Pid::CONTINUE_TEXT);
+    bool endStyled = isStyled(Pid::END_TEXT);
+
+    SLine::reset();
+    if (!beginStyled) {
+        undoChangeProperty(Pid::BEGIN_TEXT, beginText, PropertyFlags::UNSTYLED);
+    }
+    if (!contStyled) {
+        undoChangeProperty(Pid::CONTINUE_TEXT, contText, PropertyFlags::UNSTYLED);
+    }
+    if (!endStyled) {
+        undoChangeProperty(Pid::END_TEXT, endText, PropertyFlags::UNSTYLED);
+    }
 }
 
 //---------------------------------------------------------

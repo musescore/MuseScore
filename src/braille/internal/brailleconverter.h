@@ -22,7 +22,7 @@
 #ifndef MU_BRAILLE_BRAILLECONVERTER_H
 #define MU_BRAILLE_BRAILLECONVERTER_H
 
-#include "../ibrailleconverter.h"
+#include "ibrailleconverter.h"
 
 namespace mu::engraving {
 class BrailleConverter : public mu::braille::IBrailleConverter

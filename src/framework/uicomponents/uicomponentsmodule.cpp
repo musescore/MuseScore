@@ -36,6 +36,13 @@
 #include "view/itemmultiselectionmodel.h"
 #include "view/textinputfieldmodel.h"
 #include "view/selectmultipledirectoriesmodel.h"
+#include "view/buttonboxmodel.h"
+
+#include "view/treeview/qquicktreemodeladaptor_p.h"
+#include "view/treeview/qquickrangemodel_p.h"
+#include "view/treeview/qquickwheelarea_p.h"
+#include "view/treeview/qquickabstractstyle_p.h"
+#include "view/treeview/qquickselectionmode_p.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -51,6 +58,12 @@ using namespace mu::modularity;
 static void uicomponents_init_qrc()
 {
     Q_INIT_RESOURCE(uicomponents);
+
+#ifdef MU_QT5_COMPAT
+    Q_INIT_RESOURCE(graphicaleffects_qt5);
+#else
+    Q_INIT_RESOURCE(graphicaleffects);
+#endif
 }
 
 std::string UiComponentsModule::moduleName() const
@@ -104,6 +117,15 @@ void UiComponentsModule::registerUiTypes()
 
     qmlRegisterType<TextInputFieldModel>("MuseScore.UiComponents", 1, 0, "TextInputFieldModel");
     qmlRegisterType<SelectMultipleDirectoriesModel>("MuseScore.UiComponents", 1, 0, "SelectMultipleDirectoriesModel");
+    qmlRegisterType<ButtonBoxModel>("MuseScore.UiComponents", 1, 0, "ButtonBoxModel");
+
+    qmlRegisterType<QQuickTreeModelAdaptor1>("MuseScore.UiComponents.Private", 1, 0, "TreeModelAdaptor");
+    qmlRegisterType<QQuickRangeModel1>("MuseScore.UiComponents.Private", 1, 0, "RangeModel");
+    qmlRegisterType<QQuickWheelArea1>("MuseScore.UiComponents.Private", 1, 0, "WheelArea");
+    qmlRegisterType<QQuickAbstractStyle1>("MuseScore.UiComponents.Private", 1, 0, "AbstractStyle");
+    qmlRegisterType<QQuickPadding1>("MuseScore.UiComponents.Private", 1, 0, "Padding");
+    qmlRegisterUncreatableType<QQuickSelectionMode1>("MuseScore.UiComponents.Private", 1, 0, "SelectionMode",
+                                                     QLatin1String("Do not create objects of type SelectionMode"));
 
     auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {

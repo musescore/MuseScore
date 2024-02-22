@@ -33,7 +33,7 @@ namespace mu::engraving {
 //   MScoreTextToMXML
 //---------------------------------------------------------
 
-MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, const CharFormat& defFmt, const QString& mtf)
+MScoreTextToMXML::MScoreTextToMXML(const String& tag, const String& attr, const CharFormat& defFmt, const String& mtf)
     : attribs(attr), tagname(tag), oldFormat(defFmt), musicalTextFont(mtf)
 {
     // set MusicXML defaults
@@ -51,14 +51,15 @@ MScoreTextToMXML::MScoreTextToMXML(const QString& tag, const QString& attr, cons
 //    part name and shortName
 //---------------------------------------------------------
 
-QString MScoreTextToMXML::toPlainText(const QString& text)
+String MScoreTextToMXML::toPlainText(const String& text)
 {
-    QString res;
+    String res;
     bool inElem = false;
-    foreach (QChar ch, text) {
-        if (ch == '<') {
+    for (size_t i = 0; i < text.size(); ++i) {
+        Char ch = text.at(i);
+        if (ch == u'<') {
             inElem = true;
-        } else if (ch == '>') {
+        } else if (ch == u'>') {
             inElem = false;
         } else {
             if (!inElem) {
@@ -66,7 +67,7 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
             }
         }
     }
-    //LOGD("MScoreTextToMXML::toPlainText('%s') res '%s'", qPrintable(text), qPrintable(res));
+    //LOGD("MScoreTextToMXML::toPlainText('%s') res '%s'", muPrintable(text), muPrintable(res));
     return res;
 }
 
@@ -75,9 +76,9 @@ QString MScoreTextToMXML::toPlainText(const QString& text)
 //    convert to plain text plus <sym>[name]</sym> encoded symbols
 //---------------------------------------------------------
 
-QString MScoreTextToMXML::toPlainTextPlusSymbols(const std::list<TextFragment>& list)
+String MScoreTextToMXML::toPlainTextPlusSymbols(const std::list<TextFragment>& list)
 {
-    QString res;
+    String res;
     for (const TextFragment& f : list) {
         res += f.text;
     }
@@ -198,8 +199,8 @@ void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, Xml
     bool firstTime = true;   // write additional attributes only the first time characters are written
     for (const TextFragment& f : fr) {
         newFormat = f.format;
-        QString formatAttr = updateFormat();
-        xml.tagRaw(tagname + (firstTime ? attribs : "") + formatAttr, f.text);
+        String formatAttr = updateFormat();
+        xml.tagRaw(tagname + (firstTime ? attribs : String()) + formatAttr, f.text);
         firstTime = false;
     }
 }
@@ -209,14 +210,14 @@ void MScoreTextToMXML::writeTextFragments(const std::list<TextFragment>& fr, Xml
 //    add one attribute if necessary
 //---------------------------------------------------------
 
-static QString attribute(bool needed, bool value, QString trueString, QString falseString)
+static String attribute(bool needed, bool value, String trueString, String falseString)
 {
-    QString res;
+    String res;
     if (needed) {
         res = value ? trueString : falseString;
     }
-    if (res != "") {
-        res = " " + res;
+    if (!res.empty()) {
+        res = u" " + res;
     }
     return res;
 }
@@ -228,20 +229,21 @@ static QString attribute(bool needed, bool value, QString trueString, QString fa
 //    copy newFormat to oldFormat
 //---------------------------------------------------------
 
-QString MScoreTextToMXML::updateFormat()
+String MScoreTextToMXML::updateFormat()
 {
     if (newFormat.fontFamily() == "ScoreText") {
         newFormat.setFontFamily(musicalTextFont);
     }
-    QString res;
-    res += attribute(newFormat.bold() != oldFormat.bold(), newFormat.bold(), "font-weight=\"bold\"", "font-weight=\"normal\"");
-    res += attribute(newFormat.italic() != oldFormat.italic(), newFormat.italic(), "font-style=\"italic\"", "font-style=\"normal\"");
-    res += attribute(newFormat.underline() != oldFormat.underline(), newFormat.underline(), "underline=\"1\"", "underline=\"0\"");
-    res += attribute(newFormat.strike() != oldFormat.strike(), newFormat.strike(), "line-through=\"1\"", "line-though=\"0\"");
-    res += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true, QString("font-family=\"%1\"").arg(newFormat.fontFamily()), "");
+    String res;
+    res += attribute(newFormat.bold() != oldFormat.bold(), newFormat.bold(), u"font-weight=\"bold\"", u"font-weight=\"normal\"");
+    res += attribute(newFormat.italic() != oldFormat.italic(), newFormat.italic(), u"font-style=\"italic\"", u"font-style=\"normal\"");
+    res += attribute(newFormat.underline() != oldFormat.underline(), newFormat.underline(), u"underline=\"1\"", u"underline=\"0\"");
+    res += attribute(newFormat.strike() != oldFormat.strike(), newFormat.strike(), u"line-through=\"1\"", u"line-though=\"0\"");
+    res += attribute(newFormat.fontFamily() != oldFormat.fontFamily(), true,
+                     String(u"font-family=\"%1\"").arg(newFormat.fontFamily()), u"");
     bool needSize = newFormat.fontSize() < 0.99 * oldFormat.fontSize() || newFormat.fontSize() > 1.01 * oldFormat.fontSize();
-    res += attribute(needSize, true, QString("font-size=\"%1\"").arg(newFormat.fontSize()), "");
-    //LOGD("updateFormat() res '%s'", qPrintable(res));
+    res += attribute(needSize, true, String(u"font-size=\"%1\"").arg(newFormat.fontSize()), u"");
+    //LOGD("updateFormat() res '%s'", muPrintable(res));
     oldFormat = newFormat;
     return res;
 }

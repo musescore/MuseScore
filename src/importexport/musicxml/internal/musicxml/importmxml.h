@@ -23,15 +23,13 @@
 #ifndef __IMPORTMXML_H__
 #define __IMPORTMXML_H__
 
+#include "global/types/string.h"
 #include "engravingerrors.h"
-
-class QString;
-class QIODevice;
 
 namespace mu::engraving {
 class Score;
 
-Err importMusicXMLfromBuffer(Score* score, const QString&, QIODevice* dev);
+Err importMusicXMLfromBuffer(Score* score, const String&, const ByteArray& data);
 }
 
 #endif

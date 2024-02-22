@@ -52,17 +52,17 @@ class MuseData
     int voice;
     engraving::Slur* slur[4];
 
-    void musicalAttribute(QString s, engraving::Part*);
-    void readPart(QStringList sl, engraving::Part*);
-    void readNote(engraving::Part*, const QString& s);
-    void readChord(engraving::Part*, const QString& s);
-    void readRest(engraving::Part*, const QString& s);
-    void readBackup(const QString& s);
+    void musicalAttribute(QStringView s, engraving::Part*);
+    void readPart(const QStringList& sl, engraving::Part*);
+    void readNote(engraving::Part*, QStringView s);
+    void readChord(engraving::Part*, QStringView s);
+    void readRest(engraving::Part*, QStringView s);
+    void readBackup(QStringView s);
     engraving::Measure* createMeasure();
     int countStaves(const QStringList& sl);
     void openSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice);
     void closeSlur(int idx, const engraving::Fraction& tick, engraving::Staff* staff, int voice);
-    QString diacritical(QString);
+    QString diacritical(QStringView);
 
 public:
     MuseData(engraving::Score* s) { score = s; }

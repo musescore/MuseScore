@@ -38,10 +38,14 @@ Item {
     height: content.height
 
     property NavigationPanel navigationPanel: NavigationPanel {
+        id: navPanel
         name: "PlaybackToolBar"
         enabled: root.enabled && root.visible
         accessible.name: qsTrc("playback", "Playback toolbar")
     }
+
+    property alias navigationPanelSection: navPanel.section
+    property alias navigationPanelOrder: navPanel.order
 
     PlaybackToolBarModel {
         id: playbackModel

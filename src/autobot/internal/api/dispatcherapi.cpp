@@ -35,6 +35,8 @@ void DispatcherApi::dispatch(const QString& action, const QVariantList& args)
 {
     ActionData data;
     int index = 0;
+
+#ifdef MU_QT5_COMPAT
     for (const QVariant& arg : args) {
         switch (arg.type()) {
         case QVariant::Int: data.setArg<int>(index, arg.value<int>());
@@ -47,6 +49,20 @@ void DispatcherApi::dispatch(const QString& action, const QVariantList& args)
 
         ++index;
     }
+#else
+    for (const QVariant& arg : args) {
+        switch (arg.typeId()) {
+        case QMetaType::Int: data.setArg<int>(index, arg.value<int>());
+            break;
+        default: {
+            LOGE() << "unknown type: " << arg.typeName();
+            continue;
+        } break;
+        }
+
+        ++index;
+    }
+#endif
 
     dispatcher()->dispatch(action.toStdString(), data);
 }

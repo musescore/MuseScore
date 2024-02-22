@@ -57,7 +57,7 @@ public:
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
-    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t, bool), (const, override));
+    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));
     MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, draw::Color), (override));
     MOCK_METHOD((async::Channel<engraving::voice_idx_t, draw::Color>), selectionColorChanged, (), (const, override));
 
@@ -75,12 +75,12 @@ public:
 
     MOCK_METHOD(bool, guitarProImportExperimental, (), (const, override));
     MOCK_METHOD(bool, negativeFretsAllowed, (), (const, override));
-    MOCK_METHOD(bool, tablatureParenthesesZIndexWorkaround, (), (const, override));
     MOCK_METHOD(bool, crossNoteHeadAlwaysBlack, (), (const, override));
     MOCK_METHOD(bool, enableExperimentalFretCircle, (), (const, override));
     MOCK_METHOD(void, setGuitarProMultivoiceEnabled, (bool), (override));
     MOCK_METHOD(bool, guitarProMultivoiceEnabled, (), (const, override));
     MOCK_METHOD(bool, minDistanceForPartialSkylineCalculated, (), (const, override));
+    MOCK_METHOD(bool, specificSlursLayoutWorkaround, (), (const, override));
 };
 }
 

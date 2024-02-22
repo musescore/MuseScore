@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FLACENCODER_H
-#define MU_FLACENCODER_H
+#ifndef MU_AUDIO_FLACENCODER_H
+#define MU_AUDIO_FLACENCODER_H
 
 #include "abstractaudioencoder.h"
 
@@ -46,4 +46,4 @@ private:
 };
 }
 
-#endif // MU_FLACENCODER_H
+#endif // MU_AUDIO_FLACENCODER_H

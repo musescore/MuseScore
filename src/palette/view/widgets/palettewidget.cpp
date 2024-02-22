@@ -596,7 +596,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 
     engravingRender()->layoutItem(element.get());
 
-    RectF r = element->layoutData()->bbox();
+    RectF r = element->ldata()->bbox();
     int w = lrint(r.width() * cellMag);
     int h = lrint(r.height() * cellMag);
 
@@ -614,7 +614,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     painter.scale(cellMag, cellMag);
 
     painter.translate(-r.topLeft());
-    PointF pos = element->layoutData()->pos();
+    PointF pos = element->ldata()->pos();
     element->setPos(0, 0);
 
     QColor color;
@@ -821,6 +821,9 @@ void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
                 || suffix == "jpg"
                 || suffix == "jpeg"
                 || suffix == "png"
+                || suffix == "bmp"
+                || suffix == "tif"
+                || suffix == "tiff"
                 ) {
                 event->acceptProposedAction();
             }
@@ -843,7 +846,12 @@ void PaletteWidget::dragMoveEvent(QDragMoveEvent* event)
 {
     if (event->source() == this) {
         if (m_currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
-            int targetIdx = cellIndexForPoint(event->pos());
+#ifdef MU_QT5_COMPAT
+            QPoint pos = event->pos();
+#else
+            QPoint pos = event->position().toPoint();
+#endif
+            int targetIdx = cellIndexForPoint(pos);
             if (targetIdx != -1 && targetIdx != m_currentIdx) {
                 PaletteCellPtr cell = m_palette->takeCell(m_currentIdx);
                 m_palette->insertCell(targetIdx, cell);
@@ -925,7 +933,12 @@ void PaletteWidget::dropEvent(QDropEvent* event)
     }
 
     element->setSelected(false);
-    int i = cellIndexForPoint(event->pos());
+#ifdef MU_QT5_COMPAT
+    QPoint pos = event->pos();
+#else
+    QPoint pos = event->position().toPoint();
+#endif
+    int i = cellIndexForPoint(pos);
     if (i == -1 || cells()[i]) {
         appendElement(element, name);
     } else {
@@ -1019,13 +1032,13 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         }
 
         if (idx == m_selectedIdx) {
-            c.setAlphaF(0.5);
+            c.setAlphaF(0.5f);
             painter.fillRect(r, c);
         } else if (idx == m_pressedIndex) {
-            c.setAlphaF(0.75);
+            c.setAlphaF(0.75f);
             painter.fillRect(r, c);
         } else if (idx == m_currentIdx) {
-            c.setAlphaF(0.2);
+            c.setAlphaF(0.2f);
             painter.fillRect(r, c);
         }
 
@@ -1084,9 +1097,9 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         if (drawStaff) {
             sy = gy + gh * .5 - 2.0 * _spatium;
         } else {
-            sy  = gy + (gh - sh) * .5 - el->layoutData()->bbox().y();
+            sy  = gy + (gh - sh) * .5 - el->ldata()->bbox().y();
         }
-        double sx  = gx + (gw - sw) * .5 - el->layoutData()->bbox().x();
+        double sx  = gx + (gw - sw) * .5 - el->ldata()->bbox().x();
 
         sy += yOffset() * _spatium;
 

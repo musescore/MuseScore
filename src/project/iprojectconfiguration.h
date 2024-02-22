@@ -26,12 +26,13 @@
 #include <QColor>
 
 #include "modularity/imoduleinterface.h"
-#include "io/path.h"
 #include "async/channel.h"
 #include "async/notification.h"
-#include "inotationproject.h"
-#include "projecttypes.h"
+#include "io/path.h"
 #include "types/bytearray.h"
+
+#include "inotationproject.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
 class IProjectConfiguration : MODULE_EXPORT_INTERFACE
@@ -119,9 +120,15 @@ public:
     virtual void setAutoSaveInterval(int minutes) = 0;
     virtual async::Channel<int> autoSaveIntervalChanged() const = 0;
 
-    virtual bool promptShareAudioCom() const = 0;
-    virtual void setPromptShareAudioCom(bool prompt) = 0;
-    virtual async::Channel<bool> promptShareAudioComChanged() const = 0;
+    virtual bool alsoShareAudioCom() const = 0;
+    virtual void setAlsoShareAudioCom(bool share) = 0;
+    virtual async::Channel<bool> alsoShareAudioComChanged() const = 0;
+
+    virtual bool showAlsoShareAudioComDialog() const = 0;
+    virtual void setShowAlsoShareAudioComDialog(bool show) = 0;
+
+    virtual bool hasAskedAlsoShareAudioCom() const = 0;
+    virtual void setHasAskedAlsoShareAudioCom(bool has) = 0;
 
     virtual io::path_t newProjectTemporaryPath() const = 0;
 
@@ -150,6 +157,9 @@ public:
 
     virtual bool showCloudIsNotAvailableWarning() const = 0;
     virtual void setShowCloudIsNotAvailableWarning(bool show) = 0;
+
+    virtual bool disableVersionChecking() const = 0;
+    virtual void setDisableVersionChecking(bool disable) = 0;
 };
 }
 

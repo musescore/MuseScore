@@ -1,7 +1,7 @@
 /**
- * pugixml parser - version 1.13
+ * pugixml parser - version 1.14
  * --------------------------------------------------------
- * Copyright (C) 2006-2022, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
+ * Copyright (C) 2006-2023, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at https://pugixml.org/
  *
  * This library is distributed under the MIT License. See notice at the end
@@ -52,7 +52,7 @@
 #endif
 
 /**
- * Copyright (c) 2006-2022 Arseny Kapoulkine
+ * Copyright (c) 2006-2023 Arseny Kapoulkine
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation

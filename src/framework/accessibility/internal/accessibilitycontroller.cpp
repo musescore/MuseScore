@@ -286,8 +286,8 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
             cancelPreviousReading();
             savePanelAccessibleName(m_lastFocused, item.item);
 
-            QAccessibleEvent ev(item.object, QAccessible::Focus);
-            sendEvent(&ev);
+            QAccessibleEvent ev2(item.object, QAccessible::Focus);
+            sendEvent(&ev2);
             m_lastFocused = item.item;
         }
     }
@@ -336,6 +336,7 @@ void AccessibilityController::savePanelAccessibleName(const IAccessible* oldItem
 }
 
 #ifndef Q_OS_MAC
+
 void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
 {
     if (!configuration()->active()) {
@@ -364,7 +365,7 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
     m_itemForRestoreFocus = item;
 
     //! NOTE: Restore the focused element after some delay(this value was found experimentally)
-    QTimer::singleShot(200, [=]() {
+    QTimer::singleShot(100, [=]() {
         if (m_lastFocused) {
             m_lastFocused->setState(State::Focused, false);
         }
@@ -658,6 +659,11 @@ QString AccessibilityController::accessibleTextAtOffset(int, TextBoundaryType, i
 }
 
 int AccessibilityController::accessibleCharacterCount() const
+{
+    return 0;
+}
+
+int AccessibilityController::accessibleRowIndex() const
 {
     return 0;
 }

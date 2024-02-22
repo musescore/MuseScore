@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __HARPPEDALDIAGRAM_H__
-#define __HARPPEDALDIAGRAM_H__
+#ifndef MU_ENGRAVING_HARPPEDALDIAGRAM_H
+#define MU_ENGRAVING_HARPPEDALDIAGRAM_H
 
 #include "pitchspelling.h"
 #include "textbase.h"
@@ -81,7 +81,10 @@ public:
     String createDiagramText();
     void updateDiagramText();
 
+    void undoChangePedalState(std::array<PedalPosition, HARP_STRING_NO> _pedalState);
+
     bool isTpcPlayable(int tpc);
+    const std::set<int>& playableTpcs() const { return m_playableTpcs; }
 
 private:
 
@@ -93,4 +96,4 @@ private:
 };
 } // namespace mu::engraving
 
-#endif // __HARPPEDALDIAGRAM_H__
+#endif // MU_ENGRAVING_HARPPEDALDIAGRAM_H

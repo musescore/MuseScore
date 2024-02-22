@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NOTELINE_H__
-#define __NOTELINE_H__
+#ifndef MU_ENGRAVING_NOTELINE_H
+#define MU_ENGRAVING_NOTELINE_H
 
 #include "textlinebase.h"
 
@@ -37,9 +37,6 @@ class NoteLine final : public TextLineBase
     OBJECT_ALLOCATOR(engraving, NoteLine)
     DECLARE_CLASSOF(ElementType::NOTELINE)
 
-    Note* _startNote;
-    Note* _endNote;
-
 public:
     NoteLine(EngravingItem* parent);
     NoteLine(const NoteLine&);
@@ -47,11 +44,16 @@ public:
 
     NoteLine* clone() const override { return new NoteLine(*this); }
 
-    void setStartNote(Note* n) { _startNote = n; }
-    Note* startNote() const { return _startNote; }
-    void setEndNote(Note* n) { _endNote = n; }
-    Note* endNote() const { return _endNote; }
+    void setStartNote(Note* n) { m_startNote = n; }
+    Note* startNote() const { return m_startNote; }
+    void setEndNote(Note* n) { m_endNote = n; }
+    Note* endNote() const { return m_endNote; }
     LineSegment* createLineSegment(System* parent) override;
+
+private:
+
+    Note* m_startNote = nullptr;
+    Note* m_endNote = nullptr;
 };
 } // namespace mu::engraving
 #endif

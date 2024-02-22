@@ -86,9 +86,9 @@ RectF StaffLines::hitBBox() const
 {
     double clickablePadding = spatium();
     if (m_lines.size() <= 1) {
-        return layoutData()->bbox().adjusted(0.0, -clickablePadding, 0.0, clickablePadding);
+        return ldata()->bbox().adjusted(0.0, -clickablePadding, 0.0, clickablePadding);
     }
-    return layoutData()->bbox();
+    return ldata()->bbox();
 }
 
 Shape StaffLines::hitShape() const
@@ -106,7 +106,7 @@ double StaffLines::y1() const
 /*      if (system == 0 || staffIdx() >= system->staves()->size())
             return 0.0;
       */
-    return system->staff(staffIdx())->y() + layoutData()->pos().y();
+    return system->staff(staffIdx())->y() + ldata()->pos().y();
 }
 
 //---------------------------------------------------------

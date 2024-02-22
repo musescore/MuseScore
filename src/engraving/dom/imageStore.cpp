@@ -52,7 +52,7 @@ ImageStoreItem::ImageStoreItem(const path_t& p)
 
 void ImageStoreItem::dereference(Image* image)
 {
-    _references.remove(image);
+    m_references.remove(image);
 }
 
 //---------------------------------------------------------
@@ -62,7 +62,7 @@ void ImageStoreItem::dereference(Image* image)
 
 void ImageStoreItem::reference(Image* image)
 {
-    _references.push_back(image);
+    m_references.push_back(image);
 }
 
 //---------------------------------------------------------
@@ -72,7 +72,7 @@ void ImageStoreItem::reference(Image* image)
 
 bool ImageStoreItem::isUsed(Score* score) const
 {
-    for (Image* image : _references) {
+    for (Image* image : m_references) {
         if (image->score() == score && image->explicitParent()) {
             return true;
         }
@@ -86,18 +86,18 @@ bool ImageStoreItem::isUsed(Score* score) const
 
 void ImageStoreItem::load()
 {
-    if (!_buffer.empty()) {
+    if (!m_buffer.empty()) {
         return;
     }
-    File inFile(_path);
+    File inFile(m_path);
     if (!inFile.open(IODevice::ReadOnly)) {
         LOGD("Cannot open picture file");
         return;
     }
-    _buffer = inFile.readAll();
+    m_buffer = inFile.readAll();
     inFile.close();
 
-    _hash = cryptographicHash()->hash(_buffer, ICryptographicHash::Algorithm::Md4);
+    m_hash = cryptographicHash()->hash(m_buffer, ICryptographicHash::Algorithm::Md4);
 }
 
 //---------------------------------------------------------
@@ -109,11 +109,11 @@ String ImageStoreItem::hashName() const
     const char hex[17] = "0123456789abcdef";
     char p[33];
     for (int i = 0; i < 16; ++i) {
-        p[i * 2]     = hex[(_hash[i] >> 4) & 0xf];
-        p[i * 2 + 1] = hex[_hash[i] & 0xf];
+        p[i * 2]     = hex[(m_hash[i] >> 4) & 0xf];
+        p[i * 2 + 1] = hex[m_hash[i] & 0xf];
     }
     p[32] = 0;
-    return String::fromAscii(p) + u"." + _type;
+    return String::fromAscii(p) + u"." + m_type;
 }
 
 //---------------------------------------------------------
@@ -122,8 +122,8 @@ String ImageStoreItem::hashName() const
 
 void ImageStoreItem::setPath(const path_t& val)
 {
-    _path = val;
-    _type = FileInfo::suffix(_path);
+    m_path = val;
+    m_type = FileInfo::suffix(m_path);
 }
 
 //---------------------------------------------------------
@@ -144,7 +144,7 @@ inline static int toInt(char c)
 
 ImageStore::~ImageStore()
 {
-    DeleteAll(_items);
+    DeleteAll(m_items);
 }
 
 //---------------------------------------------------------
@@ -158,7 +158,7 @@ ImageStoreItem* ImageStore::getImage(const path_t& path) const
         //
         // some limited support for backward compatibility
         //
-        for (ImageStoreItem* item: _items) {
+        for (ImageStoreItem* item: m_items) {
             if (item->path() == path) {
                 return item;
             }
@@ -169,7 +169,7 @@ ImageStoreItem* ImageStore::getImage(const path_t& path) const
     for (int i = 0; i < 16; ++i) {
         hash[i] = toInt(s.at(i * 2).toAscii()) * 16 + toInt(s.at(i * 2 + 1).toAscii());
     }
-    for (ImageStoreItem* item : _items) {
+    for (ImageStoreItem* item : m_items) {
         if (item->hash() == hash) {
             return item;
         }
@@ -185,14 +185,14 @@ ImageStoreItem* ImageStore::getImage(const path_t& path) const
 ImageStoreItem* ImageStore::add(const path_t& path, const ByteArray& ba)
 {
     ByteArray hash = cryptographicHash()->hash(ba, ICryptographicHash::Algorithm::Md4);
-    for (ImageStoreItem* item : _items) {
+    for (ImageStoreItem* item : m_items) {
         if (item->hash() == hash) {
             return item;
         }
     }
     ImageStoreItem* item = new ImageStoreItem(path);
     item->set(ba, hash);
-    _items.push_back(item);
+    m_items.push_back(item);
     return item;
 }
 
@@ -202,15 +202,15 @@ ImageStoreItem* ImageStore::add(const path_t& path, const ByteArray& ba)
 
 void ImageStore::clearUnused()
 {
-    _items.erase(
-        std::remove_if(_items.begin(), _items.end(), [](ImageStoreItem* i) {
+    m_items.erase(
+        std::remove_if(m_items.begin(), m_items.end(), [](ImageStoreItem* i) {
         const bool remove = !i->isUsed();
         if (remove) {
             delete i;
         }
         return remove;
     }),
-        _items.end()
+        m_items.end()
         );
 }
 }

@@ -45,7 +45,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-// table must be in sync with enum ClefType
+// table must be in sync with enum ClefType in types.h
 const ClefInfo ClefInfo::clefTable[] = {
 //                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group
     { ClefType::G,       2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,            StaffGroup::STANDARD },
@@ -87,6 +87,8 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::TAB4,    5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClef,        StaffGroup::TAB },
     { ClefType::TAB_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,  StaffGroup::TAB },
     { ClefType::TAB4_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif, StaffGroup::TAB },
+
+    { ClefType::C4_8VB,  4, 30, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClef8vb,         StaffGroup::STANDARD },
 };
 
 //---------------------------------------------------------
@@ -172,14 +174,14 @@ void Clef::setSmall(bool val)
 void Clef::setClefType(ClefType i)
 {
     if (concertPitch()) {
-        m_clefTypes._concertClef = i;
-        if (m_clefTypes._transposingClef == ClefType::INVALID) {
-            m_clefTypes._transposingClef = i;
+        m_clefTypes.concertClef = i;
+        if (m_clefTypes.transposingClef == ClefType::INVALID) {
+            m_clefTypes.transposingClef = i;
         }
     } else {
-        m_clefTypes._transposingClef = i;
-        if (m_clefTypes._concertClef == ClefType::INVALID) {
-            m_clefTypes._concertClef = i;
+        m_clefTypes.transposingClef = i;
+        if (m_clefTypes.concertClef == ClefType::INVALID) {
+            m_clefTypes.concertClef = i;
         }
     }
 }
@@ -190,7 +192,7 @@ void Clef::setClefType(ClefType i)
 
 void Clef::setConcertClef(ClefType val)
 {
-    m_clefTypes._concertClef = val;
+    m_clefTypes.concertClef = val;
 }
 
 //---------------------------------------------------------
@@ -199,7 +201,7 @@ void Clef::setConcertClef(ClefType val)
 
 void Clef::setTransposingClef(ClefType val)
 {
-    m_clefTypes._transposingClef = val;
+    m_clefTypes.transposingClef = val;
 }
 
 //---------------------------------------------------------
@@ -209,9 +211,9 @@ void Clef::setTransposingClef(ClefType val)
 ClefType Clef::clefType() const
 {
     if (concertPitch()) {
-        return m_clefTypes._concertClef;
+        return m_clefTypes.concertClef;
     } else {
-        return m_clefTypes._transposingClef;
+        return m_clefTypes.transposingClef;
     }
 }
 
@@ -279,8 +281,8 @@ Clef* Clef::otherClef()
 PropertyValue Clef::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::CLEF_TYPE_CONCERT:     return m_clefTypes._concertClef;
-    case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes._transposingClef;
+    case Pid::CLEF_TYPE_CONCERT:     return m_clefTypes.concertClef;
+    case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes.transposingClef;
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
     case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
@@ -477,6 +479,20 @@ void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
     }
 }
 
+void Clef::manageExclusionFromParts(bool exclude)
+{
+    if (exclude) {
+        EngravingItem::manageExclusionFromParts(exclude);
+    } else {
+        Measure* measure = findMeasure();
+        EngravingItem* nextEl = measure && rtick() == measure->ticks() ? measure->next() : nullptr;
+        if (!nextEl) {
+            nextEl = nextElement();
+        }
+        score()->undoChangeClef(staff(), nextEl, clefType(), false, this);
+    }
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------
@@ -526,12 +542,21 @@ String Clef::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Clef::subtypeUserName() const
+{
+    return TConv::userName(clefType());
+}
+
+//---------------------------------------------------------
 //   clear
 //---------------------------------------------------------
 
 void Clef::clear()
 {
-    LayoutData* ldata = mutLayoutData();
+    LayoutData* ldata = mutldata();
     ldata->clearBbox();
     ldata->symId = SymId::noSym;
     Clef* pairedClef = otherClef();

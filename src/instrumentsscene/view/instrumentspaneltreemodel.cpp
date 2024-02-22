@@ -259,30 +259,39 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
 void InstrumentsPanelTreeModel::listenNotationSelectionChanged()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-        std::vector<EngravingItem*> selectedElements = m_notation->interaction()->selection()->elements();
-
-        if (selectedElements.empty()) {
-            m_selectionModel->clear();
-            return;
-        }
-
-        QSet<ID> selectedPartIdSet;
-        for (const EngravingItem* element : selectedElements) {
-            if (!element->part()) {
-                continue;
-            }
-
-            selectedPartIdSet << element->part()->id();
-        }
-
-        for (const ID& selectedPartId : selectedPartIdSet) {
-            AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtId(selectedPartId);
-
-            if (item) {
-                m_selectionModel->select(createIndex(item->row(), 0, item));
-            }
-        }
+        updateSelectedRows();
     });
+}
+
+void InstrumentsPanelTreeModel::updateSelectedRows()
+{
+    if (!m_instrumentsPanelVisible || !m_notation) {
+        return;
+    }
+
+    m_selectionModel->clear();
+
+    std::vector<EngravingItem*> selectedElements = m_notation->interaction()->selection()->elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    QSet<ID> selectedPartIdSet;
+    for (const EngravingItem* element : selectedElements) {
+        if (!element->part()) {
+            continue;
+        }
+
+        selectedPartIdSet << element->part()->id();
+    }
+
+    for (const ID& selectedPartId : selectedPartIdSet) {
+        AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtId(selectedPartId);
+
+        if (item) {
+            m_selectionModel->select(createIndex(item->row(), 0, item), QItemSelectionModel::Select);
+        }
+    }
 }
 
 void InstrumentsPanelTreeModel::clear()
@@ -357,6 +366,19 @@ void InstrumentsPanelTreeModel::sortParts(notation::PartList& parts)
 
         return index1 < index2;
     });
+}
+
+void InstrumentsPanelTreeModel::setInstrumentsPanelVisible(bool visible)
+{
+    if (m_instrumentsPanelVisible == visible) {
+        return;
+    }
+
+    m_instrumentsPanelVisible = visible;
+
+    if (visible) {
+        updateSelectedRows();
+    }
 }
 
 void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
@@ -452,11 +474,17 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
 
     int sourceFirstRow = sourceRow;
     int sourceLastRow = sourceRow + count - 1;
-    int destinationRow = (sourceLastRow > destinationChild
-                          || sourceParentItem != destinationParentItem) ? destinationChild : destinationChild + 1;
+    int destinationRow = (sourceLastRow > destinationChild || sourceParentItem != destinationParentItem)
+                         ? destinationChild : destinationChild + 1;
+
+    m_activeDragIsStave = destinationParentItem != m_rootItem;
+
+    if (m_dragInProgress) {
+        m_activeDragMoveParams = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
+    }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow);
+    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
     updateRearrangementAvailability();
@@ -464,6 +492,31 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     setLoadingBlocked(false);
 
     return true;
+}
+
+void InstrumentsPanelTreeModel::startActiveDrag()
+{
+    m_dragInProgress = true;
+}
+
+void InstrumentsPanelTreeModel::endActiveDrag()
+{
+    setLoadingBlocked(true);
+
+    if (m_activeDragIsStave) {
+        m_notation->parts()->moveStaves(m_activeDragMoveParams.childIdListToMove,
+                                        m_activeDragMoveParams.destinationParentId,
+                                        m_activeDragMoveParams.insertMode);
+    } else {
+        m_notation->parts()->moveParts(m_activeDragMoveParams.childIdListToMove,
+                                       m_activeDragMoveParams.destinationParentId,
+                                       m_activeDragMoveParams.insertMode);
+    }
+
+    m_activeDragMoveParams = MoveParams();
+    m_dragInProgress = false;
+
+    setLoadingBlocked(false);
 }
 
 void InstrumentsPanelTreeModel::toggleVisibilityOfSelectedRows(bool visible)

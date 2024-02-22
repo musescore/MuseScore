@@ -133,7 +133,7 @@ QString NotationMeta::composer(const mu::engraving::Score* score)
 QString NotationMeta::poet(const mu::engraving::Score* score)
 {
     QString poet;
-    const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::POET);
+    const mu::engraving::Text* text = score->getText(mu::engraving::TextStyleType::LYRICIST);
     if (text) {
         poet = text->plainText();
     }
@@ -243,7 +243,7 @@ QJsonObject NotationMeta::typeDataJson(mu::engraving::Score* score)
         { "titles", TextStyleType::TITLE },
         { "subtitles", TextStyleType::SUBTITLE },
         { "composers", TextStyleType::COMPOSER },
-        { "poets", TextStyleType::POET }
+        { "poets", TextStyleType::LYRICIST }
     };
 
     for (auto nameType : namesTypesList) {

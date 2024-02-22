@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_SCORELAYOUT_STABLE_H
 #define MU_ENGRAVING_SCORELAYOUT_STABLE_H
 
-#include "layoutcontext.h"
+#include "types/fraction.h"
 
 namespace mu::engraving {
 class Score;
@@ -34,14 +34,6 @@ class ScoreLayout
 public:
 
     static void layoutRange(Score* score, const Fraction& st, const Fraction& et);
-
-private:
-    static void layoutLinear(LayoutContext& ctx);
-    static void layoutLinear(LayoutContext& ctx, bool layoutAll);
-    static void resetSystems(LayoutContext& ctx, bool layoutAll);
-    static void collectLinearSystem(LayoutContext& ctx);
-
-    static void doLayout(LayoutContext& ctx);
 };
 }
 

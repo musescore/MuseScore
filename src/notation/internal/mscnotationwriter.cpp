@@ -51,7 +51,7 @@ bool MscNotationWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MscNotationWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options&)
+mu::Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -63,16 +63,19 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, QIODevice& destinationDe
         return make_ret(Ret::Code::UnknownError);
     }
 
-    Buffer buf;
-
     MscWriter::Params params;
     params.mode = m_mode;
+    params.filePath = device.meta("file_path");
+    if (m_mode == MscIoMode::Dir) {
+        IF_ASSERT_FAILED(!params.filePath.empty()) {
+            return make_ret(Ret::Code::InternalError);
+        }
 
-    params.filePath = destinationDevice.property("path").toString();
-    if (m_mode != MscIoMode::Dir) {
-        params.device = &buf;
-    } else if (File::exists(params.filePath)) {
-        File::remove(params.filePath);
+        if (File::exists(params.filePath)) {
+            File::remove(params.filePath);
+        }
+    } else {
+        params.device = &device;
     }
 
     MscWriter msczWriter(params);
@@ -90,17 +93,10 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, QIODevice& destinationDe
         return Ret(Ret::Code::UnknownError);
     }
 
-    if (m_mode != MscIoMode::Dir) {
-        buf.open(io::IODevice::ReadOnly);
-        ByteArray ba = buf.readAll();
-        destinationDevice.write(reinterpret_cast<const char*>(ba.constData()), ba.size());
-        buf.close();
-    }
-
     return Ret(Ret::Code::Ok);
 }
 
-mu::Ret MscNotationWriter::writeList(const INotationPtrList&, QIODevice&, const Options&)
+mu::Ret MscNotationWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

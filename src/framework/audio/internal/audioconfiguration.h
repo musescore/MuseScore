@@ -22,16 +22,18 @@
 #ifndef MU_AUDIO_AUDIOCONFIGURATION_H
 #define MU_AUDIO_AUDIOCONFIGURATION_H
 
+#include "global/modularity/ioc.h"
+#include "global/io/ifilesystem.h"
+#include "global/iglobalconfiguration.h"
+
 #include "../iaudioconfiguration.h"
-#include "io/ifilesystem.h"
-#include "modularity/ioc.h"
-#include "iglobalconfiguration.h"
 
 namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<framework::IGlobalConfiguration> globalConfiguration;
+    Inject<io::IFileSystem> fileSystem;
+
 public:
     AudioConfiguration() = default;
 
@@ -56,6 +58,8 @@ public:
     unsigned int sampleRate() const override;
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
+
+    size_t minTrackCountForMultithreading() const override;
 
     // synthesizers
     AudioInputParams defaultAudioInputParams() const override;

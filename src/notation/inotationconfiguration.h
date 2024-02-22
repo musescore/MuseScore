@@ -149,6 +149,9 @@ public:
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
 
+    virtual bool warnGuitarBends() const = 0;
+    virtual void setWarnGuitarBends(bool value) = 0;
+
     virtual int delayBetweenNotesInRealTimeModeMilliseconds() const = 0;
     virtual void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) = 0;
 
@@ -166,6 +169,8 @@ public:
     virtual io::paths_t userScoreOrderListPaths() const = 0;
     virtual void setUserScoreOrderListPaths(const io::paths_t& paths) = 0;
 
+    virtual io::path_t stringTuningsPresetsPath() const = 0;
+
     virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
     virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;
 
@@ -177,6 +182,9 @@ public:
 
     virtual bool needToShowAddFiguredBassErrorMessage() const = 0;
     virtual void setNeedToShowAddFiguredBassErrorMessage(bool show) = 0;
+
+    virtual bool needToShowAddGuitarBendErrorMessage() const = 0;
+    virtual void setNeedToShowAddGuitarBendErrorMessage(bool show) = 0;
 
     virtual bool needToShowMScoreError(const std::string& errorKey) const = 0;
     virtual void setNeedToShowMScoreError(const std::string& errorKey, bool show) = 0;

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CHORD_H__
-#define __CHORD_H__
+#ifndef MU_ENGRAVING_CHORD_H
+#define MU_ENGRAVING_CHORD_H
 
 /**
  \file
@@ -50,11 +50,8 @@ class NoteEventList;
 class Stem;
 class StemSlash;
 class StretchedBend;
-class Tremolo;
-
-enum class TremoloChordType : char {
-    TremoloSingle, TremoloFirstNote, TremoloSecondNote
-};
+class TremoloTwoChord;
+class TremoloSingleChord;
 
 class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
 {
@@ -64,7 +61,6 @@ public:
     GraceNotesGroup(Chord* c);
 
     Chord* parent() const { return _parent; }
-    Shape shape() const override;
 
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
@@ -132,6 +128,7 @@ public:
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
     LedgerLine* ledgerLines() { return m_ledgerLines; }
+    const LedgerLine* ledgerLines() const { return m_ledgerLines; }
     void setLedgerLine(LedgerLine* l) { m_ledgerLines = l; }
     void addLedgerLines();
 
@@ -162,14 +159,27 @@ public:
     Stem* stem() const { return m_stem; }
     Arpeggio* arpeggio() const { return m_arpeggio; }
     void setArpeggio(Arpeggio* a) { m_arpeggio = a; }
-    Tremolo* tremolo() const { return m_tremolo; }
-    void setTremolo(Tremolo* t, bool applyLogic = true);
+
+    Arpeggio* spanArpeggio() const { return m_spanArpeggio; }
+    void setSpanArpeggio(Arpeggio* a) { m_spanArpeggio = a; }
+    void undoChangeSpanArpeggio(Arpeggio* a);
+
+    TremoloType tremoloType() const;
+    TremoloTwoChord* tremoloTwoChord() const;
+    TremoloSingleChord* tremoloSingleChord() const;
+
+    void setTremoloTwoChord(TremoloTwoChord* tr, bool applyLogic = true);
+    void setTremoloSingleChord(TremoloSingleChord* tr);
 
     ChordLine* chordLine() const;
-    bool endsGlissando() const { return m_endsGlissando; }
-    void setEndsGlissando(bool val) { m_endsGlissando = val; }
-    void updateEndsGlissando();
+    bool endsGlissandoOrGuitarBend() const { return m_endsGlissando; }
+    void setEndsGlissandoOrGuitarBend(bool val) { m_endsGlissando = val; }
+    void updateEndsGlissandoOrGuitarBend();
     StemSlash* stemSlash() const { return m_stemSlash; }
+    bool showStemSlash() const { return m_showStemSlash; }
+    void setShowStemSlashInAdvance();
+    void requestShowStemSlash(bool show);
+    void setShowStemSlash(bool show) { m_showStemSlash = show; }
     bool slash();
     void setSlash(bool flag, bool stemless);
     void removeMarkings(bool keepTremolo = false) override;
@@ -177,8 +187,8 @@ public:
     const std::vector<Chord*>& graceNotes() const { return m_graceNotes; }
     std::vector<Chord*>& graceNotes() { return m_graceNotes; }
 
-    GraceNotesGroup& graceNotesBefore() const;
-    GraceNotesGroup& graceNotesAfter() const;
+    GraceNotesGroup& graceNotesBefore(bool filterUnplayable = false) const;
+    GraceNotesGroup& graceNotesAfter(bool filterUnplayable = false) const;
 
     size_t graceIndex() const { return m_graceIndex; }
     void setGraceIndex(size_t val) { m_graceIndex = val; }
@@ -205,9 +215,16 @@ public:
     void cmdUpdateNotes(AccidentalState*);
 
     NoteType noteType() const { return m_noteType; }
-    void setNoteType(NoteType t) { m_noteType = t; }
+    void setNoteType(NoteType t);
     bool isGrace() const { return m_noteType != NoteType::NORMAL; }
     void toGraceAfter();
+
+    bool isPreBendOrGraceBendStart() const;
+    bool isGraceBendEnd() const;
+    bool preOrGraceBendSpacingExceptionInTab() const;
+
+    bool isTrillCueNote() const { return m_isTrillCueNote; }
+    void setIsTrillCueNote(bool v);
 
     void setTrack(track_idx_t val) override;
 
@@ -266,7 +283,6 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    Shape shape() const override;
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
@@ -294,9 +310,6 @@ public:
     double upPos()   const override;
     double downPos() const override;
     double centerX() const;
-
-    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
-    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
 
     double calcDefaultStemLength();
 
@@ -329,20 +342,30 @@ private:
     int calcMinStemLength();
     int calc4BeamsException(int stemLength) const;
 
+    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
+    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
+
     std::vector<Note*> m_notes;           // sorted to decreasing line step
     LedgerLine* m_ledgerLines = nullptr;  // single linked list
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;
-    StemSlash* m_stemSlash = nullptr;     // for acciacatura
+    StemSlash* m_stemSlash = nullptr;     // for grace notes
+    bool m_showStemSlash = false;
 
-    Arpeggio* m_arpeggio = nullptr;
-    Tremolo* m_tremolo = nullptr;
+    Arpeggio* m_arpeggio = nullptr;       // arpeggio which starts on the chord
+    Arpeggio* m_spanArpeggio = nullptr;   // arpeggio which spans over this chord
+
+    TremoloTwoChord* m_tremoloTwoChord = nullptr;
+    TremoloSingleChord* m_tremoloSingleChord = nullptr;
+
     bool m_endsGlissando = false;        // true if this chord is the ending point of a glissando (needed for layout)
     std::vector<Chord*> m_graceNotes;    // storage for all grace notes
     mutable GraceNotesGroup m_graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
     mutable GraceNotesGroup m_graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
     size_t m_graceIndex = 0;             // if this is a grace note, index in parent list
+
+    bool m_isTrillCueNote = false;
 
     DirectionV m_stemDirection = DirectionV::AUTO;
     NoteType m_noteType = NoteType::NORMAL; // mark grace notes: acciaccatura and appoggiatura

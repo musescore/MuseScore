@@ -178,6 +178,8 @@ private:
     bool startTextEditingAllowed() const;
     void updateTextCursorPosition();
 
+    EngravingItem* resolveStartPlayableElement() const;
+
     IControlledView* m_view = nullptr;
 
     QList<int> m_possibleZoomPercentages;
@@ -186,7 +188,8 @@ private:
     bool m_isCanvasDragged = false;
     bool m_tripleClickPending = false;
 
-    PointF m_beginPoint;
+    QPointF m_physicalBeginPoint;
+    PointF m_logicalBeginPoint;
 
     mu::engraving::EngravingItem* m_prevHitElement = nullptr;
     bool m_shouldTogglePopupOnLeftClickRelease = false;

@@ -99,6 +99,14 @@ TEST_F(Mei_Tests, mei_accid_02) {
     meiReadTest("accid-02");
 }
 
+TEST_F(Mei_Tests, mei_arpeg_01) {
+    meiReadTest("arpeg-01");
+}
+
+TEST_F(Mei_Tests, mei_artic_01) {
+    meiReadTest("artic-01");
+}
+
 TEST_F(Mei_Tests, mei_beam_01) {
     meiReadTest("beam-01");
 }
@@ -117,6 +125,10 @@ TEST_F(Mei_Tests, mei_breaks_01) {
 
 TEST_F(Mei_Tests, mei_breath_01) {
     meiReadTest("breath-01");
+}
+
+TEST_F(Mei_Tests, mei_btrem_01) {
+    meiReadTest("btrem-01");
 }
 
 TEST_F(Mei_Tests, mei_chord_label_01) {
@@ -151,6 +163,10 @@ TEST_F(Mei_Tests, mei_fermata_01) {
     meiReadTest("fermata-01");
 }
 
+TEST_F(Mei_Tests, mei_fig_bass_01) {
+    meiReadTest("fig-bass-01");
+}
+
 TEST_F(Mei_Tests, mei_gracenote_01) {
     meiReadTest("gracenote-01");
 }
@@ -173,6 +189,10 @@ TEST_F(Mei_Tests, mei_jump_02) {
 
 TEST_F(Mei_Tests, mei_key_signature_01) {
     meiReadTest("key-signature-01");
+}
+
+TEST_F(Mei_Tests, mei_label_01) {
+    meiReadTest("label-01");
 }
 
 TEST_F(Mei_Tests, mei_lyric_01) {
@@ -217,6 +237,10 @@ TEST_F(Mei_Tests, mei_page_head_01) {
 
 TEST_F(Mei_Tests, mei_page_head_02) {
     meiReadTest("page-head-02");
+}
+
+TEST_F(Mei_Tests, mei_pedal_01) {
+    meiReadTest("pedal-01");
 }
 
 TEST_F(Mei_Tests, mei_roman_numeral_01) {

@@ -39,7 +39,8 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
-#include "tremolo.h"
+
+#include "tremolotwochord.h"
 #include "tuplet.h"
 
 #include "log.h"
@@ -57,7 +58,7 @@ static const ElementStyle beamStyle {
 //---------------------------------------------------------
 
 Beam::Beam(System* parent)
-    : EngravingItem(ElementType::BEAM, parent)
+    : BeamBase(ElementType::BEAM, parent)
 {
     initElementStyle(&beamStyle);
 }
@@ -67,7 +68,7 @@ Beam::Beam(System* parent)
 //---------------------------------------------------------
 
 Beam::Beam(const Beam& b)
-    : EngravingItem(b)
+    : BeamBase(b)
 {
     m_elements     = b.m_elements;
     m_id           = b.m_id;
@@ -88,8 +89,8 @@ Beam::Beam(const Beam& b)
     m_maxMove          = b.m_maxMove;
     m_isGrace          = b.m_isGrace;
     m_cross            = b.m_cross;
+    m_fullCross        = b.m_fullCross;
     m_slope            = b.m_slope;
-    layoutInfo       = b.layoutInfo;
 }
 
 //---------------------------------------------------------
@@ -102,10 +103,13 @@ Beam::~Beam()
     // delete all references from chords
     //
     for (ChordRest* cr : m_elements) {
-        cr->setBeam(0);
+        cr->setBeam(nullptr);
     }
-    DeleteAll(m_beamSegments);
+
+    clearBeamSegments();
+
     DeleteAll(m_fragments);
+    m_fragments.clear();
 }
 
 //---------------------------------------------------------
@@ -411,7 +415,7 @@ void Beam::setBeamDirection(DirectionV d)
 
     for (ChordRest* e : elements()) {
         if (e->isChord()) {
-            toChord(e)->setStemDirection(d);
+            toChord(e)->undoChangeProperty(Pid::STEM_DIRECTION, d);
         }
     }
 }
@@ -444,8 +448,8 @@ void Beam::reset()
         undoChangeProperty(Pid::USER_MODIFIED, false);
     }
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
-    resetProperty(Pid::BEAM_NO_SLOPE);
-    setGenerated(true);
+    undoResetProperty(Pid::BEAM_NO_SLOPE);
+    undoChangeProperty(Pid::GENERATED, true);
 }
 
 //---------------------------------------------------------
@@ -601,6 +605,15 @@ PropertyValue Beam::getProperty(Pid propertyId) const
     case Pid::USER_MODIFIED:  return userModified();
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
     case Pid::BEAM_NO_SLOPE:  return noSlope();
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        for (ChordRest* chordRest : elements()) {
+            bool linked = chordRest->getProperty(propertyId).toBool();
+            if (!linked) {
+                return false;
+            }
+        }
+        return true;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -633,6 +646,17 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::BEAM_NO_SLOPE:
         setNoSlope(v.toBool());
         break;
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (v.toBool() == true) {
+            for (ChordRest* chordRest : elements()) {
+                // when re-linking, re-link all the chords
+                chordRest->setProperty(propertyId, v);
+            }
+            resetProperty(Pid::STEM_DIRECTION);
+            break;
+        }
+    // fall through
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
@@ -846,25 +870,43 @@ bool Beam::hasAllRests()
     return true;
 }
 
-Shape Beam::shape() const
+void Beam::clearBeamSegments()
 {
-    Shape shape;
-    for (BeamSegment* beamSegment : m_beamSegments) {
-        shape.add(beamSegment->shape());
+    for (ChordRest* chordRest : m_elements) {
+        BeamSegment* chordRestBeamlet = chordRest->beamlet();
+        if (!chordRestBeamlet) {
+            continue;
+        }
+
+        for (BeamSegment* segment : m_beamSegments) {
+            if (segment == chordRestBeamlet) {
+                chordRest->setBeamlet(nullptr);
+            }
+        }
     }
-    return shape;
+
+    DeleteAll(m_beamSegments);
+    m_beamSegments.clear();
 }
 
 //-------------------------------------------------------
 // BEAM SEGMENT CLASS
 //-------------------------------------------------------
 
+BeamSegment::BeamSegment(EngravingItem* b)
+    : parentElement(b)
+{
+    DO_ASSERT(parentElement->isType(ElementType::BEAM) || parentElement->isType(ElementType::TREMOLO_TWOCHORD));
+}
+
 Shape BeamSegment::shape() const
 {
     Shape shape;
     PointF startPoint = line.p1();
     PointF endPoint = line.p2();
-    double _beamWidth = parentElement->isBeam() ? toBeam(parentElement)->m_beamWidth : toTremolo(parentElement)->beamWidth();
+    double _beamWidth = parentElement->isBeam()
+                        ? item_cast<const Beam*>(parentElement)->m_beamWidth
+                        : item_cast<const TremoloTwoChord*>(parentElement)->ldata()->beamWidth;
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

@@ -20,24 +20,26 @@
 
 set(MODULE global)
 
-include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/haw_logger/logger/logger.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/haw_profiler/src/profiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler/profiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_modularity/modularity/modularity.cmake)
 
 set(MODULE_SRC
     ${MODULARITY_SRC}
     ${ASYNC_SRC}
-    ${HAW_LOGGER_SRC}
-    ${HAW_PROFILER_SRC}
+    ${KORS_LOGGER_SRC}
+    ${KORS_PROFILER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
     ${CMAKE_CURRENT_LIST_DIR}/iglobalconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/log.h
     ${CMAKE_CURRENT_LIST_DIR}/logstream.h
+    ${CMAKE_CURRENT_LIST_DIR}/logger.h
     ${CMAKE_CURRENT_LIST_DIR}/logremover.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logremover.h
+    ${CMAKE_CURRENT_LIST_DIR}/profiler.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
     ${CMAKE_CURRENT_LIST_DIR}/muversion.cpp
@@ -54,6 +56,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/progress.h
     ${CMAKE_CURRENT_LIST_DIR}/utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/interpolation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/interpolation.h
     ${CMAKE_CURRENT_LIST_DIR}/defer.h
     ${CMAKE_CURRENT_LIST_DIR}/containers.h
     ${CMAKE_CURRENT_LIST_DIR}/icryptographichash.h
@@ -61,6 +65,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/allocator.h
     ${CMAKE_CURRENT_LIST_DIR}/dlib.h
     ${CMAKE_CURRENT_LIST_DIR}/iprocess.h
+    ${CMAKE_CURRENT_LIST_DIR}/isysteminfo.h
+
+    ${KORS_MODULARITY_SRC}
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/ioc.h
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/imoduleinterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/modularity/imodulesetup.h
 
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
@@ -85,6 +95,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/mnemonicstring.h
     ${CMAKE_CURRENT_LIST_DIR}/types/version.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/version.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/number.h
 
     ${CMAKE_CURRENT_LIST_DIR}/io/ioenums.h
     ${CMAKE_CURRENT_LIST_DIR}/io/path.cpp
@@ -106,8 +117,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmlstreamwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/thirdparty//tinyxml/tinyxml2.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/tinyxml/tinyxml2.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/tinyxml/tinyxml2.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/tinyxml/mu_patch.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipreader.h
     ${CMAKE_CURRENT_LIST_DIR}/serialization/zipwriter.cpp
@@ -123,6 +135,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/serialization/xmldom.h
 
     ${CMAKE_CURRENT_LIST_DIR}/concurrency/taskscheduler.h
+    ${CMAKE_CURRENT_LIST_DIR}/concurrency/concurrent.h
 )
 
 if (GLOBAL_NO_INTERNAL)
@@ -146,6 +159,8 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/invoker.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/process.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/process.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/systeminfo.h
 
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.cpp
         ${CMAKE_CURRENT_LIST_DIR}/io/internal/filesystem.h
@@ -216,6 +231,6 @@ endif()
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_GLOBAL_TESTS)
     add_subdirectory(tests)
 endif()

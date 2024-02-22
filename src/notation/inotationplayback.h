@@ -29,7 +29,6 @@
 #include "mpe/events.h"
 #include "engraving/types/types.h"
 
-#include "internal/inotationundostack.h"
 #include "notationtypes.h"
 
 namespace mu::notation {
@@ -38,7 +37,7 @@ class INotationPlayback
 public:
     virtual ~INotationPlayback() = default;
 
-    virtual void init(INotationUndoStackPtr undoStack) = 0;
+    virtual void init() = 0;
 
     virtual const engraving::InstrumentTrackId& metronomeTrackId() const = 0;
     virtual engraving::InstrumentTrackId chordSymbolsTrackId(const ID& partId) const = 0;
@@ -69,7 +68,7 @@ public:
     };
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) = 0;
-    virtual void setLoopBoundariesVisible(bool visible) = 0;
+    virtual void setLoopBoundariesEnabled(bool enabled) = 0;
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual async::Notification loopBoundariesChanged() const = 0;
 
@@ -79,6 +78,10 @@ public:
 
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
+
+    virtual void addSoundFlag(mu::engraving::StaffText* staffText) = 0;
+    virtual void addSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
+    virtual void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) = 0;
 };
 
 using INotationPlaybackPtr = std::shared_ptr<INotationPlayback>;

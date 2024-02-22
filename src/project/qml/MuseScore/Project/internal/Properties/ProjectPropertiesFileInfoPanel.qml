@@ -22,23 +22,26 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Project 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 ColumnLayout {
     id: root
 
-    Layout.fillWidth: true
+    required property ProjectPropertiesModel propertiesModel
 
-    spacing: 4
-
-    property int propertyNameWidth: 110
+    property int propertyNameWidth: 160
+    property int propertyRowHorizontalSpacing: 8
+    property int propertyRowRightMargin: 0
 
     property NavigationPanel navigationPanel: null
     property int navigationColumnEnd: apiLevelProperty.navigationColumnEnd
 
+    spacing: 8
+
     RowLayout {
-        spacing: 8
+        spacing: root.propertyRowHorizontalSpacing
 
         PropertyItem {
             id: filePathProperty
@@ -46,7 +49,7 @@ ColumnLayout {
             propertyNameWidth: root.propertyNameWidth
             index: 0
             propertyName: qsTrc("project/properties", "File path:")
-            propertyValue: projectPropertiesModel.filePath
+            propertyValue: root.propertiesModel.filePath
             isFileInfoPanelProperty: true
             valueFillWidth: true
 
@@ -66,21 +69,17 @@ ColumnLayout {
             navigation.column: filePathProperty.navigationColumnEnd + 1
             accessible.name: "Open file location"
 
-            onClicked: projectPropertiesModel.openFileLocation()
+            onClicked: root.propertiesModel.openFileLocation()
         }
-
-        Item { width: 8 }
     }
 
     RowLayout {
-        Layout.topMargin: 4
-
-        spacing: 8
+        spacing: root.propertyRowHorizontalSpacing
 
         PropertyItem {
             index: 2
             propertyName: qsTrc("project/properties", "MuseScore version:")
-            propertyValue: projectPropertiesModel.version
+            propertyValue: root.propertiesModel.version
             isFileInfoPanelProperty: true
 
             navigationPanel: root.navigationPanel
@@ -89,7 +88,7 @@ ColumnLayout {
         PropertyItem {
             index: 3
             propertyName: qsTrc("project/properties", "Revision:")
-            propertyValue: projectPropertiesModel.revision
+            propertyValue: root.propertiesModel.revision
             isFileInfoPanelProperty: true
 
             Layout.leftMargin: 32
@@ -103,7 +102,7 @@ ColumnLayout {
 
             index: 4
             propertyName: qsTrc("project/properties", "API-Level:")
-            propertyValue: projectPropertiesModel.apiLevel
+            propertyValue: root.propertiesModel.apiLevel
             isFileInfoPanelProperty: true
 
             navigationPanel: root.navigationPanel

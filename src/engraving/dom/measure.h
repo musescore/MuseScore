@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MEASURE_H__
-#define __MEASURE_H__
+#ifndef MU_ENGRAVING_MEASURE_H
+#define MU_ENGRAVING_MEASURE_H
 
 /**
  \file
@@ -284,6 +284,7 @@ public:
     bool isFinalMeasureOfSection() const;
     bool isAnacrusis() const;
     bool isFirstInSystem() const;
+    bool isFirstInSection() const;
 
     bool breakMultiMeasureRest() const { return m_breakMultiMeasureRest; }
     void setBreakMultiMeasureRest(bool val) { m_breakMultiMeasureRest = val; }
@@ -299,6 +300,9 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+    void undoChangeProperty(Pid id, const PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
@@ -347,23 +351,12 @@ public:
     // parameter, meaning it can't be any narrower than it currently is.
     void setWidthLocked(bool b) { m_isWidthLocked = b; }
 
-    //! puts segments on the positions according to their length
-    void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
-
-    double computeFirstSegmentXPosition(Segment* segment);
-
-    void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
-
-    void calculateQuantumCell(const std::vector<int>& visibleParts);
-
-    Fraction quantumOfSegmentCell() const;
-
     double squeezableSpace() const { return m_squeezableSpace; }
     void setSqueezableSpace(double val) { m_squeezableSpace = val; }
 
     void respaceSegments();
 
-    void spaceRightAlignedSegments();
+    bool canAddStringTunings(staff_idx_t staffIdx) const;
 
 private:
 
@@ -403,8 +396,6 @@ private:
 
     MeasureNumberMode m_noMode = MeasureNumberMode::AUTO;
     bool m_breakMultiMeasureRest = false;
-
-    Fraction m_quantumOfSegmentCell = { 1, 16 };
 
     double m_layoutStretch = 1.0;
     bool m_isWidthLocked = false;

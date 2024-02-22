@@ -23,26 +23,22 @@
 #ifndef MU_AUDIO_FLUIDSYNTH_H
 #define MU_AUDIO_FLUIDSYNTH_H
 
-#include <cstdint>
-#include <functional>
-#include <list>
 #include <memory>
 #include <optional>
-#include <unordered_set>
 #include <vector>
 
-#include "modularity/ioc.h"
+#include "global/modularity/ioc.h"
 #include "midi/imidioutport.h"
 
 #include "../../abstractsynthesizer.h"
 #include "fluidsequencer.h"
-#include "soundmapping.h"
 
 namespace mu::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
-    INJECT(midi::IMidiOutPort, midiOutPort)
+    Inject<midi::IMidiOutPort> midiOutPort;
+
 public:
     FluidSynth(const audio::AudioSourceParams& params);
 

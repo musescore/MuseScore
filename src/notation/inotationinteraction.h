@@ -44,8 +44,9 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
-    virtual void showShadowNote(const PointF& pos) = 0;
+    virtual bool showShadowNote(const PointF& pos) = 0;
     virtual void hideShadowNote() = 0;
+    virtual RectF shadowNoteRect() const = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;
@@ -58,6 +59,11 @@ public:
     {
         notation::EngravingItem* element = nullptr;
         notation::Staff* staff = nullptr;
+
+        bool operator ==(const HitElementContext& other) const
+        {
+            return element == other.element && staff == other.staff;
+        }
     };
 
     virtual const HitElementContext& hitElementContext() const = 0;
@@ -137,6 +143,7 @@ public:
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
     virtual async::Channel<TextBase*> textEditingEnded() const = 0;
+    virtual async::Channel<TextBase*> textAdded() const = 0;
 
     // Display
     virtual async::Channel<ScoreConfigType> scoreConfigChanged() const = 0;
@@ -160,7 +167,7 @@ public:
 
     virtual Ret canAddBoxes() const = 0;
     virtual void addBoxes(BoxType boxType, int count, AddBoxesTarget target) = 0;
-    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex) = 0;
+    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool insertAfter) = 0;
 
     virtual void copySelection() = 0;
     virtual mu::Ret repeatSelection() = 0;
@@ -239,6 +246,9 @@ public:
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
 
+    virtual Ret canAddGuitarBend() const = 0;
+    virtual void addGuitarBend(GuitarBendType bendType) = 0;
+
     // Text navigation
     virtual void navigateToLyrics(MoveDirection direction, bool moveOnly = false) = 0;
     virtual void navigateToLyricsVerse(MoveDirection direction) = 0;
@@ -260,6 +270,8 @@ public:
     virtual void toggleItalic() = 0;
     virtual void toggleUnderline() = 0;
     virtual void toggleStrike() = 0;
+    virtual void toggleSubScript() = 0;
+    virtual void toggleSuperScript() = 0;
 
     virtual bool canInsertClef(mu::engraving::ClefType) const = 0;
     virtual void insertClef(mu::engraving::ClefType) = 0;

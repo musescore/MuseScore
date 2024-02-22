@@ -85,6 +85,9 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
 
+    bool canBeExcludedFromOtherParts() const override { return true; }
+    void manageExclusionFromParts(bool exclude) override;
+
 private:
     Spatium m_boxWidth;         // only valid for HBox
     Spatium m_boxHeight;        // only valid for VBox
@@ -153,6 +156,7 @@ public:
     double maxHeight() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
+    PropertyValue propertyDefault(Pid) const override;
 
     void startEditDrag(EditData&) override;
 
@@ -195,6 +199,7 @@ public:
     ~TBox() override;
 
     Text* text() const { return m_text; }
+    void resetText(Text* text);
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
@@ -206,6 +211,8 @@ public:
     EngravingItem* drop(EditData&) override;
     void add(EngravingItem* e) override;
     void remove(EngravingItem* el) override;
+
+    PropertyValue propertyDefault(Pid) const override;
 
     String accessibleExtraInfo() const override;
 

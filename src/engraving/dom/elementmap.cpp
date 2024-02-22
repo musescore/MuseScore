@@ -43,7 +43,7 @@ void ElementMap::add(EngravingItem* o, EngravingItem* n)
 
 Tuplet* TupletMap::findNew(Tuplet* o)
 {
-    for (const Tuplet2& t2 : map) {
+    for (const Tuplet2& t2 : m_map) {
         if (t2.o == o) {
             return t2.n;
         }

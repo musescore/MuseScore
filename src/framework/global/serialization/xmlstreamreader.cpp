@@ -23,6 +23,8 @@
 
 #include <cstring>
 
+#include "global/types/string.h"
+
 #include "thirdparty/tinyxml/tinyxml2.h"
 
 #include "log.h"
@@ -71,15 +73,43 @@ XmlStreamReader::~XmlStreamReader()
     delete m_xml;
 }
 
-void XmlStreamReader::setData(const ByteArray& data)
+void XmlStreamReader::setData(const ByteArray& data_)
 {
     m_xml->doc.Clear();
-    m_xml->err = m_xml->doc.Parse(reinterpret_cast<const char*>(data.constData()), data.size());
-    m_token = m_xml->err == XML_SUCCESS ? TokenType::NoToken : TokenType::Invalid;
     m_xml->customErr.clear();
+    m_token = TokenType::Invalid;
 
-    if (m_xml->err != XML_SUCCESS) {
-        LOGE() << errorString();
+    if (data_.size() < 4) {
+        m_xml->err = XML_ERROR_EMPTY_DOCUMENT;
+        LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
+        return;
+    }
+
+    UtfCodec::Encoding enc = UtfCodec::xmlEncoding(data_);
+    if (enc == UtfCodec::Encoding::Unknown) {
+        m_xml->err = XML_CAN_NOT_CONVERT_TEXT;
+        LOGE() << "unknown encoding";
+        return;
+    }
+
+    if (enc == UtfCodec::Encoding::UTF_16BE) {
+        m_xml->err = XML_CAN_NOT_CONVERT_TEXT;
+        LOGE() << "unsupported encoding UTF-16BE";
+        return;
+    }
+
+    ByteArray data = data_; // no copy, implicit sharing
+    if (enc == UtfCodec::Encoding::UTF_16LE) {
+        String u16 = String::fromUtf16LE(data_);
+        data = u16.toUtf8();
+    }
+
+    m_xml->err = m_xml->doc.Parse(reinterpret_cast<const char*>(data.constData()), data.size());
+
+    if (m_xml->err == XML_SUCCESS) {
+        m_token = TokenType::NoToken;
+    } else {
+        LOGE() << m_xml->doc.ErrorIDToName(m_xml->err);
     }
 }
 
@@ -185,8 +215,8 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
         StringList list = val.split(' ');
         if (list.size() == 3) {
             String name = list.at(1);
-            String val = list.at(2);
-            m_entities[u'&' + name + u';'] = val.mid(1, val.size() - 2);
+            String val2 = list.at(2);
+            m_entities[u'&' + name + u';'] = val2.mid(1, val2.size() - 2);
         } else {
             LOGW() << "unknown ENTITY: " << val;
         }

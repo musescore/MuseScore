@@ -27,11 +27,13 @@
 #include "actionicon.h"
 #include "factory.h"
 #include "layoutbreak.h"
+#include "masterscore.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
 #include "system.h"
 #include "text.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -99,7 +101,7 @@ void Box::editDrag(EditData& ed)
             int n = lrint(m_boxHeight.val() / vRaster);
             m_boxHeight = Spatium(vRaster * n);
         }
-        mutLayoutData()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
+        mutldata()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
         system()->setHeight(height());
         triggerLayout();
     } else {
@@ -154,7 +156,7 @@ RectF Box::contentRect() const
     RectF result;
 
     for (const EngravingItem* element : el()) {
-        result = result.united(element->layoutData()->bbox());
+        result = result.united(element->ldata()->bbox());
     }
 
     return result;
@@ -286,7 +288,7 @@ HBox::HBox(System* parent)
     : Box(ElementType::HBOX, parent)
 {
     initElementStyle(&hBoxStyle);
-    setBoxWidth(Spatium(5.0));
+    resetProperty(Pid::BOX_WIDTH);
 }
 
 //---------------------------------------------------------
@@ -385,16 +387,16 @@ EngravingItem* Box::drop(EditData& data)
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::VFRAME:
-            score()->insertMeasure(ElementType::VBOX, this);
+            score()->insertBox(ElementType::VBOX, this);
             break;
         case ActionIconType::TFRAME:
-            score()->insertMeasure(ElementType::TBOX, this);
+            score()->insertBox(ElementType::TBOX, this);
             break;
         case ActionIconType::FFRAME:
-            score()->insertMeasure(ElementType::FBOX, this);
+            score()->insertBox(ElementType::FBOX, this);
             break;
         case ActionIconType::HFRAME:
-            score()->insertMeasure(ElementType::HBOX, this);
+            score()->insertBox(ElementType::HBOX, this);
             break;
         case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
@@ -414,6 +416,90 @@ EngravingItem* Box::drop(EditData& data)
         return 0;
     }
     return 0;
+}
+
+void Box::manageExclusionFromParts(bool exclude)
+{
+    // manage Layout Breaks - remove old ones first
+    LayoutBreak* sectionBreak = sectionBreakElement();
+    if (sectionBreak) {
+        toEngravingItem(sectionBreak)->manageExclusionFromParts(true);
+    }
+
+    bool titleFrame = this == score()->first() && type() == ElementType::VBOX;
+    if (exclude) {
+        const std::list<EngravingObject*> links = linkList();
+        for (EngravingObject* linkedObject : links) {
+            // Only remove title frame from score
+            if (linkedObject->score() == score() || (!this->score()->isMaster() && titleFrame && !linkedObject->score()->isMaster())) {
+                continue;
+            }
+            EngravingItem* linkedItem = toEngravingItem(linkedObject);
+            if (linkedItem->selected()) {
+                linkedItem->score()->deselect(linkedItem);
+            }
+            linkedItem->score()->undoRemoveElement(linkedItem, false);
+            linkedItem->undoUnlink();
+        }
+
+        // manage Layout Breaks - there are no linked boxes, so add linked Line Breaks to previous measure
+        if (sectionBreak && !titleFrame) {
+            if (MeasureBase* prevMeasure = this->prevMeasure()) {
+                for (Score* score : masterScore()->scoreList()) {
+                    if (score == this->score()) {
+                        continue;
+                    }
+                    if (MeasureBase* localPrevMeasure = score->tick2measure(prevMeasure->tick())) {
+                        EngravingItem* newSectionBreak = sectionBreak->linkedClone();
+                        newSectionBreak->setScore(score);
+                        newSectionBreak->setParent(localPrevMeasure);
+                        score->doUndoAddElement(newSectionBreak);
+                    }
+                }
+            }
+        }
+    } else {
+        for (Score* score : masterScore()->scoreList()) {
+            if (score == this->score() || (titleFrame && !this->score()->isMaster() && !score->isMaster())) {
+                continue;
+            }
+
+            MeasureBase* newMB = next() ? next()->getInScore(score, true) : nullptr;
+            Score::InsertMeasureOptions options;
+            options.cloneBoxToAllParts = false;
+            MeasureBase* newFrame = score->insertBox(type(), newMB, options);
+            newFrame->setExcludeFromOtherParts(false);
+
+            for (EngravingItem* item : el()) {
+                // Don't add instrument name from current part
+                if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
+                    continue;
+                }
+                // add frame items (Layout Break, Title, ...)
+                newFrame->add(item->linkedClone());
+            }
+
+            if (isTBox()) {
+                Text* thisText = toTBox(this)->text();
+                Text* newText = toText(thisText->linkedClone());
+                toTBox(newFrame)->resetText(newText);
+            }
+
+            if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
+                // Title frame - add part name
+                String partLabel = score->name();
+                if (!partLabel.empty()) {
+                    Text* txt = Factory::createText(newFrame, TextStyleType::INSTRUMENT_EXCERPT);
+                    txt->setPlainText(partLabel);
+                    newFrame->add(txt);
+
+                    score->setMetaTag(u"partName", partLabel);
+                }
+            }
+
+            newFrame->linkTo(this);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -488,6 +574,8 @@ PropertyValue HBox::propertyDefault(Pid id) const
     switch (id) {
     case Pid::CREATE_SYSTEM_HEADER:
         return true;
+    case Pid::BOX_WIDTH:
+        return Spatium(5.0);
     default:
         return Box::propertyDefault(id);
     }
@@ -501,7 +589,7 @@ VBox::VBox(const ElementType& type, System* parent)
     : Box(type, parent)
 {
     initElementStyle(&boxStyle);
-    setBoxHeight(Spatium(10.0));
+    resetProperty(Pid::BOX_HEIGHT);
     setLineBreak(true);
 }
 
@@ -527,6 +615,20 @@ PropertyValue VBox::getProperty(Pid propertyId) const
         return isAutoSizeEnabled();
     default:
         return Box::getProperty(propertyId);
+    }
+}
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+PropertyValue VBox::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::BOX_HEIGHT:
+        return Spatium(10.0);
+    default:
+        return Box::propertyDefault(id);
     }
 }
 
@@ -569,7 +671,7 @@ void FBox::add(EngravingItem* e)
 TBox::TBox(System* parent)
     : VBox(ElementType::TBOX, parent)
 {
-    setBoxHeight(Spatium(1));
+    resetProperty(Pid::BOX_HEIGHT);
     m_text  = Factory::createText(this, TextStyleType::FRAME);
     m_text->setLayoutToParentWidth(true);
     m_text->setParent(this);
@@ -584,6 +686,15 @@ TBox::TBox(const TBox& tbox)
 TBox::~TBox()
 {
     delete m_text;
+}
+
+void TBox::resetText(Text* text)
+{
+    if (m_text) {
+        delete m_text;
+    }
+    m_text = text;
+    text->setParent(this);
 }
 
 //---------------------------------------------------------
@@ -638,6 +749,20 @@ void TBox::remove(EngravingItem* el)
         el->removed();
     } else {
         VBox::remove(el);
+    }
+}
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+PropertyValue TBox::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::BOX_HEIGHT:
+        return Spatium(1);
+    default:
+        return VBox::propertyDefault(id);
     }
 }
 

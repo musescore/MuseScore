@@ -393,7 +393,7 @@ void TitleBar::onFloatClicked()
             // Case 2: Multiple dockwidgets are tabbed together and floating
             // TODO: Just reuse the whole frame and put it back. The frame currently doesn't remember the position in the main window
             // so use an hack for now
-            for (auto dock : qAsConst(dockWidgets)) {
+            for (auto dock : std::as_const(dockWidgets)) {
                 dock->setFloating(true);
                 dock->setFloating(false);
             }

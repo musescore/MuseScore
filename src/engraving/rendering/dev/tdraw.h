@@ -130,6 +130,7 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class Sticking;
+class StringTunings;
 class StretchedBend;
 
 class BSymbol;
@@ -138,6 +139,7 @@ class FSymbol;
 
 class SystemDivider;
 class SystemText;
+class SoundFlag;
 
 class TabDurationSymbol;
 class TempoText;
@@ -149,7 +151,8 @@ class TextLineBase;
 class TextLineBaseSegment;
 class Tie;
 class TimeSig;
-class Tremolo;
+class TremoloSingleChord;
+class TremoloTwoChord;
 class TremoloBar;
 class TrillSegment;
 class TripletFeel;
@@ -162,6 +165,12 @@ class Volta;
 class VoltaSegment;
 
 class WhammyBarSegment;
+
+// dev
+class System;
+class Measure;
+class Segment;
+class Chord;
 }
 
 namespace mu::engraving::rendering::dev {
@@ -208,6 +217,8 @@ private:
 
     static void draw(const GlissandoSegment* item, draw::Painter* painter);
     static void draw(const GradualTempoChangeSegment* item, draw::Painter* painter);
+    static void draw(const GuitarBendSegment* item, draw::Painter* painter);
+    static void draw(const GuitarBendHoldSegment* item, draw::Painter* painter);
 
     static void draw(const HairpinSegment* item, draw::Painter* painter);
     static void draw(const HarpPedalDiagram* item, draw::Painter* painter);
@@ -263,11 +274,13 @@ private:
     static void draw(const Stem* item, draw::Painter* painter);
     static void draw(const StemSlash* item, draw::Painter* painter);
     static void draw(const Sticking* item, draw::Painter* painter);
+    static void draw(const StringTunings* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
     static void draw(const Symbol* item, draw::Painter* painter);
     static void draw(const FSymbol* item, draw::Painter* painter);
     static void draw(const SystemDivider* item, draw::Painter* painter);
     static void draw(const SystemText* item, draw::Painter* painter);
+    static void draw(const SoundFlag* item, draw::Painter* painter);
 
     static void draw(const TabDurationSymbol* item, draw::Painter* painter);
     static void draw(const TempoText* item, draw::Painter* painter);
@@ -275,7 +288,8 @@ private:
     static void draw(const TextLineSegment* item, draw::Painter* painter);
     static void draw(const TieSegment* item, draw::Painter* painter);
     static void draw(const TimeSig* item, draw::Painter* painter);
-    static void draw(const Tremolo* item, draw::Painter* painter);
+    static void draw(const TremoloSingleChord* item, draw::Painter* painter);
+    static void draw(const TremoloTwoChord* item, draw::Painter* painter);
     static void draw(const TremoloBar* item, draw::Painter* painter);
     static void draw(const TrillSegment* item, draw::Painter* painter);
     static void draw(const TripletFeel* item, draw::Painter* painter);
@@ -288,6 +302,12 @@ private:
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
+
+    // dev
+    static void draw(const System* item, draw::Painter* painter);
+    static void draw(const Measure* item, draw::Painter* painter);
+    static void draw(const Segment* item, draw::Painter* painter);
+    static void draw(const Chord* item, draw::Painter* painter);
 };
 }
 

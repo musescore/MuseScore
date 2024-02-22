@@ -40,10 +40,14 @@ class SoundProfilesRepository : public ISoundProfilesRepository, public async::A
 public:
     SoundProfilesRepository() = default;
 
+    void init();
+
     void refresh() override;
 
     const SoundProfile& profile(const SoundProfileName& name) const override;
+    bool containsProfile(const SoundProfileName& name) const override;
     const SoundProfilesMap& availableProfiles() const override;
+
     void addProfile(const SoundProfile& profile) override;
     void removeProfile(const SoundProfileName& name) override;
 

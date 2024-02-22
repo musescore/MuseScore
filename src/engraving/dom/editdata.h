@@ -230,15 +230,12 @@ class MuseScoreView;
 class EngravingItem;
 class EditData
 {
-    std::list<std::shared_ptr<ElementEditData> > data;
-    MuseScoreView* view_ { 0 };
-
 public:
-    MuseScoreView* view() const { return view_; }
+    MuseScoreView* view() const { return m_view; }
 
     std::vector<RectF> grip;
-    int grips                        { 0 };                 // number of grips
-    Grip curGrip                     { Grip::NO_GRIP };
+    int grips = 0;                 // number of grips
+    Grip curGrip = Grip::NO_GRIP;
 
     PointF pos;
     PointF startMove;
@@ -248,23 +245,23 @@ public:
     PointF delta;               ///< This property is deprecated, use evtDelta or moveDelta instead. In normal drag equals to moveDelta, in edit drag - to evtDelta
     PointF evtDelta;            ///< Mouse offset for the last mouse move event
     PointF moveDelta;           ///< Mouse offset from the start of mouse move
-    bool hRaster                     { false };
-    bool vRaster                     { false };
+    bool hRaster = false;
+    bool vRaster = false;
 
-    int key                          { 0 };
+    int key = 0;
     KeyboardModifiers modifiers  { /*0*/ };   // '0' initialized via default constructor, doing it here too results in compiler warning with Qt 5.15
     String s;
     String preeditString;
 
-    MouseButtons buttons         { NoButton };
+    MouseButtons buttons = NoButton;
 
     // drop data:
     PointF dragOffset;
-    EngravingItem* element                 { 0 };
-    EngravingItem* dropElement             { 0 };
+    EngravingItem* element = nullptr;
+    EngravingItem* dropElement = nullptr;
 
     EditData(MuseScoreView* v = nullptr)
-        : view_(v) {}
+        : m_view(v) {}
 
     void clear();
 
@@ -273,6 +270,11 @@ public:
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & ShiftModifier; }
     bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
+    bool hasCurrentGrip() { return curGrip != Grip::NO_GRIP; }
+
+private:
+    std::list<std::shared_ptr<ElementEditData> > m_data;
+    MuseScoreView* m_view = nullptr;
 };
 }
 

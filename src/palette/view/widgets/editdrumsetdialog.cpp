@@ -282,15 +282,13 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 EditDrumsetDialog::EditDrumsetDialog(const EditDrumsetDialog& other)
     : QDialog(other.parentWidget())
 {
 }
 
-int EditDrumsetDialog::static_metaTypeId()
-{
-    return QMetaType::type(EDIT_DRUMSET_DIALOG_NAME.toStdString().c_str());
-}
+#endif
 
 //---------------------------------------------------------
 //   customGboxToggled
@@ -629,10 +627,12 @@ void EditDrumsetDialog::updateExample()
     note->setPos(0.0, gpaletteScore->style().spatium() * .5 * line);
     note->setHeadType(NoteHeadType::HEAD_QUARTER);
     note->setHeadGroup(nh);
-    note->mutLayoutData()->cachedNoteheadSym = SymNames::symIdByName(quarterCmb->currentData().toString());
+    note->mutldata()->cachedNoteheadSym.set_value(SymNames::symIdByName(quarterCmb->currentData().toString()));
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
+    stem->setParent(chord.get());
     stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * gpaletteScore->style().spatium()));
+    engravingRenderer()->layoutItem(stem);
     chord->add(stem);
     drumNote->appendElement(chord, m_editedDrumset.translatedName(pitch));
 }

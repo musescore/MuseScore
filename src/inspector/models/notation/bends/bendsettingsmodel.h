@@ -24,14 +24,19 @@
 
 #include "models/abstractinspectormodel.h"
 
+#include "types/bendtypes.h"
+
 namespace mu::inspector {
 class BendSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * bendType READ bendType CONSTANT)
-    Q_PROPERTY(PropertyItem * bendCurve READ bendCurve CONSTANT)
-    Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
+    Q_PROPERTY(PropertyItem * bendDirection READ bendDirection CONSTANT)
+    Q_PROPERTY(PropertyItem * showHoldLine READ showHoldLine CONSTANT)
+    Q_PROPERTY(bool isShowHoldLineAvailable READ isShowHoldLineAvailable NOTIFY isShowHoldLineAvailableChanged)
+
+    Q_PROPERTY(bool isBendCurveEnabled READ isBendCurveEnabled NOTIFY isBendCurveEnabledChanged)
+    Q_PROPERTY(QVariantList bendCurve READ bendCurve WRITE setBendCurve NOTIFY bendCurveChanged)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
 
@@ -43,19 +48,41 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    PropertyItem* bendType() const;
-    PropertyItem* bendCurve() const;
-    PropertyItem* lineThickness() const;
+    PropertyItem* bendDirection() const;
+    PropertyItem* showHoldLine() const;
+    bool isShowHoldLineAvailable() const;
+
+    QVariantList bendCurve() const;
 
     bool areSettingsAvailable() const;
 
+    void setBendCurve(const QVariantList& newBendCurve);
+
+    bool isBendCurveEnabled() const;
+
 signals:
     void areSettingsAvailableChanged(bool areSettingsAvailable);
+    void isShowHoldLineAvailableChanged(bool isAvailable);
+
+    void isBendCurveEnabledChanged();
+    void bendCurveChanged();
 
 private:
-    PropertyItem* m_bendType = nullptr;
-    PropertyItem* m_bendCurve = nullptr;
-    PropertyItem* m_lineThickness = nullptr;
+    void updateIsShowHoldLineAvailable();
+
+    void loadBendCurve();
+
+    mu::engraving::EngravingItem* item() const;
+
+    bool isHold(const mu::engraving::EngravingItem* item) const;
+    mu::engraving::GuitarBend* guitarBend(mu::engraving::EngravingItem* item) const;
+
+    PropertyItem* m_bendDirection = nullptr;
+    PropertyItem* m_showHoldLine = nullptr;
+    bool m_isShowHoldLineAvailable = false;
+
+    CurvePoints m_bendCurve;
+    bool m_releaseBend = false;
 };
 }
 

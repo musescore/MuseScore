@@ -30,7 +30,7 @@ InspectorPropertyView {
 
     property alias horizontalOffsetControl: horizontalOffsetControl
     property alias verticalOffsetControl: verticalOffsetControl
-    property bool isVerticalOffsetAvailable: false
+    property bool isVerticalOffsetAvailable: true
 
     titleText: qsTrc("inspector", "Offset")
 

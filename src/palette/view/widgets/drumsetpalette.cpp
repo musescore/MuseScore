@@ -116,9 +116,6 @@ void DrumsetPalette::updateDrumset()
         chord->setStemDirection(dir);
         chord->setIsUiItem(true);
         chord->setTrack(voice);
-        Stem* stem = Factory::createStem(chord.get());
-        stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * _spatium));
-        chord->add(stem);
         Note* note = Factory::createNote(chord.get());
         note->setMark(true);
         note->setParent(chord.get());
@@ -135,8 +132,14 @@ void DrumsetPalette::updateDrumset()
             noteheadSym = note->noteHead(true, noteHead, NoteHeadType::HEAD_QUARTER);
         }
 
-        note->mutLayoutData()->cachedNoteheadSym = noteheadSym;     // we use the cached notehead so we don't recompute it at each layout
+        note->mutldata()->cachedNoteheadSym.set_value(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
+
+        Stem* stem = Factory::createStem(chord.get());
+        stem->setParent(chord.get());
+        stem->setBaseLength(Millimetre((up ? -3.0 : 3.0) * _spatium));
+        engravingRenderer()->layoutItem(stem);
+        chord->add(stem);
 
         int shortcutCode = m_drumset->shortcut(pitch);
         QString shortcut = shortcutCode != 0 ? QChar(shortcutCode) : QString();
@@ -245,7 +248,11 @@ void DrumsetPalette::mouseMoveEvent(QMouseEvent* event)
     m_drumPalette->handleEvent(event);
 }
 
+#ifdef MU_QT5_COMPAT
 void DrumsetPalette::enterEvent(QEvent* event)
+#else
+void DrumsetPalette::enterEvent(QEnterEvent* event)
+#endif
 {
     m_drumPalette->handleEvent(event);
 }

@@ -27,7 +27,6 @@
 #include "engraving/types/typesconv.h"
 #include "engraving/types/symnames.h"
 
-#include "engraving/dom/factory.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/ambitus.h"
@@ -35,30 +34,29 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/bagpembell.h"
 #include "engraving/dom/barline.h"
-#include "engraving/dom/bend.h"
 #include "engraving/dom/bracket.h"
 #include "engraving/dom/breath.h"
+#include "engraving/dom/capo.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
 #include "engraving/dom/chordrest.h"
-#include "engraving/dom/capo.h"
 #include "engraving/dom/clef.h"
-#include "engraving/dom/drumset.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/expression.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/gradualtempochange.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
-#include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/keysig.h"
 #include "engraving/dom/layoutbreak.h"
 #include "engraving/dom/letring.h"
-#include "engraving/dom/gradualtempochange.h"
 #include "engraving/dom/marker.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
@@ -68,22 +66,21 @@
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/palmmute.h"
+#include "engraving/dom/part.h"
 #include "engraving/dom/pedal.h"
+#include "engraving/dom/playtechannotation.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/segment.h"
-#include "engraving/dom/select.h"
 #include "engraving/dom/slur.h"
 #include "engraving/dom/spacer.h"
-#include "engraving/dom/staffstate.h"
 #include "engraving/dom/stafftext.h"
-#include "engraving/dom/playtechannotation.h"
-#include "engraving/dom/stafftypechange.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/dom/systemtext.h"
-#include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/vibrato.h"
@@ -111,6 +108,7 @@ MAKE_ELEMENT(StaffText, score->dummy()->segment())
 MAKE_ELEMENT(Expression, score->dummy()->segment())
 MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
 MAKE_ELEMENT(Capo, score->dummy()->segment())
+MAKE_ELEMENT(StringTunings, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
@@ -399,7 +397,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
     for (MeasureRepeatInfo repeat: defaultPalette ? defaultMeasureRepeats : masterMeasureRepeats) {
         std::shared_ptr<MeasureRepeat> rm = makeElement<MeasureRepeat>(gpaletteScore);
-        rm->mutLayoutData()->symId = repeat.id;
+        rm->mutldata()->symId = repeat.id;
         rm->setNumMeasures(repeat.measuresCount);
         sp->appendElement(rm, SymNames::userNameForSymId(repeat.id));
     }
@@ -639,8 +637,14 @@ PalettePtr PaletteCreator::newTremoloPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
-        auto tremolo = Factory::makeTremolo(gpaletteScore->dummy()->chord());
+    for (int i = int(TremoloType::R8); i <= int(TremoloType::BUZZ_ROLL); ++i) {
+        auto tremolo = Factory::makeTremoloSingleChord(gpaletteScore->dummy()->chord());
+        tremolo->setTremoloType(TremoloType(i));
+        sp->appendElement(tremolo, tremolo->subtypeUserName());
+    }
+
+    for (int i = int(TremoloType::C8); i <= int(TremoloType::C64); ++i) {
+        auto tremolo = Factory::makeTremoloTwoChord(gpaletteScore->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }
@@ -767,12 +771,6 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     }
 
     if (!defaultPalette) {
-        auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
-        bend->points().push_back(PitchValue(0,    0, false));
-        bend->points().push_back(PitchValue(15, 100, false));
-        bend->points().push_back(PitchValue(60, 100, false));
-        sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"));
-
         auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
         tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
         tb->points().push_back(PitchValue(30, -100, false));
@@ -1082,7 +1080,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     static std::vector<ClefType> clefsMaster  {
         ClefType::G,     ClefType::G8_VA,  ClefType::G15_MA,  ClefType::G8_VB, ClefType::G15_MB, ClefType::G8_VB_O,
         ClefType::G8_VB_P,    ClefType::G_1,  ClefType::C1,  ClefType::C2,    ClefType::C3,
-        ClefType::C4,    ClefType::C5,  ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
+        ClefType::C4,    ClefType::C4_8VB,    ClefType::C5,  ClefType::C_19C, ClefType::C1_F18C, ClefType::C3_F18C, ClefType::C4_F18C,
         ClefType::C1_F20C, ClefType::C3_F20C, ClefType::C4_F20C,
         ClefType::F,   ClefType::F_8VA, ClefType::F_15MA,
         ClefType::F8_VB,    ClefType::F15_MB, ClefType::F_B, ClefType::F_C, ClefType::F_F18C, ClefType::F_19C,
@@ -1124,7 +1122,7 @@ PalettePtr PaletteCreator::newBagpipeEmbellishmentPalette()
     sp->setName(QT_TRANSLATE_NOOP("palette", "Bagpipe embellishments"));
     sp->setMag(0.8);
     sp->setYOffset(2.0);
-    sp->setGridSize(55, 55);
+    sp->setGridSize(55, 72);
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
@@ -1256,21 +1254,11 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
 
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
-    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
-    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
-    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
-    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
-    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
-    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
-    pedal->setEndText(Pedal::STAR_SYMBOL);
-    pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
@@ -1495,6 +1483,20 @@ PalettePtr PaletteCreator::newTempoPalette(bool defaultPalette)
         item->setContinueText(String(u"(%1)").arg(text));
         sp->appendElement(item, pair.second, 1.3)->yoffset = 0.4;
     }
+
+    const char* aTempoStr = QT_TRANSLATE_NOOP("palette", "a tempo");
+    auto aTempoTxt = makeElement<TempoText>(gpaletteScore);
+    aTempoTxt->setFollowText(true);
+    aTempoTxt->setXmlText(aTempoStr);
+    aTempoTxt->setATempo();
+    sp->appendElement(aTempoTxt, aTempoStr, 1.3);
+
+    const char* tempoPrimoStr = QT_TRANSLATE_NOOP("palette", "tempo primo");
+    auto tempoPrimoTxt = makeElement<TempoText>(gpaletteScore);
+    tempoPrimoTxt->setFollowText(true);
+    tempoPrimoTxt->setXmlText(tempoPrimoStr);
+    tempoPrimoTxt->setTempoPrimo();
+    sp->appendElement(tempoPrimoTxt, tempoPrimoStr, 1.3);
 
     auto stxt = makeElement<SystemText>(gpaletteScore);
     stxt->setTextStyleType(TextStyleType::TEMPO);
@@ -1838,12 +1840,6 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     letRing->setLen(w);
     sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"), 0.8);
 
-    auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
-    bend->points().push_back(PitchValue(0,    0, false));
-    bend->points().push_back(PitchValue(15, 100, false));
-    bend->points().push_back(PitchValue(60, 100, false));
-    sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"), 0.9);
-
     auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
     tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
     tb->points().push_back(PitchValue(30, -100, false));
@@ -1863,7 +1859,17 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
 
     auto capo = makeElement<Capo>(gpaletteScore);
     capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
-    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
+    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
+
+    auto stringTunings = makeElement<StringTunings>(gpaletteScore);
+    stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
+    stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
+    sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"), 0.9)->setElementTranslated(true);
+
+    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
+    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend", 1.5);
+    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
+    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {
@@ -1939,21 +1945,11 @@ PalettePtr PaletteCreator::newKeyboardPalette()
 
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
-    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
-    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
-    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
-    pedal->setEndText(Pedal::STAR_SYMBOL);
-    pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
-    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
-    pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
-    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
-    pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 

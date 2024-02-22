@@ -43,61 +43,143 @@ Column {
         bendTypeSection.focusOnFirst()
     }
 
-    DropdownPropertyView {
-        id: bendTypeSection
-        titleText: qsTrc("inspector", "Bend type")
-        propertyItem: root.model ? root.model.bendType : null
+    PlacementSection {
+        id: placmentSection
+
+        propertyItem: root.model ? root.model.bendDirection : null
+
+        //! NOTE: Bend uses the direction property,
+        // but for convenience we will display it in the placement section
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
+            { text: qsTrc("inspector", "Above"), value: DirectionTypes.VERTICAL_UP },
+            { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
+        ]
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: showHoldSection
+        titleText: qsTrc("inspector", "Hold line")
+        propertyItem: root.model ? root.model.showHoldLine : null
+
+        navigationName: "HoldLine"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: placmentSection.navigationRowEnd + 1
 
         model: [
-            { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
-            { text: qsTrc("inspector", "Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
-            { text: qsTrc("inspector", "Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
-            { text: qsTrc("inspector", "Prebend"), value: BendTypes.TYPE_PREBEND },
-            { text: qsTrc("inspector", "Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
-            { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
+            { text: qsTrc("inspector", "Auto"), value: BendTypes.SHOW_HOLD_AUTO},
+            { text: qsTrc("inspector", "Show"), value: BendTypes.SHOW_HOLD_SHOW},
+            { text: qsTrc("inspector", "Hide"), value: BendTypes.SHOW_HOLD_HIDE},
         ]
     }
 
     InspectorPropertyView {
-        id: bendCurve
-        titleText: qsTrc("inspector", "Click to add or remove points")
-        propertyItem: root.model ? root.model.bendCurve : null
+        id: bend
+        titleText: qsTrc("inspector", "Customize bend")
+
+        enabled: root.model ? root.model.isBendCurveEnabled : false
+        visible: true
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: bendTypeSection.navigationRowEnd + 1
+        navigationRowStart: showHoldSection.navigationRowEnd + 1
 
-        GridCanvas {
-            height: 200
+        spacing: 0
+
+        Item {
             width: parent.width
+            height: bendCanvas.height
 
-            pointList: root.model && root.model.bendCurve.isEnabled ? root.model.bendCurve.value : undefined
+            NavigationControl {
+                id: navCtrl
+                name: "BendCanvas"
+                enabled: bendCanvas.enabled && bendCanvas.visible
 
-            rowCount: 13
-            columnCount: 13
-            rowSpacing: 4
-            columnSpacing: 3
+                panel: root.navigationPanel
+                row: bend.navigationRowEnd + 1
 
-            onCanvasChanged: {
-                if (root.model) {
-                    root.model.bendCurve.value = pointList
+                accessible.role: MUAccessible.Information
+                accessible.name: bend.titleText + "; " + qsTrc("inspector", "Press Enter to start editing")
+
+                onActiveChanged: {
+                    if (navCtrl.active) {
+                        bendCanvas.forceActiveFocus()
+                    } else {
+                        bendCanvas.resetFocus()
+                    }
+                }
+
+                onNavigationEvent: function(event) {
+                    if (!root.model) {
+                        return
+                    }
+
+                    var accepted = false
+                    switch(event.type) {
+                    case NavigationEvent.Trigger:
+                        accepted = bendCanvas.focusOnFirstPoint()
+
+                        if (accepted) {
+                            navCtrl.accessible.focused = false
+                        }
+
+                        break
+                    case NavigationEvent.Escape:
+                        accepted = bendCanvas.resetFocus()
+
+                        if (accepted) {
+                            navCtrl.accessible.focused = true
+                        }
+
+                        break
+                    case NavigationEvent.Left:
+                        accepted = bendCanvas.moveFocusedPointToLeft()
+                        break
+                    case NavigationEvent.Right:
+                        accepted = bendCanvas.moveFocusedPointToRight()
+                        break
+                    case NavigationEvent.Up:
+                        accepted = bendCanvas.moveFocusedPointToUp()
+                        break
+                    case NavigationEvent.Down:
+                        accepted = bendCanvas.moveFocusedPointToDown()
+                        break
+                    }
+
+                    event.accepted = accepted
+                }
+            }
+
+            NavigationFocusBorder {
+                navigationCtrl: navCtrl
+            }
+
+            BendGridCanvas {
+                id: bendCanvas
+
+                width: parent.width
+                height: 200
+
+                enabled: bend.enabled
+                focus: true
+
+                pointList: root.model ? root.model.bendCurve : null
+
+                rowCount: 13
+                columnCount: 13
+                rowSpacing: 4
+                columnSpacing: 3
+
+                accessibleParent: navCtrl.accessible
+
+                onCanvasChanged: {
+                    if (root.model) {
+                        root.model.bendCurve = pointList
+                    }
                 }
             }
         }
-    }
-
-    SpinBoxPropertyView {
-        titleText: qsTrc("inspector", "Line thickness")
-        propertyItem: root.model ? root.model.lineThickness : null
-
-        maxValue: 10
-        minValue: 0.1
-        step: 0.1
-        decimals: 2
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: bendCurve.navigationRowEnd + 1
     }
 }

@@ -54,26 +54,53 @@ using namespace mu::engraving::read400;
 
 static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStaves)
 {
+    if (barType == bl->barLineType()) {
+        return;
+    }
+
     Measure* m = bl->measure();
     if (!m) {
         return;
     }
 
-    if (barType == BarLineType::START_REPEAT) {
+    bool keepStartRepeat = false;
+
+    if (barType == BarLineType::START_REPEAT && bl->segment()->segmentType() != SegmentType::BeginBarLine) {
         m = m->nextMeasure();
-        if (!m) {
+        if (!m) {  // we were in last measure
             return;
         }
     } else if (bl->barLineType() == BarLineType::START_REPEAT) {
-        if (barType != BarLineType::END_REPEAT) {
-            m->undoChangeProperty(Pid::REPEAT_START, false);
-        }
-        m = m->prevMeasure();
-        if (!m || m->isFirstInSystem()) {
+        if (m->isFirstInSystem()) {
+            if (barType != BarLineType::END_REPEAT) {
+                for (Score* lscore : m->score()->scoreList()) {
+                    Measure* lmeasure = lscore->tick2measure(m->tick());
+                    if (lmeasure) {
+                        lmeasure->undoChangeProperty(Pid::REPEAT_START, false);
+                    }
+                }
+            }
             return;
         }
+
+        m = m->prevMeasureMM();
+        if (!m) {
+            return;
+        }
+
         bl = const_cast<BarLine*>(m->endBarLine());
+        if (!bl) {
+            return;
+        }
+
+        if (barType == BarLineType::END_REPEAT) {
+            keepStartRepeat = true;
+        }
     }
+
+    // when setting barline type on mmrest, set for underlying measure (and linked staves)
+    // createMMRest will then set for the mmrest directly
+    Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
 
     switch (barType) {
     case BarLineType::END:
@@ -84,28 +111,40 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     case BarLineType::REVERSE_END:
     case BarLineType::HEAVY:
     case BarLineType::DOUBLE_HEAVY: {
+        if (m->nextMeasureMM() && m->nextMeasureMM()->isFirstInSystem()) {
+            keepStartRepeat = true;
+        }
+
         Segment* segment = bl->segment();
         SegmentType segmentType = segment->segmentType();
-        if (segmentType == SegmentType::EndBarLine) {
-            // when setting barline type on mmrest, set for underlying measure (and linked staves)
-            // createMMRest will then set for the mmrest directly
-            Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
 
-            bool generated;
+        if (segmentType == SegmentType::EndBarLine) {
+            bool generated = false;
             if (bl->barLineType() == barType) {
                 generated = bl->generated();                // no change: keep current status
             } else if (!bl->generated() && (barType == BarLineType::NORMAL)) {
                 generated = true;                           // currently non-generated, changing to normal: assume generated
-            } else {
-                generated = false;                          // otherwise assume non-generated
             }
             if (allStaves) {
                 // use all staves of master score; we will take care of parts in loop through linked staves below
-                m2 = bl->masterScore()->tick2measure(m2->tick());
-                if (!m2) {
-                    return;                     // should never happen
+                Score* mScore = bl->masterScore();
+                if (mScore->style().styleB(Sid::createMultiMeasureRests)) {
+                    m2 = mScore->tick2measureMM(m2->tick());
+                    if (!m2) {
+                        return;
+                    }
+                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
+                    m2 = m2->isMMRest() ? m2->mmRestLast() : m2;
+                    if (!m2) {
+                        return;
+                    }
+                } else {
+                    m2 = mScore->tick2measure(m2->tick());
+                    if (!m2) {
+                        return;
+                    }
+                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
                 }
-                segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
             }
             const std::vector<EngravingItem*>& elist = allStaves ? segment->elist() : std::vector<EngravingItem*> { bl };
             for (EngravingItem* e : elist) {
@@ -130,8 +169,10 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     }
 
                     lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
-                    if (lmeasure->nextMeasure() && !lmeasure->nextMeasure()->isFirstInSystem()) {
-                        lmeasure->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, false);
+
+                    Measure* nextMeasure = lmeasure->nextMeasure();
+                    if (nextMeasure && !keepStartRepeat) {
+                        nextMeasure->undoChangeProperty(Pid::REPEAT_START, false);
                     }
                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
@@ -162,20 +203,22 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                 }
             }
         } else if (segmentType == SegmentType::BeginBarLine) {
-            Segment* segment1 = m->undoGetSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
-            for (EngravingItem* e : segment1->elist()) {
-                if (e) {
-                    e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
-                    e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
-                    // set generated flag before and after so it sticks on type change and also works on undo/redo
-                    e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
+            for (Score* lscore : m2->score()->scoreList()) {
+                Measure* lmeasure = lscore->tick2measure(m2->tick());
+                Segment* segment1 = lmeasure->undoGetSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
+                for (EngravingItem* e : segment1->elist()) {
+                    if (e) {
+                        lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
+                        lscore->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, PropertyValue::fromValue(barType), PropertyFlags::NOSTYLE));
+                        // set generated flag before and after so it sticks on type change and also works on undo/redo
+                        lscore->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
+                    }
                 }
             }
         }
     }
     break;
     case BarLineType::START_REPEAT: {
-        Measure* m2 = m->isMMRest() ? m->mmRestFirst() : m;
         for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithPrevM(staffIdx)) {
                 MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
@@ -191,7 +234,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     }
     break;
     case BarLineType::END_REPEAT: {
-        Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
         for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
                 MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
@@ -207,7 +249,6 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
     }
     break;
     case BarLineType::END_START_REPEAT: {
-        Measure* m2 = m->isMMRest() ? m->mmRestLast() : m;
         for (size_t staffIdx = 0; staffIdx < m2->score()->nstaves(); ++staffIdx) {
             if (m2->isMeasureRepeatGroupWithNextM(staffIdx)) {
                 MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
@@ -422,7 +463,7 @@ static size_t nextVisibleSpannedStaff(const BarLine* bl)
 
 void BarLine::calcY()
 {
-    BarLine::LayoutData* data = mutLayoutData();
+    BarLine::LayoutData* data = mutldata();
     double _spatium = spatium();
     if (!explicitParent()) {
         // for use in palette
@@ -451,12 +492,12 @@ void BarLine::calcY()
     // after skipping ones with hideSystemBarLine set
     // and accounting for staves that are shown but have invisible measures
 
-    Fraction tick        = segment()->measure()->tick();
-    const StaffType* st1 = staff1->staffType(tick);
+    Fraction tick = segment()->measure()->tick();
+    const StaffType* staffType1 = staff1->staffType(tick);
 
-    int from    = m_spanFrom;
-    int to      = m_spanTo;
-    int oneLine = st1->lines() <= 1;
+    int from = m_spanFrom;
+    int to = m_spanTo;
+    bool oneLine = staffType1->lines() <= 1;
     if (oneLine && m_spanFrom == 0) {
         from = BARLINE_SPAN_1LINESTAFF_FROM;
         if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
@@ -464,17 +505,70 @@ void BarLine::calcY()
         }
     }
     SysStaff* sysStaff1  = system->staff(staffIdx1);
-    double yp = sysStaff1->y();
-    double spatium1 = st1->spatium(style());
-    double d  = st1->lineDistance().val() * spatium1;
-    double yy = measure->staffLines(staffIdx1)->y1() - yp;
-    double lw = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
-    data->y1 = yy + from * d * .5 - lw;
+    double startStaffY = sysStaff1->y();
+    double spatium1 = staffType1->spatium(style());
+    double lineDistance = staffType1->lineDistance().val() * spatium1;
+    double offset = staffType1->yoffset().val() * spatium1;
+    double lineWidth = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
+
+    double y1 = offset + from * lineDistance * .5 - lineWidth;
+    double y2;
+
     if (staffIdx2 != staffIdx1) {
-        data->y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
+        BarLine* barline2 = toBarLine(segment()->element(staffIdx2 * VOICES));
+        double from2 = barline2 ? barline2->m_spanFrom : m_spanFrom;
+        const Staff* staff2 = score()->staff(staffIdx2);
+        const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staff1->staffType(tick);
+        double spatium2 = staffType2->spatium(style());
+        double lineDistance2 = staffType2->lineDistance().val() * spatium2;
+        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY + from2 * lineDistance2 * .5;
     } else {
-        data->y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
+        y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
     }
+
+    // if stafftype change in next measure, check new staff positions
+    Fraction tickNext = tick + measure->ticks();
+    if (staff1->isStaffTypeStartFrom(tickNext)) {
+        Measure* measureNext = measure->nextMeasure();
+        System* systemNext = measureNext ? measureNext->system() : nullptr;
+        const StaffType* staffType1Next = staff1->staffType(tickNext);
+        bool oneLineNext = staffType1Next->lines() <= 1;
+        if (systemNext && systemNext == system && staffType1Next != staffType1) {
+            if (oneLine && !oneLineNext) {
+                from = m_spanFrom;
+                to = m_spanTo;
+            }
+            if (oneLineNext && m_spanFrom == 0) {
+                from = BARLINE_SPAN_1LINESTAFF_FROM;
+                if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+                    to = BARLINE_SPAN_1LINESTAFF_TO;
+                }
+            }
+            double spatium1Next = staffType1Next->spatium(style());
+            double lineDistanceNext = staffType1Next->lineDistance().val() * spatium1Next;
+            double offsetNext = staffType1Next->yoffset().val() * spatium1Next;
+            double lineWidthNext = style().styleS(Sid::staffLineWidth).val() * spatium1Next * .5;
+
+            int y1Next = offsetNext + from * lineDistanceNext * .5 - lineWidthNext;
+
+            // change barline, only if it is not initial one
+            if (rtick().isNotZero()) {
+                if (y1Next < y1) {
+                    y1 = y1Next;
+                }
+
+                if (staffIdx2 == staffIdx1) {
+                    double y2Next = offsetNext + (staffType1Next->lines() * 2 - 2 + to) * lineDistanceNext * .5 + lineWidthNext;
+                    if (y2Next > y2) {
+                        y2 = y2Next;
+                    }
+                }
+            }
+        }
+    }
+
+    data->y1 = y1;
+    data->y2 = y2;
 }
 
 //---------------------------------------------------------
@@ -516,7 +610,7 @@ void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
 {
     EngravingItem::drawEditMode(p, ed, currentViewScaling);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    BarLine::LayoutData* ldata = mutLayoutData();
+    BarLine::LayoutData* ldata = mutldata();
     ldata->y1 += bed->yoff1;
     ldata->y2 += bed->yoff2;
     PointF pos(canvasPos());
@@ -556,8 +650,7 @@ bool BarLine::acceptDrop(EditData& data) const
     if (type == ElementType::BAR_LINE) {
         return true;
     } else {
-        return (type == ElementType::ARTICULATION || type == ElementType::FERMATA || type == ElementType::SYMBOL
-                || type == ElementType::IMAGE)
+        return (type == ElementType::FERMATA || type == ElementType::SYMBOL || type == ElementType::IMAGE)
                && segment()
                && segment()->isEndBarLineType();
     }
@@ -681,7 +774,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 
     return {
         //PointF(lw * .5, y1 + bed->yoff1) + pp,
-        PointF(lw * .5, layoutData()->y2 + bed->yoff2) + pp
+        PointF(lw * .5, ldata()->y2 + bed->yoff2) + pp
     };
 }
 
@@ -739,12 +832,12 @@ void BarLine::editDrag(EditData& ed)
         return;
     } else {
         // min for bottom grip is 1 line below top grip
-        const double min = layoutData()->y1 - layoutData()->y2 + lineDist;
+        const double min = ldata()->y1 - ldata()->y2 + lineDist;
         // max is the bottom of the system
         const System* system = segment() ? segment()->system() : nullptr;
         const staff_idx_t st = staffIdx();
         const double max = (system && st != mu::nidx)
-                           ? (system->height() - layoutData()->y2 - system->staff(st)->y())
+                           ? (system->height() - ldata()->y2 - system->staff(st)->y())
                            : std::numeric_limits<double>::max();
         // update yoff2 and bring it within limit
         bed->yoff2 += ed.delta.y();
@@ -766,11 +859,11 @@ void BarLine::endEditDrag(EditData& ed)
 {
     calcY();
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    mutLayoutData()->y1 += bed->yoff1;
-    mutLayoutData()->y2 += bed->yoff2;
+    mutldata()->y1 += bed->yoff1;
+    mutldata()->y2 += bed->yoff2;
 
     double ay0      = pagePos().y();
-    double ay2      = ay0 + mutLayoutData()->y2;                       // absolute (page-relative) bar line bottom coord
+    double ay2      = ay0 + mutldata()->y2;                       // absolute (page-relative) bar line bottom coord
     staff_idx_t staffIdx1 = staffIdx();
     System* syst   = segment()->measure()->system();
     double systTopY = syst->pagePos().y();
@@ -842,17 +935,6 @@ void BarLine::endEditDrag(EditData& ed)
 
     bed->yoff1 = 0.0;
     bed->yoff2 = 0.0;
-}
-
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape BarLine::shape() const
-{
-    Shape shape;
-    shape.add(layoutData()->bbox(), this);
-    return shape;
 }
 
 //---------------------------------------------------------

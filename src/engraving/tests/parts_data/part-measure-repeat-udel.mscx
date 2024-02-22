@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -16,7 +16,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -804,6 +803,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Alto</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -1250,9 +1250,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Alto</name>
       </Score>
     <Score>
+      <name>Tenor</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
@@ -1738,7 +1738,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Tenor</name>
       </Score>
     </Score>
   </museScore>

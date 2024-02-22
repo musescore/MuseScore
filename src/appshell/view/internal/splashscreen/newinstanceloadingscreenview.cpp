@@ -30,17 +30,25 @@
 
 using namespace mu::appshell;
 
-NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(const QString& openingFileName, QWidget* parent)
+NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent)
     : QWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
-    if (openingFileName.isEmpty()) {
+    if (forNewScore) {
+        // When a new instance is being opened because a new score has to be created
         m_message = qtrc("appshell", "Loading new score…\u200e");
         m_dialogSize = QSize(288, 80);
-    } else {
+    } else if (!openingFileName.isEmpty()) {
+        // When a new instance is being opened because a score has to be opened, of which the name is known
         m_message = qtrc("appshell", "Loading “%1”…\u200e").arg(openingFileName);
         m_dialogSize = QSize(360, 80);
+    } else {
+        // When a new instance is being opened because a score has to be opened, of which the name is not known
+        // This is the case when opening a score from the file manager or from MuseScore.com on non-macOS systems,
+        // because then a new instance is launched by the OS, which doesn't tell MuseScore about the name of the score.
+        m_message = qtrc("appshell", "Loading score…\u200e");
+        m_dialogSize = QSize(288, 80);
     }
 
     resize(m_dialogSize);

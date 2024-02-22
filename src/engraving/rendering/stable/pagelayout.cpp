@@ -43,7 +43,8 @@
 #include "dom/staff.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
-#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 
 #include "tlayout.h"
@@ -86,7 +87,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
         }
         ctx.mutState().setPrevSystem(systems.empty() ? nullptr : systems.back());
     }
-    ctx.mutState().page()->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
+    ctx.mutState().page()->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
     ctx.mutState().page()->setNo(ctx.state().pageIdx());
     double x = 0.0;
     double y = 0.0;
@@ -113,7 +114,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     TRACEFUNC;
 
     const double slb = ctx.conf().styleMM(Sid::staffLowerBorder);
-    bool breakPages = ctx.conf().layoutMode() != LayoutMode::SYSTEM;
+    bool breakPages = ctx.conf().viewMode() != LayoutMode::SYSTEM;
     double footerExtension = ctx.state().page()->footerExtension();
     double headerExtension = ctx.state().page()->headerExtension();
     double headerFooterPadding = ctx.conf().styleMM(Sid::staffHeaderFooterPadding);
@@ -229,7 +230,6 @@ void PageLayout::collectPage(LayoutContext& ctx)
                           + ctx.state().curSystem()->height();
             Box* vbox = ctx.state().curSystem()->vbox();
             if (vbox) {
-                dist += vbox->bottomGap();
                 if (footerExtension > 0) {
                     dist += footerExtension;
                 }
@@ -262,37 +262,47 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
     }
 
-    Fraction stick = Fraction(-1, 1);
+    Fraction stick2 = Fraction(-1, 1);
     for (System* s : ctx.mutState().page()->systems()) {
         for (MeasureBase* mb : s->measures()) {
             if (!mb->isMeasure()) {
                 continue;
             }
             Measure* m = toMeasure(mb);
-            if (stick == Fraction(-1, 1)) {
-                stick = m->tick();
+            if (stick2 == Fraction(-1, 1)) {
+                stick2 = m->tick();
             }
 
             for (size_t track = 0; track < ctx.dom().ntracks(); ++track) {
                 for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                    EngravingItem* e = segment->element(track);
-                    if (!e) {
+                    EngravingItem* e2 = segment->element(track);
+                    if (!e2) {
                         continue;
                     }
-                    if (e->isChordRest()) {
+                    if (e2->isChordRest()) {
                         if (!ctx.dom().staff(track2staff(track))->show()) {
                             continue;
                         }
-                        ChordRest* cr = toChordRest(e);
+                        ChordRest* cr = toChordRest(e2);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
-                            TLayout::layout(cr->beam(), ctx);
+                            TLayout::layoutBeam(cr->beam(), ctx);
+                            for (EngravingItem* item : cr->beam()->elements()) {
+                                if (!item || !item->isRest()) {
+                                    continue;
+                                }
+                                Rest* rest = toRest(item);
+                                Beam* beam = rest->beam();
+                                if (beam && beam->fullCross() && rest->staffMove()) {
+                                    BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
+                                }
+                            }
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets
                             DurationElement* de = cr;
                             while (de->tuplet() && de->tuplet()->elements().front() == de) {
                                 Tuplet* t = de->tuplet();
-                                TLayout::layout(t, ctx);
+                                TLayout::layoutTuplet(t, ctx);
                                 de = t;
                             }
                         }
@@ -301,7 +311,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             Chord* c = toChord(cr);
                             for (Chord* cc : c->graceNotes()) {
                                 if (cc->beam() && cc->beam()->elements().front() == cc) {
-                                    TLayout::layout(cc->beam(), ctx);
+                                    TLayout::layoutBeam(cc->beam(), ctx);
                                 }
                                 ChordLayout::layoutSpanners(cc, ctx);
                                 for (EngravingItem* element : cc->el()) {
@@ -312,14 +322,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             }
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             ChordLayout::layoutSpanners(c, ctx);
-                            if (c->tremolo()) {
-                                Tremolo* t = c->tremolo();
+                            if (c->tremoloTwoChord()) {
+                                TremoloTwoChord* t = c->tremoloTwoChord();
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
-                                if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
+                                if (c1 && c2 && (c1->staffMove() || c2->staffMove())) {
                                     // For cross-staff tremolo, vertical justification may have changed
                                     // staff distances, and therefore also stem directions, so re-compute them
-                                    ChordLayout::computeUp(c1, ctx); // This will also call a tremolo layout
+                                    ChordLayout::computeUp(c1, ctx);     // This will also call a tremolo layout
                                     ChordLayout::computeUp(c2, ctx);
                                 }
                             }
@@ -335,14 +345,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                         }
                                         Fingering* fingering = toFingering(e);
                                         if (fingering->isOnCrossBeamSide()) {
-                                            TLayout::layout(fingering, ctx);
+                                            TLayout::layoutFingering(fingering, fingering->mutldata());
                                         }
                                     }
                                 }
                             }
                         }
-                    } else if (e->isBarLine()) {
-                        rendering::stable::TLayout::layout2(toBarLine(e), ctx);
+                    } else if (e2->isBarLine()) {
+                        TLayout::layoutBarLine2(toBarLine(e2), ctx);
                     }
                 }
             }
@@ -350,10 +360,27 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
     }
 
+    // If this is the last page we layout, we must also relayout the first barlines of the
+    // next page, because they may have been altered while collecting the systems.
+    MeasureBase* lastOfThisPage = ctx.mutState().page()->systems().back()->measures().back();
+    MeasureBase* firstOfNextPage = lastOfThisPage ? lastOfThisPage->next() : nullptr;
+    if (firstOfNextPage && firstOfNextPage->isMeasure() && firstOfNextPage->tick() > ctx.state().endTick()) {
+        for (Segment& segment : toMeasure(firstOfNextPage)->segments()) {
+            if (!segment.isType(SegmentType::BarLineType)) {
+                continue;
+            }
+            for (EngravingItem* item : segment.elist()) {
+                if (item && item->isBarLine()) {
+                    TLayout::layoutBarLine2(toBarLine(item), ctx);
+                }
+            }
+        }
+    }
+
     if (ctx.conf().isMode(LayoutMode::SYSTEM)) {
         const System* s = ctx.state().page()->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.state().page()->tm();
-        ctx.mutState().page()->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
+        ctx.mutState().page()->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
     }
 
     // HACK: we relayout here cross-staff slurs because only now the information
@@ -375,7 +402,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 continue;
             }
             if (toSlur(sp)->isCrossStaff()) {
-                TLayout::layout(toSlur(sp), ctx);
+                TLayout::layoutSlur(toSlur(sp), ctx);
             }
         }
     }
@@ -393,6 +420,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
 void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
 {
+    TRACEFUNC;
     if (restHeight < 0.0) {
         LOGN("restHeight < 0.0: %f\n", restHeight);
         restHeight = 0;
@@ -426,13 +454,13 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     checkDivider(ctx, false, lastSystem, 0.0, true);       // remove
 
     if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled()
-        || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
-        if (ctx.conf().layoutMode() == LayoutMode::FLOAT) {
+        || ctx.conf().viewMode() == LayoutMode::SYSTEM) {
+        if (ctx.conf().viewMode() == LayoutMode::FLOAT) {
             double y = restHeight * .5;
             for (System* system : page->systems()) {
                 system->move(PointF(0.0, y));
             }
-        } else if ((ctx.conf().layoutMode() != LayoutMode::SYSTEM) && ctx.conf().isVerticalSpreadEnabled()) {
+        } else if ((ctx.conf().viewMode() != LayoutMode::SYSTEM) && ctx.conf().isVerticalSpreadEnabled()) {
             distributeStaves(ctx, page, footerPadding);
         }
 
@@ -496,7 +524,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     for (int i = 0; i < gaps; ++i) {
         System* s1  = page->systems().at(i);
         System* s2  = page->systems().at(i + 1);
-        s1->mutLayoutData()->setPosY(y);
+        s1->mutldata()->setPosY(y);
         y          += s1->distance();
 
         if (!(s1->vbox() || s2->vbox())) {
@@ -505,7 +533,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
             checkDivider(ctx, false, s1, yOffset);
         }
     }
-    page->systems().back()->mutLayoutData()->setPosY(y);
+    page->systems().back()->mutldata()->setPosY(y);
 }
 
 void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
@@ -519,8 +547,8 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
             divider->setGenerated(true);
             s->add(divider);
         }
-        dividerLdata = divider->mutLayoutData();
-        TLayout::layout(divider, ctx);
+        dividerLdata = divider->mutldata();
+        TLayout::layoutSystemDivider(divider, divider->mutldata(), ctx);
         dividerLdata->setPosY(divider->height() * .5 + yOffset);
         if (left) {
             dividerLdata->moveY(ctx.conf().styleD(Sid::dividerLeftY) * SPATIUM20);
@@ -716,7 +744,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
         if (prvSystem == vgd->system) {
             staffShift += vgd->actualAddedSpace();
         } else {
-            vgd->system->mutLayoutData()->moveY(systemShift);
+            vgd->system->mutldata()->moveY(systemShift);
             if (prvSystem) {
                 prvSystem->setDistance(vgd->system->y() - prvSystem->y());
                 prvSystem->setHeight(prvSystem->height() + staffShift);

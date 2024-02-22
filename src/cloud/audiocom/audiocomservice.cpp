@@ -46,6 +46,8 @@ static const QUrl AUDIOCOM_USER_INFO_API_URL(AUDIOCOM_API_ROOT_URL + "/me");
 
 static const QUrl AUDIOCOM_UPLOAD_AUDIO_API_URL(AUDIOCOM_API_ROOT_URL + "/audio");
 
+static const QString AUDIOCOM_LOGO_URL(AUDIOCOM_CLOUD_URL + "/img/mu-app-logo.svg");
+
 static QString audioMime(const QString& audioFormat)
 {
     if (audioFormat == "mp3") {
@@ -70,7 +72,9 @@ cloud::CloudInfo AudioComService::cloudInfo() const
     return {
         AUDIO_COM_CLOUD_CODE,
         AUDIOCOM_CLOUD_TITLE,
-        AUDIOCOM_CLOUD_URL
+        AUDIOCOM_CLOUD_URL,
+        AUDIOCOM_LOGO_URL,
+        logoColorForTheme(uiConfig()->currentTheme())
     };
 }
 
@@ -79,6 +83,8 @@ cloud::AbstractCloudService::ServerConfig AudioComService::serverConfig() const
     ServerConfig serverConfig;
     serverConfig.serverCode = AUDIO_COM_CLOUD_CODE;
     serverConfig.serverUrl = AUDIOCOM_CLOUD_URL;
+
+    serverConfig.serverAvailabilityUrl = AUDIOCOM_API_ROOT_URL + "/system/healthcheck";
 
     serverConfig.authorizationUrl = AUDIOCOM_CLOUD_URL + "/auth/sign-in";
     serverConfig.signUpUrl = AUDIOCOM_CLOUD_URL + "/auth/sign-up";
@@ -189,7 +195,8 @@ bool AudioComService::doUpdateTokens()
     return true;
 }
 
-ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, Visibility visibility)
+ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& existingUrl,
+                                         Visibility visibility, bool replaceExisting)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -198,9 +205,9 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
         progress->progressChanged.send(current, total, message);
     });
 
-    auto createAudioCallback = [this, manager, &audioData, title, audioFormat, visibility]() {
+    auto createAudioCallback = [this, manager, &audioData, title, audioFormat, existingUrl, visibility, replaceExisting]() {
         qint64 size = audioData.size();
-        return doCreateAudio(manager, title, size, audioFormat, visibility);
+        return doCreateAudio(manager, title, size, audioFormat, existingUrl, visibility, replaceExisting);
     };
 
     auto uploadCallback = [this, manager, &audioData, audioFormat]() {
@@ -219,6 +226,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
                 ValMap audioMap;
                 audioMap["editUrl"] = Val(QString("%2/audio/%3/edit").arg(
                                               accountInfo().val.collectionUrl.toString(), m_currentUploadingAudioSlug));
+                audioMap["url"] = Val(AUDIOCOM_CLOUD_URL + "/audio/" + m_currentUploadingAudioId);
                 result.val = Val(audioMap);
             }
         }
@@ -226,6 +234,7 @@ ProgressPtr AudioComService::uploadAudio(QIODevice& audioData, const QString& au
         result.ret = ret;
 
         m_currentUploadingAudioSlug.clear();
+        m_currentUploadingAudioId.clear();
         m_currentUploadingAudioInfo = {};
 
         progress->finished.send(result);
@@ -253,43 +262,25 @@ mu::Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager
 
     audioData.seek(0);
 
-    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
-
-    QJsonObject fields = m_currentUploadingAudioInfo.value("fields").toObject();
-    for (const QString& fieldName : fields.keys()) {
-        QHttpPart part;
-        part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + fieldName + "\""));
-        part.setBody(fields[fieldName].toString().toUtf8());
-        multiPart.append(part);
-    }
-
-    QString fileField = m_currentUploadingAudioInfo.contains("field") ? m_currentUploadingAudioInfo.value("field").toString() : "file";
-
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, audioMime(audioFormat));
-    QString contentDisposition = QString("form-data; name=\"" + fileField + "\"; filename=\"temp_%1.mp3\"").arg(generateFileNameNumber());
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
-
-    filePart.setBodyDevice(&audioData);
-    multiPart.append(filePart);
-
     QString token;
 
     if (m_currentUploadingAudioInfo.contains("extra")) {
         QJsonObject extra = m_currentUploadingAudioInfo.value("extra").toObject();
-        m_currentUploadingAudioSlug = extra.value("audio").toObject().value("slug").toString();
+        QJsonObject audio = extra.value("audio").toObject();
+        m_currentUploadingAudioSlug = audio.value("slug").toString();
+        m_currentUploadingAudioId = audio.value("id").toString();
         token = extra.value("token").toString();
     }
 
     RequestHeaders headers;
-    headers.rawHeaders["Accept"] = "application/json";
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
+    headers.knownHeaders[QNetworkRequest::ContentTypeHeader] = audioMime(audioFormat);
 
     Ret ret(true);
     QBuffer receivedData;
-    OutgoingDevice device(&multiPart);
+    OutgoingDevice device(&audioData);
 
-    ret = uploadManager->post(url, &device, &receivedData, headers);
+    ret = uploadManager->put(url, &device, &receivedData, headers);
 
     if (!ret) {
         printServerReply(receivedData);
@@ -302,10 +293,32 @@ mu::Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager
     return ret;
 }
 
+Ret AudioComService::doUpdateVisibility(network::INetworkManagerPtr manager, const QUrl& url, Visibility visibility)
+{
+    QUrl patchUrl(AUDIOCOM_API_ROOT_URL + "/audio/" + idFromCloudUrl(url).toQString());
+
+    QJsonObject json;
+    json["public"] = visibility == Visibility::Public;
+    QByteArray jsonData = QString::fromStdString(QJsonDocument(json).toJson(QJsonDocument::JsonFormat::Compact).toStdString()).toUtf8();
+    QBuffer receivedData(&jsonData);
+    OutgoingDevice device(&receivedData);
+
+    Ret ret = manager->patch(patchUrl, &device, &receivedData, headers());
+
+    if (!ret) {
+        printServerReply(receivedData);
+    }
+
+    return ret;
+}
+
 Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
-                                   Visibility visibility)
+                                   const QUrl& existingUrl, Visibility visibility, bool replaceExisting)
 {
     TRACEFUNC;
+
+    QUrl postUrl;
+    Ret ret;
 
     QJsonObject json;
     QString mime = audioMime(audioFormat);
@@ -314,14 +327,27 @@ Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QS
 
     json["size"] = size;
     json["name"] = title;
-    json["public"] = visibility == Visibility::Public;
-    json["multipart"] = true;
+
+    json["method"] = "PUT";
+
+    if (replaceExisting) {
+        ret = doUpdateVisibility(manager, existingUrl, visibility);
+
+        if (!ret) {
+            ret = uploadingDownloadingRetFromRawRet(ret);
+            return ret;
+        }
+        postUrl = QUrl(AUDIOCOM_API_ROOT_URL + "/audio/" + idFromCloudUrl(existingUrl).toQString() + "/source");
+    } else {
+        json["public"] = visibility == Visibility::Public;
+        postUrl = AUDIOCOM_UPLOAD_AUDIO_API_URL;
+    }
 
     QByteArray jsonData = QString::fromStdString(QJsonDocument(json).toJson(QJsonDocument::JsonFormat::Compact).toStdString()).toUtf8();
     QBuffer receivedData(&jsonData);
     OutgoingDevice device(&receivedData);
 
-    Ret ret = manager->post(AUDIOCOM_UPLOAD_AUDIO_API_URL, &device, &receivedData, headers());
+    ret = manager->post(postUrl, &device, &receivedData, headers());
 
     if (!ret) {
         printServerReply(receivedData);

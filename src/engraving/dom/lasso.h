@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __LASSO_H__
-#define __LASSO_H__
+#ifndef MU_ENGRAVING_LASSO_H
+#define MU_ENGRAVING_LASSO_H
 
 #include "engravingitem.h"
 
@@ -44,7 +44,7 @@ public:
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }
 
-    bool isEmpty() const { return layoutData()->bbox().isEmpty(); }
+    bool isEmpty() const { return ldata()->bbox().isEmpty(); }
 
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;

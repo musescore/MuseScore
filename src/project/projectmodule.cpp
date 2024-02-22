@@ -29,7 +29,7 @@
 #include "internal/projectactionscontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
-#include "internal/saveprojectscenario.h"
+#include "internal/opensaveprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
@@ -95,7 +95,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
-    ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
+    ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
     ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
@@ -121,7 +121,7 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore/Project/SaveToCloudDialog.qml");
-        ir->registerQmlUri(Uri("musescore://project/shareonaudiocloud"), "MuseScore/Project/ShareOnAudioCloudDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/alsoshareaudiocom"), "MuseScore/Project/AlsoShareAudioComDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore/Project/ProjectPropertiesDialog.qml");
@@ -158,8 +158,7 @@ void ProjectModule::registerUiTypes()
 
     qmlRegisterUncreatableType<QMLSaveLocationType>("MuseScore.Project", 1, 0, "SaveLocationType",
                                                     "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Project", 1, 0, "SaveToCloudResponse",
-                                                       "Not creatable as it is an enum type");
+
     qmlRegisterUncreatableType<GenerateAudioTimePeriod>("MuseScore.Project", 1, 0, "GenerateAudioTimePeriodType",
                                                         "Not creatable as it is an enum type");
 

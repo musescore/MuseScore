@@ -134,18 +134,15 @@ void InteractiveTestsModel::information()
 
 void InteractiveTestsModel::warning()
 {
-    int noSaveButton = int(IInteractive::Button::CustomButton) + 1;
-    int saveButton = noSaveButton + 1;
-
     IInteractive::Result result = interactive()->warning("Do you want to save changes to the score “Untitled” before closing?",
                                                          "Your changes will be lost if you don’t save them.",
-                                                         { IInteractive::ButtonData(noSaveButton, "Don’t save"),
-                                                           interactive()->buttonData(IInteractive::Button::Cancel),
-                                                           IInteractive::ButtonData(saveButton, "Save", true) }, saveButton);
+                                                         { interactive()->buttonData(IInteractive::Button::DontSave),
+                                                           interactive()->buttonData(IInteractive::Button::Save),
+                                                           interactive()->buttonData(IInteractive::Button::Cancel) });
 
-    if (result.button() == noSaveButton) {
+    if (result.standardButton() == IInteractive::Button::DontSave) {
         LOGI() << "Don’t save!!";
-    } else if (result.button() == saveButton) {
+    } else if (result.standardButton() == IInteractive::Button::Save) {
         LOGE() << "Save!!";
     } else {
         LOGE() << "Cancel!!";
@@ -156,6 +153,14 @@ void InteractiveTestsModel::critical()
 {
     IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
                                                        std::string("An error has occurred when trying to open this file"));
+    LOGD() << interactive()->buttonData(result.standardButton()).text;
+}
+
+void InteractiveTestsModel::criticalWithDetailedText()
+{
+    IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
+                                                       std::string("An error has occurred when trying to open this file"),
+                                                       std::string("Permission denied"));
     LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 

@@ -22,6 +22,8 @@
 #ifndef MU_PROJECT_EXPORTDIALOGMODEL_H
 #define MU_PROJECT_EXPORTDIALOGMODEL_H
 
+#include <QAbstractListModel>
+
 #include "modularity/ioc.h"
 
 #include "async/asyncable.h"
@@ -34,12 +36,10 @@
 #include "importexport/audioexport/iaudioexportconfiguration.h"
 #include "importexport/mei/imeiconfiguration.h"
 
-#include "projecttypes.h"
-#include "iprojectconfiguration.h"
 #include "inotationwritersregister.h"
+#include "iprojectconfiguration.h"
 #include "internal/iexportprojectscenario.h"
-
-#include <QAbstractListModel>
+#include "types/projecttypes.h"
 
 class QItemSelectionModel;
 
@@ -70,6 +70,9 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(int pngResolution READ pngResolution WRITE setPngResolution NOTIFY pngResolutionChanged)
     Q_PROPERTY(
         bool pngTransparentBackground READ pngTransparentBackground WRITE setPngTransparentBackground NOTIFY pngTransparentBackgroundChanged)
+
+    Q_PROPERTY(
+        bool svgTransparentBackground READ svgTransparentBackground WRITE setSvgTransparentBackground NOTIFY svgTransparentBackgroundChanged)
 
     Q_PROPERTY(int sampleRate READ sampleRate WRITE setSampleRate NOTIFY sampleRateChanged)
     Q_PROPERTY(int bitRate READ bitRate WRITE setBitRate NOTIFY bitRateChanged)
@@ -120,6 +123,9 @@ public:
     bool pngTransparentBackground() const;
     void setPngTransparentBackground(const bool& transparent);
 
+    bool svgTransparentBackground() const;
+    void setSvgTransparentBackground(const bool& transparent);
+
     Q_INVOKABLE QList<int> availableSampleRates() const;
     int sampleRate() const;
     void setSampleRate(int sampleRate);
@@ -163,6 +169,8 @@ signals:
     void pdfResolutionChanged(int resolution);
     void pngResolutionChanged(int resolution);
     void pngTransparentBackgroundChanged(bool transparent);
+
+    void svgTransparentBackgroundChanged(bool transparent);
 
     void availableSampleRatesChanged();
     void sampleRateChanged(int sampleRate);

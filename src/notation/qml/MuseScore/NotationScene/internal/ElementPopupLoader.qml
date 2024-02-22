@@ -26,25 +26,23 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
+import MuseScore.Playback 1.0
+
 Item {
     id: container
 
-    width: 0
+    property var popup: loader.item
+    property bool isPopupOpened: Boolean(popup) && popup.isOpened
 
-    height: 0
-
-    anchors.fill: parent
-    property var openedPopup: null
-    property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
-
-    signal opened()
-    signal closed()
 
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
     property int navigationOrderEnd: Boolean(loader.item)
                                         ? loader.item.navigationOrderEnd
                                         : navigationOrderStart
+
+    signal opened()
+    signal closed()
 
     QtObject {
         id: prv
@@ -53,53 +51,63 @@ Item {
             switch (type) {
             case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
             case Notation.TYPE_CAPO: return capoComp
+            case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case Notation.TYPE_SOUND_FLAG: return soundFlagComp
             }
 
             return null
         }
 
-        function openPopup(popup) {
-            if (Boolean(popup)) {
-                openedPopup = popup
-                container.opened()
-                popup.open()
-            }
+        function loadPopup() {
+            loader.active = true
         }
 
-        function closeOpenedPopup() {
-            if (isPopupOpened) {
-                openedPopup.close()
-                resetOpenedPopup()
-            }
+        function unloadPopup() {
+            loader.sourceComponent = undefined
+            loader.active = false
+
+            Qt.callLater(container.closed)
         }
 
-        function resetOpenedPopup() {
-            container.closed(false)
-            openedPopup = null
+        function updateContainerPosition(elementRect) {
+            container.x = elementRect.x
+            container.y = elementRect.y
+            container.height = elementRect.height
+            container.width = elementRect.width
+
+            loader.item.updatePosition()
         }
     }
 
     function show(elementType, elementRect) {
-        if (isPopupOpened) {
-            prv.closeOpenedPopup()
-        }
-        opened()
+        prv.loadPopup()
+
         var popup = loader.createPopup(prv.componentByType(elementType), elementRect)
-        prv.openPopup(popup)
+        popup.open()
+
+        Qt.callLater(container.opened)
     }
 
     function close() {
-        closed()
-        prv.closeOpenedPopup()
+        if (Boolean(container.popup) && container.popup.isOpened) {
+            container.popup.close()
+        }
     }
 
     Loader {
         id: loader
 
+        anchors.fill: parent
+        active: false
+
         function createPopup(comp, elementRect) {
             loader.sourceComponent = comp
             loader.item.parent = container
-            loader.item.updatePosition(elementRect)
+
+            prv.updateContainerPosition(elementRect)
+            loader.item.elementRectChanged.connect(function(elementRect) {
+                prv.updateContainerPosition(elementRect)
+            })
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
             //        This is necessary so that popups do not activate navigation in the new section,
@@ -117,8 +125,7 @@ Item {
         id: harpPedalComp
         HarpPedalPopup {
             onClosed: {
-                prv.resetOpenedPopup()
-                loader.sourceComponent = null
+                prv.unloadPopup()
             }
         }
     }
@@ -127,8 +134,25 @@ Item {
         id: capoComp
         CapoPopup {
             onClosed: {
-                prv.resetOpenedPopup()
-                loader.sourceComponent = null
+                prv.unloadPopup()
+            }
+        }
+    }
+
+    Component {
+        id: stringTuningsComp
+        StringTuningsPopup {
+            onClosed: {
+                prv.unloadPopup()
+            }
+        }
+    }
+
+    Component {
+        id: soundFlagComp
+        SoundFlagPopup {
+            onClosed: {
+                prv.unloadPopup()
             }
         }
     }

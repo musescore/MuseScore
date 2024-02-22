@@ -66,6 +66,8 @@ class Glissando;
 class GlissandoSegment;
 class GradualTempoChange;
 class GradualTempoChangeSegment;
+class GuitarBend;
+class GuitarBendSegment;
 
 class Hairpin;
 class HairpinSegment;
@@ -122,11 +124,13 @@ class StaffText;
 class StaffTypeChange;
 class Stem;
 class StemSlash;
+class StringTunings;
 class StretchedBend;
 class Sticking;
 class Symbol;
 class SystemText;
 class SystemDivider;
+class SoundFlag;
 
 class TabDurationSymbol;
 class TempoText;
@@ -137,7 +141,8 @@ class TextLineSegment;
 class TextLineBaseSegment;
 class TieSegment;
 class TimeSig;
-class Tremolo;
+class TremoloSingleChord;
+class TremoloTwoChord;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -190,6 +195,7 @@ private:
 
     static void draw(const GlissandoSegment* item, draw::Painter* painter);
     static void draw(const GradualTempoChangeSegment* item, draw::Painter* painter);
+    static void draw(const GuitarBendSegment* item, draw::Painter* painter);
 
     static void draw(const HairpinSegment* item, draw::Painter* painter);
     static void draw(const HarpPedalDiagram* item, draw::Painter* painter);
@@ -238,18 +244,21 @@ private:
     static void draw(const Stem* item, draw::Painter* painter);
     static void draw(const StemSlash* item, draw::Painter* painter);
     static void draw(const Sticking* item, draw::Painter* painter);
+    static void draw(const StringTunings* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
     static void draw(const Symbol* item, draw::Painter* painter);
     static void draw(const FSymbol* item, draw::Painter* painter);
     static void draw(const SystemDivider* item, draw::Painter* painter);
     static void draw(const SystemText* item, draw::Painter* painter);
+    static void draw(const SoundFlag* item, draw::Painter* painter);
 
     static void draw(const TempoText* item, draw::Painter* painter);
     static void draw(const Text* item, draw::Painter* painter);
     static void draw(const TextLineSegment* item, draw::Painter* painter);
     static void draw(const TieSegment* item, draw::Painter* painter);
     static void draw(const TimeSig* item, draw::Painter* painter);
-    static void draw(const Tremolo* item, draw::Painter* painter);
+    static void draw(const TremoloSingleChord* item, draw::Painter* painter);
+    static void draw(const TremoloTwoChord* item, draw::Painter* painter);
     static void draw(const TremoloBar* item, draw::Painter* painter);
     static void draw(const TrillSegment* item, draw::Painter* painter);
     static void draw(const TripletFeel* item, draw::Painter* painter);

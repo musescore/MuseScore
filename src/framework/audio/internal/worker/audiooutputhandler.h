@@ -23,8 +23,8 @@
 #ifndef MU_AUDIO_AUDIOIOHANDLER_H
 #define MU_AUDIO_AUDIOIOHANDLER_H
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
+#include "global/modularity/ioc.h"
+#include "global/async/asyncable.h"
 
 #include "ifxresolver.h"
 #include "iaudiooutput.h"
@@ -40,7 +40,7 @@ using SoundTrackWriterPtr = std::shared_ptr<SoundTrackWriter>;
 
 class AudioOutputHandler : public IAudioOutput, public async::Asyncable
 {
-    INJECT(fx::IFxResolver, fxResolver)
+    Inject<fx::IFxResolver> fxResolver;
 
 public:
     explicit AudioOutputHandler(IGetTrackSequence* getSequence);

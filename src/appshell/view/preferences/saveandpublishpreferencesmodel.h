@@ -38,7 +38,7 @@ class SaveAndPublishPreferencesModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(bool isAutoSaveEnabled READ isAutoSaveEnabled WRITE setAutoSaveEnabled NOTIFY autoSaveEnabledChanged)
     Q_PROPERTY(int autoSaveInterval READ autoSaveInterval WRITE setAutoSaveInterval NOTIFY autoSaveIntervalChanged)
-    Q_PROPERTY(int promptShareAudioCom READ promptShareAudioCom WRITE setPromptShareAudioCom NOTIFY promptShareAudioComChanged)
+    Q_PROPERTY(int alsoShareAudioCom READ alsoShareAudioCom WRITE setAlsoShareAudioCom NOTIFY alsoShareAudioComChanged)
 
 public:
     explicit SaveAndPublishPreferencesModel(QObject* parent = nullptr);
@@ -47,17 +47,17 @@ public:
 
     bool isAutoSaveEnabled() const;
     int autoSaveInterval() const;
-    bool promptShareAudioCom() const;
+    bool alsoShareAudioCom() const;
 
 public slots:
     void setAutoSaveEnabled(bool enabled);
     void setAutoSaveInterval(int minutes);
-    void setPromptShareAudioCom(bool prompt);
+    void setAlsoShareAudioCom(bool share);
 
 signals:
     void autoSaveEnabledChanged(bool enabled);
     void autoSaveIntervalChanged(int minutes);
-    void promptShareAudioComChanged(int prompt);
+    void alsoShareAudioComChanged(int prompt);
 };
 }
 

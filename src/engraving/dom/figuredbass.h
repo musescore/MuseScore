@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __FIGUREDBASS_H__
-#define __FIGUREDBASS_H__
+#ifndef MU_ENGRAVING_FIGUREDBASS_H
+#define MU_ENGRAVING_FIGUREDBASS_H
 
 #include "textbase.h"
 
@@ -91,6 +91,7 @@ class FiguredBass;
 class FiguredBassItem final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, FiguredBassItem)
+    DECLARE_CLASSOF(ElementType::FIGURED_BASS_ITEM)
 
 public:
     enum class Modifier : char {
@@ -225,8 +226,8 @@ private:
 struct FiguredBassFont {
     String family;
     String displayName;
-    double defPitch;
-    double defLineHeight;
+    double defPitch = 0.0;
+    double defLineHeight = 0.0;
     Char displayAccidental[int(FiguredBassItem::Modifier::NUMOF)];
     Char displayParenthesis[int(FiguredBassItem::Parenthesis::NUMOF)];
     Char displayDigit[int(FiguredBassItem::Style::NUMOF)][10][int(FiguredBassItem::Combination::NUMOF)];
@@ -275,6 +276,7 @@ public:
     void startEdit(EditData&) override;
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
+    void regenerateText();
 
     bool onNote() const { return m_onNote; }
     void setOnNote(bool val) { m_onNote = val; }
@@ -292,6 +294,8 @@ public:
     size_t itemsCount() const { return m_items.size(); }
     void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
     const std::vector<FiguredBassItem*>& items() const { return m_items; }
+    void clearItems();
+    void addItemToLinked(FiguredBassItem* item);
 
     // the array of configured fonts
     static const std::vector<FiguredBassFont>& FBFonts();
@@ -310,7 +314,7 @@ public:
             return 0.0;
         }
     };
-    DECLARE_LAYOUTDATA_METHODS(FiguredBass);
+    DECLARE_LAYOUTDATA_METHODS(FiguredBass)
 
 private:
 
@@ -329,9 +333,9 @@ private:
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Modifier);
-Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Parenthesis);
-Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::ContLine);
+Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Modifier)
+Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::Parenthesis)
+Q_DECLARE_METATYPE(mu::engraving::FiguredBassItem::ContLine)
 #endif
 
 #endif

@@ -77,6 +77,9 @@ class Fingering;
 class Glissando;
 class GradualTempoChange;
 class Groups;
+class GuitarBend;
+class GuitarBendSegment;
+class GuitarBendHold;
 
 class Hairpin;
 class Harmony;
@@ -142,9 +145,11 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class StringData;
+class StringTunings;
 class System;
 class SystemDivider;
 class Symbol;
+class SoundFlag;
 class BSymbol;
 class FSymbol;
 
@@ -155,12 +160,17 @@ class Tie;
 class TimeSig;
 class TimeSigMap;
 class SigEvent;
-class Tremolo;
+class TremoloSingleChord;
+class TremoloTwoChord;
 class TremoloBar;
 class Trill;
 class Tuplet;
 class Vibrato;
 class Volta;
+}
+
+namespace mu::engraving::compat {
+struct TremoloCompat;
 }
 
 namespace mu::engraving::read410 {
@@ -219,6 +229,8 @@ public:
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
     static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(Groups* g, XmlReader& xml, ReadContext& ctx);
+    static void read(GuitarBend* g, XmlReader& xml, ReadContext& ctx);
+    static void read(GuitarBendHold* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
@@ -280,9 +292,11 @@ public:
     static void read(Stem* s, XmlReader& xml, ReadContext& ctx);
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(StringData* item, XmlReader& xml);
+    static void read(StringTunings* s, XmlReader& xml, ReadContext& ctx);
     static void read(System* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
     static void read(Symbol* sym, XmlReader& xml, ReadContext& ctx);
+    static void read(SoundFlag* sym, XmlReader& xml, ReadContext& ctx);
     static void read(FSymbol* sym, XmlReader& xml, ReadContext& ctx);
 
     static void read(Text* t, XmlReader& xml, ReadContext& ctx);
@@ -291,12 +305,17 @@ public:
     static void read(Tie* t, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSigMap* item, XmlReader& xml, ReadContext& ctx);
-    static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
+    static void read(TremoloTwoChord* t, XmlReader& xml, ReadContext& ctx);
+    static void read(TremoloSingleChord* t, XmlReader& xml, ReadContext& ctx);
+
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
     static void read(Trill* t, XmlReader& xml, ReadContext& ctx);
     static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);
     static void read(Vibrato* v, XmlReader& xml, ReadContext& ctx);
     static void read(Volta* v, XmlReader& xml, ReadContext& ctx);
+
+    // compat
+    static void read(compat::TremoloCompat* tc, XmlReader& xml, ReadContext& ctx);
 
     // temp compat
 
@@ -316,6 +335,8 @@ public:
     static bool readProperties(ChordRest* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Clef* c, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx);
+
+    static bool readProperties(GuitarBendSegment* g, const AsciiStringView& tag, XmlReader& xml, ReadContext&);
 
     static bool readProperties(Instrument* item, XmlReader& xml, ReadContext& ctx, Part* part, bool* customDrumset);
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NOTIFIER_H__
-#define __NOTIFIER_H__
+#ifndef MU_ENGRAVING_NOTIFIER_H
+#define MU_ENGRAVING_NOTIFIER_H
 
 #include "global/allocator.h"
 
@@ -37,12 +37,10 @@ class Listener
 {
     OBJECT_ALLOCATOR(engraving, Listener)
 
-    Notifier<Data>* _notifier = nullptr;
-
 public:
     Listener() = default;
     Listener(Notifier<Data>* n)
-        : _notifier(n) {}
+        : m_notifier(n) {}
     // do not copy notifier attachment
     Listener(const Listener<Data>&) {}
     Listener(Listener<Data>&&);
@@ -54,18 +52,21 @@ public:
 
     void detachNotifier(Notifier<Data>* n)
     {
-        if (_notifier == n) {
+        if (m_notifier == n) {
             setNotifier(nullptr);
         }
     }
 
-    Notifier<Data>* notifier() { return _notifier; }
-    const Notifier<Data>* notifier() const { return _notifier; }
+    Notifier<Data>* notifier() { return m_notifier; }
+    const Notifier<Data>* notifier() const { return m_notifier; }
 
     virtual void receive(Data d) = 0;
 
     template<typename T>
     friend void swap(Listener<T>& l1, Listener<T>& l2);
+
+private:
+    Notifier<Data>* m_notifier = nullptr;
 };
 
 //---------------------------------------------------------
@@ -75,9 +76,6 @@ public:
 template<typename Data>
 class Notifier
 {
-    std::vector<Listener<Data>*> _listeners;
-    bool _atChange = false;
-
 public:
     Notifier() = default;
     // do not copy listeners list
@@ -85,40 +83,45 @@ public:
     Notifier& operator=(const Notifier<Data>&) { return *this; }
     ~Notifier()
     {
-        _atChange = true;     // we don't need to update listeners list anymore
-        for (Listener<Data>* l : _listeners) {
+        m_atChange = true;     // we don't need to update listeners list anymore
+        for (Listener<Data>* l : m_listeners) {
             l->detachNotifier(this);
         }
     }
 
     void addListener(Listener<Data>* l)
     {
-        if (_atChange || !l) {
+        if (m_atChange || !l) {
             return;
         }
-        _atChange = true;
-        _listeners.push_back(l);
+        m_atChange = true;
+        m_listeners.push_back(l);
         l->setNotifier(this);
-        _atChange = false;
+        m_atChange = false;
     }
 
     void removeListener(Listener<Data>* l)
     {
-        if (_atChange || !l) {
+        if (m_atChange || !l) {
             return;
         }
-        _atChange = true;
-        _listeners.erase(std::remove(_listeners.begin(), _listeners.end(), l), _listeners.end());
+        m_atChange = true;
+        m_listeners.erase(std::remove(m_listeners.begin(), m_listeners.end(), l), m_listeners.end());
         l->detachNotifier(this);
-        _atChange = false;
+        m_atChange = false;
     }
 
     void notify(Data d) const
     {
-        for (Listener<Data>* l : _listeners) {
+        for (Listener<Data>* l : m_listeners) {
             l->receive(d);
         }
     }
+
+private:
+
+    std::vector<Listener<Data>*> m_listeners;
+    bool m_atChange = false;
 };
 
 template<typename Data>
@@ -146,24 +149,24 @@ Listener<Data>& Listener<Data>::operator=(Listener<Data>&& other)
 template<typename Data>
 Listener<Data>::~Listener()
 {
-    if (_notifier) {
-        _notifier->removeListener(this);
+    if (m_notifier) {
+        m_notifier->removeListener(this);
     }
 }
 
 template<typename Data>
 void Listener<Data>::setNotifier(Notifier<Data>* n)
 {
-    if (n == _notifier) {
+    if (n == m_notifier) {
         return;
     }
-    Notifier<Data>* oldNotifier = _notifier;
-    _notifier = n;
+    Notifier<Data>* oldNotifier = m_notifier;
+    m_notifier = n;
     if (oldNotifier) {
         oldNotifier->removeListener(this);
     }
-    if (_notifier) {
-        _notifier->addListener(this);
+    if (m_notifier) {
+        m_notifier->addListener(this);
     }
 }
 

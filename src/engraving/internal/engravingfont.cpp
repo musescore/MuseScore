@@ -28,7 +28,6 @@
 #include "types/symnames.h"
 
 #include "dom/mscore.h"
-#include "dom/shape.h"
 
 #include "smufl.h"
 
@@ -439,8 +438,8 @@ void EngravingFont::loadEngravingDefaults(const JsonObject& engravingDefaultsObj
         { "legerLineExtension",         { { Sid::ledgerLineLength } } },
         { "slurEndpointThickness",      { { Sid::SlurEndWidth } } },
         { "slurMidpointThickness",      { { Sid::SlurMidWidth } } },
-        // "tieEndpointThickness" not supported
-        // "tieMidpointThickness" not supported
+        { "tieEndpointThickness",       { { Sid::TieEndWidth } } },
+        { "tieMidpointThickness",       { { Sid::TieMidWidth } } },
         { "thinBarlineThickness",       { { Sid::barWidth, Sid::doubleBarWidth } } },
         { "thickBarlineThickness",      { { Sid::endBarWidth } } },
         // "dashedBarlineThickness" not supported
@@ -573,8 +572,7 @@ RectF EngravingFont::bbox(SymId id, const SizeF& mag) const
     }
 
     RectF r = sym(id).bbox;
-    return RectF(r.x() * mag.width(), r.y() * mag.height(),
-                 r.width() * mag.width(), r.height() * mag.height());
+    return r.scale(mag);
 }
 
 RectF EngravingFont::bbox(const SymIdList& s, double mag) const
@@ -607,6 +605,95 @@ Shape EngravingFont::shape(const SymIdList& s, const SizeF& mag) const
         pos.rx() += advance(id, mag.width());
     }
     return sh;
+}
+
+Shape EngravingFont::shapeWithCutouts(SymId id, double mag)
+{
+    return shapeWithCutouts(id, SizeF(mag, mag));
+}
+
+Shape EngravingFont::shapeWithCutouts(SymId id, const SizeF& mag)
+{
+    Shape& shape = sym(id).shapeWithCutouts;
+    if (shape.empty()) {
+        constructShapeWithCutouts(shape, id);
+    }
+
+    return shape.scaled(mag);
+}
+
+void EngravingFont::constructShapeWithCutouts(Shape& shape, SymId id)
+{
+    RectF boundingBox = bbox(id, 1.0);
+    double bottom = boundingBox.bottom();
+    double top = boundingBox.top();
+    double left = boundingBox.left();
+    double right = boundingBox.right();
+
+    PointF cutOutNW = smuflAnchor(id, SmuflAnchorId::cutOutNW, 1.0);
+    PointF cutOutNE = smuflAnchor(id, SmuflAnchorId::cutOutNE, 1.0);
+    PointF cutOutSW = smuflAnchor(id, SmuflAnchorId::cutOutSW, 1.0);
+    PointF cutOutSE = smuflAnchor(id, SmuflAnchorId::cutOutSE, 1.0);
+
+    bool nwNull = cutOutNW.isNull();
+    bool neNull = cutOutNE.isNull();
+    bool swNull = cutOutSW.isNull();
+    bool seNull = cutOutSE.isNull();
+
+    if (nwNull && neNull && swNull && seNull) {
+        shape = Shape(bbox(id, 1.0));
+        return;
+    }
+
+    if (nwNull) {
+        cutOutNW = PointF(left, top);
+    }
+    if (neNull) {
+        cutOutNE = PointF(right, top);
+    }
+    if (swNull) {
+        cutOutSW = PointF(left, bottom);
+    }
+    if (seNull) {
+        cutOutSE = PointF(right, bottom);
+    }
+
+    double leftInset = std::max(cutOutNW.x(), cutOutSW.x());
+    double rightInset = std::min(cutOutNE.x(), cutOutSE.x());
+    double topInset = std::max(cutOutNW.y(), cutOutNE.y());
+    double bottomInset = std::min(cutOutSW.y(), cutOutSE.y());
+
+    std::vector<RectF> rects;
+    rects.reserve(6); //at most
+
+    // bottom rect
+    rects.emplace_back(RectF(PointF(cutOutSW.x(), bottom), PointF(cutOutSE.x(), topInset)).normalized());
+    // right rect
+    bool rightRectPlaced = false;
+    if (!seNull) {
+        rects.emplace_back(RectF(PointF(right, cutOutSE.y()), PointF(leftInset, cutOutNE.y())).normalized());
+        rightRectPlaced = true;
+    }
+    // top rect
+    bool topRectPlaced = false;
+    if (!rightRectPlaced || !neNull) {
+        rects.emplace_back(RectF(PointF(cutOutNW.x(), top), PointF(cutOutNE.x(), bottomInset)).normalized());
+        topRectPlaced = true;
+    }
+    // left rect
+    if (!topRectPlaced || !nwNull) {
+        rects.emplace_back(RectF(PointF(left, cutOutSW.y()), PointF(rightInset, cutOutNW.y())).normalized());
+    }
+    // center horizontal rect if needed
+    if (leftInset > rightInset && topInset < bottomInset) {
+        rects.emplace_back(RectF(PointF(left, bottomInset), PointF(right, topInset)).normalized());
+    }
+    // center vertical rect if needed
+    if (leftInset < rightInset && topInset > bottomInset) {
+        rects.emplace_back(RectF(PointF(leftInset, bottom), PointF(rightInset, top)).normalized());
+    }
+
+    shape = Shape(rects);
 }
 
 // =============================================
@@ -657,17 +744,17 @@ PointF EngravingFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double ma
 // Draw
 // =============================================
 
-void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
+void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos, const double angle) const
 {
     const Sym& sym = this->sym(id);
     if (sym.isCompound()) { // is this a compound symbol?
-        draw(sym.subSymbolIds, painter, mag, pos);
+        draw(sym.subSymbolIds, painter, mag, pos, angle);
         return;
     }
 
     if (!sym.isValid()) {
         if (MScore::useFallbackFont && !engravingFonts()->isFallbackFont(this)) {
-            engravingFonts()->fallbackFont()->draw(id, painter, mag, pos);
+            engravingFonts()->fallbackFont()->draw(id, painter, mag, pos, angle);
         } else {
             LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
@@ -680,29 +767,36 @@ void EngravingFont::draw(SymId id, Painter* painter, const SizeF& mag, const Poi
     m_font.setPointSizeF(size);
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
+    if (angle != 0) {
+        const double _width = sym.bbox.width() / 2;
+        const double _height = sym.bbox.height() / 2;
+        painter->translate(_width, -_height);
+        painter->rotate(angle);
+        painter->translate(-_width, _height);
+    }
     painter->drawSymbol(PointF(pos.x() / mag.width(), pos.y() / mag.height()), symCode(id));
     painter->restore();
 }
 
-void EngravingFont::draw(SymId id, Painter* painter, double mag, const PointF& pos) const
+void EngravingFont::draw(SymId id, Painter* painter, double mag, const PointF& pos, const double angle) const
 {
-    draw(id, painter, SizeF(mag, mag), pos);
+    draw(id, painter, SizeF(mag, mag), pos, angle);
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, double mag, const PointF& startPos, const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, painter, mag, pos);
+        draw(id, painter, mag, pos, angle);
         pos.setX(pos.x() + advance(id, mag));
     }
 }
 
-void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
+void EngravingFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos, const double angle) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, painter, mag, pos);
+        draw(id, painter, mag, pos, angle);
         pos.setX(pos.x() + advance(id, mag.width()));
     }
 }

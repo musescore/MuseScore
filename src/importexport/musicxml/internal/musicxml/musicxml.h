@@ -41,11 +41,11 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 struct MusicXmlPartGroup {
-    int span;
-    int start;
-    BracketType type;
-    bool barlineSpan;
-    int column;
+    int span = 0;
+    int start = 0;
+    BracketType type = BracketType::NO_BRACKET;
+    bool barlineSpan = false;
+    int column = 0;
 };
 
 const int MAX_LYRICS       = 16;
@@ -58,16 +58,16 @@ const int MAX_NUMBER_LEVEL = 16; // maximum number of overlapping MusicXML objec
 //---------------------------------------------------------
 
 struct CreditWords {
-    int page;
-    QString type;
-    double defaultX;
-    double defaultY;
-    double fontSize;
-    QString justify;
-    QString hAlign;
-    QString vAlign;
-    QString words;
-    CreditWords(int p, QString tp, double dx, double dy, double fs, QString j, QString ha, QString va, QString w)
+    int page = 0;
+    String type;
+    double defaultX = 0.0;
+    double defaultY = 0.0;
+    double fontSize = 0.0;
+    String justify;
+    String hAlign;
+    String vAlign;
+    String words;
+    CreditWords(int p, String tp, double dx, double dy, double fs, String j, String ha, String va, String w)
     {
         page = p;
         type = tp;
@@ -81,7 +81,7 @@ struct CreditWords {
     }
 };
 
-typedef  QList<CreditWords*> CreditWordsList;
+typedef  std::vector<CreditWords*> CreditWordsList;
 typedef  CreditWordsList::iterator iCreditWords;
 typedef  CreditWordsList::const_iterator ciCreditWords;
 
@@ -95,17 +95,18 @@ typedef  CreditWordsList::const_iterator ciCreditWords;
 
 class JumpMarkerDesc
 {
-    EngravingItem* _el;
-    Measure* _meas;
-
 public:
     JumpMarkerDesc(EngravingItem* el, Measure* meas)
-        : _el(el), _meas(meas) {}
-    EngravingItem* el() const { return _el; }
-    Measure* meas() const { return _meas; }
+        : m_el(el), m_meas(meas) {}
+    EngravingItem* el() const { return m_el; }
+    Measure* meas() const { return m_meas; }
+
+private:
+    EngravingItem* m_el = nullptr;
+    Measure* m_meas = nullptr;
 };
 
-typedef QList<JumpMarkerDesc> JumpMarkerDescList;
+typedef std::vector<JumpMarkerDesc> JumpMarkerDescList;
 
 //---------------------------------------------------------
 //   SlurDesc
@@ -122,15 +123,15 @@ public:
         NONE, START, STOP
     };
     SlurDesc()
-        : _slur(0), _state(State::NONE) {}
-    Slur* slur() const { return _slur; }
-    void start(Slur* slur) { _slur = slur; _state = State::START; }
-    void stop(Slur* slur) { _slur = slur; _state = State::STOP; }
-    bool isStart() const { return _state == State::START; }
-    bool isStop() const { return _state == State::STOP; }
+        : m_slur(0), m_state(State::NONE) {}
+    Slur* slur() const { return m_slur; }
+    void start(Slur* slur) { m_slur = slur; m_state = State::START; }
+    void stop(Slur* slur) { m_slur = slur; m_state = State::STOP; }
+    bool isStart() const { return m_state == State::START; }
+    bool isStop() const { return m_state == State::STOP; }
 private:
-    Slur* _slur;
-    State _state;
+    Slur* m_slur = nullptr;
+    State m_state;
 };
 
 //---------------------------------------------------------
@@ -138,6 +139,6 @@ private:
 //---------------------------------------------------------
 
 typedef std::vector<MusicXmlPartGroup*> MusicXmlPartGroupList;
-typedef QMap<SLine*, QPair<int, int> > MusicXmlSpannerMap;
+typedef std::map<SLine*, std::pair<int, int> > MusicXmlSpannerMap;
 } // namespace Ms
 #endif

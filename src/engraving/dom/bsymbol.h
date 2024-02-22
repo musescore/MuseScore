@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BSYMBOL_H__
-#define __BSYMBOL_H__
+#ifndef MU_ENGRAVING_BSYMBOL_H
+#define MU_ENGRAVING_BSYMBOL_H
 
 #include <vector>
 
@@ -57,7 +57,6 @@ public:
     void setAlign(Align a) { m_align = a; }
 
     const std::vector<EngravingItem*>& leafs() const { return m_leafs; }
-    std::vector<EngravingItem*>& leafs() { return m_leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     std::vector<mu::LineF> dragAnchorLines() const override;

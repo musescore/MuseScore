@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "audio/iaudiostream.h"
+#include "iaudiostream.h"
 #include "samplerateconvertor.h"
 
 namespace mu::audio {

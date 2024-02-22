@@ -32,8 +32,12 @@ using namespace mu::ui;
 using namespace mu::draw;
 using namespace mu::notation;
 
-static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
-static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
+static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
+
+static void compensateFloatPart(RectF& rect)
+{
+    rect.adjust(-1, -1, 1, 1);
+}
 
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : uicomponents::QuickPaintedView(parent)
@@ -66,7 +70,7 @@ AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
 
     //! NOTE For diagnostic tools
     dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
-        redraw();
+        scheduleRedraw();
     });
 
     m_enableAutoScrollTimer.setSingleShot(true);
@@ -104,7 +108,7 @@ void AbstractNotationPaintView::load()
         emit viewportChanged();
     });
 
-    redraw();
+    scheduleRedraw();
 }
 
 void AbstractNotationPaintView::initBackground()
@@ -113,7 +117,7 @@ void AbstractNotationPaintView::initBackground()
 
     configuration()->backgroundChanged().onNotify(this, [this]() {
         emit backgroundColorChanged(configuration()->backgroundColor());
-        redraw();
+        scheduleRedraw();
     });
 }
 
@@ -133,8 +137,10 @@ void AbstractNotationPaintView::moveCanvasToCenter()
     }
 
     PointF canvasCenter = this->canvasCenter();
+    Transform oldMatrix = m_matrix;
+
     if (doMoveCanvas(canvasCenter.x(), canvasCenter.y())) {
-        onMatrixChanged(m_matrix, false);
+        onMatrixChanged(oldMatrix, m_matrix, false);
     }
 }
 
@@ -232,7 +238,8 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     m_notation->notationChanged().onNotify(this, [this, interaction]() {
         interaction->hideShadowNote();
-        redraw();
+        m_shadowNoteRect = RectF();
+        scheduleRedraw();
     });
 
     onNoteInputStateChanged();
@@ -241,7 +248,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     });
 
     interaction->selectionChanged().onNotify(this, [this]() {
-        redraw();
+        scheduleRedraw();
     });
 
     interaction->showItemRequested().onReceive(this, [this](const INotationInteraction::ShowItemRequest& request) {
@@ -263,6 +270,11 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     updateLoopMarkers();
     notationPlayback()->loopBoundariesChanged().onNotify(this, [this]() {
         updateLoopMarkers();
+    });
+
+    m_notation->viewModeChanged().onNotify(this, [this]() {
+        updateLoopMarkers();
+        ensureViewportInsideScrollableArea();
     });
 
     if (isMainView()) {
@@ -289,7 +301,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
     }
 
     forceFocusIn();
-    redraw();
+    scheduleRedraw();
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
@@ -315,6 +327,7 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
         return;
     }
 
+    Transform oldMatrix = m_matrix;
     m_matrix = matrix;
 
     // If `ensureViewportInsideScrollableArea` returns true, it has already
@@ -323,14 +336,21 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
         return;
     }
 
-    onMatrixChanged(m_matrix, false);
+    onMatrixChanged(oldMatrix, m_matrix, false);
 }
 
-void AbstractNotationPaintView::onMatrixChanged(const Transform&, bool overrideZoomType)
+void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix, bool overrideZoomType)
 {
     UNUSED(overrideZoomType);
 
-    redraw();
+    Transform oldMatrixInverted = oldMatrix.inverted();
+
+    if (m_shadowNoteRect.isValid()) {
+        RectF logicRect = oldMatrixInverted.map(m_shadowNoteRect);
+        m_shadowNoteRect = newMatrix.map(logicRect);
+    }
+
+    scheduleRedraw();
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
@@ -355,9 +375,7 @@ void AbstractNotationPaintView::onViewSizeChanged()
 
     ensureViewportInsideScrollableArea();
 
-    if (m_playbackCursor->visible()) {
-        redraw();
-    }
+    scheduleRedraw();
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
@@ -373,10 +391,10 @@ void AbstractNotationPaintView::updateLoopMarkers()
     m_loopInMarker->move(loop.loopInTick);
     m_loopOutMarker->move(loop.loopOutTick);
 
-    m_loopInMarker->setVisible(loop.visible);
-    m_loopOutMarker->setVisible(loop.visible);
+    m_loopInMarker->setVisible(loop.enabled);
+    m_loopOutMarker->setVisible(loop.enabled);
 
-    redraw();
+    scheduleRedraw();
 }
 
 INotationPtr AbstractNotationPaintView::notation() const
@@ -432,7 +450,8 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
 
     if (INotationInteractionPtr interaction = notationInteraction()) {
         interaction->hideShadowNote();
-        redraw();
+        m_shadowNoteRect = RectF();
+        scheduleRedraw();
     }
 }
 
@@ -468,8 +487,26 @@ bool AbstractNotationPaintView::isNoteEnterMode() const
 void AbstractNotationPaintView::showShadowNote(const PointF& pos)
 {
     TRACEFUNC;
-    notationInteraction()->showShadowNote(pos);
-    redraw();
+
+    bool visible = notationInteraction()->showShadowNote(pos);
+
+    if (m_shadowNoteRect.isValid()) {
+        scheduleRedraw(m_shadowNoteRect);
+
+        if (!visible) {
+            m_shadowNoteRect = RectF();
+            return;
+        }
+    }
+
+    RectF shadowNoteRect = fromLogical(notationInteraction()->shadowNoteRect());
+
+    if (shadowNoteRect.isValid()) {
+        compensateFloatPart(shadowNoteRect);
+        scheduleRedraw(shadowNoteRect);
+    }
+
+    m_shadowNoteRect = shadowNoteRect;
 }
 
 void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)
@@ -580,15 +617,15 @@ void AbstractNotationPaintView::onNotationSetup()
     });
 
     configuration()->foregroundChanged().onNotify(this, [this]() {
-        redraw();
+        scheduleRedraw();
     });
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-        redraw();
+        scheduleRedraw();
     });
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
-        redraw();
+        scheduleRedraw();
     });
 }
 
@@ -674,7 +711,7 @@ RectF AbstractNotationPaintView::notationContentRect() const
 
     RectF result;
     for (const Page* page: notationElements()->pages()) {
-        result.unite(page->layoutData()->bbox().translated(page->pos()));
+        result.unite(page->ldata()->bbox().translated(page->pos()));
     }
 
     return result;
@@ -684,7 +721,7 @@ RectF AbstractNotationPaintView::scrollableAreaRect() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
-    qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? SCROLL_LIMIT_ON_OFFSET : SCROLL_LIMIT_OFF_OFFSET;
+    qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? 0.0 : SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR;
 
     qreal overscrollX = viewport.width() * overscrollFactor;
     qreal overscrollY = viewport.height() * overscrollFactor;
@@ -877,8 +914,9 @@ bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
         return false;
     }
 
+    Transform oldMatrix = m_matrix;
     m_matrix.translate(dx, dy);
-    onMatrixChanged(m_matrix, false);
+    onMatrixChanged(oldMatrix, m_matrix, false);
     return true;
 }
 
@@ -887,8 +925,9 @@ bool AbstractNotationPaintView::moveCanvasToPosition(const PointF& logicPos)
     TRACEFUNC;
 
     PointF viewTopLeft = viewportTopLeft();
+    Transform oldMatrix = m_matrix;
     if (doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y())) {
-        onMatrixChanged(m_matrix, false);
+        onMatrixChanged(oldMatrix, m_matrix, false);
         return true;
     }
 
@@ -899,10 +938,11 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 {
     TRACEFUNC;
 
+    Transform oldMatrix = m_matrix;
     bool moved = doMoveCanvas(dx, dy);
 
     if (moved) {
-        onMatrixChanged(m_matrix, false);
+        onMatrixChanged(oldMatrix, m_matrix, false);
 
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
@@ -933,7 +973,7 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
     return true;
 }
 
-void AbstractNotationPaintView::redraw(const mu::RectF& rect)
+void AbstractNotationPaintView::scheduleRedraw(const mu::RectF& rect)
 {
     QRect qrect = correctDrawRect(rect).toQRect();
     update(qrect);
@@ -1005,6 +1045,7 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
 
     PointF pointBeforeScaling = toLogical(pos);
 
+    Transform oldMatrix = m_matrix;
     m_matrix.scale(factor, factor);
 
     PointF pointAfterScaling = toLogical(pos);
@@ -1014,7 +1055,7 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
 
     doMoveCanvas(dx, dy);
 
-    onMatrixChanged(m_matrix, overrideZoomType);
+    onMatrixChanged(oldMatrix, m_matrix, overrideZoomType);
 }
 
 void AbstractNotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
@@ -1199,10 +1240,12 @@ void AbstractNotationPaintView::setReadonly(bool readonly)
 
 void AbstractNotationPaintView::clear()
 {
+    Transform oldMatrix = m_matrix;
     m_matrix = Transform();
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
-    onMatrixChanged(m_matrix, false);
+    m_shadowNoteRect = RectF();
+    onMatrixChanged(oldMatrix, m_matrix, false);
 }
 
 qreal AbstractNotationPaintView::width() const
@@ -1268,7 +1311,7 @@ void AbstractNotationPaintView::onPlayingChanged()
         midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
         movePlaybackCursor(tick);
     } else {
-        redraw();
+        scheduleRedraw();
     }
 }
 
@@ -1311,10 +1354,10 @@ void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t tick)
 
     //! NOTE: the difference between the old cursor rect and the new one is not big, so we redraw their united rect
     if (dx < 1.0 && dy < 1.0) {
-        redraw(dirtyRect1.united(dirtyRect2));
+        scheduleRedraw(dirtyRect1.united(dirtyRect2));
     } else {
-        redraw(dirtyRect1);
-        redraw(dirtyRect2);
+        scheduleRedraw(dirtyRect1);
+        scheduleRedraw(dirtyRect2);
     }
 }
 

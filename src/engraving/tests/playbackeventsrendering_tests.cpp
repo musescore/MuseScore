@@ -25,8 +25,11 @@
 
 #include "mpe/tests/utils/articulationutils.h"
 
+#include "dom/factory.h"
 #include "dom/measure.h"
+#include "dom/part.h"
 #include "dom/segment.h"
+#include "dom/harppedaldiagram.h"
 
 #include "utils/scorerw.h"
 #include "playback/playbackeventsrenderer.h"
@@ -40,6 +43,8 @@ static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in micro
 static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t DEMI_SEMI_QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 8; // duration in microseconds for 4/4 120BPM
+static constexpr duration_t HALF_NOTE_DURATION = QUARTER_NOTE_DURATION * 2; // duration in microseconds for 1/2 120BPM
+static constexpr duration_t WHOLE_NOTE_DURATION = QUARTER_NOTE_DURATION * 4; // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackEventsRendererTests : public ::testing::Test
 {
@@ -53,6 +58,31 @@ protected:
         m_dummyPattern.emplace(0, m_dummyPatternSegment);
 
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
+
+        //! NOTE: allows to read test files using their version readers
+        //! instead of using 302 (see mscloader.cpp, makeReader)
+        MScore::useRead302InTestMode = false;
+    }
+
+    void TearDown() override
+    {
+        MScore::useRead302InTestMode = true;
+    }
+
+    const Chord* findChord(const Score* score, int tick, track_idx_t track = 0) const
+    {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+
+            const Chord* chord = toMeasure(mb)->findChord(Fraction::fromTicks(tick), track);
+            if (chord) {
+                return chord;
+            }
+        }
+
+        return nullptr;
     }
 
     ArticulationsProfilePtr m_defaultProfile = nullptr;
@@ -898,6 +928,222 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 }
 
 /**
+ * @brief PlaybackEventsRendererTests_TwoNotes_Discrete_Harp_Glissando
+ * @details Render a score with 3 measures containing whole notes (C4, C5, C4) and glissandos
+ *          between them.  Add harp pedal diagrams to the first and second measures set to a
+ *          whole tone scale, then back to Cmaj.  Check the glisses render as expected
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) {
+    // [GIVEN]
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "TwoNotes_Discrete_Harp_Glissando/TwoNotes_Discrete_Harp_Glissando.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    Measure* secondMeasure = firstMeasure->nextMeasure();
+    ASSERT_TRUE(secondMeasure);
+
+    Segment* secondSegment = secondMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(secondSegment);
+
+    ChordRest* secondChord = secondSegment->nextChordRest(0);
+    ASSERT_TRUE(secondChord);
+
+    // TEST FIRST GLISS
+
+    // [GIVEN] Expected glissando disclosure
+    size_t expectedSubNotesCount = 8;
+
+    float expectedDuration = static_cast<float>(WHOLE_NOTE_DURATION) / expectedSubNotesCount;
+
+    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::C, 4);
+    std::vector<int> pitchesWt = { 0, 0, 2, 4, 6, 8, 10, 12 };
+
+    std::vector<pitch_level_t> expectedPitches;
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel + pitchesWt.at(i) * PITCH_LEVEL_STEP);
+    }
+
+    m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
+
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
+
+            // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, static_cast<int>(i * expectedDuration));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+
+    // TEST SECOND GLISS
+
+    // [GIVEN] Expected glissando disclosure
+    expectedSubNotesCount = 4;
+    expectedDuration = static_cast<float>(WHOLE_NOTE_DURATION) / expectedSubNotesCount;
+
+    nominalPitchLevel = pitchLevel(PitchClass::C, 5);
+    std::vector<int> pitches2 = { 0, 1, 3, 6 };
+
+    expectedPitches.clear();
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel - pitches2.at(i) * PITCH_LEVEL_STEP);
+    }
+
+    m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
+
+    PlaybackEventsMap result2;
+    m_renderer.render(secondChord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result2);
+
+    for (const auto& pair : result2) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
+
+            // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
+
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, WHOLE_NOTE_DURATION + static_cast<int>(i * expectedDuration));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Glissando_on_tied_notes
+ * @details Make sure we render discrete/continuous glissando on tied notes
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
+{
+    // [GIVEN]
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "glissando_on_tied_notes/glissando_on_tied_notes.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
+    m_defaultProfile->setPattern(ArticulationType::ContinuousGlissando, m_dummyPattern);
+
+    // ###################################################
+    // 1st case: Discrete glissando on a tied note
+    // ###################################################
+    const Chord* chord = findChord(score, 1440, 0); // tied A4 with discrete glissando
+    ASSERT_TRUE(chord);
+    ASSERT_FALSE(chord->notes().empty());
+    ASSERT_TRUE(chord->notes().front()->tieBack());
+
+    // [GIVEN] Expected glissando disclosure
+    size_t expectedSubNotesCount = 4;
+    float expectedDuration = static_cast<float>(QUARTER_NOTE_DURATION) / expectedSubNotesCount;
+    mpe::timestamp_t expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
+    pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::A, 4);
+    std::vector<int> pitchesWt = { 0, -1, -2, -3 };
+
+    std::vector<pitch_level_t> expectedPitches;
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel + pitchesWt.at(i) * PITCH_LEVEL_STEP);
+    }
+
+    // [WHEN] Request to render a chord with the A4 note on it
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::DiscreteGlissando));
+
+            // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<int>(i * expectedDuration));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+
+    // ###################################################
+    // 2nd case: Continuous glissando on a tied note
+    // ###################################################
+    chord = findChord(score, 5280, 0); // tied A4 with continuous glissando
+    ASSERT_TRUE(chord);
+    ASSERT_FALSE(chord->notes().empty());
+    ASSERT_TRUE(chord->notes().front()->tieBack());
+
+    // [GIVEN] Expected glissando disclosure
+    expectedSubNotesCount = 1;
+    expectedDuration = QUARTER_NOTE_DURATION;
+    expectedTimestamp = timestampFromTicks(score, chord->tick().ticks());
+    nominalPitchLevel = pitchLevel(PitchClass::A, 4);
+
+    expectedPitches.clear();
+    for (size_t i = 0; i < expectedSubNotesCount; ++i) {
+        expectedPitches.push_back(nominalPitchLevel + int(i) * PITCH_LEVEL_STEP);
+    }
+
+    // [WHEN] Request to render a chord with the A4 note on it
+    result.clear();
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - Continuous Glissando
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ContinuousGlissando));
+
+            // [THEN] We expect that each sub-note has an expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDuration);
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp + static_cast<duration_t>(i) * expectedDuration);
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
  * @brief PlaybackEventsRendererTests_SingleNote_Acciaccatura
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4 quarter note prepended with G4 8-th acciaccatura note
@@ -1099,6 +1345,77 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
             // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
+
+            // [THEN] We expect that each sub-note has expected duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamps.at(i));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_GraceNoteWithTiedNotes
+ * @details In this case we're gonna render a simple piece of score with a single measure,
+ *          which starts with the F4 quarter grace note, followed by the G4 half note and tied to another half note
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(
+        PLAYBACK_EVENTS_RENDERING_DIR + "grace_note_with_tied_notes/grace_note_with_tied_notes.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected disclosure
+    int expectedSubNotesCount = 2;
+
+    std::vector<duration_t> expectedDurations = {
+        HALF_NOTE_DURATION / 2, // PreAppoggiatura, quarter note
+        2 * HALF_NOTE_DURATION - HALF_NOTE_DURATION / 2, // 2 * half note duration - grace note duration
+    };
+
+    std::vector<timestamp_t> expectedTimestamps = {
+        0,
+        HALF_NOTE_DURATION / 2
+    };
+
+    std::vector<pitch_level_t> expectedPitches = {
+        pitchLevel(PitchClass::F, 4),
+        pitchLevel(PitchClass::G, 4),
+        pitchLevel(PitchClass::G, 4),
+    };
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::PreAppoggiatura, m_dummyPattern);
+
+    // [WHEN] Request to render a chord with the F4 note on it
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    // [THEN] The events map is not empty
+    EXPECT_FALSE(result.empty());
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied - PreAppoggiatura
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PreAppoggiatura));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1344,11 +1661,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1376,7 +1700,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Arpeggio));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1406,11 +1731,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1438,7 +1770,77 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
 
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
+ * @brief Chord_Arpeggio_TiedNotes
+ * @details In this case we're gonna render a simple piece of score with 3 measures,
+ *          which starts with the B4+D5 half chord marked by the Arpeggio Up articulation
+ *          Check that Arpeggio gets extended by tied notes
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up_TiedNotes)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_with_tied_notes/chord_arpeggio_with_tied_notes.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected disclosure
+    int expectedSubNotesCount = 2;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+    };
+
+    std::vector<duration_t> expectedDurations = {
+        HALF_NOTE_DURATION* 3, // + 2 tied notes
+        HALF_NOTE_DURATION* 3 - expectedOffset, // + 2 tied notes
+    };
+
+    std::vector<pitch_level_t> expectedPitches = {
+        pitchLevel(PitchClass::B, 4),
+        pitchLevel(PitchClass::D, 5),
+    };
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
+
+    // [WHEN] Request to render a chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
+
             // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1468,11 +1870,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1500,7 +1909,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioDown));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1531,11 +1941,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1563,7 +1980,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightDown));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1594,11 +2012,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1626,7 +2051,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightUp));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1897,4 +2323,71 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
             }
         }
     }
+}
+
+/**
+ * @brief PlaybackEventsRendererTests_Pauses
+ *  @details Checks whether we correctly calculate note durations when there are pauses in the score. See:
+ * https://github.com/musescore/MuseScore/issues/20669
+ * https://github.com/musescore/MuseScore/issues/20557
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
+{
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "pauses/pauses.mscx");
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::Standard, m_dummyPattern);
+
+    // [WHEN] Render the score
+    PlaybackEventsMap result;
+
+    for (const Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+        for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+            const EngravingItem* el = s->element(0);
+            if (!el || !el->isChord()) {
+                continue;
+            }
+
+            m_renderer.render(toChord(el), dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                              ArticulationType::Standard, m_defaultProfile, result);
+        }
+    }
+
+    // [THEN] Expected time and duration of each event
+    timestamp_t secondMeasureTime = QUARTER_NOTE_DURATION * 4;
+    timestamp_t thirdMeasureTime = secondMeasureTime + QUARTER_NOTE_DURATION + 2000000 + HALF_NOTE_DURATION
+                                   + QUARTER_NOTE_DURATION + 4000000;
+
+    std::vector<TimestampAndDuration> expectedTnDList {
+        // 2nd measure
+        { secondMeasureTime, QUARTER_NOTE_DURATION }, // + 2s pause (caesura)
+        { secondMeasureTime + QUARTER_NOTE_DURATION + 2000000, HALF_NOTE_DURATION },
+        { secondMeasureTime + QUARTER_NOTE_DURATION + 2000000 + HALF_NOTE_DURATION, QUARTER_NOTE_DURATION }, // + 4s pause (section break)
+
+        // 3rd measure
+        { thirdMeasureTime, HALF_NOTE_DURATION + QUARTER_NOTE_DURATION }, // tied half + quarter notes + 3s pause (caesura)
+        { thirdMeasureTime + HALF_NOTE_DURATION + QUARTER_NOTE_DURATION + 3000000, QUARTER_NOTE_DURATION },
+    };
+
+    EXPECT_FALSE(result.empty());
+
+    int tndNum = 0;
+    for (const auto& pair : result) {
+        if (pair.second.empty()) {
+            continue;
+        }
+
+        ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(pair.second.front()));
+
+        const TimestampAndDuration& expectedTnD = expectedTnDList.at(tndNum);
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.front());
+
+        EXPECT_EQ(pair.first, expectedTnD.timestamp);
+        EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
+        EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
+
+        ++tndNum;
+    }
+
+    EXPECT_EQ(tndNum, expectedTnDList.size());
 }

@@ -397,10 +397,10 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 MenuItemList AppMenuModel::makeRecentScoresItems()
 {
     MenuItemList items;
-    ProjectFilesList recentFiles = recentFilesController()->recentFilesList();
+    const RecentFilesList& recentFiles = recentFilesController()->recentFilesList();
 
     int index = 0;
-    for (const ProjectFile& file : recentFiles) {
+    for (const RecentFile& file : recentFiles) {
         MenuItem* item = new MenuItem(this);
 
         UiAction action;
@@ -415,7 +415,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
         item->setState(state);
 
         item->setSelectable(true);
-        item->setArgs(ActionData::make_arg2<io::path_t, QString>(file.path, file.displayNameOverride));
+        item->setArgs(ActionData::make_arg2<QUrl, QString>(file.path.toQUrl(), file.displayNameOverride));
 
         items << item;
     }
@@ -626,7 +626,8 @@ MenuItemList AppMenuModel::makeShowItems()
         makeMenuItem("show-unprintable"),
         makeMenuItem("show-frames"),
         makeMenuItem("show-pageborders"),
-        makeMenuItem("show-irregular")
+        makeMenuItem("show-irregular"),
+        makeMenuItem("show-soundflags"),
     };
 
     return items;

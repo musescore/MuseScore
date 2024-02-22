@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRIPLETFEEL_H__
-#define __TRIPLETFEEL_H__
+#ifndef MU_ENGRAVING_TRIPLETFEEL_H
+#define MU_ENGRAVING_TRIPLETFEEL_H
 
 #include "systemtext.h"
 
@@ -35,15 +35,6 @@ class TripletFeel final : public SystemText
     OBJECT_ALLOCATOR(engraving, TripletFeel)
     DECLARE_CLASSOF(ElementType::TRIPLET_FEEL)
 
-    constexpr static int eightDivision = 2;
-    constexpr static int sixteenthDivision = 4;
-    constexpr static int tripletRatio = 66;
-    constexpr static int dottedRatio = 75;
-    constexpr static int scottishRatio = 25;
-    constexpr static int zeroRatio = 0;
-
-    TripletFeelType m_tripletFeelType;
-
 public:
     TripletFeel(Segment* parent = nullptr, TripletFeelType tripletFillType = TripletFeelType::NONE);
     void setTripletProperty();
@@ -54,6 +45,17 @@ public:
     Sid getPropertyStyle(Pid id) const override;
     TranslatableString subtypeUserName() const override;
     String accessibleInfo() const override;
+
+private:
+
+    constexpr static int eightDivision = 2;
+    constexpr static int sixteenthDivision = 4;
+    constexpr static int tripletRatio = 66;
+    constexpr static int dottedRatio = 75;
+    constexpr static int scottishRatio = 25;
+    constexpr static int zeroRatio = 0;
+
+    TripletFeelType m_tripletFeelType = TripletFeelType::NONE;
 };
 }     // namespace mu::engraving
 #endif

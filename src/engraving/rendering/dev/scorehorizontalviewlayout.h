@@ -36,6 +36,21 @@ private:
     static void layoutLinear(LayoutContext& ctx);
     static void resetSystems(LayoutContext& ctx, bool layoutAll);
     static void collectLinearSystem(LayoutContext& ctx);
+
+    //! puts segments on the positions according to their length
+    static void layoutSegmentsWithDuration(Measure* m, const std::vector<int>& visibleParts);
+
+    /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
+     *  \return pair of {spacing, width}
+     */
+    static std::pair<double, double> computeCellWidth(const Segment* s, const std::vector<int>& visibleParts);
+
+    /*! \brief get among all ChordRests of segment the ChordRest with minimum ticks,
+    * take into account visibleParts
+    */
+    static ChordRest* chordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
+
+    static Fraction calculateQuantumCell(const Measure* m, const std::vector<int>& visibleParts);
 };
 }
 

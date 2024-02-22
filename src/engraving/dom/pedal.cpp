@@ -26,6 +26,7 @@
 #include "measure.h"
 #include "score.h"
 #include "system.h"
+#include "text.h"
 
 #include "log.h"
 
@@ -35,7 +36,7 @@ namespace mu::engraving {
 static const ElementStyle pedalStyle {
     { Sid::pedalText,                          Pid::BEGIN_TEXT },
     { Sid::pedalContinueText,                  Pid::CONTINUE_TEXT },
-    { Sid::pedalEndText,                       Pid::END_TEXT },
+    { Sid::pedalRosetteEndText,                Pid::END_TEXT },
     { Sid::pedalFontFace,                      Pid::BEGIN_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::CONTINUE_FONT_FACE },
     { Sid::pedalFontFace,                      Pid::END_FONT_FACE },
@@ -54,6 +55,7 @@ static const ElementStyle pedalStyle {
     { Sid::pedalDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::pedalDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::pedalPlacement,                     Pid::PLACEMENT },
+    { Sid::pedalLineStyle,                     Pid::LINE_STYLE },
     { Sid::pedalPosBelow,                      Pid::OFFSET },
     { Sid::pedalFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT }
 };
@@ -64,6 +66,8 @@ const String Pedal::STAR_SYMBOL = u"<sym>keyboardPedalUp</sym>";
 PedalSegment::PedalSegment(Pedal* sp, System* parent)
     : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
+    m_text->setTextStyleType(TextStyleType::PEDAL);
+    m_endText->setTextStyleType(TextStyleType::PEDAL);
 }
 
 //---------------------------------------------------------
@@ -80,10 +84,18 @@ Sid PedalSegment::getPropertyStyle(Pid pid) const
 
 Sid Pedal::getPropertyStyle(Pid pid) const
 {
-    if (pid == Pid::OFFSET) {
+    switch (pid) {
+    case Pid::OFFSET:
         return placeAbove() ? Sid::pedalPosAbove : Sid::pedalPosBelow;
+    case Pid::END_TEXT:
+        return lineVisible() ? Sid::pedalEndText : Sid::pedalRosetteEndText;
+    case Pid::BEGIN_TEXT:
+        return beginHookType() == HookType::NONE ? Sid::pedalText : Sid::pedalHookText;
+    case Pid::CONTINUE_TEXT:
+        return beginHookType() == HookType::NONE ? Sid::pedalContinueText : Sid:: pedalContinueHookText;
+    default:
+        return TextLineBase::getPropertyStyle(pid);
     }
-    return TextLineBase::getPropertyStyle(pid);
 }
 
 //---------------------------------------------------------
@@ -104,6 +116,7 @@ Pedal::Pedal(EngravingItem* parent)
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::LINE_VISIBLE);
+    resetProperty(Pid::END_TEXT);
 }
 
 //---------------------------------------------------------
@@ -137,13 +150,9 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::pedalLineStyle);
 
     case Pid::BEGIN_TEXT:
-        return style().styleV(Sid::pedalText);
-
     case Pid::CONTINUE_TEXT:
-        return style().styleV(Sid::pedalContinueText);
-
     case Pid::END_TEXT:
-        return style().styleV(Sid::pedalEndText);
+        return style().styleV(getPropertyStyle(propertyId));
 
     case Pid::BEGIN_TEXT_PLACE:
     case Pid::CONTINUE_TEXT_PLACE:

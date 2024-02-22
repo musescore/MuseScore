@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.20">
   <Style>
     <pageWidth>8.26772</pageWidth>
     <pageHeight>11.6929</pageHeight>
@@ -363,8 +363,8 @@
     <tenutoGateTime>100</tenutoGateTime>
     <staccatoGateTime>50</staccatoGateTime>
     <slurGateTime>100</slurGateTime>
-    <ArpeggioNoteDistance>0.5</ArpeggioNoteDistance>
-    <ArpeggioAccidentalDistance>0.5</ArpeggioAccidentalDistance>
+    <ArpeggioNoteDistance>0.4</ArpeggioNoteDistance>
+    <ArpeggioAccidentalDistance>0.3</ArpeggioAccidentalDistance>
     <ArpeggioAccidentalDistanceMin>0.33</ArpeggioAccidentalDistanceMin>
     <ArpeggioLineWidth>0.18</ArpeggioLineWidth>
     <ArpeggioHookLen>0.8</ArpeggioHookLen>

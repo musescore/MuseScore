@@ -122,7 +122,6 @@ Ret EngravingProject::doSetupMasterScore(bool forceMode)
 
     for (Score* s : m_masterScore->scoreList()) {
         s->setPlaylistDirty();
-        s->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
         s->setLayoutAll();
     }
 

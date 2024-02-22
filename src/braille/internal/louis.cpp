@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
+
 #include <iostream>
 #include <sstream>
+#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <vector>
 
 #include "braille/thirdparty/liblouis/liblouis/internal.h"

@@ -149,18 +149,14 @@ SET /p PACKAGE_UUID=<uuid.txt
 ECHO on
 ECHO "PACKAGE_UUID: %PACKAGE_UUID%"
 ECHO off
-sed -i 's/00000000-0000-0000-0000-000000000000/%PACKAGE_UUID%/' build/Packaging.cmake
-sed -i 's/11111111-1111-1111-1111-111111111111/%UPGRADE_UUID%/' build/Packaging.cmake
 
-SET PACKAGE_FILE_ASSOCIATION=OFF
-IF %BUILD_MODE% == stable_build ( 
-    SET PACKAGE_FILE_ASSOCIATION=ON
-)
 cd "%BUILD_DIR%" 
-cmake -DMUE_ENABLE_FILE_ASSOCIATION=%PACKAGE_FILE_ASSOCIATION% ..
+cmake -DCPACK_WIX_PRODUCT_GUID=%PACKAGE_UUID% ^
+    -DCPACK_WIX_UPGRADE_GUID=%UPGRADE_UUID% ^
+    ..
 
 SET PATH=%WIX_DIR%;%PATH% 
-cmake --build . --target package || GOTO END_ERROR
+cmake --build . --target package || SET WIX_ERROR=1
 cd ..
 
 ECHO "Create logs dir"
@@ -175,6 +171,10 @@ ECHO "Copy from %WIX_LOGS_PATH% to %ARTIFACTS_DIR%\logs\WIX"
 
 ECHO .msi > excludedmsi.txt
 XCOPY /Y /EXCLUDE:excludedmsi.txt %WIX_LOGS_PATH% %ARTIFACTS_DIR%\logs\WIX
+
+IF DEFINED WIX_ERROR (
+    GOTO END_ERROR
+)
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (%BUILD_DIR%\*.msi) do (
@@ -228,7 +228,11 @@ for /r %%i in (.\*.paf.exe) do (
   SET "FILEPATH=%%i"
 )
 
-SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
+IF %BUILD_MODE% == nightly_build ( 
+    SET ARTIFACT_NAME=MuseScoreNightly-%BUILD_NUMBER%-%BUILD_BRANCH%-%BUILD_REVISION%-%TARGET_PROCESSOR_ARCH%.paf.exe
+) ELSE (
+    SET ARTIFACT_NAME=MuseScore-%BUILD_VERSION%-%TARGET_PROCESSOR_ARCH%.paf.exe
+)
 
 ECHO "Copy from %FILEPATH% to %ARTIFACT_NAME%"
 COPY %FILEPATH% %ARTIFACTS_DIR%\%ARTIFACT_NAME% /Y 

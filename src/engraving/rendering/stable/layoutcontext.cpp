@@ -21,6 +21,7 @@
  */
 #include "layoutcontext.h"
 
+#include "dom/undo.h"
 #include "style/defaultstyle.h"
 
 #include "dom/mscoreview.h"
@@ -72,6 +73,14 @@ bool LayoutConfiguration::isPrintingMode() const
     return score()->printing();
 }
 
+std::shared_ptr<const IEngravingFont> LayoutConfiguration::engravingFont() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->engravingFont();
+}
+
 const MStyle& LayoutConfiguration::style() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -98,7 +107,7 @@ int LayoutConfiguration::pageNumberOffset() const
 
 bool LayoutConfiguration::isVerticalSpreadEnabled() const
 {
-    return styleB(Sid::enableVerticalSpread) && (layoutMode() != LayoutMode::SYSTEM);
+    return styleB(Sid::enableVerticalSpread) && (viewMode() != LayoutMode::SYSTEM);
 }
 
 double LayoutConfiguration::maxSystemDistance() const
@@ -308,12 +317,31 @@ compat::DummyElement* DomAccessor::dummyParent() const
     return score()->dummy();
 }
 
+void DomAccessor::doUndoAddElement(EngravingItem* item)
+{
+    if (item->generated()) {
+        addElement(item);
+    } else {
+        undo(new AddElement(item));
+    }
+}
+
 void DomAccessor::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bool ctrlModifier)
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
     score()->undoAddElement(item, addToLinkedStaves, ctrlModifier);
+}
+
+void DomAccessor::doUndoRemoveElement(EngravingItem* item)
+{
+    if (item->generated()) {
+        removeElement(item);
+        item->deleteLater();
+    } else {
+        undo(new RemoveElement(item));
+    }
 }
 
 void DomAccessor::undoRemoveElement(EngravingItem* item)

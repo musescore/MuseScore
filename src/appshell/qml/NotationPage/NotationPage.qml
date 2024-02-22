@@ -154,8 +154,8 @@ DockPage {
             ]
 
             PlaybackToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
-                navigationPanel.order: 3
+                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
             }
@@ -431,6 +431,7 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
+        isBraillePanelVisible: pageModel.isBraillePanelVisible
         isMainView: true
 
         Component.onCompleted: {

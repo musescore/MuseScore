@@ -43,6 +43,8 @@ bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
         ElementType::PALM_MUTE,
         ElementType::TRILL,
         ElementType::GLISSANDO,
+        ElementType::GUITAR_BEND,
+        ElementType::VIBRATO,
     };
 
     return SUPPORTED_TYPES.find(spannerItem->type()) != SUPPORTED_TYPES.cend();
@@ -75,7 +77,15 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         type = mpe::ArticulationType::LaissezVibrer;
         break;
     case ElementType::PALM_MUTE: {
-        type = mpe::ArticulationType::Mute;
+        type = mpe::ArticulationType::PalmMute;
+        break;
+    }
+    case ElementType::GUITAR_BEND: {
+        type = mpe::ArticulationType::Multibend;
+        break;
+    }
+    case ElementType::VIBRATO: {
+        type = mpe::ArticulationType::Vibrato;
         break;
     }
     case ElementType::TRILL: {
@@ -102,8 +112,8 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
             break;
         }
 
-        Note* startNote = toNote(glissando->startElement());
-        Note* endNote = toNote(glissando->endElement());
+        const Note* startNote = toNote(glissando->startElement());
+        const Note* endNote = toNote(glissando->endElement());
 
         if (!startNote || !endNote) {
             break;
@@ -160,15 +170,5 @@ mu::mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, cons
         return 0;
     }
 
-    BeatsPerSecond startBps = score->tempomap()->tempo(positionTick);
-    BeatsPerSecond endBps = score->tempomap()->tempo(positionTick + durationTicks);
-
-    if (startBps == endBps) {
-        return durationFromTicks(startBps.val, durationTicks);
-    }
-
-    mpe::duration_t result = (durationFromTicks(startBps.val, durationTicks)
-                              + durationFromTicks(endBps.val, durationTicks)) / 2;
-
-    return result;
+    return durationFromStartAndTicks(score, positionTick, durationTicks);
 }

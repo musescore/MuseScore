@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QXmlStreamReader>
-
 #include "engraving/types/fraction.h"
 #include "engraving/types/typesconv.h"
 
@@ -39,35 +37,35 @@ namespace mu::engraving {
  Convert MusicXML note type to fraction.
  */
 
-static Fraction noteTypeToFraction(const QString& type)
+static Fraction noteTypeToFraction(const String& type)
 {
-    if (type == "1024th") {
+    if (type == u"1024th") {
         return Fraction(1, 1024);
-    } else if (type == "512th") {
+    } else if (type == u"512th") {
         return Fraction(1, 512);
-    } else if (type == "256th") {
+    } else if (type == u"256th") {
         return Fraction(1, 256);
-    } else if (type == "128th") {
+    } else if (type == u"128th") {
         return Fraction(1, 128);
-    } else if (type == "64th") {
+    } else if (type == u"64th") {
         return Fraction(1, 64);
-    } else if (type == "32nd") {
+    } else if (type == u"32nd") {
         return Fraction(1, 32);
-    } else if (type == "16th") {
+    } else if (type == u"16th") {
         return Fraction(1, 16);
-    } else if (type == "eighth") {
+    } else if (type == u"eighth") {
         return Fraction(1, 8);
-    } else if (type == "quarter") {
+    } else if (type == u"quarter") {
         return Fraction(1, 4);
-    } else if (type == "half") {
+    } else if (type == u"half") {
         return Fraction(1, 2);
-    } else if (type == "whole") {
+    } else if (type == u"whole") {
         return Fraction(1, 1);
-    } else if (type == "breve") {
+    } else if (type == u"breve") {
         return Fraction(2, 1);
-    } else if (type == "long") {
+    } else if (type == u"long") {
         return Fraction(4, 1);
-    } else if (type == "maxima") {
+    } else if (type == u"maxima") {
         return Fraction(8, 1);
     } else {
         return Fraction(0, 0);
@@ -82,7 +80,7 @@ static Fraction noteTypeToFraction(const QString& type)
  Convert note type, number of dots and actual and normal notes into a duration
  */
 
-static Fraction calculateFraction(const QString& type, const int dots, const Fraction timeMod)
+static Fraction calculateFraction(const String& type, const int dots, const Fraction timeMod)
 {
     // type
     Fraction f = noteTypeToFraction(type);
@@ -112,48 +110,44 @@ static Fraction calculateFraction(const QString& type, const int dots, const Fra
  Return empty string if OK, message in case of error.
  */
 
-QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, const bool grace)
+String MxmlNoteDuration::checkTiming(const String& type, const bool rest, const bool grace)
 {
-    //LOGD("type %s rest %d grace %d", qPrintable(type), rest, grace);
-    QString errorStr;
+    //LOGD("type %s rest %d grace %d", muPrintable(type), rest, grace);
+    String errorStr;
 
     // normalize duration
-    if (_specDura.isValid()) {
-        _specDura.reduce();
+    if (m_specDura.isValid()) {
+        m_specDura.reduce();
     }
 
     // default: use calculated duration
-    _calcDura = calculateFraction(type, _dots, _timeMod);
-    if (_calcDura.isValid()) {
-        _dura = _calcDura;
+    m_calcDura = calculateFraction(type, m_dots, m_timeMod);
+    if (m_calcDura.isValid()) {
+        m_dura = m_calcDura;
     }
 
-    if (_specDura.isValid() && _calcDura.isValid()) {
-        if (_specDura != _calcDura) {
-            errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                       .arg(_calcDura.toString(), _specDura.toString());
-            //LOGD("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
+    if (m_specDura.isValid() && m_calcDura.isValid()) {
+        if (m_specDura != m_calcDura) {
+            errorStr = String(u"calculated duration (%1) not equal to specified duration (%2)")
+                       .arg(m_calcDura.toString(), m_specDura.toString());
+            //LOGD("rest %d type '%s' timemod %s", rest, muPrintable(type), muPrintable(_timeMod.print()));
 
-            if (rest && type == "whole" && _specDura.isValid()) {
+            if (rest && type == "whole" && m_specDura.isValid()) {
                 // Sibelius whole measure rest (not an error)
-                errorStr = "";
-                _dura = _specDura;
-            } else if (grace && _specDura == Fraction(0, 1)) {
+                errorStr = u"";
+                m_dura = m_specDura;
+            } else if (grace && m_specDura == Fraction(0, 1)) {
                 // grace note (not an error)
-                errorStr = "";
-                _dura = _specDura;
+                errorStr = u"";
+                m_dura = m_specDura;
             } else {
-                // note:
-                // rounding error detection may conflict with changed duration detection (Overture).
-                // exporters that intentionally change note duration typically produce a large difference,
-                // most likely in practice this will not be an issue
-                const int maxDiff = 2;       // maximum difference considered a rounding error
-                if (qAbs(_calcDura.ticks() - _specDura.ticks()) <= maxDiff) {
-                    errorStr += " -> assuming rounding error";
-                    _dura = _calcDura;
-                    _specDura = _calcDura; // prevent changing off time
+                if (std::abs(m_calcDura.ticks() - m_specDura.ticks()) <= m_pass1->maxDiff()) {
+                    errorStr += u" -> assuming rounding error";
+                    m_pass1->insertAdjustedDuration(m_dura, m_calcDura);
+                    m_dura = m_calcDura;
+                    m_specDura = m_calcDura; // prevent changing off time
                 } else {
-                    errorStr += " -> using calculated duration";
+                    errorStr += u" -> using calculated duration";
                 }
             }
 
@@ -163,29 +157,30 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
             // based on note type. If actual is 2/3 of expected, the rest is part
             // of a tuplet.
             if (rest) {
-                if (2 * _calcDura.ticks() == 3 * _specDura.ticks()) {
-                    _timeMod = Fraction(2, 3);
-                    errorStr += errorStr.isEmpty() ? " ->" : ",";
-                    errorStr += " assuming triplet";
-                    _dura = _specDura;
+                if (2 * m_calcDura.ticks() == 3 * m_specDura.ticks()) {
+                    m_timeMod = Fraction(2, 3);
+                    errorStr += errorStr.isEmpty() ? u" ->" : u",";
+                    errorStr += u" assuming triplet";
+                    m_dura = m_specDura;
                 }
             }
         }
-    } else if (_specDura.isValid() && !_calcDura.isValid()) {
+    } else if (m_specDura.isValid() && !m_calcDura.isValid()) {
         // do not report an error for typeless (whole measure) rests
         if (!(rest && type == "")) {
-            errorStr = "calculated duration invalid, using specified duration";
+            errorStr = u"calculated duration invalid, using specified duration";
         }
-        _dura = _specDura;
-    } else if (!_specDura.isValid() && _calcDura.isValid()) {
+        m_dura = m_specDura;
+    } else if (!m_specDura.isValid() && m_calcDura.isValid()) {
         if (!grace) {
-            errorStr = "specified duration invalid, using calculated duration";
+            errorStr = u"specified duration invalid, using calculated duration";
         }
     } else {
-        errorStr = "calculated and specified duration invalid, using 4/4";
-        _dura = Fraction(4, 4);
+        errorStr = u"calculated and specified duration invalid, using 4/4";
+        m_dura = Fraction(4, 4);
     }
 
+    m_pass1->insertSeenDenominator(m_dura.reduced().denominator());
     return errorStr;
 }
 
@@ -197,23 +192,13 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void mxmlNoteDuration::duration(QXmlStreamReader& e)
+void MxmlNoteDuration::duration(XmlStreamReader& e)
 {
-    _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::duration", &e);
 
-    _specDura.set(0, 0);          // invalid unless set correctly
-    int intDura = e.readElementText().toInt();
-    if (intDura > 0) {
-        if (_divs > 0) {
-            _specDura.set(intDura, 4 * _divs);
-            _specDura.reduce();             // prevent overflow in later Fraction operations
-        } else {
-            _logger->logError("illegal or uninitialized divisions", &e);
-        }
-    } else {
-        _logger->logError("illegal duration", &e);
-    }
-    //LOGD("specified duration %s valid %d", qPrintable(_specDura.print()), _specDura.isValid());
+    m_specDura.set(0, 0);          // invalid unless set correctly
+    int intDura = e.readAsciiText().toInt();
+    m_specDura = m_pass1->calcTicks(intDura, m_divs, &e); // Duration reading (and rounding) code consolidated to pass1
 }
 
 //---------------------------------------------------------
@@ -225,12 +210,12 @@ void mxmlNoteDuration::duration(QXmlStreamReader& e)
  Return true if handled.
  */
 
-bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
+bool MxmlNoteDuration::readProperties(XmlStreamReader& e)
 {
-    const QStringRef& tag(e.name());
-    //LOGD("tag %s", qPrintable(tag.toString()));
+    const AsciiStringView tag(e.name());
+    //LOGD("tag %s", muPrintable(tag.toString()));
     if (tag == "dot") {
-        _dots++;
+        m_dots++;
         e.skipCurrentElement();  // skip but don't log
         return true;
     } else if (tag == "duration") {
@@ -251,31 +236,31 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/time-modification node.
  */
 
-void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
+void MxmlNoteDuration::timeModification(XmlStreamReader& e)
 {
-    _logger->logDebugTrace("MusicXMLParserPass1::timeModification", &e);
+    m_logger->logDebugTrace(u"MusicXMLParserPass1::timeModification", &e);
 
     int intActual = 0;
     int intNormal = 0;
-    QString strActual;
-    QString strNormal;
+    String strActual;
+    String strNormal;
 
     while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
+        const AsciiStringView tag(e.name());
         if (tag == "actual-notes") {
-            strActual = e.readElementText();
+            strActual = e.readText();
         } else if (tag == "normal-notes") {
-            strNormal = e.readElementText();
+            strNormal = e.readText();
         } else if (tag == "normal-type") {
             // "measure" is not a valid normal-type,
             // but would be accepted by setType()
-            QString strNormalType = e.readElementText();
-            if (strNormalType != "measure") {
-                QByteArray ba = strNormalType.toLatin1();
-                _normalType.setType(TConv::fromXml(ba.constData(), DurationType::V_INVALID));
+            String strNormalType = e.readText();
+            if (strNormalType != u"measure") {
+                ByteArray ba = strNormalType.toAscii();
+                m_normalType.setType(TConv::fromXml(ba.constChar(), DurationType::V_INVALID));
             }
         } else {
-            _logger->logDebugInfo(QString("skipping '%1'").arg(e.name().toString()), &e);
+            m_logger->logDebugInfo(String(u"skipping '%1'").arg(String::fromAscii(e.name().ascii())), &e);
             e.skipCurrentElement();
         }
     }
@@ -283,11 +268,11 @@ void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
     intActual = strActual.toInt();
     intNormal = strNormal.toInt();
     if (intActual > 0 && intNormal > 0) {
-        _timeMod.set(intNormal, intActual);
+        m_timeMod.set(intNormal, intActual);
     } else {
-        _timeMod.set(1, 1);
-        _logger->logError(QString("illegal time-modification: actual-notes %1 normal-notes %2")
-                          .arg(strActual, strNormal), &e);
+        m_timeMod.set(1, 1);
+        m_logger->logError(String(u"illegal time-modification: actual-notes %1 normal-notes %2")
+                           .arg(strActual, strNormal), &e);
     }
 }
 }

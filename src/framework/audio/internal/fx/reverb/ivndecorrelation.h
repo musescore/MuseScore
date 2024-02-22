@@ -23,7 +23,6 @@
 #ifndef MU_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
 #define MU_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
 
-#include <array>
 #include <cassert>
 
 #include "sparsefirfilter.h"

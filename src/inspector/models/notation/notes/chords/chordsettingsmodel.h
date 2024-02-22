@@ -30,11 +30,27 @@ class ChordSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * isStemless READ isStemless CONSTANT)
+    Q_PROPERTY(PropertyItem * showStemSlash READ showStemSlash CONSTANT)
+
+    Q_PROPERTY(bool showStemSlashVisible READ showStemSlashVisible NOTIFY showStemSlashVisibleChanged)
+    Q_PROPERTY(bool showStemSlashEnabled READ showStemSlashEnabled NOTIFY showStemSlashEnabledChanged)
 
 public:
     explicit ChordSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* isStemless() const;
+    PropertyItem* showStemSlash() const;
+
+    bool showStemSlashVisible() const;  //  chord is grace
+    bool showStemSlashEnabled() const;  //  chord is not stemless
+
+public slots:
+    void setShowStemSlashVisible(bool showStemSlashVisible);
+    void setShowStemSlashEnabled(bool showStemSlashEnabled);
+
+signals:
+    void showStemSlashVisibleChanged(bool showStemSlashVisible);
+    void showStemSlashEnabledChanged(bool showStemSlashEnabled);
 
 private:
     void createProperties() override;
@@ -42,7 +58,14 @@ private:
     void loadProperties() override;
     void resetProperties() override;
 
+    void updateShowStemSlashVisible();
+    void updateShowStemSlashEnabled();
+
     PropertyItem* m_isStemless = nullptr;
+    PropertyItem* m_showStemSlash = nullptr;
+
+    bool m_showStemSlashVisible = false;
+    bool m_showStemSlashEnabled = false;
 };
 }
 

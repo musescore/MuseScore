@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __GLISSANDO_H__
-#define __GLISSANDO_H__
+#ifndef MU_ENGRAVING_GLISSANDO_H
+#define MU_ENGRAVING_GLISSANDO_H
 
 #include "engravingitem.h"
 #include "line.h"
@@ -88,18 +88,26 @@ public:
 
     const TranslatableString& glissandoTypeName() const;
 
+    std::optional<bool> isHarpGliss() const { return m_isHarpGliss; }
+    void setIsHarpGliss(std::optional<bool> v) { m_isHarpGliss = v; }
+
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
 
     // property/style methods
+    Sid getPropertyStyle(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
     void addLineAttachPoints();
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
+
+private:
+
+    std::optional<bool> m_isHarpGliss = std::nullopt;
 };
 } // namespace mu::engraving
 

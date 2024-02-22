@@ -108,22 +108,22 @@ QVariantList StringData::stringList() const
 //---------------------------------------------------------
 
 ChannelListProperty::ChannelListProperty(Instrument* i)
-    : QQmlListProperty<Channel>(i, i, &count, &at) {}
+    : QmlListProperty<Channel>(i, i, nullptr, &count, &at, nullptr) {}
 
 //---------------------------------------------------------
 //   ChannelListProperty::count
 //---------------------------------------------------------
 
-int ChannelListProperty::count(QQmlListProperty<Channel>* l)
+qsizetype ChannelListProperty::count(QQmlListProperty<Channel>* l)
 {
-    return static_cast<int>(static_cast<Instrument*>(l->data)->instrument()->channel().size());
+    return static_cast<Instrument*>(l->data)->instrument()->channel().size();
 }
 
 //---------------------------------------------------------
 //   ChannelListProperty::at
 //---------------------------------------------------------
 
-Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, int i)
+Channel* ChannelListProperty::at(QQmlListProperty<Channel>* l, qsizetype i)
 {
     Instrument* instr = static_cast<Instrument*>(l->data);
 

@@ -38,12 +38,22 @@ TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElement
 
 void TimeSignatureSettingsModel::createProperties()
 {
-    m_horizontalScale = buildPropertyItem(mu::engraving::Pid::SCALE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_horizontalScale = buildPropertyItem(mu::engraving::Pid::SCALE,
+                                          [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
+    },
+                                          [this](const mu::engraving::Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, QSizeF(newValue.toDouble() / 100, m_verticalScale->value().toDouble() / 100));
+        emit requestReloadPropertyItems();
     });
 
-    m_verticalScale = buildPropertyItem(mu::engraving::Pid::SCALE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_verticalScale = buildPropertyItem(mu::engraving::Pid::SCALE,
+                                        [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
+    },
+                                        [this](const mu::engraving::Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, QSizeF(m_horizontalScale->value().toDouble() / 100, newValue.toDouble() / 100));
+        emit requestReloadPropertyItems();
     });
 
     m_shouldShowCourtesy = buildPropertyItem(mu::engraving::Pid::SHOW_COURTESY);

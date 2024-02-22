@@ -25,7 +25,7 @@ jobs:
 
     - name: Clone repository
       if: env.DO_RUN == 'true'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup environment
       if: env.DO_RUN == 'true'
@@ -53,7 +53,7 @@ jobs:
 
     - name: Upload artifacts on GitHub
       if: env.DO_RUN == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MuseScore_locale_${{ env.BUILD_NUMBER }}
         path: ./share/locale

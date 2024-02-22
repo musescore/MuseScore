@@ -29,8 +29,7 @@
 
 #include "log.h"
 
-using namespace mu::diagnostics;
-
+namespace mu::diagnostics {
 void EngravingElementsProvider::clearStatistic()
 {
     m_statistics.clear();
@@ -38,9 +37,9 @@ void EngravingElementsProvider::clearStatistic()
 
 void EngravingElementsProvider::printStatistic(const std::string& title)
 {
-    #define FORMAT(str, width) mu::strings::leftJustified(str, width)
-    #define TITLE(str) FORMAT(std::string(str), 20)
-    #define VALUE(val) FORMAT(std::to_string(val), 20)
+#define FORMAT(str, width) mu::strings::leftJustified(str, width)
+#define TITLE(str) FORMAT(std::string(str), 20)
+#define VALUE(val) FORMAT(std::to_string(val), 20)
 
     std::stringstream stream;
     stream << "\n\n";
@@ -186,4 +185,5 @@ void EngravingElementsProvider::checkObjectTree(const mu::engraving::EngravingOb
     for (const mu::engraving::EngravingObject* ch : obj->children()) {
         checkObjectTree(ch);
     }
+}
 }

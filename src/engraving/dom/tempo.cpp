@@ -68,9 +68,9 @@ bool TEvent::valid() const
 
 TempoMap::TempoMap()
 {
-    _tempo    = 2.0;          // default fixed tempo in beat per second
-    _tempoSN  = 1;
-    _tempoMultiplier = 1.0;
+    m_tempo    = 2.0;          // default fixed tempo in beat per second
+    m_tempoSN  = 1;
+    m_tempoMultiplier = 1.0;
 }
 
 //---------------------------------------------------------
@@ -122,13 +122,13 @@ void TempoMap::normalize()
             e->second.tempo = tempo;
         }
         int delta = e->first - tick;
-        time += double(delta) / (Constants::DIVISION * tempo.val * _tempoMultiplier.val);
+        time += double(delta) / (Constants::DIVISION * tempo.val * m_tempoMultiplier.val);
         time += e->second.pause;
         e->second.time = time;
         tick  = e->first;
         tempo = e->second.tempo.val;
     }
-    ++_tempoSN;
+    ++m_tempoSN;
 }
 
 //---------------------------------------------------------
@@ -151,7 +151,7 @@ void TempoMap::dump() const
 void TempoMap::clear()
 {
     std::map<int, TEvent>::clear();
-    ++_tempoSN;
+    ++m_tempoSN;
 }
 
 //---------------------------------------------------------
@@ -168,7 +168,7 @@ void TempoMap::clearRange(int tick1, int tick2)
         return;
     }
     erase(first, last);
-    ++_tempoSN;
+    ++m_tempoSN;
 }
 
 //---------------------------------------------------------
@@ -200,7 +200,7 @@ BeatsPerSecond TempoMap::tempo(int tick) const
         return i->second.tempo;
     };
 
-    return findTempo(tick) * _tempoMultiplier;
+    return findTempo(tick) * m_tempoMultiplier;
 }
 
 //---------------------------------------------------------
@@ -226,7 +226,7 @@ void TempoMap::del(int tick)
 
 BeatsPerSecond TempoMap::tempoMultiplier() const
 {
-    return _tempoMultiplier;
+    return m_tempoMultiplier;
 }
 
 bool TempoMap::setTempoMultiplier(BeatsPerSecond val)
@@ -235,11 +235,11 @@ bool TempoMap::setTempoMultiplier(BeatsPerSecond val)
         return false;
     }
 
-    if (_tempoMultiplier == val) {
+    if (m_tempoMultiplier == val) {
         return false;
     }
 
-    _tempoMultiplier = val;
+    m_tempoMultiplier = val;
     normalize();
 
     return true;
@@ -252,16 +252,16 @@ bool TempoMap::setTempoMultiplier(BeatsPerSecond val)
 void TempoMap::delTempo(int tick)
 {
     del(tick);
-    ++_tempoSN;
+    ++m_tempoSN;
 }
 
 //---------------------------------------------------------
 //   tick2time
 //---------------------------------------------------------
 
-double TempoMap::tick2time(int tick, double time, int* sn) const
+double TempoMap::tick2time(int tick, double time, int* sn, bool ignorePauseOnTick) const
 {
-    return (*sn == _tempoSN) ? time : tick2time(tick, sn);
+    return (*sn == m_tempoSN) ? time : tick2time(tick, sn, ignorePauseOnTick);
 }
 
 //---------------------------------------------------------
@@ -271,14 +271,14 @@ double TempoMap::tick2time(int tick, double time, int* sn) const
 
 int TempoMap::time2tick(double time, int t, int* sn) const
 {
-    return (*sn == _tempoSN) ? t : time2tick(time, sn);
+    return (*sn == m_tempoSN) ? t : time2tick(time, sn);
 }
 
 //---------------------------------------------------------
 //   tick2time
 //---------------------------------------------------------
 
-double TempoMap::tick2time(int tick, int* sn) const
+double TempoMap::tick2time(int tick, int* sn, bool ignorePauseOnTick) const
 {
     double time  = 0.0;
     double delta = double(tick);
@@ -297,6 +297,10 @@ double TempoMap::tick2time(int tick, int* sn) const
             ptick = tick;
             tempo = e->second.tempo;
             time  = e->second.time;
+
+            if (ignorePauseOnTick) {
+                time -= e->second.pause;
+            }
         } else if (e != begin()) {
             auto pe = e;
             --pe;
@@ -309,9 +313,9 @@ double TempoMap::tick2time(int tick, int* sn) const
         LOGD("TempoMap: empty");
     }
     if (sn) {
-        *sn = _tempoSN;
+        *sn = m_tempoSN;
     }
-    time += delta / (Constants::DIVISION * tempo.val * _tempoMultiplier.val);
+    time += delta / (Constants::DIVISION * tempo.val * m_tempoMultiplier.val);
     return time;
 }
 
@@ -323,7 +327,7 @@ int TempoMap::time2tick(double time, int* sn) const
 {
     int tick     = 0;
     double delta = time;
-    BeatsPerSecond tempo = _tempo;
+    BeatsPerSecond tempo = m_tempo;
 
     delta = 0.0;
     tempo = 2.0;
@@ -341,9 +345,9 @@ int TempoMap::time2tick(double time, int* sn) const
         tempo = e->second.tempo;
     }
     delta = time - delta;
-    tick += lrint(delta * _tempoMultiplier.val * Constants::DIVISION * tempo.val);
+    tick += lrint(delta * m_tempoMultiplier.val * Constants::DIVISION * tempo.val);
     if (sn) {
-        *sn = _tempoSN;
+        *sn = m_tempoSN;
     }
     return tick;
 }

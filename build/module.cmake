@@ -20,6 +20,7 @@
 
 ## Setup
 # set(MODULE somename)                        - set module (target) name
+# set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})  - set module root
 # set(MODULE_INCLUDE ...)                     - set include (by default see below include_directories)
 # set(MODULE_DEF ...)                         - set definitions
 # set(MODULE_SRC ...)                         - set sources and headers files
@@ -49,16 +50,29 @@ if (NOT PROJECT_ROOT_DIR)
 endif()
 
 if (MODULE_QRC AND NOT NO_QT_SUPPORT)
-    qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
+    if (MUE_COMPILE_QT5_COMPAT)
+        qt5_add_resources(RCC_SOURCES ${MODULE_QRC})
+    else()
+        qt_add_resources(RCC_SOURCES ${MODULE_QRC})
+    endif()
 endif()
 
 if (MODULE_BIG_QRC AND NOT NO_QT_SUPPORT)
-    qt5_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
+    if (MUE_COMPILE_QT5_COMPAT)
+        qt5_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
+    else()
+        qt_add_big_resources(RCC_BIG_SOURCES ${MODULE_BIG_QRC})
+    endif()
 endif()
 
 if (MODULE_UI)
-    find_package(Qt5Widgets)
-    QT5_WRAP_UI(ui_headers ${MODULE_UI} )
+    if (MUE_COMPILE_QT5_COMPAT)
+        find_package(Qt5Widgets)
+        QT5_WRAP_UI(ui_headers ${MODULE_UI} )
+    else()
+        find_package(Qt6Widgets)
+        QT6_WRAP_UI(ui_headers ${MODULE_UI} )
+    endif()
 endif()
 
 if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
@@ -118,6 +132,7 @@ target_sources(${MODULE} PRIVATE
 target_include_directories(${MODULE} PUBLIC
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${MODULE_ROOT}
     ${PROJECT_ROOT_DIR}
     ${PROJECT_ROOT_DIR}/src
     ${PROJECT_ROOT_DIR}/src/framework

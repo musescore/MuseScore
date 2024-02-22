@@ -18,6 +18,8 @@
         <file>qml/MuseScore/NotationScene/internal/EditStyle/ItemWithTitle.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml</file>
         <file>qml/MuseScore/NotationScene/internal/EditStyle/BeamsPage.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/beam_style_french.svg</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/beam_style_regular.svg</file>
         <file>view/resources/data/std_sample.mscx</file>
         <file>view/resources/data/tab_sample.mscx</file>
         <file>qml/MuseScore/NotationScene/NoteInputBar.qml</file>
@@ -29,7 +31,6 @@
         <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
         <file>qml/MuseScore/NotationScene/NotationScrollAndZoomArea.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsTopPanel.qml</file>
-        <file>qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>
@@ -39,5 +40,8 @@
         <file>qml/MuseScore/NotationScene/internal/ElementPopupLoader.qml</file>
         <file>qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CapoPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml</file>
     </qresource>
 </RCC>

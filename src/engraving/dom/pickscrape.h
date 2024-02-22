@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PICKSCRAPE_H__
-#define __PICKSCRAPE_H__
+#ifndef MU_ENGRAVING_PICKSCRAPE_H
+#define MU_ENGRAVING_PICKSCRAPE_H
 
 #include "chordtextlinebase.h"
 
@@ -35,7 +35,7 @@ class PickScrape;
 class PickScrapeSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, PickScrapeSegment)
-    DECLARE_CLASSOF(ElementType::WHAMMY_BAR_SEGMENT)
+    DECLARE_CLASSOF(ElementType::PICK_SCRAPE_SEGMENT)
 
 public:
     PickScrapeSegment(PickScrape* sp, System* parent);
@@ -54,7 +54,7 @@ public:
 class PickScrape final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, PickScrape)
-    DECLARE_CLASSOF(ElementType::WHAMMY_BAR)
+    DECLARE_CLASSOF(ElementType::PICK_SCRAPE)
 
 public:
     PickScrape(EngravingItem* parent);

@@ -55,6 +55,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
     if (!MScore::testMode) {
         xml.tag("programVersion", MUSESCORE_VERSION);
         xml.tag("programRevision", MUSESCORE_REVISION);
+        xml.tag("LastEID", score->masterScore()->getEID()->lastID());
     }
 
     compat::WriteScoreHook hook;
@@ -107,8 +108,11 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     xml.startElement(score);
 
-    if (score->excerpt()) {
-        Excerpt* e = score->excerpt();
+    if (Excerpt* e = score->excerpt()) {
+        if (!e->name().empty()) {
+            xml.tag("name", e->name());
+        }
+
         const TracksMap& tracks = e->tracksMapping();
         if (!(tracks.size() == e->nstaves() * VOICES) && !tracks.empty()) {
             for (auto it = tracks.begin(); it != tracks.end(); ++it) {
@@ -150,6 +154,10 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
     xml.tag("showFrames", score->m_showFrames);
     xml.tag("showMargins", score->m_showPageborders);
     xml.tag("markIrregularMeasures", score->m_markIrregularMeasures, true);
+
+    if (!score->m_showSoundFlags) { // true by default
+        xml.tag("showSoundFlags", score->m_showSoundFlags);
+    }
 
     if (score->m_isOpen) {
         xml.tag("open", score->m_isOpen);

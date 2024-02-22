@@ -62,7 +62,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
@@ -293,11 +293,11 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         }
 
         if (tuple) {
-            int track = staffIdx * 2 + voice;
-            Tuplet* tuplet = tuplets[track];
+            int track2 = staffIdx * 2 + voice;
+            Tuplet* tuplet = tuplets[track2];
             if ((tuplet == nullptr) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                 tuplet = Factory::createTuplet(measure);
-                tuplets[track] = tuplet;
+                tuplets[track2] = tuplet;
                 setTuplet(tuplet, tuple);
                 tuplet->setParent(measure);
             }
@@ -1000,9 +1000,22 @@ bool GuitarPro5::read(IODevice* io)
                         s->setTrack(n->track());
                         s->setParent(n);
                         s->setGlissandoType(GlissandoType::STRAIGHT);
+                        s->setGlissandoShift(true);
                         s->setEndElement(nt);
                         s->setTick2(nt->chord()->segment()->tick());
                         s->setTrack2(n->track());
+
+                        for (Spanner* spanner : n->chord()->startingSpanners()) {
+                            if (spanner && spanner->isSlur()) {
+                                Slur* slur = toSlur(spanner);
+                                if (slur->endElement() == nt->chord()) {
+                                    slur->setConnectedElement(mu::engraving::Slur::ConnectedElement::GLISSANDO);
+                                    s->setGlissandoShift(false);
+                                    break;
+                                }
+                            }
+                        }
+
                         score->addElement(s);
                         br = true;
                         break;
@@ -1045,10 +1058,10 @@ bool GuitarPro5::read(IODevice* io)
                 Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
                 StaffText* st = new StaffText(s);
                 static constexpr char text[][22] = {
-                    "fine", "Da Capo", "D.C. al Coda", "D.C. al Double Coda",
-                    "D.C. al Fine", "Da Segno", "D.S. al Coda", "D.S. al Double Coda",
-                    "D.S. al Fine", "Da Segno Segno", "D.S.S. al Coda", "D.S.S. al Double Coda",
-                    "D.S.S. al Fine", "Da Coda", "Da Double Coda"
+                    "fine", "Da Capo", "D.C. al Coda", "D.C. al Doppia Coda",
+                    "D.C. al Fine", "Da Segno", "D.S. al Coda", "D.S. al Doppia Coda",
+                    "D.S. al Fine", "Da Doppio Segno", "D.D.S. al Coda", "D.D.S. al Doppia Coda",
+                    "D.D.S. al Fine", "Da Coda", "Da Doppia Coda"
                 };
                 st->setPlainText(String::fromAscii(text[i - 4]));
                 st->setParent(s);
@@ -1163,10 +1176,11 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
     if (modMask2 & EFFECT_TREMOLO) {      // tremolo picking length
         int tremoloDivision = readUInt8();
-        Chord* chord = note->chord();
-        Tremolo* t = Factory::createTremolo(chord);
         if (tremoloDivision >= 1 && tremoloDivision <= 3) {
             TremoloType type = tremoloType(tremoloDivision);
+            DO_ASSERT(!isTremoloTwoChord(type));
+            Chord* chord = note->chord();
+            TremoloSingleChord* t = Factory::createTremoloSingleChord(chord);
             t->setTremoloType(type);
             chord->add(t);
             m_tremolosInChords[chord] = type;
@@ -1369,9 +1383,6 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
 
     if (noteBits & NOTE_GHOST) {
         note->setGhost(true);
-        if (engravingConfiguration()->guitarProImportExperimental()) {
-            note->setHeadHasParentheses(true);
-        }
     }
 
     bool tieNote = false;
@@ -1535,8 +1546,9 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                         note->setPitch(note2->pitch());
                         true_note = note2;
                         if (m_tremolosInChords.find(chord2) != m_tremolosInChords.end()) {
-                            Tremolo* t = Factory::createTremolo(score->dummy()->chord());
                             TremoloType type = m_tremolosInChords.at(chord2);
+                            DO_ASSERT(!isTremoloTwoChord(type));
+                            TremoloSingleChord* t = Factory::createTremoloSingleChord(score->dummy()->chord());
                             t->setTremoloType(type);
                             chord->add(t);
                             mu::remove(m_tremolosInChords, chord2);

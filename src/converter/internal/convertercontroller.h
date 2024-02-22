@@ -45,9 +45,11 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
-    Ret fileConvert(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath = io::path_t(),
-                    bool forceMode = false) override;
-    Ret batchConvert(const io::path_t& batchJobFile, const io::path_t& stylePath = io::path_t(), bool forceMode = false) override;
+    Ret fileConvert(const io::path_t& in, const io::path_t& out,
+                    const io::path_t& stylePath = io::path_t(), bool forceMode = false, const String& soundProfile = String()) override;
+    Ret batchConvert(const io::path_t& batchJobFile,
+                     const io::path_t& stylePath = io::path_t(), bool forceMode = false, const String& soundProfile = String()) override;
+
     Ret convertScoreParts(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath = io::path_t(),
                           bool forceMode = false) override;
 

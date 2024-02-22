@@ -24,6 +24,10 @@
 
 #include <memory>
 
+#ifndef MU_QT5_COMPAT
+Q_MOC_INCLUDE(< QWindow >)
+#endif
+
 #include "uicomponents/view/abstractmenumodel.h"
 
 #include "actions/actionable.h"

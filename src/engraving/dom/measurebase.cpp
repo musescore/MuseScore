@@ -130,8 +130,6 @@ void MeasureBase::add(EngravingItem* e)
             setLineBreak(false);
             setSectionBreak(true);
             setNoBreak(false);
-            //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-            triggerLayoutAll();
             break;
         case LayoutBreakType:: NOBREAK:
             setPageBreak(false);
@@ -169,17 +167,22 @@ void MeasureBase::remove(EngravingItem* el)
         case LayoutBreakType::SECTION:
             setSectionBreak(false);
             score()->setPause(endTick(), 0);
-            triggerLayoutAll();
             break;
         case LayoutBreakType::NOBREAK:
             setNoBreak(false);
             break;
         }
     }
+
     if (!m_el.remove(el)) {
         LOGD("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
     } else {
         el->removed();
+    }
+
+    triggerLayout();
+    if (next()) {
+        next()->triggerLayout();
     }
 }
 
@@ -296,6 +299,30 @@ MeasureBase* MeasureBase::top() const
         }
     }
     return const_cast<MeasureBase*>(mb);
+}
+
+//---------------------------------------------------------
+//   getInScore
+//---------------------------------------------------------
+
+MeasureBase* MeasureBase::getInScore(Score* score, bool useNextMeasureFallback) const
+{
+    MeasureBase* newMB = nullptr;
+    if (!isMeasure() && !excludeFromOtherParts()) {
+        for (auto e : linkList()) {
+            if (e->score() == score) {
+                newMB = toMeasureBase(e);
+                break;
+            }
+        }
+    }
+    if (isMeasure() || (!newMB && useNextMeasureFallback)) {
+        newMB = score->tick2measure(tick());
+    }
+    if (!newMB) {
+        LOGD("measure base not found in score");
+    }
+    return newMB;
 }
 
 //---------------------------------------------------------
@@ -421,7 +448,11 @@ bool MeasureBase::setProperty(Pid id, const PropertyValue& value)
         }
         break;
     }
-    triggerLayoutAll();
+    if (id == Pid::IRREGULAR || id == Pid::NO_OFFSET) {
+        triggerLayoutAll();
+    } else {
+        triggerLayout();
+    }
     score()->setPlaylistDirty();
     return true;
 }

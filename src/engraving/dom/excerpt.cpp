@@ -33,6 +33,7 @@
 #include "box.h"
 #include "chord.h"
 #include "factory.h"
+#include "guitarbend.h"
 #include "harmony.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
@@ -40,6 +41,7 @@
 #include "masterscore.h"
 #include "measure.h"
 #include "note.h"
+#include "ornament.h"
 #include "page.h"
 #include "part.h"
 #include "rest.h"
@@ -48,11 +50,13 @@
 #include "sig.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "system.h"
 #include "text.h"
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
-#include "tremolo.h"
+
+#include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"
 #include "undo.h"
@@ -126,15 +130,18 @@ const String& Excerpt::name() const
     return m_name;
 }
 
-void Excerpt::setName(const String& name)
+void Excerpt::setName(const String& name, bool saveAndNotify)
 {
     if (m_name == name) {
         return;
     }
 
     m_name = name;
-    writeNameToMetaTags();
-    m_nameChanged.notify();
+
+    if (saveAndNotify) {
+        writeNameToMetaTags();
+        m_nameChanged.notify();
+    }
 }
 
 void Excerpt::writeNameToMetaTags()
@@ -150,6 +157,35 @@ void Excerpt::writeNameToMetaTags()
 async::Notification Excerpt::nameChanged() const
 {
     return m_nameChanged;
+}
+
+const String& Excerpt::fileName() const
+{
+    IF_ASSERT_FAILED(!m_fileName.empty()) {
+        const_cast<Excerpt*>(this)->updateFileName();
+    }
+
+    return m_fileName;
+}
+
+void Excerpt::setFileName(const String& fileName)
+{
+    m_fileName = fileName;
+}
+
+void Excerpt::updateFileName(size_t index)
+{
+    if (index == mu::nidx && m_masterScore) {
+        index = mu::indexOf(m_masterScore->excerpts(), this);
+    }
+
+    const String escapedName = io::escapeFileName(m_name).toString();
+
+    if (index == mu::nidx) {
+        m_fileName = escapedName;
+    } else {
+        m_fileName = String(u"%1_%2").arg(String::number(index), escapedName);
+    }
 }
 
 bool Excerpt::containsPart(const Part* part) const
@@ -344,19 +380,16 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     cloneStaves(masterScore, score, srcStaves, excerpt->tracksMapping());
 
+    MeasureBase* masterMeasure = masterScore->first();
     MeasureBase* scoreMeasure = score->first();
 
-    if (!scoreMeasure || !scoreMeasure->isVBox()) {
-        Score::InsertMeasureOptions options;
-        options.addToAllScores = false;
-
-        score->insertMeasure(ElementType::VBOX, scoreMeasure, options);
+    if ((!scoreMeasure || !scoreMeasure->isVBox()) && (!masterMeasure || !masterMeasure->excludeFromOtherParts())) {
+        score->insertBox(ElementType::VBOX, scoreMeasure);
         scoreMeasure = score->first();
     }
 
-    VBox* titleFrameScore = toVBox(scoreMeasure);
+    VBox* titleFrameScore = scoreMeasure && scoreMeasure->isVBox() ? toVBox(scoreMeasure) : nullptr;
 
-    MeasureBase* masterMeasure = masterScore->first();
     if (titleFrameScore && masterMeasure && masterMeasure->isVBox()) {
         VBox* titleFrameMaster = toVBox(masterMeasure);
 
@@ -375,7 +408,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // initial layout of score
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
 
     // handle transposing instruments
@@ -664,7 +696,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         return;
     }
 
-    score->undo(new AddElement(ns));
+    score->doUndoAddElement(ns);
     ns->styleChanged();
 }
 
@@ -759,11 +791,11 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
 
             track_idx_t strack = mu::value(trackList, srcTrack, mu::nidx);
 
-            Tremolo* tremolo = 0;
+            TremoloTwoChord* tremolo = 0;
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nullptr;           //create segment later, on demand
                 for (EngravingItem* e : oseg->annotations()) {
-                    if (e->generated()) {
+                    if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
                     if ((e->track() == srcTrack && strack != mu::nidx && !e->systemFlag())
@@ -842,7 +874,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
                     }
 
-                    if (oe && !oe->generated()) {
+                    if (oe && !oe->generated() && !oe->excludeFromOtherParts()) {
                         EngravingItem* ne;
                         ne = oe->linkedClone();
                         ne->setTrack(track);
@@ -863,6 +895,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                 Beam* nb = ocr->beam()->clone();
                                 nb->clear();
                                 nb->setTrack(track);
+                                nb->setParent(nm->system());
                                 nb->setScore(score);
                                 nb->add(ncr);
                                 ncr->setBeam(nb);
@@ -932,23 +965,23 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                                     }
                                 }
                                 // two note tremolo
-                                if (och->tremolo() && och->tremolo()->twoNotes()) {
-                                    if (och == och->tremolo()->chord1()) {
+                                if (och->tremoloTwoChord()) {
+                                    if (och == och->tremoloTwoChord()->chord1()) {
                                         if (tremolo) {
                                             LOGD("unconnected two note tremolo");
                                         }
-                                        tremolo = toTremolo(och->tremolo()->linkedClone());
+                                        tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
                                         tremolo->setScore(nch->score());
                                         tremolo->setParent(nch);
                                         tremolo->setTrack(nch->track());
                                         tremolo->setChords(nch, 0);
-                                        nch->setTremolo(tremolo);
-                                    } else if (och == och->tremolo()->chord2()) {
+                                        nch->setTremoloTwoChord(tremolo);
+                                    } else if (och == och->tremoloTwoChord()->chord2()) {
                                         if (!tremolo) {
                                             LOGD("first note for two note tremolo missing");
                                         } else {
                                             tremolo->setChords(tremolo->chord1(), nch);
-                                            nch->setTremolo(tremolo);
+                                            nch->setTremoloTwoChord(tremolo);
                                         }
                                     } else {
                                         LOGD("inconsistent two note tremolo");
@@ -977,6 +1010,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     }
 
     nmb->linkTo(mb);
+    nmb->setExcludeFromOtherParts(false);
+
     for (EngravingItem* e : mb->el()) {
         if (e->isLayoutBreak()) {
             LayoutBreakType st = toLayoutBreak(e)->layoutBreakType();
@@ -1032,6 +1067,18 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
     TieMap tieMap;
 
     for (MeasureBase* mb = sourceScore->measures()->first(); mb; mb = mb->next()) {
+        if (mb->excludeFromOtherParts()) {
+            // if excluded measure contains section break, add it to precedent measure in part
+            if (LayoutBreak* sectionBreak = mb->sectionBreakElement()) {
+                if (MeasureBase* prevMB = measures->last()) {
+                    EngravingItem* newSectionBreak = sectionBreak->linkedClone();
+                    newSectionBreak->setScore(dstScore);
+                    newSectionBreak->setParent(prevMB);
+                    dstScore->doUndoAddElement(newSectionBreak);
+                }
+            }
+            continue;
+        }
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->add(newMeasure);
     }
@@ -1056,6 +1103,10 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
 
     for (auto i : sourceScore->spanner()) {
         Spanner* s    = i.second;
+        if (s->excludeFromOtherParts()) {
+            continue;
+        }
+
         track_idx_t dstTrack  = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
 
@@ -1129,7 +1180,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
         for (track_idx_t srcTrack = sTrack; srcTrack < eTrack; ++srcTrack) {
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             track_idx_t dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
-            Tremolo* tremolo = 0;
+            TremoloTwoChord* tremolo = 0;
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
                 EngravingItem* oe = seg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
@@ -1180,6 +1231,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     DeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
+                    ncr->checkStaffMoveValidity();
                     // creating copy for iteration, cause seg->annotations() may change during loop
                     const std::vector<EngravingItem*> iterableAnnotations = seg->annotations();
 
@@ -1202,6 +1254,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                         case ElementType::TRIPLET_FEEL:
                         case ElementType::PLAYTECH_ANNOTATION:
                         case ElementType::CAPO:
+                        case ElementType::STRING_TUNINGS:
                         case ElementType::FRET_DIAGRAM:
                         case ElementType::HARMONY:
                         case ElementType::FIGURED_BASS:
@@ -1217,7 +1270,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             ne1->setTrack(dstTrack);
                             ne1->setParent(seg);
                             ne1->setScore(score);
-                            score->undo(new AddElement(ne1));
+                            score->doUndoAddElement(ne1);
                             continue;
                         }
                         default:
@@ -1270,26 +1323,36 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             }
                         }
                         // two note tremolo
-                        if (och->tremolo() && och->tremolo()->twoNotes()) {
-                            if (och == och->tremolo()->chord1()) {
+                        if (och->tremoloTwoChord()) {
+                            if (och == och->tremoloTwoChord()->chord1()) {
                                 if (tremolo) {
                                     LOGD("unconnected two note tremolo");
                                 }
-                                tremolo = toTremolo(och->tremolo()->linkedClone());
+                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
                                 tremolo->setScore(nch->score());
                                 tremolo->setParent(nch);
                                 tremolo->setTrack(nch->track());
                                 tremolo->setChords(nch, 0);
-                                nch->setTremolo(tremolo);
-                            } else if (och == och->tremolo()->chord2()) {
+                                nch->setTremoloTwoChord(tremolo);
+                            } else if (och == och->tremoloTwoChord()->chord2()) {
                                 if (!tremolo) {
                                     LOGD("first note for two note tremolo missing");
                                 } else {
                                     tremolo->setChords(tremolo->chord1(), nch);
-                                    nch->setTremolo(tremolo);
+                                    nch->setTremoloTwoChord(tremolo);
                                 }
                             } else {
                                 LOGD("inconsistent two note tremolo");
+                            }
+                        }
+                        // Check grace note staff move validity
+                        for (Chord* gn : nch->graceNotes()) {
+                            gn->checkStaffMoveValidity();
+                        }
+                        if (Ornament* o = nch->findOrnament()) {
+                            Chord* cueChord = o->cueNoteChord();
+                            if (cueChord) {
+                                cueChord->checkStaffMoveValidity();
                             }
                         }
                     }
@@ -1427,12 +1490,13 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 for (EngravingItem* e : oseg->annotations()) {
-                    if (e->generated()) {
+                    if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
                     bool alreadyCloned = bool(e->findLinkedInScore(score));
-                    bool cloneAnnotation = e->track() == srcTrack || (systemObject && !alreadyCloned);
+                    bool cloneAnnotation = !alreadyCloned && (e->track() == srcTrack || systemObject);
+
                     if (!cloneAnnotation) {
                         continue;
                     }
@@ -1445,7 +1509,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 EngravingItem* oe = oseg->element(srcTrack);
-                if (oe == 0 || oe->generated()) {
+                if (oe == 0 || oe->generated() || oe->excludeFromOtherParts()) {
                     continue;
                 }
 
@@ -1499,16 +1563,47 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                     LOGD("cloneStaff2: cannot find tie");
                                 }
                             }
+                            GuitarBend* bendBack = on->bendBack();
+                            Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
+                            if (bendBack && newStartNote) {
+                                GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
+                                newBend->setScore(score);
+                                newBend->setParent(newStartNote);
+                                newBend->setTrack(newStartNote->track());
+                                newBend->setTrack2(nn->track());
+                                newBend->setStartElement(newStartNote);
+                                newBend->setEndElement(nn);
+                                newStartNote->addSpannerFor(newBend);
+                                nn->addSpannerBack(newBend);
+                            }
+                            GuitarBend* bendFor = on->bendFor();
+                            if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
+                                // Because slight bends aren't detected as "bendBack"
+                                GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
+                                newBend->setScore(score);
+                                newBend->setParent(nn);
+                                newBend->setTrack(nn->track());
+                                newBend->setTrack2(nn->track());
+                                newBend->setStartElement(nn);
+                                newBend->setEndElement(nn);
+                                nn->addSpannerFor(newBend);
+                            }
                         }
                     }
                 }
+            }
+        }
+        for (Segment& seg : nm->segments()) {
+            seg.checkEmpty();
+            if (seg.empty()) {
+                score->removeElement(&seg);
             }
         }
     }
 
     for (auto i : oscore->spanner()) {
         Spanner* s = i.second;
-        if (!(s->tick() >= startTick && s->tick2() < endTick)) {
+        if (!(s->tick() >= startTick && s->tick2() < endTick) || s->excludeFromOtherParts()) {
             continue;
         }
 

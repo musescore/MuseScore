@@ -214,34 +214,6 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
     return modes;
 }
 
-QVariantList GeneralPreferencesModel::panels() const
-{
-    QVariantList result;
-
-    for (const Panel& panel: allPanels()) {
-        QVariantMap obj;
-        obj["title"] = panel.title;
-        obj["visible"] = panel.visible;
-
-        result << obj;
-    }
-
-    return result;
-}
-
-GeneralPreferencesModel::PanelList GeneralPreferencesModel::allPanels() const
-{
-    PanelList panels {
-        /*
-         * TODO: https://github.com/musescore/MuseScore/issues/9807
-         * Panel { SplashScreen, qtrc("appshell/preferences", "Show splash screen"), configuration()->needShowSplashScreen() },
-         */
-        Panel { Navigator, qtrc("appshell/preferences", "Show navigator"), configuration()->isNotationNavigatorVisible() },
-    };
-
-    return panels;
-}
-
 QStringList GeneralPreferencesModel::scorePathFilter() const
 {
     return { qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
@@ -274,28 +246,4 @@ void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
     configuration()->setStartupScorePath(scorePath);
 
     emit startupModesChanged();
-}
-
-void GeneralPreferencesModel::setPanelVisible(int panelIndex, bool visible)
-{
-    PanelList panels = allPanels();
-
-    if (panelIndex < 0 || panelIndex >= panels.size()) {
-        return;
-    }
-
-    Panel panel = panels[panelIndex];
-
-    switch (panel.type) {
-    case SplashScreen:
-        configuration()->setNeedShowSplashScreen(visible);
-        break;
-    case Navigator:
-        configuration()->setIsNotationNavigatorVisible(visible);
-        break;
-    case Unknown:
-        return;
-    }
-
-    emit panelsChanged();
 }

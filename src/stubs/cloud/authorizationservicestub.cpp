@@ -36,7 +36,7 @@ void AuthorizationServiceStub::signOut()
 {
 }
 
-mu::Ret AuthorizationServiceStub::ensureAuthorization(const std::string&)
+mu::RetVal<mu::Val> AuthorizationServiceStub::ensureAuthorization(bool, const std::string&)
 {
     return make_ret(Ret::Code::NotSupported);
 }

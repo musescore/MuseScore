@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Single Tremolos</title>
+            <respStmt>
+               <persName role="composer">Klaus Rettinghaus</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-11-07T17:28:56" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Single Tremolos</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Klaus Rettinghaus</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Violine</label>
+                        <labelAbbr>Vl.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="mznsh0" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <bTrem xml:id="boupxe7">
+                              <chord xml:id="ce9vqu2" dur="2" stem.mod="1slash">
+                                 <note xml:id="n1480cba" pname="d" oct="4" />
+                                 <note xml:id="nqvs36d" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                           <bTrem xml:id="b6wpi1v">
+                              <chord xml:id="cjmsadd" dur="2" stem.mod="2slash">
+                                 <note xml:id="n66ib5j" pname="d" oct="4" />
+                                 <note xml:id="n49w2pq" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m1imapuc" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <bTrem xml:id="b1ungrqp">
+                              <chord xml:id="c1288j8w" dur="2" stem.mod="3slash">
+                                 <note xml:id="n19ypux" pname="d" oct="4" />
+                                 <note xml:id="n1jf85dh" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                           <bTrem xml:id="bwsszy7">
+                              <chord xml:id="c1r6ltrr" dur="2" stem.mod="4slash">
+                                 <note xml:id="najlljb" pname="d" oct="4" />
+                                 <note xml:id="n1kapie7" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m1t4yges" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <bTrem xml:id="blra7a5">
+                              <chord xml:id="cxwk1rc" dur="4" stem.mod="1slash">
+                                 <note xml:id="n1naisrs" pname="d" oct="4" />
+                                 <note xml:id="n1r5e295" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                           <bTrem xml:id="b1a4h0u">
+                              <chord xml:id="clvu8ef" dur="4" stem.mod="2slash">
+                                 <note xml:id="n1oluogu" pname="d" oct="4" />
+                                 <note xml:id="n1fujlpm" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                           <bTrem xml:id="bqtu2c0">
+                              <chord xml:id="c1tsoh5c" dur="4" stem.mod="3slash">
+                                 <note xml:id="n1pcg3qk" pname="d" oct="4" />
+                                 <note xml:id="n1c45g7b" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                           <bTrem xml:id="b6883ff">
+                              <chord xml:id="c7r6nc2" dur="4" stem.mod="4slash">
+                                 <note xml:id="n1756sm5" pname="d" oct="4" />
+                                 <note xml:id="n1spf66o" pname="a" oct="4" />
+                              </chord>
+                           </bTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m18jl03a" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <beam>
+                              <bTrem xml:id="b198bzhe">
+                                 <chord xml:id="c1agcxus" dur="8" stem.mod="1slash">
+                                    <note xml:id="n1k9p3u3" pname="d" oct="4" />
+                                    <note xml:id="n10xm1z" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                              <bTrem xml:id="bjdakpq">
+                                 <chord xml:id="b1iegagm" dur="8" stem.mod="1slash">
+                                    <note xml:id="nj68own" pname="d" oct="4" />
+                                    <note xml:id="n5opgkt" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                              <bTrem xml:id="b1ye2phy">
+                                 <chord xml:id="cchxgx1" dur="8" stem.mod="2slash">
+                                    <note xml:id="n1s769l8" pname="d" oct="4" />
+                                    <note xml:id="n11h1w1m" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                              <bTrem xml:id="b8wg96c">
+                                 <chord xml:id="cywc7hv" dur="8" stem.mod="2slash">
+                                    <note xml:id="nj5bptc" pname="d" oct="4" />
+                                    <note xml:id="n1ejnl0h" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                           </beam>
+                           <beam>
+                              <bTrem xml:id="b1apodmb">
+                                 <chord xml:id="cm5hlp7" dur="8" stem.mod="3slash">
+                                    <note xml:id="n1qx3wb5" pname="d" oct="4" />
+                                    <note xml:id="np4s5qv" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                              <bTrem xml:id="b1ei6xux">
+                                 <chord xml:id="c44374v" dur="8" stem.mod="3slash">
+                                    <note xml:id="n1yrbpqu" pname="d" oct="4" />
+                                    <note xml:id="n181ov8u" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                              <bTrem xml:id="b1nay6ee">
+                                 <chord xml:id="c14ge9eg" dur="8" stem.mod="4slash">
+                                    <note xml:id="n1b6cwv9" pname="d" oct="4" />
+                                    <note xml:id="n165uy9r" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                              <bTrem xml:id="b1nitukm">
+                                 <chord xml:id="cqrn7ie" dur="8" stem.mod="4slash">
+                                    <note xml:id="n1msb1m6" pname="d" oct="4" />
+                                    <note xml:id="nm1425q" pname="a" oct="4" />
+                                 </chord>
+                              </bTrem>
+                           </beam>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m1hgoo3l" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <bTrem xml:id="be547jv">
+                              <note xml:id="n1cq33f4" dur="4" pname="a" oct="4" stem.mod="1slash" />
+                           </bTrem>
+                           <bTrem xml:id="b9psqqr">
+                              <note xml:id="n1stnvrz" dur="4" pname="a" oct="4" stem.mod="2slash" />
+                           </bTrem>
+                           <bTrem xml:id="b135nviw">
+                              <note xml:id="n1s99if" dur="4" pname="a" oct="4" stem.mod="3slash" />
+                           </bTrem>
+                           <bTrem xml:id="buh084k">
+                              <note xml:id="n825vjr" dur="4" pname="a" oct="4" stem.mod="4slash" />
+                           </bTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m19vib7l" right="end" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <note xml:id="n3fkmrz" dur="4" pname="a" oct="4" />
+                           <bTrem xml:id="b13k9dw3">
+                              <note xml:id="n181ll8i" dur="4" pname="a" oct="4" stem.mod="z" />
+                           </bTrem>
+                           <note xml:id="n16htm46" dur="4" pname="a" oct="4" />
+                           <bTrem xml:id="b11toay8">
+                              <note xml:id="n5qsjl1" dur="4" pname="a" oct="4" stem.mod="z" />
+                           </bTrem>
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

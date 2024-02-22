@@ -31,7 +31,7 @@ namespace mu::engraving {
 
 bool ClefTypeList::operator==(const ClefTypeList& t) const
 {
-    return t._concertClef == _concertClef && t._transposingClef == _transposingClef;
+    return t.concertClef == concertClef && t.transposingClef == transposingClef;
 }
 
 //---------------------------------------------------------
@@ -40,7 +40,7 @@ bool ClefTypeList::operator==(const ClefTypeList& t) const
 
 bool ClefTypeList::operator!=(const ClefTypeList& t) const
 {
-    return t._concertClef != _concertClef || t._transposingClef != _transposingClef;
+    return t.concertClef != concertClef || t.transposingClef != transposingClef;
 }
 
 //---------------------------------------------------------

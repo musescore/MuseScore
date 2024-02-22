@@ -112,6 +112,23 @@ mu::async::Channel<mu::audio::aux_channel_idx_t, std::string> PlaybackController
     return {};
 }
 
+mu::async::Promise<mu::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
+{
+    return async::Promise<mu::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
+        return reject(int(Ret::Code::UnknownError), "stub");
+    });
+}
+
+mu::notation::INotationSoloMuteState::SoloMuteState PlaybackControllerStub::trackSoloMuteState(const engraving::InstrumentTrackId&) const
+{
+    return notation::INotationSoloMuteState::SoloMuteState();
+}
+
+void PlaybackControllerStub::setTrackSoloMuteState(const engraving::InstrumentTrackId&,
+                                                   const notation::INotationSoloMuteState::SoloMuteState&) const
+{
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
 {
 }

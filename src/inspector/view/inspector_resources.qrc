@@ -65,6 +65,7 @@
         <file>qml/MuseScore/Inspector/notation/lines/VibratoSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/SlurAndTieSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/tempos/TempoSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/tempos/TempoRestorePreviousSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/sectionbreaks/SectionBreakSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/markers/MarkerSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/jumps/JumpSettings.qml</file>
@@ -94,6 +95,7 @@
         <file>qml/MuseScore/Inspector/notation/tuplets/TupletSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationSingleElementView.qml</file>
         <file>qml/MuseScore/Inspector/notation/instrumentname/InstrumentNameSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/symbols/SymbolSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/AppearanceSettings.qml</file>
         <file>qml/MuseScore/Inspector/text/TextSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lyrics/LyricsSettings.qml</file>
@@ -104,5 +106,8 @@
         <file>qml/MuseScore/Inspector/common/FrameSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyResetButton.qml</file>
+        <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>
+        <file>qml/MuseScore/Inspector/parts/PartsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
     </qresource>
 </RCC>

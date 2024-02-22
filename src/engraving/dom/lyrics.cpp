@@ -168,7 +168,7 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Lyrics::layout2(int nAbove)
 {
-    LayoutData* ldata = mutLayoutData();
+    LayoutData* ldata = mutldata();
     double lh = lineSpacing() * style().styleD(Sid::lyricsLineHeight);
 
     if (placeBelow()) {
@@ -345,7 +345,10 @@ void Lyrics::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
 
-    triggerLayoutAll();
+    triggerLayout();
+    if (m_separator) {
+        m_separator->triggerLayout();
+    }
 }
 
 //---------------------------------------------------------
@@ -527,7 +530,7 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             // rebase offset
             PointF off = offset();
             double y = pos().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
-            off.ry() = placeAbove() ? y : y - staff()->height();
+            off.ry() = placeAbove() ? y : y - staff()->staffHeight();
             undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
         }
         TextBase::undoChangeProperty(id, v, ps);

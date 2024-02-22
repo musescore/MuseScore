@@ -46,9 +46,9 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
 
 public:
     EditStaff(QWidget* parent = nullptr);
+#ifdef MU_QT5_COMPAT
     EditStaff(const EditStaff&);
-
-    static int metaTypeId();
+#endif
 
 private:
     void hideEvent(QHideEvent*) override;
@@ -111,7 +111,5 @@ private:
     EditStaffType* editStaffTypeDialog = nullptr;
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::EditStaff)
 
 #endif

@@ -3,10 +3,6 @@ set(MODULE braille)
 add_subdirectory(tables)
 add_subdirectory(thirdparty/liblouis)
 
-if (MUE_BUILD_UNIT_TESTS)
-    add_subdirectory(tests)
-endif()
-
 set(MODULE_QRC ${CMAKE_CURRENT_LIST_DIR}/braille.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
@@ -17,10 +13,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ibrailleconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/ibrailleconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationbraille.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/braillecode.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/braillecode.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/brailleconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinput.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinput.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinputparser.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/brailleinputparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/braillewriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/braille.cpp
@@ -38,4 +40,8 @@ set(MODULE_LINK
     liblouis
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
+
+if (MUE_BUILD_BRAILLE_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -349,7 +349,7 @@ AccidentalVal AccidentalState::accidentalVal(int line, bool& error) const
         error = true;
         return AccidentalVal::NATURAL;
     }
-    return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
+    return AccidentalVal((m_state[line] & 0x0f) + int(AccidentalVal::MIN));
 }
 
 //---------------------------------------------------------
@@ -363,7 +363,7 @@ static const int ACC_STATE_SHARP = int(AccidentalVal::SHARP) - int(AccidentalVal
 
 void AccidentalState::init(Key key)
 {
-    memset(state, ACC_STATE_NATURAL, MAX_ACC_STATE);
+    memset(m_state, ACC_STATE_NATURAL, MAX_ACC_STATE);
     // The numerical value of key tells us the number of sharps (or flats, if negative) in the key signature
     if (key > 0 && key <= Key::MAX) {
         for (int i = 0; i < int(key); ++i) {
@@ -374,7 +374,7 @@ void AccidentalState::init(Key key)
                 if (j >= MAX_ACC_STATE) {
                     break;
                 }
-                state[j] = ACC_STATE_SHARP;
+                m_state[j] = ACC_STATE_SHARP;
             }
         }
     } else if (key < 0 && key >= Key::MIN) {
@@ -386,7 +386,7 @@ void AccidentalState::init(Key key)
                 if (j >= MAX_ACC_STATE) {
                     break;
                 }
-                state[j] = ACC_STATE_FLAT;
+                m_state[j] = ACC_STATE_FLAT;
             }
         }
     }
@@ -409,7 +409,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
                 if (i >= MAX_ACC_STATE) {
                     break;
                 }
-                state[i] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
+                m_state[i] = static_cast<uint8_t>(int(a) - int(AccidentalVal::MIN));
             }
         }
     }
@@ -423,7 +423,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
 AccidentalVal AccidentalState::accidentalVal(int line) const
 {
     assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
-    return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
+    return AccidentalVal((m_state[line] & 0x0f) + int(AccidentalVal::MIN));
 }
 
 bool AccidentalState::forceRestateAccidental(int line) const
@@ -439,7 +439,7 @@ bool AccidentalState::forceRestateAccidental(int line) const
 bool AccidentalState::tieContext(int line) const
 {
     assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
-    return state[line] & TIE_CONTEXT;
+    return m_state[line] & TIE_CONTEXT;
 }
 
 //---------------------------------------------------------
@@ -451,7 +451,7 @@ void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieCont
     assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
     assert(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
-    state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
+    m_state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
 }
 
 void AccidentalState::setForceRestateAccidental(int line, bool forceRestate)

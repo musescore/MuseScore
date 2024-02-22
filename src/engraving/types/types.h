@@ -70,7 +70,6 @@ enum class ElementType {
     PART,
     STAFF,
     SCORE,
-    SYMBOL,
     TEXT,
     MEASURE_NUMBER,
     MMREST_RANGE,
@@ -84,10 +83,12 @@ enum class ElementType {
     ARPEGGIO,
     ACCIDENTAL,
     LEDGER_LINE,
-    STEM,                     // list STEM before NOTE: notes in TAB might 'break' stems
-    NOTE,                     // and this requires stems to be drawn before notes
-    CLEF,                     // elements from CLEF to TIMESIG need to be in the order
-    KEYSIG,                   // in which they appear in a measure
+    STEM,   // list STEM before NOTE: notes in TAB might 'break' stems
+    HOOK,   // and this requires stems to be drawn before notes
+    NOTE,   // elements from CLEF to TIMESIG need to be in the order
+    SYMBOL, // in which they appear in a measure
+    CLEF,
+    KEYSIG,
     AMBITUS,
     TIMESIG,
     REST,
@@ -104,9 +105,9 @@ enum class ElementType {
     EXPRESSION,
     BEAM,
     BEAM_SEGMENT,
-    HOOK,
     LYRICS,
     FIGURED_BASS,
+    FIGURED_BASS_ITEM,
     MARKER,
     JUMP,
     FINGERING,
@@ -114,8 +115,10 @@ enum class ElementType {
     TEMPO_TEXT,
     STAFF_TEXT,
     SYSTEM_TEXT,
+    SOUND_FLAG,
     PLAYTECH_ANNOTATION,
     CAPO,
+    STRING_TUNINGS,
     TRIPLET_FEEL,
     REHEARSAL_MARK,
     INSTRUMENT_CHANGE,
@@ -148,7 +151,7 @@ enum class ElementType {
     STAFF_STATE,
     NOTEHEAD,
     NOTEDOT,
-    TREMOLO,
+    TREMOLO, // deprecated
     IMAGE,
     MEASURE,
     SELECTION,
@@ -194,6 +197,13 @@ enum class ElementType {
     STICKING,
     GRACE_NOTES_GROUP,
     FRET_CIRCLE,
+    GUITAR_BEND,
+    GUITAR_BEND_SEGMENT,
+    GUITAR_BEND_HOLD,
+    GUITAR_BEND_HOLD_SEGMENT,
+    GUITAR_BEND_TEXT,
+    TREMOLO_TWOCHORD,
+    TREMOLO_SINGLECHORD,
 
     ROOT_ITEM,
     DUMMY,
@@ -498,6 +508,7 @@ enum class NoteHeadGroup : signed char {
 };
 
 // P_TYPE::CLEF_TYPE
+// keep in sync with clefTable in clef.cpp, CLEF_TYPES in typesconv.cpp and CLEF_INFOS in exportxml.cpp
 enum class ClefType : signed char {
     INVALID = -1,
     G = 0,
@@ -535,6 +546,9 @@ enum class ClefType : signed char {
     TAB4,
     TAB_SERIF,
     TAB4_SERIF,
+    // new clefs to be added between here
+    C4_8VB,
+    // and here in oder to not break TAB clef style
     MAX
 };
 
@@ -691,7 +705,7 @@ enum class TextStyleType {
     TITLE,
     SUBTITLE,
     COMPOSER,
-    POET,
+    LYRICIST,
     TRANSLATOR,
     FRAME,
     INSTRUMENT_EXCERPT,
@@ -733,6 +747,7 @@ enum class TextStyleType {
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
+    STRING_TUNINGS,
     HARP_PEDAL_DIAGRAM,
     HARP_PEDAL_TEXT_DIAGRAM,
 
@@ -898,6 +913,20 @@ enum class TremoloType : signed char {
     C8, C16, C32, C64       // two note tremolo (change)
 };
 
+inline bool isTremoloTwoChord(TremoloType type)
+{
+    return type >= TremoloType::C8;
+}
+
+// only applicable to minim two-note tremolo in non-TAB staves
+enum class TremoloStyle : signed char {
+    DEFAULT = 0, TRADITIONAL, TRADITIONAL_ALTERNATE
+};
+
+enum class TremoloChordType : char {
+    TremoloNone, TremoloSingle, TremoloFirstChord, TremoloSecondChord
+};
+
 enum class BracketType : signed char {
     NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
 };
@@ -969,6 +998,12 @@ enum class LyricsSyllabic : char {
 
 enum class SpannerSegmentType {
     SINGLE, BEGIN, MIDDLE, END
+};
+
+enum class TiePlacement {
+    AUTO,
+    INSIDE,
+    OUTSIDE,
 };
 
 //---------------------------------------------------------
@@ -1051,7 +1086,6 @@ enum class UpdateMode {
 
 enum class LayoutFlag : char {
     NO_FLAGS       = 0,
-    FIX_PITCH_VELO = 1,
     PLAY_EVENTS    = 2,
     REBUILD_MIDI_MAPPING = 4,
 };

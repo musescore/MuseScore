@@ -78,7 +78,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/vibrato.h"
@@ -226,12 +225,11 @@ String GuitarPro::readPascalString(int n)
     if (n - l > 0) {
         skip(n - l);
     }
-
-    try {
+    std::string_view sw(&s[0], l);
+    if (UtfCodec::isValidUtf8(sw)) {
         return String::fromUtf8(&s[0]);
-    } catch (...) {
-        return String::fromAscii(&s[0]);
     }
+    return String::fromAscii(&s[0], l);
 }
 
 //---------------------------------------------------------
@@ -244,7 +242,11 @@ String GuitarPro::readWordPascalString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    return String::fromUtf8(&c[0]);
+    std::string_view sw(&c[0], l);
+    if (UtfCodec::isValidUtf8(sw)) {
+        return String::fromUtf8(&c[0]);
+    }
+    return String::fromAscii(&c[0], l);
 }
 
 //---------------------------------------------------------
@@ -257,7 +259,11 @@ String GuitarPro::readBytePascalString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    return String::fromUtf8(&c[0]);
+    std::string_view sw(&c[0], l);
+    if (UtfCodec::isValidUtf8(sw)) {
+        return String::fromUtf8(&c[0]);
+    }
+    return String::fromAscii(&c[0], l);
 }
 
 //---------------------------------------------------------
@@ -348,7 +354,7 @@ void GuitarPro::initGuitarProDrumset()
         gpDrumset->drum(54) = DrumInstrument(TConv::userName(DrumNum(54)), NoteHeadGroup::HEAD_CROSS, 2, DirectionV::UP);
         gpDrumset->drum(55) = DrumInstrument(TConv::userName(DrumNum(55)), NoteHeadGroup::HEAD_CROSS, -2, DirectionV::UP);
         gpDrumset->drum(56) = DrumInstrument(TConv::userName(DrumNum(56)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::UP);
-        gpDrumset->drum(57) = DrumInstrument(TConv::userName(DrumNum(57)), NoteHeadGroup::HEAD_CROSS, -1, DirectionV::UP);
+        gpDrumset->drum(57) = DrumInstrument(TConv::userName(DrumNum(57)), NoteHeadGroup::HEAD_CROSS, -3, DirectionV::UP);
         gpDrumset->drum(58) = DrumInstrument(TConv::userName(DrumNum(58)), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
         gpDrumset->drum(59) = DrumInstrument(TConv::userName(DrumNum(59)), NoteHeadGroup::HEAD_CROSS, 2, DirectionV::UP);
 
@@ -384,6 +390,7 @@ void GuitarPro::initGuitarProDrumset()
         gpDrumset->drum(87) = DrumInstrument(TConv::userName(DrumNum(87)), NoteHeadGroup::HEAD_NORMAL, 3, DirectionV::UP);
 
         gpDrumset->drum(91) = DrumInstrument(TConv::userName(DrumNum(91)), NoteHeadGroup::HEAD_DIAMOND, 3, DirectionV::UP);
+        gpDrumset->drum(92) = DrumInstrument(TConv::userName(DrumNum(46)), NoteHeadGroup::HEAD_CROSS, -1, DirectionV::UP);
         gpDrumset->drum(93) = DrumInstrument(TConv::userName(DrumNum(93)), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::UP);
 
         //Additional clutch presets (midi by default can't play this)
@@ -879,7 +886,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
             case GP_VOLTA_FLAGS:
                 count++;
                 if (*iter == 1) {                 // we want this number to be displayed in the volta
-                    if (voltaTextString == u"") {
+                    if (voltaTextString.empty()) {
                         voltaTextString += String::number(count);
                     } else {
                         voltaTextString += u',' + String::number(count);
@@ -898,7 +905,7 @@ void GuitarPro::readVolta(GPVolta* gpVolta, Measure* m)
                 if (iter == gpVolta->voltaInfo.end()) {
                     // display all numbers in the volta from voltaSequence to the decimal
                     while (voltaSequence <= binaryNumber) {
-                        if (voltaTextString == u"") {
+                        if (voltaTextString.empty()) {
                             voltaTextString = String::number(voltaSequence);
                         } else {
                             voltaTextString += u',' + String::number(voltaSequence);
@@ -1206,7 +1213,7 @@ void GuitarPro::createMeasures()
 {
     Fraction tick = Fraction(0, 1);
     Fraction ts;
-    LOGD("measures %d bars.size %d", measures, bars.size());
+    LOGD("measures %zu bars.size %zu", measures, bars.size());
 
     //      for (int i = 0; i < measures; ++i) {
     for (size_t i = 0; i < bars.size(); ++i) {     // ?? (ws)
@@ -1698,11 +1705,14 @@ void GuitarPro::createSlur(bool hasSlur, staff_idx_t staffIdx, ChordRest* cr)
         slur->setTrack2(cr->track());
         slur->setTick(cr->tick());
         slur->setTick2(cr->tick());
+        slur->setStartElement(cr);
+        slur->setEndElement(cr);
         slurs[staffIdx] = slur;
         score->addElement(slur);
     } else if (slurs[staffIdx] && !hasSlur) {
         Slur* s = slurs[staffIdx];
         slurs[staffIdx] = 0;
+        s->setEndElement(cr);
         s->setTick2(cr->tick());
         s->setTrack2(cr->track());
     }
@@ -2213,7 +2223,7 @@ GuitarPro::ReadNoteResult GuitarPro1::readNote(int string, Note* note)
                 gc->setDurationType(d);
                 gc->setTicks(d.fraction());
                 gc->setNoteType(NoteType::ACCIACCATURA);
-                gc->mutLayoutData()->setMag(note->chord()->staff()->staffMag(Fraction(0, 1)) * score->style().styleD(Sid::graceNoteMag));
+                gc->mutldata()->setMag(note->chord()->staff()->staffMag(Fraction(0, 1)) * score->style().styleD(Sid::graceNoteMag));
                 note->chord()->add(gc);         // sets parent + track
                 addDynamic(gn, dynamic);
             }
@@ -2760,8 +2770,8 @@ bool GuitarPro3::read(IODevice* io)
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
                     String txt = readDelphiString();
-                    Lyrics* lyrics = Factory::createLyrics(score->dummy()->chord());
-                    lyrics->setPlainText(txt);
+                    Lyrics* lyrics2 = Factory::createLyrics(score->dummy()->chord());
+                    lyrics2->setPlainText(txt);
                 }
                 int beatEffects = 0;
 
@@ -3346,22 +3356,12 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experiment
         for (const auto& pair : part->instruments()) {
             pair.second->updateInstrumentId();
         }
-
-        std::vector<MidiArticulation> articulations =
-        {
-            MidiArticulation(u"staccatissimo", u"", 100, 30),
-            MidiArticulation(u"staccato", u"", 100, 50),
-            MidiArticulation(u"portato", u"", 100, 67),
-            MidiArticulation(u"tenuto", u"", 100, 100),
-            MidiArticulation(u"accent", u"", 120, 100),
-            MidiArticulation(u"marcato", u"", 144, 67),
-            MidiArticulation(u"sforzato", u"", 169, 100),
-        };
-
-        part->instrument()->setArticulation(articulations);
     }
 
     score->setUpTempoMap();
+    for (Part* p : score->parts()) {
+        p->updateHarmonyChannels(false);
+    }
 
     delete gp;
 

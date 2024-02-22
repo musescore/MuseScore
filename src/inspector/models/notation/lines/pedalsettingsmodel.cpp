@@ -59,7 +59,7 @@ PropertyItem* PedalSettingsModel::lineType() const
 
 bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
 {
-    return isStarSymbolVisible();
+    return m_rosetteHookSelected;
 }
 
 bool PedalSettingsModel::isStarSymbolVisible() const
@@ -91,19 +91,22 @@ void PedalSettingsModel::loadProperties()
     m_lineType->setIsEnabled(true);
 
     if (isStarSymbolVisible()) {
+        m_rosetteHookSelected = true;
         m_lineType->updateCurrentValue(HOOK_STAR);
     } else {
+        m_rosetteHookSelected = false;
         m_lineType->updateCurrentValue(endHookType()->value());
     }
+    emit isChangingLineVisibilityAllowedChanged();
 }
 
 void PedalSettingsModel::setLineType(int newType)
 {
-    bool rosetteHookSelected = (newType == HOOK_STAR);
+    m_rosetteHookSelected = (newType == HOOK_STAR);
     int hookType = newType;
     QString text = QString();
 
-    if (rosetteHookSelected) {
+    if (m_rosetteHookSelected) {
         hookType = static_cast<int>(mu::engraving::HookType::NONE);
         text = mu::engraving::Pedal::STAR_SYMBOL;
         startHookType()->setValue(hookType);
@@ -111,7 +114,7 @@ void PedalSettingsModel::setLineType(int newType)
 
     endHookType()->setValue(hookType);
     endText()->setValue(text);
-    isLineVisible()->setValue(!rosetteHookSelected);
+    isLineVisible()->setValue(!m_rosetteHookSelected);
 
     m_lineType->setValue(newType);
 }

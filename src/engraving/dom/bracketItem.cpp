@@ -35,7 +35,7 @@ BracketItem::BracketItem(EngravingItem* parent)
 }
 
 BracketItem::BracketItem(EngravingItem* parent, BracketType a, int b)
-    : EngravingItem(ElementType::BRACKET_ITEM, parent), _bracketType(a), _bracketSpan(b)
+    : EngravingItem(ElementType::BRACKET_ITEM, parent), m_bracketType(a), m_bracketSpan(b)
 {
 }
 
@@ -48,11 +48,11 @@ PropertyValue BracketItem::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SYSTEM_BRACKET:
-        return int(_bracketType);
+        return int(m_bracketType);
     case Pid::BRACKET_COLUMN:
-        return _column;
+        return m_column;
     case Pid::BRACKET_SPAN:
-        return static_cast<int>(_bracketSpan);
+        return static_cast<int>(m_bracketSpan);
     default:
         return EngravingItem::getProperty(id);
     }
@@ -68,7 +68,7 @@ bool BracketItem::setProperty(Pid id, const PropertyValue& v)
         staff()->changeBracketColumn(column(), v.toInt());
         break;
     case Pid::BRACKET_SPAN:
-        _bracketSpan = static_cast<size_t>(v.toInt());
+        m_bracketSpan = static_cast<size_t>(v.toInt());
         break;
     case Pid::VISIBLE:
         setVisible(v.toBool());

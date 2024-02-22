@@ -29,6 +29,7 @@
 #include "context/iglobalcontext.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 #include "engraving/dom/drumset.h"
 
@@ -44,13 +45,14 @@ class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
     INJECT(framework::IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
 
 public:
     EditDrumsetDialog(QWidget* parent = nullptr);
+#ifdef MU_QT5_COMPAT
     EditDrumsetDialog(const EditDrumsetDialog& other);
-
-    static int static_metaTypeId();
+#endif
 
 private slots:
     void bboxClicked(QAbstractButton* button);
@@ -84,7 +86,5 @@ private:
     engraving::Drumset m_editedDrumset;
 };
 }
-
-Q_DECLARE_METATYPE(mu::palette::EditDrumsetDialog)
 
 #endif // MU_PALETTE_EDITDRUMSETDIALOG_H

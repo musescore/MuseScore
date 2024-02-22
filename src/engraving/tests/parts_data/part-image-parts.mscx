@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -15,7 +15,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -129,7 +128,7 @@
               <linkedMain/>
               <Image>
                 <Image>
-                  <z>8399</z>
+                  <z>8699</z>
                   <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                   <linkPath>schnee.png</linkPath>
                   </Image>
@@ -779,6 +778,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Alto</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -871,7 +871,7 @@
                   </linked>
                 <Image>
                   <Image>
-                    <z>8399</z>
+                    <z>8699</z>
                     <path>71b2e9f575296b78c22ba721cd71f6e5.png</path>
                     <linkPath>schnee.png</linkPath>
                     </Image>
@@ -1225,9 +1225,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Alto</name>
       </Score>
     <Score>
+      <name>Tenor</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1669,7 +1669,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Tenor</name>
       </Score>
     </Score>
   </museScore>

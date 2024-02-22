@@ -43,14 +43,14 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::IODevice& dstDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::IODevice& dstDevice, const Options& options = Options()) override;
 
     framework::Progress* progress() override;
     void abort() override;
 
 protected:
-    Ret doWriteAndWait(notation::INotationPtr notation, QIODevice& destinationDevice, const audio::SoundTrackFormat& format);
+    Ret doWriteAndWait(notation::INotationPtr notation, io::IODevice& dstDevice, const audio::SoundTrackFormat& format);
 
 private:
     UnitType unitTypeFromOptions(const Options& options) const;

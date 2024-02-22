@@ -178,7 +178,7 @@ void IndicatorWindow::updateMask()
     QRegion region;
 
     if (!KDDockWidgets::windowManagerHasTranslucency()) {
-        for (Indicator *indicator : qAsConst(m_indicators)) {
+        for (Indicator *indicator : std::as_const(m_indicators)) {
             if (indicator->isVisible())
                 region = region.united(QRegion(indicator->geometry(), QRegion::Rectangle));
         }
@@ -216,7 +216,7 @@ DropIndicatorOverlayInterface::DropLocation IndicatorWindow::hover(QPoint global
 {
     DropIndicatorOverlayInterface::DropLocation loc = DropIndicatorOverlayInterface::DropLocation_None;
 
-    for (Indicator *indicator : qAsConst(m_indicators)) {
+    for (Indicator *indicator : std::as_const(m_indicators)) {
         if (indicator->isVisible()) {
             const bool hovered = indicator->rect().contains(indicator->mapFromGlobal(globalPos));
             indicator->setHovered(hovered);

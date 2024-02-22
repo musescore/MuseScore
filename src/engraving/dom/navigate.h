@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NAVIGATE_H__
-#define __NAVIGATE_H__
+#ifndef MU_ENGRAVING_NAVIGATE_H
+#define MU_ENGRAVING_NAVIGATE_H
 
 namespace mu::engraving {
 class ChordRest;

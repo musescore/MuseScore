@@ -778,6 +778,8 @@ void Harmony::endEdit(EditData& ed)
     // disable spell check
     m_isMisspelled = false;
 
+    TextBase::endEdit(ed);
+
     if (links()) {
         for (EngravingObject* e : *links()) {
             if (e == this) {
@@ -797,8 +799,8 @@ void Harmony::endEdit(EditData& ed)
                     if (!h->style().styleB(Sid::concertPitch)) {
                         interval.flip();
                     }
-                    int rootTpc = transposeTpc(h->rootTpc(), interval, true);
-                    int baseTpc = transposeTpc(h->baseTpc(), interval, true);
+                    int rootTpc = transposeTpc(m_rootTpc, interval, true);
+                    int baseTpc = transposeTpc(m_baseTpc, interval, true);
                     //score()->undoTransposeHarmony(h, rootTpc, baseTpc);
                     h->setRootTpc(rootTpc);
                     h->setBaseTpc(baseTpc);
@@ -809,8 +811,6 @@ void Harmony::endEdit(EditData& ed)
             }
         }
     }
-
-    TextBase::endEdit(ed);
 }
 
 //---------------------------------------------------------
@@ -859,11 +859,11 @@ double Harmony::baseLine() const
 
 String HDegree::text() const
 {
-    if (_type == HDegreeType::UNDEF) {
+    if (m_type == HDegreeType::UNDEF) {
         return String();
     }
     String degree;
-    switch (_type) {
+    switch (m_type) {
     case HDegreeType::UNDEF: break;
     case HDegreeType::ADD:         degree = u"add";
         break;
@@ -873,14 +873,14 @@ String HDegree::text() const
         break;
     }
 
-    switch (_alter) {
+    switch (m_alter) {
     case -1:          degree += u"b";
         break;
     case 1:           degree += u"#";
         break;
     default:          break;
     }
-    String s = String::number(_value);
+    String s = String::number(m_value);
     String ss = degree + s;
     return ss;
 }
@@ -1016,6 +1016,10 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
         // Move segment reference to next measure
         if (currentMeasure != endMeasure) {
             currentMeasure = currentMeasure->nextMeasure();
+            if (currentMeasure && currentMeasure->mmRest()) {
+                duration += currentMeasure->mmRest()->ticks();
+                currentMeasure = currentMeasure->mmRest()->nextMeasure();
+            }
             cur = (currentMeasure) ? currentMeasure->first() : nullptr;
         } else {
             // End of repeatSegment or search boundary reached

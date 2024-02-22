@@ -1,7 +1,7 @@
 /**
- * pugixml parser - version 1.13
+ * pugixml parser - version 1.14
  * --------------------------------------------------------
- * Copyright (C) 2006-2022, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
+ * Copyright (C) 2006-2023, by Arseny Kapoulkine (arseny.kapoulkine@gmail.com)
  * Report bugs and download new versions at https://pugixml.org/
  *
  * This library is distributed under the MIT License. See notice at the end
@@ -14,7 +14,7 @@
 // Define version macro; evaluates to major * 1000 + minor * 10 + patch so that it's safe to use in less-than comparisons
 // Note: pugixml used major * 100 + minor * 10 + patch format up until 1.9 (which had version identifier 190); starting from pugixml 1.10, the minor version number is two digits
 #ifndef PUGIXML_VERSION
-#	define PUGIXML_VERSION 1130 // 1.13
+#	define PUGIXML_VERSION 1140 // 1.14
 #endif
 
 // Include user configuration file (this can define various configuration macros)
@@ -212,6 +212,10 @@ namespace pugi
 	// the document; this flag is only recommended for parsing documents with many PCDATA nodes in memory-constrained environments.
 	// This flag is off by default.
 	const unsigned int parse_embed_pcdata = 0x2000;
+	
+	// This flag determines whether determines whether the the two pcdata should be merged or not, if no intermediatory data are parsed in the document.
+	// This flag is off by default.
+	const unsigned int parse_merge_pcdata = 0x4000;
 
 	// The default parsing mode.
 	// Elements, PCDATA and CDATA sections are added to the DOM tree, character/reference entities are expanded,
@@ -324,7 +328,7 @@ namespace pugi
 	class PUGIXML_CLASS xml_writer
 	{
 	public:
-		virtual ~xml_writer() {}
+		virtual ~xml_writer();
 
 		// Write memory chunk into stream/file/whatever
 		virtual void write(const void* data, size_t size) = 0;
@@ -418,8 +422,9 @@ namespace pugi
 
 		// Set attribute name/value (returns false if attribute is empty or there is not enough memory)
 		bool set_name(const char_t* rhs);
-		bool set_value(const char_t* rhs, size_t sz);
+		bool set_name(const char_t* rhs, size_t size);
 		bool set_value(const char_t* rhs);
+		bool set_value(const char_t* rhs, size_t size);
 
 		// Set attribute value with type conversion (numbers are converted to strings, boolean is converted to "true"/"false")
 		bool set_value(int rhs);
@@ -553,8 +558,9 @@ namespace pugi
 
 		// Set node name/value (returns false if node is empty, there is not enough memory, or node can not have name/value)
 		bool set_name(const char_t* rhs);
-		bool set_value(const char_t* rhs, size_t sz);
+		bool set_name(const char_t* rhs, size_t size);
 		bool set_value(const char_t* rhs);
+		bool set_value(const char_t* rhs, size_t size);
 
 		// Add attribute with specified name. Returns added attribute, or empty attribute on errors.
 		xml_attribute append_attribute(const char_t* name);
@@ -712,8 +718,11 @@ namespace pugi
 
 		// Range-based for support
 		xml_object_range<xml_node_iterator> children() const;
-		xml_object_range<xml_named_node_iterator> children(const char_t* name) const;
 		xml_object_range<xml_attribute_iterator> attributes() const;
+
+		// Range-based for support for all children with the specified name
+		// Note: name pointer must have a longer lifetime than the returned object; be careful with passing temporaries!
+		xml_object_range<xml_named_node_iterator> children(const char_t* name) const;
 
 		// Get node offset in parsed file/string (in char_t units) for debugging purposes
 		ptrdiff_t offset_debug() const;
@@ -779,8 +788,8 @@ namespace pugi
 		bool as_bool(bool def = false) const;
 
 		// Set text (returns false if object is empty or there is not enough memory)
-		bool set(const char_t* rhs, size_t sz);
 		bool set(const char_t* rhs);
+		bool set(const char_t* rhs, size_t size);
 
 		// Set text with type conversion (numbers are converted to strings, boolean is converted to "true"/"false")
 		bool set(int rhs);
@@ -927,6 +936,7 @@ namespace pugi
 		xml_named_node_iterator();
 
 		// Construct an iterator which points to the specified node
+		// Note: name pointer is stored in the iterator and must have a longer lifetime than iterator itself
 		xml_named_node_iterator(const xml_node& node, const char_t* name);
 
 		// Iterator operators
@@ -1481,7 +1491,7 @@ namespace std
 #endif
 
 /**
- * Copyright (c) 2006-2022 Arseny Kapoulkine
+ * Copyright (c) 2006-2023 Arseny Kapoulkine
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation

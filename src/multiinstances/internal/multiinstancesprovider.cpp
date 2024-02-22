@@ -387,7 +387,7 @@ std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 {
     std::vector<InstanceMeta> ret;
     QList<ipc::ID> ints = m_ipcChannel->instances();
-    for (const ipc::ID& id : qAsConst(ints)) {
+    for (const ipc::ID& id : std::as_const(ints)) {
         InstanceMeta im;
         im.id = id.toStdString();
         ret.push_back(std::move(im));

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DYNAMICS_H__
-#define __DYNAMICS_H__
+#ifndef MU_ENGRAVING_DYNAMICS_H
+#define MU_ENGRAVING_DYNAMICS_H
 
 #include "textbase.h"
 
@@ -30,11 +30,11 @@ class Measure;
 class Segment;
 
 struct Dyn {
-    DynamicType type;
-    int velocity;        ///< associated midi velocity (0-127, -1 = none)
-    int changeInVelocity;
-    bool accent;         ///< if true add velocity to current chord velocity
-    const char* text;    // utf8 text of dynamic
+    DynamicType type = DynamicType::OTHER;
+    int velocity = -1;              // associated midi velocity (0-127, -1 = none)
+    int changeInVelocity = 0;
+    bool accent = 0;                // if true add velocity to current chord velocity
+    const char* text = nullptr;     // utf8 text of dynamic
 };
 
 //-----------------------------------------------------------------------------
@@ -51,8 +51,8 @@ class Dynamic final : public TextBase
 
 public:
     struct ChangeSpeedItem {
-        DynamicSpeed speed;
-        const char* name;
+        DynamicSpeed speed = DynamicSpeed::NORMAL;
+        const char* name = nullptr;
     };
 
     Dynamic(Segment* parent);

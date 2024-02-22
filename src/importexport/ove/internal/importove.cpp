@@ -62,7 +62,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/chordlist.h"
 #include "engraving/dom/rehearsalmark.h"
@@ -386,7 +386,7 @@ void OveToMScore::convertHeader()
     QList<QString> annotates = m_ove->getAnnotates();
     if (!annotates.empty() && !annotates[0].isEmpty()) {
         QString annotate = annotates[0];
-        ove::addText(vbox, m_score, annotate, TextStyleType::POET);
+        ove::addText(vbox, m_score, annotate, TextStyleType::LYRICIST);
     }
 
     QList<QString> writers = m_ove->getWriters();
@@ -398,7 +398,7 @@ void OveToMScore::convertHeader()
 
     if (writers.size() > 1) {
         QString lyricist = writers[1];
-        ove::addText(vbox, m_score, lyricist, TextStyleType::POET);
+        ove::addText(vbox, m_score, lyricist, TextStyleType::LYRICIST);
     }
 
     if (vbox) {
@@ -1546,7 +1546,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                     double yOffset = -(double)(notePtr->getLine());
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                    int lineOffset = toRest(cr)->computeVoiceOffset(5, toRest(cr)->mutLayoutData());
+                    int lineOffset = toRest(cr)->computeVoiceOffset(5, toRest(cr)->mutldata());
                     yOffset -= qreal(lineOffset + stepOffset);
                     yOffset *= m_score->style().spatium() / 2.0;
                     cr->ryoffset() = yOffset;
@@ -1823,25 +1823,25 @@ void OveToMScore::convertArticulation(
     // case ovebase::ArticulationType::Sharp_Accidental_For_Trill:
     // case ovebase::ArticulationType::Natural_Accidental_For_Trill:
     case ovebase::ArticulationType::Tremolo_Eighth: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloSingleChord* t = Factory::createTremoloSingleChord(cr);
         t->setTremoloType(TremoloType::R8);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Sixteenth: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloSingleChord* t = Factory::createTremoloSingleChord(cr);
         t->setTremoloType(TremoloType::R16);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Thirty_Second: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloSingleChord* t = Factory::createTremoloSingleChord(cr);
         t->setTremoloType(TremoloType::R32);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Sixty_Fourth: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloSingleChord* t = Factory::createTremoloSingleChord(cr);
         t->setTremoloType(TremoloType::R64);
         cr->add(t);
         break;
@@ -2505,7 +2505,6 @@ void OveToMScore::convertWedges(Measure* measure, int part, int staff, int track
             hp->setTick2(Fraction::fromTicks(absTick2));
             hp->setAnchor(Spanner::Anchor::SEGMENT);
             m_score->addSpanner(hp);
-            m_score->updateHairpin(hp);
         }
     }
 }

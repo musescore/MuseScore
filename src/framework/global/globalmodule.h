@@ -25,18 +25,23 @@
 #include <memory>
 #include <optional>
 
-#include "thirdparty/haw_logger/logger/logger.h"
+#include "logger.h"
 
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
 #include "io/ifilesystem.h"
+
+namespace mu {
+class SystemInfo;
+}
 
 namespace mu::framework {
 class Invoker;
 class GlobalConfiguration;
 class GlobalModule : public modularity::IModuleSetup
 {
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<io::IFileSystem> fileSystem;
+
 public:
 
     std::string moduleName() const override;
@@ -47,12 +52,13 @@ public:
 
     static void invokeQueuedCalls();
 
-    void setLoggerLevel(const haw::logger::Level& level);
+    void setLoggerLevel(const mu::logger::Level& level);
 
 private:
     std::shared_ptr<GlobalConfiguration> m_configuration;
+    std::shared_ptr<SystemInfo> m_systemInfo;
 
-    std::optional<haw::logger::Level> m_loggerLevel;
+    std::optional<mu::logger::Level> m_loggerLevel;
 
     static std::shared_ptr<Invoker> s_asyncInvoker;
 };

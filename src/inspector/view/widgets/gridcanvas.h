@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSPECTOR_GRIDCANVAS_H
-#define MU_INSPECTOR_GRIDCANVAS_H
+#ifndef MU_INSPECTOR_COMPAT_GRIDCANVAS_H
+#define MU_INSPECTOR_COMPAT_GRIDCANVAS_H
 
 #include <QPainter>
 

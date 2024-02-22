@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BARLINE_H__
-#define __BARLINE_H__
+#ifndef MU_ENGRAVING_BARLINE_H
+#define MU_ENGRAVING_BARLINE_H
 
 #include "engravingitem.h"
 
@@ -108,7 +108,6 @@ public:
     bool edit(EditData& ed) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
-    Shape shape() const override;
 
     const ElementList* el() const { return &m_el; }
 

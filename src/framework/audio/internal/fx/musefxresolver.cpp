@@ -24,7 +24,7 @@
 
 #include "reverb/reverbprocessor.h"
 
-#include "audio/audioutils.h"
+#include "audioutils.h"
 
 using namespace mu::audio;
 using namespace mu::audio::fx;

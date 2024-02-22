@@ -309,10 +309,11 @@ endif()
 
 set(MODULE_QRC audio.qrc)
 
+set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_AUDIO_TESTS)
     add_subdirectory(tests)
 endif()

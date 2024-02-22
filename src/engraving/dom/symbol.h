@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYMBOL_H__
-#define __SYMBOL_H__
+#ifndef MU_ENGRAVING_SYMBOL_H
+#define MU_ENGRAVING_SYMBOL_H
 
 #include <memory>
 
@@ -62,12 +62,15 @@ public:
     void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { m_sym  = s; m_scoreFont = sf; }
     SymId sym() const { return m_sym; }
     const std::shared_ptr<IEngravingFont>& scoreFont() const { return m_scoreFont; }
+    double symbolsSize() const { return m_symbolsSize; }
+    double symAngle() const { return m_symAngle; }
     mu::AsciiStringView symName() const;
 
     String accessibleInfo() const override;
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
+    PropertyValue propertyDefault(Pid) const override;
 
     double baseLine() const override { return 0.0; }
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
@@ -75,6 +78,8 @@ public:
 protected:
     SymId m_sym = SymId::noSym;
     std::shared_ptr<IEngravingFont> m_scoreFont = nullptr;
+    double m_symbolsSize =  1.0;
+    double m_symAngle = 0.0;
 };
 
 //---------------------------------------------------------
@@ -87,9 +92,6 @@ class FSymbol final : public BSymbol
     OBJECT_ALLOCATOR(engraving, FSymbol)
     DECLARE_CLASSOF(ElementType::FSYMBOL)
 
-    mu::draw::Font _font;
-    char32_t _code; // character code point (Unicode)
-
 public:
     FSymbol(EngravingItem* parent);
     FSymbol(const FSymbol&);
@@ -101,10 +103,14 @@ public:
 
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
-    const mu::draw::Font& font() const { return _font; }
-    char32_t code() const { return _code; }
+    const mu::draw::Font& font() const { return m_font; }
+    char32_t code() const { return m_code; }
     void setFont(const mu::draw::Font& f);
-    void setCode(char32_t val) { _code = val; }
+    void setCode(char32_t val) { m_code = val; }
+
+private:
+    mu::draw::Font m_font;
+    char32_t m_code = 0; // character code point (Unicode)
 };
 } // namespace mu::engraving
 #endif

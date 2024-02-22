@@ -32,6 +32,8 @@
 #include "engraving/dom/textbase.h"
 #include "engraving/dom/factory.h"
 
+#include "engraving/rw/compat/tremolocompat.h"
+
 #include "view/widgets/palettewidget.h"
 
 #include "log.h"
@@ -120,7 +122,8 @@ const char* PaletteCell::translationContext() const
         return "engraving/sym";
     case ElementType::TIMESIG:
         return "engraving/timesig";
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
         return "engraving/tremolotype";
     case ElementType::TRILL:
         return "engraving/trilltype";
@@ -199,6 +202,21 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
             custom = e.readBool();
         } else if (s == "visible") {
             visible = e.readBool();
+        } else if (s == "Tremolo") {
+            compat::TremoloCompat tc;
+            tc.parent = gpaletteScore->dummy()->chord();
+            rw::RWRegister::reader()->readTremoloCompat(&tc, e);
+            if (tc.single) {
+                element.reset(tc.single);
+            } else if (tc.two) {
+                element.reset(tc.two);
+            } else {
+                UNREACHABLE;
+            }
+
+            if (element) {
+                element->styleChanged();
+            }
         } else {
             element.reset(Factory::createItemByName(s, gpaletteScore->dummy()));
             if (!element) {

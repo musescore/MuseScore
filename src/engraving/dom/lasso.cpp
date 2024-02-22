@@ -45,7 +45,7 @@ Lasso::Lasso(Score* s)
 void Lasso::editDrag(EditData& ed)
 {
     //Qt::CursorShape cursorShape = Qt::ArrowCursor;
-    Lasso::LayoutData* ldata = mutLayoutData();
+    Lasso::LayoutData* ldata = mutldata();
     RectF bbox = ldata->bbox();
     switch (int(ed.curGrip)) {
     case 0:
@@ -93,7 +93,7 @@ void Lasso::editDrag(EditData& ed)
 
 std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
 {
-    const auto box(layoutData()->bbox());
+    const auto box(ldata()->bbox());
     return {
         box.topLeft(),
         box.topRight(),

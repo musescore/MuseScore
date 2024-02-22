@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.3
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
+import MuseScore.Cloud 1.0
 
 import "internal/ScoresPage"
 

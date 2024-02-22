@@ -33,6 +33,11 @@ namespace mu::engraving {
 class Instrument;
 class RootItem;
 
+class TremoloTwoChord;
+class TremoloSingleChord;
+
+class SoundFlag;
+
 class Factory
 {
 public:
@@ -158,6 +163,8 @@ public:
 
     static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
 
+    static SoundFlag* createSoundFlag(EngravingItem* parent, bool isAccessibleEnabled = true);
+
     static Expression* createExpression(Segment* parent, bool isAccessibleEnabled = true);
 
     static RehearsalMark* createRehearsalMark(Segment* parent, bool isAccessibleEnabled = true);
@@ -194,9 +201,13 @@ public:
     static TimeSig* copyTimeSig(const TimeSig& src);
     static std::shared_ptr<TimeSig> makeTimeSig(Segment* parent);
 
-    static Tremolo* createTremolo(Chord* parent, bool isAccessibleEnabled = true);
-    static Tremolo* copyTremolo(const Tremolo& src);
-    static std::shared_ptr<Tremolo> makeTremolo(Chord* parent);
+    static TremoloTwoChord* createTremoloTwoChord(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloTwoChord> makeTremoloTwoChord(Chord* parent);
+    static TremoloTwoChord* copyTremoloTwoChord(const TremoloTwoChord& src);
+
+    static TremoloSingleChord* createTremoloSingleChord(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloSingleChord> makeTremoloSingleChord(Chord* parent);
+    static TremoloSingleChord* copyTremoloSingleChord(const TremoloSingleChord& src);
 
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);
@@ -214,6 +225,9 @@ public:
 
     static Glissando* createGlissando(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<Glissando> makeGlissando(EngravingItem* parent);
+
+    static GuitarBend* createGuitarBend(Note* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<GuitarBend> makeGuitarBend(Note* parent);
 
     static Jump* createJump(Measure* parent, bool isAccessibleEnabled = true);
 
@@ -270,6 +284,10 @@ public:
                                                         bool isAccessibleEnabled = true);
 
     static Capo* createCapo(Segment* parent, bool isAccessibleEnabled = true);
+
+    static StringTunings* createStringTunings(Segment* parent, bool isAccessibleEnabled = true);
+    static StringTunings* copyStringTunings(const StringTunings& src);
+    static std::shared_ptr<StringTunings> makeStringTunings(Segment* parent);
 
 private:
     static EngravingItem* doCreateItem(ElementType type, EngravingItem* parent);

@@ -22,6 +22,8 @@
 
 #include "symbol.h"
 
+#include "score.h"
+
 #include "draw/fontmetrics.h"
 #include "iengravingfont.h"
 
@@ -54,8 +56,10 @@ Symbol::Symbol(EngravingItem* parent, ElementFlags f)
 Symbol::Symbol(const Symbol& s)
     : BSymbol(s)
 {
-    m_sym       = s.m_sym;
-    m_scoreFont = s.m_scoreFont;
+    m_sym         = s.m_sym;
+    m_scoreFont   = s.m_scoreFont;
+    m_symbolsSize = s.m_symbolsSize;
+    m_symAngle    = s.m_symAngle;
 }
 
 //---------------------------------------------------------
@@ -84,6 +88,16 @@ PropertyValue Symbol::getProperty(Pid propertyId) const
     switch (propertyId) {
     case Pid::SYMBOL:
         return PropertyValue::fromValue(m_sym);
+    case Pid::SCORE_FONT:
+        if (m_scoreFont) {
+            return PropertyValue::fromValue(String::fromStdString(m_scoreFont->name()));
+        } else {
+            return PropertyValue::fromValue(String());
+        }
+    case Pid::SYMBOLS_SIZE:
+        return PropertyValue::fromValue(m_symbolsSize);
+    case Pid::SYMBOL_ANGLE:
+        return PropertyValue::fromValue(m_symAngle);
     default:
         break;
     }
@@ -100,10 +114,45 @@ bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SYMBOL:
         m_sym = v.value<SymId>();
         break;
+    case Pid::SCORE_FONT:
+        m_scoreFont = engravingFonts()->fontByName(v.value<String>().toStdString());
+        break;
+    case Pid::SYMBOLS_SIZE:
+        m_symbolsSize = v.toDouble();
+        break;
+    case Pid::SYMBOL_ANGLE:
+        m_symAngle = v.toDouble();
+        break;
     default:
         break;
     }
+    triggerLayout();
     return BSymbol::setProperty(propertyId, v);
+}
+
+//---------------------------------------------------------
+//   propertyDefault
+//---------------------------------------------------------
+
+PropertyValue Symbol::propertyDefault(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::SYMBOL:
+        return SymId::accidentalSharp;
+    case Pid::SYMBOL_ANGLE:
+        return 0.0;
+    case Pid::SYMBOLS_SIZE:
+        return 1.0;
+    case Pid::SCORE_FONT:
+        if (m_scoreFont) {
+            return style().styleSt(Sid::MusicalSymbolFont);
+        } else {
+            return String();
+        }
+    default:
+        break;
+    }
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -113,15 +162,15 @@ bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
 FSymbol::FSymbol(EngravingItem* parent)
     : BSymbol(ElementType::FSYMBOL, parent)
 {
-    _code = 0;
-    _font.setNoFontMerging(true);
+    m_code = 0;
+    m_font.setNoFontMerging(true);
 }
 
 FSymbol::FSymbol(const FSymbol& s)
     : BSymbol(s)
 {
-    _font = s._font;
-    _code = s._code;
+    m_font = s.m_font;
+    m_code = s.m_code;
 }
 
 //---------------------------------------------------------
@@ -133,7 +182,7 @@ FSymbol::FSymbol(const FSymbol& s)
 
 String FSymbol::toString() const
 {
-    return String::fromUcs4(_code);
+    return String::fromUcs4(m_code);
 }
 
 //---------------------------------------------------------
@@ -154,7 +203,7 @@ String FSymbol::accessibleInfo() const
 
 void FSymbol::setFont(const mu::draw::Font& f)
 {
-    _font = f;
-    _font.setNoFontMerging(true);
+    m_font = f;
+    m_font.setNoFontMerging(true);
 }
 }

@@ -62,7 +62,8 @@ public:
         SECTION_NOTATION,
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
-        SECTION_SCORE_APPEARANCE
+        SECTION_SCORE_APPEARANCE,
+        SECTION_PARTS,
     };
     Q_ENUM(InspectorSectionType)
 
@@ -76,6 +77,8 @@ public:
         TYPE_HOOK,
         TYPE_FERMATA,
         TYPE_TEMPO,
+        TYPE_A_TEMPO,
+        TYPE_TEMPO_PRIMO,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_BREATH,
@@ -125,6 +128,8 @@ public:
         TYPE_LYRICS,
         TYPE_REST,
         TYPE_REST_BEAM,
+        TYPE_STRING_TUNINGS,
+        TYPE_SYMBOL,
     };
     Q_ENUM(InspectorModelType)
 
@@ -140,10 +145,12 @@ public:
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
+    static ElementKey makeKey(const mu::engraving::EngravingItem* item);
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
     static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
                                                                 const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
+    static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& selectedElementList);
 
     virtual bool isEmpty() const;
 
@@ -239,6 +246,7 @@ using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
 using InspectorModelTypeSet = QSet<InspectorModelType>;
 using InspectorSectionTypeSet = QSet<InspectorSectionType>;
 
+#ifdef MU_QT5_COMPAT
 inline uint qHash(InspectorSectionType key)
 {
     return ::qHash(QString::number(static_cast<int>(key)));
@@ -248,6 +256,19 @@ inline uint qHash(InspectorModelType key)
 {
     return ::qHash(QString::number(static_cast<int>(key)));
 }
+
+#else
+inline size_t qHash(InspectorSectionType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+
+inline size_t qHash(InspectorModelType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+
+#endif
 }
 
 #endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H

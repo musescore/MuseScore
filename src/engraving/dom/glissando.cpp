@@ -37,8 +37,10 @@ NICE-TO-HAVE TODO:
 #include "types/typesconv.h"
 
 #include "chord.h"
+#include "harppedaldiagram.h"
 #include "measure.h"
 #include "note.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -57,6 +59,8 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoFontStyle, Pid::FONT_STYLE },
     { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
     { Sid::glissandoText,      Pid::GLISS_TEXT },
+    { Sid::glissandoStyle,     Pid::GLISS_STYLE },
+    { Sid::glissandoStyleHarp, Pid::GLISS_STYLE }
 };
 
 //=========================================================
@@ -129,6 +133,7 @@ Glissando::Glissando(const Glissando& g)
     _showText       = g._showText;
     _playGlissando  = g._playGlissando;
     _fontStyle      = g._fontStyle;
+    m_isHarpGliss   = g.m_isHarpGliss;
 }
 
 const TranslatableString& Glissando::glissandoTypeName() const
@@ -148,6 +153,15 @@ LineSegment* Glissando::createLineSegment(System* parent)
     return seg;
 }
 
+Sid Glissando::getPropertyStyle(Pid id) const
+{
+    if (id == Pid::GLISS_STYLE) {
+        return isHarpGliss().value_or(false) ? Sid::glissandoStyleHarp : Sid::glissandoStyle;
+    }
+
+    return SLine::getPropertyStyle(id);
+}
+
 void Glissando::addLineAttachPoints()
 {
     GlissandoSegment* frontSeg = toGlissandoSegment(frontSegment());
@@ -163,8 +177,8 @@ void Glissando::addLineAttachPoints()
     if (!frontSeg || !backSeg || !startNote || !endNote) {
         return;
     }
-    double startX = frontSeg->layoutData()->pos().x();
-    double endX = backSeg->pos2().x() + backSeg->layoutData()->pos().x(); // because pos2 is relative to ipos
+    double startX = frontSeg->ldata()->pos().x();
+    double endX = backSeg->pos2().x() + backSeg->ldata()->pos().x(); // because pos2 is relative to ipos
     // Here we don't pass y() because its value is unreliable during the first stages of layout.
     // The y() is irrelevant anyway for horizontal spacing.
     startNote->addLineAttachPoint(PointF(startX, 0.0), this);
@@ -195,6 +209,41 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
     int direction = pitchEnd > pitchStart ? 1 : -1;
     pitchOffsets.clear();
     if (glissandoStyle == GlissandoStyle::DIATONIC) {
+        // Obey harp pedal diagrams if on a harp staff
+        if (glissando->isHarpGliss().value_or(false)) {
+            HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
+            std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
+            std::vector<int> playablePitches;
+            for (int t : playableTpcs) {
+                playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
+            }
+
+            // Push starting note, then check for enharmonic on the next string.  If there is an enharmonic, 0 will be pushed back twice
+            pitchOffsets.push_back(0);
+            int en = noteStart->tpc() + TPC_DELTA_ENHARMONIC * -direction;
+            // Harp pedalling will only have 1 flat or sharp
+            if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
+                pitchOffsets.push_back(0);
+            }
+
+            for (int p = pitchStart + direction; p != pitchEnd; p += direction) {
+                // Count times pitch occurs in harp pedalling - this accounts for enharmonics
+                int pitchOccurrences = std::count(playablePitches.begin(), playablePitches.end(), p % PITCH_DELTA_OCTAVE);
+                if (pitchOccurrences > 0) {
+                    pitchOffsets.insert(pitchOffsets.end(), pitchOccurrences, p - pitchStart);
+                }
+            }
+
+            // Check for enharmonic at end, in correct direction
+            en = noteEnd->tpc() + TPC_DELTA_ENHARMONIC * direction;
+            if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
+                pitchOffsets.push_back(pitchEnd - pitchStart);
+            }
+
+            return pitchOffsets.size() > 0;
+        }
+
+        // Regular diatonic mode
         int lineStart = noteStart->line();
         // scale obeying accidentals
         for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
@@ -321,109 +370,79 @@ Note* Glissando::guessInitialNote(Chord* chord)
     return 0;
 }
 
-//---------------------------------------------------------
-//   STATIC FUNCTIONS: guessFinalNote
-//
-//    Used while dropping a glissando on a note to determine (guess!) the glissando final
-//    note from its initial chord.
-//    Returns the top note of next chord of the same instrument,
-//    preferring the chord in the same track as chord, if it exists.
-//
-//    Parameter:  chord: the chord this glissando start from
-//    Returns:    the top note in a suitable following chord or nullptr if none found
-//---------------------------------------------------------
-
 Note* Glissando::guessFinalNote(Chord* chord, Note* startNote)
 {
-    switch (chord->noteType()) {
-//            case NoteType::INVALID:
-//                  return nullptr;
-    // for grace notes before, return top note of parent chord
-    // TODO : if the grace-before is not the LAST ONE, this still returns the main note
-    //    which is probably not correct; however a glissando between two grace notes
-    //    probably makes little sense.
-    case NoteType::ACCIACCATURA:
-    case NoteType::APPOGGIATURA:
-    case NoteType::GRACE4:
-    case NoteType::GRACE16:
-    case NoteType::GRACE32:
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            return toChord(chord->explicitParent())->upNote();
-        } else {                                // no parent or parent is not a chord?
-            return nullptr;
+    if (chord->isGraceBefore()) {
+        Chord* parentChord = toChord(chord->parent());
+        GraceNotesGroup& gracesBefore = parentChord->graceNotesBefore();
+        auto positionOfThis = std::find(gracesBefore.begin(), gracesBefore.end(), chord);
+        if (positionOfThis != gracesBefore.end()) {
+            auto nextPosition = ++positionOfThis;
+            if (nextPosition != gracesBefore.end()) {
+                return (*nextPosition)->upNote();
+            }
         }
-    // for grace notes after, next chord is next chord of parent chord
-    // TODO : same note as case above!
-    case NoteType::GRACE8_AFTER:
-    case NoteType::GRACE16_AFTER:
-    case NoteType::GRACE32_AFTER:
-        // move unto parent chord and proceed to standard case
-        if (chord->explicitParent() && chord->explicitParent()->isChord()) {
-            chord = toChord(chord->explicitParent());
-        } else {
-            return 0;
+        return parentChord->upNote();
+    } else if (chord->isGraceAfter()) {
+        Chord* parentChord = toChord(chord->parent());
+        GraceNotesGroup& gracesAfter = parentChord->graceNotesAfter();
+        auto positionOfThis = std::find(gracesAfter.begin(), gracesAfter.end(), chord);
+        if (positionOfThis != gracesAfter.end()) {
+            auto nextPosition = ++positionOfThis;
+            if (nextPosition != gracesAfter.end()) {
+                return (*nextPosition)->upNote();
+            }
         }
-        break;
-    case NoteType::NORMAL:
-    {
-        // if chord has grace notes after, the first one is the next note
+        chord = toChord(chord->parent());
+    } else {
         std::vector<Chord*> graces = chord->graceNotesAfter();
         if (graces.size() > 0) {
             return graces.front()->upNote();
         }
     }
-    break;
-    default:
-        break;
-    }
 
-    // standard case (NORMAL or grace after chord)
-
-    // if parent not a segment, can't locate a target note
     if (!chord->explicitParent()->isSegment()) {
         return 0;
     }
 
-    // look for first ChordRest segment after initial note is elapsed
     Segment* segm = chord->score()->tick2rightSegment(chord->tick() + chord->actualTicks());
-    track_idx_t chordTrack = chord->track();
-    Part* part = chord->part();
-    while (segm) {
-        // if next segment is a ChordRest segment
-        if (segm->segmentType() == SegmentType::ChordRest) {
-            Chord* target = nullptr;
-
-            // look for a Chord in the same track
-            if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
-                target = toChord(segm->element(chordTrack));
-            } else {                  // if no same track, look for other chords in the same instrument
-                for (EngravingItem* currChord : segm->elist()) {
-                    if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
-                        target = toChord(currChord);
-                        break;
-                    }
-                }
-            }
-
-            // if we found a target next chord
-            if (target) {
-                // if chord has grace notes before, the first one is the next note
-                std::vector<Chord*> graces = target->graceNotesBefore();
-                if (graces.size() > 0) {
-                    return graces.front()->upNote();
-                }
-                // normal case: try to return the note in the next chord that is in the
-                // same position as the start note relative to the end chord
-                auto startNoteIter = find(chord->notes().begin(), chord->notes().end(), startNote);
-                int startNoteIdx = std::distance(chord->notes().begin(), startNoteIter);
-                int endNoteIdx = std::min(startNoteIdx, int(target->notes().size()) - 1);
-                return target->notes().at(endNoteIdx);
-            }
-        }
+    while (segm && !segm->isChordRestType()) {
         segm = segm->next1();
     }
+
+    if (!segm) {
+        return nullptr;
+    }
+
+    track_idx_t chordTrack = chord->track();
+    Part* part = chord->part();
+
+    Chord* target = nullptr;
+    if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
+        target = toChord(segm->element(chordTrack));
+    } else {
+        for (EngravingItem* currChord : segm->elist()) {
+            if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
+                target = toChord(currChord);
+                break;
+            }
+        }
+    }
+
+    if (target && target->notes().size() > 0) {
+        const std::vector<Chord*>& graces = target->graceNotesBefore();
+        if (graces.size() > 0) {
+            return graces.front()->upNote();
+        }
+        // normal case: try to return the note in the next chord that is in the
+        // same position as the start note relative to the end chord
+        size_t startNoteIdx = mu::indexOf(chord->notes(), startNote);
+        size_t endNoteIdx = std::min(startNoteIdx, target->notes().size() - 1);
+        return target->notes().at(endNoteIdx);
+    }
+
     LOGD("no second note for glissando found");
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -478,8 +497,15 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setShowText(v.toBool());
         break;
     case Pid::GLISS_STYLE:
-        setGlissandoStyle(v.value<GlissandoStyle>());
+    {
+        // Make sure harp glisses can only be diatonic and chromatic
+        GlissandoStyle glissStyle = v.value<GlissandoStyle>();
+        if (isHarpGliss().value_or(false) && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
+            glissStyle = GlissandoStyle::DIATONIC;
+        }
+        setGlissandoStyle(glissStyle);
         break;
+    }
     case Pid::GLISS_SHIFT:
         setGlissandoShift(v.toBool());
         break;
@@ -507,7 +533,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 
@@ -523,7 +549,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
-        return GlissandoStyle::CHROMATIC;
+        return style().styleV(getPropertyStyle(propertyId));
     case Pid::GLISS_SHIFT:
         return false;
     case Pid::GLISS_EASEIN:

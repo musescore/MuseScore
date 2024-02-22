@@ -72,15 +72,13 @@ SelectDialog::SelectDialog(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 SelectDialog::SelectDialog(const SelectDialog& other)
     : QDialog(other.parentWidget())
 {
 }
 
-int SelectDialog::metaTypeId()
-{
-    return QMetaType::type("SelectDialog");
-}
+#endif
 
 //---------------------------------------------------------
 //   setPattern
@@ -112,6 +110,30 @@ FilterElementsOptions SelectDialog::elementOptions() const
         options.durationTicks = rest->actualTicks();
     } else {
         options.durationTicks = Fraction(-1, 1);
+    }
+
+    if (sameBeat->isChecked()) {
+        options.beat = m_element->beat();
+    } else {
+        options.beat = Fraction(0, 0);
+    }
+
+    if (sameMeasure->isChecked()) {
+        auto m = m_element->findMeasure();
+        if (!m && m_element->isSpannerSegment()) {
+            if (auto ss = toSpannerSegment(m_element)) {
+                if (auto s = ss->spanner()) {
+                    if (auto se = s->startElement()) {
+                        if (auto mse = se->findMeasure()) {
+                            m = mse;
+                        }
+                    }
+                }
+            }
+        }
+        options.measure = m;
+    } else {
+        options.measure = nullptr;
     }
 
     options.voice = sameVoice->isChecked() ? static_cast<int>(m_element->voice()) : -1;

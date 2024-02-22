@@ -167,6 +167,7 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
     config.mergeMatchingRests = staff->mergeMatchingRests();
     config.hideMode = staff->hideWhenEmpty();
     config.clefTypeList = staff->defaultClefType();
+    config.reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 
     config.staffType = *staffType;
 
@@ -225,7 +226,7 @@ mu::engraving::InstrumentChange* NotationParts::findInstrumentChange(const Part*
         return nullptr;
     }
 
-    mu::engraving::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack());
+    mu::engraving::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1);
     return item ? mu::engraving::toInstrumentChange(item) : nullptr;
 }
 
@@ -743,7 +744,8 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
     }
 
     score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
-                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
+                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests,
+                                                 config.reflectTranspositionInLinkedTab));
 
     score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType));
 }
@@ -758,10 +760,10 @@ void NotationParts::doInsertPart(Part* part, size_t index)
     mu::engraving::InstrumentList instrumentsCopy = part->instruments();
     part->setInstruments({});
 
-    score()->insertPart(part, index);
-
-    if (score()->excerpt()) {
-        score()->excerpt()->parts().insert(score()->excerpt()->parts().begin() + index, part);
+    if (Excerpt* excerpt = score()->excerpt()) {
+        score()->undo(new AddPartToExcerpt(excerpt, part, index));
+    } else {
+        score()->undoInsertPart(part, index);
     }
 
     for (auto it = instrumentsCopy.cbegin(); it != instrumentsCopy.cend(); ++it) {
@@ -788,7 +790,6 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
-    part->setScore(score());
     score()->remapBracketsAndBarlines();
 }
 
@@ -1047,7 +1048,11 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
-        score()->undo(new mu::engraving::InsertPart(part, partIdx));
+        if (Excerpt* excerpt = score()->excerpt()) {
+            score()->undo(new AddPartToExcerpt(excerpt, part, partIdx));
+        } else {
+            score()->undoInsertPart(part, partIdx);
+        }
         appendStaves(part, pi.instrumentTemplate, keyList);
         ++partIdx;
 
@@ -1102,8 +1107,7 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
     for (const Part* part : score()->parts()) {
         const Instrument* partInstrument = part->instrument();
 
-        if (partInstrument->id() == instrument.id
-            && partInstrument->trait().name == instrument.trait.name) {
+        if (partInstrument->id() == instrument.id) {
             ++count;
         }
     }
@@ -1115,7 +1119,7 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
     for (const PartInstrument& partInstrument: allNewInstruments) {
         const InstrumentTemplate& templ = partInstrument.instrumentTemplate;
 
-        if (templ.id == instrument.id && templ.trait.name == instrument.trait.name) {
+        if (templ.id == instrument.id) {
             ++count;
         }
     }

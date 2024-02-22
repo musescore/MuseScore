@@ -45,7 +45,7 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 public:
     NotationPlayback(IGetScore* getScore, async::Notification notationChanged);
 
-    void init(INotationUndoStackPtr undoStack) override;
+    void init() override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const ID& partId) const override;
@@ -70,7 +70,7 @@ public:
     RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
-    void setLoopBoundariesVisible(bool visible) override;
+    void setLoopBoundariesEnabled(bool enabled) override;
     const LoopBoundaries& loopBoundaries() const override;
     async::Notification loopBoundariesChanged() const override;
 
@@ -81,6 +81,10 @@ public:
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;
 
+    void addSoundFlag(mu::engraving::StaffText* staffText) override;
+    void addSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
+    void removeSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet) override;
+
 private:
     engraving::Score* score() const;
 
@@ -90,10 +94,15 @@ private:
     void updateLoopBoundaries();
     void updateTotalPlayTime();
 
+    bool doAddSoundFlag(mu::engraving::StaffText* staffText);
+
     const engraving::TempoText* tempoText(int tick) const;
+    std::vector<mu::engraving::StaffText*> collectStaffText(const mu::engraving::InstrumentTrackIdSet& trackIdSet,
+                                                            bool withSoundFlags) const;
 
     IGetScore* m_getScore = nullptr;
-    async::Channel<int> m_playPositionTickChanged;
+
+    async::Notification m_notationChanged;
 
     LoopBoundaries m_loopBoundaries;
     async::Notification m_loopBoundariesChanged;

@@ -33,31 +33,42 @@ using namespace mu::audio;
 static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,
     Steinberg::Vst::kCtrlExpression,
-    Steinberg::Vst::kCtrlSustainOnOff
+    Steinberg::Vst::kCtrlSustainOnOff,
+    Steinberg::Vst::kPitchBend,
 };
 
-VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)
-    : AbstractSynthesizer(params), m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
+VstSynthesiser::VstSynthesiser(const TrackId trackId, const audio::AudioInputParams& params)
+    : AbstractSynthesizer(params),
+    m_pluginPtr(std::make_shared<VstPlugin>(params.resourceMeta.id)),
+    m_vstAudioClient(std::make_unique<VstAudioClient>()),
+    m_trackId(trackId)
 {
-    init();
 }
 
-Ret VstSynthesiser::init()
+VstSynthesiser::~VstSynthesiser()
 {
+    pluginsRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
+}
+
+void VstSynthesiser::init()
+{
+    pluginsRegister()->registerInstrPlugin(m_trackId, m_pluginPtr);
+    m_pluginPtr->load();
+
     m_samplesPerChannel = config()->driverBufferSize();
 
     m_vstAudioClient->init(AudioPluginType::Instrument, m_pluginPtr);
 
-    auto load = [this]() {
+    auto onPluginLoaded = [this]() {
         m_pluginPtr->updatePluginConfig(m_params.configuration);
         m_vstAudioClient->setBlockSize(m_samplesPerChannel);
         m_sequencer.init(m_vstAudioClient->paramsMapping(SUPPORTED_CONTROLLERS));
     };
 
     if (m_pluginPtr->isLoaded()) {
-        load();
+        onPluginLoaded();
     } else {
-        m_pluginPtr->loadingCompleted().onNotify(this, load);
+        m_pluginPtr->loadingCompleted().onNotify(this, onPluginLoaded);
     }
 
     m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const audio::AudioUnitConfig& newConfig) {
@@ -72,8 +83,6 @@ Ret VstSynthesiser::init()
     m_sequencer.setOnOffStreamFlushed([this]() {
         revokePlayingNotes();
     });
-
-    return make_ret(Ret::Code::Ok);
 }
 
 void VstSynthesiser::toggleVolumeGain(const bool isActive)

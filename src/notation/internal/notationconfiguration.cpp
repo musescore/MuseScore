@@ -71,6 +71,7 @@ static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/c
 static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
+static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
@@ -84,6 +85,7 @@ static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/
 
 static const Settings::Key NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddTextErrorMessage");
 static const Settings::Key NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddFiguredBassErrorMessage");
+static const Settings::Key NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY(module_name,  "ui/dialogs/needToShowAddGuitarBendErrorMessage");
 
 static const Settings::Key PIANO_KEYBOARD_NUMBER_OF_KEYS(module_name,  "pianoKeyboard/numberOfKeys");
 
@@ -184,6 +186,7 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
+    settings()->setDefaultValue(WARN_GUITAR_BENDS, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
 
@@ -203,6 +206,7 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_TEXT_ERROR_MESSAGE_KEY, Val(true));
     settings()->setDefaultValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(true));
+    settings()->setDefaultValue(NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY, Val(true));
 
     settings()->setDefaultValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(88));
     m_pianoKeyboardNumberOfKeys.val = settings()->value(PIANO_KEYBOARD_NUMBER_OF_KEYS).toInt();
@@ -215,6 +219,7 @@ void NotationConfiguration::init()
     });
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
+    mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
     mu::engraving::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
     mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
@@ -262,7 +267,7 @@ const QPixmap& NotationConfiguration::backgroundWallpaper() const
     io::path_t path = backgroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path_t lastPath = path;
+    static io::path_t lastPath;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -331,7 +336,7 @@ const QPixmap& NotationConfiguration::foregroundWallpaper() const
     io::path_t path = foregroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path_t lastPath = path;
+    static io::path_t lastPath;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -660,6 +665,17 @@ void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
 }
 
+bool NotationConfiguration::warnGuitarBends() const
+{
+    return settings()->value(WARN_GUITAR_BENDS).toBool();
+}
+
+void NotationConfiguration::setWarnGuitarBends(bool value)
+{
+    mu::engraving::MScore::warnGuitarBends = value;
+    settings()->setSharedValue(WARN_GUITAR_BENDS, Val(value));
+}
+
 int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
 {
     return settings()->value(REALTIME_DELAY).toInt();
@@ -738,6 +754,11 @@ void NotationConfiguration::setUserScoreOrderListPaths(const io::paths_t& paths)
     }
 }
 
+io::path_t NotationConfiguration::stringTuningsPresetsPath() const
+{
+    return globalConfiguration()->appDataPath() + "instruments/string_tunings_presets.json";
+}
+
 bool NotationConfiguration::isSnappedToGrid(framework::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
@@ -802,6 +823,16 @@ bool NotationConfiguration::needToShowAddFiguredBassErrorMessage() const
 void NotationConfiguration::setNeedToShowAddFiguredBassErrorMessage(bool show)
 {
     settings()->setSharedValue(NEED_TO_SHOW_ADD_FIGURED_BASS_ERROR_MESSAGE_KEY, Val(show));
+}
+
+bool NotationConfiguration::needToShowAddGuitarBendErrorMessage() const
+{
+    return settings()->value(NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY).toBool();
+}
+
+void NotationConfiguration::setNeedToShowAddGuitarBendErrorMessage(bool show)
+{
+    settings()->setSharedValue(NEED_TO_SHOW_ADD_GUITAR_BEND_ERROR_MESSAGE_KEY, Val(show));
 }
 
 bool NotationConfiguration::needToShowMScoreError(const std::string& errorKey) const

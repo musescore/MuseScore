@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ARPEGGIO_H__
-#define __ARPEGGIO_H__
+#ifndef MU_ENGRAVING_ARPEGGIO_H
+#define MU_ENGRAVING_ARPEGGIO_H
 
 #include "engravingitem.h"
 
@@ -33,6 +33,11 @@ class Chord;
 //   @@ Arpeggio
 //---------------------------------------------------------
 
+enum class AnchorRebaseDirection : char {
+    UP,
+    DOWN
+};
+
 class Arpeggio final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Arpeggio)
@@ -40,6 +45,7 @@ class Arpeggio final : public EngravingItem
 
 public:
 
+    ~Arpeggio() override;
     Arpeggio* clone() const override { return new Arpeggio(*this); }
 
     ArpeggioType arpeggioType() const { return m_arpeggioType; }
@@ -60,15 +66,19 @@ public:
 
     int span() const { return m_span; }
     void setSpan(int val) { m_span = val; }
-    void setHeight(double) override;
-    double height() const override;
+    track_idx_t endTrack() const { return track() + m_span - 1; }
+
+    bool crossStaff() const;
+    staff_idx_t vStaffIdx() const override;
+    void findAndAttachToChords();
+    void detachFromChords(track_idx_t strack, track_idx_t etrack);
+    void rebaseStartAnchor(AnchorRebaseDirection direction);
+    void rebaseEndAnchor(AnchorRebaseDirection direction);
 
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }
     void setUserLen1(double v) { m_userLen1 = v; }
     void setUserLen2(double v) { m_userLen2 = v; }
-
-    double insetDistance(std::vector<Accidental*>& accidentals, double mag_) const;
 
     bool playArpeggio() const { return m_playArpeggio; }
     void setPlayArpeggio(bool p) { m_playArpeggio = p; }
@@ -92,13 +102,15 @@ public:
         double top = 0.0;
         double bottom = 0.0;
         double magS = 0.0;
+        double maxChordPad = 0.0;
+        double minChordX = 0.0;
 
         // out
         SymIdList symbols;
         RectF symsBBox;
         double arpeggioHeight = -1.0;
     };
-    DECLARE_LAYOUTDATA_METHODS(Arpeggio);
+    DECLARE_LAYOUTDATA_METHODS(Arpeggio)
 
 private:
 
@@ -110,16 +122,13 @@ private:
     std::vector<mu::LineF> dragAnchorLines() const override;
     std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
-
-    double insetTop() const;
-    double insetBottom() const;
-    double insetWidth() const;
+    void startEditDrag(EditData&) override;
 
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;
     double m_userLen2 = 0.0;
 
-    int m_span = 1;                // spanning staves
+    int m_span = 1;                // how many voices the arpeggio spans
     bool m_playArpeggio = true;
 
     double m_stretch = 1.0;

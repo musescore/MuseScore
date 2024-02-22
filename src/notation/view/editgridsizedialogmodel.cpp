@@ -62,12 +62,12 @@ void EditGridSizeDialogModel::setHorizontalGridSizeSpatium(int size)
 
 void EditGridSizeDialogModel::load()
 {
-    setVerticalGridSizeSpatium(configuration()->gridSizeSpatium(Orientation::Vertical));
-    setHorizontalGridSizeSpatium(configuration()->gridSizeSpatium(Orientation::Horizontal));
+    setVerticalGridSizeSpatium(configuration()->gridSizeSpatium(mu::framework::Orientation::Vertical));
+    setHorizontalGridSizeSpatium(configuration()->gridSizeSpatium(mu::framework::Orientation::Horizontal));
 }
 
 void EditGridSizeDialogModel::apply()
 {
-    configuration()->setGridSize(Orientation::Vertical, m_verticalGridSizeSpatium);
-    configuration()->setGridSize(Orientation::Horizontal, m_horizontalGridSizeSpatium);
+    configuration()->setGridSize(mu::framework::Orientation::Vertical, m_verticalGridSizeSpatium);
+    configuration()->setGridSize(mu::framework::Orientation::Horizontal, m_horizontalGridSizeSpatium);
 }

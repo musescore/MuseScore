@@ -34,6 +34,25 @@
 
 #include "../layoutoptions.h"
 
+#ifdef MUE_ENABLE_ENGRAVING_RENDER_DEBUG
+#include "log.h"
+#include "logstream.h"
+#define LAYOUT_CALL_CLEAR mu::engraving::rendering::dev::LayoutDebug::instance()->callClear
+#define LAYOUT_CALL_BEGIN(name) mu::engraving::rendering::dev::LayoutDebug::CallBegin(name)
+#define LAYOUT_CALL_END mu::engraving::rendering::dev::LayoutDebug::instance()->callEnd
+#define LAYOUT_CALL() mu::engraving::rendering::dev::LayoutDebug::CallMarker _ldcall; _ldcall.begin(FUNCNAME).stream
+#define LAYOUT_ITEM_INFO(item) item->typeName() << "(" << item->eid() << ")"
+
+#define LAYOUT_CALL_PRINT mu::engraving::rendering::dev::LayoutDebug::instance()->callPrint
+#else
+#define LAYOUT_CALL_CLEAR()
+#define LAYOUT_CALL_BEGIN(name, info)
+#define LAYOUT_CALL_END()
+#define LAYOUT_CALL() if (0) mu::logger::Stream()
+#define LAYOUT_ITEM_INFO(item) ""
+#define LAYOUT_CALL_PRINT()
+#endif
+
 namespace mu::engraving {
 class EngravingItem;
 class RootItem;
@@ -162,13 +181,16 @@ public:
 
     MeasureBase* first();
     Measure* firstMeasure();
+    Measure* tick2measure(const Fraction& tick);
 
     ChordRest* findCR(Fraction tick, track_idx_t track);
 
     // Create/Remove
     RootItem* rootItem() const;
     compat::DummyElement* dummyParent() const;
+    void doUndoAddElement(EngravingItem*);
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
+    void doUndoRemoveElement(EngravingItem* item);
     void undoRemoveElement(EngravingItem* item);
     void undo(UndoCommand* cmd, EditData* ed = nullptr) const;
     void addElement(EngravingItem* item);
@@ -216,6 +238,8 @@ public:
 
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
 
+    double segmentShapeSqueezeFactor() const { return m_segmentShapeSqueezeFactor; }
+
     // Mutable
     void setFirstSystem(bool val) { m_firstSystem = val; }
     void setFirstSystemIndent(bool val) { m_firstSystemIndent = val; }
@@ -253,6 +277,8 @@ public:
 
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
 
+    void setSegmentShapeSqueezeFactor(double val) { m_segmentShapeSqueezeFactor = val; }
+
 private:
 
     bool m_firstSystem = true;
@@ -282,8 +308,68 @@ private:
 
     bool m_rangeDone = false;
 
+    double m_segmentShapeSqueezeFactor = 1.0;
+
     // cache
     double m_totalBracketsWidth = -1.0;
+};
+
+class LayoutDebug
+{
+public:
+
+    static LayoutDebug* instance();
+
+    struct CallBeginMarker {
+        std::string_view name;
+        mu::logger::Stream stream;
+        CallBeginMarker(const std::string_view& n)
+            : name(n)
+        {
+        }
+
+        ~CallBeginMarker()
+        {
+            LayoutDebug::instance()->callBegin(name, stream.str());
+        }
+    };
+
+    struct CallMarker {
+        CallBeginMarker begin(const std::string_view& n) { return CallBeginMarker(n); }
+
+        ~CallMarker()
+        {
+            LayoutDebug::instance()->callEnd();
+        }
+    };
+
+    void callClear();
+    void callBegin(const std::string_view& name, const std::string_view& info);
+    void callEnd();
+
+    void callDump(std::stringstream& ss) const;
+    std::string callDump() const
+    {
+        std::stringstream ss;
+        callDump(ss);
+        return ss.str();
+    }
+
+    void callPrint();
+
+private:
+
+    struct Call {
+        std::string name;
+        std::string info;
+        Call* top = nullptr;
+        std::vector<Call> nested;
+    };
+
+    static void callDump(const LayoutDebug::Call& c, std::stringstream& ss, int& indent);
+
+    Call* m_currentCall;
+    std::vector<Call> m_calls;
 };
 
 class LayoutContext : public IGetScoreInternal

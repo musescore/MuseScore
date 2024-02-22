@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MEASUREBASE_H__
-#define __MEASUREBASE_H__
+#ifndef MU_ENGRAVING_MEASUREBASE_H
+#define MU_ENGRAVING_MEASUREBASE_H
 
 /**
  \file
@@ -95,6 +95,8 @@ public:
     MeasureBase* prevMM() const;
     void setPrev(MeasureBase* e) { m_prev = e; }
     MeasureBase* top() const;
+
+    MeasureBase* getInScore(Score* score, bool useNextMeasureFallback = false) const;
 
     Measure* nextMeasure() const;
     Measure* prevMeasure() const;
@@ -192,7 +194,7 @@ private:
 
     ElementList m_el;                     // Measure(/tick) relative -elements: with defined start time
                                           // but outside the staff
-    Fraction m_tick         { Fraction(0, 1) };
+    Fraction m_tick = Fraction(0, 1);
     int m_no = 0;                         // Measure number, counting from zero
     int m_noOffset = 0;                   // Offset to measure number
     double m_oldWidth = 0.0;              // Used to restore layout during recalculations in Score::collectSystem()

@@ -60,6 +60,8 @@ import "lyrics"
 import "rests"
 import "dynamics"
 import "expressions"
+import "stringtunings"
+import "symbols"
 
 Loader {
     id: root
@@ -91,6 +93,8 @@ Loader {
             case Inspector.TYPE_SLUR:
             case Inspector.TYPE_TIE: return slurAndTieComp
             case Inspector.TYPE_TEMPO: return tempoComp
+            case Inspector.TYPE_A_TEMPO: return aTempoComp
+            case Inspector.TYPE_TEMPO_PRIMO: return tempoPrimoComp
             case Inspector.TYPE_BARLINE: return barlineComp
             case Inspector.TYPE_SECTIONBREAK: return sectionBreakComp
             case Inspector.TYPE_MARKER: return markerComp
@@ -133,6 +137,8 @@ Loader {
             case Inspector.TYPE_REST_BEAM: return restComp
             case Inspector.TYPE_DYNAMIC: return dynamicComp
             case Inspector.TYPE_EXPRESSION: return expressionComp
+            case Inspector.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case Inspector.TYPE_SYMBOL: return symbolComp
             }
 
             return null
@@ -175,6 +181,16 @@ Loader {
     Component {
         id: tempoComp
         TempoSettings { }
+    }
+
+    Component {
+        id: aTempoComp
+        TempoRestorePreviousSettings { }
+    }
+
+    Component {
+        id: tempoPrimoComp
+        TempoRestorePreviousSettings { }
     }
 
     Component {
@@ -335,5 +351,15 @@ Loader {
     Component {
         id: expressionComp
         ExpressionsSettings {}
+    }
+
+    Component {
+        id: stringTuningsComp
+        StringTuningsSettings {}
+    }
+
+    Component {
+        id: symbolComp
+        SymbolSettings {}
     }
 }

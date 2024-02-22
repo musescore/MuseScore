@@ -32,8 +32,12 @@
 #include "dom/repeatlist.h"
 #include "dom/segment.h"
 #include "dom/tempo.h"
+#include "dom/tie.h"
+#include "dom/tremolotwochord.h"
 
 #include "log.h"
+
+#include <limits>
 
 using namespace mu;
 using namespace mu::engraving;
@@ -116,7 +120,7 @@ void PlaybackModel::reload()
     update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents);
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamicLevelMap, pair.second.paramMap);
     }
 
     m_dataChanged.notify();
@@ -189,7 +193,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
 
 void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
 {
-    std::vector<const EngravingItem*> playableItems = filterPlaybleItems(items);
+    std::vector<const EngravingItem*> playableItems = filterPlayableItems(items);
     if (playableItems.empty()) {
         return;
     }
@@ -199,37 +203,45 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
         return;
     }
 
-    auto trackPlaybackData = m_playbackDataMap.find(trackId);
-    if (trackPlaybackData == m_playbackDataMap.cend()) {
+    auto trackPlaybackDataIt = m_playbackDataMap.find(trackId);
+    if (trackPlaybackDataIt == m_playbackDataMap.cend()) {
+        return;
+    }
+
+    PlaybackData& trackPlaybackData = trackPlaybackDataIt->second;
+    ArticulationsProfilePtr profile = profilesRepository()->defaultProfile(trackPlaybackData.setupData.category);
+    if (!profile) {
+        LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
         return;
     }
 
     PlaybackEventsMap result;
 
+    const RepeatList& repeats = repeatList();
+
     constexpr timestamp_t actualTimestamp = 0;
     constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
-    for (const EngravingItem* item : playableItems) {
-        ArticulationsProfilePtr profile = defaultActiculationProfile(trackId);
-        if (!profile) {
-            LOGE() << "unsupported instrument family: " << trackId.partId.toUint64();
-            return;
-        }
+    const PlaybackContext& ctx = m_playbackCtxMap[trackId];
 
+    int minTick = std::numeric_limits<int>::min();
+
+    for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
             m_renderer.renderChordSymbol(toHarmony(item), actualTimestamp, actualDuration, profile, result);
             continue;
         }
 
-        int utick = repeatList().tick2utick(item->tick().ticks());
-        const PlaybackContext& ctx = m_playbackCtxMap[trackId];
+        int utick = repeats.tick2utick(item->tick().ticks());
+        minTick = std::min(utick, minTick);
 
         m_renderer.render(item, actualTimestamp, actualDuration, actualDynamicLevel, ctx.persistentArticulationType(utick), profile,
                           result);
     }
 
-    trackPlaybackData->second.offStream.send(std::move(result));
+    PlaybackParamMap params = ctx.playbackParamMap(m_score, minTick);
+    trackPlaybackData.offStream.send(std::move(result), std::move(params));
 }
 
 void PlaybackModel::triggerMetronome(int tick)
@@ -241,7 +253,7 @@ void PlaybackModel::triggerMetronome(int tick)
 
     PlaybackEventsMap result;
     m_renderer.renderMetronome(m_score, tick, 0, result);
-    trackPlaybackData->second.offStream.send(std::move(result));
+    trackPlaybackData->second.offStream.send(std::move(result), {});
 }
 
 InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
@@ -319,6 +331,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
     trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
+    trackData.paramMap = ctx.playbackParamMap(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
@@ -502,7 +515,11 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
         ElementType::HAIRPIN_SEGMENT,
         ElementType::HARMONY,
         ElementType::STAFF_TEXT,
+        ElementType::SOUND_FLAG,
         ElementType::MEASURE_REPEAT,
+        ElementType::GUITAR_BEND,
+        ElementType::GUITAR_BEND_SEGMENT,
+        ElementType::BREATH,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
@@ -534,7 +551,7 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
     return false;
 }
 
-bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const
+bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) const
 {
     static const std::unordered_set<ElementType> REQUIRED_TYPES = {
         ElementType::SCORE,
@@ -551,11 +568,24 @@ bool PlaybackModel::hasToReloadScore(const std::unordered_set<ElementType>& chan
     };
 
     for (const ElementType type : REQUIRED_TYPES) {
-        if (changedTypes.find(type) == changedTypes.cend()) {
+        if (changesRange.changedTypes.find(type) == changesRange.changedTypes.cend()) {
             continue;
         }
 
         return true;
+    }
+
+    static const std::unordered_set<mu::engraving::Pid> REQUIRED_PROPERTIES {
+        mu::engraving::Pid::REPEAT_START,
+        mu::engraving::Pid::REPEAT_END,
+        mu::engraving::Pid::REPEAT_JUMP,
+        mu::engraving::Pid::REPEAT_COUNT,
+    };
+
+    for (const Pid pid: changesRange.changedPropertyIdSet) {
+        if (mu::contains(REQUIRED_PROPERTIES, pid)) {
+            return true;
+        }
     }
 
     return false;
@@ -685,8 +715,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents);
-        search->second.dynamicLevelChanges.send(search->second.dynamicLevelMap);
+        search->second.mainStream.send(search->second.originEvents, search->second.dynamicLevelMap, search->second.paramMap);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {
@@ -740,7 +769,7 @@ PlaybackModel::TrackBoundaries PlaybackModel::trackBoundaries(const ScoreChanges
     result.trackFrom = staff2track(changesRange.staffIdxFrom, 0);
     result.trackTo = staff2track(changesRange.staffIdxTo, VOICES);
 
-    if (hasToReloadScore(changesRange.changedTypes) || !changesRange.isValidBoundary()) {
+    if (hasToReloadScore(changesRange) || !changesRange.isValidBoundary()) {
         result.trackFrom = 0;
         result.trackTo = m_score->ntracks();
     }
@@ -756,11 +785,51 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
     result.tickTo = changesRange.tickTo;
 
     if (hasToReloadTracks(changesRange)
-        || hasToReloadScore(changesRange.changedTypes)
+        || hasToReloadScore(changesRange)
         || !changesRange.isValidBoundary()) {
         const Measure* lastMeasure = m_score->lastMeasure();
         result.tickFrom = 0;
         result.tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
+
+        return result;
+    }
+
+    for (const EngravingItem* item : changesRange.changedItems) {
+        if (item->isNote()) {
+            const Note* note = toNote(item);
+            const Chord* chord = note->chord();
+            const TremoloTwoChord* tremoloTwo = chord->tremoloTwoChord();
+
+            if (tremoloTwo) {
+                const Chord* startChord = tremoloTwo->chord1();
+                const Chord* endChord = tremoloTwo->chord2();
+
+                IF_ASSERT_FAILED(startChord && endChord) {
+                    continue;
+                }
+
+                result.tickFrom = std::min(result.tickFrom, startChord->tick().ticks());
+                result.tickTo = std::max(result.tickTo, endChord->tick().ticks());
+            }
+        } else if (item->isTie()) {
+            const Tie* tie = toTie(item);
+            const Note* startNote = tie->startNote();
+            const Note* endNote = tie->endNote();
+
+            IF_ASSERT_FAILED(startNote && endNote) {
+                continue;
+            }
+
+            const Note* firstTiedNote = startNote->firstTiedNote();
+            const Note* lastTiedNote = endNote->lastTiedNote();
+
+            IF_ASSERT_FAILED(firstTiedNote && lastTiedNote) {
+                continue;
+            }
+
+            result.tickFrom = std::min(result.tickFrom, firstTiedNote->tick().ticks());
+            result.tickTo = std::max(result.tickTo, lastTiedNote->tick().ticks());
+        }
     }
 
     return result;
@@ -773,7 +842,7 @@ const RepeatList& PlaybackModel::repeatList() const
     return m_score->repeatList();
 }
 
-std::vector<const EngravingItem*> PlaybackModel::filterPlaybleItems(const std::vector<const EngravingItem*>& items) const
+std::vector<const EngravingItem*> PlaybackModel::filterPlayableItems(const std::vector<const EngravingItem*>& items) const
 {
     std::vector<const EngravingItem*> result;
 
@@ -798,8 +867,7 @@ InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
         return chordSymbolsTrackId(item->part()->id());
     }
 
-    return { item->part()->id(),
-             item->part()->instrumentId(item->tick()).toStdString() };
+    return makeInstrumentTrackId(item);
 }
 
 InstrumentTrackId PlaybackModel::idKey(const std::vector<const EngravingItem*>& items) const

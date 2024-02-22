@@ -28,20 +28,18 @@
 namespace mu::engraving::rendering::stable {
 class ArpeggioLayout
 {
+    static constexpr int ARBITRARY_ARPEGGIO_LENGTH = 10000;
 public:
 
-    static void layout(const Arpeggio* item, const LayoutContext& ctx, Arpeggio::LayoutData* data);
-
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
-    static void computeHeight(Arpeggio* item, bool includeCrossStaffHeight = false);
 
-    static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
-    static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
-
-private:
-    static void symbolLine(const IEngravingFontPtr& f, Arpeggio::LayoutData* data, SymId end, SymId fill);
-    static double calcTop(const Arpeggio* item, const LayoutContext& ctx);
-    static double calcBottom(const Arpeggio* item, const LayoutContext& ctx);
+    static double insetDistance(const Arpeggio* item, const LayoutContext& ctx, double mag_, const Chord* _chord);
+    static double insetDistance(const Arpeggio* item, const LayoutContext& ctx, double mag_, const Chord* _chord,
+                                const std::vector<Accidental*>& accidentals);
+    static double insetTop(const Arpeggio* item, const Chord* c);
+    static double insetBottom(const Arpeggio* item, const Chord* c);
+    static double insetWidth(const Arpeggio* item);
+    static void clearAccidentals(Arpeggio* item, LayoutContext& ctx);
 };
 }
 

@@ -8,14 +8,18 @@ body:
       description: What kind of issue are you experiencing?
       options:
         - Choose option...
-        - File corruption
         - Crash or freeze
-        - Engraving bug
-        - UI bug
+        - Engraving bug (incorrect score rendering)
+        - UX/Interaction bug (incorrect behaviour)
+        - UI bug (incorrect info or interface appearance)
+        - Accessibility issue (e.g. for keyboard-only or screen reader users)
         - VST bug
         - Muse Sounds bug
         - General playback bug
-        - Cloud saving/loading issue
+        - Cloud issue (opening, saving, logging in/out)
+        - Opening/saving issue
+        - Import/export issue
+        - File corruption
         - Other type of issue
     validations:
       required: true
@@ -23,7 +27,7 @@ body:
     id: desc
     attributes:
       label: Bug description
-      description: A more detailled description of the bug
+      description: A more detailed description of the bug
       placeholder: Context for the bug that didn't fit in the title
     validations:
       required: false

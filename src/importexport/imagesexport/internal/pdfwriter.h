@@ -37,8 +37,8 @@ class PdfWriter : public AbstractImageWriter
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
-    Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
+    Ret write(notation::INotationPtr notation, io::IODevice& dstDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::IODevice& dstDevice, const Options& options = Options()) override;
 
 private:
     void preparePdfWriter(QPdfWriter& pdfWriter, const QString& title, const QSizeF& size) const;

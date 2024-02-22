@@ -49,17 +49,20 @@ VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio:
         return nullptr;
     }
 
-    VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(params.resourceMeta.id);
-    pluginsRegister()->registerInstrPlugin(trackId, pluginPtr);
+    auto synth = std::make_shared<VstSynthesiser>(trackId, params);
+    synth->init();
 
-    pluginPtr->load();
-
-    return std::make_shared<VstSynthesiser>(std::move(pluginPtr), params);
+    return synth;
 }
 
 AudioResourceMetaList VstiResolver::resolveResources() const
 {
     return pluginModulesRepo()->instrumentModulesMeta();
+}
+
+SoundPresetList VstiResolver::resolveSoundPresets(const audio::AudioResourceMeta&) const
+{
+    return SoundPresetList();
 }
 
 void VstiResolver::clearSources()

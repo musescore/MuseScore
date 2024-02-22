@@ -73,6 +73,8 @@
 #include "notation/rests/restsettingsproxymodel.h"
 #include "notation/dynamics/dynamicsettingsmodel.h"
 #include "notation/expressions/expressionsettingsmodel.h"
+#include "notation/stringtunings/stringtuningssettingsmodel.h"
+#include "notation/symbols/symbolsettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -95,7 +97,9 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
     case InspectorModelType::TYPE_FERMATA:
         return new FermataSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEMPO:
-        return new TempoSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_A_TEMPO:
+    case InspectorModelType::TYPE_TEMPO_PRIMO:
+        return new TempoSettingsModel(parent, repository, modelType);
     case InspectorModelType::TYPE_GLISSANDO:
         return new GlissandoSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BARLINE:
@@ -190,6 +194,10 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new DynamicsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_EXPRESSION:
         return new ExpressionSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_STRING_TUNINGS:
+        return new StringTuningsSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_SYMBOL:
+        return new SymbolSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
     case InspectorModelType::TYPE_ARPEGGIO:
     case InspectorModelType::TYPE_UNDEFINED:

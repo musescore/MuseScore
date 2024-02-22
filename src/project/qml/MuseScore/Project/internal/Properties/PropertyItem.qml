@@ -28,9 +28,6 @@ import MuseScore.UiComponents 1.0
 RowLayout {
     id: root
 
-    width: 100
-    spacing: 8
-
     property int propertyNameWidth: -1
     property NavigationPanel navigationPanel: null
     property int navigationColumnEnd: deletePropertyButton.navigation.column
@@ -42,8 +39,10 @@ RowLayout {
     property bool isFileInfoPanelProperty: false
     property bool valueFillWidth: false
 
-    signal changePositionOfListIndex()
-    signal deleteProperty()
+    signal scrollIntoViewRequested()
+    signal deletePropertyRequested()
+
+    spacing: 8
 
     QtObject {
         id: prv
@@ -72,7 +71,7 @@ RowLayout {
         navigation.column: prv.navigationStartIndex
         navigation.onActiveChanged: {
             if (navigation.active) {
-                root.changePositionOfListIndex()
+                root.scrollIntoViewRequested()
             }
         }
 
@@ -94,7 +93,7 @@ RowLayout {
         accessible.name: root.propertyName + " " + currentText
         navigation.onActiveChanged: {
             if (navigation.active && !root.isFileInfoPanelProperty) {
-                root.changePositionOfListIndex()
+                root.scrollIntoViewRequested()
             }
         }
 
@@ -125,6 +124,6 @@ RowLayout {
         navigation.column: prv.navigationStartIndex + 2
         accessible.name: "Delete"
 
-        onClicked: root.deleteProperty()
+        onClicked: root.deletePropertyRequested()
     }
 }

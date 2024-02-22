@@ -28,6 +28,7 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -242,6 +243,24 @@ String HarpPedalDiagram::createDiagramText()
 void HarpPedalDiagram::updateDiagramText()
 {
     undoChangeProperty(Pid::TEXT, createDiagramText(), PropertyFlags::STYLED);
+}
+
+void HarpPedalDiagram::undoChangePedalState(std::array<PedalPosition, HARP_STRING_NO> _pedalState)
+{
+    const std::list<EngravingObject*> links = linkList();
+    for (EngravingObject* obj : links) {
+        if (!obj || !obj->isHarpPedalDiagram()) {
+            continue;
+        }
+
+        HarpPedalDiagram* item = toHarpPedalDiagram(obj);
+        Score* linkedScore = item->score();
+        if (!linkedScore) {
+            continue;
+        }
+
+        linkedScore->undo(new ChangeHarpPedalState(item, _pedalState));
+    }
 }
 
 bool HarpPedalDiagram::isTpcPlayable(int tpc)

@@ -103,11 +103,12 @@
         <file>qml/platform/win/AppSystemButtons.qml</file>
         <file>qml/platform/AppMenuBar.qml</file>
         <file>qml/platform/AppButtonBackground.qml</file>
-        <file>qml/platform/PlatformMenuBar.qml</file>
+        <file>qml/platform/linux/PlatformMenuBar.qml</file>
+        <file>qml/platform/mac/PlatformMenuBar.qml</file>
         <file>resources/LoadingScreen.svg</file>
         <file>qml/Preferences/BraillePreferencesPage.qml</file>
         <file>qml/Preferences/internal/BrailleSection.qml</file>
-        <file>qml/Preferences/internal/BrailleTableSection.qml</file>
+        <file>qml/Preferences/internal/BrailleAdvancedSection.qml</file>
         <file>qml/Preferences/internal/MeiSection.qml</file>
         <file>qml/Preferences/internal/PublishMuseScoreComSection.qml</file>
     </qresource>

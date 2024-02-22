@@ -28,20 +28,25 @@
 using namespace mu::playback;
 using namespace mu::audio;
 
+void SoundProfilesRepository::init()
+{
+    SoundProfile basicProfile;
+    basicProfile.type = SoundProfileType::Basic;
+    basicProfile.name = config()->basicSoundProfileName();
+    m_profilesMap.emplace(basicProfile.name, std::move(basicProfile));
+
+    SoundProfile museProfile;
+    museProfile.type = SoundProfileType::Muse;
+    museProfile.name = config()->museSoundProfileName();
+    m_profilesMap.emplace(museProfile.name, std::move(museProfile));
+}
+
 void SoundProfilesRepository::refresh()
 {
     playback()->tracks()->availableInputResources()
     .onResolve(this, [this](const AudioResourceMetaList& availableResources) {
-        const SoundProfileName& basicProfileName = config()->basicSoundProfileName();
-        const SoundProfileName& museProfileName = config()->museSoundProfileName();
-
-        SoundProfile& basicProfile = m_profilesMap[basicProfileName];
-        basicProfile.type = SoundProfileType::Basic;
-        basicProfile.name = basicProfileName;
-
-        SoundProfile& museProfile = m_profilesMap[museProfileName];
-        museProfile.type = SoundProfileType::Muse;
-        museProfile.name = museProfileName;
+        SoundProfile& basicProfile = m_profilesMap.at(config()->basicSoundProfileName());
+        SoundProfile& museProfile = m_profilesMap.at(config()->museSoundProfileName());
 
         for (const AudioResourceMeta& resource : availableResources) {
             auto setup = resource.attributes.find(u"playbackSetupData");
@@ -75,6 +80,11 @@ const SoundProfile& SoundProfilesRepository::profile(const SoundProfileName& nam
     }
 
     return search->second;
+}
+
+bool SoundProfilesRepository::containsProfile(const SoundProfileName& name) const
+{
+    return mu::contains(m_profilesMap, name);
 }
 
 const SoundProfilesMap& SoundProfilesRepository::availableProfiles() const

@@ -82,17 +82,17 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *m_reader;
     const AsciiStringView name(e.asciiAttribute("type"));
-    _type = TConv::fromXml(name, ElementType::INVALID);
+    m_type = TConv::fromXml(name, ElementType::INVALID);
 
-    m_ctx->fillLocation(_currentLoc);
+    m_ctx->fillLocation(m_currentLoc);
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
         if (tag == "prev") {
-            readEndpointLocation(_prevLoc);
+            readEndpointLocation(m_prevLoc);
         } else if (tag == "next") {
-            readEndpointLocation(_nextLoc);
+            readEndpointLocation(m_nextLoc);
         } else {
             if (tag == name) {
                 m_connector = Factory::createItemByName(tag, m_connectorReceiver->score()->dummy());
@@ -105,7 +105,7 @@ bool ConnectorInfoReader::read()
                 e.unknown();
                 return false;
             }
-            m_connector->setTrack(_currentLoc.track());
+            m_connector->setTrack(m_currentLoc.track());
             TRead::readItem(m_connector, e, *m_ctx);
         }
     }
@@ -140,10 +140,10 @@ void ConnectorInfoReader::update()
         updateCurrentInfo(m_ctx->pasteMode());
     }
     if (hasPrevious()) {
-        _prevLoc.toAbsolute(_currentLoc);
+        m_prevLoc.toAbsolute(m_currentLoc);
     }
     if (hasNext()) {
-        _nextLoc.toAbsolute(_currentLoc);
+        m_nextLoc.toAbsolute(m_currentLoc);
     }
 }
 
@@ -260,15 +260,15 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
             spanner->setStartElement(item);
             if (pasteMode) {
                 item->score()->undoAddElement(spanner);
-                for (EngravingObject* ee : spanner->linkList()) {
-                    if (ee == spanner) {
+                for (EngravingObject* linkedSpanner : spanner->linkList()) {
+                    if (linkedSpanner == spanner) {
                         continue;
                     }
-                    Spanner* ls = toSpanner(ee);
+                    Spanner* ls = toSpanner(linkedSpanner);
                     ls->setTick(spanner->tick());
-                    for (EngravingObject* eee : item->linkList()) {
-                        ChordRest* cr = toChordRest(eee);
-                        if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
+                    for (EngravingObject* linkedCR : item->linkList()) {
+                        ChordRest* cr = toChordRest(linkedCR);
+                        if (cr->score() == linkedSpanner->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack(cr->track());
                             if (ls->isSlur()) {
                                 ls->setStartElement(cr);
@@ -285,15 +285,15 @@ void ConnectorInfoReader::readAddConnector(ChordRest* item, ConnectorInfoReader*
             spanner->setTick2(item->tick());
             spanner->setEndElement(item);
             if (pasteMode) {
-                for (EngravingObject* ee : spanner->linkList()) {
-                    if (ee == spanner) {
+                for (EngravingObject* linkedSpanner : spanner->linkList()) {
+                    if (linkedSpanner == spanner) {
                         continue;
                     }
-                    Spanner* ls = static_cast<Spanner*>(ee);
+                    Spanner* ls = static_cast<Spanner*>(linkedSpanner);
                     ls->setTick2(spanner->tick2());
-                    for (EngravingObject* eee : item->linkList()) {
-                        ChordRest* cr = toChordRest(eee);
-                        if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
+                    for (EngravingObject* linkedCR : item->linkList()) {
+                        ChordRest* cr = toChordRest(linkedCR);
+                        if (cr->score() == linkedSpanner->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack2(cr->track());
                             if (ls->type() == ElementType::SLUR) {
                                 ls->setEndElement(cr);
@@ -359,6 +359,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::TIE:
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::GUITAR_BEND:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -372,7 +373,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 Tie* tie = toTie(sp);
                 tie->setParent(n);
                 tie->setStartNote(n);
-                item->setTieFor(tie);
+                n->setTieFor(tie);
             } else {
                 sp->setAnchor(Spanner::Anchor::NOTE);
                 sp->setStartElement(item);
@@ -386,8 +387,8 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 item->setTieBack(toTie(sp));
             } else {
-                if (sp->isGlissando() && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissando(true);
+                if ((sp->isGlissando() || sp->isGuitarBend()) && item->explicitParent() && item->explicitParent()->isChord()) {
+                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
                 }
                 item->addSpannerBack(sp);
             }

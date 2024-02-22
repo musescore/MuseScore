@@ -70,7 +70,6 @@ PreferencesPage {
         ProgramStartSection {
             startupModes: preferencesModel.startupModes
             scorePathFilter: preferencesModel.scorePathFilter()
-            panels: preferencesModel.panels
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -81,10 +80,6 @@ PreferencesPage {
 
             onStartupScorePathChanged: function(path) {
                 preferencesModel.setStartupScorePath(path)
-            }
-
-            onPanelsVisibleChanged: function(panelIndex, visible) {
-                preferencesModel.setPanelVisible(panelIndex, visible)
             }
         }
 

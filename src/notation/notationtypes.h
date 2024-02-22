@@ -152,6 +152,8 @@ using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using ChangesRange = mu::engraving::ScoreChangesRange;
+using GuitarBendType = mu::engraving::GuitarBendType;
+using engraving::LoopBoundaryType;
 
 static const String COMMON_GENRE_ID("common");
 
@@ -441,6 +443,8 @@ struct FilterElementsOptions
     int voice = -1;
     const mu::engraving::System* system = nullptr;
     Fraction durationTicks{ -1, 1 };
+    Fraction beat{ 0, 0 };
+    const mu::engraving::Measure* measure = nullptr;
 
     bool bySubtype = false;
     int subtype = -1;
@@ -458,7 +462,7 @@ struct FilterNotesOptions : FilterElementsOptions
     int pitch = -1;
     int string = mu::engraving::INVALID_STRING_INDEX;
     int tpc = mu::engraving::Tpc::TPC_INVALID;
-    engraving::NoteHeadGroup notehead = engraving::NoteHeadGroup::HEAD_INVALID;
+    mu::engraving::NoteHeadGroup notehead = mu::engraving::NoteHeadGroup::HEAD_INVALID;
     mu::engraving::TDuration durationType = mu::engraving::TDuration();
     mu::engraving::NoteType noteType = mu::engraving::NoteType::INVALID;
 };
@@ -479,6 +483,7 @@ struct StaffConfig
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
     bool mergeMatchingRests = false;
+    bool reflectTranspositionInLinkedTab = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     ClefTypeList clefTypeList;
     engraving::StaffType staffType;
@@ -494,6 +499,7 @@ struct StaffConfig
         equal &= hideMode == conf.hideMode;
         equal &= clefTypeList == conf.clefTypeList;
         equal &= staffType == conf.staffType;
+        equal &= reflectTranspositionInLinkedTab == conf.reflectTranspositionInLinkedTab;
 
         return equal;
     }
@@ -518,18 +524,11 @@ struct TupletOptions
     bool autoBaseLen = false;
 };
 
-enum class LoopBoundaryType
-{
-    Unknown,
-    LoopIn,
-    LoopOut
-};
-
 struct LoopBoundaries
 {
     int loopInTick = 0;
     int loopOutTick = 0;
-    bool visible = false;
+    bool enabled = false;
 
     bool isNull() const
     {
@@ -542,7 +541,7 @@ struct LoopBoundaries
 
         equals &= loopInTick == boundaries.loopInTick;
         equals &= loopOutTick == boundaries.loopOutTick;
-        equals &= visible == boundaries.visible;
+        equals &= enabled == boundaries.enabled;
 
         return equals;
     }
@@ -559,6 +558,7 @@ enum class ScoreConfigType
     ShowUnprintableElements,
     ShowFrames,
     ShowPageMargins,
+    ShowSoundFlags,
     MarkIrregularMeasures
 };
 
@@ -568,6 +568,7 @@ struct ScoreConfig
     bool isShowUnprintableElements = false;
     bool isShowFrames = false;
     bool isShowPageMargins = false;
+    bool isShowSoundFlags = false;
     bool isMarkIrregularMeasures = false;
 
     bool operator==(const ScoreConfig& conf) const
@@ -576,6 +577,7 @@ struct ScoreConfig
         equal &= (isShowUnprintableElements == conf.isShowUnprintableElements);
         equal &= (isShowFrames == conf.isShowFrames);
         equal &= (isShowPageMargins == conf.isShowPageMargins);
+        equal &= (isShowSoundFlags == conf.isShowSoundFlags);
         equal &= (isMarkIrregularMeasures == conf.isMarkIrregularMeasures);
 
         return equal;
@@ -670,12 +672,27 @@ inline bool isVerticalBoxTextStyle(TextStyleType type)
         TextStyleType::TITLE,
         TextStyleType::SUBTITLE,
         TextStyleType::COMPOSER,
-        TextStyleType::POET,
+        TextStyleType::LYRICIST,
         TextStyleType::INSTRUMENT_EXCERPT,
     };
 
     return mu::contains(types, type);
 }
+
+struct StringTuningPreset
+{
+    std::string name;
+    std::vector<int> value;
+    bool useFlats = false;
+};
+
+struct StringTuningsInfo
+{
+    size_t number = 0;
+    std::vector<StringTuningPreset> presets;
+};
+
+using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo> >;
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

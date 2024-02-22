@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEXTLINEBASE_H__
-#define __TEXTLINEBASE_H__
+#ifndef MU_ENGRAVING_TEXTLINEBASE_H
+#define MU_ENGRAVING_TEXTLINEBASE_H
 
 #include "types/types.h"
 
@@ -54,8 +54,6 @@ public:
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
     EngravingItem* propertyDelegate(Pid) override;
-
-    Shape shape() const override;
 
     bool setProperty(Pid id, const PropertyValue& v) override;
 
@@ -138,6 +136,8 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     static const std::array<Pid, 27>& textLineBasePropertyIds();
+
+    void reset() override;
 
 protected:
     friend class TextLineBaseSegment;

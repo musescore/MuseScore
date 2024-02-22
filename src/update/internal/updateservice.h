@@ -28,8 +28,9 @@
 #include "iinteractive.h"
 #include "network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
-#include "../iupdateconfiguration.h"
+#include "global/isysteminfo.h"
 
+#include "../iupdateconfiguration.h"
 #include "../iupdateservice.h"
 
 namespace mu::update {
@@ -39,6 +40,7 @@ class UpdateService : public IUpdateService, public async::Asyncable
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
     INJECT(IUpdateConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
+    INJECT(ISystemInfo, systemInfo)
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;
@@ -48,7 +50,11 @@ public:
     framework::Progress updateProgress() override;
 
 private:
+    std::string platformFileSuffix() const;
+    ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
+
     RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
+    QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
 
     void clear();
 

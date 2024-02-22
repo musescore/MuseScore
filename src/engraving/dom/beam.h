@@ -20,17 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BEAM_H__
-#define __BEAM_H__
+#ifndef MU_ENGRAVING_BEAM_H
+#define MU_ENGRAVING_BEAM_H
 
 #include <memory>
 
+#include "beambase.h"
 #include "engravingitem.h"
 #include "property.h"
-
-namespace mu::engraving::rendering::dev {
-class BeamTremoloLayout;
-}
 
 namespace mu::engraving {
 class Chord;
@@ -67,10 +64,9 @@ public:
     bool isBefore = false;
 
     Shape shape() const;
-    EngravingItem* parentElement;
+    EngravingItem* parentElement = nullptr;
 
-    BeamSegment(EngravingItem* b)
-        : parentElement(b) {}
+    BeamSegment(EngravingItem* b);
 };
 
 struct TremAnchor {
@@ -87,7 +83,7 @@ enum class ChordBeamAnchorType {
 //   @@ Beam
 //---------------------------------------------------------
 
-class Beam final : public EngravingItem
+class Beam final : public BeamBase
 {
     OBJECT_ALLOCATOR(engraving, Beam)
     DECLARE_CLASSOF(ElementType::BEAM)
@@ -186,6 +182,9 @@ public:
     bool cross() const { return m_cross; }
     void setCross(bool val) { m_cross = val; }
 
+    bool fullCross() const { return m_fullCross; }
+    void setFullCross(bool v) { m_fullCross = v; }
+
     int minMove() { return m_minMove; }
     void setMinMove(int val) { m_minMove = val; }
     int maxMove() { return m_maxMove; }
@@ -209,8 +208,6 @@ public:
 
     bool hasAllRests();
 
-    Shape shape() const override;
-
     const std::vector<TremAnchor>& tremAnchors() const { return m_tremAnchors; }
     std::vector<TremAnchor>& tremAnchors() { return m_tremAnchors; }
 
@@ -220,6 +217,7 @@ public:
 
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
+    void clearBeamSegments();
 
     const StaffType* tab() const { return m_tab; }
     void setTab(const StaffType* t) { m_tab = t; }
@@ -230,8 +228,6 @@ public:
     std::vector<int>& notes() { return m_notes; }
 
     const Chord* findChordWithCustomStemDirection() const;
-
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
 private:
 
@@ -256,6 +252,7 @@ private:
     bool m_userModified[2]{ false };    // 0: auto/down  1: up
     bool m_isGrace = false;
     bool m_cross = false;
+    bool m_fullCross = false;
 
     double m_growLeft = 1.0;               // define "feather" beams
     double m_growRight = 1.0;
@@ -277,7 +274,7 @@ private:
     int m_maxMove = 0;
 
     bool m_noSlope = false;
-    double m_slope = 0.0;
+    real_t m_slope = 0.0;
 
     std::vector<int> m_notes;
     std::vector<TremAnchor> m_tremAnchors;

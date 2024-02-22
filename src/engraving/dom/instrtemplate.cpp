@@ -222,8 +222,8 @@ InstrumentTemplate::InstrumentTemplate()
     family             = nullptr;
 
     for (int i = 0; i < MAX_STAVES; ++i) {
-        clefTypes[i]._concertClef = ClefType::G;
-        clefTypes[i]._transposingClef = ClefType::G;
+        clefTypes[i].concertClef = ClefType::G;
+        clefTypes[i].transposingClef = ClefType::G;
         staffLines[i]  = 5;
         smallStaff[i]  = false;
         bracket[i]     = BracketType::NO_BRACKET;
@@ -322,19 +322,19 @@ void InstrumentTemplate::write(XmlWriter& xml) const
         xml.tag("staves", static_cast<int>(staffCount));
     }
     for (staff_idx_t i = 0; i < staffCount; ++i) {
-        if (clefTypes[i]._concertClef == clefTypes[i]._transposingClef) {
+        if (clefTypes[i].concertClef == clefTypes[i].transposingClef) {
             if (i) {
-                xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i]._concertClef));
+                xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i].concertClef));
             } else {
-                xml.tag("clef", TConv::toXml(clefTypes[i]._concertClef));
+                xml.tag("clef", TConv::toXml(clefTypes[i].concertClef));
             }
         } else {
             if (i) {
-                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i]._concertClef));
-                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i]._transposingClef));
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i].concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(clefTypes[i].transposingClef));
             } else {
-                xml.tag("concertClef", TConv::toXml(clefTypes[i]._concertClef));
-                xml.tag("transposingClef", TConv::toXml(clefTypes[i]._transposingClef));
+                xml.tag("concertClef", TConv::toXml(clefTypes[i].concertClef));
+                xml.tag("transposingClef", TConv::toXml(clefTypes[i].transposingClef));
             }
         }
         if (staffLines[i] != 5) {
@@ -470,14 +470,14 @@ void InstrumentTemplate::read(XmlReader& e)
         } else if (tag == "clef") {             // sets both transposing and concert clef
             int idx = readStaffIdx(e);
             ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
-            clefTypes[idx]._concertClef = ct;
-            clefTypes[idx]._transposingClef = ct;
+            clefTypes[idx].concertClef = ct;
+            clefTypes[idx].transposingClef = ct;
         } else if (tag == "concertClef") {
             int idx = readStaffIdx(e);
-            clefTypes[idx]._concertClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
+            clefTypes[idx].concertClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "transposingClef") {
             int idx = readStaffIdx(e);
-            clefTypes[idx]._transposingClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
+            clefTypes[idx].transposingClef = TConv::fromXml(e.readAsciiText(), ClefType::G);
         } else if (tag == "stafflines") {
             int idx = readStaffIdx(e);
             staffLines[idx] = e.readInt();
@@ -952,7 +952,7 @@ ClefType defaultClef(int program)
     for (InstrumentGroup* g : instrumentGroups) {
         for (InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->channel[0].bank() == 0 && it->channel[0].program() == program) {
-                return it->clefTypes[0]._concertClef;
+                return it->clefTypes[0].concertClef;
             }
         }
     }

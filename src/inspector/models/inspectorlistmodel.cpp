@@ -24,6 +24,7 @@
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
+#include "parts/partssettingsmodel.h"
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
@@ -52,7 +53,7 @@ InspectorListModel::InspectorListModel(QObject* parent)
 void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet, bool isRangeSelection,
                                                         const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
-    removeUnusedModels(selectedElementKeySet, isRangeSelection);
+    removeUnusedModels(selectedElementKeySet, isRangeSelection, selectedElementList);
 
     InspectorSectionTypeSet buildingSectionTypeSet = AbstractInspectorModel::sectionTypesByElementKeys(selectedElementKeySet,
                                                                                                        isRangeSelection,
@@ -66,7 +67,7 @@ void InspectorListModel::buildModelsForSelectedElements(const ElementKeySet& sel
 void InspectorListModel::buildModelsForEmptySelection()
 {
     if (context()->currentNotation() == nullptr) {
-        removeUnusedModels({}, false /*isRangeSelection*/);
+        removeUnusedModels({}, false /*isRangeSelection*/, {});
         return;
     }
 
@@ -75,7 +76,7 @@ void InspectorListModel::buildModelsForEmptySelection()
         InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
-    removeUnusedModels({}, false /*isRangeSelection*/, persistentSectionList);
+    removeUnusedModels({}, false /*isRangeSelection*/, {}, persistentSectionList);
 
     createModelsBySectionType(persistentSectionList);
 }
@@ -100,7 +101,7 @@ void InspectorListModel::setElementList(const QList<mu::engraving::EngravingItem
         ElementKeySet newElementKeySet;
 
         for (const mu::engraving::EngravingItem* element : selectedElementList) {
-            newElementKeySet << ElementKey(element->type(), element->subtype());
+            newElementKeySet << AbstractInspectorModel::makeKey(element);
         }
 
         buildModelsForSelectedElements(newElementKeySet, selectionState == SelectionState::RANGE, selectedElementList);
@@ -139,6 +140,19 @@ int InspectorListModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
+void InspectorListModel::setInspectorVisible(bool visible)
+{
+    if (m_inspectorVisible == visible) {
+        return;
+    }
+
+    m_inspectorVisible = visible;
+
+    if (visible) {
+        updateElementList();
+    }
+}
+
 void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList,
                                                    const ElementKeySet& selectedElementKeySet)
 {
@@ -157,7 +171,8 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
             continue;
         }
 
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        int rows = rowCount();
+        beginInsertRows(QModelIndex(), rows, rows);
 
         AbstractInspectorModel* newModel = nullptr;
 
@@ -180,6 +195,9 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
             newModel = new ScoreAppearanceSettingsModel(this, m_repository);
             break;
+        case InspectorSectionType::SECTION_PARTS:
+            newModel = new PartsSettingsModel(this, m_repository);
+            break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;
         }
@@ -194,13 +212,14 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
 }
 
 void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySet,
-                                            bool isRangeSelection,
+                                            bool isRangeSelection, const QList<engraving::EngravingItem*>& selectedElementList,
                                             const QList<InspectorSectionType>& exclusions)
 {
     QList<AbstractInspectorModel*> modelsToRemove;
 
     InspectorModelTypeSet allowedModelTypes = AbstractInspectorModel::modelTypesByElementKeys(newElementKeySet);
-    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet, isRangeSelection);
+    InspectorSectionTypeSet allowedSectionTypes = AbstractInspectorModel::sectionTypesByElementKeys(newElementKeySet, isRangeSelection,
+                                                                                                    selectedElementList);
 
     for (AbstractInspectorModel* model : m_modelList) {
         if (exclusions.contains(model->sectionType())) {
@@ -292,22 +311,31 @@ void InspectorListModel::notifyModelsAboutNotationChanged()
 
 void InspectorListModel::listenSelectionChanged()
 {
-    auto updateElementList = [this]() {
-        INotationPtr notation = context()->currentNotation();
-        if (!notation) {
-            setElementList({});
-            return;
-        }
-
-        INotationSelectionPtr selection = notation->interaction()->selection();
-        auto elements = selection->elements();
-        setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
-    };
-
     updateElementList();
 
     INotationPtr notation = context()->currentNotation();
-    if (notation) {
-        notation->interaction()->selectionChanged().onNotify(this, updateElementList);
+    if (!notation) {
+        return;
     }
+
+    notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        updateElementList();
+    });
+}
+
+void InspectorListModel::updateElementList()
+{
+    if (!m_inspectorVisible) {
+        return;
+    }
+
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        setElementList({});
+        return;
+    }
+
+    INotationSelectionPtr selection = notation->interaction()->selection();
+    auto elements = selection->elements();
+    setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
 }

@@ -158,10 +158,6 @@ void NotationActionController::init()
     registerAction("sharp2", [this]() { toggleAccidental(AccidentalType::SHARP2); });
 
     registerAction("rest", &Interaction::putRestToSelection);
-    registerAction("rest-1", &Interaction::putRest, Duration(DurationType::V_WHOLE));
-    registerAction("rest-2", &Interaction::putRest, Duration(DurationType::V_HALF));
-    registerAction("rest-4", &Interaction::putRest, Duration(DurationType::V_QUARTER));
-    registerAction("rest-8", &Interaction::putRest, Duration(DurationType::V_EIGHTH));
 
     registerAction("add-marcato", [this]() { addArticulation(SymbolId::articMarcatoAbove); });
     registerAction("add-sforzato", [this]() { addArticulation(SymbolId::articAccentAbove); });
@@ -286,6 +282,7 @@ void NotationActionController::init()
     registerAction("edit-style", &Controller::openEditStyleDialog);
     registerAction("page-settings", &Controller::openPageSettingsDialog);
     registerAction("staff-properties", &Controller::openStaffProperties);
+    registerAction("edit-strings", &Controller::openEditStringsDialog);
     registerAction("add-remove-breaks", &Controller::openBreaksDialog);
     registerAction("transpose", &Controller::openTransposeDialog);
     registerAction("parts", &Controller::openPartsDialog);
@@ -317,7 +314,7 @@ void NotationActionController::init()
     registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
     registerAction("subtitle-text", [this]() { addText(TextStyleType::SUBTITLE); });
     registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
-    registerAction("poet-text", [this]() { addText(TextStyleType::POET); });
+    registerAction("poet-text", [this]() { addText(TextStyleType::LYRICIST); });
     registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
     registerAction("frame-text", [this]() { addText(TextStyleType::FRAME); });
 
@@ -348,6 +345,7 @@ void NotationActionController::init()
     registerAction("show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
     registerAction("show-frames", [this]() { toggleScoreConfig(ScoreConfigType::ShowFrames); });
     registerAction("show-pageborders", [this]() { toggleScoreConfig(ScoreConfigType::ShowPageMargins); });
+    registerAction("show-soundflags", [this]() { toggleScoreConfig(ScoreConfigType::ShowSoundFlags); });
     registerAction("show-irregular", [this]() { toggleScoreConfig(ScoreConfigType::MarkIrregularMeasures); });
 
     registerAction("concert-pitch", &Controller::toggleConcertPitch);
@@ -395,6 +393,8 @@ void NotationActionController::init()
     registerAction("text-i", &Interaction::toggleItalic, &Controller::isEditingText);
     registerAction("text-u", &Interaction::toggleUnderline, &Controller::isEditingText);
     registerAction("text-s", &Interaction::toggleStrike, &Controller::isEditingText);
+    registerAction("text-sub", &Interaction::toggleSubScript, &Controller::isEditingText);
+    registerAction("text-sup", &Interaction::toggleSuperScript, &Controller::isEditingText);
 
     registerAction("select-next-measure", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Measure, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
@@ -475,6 +475,13 @@ void NotationActionController::init()
     registerTabPadNoteAction("pad-note-512-TAB", Pad::NOTE512);
     registerTabPadNoteAction("pad-note-1024-TAB", Pad::NOTE1024);
     registerAction("rest-TAB", &Interaction::putRestToSelection);
+
+    registerAction("edit-strings", &Interaction::changeEnharmonicSpelling, true);
+
+    registerAction("standard-bend", [this]() { addGuitarBend(GuitarBendType::BEND); });
+    registerAction("pre-bend",  [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });
+    registerAction("grace-note-bend",  [this]() { addGuitarBend(GuitarBendType::GRACE_NOTE_BEND); });
+    registerAction("slight-bend",  [this]() { addGuitarBend(GuitarBendType::SLIGHT_BEND); });
 
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
@@ -1237,10 +1244,13 @@ void NotationActionController::addImage()
         return;
     }
 
-    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png)",
+    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
                                         trc("notation", "Scalable Vector Graphics") + " (*.svg)",
                                         trc("notation", "JPEG") + " (*.jpg *.jpeg)",
-                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)" };
+                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)",
+                                        trc("notation", "Bitmap") + " (*.bmp)",
+                                        trc("notation", "TIFF") + " (*.tif *.tiff)",
+                                        trc("notation", "All") + " (*)" };
 
     io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
@@ -1268,6 +1278,29 @@ void NotationActionController::addFiguredBass()
     }
 
     interaction->addFiguredBass();
+}
+
+void NotationActionController::addGuitarBend(GuitarBendType bendType)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddGuitarBend();
+    if (!ret) {
+        if (configuration()->needToShowAddGuitarBendErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
+            }
+        }
+        return;
+    }
+
+    interaction->addGuitarBend(bendType);
 }
 
 void NotationActionController::selectAllSimilarElements()
@@ -1543,6 +1576,11 @@ void NotationActionController::openPageSettingsDialog()
 void NotationActionController::openStaffProperties()
 {
     interactive()->open("musescore://notation/staffproperties");
+}
+
+void NotationActionController::openEditStringsDialog()
+{
+    interactive()->open("musescore://notation/editstrings");
 }
 
 void NotationActionController::openBreaksDialog()
@@ -1856,6 +1894,9 @@ void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
         break;
     case ScoreConfigType::ShowPageMargins:
         config.isShowPageMargins = !config.isShowPageMargins;
+        break;
+    case ScoreConfigType::ShowSoundFlags:
+        config.isShowSoundFlags = !config.isShowSoundFlags;
         break;
     case ScoreConfigType::MarkIrregularMeasures:
         config.isMarkIrregularMeasures = !config.isMarkIrregularMeasures;

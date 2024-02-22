@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MCURSOR_H__
-#define __MCURSOR_H__
+#ifndef MU_ENGRAVING_MCURSOR_H
+#define MU_ENGRAVING_MCURSOR_H
 
 #include "types/string.h"
 #include "types/fraction.h"
@@ -39,13 +39,6 @@ enum class Key;
 
 class MCursor
 {
-    MasterScore* _score;
-    Fraction _tick;
-    int _track;
-    Fraction _sig;
-
-    void createMeasures();
-
 public:
     MCursor(MasterScore* s = 0);
     void createScore(const String& s);
@@ -56,9 +49,18 @@ public:
     TimeSig* addTimeSig(const Fraction&);
 
     void move(int track, const Fraction& tick);
-    MasterScore* score() const { return _score; }
-    void setScore(MasterScore* s) { _score = s; }
-    void setTimeSig(Fraction f) { _sig = f; }
+    MasterScore* score() const { return m_score; }
+    void setScore(MasterScore* s) { m_score = s; }
+    void setTimeSig(Fraction f) { m_sig = f; }
+
+private:
+
+    void createMeasures();
+
+    MasterScore* m_score = nullptr;
+    Fraction m_tick;
+    int m_track = 0;
+    Fraction m_sig;
 };
 } // namespace mu::engraving
 #endif

@@ -361,7 +361,7 @@
     <measure number="7">
       <direction placement="below">
         <direction-type>
-          <pedal type="start" line="yes"/>
+          <pedal type="resume" line="yes" sign="yes"/>
           </direction-type>
         </direction>
       <note>
@@ -374,7 +374,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
@@ -412,7 +412,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes"/>
+          <pedal type="stop" line="yes" sign="no"/>
           </direction-type>
         </direction>
       </measure>

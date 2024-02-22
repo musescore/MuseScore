@@ -40,7 +40,7 @@ using namespace mu::engraving::rendering::dev;
 
 void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
-    Tuplet::LayoutData* ldata = item->mutLayoutData();
+    Tuplet::LayoutData* ldata = item->mutldata();
     if (item->elements().empty()) {
         LOGD("Tuplet::layout(): tuplet is empty");
         return;
@@ -54,6 +54,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //
     // create tuplet number if necessary
     //
+    const MStyle& style = ctx.conf().style();
     double _spatium = item->spatium();
     if (item->numberType() != TupletNumberType::NO_TEXT) {
         if (item->number() == nullptr) {
@@ -71,10 +72,21 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
         item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
         item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
-        if (item->numberType() == TupletNumberType::SHOW_NUMBER) {
-            item->number()->setXmlText(String(u"%1").arg(item->ratio().numerator()));
+
+        String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
+                              ? String(u"%1").arg(item->ratio().numerator())
+                              : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
+        if (style.styleB(Sid::tupletUseSymbols)) {
+            String smuflNum;
+            for (size_t i = 0; i < numberString.size(); ++i) {
+                smuflNum.append(u"<sym>tuplet");
+                smuflNum.append(numberString.at(i).unicode());
+                smuflNum.append(u"</sym>");
+            }
+            smuflNum.replace(String(u":"), String(u"Colon"));
+            item->number()->setXmlText(smuflNum);
         } else {
-            item->number()->setXmlText(String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator()));
+            item->number()->setXmlText(numberString);
         }
 
         item->setIsSmall(true);
@@ -84,7 +96,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 break;
             }
         }
-        item->number()->mutLayoutData()->setMag(item->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
+        item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
     } else {
         if (item->number()) {
             if (item->number()->selected()) {
@@ -150,7 +162,6 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //
     //    calculate bracket start and end point p1 p2
     //
-    const MStyle& style = ctx.conf().style();
     double maxSlope      = style.styleD(Sid::tupletMaxSlope);
     bool outOfStaff      = style.styleB(Sid::tupletOufOfStaff);
     double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();
@@ -161,15 +172,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double noteRight     = (style.styleMM(Sid::tupletNoteRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
 
     int move = 0;
-    item->setStaffIdx(cr1->vStaffIdx());
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
         // account for staff move when adjusting bracket to avoid staff
         // but don't attempt adjustment unless both endpoints are in same staff
         if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
             move = toChordRest(cr1)->staffMove();
-            if (move == 1) {
-                item->setStaffIdx(cr1->vStaffIdx());
-            }
         } else {
             outOfStaff = false;
         }
@@ -396,7 +403,10 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         item->p1().rx() = cr1->abbox().left() - noteLeft;
     }
     if (!cr2->isChord()) {
-        item->p2().rx() = cr2->abbox().right() + noteRight;
+        Shape shape = cr2->ldata()->shape();
+        auto shEl = shape.find_if([](const ShapeElement& i) { return i.item() && i.item()->isChordRest(); });
+        DO_ASSERT(shEl);
+        item->p2().rx() = shEl->translated(cr2->pagePos()).right() + noteRight;
     }
 
     item->setPos(0.0, 0.0);
@@ -404,7 +414,8 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     if (item->explicitParent()->isMeasure()) {
         System* s = toMeasure(item->explicitParent())->system();
         if (s) {
-            mp.ry() += s->staff(item->staffIdx())->y();
+            SysStaff* tupletStaff = s->staff(item->vStaffIdx());
+            mp.ry() += tupletStaff ? tupletStaff->y() : 0.0;
         }
     }
     item->p1() -= mp;
@@ -423,8 +434,9 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double x3 = 0.0;
     double numberWidth = 0.0;
     if (item->number()) {
-        TLayout::layout(item->number(), ctx);
-        numberWidth = item->number()->layoutData()->bbox().width();
+        Text::LayoutData* numLdata = item->number()->mutldata();
+        TLayout::layoutText(item->number(), numLdata);
+        numberWidth = numLdata->bbox().width();
 
         double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
         // for beamed tuplets, center number on beam - if they don't have a bracket
@@ -443,7 +455,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             x3 = item->p1().x() + deltax * .5;
         }
 
-        item->number()->setPos(PointF(x3, y3) - ldata->pos());
+        numLdata->setPos(PointF(x3, y3) - ldata->pos());
     }
 
     if (item->hasBracket()) {
@@ -453,7 +465,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             if (item->number()) {
                 //set width of bracket hole
                 double x     = x3 - numberWidth * .5 - _spatium * .5;
-                item->p1().rx() = std::min(item->p1().rx(), x - 0.5 * l1); // ensure enough space for the number
+                item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
                 item->bracketL[1] = PointF(item->p1().x(), item->p1().y() - l1);
@@ -461,7 +473,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
-                item->p2().rx() = std::max(item->p2().rx(), x + 0.5 * l1); // ensure enough space for the number
+                item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1); // ensure enough space for the number
                 y           = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketR[0] = PointF(x,   y - l1);
                 item->bracketR[1] = PointF(item->p2().x(), item->p2().y() - l1);
@@ -476,7 +488,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             if (item->number()) {
                 //set width of bracket hole
                 double x     = x3 - numberWidth * .5 - _spatium * .5;
-                item->p1().rx() = std::min(item->p1().rx(), x - 0.5 * l1); // ensure enough space for the number
+                item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
                 double y     = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
                 item->bracketL[1] = PointF(item->p1().x(), item->p1().y() + l1);
@@ -484,7 +496,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
                 //set width of bracket hole
                 x           = x3 + numberWidth * .5 + _spatium * .5;
-                item->p2().rx() = std::max(item->p2().rx(), x + 0.5 * l1);
+                item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1);
                 y           = item->p1().y() + (x - item->p1().x()) * slope;
                 item->bracketR[0] = PointF(x,   y + l1);
                 item->bracketR[1] = PointF(item->p2().x(), item->p2().y() + l1);
@@ -501,7 +513,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     // collect bounding box
     RectF r;
     if (item->number()) {
-        r |= item->number()->layoutData()->bbox().translated(item->number()->pos());
+        r |= item->number()->ldata()->bbox().translated(item->number()->pos());
         if (item->hasBracket()) {
             RectF b;
             b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());
@@ -515,7 +527,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     item->setbbox(r);
 
     if (outOfStaff && !item->cross()) {
-        Autoplace::autoplaceMeasureElement(item, item->mutLayoutData(), item->isUp(), /* add to skyline */ true);
+        Autoplace::autoplaceMeasureElement(item, item->mutldata(), item->isUp(), /* add to skyline */ true);
     }
 }
 
@@ -541,7 +553,7 @@ void TupletLayout::layout(DurationElement* de, LayoutContext& ctx)
         }
     }
     // layout t
-    TLayout::layout(t, ctx);
+    TLayout::layoutTuplet(t, ctx);
 }
 
 bool TupletLayout::isTopTuplet(ChordRest* cr)

@@ -23,7 +23,7 @@
 
 #include <thread>
 
-#include "concurrency/taskscheduler.h"
+#include "global/concurrency/taskscheduler.h"
 
 using namespace mu::audio;
 

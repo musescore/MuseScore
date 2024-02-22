@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 
 #include "accessibilityconfigurationstub.h"
+#include "accessibilitycontrollerstub.h"
 
 using namespace mu::accessibility;
 using namespace mu::modularity;
@@ -36,4 +37,5 @@ std::string AccessibilityModule::moduleName() const
 void AccessibilityModule::registerExports()
 {
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfigurationStub());
+    ioc()->registerExport<IAccessibilityController>(moduleName(), new AccessibilityControllerStub());
 }

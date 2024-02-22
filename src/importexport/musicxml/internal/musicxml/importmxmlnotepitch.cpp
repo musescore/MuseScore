@@ -20,12 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "importmxmllogger.h"
 #include "importmxmlnotepitch.h"
-#include "musicxmlsupport.h"
+
+#include "draw/types/color.h"
 
 #include "engraving/dom/factory.h"
 #include "engraving/dom/score.h"
+
+#include "musicxmlsupport.h"
+#include "importmxmllogger.h"
 
 #include "log.h"
 
@@ -43,22 +46,30 @@ namespace mu::engraving {
 
 // TODO: split in reading parameters versus creation
 
-static Accidental* accidental(QXmlStreamReader& e, Score* score)
+static Accidental* accidental(XmlStreamReader& e, Score* score)
 {
-    bool cautionary = e.attributes().value("cautionary") == "yes";
-    bool editorial = e.attributes().value("editorial") == "yes";
-    bool parentheses = e.attributes().value("parentheses") == "yes";
-    QString smufl = e.attributes().value("smufl").toString();
+    const bool cautionary = e.asciiAttribute("cautionary") == "yes";
+    const bool editorial = e.asciiAttribute("editorial") == "yes";
+    const bool parentheses = e.asciiAttribute("parentheses") == "yes";
+    const bool brackets = e.asciiAttribute("bracket") == "yes";
+    const Color accColor = Color(e.asciiAttribute("color").ascii());
+    String smufl = e.attribute("smufl");
 
-    const auto s = e.readElementText();
-    const auto type = mxmlString2accidentalType(s, smufl);
+    const String s = e.readText();
+    const AccidentalType type = mxmlString2accidentalType(s, smufl);
 
     if (type != AccidentalType::NONE) {
         auto a = Factory::createAccidental(score->dummy());
         a->setAccidentalType(type);
-        if (editorial || cautionary || parentheses) {
-            a->setBracket(AccidentalBracket(cautionary || parentheses));
+        if (cautionary || parentheses) {
+            a->setBracket(AccidentalBracket(AccidentalBracket::PARENTHESIS));
             a->setRole(AccidentalRole::USER);
+        } else if (editorial || brackets) {
+            a->setBracket(AccidentalBracket(AccidentalBracket::BRACKET));
+            a->setRole(AccidentalRole::USER);
+        }
+        if (accColor.isValid()) {
+            a->setColor(accColor);
         }
         return a;
     }
@@ -74,26 +85,26 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
  Handle <display-step> and <display-octave> for <rest> and <unpitched>
  */
 
-void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
+void MxmlNotePitch::displayStepOctave(XmlStreamReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "display-step") {
-            const auto step = e.readElementText();
-            int pos = QString("CDEFGAB").indexOf(step);
+            const String step = e.readText();
+            int pos = static_cast<int>(String(u"CDEFGAB").indexOf(step));
             if (step.size() == 1 && pos >= 0 && pos < 7) {
-                _displayStep = pos;
+                m_displayStep = pos;
             } else {
-                //logError(QString("invalid step '%1'").arg(strStep));
-                LOGD("invalid step '%s'", qPrintable(step));                // TODO
+                //logError(String("invalid step '%1'").arg(strStep));
+                LOGD("invalid step '%s'", muPrintable(step));                // TODO
             }
         } else if (e.name() == "display-octave") {
-            const auto oct = e.readElementText();
+            const String oct = e.readText();
             bool ok;
-            _displayOctave = oct.toInt(&ok);
-            if (!ok || _displayOctave < 0 || _displayOctave > 9) {
-                //logError(QString("invalid octave '%1'").arg(strOct));
-                LOGD("invalid octave '%s'", qPrintable(oct));               // TODO
-                _displayOctave = -1;
+            m_displayOctave = oct.toInt(&ok);
+            if (!ok || m_displayOctave < 0 || m_displayOctave > 9) {
+                //logError(String("invalid octave '%1'").arg(strOct));
+                LOGD("invalid octave '%s'", muPrintable(oct));               // TODO
+                m_displayOctave = -1;
             }
         } else {
             e.skipCurrentElement();                         // TODO log
@@ -109,43 +120,43 @@ void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
  Parse the /score-partwise/part/measure/note/pitch node.
  */
 
-void mxmlNotePitch::pitch(QXmlStreamReader& e)
+void MxmlNotePitch::pitch(XmlStreamReader& e)
 {
     // defaults
-    _step = -1;
-    _alter = 0;
-    _octave = -1;
+    m_step = -1;
+    m_alter = 0;
+    m_octave = -1;
 
     while (e.readNextStartElement()) {
         if (e.name() == "alter") {
-            const auto alter = e.readElementText();
+            const String alter = e.readText();
             bool ok;
-            _alter = MxmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
-            if (!ok || _alter < -2 || _alter > 2) {
-                _logger->logError(QString("invalid alter '%1'").arg(alter), &e);
+            m_alter = MxmlSupport::stringToInt(alter, &ok);             // fractions not supported by mscore
+            if (!ok || m_alter < -2 || m_alter > 2) {
+                m_logger->logError(String(u"invalid alter '%1'").arg(alter), &e);
                 bool ok2;
                 const auto altervalue = alter.toDouble(&ok2);
-                if (ok2 && (qAbs(altervalue) < 2.0) && (_accType == AccidentalType::NONE)) {
+                if (ok2 && (std::abs(altervalue) < 2.0) && (m_accType == AccidentalType::NONE)) {
                     // try to see if a microtonal accidental is needed
-                    _accType = microtonalGuess(altervalue);
+                    m_accType = microtonalGuess(altervalue);
                 }
-                _alter = 0;
+                m_alter = 0;
             }
         } else if (e.name() == "octave") {
-            const auto oct = e.readElementText();
+            const String oct = e.readText();
             bool ok;
-            _octave = oct.toInt(&ok);
-            if (!ok || _octave < 0 || _octave > 9) {
-                _logger->logError(QString("invalid octave '%1'").arg(oct), &e);
-                _octave = -1;
+            m_octave = oct.toInt(&ok);
+            if (!ok || m_octave < 0 || m_octave > 9) {
+                m_logger->logError(String(u"invalid octave '%1'").arg(oct), &e);
+                m_octave = -1;
             }
         } else if (e.name() == "step") {
-            const auto step = e.readElementText();
-            const auto pos = QString("CDEFGAB").indexOf(step);
-            if (step.size() == 1 && pos >= 0 && pos < 7) {
-                _step = pos;
+            const String step = e.readText();
+            const size_t pos = String(u"CDEFGAB").indexOf(step);
+            if (step.size() == 1 && pos < 7) {
+                m_step = int(pos);
             } else {
-                _logger->logError(QString("invalid step '%1'").arg(step), &e);
+                m_logger->logError(String(u"invalid step '%1'").arg(step), &e);
             }
         } else {
             // TODO skipLogCurrElem();
@@ -163,15 +174,15 @@ void mxmlNotePitch::pitch(QXmlStreamReader& e)
  Return true if handled.
  */
 
-bool mxmlNotePitch::readProperties(QXmlStreamReader& e, Score* score)
+bool MxmlNotePitch::readProperties(XmlStreamReader& e, Score* score)
 {
-    const QStringRef& tag(e.name());
+    const AsciiStringView tag(e.name());
 
     if (tag == "accidental") {
-        _acc = accidental(e, score);
+        m_acc = accidental(e, score);
         return true;
     } else if (tag == "unpitched") {
-        _unpitched = true;
+        m_unpitched = true;
         displayStepOctave(e);
         return true;
     } else if (tag == "pitch") {

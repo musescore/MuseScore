@@ -32,10 +32,12 @@ BaseSection {
 
     property alias advanceToNextNote: advanceToNextNoteBox.checked
     property alias colorNotes: colorNotesBox.checked
+    property alias warnGuitarBends: warnBendsBox.checked
     property alias delayBetweenNotes: delayBetweenNotesControl.currentValue
 
     signal advanceToNextNoteChangeRequested(bool advance)
     signal colorNotesChangeRequested(bool color)
+    signal warnGuitarBendsChangeRequested(bool warn)
     signal delayBetweenNotesChangeRequested(int delay)
 
     CheckBox {
@@ -68,6 +70,21 @@ BaseSection {
         }
     }
 
+    CheckBox {
+        id: warnBendsBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Color guitar bends outside of playable range")
+
+        navigation.name: "WarnBendBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
+
+        onClicked: {
+            root.warnGuitarBendsChangeRequested(!checked)
+        }
+    }
+
     IncrementalPropertyControlWithTitle {
         id: delayBetweenNotesControl
 
@@ -80,7 +97,7 @@ BaseSection {
 
         navigation.name: "DelayBetweenNotesControl"
         navigation.panel: root.navigation
-        navigation.row: 2
+        navigation.row: 3
 
         onValueEdited: function(newValue) {
             root.delayBetweenNotesChangeRequested(newValue)

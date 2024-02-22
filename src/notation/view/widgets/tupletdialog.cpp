@@ -52,10 +52,13 @@ TupletDialog::TupletDialog(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 TupletDialog::TupletDialog(const TupletDialog& other)
     : QDialog(other.parentWidget())
 {
 }
+
+#endif
 
 //---------------------------------------------------------
 //   defaultToStyleSettings

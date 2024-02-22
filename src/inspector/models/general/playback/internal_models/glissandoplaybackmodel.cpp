@@ -22,8 +22,10 @@
 #include "glissandoplaybackmodel.h"
 
 #include "translation.h"
+#include "dom/glissando.h"
 
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -42,6 +44,7 @@ void GlissandoPlaybackModel::createProperties()
 void GlissandoPlaybackModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::GLISSANDO);
+    updateIsHarpGliss();
 }
 
 void GlissandoPlaybackModel::loadProperties()
@@ -52,6 +55,35 @@ void GlissandoPlaybackModel::loadProperties()
 void GlissandoPlaybackModel::resetProperties()
 {
     m_styleType->resetToDefault();
+}
+
+void GlissandoPlaybackModel::updateIsHarpGliss()
+{
+    bool isHarpGliss = false;
+    for (const EngravingItem* element : m_elementList) {
+        if (element->isGlissando()) {
+            if (toGlissando(element)->isHarpGliss().value_or(false)) {
+                isHarpGliss = true;
+                break;
+            }
+        }
+    }
+    setIsHarpGliss(isHarpGliss);
+}
+
+bool GlissandoPlaybackModel::isHarpGliss() const
+{
+    return m_isHarpGliss;
+}
+
+void GlissandoPlaybackModel::setIsHarpGliss(bool isHarpGliss)
+{
+    if (isHarpGliss == m_isHarpGliss) {
+        return;
+    }
+
+    m_isHarpGliss = isHarpGliss;
+    emit isHarpGlissChanged(m_isHarpGliss);
 }
 
 PropertyItem* GlissandoPlaybackModel::styleType() const

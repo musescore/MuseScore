@@ -30,6 +30,8 @@
 #include "io/ifilesystem.h"
 #include "io/path.h"
 
+#include "meiconverter.h"
+
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/element.h"
 #include "thirdparty/libmei/shared.h"
@@ -40,6 +42,7 @@ namespace mu::engraving {
 class Chord;
 class ChordRest;
 class EngravingItem;
+class Lyrics;
 class Measure;
 class Note;
 class Part;
@@ -82,7 +85,7 @@ private:
     bool readScore(pugi::xml_node root);
     bool readScoreDef(pugi::xml_node scoreDefNode, bool isInitial);
     bool readPgHead(pugi::xml_node pgHeadNode);
-    bool readLines(pugi::xml_node parentNode, StringList& lines);
+    bool readLines(pugi::xml_node parentNode, StringList& lines, size_t& line);
     bool readLinesWithSmufl(pugi::xml_node parentNode, StringList& lines);
     bool readStaffDefs(pugi::xml_node parentNode);
     bool readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int column, size_t& idx);
@@ -98,7 +101,10 @@ private:
      * Methods for parsing MEI elements within a <layer>
      */
     bool readElements(pugi::xml_node parentNode, engraving::Measure* measure, int track, int& ticks);
+    bool readArtics(pugi::xml_node parentNode, engraving::Chord* chord);
+    bool readArtic(pugi::xml_node articNode, engraving::Chord* chord);
     bool readBeam(pugi::xml_node beamNode, engraving::Measure* measure, int track, int& ticks);
+    bool readBTrem(pugi::xml_node bTremNode, engraving::Measure* measure, int track, int& ticks);
     bool readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, int& ticks);
     bool readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, int& ticks);
     bool readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, int& ticks);
@@ -115,16 +121,20 @@ private:
      * Methods for parsing MEI control events (within <measure>)
      */
     bool readControlEvents(pugi::xml_node parentNode, engraving::Measure* measure);
+    bool readArpeg(pugi::xml_node arpegNode, engraving::Measure* measure);
     bool readBreath(pugi::xml_node breathNode, engraving::Measure* measure);
     bool readCaesura(pugi::xml_node caesuraNode, engraving::Measure* measure);
     bool readDir(pugi::xml_node dirNote, engraving::Measure* measure);
     bool readDynam(pugi::xml_node dynamNode, engraving::Measure* measure);
+    bool readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBass);
+    bool readFb(pugi::xml_node harmNode, engraving::Measure* measure);
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
     bool readHairpin(pugi::xml_node hairpinNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);
     bool readMordent(pugi::xml_node mordentNode, engraving::Measure* measure);
     bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
     bool readOrnam(pugi::xml_node ornamNode, engraving::Measure* measure);
+    bool readPedal(pugi::xml_node pedalNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
@@ -166,16 +176,18 @@ private:
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);
-    engraving::EngravingItem* addArticulation(const libmei::Element& meiElement, engraving::Measure* measure);
+    engraving::EngravingItem* addToChordRest(const libmei::Element& meiElement, engraving::Measure* measure,
+                                             engraving::Chord* chord = nullptr);
     std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
     engraving::Note* findStartNote(const libmei::Element& meiElement);
     engraving::Note* findEndNote(pugi::xml_node controlNode);
+    const std::list<engraving::ChordRest*> findPlistChordRests(pugi::xml_node controlNode);
     void clearGraceNotes();
-    bool hasLyricsToExtend(track_idx_t track, int no);
-    const std::pair<engraving::Lyrics*, engraving::ChordRest*>& getLyricsToExtend(track_idx_t track, int no);
-    void addChordtoLyricsToExtend(ChordRest* chordRest);
+    bool hasLyricsToExtend(engraving::track_idx_t track, int no);
+    const std::pair<engraving::Lyrics*, engraving::ChordRest*>& getLyricsToExtend(engraving::track_idx_t track, int no);
+    void addChordtoLyricsToExtend(engraving::ChordRest* chordRest);
     void extendLyrics(const std::pair<engraving::Lyrics*, engraving::ChordRest*>& lyricsToExtend);
     void extendLyrics();
     void setOrnamentAccid(engraving::Ornament* ornament, const Convert::OrnamStruct& ornamSt);
@@ -212,16 +224,21 @@ private:
     std::map<std::string, engraving::Note*> m_startIdNotes;
     /* A map for endId and corresponding engraving::Note */
     std::map<std::string, engraving::Note*> m_endIdNotes;
+    /* A map for plist values and corresponding engraving::ChordRest */
+    std::map<std::string, engraving::ChordRest*> m_plistValueChordRests;
     /* A map for open spanners that needs to be ended */
     std::map<engraving::Spanner*, pugi::xml_node> m_openSpannerMap;
+    /* A map for open arpeg that needs to be spanned */
+    std::map<engraving::Arpeggio*, pugi::xml_node> m_openArpegMap;
 
     /** A map of a map for lyrics with extender that needs to be extended */
-    std::map<track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
+    std::map<engraving::track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
 
     engraving::Tuplet* m_tuplet;
     engraving::BeamMode m_beamBeginMode;
     engraving::BeamMode m_graceBeamBeginMode;
     engraving::Chord* m_lastChord;
+    std::string m_tremoloId;
 
     std::list<engraving::Chord*> m_graceNotes;
     GraceReading m_readingGraceNotes;

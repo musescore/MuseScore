@@ -86,8 +86,8 @@ DockPage {
             contentBottomPadding: 2
 
             PlaybackToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
-                navigationPanel.order: 3
+                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
             }

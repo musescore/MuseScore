@@ -31,7 +31,6 @@
 #include "rw/xmlreader.h"
 
 #include "articulation.h"
-#include "tremolo.h"
 
 #include "log.h"
 
@@ -120,9 +119,9 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
 
     const AsciiStringView tag(e.name());
     if (tag == "head") {
-        _drum[pitch].notehead = TConv::fromXml(e.readAsciiText(), NoteHeadGroup::HEAD_NORMAL);
+        m_drum[pitch].notehead = TConv::fromXml(e.readAsciiText(), NoteHeadGroup::HEAD_NORMAL);
     } else if (tag == "noteheads") {
-        _drum[pitch].notehead = NoteHeadGroup::HEAD_CUSTOM;
+        m_drum[pitch].notehead = NoteHeadGroup::HEAD_CUSTOM;
         while (e.readNextStartElement()) {
             const AsciiStringView nhTag(e.name());
             int noteType = int(TConv::fromXml(nhTag, NoteHeadType::HEAD_AUTO));
@@ -130,21 +129,21 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
                 return false;
             }
 
-            _drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readAsciiText());
+            m_drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readAsciiText());
         }
     } else if (tag == "line") {
-        _drum[pitch].line = e.readInt();
+        m_drum[pitch].line = e.readInt();
     } else if (tag == "voice") {
-        _drum[pitch].voice = e.readInt();
+        m_drum[pitch].voice = e.readInt();
     } else if (tag == "name") {
-        _drum[pitch].name = e.readText();
+        m_drum[pitch].name = e.readText();
     } else if (tag == "stem") {
-        _drum[pitch].stemDirection = DirectionV(e.readInt());
+        m_drum[pitch].stemDirection = DirectionV(e.readInt());
     } else if (tag == "shortcut") {
         bool isNum;
         AsciiStringView val = e.readAsciiText();
         int i = val.toInt(&isNum);
-        _drum[pitch].shortcut = isNum ? i : val.at(0).toUpper();
+        m_drum[pitch].shortcut = isNum ? i : val.at(0).toUpper();
     } else if (tag == "variants") {
         while (e.readNextStartElement()) {
             const AsciiStringView tagv(e.name());
@@ -159,7 +158,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
                         div.tremolo = TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO);
                     }
                 }
-                _drum[pitch].addVariant(div);
+                m_drum[pitch].addVariant(div);
             }
         }
     } else {
@@ -194,10 +193,10 @@ void Drumset::load(XmlReader& e)
 void Drumset::clear()
 {
     for (int i = 0; i < 128; ++i) {
-        _drum[i].name = u"";
-        _drum[i].notehead = NoteHeadGroup::HEAD_INVALID;
-        _drum[i].shortcut = 0;
-        _drum[i].variants.clear();
+        m_drum[i].name = u"";
+        m_drum[i].notehead = NoteHeadGroup::HEAD_INVALID;
+        m_drum[i].shortcut = 0;
+        m_drum[i].variants.clear();
     }
 }
 
@@ -244,12 +243,13 @@ int Drumset::prevPitch(int ii) const
 /// find a variant for the given pitch with matching chord articulation and tremolo
 //---------------------------------------------------------
 
-DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation*> articulations, Tremolo* tremolo) const
+DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation*>& articulations, TremoloType tremType) const
 {
     DrumInstrumentVariant div;
     auto vs = variants(p);
     for (const auto& v : vs) {
-        bool matchTremolo = (!tremolo && v.tremolo == TremoloType::INVALID_TREMOLO) || (tremolo && v.tremolo == tremolo->tremoloType());
+        bool matchTremolo = ((tremType == TremoloType::INVALID_TREMOLO) && (v.tremolo == TremoloType::INVALID_TREMOLO))
+                            || (v.tremolo == tremType);
         bool matchArticulation = v.articulationName.empty() && articulations.empty();
         for (auto a : articulations) {
             matchArticulation = a->articulationName() == v.articulationName;

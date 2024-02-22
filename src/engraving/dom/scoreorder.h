@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef __SCOREORDER_H__
-#define __SCOREORDER_H__
+#ifndef MU_ENGRAVING_SCOREORDER_H
+#define MU_ENGRAVING_SCOREORDER_H
 
 #include <map>
 
@@ -45,9 +45,9 @@ struct ScoreGroup
                                 // !isEmpty() : equal to <unsorted group="unsorted"/>
     bool notUnsorted = true;    // not an unsorted group
 
-    bool bracket { false };
-    bool barLineSpan { true };
-    bool thinBracket { true };
+    bool bracket = false;
+    bool barLineSpan = true;
+    bool thinBracket = true;
 };
 
 //---------------------------------------------------------

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STRETCHED_BEND_H__
-#define __STRETCHED_BEND_H__
+#ifndef MU_ENGRAVING_STRETCHED_BEND_H
+#define MU_ENGRAVING_STRETCHED_BEND_H
 
 #include "engravingitem.h"
 #include "draw/types/font.h"
@@ -33,6 +33,12 @@ class Factory;
 //---------------------------------------------------------
 //   @@ StretchedBend
 //---------------------------------------------------------
+
+/**********************************************************
+ *    OBSOLETE CLASS
+ *    Used to import GP bends before version 4.2. Now
+ *    replaced by the GuitarBend class.
+ *********************************************************/
 
 class StretchedBend final : public EngravingItem
 {

@@ -36,6 +36,7 @@
 #include "figuredbass.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
+#include "hook.h"
 #include "instrchange.h"
 #include "keysig.h"
 #include "lyrics.h"
@@ -70,7 +71,6 @@ ChordRest::ChordRest(const ElementType& type, Segment* parent)
     m_staffMove    = 0;
     m_beam         = 0;
     m_tabDur       = 0;
-    m_up           = true;
     m_beamMode     = BeamMode::AUTO;
     m_isSmall     = false;
     m_melismaEnd   = false;
@@ -87,7 +87,6 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
                            // simply copied from another CR
 
     m_beamMode     = cr.m_beamMode;
-    m_up           = cr.m_up;
     m_isSmall     = cr.m_isSmall;
     m_melismaEnd   = cr.m_melismaEnd;
     m_crossMeasure = cr.m_crossMeasure;
@@ -124,8 +123,14 @@ ChordRest::~ChordRest()
     DeleteAll(m_lyrics);
     DeleteAll(m_el);
     delete m_tabDur;
-    if (m_beam && m_beam->contains(this)) {
-        delete m_beam;     // Beam destructor removes references to the deleted object
+
+    if (m_beam) {
+        mu::remove(m_beam->elements(), this);
+        m_beam = nullptr;
+    }
+
+    if (m_beamlet) {
+        m_beamlet = nullptr;
     }
 }
 
@@ -168,7 +173,7 @@ EngravingItem* ChordRest::drop(EditData& data)
 
     case ElementType::BAR_LINE:
         if (data.control()) {
-            score()->splitMeasure(segment());
+            score()->cmdSplitMeasure(this);
         } else {
             BarLine* bl = toBarLine(e);
             bl->setPos(PointF());
@@ -194,8 +199,6 @@ EngravingItem* ChordRest::drop(EditData& data)
                 l->setTrack(st->idx() * VOICES);
                 l->setParent(seg);
                 score->undoAddElement(l);
-
-                renderer()->layoutItem(l);
             }
         }
         delete e;
@@ -243,6 +246,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::FRET_DIAGRAM:
     case ElementType::TREMOLOBAR:
     case ElementType::SYMBOL:
+    case ElementType::IMAGE:
         e->setTrack(track());
         e->setParent(segment());
         score()->undoAddElement(e);
@@ -288,6 +292,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::STICKING:
     case ElementType::STAFF_STATE:
     case ElementType::HARP_DIAGRAM:
@@ -356,11 +361,6 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
         return e;
     }
-
-    case ElementType::IMAGE:
-        e->setParent(segment());
-        score()->undoAddElement(e);
-        return e;
 
     case ElementType::ACTION_ICON:
     {
@@ -449,7 +449,6 @@ void ChordRest::setBeam(Beam* b)
 void ChordRest::setBeamlet(BeamSegment* b)
 {
     m_beamlet = b;
-    segment()->createShape(vStaffIdx());
 }
 
 //---------------------------------------------------------
@@ -597,21 +596,27 @@ void ChordRest::removeDeleteBeam(bool beamed)
         Beam* b = m_beam;
         m_beam->remove(this);
         if (b->empty()) {
-            score()->undoRemoveElement(b);
+            score()->doUndoRemoveElement(b);
         } else {
             renderer()->layoutBeam1(b);
         }
     }
     if (!beamed && isChord()) {
-        renderer()->layoutStem(toChord(this));
+        Chord* c = toChord(this);
+        if (c->shouldHaveHook()) {
+            if (!c->hook()) {
+                c->createHook();
+            }
+        } else if (c->hook()) {
+            score()->doUndoRemoveElement(c->hook());
+        }
+        renderer()->layoutStem(c);
     }
 }
 
 void ChordRest::computeUp()
 {
     UNREACHABLE;
-    m_usesAutoUp = false;
-    m_up = true;
 }
 
 //---------------------------------------------------------
@@ -1120,44 +1125,6 @@ void ChordRest::setMelismaEnd(bool v)
 }
 
 //---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape ChordRest::shape() const
-{
-    Shape shape;
-    {
-        double x1 = 1000000.0;
-        double x2 = -1000000.0;
-        for (Lyrics* l : m_lyrics) {
-            if (!l || !l->addToSkyline()) {
-                continue;
-            }
-            double lmargin = style().styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
-            double rmargin = lmargin;
-            LyricsSyllabic syl = l->syllabic();
-            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && style().styleB(Sid::lyricsDashForce)) {
-                rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
-            }
-            // for horizontal spacing we only need the lyrics width:
-            x1 = std::min(x1, l->layoutData()->bbox().x() - lmargin + l->pos().x());
-            x2 = std::max(x2, l->layoutData()->bbox().x() + l->layoutData()->bbox().width() + rmargin + l->pos().x());
-            if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
-                x2 += spatium();
-            }
-            shape.addHorizontalSpacing(l, x1, x2);
-        }
-    }
-
-    if (isMelismaEnd()) {
-        double right = rightEdge();
-        shape.addHorizontalSpacing(nullptr, right, right);
-    }
-
-    return shape;
-}
-
-//---------------------------------------------------------
 //   lyrics
 //---------------------------------------------------------
 
@@ -1211,7 +1178,7 @@ int ChordRest::lastVerse(PlacementV p) const
 void ChordRest::removeMarkings(bool /* keepTremolo */)
 {
     DeleteAll(el());
-    el().clear();
+    clearEls();
     DeleteAll(lyrics());
     lyrics().clear();
 }
@@ -1266,7 +1233,7 @@ void ChordRest::undoAddAnnotation(EngravingItem* a)
 
 void ChordRest::checkStaffMoveValidity()
 {
-    if (!staff()) {
+    if (!staff() || !staff()->visible()) {
         return;
     }
     staff_idx_t idx = m_staffMove ? vStaffIdx() : staffIdx() + m_storedStaffMove;
@@ -1278,7 +1245,7 @@ void ChordRest::checkStaffMoveValidity()
     staff_idx_t minStaff = part()->startTrack() / VOICES;
     staff_idx_t maxStaff = part()->endTrack() / VOICES;
     bool isDestinationValid = targetStaff && targetStaff->visible() && idx >= minStaff && idx < maxStaff
-                              && targetStaffType->group() == baseStaffType->group();
+                              && targetStaffType->group() == baseStaffType->group() && targetStaff->isLinked() == baseStaff->isLinked();
     if (!isDestinationValid) {
         LOGD("staffMove out of scope %zu + %d min %zu max %zu",
              staffIdx(), m_staffMove, minStaff, maxStaff);
@@ -1288,9 +1255,15 @@ void ChordRest::checkStaffMoveValidity()
             // destination staff becomes valid (e.g. unihidden)
             m_storedStaffMove = m_staffMove;
         }
-        undoChangeProperty(Pid::STAFF_MOVE, 0);
+        setStaffMove(0);
     } else if (!m_staffMove && m_storedStaffMove) {
-        undoChangeProperty(Pid::STAFF_MOVE, m_storedStaffMove);
+        setStaffMove(m_storedStaffMove);
+        m_storedStaffMove = 0;
+    }
+
+    if (isDestinationValid) {
+        // Move valid, clear stored move
+        m_storedStaffMove = 0;
     }
 }
 }

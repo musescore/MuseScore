@@ -18,7 +18,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-JOBS=4
+
+if [ $(which nproc) ]; then
+    JOBS=$(nproc --all)
+else
+    JOBS=4
+fi
 TARGET=release
 
 MUSESCORE_INSTALL_DIR=${MUSESCORE_INSTALL_DIR:-"../build.install"}
@@ -27,7 +32,7 @@ MUSESCORE_BUILD_CONFIGURATION=${MUSESCORE_BUILD_CONFIGURATION:-"app"}
 MUSESCORE_BUILD_MODE=${MUSESCORE_BUILD_MODE:-"dev"}
 MUSESCORE_BUILD_NUMBER=${MUSESCORE_BUILD_NUMBER:-"12345678"}
 MUSESCORE_REVISION=${MUSESCORE_REVISION:-"abc123456"}
-MUSESCORE_RUN_LRELEASE=${MUSESCORE_RUN_LRELEASE:-"OFF"}
+MUSESCORE_RUN_LRELEASE=${MUSESCORE_RUN_LRELEASE:-"ON"}
 MUSESCORE_CRASHREPORT_URL=${MUSESCORE_CRASHREPORT_URL:-""}
 MUSESCORE_BUILD_CRASHPAD_CLIENT=${MUSESCORE_BUILD_CRASHPAD_CLIENT:-"ON"}
 MUSESCORE_DEBUGLEVEL_ENABLED="OFF"
@@ -35,10 +40,11 @@ MUSESCORE_VST3_SDK_PATH=${MUSESCORE_VST3_SDK_PATH:-""}
 MUSESCORE_DOWNLOAD_SOUNDFONT=${MUSESCORE_DOWNLOAD_SOUNDFONT:-"ON"}
 MUSESCORE_BUILD_UNIT_TESTS=${MUSESCORE_BUILD_UNIT_TESTS:-"OFF"}
 MUSESCORE_NO_RPATH=${MUSESCORE_NO_RPATH:-"OFF"}
-MUSESCORE_YOUTUBE_API_KEY=${MUSESCORE_YOUTUBE_API_KEY:-""} 
+MUSESCORE_YOUTUBE_API_KEY=${MUSESCORE_YOUTUBE_API_KEY:-""}
 MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"}
 MUSESCORE_BUILD_VST_MODULE=${MUSESCORE_BUILD_VST_MODULE:-"OFF"}
 MUSESCORE_BUILD_VIDEOEXPORT_MODULE=${MUSESCORE_BUILD_VIDEOEXPORT_MODULE:-"OFF"}
+MUSESCORE_QT5_COMPAT=${MUSESCORE_QT5_COMPAT:-"ON"}
 
 SHOW_HELP=0
 while [[ "$#" -gt 0 ]]; do
@@ -52,8 +58,16 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [ $SHOW_HELP -eq 1 ]; then
-	echo "TODO..."
-	exit 0
+    echo -e "Usage: ${0}\n" \
+	 "\t-t, --target <string> [default: ${TARGET}]\n" \
+	 "\t\tProvided targets: \n" \
+	 "\t\trelease, debug, relwithdebinfo, install, installrelwithdebinfo, \n" \
+	 "\t\tinstalldebug, clean, compile_commands, revision, appimage\n" \
+	 "\t-j, --jobs <number> [default: ${JOBS}]\n" \
+	 "\t\t Number of parallel compilations jobs\n" \
+	 "\t-h, --help\n"\
+	 "\t\t Show this help"
+    exit 0
 fi
 
 cmake --version
@@ -83,11 +97,12 @@ function do_build() {
         -DMUE_BUILD_CRASHPAD_CLIENT="${MUSESCORE_BUILD_CRASHPAD_CLIENT}" \
         -DMUE_CRASH_REPORT_URL="${MUSESCORE_CRASHREPORT_URL}" \
         -DMUE_LOGGER_DEBUGLEVEL_ENABLED="${MUSESCORE_DEBUGLEVEL_ENABLED}" \
+        -DMUE_COMPILE_QT5_COMPAT="${MUSESCORE_QT5_COMPAT}" \
         -DVST3_SDK_PATH="${MUSESCORE_VST3_SDK_PATH}" \
         -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
 
 
-    ninja -j $JOBS 
+    ninja -j $JOBS
 }
 
 
@@ -97,7 +112,7 @@ case $TARGET in
         mkdir -p build.release
         cd build.release
         do_build Release
-        ;; 
+        ;;
 
     debug)
         mkdir -p build.debug
@@ -109,7 +124,7 @@ case $TARGET in
         mkdir -p build.release
         cd build.release
         do_build RelWithDebInfo
-        ;;     
+        ;;
 
     install)
         mkdir -p build.release
@@ -123,19 +138,19 @@ case $TARGET in
         cd build.release
         do_build RelWithDebInfo
         ninja install
-        ;;    
+        ;;
 
     installdebug)
         mkdir -p build.debug
         cd build.debug
         do_build Debug
         ninja install
-        ;; 
+        ;;
 
     clean)
         rm -rf build.debug build.release
-        ;; 
-    
+        ;;
+
     compile_commands)
         # Generate compile_commands.json file (https://clang.llvm.org/docs/JSONCompilationDatabase.html)
         mkdir -p build.tooldata
@@ -162,8 +177,6 @@ case $TARGET in
             -DMUE_LOGGER_DEBUGLEVEL_ENABLED="${MUSESCORE_DEBUGLEVEL_ENABLED}" \
             -DVST3_SDK_PATH="${MUSESCORE_VST3_SDK_PATH}" \
             -DCMAKE_SKIP_RPATH="${MUSESCORE_NO_RPATH}" \
-
-
         ;;
 
     revision)
@@ -171,29 +184,52 @@ case $TARGET in
         ;;
 
     appimage)
-        MUSESCORE_INSTALL_DIR=../MuseScore 
+        MUSESCORE_INSTALL_DIR=../MuseScore
         MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
-        MUSESCORE_NO_RPATH=ON 
+        MUSESCORE_NO_RPATH=ON
 
         mkdir -p build.release
         cd build.release
         do_build RELEASE
         ninja install
 
-        build_dir="$(pwd)" 
-        install_dir="$(cat $build_dir/PREFIX.txt)" 
+        build_dir="$(pwd)"
+        install_dir="$(cat $build_dir/PREFIX.txt)"
         cd $install_dir
 
         ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
         mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
         desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
-        icon="${mscore}.svg" 
-        mani="install_manifest.txt" 
+        icon="${mscore}.png"
+        mani="install_manifest.txt"
         cp "share/applications/${desktop}" "${desktop}"
-        cp "share/icons/hicolor/scalable/apps/${icon}" "${icon}" 
+        cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
         <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
+        ;;
 
-        ;;     
+    appimagedebug)
+        MUSESCORE_INSTALL_DIR=../MuseScore
+        MUSESCORE_INSTALL_SUFFIX="4portable${MUSESCORE_INSTALL_SUFFIX}" # e.g. "4portable" or "4portablenightly"
+        MUSESCORE_NO_RPATH=ON
+
+        mkdir -p build.debug
+        cd build.debug
+        do_build Debug
+        ninja install
+
+        build_dir="$(pwd)"
+        install_dir="$(cat $build_dir/PREFIX.txt)"
+        cd $install_dir
+
+        ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
+        mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
+        desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
+        icon="${mscore}.png"
+        mani="install_manifest.txt"
+        cp "share/applications/${desktop}" "${desktop}"
+        cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
+        <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
+        ;;
 
     *)
         echo "Unknown target: $TARGET";

@@ -41,6 +41,7 @@ PreferencesPage {
         NoteInputSection {
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             colorNotes: noteInputModel.colorNotesOutsideOfUsablePitchRange
+            warnGuitarBends: noteInputModel.warnGuitarBends
             delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
 
             navigation.section: root.navigationSection
@@ -52,6 +53,10 @@ PreferencesPage {
 
             onColorNotesChangeRequested: function(color) {
                 noteInputModel.colorNotesOutsideOfUsablePitchRange = color
+            }
+
+            onWarnGuitarBendsChangeRequested: function(warn) {
+                noteInputModel.warnGuitarBends = warn
             }
 
             onDelayBetweenNotesChangeRequested: function(delay) {

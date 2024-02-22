@@ -20,6 +20,7 @@
   <part-list>
     <part-group type="start" number="1">
       <group-symbol>bracket</group-symbol>
+      <group-barline>yes</group-barline>
       </part-group>
     <score-part id="P1">
       <part-name>Soprano</part-name>
@@ -61,7 +62,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <note>
+      <note print-object="no">
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>

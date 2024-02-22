@@ -37,7 +37,12 @@ ChordSettingsModel::ChordSettingsModel(QObject* parent, IElementRepositoryServic
 
 void ChordSettingsModel::createProperties()
 {
-    m_isStemless = buildPropertyItem(Pid::NO_STEM);
+    m_isStemless = buildPropertyItem(mu::engraving::Pid::NO_STEM,
+                                     [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        updateShowStemSlashEnabled();
+    });
+    m_showStemSlash = buildPropertyItem(Pid::SHOW_STEM_SLASH);
 }
 
 void ChordSettingsModel::requestElements()
@@ -48,14 +53,86 @@ void ChordSettingsModel::requestElements()
 void ChordSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isStemless);
+    loadPropertyItem(m_showStemSlash);
+    updateShowStemSlashVisible();
+    updateShowStemSlashEnabled();
 }
 
 void ChordSettingsModel::resetProperties()
 {
     m_isStemless->resetToDefault();
+    m_showStemSlash->resetToDefault();
+    updateShowStemSlashEnabled();
 }
 
 PropertyItem* ChordSettingsModel::isStemless() const
 {
     return m_isStemless;
+}
+
+PropertyItem* ChordSettingsModel::showStemSlash() const
+{
+    return m_showStemSlash;
+}
+
+bool ChordSettingsModel::showStemSlashVisible() const
+{
+    return m_showStemSlashVisible;
+}
+
+bool ChordSettingsModel::showStemSlashEnabled() const
+{
+    return m_showStemSlashEnabled;
+}
+
+void ChordSettingsModel::updateShowStemSlashVisible()
+{
+    bool visible = false;
+    for (EngravingItem* element : m_elementList) {
+        engraving::EngravingItem* elementBase = element->elementBase();
+        if (elementBase->isChord()) {
+            engraving::Chord* chord = engraving::toChord(elementBase);
+            if (chord->noteType() != NoteType::NORMAL) {
+                visible = true;
+                break;
+            }
+        }
+    }
+    setShowStemSlashVisible(visible);
+}
+
+void ChordSettingsModel::updateShowStemSlashEnabled()
+{
+    bool enabled = false;
+    for (EngravingItem* element : m_elementList) {
+        engraving::EngravingItem* elementBase = element->elementBase();
+        if (elementBase->isChord()) {
+            engraving::Chord* chord = engraving::toChord(elementBase);
+            if (!chord->noStem()) {
+                enabled = true;
+                break;
+            }
+        }
+    }
+    setShowStemSlashEnabled(enabled);
+}
+
+void ChordSettingsModel::setShowStemSlashVisible(bool visible)
+{
+    if (visible == m_showStemSlashVisible) {
+        return;
+    }
+
+    m_showStemSlashVisible = visible;
+    emit showStemSlashVisibleChanged(m_showStemSlashVisible);
+}
+
+void ChordSettingsModel::setShowStemSlashEnabled(bool enabled)
+{
+    if (enabled == m_showStemSlashEnabled) {
+        return;
+    }
+
+    m_showStemSlashEnabled = enabled;
+    emit showStemSlashEnabledChanged(m_showStemSlashEnabled);
 }

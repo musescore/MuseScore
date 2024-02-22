@@ -22,8 +22,8 @@
 
 #include "audiooutputhandler.h"
 
-#include "async/async.h"
-#include "containers.h"
+#include "global/async/async.h"
+#include "global/containers.h"
 
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"

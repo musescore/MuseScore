@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -18,7 +18,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -201,7 +200,6 @@
             <durationType>quarter</durationType>
             <Stem>
               <offset x="0.617965" y="-3.31219"/>
-              <userLen>0.2</userLen>
               </Stem>
             <Note>
               <pitch>72</pitch>

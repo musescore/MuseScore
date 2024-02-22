@@ -192,7 +192,7 @@ QVariantMap EngravingElementsModel::makeData(const mu::engraving::EngravingObjec
     info += "\n";
     if (el->isEngravingItem()) {
         const mu::engraving::EngravingItem* item = mu::engraving::toEngravingItem(el);
-        info += "pagePos: " + formatPoint(item->pagePos()) + ", bbox: " + formatRect(item->layoutData()->bbox());
+        info += "pagePos: " + formatPoint(item->pagePos()) + ", bbox: " + formatRect(item->ldata()->bbox());
     }
 
     QVariantMap d;

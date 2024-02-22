@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_TRACKSEQUENCE_H
 #define MU_AUDIO_TRACKSEQUENCE_H
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
 #include "itracksequence.h"
 #include "igettracks.h"
@@ -86,6 +86,8 @@ private:
 
     async::Channel<TrackPtr> m_trackAboutToBeAdded;
     async::Channel<TrackPtr> m_trackAboutToBeRemoved;
+
+    TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
 };
 }
 

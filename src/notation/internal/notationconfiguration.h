@@ -152,6 +152,9 @@ public:
     bool colorNotesOutsideOfUsablePitchRange() const override;
     void setColorNotesOutsideOfUsablePitchRange(bool value) override;
 
+    bool warnGuitarBends() const override;
+    void setWarnGuitarBends(bool value) override;
+
     int delayBetweenNotesInRealTimeModeMilliseconds() const override;
     void setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs) override;
 
@@ -169,6 +172,8 @@ public:
     io::paths_t userScoreOrderListPaths() const override;
     void setUserScoreOrderListPaths(const io::paths_t& paths) override;
 
+    io::path_t stringTuningsPresetsPath() const override;
+
     bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
     void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
 
@@ -180,6 +185,9 @@ public:
 
     bool needToShowAddFiguredBassErrorMessage() const override;
     void setNeedToShowAddFiguredBassErrorMessage(bool show) override;
+
+    bool needToShowAddGuitarBendErrorMessage() const override;
+    void setNeedToShowAddGuitarBendErrorMessage(bool show) override;
 
     bool needToShowMScoreError(const std::string& errorKey) const override;
     void setNeedToShowMScoreError(const std::string& errorKey, bool show) override;

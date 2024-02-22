@@ -419,7 +419,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
     int graceNumber1 = 0;
     bool foundcr1 = false;
     Fraction tick2 = tick;
-    foreach (NoteObj* nobj, objects) {
+    for (NoteObj* nobj : objects) {
         BasicDurationalObj* d = 0;
         if (nobj->type() == CapellaNoteObjectType::REST) {
             d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(nobj));
@@ -468,14 +468,14 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
         if (seg->segmentType() != SegmentType::ChordRest) {
             continue;
         }
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+        ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
-            if (graceNumber1 > 0) {       // the spanner is starting from a grace note
-                Chord* chord = static_cast<Chord*>(cr);
-                foreach (Chord* cc, chord->graceNotes()) {
+            if ((graceNumber1 > 0) && cr->isChord()) {       // the spanner is starting from a grace note
+                Chord* chord = toChord(cr);
+                for (Chord* cc : chord->graceNotes()) {
                     --graceNumber1;
                     if ((graceNumber1 == 0) && (!cr1)) {
-                        cr1 = static_cast<ChordRest*>(cc);             // found first ChordRest
+                        cr1 = toChordRest(cc);             // found first ChordRest
                     }
                 }
             }
@@ -489,14 +489,14 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
         if (seg->segmentType() != SegmentType::ChordRest) {
             continue;
         }
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+        ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
-            if ((graceNumber > 0) && (cr->type() == ElementType::CHORD)) {       // the spanner is ending on a grace note
-                Chord* chord = static_cast<Chord*>(cr);
-                foreach (Chord* cc, chord->graceNotes()) {
+            if ((graceNumber > 0) && cr->isChord()) {       // the spanner is ending on a grace note
+                Chord* chord = toChord(cr);
+                for (Chord* cc : chord->graceNotes()) {
                     --graceNumber;
                     if ((graceNumber == 0) && (!cr2)) {
-                        cr2 = static_cast<ChordRest*>(cc);             // found 2nd ChordRest
+                        cr2 = toChordRest(cc);             // found 2nd ChordRest
                     }
                 }
             }
@@ -669,7 +669,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     Fraction nn = (ticks * tupletCount) / f;
                     tuplet->setTicks(nn);
                 }
-                LOGD("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %d",
+                LOGD("Tuplet at %d: count: %d  tri: %d  prolonging: %d  ticks %d objects %lld",
                      tick.ticks(), o->count, o->tripartite, o->isProlonging, ticks.ticks(),
                      o->objects.size());
             }
@@ -745,9 +745,11 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 break;
             case ClefType::C4:     off = -7;
                 break;
+            case ClefType::C4_8VB: off = -14;
+                break;
             case ClefType::C5:     off = -7;
                 break;
-            case ClefType::G_1:     off = 0;
+            case ClefType::G_1:    off = 0;
                 break;
             case ClefType::F_8VA:  off = -7;
                 break;
@@ -1111,7 +1113,6 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         hp->setTrack2(track);
                         hp->setAnchor(Spanner::Anchor::SEGMENT);
                         score->addSpanner(hp);
-                        score->updateHairpin(hp);
                     }
                 }
             }
@@ -1205,7 +1206,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     // associated with a CapStaffLayout
     //
     if (staves != cap->staffLayouts().size()) {
-        LOGD("Capella: max number of staves != number of staff layouts (%d, %d)",
+        LOGD("Capella: max number of staves != number of staff layouts (%d, %lld)",
              staves, cap->staffLayouts().size());
         staves = qMax(staves, cap->staffLayouts().size());
     }
@@ -1288,7 +1289,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
             TextStyleType tid;
             switch (to->textalign()) {
-            case 0:   tid = TextStyleType::POET;
+            case 0:   tid = TextStyleType::LYRICIST;
                 break;
             case 1:   tid = TextStyleType::TITLE;
                 break;
@@ -1417,7 +1418,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     score->setUpTempoMap();
     score->setPlaylistDirty();
     score->setLayoutAll();
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
 }
 
 //---------------------------------------------------------
@@ -1545,7 +1545,7 @@ void TransposableObj::read()
     }
     variants = cap->readDrawObjectArray();
     if (variants.size() != b) {
-        LOGD("variants.size %d, expected %d", variants.size(), b);
+        LOGD("variants.size %lld, expected %d", variants.size(), b);
     }
     Q_ASSERT(variants.size() == b);
     /*int nRefNote =*/ cap->readInt();
@@ -2242,7 +2242,7 @@ QFont Capella::readFont()
     }
     index -= 1;
     if (index >= fonts.size()) {
-        LOGD("illegal font index %d (max %d)", index, fonts.size() - 1);
+        LOGD("illegal font index %d (max %lld)", index, fonts.size() - 1);
     }
     return fonts[index];
 }
@@ -2421,6 +2421,7 @@ ClefType CapClef::clefType(Form form, ClefLine line, Oct oct)
     case int(Form::C) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C2;
     case int(Form::C) + (int(ClefLine::L3) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C3;
     case int(Form::C) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C4;
+    case int(Form::C) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::C4_8VB;
     case int(Form::C) + (int(ClefLine::L5) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C5;
 
     case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F;

@@ -115,9 +115,15 @@ public:
     void setAutoSaveInterval(int minutes) override;
     async::Channel<int> autoSaveIntervalChanged() const override;
 
-    bool promptShareAudioCom() const override;
-    void setPromptShareAudioCom(bool prompt) override;
-    async::Channel<bool> promptShareAudioComChanged() const override;
+    bool alsoShareAudioCom() const override;
+    void setAlsoShareAudioCom(bool share) override;
+    async::Channel<bool> alsoShareAudioComChanged() const override;
+
+    bool showAlsoShareAudioComDialog() const override;
+    void setShowAlsoShareAudioComDialog(bool show) override;
+
+    bool hasAskedAlsoShareAudioCom() const override;
+    void setHasAskedAlsoShareAudioCom(bool has) override;
 
     io::path_t newProjectTemporaryPath() const override;
 
@@ -146,6 +152,9 @@ public:
     bool showCloudIsNotAvailableWarning() const override;
     void setShowCloudIsNotAvailableWarning(bool show) override;
 
+    bool disableVersionChecking() const override;
+    void setDisableVersionChecking(bool disable) override;
+
 private:
     io::path_t appTemplatesPath() const;
     io::path_t legacyCloudProjectsPath() const;
@@ -160,7 +169,7 @@ private:
     async::Channel<bool> m_autoSaveEnabledChanged;
     async::Channel<int> m_autoSaveIntervalChanged;
 
-    async::Channel<bool> m_promptShareAudioComChanged;
+    async::Channel<bool> m_alsoShareAudioComChanged;
 
     mutable std::map<MigrationType, MigrationOptions> m_migrationOptions;
 };

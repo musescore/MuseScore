@@ -69,6 +69,11 @@ Ret NetworkManager::put(const QUrl& url, OutgoingDevice* outgoingData, IncomingD
     return execRequest(PUT_REQUEST, url, incomingData, outgoingData, headers);
 }
 
+Ret NetworkManager::patch(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData, const RequestHeaders& headers)
+{
+    return execRequest(PATCH_REQUEST, url, incomingData, outgoingData, headers);
+}
+
 Ret NetworkManager::del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers)
 {
     return execRequest(DELETE_REQUEST, url, incomingData, nullptr, headers);
@@ -141,6 +146,14 @@ QNetworkReply* NetworkManager::receiveReply(RequestType requestType, const QNetw
             return m_manager->put(request, outgoingData->device());
         } else if (outgoingData->multiPart()) {
             return m_manager->put(request, outgoingData->multiPart());
+        }
+        break;
+    }
+    case PATCH_REQUEST: {
+        if (outgoingData->device()) {
+            return m_manager->sendCustomRequest(request, "PATCH", outgoingData->device());
+        } else if (outgoingData->multiPart()) {
+            return m_manager->sendCustomRequest(request, "PATCH", outgoingData->multiPart());
         }
         break;
     }

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEXTBASE_H__
-#define __TEXTBASE_H__
+#ifndef MU_ENGRAVING_TEXTBASE_H
+#define MU_ENGRAVING_TEXTBASE_H
 
 #include <variant>
 
@@ -79,37 +79,39 @@ enum class SelectTextType : char {
 
 class CharFormat
 {
-    FontStyle _style          { FontStyle::Normal };
-    VerticalAlignment _valign { VerticalAlignment::AlignNormal };
-    double _fontSize           { 12.0 };
-    String _fontFamily;
-
 public:
     CharFormat() {}
     CharFormat(const CharFormat& cf) { *this = cf; }
     bool operator==(const CharFormat& cf) const;
     CharFormat& operator=(const CharFormat& cf);
 
-    FontStyle style() const { return _style; }
-    void setStyle(FontStyle s) { _style = s; }
-    bool bold() const { return _style & FontStyle::Bold; }
-    bool italic() const { return _style & FontStyle::Italic; }
-    bool underline() const { return _style & FontStyle::Underline; }
-    bool strike() const { return _style & FontStyle::Strike; }
-    void setBold(bool val) { _style = val ? _style + FontStyle::Bold : _style - FontStyle::Bold; }
-    void setItalic(bool val) { _style = val ? _style + FontStyle::Italic : _style - FontStyle::Italic; }
-    void setUnderline(bool val) { _style = val ? _style + FontStyle::Underline : _style - FontStyle::Underline; }
-    void setStrike(bool val) { _style = val ? _style + FontStyle::Strike : _style - FontStyle::Strike; }
+    FontStyle style() const { return m_style; }
+    void setStyle(FontStyle s) { m_style = s; }
+    bool bold() const { return m_style & FontStyle::Bold; }
+    bool italic() const { return m_style & FontStyle::Italic; }
+    bool underline() const { return m_style & FontStyle::Underline; }
+    bool strike() const { return m_style & FontStyle::Strike; }
+    void setBold(bool val) { m_style = val ? m_style + FontStyle::Bold : m_style - FontStyle::Bold; }
+    void setItalic(bool val) { m_style = val ? m_style + FontStyle::Italic : m_style - FontStyle::Italic; }
+    void setUnderline(bool val) { m_style = val ? m_style + FontStyle::Underline : m_style - FontStyle::Underline; }
+    void setStrike(bool val) { m_style = val ? m_style + FontStyle::Strike : m_style - FontStyle::Strike; }
 
-    VerticalAlignment valign() const { return _valign; }
-    double fontSize() const { return _fontSize; }
-    String fontFamily() const { return _fontFamily; }
-    void setValign(VerticalAlignment val) { _valign = val; }
-    void setFontSize(double val) { _fontSize = val; }
-    void setFontFamily(const String& val) { _fontFamily = val; }
+    VerticalAlignment valign() const { return m_valign; }
+    double fontSize() const { return m_fontSize; }
+    String fontFamily() const { return m_fontFamily; }
+    void setValign(VerticalAlignment val) { m_valign = val; }
+    void setFontSize(double val) { m_fontSize = val; }
+    void setFontFamily(const String& val) { m_fontFamily = val; }
 
     FormatValue formatValue(FormatId) const;
     void setFormatValue(FormatId, const FormatValue& val);
+
+private:
+
+    FontStyle m_style = FontStyle::Normal;
+    VerticalAlignment m_valign = VerticalAlignment::AlignNormal;
+    double m_fontSize = 12.0;
+    String m_fontFamily;
 };
 
 //---------------------------------------------------------
@@ -120,14 +122,6 @@ public:
 
 class TextCursor
 {
-    TextBase* _text;
-    CharFormat _format;
-    size_t _row           { 0 };
-    size_t _column        { 0 };
-    size_t _selectLine    { 0 };           // start of selection
-    size_t _selectColumn  { 0 };
-    bool _editing { false };
-
 public:
     enum class MoveOperation {
         Start,
@@ -148,27 +142,27 @@ public:
     };
 
     TextCursor(TextBase* t)
-        : _text(t) {}
+        : m_text(t) {}
 
-    TextBase* text() const { return _text; }
-    bool hasSelection() const { return (_selectLine != _row) || (_selectColumn != _column); }
+    TextBase* text() const { return m_text; }
+    bool hasSelection() const { return (m_selectLine != m_row) || (m_selectColumn != m_column); }
     void clearSelection();
     void endEdit();
     void startEdit();
-    bool editing() const { return _editing; }
+    bool editing() const { return m_editing; }
 
-    CharFormat* format() { return &_format; }
-    const CharFormat* format() const { return &_format; }
-    void setFormat(const CharFormat& f) { _format = f; }
+    CharFormat* format() { return &m_format; }
+    const CharFormat* format() const { return &m_format; }
+    void setFormat(const CharFormat& f) { m_format = f; }
 
-    size_t row() const { return _row; }
-    size_t column() const { return _column; }
-    size_t selectLine() const { return _selectLine; }
-    size_t selectColumn() const { return _selectColumn; }
-    void setRow(size_t val) { _row = val; }
-    void setColumn(size_t val) { _column = val; }
-    void setSelectLine(size_t val) { _selectLine = val; }
-    void setSelectColumn(size_t val) { _selectColumn = val; }
+    size_t row() const { return m_row; }
+    size_t column() const { return m_column; }
+    size_t selectLine() const { return m_selectLine; }
+    size_t selectColumn() const { return m_selectColumn; }
+    void setRow(size_t val) { m_row = val; }
+    void setColumn(size_t val) { m_column = val; }
+    void setSelectLine(size_t val) { m_selectLine = val; }
+    void setSelectColumn(size_t val) { m_selectColumn = val; }
     size_t columns() const;
     void init();
 
@@ -203,6 +197,14 @@ public:
 private:
     Range range(int start, int end) const;
     int position(int row, int column) const;
+
+    TextBase* m_text = nullptr;
+    CharFormat m_format;
+    size_t m_row = 0;
+    size_t m_column = 0;
+    size_t m_selectLine = 0;           // start of selection
+    size_t m_selectColumn = 0;
+    bool m_editing = false;
 };
 
 //---------------------------------------------------------
@@ -237,24 +239,16 @@ public:
 
 class TextBlock
 {
-    std::list<TextFragment> _fragments;
-    double _y = 0;
-    double _lineSpacing = 0.0;
-    mu::RectF _bbox;
-    bool _eol = false;
-
-    void simplify();
-
 public:
     TextBlock() {}
-    bool operator ==(const TextBlock& x) const { return _fragments == x._fragments; }
-    bool operator !=(const TextBlock& x) const { return _fragments != x._fragments; }
+    bool operator ==(const TextBlock& x) const { return m_fragments == x.m_fragments; }
+    bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
     void draw(mu::draw::Painter*, const TextBase*) const;
     void layout(const TextBase*);
-    const std::list<TextFragment>& fragments() const { return _fragments; }
-    std::list<TextFragment>& fragments() { return _fragments; }
+    const std::list<TextFragment>& fragments() const { return m_fragments; }
+    std::list<TextFragment>& fragments() { return m_fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
-    const mu::RectF& boundingRect() const { return _bbox; }
+    const mu::RectF& boundingRect() const { return m_bbox; }
     mu::RectF boundingRect(int col1, int col2, const TextBase*) const;
     size_t columns() const;
     void insert(TextCursor*, const String&);
@@ -268,13 +262,22 @@ public:
     const CharFormat* formatAt(int) const;
     const TextFragment* fragment(int col) const;
     std::list<TextFragment>::iterator fragment(int column, int* rcol, int* ridx);
-    double y() const { return _y; }
-    void setY(double val) { _y = val; }
-    double lineSpacing() const { return _lineSpacing; }
+    double y() const { return m_y; }
+    void setY(double val) { m_y = val; }
+    double lineSpacing() const { return m_lineSpacing; }
     String text(int, int, bool = false) const;
-    bool eol() const { return _eol; }
-    void setEol(bool val) { _eol = val; }
+    bool eol() const { return m_eol; }
+    void setEol(bool val) { m_eol = val; }
     void changeFormat(FormatId, const FormatValue& val, int start, int n);
+
+private:
+    void simplify();
+
+    std::list<TextFragment> m_fragments;
+    double m_y = 0.0;
+    double m_lineSpacing = 0.0;
+    mu::RectF m_bbox;
+    bool m_eol = false;
 };
 
 //---------------------------------------------------------
@@ -286,6 +289,8 @@ class TextBase : public EngravingItem
     OBJECT_ALLOCATOR(engraving, TextBase)
 
     INJECT(IEngravingFontsProvider, engravingFonts)
+
+    M_PROPERTY2(bool, isTextLinkedToMaster, setTextLinkedToMaster, true)
 
 public:
 
@@ -326,9 +331,6 @@ public:
     void setFontStyle(const FontStyle& val);
     void setFamily(const String& val);
     void setSize(const double& val);
-
-    bool layoutToParentWidth() const { return m_layoutToParentWidth; }
-    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
 
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
@@ -377,6 +379,8 @@ public:
     mu::draw::Font font() const;
     mu::draw::FontMetrics fontMetrics() const;
 
+    bool isPropertyLinkedToMaster(Pid id) const override;
+    bool isUnlinkedFromMaster() const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
@@ -452,12 +456,16 @@ public:
         const TextBlock& textBlock(size_t i) const { return blocks.at(i); }
         TextBlock& textBlock(size_t i) { return blocks[i]; }
     };
-    DECLARE_LAYOUTDATA_METHODS(TextBase);
+    DECLARE_LAYOUTDATA_METHODS(TextBase)
 
     void createBlocks();
     void createBlocks(LayoutData* ldata) const;
     void layoutFrame();
     void layoutFrame(LayoutData* ldata) const;
+
+    //! NOTE It can only be set for some types of text, see who has the setter.
+    //! At the moment it's: Text, Jump, Marker
+    bool layoutToParentWidth() const { return m_layoutToParentWidth; }
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
@@ -470,6 +478,8 @@ protected:
     bool prepareFormat(const String& token, CharFormat& format);
 
     virtual void commitText();
+
+    bool m_layoutToParentWidth = false;
 
 private:
 
@@ -509,8 +519,6 @@ private:
     bool m_textInvalid = true;
 
     TextStyleType m_textStyleType = TextStyleType::DEFAULT;           // text style id
-
-    bool m_layoutToParentWidth = false;
 
     int m_hexState = -1;
     bool m_primed = 0;

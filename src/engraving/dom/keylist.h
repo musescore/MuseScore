@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __KEYLIST_H__
-#define __KEYLIST_H__
+#ifndef MU_ENGRAVING_KEYLIST_H
+#define MU_ENGRAVING_KEYLIST_H
 
 #include <map>
 

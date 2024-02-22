@@ -27,7 +27,6 @@
 
 #include "types/typesconv.h"
 
-#include "changeMap.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -117,8 +116,8 @@ Volta::Volta(EngravingItem* parent)
 ///
 void Volta::setEndings(const std::vector<int>& l)
 {
-    _endings = l;
-    std::sort(_endings.begin(), _endings.end());
+    m_endings = l;
+    std::sort(m_endings.begin(), m_endings.end());
 }
 
 //---------------------------------------------------------
@@ -176,10 +175,10 @@ bool Volta::hasEnding(int repeat) const
 
 int Volta::firstEnding() const
 {
-    if (_endings.empty()) {
+    if (m_endings.empty()) {
         return 0;
     }
-    return _endings.front();
+    return m_endings.front();
 }
 
 //---------------------------------------------------------
@@ -188,10 +187,10 @@ int Volta::firstEnding() const
 
 int Volta::lastEnding() const
 {
-    if (_endings.empty()) {
+    if (m_endings.empty()) {
         return 0;
     }
-    return _endings.back();
+    return m_endings.back();
 }
 
 //---------------------------------------------------------
@@ -260,29 +259,6 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
 
     default:
         return TextLineBase::propertyDefault(propertyId);
-    }
-}
-
-//---------------------------------------------------------
-//   setVelocity
-//---------------------------------------------------------
-
-void Volta::setVelocity() const
-{
-    Measure* startMeasure = Spanner::startMeasure();
-    Measure* endMeasure = Spanner::endMeasure();
-
-    if (startMeasure && endMeasure) {
-        if (!endMeasure->repeatEnd()) {
-            return;
-        }
-
-        Fraction startTick  = Fraction::fromTicks(startMeasure->tick().ticks() - 1);
-        Fraction endTick    = Fraction::fromTicks((endMeasure->tick() + endMeasure->ticks()).ticks() - 1);
-        Staff* st      = staff();
-        ChangeMap& velo = st->velocities();
-        auto prevVelo  = velo.val(startTick);
-        velo.addFixed(endTick, prevVelo);
     }
 }
 

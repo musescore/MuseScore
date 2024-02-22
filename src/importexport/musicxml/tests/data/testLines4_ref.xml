@@ -69,7 +69,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <bracket type="stop" number="1" line-end="down" end-length="6"/>
+          <bracket type="stop" number="1" line-end="both" end-length="12"/>
           </direction-type>
         </direction>
       </measure>
@@ -94,7 +94,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <bracket type="stop" number="1" line-end="down" end-length="6"/>
+          <bracket type="stop" number="1" line-end="both" end-length="12"/>
           </direction-type>
         </direction>
       </measure>

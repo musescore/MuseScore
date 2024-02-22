@@ -92,8 +92,10 @@ static void alsaCleanup()
     if (s_alsaData->threadHandle) {
         pthread_join(s_alsaData->threadHandle, nullptr);
     }
-    snd_pcm_drain(s_alsaData->alsaDeviceHandle);
-    snd_pcm_close(s_alsaData->alsaDeviceHandle);
+    if (nullptr != s_alsaData->alsaDeviceHandle) {
+        snd_pcm_drain(s_alsaData->alsaDeviceHandle);
+        snd_pcm_close(s_alsaData->alsaDeviceHandle);
+    }
 
     if (nullptr != s_alsaData->buffer) {
         delete[] s_alsaData->buffer;

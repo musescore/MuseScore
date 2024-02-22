@@ -23,7 +23,7 @@
 #ifndef MU_AUDIO_PLAYERSHANDLER_H
 #define MU_AUDIO_PLAYERSHANDLER_H
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
 #include "iplayer.h"
 #include "igettracksequence.h"

@@ -392,7 +392,7 @@ struct ZipContainer::Impl {
         : device(d) {}
 
     void scanFiles();
-    ZipContainer::FileInfo fillFileInfo(int index) const;
+    ZipContainer::FileInfo fillFileInfo(size_t index) const;
 };
 
 void ZipContainer::Impl::scanFiles()
@@ -486,7 +486,7 @@ void ZipContainer::Impl::scanFiles()
     }
 }
 
-ZipContainer::FileInfo ZipContainer::Impl::fillFileInfo(int index) const
+ZipContainer::FileInfo ZipContainer::Impl::fillFileInfo(size_t index) const
 {
     ZipContainer::FileInfo fileInfo;
     FileHeader header = fileHeaders.at(index);
@@ -524,7 +524,7 @@ ZipContainer::FileInfo ZipContainer::Impl::fillFileInfo(int index) const
 
         break;
     default:
-        LOGW("Zip: Zip entry format at %d is not supported.", index);
+        LOGW("Zip: Zip entry format at %zu is not supported.", index);
         return fileInfo; // we don't support anything else
     }
 
@@ -538,12 +538,24 @@ ZipContainer::FileInfo ZipContainer::Impl::fillFileInfo(int index) const
 
     // fix the file path, if broken (convert separators, eat leading and trailing ones)
     fileInfo.filePath = Dir::fromNativeSeparators(fileInfo.filePath).toStdString();
-    while (!fileInfo.filePath.empty() && (fileInfo.filePath.front() == '.' || fileInfo.filePath.front() == '/')) {
-        fileInfo.filePath = fileInfo.filePath.substr(1);
+    {
+        bool frontOk = false;
+        while (!fileInfo.filePath.empty() && !frontOk) {
+            if (fileInfo.filePath.front() == '/') {
+                fileInfo.filePath = fileInfo.filePath.substr(1);
+            } else if (fileInfo.filePath.rfind("./", 0) == 0) {
+                fileInfo.filePath = fileInfo.filePath.substr(2);
+            } else if (fileInfo.filePath.rfind("../", 0) == 0) {
+                fileInfo.filePath = fileInfo.filePath.substr(3);
+            } else {
+                frontOk = true;
+            }
+        }
     }
     while (!fileInfo.filePath.empty() && fileInfo.filePath.back() == '/') {
         fileInfo.filePath = fileInfo.filePath.substr(0, fileInfo.filePath.size() - 1);
     }
+
     return fileInfo;
 }
 
@@ -573,8 +585,13 @@ void ZipContainer::Impl::addEntry(EntryType type, const std::string& fileName, c
     writeUInt(header.h.uncompressed_size, (uint)contents.size());
 
     std::time_t t = std::time(0);   // get time now
-    std::tm* now = std::localtime(&t);
-    writeMSDosDate(header.h.last_mod_file, *now);
+    std::tm now;
+#ifdef WIN32
+    localtime_s(&now, &t);
+#else
+    localtime_r(&t, &now);
+#endif
+    writeMSDosDate(header.h.last_mod_file, now);
     ByteArray data = contents;
     if (compression == ZipContainer::AlwaysCompress) {
         writeUShort(header.h.compression_method, CompressionMethodDeflated);
@@ -692,9 +709,9 @@ std::vector<ZipContainer::FileInfo> ZipContainer::fileInfoList() const
 {
     p->scanFiles();
     std::vector<FileInfo> files;
-    const int numFileHeaders = (int)p->fileHeaders.size();
+    const size_t numFileHeaders = p->fileHeaders.size();
     files.reserve(numFileHeaders);
-    for (int i = 0; i < numFileHeaders; ++i) {
+    for (size_t i = 0; i < numFileHeaders; ++i) {
         files.push_back(p->fillFileInfo(i));
     }
     return files;
@@ -739,7 +756,7 @@ ByteArray ZipContainer::fileData(const std::string& fileName) const
 
     ushort version_needed = readUShort(header.h.version_needed);
     if (version_needed > ZIP_VERSION) {
-        LOGW("Zip: .ZIP specification version %d implementationis needed to extract the data.", version_needed);
+        LOGW("Zip: .ZIP specification version %d implementation is needed to extract the data.", version_needed);
         return ByteArray();
     }
 

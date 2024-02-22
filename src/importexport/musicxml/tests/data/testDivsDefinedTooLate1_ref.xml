@@ -45,7 +45,7 @@
           <line>2</line>
           </clef>
         </attributes>
-      <note>
+      <note print-object="no">
         <rest measure="yes"/>
         <duration>4</duration>
         <voice>1</voice>

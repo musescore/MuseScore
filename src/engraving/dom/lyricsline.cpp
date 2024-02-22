@@ -112,7 +112,7 @@ bool LyricsLine::setProperty(Pid propertyId, const engraving::PropertyValue& v)
         }
         break;
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 

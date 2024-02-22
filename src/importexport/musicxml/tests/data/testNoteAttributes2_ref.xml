@@ -448,7 +448,8 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <detached-legato/>
+            <staccato/>
+            <tenuto/>
             </articulations>
           </notations>
         </note>
@@ -510,7 +511,7 @@
         <stem>up</stem>
         <notations>
           <technical>
-            <open-string/>
+            <open/>
             </technical>
           </notations>
         </note>

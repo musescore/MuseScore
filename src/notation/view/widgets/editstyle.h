@@ -50,12 +50,16 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 
 public:
     EditStyle(QWidget* = nullptr);
+
+#ifdef MU_QT5_COMPAT
     EditStyle(const EditStyle&);
+#endif
 
     QString currentPageCode() const;
     QString currentSubPageCode() const;
 
     static QString pageCodeForElement(const EngravingItem*);
+    static QString subPageCodeForElement(const EngravingItem*);
 
 public slots:
     void accept();
@@ -139,6 +143,9 @@ private slots:
     void editUserStyleName();
     void endEditUserStyleName();
     void resetUserStyleName();
+    void updateParenthesisIndicatingTiesGroupState();
+    void clefVisibilityChanged(bool);
+    void tupletUseSymbolsChanged(bool);
 
 private:
     QString m_currentPageCode;
@@ -148,7 +155,5 @@ private:
     static int s_lastSubPageRow;
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::EditStyle)
 
 #endif // MU_NOTATION_EDITSTYLE_H

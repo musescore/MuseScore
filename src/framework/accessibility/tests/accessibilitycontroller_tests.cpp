@@ -47,13 +47,13 @@ public:
         m_controller = std::make_shared<AccessibilityController>();
 
         m_mainWindow = std::make_shared<ui::MainWindowMock>();
-        m_controller->setmainWindow(m_mainWindow);
+        m_controller->mainWindow.set(m_mainWindow);
 
         m_application = std::make_shared<framework::ApplicationMock>();
-        m_controller->setapplication(m_application);
+        m_controller->application.set(m_application);
 
         m_configuration = std::make_shared<AccessibilityConfigurationMock>();
-        m_controller->setconfiguration(m_configuration);
+        m_controller->configuration.set(m_configuration);
     }
 
     class AccessibleItem : public accessibility::IAccessible
@@ -88,6 +88,8 @@ public:
         QString accessibleTextAfterOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
         QString accessibleTextAtOffset(int, TextBoundaryType, int*, int*) const override { return QString(); }
         int accessibleCharacterCount() const override { return 0; }
+
+        int accessibleRowIndex() const override { return 0; }
 
         async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const override
         {

@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "samplerateconvertor.h"
-#include "log.h"
+
 #include <cmath>
+
+#include "log.h"
 
 using namespace mu::audio;
 

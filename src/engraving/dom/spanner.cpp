@@ -132,10 +132,18 @@ ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 
 EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 {
-    if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT) {
+    switch (pid) {
+    case Pid::COLOR:
+    case Pid::VISIBLE:
+    case Pid::PLACEMENT:
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
         return spanner();
+    default: break;
     }
-    return 0;
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -167,7 +175,7 @@ bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
     switch (pid) {
     case Pid::OFFSET2:
         m_offset2 = v.value<PointF>();
-        triggerLayoutAll();
+        triggerLayout();
         break;
     default:
         return EngravingItem::setProperty(pid, v);
@@ -356,6 +364,54 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, EngravingItem
     }
 }
 
+std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() const
+{
+    std::list<EngravingObject*> result;
+    result.push_back(const_cast<SpannerSegment*>(this));
+
+    if (isMiddleType()) {
+        return result;
+    }
+
+    for (const EngravingObject* linkedSpanner : m_spanner->linkList()) {
+        if (linkedSpanner == m_spanner || toSpanner(linkedSpanner)->placement() != m_spanner->placement()) {
+            continue;
+        }
+        const std::vector<SpannerSegment*>& linkedSegments = toSpanner(linkedSpanner)->spannerSegments();
+        if (linkedSegments.empty()) {
+            continue;
+        }
+        if (isSingleBeginType()) {
+            result.push_back(linkedSegments.front());
+        } else if (isSingleEndType()) {
+            result.push_back(linkedSegments.back());
+        }
+    }
+
+    return result;
+}
+
+bool SpannerSegment::isPropertyLinkedToMaster(Pid id) const
+{
+    bool linkedForSpannerSegment = EngravingItem::isPropertyLinkedToMaster(id);
+    if (!linkedForSpannerSegment) {
+        return false;
+    }
+
+    // The property is linked for the spanner segment, but may be unlinked for the spanner, in which case we consider it unlinked
+    return spanner()->isPropertyLinkedToMaster(id);
+}
+
+bool SpannerSegment::isUserModified() const
+{
+    bool modified = !autoplace() || !visible()
+                    || (propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
+                        || getProperty(Pid::MIN_DISTANCE) != propertyDefault(Pid::MIN_DISTANCE))
+                    || (!isStyled(Pid::OFFSET) && (!offset().isNull() || !userOff2().isNull()));
+
+    return modified;
+}
+
 //---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
@@ -374,10 +430,11 @@ Spanner::Spanner(const Spanner& s)
     m_tick         = s.m_tick;
     m_ticks        = s.m_ticks;
     m_track2       = s.m_track2;
-    if (!s.startElement() && !spannerSegments().size()) {
-        for (auto* segment : s.spannerSegments()) {
-            add(segment->clone());
-        }
+
+    for (auto* segment : s.m_segments) {
+        SpannerSegment* newSegment = toSpannerSegment(segment->clone());
+        newSegment->setParent(nullptr);
+        add(newSegment);
     }
 }
 
@@ -505,10 +562,15 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
 void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
+    if (score()->isPaletteScore()) {
+        EngravingObject::scanElements(data, func, all);
+        return;
+    }
+
     for (EngravingObject* child : scanChildren()) {
-        if (scanParent() && child->isSpannerSegment()) {
-            continue; // spanner segments are scanned by the system
-                      // except in the palette (in which case scanParent() == nullptr)
+        if (child->isSpannerSegment()) {
+            // spanner segments are scanned by the system
+            continue;
         }
         child->scanElements(data, func, all);
     }
@@ -595,10 +657,8 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SPANNER_TICK:
         triggerLayout();           // spanner may have moved to another system
         setTick(v.value<Fraction>());
-        setStartElement(0);               // invalidate
-        setEndElement(0);                 //
         if (score() && score()->spannerMap().removeSpanner(this)) {
-            score()->addSpanner(this);
+            score()->addSpanner(this, /*computeStartEnd =*/ false);
         }
         break;
     case Pid::SPANNER_TICKS:
@@ -616,6 +676,24 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::ANCHOR:
         setAnchor(Anchor(v.toInt()));
+        break;
+    case Pid::POSITION_LINKED_TO_MASTER:
+        setPositionLinkedToMaster(v.toBool());
+        if (isPositionLinkedToMaster()) {
+            for (SpannerSegment* seg : spannerSegments()) {
+                seg->relinkPropertiesToMaster(PropertyGroup::POSITION);
+            }
+            relinkPropertiesToMaster(PropertyGroup::POSITION);
+        }
+        break;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        setAppearanceLinkedToMaster(v.toBool());
+        if (isAppearanceLinkedToMaster()) {
+            for (SpannerSegment* seg : spannerSegments()) {
+                seg->relinkPropertiesToMaster(PropertyGroup::APPEARANCE);
+            }
+            relinkPropertiesToMaster(PropertyGroup::APPEARANCE);
+        }
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -645,23 +723,30 @@ PropertyValue Spanner::propertyDefault(Pid propertyId) const
 
 void Spanner::computeStartElement()
 {
+    EngravingItem* oldStartElement = m_startElement;
+
     switch (m_anchor) {
     case Anchor::SEGMENT: {
         if (systemFlag()) {
             m_startElement = startSegment();
         } else {
             Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-            if (!seg || seg->empty()) {
+            if (!seg || seg->empty() || !seg->element(track())) {
                 seg = score()->tick2segment(tick(), false, SegmentType::ChordRest);
             }
-            track_idx_t strack = (track() / VOICES) * VOICES;
-            track_idx_t etrack = strack + VOICES;
-            m_startElement = 0;
+            m_startElement = nullptr;
             if (seg) {
-                for (track_idx_t t = strack; t < etrack; ++t) {
-                    if (seg->element(t)) {
-                        m_startElement = seg->element(t);
-                        break;
+                EngravingItem* e = seg->element(track());
+                if (e) {
+                    m_startElement = e;
+                } else {
+                    track_idx_t strack = (track() / VOICES) * VOICES;
+                    track_idx_t etrack = strack + VOICES;
+                    for (track_idx_t t = strack; t < etrack; ++t) {
+                        if (seg->element(t)) {
+                            m_startElement = seg->element(t);
+                            break;
+                        }
                     }
                 }
             }
@@ -678,6 +763,10 @@ void Spanner::computeStartElement()
         break;
     }
 
+    if (oldStartElement && oldStartElement->isChord()) {
+        toChord(oldStartElement)->removeStartingSpanner(this);
+    }
+
     Chord* startChord = m_startElement && m_startElement->isChord() ? toChord(m_startElement) : nullptr;
     if (startChord) {
         startChord->addStartingSpanner(this);
@@ -690,6 +779,8 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
 {
+    EngravingItem* oldEndElement = m_endElement;
+
     if (score()->isPaletteScore()) {
         // return immediately to prevent lots of
         // "no element found" messages from appearing
@@ -765,6 +856,10 @@ void Spanner::computeEndElement()
         }
     case Anchor::CHORD:
         break;
+    }
+
+    if (oldEndElement && oldEndElement->isChord()) {
+        toChord(oldEndElement)->removeEndingSpanner(this);
     }
 
     Chord* endChord = m_endElement && m_endElement->isChord() ? toChord(m_endElement) : nullptr;
@@ -987,7 +1082,11 @@ ChordRest* Spanner::findEndCR() const
 Segment* Spanner::startSegment() const
 {
     assert(score() != NULL);
-    return score()->tick2rightSegment(tick(), style().styleB(Sid::createMultiMeasureRests));
+    Segment* rightSegment = score()->tick2rightSegment(tick(), style().styleB(Sid::createMultiMeasureRests));
+    if (rightSegment && rightSegment->tick() < tick2()) {
+        return rightSegment;
+    }
+    return score()->tick2leftSegment(tick(), style().styleB(Sid::createMultiMeasureRests));
 }
 
 //---------------------------------------------------------
@@ -996,7 +1095,7 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    return score()->tick2leftSegment(tick2(), style().styleB(Sid::createMultiMeasureRests));
+    return score()->tick2leftSegment(tick2(), style().styleB(Sid::createMultiMeasureRests), systemFlag());
 }
 
 //---------------------------------------------------------
@@ -1260,17 +1359,6 @@ void Spanner::triggerLayout() const
     score()->setLayout(m_tick, m_tick + m_ticks, staffIdx(), track2staff(tr2), this);
 }
 
-void Spanner::triggerLayoutAll() const
-{
-    // Spanners do not have parent even when added to a score, so can't check parent here
-    score()->setLayoutAll(staffIdx(), this);
-
-    const track_idx_t tr2 = track2();
-    if (tr2 != mu::nidx && tr2 != track()) {
-        score()->setLayoutAll(track2staff(tr2), this);
-    }
-}
-
 //---------------------------------------------------------
 //   pushUnusedSegment
 //---------------------------------------------------------
@@ -1360,6 +1448,17 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
             pushUnusedSegment(seg);
         }
     }
+}
+
+bool Spanner::isUserModified() const
+{
+    for (SpannerSegment* seg : m_segments) {
+        if (seg->isUserModified()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------

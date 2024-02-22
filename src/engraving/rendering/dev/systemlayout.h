@@ -51,22 +51,24 @@ public:
 
     static void layout2(System* system, LayoutContext& ctx);
     static void restoreLayout2(System* system, LayoutContext& ctx);
-    static void setMeasureHeight(System* system, double height, LayoutContext& ctx);
+    static void setMeasureHeight(System* system, double height, const LayoutContext& ctx);
     static void layoutBracketsVertical(System* system, LayoutContext& ctx);
     static void layoutInstrumentNames(System* system, LayoutContext& ctx);
 
     static void setInstrumentNames(System* system, LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
 
-    static double minDistance(const System* top, const System* bottom, LayoutContext& ctx);
+    static double minDistance(const System* top, const System* bottom, const LayoutContext& ctx);
 
 private:
     static System* getNextSystem(LayoutContext& lc);
     static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
-    static void layoutTies(Chord* ch, System* system, const Fraction& stick);
-    static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);
+    static void layoutTies(Chord* ch, System* system, const Fraction& stick, LayoutContext& ctx);
+    static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick, LayoutContext& ctx);
+    static void doLayoutTiesLinear(System* system, LayoutContext& ctx);
+    static void layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx);
     static void justifySystem(System* system, double curSysWidth, double targetSystemWidth);
     static void updateCrossBeams(System* system, LayoutContext& ctx);
-    static void restoreTies(System* system);
+    static void restoreTiesAndBends(System* system, LayoutContext& ctx);
     static void manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth, const Fraction minTicks,
                                     const Fraction maxTicks);
 

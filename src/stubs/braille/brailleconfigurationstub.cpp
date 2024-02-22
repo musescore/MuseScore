@@ -22,8 +22,8 @@
 #include "brailleconfigurationstub.h"
 
 using namespace mu;
-using namespace mu::braille;
 
+namespace mu::braille {
 async::Notification BrailleConfigurationStub::braillePanelEnabledChanged() const
 {
     return {};
@@ -35,6 +35,20 @@ bool BrailleConfigurationStub::braillePanelEnabled() const
 }
 
 void BrailleConfigurationStub::setBraillePanelEnabled(const bool)
+{
+}
+
+async::Notification BrailleConfigurationStub::intervalDirectionChanged() const
+{
+    return {};
+}
+
+BrailleIntervalDirection BrailleConfigurationStub::intervalDirection() const
+{
+    return {};
+}
+
+void BrailleConfigurationStub::setIntervalDirection(const BrailleIntervalDirection)
 {
 }
 
@@ -52,7 +66,8 @@ void BrailleConfigurationStub::setBrailleTable(const QString)
 {
 }
 
-QStringList BrailleConfigurationStub::brailleTableList()
+QStringList BrailleConfigurationStub::brailleTableList() const
 {
     return {};
+}
 }

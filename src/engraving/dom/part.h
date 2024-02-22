@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PART_H__
-#define __PART_H__
+#ifndef MU_ENGRAVING_PART_H
+#define MU_ENGRAVING_PART_H
 
 #include <vector>
 
@@ -114,9 +114,13 @@ public:
 
     void setLongName(const String& s);
     void setShortName(const String& s);
+    void setLongNameAll(const String& s);  // For all instruments in _instruments
+    void setShortNameAll(const String& s); // For all instruments in _instruments
 
     void setPlainLongName(const String& s);
     void setPlainShortName(const String& s);
+    void setPlainLongNameAll(const String& s);
+    void setPlainShortNameAll(const String& s);
 
     void setStaves(int);
 
@@ -132,10 +136,10 @@ public:
 
     void insertStaff(Staff*, staff_idx_t idx);
     void removeStaff(Staff*);
-    bool show() const { return _show; }
-    void setShow(bool val) { _show = val; }
-    bool soloist() const { return _soloist; }
-    void setSoloist(bool val) { _soloist = val; }
+    bool show() const { return m_show; }
+    void setShow(bool val) { m_show = val; }
+    bool soloist() const { return m_soloist; }
+    void setSoloist(bool val) { m_soloist = val; }
 
     Instrument* instrument(Fraction = { -1, 1 });
     const Instrument* instrument(Fraction = { -1, 1 }) const;
@@ -146,7 +150,12 @@ public:
     void setInstrument(const Instrument&, Fraction = { -1, 1 });
     void setInstruments(const InstrumentList& instruments);
     void removeInstrument(const Fraction&);
+    void removeNonPrimaryInstruments();
     const InstrumentList& instruments() const;
+
+    const StringData* stringData(const Fraction& tick, staff_idx_t staffIdx) const;
+    void addStringTunings(StringTunings* stringTunings);
+    void removeStringTunings(StringTunings* stringTunings);
 
     void insertTime(const Fraction& tick, const Fraction& len);
 
@@ -158,10 +167,10 @@ public:
     HarpPedalDiagram* prevHarpDiagram(const Fraction&) const;
     Fraction currentHarpDiagramTick(const Fraction&) const;
 
-    String partName() const { return _partName; }
-    void setPartName(const String& s) { _partName = s; }
-    int color() const { return _color; }
-    void setColor(int value) { _color = value; }
+    String partName() const { return m_partName; }
+    void setPartName(const String& s) { m_partName = s; }
+    int color() const { return m_color; }
+    void setColor(int value) { m_color = value; }
 
     bool isVisible() const;
 
@@ -181,8 +190,8 @@ public:
     const Part* masterPart() const;
     Part* masterPart();
 
-    PreferSharpFlat preferSharpFlat() const { return _preferSharpFlat; }
-    void setPreferSharpFlat(PreferSharpFlat v) { _preferSharpFlat = v; }
+    PreferSharpFlat preferSharpFlat() const { return m_preferSharpFlat; }
+    void setPreferSharpFlat(PreferSharpFlat v) { m_preferSharpFlat = v; }
 
     // Allows not reading the same instrument twice on importing 2.X scores.
     // TODO: do we need instruments info in parts at all?
@@ -193,17 +202,18 @@ public:
 private:
     friend class read206::Read206;
 
-    String _partName;              ///< used in tracklist (mixer)
-    InstrumentList _instruments;
-    std::vector<Staff*> _staves;
-    ID _id = INVALID_ID;             ///< used for MusicXml import
-    bool _show = false;              ///< show part in partitur if true
-    bool _soloist = false;           ///< used in score ordering
-    int _capoFret = 0;
+    String m_partName;                ///< used in tracklist (mixer)
+    InstrumentList m_instruments;
+    std::vector<Staff*> m_staves;
+    ID m_id = INVALID_ID;             ///< used for MusicXml import
+    bool m_show = false;              ///< show part in partitur if true
+    bool m_soloist = false;           ///< used in score ordering
+    int m_capoFret = 0;
+    int m_color = 0;                  ///User specified color for helping to label parts
 
-    int _color = 0;                  ///User specified color for helping to label parts
+    PreferSharpFlat m_preferSharpFlat = PreferSharpFlat::AUTO;
 
-    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::AUTO;
+    std::map<int, StringTunings*> m_stringTunings;
 };
 } // namespace mu::engraving
 #endif

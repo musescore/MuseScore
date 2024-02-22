@@ -135,9 +135,9 @@ enum class AccidentalType {
     SHARP_31 = int(mu::engraving::AccidentalType::SHARP_31),
     FLAT_53 = int(mu::engraving::AccidentalType::FLAT_53),
     SHARP_53 = int(mu::engraving::AccidentalType::SHARP_53),
-    //EQUALS_ALMOST = int(mu::engraving::AccidentalType::EQUALS_ALMOST),
-    //EQUALS = int(mu::engraving::AccidentalType::EQUALS),
-    //TILDE = int(mu::engraving::AccidentalType::TILDE),
+    EQUALS_ALMOST = int(mu::engraving::AccidentalType::EQUALS_ALMOST),
+    EQUALS = int(mu::engraving::AccidentalType::EQUALS),
+    TILDE = int(mu::engraving::AccidentalType::TILDE),
 
     // Persian
     SORI = int(mu::engraving::AccidentalType::SORI),
@@ -289,7 +289,9 @@ enum class ElementType {
     STAFF_STATE           = int(mu::engraving::ElementType::STAFF_STATE),
     NOTEHEAD              = int(mu::engraving::ElementType::NOTEHEAD),
     NOTEDOT               = int(mu::engraving::ElementType::NOTEDOT),
-    TREMOLO               = int(mu::engraving::ElementType::TREMOLO),
+    TREMOLO               = int(mu::engraving::ElementType::TREMOLO), // deprecated
+    TREMOLO_SINGLECHORD   = int(mu::engraving::ElementType::TREMOLO_SINGLECHORD),
+    TREMOLO_TWOCHORD      = int(mu::engraving::ElementType::TREMOLO_TWOCHORD),
     IMAGE                 = int(mu::engraving::ElementType::IMAGE),
     MEASURE               = int(mu::engraving::ElementType::MEASURE),
     SELECTION             = int(mu::engraving::ElementType::SELECTION),
@@ -425,7 +427,7 @@ enum class GlissandoStyle {
     WHITE_KEYS = int(mu::engraving::GlissandoStyle::WHITE_KEYS),
     BLACK_KEYS = int(mu::engraving::GlissandoStyle::BLACK_KEYS),
     DIATONIC = int(mu::engraving::GlissandoStyle::DIATONIC),
-    PORTAMENTO = int(mu::engraving::GlissandoStyle::PORTAMENTO),
+    PORTAMENTO = int(mu::engraving::GlissandoStyle::PORTAMENTO)
 };
 Q_ENUM_NS(GlissandoStyle);
 
@@ -547,7 +549,7 @@ enum class Tid {
     TITLE = int(mu::engraving::TextStyleType::TITLE),
     SUBTITLE = int(mu::engraving::TextStyleType::SUBTITLE),
     COMPOSER = int(mu::engraving::TextStyleType::COMPOSER),
-    POET = int(mu::engraving::TextStyleType::POET),
+    POET = int(mu::engraving::TextStyleType::LYRICIST),
     TRANSLATOR = int(mu::engraving::TextStyleType::TRANSLATOR),
     FRAME = int(mu::engraving::TextStyleType::FRAME),
     INSTRUMENT_EXCERPT = int(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT),

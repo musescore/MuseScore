@@ -67,6 +67,7 @@ class Hairpin;
 class HairpinSegment;
 class HarpPedalDiagram;
 
+class Image;
 class InstrumentChange;
 
 class Jump;
@@ -101,8 +102,10 @@ class Slur;
 class Spacer;
 class StaffText;
 class StaffTypeChange;
+class StringTunings;
 class Symbol;
 class SystemText;
+class SoundFlag;
 
 class TempoText;
 class Text;
@@ -110,7 +113,8 @@ class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
-class Tremolo;
+class TremoloSingleChord;
+class TremoloTwoChord;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -176,10 +180,12 @@ public:
 
     static void layout(Glissando* item, const Context& ctx);
     static void layout(GradualTempoChange* item, const Context& ctx);
+    static void layout(GuitarBend* item, const Context& ctx);
 
     static void layout(Hairpin* item, const Context& ctx);
     static void layout(HarpPedalDiagram* item, const Context& ctx);
 
+    static void layout(Image* item, const Context& ctx);
     static void layout(InstrumentChange* item, const Context& ctx);
 
     static void layout(Jump* item, const Context& ctx);
@@ -208,13 +214,16 @@ public:
     static void layout(Spacer* item, const Context&);
     static void layout(StaffText* item, const Context& ctx);
     static void layout(StaffTypeChange* item, const Context& ctx);
+    static void layout(StringTunings* item, const Context& ctx);
     static void layout(Symbol* item, const Context& ctx);
     static void layout(SystemText* item, const Context& ctx);
+    static void layout(SoundFlag* item, const Context& ctx);
 
     static void layout(TempoText* item, const Context& ctx);
     static void layout(TextLine* item, const Context& ctx);
     static void layout(TimeSig* item, const Context& ctx);
-    static void layout(Tremolo* item, const Context& ctx);
+    static void layout(TremoloSingleChord* item, const Context& ctx);
+    static void layout(TremoloTwoChord* item, const Context& ctx);
     static void layout(TremoloBar* item, const Context& ctx);
     static void layout(Trill* item, const Context& ctx);
 
@@ -224,6 +233,7 @@ public:
 private:
     static void layout(GlissandoSegment* item, const Context& ctx);
     static void layout(GradualTempoChangeSegment* item, const Context& ctx);
+    static void layout(GuitarBendSegment* item, const Context& ctx);
     static void layout(HairpinSegment* item, const Context& ctx);
     static void layout(LetRingSegment* item, const Context& ctx);
     static void layout(OttavaSegment* item, const Context& ctx);

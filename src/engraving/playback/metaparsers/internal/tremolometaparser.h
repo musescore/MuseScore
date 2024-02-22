@@ -26,7 +26,15 @@
 #include "playback/metaparsers/metaparserbase.h"
 
 namespace mu::engraving {
-class TremoloMetaParser : public MetaParserBase<TremoloMetaParser>
+class TremoloSingleMetaParser : public MetaParserBase<TremoloSingleMetaParser>
+{
+protected:
+    friend MetaParserBase;
+
+    static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
+};
+
+class TremoloTwoMetaParser : public MetaParserBase<TremoloTwoMetaParser>
 {
 protected:
     friend MetaParserBase;

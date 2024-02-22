@@ -40,6 +40,10 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
+    onVisibleChanged: {
+        inspectorListModel.setInspectorVisible(root.visible)
+    }
+
     function focusFirstItem() {
         var item = inspectorRepeater.itemAt(0)
         if (item) {
@@ -136,7 +140,7 @@ Rectangle {
                             flickableArea.ensureContentVisible(invisibleContentHeight)
                         }
 
-                        onPopupOpened: {
+                        onPopupOpened: function(openedPopup, visualControl) {
                             prv.closePreviousOpenedPopup(openedPopup, visualControl)
                         }
                     }

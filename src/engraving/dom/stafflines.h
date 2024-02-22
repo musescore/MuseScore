@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_LIBMSCORE_STAFFLINES_H
-#define MU_LIBMSCORE_STAFFLINES_H
+#ifndef MU_ENGRAVING_STAFFLINES_H
+#define MU_ENGRAVING_STAFFLINES_H
 
 #include <vector>
 

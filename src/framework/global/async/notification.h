@@ -22,9 +22,9 @@
 #ifndef MU_ASYNC_NOTIFY_H
 #define MU_ASYNC_NOTIFY_H
 
-#include "thirdparty/deto_async/async/notification.h"
+#include "thirdparty/kors_async/async/notification.h"
 namespace mu::async {
-using Notification = deto::async::Notification;
+using Notification = kors::async::Notification;
 }
 
 #endif // MU_ASYNC_NOTIFY_H

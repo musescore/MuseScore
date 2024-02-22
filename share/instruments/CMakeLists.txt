@@ -21,6 +21,7 @@
 install(FILES
       instruments.xml
       orders.xml
+      string_tunings_presets.json
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}instruments
       )
 

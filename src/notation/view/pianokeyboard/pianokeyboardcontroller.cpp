@@ -146,9 +146,9 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
         return;
     }
 
-    Event ev;
-    ev.setMessageType(Event::MessageType::ChannelVoice10);
-    ev.setOpcode(Event::Opcode::NoteOn);
+    mu::midi::Event ev;
+    ev.setMessageType(mu::midi::Event::MessageType::ChannelVoice10);
+    ev.setOpcode(mu::midi::Event::Opcode::NoteOn);
     ev.setNote(key);
     ev.setVelocity(80);
 
@@ -162,9 +162,9 @@ void PianoKeyboardController::sendNoteOff(piano_key_t key)
         return;
     }
 
-    Event ev;
-    ev.setMessageType(Event::MessageType::ChannelVoice10);
-    ev.setOpcode(Event::Opcode::NoteOff);
+    mu::midi::Event ev;
+    ev.setMessageType(mu::midi::Event::MessageType::ChannelVoice10);
+    ev.setOpcode(mu::midi::Event::Opcode::NoteOff);
     ev.setNote(key);
 
     notation->midiInput()->onMidiEventReceived(ev);

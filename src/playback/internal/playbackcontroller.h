@@ -43,7 +43,7 @@
 
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
-#include "isoundprofilesrepository.h"
+#include "../isoundprofilesrepository.h"
 
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
@@ -85,6 +85,12 @@ public:
 
     std::string auxChannelName(audio::aux_channel_idx_t index) const override;
     async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
+
+    async::Promise<audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const override;
+
+    notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
+    void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
+                               const notation::INotationSoloMuteState::SoloMuteState& state) const override;
 
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
@@ -128,14 +134,18 @@ private:
     bool isPaused() const;
     bool isLoaded() const;
 
-    bool isLoopVisible() const;
-    bool isPlaybackLooped() const;
+    bool isLoopEnabled() const;
+    bool loopBoundariesSet() const;
 
     void onNotationChanged();
 
     void onSelectionChanged();
     void seekListSelection();
     void seekRangeSelection();
+
+    void addSoundFlagsToExistingTracks();
+    void updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, audio::AudioSourceType sourceType);
+    void addSoundFlagIfNeed(mu::engraving::StaffText* staffText);
 
     void togglePlay();
     void rewind(const actions::ActionData& args);
@@ -165,8 +175,8 @@ private:
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
     void updateLoop();
 
-    void showLoop();
-    void hideLoop();
+    void enableLoop();
+    void disableLoop();
 
     void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 

@@ -27,6 +27,7 @@
 #include <QPainter>
 #include <QQuickPaintedItem>
 
+#include "draw/types/geometry.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "inotationconfiguration.h"
@@ -36,6 +37,23 @@
 #include "abstractnotationpaintview.h"
 
 namespace mu::notation {
+class NotationNavigatorCursorView : public QQuickPaintedItem
+{
+    Q_OBJECT
+
+    INJECT(INotationConfiguration, configuration)
+
+public:
+    NotationNavigatorCursorView(QQuickItem* parent = nullptr);
+
+    void setRect(const RectF& cursorRect);
+
+private:
+    virtual void paint(QPainter* painter) override;
+
+    RectF m_cursorRect;
+};
+
 class NotationNavigator : public AbstractNotationPaintView
 {
     Q_OBJECT
@@ -76,16 +94,16 @@ private:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
 
-    void paintCursor(QPainter* painter);
     void paintPageNumbers(QPainter* painter);
 
-    void moveCanvasToRect(const RectF& viewRect);
+    bool moveCanvasToRect(const RectF& viewRect);
 
     bool isVerticalOrientation() const;
 
     PageList pages() const;
 
     RectF m_cursorRect;
+    NotationNavigatorCursorView* m_cursorRectView = nullptr;
     PointF m_startMove;
 };
 }

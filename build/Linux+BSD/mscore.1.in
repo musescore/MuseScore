@@ -13,7 +13,6 @@
 .Sh SYNOPSIS
 .Nm
 .Op Fl deFfhIiLmnOPRstvw
-.Op Fl a | Fl \-use\-audio Ar driver
 .Op Fl b | Fl \-bitrate Ar bitrate
 .Op Fl c | Fl \-config\-folder Ar pathname
 .Op Fl D | Fl \-monitor\-resolution Ar DPI
@@ -141,12 +140,6 @@ and opens any files specified on the command line.
 .Pp
 The options are as follows:
 .Bl -tag -width Ds
-.It Fl a | Fl \-use\-audio Ar driver
-Use audio driver: one of
-.Cm jack ,
-.Cm alsa ,
-.Cm portaudio ,
-.Cm pulse
 .It Fl b | Fl \-bitrate Ar bitrate
 Set MP3 output bitrate in kbit/s
 .It Fl c | Fl \-config\-folder Ar pathname

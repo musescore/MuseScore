@@ -31,6 +31,8 @@
 #include "dom/measure.h"
 #include "dom/segment.h"
 
+#include "tdraw.h"
+
 #include "log.h"
 
 using namespace mu::draw;
@@ -40,7 +42,9 @@ using namespace mu::engraving::rendering::dev;
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
 /// Generates a seemingly random but stable color based on a pointer address.
-/// (If we would use really random colors, the would change on every redraw.)
+/// If we would use really random colors, they would change on every redraw.
+/// Additional advantage: being able to see when an element is replaced with
+/// a different element during layout.
 static Color colorForPointer(const void* ptr)
 {
     static constexpr uint32_t rgbTotalMax = 600;
@@ -66,7 +70,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    RectF bbox = item->layoutData()->bbox();
+    RectF bbox = item->ldata()->bbox();
 
     if (item->isType(ElementType::SEGMENT)) {
         if (RealIsNull(bbox.height())) {
@@ -83,7 +87,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
             path.setFillRule(PainterPath::FillRule::WindingFill);
 
             Shape shape = item->shape();
-            for (const RectF& rect : shape) {
+            for (const RectF& rect : shape.elements()) {
                 path.addRect(rect);
             }
 
@@ -106,8 +110,13 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     painter.translate(-pos);
 }
 
-void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
+void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::vector<EngravingItem*>& items)
 {
+    auto options = configuration()->debuggingOptions();
+    if (!options.anyEnabled()) {
+        return;
+    }
+
     IF_ASSERT_FAILED(page) {
         return;
     }
@@ -122,19 +131,16 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
     painter.save();
 
-    EngravingItemList items = page->childrenItems(true);
     for (const EngravingItem* item : items) {
         paintElementDebug(painter, item);
     }
-
-    auto options = configuration()->debuggingOptions();
 
     if (options.showSystemBoundingRects) {
         painter.setBrush(BrushStyle::NoBrush);
         painter.setPen(Pen(Color::BLACK, 3.0 / scaling));
 
         for (const System* system : page->systems()) {
-            PointF pt(system->layoutData()->pos());
+            PointF pt(system->ldata()->pos());
             double h = system->height() + system->minBottom() + system->minTop();
             painter.translate(pt);
             RectF rect(0.0, -system->minTop(), system->width(), h);
@@ -150,7 +156,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                     continue;
                 }
 
-                PointF pt(system->layoutData()->pos().x(), system->layoutData()->pos().y() + ss->y());
+                PointF pt(system->ldata()->pos().x(), system->ldata()->pos().y() + ss->y());
                 painter.translate(pt);
                 ss->skyline().paint(painter, 3.0 / scaling);
                 painter.translate(-pt);
@@ -181,7 +187,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                         path.setFillRule(PainterPath::FillRule::WindingFill);
 
                         Shape shape = s->shapes().at(i);
-                        for (const RectF& rect : shape) {
+                        for (const RectF& rect : shape.elements()) {
                             path.addRect(rect);
                         }
 
@@ -247,6 +253,37 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         }
     }
 #endif
+
+    painter.restore();
+}
+
+void DebugPaint::paintTreeElement(mu::draw::Painter& painter, const EngravingItem* item)
+{
+//    if (item->ldata()->isSkipDraw()) {
+//        return;
+//    }
+    item->itemDiscovered = false;
+    PointF itemPosition(item->pagePos());
+
+    painter.translate(itemPosition);
+    TDraw::drawItem(item, &painter);
+    painter.translate(-itemPosition);
+}
+
+static void paintRecursive(mu::draw::Painter& painter, const EngravingItem* item)
+{
+    DebugPaint::paintTreeElement(painter, item);
+
+    for (const EngravingItem* eItem : item->childrenItems()) {
+        paintRecursive(painter, eItem);
+    }
+}
+
+void DebugPaint::paintPageTree(mu::draw::Painter& painter, const Page* page)
+{
+    painter.save();
+
+    paintRecursive(painter, page);
 
     painter.restore();
 }

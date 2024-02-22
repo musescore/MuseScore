@@ -24,6 +24,7 @@
 #define __PLUGIN_API_INSTRUMENT_H__
 
 #include "log.h"
+#include "qmllistproperty.h"
 #include "scoreelement.h"
 #include "engraving/dom/instrument.h"
 
@@ -206,13 +207,13 @@ public:
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
-class ChannelListProperty : public QQmlListProperty<Channel>
+class ChannelListProperty : public QmlListProperty<Channel>
 {
 public:
     ChannelListProperty(Instrument* i);
 
-    static int count(QQmlListProperty<Channel>* l);
-    static Channel* at(QQmlListProperty<Channel>* l, int i);
+    static qsizetype count(QQmlListProperty<Channel>* l);
+    static Channel* at(QQmlListProperty<Channel>* l, qsizetype i);
 };
 
 //---------------------------------------------------------

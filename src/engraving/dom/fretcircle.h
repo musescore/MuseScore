@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __FRETCIRCLE_H__
-#define __FRETCIRCLE_H__
+#ifndef MU_ENGRAVING_FRETCIRCLE_H
+#define MU_ENGRAVING_FRETCIRCLE_H
 
 #include "engravingitem.h"
 
@@ -49,7 +49,7 @@ public:
         double offsetFromUpNote = 0.0;
         double sideOffset = 0.0;
     };
-    DECLARE_LAYOUTDATA_METHODS(FretCircle);
+    DECLARE_LAYOUTDATA_METHODS(FretCircle)
 
 private:
 

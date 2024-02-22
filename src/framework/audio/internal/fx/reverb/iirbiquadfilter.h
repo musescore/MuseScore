@@ -26,7 +26,6 @@
 #include <array>
 #include <cassert>
 #include <cmath>
-#include <complex>
 
 #include "smoothlinearvalue.h"
 

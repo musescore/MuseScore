@@ -44,16 +44,18 @@ static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/pa
 
 static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
 
-struct VoiceColorKey {
+struct VoiceColor {
     Settings::Key key;
     Color color;
 };
 
-static VoiceColorKey voiceColorKeys[VOICES];
+static VoiceColor VOICE_COLORS[VOICES];
+
+static const Color UNLINKED_ITEM_COLOR = "#FF9300";
 
 void EngravingConfiguration::init()
 {
-    Color defaultVoiceColors[VOICES] {
+    static const Color DEFAULT_VOICE_COLORS[VOICES] {
         "#0065BF",
         "#007F00",
         "#C53F00",
@@ -68,17 +70,17 @@ void EngravingConfiguration::init()
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
-        settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));
+        settings()->setDefaultValue(key, Val(DEFAULT_VOICE_COLORS[voice].toQColor()));
         settings()->setDescription(key, qtrc("engraving", "Voice %1 color").arg(voice + 1).toStdString());
         settings()->setCanBeManuallyEdited(key, true);
         settings()->valueChanged(key).onReceive(this, [this, voice](const Val& val) {
             Color color = val.toQColor();
-            voiceColorKeys[voice].color = color;
+            VOICE_COLORS[voice].color = color;
             m_voiceColorChanged.send(voice, color);
         });
 
         Color currentColor = settings()->value(key).toQColor();
-        voiceColorKeys[voice] = VoiceColorKey { std::move(key), currentColor };
+        VOICE_COLORS[voice] = VoiceColor { std::move(key), currentColor };
     }
 }
 
@@ -116,7 +118,11 @@ static bool defaultPageSizeIsLetter()
     }
 #ifndef NO_QT_SUPPORT
     // try locale
+#ifdef MU_QT5_COMPAT
     switch (QLocale::system().country()) {
+#else
+    switch (QLocale::system().territory()) {
+#endif
     case QLocale::UnitedStates:
     case QLocale::Canada:
     case QLocale::Mexico:
@@ -216,9 +222,9 @@ double EngravingConfiguration::guiScaling() const
     return uiConfiguration()->guiScaling();
 }
 
-Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible) const
+Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const
 {
-    Color color = voiceColorKeys[voice].color;
+    Color color = itemIsUnlinkedFromScore ? UNLINKED_ITEM_COLOR : VOICE_COLORS[voice].color;
 
     if (itemVisible) {
         return color;
@@ -235,7 +241,7 @@ Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible
 
 void EngravingConfiguration::setSelectionColor(voice_idx_t voiceIndex, Color color)
 {
-    settings()->setSharedValue(voiceColorKeys[voiceIndex].key, Val(color.toQColor()));
+    settings()->setSharedValue(VOICE_COLORS[voiceIndex].key, Val(color.toQColor()));
 }
 
 mu::async::Channel<voice_idx_t, Color> EngravingConfiguration::selectionColorChanged() const
@@ -293,11 +299,6 @@ bool EngravingConfiguration::negativeFretsAllowed() const
     return guitarProImportExperimental();
 }
 
-bool EngravingConfiguration::tablatureParenthesesZIndexWorkaround() const
-{
-    return guitarProImportExperimental();
-}
-
 bool EngravingConfiguration::crossNoteHeadAlwaysBlack() const
 {
     return guitarProImportExperimental();
@@ -319,6 +320,11 @@ bool EngravingConfiguration::guitarProMultivoiceEnabled() const
 }
 
 bool EngravingConfiguration::minDistanceForPartialSkylineCalculated() const
+{
+    return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::specificSlursLayoutWorkaround() const
 {
     return guitarProImportExperimental();
 }

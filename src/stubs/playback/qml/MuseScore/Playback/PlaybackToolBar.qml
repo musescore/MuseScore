@@ -27,15 +27,10 @@ Rectangle {
 
     property bool floating: false
 
-    property alias navigation: nav
+    property var navigationPanelSection: navigationPanel.section
+    property var navigationPanelOrder: navigationPanel.order
 
     color: ui.theme.backgroundPrimaryColor
-
-    QtObject {
-        id: nav
-        property QtObject section: null
-        property int order: 0
-    }
 
     StyledTextLabel {
         anchors.centerIn: parent

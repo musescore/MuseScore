@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STAFFTYPELIST_H__
-#define __STAFFTYPELIST_H__
+#ifndef MU_ENGRAVING_STAFFTYPELIST_H
+#define MU_ENGRAVING_STAFFTYPELIST_H
 
 #include "stafftype.h"
 
@@ -34,9 +34,6 @@ namespace mu::engraving {
 
 class StaffTypeList
 {
-    StaffType firstStaffType;   ///< staff type at tick 0
-    std::map<int, StaffType> staffTypeChanges;
-
 public:
     StaffTypeList() {}
     StaffType& staffType(const Fraction&);
@@ -46,8 +43,12 @@ public:
     bool isStaffTypeStartFrom(const Fraction&) const;
     void moveStaffType(const Fraction& from, const Fraction& to);
 
-    bool uniqueStaffType() const { return staffTypeChanges.empty(); }
+    bool uniqueStaffType() const { return m_staffTypeChanges.empty(); }
     std::pair<int, int> staffTypeRange(const Fraction&) const;
+
+private:
+    StaffType m_firstStaffType;   // staff type at tick 0
+    std::map<int, StaffType> m_staffTypeChanges;
 };
 }
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MMREST_H__
-#define __MMREST_H__
+#ifndef MU_ENGRAVING_MMREST_H
+#define MU_ENGRAVING_MMREST_H
 
 #include "rest.h"
 
@@ -41,16 +41,11 @@ public:
     MMRest* clone() const override { return new MMRest(*this, false); }
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
-    void setWidth(double width) override { m_width = width; }
-    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override { UNUSED(mode); return m_width; }
-
     bool numberVisible() const { return m_numberVisible; }
 
     PropertyValue propertyDefault(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue getProperty(Pid) const override;
-
-    Shape shape() const override;
 
     mu::RectF numberRect() const override;
 
@@ -62,15 +57,15 @@ public:
         SymIdList restSyms;                 // stores symbols when using old-style rests
         double symsWidth = 0.0;             // width of symbols with spacing when using old-style
 
+        ld_field<double> restWidth = { "[MMRest] restWidth", 0.0 }; // width of multimeasure rest
+
         void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
     };
-    DECLARE_LAYOUTDATA_METHODS(MMRest);
+    DECLARE_LAYOUTDATA_METHODS(MMRest)
 
 private:
 
     Sid getPropertyStyle(Pid) const override;
-
-    double m_width = 0.0;           // width of multimeasure rest
 
     double m_numberPos = 0.0;       // vertical position of number relative to staff
     bool m_numberVisible = false;   // show or hide number

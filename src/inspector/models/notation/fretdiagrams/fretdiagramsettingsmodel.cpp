@@ -39,8 +39,13 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
 
 void FretDiagramSettingsModel::createProperties()
 {
-    m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_scale = buildPropertyItem(mu::engraving::Pid::MAG,
+                                [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
+    },
+                                [this](const mu::engraving::Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, newValue.toDouble() / 100);
+        emit requestReloadPropertyItems();
     });
 
     m_stringsCount = buildPropertyItem(mu::engraving::Pid::FRET_STRINGS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {

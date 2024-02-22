@@ -125,6 +125,17 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const Tran
     return insertElement(idx, element, name.str, mag, offset, tag);
 }
 
+PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, actions::ActionCode code, double mag)
+{
+    const ui::UiAction& action = actionsRegister()->action(code);
+    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
+    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
+    icon->setActionType(type);
+    icon->setAction(code, static_cast<char16_t>(action.iconCode));
+
+    return insertElement(idx, icon, name, mag);
+}
+
 PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
 {
     if (element) {
@@ -149,7 +160,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableStri
     return appendElement(element, name.str, mag, offset, tag);
 }
 
-PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code)
+PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code, double mag)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
@@ -157,7 +168,7 @@ PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCod
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
 
-    return appendElement(icon, name);
+    return appendElement(icon, name, mag);
 }
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
@@ -177,6 +188,21 @@ bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 
     m_cells.insert(m_cells.begin() + idx, std::make_move_iterator(cells.begin()),
                    std::make_move_iterator(cells.end()));
+
+    return true;
+}
+
+bool Palette::removeCell(PaletteCellPtr cell)
+{
+    return removeCells({ cell });
+}
+
+bool Palette::removeCells(std::vector<PaletteCellPtr> cells)
+{
+    for (PaletteCellPtr& c : cells) {
+        c->setParent(nullptr);
+        m_cells.erase(std::remove(m_cells.begin(), m_cells.end(), c), m_cells.end());
+    }
 
     return true;
 }
@@ -316,6 +342,7 @@ bool Palette::read(XmlReader& e, bool pasteMode)
         m_type = guessType();
     }
 
+    PaletteCompat::removeOldItemsIfNeeded(*this);
     PaletteCompat::addNewItemsIfNeeded(*this, gpaletteScore);
 
     return true;
@@ -562,7 +589,8 @@ Palette::Type Palette::guessType() const
     case ElementType::ARPEGGIO:
     case ElementType::GLISSANDO:
         return Type::Arpeggio;
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
         return Type::Tremolo;
     case ElementType::TEMPO_TEXT:
         return Type::Tempo;
@@ -585,6 +613,8 @@ Palette::Type Palette::guessType() const
         return Type::Accordion;
     case ElementType::HARP_DIAGRAM:
         return Type::Harp;
+    case ElementType::STRING_TUNINGS:
+        return Type::StringTunings;
     case ElementType::ACTION_ICON: {
         const ActionIcon* action = toActionIcon(e);
         QString actionCode = QString::fromStdString(action->actionCode());

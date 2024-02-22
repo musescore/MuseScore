@@ -21,10 +21,12 @@
  */
 #include "profilerviewmodel.h"
 
+#include "global/profiler.h"
+
 #include "log.h"
 
 using namespace mu::diagnostics;
-using namespace haw::profiler;
+using namespace mu::profiler;
 
 ProfilerViewModel::ProfilerViewModel(QObject* parent)
     : QAbstractListModel(parent)

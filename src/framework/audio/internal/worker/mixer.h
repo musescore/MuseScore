@@ -25,9 +25,9 @@
 #include <memory>
 #include <map>
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
-#include "types/retval.h"
+#include "global/modularity/ioc.h"
+#include "global/async/asyncable.h"
+#include "global/types/retval.h"
 
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
@@ -39,8 +39,9 @@
 namespace mu::audio {
 class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
-    INJECT(fx::IFxResolver, fxResolver)
-    INJECT(IAudioConfiguration, configuration)
+    Inject<fx::IFxResolver> fxResolver;
+    Inject<IAudioConfiguration> configuration;
+
 public:
     Mixer();
     ~Mixer();
@@ -63,6 +64,9 @@ public:
 
     async::Channel<audioch_t, AudioSignalVal> masterAudioSignalChanges() const;
 
+    void setIsIdle(bool idle);
+    void setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds);
+
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
@@ -78,7 +82,13 @@ private:
     void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
+
+    bool useMultithreading() const;
+
+    void notifyNoAudioSignal();
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
+
+    size_t m_minTrackCountForMultithreading = 0;
 
     std::vector<float> m_writeCacheBuff;
 
@@ -87,6 +97,7 @@ private:
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
     std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
+    std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 
     struct AuxChannelInfo {
         MixerChannelPtr channel;
@@ -104,6 +115,7 @@ private:
     mutable AudioSignalsNotifier m_audioSignalNotifier;
 
     bool m_isSilence = false;
+    bool m_isIdle = false;
 };
 
 using MixerPtr = std::shared_ptr<Mixer>;

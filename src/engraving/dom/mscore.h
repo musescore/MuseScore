@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MSCORE_H__
-#define __MSCORE_H__
+#ifndef MU_ENGRAVING_MSCORE_H
+#define MU_ENGRAVING_MSCORE_H
 
 #include "global/containers.h"
 
@@ -73,8 +73,8 @@ static constexpr double SPATIUM20 = 5.0 * (DPI / 72.0);
 static constexpr double DPMM      = DPI / INCH;
 
 // NOTE: the Smufl default is actually 20pt. We use 10 for historical reasons
-// and back-compatibility, but this will be multiplied x2 during dynamic layout.
-static constexpr double DYNAMICS_DEFAULT_FONT_SIZE = 10.0;
+// and back-compatibility, but this will be multiplied x2 during layout.
+static constexpr double MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE = 10.0;
 
 static constexpr int MAX_STAVES = 4;
 
@@ -119,6 +119,16 @@ enum class KeySigNatural : char {
     NONE   = 0,               // no naturals, except for change to CMaj/Amin
     BEFORE = 1,               // naturals before accidentals
     AFTER  = 2                // naturals after accidentals (but always before if going sharps <=> flats)
+};
+
+//---------------------------------------------------------
+//    CourtesyBarlineMode (for key sig. and time sig. changes)
+//---------------------------------------------------------
+
+enum class CourtesyBarlineMode : char {
+    ALWAYS_SINGLE = 0,
+    ALWAYS_DOUBLE = 1,
+    DOUBLE_BEFORE_COURTESY = 2,
 };
 
 //---------------------------------------------------------
@@ -200,6 +210,7 @@ public:
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
 
     static bool warnPitchRange;
+    static bool warnGuitarBends;
     static int pedalEventsMinTicks;
 
     static double nudgeStep;
@@ -215,6 +226,7 @@ public:
     static bool debugMode;
     static bool testMode;
     static bool testWriteStyleToScore;
+    static bool useRead302InTestMode;
 
     static int sampleRate;
     static int mtcType;

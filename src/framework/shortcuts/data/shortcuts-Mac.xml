@@ -106,7 +106,7 @@
     </SC>
   <SC>
     <key>file-save-as</key>
-    <std>63</std>
+    <seq>Ctrl+Shift+S</seq>
     </SC>
   <SC>
     <key>file-close</key>
@@ -142,11 +142,11 @@
     </SC>
   <SC>
     <key>notation-paste-half</key>
-    <seq>Ctrl+Shift+Q</seq>
+    <seq>Meta+Shift+Q</seq>
     </SC>
   <SC>
     <key>notation-paste-double</key>
-    <seq>Ctrl+Shift+W</seq>
+    <seq>Meta+Shift+W</seq>
     </SC>
   <SC>
     <key>notation-swap</key>
@@ -520,14 +520,6 @@
     <seq>Shift+.</seq>
     </SC>
   <SC>
-    <key>add-8va</key>
-    <seq>Ctrl+Y,Ctrl+O,Ctrl+A</seq>
-    </SC>
-  <SC>
-    <key>add-8vb</key>
-    <seq>Ctrl+Y,Ctrl+O,Ctrl+B</seq>
-    </SC>
-  <SC>
     <key>notation-escape</key>
     <seq>Esc</seq>
     </SC>
@@ -560,7 +552,7 @@
     </SC>
   <SC>
     <key>insert-measures</key>
-    <seq>Shift+Del+I</seq>
+    <seq>Alt+Shift+I</seq>
     </SC>
   <SC>
     <key>duplet</key>
@@ -683,10 +675,6 @@
     <seq>F10</seq>
     </SC>
   <SC>
-    <key>toggle-playpanel</key>
-    <seq>F11</seq>
-    </SC>
-  <SC>
     <key>toggle-timeline</key>
     <seq>F12</seq>
     </SC>
@@ -755,14 +743,6 @@
     <seq>Ctrl+A</seq>
     </SC>
   <SC>
-    <key>clef-violin</key>
-    <seq>Ctrl+Y,Ctrl+1</seq>
-    </SC>
-  <SC>
-    <key>clef-bass</key>
-    <seq>Ctrl+Y,Ctrl+2</seq>
-    </SC>
-  <SC>
     <key>system-break</key>
     <seq>Return</seq>
     </SC>
@@ -782,22 +762,6 @@
   <SC>
     <key>show-keys</key>
     <seq>Shift+F2</seq>
-    </SC>
-  <SC>
-    <key>rest-1</key>
-    <seq>Shift+R, Shift+S</seq>
-    </SC>
-  <SC>
-    <key>rest-2</key>
-    <seq>Shift+R, Shift+M</seq>
-    </SC>
-  <SC>
-    <key>rest-4</key>
-    <seq>Shift+R, Shift+R</seq>
-    </SC>
-  <SC>
-    <key>rest-8</key>
-    <seq>Shift+R, Shift+Q</seq>
     </SC>
   <SC>
     <key>backspace</key>
@@ -914,6 +878,30 @@
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
     </SC>
+  <SC>
+    <key>prev-text-element</key>
+    <seq>Left</seq>
+  </SC>
+  <SC>
+    <key>next-syllable</key>
+    <seq>-</seq>
+  </SC>
+  <SC>
+    <key>add-melisma</key>
+    <seq>Shift+-</seq>
+  </SC>
+  <SC>
+    <key>next-lyric-verse</key>
+    <seq>Down</seq>
+  </SC>
+  <SC>
+    <key>prev-lyric-verse</key>
+    <seq>Up</seq>
+  </SC>
+  <SC>
+    <key>add-lyric-verse</key>
+    <seq>Return</seq>
+  </SC>
   <SC>
     <key>toggle-visible</key>
     <seq>V</seq>
@@ -1121,7 +1109,7 @@
     </SC>
   <SC>
     <key>text-u</key>
-    <seq>Ctrl+u</seq>
+    <seq>Ctrl+U</seq>
     </SC>
   <SC>
     <key>startcenter</key>
@@ -1155,5 +1143,13 @@
     <key>notation-context-menu</key>
     <seq>Shift+F10</seq>
     <seq>Ctrl+Shift+F10</seq>
+    </SC>
+  <SC>
+    <key>standard-bend</key>
+    <seq>Alt+B</seq>
+    </SC>
+  <SC>
+    <key>grace-note-bend</key>
+    <seq>Ctrl+Alt+B</seq>
     </SC>
   </Shortcuts>

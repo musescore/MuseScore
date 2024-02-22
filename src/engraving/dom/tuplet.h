@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TUPLET_H__
-#define __TUPLET_H__
+#ifndef MU_ENGRAVING_TUPLET_H
+#define MU_ENGRAVING_TUPLET_H
 
 #include <set>
 
@@ -124,6 +124,7 @@ public:
     Fraction elementsDuration();
     void sortElements();
     bool cross() const;
+    staff_idx_t vStaffIdx() const override;
 
     const mu::PointF& p1() const { return m_p1; }
     mu::PointF& p1() { return m_p1; }
@@ -140,8 +141,6 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
-
-    Shape shape() const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }

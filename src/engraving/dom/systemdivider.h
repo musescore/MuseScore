@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYSTEMDIVIDER_H__
-#define __SYSTEMDIVIDER_H__
+#ifndef MU_ENGRAVING_SYSTEMDIVIDER_H
+#define MU_ENGRAVING_SYSTEMDIVIDER_H
 
 #include "symbol.h"
 
@@ -52,6 +52,8 @@ public:
 
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
+
+    void styleChanged() override;
 
 private:
     Type m_dividerType = Type::LEFT;

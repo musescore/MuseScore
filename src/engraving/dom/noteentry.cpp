@@ -94,7 +94,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         if (m_is.rest()) {
             return nval;
         }
-        stringData = instr->stringData();
+        stringData = st->part()->stringData(s->tick(), st->idx());
         line = st->staffType(tick)->visualStringToPhys(line);
         if (line < 0 || line >= static_cast<int>(stringData->strings())) {
             error = true;
@@ -432,7 +432,7 @@ Ret Score::putNote(const Position& p, bool replace)
         break;
     }
     case StaffGroup::TAB:
-        stringData = st->part()->instrument(s->tick())->stringData();
+        stringData = st->part()->stringData(s->tick(), st->idx());
         m_is.setDrumNote(-1);
         break;
     case StaffGroup::STANDARD:
@@ -723,13 +723,13 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
     }
 
     // remove all two-note tremolos that end on this tick
-    for (EngravingItem* e : seg->_elist) {
+    for (EngravingItem* e : seg->elist()) {
         if (!e || !e->isChord()) {
             continue;
         }
         Chord* c = toChord(e);
-        Tremolo* t = c->tremolo();
-        if (t && t->twoNotes() && t->chord2() == c) {
+        TremoloTwoChord* t = c->tremoloTwoChord();
+        if (t && t->chord2() == c) {
             // we have to remove this tremolo because we are adding time in the middle of it
             // (if c is chord1 then we're inserting before the trem so it's fine)
             undoRemoveElement(t);

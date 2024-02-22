@@ -22,6 +22,8 @@
 
 #include "soundtrackwriter.h"
 
+#include "global/defer.h"
+
 #include "internal/worker/audioengine.h"
 #include "internal/encoders/mp3encoder.h"
 #include "internal/encoders/oggencoder.h"
@@ -29,8 +31,6 @@
 #include "internal/encoders/wavencoder.h"
 
 #include "audioerrors.h"
-
-#include "defer.h"
 
 using namespace mu;
 using namespace mu::audio;
@@ -79,7 +79,7 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
-        AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
+        AudioEngine::instance()->setMode(RenderMode::IdleMode);
 
         m_source->setSampleRate(AudioEngine::instance()->sampleRate());
         m_source->setIsActive(false);

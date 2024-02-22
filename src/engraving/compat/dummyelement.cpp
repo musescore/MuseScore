@@ -138,7 +138,7 @@ EngravingItem* DummyElement::clone() const
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr DummyElement::createAccessible()
 {
-    return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Panel);
+    return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Group);
 }
 
 #endif

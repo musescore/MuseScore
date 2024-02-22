@@ -43,6 +43,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/ornamenttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/linetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/directiontypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/slurtietypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/commontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
@@ -86,10 +87,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/parts/partssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/parts/partssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/bendgridcanvas.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/bendgridcanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/gridcanvas.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/gridcanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notationsettingsproxymodel.cpp
@@ -168,6 +173,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/staffs/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stafftype/stafftypesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stafftype/stafftypesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/symbols/symbolsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/symbols/symbolsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tempos/temposettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tempos/temposettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/timesignatures/timesignaturesettingsmodel.cpp
@@ -206,6 +213,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/dynamics/dynamicsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/expressions/expressionsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/expressions/expressionsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/stringtunings/stringtuningssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/stringtunings/stringtuningssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp

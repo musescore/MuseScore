@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __AMBITUS_H__
-#define __AMBITUS_H__
+#ifndef MU_ENGRAVING_AMBITUS_H
+#define MU_ENGRAVING_AMBITUS_H
 
 #include "engravingitem.h"
 
@@ -121,7 +121,7 @@ public:
         PointF bottomPos;       // position of bottom note symbol
         LineF line;             // the drawn line
     };
-    DECLARE_LAYOUTDATA_METHODS(Ambitus);
+    DECLARE_LAYOUTDATA_METHODS(Ambitus)
 
 private:
 

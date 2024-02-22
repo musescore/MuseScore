@@ -43,11 +43,9 @@ void TextInputFieldModel::init()
     loadShortcuts();
 }
 
-bool TextInputFieldModel::isShortcutAllowedOverride(int key, Qt::KeyboardModifiers modifiers) const
+bool TextInputFieldModel::isShortcutAllowedOverride(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
-    std::pair<int, Qt::KeyboardModifiers> correctedKeyInput = correctKeyInput(key, modifiers);
-    int newKey = correctedKeyInput.first;
-    Qt::KeyboardModifiers newModifiers = correctedKeyInput.second;
+    auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
     if (needIgnoreKey(newKey)) {
         return true;
@@ -57,11 +55,9 @@ bool TextInputFieldModel::isShortcutAllowedOverride(int key, Qt::KeyboardModifie
     return !shortcut.isValid();
 }
 
-bool TextInputFieldModel::handleShortcut(int key, Qt::KeyboardModifiers modifiers)
+bool TextInputFieldModel::handleShortcut(Qt::Key key, Qt::KeyboardModifiers modifiers)
 {
-    std::pair<int, Qt::KeyboardModifiers> correctedKeyInput = correctKeyInput(key, modifiers);
-    int newKey = correctedKeyInput.first;
-    Qt::KeyboardModifiers newModifiers = correctedKeyInput.second;
+    auto [newKey, newModifiers] = correctKeyInput(key, modifiers);
 
     if (needIgnoreKey(newKey)) {
         return false;
@@ -100,9 +96,9 @@ void TextInputFieldModel::loadShortcuts()
     }
 }
 
-Shortcut TextInputFieldModel::shortcut(int key, Qt::KeyboardModifiers modifiers) const
+Shortcut TextInputFieldModel::shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const
 {
-    QKeySequence keySequence(modifiers + key);
+    QKeySequence keySequence(modifiers | key);
     for (const Shortcut& shortcut : m_notAllowedForOverrideShortcuts) {
         for (const std::string& seq : shortcut.sequences) {
             QKeySequence shortcutSequence(QString::fromStdString(seq));

@@ -21,6 +21,8 @@
  */
 #include "commandlineparser.h"
 
+#include <QDir>
+
 #include "global/io/dir.h"
 #include "global/muversion.h"
 
@@ -103,6 +105,10 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("source-update", "Update the source in the given score"));
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
+
+    m_parser.addOption(QCommandLineOption("sound-profile",
+                                          "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
+                                          "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
 
     // Video export
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
@@ -197,7 +203,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("d")) {
-        m_options.app.loggerLevel = haw::logger::Debug;
+        m_options.app.loggerLevel = mu::logger::Level::Debug;
     }
 
     if (m_parser.isSet("D")) {
@@ -394,6 +400,10 @@ void CommandLineParser::parse(int argc, char** argv)
         m_converterTask.params[CommandLineParser::ParamKey::StylePath] = fromUserInputPath(m_parser.value("S"));
     }
 
+    if (m_parser.isSet("sound-profile")) {
+        m_converterTask.params[CommandLineParser::ParamKey::SoundProfile] = m_parser.value("sound-profile");
+    }
+
     if (m_parser.isSet("gp-linked")) {
         m_options.guitarPro.linkedTabStaffCreated = true;
     }
@@ -463,7 +473,7 @@ void CommandLineParser::parse(int argc, char** argv)
     // Startup
     if (m_runMode == IApplication::RunMode::GuiApp) {
         if (!scorefiles.isEmpty()) {
-            m_options.startup.scorePath = scorefiles[0].toStdString();
+            m_options.startup.scoreUrl = QUrl::fromUserInput(scorefiles[0], QDir::currentPath(), QUrl::AssumeLocalFile);
         }
 
         if (m_parser.isSet("score-display-name-override")) {

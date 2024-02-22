@@ -64,8 +64,9 @@ public:
     INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
-    void showShadowNote(const PointF& pos) override;
+    bool showShadowNote(const PointF& pos) override;
     void hideShadowNote() override;
+    RectF shadowNoteRect() const override;
 
     // Visibility
     void toggleVisible() override;
@@ -147,6 +148,7 @@ public:
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
     async::Channel<TextBase*> textEditingEnded() const override;
+    async::Channel<TextBase*> textAdded() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;
@@ -168,7 +170,7 @@ public:
 
     Ret canAddBoxes() const override;
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target) override;
-    void addBoxes(BoxType boxType, int count, int beforeBoxIndex) override;
+    void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef = true) override;
 
     void copySelection() override;
     void copyLyrics() override;
@@ -262,10 +264,15 @@ public:
     void addMelisma() override;
     void addLyricsVerse() override;
 
+    Ret canAddGuitarBend() const override;
+    void addGuitarBend(GuitarBendType bendType) override;
+
     void toggleBold() override;
     void toggleItalic() override;
     void toggleUnderline() override;
     void toggleStrike() override;
+    void toggleSubScript() override;
+    void toggleSuperScript() override;
     void toggleArticulation(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
@@ -313,6 +320,7 @@ private:
     void doDragLasso(const PointF& p);
     void endLasso();
     void toggleFontStyle(mu::engraving::FontStyle);
+    void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
     void navigateToLyrics(bool, bool, bool);
 
     mu::engraving::Harmony* editedHarmony() const;
@@ -356,6 +364,8 @@ private:
 
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
                                  Qt::KeyboardModifiers modifiers, PointF pt = PointF(), bool pasteMode = false);
+
+    void applyLineNoteToNote(engraving::Score* score, Note* note1, Note* note2, EngravingItem* line);
 
     void doAddSlur(const mu::engraving::Slur* slurTemplate = nullptr);
     void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const mu::engraving::Slur* slurTemplate);
@@ -419,6 +429,7 @@ private:
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
     async::Channel<TextBase*> m_textEditingEnded;
+    async::Channel<TextBase*> m_textAdded;
 
     DropData m_dropData;
     async::Notification m_dropChanged;

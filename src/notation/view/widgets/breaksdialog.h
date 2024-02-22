@@ -41,7 +41,9 @@ class BreaksDialog : public QDialog, public Ui::BreaksDialog
 
 public:
     BreaksDialog(QWidget* parent = nullptr);
+#ifdef MU_QT5_COMPAT
     BreaksDialog(const BreaksDialog& dialog);
+#endif
 
 private slots:
     void accept() override;
@@ -52,7 +54,5 @@ private:
     bool _allSelected = false;
 };
 }
-
-Q_DECLARE_METATYPE(mu::notation::BreaksDialog)
 
 #endif // MU_NOTATION_BREAKSDIALOG_H

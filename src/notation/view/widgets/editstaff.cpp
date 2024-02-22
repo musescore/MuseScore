@@ -109,15 +109,13 @@ EditStaff::EditStaff(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 EditStaff::EditStaff(const EditStaff& other)
     : QDialog(other.parentWidget())
 {
 }
 
-int EditStaff::metaTypeId()
-{
-    return QMetaType::type("EditStaff");
-}
+#endif
 
 void EditStaff::setStaff(Staff* s, const Fraction& tick)
 {
@@ -156,6 +154,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_staff->setShowIfEmpty(m_orgStaff->showIfEmpty());
     m_staff->setHideSystemBarLine(m_orgStaff->hideSystemBarLine());
     m_staff->setMergeMatchingRests(m_orgStaff->mergeMatchingRests());
+    m_staff->setReflectTranspositionInLinkedTab(m_orgStaff->reflectTranspositionInLinkedTab());
 
     // get tick range for instrument
     auto i = part->instruments().upper_bound(tick.ticks());
@@ -183,6 +182,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
     mergeMatchingRests->setChecked(m_staff->mergeMatchingRests());
+    noReflectTranspositionInLinkedTab->setChecked(!m_staff->reflectTranspositionInLinkedTab());
 
     updateStaffType(*stt);
     updateInstrument();
@@ -458,7 +458,16 @@ void EditStaff::initStaff()
     const EngravingItem* element = context.element;
     Staff* staff = context.staff;
 
-    if (!element) {
+    if (interaction && !element) {
+        INotationSelectionPtr selection = interaction->selection();
+        if (selection->isRange()) {
+            INotationSelectionRangePtr range = selection->range();
+            element = range->measureRange().endMeasure;
+            staff = element->score()->staff(range->endStaffIndex() - 1);
+        }
+    }
+
+    IF_ASSERT_FAILED(element) {
         return;
     }
 
@@ -477,6 +486,10 @@ void EditStaff::initStaff()
         if (measure) {
             tick = measure->tick();
         }
+    }
+
+    IF_ASSERT_FAILED(staff) {
+        return;
     }
 
     setStaff(staff, tick);
@@ -506,6 +519,7 @@ void EditStaff::applyStaffProperties()
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
+    config.reflectTranspositionInLinkedTab = !noReflectTranspositionInLinkedTab->isChecked();
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 }
@@ -589,9 +603,12 @@ void EditStaff::editStringDataClicked()
     int frets = m_instrument.stringData()->frets();
     std::vector<mu::engraving::instrString> stringList = m_instrument.stringData()->stringList();
 
-    EditStringData* esd = new EditStringData(this, &stringList, &frets);
-    esd->setWindowModality(Qt::WindowModal);
+    EditStringData* esd = new EditStringData(this, stringList, frets);
+
     if (esd->exec()) {
+        frets = esd->frets();
+        stringList = esd->strings();
+
         mu::engraving::StringData stringData(frets, stringList);
 
         // update instrument pitch ranges as necessary

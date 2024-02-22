@@ -30,6 +30,7 @@
 #include "types/typesconv.h"
 
 #include "dom/mscore.h"
+#include "dom/pedal.h"
 #include "dom/types.h"
 
 #include "defaultstyle.h"
@@ -179,6 +180,12 @@ bool MStyle::readProperties(XmlReader& e)
                 break;
             case P_TYPE::CLEF_TO_BARLINE_POS:
                 set(idx, ClefToBarlinePosition(e.readInt()));
+                break;
+            case P_TYPE::TIE_PLACEMENT:
+                set(idx, TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
+                break;
+            case P_TYPE::GLISS_STYLE:
+                set(idx, GlissandoStyle(e.readText().toInt()));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
@@ -352,9 +359,48 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         } else if (tag == "chordlineThickness" && m_version < 410) {
             // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
             e.skipCurrentElement();
+        } else if (tag == "pedalText" && m_version < 420) {
+            // Ignore old default
+            String pedText = e.readText();
+            if (pedText != "") {
+                set(Sid::pedalText, pedText);
+            }
+        } else if (tag == "pedalContinueText" && m_version < 420 && e.readAsciiText() == "") {
+            // Ignore old default
+            String pedContText = e.readText();
+            if (pedContText != "") {
+                set(Sid::pedalText, pedContText);
+            }
+        } else if ((tag == "slurEndWidth"
+                    || tag == "slurMidWidth"
+                    || tag == "slurDottedWidth"
+                    || tag == "slurMinDistance")
+                   && m_version < 430) {
+            // Pre-4.3 scores used identical style values for slurs and ties.
+            // When opening older scores, use the same values for both.
+            double _val = e.readDouble();
+            if (tag == "slurEndWidth") {
+                set(Sid::TieEndWidth,     Spatium(_val));
+                set(Sid::SlurEndWidth,    Spatium(_val));
+            } else if (tag == "slurMidWidth") {
+                set(Sid::TieMidWidth,     Spatium(_val));
+                set(Sid::SlurMidWidth,    Spatium(_val));
+            } else if (tag == "slurDottedWidth") {
+                set(Sid::TieDottedWidth,  Spatium(_val));
+                set(Sid::SlurDottedWidth, Spatium(_val));
+            } else if (tag == "slurMinDistance") {
+                set(Sid::TieMinDistance,  Spatium(_val));
+                set(Sid::SlurMinDistance, Spatium(_val));
+            }
         } else if (!readProperties(e)) {
             e.unknown();
         }
+    }
+
+    if (m_version < 420 && !MScore::testMode) {
+        // This style didn't exist before version 4.2. For files older than 4.2, defaults
+        // to INSIDE for compatibility. For files 4.2 and newer, defaults to OUTSIDE.
+        set(Sid::tiePlacementChord, TiePlacement::INSIDE);
     }
 
     if (readChordListHook) {
@@ -398,6 +444,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(a));
         } else if (P_TYPE::LINE_TYPE == type) {
             xml.tagProperty(st.name(), value(idx));
+        } else if (P_TYPE::TIE_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility

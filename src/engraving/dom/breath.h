@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BREATH_H__
-#define __BREATH_H__
+#ifndef MU_ENGRAVING_BREATH_H
+#define MU_ENGRAVING_BREATH_H
 
 #include "engravingitem.h"
 
@@ -33,9 +33,9 @@ class Factory;
 //---------------------------------------------------------
 
 struct BreathType {
-    SymId id;
-    bool isCaesura;
-    double pause;
+    SymId id = SymId::noSym;
+    bool isCaesura = false;
+    double pause = false;
 };
 
 //---------------------------------------------------------

@@ -25,6 +25,8 @@
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 
+#include "brailletypes.h"
+
 namespace mu::braille {
 class IBrailleConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -37,11 +39,14 @@ public:
     virtual bool braillePanelEnabled() const = 0;
     virtual void setBraillePanelEnabled(const bool enabled) = 0;
 
+    virtual async::Notification intervalDirectionChanged() const = 0;
+    virtual BrailleIntervalDirection intervalDirection() const = 0;
+    virtual void setIntervalDirection(const BrailleIntervalDirection direction) = 0;
+
     virtual async::Notification brailleTableChanged() const = 0;
     virtual QString brailleTable() const = 0;
     virtual void setBrailleTable(const QString table) = 0;
-
-    virtual QStringList brailleTableList() = 0;
+    virtual QStringList brailleTableList() const = 0;
 };
 }
 

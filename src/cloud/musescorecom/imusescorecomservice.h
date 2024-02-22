@@ -60,7 +60,8 @@ public:
     /// big list of all issues, but you have many pages, with 25 issues per page.
     virtual async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) = 0;
 
-    virtual framework::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData) = 0;
+    virtual framework::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData,
+                                                 const QString& hash = QString(), const QString& secret = QString()) = 0;
 };
 }
 

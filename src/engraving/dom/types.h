@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TYPES_H__
-#define __TYPES_H__
+#ifndef MU_ENGRAVING_TYPES_OLD_H
+#define MU_ENGRAVING_TYPES_OLD_H
 
 #include <unordered_set>
 
@@ -32,12 +32,15 @@
 #include "style/styledef.h"
 
 namespace mu::engraving {
+class EngravingItem;
+
 enum class CommandType {
     Unknown = -1,
 
     // Parts
     InsertPart,
     RemovePart,
+    AddPartToExcerpt,
     SetSoloist,
     ChangePart,
 
@@ -246,9 +249,9 @@ enum class AccidentalType {
     SHARP_31,
     FLAT_53,
     SHARP_53,
-    //EQUALS_ALMOST,
-    //EQUALS,
-    //TILDE,
+    EQUALS_ALMOST,
+    EQUALS,
+    TILDE,
 
     // Persian
     SORI,
@@ -488,12 +491,26 @@ enum class TripletFeelType : char {
     SCOTTISH_16TH
 };
 
+enum class GuitarBendType {
+    BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+};
+
+enum class GuitarBendShowHoldLine {
+    AUTO,
+    SHOW,
+    HIDE,
+};
+
 struct ScoreChangesRange {
     int tickFrom = -1;
     int tickTo = -1;
     staff_idx_t staffIdxFrom = mu::nidx;
     staff_idx_t staffIdxTo = mu::nidx;
 
+    std::set<const EngravingItem*> changedItems;
     ElementTypeSet changedTypes;
     PropertyIdSet changedPropertyIdSet;
     StyleIdSet changedStyleIdSet;
@@ -514,9 +531,9 @@ struct ScoreChangesRange {
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::NoteType);
-Q_DECLARE_METATYPE(mu::engraving::PlayEventType);
-Q_DECLARE_METATYPE(mu::engraving::AccidentalType);
+Q_DECLARE_METATYPE(mu::engraving::NoteType)
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
+Q_DECLARE_METATYPE(mu::engraving::AccidentalType)
 #endif
 
 #endif

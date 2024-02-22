@@ -59,7 +59,7 @@ void Score::addText(const QString& type, const QString& txt)
 {
     MeasureBase* measure = score()->first();
     if (!measure || !measure->isVBox()) {
-        score()->insertMeasure(ElementType::VBOX, measure);
+        score()->insertBox(ElementType::VBOX, measure);
         measure = score()->first();
     }
     mu::engraving::TextStyleType tid = mu::engraving::TextStyleType::DEFAULT;
@@ -70,7 +70,7 @@ void Score::addText(const QString& type, const QString& txt)
     } else if (type == "composer") {
         tid = mu::engraving::TextStyleType::COMPOSER;
     } else if (type == "lyricist") {
-        tid = mu::engraving::TextStyleType::POET;
+        tid = mu::engraving::TextStyleType::LYRICIST;
     }
 
     mu::engraving::Text* text = mu::engraving::Factory::createText(measure, tid);

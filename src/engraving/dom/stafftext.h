@@ -20,28 +20,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STAFFTEXT_H__
-#define __STAFFTEXT_H__
+#ifndef MU_ENGRAVING_STAFFTEXT_H
+#define MU_ENGRAVING_STAFFTEXT_H
 
 #include "stafftextbase.h"
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   StaffText
-//---------------------------------------------------------
-
 class StaffText final : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, StaffText)
     DECLARE_CLASSOF(ElementType::STAFF_TEXT)
 
 public:
-    StaffText(Segment* parent = 0, TextStyleType = TextStyleType::STAFF);
+    StaffText(Segment* parent = nullptr, TextStyleType = TextStyleType::STAFF);
+    StaffText(const StaffText&);
 
     StaffText* clone() const override { return new StaffText(*this); }
 
+    bool canBeExcludedFromOtherParts() const override { return true; }
+
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
+    EngravingObjectList scanChildren() const override;
+
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+
+    void setTrack(track_idx_t idx) override;
+
+    bool hasSoundFlag() const;
+    SoundFlag* soundFlag() const;
+    void setSoundFlag(SoundFlag* flag);
+
 private:
     PropertyValue propertyDefault(Pid id) const override;
+
+    SoundFlag* m_soundFlag = nullptr;
 };
 } // namespace mu::engraving
-#endif
+#endif // MU_ENGRAVING_STAFFTEXT_H

@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <QImage>
+#include <QBuffer>
 
 #include "log.h"
 
@@ -37,7 +38,7 @@ std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
+mu::Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -46,7 +47,7 @@ mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();
 
     INotationPainting::Options opt;
-    opt.fromPage = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    opt.fromPage = mu::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
@@ -61,14 +62,21 @@ mu::Ret PngWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
     image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
 
-    const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND, Val(false)).toBool();
+    const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                  Val(configuration()->exportPngWithTransparentBackground())).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
     mu::draw::Painter painter(&image, "pngwriter");
 
     notation->painting()->paintPng(&painter, opt);
 
-    image.save(&destinationDevice, "png");
+    QByteArray qdata;
+    QBuffer buf(&qdata);
+    buf.open(QIODevice::WriteOnly);
+    image.save(&buf, "png");
+
+    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+    destinationDevice.write(data);
 
     return true;
 }

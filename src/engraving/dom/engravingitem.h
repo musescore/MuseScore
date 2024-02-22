@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ELEMENT_H__
-#define __ELEMENT_H__
+#ifndef MU_ENGRAVING_ELEMENT_H
+#define MU_ENGRAVING_ELEMENT_H
 
 #include <optional>
 
@@ -37,20 +37,31 @@
 #include "rendering/iscorerenderer.h"
 
 #include "infrastructure/ld_access.h"
+#include "infrastructure/shape.h"
+#include "infrastructure/skyline.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"
 #include "types/types.h"
 
-#include "shape.h"
 #include "editdata.h"
 
 #define DECLARE_LAYOUTDATA_METHODS(Class) \
-    const LayoutData* layoutData() const { return static_cast<const Class::LayoutData*>(EngravingItem::layoutData()); } \
-    LayoutData* mutLayoutData() { return static_cast<Class::LayoutData*>(EngravingItem::mutLayoutData()); } \
+    const LayoutData* ldata() const { return static_cast<const Class::LayoutData*>(EngravingItem::ldata()); } \
+    LayoutData* mutldata() { return static_cast<Class::LayoutData*>(EngravingItem::mutldata()); } \
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
 namespace mu::engraving {
+template<typename T>
+inline void dump(const ld_field<T>& f, std::stringstream& ss)
+{
+    if (f.has_value()) {
+        dump(f.value(), ss);
+    } else {
+        ss << "no value";
+    }
+}
+
 class Factory;
 class XmlReader;
 
@@ -146,6 +157,10 @@ class EngravingItem : public EngravingObject
     INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
     INJECT_STATIC(rendering::IScoreRenderer, renderer)
 
+    M_PROPERTY2(bool, isPositionLinkedToMaster, setPositionLinkedToMaster, true)
+    M_PROPERTY2(bool, isAppearanceLinkedToMaster, setAppearanceLinkedToMaster, true)
+    M_PROPERTY2(bool, excludeFromOtherParts, setExcludeFromOtherParts, false)
+
 public:
 
     virtual ~EngravingItem();
@@ -232,8 +247,8 @@ public:
     virtual void setOffset(const PointF& o) { m_offset = o; }
     void setOffset(double x, double y) { m_offset.setX(x), m_offset.setY(y); }
     PointF& roffset() { return m_offset; }
-    double& rxoffset() { return m_offset.rx(); }
-    double& ryoffset() { return m_offset.ry(); }
+    real_t& rxoffset() { return m_offset.rx(); }
+    real_t& ryoffset() { return m_offset.ry(); }
 
     virtual Fraction tick() const;
     virtual Fraction rtick() const;
@@ -246,7 +261,7 @@ public:
     bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
 
-    virtual mu::RectF hitBBox() const { return layoutData()->bbox(); }
+    virtual mu::RectF hitBBox() const { return ldata()->bbox(); }
     virtual Shape hitShape() const { return shape(); }
     Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
@@ -344,15 +359,15 @@ public:
     virtual TranslatableString subtypeUserName() const;
     virtual String translatedSubtypeUserName() const;
 
+    virtual void setColor(const mu::draw::Color& c);
     virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;
     mu::draw::Color curColor(bool isVisible) const;
     mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;
-    virtual void setColor(const mu::draw::Color& c) { m_color = c; }
 
     void undoSetColor(const mu::draw::Color& c);
     void undoSetVisible(bool v);
-    void undoAddElement(EngravingItem* element);
+    void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true);
 
     static ElementType readType(XmlReader& node, PointF*, Fraction*);
     static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, PointF*, Fraction*);
@@ -384,7 +399,7 @@ public:
  */
     virtual bool mousePress(EditData&) { return false; }
 
-    mutable bool itemDiscovered      { false };       ///< helper flag for bsp
+    mutable bool itemDiscovered = false;       // helper flag for bsp
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
@@ -421,7 +436,7 @@ public:
 
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
-    bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
+    bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)) && !ldata()->isSkipDraw(); }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
@@ -441,6 +456,7 @@ public:
     double symWidth(const SymIdList&) const;
     RectF symBbox(SymId id) const;
     RectF symBbox(const SymIdList&) const;
+    Shape symShapeWithCutouts(SymId id) const;
 
     PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
 
@@ -480,9 +496,12 @@ public:
 
     std::pair<int, float> barbeat() const;
 
+    virtual EngravingItem* findLinkedInScore(const Score* score) const;
+    EngravingItem* findLinkedInStaff(const Staff* staff) const;
+
     struct Autoplace {
         OffsetChange offsetChanged = OffsetChange::NONE;     // set by user actions that change offset, used by autoplace
-        PointF changedPos;                // position set when changing offset
+        PointF changedPos;                                   // position set when changing offset
     };
 
     struct LayoutData {
@@ -492,12 +511,12 @@ public:
 
         virtual void reset()
         {
-            m_bbox.reset();
+            m_shape.reset();
             //! NOTE Temporary removed, have problems, need investigation
             //m_pos.reset();
         }
 
-        bool isValid() const { return m_bbox.has_value(); }
+        virtual bool isValid() const { return m_shape.has_value() && m_shape.value().bbox().isValid(); }
 
         bool isSkipDraw() const { return m_isSkipDraw; }
         void setIsSkipDraw(bool val) { m_isSkipDraw = val; }
@@ -521,58 +540,112 @@ public:
         void moveX(double x) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x() + x, pos(LD_ACCESS::MAYBE_NOTINITED).y()); }
         void moveY(double y) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x(), pos(LD_ACCESS::MAYBE_NOTINITED).y() + y); }
 
-        bool isSetBbox() const { return m_bbox.has_value(); }
-        void clearBbox() { m_bbox.reset(); }
-        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bbox.value(mode); }
-        void setBbox(const mu::RectF& r) { m_bbox.set_value(r); }
-        void setBbox(double x, double y, double w, double h) { mutBbox().setRect(x, y, w, h); }
-        void addBbox(const mu::RectF& r) { mutBbox().unite(r); }
-        void setHeight(double v) { mutBbox().setHeight(v); }
-        void setWidth(double v) { mutBbox().setWidth(v); }
+        bool isSetBbox() const { return m_shape.has_value(); }
+        void clearBbox() { m_shape.reset(); }
+        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const;
+
+        bool isSetShape() const { return m_shape.has_value(); }
+        void clearShape() { m_shape.reset(); }
+        Shape shape(LD_ACCESS mode = LD_ACCESS::CHECK) const;
+
+        void setShape(const Shape& sh) { m_shape.set_value(sh); }
+
+        void setBbox(const mu::RectF& r);
+
+        void setBbox(double x, double y, double w, double h) { setBbox(mu::RectF(x, y, w, h)); }
+        void addBbox(const mu::RectF& r)
+        {
+            DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
+            DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));
+            DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
+            DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
+
+            //DO_ASSERT(!isShapeComposite());
+            mutShape().addBBox(r);
+        }
+
+        void setHeight(double v)
+        {
+            mu::RectF r = bbox();
+            r.setHeight(v);
+            setBbox(r);
+        }
+
+        void setWidth(double v)
+        {
+            mu::RectF r = bbox();
+            r.setWidth(v);
+            setBbox(r);
+        }
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
+        void dump(std::stringstream& ss) const;
+
     protected:
+
+        virtual void supDump(std::stringstream& ss) const { UNUSED(ss); }
+
+#ifndef NDEBUG
+        void doSetPosDebugHook(double x, double y);
+#endif
+
         inline void doSetPos(double x, double y)
         {
+#ifndef NDEBUG
+            doSetPosDebugHook(x, y);
+#endif
             m_pos.mut_value().setX(x),
             m_pos.mut_value().setY(y);
         }
 
-        mu::RectF& mutBbox() { return m_bbox.mut_value(); }
+        Shape& mutShape() { return m_shape.mut_value(); }
+        bool isShapeComposite() const { return m_shape.has_value() && m_shape.value().isComposite(); }
 
+        friend class EngravingItem;
+
+        const EngravingItem* m_item = nullptr;
         bool m_isSkipDraw = false;
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
-        ld_field<RectF> m_bbox = "bbox";        // Bounding box relative to _pos + _offset
+        ld_field<Shape> m_shape = "shape";
     };
 
-    const LayoutData* layoutData() const;
-    LayoutData* mutLayoutData();
+    const LayoutData* ldata() const;
+    LayoutData* mutldata();
 
     virtual double mag() const;
-    virtual Shape shape() const { return Shape(layoutData()->bbox(), this); }
+    Shape shape(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->shape(mode); }
     virtual double baseLine() const { return -height(); }
 
-    mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
-    mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
-    mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(canvasPos()); }
+    mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
+    mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
+    mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
+
+    virtual bool isPropertyLinkedToMaster(Pid id) const;
+    virtual bool isUnlinkedFromMaster() const;
+    void unlinkPropertyFromMaster(Pid id);
+    void relinkPropertiesToMaster(PropertyGroup propGroup);
+    void relinkPropertyToMaster(Pid propertyId);
+    PropertyPropagation propertyPropagation(const EngravingItem* destinationItem, Pid propertyId) const;
+    virtual bool canBeExcludedFromOtherParts() const { return false; }
+    virtual void manageExclusionFromParts(bool exclude);
 
     //! --- Old Interface ---
-    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->setBbox(r); }
-    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->addBbox(r); }
-    virtual double height() const { return layoutData()->bbox().height(); }
-    virtual void setHeight(double v) { mutLayoutData()->setHeight(v); }
-    virtual double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).width(); }
-    virtual void setWidth(double v) { mutLayoutData()->setWidth(v); }
+    void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
+    double height() const { return ldata()->bbox().height(); }
+    void setHeight(double v) { mutldata()->setHeight(v); }
 
-    virtual const PointF pos() const { return layoutData()->pos() + m_offset; }
-    virtual double x() const { return layoutData()->pos().x() + m_offset.x(); }
-    virtual double y() const { return layoutData()->pos().y() + m_offset.y(); }
-    virtual void setPos(double x, double y) { mutLayoutData()->setPos(x, y); }
-    virtual void setPos(const PointF& p) { mutLayoutData()->setPos(p.x(), p.y()); }
+    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
+    void setWidth(double v) { mutldata()->setWidth(v); }
 
-    virtual void move(const PointF& s) { mutLayoutData()->move(s); }
+    virtual const PointF pos() const { return ldata()->pos() + m_offset; }
+    virtual double x() const { return ldata()->pos().x() + m_offset.x(); }
+    virtual double y() const { return ldata()->pos().y() + m_offset.y(); }
+    virtual void setPos(double x, double y) { mutldata()->setPos(x, y); }
+    virtual void setPos(const PointF& p) { mutldata()->setPos(p.x(), p.y()); }
+
+    virtual void move(const PointF& s) { mutldata()->move(s); }
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
@@ -587,6 +660,8 @@ protected:
 #endif
 
     virtual LayoutData* createLayoutData() const;
+    virtual const LayoutData* ldataInternal() const;
+    virtual LayoutData* mutldataInternal();
 
     mutable int m_z = 0;
     mu::draw::Color m_color;                // element color attribute
@@ -677,11 +752,6 @@ class Compound : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Compound)
 
-    std::list<EngravingItem*> elements;
-
-protected:
-    const std::list<EngravingItem*>& getElements() const { return elements; }
-
 public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
@@ -692,6 +762,12 @@ public:
     virtual void setSelected(bool f);
     virtual void setVisible(bool);
     virtual void layout();
+
+protected:
+    const std::list<EngravingItem*>& getElements() const { return m_elements; }
+
+private:
+    std::list<EngravingItem*> m_elements;
 };
 
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
@@ -699,7 +775,7 @@ extern void collectElements(void* data, EngravingItem* e);
 } // mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::ElementType);
+Q_DECLARE_METATYPE(mu::engraving::ElementType)
 #endif
 
 #endif

@@ -30,6 +30,8 @@ class MidiConfigurationStub : public IMidiConfiguration
 public:
     MidiConfigurationStub() = default;
 
+    bool midiPortIsAvalaible() const override;
+
     bool useRemoteControl() const override;
     void setUseRemoteControl(bool value) override;
 

@@ -23,20 +23,22 @@
 #include <set>
 
 #include "importmidi_clef.h"
-#include "engraving/dom/factory.h"
-#include "engraving/dom/staff.h"
-#include "engraving/dom/measure.h"
-#include "engraving/dom/segment.h"
-#include "engraving/dom/clef.h"
-#include "engraving/dom/chordrest.h"
 #include "engraving/dom/chord.h"
-#include "engraving/dom/note.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/clef.h"
 #include "engraving/dom/engravingitem.h"
-#include "importmidi_tie.h"
-#include "importmidi_meter.h"
-#include "importmidi_fraction.h"
-#include "importmidi_operations.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/sig.h"
+#include "engraving/dom/staff.h"
+#include "importmidi_fraction.h"
+#include "importmidi_meter.h"
+#include "importmidi_operations.h"
+#include "importmidi_tie.h"
 
 #include "log.h"
 
@@ -124,7 +126,7 @@ static void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall =
         const track_idx_t track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
-        clef->mutLayoutData()->setMag(staff->staffMag(Fraction::fromTicks(tick)));
+        clef->mutldata()->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         clef->setSmall(isSmall);
         seg->add(clef);
     }
@@ -437,7 +439,7 @@ bool hasGFclefs(const InstrumentTemplate* templ)
     bool hasG = false;
     bool hasF = false;
     for (staff_idx_t i = 0; i != staveCount; ++i) {
-        switch (templ->clefTypes[i]._concertClef) {
+        switch (templ->clefTypes[i].concertClef) {
         case ClefType::G:
             hasG = true;
             break;

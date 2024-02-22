@@ -28,7 +28,7 @@
 #include <functional>
 #include <memory>
 
-#include "async/notification.h"
+#include "global/async/notification.h"
 #include "modularity/imoduleinterface.h"
 
 #include "audiotypes.h"

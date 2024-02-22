@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CLEFLIST_H__
-#define __CLEFLIST_H__
+#ifndef MU_ENGRAVING_CLEFLIST_H
+#define MU_ENGRAVING_CLEFLIST_H
 
 #include "clef.h"
 

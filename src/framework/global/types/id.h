@@ -79,12 +79,22 @@ inline bool containsId(const IDList& list, const ID& id)
 }
 
 #ifndef NO_QT_SUPPORT
+
+#ifdef MU_QT5_COMPAT
 inline uint qHash(const ID& id)
 {
     return ::qHash(id.toUint64());
 }
 
-#endif
+#else
+inline size_t qHash(const ID& id)
+{
+    return ::qHash(id.toUint64());
+}
+
+#endif // MU_QT5_COMPAT
+
+#endif // NO_QT_SUPPORT
 }
 
 inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::ID& v)

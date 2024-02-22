@@ -20,13 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CHORDREST_H__
-#define __CHORDREST_H__
+#ifndef MU_ENGRAVING_CHORDREST_H
+#define MU_ENGRAVING_CHORDREST_H
 
 #include <functional>
 
 #include "durationelement.h"
 #include "types/types.h"
+
+#include "fermata.h"
 
 namespace mu::engraving {
 enum class CrossMeasure : signed char {
@@ -78,24 +80,21 @@ public:
 
     void setBeam(Beam* b);
     void setBeamlet(BeamSegment* b);
+    BeamSegment* beamlet() const { return m_beamlet; }
+
     virtual Beam* beam() const final;
     int beams() const { return m_durationType.hooks(); }
     virtual double upPos()   const = 0;
     virtual double downPos() const = 0;
 
     int line(bool up) const { return up ? upLine() : downLine(); }
-    int line() const { return m_up ? upLine() : downLine(); }
+    int line() const { return ldata()->up ? upLine() : downLine(); }
     virtual int upLine() const = 0;
     virtual int downLine() const = 0;
     virtual mu::PointF stemPos() const = 0;
     virtual double stemPosX() const = 0;
     virtual mu::PointF stemPosBeam() const = 0;
     virtual double rightEdge() const = 0;
-
-    void setUp(bool val) { m_up = val; }
-    bool up() const { return m_up; }
-    bool usesAutoUp() const { return m_usesAutoUp; }
-    void setUsesAutoUp(bool val) { m_usesAutoUp = val; }
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val) { m_isSmall = val; }
@@ -147,8 +146,12 @@ public:
     void removeDeleteBeam(bool beamed);
     void replaceBeam(Beam* newBeam);
 
-    ElementList& el() { return m_el; }
     const ElementList& el() const { return m_el; }
+
+    //! TODO Look like a hack, see using
+    void addFermata(Fermata* f) { addEl(f); }
+    void removeFermata(Fermata* f) { removeEl(f); }
+    //! --------------------------------
 
     Slur* slur(const ChordRest* secondChordRest = nullptr) const;
 
@@ -180,7 +183,6 @@ public:
     virtual EngravingItem* nextSegmentElement() override;
     virtual EngravingItem* prevSegmentElement() override;
     virtual String accessibleExtraInfo() const override;
-    virtual Shape shape() const override;
     virtual void computeUp();
 
     bool isFullMeasureRest() const { return m_durationType == DurationType::V_MEASURE; }
@@ -195,7 +197,21 @@ public:
     TabDurationSymbol* tabDur() const { return m_tabDur; }
     void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
 
+    struct LayoutData : public DurationElement::LayoutData {
+        ld_field<bool> up = { "[ChordRest] up", true }; // actual stem direction
+    };
+    DECLARE_LAYOUTDATA_METHODS(ChordRest)
+
+    //! DEPRECATED ------
+    void setUp(bool val) { mutldata()->up = val; }
+    bool up() const { return ldata()->up; }
+    //! -----------------
+
 protected:
+
+    void addEl(EngravingItem* e) { m_el.push_back(e); }
+    bool removeEl(EngravingItem* e) { return m_el.remove(e); }
+    void clearEls() { m_el.clear(); }
 
     std::vector<Lyrics*> m_lyrics;
     TabDurationSymbol* m_tabDur = nullptr;  // stores a duration symbol in tablature staves
@@ -203,8 +219,6 @@ protected:
     Beam* m_beam = nullptr;
     BeamSegment* m_beamlet = nullptr;
     BeamMode m_beamMode = BeamMode::INVALID;
-    bool m_up = false;                      // actual stem direction
-    bool m_usesAutoUp = false;
     bool m_isSmall = false;
     bool m_melismaEnd = false;
 

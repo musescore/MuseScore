@@ -40,18 +40,21 @@ StyledDialogView {
 
     property alias withDontShowAgainCheckBox: mainPanel.withDontShowAgainCheckBox
 
-    property var buttons: [ { "buttonId": 1, "title": qsTrc("global", "OK"), "accent": true } ]
+    property var buttons
+    property var customButtons
     property alias defaultButtonId: mainPanel.defaultButtonId
 
     QtObject {
         id: toggleDetailsButton
 
         property int buttonId: 999
-        property string title: detailsLoader.active ? qsTrc("global", "Hide details") : qsTrc("global", "Show details")
-        property bool accent: false
+        property string text: detailsLoader.active ? qsTrc("global", "Hide details") : qsTrc("global", "Show details")
+        property int role: ButtonBoxModel.CustomRole
+        property bool isAccent: false
+        property bool isLeftSide: true
     }
 
-    contentWidth: content.implicitWidth
+    contentWidth: mainPanel.implicitWidth
     contentHeight: content.implicitHeight
 
     margins: 16
@@ -64,11 +67,11 @@ StyledDialogView {
         var tmp = []
         tmp.push(toggleDetailsButton)
 
-        for (var i = 0; i < root.buttons.length; ++i) {
-            tmp.push(root.buttons[i])
+        for (var i = 0; i < root.customButtons.length; ++i) {
+            tmp.push(root.customButtons[i])
         }
 
-        root.buttons = tmp
+        root.customButtons = tmp
     }
 
     onNavigationActivateRequested: {
@@ -82,8 +85,6 @@ StyledDialogView {
     Column {
         id: content
 
-        width: mainPanel.width
-
         spacing: 16
 
         StandardDialogPanel {
@@ -93,6 +94,7 @@ StyledDialogView {
             navigation.order: 1
 
             buttons: root.buttons
+            customButtons: root.customButtons
 
             onClicked: function(buttonId, showAgain) {
                 if (buttonId === toggleDetailsButton.buttonId) {

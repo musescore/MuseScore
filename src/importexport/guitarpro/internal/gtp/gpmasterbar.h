@@ -14,10 +14,18 @@ public:
         Type type{ Type::None };
         int count{ 1 };
     };
-    enum class KeySig {
-        C_B = -7,
-        G_B, D_B, A_B, E_B, B_B, F,   C,
-        G,   D,   A,   E,   B,   F_S, C_S,
+    struct KeySig {
+        enum class Accidentals {
+            C_B = -7,
+            G_B, D_B, A_B, E_B, B_B, F, C,
+            G, D, A, E, B, F_S, C_S,
+        };
+        enum class Mode {
+            Major,
+            Minor
+        };
+        Accidentals accidentalCount{ Accidentals::C };
+        Mode mode{ Mode::Major };
     };
     enum class TripletFeelType {
         Triplet8th,

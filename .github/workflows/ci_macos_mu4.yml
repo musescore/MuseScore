@@ -7,7 +7,7 @@ on:
     
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    # - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
+    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -22,29 +22,33 @@ on:
         description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         required: false
         default: ''
+      qt5_compat:
+        description: 'Build with Qt5 '
+        required: false
+        default: 'on'    
 
 env:
-  # CURRENT_RELEASE_BRANCH: 4.2.0
-  DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
+  CURRENT_RELEASE_BRANCH: 4.3.0
+  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
   build_mu4:    
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
     - name: Cancel Previous Runs
-      uses: styfle/cancel-workflow-action@0.11.0
+      uses: styfle/cancel-workflow-action@0.12.1
       with:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
     - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: Ccache cache files
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.ccache
         key: ${{github.workflow}}-ccache-$(date -u +"%F-%T")
@@ -138,6 +142,11 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Mac${ADD_INFO}")"
 
+        QT5_COMPAT='ON'
+        if [ "${{ github.event.inputs.qt5_compat }}" == "off" ]; then 
+          QT5_COMPAT='OFF' 
+        fi
+
         echo "github.repository: ${{ github.repository }}"
         echo "BUILD_MODE=$BUILD_MODE" >> $GITHUB_ENV
         echo "BUILD_MODE: $BUILD_MODE"
@@ -161,13 +170,18 @@ jobs:
         echo "SENTRY_URL: $SENTRY_URL"
         echo "UPLOAD_ARTIFACT_NAME=$UPLOAD_ARTIFACT_NAME" >> $GITHUB_ENV
         echo "UPLOAD_ARTIFACT_NAME: $UPLOAD_ARTIFACT_NAME"
+        echo "QT5_COMPAT=$QT5_COMPAT" >> $GITHUB_ENV
+        echo "QT5_COMPAT: $QT5_COMPAT"
 
     - name: Setup environment
       if: env.DO_BUILD == 'true'
       run: |
-        bash ./build/ci/macos/setup.sh  
+        bash ./build/ci/macos/setup.sh --qt5_compat ${{ env.QT5_COMPAT }}  
     - name: Generate _en.ts files
       if: env.DO_BUILD == 'true'
+      env:
+        LUPDATE_ARGS: ""
+        POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
       run: |
         bash ./build/ci/translation/run_lupdate.sh
     - name: Update .ts files
@@ -175,20 +189,12 @@ jobs:
       run: |
         bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s macos
         bash ./build/ci/translation/tx_pull.sh
-    - name: Generate placeholder.ts files
-      if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
-      run: |
-        python3 ./tools/translations/placeholder_translations.py --warn-only
-    - name: Generate .qm files
-      if: env.DO_BUILD == 'true'
-      run: |
-        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'    
       run: |
         YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        bash ./build/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL
+        bash ./build/ci/macos/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --qt5_compat ${{ env.QT5_COMPAT }}
         echo "============== ccache ==============="
         ccache -s
     - name: Generate dump symbols
@@ -225,7 +231,7 @@ jobs:
         bash ./build/ci/tools/sparkle_appcast_gen.sh -p macos   
     - name: Upload artifacts on GitHub
       if: env.DO_BUILD == 'true'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.UPLOAD_ARTIFACT_NAME }}
         path: ./build.artifacts/

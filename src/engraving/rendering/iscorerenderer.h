@@ -74,6 +74,7 @@ class Rest;
 class ShadowNote;
 class Spanner;
 class Slur;
+class SlurSegment;
 class SlurTie;
 class StaffText;
 class Stem;
@@ -81,6 +82,7 @@ class Stem;
 class TextBase;
 class Text;
 class TextLineBaseSegment;
+class TieSegment;
 class TimeSig;
 }
 
@@ -169,13 +171,6 @@ public:
         doLayoutItem(static_cast<EngravingItem*>(item));
     }
 
-    // Layout Elements on Edit
-    virtual void layoutOnEdit(Arpeggio* item) = 0;
-
-    // Horizontal spacing
-    virtual double computePadding(const EngravingItem* item1, const EngravingItem* item2) = 0;
-    virtual KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) = 0;
-
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
     virtual void layoutTextLineBaseSegment(TextLineBaseSegment* item) = 0;
@@ -189,6 +184,9 @@ public:
     {
         doDrawItem(item, p);
     }
+
+    virtual void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) = 0;
+    virtual void computeBezier(SlurSegment* slurSeg, PointF shoulderOffser = PointF()) = 0;
 
 private:
     // Layout Single Item

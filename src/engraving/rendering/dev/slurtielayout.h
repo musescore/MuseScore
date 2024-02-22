@@ -27,13 +27,20 @@
 namespace mu::engraving {
 class Slur;
 class SlurSegment;
-struct SlurPos;
+struct SlurTiePos;
+class SlurTieSegment;
 class SpannerSegment;
 class System;
 class Chord;
 class TieSegment;
 class Tie;
-class Tremolo;
+class TremoloTwoChord;
+enum class Grip;
+class Note;
+}
+
+namespace mu::draw {
+class Transform;
 }
 
 namespace mu::engraving::rendering::dev {
@@ -44,21 +51,48 @@ public:
     static SpannerSegment* layoutSystem(Slur* item, System* system, LayoutContext& ctx);
 
     static TieSegment* tieLayoutFor(Tie* item, System* system);
-    static TieSegment* tieLayoutBack(Tie* item, System* system);
+    static TieSegment* tieLayoutBack(Tie* item, System* system, LayoutContext& ctx);
+    static void resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies);
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
 
+    static void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF());
+    static void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF());
+
 private:
 
-    static void slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx);
+    static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
+    static void avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
+    static void adjustEndPoints(SlurSegment* slurSeg);
+    static void avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
+                                mu::draw::Transform& toSystemCoordinates, double& slurAngle);
+    static Shape getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRest* startCR, ChordRest* endCR);
 
-    static void tiePos(Tie* item, SlurPos* sp);
+    static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
+    static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
+    static double noteOpticalCenterForTie(const Note* note, bool up);
+    static void correctForCrossStaff(Tie* tie, SlurTiePos& sPos);
+    static void forceHorizontal(Tie* tie, SlurTiePos& sPos);
+    static void adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip startOrEnd);
+    static void adjustXforLedgerLines(TieSegment* tieSegment, bool start, Chord* chord, Note* note, const PointF& chordSystemPos,
+                                      double padding, double& resultingX);
+    static void adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sPos);
+    static void adjustY(TieSegment* tieSegment);
+    static bool hasEndPointAboveNote(TieSegment* tieSegment);
 
-    static double defaultStemLengthStart(Tremolo* tremolo);
-    static double defaultStemLengthEnd(Tremolo* tremolo);
+    static TieSegment* layoutTieWithNoEndNote(Tie* item);
+
+    static double defaultStemLengthStart(TremoloTwoChord* tremolo);
+    static double defaultStemLengthEnd(TremoloTwoChord* tremolo);
+
+    static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
 
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+
+    static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
+    static void fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
+    static bool shouldHideSlurSegment(SlurSegment* item, LayoutContext& ctx);
 };
 }
 

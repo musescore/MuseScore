@@ -33,6 +33,7 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/factory.h"
+#include "dom/guitarbend.h"
 #include "dom/instrumentname.h"
 #include "dom/layoutbreak.h"
 #include "dom/measure.h"
@@ -49,7 +50,9 @@
 #include "dom/stafflines.h"
 #include "dom/system.h"
 #include "dom/tie.h"
-#include "dom/tremolo.h"
+#include "dom/timesig.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 #include "dom/volta.h"
 
@@ -62,6 +65,7 @@
 #include "measurelayout.h"
 #include "tupletlayout.h"
 #include "slurtielayout.h"
+#include "horizontalspacing.h"
 
 #include "log.h"
 
@@ -304,7 +308,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
         const MeasureBase* mb = ctx.state().curMeasure();
         bool lineBreak  = false;
-        switch (ctx.conf().layoutMode()) {
+        switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
             lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();
@@ -410,7 +414,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
         Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
-        MeasureLayout::createEndBarLines(pm, true, ctx);
+        curSysWidth += MeasureLayout::createEndBarLines(pm, true, ctx);
     }
 
     // hide empty staves
@@ -438,9 +442,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             continue;
         }
         Measure* m = toMeasure(mb);
-        double oldWidth = m->width();
+        double oldWidth2 = m->width();
         MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, preStretch);
-        curSysWidth += m->width() - oldWidth;
+        curSysWidth += m->width() - oldWidth2;
     }
 
     if (curSysWidth > targetSystemWidth) {
@@ -477,7 +481,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             }
         } else if (mb->isHBox()) {
             mb->setPos(pos + PointF(toHBox(mb)->topGap(), 0.0));
-            TLayout::layout(mb, ctx);
+            TLayout::layoutMeasureBase(mb, ctx);
             createBrackets = toHBox(mb)->createSystemHeader();
         } else if (mb->isVBox()) {
             mb->setPos(pos);
@@ -509,10 +513,11 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
     }
 
-    if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
+    if (oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
+        && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
-        SystemLayout::restoreTies(oldSystem);
+        SystemLayout::restoreTiesAndBends(oldSystem, ctx);
     }
 
     return system;
@@ -589,6 +594,10 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
     staff_idx_t staffIdx = 0;
     bool systemIsEmpty = true;
 
+    Fraction stick = system->measures().front()->tick();
+    Fraction etick = system->measures().back()->endTick();
+    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
+
     for (const Staff* staff : ctx.dom().staves()) {
         SysStaff* ss  = system->staff(staffIdx);
 
@@ -600,6 +609,14 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
                 && !(isFirstSystem && ctx.conf().styleB(Sid::dontHideStavesInFirstSystem))
                 && hideMode != Staff::HideMode::NEVER)) {
             bool hideStaff = true;
+            for (auto spanner : spanners) {
+                if (spanner.value->staff() == staff
+                    && !spanner.value->systemFlag()
+                    && !spanner.value->isHairpin()) {
+                    hideStaff = false;
+                    break;
+                }
+            }
             for (MeasureBase* m : system->measures()) {
                 if (!m->isMeasure()) {
                     continue;
@@ -745,7 +762,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
             Rest* rest = toRest(item);
             Beam* beam = rest->beam();
-            if (beam && !beam->cross()) {
+            if (beam && !beam->cross() && !beam->fullCross()) {
                 BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
             }
         }
@@ -771,16 +788,16 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             if (mno && mno->addToSkyline()) {
-                ss->skyline().add(mno->layoutData()->bbox().translated(m->pos() + mno->pos()));
+                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos()));
             }
             if (mmrr && mmrr->addToSkyline()) {
-                ss->skyline().add(mmrr->layoutData()->bbox().translated(m->pos() + mmrr->pos()));
+                ss->skyline().add(mmrr->ldata()->bbox().translated(m->pos() + mmrr->pos()));
             }
             if (m->staffLines(staffIdx)->addToSkyline()) {
-                ss->skyline().add(m->staffLines(staffIdx)->layoutData()->bbox().translated(m->pos()));
+                ss->skyline().add(m->staffLines(staffIdx)->ldata()->bbox().translated(m->pos()));
             }
             for (Segment& s : m->segments()) {
-                if (!s.enabled() || s.isTimeSigType()) {             // hack: ignore time signatures
+                if (!s.enabled()) {
                     continue;
                 }
                 PointF p(s.pos() + m->pos());
@@ -790,6 +807,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     if (bl && bl->addToSkyline()) {
                         RectF r = TLayout::layoutRect(bl, ctx);
                         skyline.add(r.translated(bl->pos() + p));
+                    }
+                } else if (s.segmentType() & SegmentType::TimeSig) {
+                    TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
+                    if (ts && ts->addToSkyline()) {
+                        skyline.add(ts->shape().translate(ts->pos() + p));
                     }
                 } else {
                     track_idx_t strack = staffIdx * VOICES;
@@ -810,6 +832,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                             if (e->isChord()) {
                                 GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
                                 GraceNotesGroup& graceAfter = toChord(e)->graceNotesAfter();
+                                TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
+                                TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
                                 if (!graceBefore.empty()) {
                                     skyline.add(graceBefore.shape().translated(graceBefore.pos() + p));
                                 }
@@ -830,18 +854,26 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         }
 
                         // add tremolo to skyline
-                        if (e->isChord() && toChord(e)->tremolo()) {
-                            Tremolo* t = toChord(e)->tremolo();
-                            Chord* c1 = t->chord1();
-                            Chord* c2 = t->chord2();
-                            if (!t->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                                if (t->chord() == e && t->addToSkyline()) {
+                        if (e->isChord()) {
+                            Chord* ch = item_cast<Chord*>(e);
+                            if (ch->tremoloSingleChord()) {
+                                TremoloSingleChord* t = ch->tremoloSingleChord();
+                                if (t->addToSkyline()) {
                                     skyline.add(t->shape().translate(t->pos() + e->pos() + p));
+                                }
+                            } else if (ch->tremoloTwoChord()) {
+                                TremoloTwoChord* t = ch->tremoloTwoChord();
+                                Chord* c1 = t->chord1();
+                                Chord* c2 = t->chord2();
+                                if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                                    if (t->chord() == e && t->addToSkyline()) {
+                                        skyline.add(t->shape().translate(t->pos() + e->pos() + p));
+                                    }
                                 }
                             }
                         }
 
-                        // add beams to skline
+                        // add beams to skyline
                         if (e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
                             if (BeamLayout::isTopBeam(cr)) {
@@ -854,6 +886,24 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
+
+    //-------------------------------------------------------------
+    // layout ties and guitar bends
+    //-------------------------------------------------------------
+
+    bool useRange = false;    // TODO: lineMode();
+    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
+    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
+    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+
+    // ties
+    if (ctx.conf().isLinearMode()) {
+        doLayoutTiesLinear(system);
+    } else {
+        doLayoutTies(system, sl, stick, etick);
+    }
+    // guitar bends
+    layoutGuitarBends(sl, ctx);
 
     //-------------------------------------------------------------
     // layout articulations, fingering and stretched bends
@@ -918,14 +968,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     // layout slurs
     //-------------------------------------------------------------
 
-    bool useRange = false;    // TODO: lineMode();
-    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
-    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
-    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
-
-    // ties
-    doLayoutTies(system, sl, stick, etick);
-
     // slurs
     std::vector<Spanner*> spanner;
     for (auto interval : spanners) {
@@ -978,7 +1020,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     if (e->isDynamic()) {
                         toDynamic(e)->manageBarlineCollisions();
                     }
-                    Autoplace::autoplaceSegmentElement(e, e->mutLayoutData(), false);
+                    Autoplace::autoplaceSegmentElement(e, e->mutldata(), false);
                     dynamicsAndFigBass.push_back(e);
                 }
             }
@@ -1062,8 +1104,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     LyricsLayout::layoutLyrics(ctx, system);
 
-    // here are lyrics dashes and melisma
-    for (Spanner* sp : ctx.dom().unmanagedSpanners()) {
+    // Layout lyrics dashes and melisma
+    // NOTE: loop on a *copy* of unmanagedSpanners because in some cases
+    // the underlying operation may invalidate some of the iterators.
+    std::set<Spanner*> unmanagedSpanners = ctx.dom().unmanagedSpanners();
+    for (Spanner* sp : unmanagedSpanners) {
         if (sp->tick() >= etick || sp->tick2() <= stick) {
             continue;
         }
@@ -1077,7 +1122,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarpPedalDiagram()) {
-                rendering::stable::TLayout::layoutItem(e, ctx);
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
@@ -1141,7 +1186,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
-            if (e->isPlayTechAnnotation() || e->isCapo() || e->isSystemText() || e->isTripletFeel()) {
+            if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isSystemText() || e->isTripletFeel()) {
                 TLayout::layoutItem(e, ctx);
             }
         }
@@ -1176,7 +1221,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         break;
                     }
                 }
-                y = std::min(y, ss->layoutData()->pos().y());
+                y = std::min(y, ss->ldata()->pos().y());
                 ++idx;
                 prevVolta = volta;
             }
@@ -1184,7 +1229,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             for (int i = 0; i < idx; ++i) {
                 SpannerSegment* ss = voltaSegments[i];
                 if (ss->autoplace() && ss->isStyled(Pid::OFFSET)) {
-                    ss->mutLayoutData()->setPosY(y);
+                    ss->mutldata()->setPosY(y);
                 }
                 if (ss->addToSkyline()) {
                     system->staff(staffIdx)->skyline().add(ss->shape().translate(ss->pos()));
@@ -1290,6 +1335,69 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
     }
 }
 
+void SystemLayout::doLayoutTiesLinear(System* system)
+{
+    constexpr Fraction start = Fraction(0, 1);
+    for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            if (!segment->isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* e : segment->elist()) {
+                if (!e || !e->isChord()) {
+                    continue;
+                }
+                Chord* c = toChord(e);
+                for (Chord* ch : c->graceNotes()) {
+                    layoutTies(ch, system, start);
+                }
+                layoutTies(c, system, start);
+            }
+        }
+    }
+}
+
+void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx)
+{
+    auto doLayoutGuitarBends = [&] (Chord* chord) {
+        for (Note* note : chord->notes()) {
+            GuitarBend* bendBack = note->bendBack();
+            if (bendBack) {
+                TLayout::layoutGuitarBend(bendBack, ctx);
+            }
+
+            Note* startOfTie = note->firstTiedNote();
+            if (startOfTie != note) {
+                GuitarBend* bendBack2 = startOfTie->bendBack();
+                if (bendBack2) {
+                    TLayout::layoutGuitarBend(bendBack2, ctx);
+                }
+            }
+
+            GuitarBend* bendFor = note->bendFor();
+            if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
+                TLayout::layoutGuitarBend(bendFor, ctx);
+            }
+        }
+    };
+
+    for (Segment* seg : sl) {
+        for (EngravingItem* el : seg->elist()) {
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(el);
+            for (Chord* grace : chord->graceNotesBefore()) {
+                doLayoutGuitarBends(grace);
+            }
+            doLayoutGuitarBends(chord);
+            for (Chord* grace : chord->graceNotesAfter()) {
+                doLayoutGuitarBends(grace);
+            }
+        }
+    }
+}
+
 void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
@@ -1303,13 +1411,13 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
         constexpr double minY = -1000000.0;
-        const double defaultY = segments[0]->layoutData()->pos().y();
+        const double defaultY = segments[0]->ldata()->pos().y();
         std::vector<double> y(nstaves, minY);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
                 double& staffY = y[ss->staffIdx()];
-                staffY = std::max(staffY, ss->layoutData()->pos().y());
+                staffY = std::max(staffY, ss->ldata()->pos().y());
             }
         }
         for (SpannerSegment* ss : segments) {
@@ -1318,9 +1426,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
             }
             const double staffY = y[ss->staffIdx()];
             if (staffY > minY) {
-                ss->mutLayoutData()->setPosY(staffY);
+                ss->mutldata()->setPosY(staffY);
             } else {
-                ss->mutLayoutData()->setPosY(defaultY);
+                ss->mutldata()->setPosY(defaultY);
             }
         }
     }
@@ -1346,8 +1454,8 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                         && compare(slur1->ups(Grip::END).p.y(), slur2->ups(Grip::START).p.y())) {
                         slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
                         slur2->ups(Grip::START).p.rx() += slurCollisionHorizOffset;
-                        slur1->computeBezier();
-                        slur2->computeBezier();
+                        SlurTieLayout::computeBezier(slur1);
+                        SlurTieLayout::computeBezier(slur2);
                         continue;
                     }
                 }
@@ -1368,7 +1476,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                     if (slur1->ups(Grip::END).p.x() > slurTie2->ups(Grip::END).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
-                        slur1->computeBezier();
+                        SlurTieLayout::computeBezier(slur1);
                     }
                 }
                 // END POINT
@@ -1377,7 +1485,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                     if (slur1->ups(Grip::START).p.x() < slurTie2->ups(Grip::START).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
-                        slur1->computeBezier();
+                        SlurTieLayout::computeBezier(slur1);
                     }
                 }
             }
@@ -1401,9 +1509,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isHarmonicMarkSegment()
                 && ss->isVibratoSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = ss->layoutData()->bbox().bottom() - prevSegment->layoutData()->bbox().bottom()
-                              + prevSegment->layoutData()->bbox().top();
-                prevSegment->mutLayoutData()->moveY(diff);
+                double diff = ss->ldata()->bbox().bottom() - prevSegment->ldata()->bbox().bottom()
+                              + prevSegment->ldata()->bbox().top();
+                prevSegment->mutldata()->moveY(diff);
                 fixed = true;
             }
             if (prevSegment->visible()
@@ -1411,9 +1519,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isVibratoSegment()
                 && ss->isHarmonicMarkSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = prevSegment->layoutData()->bbox().bottom() - ss->layoutData()->bbox().bottom()
-                              + ss->layoutData()->bbox().top();
-                ss->mutLayoutData()->moveY(diff);
+                double diff = prevSegment->ldata()->bbox().bottom() - ss->ldata()->bbox().bottom()
+                              + ss->ldata()->bbox().top();
+                ss->mutldata()->moveY(diff);
                 fixed = true;
             }
         }
@@ -1441,12 +1549,15 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
     if (!staff->show()) {
         return;
     }
+    std::vector<TieSegment*> stackedForwardTies;
+    std::vector<TieSegment*> stackedBackwardTies;
     for (Note* note : ch->notes()) {
         Tie* t = note->tieFor();
         if (t) {
             TieSegment* ts = SlurTieLayout::tieLayoutFor(t, system);
             if (ts && ts->addToSkyline()) {
                 staff->skyline().add(ts->shape().translate(ts->pos()));
+                stackedForwardTies.push_back(ts);
             }
         }
         t = note->tieBack();
@@ -1455,10 +1566,13 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
                 TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system);
                 if (ts && ts->addToSkyline()) {
                     staff->skyline().add(ts->shape().translate(ts->pos()));
+                    stackedBackwardTies.push_back(ts);
                 }
             }
         }
     }
+    SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);
+    SlurTieLayout::resolveVerticalTieCollisions(stackedBackwardTies);
 }
 
 /****************************************************************************
@@ -1511,8 +1625,8 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
                         seg.createShape(chord->vStaffIdx());
                     }
-                } else if (chord->tremolo() && chord->tremolo()->twoNotes()) {
-                    Tremolo* t = chord->tremolo();
+                } else if (chord->tremoloTwoChord()) {
+                    TremoloTwoChord* t = chord->tremoloTwoChord();
                     Chord* c1 = t->chord1();
                     Chord* c2 = t->chord2();
                     if (t->userModified() || (c1->staffMove() != 0 || c2->staffMove() != 0)) {
@@ -1529,7 +1643,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::restoreTies(System* system)
+void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
 {
     std::vector<Segment*> segList;
     for (MeasureBase* mb : system->measures()) {
@@ -1545,6 +1659,7 @@ void SystemLayout::restoreTies(System* system)
     Fraction stick = system->measures().front()->tick();
     Fraction etick = system->measures().back()->endTick();
     doLayoutTies(system, segList, stick, etick);
+    layoutGuitarBends(segList, ctx);
 }
 
 void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth,
@@ -1581,7 +1696,6 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
     }
 
     // Now we are limited by the collision checks, so try to gradually squeeze everything without collisions
-    staff_idx_t nstaves = ctx.dom().nstaves();
     double squeezeFactor = 1 - step;
     while (curSysWidth > targetSysWidth && RealIsEqualOrMore(squeezeFactor, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
@@ -1592,19 +1706,15 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
             // Reduce all paddings
             Measure* m = toMeasure(mb);
             double prevWidth = m->width();
-            for (Segment& segment : m->segments()) {
-                for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                    Shape& shape = segment.staffShape(staffIdx);
-                    shape.setSqueezeFactor(squeezeFactor);
-                }
-            }
+
+            ctx.mutState().setSegmentShapeSqueezeFactor(squeezeFactor);
             MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, stretchCoeff,  /*overrideMinMeasureWidth*/ true);
 
             // Reduce other distances that don't depend on paddings
             Segment* first = m->firstEnabled();
             double currentFirstX = first->x();
             if (currentFirstX > 0 && !first->hasAccidentals()) {
-                first->mutLayoutData()->setPosX(currentFirstX * std::max(squeezeFactor, squeezeLimit));
+                first->mutldata()->setPosX(currentFirstX * std::max(squeezeFactor, squeezeLimit));
             }
             for (Segment& segment : m->segments()) {
                 if (!segment.header() && !segment.isTimeSigType()) {
@@ -1614,8 +1724,11 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 if (!nextSeg || !nextSeg->isChordRestType()) {
                     continue;
                 }
-                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg);
-                double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
+
+                double squeezeFactor2 = ctx.state().segmentShapeSqueezeFactor();
+                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor2);
+
+                double reducedMargin = margin * (1 - std::max(squeezeFactor2, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
             }
             m->respaceSegments();
@@ -1742,17 +1855,17 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
 
     for (const SysStaff* s : system->staves()) {
         for (InstrumentName* t : s->instrumentNames) {
-            TLayout::layout(t, ctx);
+            TLayout::layoutInstrumentName(t, t->mutldata());
 
             switch (t->align().horizontal) {
             case AlignH::LEFT:
-                t->mutLayoutData()->setPosX(0);
+                t->mutldata()->setPosX(0);
                 break;
             case AlignH::HCENTER:
-                t->mutLayoutData()->setPosX(maxNamesWidth * .5);
+                t->mutldata()->setPosX(maxNamesWidth * .5);
                 break;
             case AlignH::RIGHT:
-                t->mutLayoutData()->setPosX(maxNamesWidth);
+                t->mutldata()->setPosX(maxNamesWidth);
                 break;
             }
         }
@@ -1780,7 +1893,7 @@ double SystemLayout::instrumentNamesWidth(System* system, LayoutContext& ctx, bo
         }
 
         for (InstrumentName* name : staff->instrumentNames) {
-            TLayout::layout(name, ctx);
+            TLayout::layoutInstrumentName(name, name->mutldata());
             namesWidth = std::max(namesWidth, name->width());
         }
     }
@@ -1842,9 +1955,10 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
                 Bracket* dummyBr = Factory::createBracket(ctx.mutDom().dummyParent(), /*isAccessibleEnabled=*/ false);
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
-                TLayout::layout(dummyBr, ctx);
+                dummyBr->mutldata()->bracketHeight.set_value(3.5 * dummyBr->spatium() * 2); // default
+                TLayout::layoutBracket(dummyBr, dummyBr->mutldata(), ctx.conf());
                 for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
-                    bracketWidth[stfIdx] += dummyBr->width();
+                    bracketWidth[stfIdx] += dummyBr->ldata()->bracketWidth();
                 }
                 delete dummyBr;
             }
@@ -1865,16 +1979,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
     size_t nstaves = system->staves().size();
     size_t columns = system->getBracketsColumnsCount();
 
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    double bracketWidth[columns];
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
-    std::vector<double> bracketWidth(columns);
-#endif
-    for (size_t i = 0; i < columns; ++i) {
-        bracketWidth[i] = 0.0;
-    }
+    std::vector<double> bracketWidth(columns, 0.0);
 
     std::vector<Bracket*> bl;
     bl.swap(system->brackets());
@@ -1888,7 +1993,9 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
                 }
                 Bracket* b = SystemLayout::createBracket(system, ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
                 if (b != nullptr) {
-                    bracketWidth[i] = std::max(bracketWidth[i], b->width());
+                    b->mutldata()->bracketHeight.set_value(3.5 * b->spatium() * 2); // dummy
+                    TLayout::layoutBracket(b, b->mutldata(), ctx.conf());
+                    bracketWidth[i] = std::max(bracketWidth[i], b->ldata()->bracketWidth());
                 }
             }
         }
@@ -1945,6 +2052,7 @@ void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& 
     //---------------------------------------------------
     //  layout brackets
     //---------------------------------------------------
+    SystemLayout::layoutBracketsVertical(system, ctx);
 
     system->setBracketsXPosition(measure->x());
 
@@ -2043,10 +2151,11 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
 
 void SystemLayout::layout2(System* system, LayoutContext& ctx)
 {
+    TRACEFUNC;
     Box* vb = system->vbox();
     if (vb) {
-        TLayout::layout(vb, ctx);
-        system->setbbox(vb->layoutData()->bbox());
+        TLayout::layoutBox(vb, vb->mutldata(), ctx);
+        system->setbbox(vb->ldata()->bbox());
         return;
     }
 
@@ -2083,7 +2192,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         const Staff* staff  = ctx.dom().staff(si1);
         auto ni = std::next(i);
 
-        double dist = staff->height();
+        double dist = staff->staffHeight();
         double yOffset;
         double h;
         if (staff->lines(Fraction(0, 1)) == 1) {
@@ -2091,7 +2200,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             h = _spatium * (BARLINE_SPAN_1LINESTAFF_TO - BARLINE_SPAN_1LINESTAFF_FROM) * 0.5;
         } else {
             yOffset = 0.0;
-            h = staff->height();
+            h = staff->staffHeight();
         }
         if (ni == visibleStaves.end()) {
             ss->setYOff(yOffset);
@@ -2120,16 +2229,16 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->height() + sp->gap();
+                    dist = staff->staffHeight() + sp->gap();
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = std::max(dist, staff->height() + sp->gap());
+                    dist = std::max(dist, staff->staffHeight() + sp->gap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = std::max(dist, sp->gap() + staff->height());
+                dist = std::max(dist, sp->gap() + staff->staffHeight());
             }
         }
         if (!fixedSpace) {
@@ -2202,6 +2311,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
 
 void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
 {
+    TRACEFUNC;
     if (system->vbox()) {
         return;
     }
@@ -2218,16 +2328,16 @@ void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext
 {
     double _spatium = system->spatium();
     for (MeasureBase* m : system->measures()) {
-        MeasureBase::LayoutData* mldata = m->mutLayoutData();
+        MeasureBase::LayoutData* mldata = m->mutldata();
         if (m->isMeasure()) {
             // note that the factor 2 * _spatium must be corrected for when exporting
             // system distance in MusicXML (issue #24733)
             mldata->setBbox(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
         } else if (m->isHBox()) {
             mldata->setBbox(0.0, 0.0, m->width(), height);
-            TLayout::layout2(toHBox(m), ctx);
+            TLayout::layoutHBox2(toHBox(m), ctx);
         } else if (m->isTBox()) {
-            TLayout::layout(toTBox(m), ctx);
+            TLayout::layoutTBox(toTBox(m), toTBox(m)->mutldata(), ctx);
         } else {
             LOGD("unhandled measure type %s", m->typeName());
         }
@@ -2260,9 +2370,11 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
             sy = system->staves().at(staffIdx1)->bbox().top();
             ey = system->staves().at(staffIdx2)->bbox().bottom();
         }
-        b->mutLayoutData()->setPosY(sy);
-        b->setHeight(ey - sy);
-        TLayout::layout(b, ctx);
+
+        Bracket::LayoutData* bldata = b->mutldata();
+        bldata->setPosY(sy);
+        bldata->bracketHeight = ey - sy;
+        TLayout::layoutBracket(b, bldata, ctx.conf());
     }
 }
 
@@ -2331,7 +2443,7 @@ void SystemLayout::layoutInstrumentNames(System* system, LayoutContext& ctx)
                     y2 = system->staff(staffIdx + 2)->bbox().bottom();
                     break;
                 }
-                t->mutLayoutData()->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
+                t->mutldata()->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
             }
         }
         staffIdx += nstaves;
@@ -2415,6 +2527,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
 
 double SystemLayout::minDistance(const System* top, const System* bottom, LayoutContext& ctx)
 {
+    TRACEFUNC;
     if (top->vbox() && !bottom->vbox()) {
         return std::max(double(top->vbox()->bottomGap()), bottom->minTop());
     } else if (!top->vbox() && bottom->vbox()) {

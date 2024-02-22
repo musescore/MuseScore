@@ -38,13 +38,13 @@ bool AbstractImageWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret AbstractImageWriter::write(INotationPtr, QIODevice&, const Options& options)
+mu::Ret AbstractImageWriter::write(INotationPtr, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) != UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
     }
 
-    if (supportsUnitType(options.value(OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
+    if (supportsUnitType(mu::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -53,13 +53,13 @@ mu::Ret AbstractImageWriter::write(INotationPtr, QIODevice&, const Options& opti
     return Ret(Ret::Code::NotSupported);
 }
 
-mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, QIODevice&, const Options& options)
+mu::Ret AbstractImageWriter::writeList(const INotationPtrList&, io::IODevice&, const Options& options)
 {
     IF_ASSERT_FAILED(unitTypeFromOptions(options) == UnitType::MULTI_PART) {
         return Ret(Ret::Code::NotSupported);
     }
 
-    if (supportsUnitType(options.value(OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
+    if (supportsUnitType(mu::value(options, OptionKey::UNIT_TYPE, Val(UnitType::PER_PAGE)).toEnum<UnitType>())) {
         NOT_IMPLEMENTED;
         return Ret(Ret::Code::NotImplemented);
     }
@@ -76,7 +76,7 @@ INotationWriter::UnitType AbstractImageWriter::unitTypeFromOptions(const Options
     }
 
     UnitType defaultUnitType = supported.front();
-    UnitType unitType = options.value(OptionKey::UNIT_TYPE, Val(defaultUnitType)).toEnum<UnitType>();
+    UnitType unitType = mu::value(options, OptionKey::UNIT_TYPE, Val(defaultUnitType)).toEnum<UnitType>();
     if (!supportsUnitType(unitType)) {
         return defaultUnitType;
     }

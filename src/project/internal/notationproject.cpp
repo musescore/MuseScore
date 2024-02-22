@@ -25,7 +25,8 @@
 #include <QDir>
 #include <QFile>
 
-#include "io/buffer.h"
+#include "global/io/buffer.h"
+#include "global/io/file.h"
 
 #include "engraving/dom/undo.h"
 
@@ -52,44 +53,6 @@ using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
 
-static const QString WORK_TITLE_TAG("workTitle");
-static const QString WORK_NUMBER_TAG("workNumber");
-static const QString SUBTITLE_TAG("subtitle");
-static const QString COMPOSER_TAG("composer");
-static const QString LYRICIST_TAG("lyricist");
-static const QString POET_TAG("poet");
-static const QString SOURCE_TAG("source");
-static const QString SOURCE_REVISION_ID_TAG("sourceRevisionId");
-static const QString COPYRIGHT_TAG("copyright");
-static const QString TRANSLATOR_TAG("translator");
-static const QString ARRANGER_TAG("arranger");
-static const QString CREATION_DATE_TAG("creationDate");
-static const QString PLATFORM_TAG("platform");
-static const QString MOVEMENT_TITLE_TAG("movementTitle");
-static const QString MOVEMENT_NUMBER_TAG("movementNumber");
-
-static bool isStandardTag(const QString& tag)
-{
-    static const QSet<QString> standardTags {
-        WORK_TITLE_TAG,
-        WORK_NUMBER_TAG,
-        SUBTITLE_TAG,
-        COMPOSER_TAG,
-        LYRICIST_TAG,
-        POET_TAG,
-        SOURCE_TAG,
-        COPYRIGHT_TAG,
-        TRANSLATOR_TAG,
-        ARRANGER_TAG,
-        CREATION_DATE_TAG,
-        PLATFORM_TAG,
-        MOVEMENT_NUMBER_TAG,
-        MOVEMENT_TITLE_TAG
-    };
-
-    return standardTags.contains(tag);
-}
-
 static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const ProjectCreateOptions& projectOptions)
 {
     if (!projectOptions.title.isEmpty()) {
@@ -106,6 +69,9 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
     }
     if (!projectOptions.copyright.isEmpty()) {
         masterScore->setMetaTag(COPYRIGHT_TAG, projectOptions.copyright);
+    }
+    if (!projectOptions.templatePath.empty()) {
+        masterScore->setMetaTag(CREATION_DATE_TAG, QDate::currentDate().toString(Qt::ISODate));
     }
 }
 
@@ -230,23 +196,19 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     masterScore->update();
 
     // Load audio settings
+    bool tryCompatAudio = false;
     ret = m_projectAudioSettings->read(reader);
     if (!ret) {
         m_projectAudioSettings->makeDefault();
-
-        // Apply compat audio settings
-        if (!settingsCompat.audioSettings.empty()) {
-            for (const auto& audioCompat : settingsCompat.audioSettings) {
-                IProjectAudioSettings::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
-                m_projectAudioSettings->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
-            }
-        }
+        tryCompatAudio = true;
     }
 
     // Load cloud info
     {
         m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
         m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
+
+        m_cloudAudioInfo.url = masterScore->metaTags()[AUDIO_COM_URL_TAG].toQString();
 
         if (configuration()->isLegacyCloudProject(path)) {
             m_cloudInfo.name = io::filename(path, false).toQString();
@@ -256,10 +218,22 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     // Set current if all success
     m_masterNotation->setMasterScore(masterScore);
 
-    // Load view settings (needs to be done after notations are created)
+    // Load view settings & solo-mute states (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
+    m_masterNotation->notation()->soloMuteState()->read(reader);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
-        excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->name() + u"/");
+        io::path_t ePath = u"Excerpts/" + excerpt->fileName() + u"/";
+        excerpt->notation()->viewState()->read(reader, ePath);
+        excerpt->notation()->soloMuteState()->read(reader, ePath);
+    }
+
+    // Apply compat audio settings (needs to be done after notations are created)
+    if (tryCompatAudio && !settingsCompat.audioSettings.empty()) {
+        for (const auto& audioCompat : settingsCompat.audioSettings) {
+            notation::INotationSoloMuteState::SoloMuteState state = { audioCompat.second.mute, audioCompat.second.solo };
+            INotationSoloMuteStatePtr soloMuteStatePtr = m_masterNotation->notation()->soloMuteState();
+            soloMuteStatePtr->setTrackSoloMuteState(audioCompat.second.instrumentId, state);
+        }
     }
 
     return make_ret(Ret::Code::Ok);
@@ -464,6 +438,17 @@ void NotationProject::setCloudInfo(const CloudProjectInfo& info)
     m_masterNotation->masterScore()->setMetaTag(SOURCE_REVISION_ID_TAG, String::number(info.revisionId));
 
     m_displayNameChanged.notify();
+}
+
+const CloudAudioInfo& NotationProject::cloudAudioInfo() const
+{
+    return m_cloudAudioInfo;
+}
+
+void NotationProject::setCloudAudioInfo(const CloudAudioInfo& audioInfo)
+{
+    m_cloudAudioInfo = audioInfo;
+    m_masterNotation->masterScore()->setMetaTag(AUDIO_COM_URL_TAG, audioInfo.url.toString());
 }
 
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
@@ -724,17 +709,24 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection,
         return make_ret(notation::Err::UnknownError);
     }
 
-    // Write audio settings
-    ret = m_projectAudioSettings->write(msczWriter);
+    // Write master audio settings
+    ret = m_projectAudioSettings->write(msczWriter, m_masterNotation->notation()->soloMuteState());
     if (!ret) {
         LOGE() << "failed write project audio settings, err: " << ret.toString();
         return ret;
     }
 
-    // Write view settings
+    // Write view settings and excerpt solo-mute states
     m_masterNotation->notation()->viewState()->write(msczWriter);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
-        excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->name() + u"/");
+        io::path_t path = u"Excerpts/" + excerpt->fileName() + u"/";
+        excerpt->notation()->viewState()->write(msczWriter, path);
+
+        ByteArray soloMuteData;
+        Buffer soloMuteBuf(&soloMuteData);
+        soloMuteBuf.open(IODevice::WriteOnly);
+        excerpt->notation()->soloMuteState()->write(&soloMuteBuf /*out*/);
+        msczWriter.writeAudioSettingsJsonFile(soloMuteData, path);
     }
 
     return make_ret(Ret::Code::Ok);
@@ -782,8 +774,8 @@ mu::Ret NotationProject::exportProject(const io::path_t& path, const std::string
 {
     TRACEFUNC;
 
-    QFile file(path.toQString());
-    file.open(QFile::WriteOnly);
+    File file(path);
+    file.open(File::WriteOnly);
 
     auto writer = writers()->writer(suffix);
     if (!writer) {
@@ -953,33 +945,35 @@ ProjectMeta NotationProject::metaInfo() const
     mu::engraving::MasterScore* score = m_masterNotation->masterScore();
 
     ProjectMeta meta;
+    meta.filePath = m_path;
+
     auto allTags = score->metaTags();
 
     meta.title = allTags[WORK_TITLE_TAG];
     meta.subtitle = allTags[SUBTITLE_TAG];
     meta.composer = allTags[COMPOSER_TAG];
-    meta.lyricist = allTags[LYRICIST_TAG];
-    meta.copyright = allTags[COPYRIGHT_TAG];
-    meta.translator = allTags[TRANSLATOR_TAG];
     meta.arranger = allTags[ARRANGER_TAG];
-    meta.source = allTags[SOURCE_TAG];
+    meta.lyricist = allTags[LYRICIST_TAG];
+    meta.translator = allTags[TRANSLATOR_TAG];
+    meta.copyright = allTags[COPYRIGHT_TAG];
     meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
+
+    meta.partsCount = score->excerpts().size();
+
+    meta.source = allTags[SOURCE_TAG];
+    meta.audioComUrl = allTags[AUDIO_COM_URL_TAG];
     meta.platform = allTags[PLATFORM_TAG];
     meta.musescoreVersion = score->mscoreVersion();
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
     for (const String& tag : mu::keys(allTags)) {
-        if (isStandardTag(tag)) {
+        if (isRepresentedInProjectMeta(tag)) {
             continue;
         }
 
         meta.additionalTags[tag] = allTags[tag].toQString();
     }
-
-    meta.filePath = m_path;
-
-    meta.partsCount = score->excerpts().size();
 
     return meta;
 }
@@ -994,13 +988,14 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
         { COMPOSER_TAG, meta.composer },
-        { LYRICIST_TAG, meta.lyricist },
-        { COPYRIGHT_TAG, meta.copyright },
-        { TRANSLATOR_TAG, meta.translator },
         { ARRANGER_TAG, meta.arranger },
+        { LYRICIST_TAG, meta.lyricist },
+        { TRANSLATOR_TAG, meta.translator },
+        { COPYRIGHT_TAG, meta.copyright },
+        { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) },
         { SOURCE_TAG, meta.source },
+        { AUDIO_COM_URL_TAG, meta.audioComUrl },
         { PLATFORM_TAG, meta.platform },
-        { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) }
     };
 
     for (const QString& tag : meta.additionalTags.keys()) {

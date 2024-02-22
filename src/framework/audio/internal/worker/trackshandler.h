@@ -23,8 +23,8 @@
 #ifndef MU_AUDIO_SEQUENCETRACKS_H
 #define MU_AUDIO_SEQUENCETRACKS_H
 
-#include "modularity/ioc.h"
-#include "async/asyncable.h"
+#include "global/modularity/ioc.h"
+#include "global/async/asyncable.h"
 
 #include "isynthresolver.h"
 #include "itracks.h"
@@ -33,7 +33,8 @@
 namespace mu::audio {
 class TracksHandler : public ITracks, public async::Asyncable
 {
-    INJECT(synth::ISynthResolver, resolver)
+    Inject<synth::ISynthResolver> resolver;
+
 public:
     explicit TracksHandler(IGetTrackSequence* getSequence);
     ~TracksHandler();
@@ -57,6 +58,7 @@ public:
     async::Channel<TrackSequenceId, TrackId> trackRemoved() const override;
 
     async::Promise<AudioResourceMetaList> availableInputResources() const override;
+    async::Promise<SoundPresetList> availableSoundPresets(const AudioResourceMeta& resourceMeta) const override;
 
     async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;

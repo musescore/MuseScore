@@ -53,10 +53,10 @@ static mu::testing::SuiteEnvironment engraving_se(
 
     mu::engraving::loadInstrumentTemplates(":/data/instruments.xml");
 
-    std::shared_ptr<testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
-        = std::make_shared<testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
-    ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(testing::Return(false));
-    ON_CALL(*configurator, defaultColor()).WillByDefault(testing::Return(mu::draw::Color::BLACK));
+    std::shared_ptr<::testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
+        = std::make_shared<::testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
+    ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(::testing::Return(false));
+    ON_CALL(*configurator, defaultColor()).WillByDefault(::testing::Return(mu::draw::Color::BLACK));
     mu::engraving::EngravingItem::setengravingConfiguration(configurator);
 }
     );

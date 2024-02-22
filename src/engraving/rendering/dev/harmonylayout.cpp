@@ -50,8 +50,8 @@ void HarmonyLayout::layoutHarmonies(const std::vector<Segment*>& sl, LayoutConte
                 // in order to calculate a bbox and allocate its shape to the ChordRest.
                 // But that layout (if it happens at all) does not do autoplace,
                 // so we need the full layout here.
-                TLayout::layout(h, ctx);
-                Autoplace::autoplaceSegmentElement(h, h->mutLayoutData());
+                TLayout::layoutHarmony(h, h->mutldata(), ctx);
+                Autoplace::autoplaceSegmentElement(h, h->mutldata());
             }
         }
     }
@@ -149,9 +149,9 @@ void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segme
                     be = getReferenceElement(s, above, true);
                 }
                 if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
-                    double shift = be->layoutData()->pos().y();
-                    be->mutLayoutData()->setPosY(reference - be->ryoffset());
-                    shift -= be->layoutData()->pos().y();
+                    double shift = be->ldata()->pos().y();
+                    be->mutldata()->setPosY(reference - be->ryoffset());
+                    shift -= be->ldata()->pos().y();
                     for (EngravingItem* e : elements[s]) {
                         if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
                             continue;
@@ -160,7 +160,7 @@ void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segme
                         handled.push_back(e);
                         moved = true;
                         if (e != be) {
-                            e->mutLayoutData()->moveY(-shift);
+                            e->mutldata()->moveY(-shift);
                         }
                     }
                     for (auto e : handled) {

@@ -21,6 +21,7 @@
  */
 #include "layoutcontext.h"
 
+#include "dom/undo.h"
 #include "style/defaultstyle.h"
 
 #include "dom/mscoreview.h"
@@ -259,6 +260,14 @@ Measure* DomAccessor::firstMeasure()
     return score()->firstMeasure();
 }
 
+Measure* DomAccessor::tick2measure(const Fraction& tick)
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->tick2measure(tick);
+}
+
 const SpannerMap& DomAccessor::spannerMap() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -316,12 +325,31 @@ compat::DummyElement* DomAccessor::dummyParent() const
     return score()->dummy();
 }
 
+void DomAccessor::doUndoAddElement(EngravingItem* item)
+{
+    if (item->generated()) {
+        addElement(item);
+    } else {
+        undo(new AddElement(item));
+    }
+}
+
 void DomAccessor::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bool ctrlModifier)
 {
     IF_ASSERT_FAILED(score()) {
         return;
     }
     score()->undoAddElement(item, addToLinkedStaves, ctrlModifier);
+}
+
+void DomAccessor::doUndoRemoveElement(EngravingItem* item)
+{
+    if (item->generated()) {
+        removeElement(item);
+        item->deleteLater();
+    } else {
+        undo(new RemoveElement(item));
+    }
 }
 
 void DomAccessor::undoRemoveElement(EngravingItem* item)
@@ -371,6 +399,74 @@ const std::set<Spanner*>& DomAccessor::unmanagedSpanners() const
         return dummy;
     }
     return score()->unmanagedSpanners();
+}
+
+// =============================================================
+// LayoutDebug
+// =============================================================
+LayoutDebug* LayoutDebug::instance()
+{
+    static LayoutDebug ld;
+    return &ld;
+}
+
+void LayoutDebug::callClear()
+{
+    m_currentCall = nullptr;
+    m_calls.clear();
+}
+
+void LayoutDebug::callBegin(const std::string_view& name, const std::string_view& info)
+{
+    //LOGDA() << name << " " << info;
+    Call c;
+    c.name = name;
+    c.info = info;
+    if (m_currentCall) {
+        c.top = m_currentCall;
+        m_currentCall->nested.push_back(c);
+        m_currentCall = &m_currentCall->nested.back();
+    } else {
+        m_calls.push_back(c);
+        m_currentCall = &m_calls.back();
+    }
+}
+
+void LayoutDebug::callEnd()
+{
+    IF_ASSERT_FAILED(m_currentCall) {
+        return;
+    }
+
+    //LOGDA() << m_currentCall->name << " " << m_currentCall->info;
+    m_currentCall = m_currentCall->top;
+}
+
+void LayoutDebug::callDump(const LayoutDebug::Call& c, std::stringstream& ss, int& indent)
+{
+    std::string gap;
+    gap.resize(indent * 2, ' ');
+    ss << "\n";
+    ss << gap << c.name << " " << c.info;
+
+    for (const Call& cn : c.nested) {
+        ++indent;
+        callDump(cn, ss, indent);
+        --indent;
+    }
+}
+
+void LayoutDebug::callDump(std::stringstream& ss) const
+{
+    for (const Call& c : m_calls) {
+        int indent = 0;
+        callDump(c, ss, indent);
+    }
+}
+
+void LayoutDebug::callPrint()
+{
+    LOGDA() << "\n" << callDump();
 }
 
 // =============================================================

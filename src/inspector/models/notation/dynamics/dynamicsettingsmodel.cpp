@@ -39,8 +39,13 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
 void DynamicsSettingsModel::createProperties()
 {
     m_avoidBarLines = buildPropertyItem(mu::engraving::Pid::AVOID_BARLINES);
-    m_dynamicSize = buildPropertyItem(mu::engraving::Pid::DYNAMICS_SIZE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+    m_dynamicSize = buildPropertyItem(mu::engraving::Pid::DYNAMICS_SIZE,
+                                      [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue.toDouble() / 100);
+    },
+                                      [this](const mu::engraving::Sid sid, const QVariant& newValue) {
+        updateStyleValue(sid, newValue.toDouble() / 100);
+        emit requestReloadPropertyItems();
     });
     m_centerOnNotehead = buildPropertyItem(mu::engraving::Pid::CENTER_ON_NOTEHEAD);
     m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);

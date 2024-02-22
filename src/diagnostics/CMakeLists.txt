@@ -108,7 +108,6 @@ if (MUE_BUILD_CRASHPAD_CLIENT)
     )
 
     set(MODULE_DEF ${MODULE_DEF}
-        -DMUE_BUILD_CRASHPAD_CLIENT
         -DMUE_CRASH_REPORT_URL="${MUE_CRASH_REPORT_URL}"
     )
 
@@ -157,6 +156,6 @@ set(MODULE_INCLUDE ${MODULE_INCLUDE}
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_DIAGNOSTICS_TESTS)
     add_subdirectory(tests)
 endif()

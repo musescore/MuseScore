@@ -87,10 +87,13 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     ui::WidgetStateStore::restoreGeometry(this);
 }
 
+#ifdef MU_QT5_COMPAT
 StaffTextPropertiesDialog::StaffTextPropertiesDialog(const StaffTextPropertiesDialog& other)
     : QDialog(other.parentWidget())
 {
 }
+
+#endif
 
 StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 {
@@ -101,11 +104,6 @@ void StaffTextPropertiesDialog::hideEvent(QHideEvent* event)
 {
     ui::WidgetStateStore::saveGeometry(this);
     QDialog::hideEvent(event);
-}
-
-int StaffTextPropertiesDialog::static_metaTypeId()
-{
-    return QMetaType::type(STAFF_TEXT_PROPERTIES_DIALOG_NAME.toStdString().c_str());
 }
 
 //---------------------------------------------------------

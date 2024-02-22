@@ -95,14 +95,14 @@ void NewWorkspaceModel::validateWorkspaceName()
     m_errorMessage.clear();
 
     if (m_workspaceNames.contains(m_workspaceName)) {
-        m_errorMessage = qtrc("workspace", "A workspace with the name '%1' already exists. Please choose a different name.")
+        m_errorMessage = qtrc("workspace", "A workspace with the name “%1” already exists. Please choose a different name.")
                          .arg(m_workspaceName);
         return;
     }
 
     //! NOTE A file will be created with this name, so let's check if the name is valid for the file name
     if (!io::isAllowedFileName(io::path_t(m_workspaceName))) {
-        m_errorMessage = qtrc("workspace", "'%1' cannot be used as a workspace name. Please choose a different name.")
+        m_errorMessage = qtrc("workspace", "“%1” cannot be used as a workspace name. Please choose a different name.")
                          .arg(m_workspaceName);
         return;
     }

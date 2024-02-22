@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ARTICULATION_H__
-#define __ARTICULATION_H__
+#ifndef MU_ENGRAVING_ARTICULATION_H
+#define MU_ENGRAVING_ARTICULATION_H
 
 #include <set>
 
@@ -172,35 +172,26 @@ public:
 
     bool isOnCrossBeamSide() const;
 
-    staff_idx_t vStaffIdx() const override { return chordRest()->vStaffIdx(); }
+    staff_idx_t vStaffIdx() const override;
 
     struct LayoutData : public EngravingItem::LayoutData
     {
+        ld_field<bool> up = { "[Articulation] up", true };
+        ld_field<SymId> symId = { "[Articulation] symId", SymId::noSym };
+
         void reset() override
         {
             EngravingItem::LayoutData::reset();
-            m_up.reset();
-            m_symId.reset();
+            up.reset();
+            symId.reset();
         }
-
-        bool isSetUp() const { return m_up.has_value(); }
-        bool up(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_up.value(mode); }
-        void setUp(bool val) { m_up.set_value(val); }
-
-        bool isSetSymId() const { return m_symId.has_value(); }
-        SymId symId(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_symId.value(mode); }
-        void setSymId(SymId val) { m_symId.set_value(val); }
-
-    private:
-        ld_field<bool> m_up = { "up", true };
-        ld_field<SymId> m_symId = { "symId", SymId::noSym };
     };
-    DECLARE_LAYOUTDATA_METHODS(Articulation);
+    DECLARE_LAYOUTDATA_METHODS(Articulation)
 
     void setUp(bool val);
 
     //! --- DEPRECATED ---
-    bool up() const { return layoutData()->up(); }
+    bool up() const { return ldata()->up; }
     //! ------------------
 
 protected:

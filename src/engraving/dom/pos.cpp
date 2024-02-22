@@ -40,68 +40,68 @@ namespace mu::engraving {
 
 Pos::Pos()
 {
-    tempo  = 0;
-    sig    = 0;
-    _type  = TType::TICKS;
-    _tick  = 0;
-    _frame = 0;
-    sn     = -1;
-    _valid = false;
+    m_tempo  = 0;
+    m_sig    = 0;
+    m_type  = TType::TICKS;
+    m_tick  = 0;
+    m_frame = 0;
+    m_sn     = -1;
+    m_valid = false;
 }
 
 Pos::Pos(TempoMap* tl, TimeSigMap* sl)
 {
-    tempo  = tl;
-    sig    = sl;
-    _type   = TType::TICKS;
-    _tick   = 0;
-    _frame  = 0;
-    sn      = -1;
-    _valid  = false;
+    m_tempo  = tl;
+    m_sig    = sl;
+    m_type   = TType::TICKS;
+    m_tick   = 0;
+    m_frame  = 0;
+    m_sn      = -1;
+    m_valid  = false;
 }
 
 Pos::Pos(TempoMap* tl, TimeSigMap* sl, unsigned t, TType timeType)
 {
-    tempo  = tl;
-    sig    = sl;
-    _type = timeType;
-    if (_type == TType::TICKS) {
-        _tick   = t;
+    m_tempo  = tl;
+    m_sig    = sl;
+    m_type = timeType;
+    if (m_type == TType::TICKS) {
+        m_tick   = t;
     } else {
-        _frame = t;
+        m_frame = t;
     }
-    sn = -1;
-    _valid = true;
+    m_sn = -1;
+    m_valid = true;
 }
 
 Pos::Pos(TempoMap* tl, TimeSigMap* sl, const String& s)
 {
-    tempo  = tl;
-    sig    = sl;
+    m_tempo  = tl;
+    m_sig    = sl;
     int m, b, t;
     sscanf(s.toAscii().constChar(), "%04d.%02d.%03d", &m, &b, &t);
-    _tick  = sig->bar2tick(m, b) + t;
-    _type  = TType::TICKS;
-    _frame = 0;
-    sn     = -1;
-    _valid = true;
+    m_tick  = m_sig->bar2tick(m, b) + t;
+    m_type  = TType::TICKS;
+    m_frame = 0;
+    m_sn     = -1;
+    m_valid = true;
 }
 
 Pos::Pos(TempoMap* tl, TimeSigMap* sl, int measure, int beat, int tick)
 {
-    tempo  = tl;
-    sig    = sl;
-    _tick  = sig->bar2tick(measure, beat) + tick;
-    _type  = TType::TICKS;
-    _frame = 0;
-    sn     = -1;
-    _valid = true;
+    m_tempo  = tl;
+    m_sig    = sl;
+    m_tick  = m_sig->bar2tick(measure, beat) + tick;
+    m_type  = TType::TICKS;
+    m_frame = 0;
+    m_sn     = -1;
+    m_valid = true;
 }
 
 Pos::Pos(TempoMap* tl, TimeSigMap* sl, int min, int sec, int frame, int subframe)
 {
-    tempo  = tl;
-    sig    = sl;
+    m_tempo  = tl;
+    m_sig    = sl;
     double time = min * 60.0 + sec;
 
     double f = frame + subframe / 100.0;
@@ -119,11 +119,11 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, int min, int sec, int frame, int subframe
         time += f * 1.0 / 30.0;
         break;
     }
-    _type  = TType::FRAMES;
-    _tick  = 0;
-    _frame = lrint(time * MScore::sampleRate);
-    sn     = -1;
-    _valid = true;
+    m_type  = TType::FRAMES;
+    m_tick  = 0;
+    m_frame = lrint(time * MScore::sampleRate);
+    m_sn     = -1;
+    m_valid = true;
 }
 
 //---------------------------------------------------------
@@ -132,18 +132,18 @@ Pos::Pos(TempoMap* tl, TimeSigMap* sl, int min, int sec, int frame, int subframe
 
 void Pos::setType(TType t)
 {
-    if (t == _type) {
+    if (t == m_type) {
         return;
     }
 
-    if (_type == TType::TICKS) {
+    if (m_type == TType::TICKS) {
         // convert from ticks to frames
-        _frame = tempo->tick2time(_tick, _frame, &sn) * MScore::sampleRate;
+        m_frame = m_tempo->tick2time(m_tick, m_frame, &m_sn) * MScore::sampleRate;
     } else {
         // convert from frames to ticks
-        _tick = tempo->time2tick(_frame / MScore::sampleRate, _tick, &sn);
+        m_tick = m_tempo->time2tick(m_frame / MScore::sampleRate, m_tick, &m_sn);
     }
-    _type = t;
+    m_type = t;
 }
 
 //---------------------------------------------------------
@@ -152,12 +152,12 @@ void Pos::setType(TType t)
 
 Pos& Pos::operator+=(const Pos& a)
 {
-    if (_type == TType::FRAMES) {
-        _frame += a.frame();
+    if (m_type == TType::FRAMES) {
+        m_frame += a.frame();
     } else {
-        _tick += a.tick();
+        m_tick += a.tick();
     }
-    sn = -1;            // invalidate cached values
+    m_sn = -1;            // invalidate cached values
     return *this;
 }
 
@@ -167,12 +167,12 @@ Pos& Pos::operator+=(const Pos& a)
 
 Pos& Pos::operator-=(const Pos& a)
 {
-    if (_type == TType::FRAMES) {
-        _frame -= a.frame();
+    if (m_type == TType::FRAMES) {
+        m_frame -= a.frame();
     } else {
-        _tick -= a.tick();
+        m_tick -= a.tick();
     }
-    sn = -1;            // invalidate cached values
+    m_sn = -1;            // invalidate cached values
     return *this;
 }
 
@@ -182,12 +182,12 @@ Pos& Pos::operator-=(const Pos& a)
 
 Pos& Pos::operator+=(int a)
 {
-    if (_type == TType::FRAMES) {
-        _frame += a;
+    if (m_type == TType::FRAMES) {
+        m_frame += a;
     } else {
-        _tick += a;
+        m_tick += a;
     }
-    sn = -1;            // invalidate cached values
+    m_sn = -1;            // invalidate cached values
     return *this;
 }
 
@@ -197,12 +197,12 @@ Pos& Pos::operator+=(int a)
 
 Pos& Pos::operator-=(int a)
 {
-    if (_type == TType::FRAMES) {
-        _frame -= a;
+    if (m_type == TType::FRAMES) {
+        m_frame -= a;
     } else {
-        _tick -= a;
+        m_tick -= a;
     }
-    sn = -1;            // invalidate cached values
+    m_sn = -1;            // invalidate cached values
     return *this;
 }
 
@@ -232,55 +232,55 @@ Pos operator-(const Pos& a, const Pos& b)
 
 bool Pos::operator>=(const Pos& s) const
 {
-    if (_type == TType::FRAMES) {
-        return _frame >= s.frame();
+    if (m_type == TType::FRAMES) {
+        return m_frame >= s.frame();
     } else {
-        return _tick >= s.tick();
+        return m_tick >= s.tick();
     }
 }
 
 bool Pos::operator>(const Pos& s) const
 {
-    if (_type == TType::FRAMES) {
-        return _frame > s.frame();
+    if (m_type == TType::FRAMES) {
+        return m_frame > s.frame();
     } else {
-        return _tick > s.tick();
+        return m_tick > s.tick();
     }
 }
 
 bool Pos::operator<(const Pos& s) const
 {
-    if (_type == TType::FRAMES) {
-        return _frame < s.frame();
+    if (m_type == TType::FRAMES) {
+        return m_frame < s.frame();
     } else {
-        return _tick < s.tick();
+        return m_tick < s.tick();
     }
 }
 
 bool Pos::operator<=(const Pos& s) const
 {
-    if (_type == TType::FRAMES) {
-        return _frame <= s.frame();
+    if (m_type == TType::FRAMES) {
+        return m_frame <= s.frame();
     } else {
-        return _tick <= s.tick();
+        return m_tick <= s.tick();
     }
 }
 
 bool Pos::operator==(const Pos& s) const
 {
-    if (_type == TType::FRAMES) {
-        return _frame == s.frame();
+    if (m_type == TType::FRAMES) {
+        return m_frame == s.frame();
     } else {
-        return _tick == s.tick();
+        return m_tick == s.tick();
     }
 }
 
 bool Pos::operator!=(const Pos& s) const
 {
-    if (_type == TType::FRAMES) {
-        return _frame != s.frame();
+    if (m_type == TType::FRAMES) {
+        return m_frame != s.frame();
     } else {
-        return _tick != s.tick();
+        return m_tick != s.tick();
     }
 }
 
@@ -290,10 +290,10 @@ bool Pos::operator!=(const Pos& s) const
 
 unsigned Pos::tick() const
 {
-    if (_type == TType::FRAMES) {
-        _tick = tempo->time2tick(_frame / MScore::sampleRate, _tick, &sn);
+    if (m_type == TType::FRAMES) {
+        m_tick = m_tempo->time2tick(m_frame / MScore::sampleRate, m_tick, &m_sn);
     }
-    return _tick;
+    return m_tick;
 }
 
 //---------------------------------------------------------
@@ -302,12 +302,12 @@ unsigned Pos::tick() const
 
 unsigned Pos::frame() const
 {
-    if (_type == TType::TICKS) {
+    if (m_type == TType::TICKS) {
         // double time = _frame / MScore::sampleRate;
         // _frame = tempo->tick2time(_tick, time, &sn) * MScore::sampleRate;
-        _frame = tempo->tick2time(_tick) * MScore::sampleRate;
+        m_frame = m_tempo->tick2time(m_tick) * MScore::sampleRate;
     }
-    return _frame;
+    return m_frame;
 }
 
 //---------------------------------------------------------
@@ -316,12 +316,12 @@ unsigned Pos::frame() const
 
 void Pos::setTick(unsigned pos)
 {
-    _tick = pos;
-    sn    = -1;
-    if (_type == TType::FRAMES) {
-        _frame = tempo->tick2time(pos, &sn) * MScore::sampleRate;
+    m_tick = pos;
+    m_sn    = -1;
+    if (m_type == TType::FRAMES) {
+        m_frame = m_tempo->tick2time(pos, &m_sn) * MScore::sampleRate;
     }
-    _valid = true;
+    m_valid = true;
 }
 
 //---------------------------------------------------------
@@ -330,12 +330,12 @@ void Pos::setTick(unsigned pos)
 
 void Pos::setFrame(unsigned pos)
 {
-    _frame = pos;
-    sn     = -1;
-    if (_type == TType::TICKS) {
-        _tick = tempo->time2tick(pos / MScore::sampleRate, &sn);
+    m_frame = pos;
+    m_sn     = -1;
+    if (m_type == TType::TICKS) {
+        m_tick = m_tempo->time2tick(pos / MScore::sampleRate, &m_sn);
     }
-    _valid = true;
+    m_valid = true;
 }
 
 //---------------------------------------------------------
@@ -345,17 +345,17 @@ void Pos::setFrame(unsigned pos)
 PosLen::PosLen(TempoMap* tl, TimeSigMap* sl)
     : Pos(tl, sl)
 {
-    _lenTick  = 0;
-    _lenFrame = 0;
-    sn        = -1;
+    m_lenTick  = 0;
+    m_lenFrame = 0;
+    m_sn        = -1;
 }
 
 PosLen::PosLen(const PosLen& p)
     : Pos(p)
 {
-    _lenTick  = p._lenTick;
-    _lenFrame = p._lenFrame;
-    sn = -1;
+    m_lenTick  = p.m_lenTick;
+    m_lenFrame = p.m_lenFrame;
+    m_sn = -1;
 }
 
 //---------------------------------------------------------
@@ -368,23 +368,23 @@ void PosLen::dump(int n) const
     LOGD("  Len(");
     switch (type()) {
     case TType::FRAMES:
-        LOGD("samples=%d)", _lenFrame);
+        LOGD("samples=%d)", m_lenFrame);
         break;
     case TType::TICKS:
-        LOGD("ticks=%d)", _lenTick);
+        LOGD("ticks=%d)", m_lenTick);
         break;
     }
 }
 
 void Pos::dump(int /*n*/) const
 {
-    LOGD("Pos(%s, sn=%d, ", type() == TType::FRAMES ? "Frames" : "Ticks", sn);
+    LOGD("Pos(%s, sn=%d, ", type() == TType::FRAMES ? "Frames" : "Ticks", m_sn);
     switch (type()) {
     case TType::FRAMES:
-        LOGD("samples=%d)", _frame);
+        LOGD("samples=%d)", m_frame);
         break;
     case TType::TICKS:
-        LOGD("ticks=%d)", _tick);
+        LOGD("ticks=%d)", m_tick);
         break;
     }
 }
@@ -395,12 +395,12 @@ void Pos::dump(int /*n*/) const
 
 void PosLen::setLenTick(unsigned len)
 {
-    _lenTick = len;
-    sn       = -1;
+    m_lenTick = len;
+    m_sn       = -1;
     if (type() == TType::FRAMES) {
-        _lenFrame = tempo->tick2time(len, &sn) * MScore::sampleRate;
+        m_lenFrame = m_tempo->tick2time(len, &m_sn) * MScore::sampleRate;
     } else {
-        _lenTick = len;
+        m_lenTick = len;
     }
 }
 
@@ -410,11 +410,11 @@ void PosLen::setLenTick(unsigned len)
 
 void PosLen::setLenFrame(unsigned len)
 {
-    sn      = -1;
+    m_sn      = -1;
     if (type() == TType::TICKS) {
-        _lenTick = tempo->time2tick(len / MScore::sampleRate, &sn);
+        m_lenTick = m_tempo->time2tick(len / MScore::sampleRate, &m_sn);
     } else {
-        _lenFrame = len;
+        m_lenFrame = len;
     }
 }
 
@@ -425,9 +425,9 @@ void PosLen::setLenFrame(unsigned len)
 unsigned PosLen::lenTick() const
 {
     if (type() == TType::FRAMES) {
-        _lenTick = tempo->time2tick(_lenFrame / MScore::sampleRate, _lenTick, &sn);
+        m_lenTick = m_tempo->time2tick(m_lenFrame / MScore::sampleRate, m_lenTick, &m_sn);
     }
-    return _lenTick;
+    return m_lenTick;
 }
 
 //---------------------------------------------------------
@@ -437,9 +437,9 @@ unsigned PosLen::lenTick() const
 unsigned PosLen::lenFrame() const
 {
     if (type() == TType::TICKS) {
-        _lenFrame = tempo->tick2time(_lenTick, _lenFrame, &sn) * MScore::sampleRate;
+        m_lenFrame = m_tempo->tick2time(m_lenTick, m_lenFrame, &m_sn) * MScore::sampleRate;
     }
-    return _lenFrame;
+    return m_lenFrame;
 }
 
 //---------------------------------------------------------
@@ -452,10 +452,10 @@ Pos PosLen::end() const
     pos.invalidSn();
     switch (type()) {
     case TType::FRAMES:
-        pos.setFrame(pos.frame() + _lenFrame);
+        pos.setFrame(pos.frame() + m_lenFrame);
         break;
     case TType::TICKS:
-        pos.setTick(pos.tick() + _lenTick);
+        pos.setTick(pos.tick() + m_lenTick);
         break;
     }
     return pos;
@@ -484,9 +484,9 @@ void PosLen::setPos(const Pos& pos)
 bool PosLen::operator==(const PosLen& pl) const
 {
     if (type() == TType::TICKS) {
-        return _lenTick == pl._lenTick && Pos::operator==((const Pos&)pl);
+        return m_lenTick == pl.m_lenTick && Pos::operator==((const Pos&)pl);
     } else {
-        return _lenFrame == pl._lenFrame && Pos::operator==((const Pos&)pl);
+        return m_lenFrame == pl.m_lenFrame && Pos::operator==((const Pos&)pl);
     }
 }
 
@@ -496,7 +496,7 @@ bool PosLen::operator==(const PosLen& pl) const
 
 void Pos::mbt(int* bar, int* beat, int* tk) const
 {
-    sig->tickValues(tick(), bar, beat, tk);
+    m_sig->tickValues(tick(), bar, beat, tk);
 }
 
 //---------------------------------------------------------
@@ -535,7 +535,7 @@ void Pos::msf(int* min, int* sec, int* fr, int* subFrame) const
 
 SigEvent Pos::timesig() const
 {
-    return sig->timesig(tick());
+    return m_sig->timesig(tick());
 }
 
 //---------------------------------------------------------
@@ -547,31 +547,31 @@ SigEvent Pos::timesig() const
 
 void Pos::snap(int raster)
 {
-    setTick(sig->raster(tick(), raster));
+    setTick(m_sig->raster(tick(), raster));
 }
 
 void Pos::upSnap(int raster)
 {
-    setTick(sig->raster2(tick(), raster));
+    setTick(m_sig->raster2(tick(), raster));
 }
 
 void Pos::downSnap(int raster)
 {
-    setTick(sig->raster1(tick(), raster));
+    setTick(m_sig->raster1(tick(), raster));
 }
 
 Pos Pos::snapped(int raster) const
 {
-    return Pos(tempo, sig, sig->raster(tick(), raster));
+    return Pos(m_tempo, m_sig, m_sig->raster(tick(), raster));
 }
 
 Pos Pos::upSnapped(int raster) const
 {
-    return Pos(tempo, sig, sig->raster2(tick(), raster));
+    return Pos(m_tempo, m_sig, m_sig->raster2(tick(), raster));
 }
 
 Pos Pos::downSnapped(int raster) const
 {
-    return Pos(tempo, sig, sig->raster1(tick(), raster));
+    return Pos(m_tempo, m_sig, m_sig->raster1(tick(), raster));
 }
 }

@@ -29,15 +29,26 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/musicxmlmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/imusicxmlconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
     )
+
+if (MUSICXML_NO_INTERNAL)
+    set(MODULE_DEF ${MODULE_DEF} -DMUSICXML_NO_INTERNAL -DMUSICXML_NO_INTERACTIVE -DMUSICXML_NO_VALIDATION)
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlconfiguration.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlconfiguration.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlreader.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/musicxmlwriter.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
+        )
+
+    if (NOT MUE_COMPILE_QT5_COMPAT)
+        set(MODULE_DEF ${MODULE_DEF} -DMUSICXML_NO_VALIDATION)
+    endif()
+endif()
 
 set(MODULE_LINK
     engraving
@@ -45,6 +56,6 @@ set(MODULE_LINK
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_IMPORTEXPORT_TESTS)
     add_subdirectory(tests)
 endif()

@@ -49,9 +49,12 @@ static const QUrl MUSESCORECOM_USER_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/m
 
 static const QUrl MUSESCORECOM_SCORE_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/info");
 static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL + "/collection/scores");
-static const QUrl MUSESCORECOM_DOWNLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
+static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
+static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download-shared");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
+
+static const QString MUSESCORE_TEXT_LOGO("https://musescore.org/themes/musescore_theme/logo.svg");
 
 static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
@@ -73,7 +76,9 @@ CloudInfo MuseScoreComService::cloudInfo() const
     return {
         MUSESCORE_COM_CLOUD_CODE,
         MUSESCORECOM_CLOUD_TITLE,
-        MUSESCORECOM_CLOUD_URL
+        MUSESCORECOM_CLOUD_URL,
+        MUSESCORE_TEXT_LOGO,
+        logoColorForTheme(uiConfig()->currentTheme())
     };
 }
 
@@ -87,6 +92,8 @@ AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
     ServerConfig serverConfig;
     serverConfig.serverCode = MUSESCORE_COM_CLOUD_CODE;
     serverConfig.serverUrl = MUSESCORECOM_CLOUD_URL;
+
+    serverConfig.serverAvailabilityUrl = MUSESCORECOM_API_ROOT_URL + "/system/healthcheck";
 
     serverConfig.authorizationUrl = MUSESCORECOM_CLOUD_URL + "/oauth/authorize";
     serverConfig.signUpUrl = MUSESCORECOM_CLOUD_URL + "/oauth/authorize-new";
@@ -191,7 +198,7 @@ bool MuseScoreComService::doUpdateTokens()
 
 mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)
 {
-    return downloadScoreInfo(scoreIdFromSourceUrl(sourceUrl));
+    return downloadScoreInfo(idFromCloudUrl(sourceUrl).toUint64());
 }
 
 mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
@@ -215,7 +222,7 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
 
     if (!ret) {
         printServerReply(receivedData);
-        result.ret = ret;
+        result.ret = uploadingDownloadingRetFromRawRet(ret);
         return result;
     }
 
@@ -300,7 +307,7 @@ mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int score
     });
 }
 
-ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData)
+ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData, const QString& hash, const QString& secret)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -309,12 +316,12 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
         progress->progressChanged.send(current, total, message);
     });
 
-    async::Async::call(this, [this, manager, scoreId, &scoreData, progress]() {
+    async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
         progress->started.notify();
 
         ProgressResult result;
-        result.ret = executeRequest([this, manager, scoreId, &scoreData]() {
-            return doDownloadScore(manager, scoreId, scoreData);
+        result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
+            return doDownloadScore(manager, scoreId, scoreData, hash, secret);
         });
 
         progress->finished.send(result);
@@ -323,14 +330,27 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     return progress;
 }
 
-mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData)
+mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+                                             const QString& hash, const QString& secret)
 {
     TRACEFUNC;
+
+    QUrl baseDownloadUrl = MUSESCORECOM_SCORE_DOWNLOAD_API_URL;
 
     QVariantMap params;
     params["score_id"] = scoreId;
 
-    RetVal<QUrl> downloadUrl = prepareUrlForRequest(MUSESCORECOM_DOWNLOAD_SCORE_API_URL, params);
+    if (!hash.isEmpty()) {
+        baseDownloadUrl = MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL;
+
+        params["h"] = hash;
+
+        if (!secret.isEmpty()) {
+            params["secret"] = secret;
+        }
+    }
+
+    RetVal<QUrl> downloadUrl = prepareUrlForRequest(baseDownloadUrl, params);
     if (!downloadUrl.ret) {
         return downloadUrl.ret;
     }
@@ -407,11 +427,11 @@ mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr upl
         return result;
     }
 
-    int scoreId = scoreIdFromSourceUrl(sourceUrl);
-    bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
+    ID scoreId = idFromCloudUrl(sourceUrl);
+    bool isScoreAlreadyUploaded = scoreId != INVALID_ID;
 
     if (isScoreAlreadyUploaded) {
-        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId);
+        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId.toUint64());
 
         if (!scoreInfo.ret) {
             if (statusCode(scoreInfo.ret) == NOT_FOUND_STATUS_CODE) {
@@ -442,7 +462,7 @@ mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr upl
     if (isScoreAlreadyUploaded) {
         QHttpPart scoreIdPart;
         scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-        scoreIdPart.setBody(QString::number(scoreId).toLatin1());
+        scoreIdPart.setBody(QString::number(scoreId.toUint64()).toLatin1());
         multiPart.append(scoreIdPart);
 
         if (revisionId) {
@@ -528,7 +548,7 @@ mu::Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadMan
 
     QHttpPart scoreIdPart;
     scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-    scoreIdPart.setBody(QString::number(scoreIdFromSourceUrl(sourceUrl)).toLatin1());
+    scoreIdPart.setBody(QString::number(idFromCloudUrl(sourceUrl).toUint64()).toLatin1());
     multiPart.append(scoreIdPart);
 
     QBuffer receivedData;
@@ -541,4 +561,14 @@ mu::Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadMan
     }
 
     return ret;
+}
+
+QString MuseScoreComService::logoColorForTheme(const ui::ThemeInfo& theme) const
+{
+    if (theme.codeKey == ui::LIGHT_THEME_CODE) {
+        return "#0065C3";
+    } else if (theme.codeKey == ui::DARK_THEME_CODE) {
+        return "#8EC9FF";
+    }
+    return AbstractCloudService::logoColorForTheme(theme);
 }

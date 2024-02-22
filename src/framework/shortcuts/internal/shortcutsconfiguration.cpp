@@ -29,8 +29,11 @@
 using namespace mu::shortcuts;
 using namespace mu::framework;
 
-static const mu::io::path_t SHORTCUTS_FILE_NAME("/shortcuts.xml");
-static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data" + SHORTCUTS_FILE_NAME);
+#if defined(Q_OS_MACOS)
+static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts-Mac.xml");
+#else
+static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts.xml");
+#endif
 
 static const std::string MIDIMAPPINGS_FILE_NAME("/midi_mappings.xml");
 
@@ -56,7 +59,7 @@ void ShortcutsConfiguration::setCurrentKeyboardLayout(const QString& layout)
 
 mu::io::path_t ShortcutsConfiguration::shortcutsUserAppDataPath() const
 {
-    return globalConfiguration()->userAppDataPath() + SHORTCUTS_FILE_NAME;
+    return globalConfiguration()->userAppDataPath() + "/shortcuts.xml";
 }
 
 mu::io::path_t ShortcutsConfiguration::shortcutsAppDataPath() const

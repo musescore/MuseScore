@@ -245,7 +245,7 @@
             <fff/>
             </dynamics>
           </direction-type>
-        <sound dynamics="140.00"/>
+        <sound dynamics="140"/>
         </direction>
       <note>
         <pitch>
@@ -379,7 +379,7 @@
             <other-dynamics>sff</other-dynamics>
             </dynamics>
           </direction-type>
-        <sound dynamics="140.00"/>
+        <sound dynamics="140"/>
         </direction>
       <note>
         <pitch>
@@ -398,7 +398,7 @@
             <sffz/>
             </dynamics>
           </direction-type>
-        <sound dynamics="140.00"/>
+        <sound dynamics="140"/>
         </direction>
       <note>
         <pitch>

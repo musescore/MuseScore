@@ -34,6 +34,10 @@
 
 using namespace mu;
 
+constexpr unsigned char U8_BOM[] = { 239, 187, 191 };
+constexpr unsigned char U16LE_BOM[] = { 255, 254 };
+constexpr unsigned char U16BE_BOM[] = { 254, 255 };
+
 // Helpers
 
 static long int toInt_helper(const char* str, bool* ok, int base)
@@ -46,19 +50,11 @@ static long int toInt_helper(const char* str, bool* ok, int base)
     }
     const char* currentLoc = setlocale(LC_NUMERIC, "C");
     char* end = nullptr;
-    long v = std::strtol(str, &end, base);
+    long int v = static_cast<int>(std::strtol(str, &end, base));
     setlocale(LC_NUMERIC, currentLoc);
     bool myOk = std::strlen(end) == 0;
     if (!myOk) {
-        end++;
-        if (std::strlen(end) != 0) {
-            char* frEnd = nullptr;
-            std::strtol(end, &frEnd, base);
-            myOk = std::strlen(frEnd) == 0;
-            if (!myOk) {
-                v = 0;
-            }
-        }
+        v = 0;
     }
 
     if (ok) {
@@ -186,6 +182,45 @@ char16_t Char::toUpper(char16_t ch)
 // ============================
 // UtfCodec
 // ============================
+UtfCodec::Encoding UtfCodec::xmlEncoding(const ByteArray& data)
+{
+    if (data.size() < 3) {
+        return Encoding::Unknown;
+    }
+
+    // Check Bom
+    if (std::memcmp(data.constChar(), U8_BOM, 3) == 0) {
+        return Encoding::UTF_8;
+    }
+
+    if (std::memcmp(data.constChar(), U16LE_BOM, 2) == 0) {
+        return Encoding::UTF_16LE;
+    }
+
+    if (std::memcmp(data.constChar(), U16BE_BOM, 2) == 0) {
+        return Encoding::UTF_16BE;
+    }
+
+    // Check content
+    //! NOTE For XML we know that the content starts with an ascii character '<',
+    //! it takes up 8 bits, so the remaining bits will be zero if the encoding is greater than UTF-8
+    //! (for other content type this may not be true)
+    const uint8_t* d = data.constData();
+    if (d[0] != 0 && d[1] != 0) {
+        return Encoding::UTF_8;
+    }
+
+    if (d[0] != 0 && d[1] == 0) {
+        return Encoding::UTF_16LE;
+    }
+
+    if (d[0] == 0 && d[1] != 0) {
+        return Encoding::UTF_16BE;
+    }
+
+    return Encoding::Unknown;
+}
+
 void UtfCodec::utf8to16(std::string_view src, std::u16string& dst)
 {
     try {
@@ -220,6 +255,11 @@ void UtfCodec::utf32to8(std::u32string_view src, std::string& dst)
     } catch (const std::exception& e) {
         LOGE() << e.what();
     }
+}
+
+bool UtfCodec::isValidUtf8(const std::string_view& src)
+{
+    return utf8::is_valid(src.begin(), src.end());
 }
 
 // ============================
@@ -305,6 +345,7 @@ struct String::Mutator {
     void reserve(size_t n) { s.reserve(n); }
     void resize(size_t n) { s.resize(n); }
     void clear() { s.clear(); }
+    void push_back(char16_t c) { s.push_back(c); }
     void insert(size_t p, const std::u16string& v) { s.insert(p, v); }
     void erase(size_t p, size_t n) { s.erase(p, n); }
 
@@ -423,6 +464,38 @@ String& String::prepend(const String& s)
 {
     mutStr() = s.constStr() + constStr();
     return *this;
+}
+
+String String::fromUtf16LE(const ByteArray& data)
+{
+    //make sure len is divisible by 2
+    size_t len = data.size();
+    if (len % 2) {
+        len--;
+    }
+
+    if (len < 2) {
+        return String();
+    }
+
+    String u16;
+    u16.reserve(len / 2);
+    String::Mutator mut = u16.mutStr();
+
+    const uint8_t* d = data.constData();
+    size_t start = 0;
+    if (std::memcmp(d, U16LE_BOM, 2) == 0) {
+        start += 2;
+    }
+
+    for (size_t i = start; i < len;) {
+        //little-endian
+        int lo = d[i++] & 0xFF;
+        int hi = d[i++] & 0xFF;
+        mut.push_back(hi << 8 | lo);
+    }
+
+    return u16;
 }
 
 String String::fromUtf8(const char* str)
@@ -594,6 +667,25 @@ bool String::contains(const String& str, CaseSensitivity cs) const
     }
 }
 
+bool String::contains(const std::wregex& re) const
+{
+    const std::u16string& u16 = constStr();
+    std::wstring ws;
+    ws.resize(u16.size());
+
+    static_assert(sizeof(wchar_t) >= sizeof(char16_t));
+
+    for (size_t i = 0; i < ws.size(); ++i) {
+        ws[i] = static_cast<wchar_t>(u16.at(i));
+    }
+
+    auto words_begin = std::wsregex_iterator(ws.begin(), ws.end(), re);
+    if (words_begin != std::wsregex_iterator()) {
+        return true;
+    }
+    return false;
+}
+
 int String::count(const Char& ch) const
 {
     int count = 0;
@@ -613,6 +705,11 @@ size_t String::indexOf(const Char& ch, size_t from) const
         }
     }
     return mu::nidx;
+}
+
+size_t String::indexOf(const String& str, size_t from) const
+{
+    return constStr().find(str.constStr(), from);
 }
 
 size_t String::indexOf(const char16_t* str, size_t from) const
@@ -1041,6 +1138,23 @@ String String::toXmlEscaped(const String& s)
 String String::toXmlEscaped() const
 {
     return toXmlEscaped(*this);
+}
+
+String String::decodeXmlEntities(const String& src_)
+{
+    std::string src = src_.toStdString();
+    String ret = src_;
+    static const std::regex re("&#([0-9]+);");
+
+    auto begin = std::sregex_iterator(src.begin(), src.end(), re);
+    auto end = std::sregex_iterator();
+    for (auto it = begin; it != end; ++it) {
+        std::smatch match = *it;
+        std::string str0 = match[0];
+        std::string str1 = match[1];
+        ret.replace(String::fromStdString(str0), String(Char(std::stoi(str1))));
+    }
+    return ret;
 }
 
 String String::toLower() const

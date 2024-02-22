@@ -28,6 +28,7 @@
 
 #include "notationpainting.h"
 #include "notationviewstate.h"
+#include "notationsolomutestate.h"
 #include "notationinteraction.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
@@ -47,6 +48,7 @@ Notation::Notation(mu::engraving::Score* score)
 {
     m_painting = std::make_shared<NotationPainting>(this);
     m_viewState = std::make_shared<NotationViewState>(this);
+    m_soloMuteState = std::make_shared<NotationSoloMuteState>();
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_interaction, m_undoStack);
@@ -88,11 +90,8 @@ Notation::Notation(mu::engraving::Score* score)
     });
 
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
-        if (m_score) {
+        if (m_score && m_score->autoLayoutEnabled()) {
             m_score->doLayout();
-            for (Score* score : m_score->scoreList()) {
-                score->doLayout();
-            }
         }
     });
 
@@ -230,6 +229,21 @@ mu::async::Notification Notation::openChanged() const
     return m_openChanged;
 }
 
+bool Notation::hasVisibleParts() const
+{
+    if (!m_parts || !m_parts->hasParts()) {
+        return false;
+    }
+
+    for (const Part* part : m_parts->partList()) {
+        if (part->show()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Notation::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();
@@ -238,6 +252,11 @@ void Notation::notifyAboutNotationChanged()
 void Notation::setViewMode(const ViewMode& viewMode)
 {
     m_painting->setViewMode(viewMode);
+}
+
+mu::async::Notification Notation::viewModeChanged() const
+{
+    return m_painting->viewModeChanged();
 }
 
 ViewMode Notation::viewMode() const
@@ -253,6 +272,11 @@ INotationPaintingPtr Notation::painting() const
 INotationViewStatePtr Notation::viewState() const
 {
     return m_viewState;
+}
+
+INotationSoloMuteStatePtr Notation::soloMuteState() const
+{
+    return m_soloMuteState;
 }
 
 INotationInteractionPtr Notation::interaction() const

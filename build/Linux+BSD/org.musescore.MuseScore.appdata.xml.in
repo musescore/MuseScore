@@ -101,10 +101,10 @@
             <image>https://raw.githubusercontent.com/flathub/org.musescore.MuseScore/master/screenshots/07-new-score-wizard.png</image>
         </screenshot>
     </screenshots>
-    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION@/locale/instruments</translation>
-    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION@/locale/musescore</translation>
-    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION@/locale/qt</translation>
-    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION@/locale/qtbase</translation>
+    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION_MAJ_MIN@/locale/instruments</translation>
+    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION_MAJ_MIN@/locale/musescore</translation>
+    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION_MAJ_MIN@/locale/qt</translation>
+    <translation type="qt">mscore@MUSESCORE_INSTALL_SUFFIX@-@MUSESCORE_VERSION_MAJ_MIN@/locale/qtbase</translation>
     <content_rating type="oars-1.1"/>
     <!-- GNOME extensions -->
     <kudos>
@@ -132,9 +132,6 @@
         </release>
         <release date="2020-10-16" version="3.5.2">
             <url>https://musescore.org/en/3.5.2</url>
-        </release>
-        <release date="2020-10-09" version="3.5.1">
-            <url>https://musescore.org/en/3.5.1</url>
         </release>
         <release date="2020-10-09" version="3.5.1">
             <url>https://musescore.org/en/3.5.1</url>

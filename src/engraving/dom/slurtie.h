@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SLURTIE_H__
-#define __SLURTIE_H__
+#ifndef MU_ENGRAVING_SLURTIE_H
+#define MU_ENGRAVING_SLURTIE_H
 
 #include "spanner.h"
 
@@ -32,7 +32,7 @@ namespace mu::engraving {
 //   SlurPos
 //---------------------------------------------------------
 
-struct SlurPos {
+struct SlurTiePos {
     PointF p1;               // start point of slur
     System* system1 = nullptr;          // start system of slur
     PointF p2;               // end point of slur
@@ -99,7 +99,6 @@ public:
 
     void startEditDrag(EditData& ed) override;
     void endEditDrag(EditData& ed) override;
-    void editDrag(EditData&) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -112,9 +111,6 @@ public:
     void setSlurOffset(Grip i, const PointF& val) { m_ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
     UP& ups(Grip i) { return m_ups[int(i)]; }
-    Shape shape() const override { return m_shape; }
-
-    const mu::draw::PainterPath& path() const { return m_path; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return int(Grip::GRIPS); }
@@ -123,7 +119,13 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-    virtual void computeBezier(PointF so = PointF()) = 0;
+
+    struct LayoutData : public SpannerSegment::LayoutData
+    {
+        ld_field<mu::draw::PainterPath> path = "path";
+        ld_field<double> midThickness = "midThickness";
+    };
+    DECLARE_LAYOUTDATA_METHODS(SlurTieSegment)
 
 protected:
     SlurTieSegment(const ElementType& type, System*);
@@ -133,10 +135,6 @@ protected:
     std::vector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
     struct UP m_ups[int(Grip::GRIPS)];
-
-    mu::draw::PainterPath m_path;
-    mu::draw::PainterPath m_shapePath;
-    Shape m_shape;
 };
 
 //-------------------------------------------------------------------
@@ -176,6 +174,8 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     void fixupSegments(unsigned nsegs);
+
+    virtual double scalingFactor() const = 0;
 
 protected:
 

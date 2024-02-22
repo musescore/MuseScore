@@ -32,8 +32,9 @@ using namespace mu::musesampler;
 
 static constexpr int AUDIO_CHANNELS_COUNT = 2;
 
-MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const audio::AudioSourceParams& params)
-    : AbstractSynthesizer(params), m_samplerLib(samplerLib)
+MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, ms_InstrumentInfo instrument,
+                                       const audio::AudioSourceParams& params)
+    : AbstractSynthesizer(params), m_samplerLib(samplerLib), m_instrument(instrument)
 {
     if (!m_samplerLib || !m_samplerLib->isValid()) {
         return;
@@ -84,6 +85,7 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 
     if (currentRenderMode() == audio::RenderMode::OfflineMode) {
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
+        m_offlineModeStarted = true;
     }
 }
 
@@ -151,7 +153,7 @@ void MuseSamplerWrapper::flushSound()
 
     m_samplerLib->allNotesOff(m_sampler);
 
-    LOGI() << "ALL NOTES OFF";
+    LOGD() << "ALL NOTES OFF";
 }
 
 bool MuseSamplerWrapper::isValid() const
@@ -165,7 +167,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
     int unique_id = params().resourceMeta.attributeVal(u"museUID").toInt();
     m_track = m_samplerLib->addTrack(m_sampler, unique_id);
     if (m_track != nullptr) {
-        m_sequencer.init(m_samplerLib, m_sampler, m_track);
+        m_sequencer.init(m_samplerLib, m_sampler, m_track, resolveDefaultPresetCode(m_instrument));
         return;
     } else {
         LOGE() << "Could not add instrument with ID of " << unique_id;
@@ -214,6 +216,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
         // For now, hack to just choose first instrument:
         if (firstInternalId == -1) {
             firstInternalId = internalId;
+            m_instrument = instrument;
         }
     }
 
@@ -224,7 +227,7 @@ void MuseSamplerWrapper::setupSound(const mpe::PlaybackSetupData& setupData)
 
     m_track = m_samplerLib->addTrack(m_sampler, firstInternalId);
 
-    m_sequencer.init(m_samplerLib, m_sampler, m_track);
+    m_sequencer.init(m_samplerLib, m_sampler, m_track, resolveDefaultPresetCode(m_instrument));
 }
 
 void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
@@ -242,14 +245,15 @@ void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
         return;
     }
 
-    if (mode != audio::RenderMode::OfflineMode) {
+    if (mode != audio::RenderMode::OfflineMode && m_offlineModeStarted) {
         m_samplerLib->stopOfflineMode(m_sampler);
+        m_offlineModeStarted = false;
     }
 }
 
 msecs_t MuseSamplerWrapper::playbackPosition() const
 {
-    return m_sequencer.playbackPosition();
+    return samplesToMsecs(m_currentPosition, m_sampleRate);
 }
 
 void MuseSamplerWrapper::setPlaybackPosition(const audio::msecs_t newPosition)
@@ -286,14 +290,29 @@ void MuseSamplerWrapper::setIsActive(bool arg)
     LOGD() << "Toggled playing status, isPlaying: " << arg;
 }
 
+std::string MuseSamplerWrapper::resolveDefaultPresetCode(ms_InstrumentInfo instrument) const
+{
+    if (!instrument) {
+        return std::string();
+    }
+
+    ms_PresetList presets = m_samplerLib->getPresetList(instrument);
+
+    if (const char* presetCode = m_samplerLib->getNextPreset(presets)) {
+        return presetCode;
+    }
+
+    return std::string();
+}
+
 void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventType& event)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
         return;
     }
 
-    if (std::holds_alternative<ms_AuditionStartNoteEvent_2>(event)) {
-        m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent_2>(event));
+    if (std::holds_alternative<ms_AuditionStartNoteEvent_3>(event)) {
+        m_samplerLib->startAuditionNote(m_sampler, m_track, std::get<ms_AuditionStartNoteEvent_3>(event));
         return;
     }
 

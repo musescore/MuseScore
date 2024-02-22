@@ -105,7 +105,7 @@ FocusableItem {
 
                 step: 1
                 decimals: 0
-                maxValue: 6
+                maxValue: 24
                 minValue: 1
 
                 navigationName: "VisibleFrets"
@@ -124,7 +124,7 @@ FocusableItem {
 
                 step: 1
                 decimals: 0
-                maxValue: 12
+                maxValue: 24
                 minValue: 1
 
                 navigationName: "FretNumber"

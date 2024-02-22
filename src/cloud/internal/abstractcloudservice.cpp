@@ -113,11 +113,20 @@ void AbstractCloudService::initOAuthIfNecessary()
 
     m_oauth2->setAuthorizationUrl(m_serverConfig.authorizationUrl);
     m_oauth2->setAccessTokenUrl(m_serverConfig.accessTokenUrl);
+#ifdef MU_QT5_COMPAT
     m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QVariantMap* parameters) {
         for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
             parameters->insert(key, m_serverConfig.authorizationParameters.value(key));
         }
     });
+#else
+    m_oauth2->setModifyParametersFunction([this](QAbstractOAuth::Stage, QMultiMap<QString, QVariant>* parameters) {
+        for (const QString& key : m_serverConfig.authorizationParameters.keys()) {
+            parameters->insert(key, m_serverConfig.authorizationParameters.value(key));
+        }
+    });
+#endif
+
     m_oauth2->setReplyHandler(m_replyHandler);
 
     connect(m_oauth2, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, this, &AbstractCloudService::openUrl);
@@ -295,7 +304,7 @@ void AbstractCloudService::signOut()
     clearTokens();
 }
 
-mu::Ret AbstractCloudService::ensureAuthorization(const std::string& text)
+mu::RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, const std::string& text)
 {
     if (m_userAuthorized.val) {
         return make_ok();
@@ -304,7 +313,8 @@ mu::Ret AbstractCloudService::ensureAuthorization(const std::string& text)
     UriQuery query("musescore://cloud/requireauthorization");
     query.addParam("text", Val(text));
     query.addParam("cloudCode", Val(cloudInfo().code));
-    return interactive()->open(query).ret;
+    query.addParam("publishingScore", Val(publishingScore));
+    return interactive()->open(query);
 }
 
 mu::ValCh<bool> AbstractCloudService::userAuthorized() const
@@ -321,7 +331,7 @@ mu::Ret AbstractCloudService::checkCloudIsAvailable() const
 {
     QBuffer receivedData;
     INetworkManagerPtr manager = networkManagerCreator()->makeNetworkManager();
-    Ret ret = manager->get(m_serverConfig.serverUrl, &receivedData, m_serverConfig.headers);
+    Ret ret = manager->get(m_serverConfig.serverAvailabilityUrl, &receivedData, m_serverConfig.headers);
 
     if (!ret) {
         printServerReply(receivedData);
@@ -366,37 +376,39 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
         return rawRet; // OK
     }
 
-    int code = statusCode(rawRet);
-    if (!code) {
-        return rawRet;
+    int status = statusCode(rawRet);
+    if (status) {
+        switch (status) {
+        case 400: return make_ret(Err::Status400_InvalidRequest);
+        case 401: return make_ret(Err::Status401_AuthorizationRequired);
+        case 403:
+            if (isAlreadyUploaded) {
+                return make_ret(Err::Status403_AccountNotActivated);
+            } else {
+                return make_ret(Err::Status403_NotOwner);
+            }
+        case 404: return make_ret(Err::Status404_NotFound);
+        case 409: return make_ret(Err::Status409_Conflict);
+        case 422: return make_ret(Err::Status422_ValidationFailed);
+        case 429: return make_ret(Err::Status429_RateLimitExceeded);
+        case 500: return make_ret(Err::Status500_InternalServerError);
+        default: break;
+        }
+
+        Ret ret = make_ret(Err::UnknownStatusCode);
+        ret.setText("Unknown status code: " + std::to_string(status));
+        ret.setData("status", status);
+        return ret;
     }
 
-    if (!isAlreadyUploaded && code == FORBIDDEN_CODE) {
-        return make_ret(cloud::Err::AccountNotActivated);
+    switch (rawRet.code()) {
+    case int(network::Err::NetworkError):
+    case int(network::Err::Timeout):
+    case int(network::Err::Abort):
+        return make_ret(Err::NetworkError);
     }
 
-    if (code == CONFLICT_STATUS_CODE) {
-        return make_ret(cloud::Err::Conflict);
-    }
-
-    static const std::map<int, mu::TranslatableString> codes {
-        { 400, mu::TranslatableString("cloud", "Invalid request") },
-        { 401, mu::TranslatableString("cloud", "Authorization required") },
-        { 403, mu::TranslatableString("cloud", "Forbidden. User is not owner of the score.") },
-        { 422, mu::TranslatableString("cloud", "Validation failed") },
-        { 500, mu::TranslatableString("cloud", "Internal server error") },
-    };
-
-    std::string userDescription = qtrc("cloud", "Error %1: %2")
-                                  .arg(code)
-                                  .arg(mu::value(codes, code, TranslatableString("cloud", "Unknown error")).qTranslated())
-                                  .toStdString();
-
-    Ret ret = make_ret(cloud::Err::NetworkError);
-    ret.setData(CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY, userDescription);
-    ret.setData(STATUS_KEY, code);
-
-    return ret;
+    return rawRet;
 }
 
 int AbstractCloudService::statusCode(const mu::Ret& ret) const
@@ -453,4 +465,12 @@ void AbstractCloudService::openUrl(const QUrl& url)
     if (!ret) {
         LOGE() << ret.toString();
     }
+}
+
+QString AbstractCloudService::logoColorForTheme(const ui::ThemeInfo& theme) const
+{
+    if (ui::isDarkTheme(theme.codeKey)) {
+        return "#FFFFFF";
+    }
+    return "#000000";
 }

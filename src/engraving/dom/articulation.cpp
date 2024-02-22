@@ -35,6 +35,8 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
+#include "note.h"
+#include "tie.h"
 
 #include "log.h"
 
@@ -115,8 +117,8 @@ int Articulation::subtype() const
 
 void Articulation::setUp(bool val)
 {
-    Articulation::LayoutData* ldata = mutLayoutData();
-    ldata->setUp(val);
+    Articulation::LayoutData* ldata = mutldata();
+    ldata->up = val;
 
     //! NOTE member of Articulation m_symId - this is `given` data
     //! member of LayoutData m_symId - this is layout data
@@ -141,7 +143,7 @@ void Articulation::setUp(bool val)
         }
     }
 
-    ldata->setSymId(m_symId);
+    ldata->symId = m_symId;
 }
 
 //---------------------------------------------------------
@@ -658,6 +660,15 @@ bool Articulation::isOnCrossBeamSide() const
     }
     Chord* chord = toChord(cr);
     return chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0) && (up() == chord->up());
+}
+
+staff_idx_t Articulation::vStaffIdx() const
+{
+    ChordRest* cr = chordRest();
+    if (!cr) {
+        return staffIdx();
+    }
+    return cr->vStaffIdx();
 }
 
 struct ArticulationGroup

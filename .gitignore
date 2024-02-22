@@ -5,6 +5,7 @@
 .qped
 .directory
 .idea
+.vscode/
 /builds
 /build_overrides.cmake
 build.release
@@ -29,9 +30,7 @@ MuseScorePortable
 /*.includes
 *.user
 /share/locale/*placeholder.ts
-*.qm
-share/manual/en
-share/manual/de
+/share/locale/*.qm
 /share/instruments/tsv
 Doc
 DocLib
@@ -68,3 +67,5 @@ VERSION
 *.orig
 
 temp_*
+
+*.local.cmake

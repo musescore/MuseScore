@@ -90,10 +90,13 @@ TimeDialog::TimeDialog(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 TimeDialog::TimeDialog(const TimeDialog& dialog)
     : TimeDialog(dialog.parentWidget())
 {
 }
+
+#endif
 
 bool TimeDialog::dirty() const
 {

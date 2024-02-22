@@ -26,7 +26,8 @@
 #include <string>
 #include <vector>
 
-#include "io/path.h"
+#include "global/io/path.h"
+
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {

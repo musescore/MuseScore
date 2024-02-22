@@ -23,8 +23,6 @@ set(MODULE notation)
 set(MODULE_QRC notationscene.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-find_package(Qt5 COMPONENTS Svg REQUIRED)
-
 include(${CMAKE_CURRENT_LIST_DIR}/view/widgets/widgets.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/view/styledialog/styledialog.cmake)
 
@@ -36,6 +34,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotation.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationpainting.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationviewstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/inotationsolomutestate.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationnoteinput.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationselection.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationinteraction.h
@@ -66,6 +65,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationpainting.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationviewstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationviewstate.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationsolomutestate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/notationsolomutestate.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationundostack.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationstyle.cpp
@@ -143,16 +144,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/noteflagstypeselectormodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/noteflagstypeselectormodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractelementpopupmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractelementpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp
@@ -175,13 +178,16 @@ set(MODULE_UI
     )
 
 set(MODULE_LINK
-    Qt5::Svg
     draw
     engraving
     commonscene
     uicomponents
     ui
     )
+
+if (MUE_BUILD_NOTATION_TESTS)
+    add_subdirectory(tests)
+endif()
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")

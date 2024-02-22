@@ -15,9 +15,7 @@
          </titleStmt>
          <pubStmt>
             <date isodate="2023-08-11T14:53:16" />
-            <availability>
-               <distributor>Public domain</distributor>
-            </availability>
+            <availability>Public domain</availability>
          </pubStmt>
       </fileDesc>
    </meiHead>

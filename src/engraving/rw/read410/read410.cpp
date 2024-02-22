@@ -35,7 +35,6 @@
 #include "dom/tuplet.h"
 #include "dom/chord.h"
 #include "dom/beam.h"
-#include "dom/tremolo.h"
 #include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/measurerepeat.h"
@@ -48,7 +47,9 @@
 #include "dom/dynamic.h"
 #include "dom/hairpin.h"
 #include "dom/figuredbass.h"
+#include "dom/tremolotwochord.h"
 
+#include "../compat/tremolocompat.h"
 #include "staffread.h"
 #include "tread.h"
 
@@ -79,6 +80,11 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
             }
         } else if (tag == "Revision") {
             e.skipCurrentElement();
+        } else if (tag == "LastEID") {
+            int val = e.readInt(nullptr);
+            if (score->isMaster()) {
+                score->masterScore()->getEID()->init(val);
+            }
         } else if (tag == "Score") {
             if (!readScore410(score, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {
@@ -147,6 +153,8 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
             score->m_showFrames = e.readInt();
         } else if (tag == "showMargins") {
             score->m_showPageborders = e.readInt();
+        } else if (tag == "showSoundFlags") {
+            score->m_showSoundFlags = e.readInt();
         } else if (tag == "markIrregularMeasures") {
             score->m_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
@@ -210,6 +218,8 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (e.name() == "initialPartId") {
             if (score->excerpt()) {
                 score->excerpt()->setInitialPartId(ID(e.readInt()));
+            } else {
+                e.skipCurrentElement();
             }
         } else if (e.name() == "Tracklist") {
             int strack = e.intAttribute("sTrack",   -1);
@@ -224,7 +234,7 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "name") {
             String n = e.readText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
-                score->excerpt()->setName(n);
+                score->excerpt()->setName(n, /*saveAndNotify=*/ false);
             }
         } else if (tag == "layoutMode") {
             String s = e.readText();
@@ -276,8 +286,6 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
     for (int idx : sysStaves) {
         score->addSystemObjectStaff(score->staff(idx));
     }
-
-//      createPlayEvents();
 
     return true;
 }
@@ -458,7 +466,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         if (tuplet) {
                             cr->readAddTuplet(tuplet);
                         }
-                        ctx.incTick(cr->actualTicks());
+                        ctx.incTick(cr->actualTicksAt(tick));
                         if (doScale) {
                             Fraction d = cr->durationTypeTicks();
                             cr->setTicks(cr->ticks() * scale);
@@ -472,8 +480,8 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             // disallow tie across barline within two-note tremolo
                             // tremolos can potentially still straddle the barline if no tie is required
                             // but these will be removed later
-                            Tremolo* t = chord->tremolo();
-                            if (t && t->twoNotes()) {
+                            TremoloTwoChord* t = chord->tremoloTwoChord();
+                            if (t) {
                                 if (doScale) {
                                     Fraction d = t->durationType().ticks();
                                     t->setDurationType(d * scale);
@@ -521,7 +529,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     }
                                     if (crt && crt->isChord()) {
                                         Chord* chrt = toChord(crt);
-                                        Tremolo* tr = chrt->tremolo();
+                                        TremoloTwoChord* tr = chrt->tremoloTwoChord();
                                         if (tr) {
                                             tr->setChords(chrt, toChord(cr));
                                             chrt->remove(tr);
@@ -584,6 +592,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                            || tag == "StaffText"
                            || tag == "PlayTechAnnotation"
                            || tag == "Capo"
+                           || tag == "StringTunings"
                            || tag == "TempoText"
                            || tag == "FiguredBass"
                            || tag == "Sticking"
@@ -705,6 +714,12 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         if (endStaff > score->nstaves()) {
             endStaff = score->nstaves();
         }
+
+        if (score->cmdState().layoutRange()) {
+            score->cmdState().reset();
+            score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
+        }
+
         //check and add truly invisible rests instead of gaps
         //TODO: look if this could be done different
         Measure* dstM = score->tick2measure(dstTick);
@@ -888,7 +903,7 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
                             score->undoAddElement(el);
                         }
                     } else if (tag == "StaffText" || tag == "PlayTechAnnotation" || tag == "Capo" || tag == "Sticking"
-                               || tag == "HarpPedalDiagram") {
+                               || tag == "HarpPedalDiagram" || tag == "StringTunings") {
                         EngravingItem* el = Factory::createItemByName(tag, score->dummy());
                         TRead::readItem(el, e, ctx);
                         el->setTrack(destTrack);
@@ -1015,6 +1030,17 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
         }                                 // outer while readNextstartElement()
     }                                     // inner while readNextstartElement()
 }                                         // pasteSymbolList()
+
+void Read410::readTremoloCompat(compat::TremoloCompat* tc, XmlReader& xml)
+{
+    IF_ASSERT_FAILED(tc->parent) {
+        return;
+    }
+
+    ReadContext ctx(tc->parent->score());
+    ctx.setPasteMode(true);
+    TRead::read(tc, xml, ctx);
+}
 
 void Read410::doReadItem(EngravingItem* item, XmlReader& xml)
 {

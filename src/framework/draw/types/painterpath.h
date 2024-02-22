@@ -139,8 +139,6 @@ private:
 
     void computeBoundingRect() const;
 
-    static bool hasValidCoords(PointF p);
-
     inline void maybeMoveTo()
     {
         if (m_requireMoveTo) {
@@ -163,7 +161,8 @@ private:
         return std::isfinite(c) && std::fabs(c) < 1e128;
     }
 
-    static bool hasValidCoords(RectF r);
+    static bool hasValidCoords(const PointF& p);
+    static bool hasValidCoords(const RectF& r);
 
     static RectF painterpathBezierExtrema(const Bezier& b);
 
@@ -180,6 +179,24 @@ private:
 
     friend class Transform;
 };
+
+inline void dump(const PainterPath& p, std::stringstream& ss)
+{
+    ss << "bbox: " << mu::dump(p.boundingRect()) << "\n"
+       << "fillRule: " << int(p.fillRule()) << "\n"
+       << "elements: " << p.elementCount() << "\n";
+    for (size_t i = 0; i < p.elementCount(); ++i) {
+        PainterPath::Element e = p.elementAt(i);
+        ss << " type: " << int(e.type) << ", x: " << e.x << ", y: " << e.y << "\n";
+    }
+}
+
+inline std::string dump(const PainterPath& p)
+{
+    std::stringstream ss;
+    mu::draw::dump(p, ss);
+    return ss.str();
+}
 }
 #ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::draw::PainterPath)

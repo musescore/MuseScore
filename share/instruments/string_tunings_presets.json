@@ -1,0 +1,320 @@
+[
+  {
+    "familyId": "guitars",
+    "strings": [
+      {
+        "number": 5,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [40, 45, 50, 55, 59]
+          },{
+            "name": "Hi C",
+            "value": [40, 45, 50, 55, 60]
+          },{
+            "name": "Baritone",
+            "value": [36, 43, 50, 57, 64]
+          },{
+            "name": "Open G",
+            "value": [43, 50, 55, 59, 62]
+          }
+        ]
+      },{
+        "number": 6,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [40, 45, 50, 55, 59, 64],
+            "useFlats": true
+          },{
+            "name": "Tune down 1/2 step",
+            "value": [39, 44, 49, 54, 58, 63],
+            "useFlats": true
+          },{
+            "name": "Tune down 1 step",
+            "value": [38, 43, 48, 53, 57, 62],
+            "useFlats": true
+          },{
+            "name": "Tune down 2 step",
+            "value": [36, 41, 46, 51, 55, 60],
+            "useFlats": true
+          },{
+            "name": "Dropped D",
+            "value": [38, 45, 50, 55, 59, 64],
+            "useFlats": true
+          },{
+            "name": "Dropped D tune down 1/2 step",
+            "value": [37, 44, 49, 54, 58, 63],
+            "useFlats": true
+          },{
+            "name": "Dropped D Variant",
+            "value": [38, 45, 50, 55, 57, 64],
+            "useFlats": true
+          },{
+            "name": "Double Dropped D",
+            "value": [38, 45, 50, 55, 59, 62],
+            "useFlats": true
+          },{
+            "name": "Dropped C",
+            "value": [36, 43, 48, 53, 57, 62],
+            "useFlats": true
+          },{
+            "name": "Dropped E",
+            "value": [40, 47, 52, 57, 61, 66]
+          },{
+            "name": "Dropped B",
+            "value": [35, 42, 47, 52, 56, 61]
+          },{
+            "name": "Baritone",
+            "value": [35, 40, 45, 50, 54, 59]
+          },{
+            "name": "Open C",
+            "value": [36, 43, 48, 55, 60, 64]
+          },{
+            "name": "Open Cm",
+            "value": [36, 43, 48, 55, 60, 63]
+          },{
+            "name": "Open C6",
+            "value": [36, 43, 48, 55, 57, 64]
+          },{
+            "name": "Open CM7",
+            "value": [36, 43, 52, 55, 59, 64]
+          },{
+            "name": "Open D",
+            "value": [38, 45, 50, 54, 57, 62]
+          },{
+            "name": "Open Dm",
+            "value": [38, 45, 50, 53, 57, 62]
+          },{
+            "name": "Open D5",
+            "value": [38, 45, 50, 50, 57, 62]
+          },{
+            "name": "Open D6",
+            "value": [38, 45, 50, 54, 59, 62]
+          },{
+            "name": "Open Dsus4",
+            "value": [38, 45, 50, 55, 57, 62]
+          },{
+            "name": "Open E",
+            "value": [40, 47, 52, 56, 59, 64]
+          },{
+            "name": "Open Em",
+            "value": [40, 47, 52, 55, 59, 64]
+          },{
+            "name": "Open Esus11",
+            "value": [40, 45, 52, 55, 59, 64]
+          },{
+            "name": "Open F",
+            "value": [41, 45, 48, 53, 60, 65]
+          },{
+            "name": "Open G",
+            "value": [38, 43, 50, 55, 59, 62]
+          },{
+            "name": "Open Gm",
+            "value": [38, 43, 50, 55, 58, 62]
+          },{
+            "name": "Open Gsus4",
+            "value": [38, 43, 50, 55, 60, 62]
+          },{
+            "name": "Open G6",
+            "value": [38, 43, 50, 55, 59, 64]
+          },{
+            "name": "Open A",
+            "value": [40, 45, 52, 57, 61, 64]
+          },{
+            "name": "Open Am",
+            "value": [40, 45, 52, 57, 60, 64]
+          },{
+            "name": "Dobro Open G",
+            "value": [43, 47, 50, 55, 59, 62]
+          },{
+            "name": "Lute or Vihuela",
+            "value": [40, 45, 50, 54, 59, 64]
+          },{
+            "name": "Nashville",
+            "value": [52, 57, 62, 67, 59, 64]
+          }
+        ]
+      },{
+        "number": 7,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [35, 40, 45, 50, 55, 59, 64]
+          },{
+            "name": "Drop D",
+            "value": [33, 38, 45, 50, 55, 59, 64]
+          },{
+            "name": "Tune down 1/2 step",
+            "value": [34, 39, 44, 49, 54, 58, 63]
+          },{
+            "name": "Tune down 1 step",
+            "value": [33, 38, 43, 48, 53, 57, 62]
+          },{
+            "name": "Tune down 2 step",
+            "value": [31, 36, 41, 46, 51, 55, 60]
+          }
+        ]
+      },{
+        "number": 8,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [30, 35, 40, 45, 50, 55, 59, 64]
+          },{
+            "name": "Tune down 1/2 step",
+            "value": [29, 34, 39, 44, 49, 54, 58, 63]
+          },{
+            "name": "Tune down 1 step",
+            "value": [28, 33, 38, 43, 48, 53, 57, 62]
+          },{
+            "name": "Tune down 2 step",
+            "value": [27, 32, 36, 41, 46, 51, 55, 60]
+          }
+        ]
+      },{
+        "number": 9,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [25, 30, 35, 40, 45, 50, 55, 59, 64]
+          }
+        ]
+      },{
+        "number": 10,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [30, 32, 34, 36, 40, 45, 57, 62, 67, 76]
+          },{
+            "name": "Baroque",
+            "value": [45, 47, 48, 50, 52, 57, 62, 67, 71, 76]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "familyId": "shamisens",
+    "strings": [
+      {
+        "number": 3,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [57, 64, 69]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "familytId": "banjos",
+    "strings": [
+      {
+        "number": 4,
+        "presets": [
+          {
+            "name": "Tenor",
+            "value": [48, 55, 62, 69]
+          },{
+            "name": "Irish Tenor",
+            "value": [43, 50, 57, 64]
+          },{
+            "name": "Chicago Tenor",
+            "value": [50, 55, 59, 64]
+          }
+        ]
+      },{
+        "number": 5,
+        "presets": [
+          {
+            "name": "Open G",
+            "value": [67, 50, 55, 59, 62]
+          },{
+            "name": "Drop C",
+            "value": [67, 48, 55, 59, 62]
+          },{
+            "name": "G Modal",
+            "value": [67, 50, 55, 60, 62]
+          },{
+            "name": "Double C",
+            "value": [67, 60, 55, 48, 67]
+          },{
+            "name": "Open D",
+            "value": [66, 50, 54, 57, 62]
+          }
+        ]
+      },{
+        "number": 6,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [40, 45, 50, 55, 59, 64]
+          }
+        ]
+      }
+    ]
+  },{
+    "familyId": "mandolins",
+    "strings": [
+      {
+        "number": 4,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [55, 62, 69, 76]
+          }
+        ]
+      }
+    ]
+  },{
+    "familyId": "ukuleles",
+    "strings": [
+      {
+        "number": 4,
+        "presets": [
+          {
+            "name": "C Tuning",
+            "value": [67, 60, 64, 69]
+          },{
+            "name": "D Tuning",
+            "value": [69, 62, 66, 71]
+          },{
+            "name": "Low G",
+            "value": [55, 60, 64, 69]
+          },{
+            "name": "Baritone",
+            "value": [50, 55, 59, 64]
+          }
+        ]
+      }
+    ]
+  },{
+    "familyId": "orchestral-strings",
+    "strings": [
+      {
+        "number": 4,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [55, 62, 69, 76]
+          }
+        ]
+      }
+    ]
+  },{
+    "instrumentId": "contrabass",
+    "strings": [
+      {
+        "number": 4,
+        "presets": [
+          {
+            "name": "Standard",
+            "value": [28, 33, 38, 43]
+          }
+        ]
+      }
+    ]
+  }
+]

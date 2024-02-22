@@ -41,14 +41,6 @@ public:
     void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const override;
     void paintItem(draw::Painter& painter, const EngravingItem* item) const override;
 
-    // Temporary compatibility interface
-
-    void layoutOnEdit(Arpeggio* item) override;
-
-    // Horizontal spacing
-    double computePadding(const EngravingItem* item1, const EngravingItem* item2) override;
-    KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) override;
-
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
     void layoutTextLineBaseSegment(TextLineBaseSegment* item) override;
@@ -57,6 +49,9 @@ public:
 
     // Layout Text 1
     void layoutText1(TextBase* item, bool base = false) override;
+
+    void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) override;
+    void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF()) override;
 
 private:
     // Layout Single Item

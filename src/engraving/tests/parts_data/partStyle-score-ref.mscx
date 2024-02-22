@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -22,7 +22,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -308,6 +307,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -502,9 +502,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     <Score>
+      <name>Oboe</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -666,7 +666,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Oboe</name>
       </Score>
     </Score>
   </museScore>

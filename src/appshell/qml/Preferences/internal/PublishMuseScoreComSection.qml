@@ -29,22 +29,22 @@ BaseSection {
 
     title: qsTrc("appshell/preferences", "Publish to MuseScore.com")
 
-    property alias promptShareAudioCom: promptShareAudioComCheckBox.checked
+    property alias alsoShareAudioCom: alsoShareAudioComCheckBox.checked
 
-    signal promptShareAudioComChangeRequested(bool prompt)
+    signal alsoShareAudioComChangeRequested(bool share)
 
     CheckBox {
-        id: promptShareAudioComCheckBox
+        id: alsoShareAudioComCheckBox
 
         width: parent.width
 
         text: qsTrc("appshell/preferences", "Always prompt to share on Audio.com after publishing to MuseScore.com")
 
-        navigation.name: "PromptShareAudioComCheckBox"
+        navigation.name: "AlsoShareAudioComCheckBox"
         navigation.panel: root.navigation
 
         onClicked: {
-            root.promptShareAudioComChangeRequested(!checked)
+            root.alsoShareAudioComChangeRequested(!checked)
         }
     }
 }

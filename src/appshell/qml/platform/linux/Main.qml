@@ -24,7 +24,6 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-import "../"
 import "../../"
 
 AppWindow {
@@ -43,7 +42,7 @@ AppWindow {
     }
 
     Component.onCompleted: {
-        platformMenuBar.setSource("../PlatformMenuBar.qml", { "loadSubitems": false });
+        platformMenuBar.setSource("PlatformMenuBar.qml");
         if (platformMenuBar.item.available) {
             platformMenuBar.item.load();
             appMenuBar.active = 0;

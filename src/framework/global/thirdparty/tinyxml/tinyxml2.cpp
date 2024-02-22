@@ -23,6 +23,8 @@ distribution.
 
 #include "tinyxml2.h"
 
+#include "mu_patch.h"
+
 #include <new>          // yes, this one new style header, is in the Android SDK.
 #if defined(ANDROID_NDK) || defined(__BORLANDC__) || defined(__QNXNTO__)
 #   include <stddef.h>
@@ -1046,9 +1048,14 @@ char* XMLNode::ParseDeep(char* p, StrPair* parentEndTag, int* curLineNumPtr)
                 }
             }
             if (!wellLocated) {
+#ifdef TINYXML_SKIP_DECLARATION_IN_MIDDLE
+                DeleteNode(node);
+                continue;
+#else           // default behavior
                 _document->SetError(XML_ERROR_PARSING_DECLARATION, initialLineNum, "XMLDeclaration value=%s", decl->Value());
                 DeleteNode(node);
                 break;
+#endif
             }
         }
 

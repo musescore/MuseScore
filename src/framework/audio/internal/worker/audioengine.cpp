@@ -22,12 +22,10 @@
 
 #include "audioengine.h"
 
-#include "log.h"
-#include "ptrutils.h"
-
 #include "internal/audiobuffer.h"
 #include "internal/audiosanitizer.h"
-#include "audioerrors.h"
+
+#include "log.h"
 
 using namespace mu::audio;
 
@@ -64,7 +62,7 @@ mu::Ret AudioEngine::init(AudioBufferPtr bufferPtr)
     m_mixer = std::make_shared<Mixer>();
 
     m_buffer = std::move(bufferPtr);
-    setMode(RenderMode::RealTimeMode);
+    setMode(RenderMode::IdleMode);
 
     m_inited = true;
 
@@ -142,10 +140,22 @@ void AudioEngine::setMode(const RenderMode newMode)
 
     m_currentMode = newMode;
 
-    if (m_currentMode == RenderMode::RealTimeMode) {
+    switch (m_currentMode) {
+    case RenderMode::RealTimeMode:
         m_buffer->setSource(m_mixer->mixedSource());
-    } else {
+        m_mixer->setIsIdle(false);
+        break;
+    case RenderMode::IdleMode:
+        m_buffer->setSource(m_mixer->mixedSource());
+        m_mixer->setIsIdle(true);
+        break;
+    case RenderMode::OfflineMode:
         m_buffer->setSource(nullptr);
+        m_mixer->setIsIdle(false);
+        break;
+    case RenderMode::Undefined:
+        UNREACHABLE;
+        break;
     }
 
     m_modeChanges.notify();

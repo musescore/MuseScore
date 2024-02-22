@@ -276,8 +276,8 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(XmlDomNode*
                 tempo.type = GPMasterTracks::Automation::Type::tempo;
                 String str = currentAutomation.firstChildElement("Value").toElement().text();
                 StringList tempoValue = str.split(u' ');
-                tempo.value = tempoValue[0].toInt();
-                tempo.tempoUnit = tempoValue.size() > 1 ? tempoValue.at(1).toInt() : 0;
+                tempo.value = static_cast<int>(tempoValue[0].toDouble());
+                tempo.tempoUnit = tempoValue.size() > 1 ? static_cast<int>(tempoValue[1].toDouble()) : 0;
                 tempo.bar = currentAutomation.firstChildElement("Bar").text().toInt();
                 tempo.position = currentAutomation.firstChildElement("Position").text().toFloat();
                 tempo.linear = (ln.toElement().text() == u"true");
@@ -850,9 +850,18 @@ GPTrack::RSE GP67DomBuilder::readTrackRSE(XmlDomNode* trackChildNode) const
 GPMasterBar::KeySig GP67DomBuilder::readKeySig(XmlDomNode* keyNode) const
 {
     const auto& accidentalCount = keyNode->firstChildElement("AccidentalCount");
+    const auto& modeNode = keyNode->firstChildElement("Mode");
+
+    String modeName = modeNode.toElement().text();
+
+    GPMasterBar::KeySig::Mode mode = GPMasterBar::KeySig::Mode::Major;
+    if (modeName == "Minor") {
+        mode = GPMasterBar::KeySig::Mode::Minor;
+    }
+
     int keyCount = accidentalCount.toElement().text().toInt();
 
-    return GPMasterBar::KeySig(keyCount);
+    return GPMasterBar::KeySig{ GPMasterBar::KeySig::Accidentals(keyCount), mode };
 }
 
 bool GP67DomBuilder::readUseFlats(XmlDomNode* keyNode) const

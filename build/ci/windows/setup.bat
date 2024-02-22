@@ -3,18 +3,27 @@ ECHO "Setup Windows build environment"
 
 SET TARGET_PROCESSOR_BITS=64
 SET BUILD_WIN_PORTABLE=OFF
+SET QT5_COMPAT=OFF
 
 :GETOPTS
 IF /I "%1" == "-b" SET TARGET_PROCESSOR_BITS=%2 & SHIFT
 IF /I "%1" == "--portable" SET BUILD_WIN_PORTABLE=%2 & SHIFT
+IF /I "%1" == "--qt5_compat" SET QT5_COMPAT=%2 & SHIFT
 SHIFT
 IF NOT "%1" == "" GOTO GETOPTS
+
+ECHO "QT5_COMPAT: %QT5_COMPAT%"
 
 IF NOT %TARGET_PROCESSOR_BITS% == 64 (
     IF NOT %TARGET_PROCESSOR_BITS% == 32 (
         ECHO "Error: TARGET_PROCESSOR_BITS not set, must be 32 or 64, current TARGET_PROCESSOR_BITS: %TARGET_PROCESSOR_BITS%"
         EXIT /b 1
     )
+)
+
+IF %TARGET_PROCESSOR_BITS% == 32 (
+    ECHO "Error: Build 32-bit not available"
+    EXIT /b 1
 )
 
 :: Install tools
@@ -34,17 +43,14 @@ MKDIR %TEMP_DIR%
 :: Install Qt
 ECHO "=== Install Qt ==="
 
-:: Default for x64
+SET "Qt_ARCHIVE=Qt624_msvc2019_64.7z"
+SET "QT_DIR=C:\Qt\6.2.4"
+IF %QT5_COMPAT% == ON (
 SET "Qt_ARCHIVE=Qt5152_msvc2019_64.7z"
-
-IF %TARGET_PROCESSOR_BITS% == 32 (
-    SET "Qt_ARCHIVE=Qt5152_msvc2019.7z"
-    ECHO "Error: Qt 32-bit (%Qt_ARCHIVE%) not (yet) available"
-    EXIT /b 1
+SET "QT_DIR=C:\Qt\5.15.2"
 )
 
 SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
-SET "QT_DIR=C:\Qt\5.15.2"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
@@ -60,8 +66,8 @@ SET PATH=%JACK_DIR%;%PATH%
 CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/dependencies.7z" -O  %TEMP_DIR%\dependencies.7z
 CALL "7z" x -y %TEMP_DIR%\dependencies.7z "-oC:\musescore_dependencies"
 
-CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z" -O  %TEMP_DIR%\VST3_SDK_37.7z
-CALL "7z" x -y %TEMP_DIR%\VST3_SDK_37.7z "-oC:\vst"
+CALL "wget.exe" -q --show-progress --no-check-certificate "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z" -O  %TEMP_DIR%\VST3_SDK.7z
+CALL "7z" x -y %TEMP_DIR%\VST3_SDK.7z "-oC:\vst"
 
 :: breakpad_tools
 ECHO "=== Install breakpad_tools ==="

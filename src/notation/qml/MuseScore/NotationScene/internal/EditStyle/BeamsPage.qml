@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.NotationScene 1.0
 import MuseScore.UiComponents 1.0
@@ -121,6 +122,65 @@ StyleDialogPage {
         checked: beamsPageModel.beamNoSlope.value
         onClicked: {
             beamsPageModel.beamNoSlope.value = !checked
+        }
+    }
+
+    StyledGroupBox {
+        width: parent.width
+        height: 120
+
+        title: qsTrc("notation", "Beam style")
+        label.x: 0
+
+        RowLayout {
+            anchors.fill: parent
+            spacing: 12
+
+            RadioButtonGroup {
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+
+                spacing: 12
+                orientation: ListView.Vertical
+
+                model: [
+                    { title: qsTrc("notation", "Draw inner stems through beams"), value: false },
+                    { title: qsTrc("notation", "Draw inner stems to nearest beam (“French” style)"), value: true }
+                ]
+                delegate: RoundedRadioButton {
+                    leftPadding: 0
+                    spacing: 6
+
+                    text: modelData.title
+
+                    checked: modelData.value === beamsPageModel.frenchStyleBeams.value
+
+                    onToggled: {
+                        beamsPageModel.frenchStyleBeams.value = modelData.value
+                    }
+                }
+            }
+
+            Rectangle {
+                id: frenchStyleBeamFrame
+                width: 200
+                Layout.fillHeight: true
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+
+                color: "#ffffff"
+                border.color: ui.theme.strokeColor
+                radius: ui.theme.borderWidth
+
+                Image {
+                    width: Math.min(62, parent.width)
+                    mipmap: true
+                    sourceSize.width: 240
+                    sourceSize.height: 240
+                    anchors.centerIn: parent
+                    fillMode: Image.PreserveAspectFit
+                    source: beamsPageModel.frenchStyleBeams.value ? "beam_style_french.svg" : "beam_style_regular.svg"
+                }
+            }
         }
     }
 }

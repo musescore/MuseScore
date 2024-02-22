@@ -63,10 +63,17 @@ TempoText::TempoText(Segment* parent)
     : TextBase(ElementType::TEMPO_TEXT, parent, TextStyleType::TEMPO, ElementFlag::SYSTEM | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tempoStyle);
-    _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();
-    _followText = false;
-    _relative   = 1.0;
-    _isRelative = false;
+    m_tempoTextType  = TempoTextType::NORMAL;
+    m_tempo          = 2.0;        // propertyDefault(P_TEMPO).toDouble();
+    m_followText     = false;
+    m_relative       = 1.0;
+    m_isRelative     = false;
+}
+
+void TempoText::setTempoTextType(TempoTextType ttt)
+{
+    m_tempoTextType = ttt;
+    score()->setUpTempoMapLater();
 }
 
 double TempoText::tempoBpm() const
@@ -225,7 +232,7 @@ void TempoText::updateScore()
 void TempoText::updateRelative()
 {
     BeatsPerSecond tempoBefore = score()->tempo(tick() - Fraction::fromTicks(1));
-    setTempo(tempoBefore * _relative);
+    setTempo(tempoBefore * m_relative);
 }
 
 //---------------------------------------------------------
@@ -236,7 +243,7 @@ void TempoText::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags
 {
     if (id == Pid::TEMPO_FOLLOW_TEXT) {
         EngravingObject::undoChangeProperty(id, v, ps);
-        if (_followText) {
+        if (m_followText) {
             updateTempo();
         }
     } else {
@@ -256,6 +263,11 @@ void TempoText::updateTempo()
     String s = plainText();
     s.replace(u",", u".");
     s.replace(u"<sym>space</sym>", u" ");
+    s.replace(u"≒", u"=");
+    s.replace(u"≈", u"=");
+    s.replace(u"~", u"=");
+    s.replace(u"ca.", u"");
+    s.replace(u"approx.", u"");
     std::string su8 = s.toStdString();
     for (const TempoPattern& pa : tp) {
         String pattern = String::fromUtf8(pa.pattern);
@@ -270,10 +282,10 @@ void TempoText::updateTempo()
         if (!match.empty()) {
             if (match.size() == 2) {
                 BeatsPerSecond nt = BeatsPerSecond(String::fromStdString(match[1].str()).toDouble() * pa.f);
-                if (nt != _tempo) {
+                if (nt != m_tempo) {
                     undoChangeProperty(Pid::TEMPO, PropertyValue(nt), propertyFlags(Pid::TEMPO));
-                    _relative = 1.0;
-                    _isRelative = false;
+                    m_relative = 1.0;
+                    m_isRelative = false;
                     updateScore();
                 }
                 break;
@@ -291,8 +303,8 @@ void TempoText::updateTempo()
                 std::smatch match2;
                 std::regex_search(su8, match2, re2);
                 if (!match2.empty()) {
-                    _relative = pa2.f / pa.f;
-                    _isRelative = true;
+                    m_relative = pa2.f / pa.f;
+                    m_isRelative = true;
                     updateRelative();
                     updateScore();
                     return;
@@ -313,7 +325,7 @@ void TempoText::setTempo(BeatsPerSecond v)
     } else if (v.val > MAX_TEMPO) {
         v = MAX_TEMPO;
     }
-    _tempo = v;
+    m_tempo = v;
 }
 
 //---------------------------------------------------------
@@ -342,9 +354,9 @@ PropertyValue TempoText::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TEMPO:
-        return _tempo;
+        return m_tempo;
     case Pid::TEMPO_FOLLOW_TEXT:
-        return _followText;
+        return m_followText;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -362,7 +374,7 @@ bool TempoText::setProperty(Pid propertyId, const PropertyValue& v)
         score()->setUpTempoMapLater();
         break;
     case Pid::TEMPO_FOLLOW_TEXT:
-        _followText = v.toBool();
+        m_followText = v.toBool();
         break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
@@ -430,7 +442,7 @@ String TempoText::accessibleInfo() const
     String secondPart = text.split(u" = ").back();
     int x1 = findTempoDuration(firstPart, len1, t1);
     int x2 = -1;
-    if (_relative) {
+    if (m_relative) {
         x2 = findTempoDuration(secondPart, len2, t2);
     }
 
@@ -471,7 +483,7 @@ void TempoText::removed()
 
 void TempoText::commitText()
 {
-    if (_followText) {
+    if (m_followText) {
         updateTempo();
     }
 

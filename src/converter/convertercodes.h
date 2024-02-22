@@ -33,6 +33,8 @@ enum class Err {
     BatchJobFileFailedOpen = 1301,
     BatchJobFileFailedParse = 1302,
 
+    ConvertFailed = 1303,
+
     ConvertTypeUnknown = 1310,
 
     InFileFailedLoad = 1320,

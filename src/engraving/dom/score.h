@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SCORE_H__
-#define __SCORE_H__
+#ifndef MU_ENGRAVING_SCORE_H
+#define MU_ENGRAVING_SCORE_H
 
 /**
  \file
@@ -30,10 +30,11 @@
 
 #include <set>
 #include <memory>
+#include <optional>
 
 #include "async/channel.h"
 #include "types/ret.h"
-#include "compat/midi/midirender.h"
+#include "compat/midi/compatmidirenderinternal.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
@@ -149,8 +150,10 @@ enum class HDuration : signed char;
 enum class AccidentalType;
 enum class LayoutBreakType;
 
-enum class POS : char {
-    CURRENT, LEFT, RIGHT
+enum class LoopBoundaryType : signed char {
+    Unknown = -1,
+    LoopIn = 0,
+    LoopOut = 1
 };
 
 enum class Pad : char {
@@ -180,9 +183,9 @@ enum class Pad : char {
 //---------------------------------------------------------
 
 struct MidiInputEvent {
-    int pitch;
-    bool chord;
-    int velocity;
+    int pitch = 0;
+    bool chord = false;
+    int velocity = 0;
 };
 
 //---------------------------------------------------------
@@ -190,10 +193,10 @@ struct MidiInputEvent {
 //---------------------------------------------------------
 
 struct Position {
-    Segment* segment { nullptr };
+    Segment* segment = nullptr;
     staff_idx_t staffIdx = mu::nidx;
-    int line         { 0 };
-    int fret         { INVALID_FRET_INDEX };
+    int line = 0;
+    int fret = INVALID_FRET_INDEX;
     mu::PointF pos;
 };
 
@@ -270,8 +273,8 @@ public:
 
     ShadowNote* shadowNote() const;
 
-    mu::async::Channel<POS, unsigned> posChanged() const;
-    void notifyPosChanged(POS pos, unsigned ticks);
+    mu::async::Channel<LoopBoundaryType, unsigned> loopBoundaryTickChanged() const;
+    void notifyLoopBoundaryTickChanged(LoopBoundaryType type, unsigned ticks);
 
     mu::async::Channel<EngravingItem*> elementDestroyed();
 
@@ -294,10 +297,11 @@ public:
 
     // methods for resetting elements for pre-4.0 score migration
     void resetAutoplace();
-    void resetDefaults();
+    void resetSlurTieDefaults();
 
     void cmdAddBracket();
     void cmdAddParentheses();
+    void cmdAddParentheses(EngravingItem* el);
     void cmdAddBraces();
     void cmdAddFret(int fret);
     void cmdSetBeamMode(BeamMode);
@@ -373,9 +377,10 @@ public:
     Measure* pos2measure(const mu::PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5) const;
 
-    void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true, bool ctrlModifier = false);
+    void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true, bool ctrlModifier = false,
+                        EngravingItem* elementToRelink = nullptr);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
-    void undoRemoveElement(EngravingItem* element);
+    void undoRemoveElement(EngravingItem* element, bool removeLinked = true);
     void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
     void undoChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
     void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
@@ -393,22 +398,26 @@ public:
     void undoChangeTuning(Note*, double);
     void undoChangeUserMirror(Note*, DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-    void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false);
-    bool undoPropertyChanged(EngravingItem* e, Pid t, const PropertyValue& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false, Clef* clefToRelink = nullptr);
+    bool undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue,
+                             PropertyFlags propFlags = PropertyFlags::NOSTYLE);
     void undoPropertyChanged(EngravingObject*, Pid, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = nullptr) const;
-    void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
+    void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false, bool moveStaffTypeChanges = true);
     void undoChangeMeasureRepeatCount(Measure* m, int count, staff_idx_t staffIdx);
     void undoAddBracket(Staff* staff, size_t level, BracketType type, size_t span);
     void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
     void undoChangeStyleVal(Sid idx, const PropertyValue& v);
     void undoChangePageNumberOffset(int po);
+    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
 
     void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
+
+    GuitarBend* addGuitarBend(GuitarBendType type, Note* note, Note* endNote = nullptr);
 
     Segment* setNoteRest(Segment*, track_idx_t track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
                          bool forceAccidental = false, const std::set<SymId>& articulationIds = {}, bool rhythmic = false,
@@ -430,7 +439,9 @@ public:
     Tuplet* addTuplet(ChordRest* destinationChordRest, Fraction ratio, TupletNumberType numberType, TupletBracketType bracketType);
 
     ChordRest* addClone(ChordRest* cr, const Fraction& tick, const TDuration& d);
-    Rest* setRest(const Fraction& tick,  track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+    Rest* setRest(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet, bool useFullMeasureRest = true);
+    std::vector<Rest*> setRests(const Fraction& tick, track_idx_t track, const Fraction&, bool useDots, Tuplet* tuplet,
+                                bool useFullMeasureRest = true);
 
     void upDown(bool up, UpDownMode);
     void upDownDelta(int pitchDelta);
@@ -444,7 +455,9 @@ public:
     void changeAccidental(Note* oNote, AccidentalType);
 
     void addElement(EngravingItem*);
+    void doUndoAddElement(EngravingItem*);
     void removeElement(EngravingItem*);
+    void doUndoRemoveElement(EngravingItem*);
     bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
@@ -458,7 +471,7 @@ public:
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
-    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr, bool addToAllScores = true);
+    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr);
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
@@ -498,14 +511,14 @@ public:
 
     void cmdToggleAutoplace(bool all);
 
-    bool playNote() const { return m_updateState._playNote; }
-    void setPlayNote(bool v) { m_updateState._playNote = v; }
-    bool playChord() const { return m_updateState._playChord; }
-    void setPlayChord(bool v) { m_updateState._playChord = v; }
+    bool playNote() const { return m_updateState.playNote; }
+    void setPlayNote(bool v) { m_updateState.playNote = v; }
+    bool playChord() const { return m_updateState.playChord; }
+    void setPlayChord(bool v) { m_updateState.playChord = v; }
     bool selectionEmpty() const { return m_selection.staffStart() == m_selection.staffEnd(); }
-    bool selectionChanged() const { return m_updateState._selectionChanged; }
-    void setSelectionChanged(bool val) { m_updateState._selectionChanged = val; }
-    void deleteLater(EngravingObject* e) { m_updateState._deleteList.push_back(e); }
+    bool selectionChanged() const { return m_updateState.selectionChanged; }
+    void setSelectionChanged(bool val) { m_updateState.selectionChanged = val; }
+    void deleteLater(EngravingObject* e) { m_updateState.deleteList.push_back(e); }
     void deletePostponed();
 
     void changeSelectedNotesVoice(voice_idx_t);
@@ -526,12 +539,14 @@ public:
     bool showUnprintable() const { return m_showUnprintable; }
     bool showFrames() const { return m_showFrames; }
     bool showPageborders() const { return m_showPageborders; }
+    bool showSoundFlags() const { return m_showSoundFlags; }
     bool markIrregularMeasures() const { return m_markIrregularMeasures; }
     bool showInstrumentNames() const { return m_showInstrumentNames; }
     void setShowInvisible(bool v);
     void setShowUnprintable(bool v);
     void setShowFrames(bool v);
     void setShowPageborders(bool v);
+    void setShowSoundFlags(bool v);
     void setMarkIrregularMeasures(bool v);
     void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
@@ -565,7 +580,7 @@ public:
     Segment* tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const;
     Segment* tick2segmentMM(const Fraction& tick) const;
     Segment* tick2segmentMM(const Fraction& tick, bool first) const;
-    Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false) const;
+    Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false, bool anySegmentType = false) const;
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
 
@@ -620,15 +635,13 @@ public:
     TranslatableString getTextStyleUserName(TextStyleType tid);
 
     // These position are in ticks and not uticks
-    Fraction playPos() const { return pos(POS::CURRENT); }
-    void setPlayPos(const Fraction& tick) { setPos(POS::CURRENT, tick); }
-    Fraction loopInTick() const { return pos(POS::LEFT); }
-    Fraction loopOutTick() const { return pos(POS::RIGHT); }
-    void setLoopInTick(const Fraction& tick) { setPos(POS::LEFT, tick); }
-    void setLoopOutTick(const Fraction& tick) { setPos(POS::RIGHT, tick); }
+    Fraction loopInTick() const { return loopBoundaryTick(LoopBoundaryType::LoopIn); }
+    Fraction loopOutTick() const { return loopBoundaryTick(LoopBoundaryType::LoopOut); }
+    void setLoopInTick(const Fraction& tick) { setLoopBoundaryTick(LoopBoundaryType::LoopIn, tick); }
+    void setLoopOutTick(const Fraction& tick) { setLoopBoundaryTick(LoopBoundaryType::LoopOut, tick); }
 
-    Fraction pos(POS pos) const;
-    void setPos(POS pos, Fraction tick);
+    Fraction loopBoundaryTick(LoopBoundaryType type) const;
+    void setLoopBoundaryTick(LoopBoundaryType type, Fraction tick);
 
     bool noteEntryMode() const { return inputState().noteEntryMode(); }
     void setNoteEntryMode(bool val) { inputState().setNoteEntryMode(val); }
@@ -640,7 +653,6 @@ public:
     const InputState& inputState() const { return m_is; }
     InputState& inputState() { return m_is; }
     void setInputState(const InputState& st) { m_is = st; }
-    void setInputTrack(int t) { inputState().setTrack(t); }
 
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
@@ -648,7 +660,6 @@ public:
     void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
-    void renderMidi(EventsHolder& events, const MidiRenderer::Context& ctx, bool expandRepeats);
 
     static void transposeChord(Chord* c, const Fraction& tick);
 
@@ -660,10 +671,8 @@ public:
     void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String&);
 
     void updateSwing();
-    void createPlayEvents(Measure const* start = nullptr, Measure const* const end = nullptr);
 
     void updateCapo();
-    void updateVelo();
     void updateChannel();
 
     void cmdConcertPitchChanged(bool);
@@ -770,8 +779,6 @@ public:
     SynthesizerState& synthesizerState() { return m_synthesizerState; }
     void setSynthesizerState(const SynthesizerState& s);
 
-    void updateHairpin(Hairpin*);         // add/modify hairpin to pitchOffset list
-
     MasterScore* masterScore() const { return m_masterScore; }
     void setMasterScore(MasterScore* s) { m_masterScore = s; }
 
@@ -785,7 +792,6 @@ public:
     void setMetaTag(const String& tag, const String& val);
 
     void cmdSplitMeasure(ChordRest*);
-    void splitMeasure(Segment*);
     void cmdJoinMeasure(Measure*, Measure*);
 
     int pageNumberOffset() const { return m_pageNumberOffset; }
@@ -825,11 +831,14 @@ public:
         bool createEmptyMeasures = false;
         bool moveSignaturesClef = true;
         bool needDeselectAll = true;
-        bool addToAllScores = true;
+        bool cloneBoxToAllParts = true;
+        bool moveStaffTypeChanges = true;
     };
 
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
                                const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertBox(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                           const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return m_audio; }
     void setAudio(Audio* a) { m_audio = a; }
@@ -850,7 +859,7 @@ public:
     const SpannerMap& spannerMap() const { return m_spanner; }
     bool isSpannerStartEnd(const Fraction& tick, track_idx_t track) const;
     void removeSpanner(Spanner*);
-    void addSpanner(Spanner*);
+    void addSpanner(Spanner*, bool computeStartEnd = true);
     void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
     void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment, bool ctrlModifier = false);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick, bool removeOrphans = true);
@@ -950,20 +959,20 @@ public:
     friend class Chord;
 
 protected:
-    int m_fileDivision = 0;   // division of current loading *.msc file
-    SynthesizerState m_synthesizerState;
-
-    void createPlayEvents(Chord* chord, Chord* prevChord = nullptr);
-    void createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime);
-    void cmdPitchUp();
-    void cmdPitchDown();
-    void cmdPitchUpOctave();
-    void cmdPitchDownOctave();
 
     friend class MasterScore;
     Score();
     Score(MasterScore*, bool forcePartStyle = true);
     Score(MasterScore*, const MStyle&);
+
+    // NOTE: Looks like this four are unused
+    void cmdPitchUp();
+    void cmdPitchDown();
+    void cmdPitchUpOctave();
+    void cmdPitchDownOctave();
+
+    int m_fileDivision = 0;   // division of current loading *.msc file
+    SynthesizerState m_synthesizerState;
 
 private:
 
@@ -1000,13 +1009,14 @@ private:
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
-    void rebuildTempoAndTimeSigMaps(Measure* m);
+    void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
 
     void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
                                  const SelectionFilter& filter);
     void deleteAnnotationsFromRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
                                     const SelectionFilter& filter);
-    ChordRest* deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd, const SelectionFilter& filter);
+    std::vector<ChordRest*> deleteRange(Segment* segStart, Segment* segEnd, track_idx_t trackStart, track_idx_t trackEnd,
+                                        const SelectionFilter& filter);
 
     void update(bool resetCmdState, bool layoutAllParts = false);
 
@@ -1057,6 +1067,7 @@ private:
     bool m_showUnprintable = true;
     bool m_showFrames = true;
     bool m_showPageborders = false;
+    bool m_showSoundFlags = true;
     bool m_markIrregularMeasures = true;
     bool m_showInstrumentNames = true;
     bool m_printing = false;                // True if we are drawing to a printer
@@ -1084,7 +1095,7 @@ private:
 
     ShadowNote* m_shadowNote = nullptr;
 
-    mu::async::Channel<POS, unsigned> m_posChanged;
+    mu::async::Channel<LoopBoundaryType, unsigned> m_loopBoundaryTickChanged;
 
     PaddingTable m_paddingTable;
     double m_minimumPaddingUnit = 0.0;
@@ -1110,12 +1121,12 @@ static inline const Score* toScore(const EngravingObject* e)
 
 class ScoreLoad
 {
-    static int _loading;
+    static int m_loading;
 
 public:
-    ScoreLoad() { ++_loading; }
-    ~ScoreLoad() { --_loading; }
-    static bool loading() { return _loading > 0; }
+    ScoreLoad() { ++m_loading; }
+    ~ScoreLoad() { --m_loading; }
+    static bool loading() { return m_loading > 0; }
 };
 
 DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)

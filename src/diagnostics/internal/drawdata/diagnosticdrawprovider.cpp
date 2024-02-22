@@ -71,10 +71,10 @@ Ret DiagnosticDrawProvider::compareDrawData(const io::path_t& ref, const io::pat
     }
 
     if (opt.isMakePng) {
-        DrawDataConverter c;
-        c.drawDataToPng(ref, outDir + "/" + io::FileInfo(ref).completeBaseName() + ".ref.png");
-        c.drawDataToPng(test, outDir + "/" + io::FileInfo(test).completeBaseName() + ".png");
-        c.drawDiffToPng(outDiff, ref, outDir + "/" + io::FileInfo(outDiff).completeBaseName() + ".diff.png");
+        DrawDataConverter c2;
+        c2.drawDataToPng(ref, outDir + "/" + io::FileInfo(ref).completeBaseName() + ".ref.png");
+        c2.drawDataToPng(test, outDir + "/" + io::FileInfo(test).completeBaseName() + ".png");
+        c2.drawDiffToPng(outDiff, ref, outDir + "/" + io::FileInfo(outDiff).completeBaseName() + ".diff.png");
     }
 
     return ret;

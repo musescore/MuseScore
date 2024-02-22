@@ -114,7 +114,7 @@ void UiModule::resolveImports()
 
     auto ir = modularity::ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerWidgetUri(Uri("musescore://devtools/interactive/testdialog"), TestDialog::static_metaTypeId());
+        ir->registerWidgetUri<TestDialog>(Uri("musescore://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("musescore://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
     }
 }

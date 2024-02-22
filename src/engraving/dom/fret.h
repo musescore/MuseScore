@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __FRET_H__
-#define __FRET_H__
+#ifndef MU_ENGRAVING_FRET_H
+#define MU_ENGRAVING_FRET_H
 
 #include "engravingitem.h"
 #include "harmony.h"
@@ -52,43 +52,46 @@ class FretItem
 {
 public:
     struct Barre {
-        int startString;
-        int endString;
+        int startString = -1;
+        int endString = -1;
 
-        Barre() { startString = endString = -1; }
+        Barre() = default;
         Barre(int s, int e)
             : startString(s), endString(e) {}
+
         bool exists() const { return startString > -1; }
     };
 
     struct Dot {
-        int fret                { 0 };
-        FretDotType dtype       { FretDotType::NORMAL };
-        int fingering           { 0 };     // NOTE:JT - possible future feature?
+        int fret = 0;
+        FretDotType dtype = FretDotType::NORMAL;
+        int fingering = 0;     // NOTE:JT - possible future feature?
 
-        Dot() {}
+        Dot() = default;
         Dot(int f, FretDotType t = FretDotType::NORMAL)
             : fret(f), dtype(t) {}
+
         bool exists() const { return fret > 0; }
     };
 
     struct Marker {
-        FretMarkerType mtype;
+        FretMarkerType mtype = FretMarkerType::NONE;
 
-        Marker() { mtype = FretMarkerType::NONE; }
+        Marker() = default;
         Marker(FretMarkerType t)
             : mtype(t) {}
+
         bool exists() const { return mtype != FretMarkerType::NONE; }
     };
 
     struct MarkerTypeNameItem {
-        FretMarkerType mtype;
-        const char* name;
+        FretMarkerType mtype = FretMarkerType::NONE;
+        const char* name = nullptr;
     };
 
     struct DotTypeNameItem {
-        FretDotType dtype;
-        const char* name;
+        FretDotType dtype = FretDotType::NORMAL;
+        const char* name = nullptr;
     };
 
     static const std::vector<FretItem::MarkerTypeNameItem> markerTypeNameMap;
@@ -108,16 +111,18 @@ typedef std::map<int, std::vector<FretItem::Dot> > DotMap;
 
 class FretUndoData
 {
-    FretDiagram* _diagram         { nullptr };
-    BarreMap _barres;
-    MarkerMap _markers;
-    DotMap _dots;
-
 public:
     FretUndoData() {}
     FretUndoData(FretDiagram* fd);
 
     void updateDiagram();
+
+private:
+
+    FretDiagram* m_diagram = nullptr;
+    BarreMap m_barres;
+    MarkerMap m_markers;
+    DotMap m_dots;
 };
 
 //---------------------------------------------------------
@@ -224,7 +229,7 @@ public:
         double fretDist = 0.0;
         double markerSize = 0.0;
     };
-    DECLARE_LAYOUTDATA_METHODS(FretDiagram);
+    DECLARE_LAYOUTDATA_METHODS(FretDiagram)
 
 private:
     friend class Factory;

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SPANNER_H__
-#define __SPANNER_H__
+#ifndef MU_ENGRAVING_SPANNER_H
+#define MU_ENGRAVING_SPANNER_H
 
 #include <deque>
 
@@ -68,8 +68,8 @@ public:
     void setUserOff2(const mu::PointF& o) { m_offset2 = o; }
     void setUserXoffset2(double x) { m_offset2.setX(x); }
     void setUserYoffset2(double y) { m_offset2.setY(y); }
-    double& rUserXoffset2() { return m_offset2.rx(); }
-    double& rUserYoffset2() { return m_offset2.ry(); }
+    real_t& rUserXoffset2() { return m_offset2.rx(); }
+    real_t& rUserYoffset2() { return m_offset2.ry(); }
 
     void setPos2(const mu::PointF& p) { m_p2 = p; }
     //TODO: rename to spanSegPosWithUserOffset()
@@ -77,8 +77,8 @@ public:
     //TODO: rename to spanSegPos()
     const mu::PointF& ipos2() const { return m_p2; }
     mu::PointF& rpos2() { return m_p2; }
-    double& rxpos2() { return m_p2.rx(); }
-    double& rypos2() { return m_p2.ry(); }
+    real_t& rxpos2() { return m_p2.rx(); }
+    real_t& rypos2() { return m_p2.ry(); }
 
     bool isEditable() const override { return true; }
 
@@ -109,6 +109,11 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
     void triggerLayout() const override;
+
+    std::list<EngravingObject*> linkListForPropertyPropagation() const override;
+    bool isPropertyLinkedToMaster(Pid id) const override;
+
+    bool isUserModified() const override;
 
 protected:
 
@@ -188,7 +193,6 @@ public:
     bool eitherEndVisible() const;
 
     virtual void triggerLayout() const override;
-    virtual void triggerLayoutAll() const override;
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
@@ -248,6 +252,8 @@ public:
                                                   // is added back to the spanner.
     int reuseSegments(int number);
     void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
+
+    bool isUserModified() const override;
 
 protected:
 

@@ -28,12 +28,16 @@
 
 #include "dom/score.h"
 #include "dom/repeatlist.h"
+#include "dom/chord.h"
+#include "dom/note.h"
+#include "dom/tie.h"
+
 #include "types/constants.h"
 
 namespace mu::engraving {
-inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick)
+inline mpe::timestamp_t timestampFromTicks(const Score* score, const int tick, bool ignorePauseOnTick = false)
 {
-    return score->repeatList().utick2utime(tick) * 1000000;
+    return score->repeatList().utick2utime(tick, ignorePauseOnTick) * 1000000;
 }
 
 inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
@@ -41,11 +45,56 @@ inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
-inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::DIVISION)
+inline mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick)
+{
+    return timestampFromTicks(score, endTick, true /*ignorePauseOnTick*/) - timestampFromTicks(score, startTick);
+}
+
+inline mpe::duration_t durationFromStartAndTicks(const Score* score, const int startTick, const int ticks)
+{
+    return durationFromStartAndEndTick(score, startTick, startTick + ticks);
+}
+
+struct TimestampAndDuration {
+    mpe::timestamp_t timestamp = 0;
+    mpe::duration_t duration = 0;
+};
+
+inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
+                                                                          const int startTick, const int durationTicks)
+{
+    mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick);
+    mpe::duration_t duration = timestampFromTicks(score, startTick + durationTicks, true /*ignorePauseOnTick*/) - startTimestamp;
+
+    return { startTimestamp, duration };
+}
+
+inline mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, const int durationTicks,
+                                                 const int ticksPerBeat = Constants::DIVISION)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
     return (beatsNumber / beatsPerSecond) * 1000000;
+}
+
+inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* firstNote, mpe::duration_t firstNoteDuration,
+                                              const int tickPositionOffset)
+{
+    //! NOTE: calculate the duration from the 2nd note, since the duration of the 1st note is already known
+    const Note* secondNote = firstNote->tieFor()->endNote();
+    IF_ASSERT_FAILED(secondNote) {
+        return firstNoteDuration;
+    }
+
+    int startTick = secondNote->tick().ticks();
+
+    const Note* lastNote = firstNote->lastTiedNote();
+
+    int endTick = lastNote
+                  ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
+                  : startTick + secondNote->chord()->actualTicks().ticks();
+
+    return firstNoteDuration + durationFromStartAndEndTick(score, startTick + tickPositionOffset, endTick + tickPositionOffset);
 }
 
 static constexpr int CROTCHET_TICKS = Constants::DIVISION;

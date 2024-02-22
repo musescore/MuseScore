@@ -25,6 +25,16 @@ SKIP_ERR_FLAG=true
 
 export MACOSX_DEPLOYMENT_TARGET=10.14
 
+QT5_COMPAT="ON"
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --qt5_compat) QT5_COMPAT="$2"; shift ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/2020-02/bottles-MuseScore-3.0-yosemite.zip
 unzip bottles.zip
@@ -93,23 +103,39 @@ installBottleManually libsndfile
 rm '/usr/local/bin/2to3'
 brew install ninja pkg-config
 
+brew install cmake
+
 # Qt
-export QT_SHORT_VERSION=5.15.9
-export QT_PATH=$HOME/Qt
-export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
-export PATH=$PATH:$QT_MACOS/bin
-echo "PATH=$PATH" >> $GITHUB_ENV
-wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5159_mac.zip
-mkdir -p $QT_MACOS
-unzip -qq qt5.zip -d $QT_MACOS
-rm qt5.zip
+
+if [ "$QT5_COMPAT" == "ON" ]; then
+  export QT_SHORT_VERSION=5.15.9
+  echo "Download Qt $QT_SHORT_VERSION"
+  export QT_PATH=$HOME/Qt
+  export QT_MACOS=$QT_PATH/$QT_SHORT_VERSION/clang_64
+  export PATH=$PATH:$QT_MACOS/bin
+  echo "PATH=$PATH" >> $GITHUB_ENV
+  wget -nv -O qt5.zip https://s3.amazonaws.com/utils.musescore.org/Qt5159_mac.zip
+  mkdir -p $QT_MACOS
+  unzip -qq qt5.zip -d $QT_MACOS
+  rm qt5.zip
+else 
+  export QT_SHORT_VERSION=6.2.4
+  echo "Download Qt $QT_SHORT_VERSION"
+  export QT_PATH=$HOME/Qt/$QT_SHORT_VERSION/
+  export PATH=$PATH:$QT_PATH/macos/bin
+  echo "PATH=$PATH" >> $GITHUB_ENV
+  wget -nv -O qt.7z https://s3.amazonaws.com/utils.musescore.org/Qt624_mac.7z
+  mkdir -p $QT_PATH
+  7z x -y qt.7z -o$QT_PATH
+  rm qt.7z
+fi
 
 # Dump syms
 wget -q --show-progress -O dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/macos/x86-64/dump_syms.7z"
 7z x -y dump_syms.7z -o"$HOME/breakpad"
 
 # VST SDK
-wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_37.7z"
+wget -q --show-progress -O vst_sdk.7z "https://s3.amazonaws.com/utils.musescore.org/VST3_SDK_379.7z"
 7z x -y vst_sdk.7z -o"$HOME/vst"
 echo "VST3_SDK_PATH=$HOME/vst/VST3_SDK" >> $GITHUB_ENV
 

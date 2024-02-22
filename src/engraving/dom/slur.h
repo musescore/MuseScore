@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SLUR_H__
-#define __SLUR_H__
+#ifndef MU_ENGRAVING_SLUR_H
+#define MU_ENGRAVING_SLUR_H
 
 #include "slurtie.h"
 
@@ -56,10 +56,11 @@ public:
     void editDrag(EditData& ed) override;
 
     Slur* slur() const { return toSlur(spanner()); }
-    void adjustEndpoints();
-    void computeBezier(mu::PointF so = mu::PointF()) override;
-    Shape getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR);
-    void avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, mu::draw::Transform& toSystemCoordinates, double& slurAngle);
+
+    const PointF& endPointOff1() const { return m_endPointOff1; }
+    const PointF& endPointOff2() const { return m_endPointOff2; }
+    void setEndPointOff1(const PointF& p) { m_endPointOff1 = p; }
+    void setEndPointOff2(const PointF& p) { m_endPointOff2 = p; }
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
@@ -119,17 +120,31 @@ public:
     static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
     static bool isDirectionMixture(Chord* c1, Chord* c2);
 
+    double scalingFactor() const override;
+
+    /// temporary HACK for correct guitar pro import
+    enum ConnectedElement {
+        NONE,
+        GLISSANDO,
+        HAMMER_ON
+    };
+
+    void setConnectedElement(ConnectedElement el) { m_connectedElement = el; }
+    ConnectedElement connectedElement() const { return m_connectedElement; }
+
 private:
 
     friend class Factory;
     Slur(EngravingItem* parent);
     Slur(const Slur&);
 
-    void slurPosChord(SlurPos*);
+    void slurPosChord(SlurTiePos*);
 
     int m_sourceStemArrangement = -1;
 
     StemFloated m_stemFloated; // end point position is attached to stem but floated towards the note
+
+    ConnectedElement m_connectedElement = ConnectedElement::NONE;
 };
 } // namespace mu::engraving
 #endif

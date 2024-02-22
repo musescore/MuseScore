@@ -42,7 +42,9 @@ public:
 
 private:
     Templates readTemplates(const io::path_t& dirPath) const;
-    Templates readTemplates(const io::paths_t& files, const QString& category, const io::path_t& dirPath = io::path_t()) const;
+
+    Templates readTemplates(const io::paths_t& files, const QString& category, bool isCustom,
+                            const io::path_t& dirPath = io::path_t()) const;
 };
 }
 

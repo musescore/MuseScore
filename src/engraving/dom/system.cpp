@@ -49,7 +49,8 @@
 #include "staff.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "tremolo.h"
+
+#include "tremolotwochord.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -59,7 +60,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -289,12 +289,12 @@ void System::setBracketsXPosition(const double xPosition)
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
             if (b1->column() > b2->column()
                 && (b1FirstStaffInB2 || b1LastStaffInB2)) {
-                xOffset += b2->layoutData()->bracketWidth();
+                xOffset += b2->ldata()->bracketWidth();
             }
         }
         // Set position
-        double x = xPosition - xOffset - b1->layoutData()->bracketWidth() + lineWidthCorrection;
-        b1->mutLayoutData()->setPosX(x);
+        double x = xPosition - xOffset - b1->ldata()->bracketWidth() + lineWidthCorrection;
+        b1->mutldata()->setPosX(x);
     }
 }
 
@@ -465,6 +465,8 @@ void System::add(EngravingItem* el)
     case ElementType::RASGUEADO_SEGMENT:
     case ElementType::HARMONIC_MARK_SEGMENT:
     case ElementType::PICK_SCRAPE_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
     {
         SpannerSegment* ss = toSpannerSegment(el);
 #ifndef NDEBUG
@@ -536,6 +538,8 @@ void System::remove(EngravingItem* el)
     case ElementType::LYRICSLINE_SEGMENT:
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
         if (!mu::remove(m_spannerSegments, toSpannerSegment(el))) {
             LOGD("System::remove: %p(%s) not found, score %p", el, el->typeName(), score());
             assert(score() == el->score());
@@ -987,7 +991,7 @@ double System::firstNoteRestSegmentX(bool leading)
                             }
                             EngravingItem* e = seg->element(i * VOICES);
                             if (e && e->addToSkyline()) {
-                                width = std::max(width, e->pos().x() + e->layoutData()->bbox().right());
+                                width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
                             }
                         }
                         return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
@@ -1011,7 +1015,7 @@ double System::firstNoteRestSegmentX(bool leading)
 double System::endingXForOpenEndedLines() const
 {
     double margin = style().spatium() / 4;  // TODO: this can be parameterizable
-    double systemEndX = layoutData()->bbox().width();
+    double systemEndX = ldata()->bbox().width();
 
     Measure* lastMeas = lastMeasure();
     if (!lastMeas) {
@@ -1223,10 +1227,11 @@ bool System::hasCrossStaffOrModifiedBeams()
                     return true;
                 }
                 Chord* c = e->isChord() ? toChord(e) : nullptr;
-                if (c && c->tremolo() && c->tremolo()->twoNotes()) {
-                    Chord* c1 = c->tremolo()->chord1();
-                    Chord* c2 = c->tremolo()->chord2();
-                    if (c->tremolo()->userModified() || c1->staffMove() != c2->staffMove()) {
+                if (c && c->tremoloTwoChord()) {
+                    TremoloTwoChord* trem = c->tremoloTwoChord();
+                    Chord* c1 = trem->chord1();
+                    Chord* c2 = trem->chord2();
+                    if (trem->userModified() || c1->staffMove() != c2->staffMove()) {
                         return true;
                     }
                 }

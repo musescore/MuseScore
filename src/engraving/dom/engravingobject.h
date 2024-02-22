@@ -34,6 +34,7 @@
 #include "types/types.h"
 
 #include "../infrastructure/rtti.h"
+#include "../infrastructure/eid.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -77,6 +78,7 @@ class FBox;
 class FSymbol;
 class Fermata;
 class FiguredBass;
+class FiguredBassItem;
 class Fingering;
 class FretDiagram;
 class Glissando;
@@ -84,6 +86,11 @@ class GlissandoSegment;
 class GraceNotesGroup;
 class GradualTempoChange;
 class GradualTempoChangeSegment;
+class GuitarBend;
+class GuitarBendSegment;
+class GuitarBendHold;
+class GuitarBendHoldSegment;
+class GuitarBendText;
 class HBox;
 class Hairpin;
 class HairpinSegment;
@@ -153,10 +160,12 @@ class Stem;
 class StemSlash;
 class Sticking;
 class StretchedBend;
+class StringTunings;
 class Symbol;
 class System;
 class SystemDivider;
 class SystemText;
+class SoundFlag;
 class TBox;
 class TempoText;
 class Text;
@@ -168,7 +177,6 @@ class TextLineSegment;
 class Tie;
 class TieSegment;
 class TimeSig;
-class Tremolo;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -212,6 +220,9 @@ public:
     virtual TranslatableString typeUserName() const;
     virtual String translatedTypeUserName() const;
 
+    inline EID eid() const { return m_eid; }
+    inline void setEID(EID id) { m_eid = id; }
+
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
     EngravingObject* explicitParent() const;
@@ -250,7 +261,7 @@ public:
     bool isStyled(Pid pid) const;
     PropertyValue styleValue(Pid, Sid) const;
 
-    void setPropertyFlags(Pid, PropertyFlags);
+    virtual void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
 
@@ -267,13 +278,13 @@ public:
     void linkTo(EngravingObject*);
     void unlink();
     bool isLinked(EngravingObject* se = nullptr) const;
-    EngravingObject* findLinkedInScore(Score* score) const;
 
     virtual void undoUnlink();
     LinkedObjects* links() const { return m_links; }
     void setLinks(LinkedObjects* le);
 
 protected:
+    virtual void setParentInternal(EngravingObject* p);
     virtual int getPropertyFlagsIdx(Pid id) const;
 
     //! NOTE For compatibility reasons, hope, we will remove the need for this method.
@@ -294,11 +305,14 @@ private:
     void doSetScore(Score* sc);
 
     ElementType m_type = ElementType::INVALID;
+    mutable EID m_eid;
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;
 
 public:
+
+    virtual std::list<EngravingObject*> linkListForPropertyPropagation() const { return linkList(); }
 
     //---------------------------------------------------
     // check type
@@ -336,6 +350,11 @@ public:
     CONVERT(Slur,          SLUR)
     CONVERT(Glissando,     GLISSANDO)
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
+    CONVERT(GuitarBend,    GUITAR_BEND)
+    CONVERT(GuitarBendSegment, GUITAR_BEND_SEGMENT)
+    CONVERT(GuitarBendHold, GUITAR_BEND_HOLD)
+    CONVERT(GuitarBendHoldSegment, GUITAR_BEND_HOLD_SEGMENT)
+    CONVERT(GuitarBendText, GUITAR_BEND_TEXT)
     CONVERT(SystemDivider, SYSTEM_DIVIDER)
     CONVERT(RehearsalMark, REHEARSAL_MARK)
     CONVERT(TripletFeel, TRIPLET_FEEL)
@@ -407,6 +426,7 @@ public:
     CONVERT(LyricsLine,    LYRICSLINE)
     CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
     CONVERT(FiguredBass,   FIGURED_BASS)
+    CONVERT(FiguredBassItem, FIGURED_BASS_ITEM)
     CONVERT(StaffState,    STAFF_STATE)
     CONVERT(Arpeggio,      ARPEGGIO)
     CONVERT(Image,         IMAGE)
@@ -419,6 +439,7 @@ public:
     CONVERT(MMRestRange,   MMREST_RANGE)
     CONVERT(StaffText,     STAFF_TEXT)
     CONVERT(SystemText,    SYSTEM_TEXT)
+    CONVERT(SoundFlag,     SOUND_FLAG)
     CONVERT(PlayTechAnnotation, PLAYTECH_ANNOTATION)
     CONVERT(Capo,          CAPO)
     CONVERT(BracketItem,   BRACKET_ITEM)
@@ -430,6 +451,7 @@ public:
     CONVERT(Sticking,      STICKING)
     CONVERT(GraceNotesGroup, GRACE_NOTES_GROUP)
     CONVERT(FretCircle, FRET_CIRCLE)
+    CONVERT(StringTunings, STRING_TUNINGS)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -450,6 +472,7 @@ public:
                || isTextLineSegment()
                || isOttavaSegment()
                || isPalmMuteSegment()
+               || isPickScrapeSegment()
                || isWhammyBarSegment()
                || isRasgueadoSegment()
                || isHarmonicMarkSegment()
@@ -465,6 +488,8 @@ public:
                || isTextLineBaseSegment()
                || isTrillSegment()
                || isVibratoSegment()
+               || isGuitarBendSegment()
+               || isGuitarBendHoldSegment()
         ;
     }
 
@@ -483,6 +508,7 @@ public:
                || isOttava()
                || isPalmMute()
                || isWhammyBar()
+               || isPickScrape()
                || isRasgueado()
                || isHarmonicMark()
                || isPedal()
@@ -493,7 +519,7 @@ public:
 
     bool isSLine() const
     {
-        return isTextLineBase() || isTrill() || isGlissando() || isVibrato();
+        return isTextLineBase() || isTrill() || isGlissando() || isVibrato() || isGuitarBend() || isGuitarBendHold();
     }
 
     bool isSpanner() const
@@ -509,7 +535,7 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo() || isStringTunings();
     }
 
     bool isArticulationFamily() const
@@ -696,6 +722,11 @@ CONVERT(Tie)
 CONVERT(Slur)
 CONVERT(Glissando)
 CONVERT(GlissandoSegment)
+CONVERT(GuitarBend)
+CONVERT(GuitarBendSegment)
+CONVERT(GuitarBendHold)
+CONVERT(GuitarBendHoldSegment)
+CONVERT(GuitarBendText)
 CONVERT(SystemDivider)
 CONVERT(RehearsalMark)
 CONVERT(TripletFeel)
@@ -708,7 +739,6 @@ CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(Segment)
-CONVERT(Tremolo)
 CONVERT(System)
 CONVERT(Lyrics)
 CONVERT(Stem)
@@ -774,6 +804,7 @@ CONVERT(NoteHead)
 CONVERT(LyricsLine)
 CONVERT(LyricsLineSegment)
 CONVERT(FiguredBass)
+CONVERT(FiguredBassItem)
 CONVERT(StaffState)
 CONVERT(Arpeggio)
 CONVERT(Image)
@@ -791,6 +822,8 @@ CONVERT(Sticking)
 CONVERT(GraceNotesGroup)
 CONVERT(FretCircle)
 CONVERT(DeadSlapped)
+CONVERT(StringTunings)
+CONVERT(SoundFlag)
 #undef CONVERT
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -18,7 +18,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -134,7 +133,7 @@
             </Chord>
           <endTuplet/>
           <location>
-            <fractions>1/108</fractions>
+            <fractions>-43/2160</fractions>
             </location>
           <Rest>
             <dots>1</dots>
@@ -142,7 +141,7 @@
             </Rest>
           <endTuplet/>
           <location>
-            <fractions>-29/960</fractions>
+            <fractions>-1/960</fractions>
             </location>
           <Tuplet>
             <normalNotes>4</normalNotes>
@@ -206,15 +205,6 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
-          <location>
-            <fractions>-469/960</fractions>
-            </location>
-          <Rest>
-            <durationType>half</durationType>
-            </Rest>
-          <location>
-            <fractions>-11/960</fractions>
-            </location>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

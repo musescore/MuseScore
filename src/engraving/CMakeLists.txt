@@ -55,6 +55,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/ld_access.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/shape.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/shape.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.h
 
     ${DOM_SRC}
 
@@ -128,6 +136,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/compatutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/compatutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/tremolocompat.h
 
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h
@@ -202,6 +211,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/tremolorenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/chordarticulationsrenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/renderers/bendsrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/symbolsmetaparser.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/metaparsers/internal/annotationsmetaparser.cpp
@@ -292,15 +303,18 @@ set(MODULE_LINK
     draw
 )
 
-if (MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER)
-    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_PAINT_DEBUGGER)
+
+if (MUE_ENABLE_ENGRAVING_RENDER_DEBUG)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_RENDER_DEBUG)
 endif()
 
 if (MUE_ENABLE_ENGRAVING_LD_ACCESS)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_LD_ACCESS)
 endif()
 
-
+if (MUE_ENABLE_ENGRAVING_LD_PASSES)
+    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ENGRAVING_LD_PASSES)
+endif()
 
 set(MODULE_USE_UNITY_NONE ON)
 include(SetupModule)
@@ -309,6 +323,6 @@ set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGI
 
 #target_compile_options(${MODULE} PUBLIC -Wconversion)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_ENGRAVING_TESTS)
     add_subdirectory(tests)
 endif()

@@ -299,8 +299,8 @@ void StretchedBend::fillSegments()
             dest = PointF(src.x(), minY - bendHeight(bendSegment.tone) - baseBendHeight);
 
             /// shortening length of prebend on standard staff if chord has staccato
-            Staff* st = staff();
-            if (st && !st->isTabStaff(tick())) {
+            Staff* st2 = staff();
+            if (st2 && !st2->isTabStaff(tick())) {
                 for (Articulation* art : chord->articulations()) {
                     if (art->isStaccato()) {
                         src.setY(src.y() - symWidth(art->symId()) - style().styleS(Sid::articulationMinDistance).val() * sp);

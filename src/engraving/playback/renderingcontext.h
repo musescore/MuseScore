@@ -88,7 +88,11 @@ struct RenderingContext {
 
 inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
 {
-    return durationFromTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
+    if (!note->score()) {
+        return durationFromTempoAndTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
+    }
+
+    return durationFromStartAndTicks(note->score(), note->tick().ticks(), note->chord()->actualTicks().ticks());
 }
 
 struct NominalNoteCtx {
@@ -110,7 +114,7 @@ struct NominalNoteCtx {
         userVelocityFraction(note->userVelocityFraction()),
         pitchLevel(notePitchLevel(note->playingTpc(),
                                   note->playingOctave(),
-                                  note->tuning())),
+                                  note->playingTuning())),
         chordCtx(ctx)
     {
         if (RealIsEqual(userVelocityFraction, 0.f)) {
@@ -168,12 +172,25 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           ctx.userVelocityFraction);
 }
 
+inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::PitchCurve& pitchCurve)
+{
+    return mpe::NoteEvent(ctx.timestamp,
+                          ctx.duration,
+                          static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
+                          ctx.pitchLevel,
+                          ctx.chordCtx.nominalDynamicLevel,
+                          ctx.chordCtx.commonArticulations,
+                          ctx.tempo.val,
+                          ctx.userVelocityFraction,
+                          pitchCurve);
+}
+
 inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           noteNominalDuration(note, ctx),
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
-                          notePitchLevel(note->playingTpc(), note->playingOctave(), note->tuning()),
+                          notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
                           ctx.nominalDynamicLevel,
                           ctx.commonArticulations,
                           ctx.beatsPerSecond.val,
@@ -201,7 +218,7 @@ inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp
     return mpe::NoteEvent(actualTimestamp,
                           actualDuration,
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
-                          notePitchLevel(note->playingTpc(), note->playingOctave(), note->tuning()),
+                          notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
                           actualDynamicLevel,
                           articulations,
                           1);

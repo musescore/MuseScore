@@ -54,7 +54,7 @@ static const ElementStyle pickScrapeStyle {
 };
 
 PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
-    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextLineBaseSegment(ElementType::PICK_SCRAPE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -63,7 +63,7 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
 //---------------------------------------------------------
 
 PickScrape::PickScrape(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::WHAMMY_BAR, parent)
+    : ChordTextLineBase(ElementType::PICK_SCRAPE, parent)
 {
     initElementStyle(&pickScrapeStyle);
     resetProperty(Pid::LINE_VISIBLE);

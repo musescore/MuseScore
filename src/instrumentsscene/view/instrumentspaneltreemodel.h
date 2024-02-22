@@ -35,6 +35,10 @@
 #include "shortcuts/ishortcutsregister.h"
 #include "iinteractive.h"
 
+#ifndef MU_QT5_COMPAT
+Q_MOC_INCLUDE("uicomponents/view/itemmultiselectionmodel.h")
+#endif
+
 namespace mu::uicomponents {
 class ItemMultiSelectionModel;
 }
@@ -80,6 +84,7 @@ public:
     bool isInstrumentSelected() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void setInstrumentsPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
@@ -87,6 +92,9 @@ public:
     Q_INVOKABLE void moveSelectedRowsDown();
     Q_INVOKABLE void removeSelectedRows();
     Q_INVOKABLE void toggleVisibilityOfSelectedRows(bool visible);
+
+    Q_INVOKABLE void startActiveDrag();
+    Q_INVOKABLE void endActiveDrag();
 
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
@@ -128,6 +136,7 @@ private:
     void setupPartsConnections();
     void setupStavesConnections(const ID& stavesPartId);
     void listenNotationSelectionChanged();
+    void updateSelectedRows();
 
     void clear();
     void deleteItems();
@@ -162,6 +171,12 @@ private:
 
     using NotationKey = QString;
     QHash<NotationKey, QList<ID> > m_sortedPartIdList;
+
+    bool m_instrumentsPanelVisible = true;
+
+    bool m_dragInProgress = false;
+    bool m_activeDragIsStave = false;
+    MoveParams m_activeDragMoveParams;
 };
 }
 

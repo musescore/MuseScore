@@ -49,6 +49,7 @@
 #include "fretcircle.h"
 #include "glissando.h"
 #include "gradualtempochange.h"
+#include "guitarbend.h"
 #include "hairpin.h"
 #include "harmonicmark.h"
 #include "harmony.h"
@@ -92,15 +93,19 @@
 #include "stemslash.h"
 #include "sticking.h"
 #include "stretchedbend.h"
+#include "stringtunings.h"
 #include "system.h"
 #include "systemdivider.h"
 #include "systemtext.h"
+#include "soundflag.h"
 #include "tempotext.h"
 #include "text.h"
 #include "textline.h"
 #include "tie.h"
 #include "timesig.h"
-#include "tremolo.h"
+
+#include "tremolotwochord.h"
+#include "tremolosinglechord.h"
 #include "tremolobar.h"
 #include "trill.h"
 #include "tripletfeel.h"
@@ -170,6 +175,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
+    case ElementType::SOUND_FLAG:        return new SoundFlag(parent);
     case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
     case ElementType::NOTEHEAD:          return new NoteHead(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::NOTEDOT: {
@@ -181,7 +187,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
             return new NoteDot(dummy->note());
         }
     }
-    case ElementType::TREMOLO:           return new Tremolo(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
     case ElementType::MARKER:            return new Marker(parent);
     case ElementType::JUMP:              return new Jump(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
@@ -201,6 +208,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::GUITAR_BEND:       return new GuitarBend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::STRETCHED_BEND:    return new StretchedBend(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
     case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
@@ -222,11 +230,16 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::TRIPLET_FEEL:      return new TripletFeel(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::FRET_CIRCLE:       return new FretCircle(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::STRING_TUNINGS:      return new StringTunings(parent->isSegment() ? toSegment(parent) : dummy->segment());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::GUITAR_BEND_HOLD:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::GUITAR_BEND_TEXT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::STEM_SLASH:
@@ -269,6 +282,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::OSSIA:
     case ElementType::GRACE_NOTES_GROUP:
     case ElementType::ROOT_ITEM:
+    case ElementType::FIGURED_BASS_ITEM:
+    case ElementType::TREMOLO:
     case ElementType::DUMMY:
         break;
     }
@@ -292,7 +307,7 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingI
     T* Factory::create##T(P * parent, bool isAccessibleEnabled) \
     { \
         EngravingItem* e = createItem(type, parent, isAccessibleEnabled); \
-        return to##T(e); \
+        return item_cast<T*>(e); \
     } \
 
 #define MAKE_ITEM_IMPL(T, P) \
@@ -417,6 +432,10 @@ COPY_ITEM_IMPL(Measure)
 CREATE_ITEM_IMPL(MeasureRepeat, ElementType::MEASURE_REPEAT, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(MeasureRepeat)
 
+CREATE_ITEM_IMPL(StringTunings, ElementType::STRING_TUNINGS, Segment, isAccessibleEnabled)
+COPY_ITEM_IMPL(StringTunings)
+MAKE_ITEM_IMPL(StringTunings, Segment);
+
 CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord, isAccessibleEnabled)
 Note* Factory::copyNote(const Note& src, bool link)
 {
@@ -515,7 +534,9 @@ StaffText* Factory::createStaffText(Segment * parent, TextStyleType textStyleTyp
     return staffText;
 }
 
-Expression* Factory::createExpression(Segment* parent, bool isAccessibleEnabled)
+CREATE_ITEM_IMPL(SoundFlag, ElementType::SOUND_FLAG, EngravingItem, isAccessibleEnabled)
+
+Expression* Factory::createExpression(Segment * parent, bool isAccessibleEnabled)
 {
     Expression* expression = new Expression(parent);
     expression->setAccessibleEnabled(isAccessibleEnabled);
@@ -598,9 +619,13 @@ CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(TimeSig)
 MAKE_ITEM_IMPL(TimeSig, Segment)
 
-CREATE_ITEM_IMPL(Tremolo, ElementType::TREMOLO, Chord, isAccessibleEnabled)
-COPY_ITEM_IMPL(Tremolo)
-MAKE_ITEM_IMPL(Tremolo, Chord)
+CREATE_ITEM_IMPL(TremoloTwoChord, ElementType::TREMOLO_TWOCHORD, Chord, isAccessibleEnabled)
+COPY_ITEM_IMPL(TremoloTwoChord)
+MAKE_ITEM_IMPL(TremoloTwoChord, Chord)
+
+CREATE_ITEM_IMPL(TremoloSingleChord, ElementType::TREMOLO_SINGLECHORD, Chord, isAccessibleEnabled)
+COPY_ITEM_IMPL(TremoloSingleChord)
+MAKE_ITEM_IMPL(TremoloSingleChord, Chord)
 
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
@@ -613,6 +638,9 @@ MAKE_ITEM_IMPL(Hairpin, Segment)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)
+
+CREATE_ITEM_IMPL(GuitarBend, ElementType::GUITAR_BEND, Note, isAccessibleEnabled)
+MAKE_ITEM_IMPL(GuitarBend, Note)
 
 CREATE_ITEM_IMPL(Jump, ElementType::JUMP, Measure, isAccessibleEnabled)
 

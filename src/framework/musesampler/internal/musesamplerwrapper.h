@@ -35,7 +35,7 @@ namespace mu::musesampler {
 class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const audio::AudioSourceParams& params);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, ms_InstrumentInfo instrument, const audio::AudioSourceParams& params);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
@@ -50,7 +50,7 @@ public:
 
     void revokePlayingNotes() override;
 
-protected:
+private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
     void updateRenderingMode(const audio::RenderMode mode) override;
@@ -60,6 +60,8 @@ protected:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    std::string resolveDefaultPresetCode(ms_InstrumentInfo instrument) const;
+
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const audio::samples_t samples);
     void extractOutputSamples(audio::samples_t samples, float* output);
@@ -67,6 +69,7 @@ protected:
     async::Channel<unsigned int> m_audioChannelsCountChanged;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
+    ms_InstrumentInfo m_instrument = nullptr;
     ms_MuseSampler m_sampler = nullptr;
     ms_Track m_track = nullptr;
     ms_OutputBuffer m_bus;
@@ -77,6 +80,8 @@ protected:
     std::vector<float> m_rightChannel;
 
     std::array<float*, 2> m_internalBuffer;
+
+    bool m_offlineModeStarted = false;
 
     MuseSamplerSequencer m_sequencer;
 };

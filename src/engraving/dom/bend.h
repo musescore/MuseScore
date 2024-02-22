@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BEND_H__
-#define __BEND_H__
+#ifndef MU_ENGRAVING_BEND_H
+#define MU_ENGRAVING_BEND_H
 
 #include "draw/types/font.h"
 
@@ -35,6 +35,12 @@ class Factory;
 //---------------------------------------------------------
 //   @@ Bend
 //---------------------------------------------------------
+
+/**********************************************************
+ *    OBSOLETE CLASS
+ *    Used to represent bends before version 4.2. Now
+ *    replaced by the GuitarBend class.
+ *********************************************************/
 
 enum class BendType {
     BEND = 0,

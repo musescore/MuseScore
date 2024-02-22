@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMAGE_H__
-#define __IMAGE_H__
+#ifndef MU_ENGRAVING_IMAGE_H
+#define MU_ENGRAVING_IMAGE_H
 
 #include "bsymbol.h"
 

@@ -273,6 +273,7 @@ void OSXAudioDriver::updateDeviceMap()
 
     for (auto&& deviceId : audioObjects) {
         CFStringRef nameRef;
+        propertySize = sizeof(nameRef);
 
         result = AudioObjectGetPropertyData(deviceId, &namePropertyAddress, 0, NULL, &propertySize, &nameRef);
         if (result != noErr) {

@@ -43,9 +43,10 @@ class SelectDialog : public QDialog, Ui::SelectDialog
 
 public:
     SelectDialog(QWidget* parent = nullptr);
-    SelectDialog(const SelectDialog& other);
 
-    static int metaTypeId();
+#ifdef MU_QT5_COMPAT
+    SelectDialog(const SelectDialog& other);
+#endif
 
     bool doReplace() const;
     bool doAdd() const;

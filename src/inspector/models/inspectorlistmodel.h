@@ -47,12 +47,15 @@ public:
     QHash<int, QByteArray> roleNames() const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
+    Q_INVOKABLE void setInspectorVisible(bool visible);
+
 private:
     enum RoleNames {
         InspectorSectionModelRole = Qt::UserRole + 1
     };
 
     void listenSelectionChanged();
+    void updateElementList();
 
     void setElementList(const QList<mu::engraving::EngravingItem*>& selectedElementList,
                         notation::SelectionState selectionState = notation::SelectionState::NONE);
@@ -63,6 +66,7 @@ private:
 
     void createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList, const ElementKeySet& selectedElementKeySet = {});
     void removeUnusedModels(const ElementKeySet& newElementKeySet, bool isRangeSelection,
+                            const QList<mu::engraving::EngravingItem*>& selectedElementList,
                             const QList<InspectorSectionType>& exclusions = QList<InspectorSectionType>());
 
     bool isModelAllowed(const AbstractInspectorModel* model, const InspectorModelTypeSet& allowedModelTypes,
@@ -77,6 +81,8 @@ private:
     QList<AbstractInspectorModel*> m_modelList;
 
     IElementRepositoryService* m_repository = nullptr;
+
+    bool m_inspectorVisible = true;
 };
 }
 

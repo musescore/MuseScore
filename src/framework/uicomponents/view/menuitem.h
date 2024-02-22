@@ -151,6 +151,16 @@ private:
     ui::UiAction m_action;
 };
 using MenuItemList = QList<MenuItem*>;
+
+inline QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& list)
+{
+    QVariantList result;
+    for (MenuItem* item: list) {
+        result << QVariant::fromValue(item);
+    }
+
+    return result;
+}
 }
 
 #endif // MU_UICOMPONENTS_MENUITEM_H

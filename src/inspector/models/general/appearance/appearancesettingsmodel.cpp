@@ -50,6 +50,7 @@ void AppearanceSettingsModel::createProperties()
     m_arrangeOrder = buildPropertyItem(Pid::Z);
     m_offset = buildPointFPropertyItem(Pid::OFFSET, [this](const mu::engraving::Pid, const QVariant& newValue) {
         setPropertyValue(m_elementsForOffsetProperty, Pid::OFFSET, newValue);
+        loadProperties();
     });
 }
 

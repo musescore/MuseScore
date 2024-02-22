@@ -79,10 +79,13 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     qApp->installEventFilter(this);
 }
 
+#ifdef MU_QT5_COMPAT
 MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog)
     : MeasurePropertiesDialog(dialog.parentWidget())
 {
 }
+
+#endif
 
 void MeasurePropertiesDialog::initMeasure()
 {
@@ -94,6 +97,13 @@ void MeasurePropertiesDialog::initMeasure()
     mu::engraving::Measure* measure = mu::engraving::toMeasure(context.element);
 
     if (!measure) {
+        INotationSelectionPtr selection = m_notation->interaction()->selection();
+        if (selection->isRange()) {
+            measure = selection->range()->measureRange().endMeasure;
+        }
+    }
+
+    IF_ASSERT_FAILED(measure) {
         return;
     }
 

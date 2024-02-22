@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __UTILS_H__
-#define __UTILS_H__
+#ifndef MU_ENGRAVING_UTILS_H
+#define MU_ENGRAVING_UTILS_H
 
 #include "types/types.h"
 
@@ -31,12 +31,13 @@
 
 namespace mu::engraving {
 class Chord;
+class EngravingItem;
+class KeySig;
 class Note;
 class Rest;
 class Segment;
 class System;
 class Tuplet;
-class EngravingItem;
 
 enum class Key;
 
@@ -47,7 +48,11 @@ extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(double y, ClefType clef, double spatium);
 extern int quantizeLen(int, int);
-extern String pitch2string(int v);
+
+extern String pitch2string(int v, bool useFlats = false);
+extern int string2pitch(const String& s);
+extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
+
 extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
@@ -91,5 +96,11 @@ extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
 extern String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames);
+
+extern bool isFirstSystemKeySig(const KeySig* ks);
+
+extern String bendAmountToString(int fulls, int quarts);
+
+extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
 } // namespace mu::engraving
 #endif

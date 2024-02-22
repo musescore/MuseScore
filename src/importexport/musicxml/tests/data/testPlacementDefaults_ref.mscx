@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.20">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <pageHeight>11.6929</pageHeight>
+      <pagePrintableWidth>7.08661</pagePrintableWidth>
+      <pageEvenLeftMargin>0.590551</pageEvenLeftMargin>
+      <pageOddLeftMargin>0.590551</pageOddLeftMargin>
+      <pageEvenTopMargin>0.590551</pageEvenTopMargin>
+      <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
+      <pageOddTopMargin>0.590551</pageOddTopMargin>
+      <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <tupletFontSize>10</tupletFontSize>
+      <fingeringFontSize>10</fingeringFontSize>
+      <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
+      <rhGuitarFingeringFontSize>10</rhGuitarFingeringFontSize>
+      <stringNumberFontSize>10</stringNumberFontSize>
+      <stringTuningsFontSize>10</stringTuningsFontSize>
+      <partInstrumentFontSize>10</partInstrumentFontSize>
+      <tempoFontSize>10</tempoFontSize>
+      <tempoChangeFontSize>10</tempoChangeFontSize>
+      <metronomeFontSize>10</metronomeFontSize>
+      <measureNumberFontSize>10</measureNumberFontSize>
+      <mmRestRangeFontSize>10</mmRestRangeFontSize>
+      <rehearsalMarkFontSize>10</rehearsalMarkFontSize>
+      <repeatLeftFontSize>10</repeatLeftFontSize>
+      <repeatRightFontSize>10</repeatRightFontSize>
+      <glissandoFontSize>10</glissandoFontSize>
+      <bendFontSize>10</bendFontSize>
+      <headerFontSize>10</headerFontSize>
+      <footerFontSize>10</footerFontSize>
+      <Spatium>1.75</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger"></metaTag>
+    <metaTag name="composer">Henry Ives</metaTag>
+    <metaTag name="copyright"></metaTag>
+    <metaTag name="lyricist"></metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator"></metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Placement Defaults</metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Soprano</trackName>
+      <Instrument id="soprano">
+        <longName>Soprano</longName>
+        <shortName>S.</shortName>
+        <trackName>Soprano</trackName>
+        <minPitchP>60</minPitchP>
+        <maxPitchP>84</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>79</maxPitchA>
+        <instrumentId>voice.soprano</instrumentId>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="52"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>1</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Part id="2">
+      <Staff id="2">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        </Staff>
+      <trackName>Piano</trackName>
+      <Instrument id="piano">
+        <longName>Piano</longName>
+        <shortName>Pno.</shortName>
+        <trackName>Piano</trackName>
+        <minPitchP>21</minPitchP>
+        <maxPitchP>108</maxPitchP>
+        <minPitchA>21</minPitchA>
+        <maxPitchA>108</maxPitchA>
+        <instrumentId>keyboard.piano</instrumentId>
+        <clef staff="2">F</clef>
+        <Articulation>
+          <velocity>100</velocity>
+          <gateTime>95</gateTime>
+          </Articulation>
+        <Articulation name="staccatissimo">
+          <velocity>100</velocity>
+          <gateTime>33</gateTime>
+          </Articulation>
+        <Articulation name="staccato">
+          <velocity>100</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="portato">
+          <velocity>100</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="tenuto">
+          <velocity>100</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="marcato">
+          <velocity>120</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
+        <Articulation name="sforzato">
+          <velocity>150</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Articulation name="sforzatoStaccato">
+          <velocity>150</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoStaccato">
+          <velocity>120</velocity>
+          <gateTime>50</gateTime>
+          </Articulation>
+        <Articulation name="marcatoTenuto">
+          <velocity>120</velocity>
+          <gateTime>100</gateTime>
+          </Articulation>
+        <Channel>
+          <program value="0"/>
+          <controller ctrl="10" value="63"/>
+          <midiPort>0</midiPort>
+          <midiChannel>0</midiChannel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>12.5</height>
+        <Text>
+          <style>title</style>
+          <offset x="0" y="-0.07525"/>
+          <text><font size="22"/>Placement Defaults</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <offset x="0" y="9.92425"/>
+          <text><font size="16"/>MuseScore Testcase</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <align>right,top</align>
+          <offset x="0" y="17.4247"/>
+          <text>Henry Ives</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Tempo>
+            <tempo>0.583333</tempo>
+            <followText>1</followText>
+            <text><font size="12"/><b>Grave</b></text>
+            </Tempo>
+          <Dynamic>
+            <subtype>pp</subtype>
+            <velocity>33</velocity>
+            <placement>above</placement>
+            </Dynamic>
+          <Chord>
+            <durationType>whole</durationType>
+            <Lyrics>
+              <ticks>9600</ticks>
+              <ticks_f>20/4</ticks_f>
+              <text>ahh</text>
+              </Lyrics>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text><i>increasingly grave in spirit</i></text>
+            </StaffText>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    </location>
+                  </next>
+                </Spanner>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>whole</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    <Staff id="2">
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            </Dynamic>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>69</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>71</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>77</pitch>
+              <tpc>13</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>81</pitch>
+              <tpc>17</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <StaffText>
+            <text><i>with care</i></text>
+            </StaffText>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>86</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>74</pitch>
+              <tpc>16</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <StemDirection>down</StemDirection>
+            <Note>
+              <pitch>79</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <StemDirection>up</StemDirection>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>

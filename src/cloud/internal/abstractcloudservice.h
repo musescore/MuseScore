@@ -31,6 +31,7 @@ class QOAuth2AuthorizationCodeFlow;
 
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
+#include "ui/iuiconfiguration.h"
 #include "io/ifilesystem.h"
 #include "network/inetworkmanagercreator.h"
 #include "multiinstances/imultiinstancesprovider.h"
@@ -57,6 +58,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     Q_OBJECT
 
     INJECT(ICloudConfiguration, configuration)
+    INJECT(ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
     INJECT(framework::IInteractive, interactive)
@@ -71,7 +73,7 @@ public:
     void signIn() override;
     void signOut() override;
 
-    Ret ensureAuthorization(const std::string& text = {}) override;
+    RetVal<Val> ensureAuthorization(bool publishingScore, const std::string& text = {}) override;
 
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
@@ -85,6 +87,8 @@ protected:
     struct ServerConfig {
         QString serverCode;
         QUrl serverUrl;
+
+        QUrl serverAvailabilityUrl;
 
         QUrl authorizationUrl;
         QUrl signUpUrl;
@@ -103,6 +107,8 @@ protected:
     virtual ServerConfig serverConfig() const = 0;
 
     virtual Ret downloadAccountInfo() = 0;
+
+    virtual QString logoColorForTheme(const ui::ThemeInfo& theme) const;
 
     void setAccountInfo(const AccountInfo& info);
 

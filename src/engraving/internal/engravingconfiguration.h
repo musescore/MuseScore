@@ -72,7 +72,7 @@ public:
 
     double guiScaling() const override;
 
-    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true) const override;
+    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
     void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) override;
     async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const override;
 
@@ -91,12 +91,12 @@ public:
 
     bool guitarProImportExperimental() const override;
     bool negativeFretsAllowed() const override;
-    bool tablatureParenthesesZIndexWorkaround() const override;
     bool crossNoteHeadAlwaysBlack() const override;
     bool enableExperimentalFretCircle() const override;
     void setGuitarProMultivoiceEnabled(bool multiVoice) override;
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;
+    bool specificSlursLayoutWorkaround() const override;
 
 private:
     async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;

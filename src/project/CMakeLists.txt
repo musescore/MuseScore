@@ -48,7 +48,6 @@ endif()
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/projecttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/projecterrors.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectcreator.h
@@ -64,6 +63,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iprojectautosaver.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectrwregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectwriter.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/types/projecttypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/projectmeta.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iprojectmigrator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
@@ -89,9 +91,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/iexportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/isaveprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/saveprojectscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/saveprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iopensaveprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/opensaveprojectscenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/opensaveprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/recentfilescontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/recentfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.cpp
@@ -145,6 +147,6 @@ set(MODULE_LINK
 
 include(SetupModule)
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_PROJECT_TESTS)
     add_subdirectory(tests)
 endif()

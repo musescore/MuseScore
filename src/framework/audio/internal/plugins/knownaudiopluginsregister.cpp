@@ -22,8 +22,9 @@
 
 #include "knownaudiopluginsregister.h"
 
+#include "global/serialization/json.h"
+
 #include "audioutils.h"
-#include "serialization/json.h"
 
 #include "log.h"
 

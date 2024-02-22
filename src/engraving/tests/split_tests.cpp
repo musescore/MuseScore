@@ -52,7 +52,9 @@ void Engraving_SplitTests::split(const char* f1, const char* ref, int index)
     }
     ChordRest* cr = toChordRest(s->element(0));
 
+    score->startCmd();
     score->cmdSplitMeasure(cr);
+    score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String::fromUtf8(f1), SPLIT_DATA_DIR + String::fromUtf8(ref)));
     delete score;

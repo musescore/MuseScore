@@ -31,6 +31,7 @@
 #include "infrastructure/htmlparser.h"
 
 #include "rw/compat/compatutils.h"
+#include "rw/compat/readchordlisthook.h"
 
 #include "style/defaultstyle.h"
 #include "style/style.h"
@@ -79,13 +80,15 @@
 #include "dom/text.h"
 #include "dom/textline.h"
 #include "dom/timesig.h"
-#include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
+#include "../compat/tremolocompat.h"
 #include "../read206/read206.h"
 #include "../read400/tread.h"
 
@@ -312,7 +315,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
             break;
         case 4:  ss = TextStyleType::COMPOSER;
             break;
-        case 5:  ss = TextStyleType::POET;
+        case 5:  ss = TextStyleType::LYRICIST;
             break;
 
         case 6:  ss = TextStyleType::LYRICS_ODD;
@@ -1006,8 +1009,15 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 //   readTremolo
 //---------------------------------------------------------
 
-static void readTremolo(Tremolo* tremolo, XmlReader& e, ReadContext& ctx)
+static void readTremolo(compat::TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 {
+    auto item = [](compat::TremoloCompat* t) -> EngravingItem* {
+        if (t->two) {
+            return t->two;
+        }
+        return t->single;
+    };
+
     enum class OldTremoloType : char {
         OLD_R8 = 0,
         OLD_R16,
@@ -1016,27 +1026,37 @@ static void readTremolo(Tremolo* tremolo, XmlReader& e, ReadContext& ctx)
         OLD_C16,
         OLD_C32
     };
+
     while (e.readNextStartElement()) {
         if (e.name() == "subtype") {
             OldTremoloType sti = OldTremoloType(e.readText().toInt());
-            TremoloType st;
+            TremoloType type = TremoloType::INVALID_TREMOLO;
             switch (sti) {
             default:
-            case OldTremoloType::OLD_R8:  st = TremoloType::R8;
+            case OldTremoloType::OLD_R8:  type = TremoloType::R8;
                 break;
-            case OldTremoloType::OLD_R16: st = TremoloType::R16;
+            case OldTremoloType::OLD_R16: type = TremoloType::R16;
                 break;
-            case OldTremoloType::OLD_R32: st = TremoloType::R32;
+            case OldTremoloType::OLD_R32: type = TremoloType::R32;
                 break;
-            case OldTremoloType::OLD_C8:  st = TremoloType::C8;
+            case OldTremoloType::OLD_C8:  type = TremoloType::C8;
                 break;
-            case OldTremoloType::OLD_C16: st = TremoloType::C16;
+            case OldTremoloType::OLD_C16: type = TremoloType::C16;
                 break;
-            case OldTremoloType::OLD_C32: st = TremoloType::C32;
+            case OldTremoloType::OLD_C32: type = TremoloType::C32;
                 break;
             }
-            tremolo->setTremoloType(st);
-        } else if (!TRead::readItemProperties(tremolo, e, ctx)) {
+
+            if (isTremoloTwoChord(type)) {
+                t->two = Factory::createTremoloTwoChord(t->parent);
+                t->two->setTrack(t->parent->track());
+                t->two->setTremoloType(type);
+            } else {
+                t->single = Factory::createTremoloSingleChord(t->parent);
+                t->single->setTrack(t->parent->track());
+                t->single->setTremoloType(type);
+            }
+        } else if (!TRead::readItemProperties(item(t), e, ctx)) {
             e.unknown();
         }
     }
@@ -1068,12 +1088,20 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            Tremolo* tremolo = Factory::createTremolo(chord);
-            tremolo->setDurationType(chord->durationType());
-            chord->setTremolo(tremolo);
-            tremolo->setTrack(chord->track());
-            readTremolo(tremolo, e, ctx);
-            tremolo->setParent(chord);
+            compat::TremoloCompat tcompat;
+            tcompat.parent = chord;
+            readTremolo(&tcompat, e, ctx);
+            if (tcompat.two) {
+                tcompat.two->setParent(chord);
+                tcompat.two->setDurationType(chord->durationType());
+                chord->setTremoloTwoChord(tcompat.two, false);
+            } else if (tcompat.single) {
+                tcompat.single->setParent(chord);
+                tcompat.single->setDurationType(chord->durationType());
+                chord->setTremoloSingleChord(tcompat.single);
+            } else {
+                UNREACHABLE;
+            }
         } else if (Read206::readChordProperties206(e, ctx, chord)) {
         } else {
             e.unknown();
@@ -1197,8 +1225,8 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
         ls->setOffset(PointF());            // ignore offsets
         ls->setAutoplace(true);
         tl->add(ls);
-    } else if (read400::TRead::readProperties(tl, e, ctx)) {
-        return true;
+    } else if (!read400::TRead::readProperties(tl, e, ctx)) {
+        return false;
     }
     return true;
 }
@@ -1359,6 +1387,10 @@ static void readTextLine114(XmlReader& e, ReadContext& ctx, TextLine* textLine)
 
 static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 {
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
@@ -1373,35 +1405,72 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
             read400::TRead::readProperty(pedal, e, ctx, Pid::LINE_STYLE);
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
+            beginTextTag = true;
             String text(e.readText());
-            pedal->setBeginText(String(u"<sym>%1</sym>").arg(
-                                    text.at(0).isDigit()
-                                    ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
-                                    : text));
-            pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+            String symbol = String(u"<sym>%1</sym>").arg(
+                text.at(0).isDigit()
+                ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                : text);
+            if (symbol != pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>()) {
+                pedal->setBeginText(symbol);
+                pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+            }
         } else if (tag == "continueSymbol") {
+            continueTextTag = true;
             String text(e.readText());
-            pedal->setContinueText(String(u"<sym>%1</sym>").arg(
-                                       text.at(0).isDigit()
-                                       ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
-                                       : text));
-            pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+            String symbol = String(u"<sym>%1</sym>").arg(
+                text.at(0).isDigit()
+                ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                : text);
+            if (symbol != pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>()) {
+                pedal->setContinueText(symbol);
+                pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+            }
         } else if (tag == "endSymbol") {
+            endTextTag = true;
             String text(e.readText());
-            pedal->setEndText(String(u"<sym>%1</sym>").arg(
-                                  text.at(0).isDigit()
-                                  ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
-                                  : text));
-            pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+            String symbol = String(u"<sym>%1</sym>").arg(
+                text.at(0).isDigit()
+                ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                : text);
+            if (symbol != pedal->propertyDefault(Pid::END_TEXT).value<String>()) {
+                pedal->setEndText(symbol);
+                pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+            }
         } else if (tag == "beginSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "continueSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "endSymbolOffset") { // obsolete
             e.readPoint();
-        } else if (!readTextLineProperties114(e, ctx, pedal)) {
+        } else if (readTextLineProperties114(e, ctx, pedal)) {
+            beginTextTag = beginTextTag || tag == "beginText";
+            continueTextTag = continueTextTag || tag == "continueText";
+            endTextTag = endTextTag || tag == "endText";
+        } else {
             e.unknown();
         }
+    }
+
+    // Set to the 114 defaults if no value was specified;
+    // or follow the new style setting if the specified value matches it
+    if (!beginTextTag) {
+        pedal->setBeginText(String());
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->beginText() == pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::STYLED);
+    }
+    if (!continueTextTag) {
+        pedal->setContinueText(String());
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->continueText() == pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::STYLED);
+    }
+    if (!endTextTag) {
+        pedal->setEndText(String());
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->endText() == pedal->propertyDefault(Pid::END_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
     }
 }
 
@@ -1649,41 +1718,39 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 graceNotes.clear();
                 Fraction crticks = chord->actualTicks();
 
-                if (chord->tremolo()) {
-                    Tremolo* tremolo = chord->tremolo();
-                    if (tremolo->twoNotes()) {
-                        track_idx_t track = chord->track();
-                        Segment* ss = 0;
-                        for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
-                            if (ps->tick() >= ctx.tick()) {
-                                break;
-                            }
-                            if (ps->element(track)) {
-                                ss = ps;
-                            }
+                if (chord->tremoloSingleChord()) {
+                    chord->tremoloSingleChord()->setParent(chord);
+                } else if (chord->tremoloTwoChord()) {
+                    TremoloTwoChord* tremolo = chord->tremoloTwoChord();
+                    track_idx_t track = chord->track();
+                    Segment* ss = 0;
+                    for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
+                        if (ps->tick() >= ctx.tick()) {
+                            break;
                         }
-                        Chord* pch = 0;                   // previous chord
-                        if (ss) {
-                            ChordRest* cr = toChordRest(ss->element(track));
-                            if (cr && cr->type() == ElementType::CHORD) {
-                                pch = toChord(cr);
-                            }
+                        if (ps->element(track)) {
+                            ss = ps;
                         }
-                        if (pch) {
-                            tremolo->setParent(pch);
-                            pch->setTremolo(tremolo);
-                            chord->setTremolo(0);
-                            // force duration to half
-                            Fraction pts(timeStretch * pch->globalTicks());
-                            pch->setTicks(pts * Fraction(1, 2));
-                            chord->setTicks(crticks * Fraction(1, 2));
-                        } else {
-                            LOGD("tremolo: first note not found");
-                        }
-                        crticks = crticks * Fraction(1, 2);
-                    } else {
-                        tremolo->setParent(chord);
                     }
+                    Chord* pch = 0;                       // previous chord
+                    if (ss) {
+                        ChordRest* cr = toChordRest(ss->element(track));
+                        if (cr && cr->type() == ElementType::CHORD) {
+                            pch = toChord(cr);
+                        }
+                    }
+                    if (pch) {
+                        tremolo->setParent(pch);
+                        pch->setTremoloTwoChord(tremolo);
+                        chord->setTremoloTwoChord(nullptr);
+                        // force duration to half
+                        Fraction pts(timeStretch * pch->globalTicks());
+                        pch->setTicks(pts * Fraction(1, 2));
+                        chord->setTicks(crticks * Fraction(1, 2));
+                    } else {
+                        LOGD("tremolo: first note not found");
+                    }
+                    crticks = crticks * Fraction(1, 2);
                 }
                 lastTick = ctx.tick();
                 ctx.incTick(crticks);
@@ -1699,17 +1766,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
             } else {
-                Segment* segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-                Rest* rest = Factory::createRest(segment);
+                Rest* rest = Factory::createRest(ctx.score()->dummy()->segment());
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
                 readRest(m, rest, e, ctx);
-                if (!rest->segment()) {
-                    rest->setParent(segment);
-                }
-                segment = rest->segment();
-                segment->add(rest);
+
+                Segment* segment2 = m->getSegment(SegmentType::ChordRest, ctx.tick());
+                rest->setParent(segment2);
+                segment2->add(rest);
 
                 if (!rest->ticks().isValid()) {    // hack
                     rest->setTicks(m->timesig() / timeStretch);
@@ -1902,6 +1967,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 const AsciiStringView t(e.name());
                 if (t == "no") {
                     l->setNo(e.readInt());
+                    if (l->isEven()) {
+                        l->setEven(true);
+                        l->initTextStyleType(TextStyleType::LYRICS_EVEN);
+                    }
                 } else if (t == "syllabic") {
                     String val(e.readText());
                     if (val == "single") {
@@ -2068,11 +2137,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 segment->add(el);
             }
         } else if (tag == "stretch") {
-            double val = e.readDouble();
-            if (val < 0.0) {
-                val = 0;
-            }
-            m->setUserStretch(val);
+            // Ignore measure stretch pre 4.0
+            e.skipCurrentElement();
         } else if (tag == "noOffset") {
             m->setNoOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
@@ -2162,8 +2228,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         Fraction tupletTick = tuplet->tick();
         Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
         std::vector<DurationElement*> tElements = tuplet->elements();
-        for (auto& p : ctx.tuplets()) {
-            Tuplet* tuplet2 = p.second;
+        for (auto& p2 : ctx.tuplets()) {
+            Tuplet* tuplet2 = p2.second;
             if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) {     // already a nested tuplet or in a different voice
                 continue;
             }
@@ -2771,7 +2837,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             read400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
-            read400::TRead::read(masterScore->_sigmap, e, ctx);
+            read400::TRead::read(masterScore->m_sigmap, e, ctx);
         } else if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
@@ -2909,7 +2975,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             } else {
                 Excerpt* ex = new Excerpt(masterScore);
                 read400::TRead::read(ex, e, ctx);
-                masterScore->_excerpts.push_back(ex);
+                masterScore->m_excerpts.push_back(ex);
             }
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
@@ -2939,7 +3005,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         }
         for (auto i : s->clefList()) {
             Fraction tick   = Fraction::fromTicks(i.first);
-            ClefType clefId = i.second._concertClef;
+            ClefType clefId = i.second.concertClef;
             Measure* m      = masterScore->tick2measure(tick);
             if (!m) {
                 continue;
@@ -3006,7 +3072,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
                 // fix ottava position
                 yo = masterScore->styleValue(Pid::OFFSET, Sid::ottavaPosAbove).value<PointF>().y();
                 if (s->placeBelow()) {
-                    yo = -yo + s->staff()->height();
+                    yo = -yo + s->staff()->staffHeight();
                 }
             } else if (s->isPedal()) {
                 yo = masterScore->styleValue(Pid::OFFSET, Sid::pedalPosBelow).value<PointF>().y();
@@ -3133,13 +3199,13 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     // create excerpts
 
     std::vector<Excerpt*> readExcerpts;
-    readExcerpts.swap(masterScore->_excerpts);
+    readExcerpts.swap(masterScore->m_excerpts);
     for (Excerpt* excerpt : readExcerpts) {
         if (excerpt->parts().empty()) {             // ignore empty parts
             continue;
         }
         if (!excerpt->parts().empty()) {
-            masterScore->_excerpts.push_back(excerpt);
+            masterScore->m_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
             ReadStyleHook::setupDefaultStyle(nscore);
             excerpt->setExcerptScore(nscore);
@@ -3177,6 +3243,11 @@ bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
 }
 
 void Read114::pasteSymbols(XmlReader&, ChordRest*)
+{
+    UNREACHABLE;
+}
+
+void Read114::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
 {
     UNREACHABLE;
 }

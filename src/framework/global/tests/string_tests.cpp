@@ -622,28 +622,6 @@ TEST_F(Global_Types_StringTests, String_ToInt)
         EXPECT_FALSE(ok);
         EXPECT_EQ(v, 0);
     }
-
-    {
-        //! GIVEN Some string
-        String s("123.456");
-        //! DO
-        bool ok = false;
-        int v = s.toInt(&ok);
-        //! CHECK
-        EXPECT_TRUE(ok);
-        EXPECT_EQ(v, 123);
-    }
-
-    {
-        //! GIVEN Some string
-        String s("123.456a");
-        //! DO
-        bool ok = false;
-        int v = s.toInt(&ok);
-        //! CHECK
-        EXPECT_FALSE(ok);
-        EXPECT_EQ(v, 0);
-    }
 }
 
 TEST_F(Global_Types_StringTests, AsciiString_Construct)
@@ -765,28 +743,6 @@ TEST_F(Global_Types_StringTests, AsciiString_ToInt)
         EXPECT_FALSE(ok);
         EXPECT_EQ(v, 0);
     }
-
-    {
-        //! GIVEN Some string
-        String s("123.456");
-        //! DO
-        bool ok = false;
-        int v = s.toInt(&ok);
-        //! CHECK
-        EXPECT_TRUE(ok);
-        EXPECT_EQ(v, 123);
-    }
-
-    {
-        //! GIVEN Some string
-        String s("123.456а");
-        //! DO
-        bool ok = false;
-        int v = s.toInt(&ok);
-        //! CHECK
-        EXPECT_FALSE(ok);
-        EXPECT_EQ(v, 0);
-    }
 }
 
 TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
@@ -815,50 +771,6 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
 
     {
         //! GIVEN Some string
-        AsciiStringView s("2.1a");
-        //! DO
-        bool ok = false;
-        double v = s.toDouble(&ok);
-        //! CHECK
-        EXPECT_TRUE(ok);
-        EXPECT_DOUBLE_EQ(v, 2.1);
-    }
-
-    {
-        //! GIVEN Some string
-        AsciiStringView s("234a1");
-        //! DO
-        bool ok = false;
-        double v = s.toDouble(&ok);
-        //! CHECK
-        EXPECT_TRUE(ok);
-        EXPECT_DOUBLE_EQ(v, 234.0);
-    }
-
-    {
-        //! GIVEN Some string
-        AsciiStringView s("2.");
-        //! DO
-        bool ok = false;
-        double v = s.toDouble(&ok);
-        //! CHECK
-        EXPECT_TRUE(ok);
-        EXPECT_DOUBLE_EQ(v, 2.0);
-    }
-
-    {
-        //! GIVEN Some string
-        AsciiStringView s(".2");
-        //! DO
-        bool ok = false;
-        double v = s.toDouble(&ok);
-        //! CHECK
-        EXPECT_TRUE(ok);
-        EXPECT_DOUBLE_EQ(v, 0.2);
-    }
-
-    {
-        //! GIVEN Some string
         AsciiStringView s("2,1");
         //! DO
         bool ok = false;
@@ -880,6 +792,40 @@ TEST_F(Global_Types_StringTests, AsciiString_ToDouble)
     }
 }
 
+TEST_F(Global_Types_StringTests, String_DecodeXmlEntities)
+{
+    String ret = String::decodeXmlEntities(u"gg &#33; &#37;&#37;");
+    EXPECT_EQ(ret, String(u"gg ! %%"));
+}
+
+TEST_F(Global_Types_StringTests, String_Contains)
+{
+    //! GIVEN Regex (taken from musicxml parsing, for determining coda, segno, etc):
+    std::wregex re(L"^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+
+    {
+        //! GIVEN String:
+        String str(u"d.segno. al coda");
+
+        //! DO
+        bool ret = str.contains(re);
+
+        //! CHECK
+        EXPECT_TRUE(ret);
+    }
+
+    {
+        //! GIVEN String:
+        String str(u"d.segno. alcoda");
+
+        //! DO
+        bool ret = str.contains(re);
+
+        //! CHECK
+        EXPECT_FALSE(ret);
+    }
+}
+
 TEST_F(Global_Types_StringTests, String_Remove)
 {
     //! GIVEN Some String
@@ -894,4 +840,91 @@ TEST_F(Global_Types_StringTests, String_Remove)
 
     //! CHECK
     EXPECT_EQ(s, "13abc");
+}
+
+TEST_F(Global_Types_StringTests, UtfCodec_Encoding)
+{
+    {
+        //! GIVEN UTF-8 data with BOM
+        const uint8_t data[] = { 239, 187, 191, '<', ' ', 'x', 'm', 'l' };
+        ByteArray ba(&data[0], 8);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_8);
+    }
+    {
+        //! GIVEN UTF-8 data no BOM
+        const uint8_t data[] = { '<', ' ', 'x', 'm', 'l' };
+        ByteArray ba(&data[0], 5);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_8);
+    }
+
+    {
+        //! GIVEN UTF-16 LE data with BOM
+        const uint8_t data[] = { 255, 254, '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 12);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16LE);
+    }
+
+    {
+        //! GIVEN UTF-16 LE data no BOM
+        const uint8_t data[] = { '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 10);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16LE);
+    }
+
+    {
+        //! GIVEN UTF-16 BE data with BOM
+        const uint8_t data[] = { 254, 255, '\0', '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l' };
+        ByteArray ba(&data[0], 12);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16BE);
+    }
+
+    {
+        //! GIVEN UTF-16 BE data no BOM
+        const uint8_t data[] = { '\0', '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l' };
+        ByteArray ba(&data[0], 10);
+        //! DO
+        UtfCodec::Encoding enc = UtfCodec::xmlEncoding(ba);
+        //! CHECK
+        EXPECT_EQ(enc, UtfCodec::Encoding::UTF_16BE);
+    }
+
+    //! NOTE At the moment others not implemented
+}
+
+TEST_F(Global_Types_StringTests, String_FromUtf16LE)
+{
+    {
+        //! GIVEN UTF-16 LE data no BOM
+        const uint8_t data[] = { '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 10);
+        //! DO
+        String str = String::fromUtf16LE(ba);
+        //! CHECK
+        EXPECT_EQ(str, u"< xml");
+    }
+
+    {
+        //! GIVEN UTF-16 LE data with BOM
+        const uint8_t data[] = { 255, 254, '<', '\0', ' ', '\0', 'x', '\0', 'm', '\0', 'l', '\0' };
+        ByteArray ba(&data[0], 12);
+        //! DO
+        String str = String::fromUtf16LE(ba);
+        //! CHECK
+        EXPECT_EQ(str, u"< xml");
+    }
 }

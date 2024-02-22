@@ -90,7 +90,7 @@ void ChordLine::startEditDrag(EditData& ed)
 
 void ChordLine::editDrag(EditData& ed)
 {
-    const draw::PainterPath& path = mutLayoutData()->path;
+    const draw::PainterPath& path = mutldata()->path;
 
     auto n = path.elementCount();
     PainterPath p;
@@ -163,7 +163,7 @@ void ChordLine::editDrag(EditData& ed)
         break;
         }
     }
-    mutLayoutData()->path = p;
+    mutldata()->path = p;
     m_modified = true;
 }
 
@@ -178,11 +178,11 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         return {};
     }
 
-    IF_ASSERT_FAILED(layoutData()) {
+    IF_ASSERT_FAILED(ldata()) {
         return {};
     }
 
-    const draw::PainterPath& path = layoutData()->path;
+    const draw::PainterPath& path = ldata()->path;
 
     size_t n = path.elementCount();
     PointF cp(pagePos());
@@ -267,7 +267,7 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PATH:
-        return PropertyValue::fromValue(layoutData()->path);
+        return PropertyValue::fromValue(ldata()->path);
     case Pid::CHORD_LINE_TYPE:
         return int(m_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:
@@ -290,7 +290,7 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PATH:
-        mutLayoutData()->path = val.value<PainterPath>();
+        mutldata()->path = val.value<PainterPath>();
         break;
     case Pid::CHORD_LINE_TYPE:
         setChordLineType(ChordLineType(val.toInt()));

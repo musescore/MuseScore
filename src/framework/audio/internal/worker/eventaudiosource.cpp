@@ -22,31 +22,36 @@
 
 #include "eventaudiosource.h"
 
-#include "log.h"
-
 #include "internal/audiosanitizer.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::mpe;
 
-EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData)
+EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData,
+                                   OnOffStreamEventsReceived onOffStreamReceived)
     : m_trackId(trackId), m_playbackData(playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events) {
-        m_playbackData.originEvents = events;
+    m_playbackData.offStream.onReceive(this, [onOffStreamReceived, trackId](const PlaybackEventsMap&, const PlaybackParamMap&) {
+        onOffStreamReceived(trackId);
     });
 
-    m_playbackData.dynamicLevelChanges.onReceive(this, [this](const DynamicLevelMap& changes) {
-        m_playbackData.dynamicLevelMap = changes;
+    m_playbackData.mainStream.onReceive(this, [this](const PlaybackEventsMap& events, const DynamicLevelMap& dynamics,
+                                                     const PlaybackParamMap& params) {
+        m_playbackData.originEvents = events;
+        m_playbackData.dynamicLevelMap = dynamics;
+        m_playbackData.paramMap = params;
     });
 }
 
 EventAudioSource::~EventAudioSource()
 {
+    m_playbackData.offStream.resetOnReceive(this);
     m_playbackData.mainStream.resetOnReceive(this);
 }
 

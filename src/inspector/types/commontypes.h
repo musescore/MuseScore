@@ -56,11 +56,21 @@ struct ElementKey
 using ElementKeyList = QList<ElementKey>;
 using ElementKeySet = QSet<ElementKey>;
 
+#ifdef MU_QT5_COMPAT
 inline uint qHash(const ElementKey& key)
 {
     QString subtypePart = key.subtype >= 0 ? QString::number(key.subtype) : "";
     return qHash(QString::number(static_cast<int>(key.type)) + subtypePart);
 }
+
+#else
+inline size_t qHash(const ElementKey& key)
+{
+    QString subtypePart = key.subtype >= 0 ? QString::number(key.subtype) : "";
+    return qHash(QString::number(static_cast<int>(key.type)) + subtypePart);
+}
+
+#endif
 
 class CommonTypes
 {

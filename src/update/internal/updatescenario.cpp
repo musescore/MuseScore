@@ -23,7 +23,8 @@
 #include "updatescenario.h"
 
 #include <QTimer>
-#include <QtConcurrent>
+
+#include "global/concurrency/concurrent.h"
 
 #include "updateerrors.h"
 
@@ -118,7 +119,7 @@ void UpdateScenario::doCheckForUpdate(bool manual)
         showReleaseInfo(info);
     });
 
-    QtConcurrent::run(this, &UpdateScenario::th_heckForUpdate);
+    Concurrent::run(this, &UpdateScenario::th_heckForUpdate);
 }
 
 void UpdateScenario::th_heckForUpdate()
@@ -157,7 +158,7 @@ void UpdateScenario::processUpdateResult(int errorCode)
 void UpdateScenario::showNoUpdateMsg()
 {
     QString str = qtrc("update", "You already have the latest version of MuseScore. "
-                                 "Please visit <a href=\"%1\">musescore.org</a> for news on what's coming next.")
+                                 "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);

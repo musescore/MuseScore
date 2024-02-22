@@ -31,7 +31,6 @@
 #include "dom/excerpt.h"
 #include "dom/part.h"
 #include "dom/stem.h"
-#include "dom/tremolo.h"
 #include "dom/linkedobjects.h"
 #include "dom/measure.h"
 #include "dom/factory.h"
@@ -97,6 +96,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     }
     if (masterScore->mscVersion() < 420) {
         addMissingInitKeyForTransposingInstrument(masterScore);
+        resetFramesExclusionFromParts(masterScore);
     }
 }
 
@@ -194,7 +194,7 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
         excerpt->setInitialPartId(initialPartId);
         assignedPartIdSet.insert(initialPartId);
     };
-    // Excerpt name is same as Part name (Violin - Violin)
+
     for (Excerpt* excerpt : excerpts) {
         for (const Part* part : excerpt->excerptScore()->parts()) {
             if (excerpt->name() == part->partName()) {
@@ -203,7 +203,7 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
             }
         }
     }
-    // Excerpt name contains Part name (Violin1 - Violin)
+
     for (Excerpt* excerpt : excerpts) {
         if (excerpt->initialPartId().isValid()) {
             continue;
@@ -218,38 +218,6 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
                 assignInitialPartId(excerpt, part->id());
                 break;
             }
-        }
-    }
-    // Excerpt contains only single instrument
-    for (Excerpt* excerpt : excerpts) {
-        if (excerpt->initialPartId().isValid()) {
-            continue;
-        }
-
-        for (Part* part : excerpt->excerptScore()->parts()) {
-            if (mu::contains(assignedPartIdSet, part->id())) {
-                continue;
-            }
-
-            if (excerpt->excerptScore()->parts().size() == 1) {
-                assignInitialPartId(excerpt, part->id());
-                break;
-            }
-        }
-    }
-    // Excerpt contains instrument
-    for (Excerpt* excerpt : excerpts) {
-        if (excerpt->initialPartId().isValid()) {
-            continue;
-        }
-
-        for (Part* part : excerpt->excerptScore()->parts()) {
-            if (mu::contains(assignedPartIdSet, part->id())) {
-                continue;
-            }
-
-            assignInitialPartId(excerpt, part->id());
-            break;
         }
     }
 }
@@ -298,6 +266,8 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
         newOrnament->setPos(oldOrnament->pos());
         newOrnament->setOrnamentStyle(oldOrnament->ornamentStyle());
         newOrnament->setDirection(oldOrnament->direction());
+        newOrnament->setAutoplace(oldOrnament->autoplace());
+        newOrnament->setPlayArticulation(oldOrnament->playArticulation());
 
         LinkedObjects* links = oldOrnament->links();
         newOrnament->setLinks(links);
@@ -587,9 +557,9 @@ void CompatUtils::resetStemLengthsForTwoNoteTrems(MasterScore* masterScore)
                         continue;
                     }
                     Chord* chord = toChord(item);
-                    Tremolo* trem = chord->tremolo();
+                    TremoloTwoChord* trem = chord->tremoloTwoChord();
                     Stem* stem = chord->stem();
-                    if (stem && trem && trem->twoNotes()) {
+                    if (stem && trem) {
                         if (stem->userLength() != Millimetre(0)) {
                             stem->setUserLength(Millimetre(0));
                         }
@@ -683,6 +653,17 @@ void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
                     kse.setKey(key);
                     score->undoChangeKeySig(staff, Fraction(0, 1), kse);
                 }
+            }
+        }
+    }
+}
+
+void CompatUtils::resetFramesExclusionFromParts(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* measureBase = score->first(); measureBase; measureBase = measureBase->next()) {
+            if (!measureBase->isMeasure()) {
+                measureBase->setExcludeFromOtherParts(false);
             }
         }
     }

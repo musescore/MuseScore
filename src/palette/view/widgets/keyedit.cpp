@@ -249,7 +249,11 @@ void KeyCanvas::dragMoveEvent(QDragMoveEvent* event)
 {
     if (dragElement) {
         event->acceptProposedAction();
+#ifdef MU_QT5_COMPAT
         PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
+#else
+        PointF pos = PointF::fromQPointF(imatrix.map(event->position()));
+#endif
         dragElement->setPos(pos);
         update();
     }
@@ -279,19 +283,19 @@ void KeyCanvas::snap(Accidental* a)
 {
     double _spatium = gpaletteScore->style().spatium();
     double spatium2 = _spatium * .5;
-    double y = a->layoutData()->pos().y();
+    double y = a->ldata()->pos().y();
     int line = round(y / spatium2);
     y = line * spatium2;
-    a->mutLayoutData()->setPosY(y);
+    a->mutldata()->setPosY(y);
     // take default xposition unless Control is pressed
     int i = accidentals.indexOf(a);
     if (i > 0) {
         qreal accidentalGap = DefaultStyle::baseStyle().styleS(Sid::keysigAccidentalDistance).val();
         Accidental* prev = accidentals[i - 1];
-        double prevX = prev->layoutData()->pos().x();
+        double prevX = prev->ldata()->pos().x();
         qreal prevWidth = prev->symWidth(prev->symId());
         if (!QGuiApplication::keyboardModifiers().testFlag(Qt::ControlModifier)) {
-            a->mutLayoutData()->setPosX(prevX + prevWidth + accidentalGap * _spatium);
+            a->mutldata()->setPosX(prevX + prevWidth + accidentalGap * _spatium);
         }
     }
 }
@@ -368,11 +372,13 @@ KeyEditor::KeyEditor(QWidget* parent)
     setFocus();
 }
 
+#ifdef MU_QT5_COMPAT
 KeyEditor::KeyEditor(const KeyEditor& widget)
     : KeyEditor(widget.parentWidget())
 {
 }
 
+#endif
 //---------------------------------------------------------
 //   addClicked
 //---------------------------------------------------------
@@ -384,7 +390,7 @@ void KeyEditor::addClicked()
     double xoff = 10000000.0;
 
     for (Accidental* a : al) {
-        PointF pos = a->layoutData()->pos();
+        PointF pos = a->ldata()->pos();
         if (pos.x() < xoff) {
             xoff = pos.x();
         }
@@ -397,11 +403,11 @@ void KeyEditor::addClicked()
         Accidental* a = al[i];
         CustDef c;
         c.sym = a->symId();
-        PointF pos = a->layoutData()->pos();
+        PointF pos = a->ldata()->pos();
         c.xAlt = (pos.x() - xoff) / spatium;
         if (i > 0) {
             Accidental* prev = al[i - 1];
-            PointF prevPos = prev->layoutData()->pos();
+            PointF prevPos = prev->ldata()->pos();
             qreal prevWidth = prev->symWidth(prev->symId());
             c.xAlt -= (prevPos.x() - xoff + prevWidth) / spatium + accidentalGap;
         }

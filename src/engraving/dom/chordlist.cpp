@@ -51,7 +51,7 @@ HChord::HChord(const String& str)
         { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
         { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" }
     };
-    keys = 0;
+    m_keys = 0;
     StringList sl = str.split(u' ', mu::SkipEmptyParts);
     for (const String& s : sl) {
         for (int i = 0; i < 12; ++i) {
@@ -69,7 +69,7 @@ HChord::HChord(const String& str)
 
 HChord::HChord(int a, int b, int c, int d, int e, int f, int g, int h, int i, int k, int l)
 {
-    keys = 0;
+    m_keys = 0;
     if (a >= 0) {
         operator+=(a);
     }
@@ -113,18 +113,18 @@ HChord::HChord(int a, int b, int c, int d, int e, int f, int g, int h, int i, in
 void HChord::rotate(int semiTones)
 {
     while (semiTones > 0) {
-        if (keys & 0x800) {
-            keys = ((keys & ~0x800) << 1) + 1;
+        if (m_keys & 0x800) {
+            m_keys = ((m_keys & ~0x800) << 1) + 1;
         } else {
-            keys <<= 1;
+            m_keys <<= 1;
         }
         --semiTones;
     }
     while (semiTones < 0) {
-        if (keys & 1) {
-            keys = (keys >> 1) | 0x800;
+        if (m_keys & 1) {
+            m_keys = (m_keys >> 1) | 0x800;
         } else {
-            keys >>= 1;
+            m_keys >>= 1;
         }
         ++semiTones;
     }
@@ -458,16 +458,6 @@ void ChordToken::write(XmlWriter& xml) const
 }
 
 //---------------------------------------------------------
-//  ParsedChord
-//---------------------------------------------------------
-
-ParsedChord::ParsedChord()
-{
-    _parseable = false;
-    _understandable = false;
-}
-
-//---------------------------------------------------------
 //  configure
 //---------------------------------------------------------
 
@@ -477,15 +467,15 @@ void ParsedChord::configure(const ChordList* cl)
         return;
     }
     // TODO: allow this to be parameterized via chord list
-    major << u"ma" << u"maj" << u"major" << u"t" << u"^";
-    minor << u"mi" << u"min" << u"minor" << u"-" << u"=";
-    diminished << u"dim" << u"o";
-    augmented << u"aug" << u"+";
-    lower << u"b" << u"-" << u"dim";
-    raise << u"#" << u"+" << u"aug";
-    mod1 << u"sus" << u"alt";
-    mod2 << u"sus" << u"add" << u"no" << u"omit" << u"^";
-    symbols << u"t" << u"^" << u"-" << u"+" << u"o" << u"0";
+    m_major << u"ma" << u"maj" << u"major" << u"t" << u"^";
+    m_minor << u"mi" << u"min" << u"minor" << u"-" << u"=";
+    m_diminished << u"dim" << u"o";
+    m_augmented << u"aug" << u"+";
+    m_lower << u"b" << u"-" << u"dim";
+    m_raise << u"#" << u"+" << u"aug";
+    m_mod1 << u"sus" << u"alt";
+    m_mod2 << u"sus" << u"add" << u"no" << u"omit" << u"^";
+    m_symbols << u"t" << u"^" << u"-" << u"+" << u"o" << u"0";
 }
 
 //---------------------------------------------------------
@@ -496,7 +486,7 @@ void ParsedChord::configure(const ChordList* cl)
 
 void ParsedChord::correctXmlText(const String& s)
 {
-    String xmlText = _xmlText;
+    String xmlText = m_xmlText;
     xmlText.remove(std::regex("[0-9]"));
     if (s != "") {
         size_t pos = xmlText.lastIndexOf(u')');
@@ -505,7 +495,7 @@ void ParsedChord::correctXmlText(const String& s)
         }
         xmlText.insert(pos, s);
     }
-    _xmlText = xmlText;
+    m_xmlText = xmlText;
 }
 
 //---------------------------------------------------------
@@ -531,11 +521,11 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
     int key[] = { 0, 0, 2, 4, 5, 7, 9, 11, 0, 2, 4, 5, 7, 9, 11 };
 
     configure(cl);
-    _name = s;
-    _parseable = true;
-    _understandable = true;
+    m_name = s;
+    m_parseable = true;
+    m_understandable = true;
 
-    lastLeadingToken = _tokenList.size();
+    lastLeadingToken = m_tokenList.size();
     // get quality
     for (tok1 = u"", tok1L = u"", initial = u""; i < len; ++i) {
         // up to first (non-zero) digit, paren, or comma
@@ -544,7 +534,8 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         }
         tok1.append(s.at(i));
         tok1L.append(s.at(i).toLower());
-        if (tok1L == u"m" || major.contains(tok1L) || minor.contains(tok1L) || diminished.contains(tok1L) || augmented.contains(tok1L)) {
+        if (tok1L == u"m" || m_major.contains(tok1L) || m_minor.contains(tok1L) || m_diminished.contains(tok1L)
+            || m_augmented.contains(tok1L)) {
             initial = tok1;
         }
     }
@@ -560,61 +551,61 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         tok1L = initial.toLower();
     }
     // determine quality
-    if (tok1 == u"M" || major.contains(tok1L)) {
-        _quality = u"major";
+    if (tok1 == u"M" || m_major.contains(tok1L)) {
+        m_quality = u"major";
         take6 = true;
         take7 = true;
         take9 = true;
         take11 = true;
         take13 = true;
         if (!syntaxOnly) {
-            chord = HChord(u"C E G");
+            m_chord = HChord(u"C E G");
         }
-    } else if (tok1 == u"m" || minor.contains(tok1L)) {
-        _quality = u"minor";
+    } else if (tok1 == u"m" || m_minor.contains(tok1L)) {
+        m_quality = u"minor";
         take6 = true;
         take7 = true;
         take9 = true;
         take11 = true;
         take13 = true;
         if (!syntaxOnly) {
-            chord = HChord(u"C Eb G");
+            m_chord = HChord(u"C Eb G");
         }
-    } else if (diminished.contains(tok1L)) {
-        _quality = u"diminished";
+    } else if (m_diminished.contains(tok1L)) {
+        m_quality = u"diminished";
         take7 = true;
         if (!syntaxOnly) {
-            chord = HChord(u"C Eb Gb");
+            m_chord = HChord(u"C Eb Gb");
         }
-    } else if (augmented.contains(tok1L)) {
-        _quality = u"augmented";
+    } else if (m_augmented.contains(tok1L)) {
+        m_quality = u"augmented";
         take7 = true;
         if (!syntaxOnly) {
-            chord = HChord(u"C E G#");
+            m_chord = HChord(u"C E G#");
         }
     } else if (tok1L == "0") {
-        _quality = u"half-diminished";
+        m_quality = u"half-diminished";
         if (!syntaxOnly) {
-            chord = HChord(u"C Eb Gb Bb");
+            m_chord = HChord(u"C Eb Gb Bb");
         }
     } else if (tok1L == "") {
         // empty quality - this will turn out to be major or dominant (or minor if preferMinor)
-        _quality = u"";
+        m_quality = u"";
         if (!syntaxOnly) {
-            chord = preferMinor ? HChord(u"C Eb G") : HChord(u"C E G");
+            m_chord = preferMinor ? HChord(u"C Eb G") : HChord(u"C E G");
         }
         if (preferMinor) {
-            _name = u"=" + _name;
+            m_name = u"=" + m_name;
         }
     } else {
         // anything else is not a quality after all, but a modifier
         // reset to read again as modifier
-        _quality = u"";
+        m_quality = u"";
         tok1 = u"";
         tok1L = u"";
         i = static_cast<int>(lastLeadingToken);
         if (!syntaxOnly) {
-            chord = HChord(u"C E G");
+            m_chord = HChord(u"C E G");
         }
     }
     if (tok1L == "=") {
@@ -625,14 +616,14 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         addToken(tok1, ChordTokenClass::QUALITY);
     }
     if (!syntaxOnly) {
-        _xmlKind = _quality;
-        _xmlParens = u"no";
-        if (symbols.contains(tok1)) {
-            _xmlSymbols = u"yes";
-            _xmlText = u"";
+        m_xmlKind = m_quality;
+        m_xmlParens = u"no";
+        if (m_symbols.contains(tok1)) {
+            m_xmlSymbols = u"yes";
+            m_xmlText = u"";
         } else {
-            _xmlSymbols = u"no";
-            _xmlText = tok1;
+            m_xmlSymbols = u"no";
+            m_xmlText = tok1;
         }
     }
     // eat trailing parens and commas
@@ -640,7 +631,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         addToken(String(s.at(i++)), ChordTokenClass::QUALITY);
     }
 
-    lastLeadingToken = _tokenList.size();
+    lastLeadingToken = m_tokenList.size();
     // get extension - up to first non-digit other than comma or slash
     for (tok1 = u""; i < len; ++i) {
         if (!s.at(i).isDigit() && s.at(i) != ',' && s.at(i) != '/') {
@@ -648,21 +639,21 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         }
         tok1.append(s.at(i));
     }
-    _extension = tok1;
-    if (_quality == "") {
-        if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
-            _quality = preferMinor ? u"minor" : u"dominant";
+    m_extension = tok1;
+    if (m_quality == "") {
+        if (m_extension == "7" || m_extension == "9" || m_extension == "11" || m_extension == "13") {
+            m_quality = preferMinor ? u"minor" : u"dominant";
             if (!syntaxOnly) {
-                _xmlKind = preferMinor ? u"minor" : u"dominant";
+                m_xmlKind = preferMinor ? u"minor" : u"dominant";
             }
             take7 = true;
             take9 = true;
             take11 = true;
             take13 = true;
         } else {
-            _quality = preferMinor ? u"minor" : u"major";
+            m_quality = preferMinor ? u"minor" : u"major";
             if (!syntaxOnly) {
-                _xmlKind = preferMinor ? u"minor" : u"major";
+                m_xmlKind = preferMinor ? u"minor" : u"major";
             }
             take6 = true;
             take7 = true;
@@ -675,117 +666,117 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         addToken(tok1, ChordTokenClass::EXTENSION);
     }
     if (!syntaxOnly) {
-        if (_quality == "minor") {
+        if (m_quality == "minor") {
             thirdKey = 3;
         } else {
             thirdKey = 4;
         }
-        if (_quality == "major") {
+        if (m_quality == "major") {
             seventhKey = 11;
-        } else if (_quality == "diminished") {
+        } else if (m_quality == "diminished") {
             seventhKey = 9;
         } else {
             seventhKey = 10;
         }
-        _xmlText += _extension;
+        m_xmlText += m_extension;
         StringList extl;
         if (tok1 == "2") {
             String d = u"add" + tok1;
-            _xmlDegrees << d;
-            _xmlText.remove(tok1);
-            chord += 2;
+            m_xmlDegrees << d;
+            m_xmlText.remove(tok1);
+            m_chord += 2;
         } else if (tok1 == "4") {
             String d = u"add" + tok1;
-            _xmlDegrees << d;
-            _xmlText.remove(tok1);
-            chord += 5;
+            m_xmlDegrees << d;
+            m_xmlText.remove(tok1);
+            m_chord += 5;
         } else if (tok1 == "5") {
-            _xmlKind = u"power";
-            chord -= thirdKey;
+            m_xmlKind = u"power";
+            m_chord -= thirdKey;
         } else if (tok1 == "6") {
             if (take6) {
-                _xmlKind += u"-sixth";
+                m_xmlKind += u"-sixth";
             } else {
                 extl << u"6";
             }
-            chord += 9;
+            m_chord += 9;
         } else if (tok1 == "7") {
             if (take7) {
-                _xmlKind += u"-seventh";
-            } else if (_xmlKind != "half-diminished") {
+                m_xmlKind += u"-seventh";
+            } else if (m_xmlKind != "half-diminished") {
                 extl << u"7";
             }
-            chord += seventhKey;
+            m_chord += seventhKey;
         } else if (tok1 == "9") {
             if (take9) {
-                _xmlKind += u"-ninth";
+                m_xmlKind += u"-ninth";
             } else if (take7) {
-                _xmlKind += u"-seventh";
+                m_xmlKind += u"-seventh";
                 extl << u"9";
                 correctXmlText(u"7");
-            } else if (_xmlKind == u"half-diminished") {
+            } else if (m_xmlKind == u"half-diminished") {
                 extl << u"9";
                 correctXmlText();
             } else {
                 extl << u"7" << u"9";
                 correctXmlText();
             }
-            chord += seventhKey;
-            chord += 2;
+            m_chord += seventhKey;
+            m_chord += 2;
         } else if (tok1 == u"11") {
             if (take11) {
-                _xmlKind += u"-11th";
+                m_xmlKind += u"-11th";
             } else if (take7) {
-                _xmlKind += u"-seventh";
+                m_xmlKind += u"-seventh";
                 extl << u"9" << u"11";
                 correctXmlText(u"7");
-            } else if (_xmlKind == u"half-diminished") {
+            } else if (m_xmlKind == u"half-diminished") {
                 extl << u"9" << u"11";
                 correctXmlText();
             } else {
                 extl << u"7" << u"9" << u"11";
                 correctXmlText();
             }
-            chord += seventhKey;
-            chord += 2;
-            chord += 5;
+            m_chord += seventhKey;
+            m_chord += 2;
+            m_chord += 5;
         } else if (tok1 == u"13") {
             if (take13) {
-                _xmlKind += u"-13th";
+                m_xmlKind += u"-13th";
             } else if (take7) {
-                _xmlKind += u"-seventh";
+                m_xmlKind += u"-seventh";
                 extl << u"9" << u"11" << u"13";
                 correctXmlText(u"7");
-            } else if (_xmlKind == u"half-diminished") {
+            } else if (m_xmlKind == u"half-diminished") {
                 extl << u"9" << u"11" << u"13";
                 correctXmlText();
             } else {
                 extl << u"7" << u"9" << u"11" << u"13";
                 correctXmlText();
             }
-            chord += seventhKey;
-            chord += 2;
-            chord += 5;
-            chord += 9;
+            m_chord += seventhKey;
+            m_chord += 2;
+            m_chord += 5;
+            m_chord += 9;
         } else if (tok1 == u"69" || tok1 == u"6,9" || tok1 == u"6/9") {
             if (take6) {
-                _xmlKind += u"-sixth";
+                m_xmlKind += u"-sixth";
                 extl << u"9";
                 correctXmlText(u"6");
             } else {
                 extl << u"6" << u"9";
                 correctXmlText();
             }
-            _extension = u"69";
-            chord += 9;
-            chord += 2;
+            m_extension = u"69";
+            m_chord += 9;
+            m_chord += 2;
         }
         for (const String& e : extl) {
             String d = u"add" + e;
-            _xmlDegrees << d;
+            m_xmlDegrees << d;
         }
-        if (_xmlKind == u"dominant-seventh") {
-            _xmlKind = u"dominant";
+        if (m_xmlKind == u"dominant-seventh") {
+            m_xmlKind = u"dominant";
         }
     }
     // eat trailing parens and commas
@@ -795,12 +786,12 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
 
     // get modifiers
     bool addPending = false;
-    _modifierList.clear();
+    m_modifierList.clear();
     while (i < len) {
         // eat leading parens
         while (i < len && leading.contains(s.at(i))) {
             addToken(String(s.at(i++)), ChordTokenClass::MODIFIER);
-            _xmlParens = u"yes";
+            m_xmlParens = u"yes";
         }
         // get first token - up to first digit, paren, or comma
         for (tok1 = u"", tok1L = u"", initial = u""; i < len; ++i) {
@@ -809,7 +800,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             }
             tok1.append(s.at(i));
             tok1L.append(s.at(i).toLower());
-            if (mod2.contains(tok1L)) {
+            if (m_mod2.contains(tok1L)) {
                 initial = tok1;
             }
         }
@@ -850,78 +841,78 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         tok2L = tok2.toLower();
         // re-attach "add"
         if (addPending) {
-            if (raise.contains(tok1L)) {
+            if (m_raise.contains(tok1L)) {
                 tok1L = u"#";
-            } else if (lower.contains(tok1L)) {
+            } else if (m_lower.contains(tok1L)) {
                 tok1L = u"b";
-            } else if (tok1 == "M" || major.contains(tok1L)) {
+            } else if (tok1 == "M" || m_major.contains(tok1L)) {
                 tok1L = u"major";
             }
             tok2L = tok1L + tok2L;
             tok1L = u"add";
         }
         // standardize spelling
-        if (tok1 == "M" || major.contains(tok1L)) {
+        if (tok1 == "M" || m_major.contains(tok1L)) {
             tok1L = u"major";
         } else if (tok1L == "omit") {
             tok1L = u"no";
         } else if (tok1L == "sus" && tok2L == "") {
             tok2L = u"4";
-        } else if (augmented.contains(tok1L) && tok2L == "") {
-            if (_quality == "dominant" && _extension == "7") {
-                _quality = u"augmented";
+        } else if (m_augmented.contains(tok1L) && tok2L == "") {
+            if (m_quality == "dominant" && m_extension == "7") {
+                m_quality = u"augmented";
                 if (!syntaxOnly) {
-                    _xmlKind = u"augmented-seventh";
-                    _xmlText = _extension + tok1;
-                    chord -= 7;
-                    chord += 8;
+                    m_xmlKind = u"augmented-seventh";
+                    m_xmlText = m_extension + tok1;
+                    m_chord -= 7;
+                    m_chord += 8;
                 }
                 tok1L = u"";
             } else {
                 tok1L = u"#";
                 tok2L = u"5";
             }
-        } else if (diminished.contains(tok1)) {
-            _quality = u"diminished";
+        } else if (m_diminished.contains(tok1)) {
+            m_quality = u"diminished";
             if (!syntaxOnly) {
-                _xmlKind = u"diminished";
-                _xmlText = _extension + tok1;
-                chord -= 4;
-                chord += 3;
-                chord -= 7;
-                chord += 6;
+                m_xmlKind = u"diminished";
+                m_xmlText = m_extension + tok1;
+                m_chord -= 4;
+                m_chord += 3;
+                m_chord -= 7;
+                m_chord += 6;
             }
             tok1L = u"";
-        } else if ((lower.contains(tok1L) || raise.contains(tok1L)) && tok2L == "") {
+        } else if ((m_lower.contains(tok1L) || m_raise.contains(tok1L)) && tok2L == "") {
             // trailing alteration - treat as applying to extension (and convert to modifier)
             // this handles C5b, C9#, etc
-            tok2L = _extension;
+            tok2L = m_extension;
             if (!syntaxOnly) {
-                _xmlKind = (_quality == u"dominant") ? u"major" : _quality;
-                _xmlText.remove(_extension);
-                if (_extension == "5") {
-                    chord += thirdKey;
+                m_xmlKind = (m_quality == u"dominant") ? u"major" : m_quality;
+                m_xmlText.remove(m_extension);
+                if (m_extension == "5") {
+                    m_chord += thirdKey;
                 } else {
-                    chord -= seventhKey;
+                    m_chord -= seventhKey;
                 }
             }
-            if (_quality == "dominant") {
-                _quality = u"major";
+            if (m_quality == "dominant") {
+                m_quality = u"major";
             }
-            _extension = u"";
-            if (lower.contains(tok1L)) {
+            m_extension = u"";
+            if (m_lower.contains(tok1L)) {
                 tok1L = u"b";
             } else {
                 tok1L = u"#";
             }
-        } else if (lower.contains(tok1L)) {
+        } else if (m_lower.contains(tok1L)) {
             tok1L = u"b";
-        } else if (raise.contains(tok1L)) {
+        } else if (m_raise.contains(tok1L)) {
             tok1L = u"#";
         }
         String m = tok1L + tok2L;
         if (m != "") {
-            _modifierList << m;
+            m_modifierList << m;
         }
         if (tok1 != "") {
             addToken(tok1, ChordTokenClass::MODIFIER);
@@ -948,16 +939,16 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                     // this was result of addPending
                     // alteration; tok1 = alter, tok2 = value
                     d = tok2.toInt();
-                    if (raise.contains(tok1) || tok1 == "M" || major.contains(tok1.toLower())) {
+                    if (m_raise.contains(tok1) || tok1 == "M" || m_major.contains(tok1.toLower())) {
                         if (d == 7) {
-                            chord += 11;
+                            m_chord += 11;
                             tok2L = u"#7";
-                        } else if (raise.contains(tok1)) {
+                        } else if (m_raise.contains(tok1)) {
                             hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
                         }
-                    } else if (lower.contains(tok1)) {
+                    } else if (m_lower.contains(tok1)) {
                         if (d == 7) {
-                            chord += 10;
+                            m_chord += 10;
                         } else {
                             hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
                         }
@@ -975,106 +966,106 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 // convert chords with sus into suspended "kind"
                 // extension then becomes a series of degree adds
                 if (tok2L == "4") {
-                    _xmlKind = u"suspended-fourth";
+                    m_xmlKind = u"suspended-fourth";
                 } else if (tok2L == "2") {
-                    _xmlKind = u"suspended-second";
+                    m_xmlKind = u"suspended-second";
                 }
-                _xmlText = tok1 + tok2;
-                if (_extension == "7" || _extension == "9" || _extension == "11" || _extension == "13") {
-                    _xmlDegrees << ((_quality == u"major") ? u"add#7" : u"add7");
+                m_xmlText = tok1 + tok2;
+                if (m_extension == "7" || m_extension == "9" || m_extension == "11" || m_extension == "13") {
+                    m_xmlDegrees << ((m_quality == u"major") ? u"add#7" : u"add7");
                     // hack for programs that cannot assemble names well
                     // even though the kind is suspended, set text to also include the extension
                     // in export, we will set the degree text to null
-                    _xmlText = _extension + _xmlText;
+                    m_xmlText = m_extension + m_xmlText;
                     degree = u"";
-                } else if (_extension != "") {
-                    degree = u"add" + _extension;
+                } else if (m_extension != "") {
+                    degree = u"add" + m_extension;
                 }
-                if (_extension == u"13") {
-                    _xmlDegrees << u"add9";
-                    _xmlDegrees << u"add11";
-                    _xmlDegrees << u"add13";
-                } else if (_extension == u"11") {
-                    _xmlDegrees << u"add9";
-                    _xmlDegrees << u"add11";
-                } else if (_extension == u"9") {
-                    _xmlDegrees << u"add9";
+                if (m_extension == u"13") {
+                    m_xmlDegrees << u"add9";
+                    m_xmlDegrees << u"add11";
+                    m_xmlDegrees << u"add13";
+                } else if (m_extension == u"11") {
+                    m_xmlDegrees << u"add9";
+                    m_xmlDegrees << u"add11";
+                } else if (m_extension == u"9") {
+                    m_xmlDegrees << u"add9";
                 }
                 susChord = true;
-                chord -= thirdKey;
+                m_chord -= thirdKey;
                 if (d) {
-                    chord += key[d];
+                    m_chord += key[d];
                 }
             } else if (tok1L == u"major") {
-                if (_xmlKind.startsWith(u"minor")) {
-                    _xmlKind = u"major-minor";
-                    if (_extension == u"9" || tok2L == u"9") {
-                        _xmlDegrees << u"add9";
+                if (m_xmlKind.startsWith(u"minor")) {
+                    m_xmlKind = u"major-minor";
+                    if (m_extension == u"9" || tok2L == u"9") {
+                        m_xmlDegrees << u"add9";
                     }
-                    if (_extension == "11" || tok2L == u"11") {
-                        _xmlDegrees << u"add9";
-                        _xmlDegrees << u"add11";
+                    if (m_extension == "11" || tok2L == u"11") {
+                        m_xmlDegrees << u"add9";
+                        m_xmlDegrees << u"add11";
                     }
-                    if (_extension == u"13" || tok2L == u"13") {
-                        _xmlDegrees << u"add9";
-                        _xmlDegrees << u"add11";
-                        _xmlDegrees << u"add13";
+                    if (m_extension == u"13" || tok2L == u"13") {
+                        m_xmlDegrees << u"add9";
+                        m_xmlDegrees << u"add11";
+                        m_xmlDegrees << u"add13";
                     }
-                    _xmlText += tok1 + tok2;
+                    m_xmlText += tok1 + tok2;
                     correctXmlText(u"7");
                 } else {
                     tok1L = u"add";
                 }
-                chord -= 10;
-                chord += 11;
+                m_chord -= 10;
+                m_chord += 11;
                 if (d && d != 7) {
                     hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
                 }
             } else if (tok1L == u"alt") {
-                _xmlDegrees << u"altb5";
-                _xmlDegrees << u"add#5";
-                _xmlDegrees << u"addb9";
-                _xmlDegrees << u"add#9";
-                chord -= 7;
-                chord += 6;
-                chord += 8;
-                chord += 1;
-                chord += 3;
+                m_xmlDegrees << u"altb5";
+                m_xmlDegrees << u"add#5";
+                m_xmlDegrees << u"addb9";
+                m_xmlDegrees << u"add#9";
+                m_chord -= 7;
+                m_chord += 6;
+                m_chord += 8;
+                m_chord += 1;
+                m_chord += 3;
             } else if (tok1L == u"blues") {
                 // this isn't really well-defined, but it might as well mean something
-                if (_extension == u"11" || _extension == u"13") {
-                    _xmlDegrees << u"alt#9";
+                if (m_extension == u"11" || m_extension == u"13") {
+                    m_xmlDegrees << u"alt#9";
                 } else {
-                    _xmlDegrees << u"add#9";
+                    m_xmlDegrees << u"add#9";
                 }
-                chord += 3;
+                m_chord += 3;
             } else if (tok1L == u"lyd") {
-                if (_extension == u"13") {
-                    _xmlDegrees << u"alt#11";
+                if (m_extension == u"13") {
+                    m_xmlDegrees << u"alt#11";
                 } else {
-                    _xmlDegrees << u"add#11";
+                    m_xmlDegrees << u"add#11";
                 }
-                chord += 6;
+                m_chord += 6;
             } else if (tok1L == "phryg") {
-                if (!_xmlKind.startsWith(u"minor")) {
-                    _xmlKind = u"minor-seventh";
+                if (!m_xmlKind.startsWith(u"minor")) {
+                    m_xmlKind = u"minor-seventh";
                 }
-                if (_extension == "11" || _extension == "13") {
-                    _xmlDegrees << u"altb9";
+                if (m_extension == "11" || m_extension == "13") {
+                    m_xmlDegrees << u"altb9";
                 } else {
-                    _xmlDegrees << u"addb9";
+                    m_xmlDegrees << u"addb9";
                 }
-                _xmlText += tok1;
-                chord = HChord(u"C Db Eb G Bb");
+                m_xmlText += tok1;
+                m_chord = HChord(u"C Db Eb G Bb");
             } else if (tok1L == "tristan") {
-                _xmlKind = u"Tristan";
-                _xmlText = tok1;
-                chord = HChord(u"C F# A# D#");
+                m_xmlKind = u"Tristan";
+                m_xmlText = tok1;
+                m_chord = HChord(u"C F# A# D#");
             } else if (addPending) {
                 degree = u"add" + tok1L + tok2L;
-                if (raise.contains(tok1L)) {
+                if (m_raise.contains(tok1L)) {
                     hdl.push_back(HDegree(d, 1, HDegreeType::ADD));
-                } else if (lower.contains(tok1L)) {
+                } else if (m_lower.contains(tok1L)) {
                     hdl.push_back(HDegree(d, -1, HDegreeType::ADD));
                 } else {
                     hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
@@ -1082,36 +1073,36 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
             } else if (tok1L == "" && tok2L != "") {
                 degree = u"add" + tok2L;
                 hdl.push_back(HDegree(d, 0, HDegreeType::ADD));
-            } else if (lower.contains(tok1L)) {
+            } else if (m_lower.contains(tok1L)) {
                 tok1L = u"b";
                 alter = true;
-            } else if (raise.contains(tok1L)) {
+            } else if (m_raise.contains(tok1L)) {
                 tok1L = u"#";
                 alter = true;
             } else if (tok1L == "") {
                 // token was already handled fully
             } else {
-                _understandable = false;
+                m_understandable = false;
                 if (s.startsWith(tok1)) {
                     // unrecognized token right from very beginning
-                    _xmlKind = u"other";
-                    _xmlText = tok1;
+                    m_xmlKind = u"other";
+                    m_xmlText = tok1;
                 }
             }
             if (alter) {
-                if (tok2L == "4" && _xmlKind == "suspended-fourth") {
+                if (tok2L == "4" && m_xmlKind == "suspended-fourth") {
                     degree = u"alt";
                 } else if (tok2L == "5") {
                     degree = u"alt";
-                } else if (tok2L == "9" && (_extension == "11" || _extension == "13")) {
+                } else if (tok2L == "9" && (m_extension == "11" || m_extension == "13")) {
                     degree = u"alt";
-                } else if (tok2L == "11" && _extension == "13") {
+                } else if (tok2L == "11" && m_extension == "13") {
                     degree = u"alt";
                 } else {
                     degree = u"add";
                 }
                 degree += tok1L + tok2L;
-                if (chord.contains(key[d]) && !(susChord && (d == 11))) {
+                if (m_chord.contains(key[d]) && !(susChord && (d == 11))) {
                     hdl.push_back(HDegree(d, 0, HDegreeType::SUBTRACT));
                 }
                 if (tok1L == "#") {
@@ -1121,7 +1112,7 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
                 }
             }
             if (degree != "") {
-                _xmlDegrees << degree;
+                m_xmlDegrees << degree;
             }
         }
         // eat trailing parens and commas
@@ -1131,45 +1122,45 @@ bool ParsedChord::parse(const String& s, const ChordList* cl, bool syntaxOnly, b
         addPending = false;
     }
     if (!syntaxOnly) {
-        chord.add(hdl);
+        m_chord.add(hdl);
         // fix "add" / "alt" conflicts
         // so add9,altb9 -> addb9
-        StringList altList = _xmlDegrees.filter(u"alt");
+        StringList altList = m_xmlDegrees.filter(u"alt");
         for (const String& d : altList) {
             String unalt(d);
             unalt.replace(std::regex("alt[b#]"), u"add");
-            if (_xmlDegrees.removeAll(unalt)) {
+            if (m_xmlDegrees.removeAll(unalt)) {
                 String alt(d);
                 alt.replace(u"alt", u"add");
-                size_t i1 = _xmlDegrees.indexOf(d);
-                _xmlDegrees.replace(i1, alt);
+                size_t i1 = m_xmlDegrees.indexOf(d);
+                m_xmlDegrees.replace(i1, alt);
             }
         }
     }
 
     // construct handle
-    if (!_modifierList.empty()) {
-        std::sort(_modifierList.begin(), _modifierList.end());
-        _modifiers = u"<" + _modifierList.join(u"><") + u">";
+    if (!m_modifierList.empty()) {
+        std::sort(m_modifierList.begin(), m_modifierList.end());
+        m_modifiers = u"<" + m_modifierList.join(u"><") + u">";
     }
-    _handle = u"<" + _quality + u"><" + _extension + u">" + _modifiers;
+    m_handle = u"<" + m_quality + u"><" + m_extension + u">" + m_modifiers;
 
     // force <minor><7><b5> to export as half-diminished
-    if (!syntaxOnly && _handle == u"<minor><7><b5>") {
-        _xmlKind = u"half-diminished";
-        _xmlText = s;
-        _xmlDegrees.clear();
+    if (!syntaxOnly && m_handle == u"<minor><7><b5>") {
+        m_xmlKind = u"half-diminished";
+        m_xmlText = s;
+        m_xmlDegrees.clear();
     }
     if (MScore::debugMode) {
-        LOGD("parse: source = <%s>, handle = %s", muPrintable(s), muPrintable(_handle));
+        LOGD("parse: source = <%s>, handle = %s", muPrintable(s), muPrintable(m_handle));
         if (!syntaxOnly) {
-            LOGD("parse: HChord = <%s> (%d)", muPrintable(chord.voicing()), chord.getKeys());
-            LOGD("parse: xmlKind = <%s>, text = <%s>", muPrintable(_xmlKind), muPrintable(_xmlText));
-            LOGD("parse: xmlSymbols = %s, xmlParens = %s", muPrintable(_xmlSymbols), muPrintable(_xmlParens));
-            LOGD("parse: xmlDegrees = <%s>", muPrintable(_xmlDegrees.join(u",")));
+            LOGD("parse: HChord = <%s> (%d)", muPrintable(m_chord.voicing()), m_chord.getKeys());
+            LOGD("parse: xmlKind = <%s>, text = <%s>", muPrintable(m_xmlKind), muPrintable(m_xmlText));
+            LOGD("parse: xmlSymbols = %s, xmlParens = %s", muPrintable(m_xmlSymbols), muPrintable(m_xmlParens));
+            LOGD("parse: xmlDegrees = <%s>", muPrintable(m_xmlDegrees.join(u",")));
         }
     }
-    return _parseable;
+    return m_parseable;
 }
 
 //---------------------------------------------------------
@@ -1186,56 +1177,56 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
     bool implied = false;
     bool extend = false;
     int extension = 0;
-    _parseable = true;
-    _understandable = true;
+    m_parseable = true;
+    m_understandable = true;
 
     // get quality info from kind
     if (kind == "major-minor") {
-        _quality = u"minor";
-        _modifierList << u"major7";
+        m_quality = u"minor";
+        m_modifierList << u"major7";
         extend = true;
     } else if (kind.contains(u"major")) {
-        _quality = u"major";
+        m_quality = u"major";
         if (kind == "major" || kind == "major-sixth") {
             implied = true;
         }
     } else if (kind.contains(u"minor")) {
-        _quality = u"minor";
+        m_quality = u"minor";
     } else if (kind.contains(u"dominant")) {
-        _quality = u"dominant";
+        m_quality = u"dominant";
         implied = true;
         extension = 7;
     } else if (kind == "augmented-seventh") {
-        _quality = u"augmented";
+        m_quality = u"augmented";
         extension = 7;
         extend = true;
     } else if (kind == "augmented") {
-        _quality = u"augmented";
+        m_quality = u"augmented";
     } else if (kind == "half-diminished") {
-        _quality = u"half-diminished";
+        m_quality = u"half-diminished";
         if (syms) {
             extension = 7;
             extend = true;
         }
     } else if (kind == "diminished-seventh") {
-        _quality = u"diminished";
+        m_quality = u"diminished";
         extension = 7;
     } else if (kind == "diminished") {
-        _quality = u"diminished";
+        m_quality = u"diminished";
     } else if (kind == "suspended-fourth") {
-        _quality = u"major";
+        m_quality = u"major";
         implied = true;
-        _modifierList << u"sus4";
+        m_modifierList << u"sus4";
     } else if (kind == "suspended-second") {
-        _quality = u"major";
+        m_quality = u"major";
         implied = true;
-        _modifierList << u"sus2";
+        m_modifierList << u"sus2";
     } else if (kind == "power") {
-        _quality = u"major";
+        m_quality = u"major";
         implied = true;
         extension = 5;
     } else {
-        _quality = kind;
+        m_quality = kind;
     }
 
     // get extension info from kind
@@ -1276,13 +1267,13 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
         }
         mod += String::number(v);
         if (mod == "add7" && kind.contains(u"suspended")) {
-            _quality = u"dominant";
+            m_quality = u"dominant";
             implied = true;
             extension = 7;
             extend = true;
             mod = u"";
         } else if (mod == "add#7" && kind.contains(u"suspended")) {
-            _quality = u"major";
+            m_quality = u"major";
             implied = false;
             extension = 7;
             extend = true;
@@ -1305,29 +1296,29 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
             mod = u"";
         }
         if (mod != "") {
-            _modifierList << mod;
+            m_modifierList << mod;
         }
     }
     // convert no3,add[42] into sus[42]
-    size_t no3 = _modifierList.indexOf(u"no3");
+    size_t no3 = m_modifierList.indexOf(u"no3");
     if (no3 != mu::nidx) {
-        size_t addn = _modifierList.indexOf(u"add4");
+        size_t addn = m_modifierList.indexOf(u"add4");
         if (addn == mu::nidx) {
-            addn = _modifierList.indexOf(u"add2");
+            addn = m_modifierList.indexOf(u"add2");
         }
         if (addn != mu::nidx) {
-            String& s = _modifierList[addn];
+            String& s = m_modifierList[addn];
             s.replace(u"add", u"sus");
-            _modifierList.removeAt(no3);
+            m_modifierList.removeAt(no3);
         }
     }
     // convert kind=minor-seventh, degree=altb5 to kind=half-diminished (suppression of degree=altb comes later)
-    if (kind == "minor-seventh" && _modifierList.size() == 1 && _modifierList.front() == "b5") {
+    if (kind == "minor-seventh" && m_modifierList.size() == 1 && m_modifierList.front() == "b5") {
         kind = u"half-diminished";
     }
     // force parens where necessary)
-    if (!parens && extension == 0 && !_modifierList.empty()) {
-        String firstMod = _modifierList.front();
+    if (!parens && extension == 0 && !m_modifierList.empty()) {
+        String firstMod = m_modifierList.front();
         if (firstMod != "" && (firstMod.startsWith(u'#') || firstMod.startsWith(u'b'))) {
             parens = true;
         }
@@ -1335,7 +1326,7 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
 
     // record extension
     if (extension) {
-        _extension = String::number(extension);
+        m_extension = String::number(extension);
     }
 
     // validate kindText
@@ -1343,71 +1334,71 @@ String ParsedChord::fromXml(const String& rawKind, const String& rawKindText, co
         ParsedChord validate;
         validate.parse(kindText, cl, false);
         // kindText should parse to produce same kind, no degrees
-        if (validate._xmlKind != kind || !validate._xmlDegrees.empty()) {
+        if (validate.m_xmlKind != kind || !validate.m_xmlDegrees.empty()) {
             kindText = u"";
         }
     }
 
     // construct name & handle
-    _name = u"";
+    m_name = u"";
     if (kindText != "") {
-        if (_extension != "" && kind.contains(u"suspended")) {
-            _name += _extension;
+        if (m_extension != "" && kind.contains(u"suspended")) {
+            m_name += m_extension;
         }
-        _name += kindText;
+        m_name += kindText;
         if (extension == 69) {
-            _name += u"9";
+            m_name += u"9";
         }
     } else if (implied) {
-        _name = _extension;
+        m_name = m_extension;
     } else {
-        if (_quality == "major") {
-            _name = syms ? u"^" : u"maj";
-        } else if (_quality == "minor") {
-            _name = syms ? u"-" : u"m";
-        } else if (_quality == "augmented") {
-            _name = syms ? u"+" : u"aug";
-        } else if (_quality == "diminished") {
-            _name = syms ? u"o" : u"dim";
-        } else if (_quality == "half-diminished") {
-            _name = syms ? u"0" : u"m7b5";
+        if (m_quality == "major") {
+            m_name = syms ? u"^" : u"maj";
+        } else if (m_quality == "minor") {
+            m_name = syms ? u"-" : u"m";
+        } else if (m_quality == "augmented") {
+            m_name = syms ? u"+" : u"aug";
+        } else if (m_quality == "diminished") {
+            m_name = syms ? u"o" : u"dim";
+        } else if (m_quality == "half-diminished") {
+            m_name = syms ? u"0" : u"m7b5";
         } else {
-            _name = _quality;
+            m_name = m_quality;
         }
-        _name += _extension;
+        m_name += m_extension;
     }
     if (parens) {
-        _name += u"(";
+        m_name += u"(";
     }
-    for (String mod : _modifierList) {
+    for (String mod : m_modifierList) {
         mod.replace(u"major", u"maj");
         if (kindText != "" && kind.contains(u"suspended") && mod.startsWith(u"sus")) {
             continue;
         } else if (kindText != "" && kind == "major-minor" && mod.startsWith(u"maj")) {
             continue;
         }
-        _name += mod;
+        m_name += mod;
     }
     if (parens) {
-        _name += u")";
+        m_name += u")";
     }
 
     // parse name to construct handle & tokenList
-    parse(_name, cl, true);
+    parse(m_name, cl, true);
 
     // record original MusicXML
-    _xmlKind = kind;
-    _xmlText = kindText;
-    _xmlSymbols = useSymbols;
-    _xmlParens = useParens;
+    m_xmlKind = kind;
+    m_xmlText = kindText;
+    m_xmlSymbols = useSymbols;
+    m_xmlParens = useParens;
     for (const HDegree& d : dl) {
         if (kind == "half-diminished" && d.type() == HDegreeType::ALTER && d.alter() == -1 && d.value() == 5) {
             continue;
         }
-        _xmlDegrees << d.text();
+        m_xmlDegrees << d.text();
     }
 
-    return _name;
+    return m_name;
 }
 
 //---------------------------------------------------------
@@ -1419,18 +1410,18 @@ double ChordList::position(const StringList& names, ChordTokenClass ctc) const
     String name = names.empty() ? u"" : names.front();
     switch (ctc) {
     case ChordTokenClass::EXTENSION:
-        return _eadjust;
+        return m_eadjust;
     case ChordTokenClass::MODIFIER: {
         Char c = name.isEmpty() ? name.at(0) : u'0';
         if (c.isDigit() || c.isPunct()) {
-            return _madjust;
+            return m_madjust;
         } else {
             return 0.0;
         }
     }
     default:
         if (name == "o" || name == "0") {
-            return _eadjust;
+            return m_eadjust;
         } else {
             return 0.0;
         }
@@ -1445,11 +1436,11 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
 {
     // generate anew on each call,
     // in case chord list has changed since last time
-    if (!_renderList.empty()) {
-        _renderList.clear();
+    if (!m_renderList.empty()) {
+        m_renderList.clear();
     }
     bool adjust = cl ? cl->autoAdjust() : false;
-    for (const ChordToken& tok : _tokenList) {
+    for (const ChordToken& tok : m_tokenList) {
         String n = tok.names.front();
         std::list<RenderAction> rl;
         std::list<ChordToken> definedTokens;
@@ -1488,24 +1479,24 @@ const std::list<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
             m1.movex = 0.0;
             m1.movey = p;
-            _renderList.push_back(m1);
+            m_renderList.push_back(m1);
         }
         if (found) {
-            _renderList.insert(_renderList.end(), rl.begin(), rl.end());
+            m_renderList.insert(m_renderList.end(), rl.begin(), rl.end());
         } else {
             // no definition for token, so render as literal
             RenderAction a(RenderAction::RenderActionType::SET);
             a.text = tok.names.front();
-            _renderList.push_back(a);
+            m_renderList.push_back(a);
         }
         if (p != 0.0) {
             RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
             m2.movex = 0.0;
             m2.movey = -p;
-            _renderList.push_back(m2);
+            m_renderList.push_back(m2);
         }
     }
-    return _renderList;
+    return m_renderList;
 }
 
 //---------------------------------------------------------
@@ -1520,7 +1511,7 @@ void ParsedChord::addToken(String s, ChordTokenClass tc)
     ChordToken tok;
     tok.names << s;
     tok.tokenClass = tc;
-    _tokenList.push_back(tok);
+    m_tokenList.push_back(tok);
 }
 
 //---------------------------------------------------------
@@ -1590,7 +1581,7 @@ void ChordDescription::complete(ParsedChord* pc, const ChordList* cl)
     if (chord.getKeys() == 0) {
         chord = HChord(pc->keys());
     }
-    _quality = pc->quality();
+    m_quality = pc->quality();
 }
 
 //---------------------------------------------------------
@@ -1660,10 +1651,10 @@ int ChordList::privateID = -1000;
 
 void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, double madjust)
 {
-    _emag = emag;
-    _eadjust = eadjust;
-    _mmag = mmag;
-    _madjust = madjust;
+    m_emag = emag;
+    m_eadjust = eadjust;
+    m_mmag = mmag;
+    m_madjust = madjust;
 }
 
 //---------------------------------------------------------
@@ -1673,7 +1664,7 @@ void ChordList::configureAutoAdjust(double emag, double eadjust, double mmag, do
 void ChordList::read(XmlReader& e)
 {
     int fontIdx = static_cast<int>(fonts.size());
-    _autoAdjust = false;
+    m_autoAdjust = false;
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "font") {
@@ -1712,7 +1703,7 @@ void ChordList::read(XmlReader& e)
                         cs.value = cs.name;
                     }
                     cs.name = symClass + cs.name;
-                    symbols.insert({ cs.name, cs });
+                    m_symbols.insert({ cs.name, cs });
                     e.readNext();
                 } else if (e.name() == "mag") {
                     f.mag = e.readDouble();
@@ -1720,21 +1711,21 @@ void ChordList::read(XmlReader& e)
                     e.unknown();
                 }
             }
-            if (_autoAdjust) {
+            if (m_autoAdjust) {
                 if (f.fontClass == "extension") {
-                    f.mag *= _emag;
+                    f.mag *= m_emag;
                 } else if (f.fontClass == "modifier") {
-                    f.mag *= _mmag;
+                    f.mag *= m_mmag;
                 }
             }
             fonts.push_back(f);
             ++fontIdx;
         } else if (tag == "autoAdjust") {
             String nmag = e.attribute("mag");
-            _nmag = nmag.toDouble();
+            m_nmag = nmag.toDouble();
             String nadjust = e.attribute("adjust");
-            _nadjust = nadjust.toDouble();
-            _autoAdjust = e.readBool();
+            m_nadjust = nadjust.toDouble();
+            m_autoAdjust = e.readBool();
         } else if (tag == "token") {
             ChordToken t;
             t.read(e);
@@ -1780,7 +1771,7 @@ void ChordList::write(XmlWriter& xml) const
     for (const ChordFont& f : fonts) {
         xml.startElement("font", { { "id", fontIdx }, { "family", f.family } });
         xml.tag("mag", f.mag);
-        for (const auto& p : symbols) {
+        for (const auto& p : m_symbols) {
             const ChordSymbol& s = p.second;
             if (s.fontIdx == fontIdx) {
                 if (s.code.isNull()) {
@@ -1793,8 +1784,8 @@ void ChordList::write(XmlWriter& xml) const
         xml.endElement();
         ++fontIdx;
     }
-    if (_autoAdjust) {
-        xml.tag("autoAdjust", { { "mag", _nmag }, { "adjust", _nadjust } });
+    if (m_autoAdjust) {
+        xml.tag("autoAdjust", { { "mag", m_nmag }, { "adjust", m_nadjust } });
     }
     for (const ChordToken& t : chordTokenList) {
         t.write(xml);
@@ -1922,12 +1913,12 @@ bool ChordList::loaded() const
 void ChordList::unload()
 {
     clear();
-    symbols.clear();
+    m_symbols.clear();
     fonts.clear();
     renderListRoot.clear();
     renderListBase.clear();
     chordTokenList.clear();
-    _autoAdjust = false;
+    m_autoAdjust = false;
 }
 
 const ChordDescription* ChordList::description(int id) const

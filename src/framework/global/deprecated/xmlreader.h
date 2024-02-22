@@ -80,7 +80,7 @@ public:
 
 private:
     QString readElementText(ReadStringBehavior behavior = ErrorOnUnexpectedElement);
-    QStringRef attributeValue(std::string_view name) const;
+    QStringView attributeValue(std::string_view name) const;
 
     std::unique_ptr<QIODevice> m_device;
     std::unique_ptr<QXmlStreamReader> m_reader;

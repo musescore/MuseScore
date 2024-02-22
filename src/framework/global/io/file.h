@@ -31,7 +31,8 @@
 namespace mu::io {
 class File : public IODevice
 {
-    INJECT_STATIC(IFileSystem, fileSystem)
+    static inline Inject<IFileSystem> fileSystem;
+
 public:
 
     File() = default;

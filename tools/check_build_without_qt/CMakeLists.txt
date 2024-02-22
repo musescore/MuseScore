@@ -52,6 +52,8 @@ add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
 add_subdirectory(${MU_ROOT}/src/importexport/guitarpro guitarpro)
 
+set(MUSICXML_NO_INTERNAL ON)
+add_subdirectory(${MU_ROOT}/src/importexport/musicxml musicxml)
 
 add_executable(engraving_app
     fontproviderstub.cpp

@@ -226,6 +226,7 @@ enum class Sid {
     beamMinLen,
     beamNoSlope,
     snapCustomBeamsToGrid,
+    frenchStyleBeams,
 
     dotMag,
     dotNoteDistance,
@@ -288,6 +289,7 @@ enum class Sid {
     pedalFontSize,
     pedalLineSpacing,
     pedalFontSpatiumDependent,
+    pedalMusicalSymbolsScale,
     pedalFontStyle,
     pedalColor,
     pedalTextAlign,
@@ -298,8 +300,11 @@ enum class Sid {
     pedalFrameFgColor,
     pedalFrameBgColor,
     pedalText,
+    pedalHookText,
     pedalContinueText,
+    pedalContinueHookText,
     pedalEndText,
+    pedalRosetteEndText,
 
     trillPlacement,
     trillPosAbove,
@@ -423,10 +428,14 @@ enum class Sid {
     smallStaffMag,
     smallClefMag,
     genClef,
+    hideTabClefAfterFirst,
     genKeysig,
     genCourtesyTimesig,
     genCourtesyKeysig,
     genCourtesyClef,
+
+    keySigCourtesyBarlineMode,
+    timeSigCourtesyBarlineMode,
 
     swingRatio,
     swingUnit,
@@ -483,11 +492,20 @@ enum class Sid {
     SlurEndWidth,
     SlurMidWidth,
     SlurDottedWidth,
+    TieEndWidth,
+    TieMidWidth,
+    TieDottedWidth,
     MinTieLength,
     MinStraightGlissandoLength,
     MinWigglyGlissandoLength,
     SlurMinDistance,
+    TieMinDistance,
     HeaderToLineStartDistance, // determines start point of "dangling" lines (ties, gliss, lyrics...) at start of system
+
+    tiePlacementSingleNote,
+    tiePlacementChord,
+    tieMinShoulderHeight,
+    tieMaxShoulderHeight,
 
     SectionPause,
     MusicalSymbolFont,
@@ -580,6 +598,7 @@ enum class Sid {
     ottavaFontSize,
     ottavaLineSpacing,
     ottavaFontSpatiumDependent,
+    ottavaMusicalSymbolsScale,
     ottavaFontStyle,
     ottavaColor,
     ottavaTextAlignAbove,
@@ -623,9 +642,11 @@ enum class Sid {
     tupletFontSize,
     tupletLineSpacing,
     tupletFontSpatiumDependent,
+    tupletMusicalSymbolsScale,
     tupletFontStyle,
     tupletColor,
     tupletAlign,
+    tupletUseSymbols,
     tupletBracketHookHeight,
     tupletOffset,
     tupletFrameType,
@@ -824,10 +845,13 @@ enum class Sid {
     stringNumberOffset,
     preferSameStringForTranspose,
 
+    stringTuningsFontSize,
+
     harpPedalDiagramFontFace,
     harpPedalDiagramFontSize,
     harpPedalDiagramLineSpacing,
     harpPedalDiagramFontSpatiumDependent,
+    harpPedalDiagramMusicalSymbolsScale,
     harpPedalDiagramFontStyle,
     harpPedalDiagramColor,
     harpPedalDiagramAlign,
@@ -1187,6 +1211,8 @@ enum class Sid {
     glissandoFrameBgColor,
     glissandoLineWidth,
     glissandoText,
+    glissandoStyle,
+    glissandoStyleHarp,
 
     bendFontFace,
     bendFontSize,
@@ -1204,6 +1230,15 @@ enum class Sid {
     bendFrameBgColor,
     bendLineWidth,
     bendArrowWidth,
+
+    guitarBendLineWidth,
+    guitarBendLineWidthTab,
+    guitarBendHeightAboveTABStaff,
+    guitarBendPartialBendHeight,
+    guitarBendUseFull,
+    guitarBendArrowWidth,
+    guitarBendArrowHeight,
+    useCueSizeFretForGraceBends,
 
     headerFontFace,
     headerFontSize,
@@ -1585,7 +1620,13 @@ enum class Sid {
     golpeShowTabSimple,
     golpeShowTabCommon,
 
+    tabShowTiedFret,
+    tabParenthesizeTiedFret,
+    parenthesizeTiedFretIfArticulation,
+
     chordlineThickness,
+
+    dummyMusicalSymbolsScale,
 
     autoplaceEnabled,
     defaultsVersion,

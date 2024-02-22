@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __REST_H__
-#define __REST_H__
+#ifndef MU_ENGRAVING_REST_H
+#define MU_ENGRAVING_REST_H
 
 #include "containers.h"
 
@@ -32,11 +32,6 @@ namespace mu::engraving {
 class TDuration;
 
 struct RestVerticalClearance {
-private:
-    int m_above = 0.0; // In space units
-    int m_below = 0.0; // In space units
-    bool m_locked = false;
-
 public:
     void reset()
     {
@@ -52,6 +47,11 @@ public:
 
     bool locked() const { return m_locked; }
     void setLocked(bool v) { m_locked = v; }
+
+private:
+    int m_above = 0.0; // In space units
+    int m_below = 0.0; // In space units
+    bool m_locked = false;
 };
 
 //---------------------------------------------------------
@@ -115,6 +115,7 @@ public:
     double stemPosX() const override;
     mu::PointF stemPosBeam() const override;
     double rightEdge() const override;
+    double centerX() const;
 
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue propertyDefault(Pid) const override;
@@ -127,7 +128,6 @@ public:
     EngravingItem* prevElement() override;
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
-    Shape shape() const override;
     void editDrag(EditData& editData) override;
 
     bool shouldNotBeDrawn() const;
@@ -136,9 +136,9 @@ public:
 
     struct LayoutData : public ChordRest::LayoutData {
         std::vector<Rest*> mergedRests;     // Rests from other voices that may be merged with this
-        SymId sym = SymId::restQuarter;
+        ld_field<SymId> sym = { "[Rest] sym", SymId::restQuarter };
     };
-    DECLARE_LAYOUTDATA_METHODS(Rest);
+    DECLARE_LAYOUTDATA_METHODS(Rest)
 
     int computeNaturalLine(int lines) const; // Natural rest vertical position
     int computeVoiceOffset(int lines, LayoutData* ldata) const; // Vertical displacement in multi-voice cases

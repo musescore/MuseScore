@@ -138,24 +138,16 @@ StyledDialogView {
             }
         }
 
-        Row {
-            Layout.preferredHeight: childrenRect.height
+        ButtonBox {
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            spacing: 12
+            buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
-            FlatButton {
-                text: qsTrc("global", "Cancel")
-
-                onClicked: {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Cancel) {
                     root.reject()
-                }
-            }
-
-            FlatButton {
-                text: qsTrc("global", "OK")
-
-                onClicked: {
+                } else if (buttonId === ButtonBoxModel.Ok) {
                     model.apply()
                     root.hide()
                 }

@@ -37,10 +37,19 @@ private:
 }
 
 namespace mu {
+#ifdef MU_QT5_COMPAT
 inline uint qHash(const Uri& uri)
 {
     return qHash(QString::fromStdString(uri.toString()));
 }
+
+#else
+inline size_t qHash(const Uri& uri)
+{
+    return qHash(QString::fromStdString(uri.toString()));
+}
+
+#endif
 }
 
 #endif // MU_UI_INTERACTIVEURIREGISTER_H

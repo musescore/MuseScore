@@ -24,6 +24,8 @@
 
 #include "types/texttypes.h"
 
+#include "dom/tempotext.h"
+
 #include "log.h"
 
 using namespace mu::inspector;
@@ -85,8 +87,13 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::TIMESIG, InspectorModelType::TYPE_TIME_SIGNATURE },
     { mu::engraving::ElementType::MMREST, InspectorModelType::TYPE_MMREST },
     { mu::engraving::ElementType::BEND, InspectorModelType::TYPE_BEND },
+    { mu::engraving::ElementType::GUITAR_BEND, InspectorModelType::TYPE_BEND },
+    { mu::engraving::ElementType::GUITAR_BEND_SEGMENT, InspectorModelType::TYPE_BEND },
+    { mu::engraving::ElementType::GUITAR_BEND_HOLD, InspectorModelType::TYPE_BEND },
+    { mu::engraving::ElementType::GUITAR_BEND_HOLD_SEGMENT, InspectorModelType::TYPE_BEND },
     { mu::engraving::ElementType::TREMOLOBAR, InspectorModelType::TYPE_TREMOLOBAR },
-    { mu::engraving::ElementType::TREMOLO, InspectorModelType::TYPE_TREMOLO },
+    { mu::engraving::ElementType::TREMOLO_SINGLECHORD, InspectorModelType::TYPE_TREMOLO },
+    { mu::engraving::ElementType::TREMOLO_TWOCHORD, InspectorModelType::TYPE_TREMOLO },
     { mu::engraving::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },
     { mu::engraving::ElementType::TUPLET, InspectorModelType::TYPE_TUPLET },
     { mu::engraving::ElementType::TEXTLINE, InspectorModelType::TYPE_TEXT_LINE },
@@ -97,7 +104,9 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::LYRICS, InspectorModelType::TYPE_LYRICS },
     { mu::engraving::ElementType::REST, InspectorModelType::TYPE_REST },
     { mu::engraving::ElementType::DYNAMIC, InspectorModelType::TYPE_DYNAMIC },
-    { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION }
+    { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION },
+    { mu::engraving::ElementType::STRING_TUNINGS, InspectorModelType::TYPE_STRING_TUNINGS },
+    { mu::engraving::ElementType::SYMBOL, InspectorModelType::TYPE_SYMBOL },
 };
 
 static QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
@@ -109,6 +118,12 @@ static QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODE
 
 static QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
     { mu::engraving::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
+};
+
+static QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_ELEMENT_MODEL_TYPES = {
+    { mu::engraving::TempoTextType::NORMAL, InspectorModelType::TYPE_TEMPO },
+    { mu::engraving::TempoTextType::A_TEMPO, InspectorModelType::TYPE_A_TEMPO },
+    { mu::engraving::TempoTextType::TEMPO_PRIMO, InspectorModelType::TYPE_TEMPO_PRIMO },
 };
 
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
@@ -182,6 +197,18 @@ InspectorModelType AbstractInspectorModel::modelType() const
     return m_modelType;
 }
 
+ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
+{
+    switch (item->type()) {
+    case ElementType::TEMPO_TEXT: {
+        const auto tempoText = static_cast<const TempoText*>(item);
+        return ElementKey{ ElementType::TEMPO_TEXT, static_cast<int>(tempoText->tempoTextType()) };
+    }
+    default:
+        return ElementKey{ item->type(), item->subtype() };
+    }
+}
+
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
     if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
@@ -192,6 +219,11 @@ InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKe
     if (elementKey.type == mu::engraving::ElementType::LAYOUT_BREAK) {
         return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
+    }
+
+    if (elementKey.type == mu::engraving::ElementType::TEMPO_TEXT) {
+        return TEMPO_TEXT_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::TempoTextType>(elementKey.subtype),
+                                                    InspectorModelType::TYPE_UNDEFINED);
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
@@ -210,18 +242,25 @@ InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const Elem
 
 static bool isPureDynamics(const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
-    for (EngravingItem* item : selectedElementList) {
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
         if (!item->isTextBase()) {
             continue;
         }
+
         if (!item->isDynamic()) {
             return false;
         }
-        Dynamic* dynamic = toDynamic(item);
+
+        const Dynamic* dynamic = toDynamic(item);
         if (dynamic->hasCustomText()) {
             return false;
         }
     }
+
     return true;
 }
 
@@ -250,7 +289,23 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         types << InspectorSectionType::SECTION_MEASURES;
     }
 
+    if (showPartsSection(selectedElementList)) {
+        types << InspectorSectionType::SECTION_PARTS;
+    }
+
     return types;
+}
+
+bool AbstractInspectorModel::showPartsSection(const QList<EngravingItem*>& selectedElementList)
+{
+    for (EngravingItem* element : selectedElementList) {
+        if ((!element->score()->isMaster() && !element->isLayoutBreak() && !element->isAccidental())
+            || element->canBeExcludedFromOtherParts()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool AbstractInspectorModel::isEmpty() const
@@ -405,7 +460,7 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
     P_TYPE type = mu::engraving::propertyType(pid);
     switch (type) {
     case P_TYPE::POINT: {
-        if (element->sizeIsSpatiumDependent()) {
+        if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
             return toPoint(value) * element->spatium();
         } else {
             return toPoint(value) * mu::engraving::DPMM;
@@ -451,7 +506,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid&
 
     switch (value.type()) {
     case P_TYPE::POINT: {
-        if (element->sizeIsSpatiumDependent()) {
+        if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
             return value.value<PointF>().toQPointF() / element->spatium();
         } else {
             return value.value<PointF>().toQPointF() / mu::engraving::DPMM;

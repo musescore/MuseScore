@@ -125,6 +125,7 @@ Column {
     Loader {
         id: pageLoader
         width: parent.width
+        visible: status === Loader.Ready
 
         function refresh() {
             if (!root.exportModel.selectedExportType.settingsPagePath) {

@@ -22,11 +22,12 @@
 
 #include <gtest/gtest.h>
 
-#include "audio/internal/plugins/knownaudiopluginsregister.h"
-#include "global/tests/mocks/filesystemmock.h"
-#include "audio/tests/mocks/audioconfigurationmock.h"
+#include "global/serialization/json.h"
 
-#include "serialization/json.h"
+#include "internal/plugins/knownaudiopluginsregister.h"
+
+#include "global/tests/mocks/filesystemmock.h"
+#include "tests/mocks/audioconfigurationmock.h"
 
 using ::testing::_;
 using ::testing::Return;
@@ -44,8 +45,8 @@ protected:
         m_fileSystem = std::make_shared<FileSystemMock>();
         m_configuration = std::make_shared<AudioConfigurationMock>();
 
-        m_knownPlugins->setfileSystem(m_fileSystem);
-        m_knownPlugins->setconfiguration(m_configuration);
+        m_knownPlugins->fileSystem.set(m_fileSystem);
+        m_knownPlugins->configuration.set(m_configuration);
 
         m_knownAudioPluginsFilePath = "/test/some dir/known_audio_plugins.json";
         ON_CALL(*m_configuration, knownAudioPluginsFilePath())

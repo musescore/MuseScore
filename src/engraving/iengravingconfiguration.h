@@ -67,7 +67,7 @@ public:
 
     virtual double guiScaling() const = 0;
 
-    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true) const = 0;
+    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) = 0;
     virtual async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const = 0;
 
@@ -85,6 +85,20 @@ public:
         bool showSkylines = false;
         bool showSystemBoundingRects = false;
         bool showCorruptedMeasures = true;
+
+        bool anyEnabled() const
+        {
+            return showElementBoundingRects
+                   || colorElementShapes
+                   || showSegmentShapes
+                   || colorSegmentShapes
+                   || showSkylines
+                   || showSystemBoundingRects
+#ifndef NDEBUG
+                   || showCorruptedMeasures
+#endif
+            ;
+        }
     };
 
     virtual const DebuggingOptions& debuggingOptions() const = 0;
@@ -96,12 +110,12 @@ public:
     /// these configurations will be removed after solving https://github.com/musescore/MuseScore/issues/14294
     virtual bool guitarProImportExperimental() const = 0;
     virtual bool negativeFretsAllowed() const = 0;
-    virtual bool tablatureParenthesesZIndexWorkaround() const = 0;
     virtual bool crossNoteHeadAlwaysBlack() const = 0;
     virtual bool enableExperimentalFretCircle() const = 0;
     virtual void setGuitarProMultivoiceEnabled(bool multiVoice) = 0;
     virtual bool guitarProMultivoiceEnabled() const = 0;
     virtual bool minDistanceForPartialSkylineCalculated() const = 0;
+    virtual bool specificSlursLayoutWorkaround() const = 0;
 };
 }
 

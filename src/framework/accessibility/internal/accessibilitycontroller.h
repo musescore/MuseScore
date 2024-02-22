@@ -27,7 +27,7 @@
 #include <QList>
 #include <QHash>
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 #include "global/iapplication.h"
 
 #include "modularity/ioc.h"
@@ -49,10 +49,11 @@ namespace mu::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
-    INJECT(framework::IApplication, application)
-    INJECT(ui::IMainWindow, mainWindow)
-    INJECT(ui::IInteractiveProvider, interactiveProvider)
-    INJECT(IAccessibilityConfiguration, configuration)
+public:
+    Inject<framework::IApplication> application;
+    Inject<ui::IMainWindow> mainWindow;
+    Inject<ui::IInteractiveProvider> interactiveProvider;
+    Inject<IAccessibilityConfiguration> configuration;
 
 public:
     AccessibilityController() = default;
@@ -106,6 +107,9 @@ public:
     QString accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const override;
     int accessibleCharacterCount() const override;
+
+    // ListView item Interface
+    int accessibleRowIndex() const override;
 
     async::Channel<Property, Val> accessiblePropertyChanged() const override;
     async::Channel<State, bool> accessibleStateChanged() const override;

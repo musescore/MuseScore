@@ -30,6 +30,7 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "keysig.h"
 #include "measure.h"
 #include "note.h"
 #include "page.h"
@@ -205,16 +206,18 @@ Segment* Score::tick2segment(const Fraction& tick, bool first) const
 /// the first segment *before* this tick position
 //---------------------------------------------------------
 
-Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest) const
+Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest, bool anySegmentType) const
 {
     Measure* m = useMMrest ? tick2measureMM(tick) : tick2measure(tick);
     if (m == 0) {
         LOGD("tick2leftSegment(): not found tick %d", tick.ticks());
         return 0;
     }
+
     // loop over all segments
+    SegmentType segmentType = anySegmentType ? SegmentType::All : SegmentType::ChordRest;
     Segment* ps = 0;
-    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+    for (Segment* s = m->first(segmentType); s; s = s->next(segmentType)) {
         if (tick < s->tick()) {
             return ps;
         } else if (tick == s->tick()) {
@@ -482,7 +485,7 @@ int quantizeLen(int len, int raster)
     return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
 }
 
-static const char16_t* vall[] = {
+static const char16_t* valSharp[] = {
     u"c",
     u"c♯",
     u"d",
@@ -496,19 +499,19 @@ static const char16_t* vall[] = {
     u"a♯",
     u"b"
 };
-static const char16_t* valu[] = {
-    u"C",
-    u"C♯",
-    u"D",
-    u"D♯",
-    u"E",
-    u"F",
-    u"F♯",
-    u"G",
-    u"G♯",
-    u"A",
-    u"A♯",
-    u"B"
+static const char16_t* valFlat[] = {
+    u"c",
+    u"d♭",
+    u"d",
+    u"e♭",
+    u"e",
+    u"f",
+    u"g♭",
+    u"g",
+    u"a♭",
+    u"a",
+    u"b♭",
+    u"b"
 };
 
 /*!
@@ -523,16 +526,84 @@ static const char16_t* valu[] = {
  * @return
  *  The string representation of the note.
  */
-String pitch2string(int v)
+String pitch2string(int v, bool useFlats)
 {
     if (v < 0 || v > 127) {
         return String(u"----");
     }
-    int octave = (v / 12) - 1;
+    int octave = (v / PITCH_DELTA_OCTAVE) - 1;
     String o;
     o = String::number(octave);
-    int i = v % 12;
-    return (octave < 0 ? valu[i] : vall[i]) + o;
+    int i = v % PITCH_DELTA_OCTAVE;
+
+    String pitchStr = useFlats ? valFlat[i] : valSharp[i];
+    if (octave < 0) {
+        pitchStr = pitchStr.toUpper();
+    }
+
+    return pitchStr + o;
+}
+
+/*!
+ * Returns the pitch number of the given string.
+ *
+ * @param s
+ *  The string representation of the note.
+ *
+ * @return
+ *  The pitch number of the note.
+ */
+int string2pitch(const String& s)
+{
+    if (s == String(u"----")) {
+        return -1;
+    }
+
+    String value = s;
+
+    bool negative = s.contains(u'-');
+    int octave = String(s[s.size() - 1]).toInt() * (negative ? -1 : 1);
+    if (octave < -1 || octave > 9) {
+        return -1;
+    }
+
+    value = value.mid(0, value.size() - (negative ? 2 : 1));
+    value = value.toLower();
+
+    int pitchIndex = -1;
+    for (int i = 0; i < PITCH_DELTA_OCTAVE; ++i) {
+        if (value == valFlat[i] || value == valSharp[i]) {
+            pitchIndex = i;
+            break;
+        }
+    }
+
+    if (pitchIndex == -1) {
+        return -1;
+    }
+
+    return (octave + 1) * PITCH_DELTA_OCTAVE + pitchIndex;
+}
+
+String convertPitchStringFlatsAndSharpsToUnicode(const String& str)
+{
+    if (str.isEmpty()) {
+        return String();
+    }
+
+    String value = String(str[0]);
+    for (size_t i = 1; i < str.size(); ++i) {
+        Char symbol = str.at(i).toLower();
+        if (symbol == u'b') {
+            value.append(u'♭');
+        } else if (symbol == u'#') {
+            value.append(u'♯');
+        } else {
+            value.append(symbol);
+        }
+    }
+
+    return value;
 }
 
 /*!
@@ -1024,9 +1095,9 @@ int chromaticPitchSteps(const Note* noteL, const Note* noteR, const int nominalD
     //  ... 8 is the bottom line.
     int lineL = noteL->line();
     if (lineL == INVALID_LINE) {
-        int relLine = absStep(noteL->tpc(), noteL->epitch());
+        int absLine = absStep(noteL->tpc(), noteL->epitch());
         ClefType clef = noteL->staff()->clef(noteL->tick());
-        lineL = relStep(relLine, clef);
+        lineL = relStep(absLine, clef);
     }
 
     // we use line - deltastep, because lines are oriented from top to bottom, while step is oriented from bottom to top.
@@ -1291,5 +1362,53 @@ String formatUniqueExcerptName(const String& baseName, const StringList& allExce
     }
 
     return result;
+}
+
+bool isFirstSystemKeySig(const KeySig* ks)
+{
+    if (!ks) {
+        return false;
+    }
+    const System* sys = ks->measure()->system();
+    if (!sys) {
+        return false;
+    }
+    return ks->tick() == sys->firstMeasure()->tick();
+}
+
+String bendAmountToString(int fulls, int quarts)
+{
+    String string = (fulls != 0 || quarts == 0) ? String::number(fulls) : String();
+
+    switch (quarts) {
+    case 1:
+        string += u"\u00BC";
+        break;
+    case 2:
+        string += u"\u00BD";
+        break;
+    case 3:
+        string += u"\u00BE";
+        break;
+    default:
+        break;
+    }
+
+    return string;
+}
+
+InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item)
+{
+    const Part* part = item->part();
+    if (!part) {
+        return InstrumentTrackId();
+    }
+
+    mu::engraving::InstrumentTrackId trackId {
+        part->id(),
+        part->instrumentId(item->tick()).toStdString()
+    };
+
+    return trackId;
 }
 }

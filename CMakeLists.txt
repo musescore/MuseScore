@@ -58,16 +58,23 @@ set(MUSESCORE_REVISION "" CACHE STRING "Build revision")
 
 # Modules framework (alphabetical order please)
 option(MUE_BUILD_ACCESSIBILITY_MODULE "Build accessibility module" ON)
+option(MUE_BUILD_ACCESSIBILITY_TESTS "Build accessibility tests" ON)
 option(MUE_BUILD_AUDIO_MODULE "Build audio module" ON)
+option(MUE_BUILD_AUDIO_TESTS "Build audio tests" ON)
 option(MUE_ENABLE_AUDIO_JACK "Jack audio support" OFF)
 option(MUE_ENABLE_AUDIO_EXPORT "Enable audio export" ON)
+option(MUE_BUILD_DRAW_TESTS "Build draw tests" ON)
+option(MUE_BUILD_GLOBAL_TESTS "Build global tests" ON)
 option(MUE_BUILD_MIDI_MODULE "Build midi module" ON)
 option(MUE_BUILD_MPE_MODULE "Build mpe module" ON)
+option(MUE_BUILD_MPE_TESTS "Build mpe tests" ON)
 option(MUE_BUILD_MUSESAMPLER_MODULE "Build MuseSampler module" ON)
 set(MUSESAMPLER_SRC_PATH "" CACHE PATH "Path to MuseSampler sources")
 option(MUE_BUILD_NETWORK_MODULE "Build network module" ON)
+option(MUE_BUILD_NETWORK_TESTS "Build network tests" ON)
 option(MUE_BUILD_SHORTCUTS_MODULE "Build shortcuts module" ON)
 option(MUE_BUILD_UI_MODULE "Build ui module" ON)
+option(MUE_BUILD_UI_TESTS "Build ui tests" ON)
 set(VST3_SDK_VERSION "3.7")
 option(MUE_BUILD_VST_MODULE "Build VST module" OFF)
 set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VERSION} required")
@@ -76,10 +83,14 @@ set(VST3_SDK_PATH "" CACHE PATH "Path to VST3_SDK. SDK version >= ${VST3_SDK_VER
 option(MUE_BUILD_APPSHELL_MODULE "Build appshell module" ON)
 option(MUE_BUILD_AUTOBOT_MODULE "Build autobot module" ON)
 option(MUE_BUILD_BRAILLE_MODULE "Build braille module" ON)
+option(MUE_BUILD_BRAILLE_TESTS "Build braille tests" ON)
 option(MUE_BUILD_CLOUD_MODULE "Build cloud module" ON)
 option(MUE_BUILD_CONVERTER_MODULE "Build converter module" ON)
 option(MUE_BUILD_DIAGNOSTICS_MODULE "Build diagnostic code" ON)
+option(MUE_BUILD_DIAGNOSTICS_TESTS "Build diagnostic tests" ON)
+option(MUE_BUILD_ENGRAVING_TESTS "Build engraving tests" ON)
 option(MUE_BUILD_IMPORTEXPORT_MODULE "Build importexport module" ON)
+option(MUE_BUILD_IMPORTEXPORT_TESTS "Build importexport tests" ON)
 option(MUE_BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF)
 option(MUE_BUILD_IMAGESEXPORT_MODULE "Build imagesexport module" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
@@ -89,11 +100,16 @@ option(MUE_BUILD_LEARN_MODULE "Build learn module" ON)
 set(MUE_LEARN_YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 option(MUE_BUILD_MULTIINSTANCES_MODULE "Build multiinstances module" ON)
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
+option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
 option(MUE_BUILD_PLAYBACK_MODULE "Build playback module" ON)
+option(MUE_BUILD_PLAYBACK_TESTS "Build playback tests" ON)
 option(MUE_BUILD_PLUGINS_MODULE "Build plugins module" ON)
+option(MUE_BUILD_PLUGINS_TESTS "Build plugins tests" ON)
 option(MUE_BUILD_PROJECT_MODULE "Build project module" ON)
+option(MUE_BUILD_PROJECT_TESTS "Build project tests" ON)
 option(MUE_BUILD_UPDATE_MODULE "Build update module" ON)
+option(MUE_BUILD_UPDATE_TESTS "Build update tests" ON)
 option(MUE_BUILD_WORKSPACE_MODULE "Build workspace module" ON)
 
 # === Setup ===
@@ -101,7 +117,6 @@ option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of 
 
 # === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
-option(MUE_ENABLE_FILE_ASSOCIATION "File types association (using for package)" OFF)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
@@ -116,6 +131,7 @@ option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (op
 option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)" OFF)
 
 # === Compile ===
+option(MUE_COMPILE_QT5_COMPAT "Build with Qt5" ON)
 option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
 option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
@@ -131,14 +147,19 @@ option(MUE_ENABLE_ACCESSIBILITY_TRACE "Enable accessibility logging" OFF)
 option(MUE_ENABLE_DRAW_TRACE "Trace draw objects" ON)
 option(MUE_DISABLE_UI_MODALITY "Disable dialogs modality for testing purpose" OFF)
 option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
-option(MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER "Enable diagnostic engraving paint debugger" OFF)
+option(MUE_ENABLE_ENGRAVING_RENDER_DEBUG "Enable rendering debug" OFF)
 option(MUE_ENABLE_ENGRAVING_LD_ACCESS "Enable diagnostic engraving check layout data access" OFF)
+option(MUE_ENABLE_ENGRAVING_LD_PASSES "Enable engraving layout by passes" OFF)
 option(MUE_ENABLE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
 
 ###########################################
 # Setup Configure
 ###########################################
-include(SetupConfigure)
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
+    include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
+else()
+    include(SetupConfigure)
+endif()
 
 set(THIRDPARTY_DIR ${PROJECT_SOURCE_DIR}/thirdparty)
 
@@ -156,9 +177,13 @@ endif(MUE_COMPILE_USE_CCACHE)
 ###########################################
 # Setup external dependencies
 ###########################################
-
-set(QT_MIN_VERSION    "5.15.0")
-include(FindQt5)
+if (MUE_COMPILE_QT5_COMPAT)
+    set(QT_MIN_VERSION "5.15.0")
+    include(FindQt5)
+else()
+    set(QT_MIN_VERSION "6.2.4")
+    include(FindQt6)
+endif()
 
 if (OS_IS_WIN)
     set(DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
@@ -200,6 +225,9 @@ if (NOT BUILD_SHARED_LIBS)
     set(KDDockWidgets_STATIC ON CACHE BOOL "Build static versions of the libraries" FORCE)
 endif(NOT BUILD_SHARED_LIBS)
 
+if (NOT MUE_COMPILE_QT5_COMPAT)
+    set(KDDockWidgets_QT6 ON CACHE BOOL "Build against Qt 6" FORCE)
+endif()
 set(KDDockWidgets_QTQUICK ON CACHE BOOL "Build for QtQuick instead of QtWidgets" FORCE)
 set(KDDockWidgets_EXAMPLES OFF CACHE BOOL "Build the examples" FORCE)
 add_subdirectory(thirdparty/KDDockWidgets)
@@ -213,7 +241,7 @@ if (OS_IS_LIN)
 endif(OS_IS_LIN)
 
 if (OS_IS_WIN)
-    include(Packaging)
+    include(SetupWindowsPackaging)
 endif(OS_IS_WIN)
 
 ###########################################

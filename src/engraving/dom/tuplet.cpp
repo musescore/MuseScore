@@ -194,7 +194,9 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
     }
     bool tupletStartsBeam = beamStart->elements().front() == c1;
     bool tupletEndsBeam = beamEnd->elements().back() == c2;
-    if (tupletStartsBeam && tupletEndsBeam) {
+    bool headSide = isUp() != (c1->up() || c2->up());
+    bool isCross = c1->vStaffIdx() != c2->vStaffIdx();
+    if (tupletStartsBeam && tupletEndsBeam && (!headSide || isCross)) {
         return false;
     }
 
@@ -240,52 +242,11 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
         endChordDefinesTuplet = endChordDefinesTuplet || nextEndChord->beams() < beamCount;
     }
 
-    if (startChordDefinesTuplet && endChordDefinesTuplet) {
+    if (startChordDefinesTuplet && endChordDefinesTuplet && (!headSide || isCross)) {
         return false;
     }
 
     return true;
-}
-
-//---------------------------------------------------------
-//   Rect
-//    helper class
-//---------------------------------------------------------
-
-class TupletRect : public RectF
-{
-    OBJECT_ALLOCATOR(engraving, TupletRect)
-public:
-    TupletRect(const PointF& p1, const PointF& p2, double w)
-    {
-        double w2 = w * .5;
-        setCoords(std::min(p1.x(), p2.x()) - w2, std::min(p1.y(), p2.y()) - w2,  std::max(p1.x(), p2.x()) + w2, std::max(p1.y(),
-                                                                                                                         p2.y()) + w2);
-    }
-};
-
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape Tuplet::shape() const
-{
-    Shape s;
-    if (m_hasBracket) {
-        double w = m_bracketWidth.val() * mag();
-        s.add(TupletRect(bracketL[0], bracketL[1], w));
-        s.add(TupletRect(bracketL[1], bracketL[2], w));
-        if (m_number) {
-            s.add(TupletRect(bracketR[0], bracketR[1], w));
-            s.add(TupletRect(bracketR[1], bracketR[2], w));
-        } else {
-            s.add(TupletRect(bracketL[2], bracketL[3], w));
-        }
-    }
-    if (m_number) {
-        s.add(m_number->layoutData()->bbox().translated(m_number->pos()));
-    }
-    return s;
 }
 
 //---------------------------------------------------------
@@ -523,6 +484,32 @@ bool Tuplet::cross() const
 }
 
 //---------------------------------------------------------
+//   vStaffIdx
+///  Staff index for layout based on the first ChordRest
+//---------------------------------------------------------
+
+staff_idx_t Tuplet::vStaffIdx() const
+{
+    if (elements().empty()) {
+        return mu::nidx;
+    }
+
+    const DurationElement* cr = elements().front();
+    if (!cr) {
+        return mu::nidx;
+    }
+
+    while (cr->isTuplet()) {
+        const Tuplet* t = toTuplet(cr);
+        if (t->elements().empty()) {
+            break;
+        }
+        cr = t->elements().front();
+    }
+    return cr->vStaffIdx();
+}
+
+//---------------------------------------------------------
 //   elementsDuration
 ///  Get the sum of the element fraction in the tuplet,
 ///  even if the tuplet is not complete yet
@@ -634,7 +621,7 @@ PropertyValue Tuplet::propertyDefault(Pid id) const
     case Pid::SYSTEM_FLAG:
         return false;
     case Pid::TEXT:
-        return String(u"");
+        return String();
     case Pid::NORMAL_NOTES:
     case Pid::ACTUAL_NOTES:
         return 0;

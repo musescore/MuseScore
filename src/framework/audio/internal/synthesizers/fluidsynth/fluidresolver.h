@@ -26,10 +26,10 @@
 #include <optional>
 #include <unordered_map>
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "audio/isoundfontrepository.h"
+#include "global/async/asyncable.h"
+#include "global/modularity/ioc.h"
 
+#include "isoundfontrepository.h"
 #include "isynthresolver.h"
 #include "fluidsynth.h"
 
@@ -44,6 +44,7 @@ public:
     bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
 
     audio::AudioResourceMetaList resolveResources() const override;
+    audio::SoundPresetList resolveSoundPresets(const AudioResourceMeta& resourceMeta) const override;
 
     void refresh() override;
     void clearSources() override;

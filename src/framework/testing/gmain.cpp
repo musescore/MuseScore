@@ -26,6 +26,7 @@
 #include "global/stringutils.h"
 #include "global/runtime.h"
 #include "environment.h"
+#include "log.h"
 
 GTEST_API_ int main(int argc, char** argv)
 {
@@ -73,5 +74,11 @@ GTEST_API_ int main(int argc, char** argv)
 
     GTEST_FLAG_SET(death_test_style, "threadsafe");
 
-    return RUN_ALL_TESTS();
+    PROFILER_CLEAR;
+
+    int code = RUN_ALL_TESTS();
+
+    PROFILER_PRINT;
+
+    return code;
 }

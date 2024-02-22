@@ -36,7 +36,9 @@
 #include "slur.h"
 #include "staff.h"
 #include "tie.h"
-#include "tremolo.h"
+
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "tuplet.h"
 #include "utils.h"
 
@@ -97,7 +99,7 @@ void TrackList::appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet)
             for (EngravingItem* ee : seg->annotations()) {
                 bool addSysObject = ee->systemFlag() && !ee->isLinked() && ee->track() == 0 && e->track() == 0;
                 if (addSysObject || (!ee->systemFlag() && ee->track() == e->track())) {
-                    _range->annotations.push_back({ e->tick(), ee->clone() });
+                    m_range->m_annotations.push_back({ e->tick(), ee->clone() });
                 }
             }
         }
@@ -157,7 +159,7 @@ void TrackList::combineTuplet(Tuplet* dst, Tuplet* src)
 void TrackList::append(EngravingItem* e)
 {
     if (e->isDurationElement()) {
-        _duration += toDurationElement(e)->ticks();
+        m_duration += toDurationElement(e)->ticks();
 
         bool accumulateRest = e->isRest() && !empty() && back()->isRest();
         Segment* s          = accumulateRest ? toRest(e)->segment() : 0;
@@ -187,7 +189,7 @@ void TrackList::append(EngravingItem* e)
                 for (EngravingItem* ee : s1->annotations()) {
                     bool addSysObject = ee->systemFlag() && !ee->isLinked() && ee->track() == 0 && e->track() == 0;
                     if (addSysObject || (!ee->systemFlag() && ee->track() == e->track())) {
-                        _range->annotations.push_back({ s1->tick(), ee->clone() });
+                        m_range->m_annotations.push_back({ s1->tick(), ee->clone() });
                     }
                 }
                 if (e->isChord()) {
@@ -241,13 +243,13 @@ void TrackList::appendGap(const Fraction& du, Score* score)
         Rest* rest  = toRest(back());
         Fraction dd = rest->ticks();
         dd          += du;
-        _duration   += du;
+        m_duration   += du;
         rest->setTicks(dd);
     } else {
         Rest* rest = Factory::createRest(score->dummy()->segment());
         rest->setTicks(du);
         std::vector<EngravingItem*>::push_back(rest);
-        _duration   += du;
+        m_duration   += du;
     }
 }
 
@@ -275,7 +277,7 @@ bool TrackList::truncate(const Fraction& f)
     } else {
         r->setTicks(r->ticks() - f);
     }
-    _duration -= f;
+    m_duration -= f;
     return true;
 }
 
@@ -292,11 +294,11 @@ void TrackList::read(const Segment* fs, const Segment* es)
         if (!s->enabled()) {
             continue;
         }
-        EngravingItem* e = s->element(_track);
+        EngravingItem* e = s->element(m_track);
         if (!e || e->generated()) {
             for (EngravingItem* ee : s->annotations()) {
-                if (ee->track() == _track) {
-                    _range->annotations.push_back({ s->tick(), ee->clone() });
+                if (ee->track() == m_track) {
+                    m_range->m_annotations.push_back({ s->tick(), ee->clone() });
                 }
             }
             continue;
@@ -451,7 +453,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                     }
                 } else {
                     ASSERT_X(String(u"premature end of measure list in track %1, rest %2/%3")
-                             .arg(_track).arg(duration.numerator(), duration.denominator()));
+                             .arg(m_track).arg(duration.numerator(), duration.denominator()));
                 }
             }
             if (e->isChordRest()) {
@@ -465,7 +467,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                         cr->removeMarkings(true);
                     }
                     cr->setScore(score);
-                    cr->setTrack(_track);
+                    cr->setTrack(m_track);
                     segment->add(cr);
                     cr->setTicks(k.fraction());
                     cr->setDurationType(k);
@@ -504,7 +506,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
 
 bool TrackList::write(Score* score, const Fraction& tick) const
 {
-    if ((_track % VOICES) && size() == 1 && at(0)->isRest()) {     // don’t write rests in voice > 0
+    if ((m_track % VOICES) && size() == 1 && at(0)->isRest()) {     // don’t write rests in voice > 0
         return true;
     }
     Measure* measure = score->tick2measure(tick);
@@ -533,7 +535,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     // handle full measure rest
                     //
                     Segment* seg = m->getSegmentR(SegmentType::ChordRest, m->ticks() - remains);
-                    if ((_track % VOICES) == 0) {
+                    if ((m_track % VOICES) == 0) {
                         // write only for voice 1
                         Rest* r = Factory::createRest(seg, DurationType::V_MEASURE);
                         // ideally we should be using stretchedLen
@@ -542,7 +544,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         //Fraction stretchedLen = m->stretchedLen(staff);
                         //r->setTicks(stretchedLen);
                         r->setTicks(m->ticks());
-                        r->setTrack(_track);
+                        r->setTrack(m_track);
                         seg->add(r);
                     }
                     duration -= m->ticks();
@@ -560,7 +562,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         if (!firstpart) {
                             cr->removeMarkings(true);
                         }
-                        cr->setTrack(_track);
+                        cr->setTrack(m_track);
                         cr->setScore(score);
                         Fraction gd = k.fraction();
                         cr->setTicks(gd);
@@ -571,15 +573,15 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         remains  -= gd;
 
                         if (cr->isChord()) {
-                            if (!firstpart && toChord(cr)->tremolo() && toChord(cr)->tremolo()->twoNotes()) {               // remove partial two-note tremolo
-                                if (toChord(e)->tremolo()->chord1() == toChord(e)) {
-                                    toChord(cr)->tremolo()->setChords(toChord(cr), nullptr);
+                            TremoloTwoChord* tremolo = toChord(cr)->tremoloTwoChord();
+                            if (!firstpart && tremolo) {               // remove partial two-note tremolo
+                                if (toChord(e)->tremoloTwoChord()->chord1() == toChord(e)) {
+                                    tremolo->setChords(toChord(cr), nullptr);
                                 } else {
-                                    toChord(cr)->tremolo()->setChords(nullptr, toChord(cr));
+                                    tremolo->setChords(nullptr, toChord(cr));
                                 }
-                                Tremolo* tremoloPointer = toChord(cr)->tremolo();
-                                toChord(cr)->setTremolo(nullptr);
-                                delete tremoloPointer;
+                                toChord(cr)->setTremoloTwoChord(nullptr);
+                                delete tremolo;
                             }
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {
@@ -615,7 +617,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             }
             EngravingItem* ne = e->clone();
             ne->setScore(score);
-            ne->setTrack(_track);
+            ne->setTrack(m_track);
             seg->add(ne);
         } else {
             if (!m) {
@@ -627,7 +629,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             Segment* seg = m->getSegmentR(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : m->ticks() - remains);
             EngravingItem* ne = e->clone();
             ne->setScore(score);
-            ne->setTrack(_track);
+            ne->setTrack(m_track);
             seg->add(ne);
         }
     }
@@ -636,7 +638,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     //
 
     for (Segment* s = measure->first(); s; s = s->next1()) {
-        EngravingItem* e = s->element(_track);
+        EngravingItem* e = s->element(m_track);
         if (!e || !e->isChord()) {
             continue;
         }
@@ -665,7 +667,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 
 ScoreRange::~ScoreRange()
 {
-    DeleteAll(tracks);
+    DeleteAll(m_tracks);
 }
 
 //---------------------------------------------------------
@@ -674,15 +676,15 @@ ScoreRange::~ScoreRange()
 
 void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 {
-    _first        = first;
-    _last         = last;
+    m_first        = first;
+    m_last         = last;
     Score* score  = first->score();
     std::list<track_idx_t> sl = score->uniqueStaves();
 
     track_idx_t startTrack = 0;
     track_idx_t endTrack   = score->nstaves() * VOICES;
 
-    spanner.clear();
+    m_spanner.clear();
 
     if (readSpanner) {
         Fraction stick = first->tick();
@@ -695,7 +697,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);
-                spanner.push_back(ns);
+                m_spanner.push_back(ns);
             }
         }
     }
@@ -706,7 +708,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             TrackList* dl = new TrackList(this);
             dl->setTrack(track);
             dl->read(first, last);
-            tracks.push_back(dl);
+            m_tracks.push_back(dl);
         }
     }
 }
@@ -717,7 +719,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
 
 bool ScoreRange::write(Score* score, const Fraction& tick) const
 {
-    for (TrackList* dl : tracks) {
+    for (TrackList* dl : m_tracks) {
         track_idx_t track = dl->track();
         if (!dl->write(score, tick)) {
             return false;
@@ -739,7 +741,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         }
         ++track;
     }
-    for (Spanner* s : spanner) {
+    for (Spanner* s : m_spanner) {
         s->setTick(s->tick() + tick);
         if (s->isSlur()) {
             Slur* slur = toSlur(s);
@@ -762,7 +764,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
         }
         score->undoAddElement(s);
     }
-    for (const Annotation& a : annotations) {
+    for (const Annotation& a : m_annotations) {
         Measure* tm = score->tick2measure(a.tick);
         Segment* op = toSegment(a.e->explicitParent());
         Segment* s = tm->undoGetSegment(op->segmentType(), a.tick);
@@ -781,13 +783,13 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
 void ScoreRange::fill(const Fraction& f)
 {
     const Fraction oldDuration = ticks();
-    Fraction oldEndTick = _first->tick() + oldDuration;
-    for (auto t : tracks) {
-        t->appendGap(f, _first->score());
+    Fraction oldEndTick = m_first->tick() + oldDuration;
+    for (auto t : m_tracks) {
+        t->appendGap(f, m_first->score());
     }
 
     Fraction diff = ticks() - oldDuration;
-    for (Spanner* sp : spanner) {
+    for (Spanner* sp : m_spanner) {
         if (sp->tick2() >= oldEndTick && sp->tick() < oldEndTick) {
             sp->setTicks(sp->ticks() + diff);
         }
@@ -801,7 +803,7 @@ void ScoreRange::fill(const Fraction& f)
 
 bool ScoreRange::truncate(const Fraction& f)
 {
-    for (TrackList* dl : tracks) {
+    for (TrackList* dl : m_tracks) {
         if (dl->empty()) {
             continue;
         }
@@ -814,7 +816,7 @@ bool ScoreRange::truncate(const Fraction& f)
             return false;
         }
     }
-    for (TrackList* dl : tracks) {
+    for (TrackList* dl : m_tracks) {
         dl->truncate(f);
     }
     return true;
@@ -826,7 +828,7 @@ bool ScoreRange::truncate(const Fraction& f)
 
 Fraction ScoreRange::ticks() const
 {
-    return tracks.empty() ? Fraction() : tracks.front()->ticks();
+    return m_tracks.empty() ? Fraction() : m_tracks.front()->ticks();
 }
 
 //---------------------------------------------------------
@@ -835,7 +837,7 @@ Fraction ScoreRange::ticks() const
 
 void TrackList::dump() const
 {
-    LOGD("elements %zu, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
+    LOGD("elements %zu, duration %d/%d", size(), m_duration.numerator(), m_duration.denominator());
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();

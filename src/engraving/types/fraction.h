@@ -186,7 +186,7 @@ public:
     {
         m_numerator *= val.m_numerator;
         m_denominator *= val.m_denominator;
-        if (abs(val.m_denominator) > 1) {
+        if (std::llabs(val.m_denominator) > 1) {
             reduce();                            // We should be free to fully reduce here
         }
         return *this;

@@ -48,7 +48,7 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.order: root.navigationRowStart
 
-        text: qsTrc("inspector", "Don't hide empty staves in first system")
+        text: qsTrc("inspector", "Don’t hide empty staves in first system")
         checked: root.model ? root.model.dontHideEmptyStavesInFirstSystem : false
 
         onClicked: {

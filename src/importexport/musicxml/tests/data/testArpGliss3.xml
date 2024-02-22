@@ -99,7 +99,7 @@
         <type>half</type>
         <stem>down</stem>
         <notations>
-          <glissando line-type="wavy" number="1" type="stop" color="#005500"/>
+          <glissando line-type="wavy" number="1" type="stop"/>
           </notations>
         </note>
       </measure>
@@ -155,7 +155,7 @@
         <type>half</type>
         <stem>down</stem>
         <notations>
-          <slide line-type="solid" number="1" type="stop" color="#AA0000"/>
+          <slide line-type="solid" number="1" type="stop"/>
           </notations>
         </note>
       <barline location="right">

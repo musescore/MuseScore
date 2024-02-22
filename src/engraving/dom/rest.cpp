@@ -26,7 +26,6 @@
 #include <set>
 
 #include "containers.h"
-#include "realfn.h"
 #include "translation.h"
 
 #include "actionicon.h"
@@ -121,7 +120,7 @@ void Rest::setOffset(const mu::PointF& o)
     //! NOTE We need to find out why this is being done here.
     //! We rewrite sym in the layout (we get from the Rest::getSymbol method )
 
-    LayoutData* ldata = mutLayoutData();
+    LayoutData* ldata = mutldata();
 
     if (ldata->sym == SymId::restWhole && (line <= -2 || line >= 3)) {
         ldata->sym = SymId::restWholeLegerLine;
@@ -207,6 +206,16 @@ bool Rest::acceptDrop(EditData& data) const
         return true;
     }
 
+    if (type == ElementType::STRING_TUNINGS) {
+        staff_idx_t staffIdx = 0;
+        Segment* seg = nullptr;
+        if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
+            return false;
+        }
+
+        return measure()->canAddStringTunings(staffIdx);
+    }
+
     // prevent 'hanging' slurs, avoid crash on tie
     static const std::set<ElementType> ignoredTypes {
         ElementType::SLUR,
@@ -263,11 +272,8 @@ EngravingItem* Rest::drop(EditData& data)
         }
         break;
     }
-    case ElementType::SYMBOL:
-    case ElementType::IMAGE:
-        e->setParent(this);
-        score()->undoAddElement(e);
-        return e;
+    case ElementType::STRING_TUNINGS:
+        return measure()->drop(data);
 
     default:
         return ChordRest::drop(data);
@@ -508,7 +514,7 @@ int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
                 continue;
             }
             Chord* chord = toChord(item);
-            Shape chordShape = chord->shape().translated(chord->pos());
+            Shape chordShape = chord->shape().translate(chord->pos());
             chordShape.removeInvisibles();
             if (chordShape.empty()) {
                 continue;
@@ -562,7 +568,7 @@ int Rest::computeNaturalLine(int lines) const
 
 double Rest::upPos() const
 {
-    return symBbox(layoutData()->sym).y();
+    return symBbox(ldata()->sym()).y();
 }
 
 //---------------------------------------------------------
@@ -571,7 +577,7 @@ double Rest::upPos() const
 
 double Rest::downPos() const
 {
-    return symBbox(layoutData()->sym).y() + symHeight(layoutData()->sym);
+    return symBbox(ldata()->sym()).y() + symHeight(ldata()->sym());
 }
 
 //---------------------------------------------------------
@@ -636,7 +642,7 @@ double Rest::intrinsicMag() const
 int Rest::upLine() const
 {
     double _spatium = spatium();
-    return lrint((pos().y() + layoutData()->bbox().top() + _spatium) * 2 / _spatium);
+    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
 }
 
 //---------------------------------------------------------
@@ -646,7 +652,7 @@ int Rest::upLine() const
 int Rest::downLine() const
 {
     double _spatium = spatium();
-    return lrint((pos().y() + layoutData()->bbox().top() + _spatium) * 2 / _spatium);
+    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
 }
 
 //---------------------------------------------------------
@@ -668,10 +674,10 @@ PointF Rest::stemPos() const
 PointF Rest::stemPosBeam() const
 {
     PointF p(pagePos());
-    if (m_up) {
-        p.ry() += layoutData()->bbox().top() + spatium() * 1.5;
+    if (ldata()->up) {
+        p.ry() += ldata()->bbox().top() + spatium() * 1.5;
     } else {
-        p.ry() += layoutData()->bbox().bottom() - spatium() * 1.5;
+        p.ry() += ldata()->bbox().bottom() - spatium() * 1.5;
     }
     return p;
 }
@@ -682,10 +688,10 @@ PointF Rest::stemPosBeam() const
 
 double Rest::stemPosX() const
 {
-    if (m_up) {
-        return layoutData()->bbox().right();
+    if (ldata()->up) {
+        return ldata()->bbox().right();
     } else {
-        return layoutData()->bbox().left();
+        return ldata()->bbox().left();
     }
 }
 
@@ -696,6 +702,13 @@ double Rest::stemPosX() const
 double Rest::rightEdge() const
 {
     return x() + width();
+}
+
+double Rest::centerX() const
+{
+    SymId sym = ldata()->sym();
+    RectF bbox = symBbox(sym);
+    return bbox.left() + bbox.width() / 2;
 }
 
 //---------------------------------------------------------
@@ -716,11 +729,11 @@ void Rest::setAccent(bool flag)
     undoChangeProperty(Pid::SMALL, flag);
     if (voice() % 2 == 0) {
         if (flag) {
-            double yOffset = -(layoutData()->bbox().bottom());
+            double yOffset = -(ldata()->bbox().bottom());
             if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            mutLayoutData()->moveY(yOffset);
+            mutldata()->moveY(yOffset);
         }
     }
 }
@@ -771,12 +784,6 @@ void Rest::add(EngravingItem* e)
         break;
     case ElementType::DEAD_SLAPPED:
         m_deadSlapped = toDeadSlapped(e);
-    // fallthrough
-    case ElementType::SYMBOL:
-    case ElementType::IMAGE:
-        el().push_back(e);
-        e->added();
-        break;
     default:
         ChordRest::add(e);
         break;
@@ -799,7 +806,7 @@ void Rest::remove(EngravingItem* e)
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
-        if (!el().remove(e)) {
+        if (!removeEl(e)) {
             LOGD("Rest::remove(): cannot find %s", e->typeName());
         } else {
             e->removed();
@@ -924,28 +931,6 @@ EngravingItem* Rest::nextElement()
 EngravingItem* Rest::prevElement()
 {
     return ChordRest::prevElement();
-}
-
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape Rest::shape() const
-{
-    Shape shape;
-    if (!m_gap) {
-        shape.add(ChordRest::shape());
-        shape.add(symBbox(layoutData()->sym), this);
-        for (NoteDot* dot : m_dots) {
-            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
-        }
-    }
-    for (EngravingItem* e : el()) {
-        if (e->addToSkyline()) {
-            shape.add(e->shape().translate(e->pos()));
-        }
-    }
-    return shape;
 }
 
 //---------------------------------------------------------

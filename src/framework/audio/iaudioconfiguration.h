@@ -23,10 +23,10 @@
 #define MU_AUDIO_IAUDIOCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
-#include "io/path.h"
-#include "types/ret.h"
-#include "async/channel.h"
-#include "async/notification.h"
+
+#include "global/async/channel.h"
+#include "global/async/notification.h"
+#include "global/io/path.h"
 
 #include "audiotypes.h"
 
@@ -56,6 +56,8 @@ public:
     virtual unsigned int sampleRate() const = 0;
     virtual void setSampleRate(unsigned int sampleRate) = 0;
     virtual async::Notification sampleRateChanged() const = 0;
+
+    virtual size_t minTrackCountForMultithreading() const = 0;
 
     // synthesizers
     virtual AudioInputParams defaultAudioInputParams() const = 0;

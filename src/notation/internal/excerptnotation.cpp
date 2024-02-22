@@ -24,6 +24,7 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/text.h"
+#include "engraving/dom/undo.h"
 
 #include "log.h"
 
@@ -106,7 +107,7 @@ void ExcerptNotation::fillWithDefaultInfo()
     unlinkText(TextStyleType::TITLE);
     unlinkText(TextStyleType::SUBTITLE);
     unlinkText(TextStyleType::COMPOSER);
-    unlinkText(TextStyleType::POET);
+    unlinkText(TextStyleType::LYRICIST);
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const
@@ -129,9 +130,33 @@ void ExcerptNotation::setName(const QString& name)
     }
 }
 
+void ExcerptNotation::undoSetName(const QString& name)
+{
+    if (name == this->name()) {
+        return;
+    }
+
+    if (!score()) {
+        setName(name);
+        return;
+    }
+
+    undoStack()->prepareChanges();
+
+    score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
+
+    undoStack()->commitChanges();
+    notifyAboutNotationChanged();
+}
+
 mu::async::Notification ExcerptNotation::nameChanged() const
 {
     return m_excerpt->nameChanged();
+}
+
+const mu::String& ExcerptNotation::fileName() const
+{
+    return m_excerpt->fileName();
 }
 
 INotationPtr ExcerptNotation::notation()

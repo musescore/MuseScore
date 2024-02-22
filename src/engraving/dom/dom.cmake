@@ -37,6 +37,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/barline.h
     ${CMAKE_CURRENT_LIST_DIR}/beam.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beam.h
+    ${CMAKE_CURRENT_LIST_DIR}/beambase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/beambase.h
     ${CMAKE_CURRENT_LIST_DIR}/bend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bend.h
     ${CMAKE_CURRENT_LIST_DIR}/box.cpp
@@ -51,8 +53,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/bsp.h
     ${CMAKE_CURRENT_LIST_DIR}/bsymbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bsymbol.h
-    ${CMAKE_CURRENT_LIST_DIR}/changeMap.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/changeMap.h
     ${CMAKE_CURRENT_LIST_DIR}/check.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chord.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chord.h
@@ -121,6 +121,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
     ${CMAKE_CURRENT_LIST_DIR}/groups.cpp
     ${CMAKE_CURRENT_LIST_DIR}/groups.h
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbend.h
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.h
     ${CMAKE_CURRENT_LIST_DIR}/harmonicmark.cpp
@@ -243,7 +245,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.h
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendermidi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeatlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeatlist.h
     ${CMAKE_CURRENT_LIST_DIR}/rest.cpp
@@ -264,12 +265,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/select.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.h
-    ${CMAKE_CURRENT_LIST_DIR}/shape.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/shape.h
     ${CMAKE_CURRENT_LIST_DIR}/sig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sig.h
-    ${CMAKE_CURRENT_LIST_DIR}/skyline.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/skyline.h
     ${CMAKE_CURRENT_LIST_DIR}/slur.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slur.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtie.cpp
@@ -291,6 +288,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftext.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftextbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/soundflag.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/soundflag.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftype.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftypechange.cpp
@@ -307,6 +306,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stretchedbend.h
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/stringtunings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/stringtunings.h
     ${CMAKE_CURRENT_LIST_DIR}/swing.cpp
     ${CMAKE_CURRENT_LIST_DIR}/swing.h
     ${CMAKE_CURRENT_LIST_DIR}/symbol.cpp
@@ -339,8 +340,10 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/timesig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timesig.h
     ${CMAKE_CURRENT_LIST_DIR}/transpose.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolo.h
+    ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.h
+    ${CMAKE_CURRENT_LIST_DIR}/tremolosinglechord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tremolosinglechord.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolobar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremolobar.h
     ${CMAKE_CURRENT_LIST_DIR}/trill.cpp

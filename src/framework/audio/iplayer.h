@@ -25,8 +25,8 @@
 
 #include <memory>
 
-#include "async/promise.h"
-#include "async/channel.h"
+#include "global/async/promise.h"
+#include "global/async/channel.h"
 
 #include "audiotypes.h"
 

@@ -21,7 +21,7 @@
  */
 #include "audiooutputdevicecontroller.h"
 
-#include "async/async.h"
+#include "global/async/async.h"
 
 #include "audiothread.h"
 #include "worker/audioengine.h"

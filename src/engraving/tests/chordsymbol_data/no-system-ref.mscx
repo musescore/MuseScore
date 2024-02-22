@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -15,7 +15,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -100,6 +99,10 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <linkedMain/>
+        </VBox>
       <Measure>
         <voice>
           <Clef>
@@ -197,6 +200,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
@@ -248,6 +252,8 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <linked>
+            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Flute</text>
@@ -302,9 +308,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     <Score>
+      <name>Alto Saxophone</name>
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
@@ -361,6 +367,11 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Alto Saxophone</text>
@@ -428,7 +439,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Alto Saxophone</name>
       </Score>
     </Score>
   </museScore>

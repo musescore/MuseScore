@@ -24,7 +24,7 @@ jobs:
     if: (github.event_name == 'schedule' && github.repository == 'musescore/MuseScore') || (github.event_name != 'schedule')    
     steps:
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: "Configure workflow"
       run: |
         bash ./build/ci/tools/make_build_number.sh
@@ -64,29 +64,29 @@ jobs:
 
     - name: Setup environment
       run: |
-        sudo bash ./build/ci/translation/qt_install.sh 
+        bash ./build/ci/translation/qt_install.sh 
     - name: Run lupdate
       run: |
-        sudo bash ./build/ci/translation/run_lupdate.sh ${{ env.LUPDATE_ARGS }}
+        bash ./build/ci/translation/run_lupdate.sh
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
-        sudo bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
-        sudo bash ./build/ci/translation/tx_push.sh
+        bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s linux
+        bash ./build/ci/translation/tx_push.sh
     - name: Create Pull Request
       if: env.DO_CREATE_PR == 'true'
       uses: peter-evans/create-pull-request@v5
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: "Run lupdate"
-        branch: "ci_run_lupdate"
+        branch: "${{github.ref_name && format('{0}_', github.ref_name) || ''}}ci_run_lupdate"
         add-paths: share/locale/*
         title: "Update in-repo translation source files"
         body: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
         labels: strings
         reviewers: cbjeukendrup
     - name: Upload artifacts on GitHub
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MuseScore_tsfiles_${{ env.BUILD_NUMBER }}
         path: ./share/locale

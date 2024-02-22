@@ -55,7 +55,8 @@ enum class StartupModeType
     StartEmpty,
     ContinueLastSession,
     StartWithNewScore,
-    StartWithScore
+    StartWithScore,
+    Recovery
 };
 }
 

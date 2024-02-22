@@ -22,6 +22,8 @@
 
 #include "svgwriter.h"
 
+#include <QBuffer>
+
 #include "draw/painter.h"
 
 #include "engraving/dom/measure.h"
@@ -46,7 +48,7 @@ std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
+mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     TRACEFUNC;
 
@@ -67,17 +69,21 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
     const std::vector<mu::engraving::Page*>& pages = score->pages();
     double pixelRationBackup = mu::engraving::MScore::pixelRatio;
 
-    const size_t PAGE_NUMBER = options.value(OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    const size_t PAGE_NUMBER = mu::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     if (PAGE_NUMBER >= pages.size()) {
         return false;
     }
 
     mu::engraving::Page* page = pages.at(PAGE_NUMBER);
 
+    QByteArray qdata;
+    QBuffer buf(&qdata);
+    buf.open(QIODevice::WriteOnly);
+
     SvgGenerator printer;
     QString title(score->name());
     printer.setTitle(pages.size() > 1 ? QString("%1 (%2)").arg(title).arg(PAGE_NUMBER + 1) : title);
-    printer.setOutputDevice(&destinationDevice);
+    printer.setOutputDevice(&buf);
 
     const int TRIM_MARGIN_SIZE = configuration()->trimMarginPixelSize();
 
@@ -99,7 +105,9 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / printer.logicalDpiX();
 
-    if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
+    const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                  Val(configuration()->exportSvgWithTransparentBackground())).toBool();
+    if (!TRANSPARENT_BACKGROUND) {
         painter.fillRect(pageRect, mu::draw::Color::WHITE);
     }
 
@@ -153,7 +161,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                 mu::engraving::StaffLines* firstSL = system->firstMeasure()->staffLines(static_cast<int>(staffIndex))->clone();
                 mu::engraving::StaffLines* lastSL =  system->lastMeasure()->staffLines(static_cast<int>(staffIndex));
 
-                qreal lastX =  lastSL->layoutData()->bbox().right()
+                qreal lastX =  lastSL->ldata()->bbox().right()
                               + lastSL->pagePos().x()
                               - firstSL->pagePos().x();
                 std::vector<mu::LineF> lines = firstSL->lines();
@@ -168,7 +176,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         }
     }
 
-    BeatsColors beatsColors = parseBeatsColors(options.value(OptionKey::BEATS_COLORS, Val()).toQVariant());
+    BeatsColors beatsColors = parseBeatsColors(mu::value(options, OptionKey::BEATS_COLORS, Val()).toQVariant());
 
     // 2nd pass: Set color for elements on beats
     int beatIndex = 0;
@@ -226,7 +234,10 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         scoreRenderer()->paintItem(painter, element);
     }
 
-    painter.endDraw(); // Writes MuseScore SVG file to disk, finally
+    painter.endDraw();
+
+    ByteArray data = ByteArray::fromQByteArrayNoCopy(qdata);
+    destinationDevice.write(data);
 
     // Clean up and return
     mu::engraving::MScore::pixelRatio = pixelRationBackup;

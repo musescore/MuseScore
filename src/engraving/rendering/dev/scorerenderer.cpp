@@ -34,6 +34,7 @@
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
 #include "horizontalspacing.h"
+#include "slurtielayout.h"
 
 #include "paint.h"
 
@@ -82,31 +83,22 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
 {
     LayoutContext ctx(item->score());
     if (base) {
-        TLayout::layout1TextBase(item, ctx);
+        TLayout::layoutBaseTextBase1(item, ctx);
     } else if (Harmony::classof(item)) {
-        TLayout::layout1(static_cast<Harmony*>(item), ctx);
+        TLayout::layoutHarmony(static_cast<Harmony*>(item), static_cast<Harmony*>(item)->mutldata(), ctx);
     } else {
-        TLayout::layout1TextBase(item, ctx);
+        TLayout::layoutBaseTextBase1(item, ctx);
     }
 }
 
-// ===============================================================
-// Layout Elements on Edit
-// ===============================================================
-void ScoreRenderer::layoutOnEdit(Arpeggio* item)
+void ScoreRenderer::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 {
-    LayoutContext ctx(item->score());
-    ArpeggioLayout::layoutOnEdit(item, ctx);
+    SlurTieLayout::computeBezier(tieSeg, shoulderOffset);
 }
 
-double ScoreRenderer::computePadding(const EngravingItem* item1, const EngravingItem* item2)
+void ScoreRenderer::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
 {
-    return HorizontalSpacing::computePadding(item1, item2);
-}
-
-KerningType ScoreRenderer::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
-{
-    return HorizontalSpacing::computeKerning(item1, item2);
+    SlurTieLayout::computeBezier(slurSeg, shoulderOffset);
 }
 
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)
@@ -118,7 +110,7 @@ void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 void ScoreRenderer::layoutBeam1(Beam* item)
 {
     LayoutContext ctx(item->score());
-    TLayout::layout1(item, ctx);
+    TLayout::layoutBeam1(item, ctx);
 }
 
 void ScoreRenderer::layoutStem(Chord* item)

@@ -445,7 +445,6 @@
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="platform">Apple Macintosh</metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -762,7 +761,7 @@
             <text><sym>keyboardPedalPed</sym></text>
             </beginText>
           <continueText>
-            <text>(<sym>keyboardPedalPed</sym>)</text>
+            <text><sym>keyboardPedalParensLeft</sym><sym>keyboardPedalPed</sym><sym>keyboardPedalParensRight</sym></text>
             </continueText>
           </Pedal>
         <Chord>

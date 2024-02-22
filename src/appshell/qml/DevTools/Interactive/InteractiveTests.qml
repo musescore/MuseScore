@@ -177,6 +177,14 @@ Rectangle {
         FlatButton {
             width: 200
             navigation.panel: navPanel
+            navigation.row: 10
+            text: "Critical with detailed text"
+            onClicked: testModel.criticalWithDetailedText()
+        }
+
+        FlatButton {
+            width: 200
+            navigation.panel: navPanel
             navigation.row: 12
             text: "Require"
             onClicked: testModel.require()

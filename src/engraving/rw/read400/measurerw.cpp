@@ -122,11 +122,16 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
             }
             measure->add(el);
         } else if (tag == "stretch") {
-            double val = e.readDouble();
-            if (val < 0.0) {
-                val = 0;
+            if (measure->score()->mscVersion() < 400) {
+                // Ignore measure stretch pre 4.0
+                e.skipCurrentElement();
+            } else {
+                double val = e.readDouble();
+                if (val < 0.0) {
+                    val = 0;
+                }
+                measure->setUserStretch(val);
             }
-            measure->setUserStretch(val);
         } else if (tag == "noOffset") {
             measure->setNoOffset(e.readInt());
         } else if (tag == "measureNumberMode") {

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PROPERTY_H__
-#define __PROPERTY_H__
+#ifndef MU_ENGRAVING_PROPERTY_H
+#define MU_ENGRAVING_PROPERTY_H
 
 #include "types/string.h"
 
@@ -152,6 +152,7 @@ enum class Pid {
     BEAM_MODE,
     BEAM_NO_SLOPE,
     USER_LEN,         // used for stems
+    SHOW_STEM_SLASH,  // used for grace notes
 
     SPACE,            // used for spacer
     TEMPO,
@@ -322,6 +323,7 @@ enum class Pid {
     FRAME_BG_COLOR,
     SIZE_SPATIUM_DEPENDENT,
     TEXT_SIZE_SPATIUM_DEPENDENT, // for text component of textLine items
+    MUSICAL_SYMBOLS_SCALE,
     ALIGN,
     TEXT_SCRIPT_ALIGN,
     SYSTEM_FLAG,
@@ -389,8 +391,14 @@ enum class Pid {
     TREMOLO_STYLE,
     HARMONY_TYPE,
 
+    ARPEGGIO_SPAN,
+
     BEND_TYPE,
     BEND_CURVE,
+    BEND_VERTEX_OFF,
+    BEND_SHOW_HOLD_LINE,
+    BEND_START_TIME_FACTOR,
+    BEND_END_TIME_FACTOR,
 
     TREMOLOBAR_TYPE,
     TREMOLOBAR_CURVE,
@@ -415,7 +423,37 @@ enum class Pid {
     CAPO_IGNORED_STRINGS,
     CAPO_GENERATE_TEXT,
 
+    TIE_PLACEMENT,
+
+    POSITION_LINKED_TO_MASTER,
+    APPEARANCE_LINKED_TO_MASTER,
+    TEXT_LINKED_TO_MASTER,
+    EXCLUDE_FROM_OTHER_PARTS,
+
+    STRINGTUNINGS_STRINGS_COUNT,
+    STRINGTUNINGS_PRESET,
+    STRINGTUNINGS_VISIBLE_STRINGS,
+
+    SCORE_FONT,
+    SYMBOLS_SIZE,
+    SYMBOL_ANGLE,
+
     END
+};
+
+// Determines propagation of properties between score and parts
+enum class PropertyPropagation {
+    NONE,
+    PROPAGATE,
+    UNLINK,
+};
+
+// Each group can be propagated differently between score and parts
+enum class PropertyGroup {
+    POSITION,
+    TEXT,
+    APPEARANCE,
+    NONE, // Properties that should not be taken into account when propagating
 };
 
 using PropertyIdSet = std::unordered_set<Pid>;
@@ -425,6 +463,7 @@ extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
+extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
 } // namespace mu::engraving

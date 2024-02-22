@@ -999,7 +999,11 @@ QVariant TracksModel::data(const QModelIndex& index, int role) const
         if (trackIndex == -1) {                 // all tracks
             if (_columns[index.column()]->isEditable(-1)) {
                 QVariant value = _columns[index.column()]->value(0);
+#ifdef MU_QT5_COMPAT
                 if (value.type() == QVariant::String) {
+#else
+                if (value.typeId() == QMetaType::QString) {
+#endif
                     value = QVariant();
                     if (!_columns[index.column()]->isForAllTracksOnly()) {
                         for (int i = 0; i < _trackCount; ++i) {
@@ -1027,7 +1031,11 @@ QVariant TracksModel::data(const QModelIndex& index, int role) const
         } else if (editableSingleTrack(trackIndex, index.column())
                    && _columns[index.column()]->isVisible(trackIndex)) {
             QVariant value = _columns[index.column()]->value(trackIndex);
+#ifdef MU_QT5_COMPAT
             if (value.type() == QVariant::String) {
+#else
+            if (value.typeId() == QMetaType::QString) {
+#endif
                 return value.toString();
             }
         }
@@ -1045,15 +1053,18 @@ QVariant TracksModel::data(const QModelIndex& index, int role) const
     case Qt::CheckStateRole:
         if (trackIndex == -1) {
             QVariant value = _columns[index.column()]->value(0);
+#ifdef MU_QT5_COMPAT
             if (value.type() == QVariant::Bool) {
+#else
+            if (value.typeId() == QMetaType::Bool) {
+#endif
                 value = QVariant();
                 if (!_columns[index.column()]->isForAllTracksOnly()) {
                     for (int i = 0; i < _trackCount; ++i) {
                         if (!_columns[index.column()]->isVisible(i)) {
                             continue;
                         }
-                        const auto newValue
-                            = _columns[index.column()]->value(i);
+                        const auto newValue = _columns[index.column()]->value(i);
                         if (!value.isValid()) {                         // value to compare with
                             value = newValue;
                             continue;
@@ -1072,7 +1083,11 @@ QVariant TracksModel::data(const QModelIndex& index, int role) const
         } else if (editableSingleTrack(trackIndex, index.column())
                    && _columns[index.column()]->isVisible(trackIndex)) {
             QVariant value = _columns[index.column()]->value(trackIndex);
+#ifdef MU_QT5_COMPAT
             if (value.type() == QVariant::Bool) {
+#else
+            if (value.typeId() == QMetaType::Bool) {
+#endif
                 return (value.toBool()) ? Qt::Checked : Qt::Unchecked;
             }
         }
@@ -1083,7 +1098,11 @@ QVariant TracksModel::data(const QModelIndex& index, int role) const
     case Qt::ToolTipRole:
         if (trackIndex != -1 && _columns[index.column()]->isVisible(trackIndex)) {
             QVariant value = _columns[index.column()]->value(trackIndex);
+#ifdef MU_QT5_COMPAT
             if (value.type() == QVariant::String
+#else
+            if (value.typeId() == QMetaType::QString
+#endif
                 && _columns[index.column()]->valueList(trackIndex).empty()) {
                 MidiOperations::Data& opers = midiImportOperations;
                 MidiOperations::CurrentMidiFileSetter setCurrentMidiFile(opers, _midiFile);
@@ -1107,14 +1126,23 @@ Qt::ItemFlags TracksModel::editableFlags(int row, int col) const
     const int trackIndex = trackIndexFromRow(row);
 
     if (_columns[col]->isVisible(trackIndex)) {
-        if (_columns[col]->value(0).type() == QVariant::Bool) {
+        QVariant value0 = _columns[col]->value(0);
+#ifdef MU_QT5_COMPAT
+        if (value0.type() == QVariant::Bool) {
+#else
+        if (value0.typeId() == QMetaType::Bool) {
+#endif
             flags |= Qt::ItemIsUserCheckable;
         } else if (_columns[col]->isEditable(trackIndex)) {
             if (trackIndex == -1) {
                 flags |= Qt::ItemIsEditable;
             } else if (editableSingleTrack(trackIndex, col)) {
                 QVariant value = _columns[col]->value(0);
-                if (value.type() != QVariant::Bool) {             // not checkboxes
+#ifdef MU_QT5_COMPAT
+                if (value.type() == QVariant::Bool) {
+#else
+                if (value.typeId() == QMetaType::Bool) {
+#endif            // not checkboxes
                     flags |= Qt::ItemIsEditable;
                 }
             }

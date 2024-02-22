@@ -29,6 +29,7 @@
 
 #include "async/channel.h"
 #include "realfn.h"
+#include "types/val.h"
 
 #include "mpetypes.h"
 #include "soundid.h"
@@ -38,9 +39,14 @@ struct NoteEvent;
 struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
-using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
-using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
-using DynamicLevelChanges = async::Channel<DynamicLevelMap>;
+using PlaybackEventsMap = std::map<timestamp_t, PlaybackEventList>;
+
+struct PlaybackParam;
+using PlaybackParamList = std::vector<PlaybackParam>;
+using PlaybackParamMap = std::map<timestamp_t, PlaybackParamList>;
+
+using MainStreamChanges = async::Channel<PlaybackEventsMap, DynamicLevelMap, PlaybackParamMap>;
+using OffStreamChanges = async::Channel<PlaybackEventsMap, PlaybackParamMap>;
 
 struct ArrangementContext
 {
@@ -106,7 +112,8 @@ struct NoteEvent
                        const dynamic_level_t nominalDynamicLevel,
                        const ArticulationMap& articulationsApplied,
                        const double bps,
-                       const float requiredVelocityFraction = 0.f)
+                       const float requiredVelocityFraction = 0.f,
+                       const PitchCurve& requiredPitchCurve = {})
     {
         m_arrangementCtx.nominalDuration = nominalDuration;
         m_arrangementCtx.nominalTimestamp = nominalTimestamp;
@@ -118,7 +125,7 @@ struct NoteEvent
         m_expressionCtx.articulations = articulationsApplied;
         m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
 
-        setUp(requiredVelocityFraction);
+        setUp(requiredVelocityFraction, requiredPitchCurve);
     }
 
     const ArrangementContext& arrangementCtx() const
@@ -151,12 +158,16 @@ private:
         return static_cast<T>(static_cast<float>(v) * f);
     }
 
-    void setUp(const float requiredVelocityFraction)
+    void setUp(const float requiredVelocityFraction, const PitchCurve& requiredPitchCurve)
     {
         calculateActualDuration(m_expressionCtx.articulations);
         calculateActualTimestamp(m_expressionCtx.articulations);
 
-        calculatePitchCurve(m_expressionCtx.articulations);
+        if (requiredPitchCurve.empty()) {
+            calculatePitchCurve(m_expressionCtx.articulations);
+        } else {
+            m_pitchCtx.pitchCurve = requiredPitchCurve;
+        }
 
         calculateExpressionCurve(m_expressionCtx.articulations, requiredVelocityFraction);
     }
@@ -189,15 +200,14 @@ private:
 
     void calculatePitchCurve(const ArticulationMap& articulationsApplied)
     {
-        const PitchPattern::PitchOffsetMap& appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
+        m_pitchCtx.pitchCurve = articulationsApplied.averagePitchOffsetMap();
 
-        m_pitchCtx.pitchCurve = appliedOffsetMap;
-
-        if (articulationsApplied.averagePitchRange() == 0 || articulationsApplied.averagePitchRange() == PITCH_LEVEL_STEP) {
+        pitch_level_t averagePitchRange = articulationsApplied.averagePitchRange();
+        if (averagePitchRange == 0 || averagePitchRange == PITCH_LEVEL_STEP) {
             return;
         }
 
-        float ratio = static_cast<float>(articulationsApplied.averagePitchRange()) / static_cast<float>(PITCH_LEVEL_STEP);
+        float ratio = static_cast<float>(averagePitchRange) / static_cast<float>(PITCH_LEVEL_STEP);
         float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
 
         for (auto& pair : m_pitchCtx.pitchCurve) {
@@ -369,19 +379,34 @@ static const PlaybackSetupData GENERIC_SETUP_DATA = {
 
 static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 
+struct PlaybackParam {
+    String code;
+    Val val;
+
+    bool operator==(const PlaybackParam& other) const
+    {
+        return code == other.code && val == other.val;
+    }
+};
+
+static const String SOUND_PRESET_PARAM_CODE(u"sound_preset");
+static const String PLAY_TECHNIQUE_PARAM_CODE(u"playing_technique");
+
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
-    PlaybackEventsChanges mainStream;
-    PlaybackEventsChanges offStream;
     DynamicLevelMap dynamicLevelMap;
-    DynamicLevelChanges dynamicLevelChanges;
+    PlaybackParamMap paramMap;
+
+    MainStreamChanges mainStream;
+    OffStreamChanges offStream;
 
     bool operator==(const PlaybackData& other) const
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamicLevelMap == other.dynamicLevelMap;
+               && dynamicLevelMap == other.dynamicLevelMap
+               && paramMap == other.paramMap;
     }
 
     bool isValid() const

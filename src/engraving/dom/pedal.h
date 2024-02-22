@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PEDAL_H__
-#define __PEDAL_H__
+#ifndef MU_ENGRAVING_PEDAL_H
+#define MU_ENGRAVING_PEDAL_H
 
 #include "textlinebase.h"
 

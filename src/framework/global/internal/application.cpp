@@ -63,7 +63,7 @@ void Application::restart()
     // NOTE: remove the first argument - the program name
     QStringList arguments = qApp->arguments().mid(1);
 
-    qApp->quit();
+    QCoreApplication::exit();
 
     QProcess::startDetached(program, arguments);
 }
