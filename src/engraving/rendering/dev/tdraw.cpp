@@ -2631,9 +2631,6 @@ void TDraw::draw(const StaffText* item, Painter* painter)
     drawTextBase(item, painter);
 
     if (item->hasSoundFlag()) {
-        SoundFlag* soundFlag = item->soundFlag();
-        soundFlag->setIconFontSize(item->font().pointSizeF() * MScore::pixelRatio);
-
         draw(item->soundFlag(), painter);
     }
 }
