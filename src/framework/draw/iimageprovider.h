@@ -22,14 +22,12 @@
 #ifndef MU_DRAW_IIMAGEPROVIDER_H
 #define MU_DRAW_IIMAGEPROVIDER_H
 
-#include "io/iodevice.h"
-
-#include "modularity/ioc.h"
+#include "global/modularity/ioc.h"
+#include "global/io/iodevice.h"
 
 #include "types/geometry.h"
 #include "types/pixmap.h"
 #include "types/color.h"
-#include "painter.h"
 #include "ipaintprovider.h"
 
 namespace mu::draw {

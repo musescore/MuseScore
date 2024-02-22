@@ -24,7 +24,6 @@
 
 #include <memory>
 
-#include "types/color.h"
 #include "types/brush.h"
 #include "types/drawtypes.h"
 #include "types/geometry.h"

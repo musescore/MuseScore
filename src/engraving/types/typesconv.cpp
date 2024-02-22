@@ -21,7 +21,9 @@
  */
 #include "typesconv.h"
 
-#include "types/translatablestring.h"
+#include "global/types/translatablestring.h"
+
+#include "draw/types/drawtypes.h"
 
 #include "symnames.h"
 

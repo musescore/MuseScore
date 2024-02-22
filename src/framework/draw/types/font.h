@@ -22,8 +22,8 @@
 #ifndef MU_DRAW_FONT_H
 #define MU_DRAW_FONT_H
 
-#include "types/string.h"
-#include "types/flags.h"
+#include "global/types/string.h"
+#include "global/types/flags.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QFont>

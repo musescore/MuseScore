@@ -22,8 +22,7 @@
 #ifndef MU_DRAW_DRAWTYPES_H
 #define MU_DRAW_DRAWTYPES_H
 
-#include "geometry.h"
-#include "types/flags.h"
+#include "global/types/flags.h"
 
 namespace mu::draw {
 enum class CompositionMode {
