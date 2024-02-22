@@ -328,3 +328,8 @@ bool EngravingConfiguration::specificSlursLayoutWorkaround() const
 {
     return guitarProImportExperimental();
 }
+
+bool EngravingConfiguration::adaptFontSizes() const
+{
+    return true;
+}
