@@ -30,7 +30,7 @@
 #include "io/ifilesystem.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
-namespace mu::framework {
+namespace mu::deprecated {
 class XmlReader;
 class XmlWriter;
 }
@@ -73,10 +73,10 @@ public:
 private:
 
     bool readFromFile(ShortcutList& shortcuts, const io::path_t& path) const;
-    Shortcut readShortcut(framework::XmlReader& reader) const;
+    Shortcut readShortcut(deprecated::XmlReader& reader) const;
 
     bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
-    void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
+    void writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const;
 
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
     void mergeAdditionalShortcuts(ShortcutList& shortcuts);

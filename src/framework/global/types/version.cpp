@@ -26,7 +26,7 @@
 
 static const mu::Char SUFFIX_DELIMITER = '-';
 
-using namespace mu::framework;
+using namespace mu;
 
 static std::array<int, 3> parseVersion(const mu::String& versionString, bool& ok)
 {

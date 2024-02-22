@@ -21,7 +21,6 @@
  */
 
 #include "settings.h"
-#include "log.h"
 
 #include <QDateTime>
 #include <QSettings>
@@ -30,8 +29,9 @@
 
 #include "multiinstances/resourcelockguard.h"
 
+#include "log.h"
+
 using namespace mu;
-using namespace mu::framework;
 using namespace mu::async;
 
 static const std::string SETTINGS_RESOURCE_NAME("SETTINGS");

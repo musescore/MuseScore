@@ -34,7 +34,6 @@
 using namespace mu::iex::audioexport;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::framework;
 
 std::vector<INotationWriter::UnitType> AbstractAudioWriter::supportedUnitTypes() const
 {
@@ -82,7 +81,7 @@ void AbstractAudioWriter::abort()
     playback()->audioOutput()->abortSavingAllSoundTracks();
 }
 
-mu::framework::Progress* AbstractAudioWriter::progress()
+mu::Progress* AbstractAudioWriter::progress()
 {
     return &m_progress;
 }

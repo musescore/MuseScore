@@ -37,7 +37,7 @@
 namespace mu::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(IUpdateConfiguration, configuration)
@@ -65,7 +65,7 @@ private:
     void closeAppAndStartInstallation(const io::path_t& installerPath);
 
     bool m_progress = false;
-    framework::ProgressPtr m_progressChannel = nullptr;
+    mu::ProgressPtr m_progressChannel = nullptr;
 };
 }
 

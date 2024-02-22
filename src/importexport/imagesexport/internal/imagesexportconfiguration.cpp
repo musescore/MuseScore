@@ -25,7 +25,7 @@
 
 #include "engraving/dom/mscore.h"
 
-using namespace mu::framework;
+using namespace mu;
 using namespace mu::iex::imagesexport;
 
 static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY("iex_imagesexport", "export/pdf/dpi");

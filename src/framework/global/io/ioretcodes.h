@@ -22,8 +22,8 @@
 #ifndef MU_IO_IORETCODES_H
 #define MU_IO_IORETCODES_H
 
-#include "types/ret.h"
-#include "translation.h"
+#include "global/types/ret.h"
+#include "global/translation.h"
 
 namespace mu::io {
 enum class Err {

@@ -28,7 +28,6 @@
 
 using namespace mu;
 using namespace mu::musesampler;
-using namespace mu::framework;
 
 static const Settings::Key USER_MUSESAMPLER_PATH("musesampler", "application/paths/museSampler");
 

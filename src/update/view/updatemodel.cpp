@@ -29,7 +29,6 @@
 #include "log.h"
 
 using namespace mu::update;
-using namespace mu::framework;
 
 UpdateModel::UpdateModel(QObject* parent)
     : QObject(parent)

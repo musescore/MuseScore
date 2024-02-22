@@ -110,7 +110,7 @@ void SoundTrackWriter::abort()
     m_isAborted = true;
 }
 
-framework::Progress SoundTrackWriter::progress()
+mu::Progress SoundTrackWriter::progress()
 {
     return m_progress;
 }

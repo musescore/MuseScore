@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_RUNTIME_H
-#define MU_FRAMEWORK_RUNTIME_H
+#ifndef MU_GLOBAL_RUNTIME_H
+#define MU_GLOBAL_RUNTIME_H
 
 #include <thread>
 #include <sstream>
@@ -52,4 +52,4 @@ void setThreadName(const std::string& name);
 const std::string& threadName();
 }
 
-#endif // MU_FRAMEWORK_RUNTIME_H
+#endif // MU_GLOBAL_RUNTIME_H

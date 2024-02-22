@@ -27,7 +27,7 @@
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "project/inotationwriter.h"
 
-namespace mu::framework {
+namespace mu::deprecated {
 class XmlWriter;
 }
 
@@ -59,11 +59,11 @@ private:
     qreal pngDpiResolution() const;
     QHash<void*, int> elementIds(const mu::engraving::Score* score) const;
 
-    void writeElementsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
-    void writeSegmentsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
-    void writeMeasuresPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeElementsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeSegmentsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeMeasuresPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
 
-    void writeEventsPositions(framework::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeEventsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
 
     ElementType m_elementType = ElementType::SEGMENT;
 };

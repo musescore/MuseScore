@@ -56,7 +56,7 @@ private:
     void changeVal(int index, QVariant newVal);
     QString typeToString(Val::Type type) const;
 
-    QList<framework::Settings::Item> m_items;
+    QList<Settings::Item> m_items;
 };
 }
 

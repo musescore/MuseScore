@@ -22,7 +22,7 @@
 #ifndef MU_ASYNC_PROCESSEVENTS_H
 #define MU_ASYNC_PROCESSEVENTS_H
 
-#include "thirdparty/kors_async/async/processevents.h"
+#include "../thirdparty/kors_async/async/processevents.h"
 
 namespace mu::async {
 inline void processEvents()

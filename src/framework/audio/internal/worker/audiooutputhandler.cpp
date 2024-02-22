@@ -204,7 +204,7 @@ Promise<bool> AudioOutputHandler::saveSoundTrack(const TrackSequenceId sequenceI
         SoundTrackWriterPtr writer = std::make_shared<SoundTrackWriter>(destination, format, totalDuration, mixer());
         m_saveSoundTracksWritersMap[sequenceId] = writer;
 
-        framework::Progress progress = saveSoundTrackProgress(sequenceId);
+        mu::Progress progress = saveSoundTrackProgress(sequenceId);
         writer->progress().progressChanged.onReceive(this, [&progress](int64_t current, int64_t total, std::string title) {
             progress.progressChanged.send(current, total, title);
         });
@@ -234,10 +234,10 @@ void AudioOutputHandler::abortSavingAllSoundTracks()
 #endif
 }
 
-mu::framework::Progress AudioOutputHandler::saveSoundTrackProgress(const TrackSequenceId sequenceId)
+mu::Progress AudioOutputHandler::saveSoundTrackProgress(const TrackSequenceId sequenceId)
 {
     if (!contains(m_saveSoundTracksProgressMap, sequenceId)) {
-        m_saveSoundTracksProgressMap.emplace(sequenceId, framework::Progress());
+        m_saveSoundTracksProgressMap.emplace(sequenceId, mu::Progress());
     }
 
     return m_saveSoundTracksProgressMap[sequenceId];

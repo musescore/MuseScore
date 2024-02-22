@@ -25,7 +25,7 @@
 #include <vector>
 #include <cassert>
 
-#include "thirdparty/kors_async/async/changednotify.h"
+#include "../thirdparty/kors_async/async/changednotify.h"
 
 #include "asyncable.h"
 

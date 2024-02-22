@@ -139,8 +139,8 @@ public:
     virtual double guiScaling() const = 0;
     virtual double notationScaling() const = 0;
 
-    virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
-    virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
+    virtual ValCh<mu::Orientation> canvasOrientation() const = 0;
+    virtual void setCanvasOrientation(mu::Orientation orientation) = 0;
 
     virtual bool isLimitCanvasScrollArea() const = 0;
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
@@ -171,11 +171,11 @@ public:
 
     virtual io::path_t stringTuningsPresetsPath() const = 0;
 
-    virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
-    virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;
+    virtual bool isSnappedToGrid(mu::Orientation gridOrientation) const = 0;
+    virtual void setIsSnappedToGrid(mu::Orientation gridOrientation, bool isSnapped) = 0;
 
-    virtual int gridSizeSpatium(framework::Orientation gridOrientation) const = 0;
-    virtual void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) = 0;
+    virtual int gridSizeSpatium(mu::Orientation gridOrientation) const = 0;
+    virtual void setGridSize(mu::Orientation gridOrientation, int sizeSpatium) = 0;
 
     virtual bool needToShowAddTextErrorMessage() const = 0;
     virtual void setNeedToShowAddTextErrorMessage(bool show) = 0;

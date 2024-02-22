@@ -113,16 +113,16 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterType<CorruptScoreDevToolsModel>("MuseScore.Diagnostics", 1, 0, "CorruptScoreDevToolsModel");
 }
 
-void DiagnosticsModule::onInit(const framework::IApplication::RunMode& mode)
+void DiagnosticsModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
     m_configuration->init();
     m_actionsController->init();
 
-    auto globalConf = modularity::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
+    auto globalConf = modularity::ioc()->resolve<IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }

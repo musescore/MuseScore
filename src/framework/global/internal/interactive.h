@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_INTERACTIVE_H
-#define MU_FRAMEWORK_INTERACTIVE_H
+#ifndef MU_GLOBAL_INTERACTIVE_H
+#define MU_GLOBAL_INTERACTIVE_H
 
-#include "iinteractive.h"
+#include "../iinteractive.h"
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
 
-namespace mu::framework {
+namespace mu {
 class Interactive : public IInteractive
 {
     Inject<ui::IInteractiveProvider> provider;
@@ -71,7 +71,7 @@ public:
                  int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
 
     // progress
-    Ret showProgress(const std::string& title, framework::Progress* progress) const override;
+    Ret showProgress(const std::string& title, mu::Progress* progress) const override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
@@ -114,4 +114,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_UIINTERACTIVE_H
+#endif // MU_GLOBAL_UIINTERACTIVE_H

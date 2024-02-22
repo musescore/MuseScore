@@ -28,7 +28,7 @@
 #include <cctype>
 #include <iomanip>
 
-#include "global/thirdparty/utfcpp-3.2.1/utf8.h"
+#include "../thirdparty/utfcpp-3.2.1/utf8.h"
 
 #include "log.h"
 

@@ -37,7 +37,7 @@ namespace mu::project {
 class ExportProjectScenario : public IExportProjectScenario, public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(INotationWritersRegister, writers)
     INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(context::IGlobalContext, context)
@@ -93,7 +93,7 @@ private:
     void setViewModes(const notation::INotationPtrList& notations, notation::ViewMode viewMode) const;
 
     mutable FileConflictPolicy m_fileConflictPolicy = FileConflictPolicy::Undefined;
-    mutable framework::Progress m_exportProgress;
+    mutable mu::Progress m_exportProgress;
 };
 }
 

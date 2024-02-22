@@ -133,9 +133,9 @@ void PaletteModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
-void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
+void PaletteModule::onInit(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::GuiApp != mode) {
+    if (IApplication::RunMode::GuiApp != mode) {
         return;
     }
 
@@ -145,9 +145,9 @@ void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
     m_paletteProvider->init();
 }
 
-void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
+void PaletteModule::onAllInited(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::GuiApp != mode) {
+    if (IApplication::RunMode::GuiApp != mode) {
         return;
     }
 

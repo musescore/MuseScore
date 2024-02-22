@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_AUDIOPLUGINSSCANNERMOCK_H
-#define MU_FRAMEWORK_AUDIOPLUGINSSCANNERMOCK_H
+#ifndef MU_GLOBAL_AUDIOPLUGINSSCANNERMOCK_H
+#define MU_GLOBAL_AUDIOPLUGINSSCANNERMOCK_H
 
 #include <gmock/gmock.h>
 
@@ -34,4 +34,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_AUDIOPLUGINSSCANNERMOCK_H
+#endif // MU_GLOBAL_AUDIOPLUGINSSCANNERMOCK_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_ID_H
-#define MU_FRAMEWORK_ID_H
+#ifndef MU_GLOBAL_ID_H
+#define MU_GLOBAL_ID_H
 
 #include <cstdint>
 #include <vector>
@@ -31,7 +31,6 @@
 #endif
 
 #include "global/logstream.h"
-#include "types/string.h"
 
 namespace mu {
 class ID
@@ -103,4 +102,4 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::ID& v)
     return s;
 }
 
-#endif // MU_FRAMEWORK_ID_H
+#endif // MU_GLOBAL_ID_H

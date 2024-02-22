@@ -33,7 +33,7 @@ class WorkspaceActionController : public actions::Actionable
 {
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(IWorkspaceConfiguration, configuration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
 public:
     void init();

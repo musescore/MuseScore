@@ -29,7 +29,6 @@
 #include "log.h"
 
 using namespace mu::app;
-using namespace mu::framework;
 
 static QStringList prepareArguments(int argc, char** argv)
 {
@@ -488,7 +487,7 @@ void CommandLineParser::processBuiltinArgs(const QCoreApplication& app)
     m_parser.process(app);
 }
 
-mu::framework::IApplication::RunMode CommandLineParser::runMode() const
+mu::IApplication::RunMode CommandLineParser::runMode() const
 {
     return m_runMode;
 }

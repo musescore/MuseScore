@@ -33,7 +33,7 @@ namespace mu::diagnostics {
 class DiagnosticsActionsController : public actions::Actionable
 {
     INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
 
 public:

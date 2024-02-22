@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_RETVAL_H
-#define MU_FRAMEWORK_RETVAL_H
+#ifndef MU_GLOBAL_RETVAL_H
+#define MU_GLOBAL_RETVAL_H
 
 #include "types/ret.h"
 #include "async/channel.h"
@@ -85,4 +85,4 @@ struct ValNt {
 };
 }
 
-#endif // MU_FRAMEWORK_RETVAL_H
+#endif // MU_GLOBAL_RETVAL_H

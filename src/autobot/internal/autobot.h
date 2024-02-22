@@ -44,12 +44,12 @@
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
-    INJECT(framework::IApplication, application)
+    INJECT(IApplication, application)
     INJECT(IAutobotConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(ui::INavigationController, navigation)
     INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(ui::IMainWindow, mainWindow)
 
 public:

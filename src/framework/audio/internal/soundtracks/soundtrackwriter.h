@@ -43,7 +43,7 @@ public:
     Ret write();
     void abort();
 
-    framework::Progress progress();
+    mu::Progress progress();
 
 private:
     encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType& type) const;
@@ -58,7 +58,7 @@ private:
 
     encode::AbstractAudioEncoderPtr m_encoderPtr = nullptr;
 
-    framework::Progress m_progress;
+    mu::Progress m_progress;
     std::atomic<bool> m_isAborted = false;
 };
 }

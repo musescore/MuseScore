@@ -40,8 +40,8 @@ public:
     void resolveImports() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onAllInited(const framework::IApplication::RunMode& mode) override;
+    void onInit(const IApplication::RunMode& mode) override;
+    void onAllInited(const IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<PlaybackConfiguration> m_configuration;

@@ -29,7 +29,6 @@
 #include "languageserrors.h"
 
 using namespace mu;
-using namespace mu::framework;
 using namespace mu::languages;
 
 static const Settings::Key LANGUAGE_KEY("languages", "language");

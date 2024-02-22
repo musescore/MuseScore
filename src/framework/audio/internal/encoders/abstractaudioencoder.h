@@ -68,7 +68,7 @@ public:
     virtual size_t encode(samples_t samplesPerChannel, const float* input) = 0;
     virtual size_t flush() = 0;
 
-    framework::Progress progress()
+    mu::Progress progress()
     {
         return m_progress;
     }
@@ -123,7 +123,7 @@ protected:
     std::vector<unsigned char> m_outputBuffer;
 
     SoundTrackFormat m_format;
-    framework::Progress m_progress;
+    mu::Progress m_progress;
 
     std::string m_locale;
 };

@@ -27,7 +27,7 @@
 #include <string>
 #include <map>
 
-#include "types/bytearray.h"
+#include "global/types/bytearray.h"
 
 namespace mu::io {
 class IODevice

@@ -42,9 +42,9 @@ public:
     virtual void registerResources() {}
     virtual void registerUiTypes() {}
 
-    virtual void onPreInit(const framework::IApplication::RunMode& mode) { (void)mode; }
-    virtual void onInit(const framework::IApplication::RunMode& mode) { (void)mode; }
-    virtual void onAllInited(const framework::IApplication::RunMode& mode) { (void)mode; }
+    virtual void onPreInit(const IApplication::RunMode& mode) { (void)mode; }
+    virtual void onInit(const IApplication::RunMode& mode) { (void)mode; }
+    virtual void onAllInited(const IApplication::RunMode& mode) { (void)mode; }
     virtual void onDelayedInit() {}
     virtual void onDeinit() {}
     virtual void onDestroy() {}

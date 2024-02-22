@@ -202,9 +202,9 @@ void NotationModule::registerUiTypes()
     }
 }
 
-void NotationModule::onInit(const framework::IApplication::RunMode& mode)
+void NotationModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
@@ -213,7 +213,7 @@ void NotationModule::onInit(const framework::IApplication::RunMode& mode)
     m_actionController->init();
     m_notationUiActions->init();
 
-    if (mode == framework::IApplication::RunMode::GuiApp) {
+    if (mode == IApplication::RunMode::GuiApp) {
         m_midiInputOutputController->init();
     }
 

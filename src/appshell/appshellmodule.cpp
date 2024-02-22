@@ -73,7 +73,6 @@
 #endif
 
 using namespace mu::appshell;
-using namespace mu::framework;
 using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::dock;
@@ -186,9 +185,9 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
-void AppShellModule::onPreInit(const framework::IApplication::RunMode& mode)
+void AppShellModule::onPreInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
@@ -197,7 +196,7 @@ void AppShellModule::onPreInit(const framework::IApplication::RunMode& mode)
 
 void AppShellModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
@@ -213,9 +212,9 @@ void AppShellModule::onInit(const IApplication::RunMode& mode)
 #endif
 }
 
-void AppShellModule::onAllInited(const framework::IApplication::RunMode& mode)
+void AppShellModule::onAllInited(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

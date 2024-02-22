@@ -24,8 +24,8 @@
 
 #include <string>
 
-#include "types/string.h"
-#include "framework/global/logstream.h"
+#include "global/types/string.h"
+#include "global/logstream.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QString>

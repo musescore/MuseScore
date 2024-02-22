@@ -28,7 +28,6 @@ using namespace mu::engraving;
 MessageBox::Button MessageBox::warning(const std::string& title, const std::string& text, const std::set<Button>& buttons)
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
-    using namespace mu::framework;
 
     std::vector<IInteractive::Button> realButtons;
     if (buttons.find(Cancel) != buttons.cend()) {

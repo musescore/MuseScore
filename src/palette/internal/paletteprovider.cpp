@@ -43,7 +43,6 @@
 #include "types/uri.h"
 
 using namespace mu::palette;
-using namespace mu::framework;
 using namespace mu::engraving;
 
 // ========================================================

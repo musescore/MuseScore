@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "types/uri.h"
+#include "uri.h"
+
+#include "../stringutils.h"
 
 #include "log.h"
-#include "stringutils.h"
 
 using namespace mu;
 

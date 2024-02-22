@@ -81,11 +81,11 @@ void MidiModule::registerUiTypes()
     qmlRegisterType<MidiPortDevModel>("MuseScore.Midi", 1, 0, "MidiPortDevModel");
 }
 
-void MidiModule::onInit(const framework::IApplication::RunMode& mode)
+void MidiModule::onInit(const IApplication::RunMode& mode)
 {
     m_configuration->init();
 
-    if (mode == framework::IApplication::RunMode::GuiApp) {
+    if (mode == IApplication::RunMode::GuiApp) {
         m_midiOutPort->init();
         m_midiInPort->init();
     }

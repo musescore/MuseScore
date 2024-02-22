@@ -32,7 +32,7 @@ public:
 
     RetVal<io::path_t> downloadRelease() override;
     void cancelUpdate() override;
-    framework::Progress updateProgress() override;
+    mu::Progress updateProgress() override;
 };
 }
 

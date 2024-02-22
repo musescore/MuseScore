@@ -23,7 +23,7 @@
 
 #include "settings.h"
 
-using namespace mu::framework;
+using namespace mu;
 using namespace mu::iex::mei;
 
 static const std::string module_name("iex_mei");

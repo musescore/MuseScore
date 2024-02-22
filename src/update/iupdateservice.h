@@ -42,7 +42,7 @@ public:
 
     virtual RetVal<io::path_t> downloadRelease() = 0;
     virtual void cancelUpdate() = 0;
-    virtual framework::Progress updateProgress() = 0;
+    virtual mu::Progress updateProgress() = 0;
 };
 }
 

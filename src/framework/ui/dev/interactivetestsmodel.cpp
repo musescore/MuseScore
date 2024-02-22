@@ -22,15 +22,13 @@
 #include "interactivetestsmodel.h"
 
 #include <QTimer>
-
-#include "log.h"
+#include <QAccessible>
 
 #include "async/async.h"
 
-#include <QAccessible>
+#include "log.h"
 
 using namespace mu::ui;
-using namespace mu::framework;
 
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
     : QObject(parent)

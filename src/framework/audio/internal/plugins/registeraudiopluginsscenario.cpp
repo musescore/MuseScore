@@ -32,7 +32,6 @@
 #include "log.h"
 
 using namespace mu::audio;
-using namespace mu::framework;
 
 void RegisterAudioPluginsScenario::init()
 {

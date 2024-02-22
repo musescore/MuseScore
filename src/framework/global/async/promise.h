@@ -22,7 +22,7 @@
 #ifndef MU_ASYNC_PROMISE_H
 #define MU_ASYNC_PROMISE_H
 
-#include "thirdparty/kors_async/async/promise.h"
+#include "../thirdparty/kors_async/async/promise.h"
 
 namespace mu::async {
 template<typename ... T>

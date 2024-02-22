@@ -21,7 +21,7 @@
  */
 #include "xmldom.h"
 
-#include "thirdparty/tinyxml/tinyxml2.h"
+#include "../thirdparty/tinyxml/tinyxml2.h"
 
 #include "log.h"
 

@@ -60,7 +60,7 @@ public:
     virtual Ret write(notation::INotationPtr notation, io::IODevice& device, const Options& options = Options()) = 0;
     virtual Ret writeList(const notation::INotationPtrList& notations, io::IODevice& device, const Options& options = Options()) = 0;
 
-    virtual framework::Progress* progress() { return nullptr; }
+    virtual mu::Progress* progress() { return nullptr; }
     virtual void abort() {}
 };
 

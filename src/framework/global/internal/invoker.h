@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_INVOKER_H
-#define MU_FRAMEWORK_INVOKER_H
+#ifndef MU_GLOBAL_INVOKER_H
+#define MU_GLOBAL_INVOKER_H
 
 #include <QObject>
 #include <thread>
 #include <functional>
 
-namespace mu::framework {
+namespace mu {
 class Invoker : public QObject
 {
     Q_OBJECT
@@ -55,4 +55,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_INVOKER_H
+#endif // MU_GLOBAL_INVOKER_H

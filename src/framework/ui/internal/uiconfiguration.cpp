@@ -39,7 +39,6 @@
 
 using namespace mu;
 using namespace mu::ui;
-using namespace mu::framework;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");

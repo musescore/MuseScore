@@ -21,7 +21,7 @@
  */
 #include "xmlstreamwriter.h"
 
-#include "containers.h"
+#include "global/containers.h"
 #include "textstream.h"
 
 #include "log.h"

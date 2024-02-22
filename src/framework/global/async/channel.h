@@ -22,7 +22,7 @@
 #ifndef MU_ASYNC_CHANNEL_H
 #define MU_ASYNC_CHANNEL_H
 
-#include "thirdparty/kors_async/async/channel.h"
+#include "../thirdparty/kors_async/async/channel.h"
 namespace mu::async {
 template<typename ... T>
 using Channel = kors::async::Channel<T...>;

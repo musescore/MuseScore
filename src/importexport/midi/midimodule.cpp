@@ -60,9 +60,9 @@ void MidiModule::resolveImports()
     }
 }
 
-void MidiModule::onInit(const framework::IApplication::RunMode& mode)
+void MidiModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

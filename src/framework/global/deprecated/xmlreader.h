@@ -20,20 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_XMLREADER_H
-#define MU_FRAMEWORK_XMLREADER_H
+#ifndef MU_GLOBAL_XMLREADER_H
+#define MU_GLOBAL_XMLREADER_H
 
 #include <memory>
 #include <QIODevice>
 
-#include "io/path.h"
+#include "global/io/path.h"
 
 //! NOTE This is class is deprecated, please use serialization/xmlstreamreader.h or serialization/xmldom.h
 
 class QXmlStreamReader;
 class QByteArray;
 
-namespace mu::framework {
+namespace mu::deprecated {
 class XmlReader
 {
 public:
@@ -87,4 +87,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_XMLREADER_H
+#endif // MU_GLOBAL_XMLREADER_H

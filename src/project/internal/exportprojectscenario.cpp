@@ -31,7 +31,6 @@
 using namespace mu::io;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::framework;
 
 std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes(const ExportType& exportType) const
 {

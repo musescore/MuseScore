@@ -97,5 +97,5 @@ void LoadingScreenView::draw(QPainter* painter)
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | alignment | Qt::TextDontClip,
-                      qtrc("appshell", "Version %1").arg(QString::fromStdString(framework::MUVersion::fullVersion().toStdString())));
+                      qtrc("appshell", "Version %1").arg(QString::fromStdString(MUVersion::fullVersion().toStdString())));
 }

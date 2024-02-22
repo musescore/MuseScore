@@ -29,7 +29,6 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::framework;
 using namespace mu::midi;
 
 constexpr std::string_view MIDIMAPPING_TAG("MidiMapping");
@@ -127,7 +126,7 @@ void MidiRemote::readMidiMappings()
     mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
     io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
-    XmlReader reader(midiMappingsPath);
+    deprecated::XmlReader reader(midiMappingsPath);
 
     reader.readNextStartElement();
     if (reader.tagName() != MIDIMAPPING_TAG) {
@@ -151,7 +150,7 @@ void MidiRemote::readMidiMappings()
     }
 }
 
-MidiControlsMapping MidiRemote::readMidiMapping(XmlReader& reader) const
+MidiControlsMapping MidiRemote::readMidiMapping(deprecated::XmlReader& reader) const
 {
     MidiControlsMapping midiMapping;
 
@@ -179,7 +178,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
     mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
     io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
-    XmlWriter writer(midiMappingsPath);
+    deprecated::XmlWriter writer(midiMappingsPath);
 
     writer.writeStartDocument();
     writer.writeStartElement(MIDIMAPPING_TAG);
@@ -194,7 +193,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
     return writer.success();
 }
 
-void MidiRemote::writeMidiMapping(XmlWriter& writer, const MidiControlsMapping& midiMapping) const
+void MidiRemote::writeMidiMapping(deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const
 {
     writer.writeStartElement(EVENT_TAG);
     writer.writeTextElement(MAPPING_ACTION_CODE_TAG, midiMapping.action);

@@ -47,7 +47,6 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::shortcuts;
-using namespace mu::framework;
 using namespace mu::modularity;
 using namespace mu::ui;
 

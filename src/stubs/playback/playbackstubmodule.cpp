@@ -28,7 +28,6 @@
 #include "playbackconfigurationstub.h"
 
 using namespace mu::playback;
-using namespace mu::framework;
 using namespace mu::modularity;
 
 static void playback_init_qrc()

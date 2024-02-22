@@ -35,7 +35,7 @@ namespace mu::palette {
 class PaletteActionsController : public actions::Actionable, public async::Asyncable
 {
     INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
 
 public:

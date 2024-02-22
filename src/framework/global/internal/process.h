@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef PROCESS_H
-#define PROCESS_H
+#ifndef MU_GLOBAL_PROCESS_H
+#define MU_GLOBAL_PROCESS_H
 
 #include "../iprocess.h"
 
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // PROCESS_H
+#endif // MU_GLOBAL_PROCESS_H

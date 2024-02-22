@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_PTRUTILS_H
-#define MU_FRAMEWORK_PTRUTILS_H
+#ifndef MU_GLOBAL_PTRUTILS_H
+#define MU_GLOBAL_PTRUTILS_H
 
 #include "runtime.h"
 #include "log.h"
@@ -53,4 +53,4 @@ template<typename T, typename E> const T* checked_cast(const E* source)
 }
 }
 
-#endif // MU_FRAMEWORK_PTRUTILS_H
+#endif // MU_GLOBAL_PTRUTILS_H

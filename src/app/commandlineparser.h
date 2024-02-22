@@ -157,7 +157,7 @@ public:
     void parse(int argc, char** argv);
     void processBuiltinArgs(const QCoreApplication& app);
 
-    framework::IApplication::RunMode runMode() const;
+    IApplication::RunMode runMode() const;
 
     // Options
     const Options& options() const;
@@ -172,7 +172,7 @@ private:
     void printLongVersion() const;
 
     QCommandLineParser m_parser;
-    framework::IApplication::RunMode m_runMode = framework::IApplication::RunMode::GuiApp;
+    IApplication::RunMode m_runMode = IApplication::RunMode::GuiApp;
     Options m_options;
 
     ConverterTask m_converterTask;

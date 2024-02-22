@@ -31,7 +31,7 @@ class SelectMultipleDirectoriesModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(bool isRemovingAvailable READ isRemovingAvailable NOTIFY selectionChanged)
 

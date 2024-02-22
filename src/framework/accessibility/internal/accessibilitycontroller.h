@@ -50,7 +50,7 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
     public std::enable_shared_from_this<AccessibilityController>
 {
 public:
-    Inject<framework::IApplication> application;
+    Inject<IApplication> application;
     Inject<ui::IMainWindow> mainWindow;
     Inject<ui::IInteractiveProvider> interactiveProvider;
     Inject<IAccessibilityConfiguration> configuration;

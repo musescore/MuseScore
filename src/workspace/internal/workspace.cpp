@@ -31,7 +31,6 @@
 
 using namespace mu;
 using namespace mu::workspace;
-using namespace mu::framework;
 
 Workspace::Workspace(const io::path_t& filePath)
     : m_file(filePath)

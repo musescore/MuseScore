@@ -57,13 +57,13 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    void onInit(const IApplication::RunMode& mode) override;
     void onDelayedInit() override;
     void onDeinit() override;
     void onDestroy() override;
 
 private:
-    void setupAudioDriver(const framework::IApplication::RunMode& mode);
+    void setupAudioDriver(const IApplication::RunMode& mode);
     void setupAudioWorker(const IAudioDriver::Spec& activeSpec);
 
     std::shared_ptr<AudioConfiguration> m_configuration;

@@ -25,7 +25,7 @@
 #include <QXmlStreamReader>
 #include <QFile>
 
-using namespace mu::framework;
+using namespace mu::deprecated;
 using namespace mu::io;
 
 static XmlReader::TokenType convertTokenType(QXmlStreamReader::TokenType type)

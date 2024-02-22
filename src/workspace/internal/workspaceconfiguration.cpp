@@ -27,7 +27,6 @@
 
 using namespace mu;
 using namespace mu::workspace;
-using namespace mu::framework;
 
 static const Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
 

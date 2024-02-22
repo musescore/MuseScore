@@ -48,9 +48,9 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
 
-    void onPreInit(const framework::IApplication::RunMode& mode) override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onAllInited(const framework::IApplication::RunMode& mode) override;
+    void onPreInit(const IApplication::RunMode& mode) override;
+    void onInit(const IApplication::RunMode& mode) override;
+    void onAllInited(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
 private:

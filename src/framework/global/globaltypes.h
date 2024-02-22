@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_GLOBALTYPES_H
-#define MU_FRAMEWORK_GLOBALTYPES_H
+#ifndef MU_GLOBAL_GLOBALTYPES_H
+#define MU_GLOBAL_GLOBALTYPES_H
 
-namespace mu::framework {
+namespace mu {
 enum class Orientation
 {
     // Note: values from Qt::Orientation
@@ -31,4 +31,4 @@ enum class Orientation
 };
 }
 
-#endif // MU_FRAMEWORK_GLOBALTYPES_H
+#endif // MU_GLOBAL_GLOBALTYPES_H

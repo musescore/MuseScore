@@ -43,7 +43,6 @@
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::framework;
 using namespace mu::actions;
 
 static const mu::Uri NOTATION_PAGE_URI("musescore://notation");

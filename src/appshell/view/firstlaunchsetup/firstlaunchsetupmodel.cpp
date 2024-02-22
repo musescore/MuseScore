@@ -25,7 +25,6 @@
 
 using namespace mu;
 using namespace mu::appshell;
-using namespace mu::framework;
 
 FirstLaunchSetupModel::FirstLaunchSetupModel(QObject* parent)
     : QObject(parent)

@@ -25,7 +25,6 @@
 
 using namespace mu;
 using namespace mu::plugins::api;
-using namespace mu::framework;
 
 FileDialog::FileDialog(QObject* parent)
     : QObject(parent) {}

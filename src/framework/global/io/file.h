@@ -22,11 +22,11 @@
 #ifndef MU_IO_FILE_H
 #define MU_IO_FILE_H
 
+#include "global/modularity/ioc.h"
+#include "ifilesystem.h"
+
 #include "iodevice.h"
 #include "path.h"
-
-#include "modularity/ioc.h"
-#include "ifilesystem.h"
 
 namespace mu::io {
 class File : public IODevice

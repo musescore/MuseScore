@@ -46,7 +46,7 @@ public:
     Ret write(notation::INotationPtr notation, io::IODevice& dstDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, io::IODevice& dstDevice, const Options& options = Options()) override;
 
-    framework::Progress* progress() override;
+    mu::Progress* progress() override;
     void abort() override;
 
 protected:
@@ -55,7 +55,7 @@ protected:
 private:
     UnitType unitTypeFromOptions(const Options& options) const;
 
-    framework::Progress m_progress;
+    mu::Progress m_progress;
     bool m_isCompleted = false;
     Ret m_writeRet;
 };

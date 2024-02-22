@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SYSTEM_FILESYSTEM_H
-#define MU_SYSTEM_FILESYSTEM_H
+#ifndef MU_IO_FILESYSTEM_H
+#define MU_IO_FILESYSTEM_H
 
 #include "../ifilesystem.h"
 
@@ -65,4 +65,4 @@ private:
 };
 }
 
-#endif // MU_SYSTEM_FILESYSTEM_H
+#endif // MU_IO_FILESYSTEM_H

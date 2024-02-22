@@ -40,7 +40,6 @@
 #endif
 
 using namespace mu;
-using namespace mu::framework;
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 

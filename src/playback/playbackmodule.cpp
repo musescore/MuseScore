@@ -102,9 +102,9 @@ void PlaybackModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
-void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
+void PlaybackModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
@@ -112,16 +112,16 @@ void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
     m_soundProfileRepo->init();
     m_playbackController->init();
 
-    if (mode != framework::IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 
     m_playbackUiActions->init();
 }
 
-void PlaybackModule::onAllInited(const framework::IApplication::RunMode& mode)
+void PlaybackModule::onAllInited(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

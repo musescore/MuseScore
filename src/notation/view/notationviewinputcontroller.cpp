@@ -326,7 +326,7 @@ void NotationViewInputController::doZoomToTwoPages()
     qreal pageHeightScale = 0.0;
     qreal pageWidthScale = 0.0;
 
-    if (configuration()->canvasOrientation().val == framework::Orientation::Vertical) {
+    if (configuration()->canvasOrientation().val == mu::Orientation::Vertical) {
         constexpr qreal VERTICAL_PAGE_GAP = 5.0;
         pageHeightScale = viewHeight / (pageHeight * 2.0 + VERTICAL_PAGE_GAP);
         pageWidthScale = viewWidth / pageWidth;
@@ -436,7 +436,7 @@ void NotationViewInputController::movePage(int direction)
         return;
     }
     Page* page = notation->elements()->msScore()->pages().back();
-    if (configuration()->canvasOrientation().val == mu::framework::Orientation::Vertical) {
+    if (configuration()->canvasOrientation().val == mu::Orientation::Vertical) {
         qreal offset = std::min((page->height() + notationScreenPadding) * direction, m_view->toLogical(
                                     QPoint()).y() + notationScreenPadding);
         m_view->moveCanvasVertical(offset);

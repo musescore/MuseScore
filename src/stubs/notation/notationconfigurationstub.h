@@ -126,8 +126,8 @@ public:
     double guiScaling() const override;
     double notationScaling() const override;
 
-    ValCh<framework::Orientation> canvasOrientation() const override;
-    void setCanvasOrientation(framework::Orientation orientation)  override;
+    ValCh<mu::Orientation> canvasOrientation() const override;
+    void setCanvasOrientation(mu::Orientation orientation)  override;
 
     bool isLimitCanvasScrollArea() const override;
     void setIsLimitCanvasScrollArea(bool limited)  override;
@@ -153,11 +153,11 @@ public:
     io::paths_t userScoreOrderListPaths() const override;
     void setUserScoreOrderListPaths(const io::paths_t& paths)  override;
 
-    bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
-    void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped)  override;
+    bool isSnappedToGrid(mu::Orientation gridOrientation) const override;
+    void setIsSnappedToGrid(mu::Orientation gridOrientation, bool isSnapped)  override;
 
-    int gridSizeSpatium(framework::Orientation gridOrientation) const override;
-    void setGridSize(framework::Orientation gridOrientation, int sizeSpatium)  override;
+    int gridSizeSpatium(mu::Orientation gridOrientation) const override;
+    void setGridSize(mu::Orientation gridOrientation, int sizeSpatium)  override;
 
     bool needToShowAddTextErrorMessage() const override;
     void setNeedToShowAddTextErrorMessage(bool show)  override;

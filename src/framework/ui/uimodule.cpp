@@ -160,18 +160,18 @@ void UiModule::registerUiTypes()
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onPreInit(const framework::IApplication::RunMode& mode)
+void UiModule::onPreInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
     m_configuration->init();
 }
 
-void UiModule::onInit(const framework::IApplication::RunMode& mode)
+void UiModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != framework::IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 
@@ -180,9 +180,9 @@ void UiModule::onInit(const framework::IApplication::RunMode& mode)
     m_keyNavigationController->init();
 }
 
-void UiModule::onAllInited(const framework::IApplication::RunMode& mode)
+void UiModule::onAllInited(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::GuiApp != mode) {
+    if (IApplication::RunMode::GuiApp != mode) {
         return;
     }
 

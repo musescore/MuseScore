@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_REALFN_H
-#define MU_FRAMEWORK_REALFN_H
+#ifndef MU_GLOBAL_REALFN_H
+#define MU_GLOBAL_REALFN_H
 
 #include <cmath>
 #include <algorithm>
@@ -178,4 +178,4 @@ inline double RealFloor(float value, int prec)
 }
 }
 
-#endif // MU_FRAMEWORK_REALFN_H
+#endif // MU_GLOBAL_REALFN_H

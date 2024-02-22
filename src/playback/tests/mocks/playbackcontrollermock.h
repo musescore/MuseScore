@@ -83,7 +83,7 @@ public:
     MOCK_METHOD(double, tempoMultiplier, (), (const, override));
     MOCK_METHOD(void, setTempoMultiplier, (double), (override));
 
-    MOCK_METHOD(framework::Progress, loadingProgress, (), (const, override));
+    MOCK_METHOD(mu::Progress, loadingProgress, (), (const, override));
 
     MOCK_METHOD(void, applyProfile, (const SoundProfileName&), (override));
 

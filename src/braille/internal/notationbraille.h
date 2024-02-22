@@ -43,7 +43,7 @@ class Selection;
 
 class NotationBraille : public mu::braille::INotationBraille, public async::Asyncable
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)

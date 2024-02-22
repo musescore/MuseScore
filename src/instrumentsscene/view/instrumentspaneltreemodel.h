@@ -54,7 +54,7 @@ class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Async
     INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(bool isMovingUpAvailable READ isMovingUpAvailable NOTIFY isMovingUpAvailableChanged)
     Q_PROPERTY(bool isMovingDownAvailable READ isMovingDownAvailable NOTIFY isMovingDownAvailableChanged)

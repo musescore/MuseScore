@@ -37,7 +37,7 @@ class PartListModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
 

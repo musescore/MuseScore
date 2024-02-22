@@ -23,7 +23,7 @@
 
 #include "types/version.h"
 
-using namespace mu::framework;
+using namespace mu;
 
 class Global_Types_VersionTests : public ::testing::Test
 {

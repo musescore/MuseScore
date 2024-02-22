@@ -22,15 +22,14 @@
 #ifndef MU_IO_DIR_H
 #define MU_IO_DIR_H
 
-#include "types/retval.h"
+#include "global/types/retval.h"
+#include "global/modularity/ioc.h"
+
 #include "path.h"
 #include "ioenums.h"
-
-#include "modularity/ioc.h"
 #include "ifilesystem.h"
 
 namespace mu::io {
-class IFileSystem;
 class Dir
 {
     static inline Inject<IFileSystem> fileSystem;

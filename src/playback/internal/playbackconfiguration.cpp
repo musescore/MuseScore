@@ -28,8 +28,8 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::playback;
-using namespace mu::framework;
 using namespace mu::audio;
 
 static const std::string moduleName("playback");

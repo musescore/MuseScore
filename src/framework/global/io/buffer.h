@@ -22,8 +22,8 @@
 #ifndef MU_IO_BUFFER_H
 #define MU_IO_BUFFER_H
 
+#include "../types/bytearray.h"
 #include "iodevice.h"
-#include "types/bytearray.h"
 
 namespace mu::io {
 class Buffer : public IODevice
