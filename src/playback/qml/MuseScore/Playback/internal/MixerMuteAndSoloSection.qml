@@ -52,7 +52,7 @@ MixerPanelSection {
                 checked: channelItem.muted
 
                 // TODO: not use `enabled` for this, but present visually in some other way
-                enabled: !(channelItem.muted && channelItem.forceMute)
+                enabled: !(channelItem.muted && channelItem.forceMute) && channelItem.type !== MixerChannelItem.Metronome
 
                 navigation.name: "MuteButton"
                 navigation.panel: channelItem.panel
@@ -79,7 +79,7 @@ MixerPanelSection {
                 checked: channelItem.solo
 
                 enabled: channelItem.type !== MixerChannelItem.Aux && (!channelItem.muted || channelItem.forceMuted)
-                visible: channelItem.type !== MixerChannelItem.Master
+                visible: channelItem.type !== MixerChannelItem.Master && channelItem.type !== MixerChannelItem.Metronome
 
                 navigation.name: "SoloButton"
                 navigation.panel: channelItem.panel

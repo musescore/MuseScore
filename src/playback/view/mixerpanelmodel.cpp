@@ -417,6 +417,11 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
     MixerChannelItem::Type type = isPrimary ? MixerChannelItem::Type::PrimaryInstrument
                                   : MixerChannelItem::Type::SecondaryInstrument;
 
+    const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
+    if (instrumentTrackId == metronomeTrackId) {
+        type = MixerChannelItem::Type::Metronome;
+    }
+
     MixerChannelItem* item = new MixerChannelItem(this, type, false /*outputOnly*/, trackId);
     item->setInstrumentTrackId(instrumentTrackId);
     item->setPanelSection(m_navigationSection);

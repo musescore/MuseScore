@@ -72,6 +72,7 @@ public:
         Unknown,
         PrimaryInstrument,
         SecondaryInstrument,
+        Metronome,
         Aux,
         Master,
     };
