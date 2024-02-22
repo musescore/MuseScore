@@ -117,7 +117,7 @@ enum class CommandType {
 
     // Style
     ChangeStyle,
-    ChangeStyleVal,
+    ChangeStyleValues,
 
     // Property
     ChangeProperty,

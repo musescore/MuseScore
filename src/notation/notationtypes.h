@@ -76,6 +76,7 @@ using Pad = mu::engraving::Pad;
 using ViewMode = engraving::LayoutMode;
 using PitchMode = mu::engraving::UpDownMode;
 using StyleId = mu::engraving::Sid;
+using StyleIdSet = mu::engraving::StyleIdSet;
 using SymbolId = mu::engraving::SymId;
 using Key = mu::engraving::Key;
 using KeyMode = mu::engraving::KeyMode;

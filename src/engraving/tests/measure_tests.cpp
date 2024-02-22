@@ -484,7 +484,7 @@ TEST_F(Engraving_MeasureTests, mmrest)
     EXPECT_TRUE(score);
 
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
     score->setLayoutAll();
     score->endCmd();
 
@@ -513,20 +513,20 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
 
     // Place measure numbers below
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, PlacementV::BELOW));
+    score->undoChangeStyleVal(Sid::measureNumberVPlacement, PlacementV::BELOW);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-1.mscx", MEASURE_DATA_DIR + u"measurenumber-1-ref.mscx"));
 
     // center measure numbers
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, PlacementH::CENTER));
+    score->undoChangeStyleVal(Sid::measureNumberHPlacement, PlacementH::CENTER);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-2.mscx", MEASURE_DATA_DIR + u"measurenumber-2-ref.mscx"));
 
     // show on first system too
-    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, true));
+    score->undoChangeStyleVal(Sid::showMeasureNumberOne, true);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-3.mscx", MEASURE_DATA_DIR + u"measurenumber-3-ref.mscx"));
@@ -535,7 +535,7 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
     score->startCmd();
     // to know whether measure numbers are shown at regular intervals or on every system,
     // musescore simply checks if measure numbers are shown at system or not.
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, false));
+    score->undoChangeStyleVal(Sid::measureNumberSystem, false);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-4.mscx", MEASURE_DATA_DIR + u"measurenumber-4-ref.mscx"));
@@ -544,14 +544,14 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
     // because they are still placed at regular intervals.
     // Instead of being at 1-6-11-16-21, etc. They should be at 5-10-15-20-25, etc.
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, false));
+    score->undoChangeStyleVal(Sid::showMeasureNumberOne, false);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-5.mscx", MEASURE_DATA_DIR + u"measurenumber-5-ref.mscx"));
 
     // show at every measure (except fist)
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, 1));
+    score->undoChangeStyleVal(Sid::measureNumberInterval, 1);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-6.mscx", MEASURE_DATA_DIR + u"measurenumber-6-ref.mscx"));
@@ -560,7 +560,7 @@ TEST_F(Engraving_MeasureTests, measureNumbers)
     score->startCmd();
     // to know whether measure numbers are shown at regular intervals or on every system,
     // musescore simply checks if measure numbers are shown at system or not.
-    score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, false));
+    score->undoChangeStyleVal(Sid::showMeasureNumber, false);
     score->setLayoutAll();
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measurenumber-7.mscx", MEASURE_DATA_DIR + u"measurenumber-7-ref.mscx"));

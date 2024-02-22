@@ -340,6 +340,7 @@ void NotationActionController::init()
     registerAction("reset-text-style-overrides", &Interaction::resetTextStyleOverrides);
     registerAction("reset-beammode", &Controller::resetBeamMode);
     registerAction("reset", &Interaction::resetShapesAndPosition, &Controller::hasSelection);
+    registerAction("reset-to-default-layout", &Interaction::resetToDefaultLayout);
 
     registerAction("show-invisible", [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
     registerAction("show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });

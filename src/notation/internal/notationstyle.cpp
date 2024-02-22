@@ -90,33 +90,9 @@ void NotationStyle::applyToAllParts()
     }
 }
 
-void NotationStyle::resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes)
+void NotationStyle::resetAllStyleValues(const StyleIdSet& exceptTheseOnes)
 {
-    static const std::set<StyleId> stylesNotToReset {
-        StyleId::pageWidth,
-        StyleId::pageHeight,
-        StyleId::pagePrintableWidth,
-        StyleId::pageEvenTopMargin,
-        StyleId::pageEvenBottomMargin,
-        StyleId::pageEvenLeftMargin,
-        StyleId::pageOddTopMargin,
-        StyleId::pageOddBottomMargin,
-        StyleId::pageOddLeftMargin,
-        StyleId::pageTwosided,
-        StyleId::spatium,
-        StyleId::concertPitch,
-        StyleId::createMultiMeasureRests
-    };
-
-    int beginIdx = int(StyleId::NOSTYLE) + 1;
-    int endIdx = int(StyleId::STYLES);
-    for (int idx = beginIdx; idx < endIdx; idx++) {
-        StyleId styleId = StyleId(idx);
-        if (stylesNotToReset.find(styleId) == stylesNotToReset.cend() && exceptTheseOnes.find(styleId) == exceptTheseOnes.cend()) {
-            score()->resetStyleValue(styleId);
-        }
-    }
-
+    score()->cmdResetAllStyles(exceptTheseOnes);
     score()->update();
     m_styleChanged.notify();
 }
