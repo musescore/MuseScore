@@ -25,7 +25,7 @@ on:
       qt5_compat:
         description: 'Build with Qt5 '
         required: false
-        default: 'on'  
+        default: 'off'  
 
 env:
   CURRENT_RELEASE_BRANCH: 4.3.0
