@@ -23,19 +23,14 @@
 #ifndef MU_AUDIO_SFCACHEDLOADER_H
 #define MU_AUDIO_SFCACHEDLOADER_H
 
+#include <cstdio>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <cstdio>
-#include <vector>
-#include <map>
-#include <string>
-
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
-
-#include "log.h"
 
 namespace mu::audio::synth {
 struct SoundFontData

@@ -26,7 +26,6 @@
 
 #include "logger.h"
 #include "logremover.h"
-#include "thirdparty/kors_logger/src/logdefdest.h"
 #include "profiler.h"
 #include "muversion.h"
 

@@ -22,8 +22,6 @@
 #ifndef MU_ENGRAVING_PROPERTYVALUE_H
 #define MU_ENGRAVING_PROPERTYVALUE_H
 
-#include <any>
-#include <string>
 #include <memory>
 #include <cassert>
 

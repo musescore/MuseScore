@@ -735,7 +735,7 @@ bool MuseData::read(const QString& name)
             continue;
         }
         if (s[0] == 'a') {
-            part.back().append(QStringView(s).mid(1));
+            part.back().append(s.mid(1));
             continue;
         }
         part.append(s);

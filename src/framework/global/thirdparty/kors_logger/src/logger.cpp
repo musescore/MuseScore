@@ -48,7 +48,6 @@ static constexpr char COLON(':');
 static constexpr char DOT('.');
 static constexpr char HYPEN('-');
 static constexpr char T('T');
-static constexpr char SPACE(' ');
 
 static constexpr std::string_view MAIN_THREAD("main_thread");
 

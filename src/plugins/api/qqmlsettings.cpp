@@ -346,7 +346,7 @@ void QQmlSettingsPrivate::load()
 #if MU_QT5_COMPAT
                                        || (currentValue.canConvert(previousValue.userType())
 #else
-                                       || (currentValue.canConvert(QMetaType(previousValue.userType()))
+                                       || (currentValue.canConvert(previousValue.metaType())
 #endif
                                            && previousValue != currentValue))) {
             property.write(q, currentValue);

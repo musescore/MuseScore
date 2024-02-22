@@ -27,6 +27,7 @@
 
 #include "../midishared/midifile.h"
 #include "engraving/compat/midi/pausemap.h"
+#include "engraving/compat/midi/compatmidirenderinternal.h"
 
 namespace mu::engraving {
 class Score;
@@ -49,7 +50,7 @@ public:
     bool write(QIODevice* device, bool midiExpandRepeats, bool exportRPNs, const engraving::SynthesizerState& synthState);
 
 private:
-    void writeHeader(const CompatMidiRendererInternal::Context& context);
+    void writeHeader(const engraving::CompatMidiRendererInternal::Context& context);
 
     QFile m_file;
     MidiFile m_midiFile;

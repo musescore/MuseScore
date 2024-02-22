@@ -105,7 +105,7 @@ public:
         return raw;
     }
 
-    __finl const float operator[](int n) const
+    __finl float operator[](int n) const
     {
         return s[n];
     }

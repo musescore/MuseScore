@@ -32,6 +32,7 @@
 
 #include "engravingitem.h"
 
+#include "mscore.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
 #include "symbol.h"

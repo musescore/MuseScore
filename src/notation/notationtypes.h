@@ -235,24 +235,6 @@ enum class NoteAddingMode
     InsertChord
 };
 
-enum class IntervalType
-{
-    Above,
-    Below
-};
-
-enum class TupletType
-{
-    Duplet,
-    Triplet,
-    Quadruplet,
-    Quintuplet,
-    Sextuplet,
-    Septuplet,
-    Octuplet,
-    Nonuplet
-};
-
 enum class PastingType {
     Default,
     Half,
@@ -316,32 +298,6 @@ struct Tempo
 };
 
 static constexpr int MAX_STAVES  = 4;
-
-struct ClefPair
-{
-    ClefType concertClef = ClefType::G;
-    ClefType transposingClef = ClefType::G;
-};
-
-struct PitchRange
-{
-    int min = 0;
-    int max = 0;
-
-    PitchRange() = default;
-    PitchRange(int min, int max)
-        : min(min), max(max) {}
-
-    bool operator ==(const PitchRange& other) const
-    {
-        return min == other.min && max == other.max;
-    }
-
-    bool operator !=(const PitchRange& other) const
-    {
-        return !operator ==(other);
-    }
-};
 
 struct InstrumentKey
 {
@@ -468,14 +424,6 @@ struct FilterNotesOptions : FilterElementsOptions
     mu::engraving::NoteType noteType = mu::engraving::NoteType::INVALID;
 };
 
-struct SelectionRange
-{
-    int startStaffIndex = 0;
-    int endStaffIndex = 0;
-    Fraction startTick;
-    Fraction endTick;
-};
-
 struct StaffConfig
 {
     bool visible = false;
@@ -591,17 +539,6 @@ inline QString staffTypeToString(StaffTypeId type)
     return preset ? preset->name().toQString() : QString();
 }
 
-inline QList<StaffTypeId> allStaffTypes()
-{
-    QList<StaffTypeId> result;
-
-    for (const StaffType& preset: StaffType::presets()) {
-        result << preset.type();
-    }
-
-    return result;
-}
-
 struct MeasureBeat
 {
     int measureIndex = 0;
@@ -660,11 +597,6 @@ constexpr bool isNotesIntervalValid(int interval)
 constexpr bool isVoiceIndexValid(size_t voiceIndex)
 {
     return voiceIndex < mu::engraving::VOICES;
-}
-
-constexpr bool isFretIndexValid(int fretIndex)
-{
-    return 0 <= fretIndex && fretIndex < MAX_FRET;
 }
 
 inline bool isVerticalBoxTextStyle(TextStyleType type)

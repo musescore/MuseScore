@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "notationsolomutestate.h"
-#include "notation.h"
 
 using namespace mu;
 using namespace mu::notation;

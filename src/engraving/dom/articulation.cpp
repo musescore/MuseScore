@@ -36,7 +36,6 @@
 #include "stafftype.h"
 #include "system.h"
 #include "note.h"
-#include "tie.h"
 
 #include "log.h"
 

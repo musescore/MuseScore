@@ -26,9 +26,8 @@
 #include <map>
 
 #include "global/allocator.h"
-#include "global/async/notification.h"
+#include "types/bps.h"
 #include "types/flags.h"
-#include "types/types.h"
 
 namespace mu::engraving {
 enum class TempoType : char {

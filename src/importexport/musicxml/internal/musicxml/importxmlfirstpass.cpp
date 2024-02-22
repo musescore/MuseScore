@@ -71,7 +71,7 @@ String MusicXmlPart::toString() const
 
     for (VoiceList::const_iterator i = voicelist.cbegin(); i != voicelist.cend(); ++i) {
         res += String(u"voice %1 map staff data %2\n")
-               .arg(String(i->first + 1), i->second.toString());
+               .arg(String::number(i->first + 1), i->second.toString());
     }
 
     for (size_t i = 0; i < m_measureNumbers.size(); ++i) {
