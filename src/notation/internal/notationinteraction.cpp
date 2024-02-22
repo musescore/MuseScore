@@ -38,8 +38,9 @@
 #include "ptrutils.h"
 #include "containers.h"
 
-#include "draw/types/pen.h"
+#include "draw/painter.h"
 #include "draw/types/painterpath.h"
+#include "draw/types/pen.h"
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/actionicon.h"
@@ -91,6 +92,7 @@
 using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::engraving;
+using namespace mu::draw;
 
 static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
 {
@@ -1149,8 +1151,25 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
         m_drag = nullptr;
     });
 
-    static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
-    pixmap.fill(Qt::white);
+    const qreal adjustedRatio = 0.4;
+    const RectF bbox = element->ldata()->bbox();
+    const qreal width = bbox.width();
+    const qreal height = bbox.height();
+
+    QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
+    QPixmap pixmap(pixmapSize);
+    pixmap.fill(Qt::transparent);
+
+    QPainter qp(&pixmap);
+    const qreal dpi = qp.device()->logicalDpiX();
+
+    Painter p(&qp, "startDragCopy");
+    p.setAntialiasing(true);
+
+    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
+    p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
+    p.scale(adjustedRatio, adjustedRatio);
+    engravingRenderer()->drawItem(element, &p);
 
     m_drag->setPixmap(pixmap);
     m_drag->exec(Qt::CopyAction);
