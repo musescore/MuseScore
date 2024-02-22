@@ -138,6 +138,7 @@ private:
     bool loopBoundariesSet() const;
 
     void onNotationChanged();
+    void onPartChanged(const engraving::Part* part);
 
     void onSelectionChanged();
     void seekListSelection();
@@ -184,7 +185,9 @@ private:
     void setupSequenceTracks();
     void setupSequencePlayer();
 
-    void updateMuteStates();
+    void initMuteStates();
+
+    void updateSoloMuteStates();
     void updateAuxMuteStates();
 
     void setCurrentPlaybackTime(audio::msecs_t msecs);

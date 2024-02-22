@@ -272,7 +272,9 @@ struct AudioOutputParams {
     volume_db_t volume = 0.f;
     balance_t balance = 0.f;
     AuxSendsParams auxSends;
+    bool solo = false;
     bool muted = false;
+    bool forceMute = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
@@ -280,7 +282,9 @@ struct AudioOutputParams {
                && RealIsEqual(volume, other.volume)
                && RealIsEqual(balance, other.balance)
                && auxSends == other.auxSends
-               && muted == other.muted;
+               && solo == other.solo
+               && muted == other.muted
+               && forceMute == other.forceMute;
     }
 };
 

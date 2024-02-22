@@ -169,8 +169,8 @@ void PreferencesModel::load(const QString& currentPageId)
         makeItem("score", QT_TRANSLATE_NOOP("appshell/preferences", "Score"), IconCode::Code::SCORE,
                  "Preferences/ScorePreferencesPage.qml"),
 
-        makeItem("io", QT_TRANSLATE_NOOP("appshell/preferences", "I/O"), IconCode::Code::AUDIO,
-                 "Preferences/IOPreferencesPage.qml"),
+        makeItem("playback", QT_TRANSLATE_NOOP("appshell/preferences", "Playback"), IconCode::Code::AUDIO,
+                 "Preferences/PlaybackPreferencesPage.qml"),
 
         makeItem("import", QT_TRANSLATE_NOOP("appshell/preferences", "Import"), IconCode::Code::IMPORT,
                  "Preferences/ImportPreferencesPage.qml"),

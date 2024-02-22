@@ -98,6 +98,21 @@ gain_t PlaybackConfigurationStub::defaultAuxSendValue(aux_channel_idx_t, AudioSo
     return 0.f;
 }
 
+bool PlaybackConfigurationStub::muteHiddenInstruments() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setMuteHiddenInstruments(bool mute)
+{
+}
+
+mu::async::Channel<bool> PlaybackConfigurationStub::muteHiddenInstrumentsChanged() const
+{
+    static async::Channel<bool> ch;
+    return ch;
+}
+
 const SoundProfileName& PlaybackConfigurationStub::basicSoundProfileName() const
 {
     static const SoundProfileName basic;
