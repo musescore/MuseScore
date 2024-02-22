@@ -29,7 +29,7 @@ df -h .
 
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
-QT5_COMPAT="ON"
+QT5_COMPAT="OFF"
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
