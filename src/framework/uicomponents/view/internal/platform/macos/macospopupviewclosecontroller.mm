@@ -23,8 +23,11 @@
 #include "macospopupviewclosecontroller.h"
 
 #include <AppKit/NSEvent.h>
+#include <QQuickWindow>
 
 using namespace mu::uicomponents;
+
+id<NSObject> minimizeObserverToken = nil;
 
 MacOSPopupViewCloseController::MacOSPopupViewCloseController(QObject* parent)
     : PopupViewCloseController(parent)
@@ -35,8 +38,15 @@ void MacOSPopupViewCloseController::doUpdateEventFilters()
 {
     if (active()) {
         qApp->installNativeEventFilter(this);
+        if (!minimizeObserverToken) {
+            initWindowMinimizedObserver();
+        }
     } else {
         qApp->removeNativeEventFilter(this);
+        if (minimizeObserverToken) {
+            [[NSNotificationCenter defaultCenter] removeObserver:minimizeObserverToken];
+            minimizeObserverToken = nil;
+        }
     }
 
     PopupViewCloseController::doUpdateEventFilters();
@@ -60,4 +70,19 @@ bool MacOSPopupViewCloseController::nativeEventFilter(const QByteArray& eventTyp
     }
 
     return false;
+}
+
+void MacOSPopupViewCloseController::initWindowMinimizedObserver()
+{
+    WId wid = parentItem()->window()->winId();
+    NSView* nsView = (__bridge NSView*)reinterpret_cast<void*>(wid);
+    NSWindow* nsWindow = [nsView window];
+
+    minimizeObserverToken = [[NSNotificationCenter defaultCenter]
+                             addObserverForName:@"NSWindowWillMiniaturizeNotification"
+                             object:nsWindow
+                             queue:nil
+                             usingBlock:^(NSNotification*) {
+                                 notifyAboutClose();
+                             }];
 }
