@@ -22,6 +22,8 @@
 
 #include "soundflag.h"
 
+#include <climits>
+
 #include "undo.h"
 #include "linkedobjects.h"
 
@@ -31,9 +33,10 @@ SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
     m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+    m_iconFont.setPointSizeF(spatium() * 2.0);
 
-    static constexpr double DEFAULT_FONT_SIZE = 8.0;
-    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
+    //! draw on top of all elements
+    setZ(INT_MAX);
 }
 
 SoundFlag* SoundFlag::clone() const

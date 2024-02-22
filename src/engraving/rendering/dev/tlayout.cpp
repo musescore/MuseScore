@@ -5267,21 +5267,21 @@ void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldat
         return;
     }
 
-    const StaffText* staffText = toStaffText(item->parentItem());
-    if (!staffText) {
+    const EngravingItem* parent = toStaffText(item->parentItem());
+    if (!parent) {
         return;
     }
 
-    draw::FontMetrics fontMetrics = draw::FontMetrics(staffText->font());
-    double iconHeight = (fontMetrics.xHeight() + fontMetrics.descent()) * 2;
+    double spatium = item->spatium();
+    double iconHeight = spatium * 3.0;
 
-    RectF parentBbox = staffText->ldata()->bbox();
+    RectF parentBbox = parent->ldata()->bbox();
     RectF iconBBox = RectF(parentBbox.x(), parentBbox.y(), iconHeight, iconHeight);
 
     iconBBox.moveCenter(parentBbox.center());
 
     // <icon><space><text>
-    double space = iconHeight / 6.0;
+    double space = spatium / 2.0;
     iconBBox.setX(parentBbox.x() - iconBBox.width() - space);
 
     ldata->setBbox(iconBBox);
