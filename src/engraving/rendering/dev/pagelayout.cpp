@@ -261,6 +261,13 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
     }
 
+    // All staves have been hidden, so correct last system's header
+    System* lastSys = ctx.mutState().page()->systems().back();
+    Measure* lastSysMeasure = lastSys->firstMeasure();
+    if (lastSysMeasure) {
+        MeasureLayout::addSystemHeader(lastSysMeasure, false, ctx);
+    }
+
     Fraction stick2 = Fraction(-1, 1);
     for (System* s : ctx.mutState().page()->systems()) {
         for (MeasureBase* mb : s->measures()) {

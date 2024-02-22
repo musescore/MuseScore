@@ -412,6 +412,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::smallClefMag,            "smallClefMag",            PropertyValue(0.8) },
 
     { Sid::genClef,                 "genClef",                 true },
+    { Sid::hideTabClefAfterFirst,   "hideTabClefAfterFirst",   true },
     { Sid::genKeysig,               "genKeysig",               true },
     { Sid::genCourtesyTimesig,      "genCourtesyTimesig",      true },
     { Sid::genCourtesyKeysig,       "genCourtesyKeysig",       true },

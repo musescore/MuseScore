@@ -162,6 +162,7 @@ public:
 
     MeasureBase* first();
     Measure* firstMeasure();
+    Measure* tick2measure(const Fraction& tick);
 
     ChordRest* findCR(Fraction tick, track_idx_t track);
 

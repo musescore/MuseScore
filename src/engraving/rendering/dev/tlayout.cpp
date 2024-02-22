@@ -221,7 +221,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutChordLine(item_cast<const ChordLine*>(item), static_cast<ChordLine::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::CLEF:
-        layoutClef(item_cast<const Clef*>(item), static_cast<Clef::LayoutData*>(ldata));
+        layoutClef(item_cast<const Clef*>(item), static_cast<Clef::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::CAPO:
         layoutCapo(item_cast<const Capo*>(item), static_cast<Capo::LayoutData*>(ldata), ctx);
@@ -1619,7 +1619,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     }
 }
 
-void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
+void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LD_INDEPENDENT;
 
@@ -1635,10 +1635,12 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
-        Fraction tick = clefSeg->tick();
+        const Fraction tick = clefSeg->tick();
+        const Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
         bool show = st->genClef();            // check staff type allows clef display
         StaffGroup staffGroup = st->group();
+        const bool hideClef = st->isTabStaff() ? conf.styleB(Sid::hideTabClefAfterFirst) : !conf.styleB(Sid::genClef);
 
         // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
         if (staffGroup != StaffGroup::TAB) {
@@ -1647,7 +1649,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
 
         // check clef is compatible with staff type group:
         if (ClefInfo::staffGroup(item->clefType()) != staffGroup) {
-            if (tick > Fraction(0, 1) && !item->generated()) {     // if clef is not generated, hide it
+            if (tick > Fraction(0, 1) && (!item->generated() || hideClef)) {     // if clef is not generated, hide it
                 show = false;
             } else {                            // if generated, replace with initial clef type
                 // TODO : instead of initial staff clef (which is assumed to be compatible)
