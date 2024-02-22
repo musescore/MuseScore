@@ -44,6 +44,8 @@ private:
 #endif
 
     void doUpdateEventFilters() override;
+
+    void initWindowMinimizedObserver();
 };
 }
 
