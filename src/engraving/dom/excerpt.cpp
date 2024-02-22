@@ -1015,7 +1015,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     for (EngravingItem* e : mb->el()) {
         if (e->isLayoutBreak()) {
             LayoutBreakType st = toLayoutBreak(e)->layoutBreakType();
-            if (st == LayoutBreakType::PAGE || st == LayoutBreakType::LINE) {
+            if (st != LayoutBreakType::SECTION) {
                 continue;
             }
         }

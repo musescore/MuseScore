@@ -175,6 +175,7 @@
         <voice>
           <MeasureRepeat>
             <subtype>2</subtype>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </MeasureRepeat>
@@ -187,6 +188,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -199,6 +201,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -212,6 +215,7 @@
         <voice>
           <MeasureRepeat>
             <subtype>4</subtype>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </MeasureRepeat>
@@ -224,6 +228,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -236,6 +241,7 @@
           </LayoutBreak>
         <voice>
           <Rest>
+            <linkedMain/>
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
@@ -944,17 +950,22 @@
           </Measure>
         <Measure>
           <measureRepeatCount>1</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
+          <voice>
+            <MeasureRepeat>
+              <subtype>2</subtype>
+              <linked>
+                </linked>
+              <durationType>measure</durationType>
+              <duration>4/4</duration>
+              </MeasureRepeat>
+            </voice>
           </Measure>
         <Measure>
           <measureRepeatCount>2</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
+              <linked>
+                </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -962,11 +973,10 @@
           </Measure>
         <Measure>
           <measureRepeatCount>1</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
+              <linked>
+                </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -974,12 +984,11 @@
           </Measure>
         <Measure>
           <measureRepeatCount>2</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <MeasureRepeat>
               <subtype>4</subtype>
+              <linked>
+                </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </MeasureRepeat>
@@ -987,11 +996,10 @@
           </Measure>
         <Measure>
           <measureRepeatCount>3</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
+              <linked>
+                </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -999,11 +1007,10 @@
           </Measure>
         <Measure>
           <measureRepeatCount>4</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
+              <linked>
+                </linked>
               <durationType>measure</durationType>
               <duration>4/4</duration>
               </Rest>
@@ -1411,9 +1418,6 @@
           </Measure>
         <Measure>
           <measureRepeatCount>1</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <MeasureRepeat>
               <subtype>1</subtype>
@@ -1426,9 +1430,6 @@
           </Measure>
         <Measure>
           <measureRepeatCount>1</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <MeasureRepeat>
               <subtype>2</subtype>
@@ -1441,9 +1442,6 @@
           </Measure>
         <Measure>
           <measureRepeatCount>2</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
               <linked>
@@ -1455,9 +1453,6 @@
           </Measure>
         <Measure>
           <measureRepeatCount>1</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
               <linked>
@@ -1469,9 +1464,6 @@
           </Measure>
         <Measure>
           <measureRepeatCount>2</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <MeasureRepeat>
               <subtype>4</subtype>
@@ -1484,9 +1476,6 @@
           </Measure>
         <Measure>
           <measureRepeatCount>3</measureRepeatCount>
-          <LayoutBreak>
-            <subtype>nobreak</subtype>
-            </LayoutBreak>
           <voice>
             <Rest>
               <linked>
