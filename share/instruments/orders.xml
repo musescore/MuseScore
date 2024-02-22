@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore>
-    <Order id="orchestral">
-        <name>Orchestral</name>
+    <Order id="orchestra">
+        <name>Orchestra</name>
         <section id="woodwind" showSystemMarkings="true">
             <family>flutes</family>
             <family>oboes</family>
