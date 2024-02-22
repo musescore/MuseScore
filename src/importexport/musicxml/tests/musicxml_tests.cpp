@@ -698,6 +698,9 @@ TEST_F(Musicxml_Tests, lyricBracket) {
 TEST_F(Musicxml_Tests, lyricColor) {
     mxmlIoTest("testLyricColor");
 }
+TEST_F(Musicxml_Tests, lyricPos) {
+    mxmlImportTestRef("testLyricPos");
+}
 TEST_F(Musicxml_Tests, lyrics1) {
     mxmlIoTestRef("testLyrics1");
 }

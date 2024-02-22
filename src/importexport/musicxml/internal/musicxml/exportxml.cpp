@@ -5534,6 +5534,10 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
+
+                if (l->placeAbove()) {
+                    lyricXml += u" placement=\"above\"";
+                }
                 _xml.startElementRaw(lyricXml);
                 LyricsSyllabic syl = (l)->syllabic();
                 QString s = "";

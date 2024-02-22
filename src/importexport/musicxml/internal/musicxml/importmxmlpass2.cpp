@@ -6073,6 +6073,7 @@ void MusicXMLParserLyric::parse()
     bool hasExtend = false;
     const auto lyricNumber = _e.attributes().value("number").toString();
     const QColor lyricColor { _e.attributes().value("color").toString() };
+    const QString placement = _e.attributes().value("placement").toString();
     QString extendType;
     QString formattedText;
 
@@ -6125,6 +6126,10 @@ void MusicXMLParserLyric::parse()
     if (lyricColor.isValid()) {
         lyric->setProperty(Pid::COLOR, mu::draw::Color::fromQColor(lyricColor));
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+    }
+    if (!placement.isEmpty()) {
+        lyric->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+        lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
     }
 
     const auto l = lyric.release();
