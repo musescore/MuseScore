@@ -61,7 +61,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(IOpenSaveProjectScenario, openSaveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
     INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
@@ -112,7 +112,7 @@ private:
     void warnProjectCriticallyCorrupted(const String& projectName, const std::string& errorText);
     void warnProjectCannotBeOpened(const Ret& ret, const io::path_t& filepath);
 
-    framework::IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
+    IInteractive::Button askAboutSavingScore(INotationProjectPtr project);
 
     Ret canSaveProject() const;
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
@@ -205,8 +205,8 @@ private:
     bool m_isAudioSharing = false;
     bool m_isProjectDownloading = false;
 
-    framework::ProgressPtr m_uploadingProjectProgress = nullptr;
-    framework::ProgressPtr m_uploadingAudioProgress = nullptr;
+    mu::ProgressPtr m_uploadingProjectProgress = nullptr;
+    mu::ProgressPtr m_uploadingAudioProgress = nullptr;
 
     int m_numberOfSavesToCloud = 0;
 

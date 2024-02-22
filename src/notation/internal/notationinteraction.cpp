@@ -90,7 +90,6 @@
 
 using namespace mu::io;
 using namespace mu::notation;
-using namespace mu::framework;
 using namespace mu::engraving;
 
 static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
@@ -1023,8 +1022,8 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
 
-    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(framework::Orientation::Horizontal);
-    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(framework::Orientation::Vertical);
+    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(mu::Orientation::Horizontal);
+    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(mu::Orientation::Vertical);
     m_dragData.ed.delta = delta;
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;

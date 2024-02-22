@@ -30,7 +30,7 @@
 namespace mu::autobot {
 class AutobotConfiguration : public IAutobotConfiguration
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     AutobotConfiguration() = default;

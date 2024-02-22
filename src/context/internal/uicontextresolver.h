@@ -33,7 +33,7 @@
 namespace mu::context {
 class UiContextResolver : public IUiContextResolver, public async::Asyncable
 {
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(IGlobalContext, globalContext)
     INJECT(ui::INavigationController, navigationController)

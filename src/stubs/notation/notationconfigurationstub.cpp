@@ -325,13 +325,13 @@ double NotationConfigurationStub::notationScaling() const
     return 1.0;
 }
 
-ValCh<framework::Orientation> NotationConfigurationStub::canvasOrientation() const
+ValCh<mu::Orientation> NotationConfigurationStub::canvasOrientation() const
 {
-    static ValCh<framework::Orientation> vch;
+    static ValCh<mu::Orientation> vch;
     return vch;
 }
 
-void NotationConfigurationStub::setCanvasOrientation(framework::Orientation)
+void NotationConfigurationStub::setCanvasOrientation(mu::Orientation)
 {
 }
 
@@ -410,21 +410,21 @@ void NotationConfigurationStub::setUserScoreOrderListPaths(const io::paths_t&)
 {
 }
 
-bool NotationConfigurationStub::isSnappedToGrid(framework::Orientation) const
+bool NotationConfigurationStub::isSnappedToGrid(mu::Orientation) const
 {
     return false;
 }
 
-void NotationConfigurationStub::setIsSnappedToGrid(framework::Orientation, bool)
+void NotationConfigurationStub::setIsSnappedToGrid(mu::Orientation, bool)
 {
 }
 
-int NotationConfigurationStub::gridSizeSpatium(framework::Orientation) const
+int NotationConfigurationStub::gridSizeSpatium(mu::Orientation) const
 {
     return 20;
 }
 
-void NotationConfigurationStub::setGridSize(framework::Orientation, int)
+void NotationConfigurationStub::setGridSize(mu::Orientation, int)
 {
 }
 

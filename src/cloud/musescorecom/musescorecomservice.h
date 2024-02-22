@@ -48,17 +48,17 @@ public:
 
     QUrl scoreManagerUrl() const override;
 
-    framework::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
-                                       const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
-    framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
+    mu::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
+                                const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
+    mu::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId) override;
 
     async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
-    framework::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
-                                         const QString& secret = QString()) override;
+    mu::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
+                                  const QString& secret = QString()) override;
 
 private:
     ServerConfig serverConfig() const override;

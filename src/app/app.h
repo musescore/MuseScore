@@ -51,7 +51,7 @@
 namespace mu::app {
 class App
 {
-    INJECT(framework::IApplication, muapplication)
+    INJECT(IApplication, muapplication)
     INJECT(converter::IConverterController, converter)
     INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
     INJECT(autobot::IAutobot, autobot)
@@ -77,7 +77,7 @@ public:
     int run(int argc, char** argv);
 
 private:
-    void applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode);
+    void applyCommandLineOptions(const CommandLineParser::Options& options, IApplication::RunMode runMode);
     int processConverter(const CommandLineParser::ConverterTask& task);
     int processDiagnostic(const CommandLineParser::Diagnostic& task);
     int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);

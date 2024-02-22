@@ -23,7 +23,6 @@
 #define MU_GLOBAL_XMLSTREAMREADER_H
 
 #include <vector>
-#include <list>
 #include <map>
 
 #include "io/iodevice.h"

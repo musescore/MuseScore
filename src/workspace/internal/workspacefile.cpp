@@ -36,7 +36,6 @@
 #include "log.h"
 
 using namespace mu::workspace;
-using namespace mu::framework;
 
 WorkspaceFile::WorkspaceFile(const io::path_t& filePath)
     : m_filePath(filePath)
@@ -131,7 +130,7 @@ void WorkspaceFile::Container::write(MQZipWriter& zip, const std::vector<std::st
     QByteArray data;
     QBuffer buf(&data);
     buf.open(QIODevice::WriteOnly);
-    XmlWriter xml(&buf);
+    deprecated::XmlWriter xml(&buf);
     xml.writeStartDocument();
     xml.writeStartElement("container");
     xml.writeStartElement("rootfiles");
@@ -154,7 +153,7 @@ void WorkspaceFile::Meta::write(MQZipWriter& zip, const std::map<std::string, Va
     QByteArray data;
     QBuffer buf(&data);
     buf.open(QIODevice::WriteOnly);
-    XmlWriter xml(&buf);
+    deprecated::XmlWriter xml(&buf);
     xml.writeStartDocument();
     xml.writeStartElement("metadata");
     xml.writeStartElement("items");
@@ -181,7 +180,7 @@ void WorkspaceFile::Meta::read(MQZipReader& zip, std::map<std::string, Val>& met
         return;
     }
 
-    XmlReader xml(data);
+    deprecated::XmlReader xml(data);
     while (xml.readNextStartElement()) {
         if ("metadata" != xml.tagName()) {
             xml.skipCurrentElement();

@@ -32,7 +32,6 @@
 
 using namespace mu::mi;
 using namespace mu::ipc;
-using namespace mu::framework;
 
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");

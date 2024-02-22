@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_SETTINGS_H
-#define MU_FRAMEWORK_SETTINGS_H
+#ifndef MU_GLOBAL_SETTINGS_H
+#define MU_GLOBAL_SETTINGS_H
 
 #include <string>
 #include <vector>
@@ -39,7 +39,7 @@
 
 class QSettings;
 
-namespace mu::framework {
+namespace mu {
 class Settings
 {
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
@@ -136,4 +136,4 @@ inline Settings* settings()
 }
 }
 
-#endif // MU_FRAMEWORK_SETTINGS_H
+#endif // MU_GLOBAL_SETTINGS_H

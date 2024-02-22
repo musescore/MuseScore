@@ -36,7 +36,7 @@
 #include "engraving/dom/score.h"
 
 #ifndef MUSICXML_NO_INTERACTIVE
-using namespace mu::framework;
+using namespace mu;
 #endif
 
 namespace mu::engraving {
@@ -50,7 +50,7 @@ namespace mu::engraving {
 #ifndef MUSICXML_NO_INTERACTIVE
 static IInteractive::Button musicXMLImportErrorDialog(const String& text, const String& detailedText)
 {
-    auto interactive = modularity::ioc()->resolve<framework::IInteractive>("musicxml");
+    auto interactive = modularity::ioc()->resolve<IInteractive>("musicxml");
 
     std::string msg = text.toStdString();
     msg += '\n';

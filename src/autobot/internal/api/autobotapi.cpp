@@ -54,7 +54,6 @@ void AutobotApi::runTestCase(const QJSValue& testCase)
 bool AutobotApi::pause(bool immediately)
 {
     if (immediately) {
-        using namespace mu::framework;
         IInteractive::Result res = interactive()->question("Pause", "Continue?",
                                                            { IInteractive::Button::Continue, IInteractive::Button::Abort });
 
@@ -72,7 +71,6 @@ bool AutobotApi::pause(bool immediately)
 
 bool AutobotApi::confirm(const QString& msg)
 {
-    using namespace mu::framework;
     int pauseBtn = int(IInteractive::Button::CustomButton) + 1;
     IInteractive::Result res = interactive()->question("Confirm", msg.toStdString(), {
         interactive()->buttonData(IInteractive::Button::Continue),

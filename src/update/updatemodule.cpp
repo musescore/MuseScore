@@ -91,9 +91,9 @@ void UpdateModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(update_QML_IMPORT);
 }
 
-void UpdateModule::onInit(const framework::IApplication::RunMode& mode)
+void UpdateModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != framework::IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 

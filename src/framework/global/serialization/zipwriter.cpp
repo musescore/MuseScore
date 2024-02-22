@@ -21,8 +21,8 @@
  */
 #include "zipwriter.h"
 
+#include "global/io/file.h"
 #include "internal/zipcontainer.h"
-#include "io/file.h"
 
 #include "log.h"
 

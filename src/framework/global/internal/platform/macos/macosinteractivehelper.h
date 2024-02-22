@@ -24,7 +24,7 @@
 
 #include "io/path.h"
 
-namespace mu::framework {
+namespace mu {
 class MacOSInteractiveHelper
 {
 public:

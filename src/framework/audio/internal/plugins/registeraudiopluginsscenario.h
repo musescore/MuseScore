@@ -40,8 +40,8 @@ class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, publi
     INJECT(IKnownAudioPluginsRegister, knownPluginsRegister)
     INJECT(IAudioPluginsScannerRegister, scannerRegister)
     INJECT(IAudioPluginMetaReaderRegister, metaReaderRegister)
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(IInteractive, interactive)
     INJECT(IProcess, process)
 
 public:
@@ -55,7 +55,7 @@ private:
     void processPluginsRegistration(const io::paths_t& pluginPaths);
     IAudioPluginMetaReaderPtr metaReader(const io::path_t& pluginPath) const;
 
-    framework::Progress m_progress;
+    mu::Progress m_progress;
     bool m_aborted = false;
 };
 }

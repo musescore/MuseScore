@@ -38,7 +38,7 @@ class AboutModel : public QObject
 
     INJECT(IAppShellConfiguration, configuration)
     INJECT(update::IUpdateConfiguration, updateConfiguration)
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit AboutModel(QObject* parent = nullptr);

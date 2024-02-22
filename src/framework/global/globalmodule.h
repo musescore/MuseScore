@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_GLOBALMODULE_H
-#define MU_FRAMEWORK_GLOBALMODULE_H
+#ifndef MU_GLOBAL_GLOBALMODULE_H
+#define MU_GLOBAL_GLOBALMODULE_H
 
 #include <memory>
 #include <optional>
@@ -33,9 +33,6 @@
 
 namespace mu {
 class SystemInfo;
-}
-
-namespace mu::framework {
 class Invoker;
 class GlobalConfiguration;
 class GlobalModule : public modularity::IModuleSetup
@@ -64,4 +61,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_GLOBALMODULE_H
+#endif // MU_GLOBAL_GLOBALMODULE_H

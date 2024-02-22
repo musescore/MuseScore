@@ -26,7 +26,6 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
-using namespace mu::framework;
 
 InstrumentSettingsModel::InstrumentSettingsModel(QObject* parent)
     : QObject(parent)

@@ -38,7 +38,6 @@
 
 using namespace mu::update;
 using namespace mu::network;
-using namespace mu::framework;
 
 mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 {
@@ -133,7 +132,7 @@ void UpdateService::cancelUpdate()
     }
 }
 
-mu::framework::Progress UpdateService::updateProgress()
+mu::Progress UpdateService::updateProgress()
 {
     return m_updateProgress;
 }

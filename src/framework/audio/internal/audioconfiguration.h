@@ -31,7 +31,7 @@
 namespace mu::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
-    Inject<framework::IGlobalConfiguration> globalConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration;
     Inject<io::IFileSystem> fileSystem;
 
 public:

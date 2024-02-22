@@ -57,9 +57,9 @@ void ImagesExportModule::resolveImports()
     }
 }
 
-void ImagesExportModule::onInit(const framework::IApplication::RunMode& mode)
+void ImagesExportModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

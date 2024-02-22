@@ -257,7 +257,7 @@ public:
     MuseSamplerLibHandler(const io::path_t& path)
     {
         // The specific versions supported, based on known functions/etc:
-        const framework::Version minimumSupported{ 0, 2, 2 };
+        const mu::Version minimumSupported{ 0, 2, 2 };
         constexpr int maximumMajorVersion = 0;
 
         m_lib = loadLib(path);
@@ -279,9 +279,9 @@ public:
             return;
         }
 
-        framework::Version current(getVersionMajor(),
-                                   getVersionMinor(),
-                                   getVersionRevision());
+        mu::Version current(getVersionMajor(),
+                            getVersionMinor(),
+                            getVersionRevision());
         if (current < minimumSupported) {
             LOGE() << "MuseSampler " << current.toString() << " is not supported (too old -- update MuseSampler); ignoring";
             return;

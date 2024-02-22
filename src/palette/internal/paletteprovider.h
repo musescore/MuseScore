@@ -47,7 +47,7 @@ class PaletteElementEditor : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IPaletteProvider, paletteProvider)
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
@@ -138,7 +138,7 @@ class UserPaletteController : public AbstractPaletteController, public async::As
     Q_OBJECT
 
     INJECT(context::IGlobalContext, globalContext)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IPaletteConfiguration, configuration)
 
     QAbstractItemModel* _model;
@@ -205,7 +205,7 @@ class PaletteProvider : public QObject, public IPaletteProvider, public async::A
     Q_OBJECT
 
     INJECT(IPaletteConfiguration, configuration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
     Q_PROPERTY(mu::palette::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)

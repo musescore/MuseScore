@@ -53,7 +53,7 @@ class Palette : public QObject
     INJECT_STATIC(IPaletteConfiguration, configuration)
     INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
 public:
     enum class Type {

@@ -25,7 +25,6 @@
 
 using namespace mu::engraving;
 using namespace mu::notation;
-using namespace mu::framework;
 
 void MScoreErrorsController::checkAndShowMScoreError()
 {

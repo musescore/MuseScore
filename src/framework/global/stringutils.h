@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_STRINGUTILS_H
-#define MU_FRAMEWORK_STRINGUTILS_H
+#ifndef MU_GLOBAL_STRINGUTILS_H
+#define MU_GLOBAL_STRINGUTILS_H
 
 #include <string>
 #include <vector>
@@ -56,4 +56,4 @@ bool lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs);
 bool lessThanCaseInsensitive(const String& lhs, const String& rhs);
 }
 
-#endif // MU_FRAMEWORK_STRINGUTILS_H
+#endif // MU_GLOBAL_STRINGUTILS_H

@@ -49,7 +49,7 @@ public:
         m_mainWindow = std::make_shared<ui::MainWindowMock>();
         m_controller->mainWindow.set(m_mainWindow);
 
-        m_application = std::make_shared<framework::ApplicationMock>();
+        m_application = std::make_shared<ApplicationMock>();
         m_controller->application.set(m_application);
 
         m_configuration = std::make_shared<AccessibilityConfigurationMock>();
@@ -153,7 +153,7 @@ public:
     std::shared_ptr<AccessibilityController> m_controller;
     std::shared_ptr<ui::MainWindowMock> m_mainWindow;
     std::shared_ptr<AccessibilityConfigurationMock> m_configuration;
-    std::shared_ptr<framework::ApplicationMock> m_application;
+    std::shared_ptr<ApplicationMock> m_application;
 };
 
 TEST_F(Accessibility_ControllerTests, SendEventOnFocusChanged)

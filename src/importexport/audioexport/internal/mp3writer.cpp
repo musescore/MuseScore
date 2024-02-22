@@ -25,7 +25,6 @@
 #include "log.h"
 
 using namespace mu::iex::audioexport;
-using namespace mu::framework;
 
 mu::Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {

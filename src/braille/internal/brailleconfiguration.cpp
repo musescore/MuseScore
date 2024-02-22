@@ -25,7 +25,6 @@
 #include "settings.h"
 
 using namespace mu::braille;
-using namespace mu::framework;
 
 namespace mu::engraving {
 static const std::string module_name("braille");

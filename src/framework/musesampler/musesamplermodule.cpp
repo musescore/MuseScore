@@ -66,9 +66,9 @@ void MuseSamplerModule::resolveImports()
     }
 }
 
-void MuseSamplerModule::onInit(const framework::IApplication::RunMode& mode)
+void MuseSamplerModule::onInit(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::AudioPluginRegistration == mode) {
+    if (IApplication::RunMode::AudioPluginRegistration == mode) {
         return;
     }
 

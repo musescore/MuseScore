@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_TIMER_H
-#define MU_FRAMEWORK_TIMER_H
+#ifndef MU_GLOBAL_TIMER_H
+#define MU_GLOBAL_TIMER_H
 
 #include "async/notification.h"
 #include "async/asyncable.h"
@@ -112,4 +112,4 @@ private:
     std::unique_ptr<std::thread> m_thread = nullptr;
 };
 }
-#endif // MU_FRAMEWORK_TIMER_H
+#endif // MU_GLOBAL_TIMER_H

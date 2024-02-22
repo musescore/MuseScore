@@ -36,7 +36,7 @@ public:
     bool hasPlaceholderLanguage() const override;
     const Language& placeholderLanguage() const override;
 
-    framework::Progress update(const QString& languageCode) override;
+    mu::Progress update(const QString& languageCode) override;
 
     bool needRestartToApplyLanguageChange() const override;
     async::Channel<bool> needRestartToApplyLanguageChangeChanged() const override;

@@ -60,9 +60,9 @@ void AudioExportModule::resolveImports()
     }
 }
 
-void AudioExportModule::onInit(const framework::IApplication::RunMode& mode)
+void AudioExportModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

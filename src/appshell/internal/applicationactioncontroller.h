@@ -48,13 +48,13 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(ui::IUiActionsRegister, actionsRegister)
     INJECT(ui::IMainWindow, mainWindow)
     INJECT(languages::ILanguagesService, languagesService)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project::IProjectFilesController, projectFilesController)
     INJECT(audio::ISoundFontRepository, soundFontRepository)
     INJECT(IStartupScenario, startupScenario)
-    INJECT(framework::IApplication, application)
+    INJECT(IApplication, application)
 
 public:
     void preInit();

@@ -27,7 +27,7 @@
 #include "io/ifilesystem.h"
 #include "modularity/ioc.h"
 
-namespace mu::framework {
+namespace mu::deprecated {
 class XmlReader;
 }
 
@@ -67,9 +67,9 @@ private:
         size_t partsCount = 0;
     };
 
-    void doReadMeta(framework::XmlReader& xmlReader, ProjectMeta& meta) const;
-    RawMeta doReadBox(framework::XmlReader& xmlReader) const;
-    RawMeta doReadRawMeta(framework::XmlReader& xmlReader) const;
+    void doReadMeta(deprecated::XmlReader& xmlReader, ProjectMeta& meta) const;
+    RawMeta doReadBox(deprecated::XmlReader& xmlReader) const;
+    RawMeta doReadRawMeta(deprecated::XmlReader& xmlReader) const;
     QString formatFromXml(const std::string& xml) const;
 
     QString format(const std::string& str) const;
@@ -77,8 +77,8 @@ private:
     QString simplified(const std::string& str) const;
     std::string cutXmlTags(const std::string& str) const;
 
-    QString readText(framework::XmlReader& xmlReader) const;
-    QString readMetaTagText(framework::XmlReader& xmlReader) const;
+    QString readText(deprecated::XmlReader& xmlReader) const;
+    QString readMetaTagText(deprecated::XmlReader& xmlReader) const;
 };
 }
 

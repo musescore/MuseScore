@@ -39,7 +39,6 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::io;
-using namespace mu::framework;
 
 constexpr std::string_view SCORE_TAG("score");
 constexpr std::string_view ELEMENTS_TAG("elements");
@@ -47,7 +46,7 @@ constexpr std::string_view ELEMENT_TAG("element");
 constexpr std::string_view EVENTS_TAG("events");
 constexpr std::string_view EVENT_TAG("event");
 
-static void writeElementPosition(mu::framework::XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
+static void writeElementPosition(mu::deprecated::XmlWriter& writer, const std::string& id, const mu::PointF& pos, const mu::PointF& sPos,
                                  page_idx_t pageIndex)
 {
     writer.writeStartElement(ELEMENT_TAG);
@@ -60,7 +59,7 @@ static void writeElementPosition(mu::framework::XmlWriter& writer, const std::st
     writer.writeEndElement();
 }
 
-static void writeEventPosition(mu::framework::XmlWriter& writer, const std::string& id, int time)
+static void writeEventPosition(mu::deprecated::XmlWriter& writer, const std::string& id, int time)
 {
     writer.writeStartElement(EVENT_TAG);
     writer.writeAttribute("elid", id);
@@ -68,7 +67,7 @@ static void writeEventPosition(mu::framework::XmlWriter& writer, const std::stri
     writer.writeEndElement();
 }
 
-static void writeMeasureEvents(mu::framework::XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
+static void writeMeasureEvents(mu::deprecated::XmlWriter& writer, Measure* m, int offset, const QHash<void*, int>& segments)
 {
     for (mu::engraving::Segment* s = m->first(mu::engraving::SegmentType::ChordRest); s;
          s = s->next(mu::engraving::SegmentType::ChordRest)) {
@@ -112,7 +111,7 @@ mu::Ret PositionsWriter::write(INotationPtr notation, io::IODevice& destinationD
     QBuffer buf(&qdata);
     buf.open(QIODevice::WriteOnly);
 
-    mu::framework::XmlWriter writer(&buf);
+    mu::deprecated::XmlWriter writer(&buf);
 
     writer.writeStartDocument();
     writer.writeStartElement(SCORE_TAG);
@@ -160,7 +159,7 @@ QHash<void*, int> PositionsWriter::elementIds(const mu::engraving::Score* score)
     return elementIds;
 }
 
-void PositionsWriter::writeElementsPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeElementsPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     writer.writeStartElement(ELEMENTS_TAG);
 
@@ -176,7 +175,7 @@ void PositionsWriter::writeElementsPositions(mu::framework::XmlWriter& writer, c
     writer.writeEndElement();
 }
 
-void PositionsWriter::writeSegmentsPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeSegmentsPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -208,7 +207,7 @@ void PositionsWriter::writeSegmentsPositions(mu::framework::XmlWriter& writer, c
     }
 }
 
-void PositionsWriter::writeMeasuresPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeMeasuresPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     int id = 0;
     qreal ndpi = pngDpiResolution();
@@ -228,7 +227,7 @@ void PositionsWriter::writeMeasuresPositions(mu::framework::XmlWriter& writer, c
     }
 }
 
-void PositionsWriter::writeEventsPositions(mu::framework::XmlWriter& writer, const mu::engraving::Score* score) const
+void PositionsWriter::writeEventsPositions(mu::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const
 {
     QHash<void*, int> elementIds = this->elementIds(score);
 

@@ -1423,7 +1423,7 @@ void PlaybackController::setTempoMultiplier(double multiplier)
     }
 }
 
-mu::framework::Progress PlaybackController::loadingProgress() const
+mu::Progress PlaybackController::loadingProgress() const
 {
     return m_loadingProgress;
 }

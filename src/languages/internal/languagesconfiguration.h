@@ -29,7 +29,7 @@
 namespace mu::languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

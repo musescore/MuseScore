@@ -48,7 +48,7 @@
 
 #include "log.h"
 
-using namespace mu::framework;
+using namespace mu;
 using namespace mu::modularity;
 using namespace mu::io;
 
@@ -134,7 +134,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     }
 
     LOGI() << "log path: " << logFilePath;
-    LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
+    LOGI() << "=== Started MuseScore " << MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace mu::profiler;

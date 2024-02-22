@@ -59,9 +59,9 @@ void AccessibilityModule::resolveImports()
     }
 }
 
-void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
+void AccessibilityModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != framework::IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 

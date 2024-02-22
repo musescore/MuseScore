@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_RET_H
-#define MU_FRAMEWORK_RET_H
+#ifndef MU_GLOBAL_RET_H
+#define MU_GLOBAL_RET_H
 
 #include <string>
 #include <map>
@@ -168,4 +168,4 @@ inline bool check_ret(const Ret& r, Ret::Code c)
 }
 }
 
-#endif // MU_FRAMEWORK_RET_H
+#endif // MU_GLOBAL_RET_H

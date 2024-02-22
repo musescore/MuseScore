@@ -26,7 +26,6 @@
 #include "log.h"
 
 using namespace mu::plugins;
-using namespace mu::framework;
 using namespace mu::actions;
 
 void PluginsActionController::init()

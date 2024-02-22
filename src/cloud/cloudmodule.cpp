@@ -87,9 +87,9 @@ void CloudModule::registerUiTypes()
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(cloud_QML_IMPORT);
 }
 
-void CloudModule::onInit(const framework::IApplication::RunMode& mode)
+void CloudModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != framework::IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 

@@ -61,7 +61,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(IAppMenuModelHook, appMenuModelHook)
     INJECT(plugins::IPluginsService, pluginsService)
     INJECT(update::IUpdateConfiguration, updateConfiguration)
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit AppMenuModel(QObject* parent = nullptr);

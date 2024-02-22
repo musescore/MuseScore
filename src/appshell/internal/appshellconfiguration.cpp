@@ -30,9 +30,9 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::appshell;
 using namespace mu::notation;
-using namespace mu::framework;
 
 static const std::string module_name("appshell");
 

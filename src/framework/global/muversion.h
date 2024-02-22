@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_MUVERSION_H
-#define MU_FRAMEWORK_MUVERSION_H
+#ifndef MU_GLOBAL_MUVERSION_H
+#define MU_GLOBAL_MUVERSION_H
 
 #include "types/string.h"
 
-namespace mu::framework {
+namespace mu {
 class MUVersion
 {
 public:
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_MUVERSION_H
+#endif // MU_GLOBAL_MUVERSION_H

@@ -89,7 +89,7 @@ Notation::Notation(mu::engraving::Score* score)
         notifyAboutNotationChanged();
     });
 
-    configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
+    configuration()->canvasOrientation().ch.onReceive(this, [this](mu::Orientation) {
         if (m_score && m_score->autoLayoutEnabled()) {
             m_score->doLayout();
         }
@@ -118,7 +118,7 @@ Notation::~Notation()
 
 void Notation::init()
 {
-    bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
+    bool isVertical = configuration()->canvasOrientation().val == mu::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 }
 

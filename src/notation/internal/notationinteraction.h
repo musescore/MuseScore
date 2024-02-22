@@ -52,7 +52,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(INotationConfiguration, configuration)
     INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
 
 public:

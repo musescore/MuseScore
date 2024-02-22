@@ -166,9 +166,9 @@ void ProjectModule::registerUiTypes()
                                           "Not creatable as it is an enum type");
 }
 
-void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
+void ProjectModule::onInit(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::GuiApp != mode) {
+    if (IApplication::RunMode::GuiApp != mode) {
         return;
     }
 

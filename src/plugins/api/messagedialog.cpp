@@ -22,7 +22,6 @@
 #include "messagedialog.h"
 
 using namespace mu::plugins::api;
-using namespace mu::framework;
 
 MessageDialog::MessageDialog(QObject* parent)
     : QObject(parent) {}

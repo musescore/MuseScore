@@ -45,7 +45,7 @@ using namespace mu::app;
 using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
-static mu::framework::GlobalModule globalModule;
+static mu::GlobalModule globalModule;
 
 App::App()
 {
@@ -71,7 +71,7 @@ int App::run(int argc, char** argv)
 #endif
 
     const char* appName;
-    if (framework::MUVersion::unstable()) {
+    if (MUVersion::unstable()) {
         appName  = "MuseScore4Development";
     } else {
         appName  = "MuseScore4";
@@ -115,10 +115,10 @@ int App::run(int argc, char** argv)
     commandLineParser.init();
     commandLineParser.parse(argc, argv);
 
-    framework::IApplication::RunMode runMode = commandLineParser.runMode();
+    IApplication::RunMode runMode = commandLineParser.runMode();
     QCoreApplication* app = nullptr;
 
-    if (runMode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (runMode == IApplication::RunMode::AudioPluginRegistration) {
         app = new QCoreApplication(argc, argv);
     } else {
         app = new QApplication(argc, argv);
@@ -127,7 +127,7 @@ int App::run(int argc, char** argv)
     QCoreApplication::setApplicationName(appName);
     QCoreApplication::setOrganizationName("MuseScore");
     QCoreApplication::setOrganizationDomain("musescore.org");
-    QCoreApplication::setApplicationVersion(QString::fromStdString(framework::MUVersion::fullVersion().toStdString()));
+    QCoreApplication::setApplicationVersion(QString::fromStdString(MUVersion::fullVersion().toStdString()));
 
 #if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN) && !defined(Q_OS_WASM)
     // Any OS that uses Freedesktop.org Desktop Entry Specification (e.g. Linux, BSD)
@@ -173,7 +173,7 @@ int App::run(int argc, char** argv)
 
 #ifdef MUE_BUILD_APPSHELL_MODULE
     SplashScreen* splashScreen = nullptr;
-    if (runMode == framework::IApplication::RunMode::GuiApp) {
+    if (runMode == IApplication::RunMode::GuiApp) {
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
@@ -228,7 +228,7 @@ int App::run(int argc, char** argv)
     // ====================================================
 
     switch (runMode) {
-    case framework::IApplication::RunMode::ConsoleApp: {
+    case IApplication::RunMode::ConsoleApp: {
         // ====================================================
         // Process Autobot
         // ====================================================
@@ -259,7 +259,7 @@ int App::run(int argc, char** argv)
             }
         }
     } break;
-    case framework::IApplication::RunMode::GuiApp: {
+    case IApplication::RunMode::GuiApp: {
 #ifdef MUE_BUILD_APPSHELL_MODULE
         // ====================================================
         // Setup Qml Engine
@@ -330,7 +330,7 @@ int App::run(int argc, char** argv)
         engine->load(url);
 #endif // MUE_BUILD_APPSHELL_MODULE
     } break;
-    case framework::IApplication::RunMode::AudioPluginRegistration: {
+    case IApplication::RunMode::AudioPluginRegistration: {
         CommandLineParser::AudioPluginRegistration pluginRegistration = commandLineParser.audioPluginRegistration();
 
         QMetaObject::invokeMethod(qApp, [this, pluginRegistration]() {
@@ -391,14 +391,14 @@ int App::run(int argc, char** argv)
     return retCode;
 }
 
-void App::applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode)
+void App::applyCommandLineOptions(const CommandLineParser::Options& options, IApplication::RunMode runMode)
 {
     uiConfiguration()->setPhysicalDotsPerInch(options.ui.physicalDotsPerInch);
 
     notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);
 
-    if (runMode == framework::IApplication::RunMode::ConsoleApp) {
+    if (runMode == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
         migration.appVersion = mu::engraving::Constants::MSC_VERSION;
 
@@ -441,7 +441,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
         appshellConfiguration()->revertToFactorySettings(options.app.revertToFactorySettings.value());
     }
 
-    if (runMode == framework::IApplication::RunMode::GuiApp) {
+    if (runMode == IApplication::RunMode::GuiApp) {
         startupScenario()->setStartupType(options.startup.type);
 
         if (options.startup.scoreUrl.has_value()) {

@@ -37,7 +37,7 @@
 namespace mu::project {
 class ProjectConfiguration : public IProjectConfiguration
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(cloud::ICloudConfiguration, cloudConfiguration)
     INJECT(accessibility::IAccessibilityConfiguration, accessibilityConfiguration)

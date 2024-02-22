@@ -57,9 +57,9 @@ const Language& LanguagesServiceStub::placeholderLanguage() const
     return pl;
 }
 
-framework::Progress LanguagesServiceStub::update(const QString&)
+mu::Progress LanguagesServiceStub::update(const QString&)
 {
-    return framework::Progress();
+    return Progress();
 }
 
 bool LanguagesServiceStub::needRestartToApplyLanguageChange() const

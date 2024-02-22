@@ -23,8 +23,8 @@
 
 #include "settings.h"
 
+using namespace mu;
 using namespace mu::appshell;
-using namespace mu::framework;
 
 AdvancedPreferencesModel::AdvancedPreferencesModel(QObject* parent)
     : QAbstractListModel(parent)

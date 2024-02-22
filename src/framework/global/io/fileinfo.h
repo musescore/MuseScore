@@ -22,11 +22,10 @@
 #ifndef MU_IO_FILEINFO_H
 #define MU_IO_FILEINFO_H
 
-#include "types/string.h"
-#include "dir.h"
-
-#include "modularity/ioc.h"
+#include "global/types/string.h"
+#include "global/modularity/ioc.h"
 #include "ifilesystem.h"
+#include "dir.h"
 
 namespace mu::io {
 class FileInfo

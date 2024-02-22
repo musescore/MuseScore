@@ -23,9 +23,9 @@
 
 #include "settings.h"
 
+using namespace mu;
 using namespace mu::learn;
 using namespace mu::network;
-using namespace mu::framework;
 
 static const std::string module_name("learn");
 static const Settings::Key GET_PLAYLISTS_TESTING_MODE_KEY(module_name, "learn/getPlaylistsTestingMode");

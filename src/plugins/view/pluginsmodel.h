@@ -37,7 +37,7 @@ class PluginsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IPluginsService, service)
     INJECT(IPluginsConfiguration, configuration)
 

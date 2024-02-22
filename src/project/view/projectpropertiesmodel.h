@@ -32,7 +32,7 @@ class ProjectPropertiesModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(QString filePath READ filePath CONSTANT)
     Q_PROPERTY(QString version READ version CONSTANT)

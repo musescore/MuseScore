@@ -30,7 +30,6 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::framework;
 using namespace mu::async;
 
 static constexpr std::string_view SHORTCUTS_TAG("Shortcuts");
@@ -245,7 +244,7 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& 
 {
     TRACEFUNC;
 
-    XmlReader reader(path);
+    deprecated::XmlReader reader(path);
 
     reader.readNextStartElement();
     if (reader.tagName() != SHORTCUTS_TAG) {
@@ -271,7 +270,7 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& 
     return reader.success();
 }
 
-Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
+Shortcut ShortcutsRegister::readShortcut(deprecated::XmlReader& reader) const
 {
     Shortcut shortcut;
 
@@ -335,7 +334,7 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 
     mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
-    XmlWriter writer(path);
+    deprecated::XmlWriter writer(path);
 
     writer.writeStartDocument();
     writer.writeStartElement(SHORTCUTS_TAG);
@@ -350,7 +349,7 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
     return writer.success();
 }
 
-void ShortcutsRegister::writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const
+void ShortcutsRegister::writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const
 {
     writer.writeStartElement(SHORTCUT_TAG);
     writer.writeTextElement(ACTION_CODE_TAG, shortcut.action);

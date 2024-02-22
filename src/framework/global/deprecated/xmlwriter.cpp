@@ -25,7 +25,7 @@
 #include <QXmlStreamWriter>
 #include <QFile>
 
-using namespace mu::framework;
+using namespace mu::deprecated;
 using namespace mu::io;
 
 XmlWriter::XmlWriter(const io::path_t& path)

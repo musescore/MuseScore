@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_IGLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#ifndef MU_GLOBAL_IGLOBALCONFIGURATION_H
+#define MU_GLOBAL_IGLOBALCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
-namespace mu::framework {
+namespace mu {
 class IGlobalConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IGlobalConfiguration)
@@ -81,4 +81,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_IGLOBALCONFIGURATION_H
+#endif // MU_GLOBAL_IGLOBALCONFIGURATION_H

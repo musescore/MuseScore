@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SYSTEMINFO_H
-#define MU_SYSTEMINFO_H
+#ifndef MU_GLOBAL_SYSTEMINFO_H
+#define MU_GLOBAL_SYSTEMINFO_H
 
-#include <map>
+#include <unordered_map>
 
-#include "types/val.h"
-
+#include "../types/val.h"
 #include "../isysteminfo.h"
 
 namespace mu {
@@ -42,4 +41,4 @@ private:
 };
 }
 
-#endif // MU_SYSTEMINFO_H
+#endif // MU_GLOBAL_SYSTEMINFO_H

@@ -39,7 +39,7 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(ui::IUiConfiguration, uiConfiguration)

@@ -21,8 +21,6 @@
  */
 #include "dir.h"
 
-#include "fileinfo.h"
-
 using namespace mu;
 using namespace mu::io;
 

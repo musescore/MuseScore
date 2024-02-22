@@ -27,13 +27,13 @@
 #include "iinteractive.h"
 
 namespace mu::autobot {
-class AutobotInteractive : public framework::IInteractive
+class AutobotInteractive : public IInteractive
 {
 public:
     AutobotInteractive() = default;
 
-    void setRealInteractive(std::shared_ptr<framework::IInteractive> real);
-    std::shared_ptr<framework::IInteractive> realInteractive() const;
+    void setRealInteractive(std::shared_ptr<IInteractive> real);
+    std::shared_ptr<IInteractive> realInteractive() const;
 
     Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
                     const Options& options = {}) const override;
@@ -71,7 +71,7 @@ public:
                  int defBtn = int(Button::NoButton), const Options& options = {}) const override;
 
     // progress
-    Ret showProgress(const std::string& title, framework::Progress* progress) const override;
+    Ret showProgress(const std::string& title, mu::Progress* progress) const override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
@@ -114,7 +114,7 @@ public:
 
 private:
 
-    std::shared_ptr<framework::IInteractive> m_real = nullptr;
+    std::shared_ptr<IInteractive> m_real = nullptr;
 
     io::path_t m_selectedFilePath;
 };

@@ -25,9 +25,9 @@
 
 #include "settings.h"
 
+using namespace mu;
 using namespace mu::cloud;
 using namespace mu::network;
-using namespace mu::framework;
 
 static const std::string module_name("cloud");
 static const Settings::Key CLIENT_ID_KEY(module_name, "cloud/clientId");

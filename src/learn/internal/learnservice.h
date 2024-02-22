@@ -36,7 +36,7 @@ class LearnService : public ILearnService
 {
     INJECT(ILearnConfiguration, configuration)
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
 public:
     void refreshPlaylists() override;

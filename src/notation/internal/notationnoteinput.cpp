@@ -551,7 +551,7 @@ mu::RectF NotationNoteInput::cursorRect() const
 
     RectF result = RectF(x, y, w, h);
 
-    if (configuration()->canvasOrientation().val == framework::Orientation::Horizontal) {
+    if (configuration()->canvasOrientation().val == mu::Orientation::Horizontal) {
         result.translate(system->page()->pos());
     }
 

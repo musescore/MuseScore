@@ -35,7 +35,7 @@
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
-    INJECT(mu::framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::IGlobalConfiguration, globalConfiguration)
     INJECT(mu::ui::IUiConfiguration, uiConfiguration)
     INJECT(mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);

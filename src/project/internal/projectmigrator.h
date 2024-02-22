@@ -32,7 +32,7 @@ namespace mu::project {
 class ProjectMigrator : public IProjectMigrator
 {
     INJECT(IProjectConfiguration, configuration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 public:
     ProjectMigrator() = default;
 

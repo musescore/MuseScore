@@ -51,7 +51,7 @@ public:
 
     void registerExports() override;
     void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
+    void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
 private:

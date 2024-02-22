@@ -28,7 +28,6 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
-using namespace mu::framework;
 using namespace mu::actions;
 using namespace mu::ui;
 using namespace mu::uicomponents;

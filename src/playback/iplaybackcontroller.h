@@ -96,7 +96,7 @@ public:
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;
 
-    virtual framework::Progress loadingProgress() const = 0;
+    virtual mu::Progress loadingProgress() const = 0;
 
     virtual void applyProfile(const SoundProfileName& profileName) = 0;
 

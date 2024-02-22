@@ -43,9 +43,9 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
 
     INJECT(IShortcutsRegister, shortcutsRegister)
     INJECT(ui::IUiActionsRegister, uiactionsRegister)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IShortcutsConfiguration, configuration)
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QItemSelection selection READ selection WRITE setSelection NOTIFY selectionChanged)
     Q_PROPERTY(QVariant currentShortcut READ currentShortcut NOTIFY selectionChanged)

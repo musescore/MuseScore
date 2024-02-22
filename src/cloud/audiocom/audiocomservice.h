@@ -48,8 +48,8 @@ public:
 
     CloudInfo cloudInfo() const override;
 
-    framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& url,
-                                       Visibility visibility = Visibility::Private, bool replaceExisting = false) override;
+    mu::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& url,
+                                Visibility visibility = Visibility::Private, bool replaceExisting = false) override;
 
 private:
     ServerConfig serverConfig() const override;
