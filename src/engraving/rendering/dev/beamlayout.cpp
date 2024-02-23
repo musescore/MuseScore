@@ -892,12 +892,12 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         restToBeamPadding = 0.35 * spatium;
     }
 
-    Shape beamShape = beam->shape().translated(beam->pagePos());
+    Shape beamShape = beam->shape().translate(beam->pagePos());
     beamShape.remove_if([&](ShapeElement& el) {
         return el.item() && el.item()->isBeamSegment() && toBeamSegment(el.item())->isBeamlet;
     });
 
-    Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
+    Shape restShape = rest->shape().translate(rest->pagePos() - rest->offset());
     double minBeamToRestXDist = up && firstRest ? 0.1 * spatium : 0.0;
 
     double restToBeamClearance = up

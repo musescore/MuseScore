@@ -2402,7 +2402,7 @@ void Segment::addPreAppendedToShape()
             toGraceNotesGroup(item)->addToShape();
         } else {
             Shape& shape = m_shapes[item->vStaffIdx()];
-            shape.add(item->shape().translated(item->pos()));
+            shape.add(item->shape().translate(item->pos()));
         }
     }
 }

@@ -2777,7 +2777,7 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
                 }
             }
         }
-        _shape.add(graceShape.translated(mu::PointF(offset, 0.0)));
+        _shape.add(graceShape.translate(mu::PointF(offset, 0.0)));
         double xpos = offset - item->parent()->rxoffset() - item->parent()->ldata()->pos().x();
         grace->setPos(xpos, 0.0);
     }
@@ -2887,7 +2887,7 @@ void TLayout::layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ct
     SysStaff* staff = item->system()->staff(item->staffIdx());
     Skyline& skyline = staff->skyline();
     SkylineLine& skylineLine = tabStaff ? skyline.north() : (item->guitarBend()->ldata()->up() ? skyline.north() : skyline.south());
-    skylineLine.add(item->shape().translated(item->pos()));
+    skylineLine.add(item->shape().translate(item->pos()));
 
     fillGuitarBendSegmentShape(item, ldata);
 }
@@ -2897,7 +2897,7 @@ void TLayout::fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBe
     Shape shape;
     shape.add(ldata->bbox(), item);
     if (!item->bendText()->empty()) {
-        shape.add(item->bendText()->shape().translated(item->bendText()->pos()));
+        shape.add(item->bendText()->shape().translate(item->bendText()->pos()));
     }
     ldata->setShape(shape);
 }
@@ -3128,7 +3128,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         bool above = item->spanner()->placeAbove();
         SkylineLine sl(!above);
         Shape sh = item->shape();
-        sl.add(sh.translated(item->pos()));
+        sl.add(sh.translate(item->pos()));
         if (above) {
             d  = item->system()->topDistance(item->staffIdx(), sl);
             if (d > -md) {
@@ -4282,7 +4282,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
             // isn't fully known yet, so we use an approximation
             double sp = item->spatium();
             PointF approxRelPos(noteBBox.width() + 0.25 * sp, -0.25 * sp);
-            shape.add(bendSeg->shape().translated(approxRelPos));
+            shape.add(bendSeg->shape().translate(approxRelPos));
         }
     }
 

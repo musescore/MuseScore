@@ -1136,8 +1136,12 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
                 aa->mutldata()->moveY(d);
                 Shape aaShape = aa->shape().translated(aa->pos() + item->pos() + s->pos() + m->pos());
                 if (sstaff && aa->addToSkyline()) {
-                    sstaff->skyline().add(aaShape);
-                    s->staffShape(item->staffIdx()).add(aaShape);
+                    sstaff->skyline().add(aa->shape().translate(aa->pos() + item->pos() + s->pos() + m->pos()));
+                    for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
+                        if (sh.item() == aa) {
+                            sh.translate(0.0, minDist);
+                        }
+                    }
                 }
             }
         }
@@ -3118,14 +3122,14 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
 
-            Shape chordShape = chord->shape().translated(chord->pos());
+            Shape chordShape = chord->shape().translate(chord->pos());
             chordShape.removeInvisibles();
             if (chordShape.empty()) {
                 continue;
             }
 
             double clearance = 0.0;
-            Shape restShape = rest->shape().translated(rest->pos() - offset);
+            Shape restShape = rest->shape().translate(rest->pos() - offset);
             if (chord->segment() == rest->segment()) {
                 clearance = restAbove
                             ? restShape.verticalClearance(chordShape)
@@ -3196,7 +3200,7 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
         }
 
         RestVerticalClearance& rest1Clearance = rest1->verticalClearance();
-        Shape shape1 = rest1->shape().translated(rest1->pos() - rest1->offset());
+        Shape shape1 = rest1->shape().translate(rest1->pos() - rest1->offset());
 
         Rest* rest2 = rests[i + 1];
         if (!rest2->visible() || !rest2->autoplace()) {
@@ -3207,7 +3211,7 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
             continue;
         }
 
-        Shape shape2 = rest2->shape().translated(rest2->pos() - rest2->offset());
+        Shape shape2 = rest2->shape().translate(rest2->pos() - rest2->offset());
         RestVerticalClearance& rest2Clearance = rest2->verticalClearance();
 
         double clearance;
@@ -3253,8 +3257,8 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
         Beam* beam1 = rest1->beam();
         Beam* beam2 = rest2->beam();
         if (beam1 && beam2 && considerBeams) {
-            shape1 = rest1->shape().translated(rest1->pos() - rest1->offset());
-            shape2 = rest2->shape().translated(rest2->pos() - rest2->offset());
+            shape1 = rest1->shape().translate(rest1->pos() - rest1->offset());
+            shape2 = rest2->shape().translate(rest2->pos() - rest2->offset());
 
             ChordRest* beam1Start = beam1->elements().front();
             ChordRest* beam1End = beam1->elements().back();
@@ -3718,7 +3722,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
         } else if (!beamlet->isBefore && item->up()) {
             xPos += stem->width();
         }
-        shape.add(beamlet->shape().translated(PointF(-xPos, 0.0)));
+        shape.add(beamlet->shape().translate(PointF(-xPos, 0.0)));
     }
 
     ldata->setShape(shape);
