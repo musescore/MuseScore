@@ -345,7 +345,15 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->layoutInfo->calculateAnchors(chordRests, item->notes());
         item->setStartAnchor(item->layoutInfo->startAnchor());
         item->setEndAnchor(item->layoutInfo->endAnchor());
-        item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
+        double xDiff = item->endAnchor().x() - item->startAnchor().x();
+        double yDiff = item->endAnchor().y() - item->startAnchor().y();
+        if (abs(xDiff) < 0.5 * item->spatium()) {
+            // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
+            // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
+            item->setSlope(0.0);
+        } else {
+            item->setSlope(yDiff / xDiff);
+        }
         item->setBeamDist(item->layoutInfo->beamDist());
     } else {
         item->setSlope(0.0);
