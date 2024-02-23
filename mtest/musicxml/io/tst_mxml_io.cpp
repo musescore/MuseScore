@@ -122,6 +122,7 @@ private slots:
       void dynamics1() { mxmlIoTest("testDynamics1"); }
       void dynamics2() { mxmlIoTest("testDynamics2"); }
       void dynamics3() { mxmlIoTestRef("testDynamics3"); }
+      void elision() { mxmlImportTestRef("testElision"); }
       void emptyMeasure() { mxmlIoTestRef("testEmptyMeasure"); }
       void emptyVoice1() { mxmlIoTestRef("testEmptyVoice1"); }
       void excessiveFretDiagrams1() { mxmlImportTestRef("testExcessiveFretDiagrams1"); }
