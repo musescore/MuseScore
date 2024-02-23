@@ -145,6 +145,7 @@ public:
     void parse();
 private:
     void skipLogCurrElem();
+    void readElision(String& formattedText);
     const LyricNumberHandler m_lyricNumberHandler;
     XmlStreamReader& m_e;
     const Score* m_score = nullptr;            // the score
