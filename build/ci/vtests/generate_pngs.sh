@@ -25,6 +25,7 @@ REF_BIN=./musescore_reference/app/bin/mscore4portable
 CUR_BIN=./musescore_current/app/bin/mscore4portable
 
 sudo apt install libopengl0 -y
+sudo apt install libegl1 -y
 
 chmod +x $REF_BIN
 # chmod +x ./musescore_reference/app/bin/crashpad_handler
