@@ -278,8 +278,6 @@ typedef int (* ms_Instrument_get_id)(ms_InstrumentInfo instrument);
 typedef const char*(* ms_Instrument_get_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
-typedef const char*(* ms_Instrument_get_pack_name)(ms_InstrumentInfo);
-typedef const char*(* ms_Instrument_get_vendor_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
 typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);
@@ -347,10 +345,17 @@ typedef void (* ms_MuseSampler_set_playing)(ms_MuseSampler, int playing);
 typedef ms_Result (* ms_MuseSampler_all_notes_off)(ms_MuseSampler);
 
 // Added in 0.6
+typedef const char*(* ms_Instrument_get_pack_name)(ms_InstrumentInfo);
+typedef const char*(* ms_Instrument_get_vendor_name)(ms_InstrumentInfo);
+
 typedef ms_PresetChange (* ms_MuseSampler_create_preset_change)(ms_MuseSampler ms, ms_Track track, long long location_us);
 typedef ms_Result (* ms_MuseSampler_add_preset)(ms_MuseSampler ms, ms_Track track, ms_PresetChange preset_change, const char* preset_name);
+
 typedef const char*(* ms_get_text_articulations)(int instrument_id, const char* preset_name);
 typedef ms_Result (* ms_MuseSampler_add_track_text_articulation_event)(ms_MuseSampler ms, ms_Track track, ms_TextArticulationEvent evt);
+
+typedef const char*(* ms_get_drum_mapping)(int instrument_id);
+// ------------------------------------------------------------
 
 namespace mu::musesampler {
 using track_idx_t = size_t;

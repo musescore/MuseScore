@@ -107,7 +107,7 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
     auto instrumentList = m_libHandler->getInstrumentList();
     while (auto instrument = m_libHandler->getNextInstrument(instrumentList))
     {
-        int uniqueId = m_libHandler->getInstrumentId(instrument);
+        int instrumentId = m_libHandler->getInstrumentId(instrument);
         String internalName = String::fromUtf8(m_libHandler->getInstrumentName(instrument));
         String internalCategory = String::fromUtf8(m_libHandler->getInstrumentCategory(instrument));
         String instrumentPackName = String::fromUtf8(m_libHandler->getInstrumentPackName(instrument));
@@ -123,7 +123,7 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
         }
 
         AudioResourceMeta meta;
-        meta.id = buildMuseInstrumentId(internalCategory, internalName, uniqueId).toStdString();
+        meta.id = buildMuseInstrumentId(internalCategory, internalName, instrumentId).toStdString();
         meta.type = AudioResourceType::MuseSamplerSoundPack;
         meta.vendor = "MuseSounds";
         meta.attributes = {
@@ -132,7 +132,7 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
             { u"musePack", instrumentPackName },
             { u"museVendorName", vendorName },
             { u"museName", internalName },
-            { u"museUID", String::fromStdString(std::to_string(uniqueId)) },
+            { u"museUID", String::fromStdString(std::to_string(instrumentId)) },
         };
 
         result.push_back(std::move(meta));
@@ -220,6 +220,16 @@ float MuseSamplerResolver::defaultReverbLevel(const String& instrumentSoundId) c
     }
 
     return 0.f;
+}
+
+String MuseSamplerResolver::drumMapping(int instrumentId) const
+{
+    if (!m_libHandler) {
+        return String();
+    }
+
+    const char* mapping_cstr = m_libHandler->getDrumMapping(instrumentId);
+    return mapping_cstr ? String::fromAscii(mapping_cstr) : String();
 }
 
 bool MuseSamplerResolver::checkLibrary() const

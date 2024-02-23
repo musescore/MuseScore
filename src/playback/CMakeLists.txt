@@ -44,6 +44,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundprofilesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundprofilesrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/drumsetloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/drumsetloader.h
 
     #view
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/mixerchannelitem.cpp
