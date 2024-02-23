@@ -55,10 +55,6 @@ void MixerPanelModel::load()
 
     m_currentTrackSequenceId = sequenceId;
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
-    });
-
     controller()->trackAdded().onReceive(this, [this](const TrackId trackId) {
         onTrackAdded(trackId);
     });
@@ -165,16 +161,6 @@ void MixerPanelModel::loadItems()
 
     updateItemsPanelsOrder();
     setupConnections();
-}
-
-void MixerPanelModel::onNotationChanged()
-{
-    auto instrumentTrackIdMap = controller()->instrumentTrackIdMap();
-    for (auto it = instrumentTrackIdMap.cbegin(); it != instrumentTrackIdMap.cend(); ++it) {
-        if (MixerChannelItem* item = findChannelItem(it->second)) {
-            item->loadSoloMuteState(controller()->trackSoloMuteState(it->first));
-        }
-    }
 }
 
 void MixerPanelModel::onTrackAdded(const TrackId& trackId)
@@ -430,6 +416,11 @@ MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::Track
 {
     MixerChannelItem::Type type = isPrimary ? MixerChannelItem::Type::PrimaryInstrument
                                   : MixerChannelItem::Type::SecondaryInstrument;
+
+    const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
+    if (instrumentTrackId == metronomeTrackId) {
+        type = MixerChannelItem::Type::Metronome;
+    }
 
     MixerChannelItem* item = new MixerChannelItem(this, type, false /*outputOnly*/, trackId);
     item->setInstrumentTrackId(instrumentTrackId);

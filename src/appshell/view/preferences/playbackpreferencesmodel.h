@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_IOPREFERENCESMODEL_H
-#define MU_APPSHELL_IOPREFERENCESMODEL_H
+#ifndef MU_APPSHELL_PLAYBACKPREFERENCESMODEL_H
+#define MU_APPSHELL_PLAYBACKPREFERENCESMODEL_H
 
 #include <QObject>
 
@@ -32,7 +32,7 @@
 #include "midi/imidiinport.h"
 
 namespace mu::appshell {
-class IOPreferencesModel : public QObject, public async::Asyncable
+class PlaybackPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -40,6 +40,7 @@ class IOPreferencesModel : public QObject, public async::Asyncable
     INJECT(midi::IMidiConfiguration, midiConfiguration)
     INJECT(midi::IMidiOutPort, midiOutPort)
     INJECT(midi::IMidiInPort, midiInPort)
+    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
 
@@ -52,8 +53,10 @@ class IOPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool isMIDI20OutputSupported READ isMIDI20OutputSupported CONSTANT)
     Q_PROPERTY(bool useMIDI20Output READ useMIDI20Output WRITE setUseMIDI20Output NOTIFY useMIDI20OutputChanged)
 
+    Q_PROPERTY(bool muteHiddenInstruments READ muteHiddenInstruments WRITE setMuteHiddenInstruments NOTIFY muteHiddenInstrumentsChanged)
+
 public:
-    explicit IOPreferencesModel(QObject* parent = nullptr);
+    explicit PlaybackPreferencesModel(QObject* parent = nullptr);
 
     Q_INVOKABLE void init();
 
@@ -75,10 +78,14 @@ public:
     bool isMIDI20OutputSupported() const;
     bool useMIDI20Output() const;
 
+    bool muteHiddenInstruments() const;
+
 public slots:
     void setCurrentAudioApiIndex(int index);
 
     void setUseMIDI20Output(bool use);
+
+    void setMuteHiddenInstruments(bool mute);
 
 signals:
     void currentAudioApiIndexChanged(int index);
@@ -90,6 +97,8 @@ signals:
 
     void useMIDI20OutputChanged();
 
+    void muteHiddenInstrumentsChanged(bool mute);
+
 private:
     midi::MidiDeviceID midiInputDeviceId(int index) const;
     midi::MidiDeviceID midiOutputDeviceId(int index) const;
@@ -98,4 +107,4 @@ private:
 };
 }
 
-#endif // MU_APPSHELL_IOPREFERENCESMODEL_H
+#endif // MU_APPSHELL_PLAYBACKPREFERENCESMODEL_H

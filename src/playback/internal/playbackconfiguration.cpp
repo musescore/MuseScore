@@ -49,6 +49,8 @@ static const Settings::Key MIXER_FADER_SECTION_VISIBLE_KEY(moduleName, "playback
 static const Settings::Key MIXER_MUTE_AND_SOLO_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/muteAndSoloSectionVisible");
 static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
 
+static const Settings::Key MUTE_HIDDEN_INSTRUMENTS(moduleName, "playback/mixer/muteHiddenInstruments");
+
 static const Settings::Key DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS(moduleName, "playback/profiles/defaultProfileName");
 static const SoundProfileName BASIC_PROFILE_NAME(u"MuseScore Basic");
 static const SoundProfileName MUSE_PROFILE_NAME(u"Muse Sounds");
@@ -91,6 +93,11 @@ void PlaybackConfiguration::init()
         bool sectionEnabledByDefault = sectionType != MixerSectionType::Volume;
         settings()->setDefaultValue(mixerSectionVisibleKey(sectionType), Val(sectionEnabledByDefault));
     }
+
+    settings()->setDefaultValue(MUTE_HIDDEN_INSTRUMENTS, Val(true));
+    settings()->valueChanged(MUTE_HIDDEN_INSTRUMENTS).onReceive(nullptr, [this](const Val& mute) {
+        m_muteHiddenInstrumentsChanged.send(mute.toBool());
+    });
 
     settings()->setDefaultValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(fallbackSoundProfileStr().toStdString()));
 
@@ -203,6 +210,21 @@ gain_t PlaybackConfiguration::defaultAuxSendValue(aux_channel_idx_t index, Audio
     }
 
     return DEFAULT_VALUE;
+}
+
+bool PlaybackConfiguration::muteHiddenInstruments() const
+{
+    return settings()->value(MUTE_HIDDEN_INSTRUMENTS).toBool();
+}
+
+void PlaybackConfiguration::setMuteHiddenInstruments(bool mute)
+{
+    settings()->setSharedValue(MUTE_HIDDEN_INSTRUMENTS, Val(mute));
+}
+
+mu::async::Channel<bool> PlaybackConfiguration::muteHiddenInstrumentsChanged() const
+{
+    return m_muteHiddenInstrumentsChanged;
 }
 
 const SoundProfileName& PlaybackConfiguration::basicSoundProfileName() const

@@ -58,10 +58,9 @@ class MixerChannelItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(float volumeLevel READ volumeLevel WRITE setVolumeLevel NOTIFY volumeLevelChanged)
     Q_PROPERTY(int balance READ balance WRITE setBalance NOTIFY balanceChanged)
-
-    Q_PROPERTY(bool muted READ muted NOTIFY mutedChanged)
-    Q_PROPERTY(bool mutedManually READ mutedManually WRITE setMutedManually NOTIFY mutedChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
+    Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
+    Q_PROPERTY(bool forceMute READ forceMute NOTIFY forceMuteChanged)
 
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
@@ -73,6 +72,7 @@ public:
         Unknown,
         PrimaryInstrument,
         SecondaryInstrument,
+        Metronome,
         Aux,
         Master,
     };
@@ -97,10 +97,9 @@ public:
 
     float volumeLevel() const;
     int balance() const;
-
-    bool muted() const;
-    bool mutedManually() const;
     bool solo() const;
+    bool muted() const;
+    bool forceMute() const;
 
     ui::NavigationPanel* panel() const;
     void setPanelOrder(int panelOrder);
@@ -133,9 +132,8 @@ public slots:
 
     void setVolumeLevel(float volumeLevel);
     void setBalance(int balance);
-
-    void setMutedManually(bool isMuted);
     void setSolo(bool solo);
+    void setMuted(bool mute);
 
 signals:
     void titleChanged(QString title);
@@ -145,9 +143,9 @@ signals:
 
     void volumeLevelChanged(float volumeLevel);
     void balanceChanged(int balance);
-
-    void mutedChanged();
     void soloChanged();
+    void mutedChanged();
+    void forceMuteChanged();
 
     void panelChanged(ui::NavigationPanel* panel);
 
@@ -187,7 +185,6 @@ protected:
 
     audio::AudioInputParams m_inputParams;
     audio::AudioOutputParams m_outParams;
-    notation::INotationSoloMuteState::SoloMuteState m_soloMuteState;
 
     InputResourceItem* m_inputResourceItem = nullptr;
     QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;

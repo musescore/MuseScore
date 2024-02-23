@@ -59,6 +59,10 @@ public:
     virtual audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
                                               const String& instrumentSoundId) const = 0;
 
+    virtual bool muteHiddenInstruments() const = 0;
+    virtual void setMuteHiddenInstruments(bool mute) = 0;
+    virtual async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
+
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
     virtual const SoundProfileName& museSoundProfileName() const = 0;
 
