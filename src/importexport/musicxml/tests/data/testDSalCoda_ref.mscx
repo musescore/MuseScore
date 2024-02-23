@@ -358,6 +358,9 @@
             </Rest>
           </voice>
         </Measure>
+      <HBox>
+        <width>10</width>
+        </HBox>
       <Measure>
         <Marker>
           <style>repeat_left</style>
