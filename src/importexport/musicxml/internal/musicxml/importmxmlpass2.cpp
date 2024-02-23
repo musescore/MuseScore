@@ -6116,6 +6116,7 @@ void MusicXMLParserLyric::parse()
     const String lyricNumber = m_e.attribute("number");
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     const bool printLyric = m_e.asciiAttribute("print-object") != "no";
+    const String placement = m_e.attribute("placement");
     String extendType;
     String formattedText;
 
@@ -6170,6 +6171,10 @@ void MusicXMLParserLyric::parse()
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
     lyric->setVisible(printLyric);
+    if (!placement.empty()) {
+        lyric->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+        lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
 
     const auto l = lyric.release();
     m_numberedLyrics[lyricNo] = l;
