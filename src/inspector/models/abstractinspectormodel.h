@@ -22,8 +22,10 @@
 #ifndef MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H
 #define MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H
 
-#include <QList>
 #include <functional>
+#include <set>
+
+#include <QList>
 
 #include "async/asyncable.h"
 
@@ -147,9 +149,9 @@ public:
 
     static ElementKey makeKey(const mu::engraving::EngravingItem* item);
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
-    static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
-    static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
-                                                                const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
+    static std::set<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
+    static std::set<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
+                                                                    const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
     static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& selectedElementList);
 
     virtual bool isEmpty() const;
@@ -243,32 +245,8 @@ private:
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;
 using InspectorSectionType = AbstractInspectorModel::InspectorSectionType;
-using InspectorModelTypeSet = QSet<InspectorModelType>;
-using InspectorSectionTypeSet = QSet<InspectorSectionType>;
-
-#ifdef MU_QT5_COMPAT
-inline uint qHash(InspectorSectionType key)
-{
-    return ::qHash(QString::number(static_cast<int>(key)));
-}
-
-inline uint qHash(InspectorModelType key)
-{
-    return ::qHash(QString::number(static_cast<int>(key)));
-}
-
-#else
-inline size_t qHash(InspectorSectionType key)
-{
-    return ::qHash(QString::number(static_cast<int>(key)));
-}
-
-inline size_t qHash(InspectorModelType key)
-{
-    return ::qHash(QString::number(static_cast<int>(key)));
-}
-
-#endif
+using InspectorModelTypeSet = std::set<InspectorModelType>;
+using InspectorSectionTypeSet = std::set<InspectorSectionType>;
 }
 
 #endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H
