@@ -264,6 +264,12 @@ EditStyle::EditStyle(QWidget* parent)
     tabParenthFrets->addButton(tabParenthMeasure, int(ParenthesizeTiedFret::START_OF_MEASURE));
     tabParenthFrets->addButton(tabParenthNone, int(ParenthesizeTiedFret::NEVER));
 
+    void (QButtonGroup::* tabShowTiedFretsButtonClicked)(QAbstractButton*) = &QButtonGroup::buttonClicked;
+    connect(tabShowTiedFrets, tabShowTiedFretsButtonClicked, this, [this](QAbstractButton*){
+        updateParenthesisIndicatingTiesGroupState();
+    });
+    updateParenthesisIndicatingTiesGroupState();
+
     QButtonGroup* clefVisibility = new QButtonGroup(this);
     clefVisibility->addButton(radioShowAllClefs, true);
     clefVisibility->addButton(radioHideClefs, false);
@@ -2462,6 +2468,11 @@ void EditStyle::resetUserStyleName()
 {
     styleName->clear();
     endEditUserStyleName();
+}
+
+void EditStyle::updateParenthesisIndicatingTiesGroupState()
+{
+    groupBox_2->setEnabled(tabShowTies->isChecked());
 }
 
 void EditStyle::clefVisibilityChanged(bool checked)
