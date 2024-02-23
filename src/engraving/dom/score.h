@@ -333,6 +333,7 @@ public:
     void cmdResetBeamMode();
     void cmdResetTextStyleOverrides();
     void cmdResetAllStyles(const StyleIdSet& exceptTheseOnes = {});
+    void cmdResetMeasuresLayout();
     bool canInsertClef(ClefType) const;
     void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
@@ -986,8 +987,6 @@ private:
     friend class write::Writer;
 
     static std::set<Score*> validScores;
-
-    void cmdResetMeasuresLayout();
 
     ScoreChangesRange changesRange() const;
 
