@@ -1607,6 +1607,10 @@ enum class Sid {
     golpeShowTabSimple,
     golpeShowTabCommon,
 
+    tabShowTiedFret,
+    tabParenthesizeTiedFret,
+    parenthesizeTiedFretIfArticulation,
+
     chordlineThickness,
 
     autoplaceEnabled,

@@ -2217,17 +2217,11 @@ void TDraw::draw(const Note* item, Painter* painter)
 
     // tablature
     if (tablature) {
-        if (item->displayFret() == Note::DisplayFretOption::Hide) {
+        if (item->displayFret() == Note::DisplayFretOption::Hide || item->shouldHideFret()) {
             return;
         }
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
-        if (item->tieBack() && !tab->showBackTied()) {
-            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
-                // fret should be hidden, so return without drawing it
-                return;
-            }
-        }
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || item->fretConflict()) {
             double d  = item->spatium() * .1;
