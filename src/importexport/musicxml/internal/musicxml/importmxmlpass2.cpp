@@ -3002,7 +3002,13 @@ void MusicXMLParserDirection::direction(const String& partId,
     // handle the elems
     for (auto elem : m_elems) {
         // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
-        addElemOffset(elem, track, placement, measure, tick + m_offset);
+        if (hasTotalY()) {
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
+                totalY(), elem, track, placement, measure, tick + m_offset);
+            delayedDirections.push_back(delayedDirection);
+        } else {
+            addElemOffset(elem, track, placement, measure, tick + m_offset);
+        }
     }
 
     // handle the spanner stops first
@@ -3138,6 +3144,13 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
         } else if (m_e.name() == "segno") {
             m_wordsText += u"<sym>segno</sym>";
             m_e.skipCurrentElement();
+        } else if (m_e.name() == "symbol") {
+            const String smufl = m_e.readText();
+            if (!smufl.empty()) {
+                m_wordsText += u"<sym>" + smufl + u"</sym>";
+            }
+        } else if (m_e.name() == "other-direction") {
+            otherDirection();
         } else {
             skipLogCurrElem();
         }
@@ -3182,6 +3195,59 @@ void MusicXMLParserDirection::dynamics()
         } else {
             m_dynamicsList.push_back(String::fromAscii(m_e.name().ascii()));
             m_e.skipCurrentElement();
+        }
+    }
+}
+
+void MusicXMLParserDirection::otherDirection()
+{
+    // <other-direction> element is used to define any <direction> symbols not yet in the MusicXML format
+    const String smufl = m_e.attribute("smufl");
+    const Color color = Color::fromString(m_e.attribute("color"));
+
+    // Read smufl symbol
+    if (!smufl.empty()) {
+        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+        if (id != SymId::noSym) {
+            Symbol* smuflSym = Factory::createSymbol(m_score->dummy());
+            smuflSym->setSym(id);
+            if (color.isValid()) {
+                smuflSym->setColor(color);
+            }
+            m_elems.push_back(smuflSym);
+        }
+        m_e.skipCurrentElement();
+    } else {
+        // TODO: Multiple sets of maps for exporters other than Dolet 6/Sibelius
+        // TODO: Add more symbols from Sibelius
+        std::map<String, String> otherDirectionStrings;
+        if (m_pass1.exporterString().contains(u"Dolet")) {
+            otherDirectionStrings = {
+                { String(u"To Coda"), String(u"To Coda") },
+                { String(u"Segno"), String(u"<sym>segno</sym>") },
+                { String(u"CODA"), String(u"<sym>coda</sym>") },
+            };
+        }
+        std::map<String, SymId> otherDirectionSyms;
+        otherDirectionSyms = { { String(u"Rhythm dot"), SymId::augmentationDot },
+            { String(u"Whole rest"), SymId::restWhole },
+            { String(u"l.v. down"), SymId::articLaissezVibrerBelow },
+            { String(u"8vb"), SymId::ottavaBassaVb },
+            { String(u"Treble clef"), SymId::gClef },
+            { String(u"Bass clef"), SymId::fClef }
+        };
+        String t = m_e.readText();
+        String val = mu::value(otherDirectionStrings, t);
+        if (!val.empty()) {
+            m_wordsText += val;
+        } else {
+            SymId sym = mu::value(otherDirectionSyms, t);
+            Symbol* smuflSym = Factory::createSymbol(m_score->dummy());
+            smuflSym->setSym(sym);
+            if (color.isValid()) {
+                smuflSym->setColor(color);
+            }
+            m_elems.push_back(smuflSym);
         }
     }
 }
@@ -7006,6 +7072,8 @@ void MusicXMLParserNotations::parse()
             tied();
         } else if (m_e.name() == "tuplet") {
             tuplet();
+        } else if (m_e.name() == "other-notation") {
+            otherNotation();
         } else {
             skipLogCurrElem();
         }
@@ -7214,6 +7282,20 @@ void MusicXMLParserNotations::tuplet()
         // ignore
     } else {
         m_logger->logError(String(u"unknown tuplet placement: %1").arg(tupletPlacement), &m_e);
+    }
+}
+
+void MusicXMLParserNotations::otherNotation()
+{
+    const String type = m_e.attribute("type");
+    const String smufl = m_e.attribute("smufl");
+
+    if (!smufl.empty()) {
+        SymId id = SymNames::symIdByName(smufl, SymId::noSym);
+        Notation notation = Notation::notationWithAttributes(String::fromAscii(m_e.name().ascii()),
+                                                             m_e.attributes(), u"notations", id);
+        m_notations.push_back(notation);
+        m_e.skipCurrentElement();
     }
 }
 

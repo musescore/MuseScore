@@ -186,6 +186,7 @@ public:
     void insertAdjustedDuration(Fraction key, Fraction value) { m_adjustedDurations.insert({ key, value }); }
     std::map<Fraction, Fraction>& adjustedDurations() { return m_adjustedDurations; }
     void insertSeenDenominator(int val) { m_seenDenominators.emplace(val); }
+    String exporterString() const { return m_exporterString; }
 
 private:
     // functions
@@ -193,6 +194,7 @@ private:
 
     // generic pass 1 data
     XmlStreamReader m_e;
+    String m_exporterString;                    // Name of the software which exported the file
     int m_divs = 0;                              // Current MusicXML divisions value
     std::map<String, MusicXmlPart> m_parts;     // Parts data, mapped on part id
     std::set<int> m_systemStartMeasureNrs;       // Measure numbers of measures starting a page
