@@ -106,7 +106,13 @@ std::string UpdateConfiguration::checkForUpdateUrl() const
            : "https://updates.musescore.org/feed/latest.test.xml";
 }
 
-mu::network::RequestHeaders UpdateConfiguration::checkForUpdateHeaders() const
+std::string UpdateConfiguration::previousReleasesNotesUrl() const
+{
+    return !allowUpdateOnPreRelease() ? "https://updates.musescore.org/feed/all.xml"
+           : "https://updates.musescore.org/feed/all.test.xml";
+}
+
+mu::network::RequestHeaders UpdateConfiguration::updateHeaders() const
 {
     network::RequestHeaders headers;
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
