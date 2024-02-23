@@ -8172,7 +8172,7 @@
                         <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="53"> <!--Ride Bell-->
-                        <head>normal</head>
+                        <head>diamond</head>
                         <line>0</line>
                         <voice>0</voice>
                         <name>Ride Bell</name>
