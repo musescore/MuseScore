@@ -6048,6 +6048,19 @@ void MusicXMLParserLyric::skipLogCurrElem()
     _e.skipCurrentElement();
 }
 
+void MusicXMLParserLyric::readElision(QString& formattedText)
+{
+    const QString text = _e.readElementText();
+    const QString smufl = _e.attributes().value("smufl").toString();
+    if (!text.isEmpty()) {
+        formattedText += text;
+    } else if (!smufl.isEmpty()) {
+        formattedText += u"<sym>" + String(smufl) + u"</sym>";
+    } else {
+        formattedText += u"<sym>lyricsElision</sym>";
+    }
+}
+
 //---------------------------------------------------------
 //   parse
 //---------------------------------------------------------
@@ -6065,14 +6078,7 @@ void MusicXMLParserLyric::parse()
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "elision") {
-            // TODO verify elision handling
-            /*
-             QString text = _e.readElementText();
-             if (text.isEmpty())
-             formattedText += " ";
-             else
-             */
-            formattedText += xmlpass2::nextPartOfFormattedString(_e);
+            readElision(formattedText);
         } else if (_e.name() == "extend") {
             hasExtend = true;
             extendType = _e.attributes().value("type").toString();

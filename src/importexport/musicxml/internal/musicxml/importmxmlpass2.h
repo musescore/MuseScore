@@ -137,6 +137,7 @@ public:
     void parse();
 private:
     void skipLogCurrElem();
+    void readElision(QString& formattedText);
     const LyricNumberHandler _lyricNumberHandler;
     QXmlStreamReader& _e;
     Score* const _score;                        // the score

@@ -536,6 +536,9 @@ TEST_F(Musicxml_Tests, dynamics2) {
 TEST_F(Musicxml_Tests, dynamics3) {
     mxmlIoTestRef("testDynamics3");
 }
+TEST_F(Musicxml_Tests, elision) {
+    mxmlImportTestRef("testElision");
+}
 TEST_F(Musicxml_Tests, emptyMeasure) {
     mxmlIoTestRef("testEmptyMeasure");
 }
