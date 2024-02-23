@@ -35,7 +35,7 @@
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
-    INJECT(mu::framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::IGlobalConfiguration, globalConfiguration)
     INJECT(mu::ui::IUiConfiguration, uiConfiguration)
     INJECT(mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
@@ -97,6 +97,7 @@ public:
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;
     bool specificSlursLayoutWorkaround() const override;
+    bool adaptFontSizes() const override;
 
 private:
     async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;

@@ -59,24 +59,21 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 public:
     explicit InteractiveProvider();
 
-    RetVal<Val> question(const std::string& title, const framework::IInteractive::Text& text,
-                         const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
-                         const framework::IInteractive::Options& options = {}) override;
+    RetVal<Val> question(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
+                         int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;
 
-    RetVal<Val> info(const std::string& title, const framework::IInteractive::Text& text,
-                     const framework::IInteractive::ButtonDatas& buttons, int defBtn = int(framework::IInteractive::Button::NoButton),
-                     const framework::IInteractive::Options& options = {}) override;
+    RetVal<Val> info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
+                     int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;
 
-    RetVal<Val> warning(const std::string& title, const framework::IInteractive::Text& text, const std::string& detailedText = {},
-                        const framework::IInteractive::ButtonDatas& buttons = {},
-                        int defBtn = int(framework::IInteractive::Button::NoButton),
-                        const framework::IInteractive::Options& options = {}) override;
+    RetVal<Val> warning(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
+                        const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
+                        const IInteractive::Options& options = {}) override;
 
-    RetVal<Val> error(const std::string& title, const framework::IInteractive::Text& text, const std::string& detailedText = {},
-                      const framework::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(framework::IInteractive::Button::NoButton),
-                      const framework::IInteractive::Options& options = {}) override;
+    RetVal<Val> error(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
+                      const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
+                      const IInteractive::Options& options = {}) override;
 
-    Ret showProgress(const std::string& title, framework::Progress* progress) override;
+    Ret showProgress(const std::string& title, mu::Progress* progress) override;
 
     RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir, const std::vector<std::string>& filter) override;
     RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
@@ -139,10 +136,9 @@ private:
 
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QObject* object, const UriQuery& q) const;
-    void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title,
-                                const framework::IInteractive::Text& text, const std::string& detailedText,
-                                const framework::IInteractive::ButtonDatas& buttons, int defBtn,
-                                const framework::IInteractive::Options& options) const;
+    void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title, const IInteractive::Text& text,
+                                const std::string& detailedText, const IInteractive::ButtonDatas& buttons, int defBtn,
+                                const IInteractive::Options& options) const;
     void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
                             const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
@@ -151,10 +147,9 @@ private:
 
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
     RetVal<OpenData> openQml(const UriQuery& q);
-    RetVal<Val> openStandardDialog(const QString& type, const std::string& title, const framework::IInteractive::Text& text,
-                                   const std::string& detailedText = {}, const framework::IInteractive::ButtonDatas& buttons = {},
-                                   int defBtn = int(framework::IInteractive::Button::NoButton),
-                                   const framework::IInteractive::Options& options = {});
+    RetVal<Val> openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
+                                   const std::string& detailedText = {}, const IInteractive::ButtonDatas& buttons = {},
+                                   int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {});
 
     RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
                                       const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);

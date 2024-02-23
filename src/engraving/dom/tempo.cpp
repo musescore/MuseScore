@@ -22,7 +22,7 @@
 
 #include "tempo.h"
 
-#include <cmath>
+#include "types/constants.h"
 
 #include "log.h"
 

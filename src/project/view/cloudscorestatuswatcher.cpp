@@ -65,7 +65,7 @@ void CloudScoreStatusWatcher::onProjectBeingDownloadedChanged()
         emit progressChanged();
     });
 
-    download.progress->finished.onReceive(this, [this](const framework::ProgressResult&) {
+    download.progress->finished.onReceive(this, [this](const mu::ProgressResult&) {
         clearProgress();
     });
 }

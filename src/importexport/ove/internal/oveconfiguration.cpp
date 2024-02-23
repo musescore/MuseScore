@@ -23,7 +23,7 @@
 
 #include "settings.h"
 
-using namespace mu::framework;
+using namespace mu;
 using namespace mu::iex::ove;
 
 static const Settings::Key IMPORT_OVERTURE_CHARSET_KEY("iex_ove", "import/overture/charset");

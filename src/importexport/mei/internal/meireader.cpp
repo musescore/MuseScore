@@ -74,7 +74,6 @@ Err MeiReader::import(MasterScore* score, const io::path_t& path, const Options&
  */
 bool MeiReader::askToLoadDespiteWarnings(const String& text, const String& detailedText)
 {
-    using framework::IInteractive;
     IInteractive::Button btn = interactive()->warning(
         text.toStdString(), trc("iex_mei", "Do you want to try to load this MEI file anyway?"), detailedText.toStdString(), {
         interactive()->buttonData(IInteractive::Button::Cancel),

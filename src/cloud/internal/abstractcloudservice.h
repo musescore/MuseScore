@@ -61,7 +61,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     INJECT(ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:

@@ -123,7 +123,7 @@ void AbstractNotationPaintView::initBackground()
 
 void AbstractNotationPaintView::initNavigatorOrientation()
 {
-    configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
+    configuration()->canvasOrientation().ch.onReceive(this, [this](mu::Orientation) {
         moveCanvasToPosition(PointF(0, 0));
     });
 }

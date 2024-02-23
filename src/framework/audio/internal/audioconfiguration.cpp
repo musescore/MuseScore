@@ -31,7 +31,6 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::framework;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 

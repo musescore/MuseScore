@@ -34,8 +34,8 @@
 #include "settings.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::plugins;
-using namespace mu::framework;
 
 static const std::string module_name("plugins");
 static const Settings::Key USER_PLUGINS_PATH(module_name, "application/paths/myPlugins");

@@ -41,7 +41,6 @@ using ::testing::ReturnRef;
 
 using namespace mu::audio;
 using namespace mu::io;
-using namespace mu::framework;
 
 namespace mu::audio {
 class Audio_RegisterAudioPluginsScenarioTest : public ::testing::Test

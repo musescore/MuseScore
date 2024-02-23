@@ -27,7 +27,6 @@
 #include <atomic>
 
 #include "modularity/ioc.h"
-#include "io/path.h"
 #include "async/asyncable.h"
 #include "async/notification.h"
 #include "async/channel.h"
@@ -37,7 +36,6 @@
 #include "ivstmodulesrepository.h"
 #include "vsttypes.h"
 #include "vstcomponenthandler.h"
-#include "vsterrors.h"
 
 namespace mu::vst {
 class VstPluginProvider;

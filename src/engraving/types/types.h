@@ -26,10 +26,10 @@
 #include <functional>
 #include <map>
 #include <unordered_set>
-#include <utility>
 
 #include "types/id.h"
 #include "types/string.h"
+#include "global/types/flags.h"
 
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"

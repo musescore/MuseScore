@@ -37,7 +37,7 @@ class WorkspaceListModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(IWorkspaceManager, workspacesManager)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 

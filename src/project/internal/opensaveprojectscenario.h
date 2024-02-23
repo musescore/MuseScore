@@ -39,7 +39,7 @@ class OpenSaveProjectScenario : public IOpenSaveProjectScenario
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(IProjectFilesController, projectFilesController)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
     INJECT(cloud::IAudioComService, audioComService)
 

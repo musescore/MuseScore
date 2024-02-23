@@ -33,7 +33,7 @@
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
 {
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(io::IFileSystem, fileSystem)
 
 public:

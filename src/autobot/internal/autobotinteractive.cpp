@@ -25,7 +25,6 @@
 
 using namespace mu;
 using namespace mu::autobot;
-using namespace mu::framework;
 
 void AutobotInteractive::setRealInteractive(std::shared_ptr<IInteractive> real)
 {
@@ -103,7 +102,7 @@ IInteractive::Result AutobotInteractive::error(const std::string& title, const T
     return m_real->error(title, text, detailedText, buttons, defBtn, options);
 }
 
-Ret AutobotInteractive::showProgress(const std::string& title, framework::Progress* progress) const
+Ret AutobotInteractive::showProgress(const std::string& title, mu::Progress* progress) const
 {
     return m_real->showProgress(title, progress);
 }

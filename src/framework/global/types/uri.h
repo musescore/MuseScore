@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_URI_H
-#define MU_FRAMEWORK_URI_H
+#ifndef MU_GLOBAL_URI_H
+#define MU_GLOBAL_URI_H
 
 #include <string>
 #include <vector>
 #include <map>
 
-#include "types/val.h"
+#include "val.h"
 
 namespace mu {
 class Uri
@@ -90,4 +90,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_URI_H
+#endif // MU_GLOBAL_URI_H

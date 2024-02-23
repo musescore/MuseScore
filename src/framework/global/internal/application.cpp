@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QProcess>
 
-using namespace mu::framework;
+using namespace mu;
 
 void Application::setRunMode(const RunMode& mode)
 {

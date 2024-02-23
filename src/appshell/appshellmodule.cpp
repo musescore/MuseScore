@@ -54,7 +54,7 @@
 #include "view/preferences/saveandpublishpreferencesmodel.h"
 #include "view/preferences/scorepreferencesmodel.h"
 #include "view/preferences/importpreferencesmodel.h"
-#include "view/preferences/iopreferencesmodel.h"
+#include "view/preferences/playbackpreferencesmodel.h"
 #include "view/preferences/commonaudioapiconfigurationmodel.h"
 #include "view/preferences/braillepreferencesmodel.h"
 #include "view/framelesswindow/framelesswindowmodel.h"
@@ -73,7 +73,6 @@
 #endif
 
 using namespace mu::appshell;
-using namespace mu::framework;
 using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::dock;
@@ -160,7 +159,7 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<SaveAndPublishPreferencesModel>("MuseScore.Preferences", 1, 0, "SaveAndPublishPreferencesModel");
     qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
-    qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");
+    qmlRegisterType<PlaybackPreferencesModel>("MuseScore.Preferences", 1, 0, "PlaybackPreferencesModel");
     qmlRegisterType<CommonAudioApiConfigurationModel>("MuseScore.Preferences", 1, 0, "CommonAudioApiConfigurationModel");
     qmlRegisterType<BraillePreferencesModel>("MuseScore.Preferences", 1, 0, "BraillePreferencesModel");
 
@@ -186,9 +185,9 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<WindowDropArea>("MuseScore.Ui", 1, 0, "WindowDropArea");
 }
 
-void AppShellModule::onPreInit(const framework::IApplication::RunMode& mode)
+void AppShellModule::onPreInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
@@ -197,7 +196,7 @@ void AppShellModule::onPreInit(const framework::IApplication::RunMode& mode)
 
 void AppShellModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 
@@ -213,9 +212,9 @@ void AppShellModule::onInit(const IApplication::RunMode& mode)
 #endif
 }
 
-void AppShellModule::onAllInited(const framework::IApplication::RunMode& mode)
+void AppShellModule::onAllInited(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

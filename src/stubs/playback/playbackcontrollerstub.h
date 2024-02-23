@@ -79,7 +79,7 @@ public:
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;
 
-    framework::Progress loadingProgress() const override;
+    mu::Progress loadingProgress() const override;
 
     void applyProfile(const SoundProfileName& profileName) override;
 

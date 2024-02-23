@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_IAPPLICATION_H
-#define MU_FRAMEWORK_IAPPLICATION_H
+#ifndef MU_GLOBAL_IAPPLICATION_H
+#define MU_GLOBAL_IAPPLICATION_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -28,7 +28,7 @@ class QObject;
 class QEvent;
 class QWindow;
 
-namespace mu::framework {
+namespace mu {
 class IApplication : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IApplication)
@@ -53,4 +53,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_IAPPLICATION_H
+#endif // MU_GLOBAL_IAPPLICATION_H

@@ -22,7 +22,7 @@
 #ifndef MU_FONTS_FONTSMODULE_H
 #define MU_FONTS_FONTSMODULE_H
 
-#include "modularity/imodulesetup.h"
+#include "global/modularity/imodulesetup.h"
 
 namespace mu::fonts {
 class FontsModule : public modularity::IModuleSetup

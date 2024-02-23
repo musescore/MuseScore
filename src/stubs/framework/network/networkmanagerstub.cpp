@@ -53,9 +53,9 @@ mu::Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeade
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::framework::Progress NetworkManagerStub::progress() const
+mu::Progress NetworkManagerStub::progress() const
 {
-    return framework::Progress();
+    return Progress();
 }
 
 void NetworkManagerStub::abort()

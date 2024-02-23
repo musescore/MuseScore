@@ -36,7 +36,6 @@ static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
 using namespace mu;
 using namespace mu::update;
-using namespace mu::framework;
 
 static ValMap releaseInfoToValMap(const ReleaseInfo& info)
 {
@@ -84,7 +83,7 @@ bool UpdateScenario::isCheckStarted() const
 
 void UpdateScenario::doCheckForUpdate(bool manual)
 {
-    m_progressChannel = std::make_shared<framework::Progress>();
+    m_progressChannel = std::make_shared<mu::Progress>();
     m_progressChannel->started.onNotify(this, [this]() {
         m_progress = true;
     });

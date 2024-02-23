@@ -29,12 +29,12 @@ import "internal"
 PreferencesPage {
     id: root
 
-    IOPreferencesModel {
-        id: ioModel
+    PlaybackPreferencesModel {
+        id: playbackModel
     }
 
     Component.onCompleted: {
-        ioModel.init()
+        playbackModel.init()
     }
 
     Column {
@@ -42,41 +42,54 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         AudioApiSection {
-            currentAudioApiIndex: ioModel.currentAudioApiIndex
-            audioApiList: ioModel.audioApiList()
+            currentAudioApiIndex: playbackModel.currentAudioApiIndex
+            audioApiList: playbackModel.audioApiList()
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 
             onCurrentAudioApiIndexChangeRequested: function(newIndex) {
-                ioModel.currentAudioApiIndex = newIndex
+                playbackModel.currentAudioApiIndex = newIndex
             }
         }
 
         SeparatorLine {}
 
         MidiDevicesSection {
-            inputDeviceId: ioModel.midiInputDeviceId
-            outputDeviceId: ioModel.midiOutputDeviceId
-            inputDevices: ioModel.midiInputDevices
-            outputDevices: ioModel.midiOutputDevices
+            inputDeviceId: playbackModel.midiInputDeviceId
+            outputDeviceId: playbackModel.midiOutputDeviceId
+            inputDevices: playbackModel.midiInputDevices
+            outputDevices: playbackModel.midiOutputDevices
 
-            isMIDI20OutputSupported: ioModel.isMIDI20OutputSupported
-            useMIDI20Output: ioModel.useMIDI20Output
+            isMIDI20OutputSupported: playbackModel.isMIDI20OutputSupported
+            useMIDI20Output: playbackModel.useMIDI20Output
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
 
             onInputDeviceIdChangeRequested: function(newId) {
-                ioModel.inputDeviceSelected(newId)
+                playbackModel.inputDeviceSelected(newId)
             }
 
             onOutputDeviceIdChangeRequested: function(newId) {
-                ioModel.outputDeviceSelected(newId)
+                playbackModel.outputDeviceSelected(newId)
             }
 
             onUseMIDI20OutputChangeRequested: function(use) {
-                ioModel.useMIDI20Output = use
+                playbackModel.useMIDI20Output = use
+            }
+        }
+
+        SeparatorLine {}
+
+        MixerSection {
+            muteHiddenInstruments: playbackModel.muteHiddenInstruments
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onMuteHiddenInstrumentsChangeRequested: function(mute) {
+                playbackModel.muteHiddenInstruments = mute
             }
         }
 

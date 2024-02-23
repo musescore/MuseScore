@@ -23,8 +23,8 @@
 
 #include "settings.h"
 
+using namespace mu;
 using namespace mu::update;
-using namespace mu::framework;
 
 static const std::string module_name("update");
 

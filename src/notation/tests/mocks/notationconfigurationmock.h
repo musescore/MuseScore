@@ -129,8 +129,8 @@ public:
     MOCK_METHOD(double, guiScaling, (), (const, override));
     MOCK_METHOD(double, notationScaling, (), (const, override));
 
-    MOCK_METHOD(ValCh<framework::Orientation>, canvasOrientation, (), (const, override));
-    MOCK_METHOD(void, setCanvasOrientation, (framework::Orientation), (override));
+    MOCK_METHOD(ValCh<mu::Orientation>, canvasOrientation, (), (const, override));
+    MOCK_METHOD(void, setCanvasOrientation, (mu::Orientation), (override));
 
     MOCK_METHOD(bool, isLimitCanvasScrollArea, (), (const, override));
     MOCK_METHOD(void, setIsLimitCanvasScrollArea, (bool), (override));
@@ -161,11 +161,11 @@ public:
 
     MOCK_METHOD(io::path_t, stringTuningsPresetsPath, (), (const, override));
 
-    MOCK_METHOD(bool, isSnappedToGrid, (framework::Orientation), (const, override));
-    MOCK_METHOD(void, setIsSnappedToGrid, (framework::Orientation, bool), (override));
+    MOCK_METHOD(bool, isSnappedToGrid, (mu::Orientation), (const, override));
+    MOCK_METHOD(void, setIsSnappedToGrid, (mu::Orientation, bool), (override));
 
-    MOCK_METHOD(int, gridSizeSpatium, (framework::Orientation), (const, override));
-    MOCK_METHOD(void, setGridSize, (framework::Orientation, int), (override));
+    MOCK_METHOD(int, gridSizeSpatium, (mu::Orientation), (const, override));
+    MOCK_METHOD(void, setGridSize, (mu::Orientation, int), (override));
 
     MOCK_METHOD(bool, needToShowAddTextErrorMessage, (), (const, override));
     MOCK_METHOD(void, setNeedToShowAddTextErrorMessage, (bool), (override));

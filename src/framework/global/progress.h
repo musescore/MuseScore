@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_PROGRESS_H
-#define MU_FRAMEWORK_PROGRESS_H
+#ifndef MU_GLOBAL_PROGRESS_H
+#define MU_GLOBAL_PROGRESS_H
 
 #include "async/channel.h"
 #include "async/notification.h"
@@ -28,7 +28,7 @@
 #include "types/retval.h"
 #include "types/val.h"
 
-namespace mu::framework {
+namespace mu {
 using ProgressResult = RetVal<Val>;
 
 struct Progress
@@ -52,7 +52,7 @@ using ProgressPtr = std::shared_ptr<Progress>;
 }
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::framework::Progress*)
+Q_DECLARE_METATYPE(mu::Progress*)
 #endif
 
-#endif // MU_FRAMEWORK_PROGRESS_H
+#endif // MU_GLOBAL_PROGRESS_H

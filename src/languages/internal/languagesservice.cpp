@@ -44,7 +44,6 @@
 
 using namespace mu;
 using namespace mu::languages;
-using namespace mu::framework;
 using namespace mu::network;
 
 static const QStringList LANGUAGE_RESOURCE_NAMES = {

@@ -25,8 +25,6 @@
 #include <stack>
 #include <string>
 
-#include "../types/geometry.h"
-
 namespace mu::draw {
 class DrawObjectsLogger
 {

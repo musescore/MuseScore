@@ -302,7 +302,7 @@ using Templates = QList<Template>;
 
 struct ProjectBeingDownloaded {
     int scoreId = 0;
-    framework::ProgressPtr progress;
+    mu::ProgressPtr progress;
 };
 
 class GenerateAudioTimePeriod

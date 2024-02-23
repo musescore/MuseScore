@@ -25,7 +25,7 @@ on:
       qt5_compat:
         description: 'Build with Qt5 '
         required: false
-        default: 'on'    
+        default: 'off'    
 
 env:
   CURRENT_RELEASE_BRANCH: 4.3.0
@@ -142,9 +142,9 @@ jobs:
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Mac${ADD_INFO}")"
 
-        QT5_COMPAT='ON'
-        if [ "${{ github.event.inputs.qt5_compat }}" == "off" ]; then 
-          QT5_COMPAT='OFF' 
+        QT5_COMPAT='OFF'
+        if [ "${{ github.event.inputs.qt5_compat }}" == "on" ]; then 
+          QT5_COMPAT='ON' 
         fi
 
         echo "github.repository: ${{ github.repository }}"

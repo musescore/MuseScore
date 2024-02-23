@@ -19,13 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_GLOBALCONFIGURATION_H
-#define MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#ifndef MU_GLOBAL_GLOBALCONFIGURATION_H
+#define MU_GLOBAL_GLOBALCONFIGURATION_H
 
 #include "../iglobalconfiguration.h"
-#include "modularity/ioc.h"
 
-namespace mu::framework {
+namespace mu {
 class GlobalConfiguration : public IGlobalConfiguration
 {
 public:
@@ -66,4 +65,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_GLOBALCONFIGURATION_H
+#endif // MU_GLOBAL_GLOBALCONFIGURATION_H

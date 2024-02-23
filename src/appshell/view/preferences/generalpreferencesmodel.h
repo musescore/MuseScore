@@ -42,7 +42,7 @@ class GeneralPreferencesModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(IAppShellConfiguration, configuration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(languages::ILanguagesConfiguration, languagesConfiguration)
     INJECT(languages::ILanguagesService, languagesService)
     INJECT(shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
@@ -103,7 +103,7 @@ signals:
     void startupModesChanged();
 
 private:
-    framework::Progress m_languageUpdateProgress;
+    mu::Progress m_languageUpdateProgress;
 
     bool m_isNeedRestart = false;
 

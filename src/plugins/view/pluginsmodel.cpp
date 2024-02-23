@@ -29,7 +29,6 @@
 #include "shortcuts/shortcutstypes.h"
 
 using namespace mu::plugins;
-using namespace mu::framework;
 using namespace mu::async;
 
 static constexpr int INVALID_INDEX = -1;

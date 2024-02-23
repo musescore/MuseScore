@@ -80,7 +80,7 @@ void MusicXmlModule::resolveImports()
 #endif
 }
 
-void MusicXmlModule::onInit(const framework::IApplication::RunMode&)
+void MusicXmlModule::onInit(const IApplication::RunMode&)
 {
 #ifndef MUSICXML_NO_INTERNAL
     m_configuration->init();

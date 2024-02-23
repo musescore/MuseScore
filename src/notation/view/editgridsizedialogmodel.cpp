@@ -23,7 +23,6 @@
 #include "editgridsizedialogmodel.h"
 
 using namespace mu::notation;
-using namespace mu::framework;
 
 EditGridSizeDialogModel::EditGridSizeDialogModel(QObject* parent)
     : QObject(parent)
@@ -62,12 +61,12 @@ void EditGridSizeDialogModel::setHorizontalGridSizeSpatium(int size)
 
 void EditGridSizeDialogModel::load()
 {
-    setVerticalGridSizeSpatium(configuration()->gridSizeSpatium(mu::framework::Orientation::Vertical));
-    setHorizontalGridSizeSpatium(configuration()->gridSizeSpatium(mu::framework::Orientation::Horizontal));
+    setVerticalGridSizeSpatium(configuration()->gridSizeSpatium(mu::Orientation::Vertical));
+    setHorizontalGridSizeSpatium(configuration()->gridSizeSpatium(mu::Orientation::Horizontal));
 }
 
 void EditGridSizeDialogModel::apply()
 {
-    configuration()->setGridSize(mu::framework::Orientation::Vertical, m_verticalGridSizeSpatium);
-    configuration()->setGridSize(mu::framework::Orientation::Horizontal, m_horizontalGridSizeSpatium);
+    configuration()->setGridSize(mu::Orientation::Vertical, m_verticalGridSizeSpatium);
+    configuration()->setGridSize(mu::Orientation::Horizontal, m_horizontalGridSizeSpatium);
 }

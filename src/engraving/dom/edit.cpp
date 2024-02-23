@@ -4787,18 +4787,18 @@ void Score::undoPropertyChanged(EngravingObject* e, Pid t, const PropertyValue& 
     }
 }
 
-//---------------------------------------------------------
-//   undoChangeStyleVal
-//---------------------------------------------------------
-
 void Score::undoChangeStyleVal(Sid idx, const PropertyValue& v)
 {
-    undo(new ChangeStyleVal(this, idx, v));
+    std::unordered_map<Sid, PropertyValue> map;
+    map.emplace(idx, v);
+
+    undo(new ChangeStyleValues(this, std::move(map)));
 }
 
-//---------------------------------------------------------
-//   undoChangePageNumberOffset
-//---------------------------------------------------------
+void Score::undoChangeStyleValues(std::unordered_map<Sid, PropertyValue> values)
+{
+    undo(new ChangeStyleValues(this, std::move(values)));
+}
 
 void Score::undoChangePageNumberOffset(int po)
 {

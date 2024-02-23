@@ -190,7 +190,7 @@ void PlaybackControllerStub::setTempoMultiplier(double)
 {
 }
 
-mu::framework::Progress PlaybackControllerStub::loadingProgress() const
+mu::Progress PlaybackControllerStub::loadingProgress() const
 {
     return {};
 }

@@ -37,7 +37,7 @@
 namespace mu::appshell {
 class StartupScenario : public IStartupScenario, public async::Asyncable
 {
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(IAppShellConfiguration, configuration)

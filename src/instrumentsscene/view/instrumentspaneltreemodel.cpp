@@ -36,7 +36,6 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::uicomponents;
-using namespace mu::framework;
 
 using ItemType = InstrumentsTreeItemType::ItemType;
 

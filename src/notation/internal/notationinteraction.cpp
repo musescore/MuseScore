@@ -38,8 +38,9 @@
 #include "ptrutils.h"
 #include "containers.h"
 
-#include "draw/types/pen.h"
+#include "draw/painter.h"
 #include "draw/types/painterpath.h"
+#include "draw/types/pen.h"
 #include "engraving/internal/qmimedataadapter.h"
 
 #include "engraving/dom/actionicon.h"
@@ -90,8 +91,8 @@
 
 using namespace mu::io;
 using namespace mu::notation;
-using namespace mu::framework;
 using namespace mu::engraving;
+using namespace mu::draw;
 
 static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
 {
@@ -1023,8 +1024,8 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
 
-    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(framework::Orientation::Horizontal);
-    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(framework::Orientation::Vertical);
+    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(mu::Orientation::Horizontal);
+    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(mu::Orientation::Vertical);
     m_dragData.ed.delta = delta;
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;
@@ -1150,8 +1151,25 @@ void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* d
         m_drag = nullptr;
     });
 
-    static QPixmap pixmap(2, 2); // null or 1x1 crashes on Linux under ChromeOS?!
-    pixmap.fill(Qt::white);
+    const qreal adjustedRatio = 0.4;
+    const RectF bbox = element->ldata()->bbox();
+    const qreal width = bbox.width();
+    const qreal height = bbox.height();
+
+    QSize pixmapSize = QSize(width * adjustedRatio, height * adjustedRatio);
+    QPixmap pixmap(pixmapSize);
+    pixmap.fill(Qt::transparent);
+
+    QPainter qp(&pixmap);
+    const qreal dpi = qp.device()->logicalDpiX();
+
+    Painter p(&qp, "startDragCopy");
+    p.setAntialiasing(true);
+
+    mu::engraving::MScore::pixelRatio = mu::engraving::DPI / dpi;
+    p.translate(qAbs(bbox.x() * adjustedRatio), qAbs(bbox.y() * adjustedRatio));
+    p.scale(adjustedRatio, adjustedRatio);
+    engravingRenderer()->drawItem(element, &p);
 
     m_drag->setPixmap(pixmap);
     m_drag->exec(Qt::CopyAction);
@@ -4504,6 +4522,15 @@ void NotationInteraction::resetShapesAndPosition()
     for (EngravingItem* item : selection()->elements()) {
         resetItem(item);
     }
+}
+
+void NotationInteraction::resetToDefaultLayout()
+{
+    TRACEFUNC;
+
+    startEdit();
+    score()->cmdResetToDefaultLayout();
+    apply();
 }
 
 ScoreConfig NotationInteraction::scoreConfig() const

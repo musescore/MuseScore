@@ -23,7 +23,10 @@
 #ifndef MU_ENGRAVING_PITCHSPELLING_H
 #define MU_ENGRAVING_PITCHSPELLING_H
 
-#include "mscore.h"
+#include <vector>
+
+#include "types/string.h"
+#include "types/types.h"
 
 namespace mu::engraving {
 class MidiNote;

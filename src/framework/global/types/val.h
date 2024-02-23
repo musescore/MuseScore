@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_VAL_H
-#define MU_FRAMEWORK_VAL_H
+#ifndef MU_GLOBAL_VAL_H
+#define MU_GLOBAL_VAL_H
 
 #include <string>
 #include <variant>
@@ -119,4 +119,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_VAL_H
+#endif // MU_GLOBAL_VAL_H

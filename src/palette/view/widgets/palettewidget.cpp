@@ -68,7 +68,6 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::engraving;
-using namespace mu::framework;
 using namespace mu::draw;
 
 PaletteWidget::PaletteWidget(QWidget* parent)

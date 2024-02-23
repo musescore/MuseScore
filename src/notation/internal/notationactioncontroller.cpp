@@ -31,11 +31,11 @@
 #include "translation.h"
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::context;
-using namespace mu::framework;
 
 static constexpr qreal STRETCH_STEP = 0.1;
 static constexpr bool NEAR_NOTE_OR_REST = true;
@@ -340,6 +340,7 @@ void NotationActionController::init()
     registerAction("reset-text-style-overrides", &Interaction::resetTextStyleOverrides);
     registerAction("reset-beammode", &Controller::resetBeamMode);
     registerAction("reset", &Interaction::resetShapesAndPosition, &Controller::hasSelection);
+    registerAction("reset-to-default-layout", &Interaction::resetToDefaultLayout);
 
     registerAction("show-invisible", [this]() { toggleScoreConfig(ScoreConfigType::ShowInvisibleElements); });
     registerAction("show-unprintable", [this]() { toggleScoreConfig(ScoreConfigType::ShowUnprintableElements); });
@@ -1192,7 +1193,7 @@ void NotationActionController::insertClef(mu::engraving::ClefType type)
     interaction->insertClef(type);
 }
 
-IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
+mu::IInteractive::Result NotationActionController::showErrorMessage(const std::string& message) const
 {
     return interactive()->info(message,
                                std::string(), {}, 0, IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);

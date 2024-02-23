@@ -29,7 +29,6 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::framework;
 
 EditShortcutModel::EditShortcutModel(QObject* parent)
     : QObject(parent)

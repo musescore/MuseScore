@@ -22,12 +22,9 @@
 #ifndef MU_DRAW_PAINTER_H
 #define MU_DRAW_PAINTER_H
 
-#include <list>
 #include <stack>
 
-#include "ipaintprovider.h"
-
-#include "types/string.h"
+#include "global/types/string.h"
 
 #include "types/color.h"
 #include "types/geometry.h"
@@ -35,6 +32,8 @@
 #include "types/font.h"
 #include "types/pen.h"
 #include "types/pixmap.h"
+
+#include "ipaintprovider.h"
 
 class QPaintDevice;
 

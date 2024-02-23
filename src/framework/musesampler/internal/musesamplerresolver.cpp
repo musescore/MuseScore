@@ -33,7 +33,6 @@ using namespace mu::async;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::musesampler;
-using namespace mu::framework;
 
 ms_InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const audio::AudioResourceMeta& resourceMeta)
 {

@@ -28,7 +28,6 @@
 #include <QApplication>
 
 using namespace mu::diagnostics;
-using namespace mu::framework;
 
 mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
 {

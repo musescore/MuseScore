@@ -36,7 +36,6 @@
 
 using namespace mu;
 using namespace mu::autobot;
-using namespace mu::framework;
 
 void Autobot::init()
 {

@@ -48,7 +48,7 @@ class ExportDialogModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, context)
     INJECT(IProjectConfiguration, configuration)
     INJECT(INotationWritersRegister, writers)

@@ -35,9 +35,9 @@
 
 #include "log.h"
 
-using namespace mu::engraving;
-using namespace mu::framework;
+using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
@@ -327,4 +327,9 @@ bool EngravingConfiguration::minDistanceForPartialSkylineCalculated() const
 bool EngravingConfiguration::specificSlursLayoutWorkaround() const
 {
     return guitarProImportExperimental();
+}
+
+bool EngravingConfiguration::adaptFontSizes() const
+{
+    return true;
 }

@@ -27,6 +27,7 @@ jobs:
 
         echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
         echo "BUILD_NUMBER: $BUILD_NUMBER"
+        
     - name: Get reference commit for PR
       if: github.event_name == 'pull_request'
       env:

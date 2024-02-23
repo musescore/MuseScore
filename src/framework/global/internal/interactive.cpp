@@ -41,12 +41,12 @@
 #include <QProcess>
 #endif
 
-#include "log.h"
 #include "translation.h"
 #include "io/path.h"
 
+#include "log.h"
+
 using namespace mu;
-using namespace mu::framework;
 
 static IInteractive::Result standardDialogResult(const RetVal<Val>& retVal)
 {
@@ -179,7 +179,7 @@ IInteractive::Result Interactive::error(const std::string& title, const Text& te
     return standardDialogResult(provider()->error(title, text, detailedText, buttons, defBtn, options));
 }
 
-Ret Interactive::showProgress(const std::string& title, framework::Progress* progress) const
+Ret Interactive::showProgress(const std::string& title, mu::Progress* progress) const
 {
     return provider()->showProgress(title, progress);
 }

@@ -33,7 +33,6 @@
 
 using namespace mu::io;
 using namespace mu::project;
-using namespace mu::framework;
 using namespace mu::engraving;
 
 mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path_t& filePath) const
@@ -60,7 +59,7 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path_t& filePath) cons
 
     // Read score meta
     ByteArray scoreData = msczReader.readScoreFile();
-    framework::XmlReader xmlReader(scoreData.toQByteArray());
+    deprecated::XmlReader xmlReader(scoreData.toQByteArray());
     doReadMeta(xmlReader, meta.val);
 
     // Read thumbnail
@@ -76,7 +75,7 @@ mu::RetVal<ProjectMeta> MscMetaReader::readMeta(const io::path_t& filePath) cons
     return meta;
 }
 
-MscMetaReader::RawMeta MscMetaReader::doReadBox(framework::XmlReader& xmlReader) const
+MscMetaReader::RawMeta MscMetaReader::doReadBox(deprecated::XmlReader& xmlReader) const
 {
     RawMeta meta;
 
@@ -139,7 +138,7 @@ MscMetaReader::RawMeta MscMetaReader::doReadBox(framework::XmlReader& xmlReader)
     return meta;
 }
 
-MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(framework::XmlReader& xmlReader) const
+MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(deprecated::XmlReader& xmlReader) const
 {
     RawMeta meta;
 
@@ -205,7 +204,7 @@ MscMetaReader::RawMeta MscMetaReader::doReadRawMeta(framework::XmlReader& xmlRea
     return meta;
 }
 
-void MscMetaReader::doReadMeta(framework::XmlReader& xmlReader, ProjectMeta& meta) const
+void MscMetaReader::doReadMeta(deprecated::XmlReader& xmlReader, ProjectMeta& meta) const
 {
     RawMeta rawMeta;
 
@@ -321,13 +320,13 @@ std::string MscMetaReader::cutXmlTags(const std::string& str) const
     return fin;
 }
 
-QString MscMetaReader::readText(mu::framework::XmlReader& xmlReader) const
+QString MscMetaReader::readText(deprecated::XmlReader& xmlReader) const
 {
-    std::string str = xmlReader.readString(framework::XmlReader::IncludeChildElements);
+    std::string str = xmlReader.readString(deprecated::XmlReader::IncludeChildElements);
     return formatFromXml(str);
 }
 
-QString MscMetaReader::readMetaTagText(mu::framework::XmlReader& xmlReader) const
+QString MscMetaReader::readMetaTagText(deprecated::XmlReader& xmlReader) const
 {
     return QString::fromStdString(xmlReader.readString());
 }

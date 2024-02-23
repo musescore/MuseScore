@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_APPLICATIONMOCK_H
-#define MU_FRAMEWORK_APPLICATIONMOCK_H
+#ifndef MU_GLOBAL_APPLICATIONMOCK_H
+#define MU_GLOBAL_APPLICATIONMOCK_H
 
 #include <gmock/gmock.h>
 
-#include "framework/global/iapplication.h"
+#include "global/iapplication.h"
 
-namespace mu::framework {
+namespace mu {
 class ApplicationMock : public IApplication
 {
 public:
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_FRAMEWORK_APPLICATIONMOCK_H
+#endif // MU_GLOBAL_APPLICATIONMOCK_H

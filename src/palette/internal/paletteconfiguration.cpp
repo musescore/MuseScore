@@ -27,8 +27,8 @@
 
 #include "ui/internal/uiengine.h"
 
+using namespace mu;
 using namespace mu::palette;
-using namespace mu::framework;
 using namespace mu::ui;
 
 static const std::string MODULE_NAME("palette");

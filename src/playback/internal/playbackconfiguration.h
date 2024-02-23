@@ -61,6 +61,10 @@ public:
     audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
                                       const String& instrumentSoundId) const override;
 
+    bool muteHiddenInstruments() const override;
+    void setMuteHiddenInstruments(bool mute) override;
+    async::Channel<bool> muteHiddenInstrumentsChanged() const override;
+
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;
     SoundProfileName defaultProfileForNewProjects() const override;
@@ -74,6 +78,8 @@ private:
 
     async::Channel<audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     async::Channel<audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
+
+    async::Channel<bool> m_muteHiddenInstrumentsChanged;
 };
 }
 

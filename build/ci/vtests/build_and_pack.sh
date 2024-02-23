@@ -41,6 +41,7 @@ bash ninja_build.sh -t clean
 
 MUSESCORE_BUILD_CONFIGURATION="vtest" \
 MUSESCORE_REVISION=$MUSESCORE_REVISION \
+MUSESCORE_QT5_COMPAT=OFF \
 bash ninja_build.sh -t appimagedebug
 
 bash ./build/ci/tools/make_release_channel_env.sh -c $BUILD_MODE

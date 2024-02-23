@@ -44,7 +44,6 @@
 using namespace mu;
 using namespace mu::cloud;
 using namespace mu::network;
-using namespace mu::framework;
 
 const QString mu::cloud::ACCESS_TOKEN_KEY("access_token");
 const QString mu::cloud::REFRESH_TOKEN_KEY("refresh_token");

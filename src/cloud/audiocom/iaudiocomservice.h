@@ -40,9 +40,8 @@ public:
 
     virtual IAuthorizationServicePtr authorization() = 0;
 
-    virtual framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title,
-                                               const QUrl& existingUrl, Visibility visibility = Visibility::Private,
-                                               bool replaceExisting = false) = 0;
+    virtual mu::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& existingUrl,
+                                        Visibility visibility = Visibility::Private, bool replaceExisting = false) = 0;
 
     virtual CloudInfo cloudInfo() const = 0;
 };

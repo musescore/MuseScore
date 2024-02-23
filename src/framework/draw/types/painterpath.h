@@ -25,10 +25,10 @@
 
 #include <cmath>
 
+#include "global/realfn.h"
+
 #include "geometry.h"
 #include "bezier.h"
-#include "drawtypes.h"
-#include "realfn.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QPainterPath>

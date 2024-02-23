@@ -72,7 +72,7 @@ void NotationNavigator::load()
 
 bool NotationNavigator::isVerticalOrientation() const
 {
-    return configuration()->canvasOrientation().val == framework::Orientation::Vertical;
+    return configuration()->canvasOrientation().val == mu::Orientation::Vertical;
 }
 
 PageList NotationNavigator::pages() const
@@ -230,8 +230,8 @@ INotationPtr NotationNavigator::currentNotation() const
 
 void NotationNavigator::initOrientation()
 {
-    ValCh<framework::Orientation> orientation = configuration()->canvasOrientation();
-    orientation.ch.onReceive(this, [this](framework::Orientation) {
+    ValCh<mu::Orientation> orientation = configuration()->canvasOrientation();
+    orientation.ch.onReceive(this, [this](mu::Orientation) {
         moveCanvasToPosition(PointF(0, 0));
         emit orientationChanged();
     });

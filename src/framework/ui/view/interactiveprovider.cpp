@@ -33,7 +33,6 @@
 
 using namespace mu;
 using namespace mu::ui;
-using namespace mu::framework;
 
 class WidgetDialogEventFilter : public QObject
 {
@@ -122,7 +121,7 @@ RetVal<Val> InteractiveProvider::warning(const std::string& title, const IIntera
     return openStandardDialog("WARNING", title, text, detailedText, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::error(const std::string& title, const framework::IInteractive::Text& text,
+RetVal<Val> InteractiveProvider::error(const std::string& title, const IInteractive::Text& text,
                                        const std::string& detailedText,
                                        const IInteractive::ButtonDatas& buttons,
                                        int defBtn,
@@ -131,7 +130,7 @@ RetVal<Val> InteractiveProvider::error(const std::string& title, const framework
     return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
 }
 
-Ret InteractiveProvider::showProgress(const std::string& title, framework::Progress* progress)
+Ret InteractiveProvider::showProgress(const std::string& title, mu::Progress* progress)
 {
     IF_ASSERT_FAILED(progress) {
         return false;

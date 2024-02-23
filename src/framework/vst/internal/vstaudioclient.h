@@ -23,7 +23,6 @@
 #define MU_VST_VSTAUDIOCLIENT_H
 
 #include "audio/audiotypes.h"
-#include "mpe/events.h"
 
 #include "vstplugin.h"
 #include "vsttypes.h"

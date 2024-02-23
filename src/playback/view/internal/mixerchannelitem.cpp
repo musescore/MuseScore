@@ -118,19 +118,19 @@ int MixerChannelItem::balance() const
     return m_outParams.balance * BALANCE_SCALING_FACTOR;
 }
 
+bool MixerChannelItem::solo() const
+{
+    return m_outParams.solo;
+}
+
 bool MixerChannelItem::muted() const
 {
     return m_outParams.muted;
 }
 
-bool MixerChannelItem::mutedManually() const
+bool MixerChannelItem::forceMute() const
 {
-    return m_soloMuteState.mute;
-}
-
-bool MixerChannelItem::solo() const
-{
-    return m_soloMuteState.solo;
+    return m_outParams.forceMute;
 }
 
 mu::ui::NavigationPanel* MixerChannelItem::panel() const
@@ -242,13 +242,19 @@ void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
         emit balanceChanged(newParams.balance);
     }
 
+    if (m_outParams.solo != newParams.solo) {
+        m_outParams.solo = newParams.solo;
+        emit soloChanged();
+    }
+
     if (m_outParams.muted != newParams.muted) {
         m_outParams.muted = newParams.muted;
         emit mutedChanged();
     }
 
-    if (newParams.muted) {
-        setSolo(false);
+    if (m_outParams.forceMute != newParams.forceMute) {
+        m_outParams.forceMute = newParams.forceMute;
+        emit forceMuteChanged();
     }
 
     loadOutputResourceItems(newParams.fxChain);
@@ -346,13 +352,13 @@ void MixerChannelItem::loadAuxSendItems(const AuxSendsParams& auxSends)
 
 void MixerChannelItem::loadSoloMuteState(const notation::INotationSoloMuteState::SoloMuteState& newState)
 {
-    if (m_soloMuteState.mute != newState.mute) {
-        m_soloMuteState.mute = newState.mute;
+    if (m_outParams.muted != newState.mute) {
+        m_outParams.muted = newState.mute;
         emit mutedChanged();
     }
 
-    if (m_soloMuteState.solo != newState.solo) {
-        m_soloMuteState.solo = newState.solo;
+    if (m_outParams.solo != newState.solo) {
+        m_outParams.solo = newState.solo;
         emit soloChanged();
     }
 }
@@ -431,26 +437,40 @@ void MixerChannelItem::setBalance(int balance)
     emit outputParamsChanged(m_outParams);
 }
 
-void MixerChannelItem::setMutedManually(bool isMuted)
-{
-    if (m_soloMuteState.mute == isMuted) {
-        return;
-    }
-
-    m_soloMuteState.mute = isMuted;
-    emit soloMuteStateChanged(m_soloMuteState);
-    emit mutedChanged();
-}
-
 void MixerChannelItem::setSolo(bool solo)
 {
-    if (m_soloMuteState.solo == solo) {
+    if (m_outParams.solo == solo) {
         return;
     }
 
-    m_soloMuteState.solo = solo;
-    emit soloMuteStateChanged(m_soloMuteState);
+    m_outParams.solo = solo;
+
+    notation::INotationSoloMuteState::SoloMuteState soloMuteState;
+    soloMuteState.mute = m_outParams.muted;
+    soloMuteState.solo = m_outParams.solo;
+
+    emit soloMuteStateChanged(soloMuteState);
     emit soloChanged();
+
+    if (solo && m_outParams.muted) {
+        setMuted(false);
+    }
+}
+
+void MixerChannelItem::setMuted(bool mute)
+{
+    if (m_outParams.muted == mute) {
+        return;
+    }
+
+    m_outParams.muted = mute;
+
+    notation::INotationSoloMuteState::SoloMuteState soloMuteState;
+    soloMuteState.mute = m_outParams.muted;
+    soloMuteState.solo = m_outParams.solo;
+
+    emit soloMuteStateChanged(soloMuteState);
+    emit mutedChanged();
 }
 
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)

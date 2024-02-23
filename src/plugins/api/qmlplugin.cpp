@@ -149,17 +149,17 @@ int QmlPlugin::mscoreVersion() const
 
 int QmlPlugin::mscoreMajorVersion() const
 {
-    return framework::MUVersion::majorVersion();
+    return MUVersion::majorVersion();
 }
 
 int QmlPlugin::mscoreMinorVersion() const
 {
-    return framework::MUVersion::minorVersion();
+    return MUVersion::minorVersion();
 }
 
 int QmlPlugin::mscoreUpdateVersion() const
 {
-    return framework::MUVersion::patchVersion();
+    return MUVersion::patchVersion();
 }
 
 qreal QmlPlugin::mscoreDPI() const

@@ -22,17 +22,19 @@
 #ifndef MU_DRAW_FONTMETRICS_H
 #define MU_DRAW_FONTMETRICS_H
 
+#include "global/types/string.h"
+#include "global/modularity/ioc.h"
+
 #include "types/font.h"
 #include "types/geometry.h"
 
-#include "types/string.h"
-#include "modularity/ioc.h"
 #include "ifontprovider.h"
 
 namespace mu::draw {
 class FontMetrics
 {
-    INJECT(IFontProvider, fontProvider)
+    Inject<IFontProvider> fontProvider;
+
 public:
     FontMetrics(const Font& font);
 

@@ -22,7 +22,7 @@
 #ifndef MU_ASYNC_ASYNC_H
 #define MU_ASYNC_ASYNC_H
 
-#include "thirdparty/kors_async/async/async.h"
+#include "../thirdparty/kors_async/async/async.h"
 namespace mu::async {
 using Async = kors::async::Async;
 }

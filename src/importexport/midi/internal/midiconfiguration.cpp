@@ -27,7 +27,7 @@
 
 #include "midiimport/importmidi_operations.h"
 
-using namespace mu::framework;
+using namespace mu;
 using namespace mu::iex::midi;
 
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");

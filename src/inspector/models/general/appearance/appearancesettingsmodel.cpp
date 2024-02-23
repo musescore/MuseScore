@@ -28,7 +28,6 @@
 
 using namespace mu::inspector;
 using namespace mu::actions;
-using namespace mu::framework;
 using namespace mu::engraving;
 
 static constexpr int REARRANGE_ORDER_STEP = 50;
@@ -265,8 +264,8 @@ bool AppearanceSettingsModel::isVerticalOffsetAvailable() const
 
 bool AppearanceSettingsModel::isSnappedToGrid() const
 {
-    bool isSnapped = notationConfiguration()->isSnappedToGrid(framework::Orientation::Horizontal);
-    isSnapped &= notationConfiguration()->isSnappedToGrid(framework::Orientation::Vertical);
+    bool isSnapped = notationConfiguration()->isSnappedToGrid(mu::Orientation::Horizontal);
+    isSnapped &= notationConfiguration()->isSnappedToGrid(mu::Orientation::Vertical);
 
     return isSnapped;
 }
@@ -277,8 +276,8 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
         return;
     }
 
-    notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Horizontal, isSnapped);
-    notationConfiguration()->setIsSnappedToGrid(framework::Orientation::Vertical, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(mu::Orientation::Horizontal, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(mu::Orientation::Vertical, isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }

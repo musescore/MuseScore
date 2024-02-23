@@ -35,7 +35,7 @@
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
@@ -142,8 +142,8 @@ public:
     double guiScaling() const override;
     double notationScaling() const override;
 
-    ValCh<framework::Orientation> canvasOrientation() const override;
-    void setCanvasOrientation(framework::Orientation orientation) override;
+    ValCh<mu::Orientation> canvasOrientation() const override;
+    void setCanvasOrientation(mu::Orientation orientation) override;
 
     bool isLimitCanvasScrollArea() const override;
     void setIsLimitCanvasScrollArea(bool limited) override;
@@ -174,11 +174,11 @@ public:
 
     io::path_t stringTuningsPresetsPath() const override;
 
-    bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
-    void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
+    bool isSnappedToGrid(mu::Orientation gridOrientation) const override;
+    void setIsSnappedToGrid(mu::Orientation gridOrientation, bool isSnapped) override;
 
-    int gridSizeSpatium(framework::Orientation gridOrientation) const override;
-    void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) override;
+    int gridSizeSpatium(mu::Orientation gridOrientation) const override;
+    void setGridSize(mu::Orientation gridOrientation, int sizeSpatium) override;
 
     bool needToShowAddTextErrorMessage() const override;
     void setNeedToShowAddTextErrorMessage(bool show) override;
@@ -207,7 +207,7 @@ private:
 
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
-    async::Channel<framework::Orientation> m_canvasOrientationChanged;
+    async::Channel<mu::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path_t> m_userStylesPathChanged;
     async::Notification m_scoreOrderListPathsChanged;
     async::Notification m_isLimitCanvasScrollAreaChanged;

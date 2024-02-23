@@ -52,9 +52,9 @@ void OveModule::resolveImports()
     }
 }
 
-void OveModule::onInit(const framework::IApplication::RunMode& mode)
+void OveModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

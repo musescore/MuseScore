@@ -43,7 +43,7 @@ class AutobotApi : public ApiObject, public async::Asyncable
     INJECT(autobot::IAutobot, autobot)
     INJECT(autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(project::IProjectFilesController, projectFilesController)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(ui::IMainWindow, mainWindow)
 

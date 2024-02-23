@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_TRANSLATION_H
-#define MU_FRAMEWORK_TRANSLATION_H
+#ifndef MU_GLOBAL_TRANSLATION_H
+#define MU_GLOBAL_TRANSLATION_H
 
 #include "types/string.h"
 
@@ -46,4 +46,4 @@ QString qtrc(const char* context, const String& key, const String& disambiguatio
 #endif
 }
 
-#endif // MU_FRAMEWORK_TRANSLATION_H
+#endif // MU_GLOBAL_TRANSLATION_H

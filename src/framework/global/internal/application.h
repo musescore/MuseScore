@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_APPLICATION_H
-#define MU_FRAMEWORK_APPLICATION_H
+#ifndef MU_GLOBAL_APPLICATION_H
+#define MU_GLOBAL_APPLICATION_H
 
 #include "../iapplication.h"
 
-namespace mu::framework {
+namespace mu {
 class Application : public IApplication
 {
 public:
@@ -47,4 +47,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_APPLICATION_H
+#endif // MU_GLOBAL_APPLICATION_H

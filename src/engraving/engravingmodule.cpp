@@ -105,9 +105,9 @@ void EngravingModule::registerUiTypes()
     MScore::registerUiTypes();
 }
 
-void EngravingModule::onInit(const framework::IApplication::RunMode& mode)
+void EngravingModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

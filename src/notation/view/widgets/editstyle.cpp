@@ -1862,7 +1862,23 @@ void EditStyle::on_buttonTogglePagelist_clicked()
 
 void EditStyle::on_resetStylesButton_clicked()
 {
-    globalContext()->currentNotation()->style()->resetAllStyleValues();
+    StyleIdSet dontResetTheseStyles {
+        Sid::pageWidth,
+        Sid::pageHeight,
+        Sid::pagePrintableWidth,
+        Sid::pageEvenTopMargin,
+        Sid::pageEvenBottomMargin,
+        Sid::pageEvenLeftMargin,
+        Sid::pageOddTopMargin,
+        Sid::pageOddBottomMargin,
+        Sid::pageOddLeftMargin,
+        Sid::pageTwosided,
+        Sid::spatium,
+        Sid::concertPitch,
+        Sid::createMultiMeasureRests
+    };
+
+    globalContext()->currentNotation()->style()->resetAllStyleValues(dontResetTheseStyles);
     setValues();
 }
 

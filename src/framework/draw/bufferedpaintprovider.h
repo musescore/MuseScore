@@ -22,9 +22,6 @@
 #ifndef MU_DRAW_BUFFEREDPAINTPROVIDER_H
 #define MU_DRAW_BUFFEREDPAINTPROVIDER_H
 
-#include <vector>
-#include <stack>
-
 #include "ipaintprovider.h"
 #include "types/drawdata.h"
 #include "types/pen.h"

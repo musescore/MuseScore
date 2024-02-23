@@ -47,9 +47,9 @@ void Environment::setPostInit(const PostInit& postInit)
 
 void Environment::setup()
 {
-    static mu::framework::GlobalModule globalModule;
+    static mu::GlobalModule globalModule;
 
-    framework::IApplication::RunMode runMode = framework::IApplication::RunMode::GuiApp;
+    IApplication::RunMode runMode = IApplication::RunMode::GuiApp;
 
     globalModule.registerResources();
     globalModule.registerExports();

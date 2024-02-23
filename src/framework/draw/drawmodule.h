@@ -22,7 +22,7 @@
 #ifndef MU_DRAW_DRAWMODULE_H
 #define MU_DRAW_DRAWMODULE_H
 
-#include "modularity/imodulesetup.h"
+#include "global/modularity/imodulesetup.h"
 
 namespace mu::draw {
 class DrawModule : public modularity::IModuleSetup

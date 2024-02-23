@@ -84,9 +84,9 @@ void BrailleModule::registerUiTypes()
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
 }
 
-void BrailleModule::onInit(const framework::IApplication::RunMode& mode)
+void BrailleModule::onInit(const IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::GuiApp != mode) {
+    if (IApplication::RunMode::GuiApp != mode) {
         return;
     }
 

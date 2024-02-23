@@ -25,7 +25,7 @@
 #include <cstring>
 #include <zlib.h>
 
-#include "io/dir.h"
+#include "global/io/dir.h"
 
 #include "log.h"
 

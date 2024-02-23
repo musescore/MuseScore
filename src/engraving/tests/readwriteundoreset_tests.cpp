@@ -84,7 +84,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
     // Regenerate MM rests from scratch:
     // 1) turn MM rests off
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, false));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, false);
     score->endCmd();
 
     // 2) save/close/reopen the score
@@ -94,7 +94,7 @@ TEST_F(Engraving_ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
 
     // 3) turn MM rests back on
     score->startCmd();
-    score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
+    score->undoChangeStyleVal(Sid::createMultiMeasureRests, true);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, recreateMMRestRefFile));

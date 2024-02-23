@@ -24,8 +24,8 @@
 
 #include "settings.h"
 
+using namespace mu;
 using namespace mu::vst;
-using namespace mu::framework;
 
 static const std::string module_name("vst");
 

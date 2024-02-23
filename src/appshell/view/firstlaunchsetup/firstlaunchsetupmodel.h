@@ -42,7 +42,7 @@ class FirstLaunchSetupModel : public QObject
     Q_PROPERTY(bool canFinish READ canFinish NOTIFY currentPageChanged)
 
     INJECT(IAppShellConfiguration, configuration)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
 public:
     explicit FirstLaunchSetupModel(QObject* parent = nullptr);

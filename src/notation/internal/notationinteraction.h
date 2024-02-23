@@ -52,7 +52,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(INotationConfiguration, configuration)
     INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
 
 public:
@@ -241,6 +241,7 @@ public:
     void resetTextStyleOverrides() override;
     void resetBeamMode() override;
     void resetShapesAndPosition() override;
+    void resetToDefaultLayout() override;
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(const ScoreConfig& config) override;

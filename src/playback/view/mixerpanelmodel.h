@@ -75,7 +75,6 @@ private:
     };
 
     void loadItems();
-    void onNotationChanged();
     void onTrackAdded(const audio::TrackId& trackId);
     void addItem(MixerChannelItem* item, int index);
     void removeItem(const audio::TrackId trackId);

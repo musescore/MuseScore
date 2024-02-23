@@ -30,7 +30,7 @@
 namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 {
-    INJECT(framework::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(notation::IInstrumentsRepository, instrumentsRepository)
 
 public:

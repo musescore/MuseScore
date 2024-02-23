@@ -85,8 +85,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/scorepreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/importpreferencesmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/iopreferencesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/iopreferencesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/playbackpreferencesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/preferences/playbackpreferencesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/commonaudioapiconfigurationmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/preferences/braillepreferencesmodel.cpp

@@ -31,7 +31,6 @@
 
 using namespace mu;
 using namespace mu::notation;
-using namespace mu::framework;
 using namespace mu::async;
 using namespace mu::ui;
 
@@ -621,19 +620,19 @@ double NotationConfiguration::notationScaling() const
     return uiConfiguration()->physicalDpi() / mu::engraving::DPI;
 }
 
-ValCh<framework::Orientation> NotationConfiguration::canvasOrientation() const
+ValCh<mu::Orientation> NotationConfiguration::canvasOrientation() const
 {
-    ValCh<framework::Orientation> orientation;
+    ValCh<mu::Orientation> orientation;
     orientation.ch = m_canvasOrientationChanged;
     bool isVertical = settings()->value(IS_CANVAS_ORIENTATION_VERTICAL_KEY).toBool();
-    orientation.val = isVertical ? framework::Orientation::Vertical : framework::Orientation::Horizontal;
+    orientation.val = isVertical ? mu::Orientation::Vertical : mu::Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setCanvasOrientation(framework::Orientation orientation)
+void NotationConfiguration::setCanvasOrientation(mu::Orientation orientation)
 {
-    bool isVertical = orientation == framework::Orientation::Vertical;
+    bool isVertical = orientation == mu::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
@@ -759,46 +758,46 @@ io::path_t NotationConfiguration::stringTuningsPresetsPath() const
     return globalConfiguration()->appDataPath() + "instruments/string_tunings_presets.json";
 }
 
-bool NotationConfiguration::isSnappedToGrid(framework::Orientation gridOrientation) const
+bool NotationConfiguration::isSnappedToGrid(mu::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
-    case framework::Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
-    case framework::Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
+    case mu::Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
+    case mu::Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
     }
 
     return false;
 }
 
-void NotationConfiguration::setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped)
+void NotationConfiguration::setIsSnappedToGrid(mu::Orientation gridOrientation, bool isSnapped)
 {
     switch (gridOrientation) {
-    case framework::Orientation::Horizontal:
+    case mu::Orientation::Horizontal:
         settings()->setSharedValue(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY, Val(isSnapped));
         break;
-    case framework::Orientation::Vertical:
+    case mu::Orientation::Vertical:
         settings()->setSharedValue(IS_SNAPPED_TO_VERTICAL_GRID_KEY, Val(isSnapped));
         break;
     }
 }
 
-int NotationConfiguration::gridSizeSpatium(framework::Orientation gridOrientation) const
+int NotationConfiguration::gridSizeSpatium(mu::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
-    case framework::Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
-    case framework::Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
+    case mu::Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
+    case mu::Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
     }
 
     return DEFAULT_GRID_SIZE_SPATIUM;
 }
 
-void NotationConfiguration::setGridSize(framework::Orientation gridOrientation, int sizeSpatium)
+void NotationConfiguration::setGridSize(mu::Orientation gridOrientation, int sizeSpatium)
 {
     switch (gridOrientation) {
-    case framework::Orientation::Horizontal:
+    case mu::Orientation::Horizontal:
         mu::engraving::MScore::setHRaster(sizeSpatium);
         settings()->setSharedValue(HORIZONTAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
-    case framework::Orientation::Vertical:
+    case mu::Orientation::Vertical:
         mu::engraving::MScore::setVRaster(sizeSpatium);
         settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;

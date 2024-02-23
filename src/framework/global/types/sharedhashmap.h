@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_SHAREDHASHMAP_H
-#define MU_FRAMEWORK_SHAREDHASHMAP_H
+#ifndef MU_GLOBAL_SHAREDHASHMAP_H
+#define MU_GLOBAL_SHAREDHASHMAP_H
 
 #include <memory>
 #include <unordered_map>
@@ -227,4 +227,4 @@ protected:
 };
 }
 
-#endif // MU_FRAMEWORK_SHAREDHASHMAP_H
+#endif // MU_GLOBAL_SHAREDHASHMAP_H

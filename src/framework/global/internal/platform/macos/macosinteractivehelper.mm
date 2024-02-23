@@ -25,7 +25,7 @@
 
 #include <Cocoa/Cocoa.h>
 
-using namespace mu::framework;
+using namespace mu;
 
 bool MacOSInteractiveHelper::revealInFinder(const io::path_t& filePath)
 {

@@ -37,7 +37,7 @@ public:
     MOCK_METHOD(Ret, patch, (const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&), (override));
     MOCK_METHOD(Ret, del, (const QUrl&, IncomingDevice*, const RequestHeaders&), (override));
 
-    MOCK_METHOD(framework::Progress, progress, (), (const, override));
+    MOCK_METHOD(mu::Progress, progress, (), (const, override));
 
     MOCK_METHOD(void, abort, (), (override));
 };

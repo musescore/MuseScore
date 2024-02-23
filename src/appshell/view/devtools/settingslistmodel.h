@@ -54,7 +54,7 @@ private:
 
     QString typeToString(Val::Type t) const;
 
-    QList<framework::Settings::Item> m_items;
+    QList<Settings::Item> m_items;
 };
 }
 

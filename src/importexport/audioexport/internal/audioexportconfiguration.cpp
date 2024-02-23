@@ -24,8 +24,8 @@
 
 #include "settings.h"
 
+using namespace mu;
 using namespace mu::iex::audioexport;
-using namespace mu::framework;
 
 static const Settings::Key EXPORT_SAMPLE_RATE_KEY("iex_audioexport", "export/audio/sampleRate");
 static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/mp3Bitrate");

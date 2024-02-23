@@ -27,7 +27,6 @@
 #include "projecterrors.h"
 
 using namespace mu;
-using namespace mu::framework;
 using namespace mu::project;
 
 static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
@@ -403,7 +402,7 @@ Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublishSha
                                                          trc("project/save", "Please check your internet connection or try again later."),
                                                          buttons, int(IInteractive::Button::Ok));
 
-    if (result.standardButton() == framework::IInteractive::Button::Ok) {
+    if (result.standardButton() == IInteractive::Button::Ok) {
         return Ret(RET_CODE_CHANGE_SAVE_LOCATION_TYPE);
     }
 
@@ -562,7 +561,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
                   .arg(info.sourceUrl.toString())
                   .toStdString();
             buttons = {
-                interactive()->buttonData(framework::IInteractive::Button::Cancel),
+                interactive()->buttonData(IInteractive::Button::Cancel),
                 IInteractive::ButtonData { publishAsNewScoreBtnCode, trc("project/save", "Publish as new score") },
                 IInteractive::ButtonData { replaceBtnCode, trc("project/save", "Replace") }
             };
@@ -573,7 +572,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
                   .arg(info.sourceUrl.toString())
                   .toStdString();
             buttons = {
-                interactive()->buttonData(framework::IInteractive::Button::Cancel),
+                interactive()->buttonData(IInteractive::Button::Cancel),
                 IInteractive::ButtonData { saveAsBtnCode, trc("project/save", "Save as…") },
                 IInteractive::ButtonData { replaceBtnCode, trc("project/save", "Replace") }
             };

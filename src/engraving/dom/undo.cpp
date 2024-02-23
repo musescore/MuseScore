@@ -655,9 +655,11 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo() const
         if (type == CommandType::ChangeProperty) {
             auto changeProperty = static_cast<const ChangeProperty*>(command);
             result.changedPropertyIdSet.insert(changeProperty->getId());
-        } else if (type == CommandType::ChangeStyleVal) {
-            auto changeStyle = static_cast<const ChangeStyleVal*>(command);
-            result.changedStyleIdSet.insert(changeStyle->id());
+        } else if (type == CommandType::ChangeStyleValues) {
+            auto changeStyle = static_cast<const ChangeStyleValues*>(command);
+            for (const auto& pair : changeStyle->values()) {
+                result.changedStyleIdSet.insert(pair.first);
+            }
         }
 
         for (const EngravingObject* object : command->objectItems()) {
@@ -1930,47 +1932,64 @@ void ChangeStyle::undo(EditData* ed)
     UndoCommand::undo(ed);
 }
 
-//---------------------------------------------------------
-//   ChangeStyleVal::flip
-//---------------------------------------------------------
-
-void ChangeStyleVal::flip(EditData*)
+static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValue, const PropertyValue& newValue)
 {
-    PropertyValue v = score->style().styleV(idx);
-    if (v != value) {
-        score->style().set(idx, value);
-        switch (idx) {
-        case Sid::chordExtensionMag:
-        case Sid::chordExtensionAdjust:
-        case Sid::chordModifierMag:
-        case Sid::chordModifierAdjust:
-        case Sid::chordDescriptionFile: {
-            const MStyle& style = score->style();
-            score->chordList()->unload();
-            double emag = style.styleD(Sid::chordExtensionMag);
-            double eadjust = style.styleD(Sid::chordExtensionAdjust);
-            double mmag = style.styleD(Sid::chordModifierMag);
-            double madjust = style.styleD(Sid::chordModifierAdjust);
-            score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
-            if (score->style().styleB(Sid::chordsXmlFile)) {
-                score->chordList()->read(u"chords.xml");
-            }
-            score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
-            score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
+    score->style().set(idx, newValue);
+    switch (idx) {
+    case Sid::chordExtensionMag:
+    case Sid::chordExtensionAdjust:
+    case Sid::chordModifierMag:
+    case Sid::chordModifierAdjust:
+    case Sid::chordDescriptionFile: {
+        const MStyle& style = score->style();
+        score->chordList()->unload();
+        double emag = style.styleD(Sid::chordExtensionMag);
+        double eadjust = style.styleD(Sid::chordExtensionAdjust);
+        double mmag = style.styleD(Sid::chordModifierMag);
+        double madjust = style.styleD(Sid::chordModifierAdjust);
+        score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+        if (score->style().styleB(Sid::chordsXmlFile)) {
+            score->chordList()->read(u"chords.xml");
         }
-        break;
-        case Sid::spatium:
-            score->spatiumChanged(v.toDouble(), value.toDouble());
-            break;
-        case Sid::defaultsVersion:
-            score->style().setDefaultStyleVersion(value.toInt());
-            break;
-        default:
-            break;
-        }
-        score->styleChanged();
+        score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
+        score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
     }
-    value = v;
+    break;
+    case Sid::spatium:
+        score->spatiumChanged(oldValue.toDouble(), newValue.toDouble());
+        break;
+    case Sid::defaultsVersion:
+        score->style().setDefaultStyleVersion(newValue.toInt());
+        break;
+    default:
+        break;
+    }
+}
+
+void ChangeStyleValues::flip(EditData*)
+{
+    if (!m_score) {
+        return;
+    }
+
+    bool styleChanged = false;
+    const MStyle& style = m_score->style();
+
+    for (auto& pair : m_values) {
+        PropertyValue oldValue = style.styleV(pair.first);
+        if (oldValue == pair.second) {
+            return;
+        }
+
+        changeStyleValue(m_score, pair.first, oldValue, pair.second);
+        pair.second = oldValue;
+
+        styleChanged = true;
+    }
+
+    if (styleChanged) {
+        m_score->styleChanged();
+    }
 }
 
 //---------------------------------------------------------

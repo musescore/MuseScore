@@ -20,19 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_XMLWRITER_H
-#define MU_FRAMEWORK_XMLWRITER_H
+#ifndef MU_GLOBAL_XMLWRITER_H
+#define MU_GLOBAL_XMLWRITER_H
 
 #include <memory>
 #include <QIODevice>
 
-#include "io/path.h"
+#include "global/io/path.h"
 
 //! NOTE This is class is deprecated, please use serialization/xmlstreamwriter.h or serialization/xmldom.h
 
 class QXmlStreamWriter;
 
-namespace mu::framework {
+namespace mu::deprecated {
 class XmlWriter
 {
 public:
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_FRAMEWORK_XMLWRITER_H
+#endif // MU_GLOBAL_XMLWRITER_H

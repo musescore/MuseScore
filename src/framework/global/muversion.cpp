@@ -23,7 +23,7 @@
 
 #include "types/version.h"
 
-using namespace mu::framework;
+using namespace mu;
 
 bool MUVersion::unstable()
 {

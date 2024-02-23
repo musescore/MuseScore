@@ -31,6 +31,9 @@
 #include "internal/encoders/wavencoder.h"
 
 #include "audioerrors.h"
+#include "log.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::audio;
@@ -110,7 +113,7 @@ void SoundTrackWriter::abort()
     m_isAborted = true;
 }
 
-framework::Progress SoundTrackWriter::progress()
+mu::Progress SoundTrackWriter::progress()
 {
     return m_progress;
 }

@@ -120,12 +120,6 @@
       <score-instrument id="P3-I63">
         <instrument-name>Instrument 63</instrument-name>
         </score-instrument>
-      <score-instrument id="P3-I64">
-        <instrument-name>Open Hi Conga</instrument-name>
-        </score-instrument>
-      <score-instrument id="P3-I65">
-        <instrument-name>Low Conga</instrument-name>
-        </score-instrument>
       <score-instrument id="P3-I66">
         <instrument-name>Instrument 66</instrument-name>
         </score-instrument>
@@ -301,20 +295,6 @@
         <midi-channel>10</midi-channel>
         <midi-program>1</midi-program>
         <midi-unpitched>63</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
-        </midi-instrument>
-      <midi-instrument id="P3-I64">
-        <midi-channel>10</midi-channel>
-        <midi-program>1</midi-program>
-        <midi-unpitched>64</midi-unpitched>
-        <volume>78.7402</volume>
-        <pan>0</pan>
-        </midi-instrument>
-      <midi-instrument id="P3-I65">
-        <midi-channel>10</midi-channel>
-        <midi-program>1</midi-program>
-        <midi-unpitched>65</midi-unpitched>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>

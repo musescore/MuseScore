@@ -323,17 +323,20 @@ void PageSettings::applyToScore(Score* s)
     double f  = mmUnit ? 1.0 / INCH : 1.0;
     double f1 = mmUnit ? DPMM : DPI;
 
-    s->undoChangeStyleVal(Sid::pageWidth, pageWidth->value() * f);
-    s->undoChangeStyleVal(Sid::pageHeight, pageHeight->value() * f);
-    s->undoChangeStyleVal(Sid::pagePrintableWidth, (pageWidth->value() - oddPageLeftMargin->value() - oddPageRightMargin->value()) * f);
-    s->undoChangeStyleVal(Sid::pageEvenTopMargin, evenPageTopMargin->value() * f);
-    s->undoChangeStyleVal(Sid::pageEvenBottomMargin, evenPageBottomMargin->value() * f);
-    s->undoChangeStyleVal(Sid::pageEvenLeftMargin, evenPageLeftMargin->value() * f);
-    s->undoChangeStyleVal(Sid::pageOddTopMargin, oddPageTopMargin->value() * f);
-    s->undoChangeStyleVal(Sid::pageOddBottomMargin, oddPageBottomMargin->value() * f);
-    s->undoChangeStyleVal(Sid::pageOddLeftMargin, oddPageLeftMargin->value() * f);
-    s->undoChangeStyleVal(Sid::pageTwosided, twosided->isChecked());
-    s->undoChangeStyleVal(Sid::spatium, spatiumEntry->value() * f1);
+    std::unordered_map<Sid, PropertyValue> values;
+    values.emplace(Sid::pageWidth, pageWidth->value() * f);
+    values.emplace(Sid::pageHeight, pageHeight->value() * f);
+    values.emplace(Sid::pagePrintableWidth, (pageWidth->value() - oddPageLeftMargin->value() - oddPageRightMargin->value()) * f);
+    values.emplace(Sid::pageEvenTopMargin, evenPageTopMargin->value() * f);
+    values.emplace(Sid::pageEvenBottomMargin, evenPageBottomMargin->value() * f);
+    values.emplace(Sid::pageEvenLeftMargin, evenPageLeftMargin->value() * f);
+    values.emplace(Sid::pageOddTopMargin, oddPageTopMargin->value() * f);
+    values.emplace(Sid::pageOddBottomMargin, oddPageBottomMargin->value() * f);
+    values.emplace(Sid::pageOddLeftMargin, oddPageLeftMargin->value() * f);
+    values.emplace(Sid::pageTwosided, twosided->isChecked());
+    values.emplace(Sid::spatium, spatiumEntry->value() * f1);
+
+    s->undoChangeStyleValues(std::move(values));
     s->undoChangePageNumberOffset(pageOffsetEntry->value() - 1);
 }
 

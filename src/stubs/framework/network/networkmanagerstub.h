@@ -38,7 +38,7 @@ public:
               const RequestHeaders& headers = RequestHeaders()) override;
     Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
 
-    framework::Progress progress() const override;
+    mu::Progress progress() const override;
 
     void abort() override;
 };

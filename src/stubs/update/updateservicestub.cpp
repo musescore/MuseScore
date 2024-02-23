@@ -37,7 +37,7 @@ void UpdateServiceStub::cancelUpdate()
 {
 }
 
-mu::framework::Progress UpdateServiceStub::updateProgress()
+mu::Progress UpdateServiceStub::updateProgress()
 {
-    return framework::Progress();
+    return Progress();
 }

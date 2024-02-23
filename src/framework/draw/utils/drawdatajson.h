@@ -22,8 +22,9 @@
 #ifndef MU_DRAW_DRAWDATAJSON_H
 #define MU_DRAW_DRAWDATAJSON_H
 
-#include "../types/drawdata.h"
 #include "global/types/retval.h"
+
+#include "../types/drawdata.h"
 
 namespace mu {
 class JsonObject;

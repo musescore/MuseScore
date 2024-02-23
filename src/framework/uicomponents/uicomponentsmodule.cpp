@@ -51,7 +51,6 @@
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::uicomponents;
-using namespace mu::framework;
 using namespace mu::ui;
 using namespace mu::modularity;
 

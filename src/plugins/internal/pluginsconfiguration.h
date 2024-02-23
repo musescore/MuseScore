@@ -35,7 +35,7 @@
 namespace mu::plugins {
 class PluginsConfiguration : public IPluginsConfiguration, public async::Asyncable
 {
-    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(ui::IUiConfiguration, uiConfiguration)
