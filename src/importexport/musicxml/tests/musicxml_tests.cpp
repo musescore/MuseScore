@@ -471,6 +471,9 @@ TEST_F(Musicxml_Tests, colors) {
 TEST_F(Musicxml_Tests, completeMeasureRests) {
     mxmlIoTest("testCompleteMeasureRests");
 }
+TEST_F(Musicxml_Tests, copyrightScale) {
+    mxmlImportTestRef("testCopyrightScale");
+}
 TEST_F(Musicxml_Tests, cueGraceNotes1) {
     mxmlImportTestRef("testCueGraceNotes");
 }

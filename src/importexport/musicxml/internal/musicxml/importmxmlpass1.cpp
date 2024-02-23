@@ -1537,6 +1537,33 @@ static void setPageFormat(Score* score, const PageFormat& pf)
     score->style().set(Sid::pageTwosided, pf.twosided);
 }
 
+static void scaleCopyrightText(Score* score)
+{
+    // Scale text to fit within margins
+    String copyright = score->metaTag(u"copyright");
+    if (copyright.empty()) {
+        return;
+    }
+
+    MStyle style = score->style();
+    String fontFace = style.styleV(Sid::footerFontFace).value<String>();
+    draw::Font footerFont(fontFace, draw::Font::Type::Unknown);
+    double footerFontSize = style.styleV(Sid::footerFontSize).value<double>();
+    footerFont.setPointSizeF(footerFontSize);
+    draw::FontMetrics fm(footerFont);
+
+    double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
+    double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
+    double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
+    double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), draw::TextShowMnemonic, copyright).width();
+    double sizeRatio = pagePrintableWidth / textWidth;
+
+    if (sizeRatio < 1) {
+        double newSize = floor(footerFontSize * sizeRatio * 10) / 10;
+        score->style().set(Sid::footerFontSize, newSize);
+    }
+}
+
 //---------------------------------------------------------
 //   defaults
 //---------------------------------------------------------
@@ -1676,6 +1703,7 @@ void MusicXMLParserPass1::defaults()
            muPrintable(lyricFontFamily), muPrintable(lyricFontSize));
     */
     updateStyles(m_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
+    scaleCopyrightText(m_score);
 }
 
 //---------------------------------------------------------
