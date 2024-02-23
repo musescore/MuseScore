@@ -167,15 +167,18 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const int
 // called when lyric (with or without "extend") or note with "extend type=stop" is found
 // note that no == -1 means all lyrics in this *track*
 
-void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fraction& tick)
+void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fraction& tick, const Lyrics* prevAddedLyrics = nullptr)
       {
       QList<Lyrics*> list;
       for (Lyrics* l : _lyrics) {
             Element* const el = l->parent();
             if (el->type() == ElementType::CHORD || el->type() == ElementType::REST) {
-                  ChordRest* const par = static_cast<ChordRest*>(el);
+                  const ChordRest* par = static_cast<ChordRest*>(el);
+                  // no = -1: stop all extends on this track
+                  // otherwise, stop all extends in the stave with the same no and placement
                   if ((no == -1 && par->track() == track)
-                      || (l->no() == no && track2staff(par->track()) == track2staff(track))) {
+                      || (l->no() == no && track2staff(par->track()) == track2staff(track) && prevAddedLyrics
+                          && prevAddedLyrics->placement() == l->placement())) {
                         Fraction lct = lastChordTicks(l->segment(), tick, track);
                         if (lct > Fraction(0,1)) {
                               // set lyric tick to the total length from the lyric note
@@ -871,7 +874,7 @@ static void addLyric(MxmlLogger* logger, const QXmlStreamReader* const xmlreader
       else {
             l->setNo(lyricNo);
             cr->add(l);
-            extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick());
+            extendedLyrics.setExtend(lyricNo, cr->track(), cr->tick(), l);
             }
       }
 

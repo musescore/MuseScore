@@ -111,7 +111,7 @@ public:
       MusicXmlLyricsExtend() {}
       void init();
       void addLyric(Lyrics* const lyric);
-      void setExtend(const int no, const int track, const Fraction& tick);
+      void setExtend(const int no, const int track, const Fraction& tick, const Lyrics* prevAddedLyrics);
 
 private:
       QSet<Lyrics*> _lyrics;
