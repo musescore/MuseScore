@@ -63,8 +63,8 @@ MixerPanelSection {
         border.color: labelColor
         border.width: 1
 
-
         StyledTextLabel {
+            id: textLabel
             anchors.centerIn: parent
 
             font: ui.theme.bodyBoldFont
@@ -82,10 +82,8 @@ MixerPanelSection {
             hoverEnabled: true
 
             onContainsMouseChanged: {
-                var instrumentName = channelItem.title
-                if (mouseArea.containsMouse && instrumentName.length > 14) {
-                    instrumentName = channelItem.title
-                    ui.tooltip.show(mouseArea, instrumentName)
+                if (mouseArea.containsMouse && textLabel.truncated) {
+                    ui.tooltip.show(mouseArea, channelItem.title)
                 } else {
                     ui.tooltip.hide(mouseArea)
                 }
