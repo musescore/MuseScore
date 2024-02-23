@@ -40,6 +40,7 @@
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
 #include "iinteractive.h"
+#include "drumsetloader.h"
 
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
@@ -235,6 +236,8 @@ private:
 
     bool m_isExportingAudio = false;
     bool m_isRangeSelection = false;
+
+    DrumsetLoader m_drumsetLoader;
 };
 }
 

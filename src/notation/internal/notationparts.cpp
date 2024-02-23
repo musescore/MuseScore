@@ -630,6 +630,8 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
     apply();
 
     notifyAboutPartChanged(part);
+
+    m_interaction->noteInput()->stateChanged().notify();
 }
 
 Notification NotationParts::partsChanged() const
