@@ -25,10 +25,10 @@ SOFTWARE.
 #ifndef KORS_LOG_BASE_H
 #define KORS_LOG_BASE_H
 
-#include <cassert>
+#include <cassert> // IWYU pragma: export
 
-#include "funcinfo.h"
-#include "logger.h"
+#include "funcinfo.h" // IWYU pragma: export
+#include "logger.h" // IWYU pragma: export
 
 //! Log
 

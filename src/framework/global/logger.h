@@ -22,9 +22,9 @@
 #ifndef MU_LOGGER_H
 #define MU_LOGGER_H
 
-#include "thirdparty/kors_logger/src/logger.h"
-#include "thirdparty/kors_logger/src/logdefdest.h"
-#include "thirdparty/kors_logger/src/log_base.h"
+#include "thirdparty/kors_logger/src/logger.h" // IWYU pragma: export
+#include "thirdparty/kors_logger/src/logdefdest.h" // IWYU pragma: export
+#include "thirdparty/kors_logger/src/log_base.h" // IWYU pragma: export
 
 namespace mu::logger {
 using Logger = kors::logger::Logger;

@@ -23,11 +23,11 @@
 #ifndef MU_GLOBAL_LOG_H
 #define MU_GLOBAL_LOG_H
 
-#include <cstdlib>
-#include <cassert>
+#include <cstdlib> // IWYU pragma: export
+#include <cassert> // IWYU pragma: export
 
-#include "profiler.h"
-#include "logger.h"
+#include "profiler.h" // IWYU pragma: export
+#include "logger.h" // IWYU pragma: export
 
 #undef FALLTHROUGH
 

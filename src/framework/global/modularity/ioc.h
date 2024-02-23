@@ -22,7 +22,7 @@
 #ifndef MU_MODULARITY_IOC_H
 #define MU_MODULARITY_IOC_H
 
-#include "../thirdparty/kors_modularity/modularity/ioc.h"
+#include "../thirdparty/kors_modularity/modularity/ioc.h" // IWYU pragma: export
 
 namespace mu {
 template<class I>
