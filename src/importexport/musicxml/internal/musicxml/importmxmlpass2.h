@@ -424,7 +424,6 @@ private:
     String m_sndFine;
     String m_sndSegno;
     String m_sndToCoda;
-    bool visible = true;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
     bool m_hasRelativeY = false;
