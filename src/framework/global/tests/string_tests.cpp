@@ -414,6 +414,41 @@ TEST_F(Global_Types_StringTests, String_Split)
     }
 }
 
+TEST_F(Global_Types_StringTests, String_Search)
+{
+    //! GIVEN Regex (taken from musicxml parsing for finding sibelius metronome marks eg 'q = 140'):
+    std::regex re(".*([yxeqhVwW])(\\.?)\\s*=[^0-9]*([0-9]+).*");
+
+    {
+        //! GIVEN String:
+        String str(u"Andante (q. = c. 90)");
+
+        String match1 = u"q";
+        String match2 = u".";
+        String match3 = u"90";
+
+        //! DO
+        StringList matches = str.search(re, { 1, 2, 3 });
+
+        //! CHECK
+
+        EXPECT_EQ(matches.at(0), match1);
+        EXPECT_EQ(matches.at(1), match2);
+        EXPECT_EQ(matches.at(2), match3);
+    }
+
+    {
+        //! GIVEN String:
+        String str(u"Andante (b = c. abc)");
+
+        //! DO
+        StringList matches = str.search(re, { 1, 2, 3 }, SplitBehavior::SkipEmptyParts);
+
+        //! CHECK
+        EXPECT_EQ(matches.size(), 0);
+    }
+}
+
 TEST_F(Global_Types_StringTests, String_StartEndWith)
 {
     {
