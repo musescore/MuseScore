@@ -898,8 +898,11 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             }
             // We use a default font size of 10pt for historical reasons,
             // but Smufl standard is 20pt so multiply x2 here.
-            if (mu::engraving::TextBase::engravingConfiguration()->adaptFontSizes()) {
-                m *= 2;
+            m *= 2;
+            if (mu::engraving::TextBase::engravingConfiguration()->adaptFontSizesToSmallResolution()) {
+                if (t->textStyleType() == TextStyleType::OTTAVA) {
+                    m *= spatiumScaling;
+                }
             }
         } else if (t->isTempoText()) {
             family = t->style().styleSt(Sid::MusicalTextFont);
