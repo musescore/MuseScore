@@ -48,7 +48,12 @@ static constexpr int MIN_DISPLAYED_ZOOM_PERCENTAGE = 25;
 static const QMap<ViewMode, ActionCode> ALL_MODE_MAP {
     { ViewMode::PAGE, "view-mode-page" },
     { ViewMode::LINE, "view-mode-continuous" },
-    { ViewMode::SYSTEM, "view-mode-single" }
+    { ViewMode::SYSTEM, "view-mode-single" },
+#ifndef NDEBUG
+    {
+        ViewMode::FLOAT, "view-mode-float"
+    },
+#endif
 };
 
 static ActionCode zoomTypeToActionCode(ZoomType type)
