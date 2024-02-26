@@ -532,13 +532,26 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
         }
     }
 
-    for (mu::engraving::EngravingItem* element : elements) {
-        element->itemDiscovered = 0;
+    auto canHitElement = [](const mu::engraving::EngravingItem* element) {
         if (!element->selectable() || element->isPage()) {
-            continue;
+            return false;
         }
 
         if (!element->isInteractionAvailable()) {
+            return false;
+        }
+
+        if (element->isSoundFlag()) {
+            return !toSoundFlag(element)->shouldHide();
+        }
+
+        return true;
+    };
+
+    for (mu::engraving::EngravingItem* element : elements) {
+        element->itemDiscovered = 0;
+
+        if (!canHitElement(element)) {
             continue;
         }
 
@@ -552,11 +565,7 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
         // if no relevant element hit, look nearby
         //
         for (mu::engraving::EngravingItem* element : elements) {
-            if (element->isPage() || !element->selectable()) {
-                continue;
-            }
-
-            if (!element->isInteractionAvailable()) {
+            if (!canHitElement(element)) {
                 continue;
             }
 
