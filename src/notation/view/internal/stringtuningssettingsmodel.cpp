@@ -126,7 +126,7 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
     StringTuningsItem* item = m_strings.at(stringIndex);
 
-    QString _stringValue = convertToUnicode(stringValue);
+    String _stringValue = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
     int value = engraving::string2pitch(_stringValue);
     if (value == -1) {
         item->valueChanged();
@@ -135,7 +135,7 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
     item->setValue(value);
 
-    bool useFlat = _stringValue.contains("♭");
+    bool useFlat = _stringValue.contains(u'♭');
     item->setUseFlat(useFlat);
 
     beginMultiCommands();
@@ -148,27 +148,15 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
     return true;
 }
 
-bool StringTuningsSettingsModel::canIncreaseStringValue(const QString& stringValue) const
-{
-    QString value = convertToUnicode(stringValue);
-    return engraving::string2pitch(value) != -1;
-}
-
 QString StringTuningsSettingsModel::increaseStringValue(const QString& stringValue)
 {
-    QString value = convertToUnicode(stringValue);
+    String value = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
     return engraving::pitch2string(engraving::string2pitch(value) + 1, false /* useFlats */);
-}
-
-bool StringTuningsSettingsModel::canDecreaseStringValue(const QString& stringValue) const
-{
-    QString value = convertToUnicode(stringValue);
-    return engraving::string2pitch(value) != -1;
 }
 
 QString StringTuningsSettingsModel::decreaseStringValue(const QString& stringValue)
 {
-    QString value = convertToUnicode(stringValue);
+    String value = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
     return engraving::pitch2string(engraving::string2pitch(value) - 1, true /* useFlats */);
 }
 
@@ -420,27 +408,6 @@ void StringTuningsSettingsModel::doSetCurrentPreset(const QString& preset)
 {
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, String::fromQString(preset));
     emit currentPresetChanged();
-}
-
-QString StringTuningsSettingsModel::convertToUnicode(const QString& stringValue) const
-{
-    if (stringValue.isEmpty()) {
-        return QString();
-    }
-
-    QString value = stringValue[0];
-    for (int i = 1; i < stringValue.size(); ++i) {
-        QChar symbol = stringValue[i].toLower();
-        if (symbol == "b") {
-            value.append("♭");
-        } else if (symbol == "#") {
-            value.append("♯");
-        } else {
-            value.append(symbol);
-        }
-    }
-
-    return value;
 }
 
 StringTuningsItem::StringTuningsItem(QObject* parent)

@@ -29,7 +29,7 @@
 
 #include "log.h"
 #include "commonscene/commonscenetypes.h"
-#include "internal/abstractelementpopupmodel.h"
+#include "abstractelementpopupmodel.h"
 
 using namespace mu;
 using namespace mu::notation;
