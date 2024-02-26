@@ -473,7 +473,10 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled()
         || ctx.conf().viewMode() == LayoutMode::SYSTEM) {
         if (ctx.conf().viewMode() == LayoutMode::FLOAT) {
-            double y = restHeight * .5;
+            double y = 0.0;
+            if (gaps > 0) {
+                y = restHeight * .5;
+            }
             for (System* system : page->systems()) {
                 system->move(PointF(0.0, y));
             }
