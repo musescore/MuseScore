@@ -386,6 +386,12 @@ if (OS_IS_WIN)
                 DESTINATION bin/printsupport)
     endif()
 
+    if (NOT MUE_COMPILE_QT5_COMPAT) # Qt6
+        install(FILES
+                ${QT_INSTALL_PLUGINS}/tls/qopensslbackend.dll
+                DESTINATION bin/tls)
+    endif()
+
     install(DIRECTORY
             ${QT_INSTALL_QML}
             DESTINATION .
