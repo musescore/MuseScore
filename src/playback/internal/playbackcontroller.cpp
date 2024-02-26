@@ -1016,7 +1016,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
         return;
     }
 
-    audio::AudioOutputParams masterOutputParams = audioSettings()->masterAudioOutputParams();
+    const audio::AudioOutputParams& masterOutputParams = audioSettings()->masterAudioOutputParams();
     playback()->audioOutput()->setMasterOutputParams(masterOutputParams);
 
     subscribeOnAudioParamsChanges();
