@@ -108,9 +108,9 @@ public:
 
     void setOutputResourceItemCount(size_t count);
 
-    void loadInputParams(audio::AudioInputParams&& newParams);
-    void loadOutputParams(audio::AudioOutputParams&& newParams);
-    void loadSoloMuteState(project::IProjectAudioSettings::SoloMuteState&& newState);
+    void loadInputParams(const audio::AudioInputParams& newParams);
+    void loadOutputParams(const audio::AudioOutputParams& newParams);
+    void loadSoloMuteState(const project::IProjectAudioSettings::SoloMuteState& newState);
 
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 

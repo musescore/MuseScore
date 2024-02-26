@@ -45,7 +45,7 @@
 #include "playbackcursor.h"
 #include "loopmarker.h"
 #include "continuouspanel.h"
-#include "internal/abstractelementpopupmodel.h"
+#include "abstractelementpopupmodel.h"
 
 namespace mu::notation {
 class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,

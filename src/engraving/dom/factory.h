@@ -33,6 +33,8 @@ namespace mu::engraving {
 class Instrument;
 class RootItem;
 
+class SoundFlag;
+
 class Factory
 {
 public:
@@ -157,6 +159,8 @@ public:
     static std::shared_ptr<StaffTypeChange> makeStaffTypeChange(MeasureBase* parent);
 
     static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
+
+    static SoundFlag* createSoundFlag(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Expression* createExpression(Segment* parent, bool isAccessibleEnabled = true);
 

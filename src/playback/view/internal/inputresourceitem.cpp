@@ -32,6 +32,7 @@
 
 #include "audio/itracks.h"
 #include "audio/soundfonttypes.h"
+#include "audio/audioutils.h"
 
 #include "msbasicpresetscategories.h"
 
@@ -130,23 +131,7 @@ void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
 
 QString InputResourceItem::title() const
 {
-    if (m_currentInputParams.type() == mu::audio::AudioSourceType::MuseSampler) {
-        return m_currentInputParams.resourceMeta.attributeVal(u"museName").toQString();
-    }
-
-    if (m_currentInputParams.resourceMeta.type == audio::AudioResourceType::FluidSoundfont) {
-        const String& presetName = m_currentInputParams.resourceMeta.attributeVal(PRESET_NAME_ATTRIBUTE);
-        if (!presetName.empty()) {
-            return presetName.toQString();
-        }
-
-        const String& soundFontName = m_currentInputParams.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
-        if (!soundFontName.empty()) {
-            return soundFontName.toQString();
-        }
-    }
-
-    return QString::fromStdString(m_currentInputParams.resourceMeta.id);
+    return audio::audioSourceName(m_currentInputParams).toQString();
 }
 
 bool InputResourceItem::isBlank() const

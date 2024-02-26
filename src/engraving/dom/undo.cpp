@@ -536,7 +536,8 @@ void UndoStack::redo(EditData* ed)
 
 bool UndoMacro::canRecordSelectedElement(const EngravingItem* e)
 {
-    return e->isNote() || (e->isChordRest() && !e->isChord()) || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram();
+    return e->isNote() || (e->isChordRest() && !e->isChord()) || (e->isTextBase() && !e->isInstrumentName()) || e->isFretDiagram()
+           || e->isSoundFlag();
 }
 
 void UndoMacro::fillSelectionInfo(SelectionInfo& info, const Selection& sel)
@@ -3141,6 +3142,22 @@ void ChangeStringData::flip(EditData*)
     }
 
     m_stringData.set(StringData(frets, stringList));
+}
+
+void ChangeSoundFlag::flip(EditData*)
+{
+    IF_ASSERT_FAILED(m_soundFlag) {
+        return;
+    }
+
+    SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
+    SoundFlag::PlayingTechniqueCodes techniques = m_soundFlag->playingTechniques();
+
+    m_soundFlag->setSoundPresets(m_presets);
+    m_soundFlag->setPlayingTechniques(m_playingTechniques);
+
+    m_presets = std::move(presets);
+    m_playingTechniques = std::move(techniques);
 }
 
 void ChangeSpanArpeggio::flip(EditData*)

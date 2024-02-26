@@ -534,12 +534,14 @@ public:
     bool showUnprintable() const { return m_showUnprintable; }
     bool showFrames() const { return m_showFrames; }
     bool showPageborders() const { return m_showPageborders; }
+    bool showSoundFlags() const { return m_showSoundFlags; }
     bool markIrregularMeasures() const { return m_markIrregularMeasures; }
     bool showInstrumentNames() const { return m_showInstrumentNames; }
     void setShowInvisible(bool v);
     void setShowUnprintable(bool v);
     void setShowFrames(bool v);
     void setShowPageborders(bool v);
+    void setShowSoundFlags(bool v);
     void setMarkIrregularMeasures(bool v);
     void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
@@ -652,7 +654,7 @@ public:
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
 
-    void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
+    std::vector<EngravingItem*> cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
 
@@ -1063,6 +1065,7 @@ private:
     bool m_showUnprintable = true;
     bool m_showFrames = true;
     bool m_showPageborders = false;
+    bool m_showSoundFlags = true;
     bool m_markIrregularMeasures = true;
     bool m_showInstrumentNames = true;
     bool m_printing = false;                // True if we are drawing to a printer

@@ -94,5 +94,18 @@ InspectorSectionView {
             isVisible: model ? model.shouldShowPageMargins : false
             onVisibleToggled: { model.shouldShowPageMargins = !model.shouldShowPageMargins }
         }
+
+        VisibilityBox {
+            Layout.fillWidth: true
+            Layout.maximumWidth: parent.width/2
+
+            navigation.panel: root.navigationPanel
+            navigation.name: "Sound flags"
+            navigation.row: root.navigationRow(6)
+
+            text: qsTrc("inspector", "Sound flags")
+            isVisible: model ? model.shouldShowSoundFlags : false
+            onVisibleToggled: { model.shouldShowSoundFlags = !model.shouldShowSoundFlags }
+        }
     }
 }

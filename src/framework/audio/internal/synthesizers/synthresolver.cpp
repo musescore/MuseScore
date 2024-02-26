@@ -104,6 +104,22 @@ AudioResourceMetaList SynthResolver::resolveAvailableResources() const
     return result;
 }
 
+SoundPresetList SynthResolver::resolveAvailableSoundPresets(const AudioResourceMeta& resourceMeta) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    TRACEFUNC;
+
+    std::lock_guard lock(m_mutex);
+
+    auto search = m_resolvers.find(audio::sourceTypeFromResourceType(resourceMeta.type));
+    if (search == m_resolvers.end()) {
+        return SoundPresetList();
+    }
+
+    return search->second->resolveSoundPresets(resourceMeta);
+}
+
 void SynthResolver::registerResolver(const AudioSourceType type, IResolverPtr resolver)
 {
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;

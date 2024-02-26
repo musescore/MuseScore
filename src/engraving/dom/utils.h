@@ -48,8 +48,11 @@ extern int pitchKeyAdjust(int note, Key);
 extern int line2pitch(int line, ClefType clef, Key);
 extern int y2pitch(double y, ClefType clef, double spatium);
 extern int quantizeLen(int, int);
+
 extern String pitch2string(int v, bool useFlats = false);
 extern int string2pitch(const String& s);
+extern String convertPitchStringFlatsAndSharpsToUnicode(const String& str);
+
 extern void transposeInterval(int pitch, int tpc, int* rpitch, int* rtpc, Interval, bool useDoubleSharpsFlats);
 extern int transposeTpc(int tpc, Interval interval, bool useDoubleSharpsFlats);
 
@@ -97,5 +100,7 @@ extern String formatUniqueExcerptName(const String& baseName, const StringList& 
 extern bool isFirstSystemKeySig(const KeySig* ks);
 
 extern String bendAmountToString(int fulls, int quarts);
+
+extern InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item);
 } // namespace mu::engraving
 #endif

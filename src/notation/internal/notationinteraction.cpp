@@ -531,13 +531,26 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
         }
     }
 
-    for (mu::engraving::EngravingItem* element : elements) {
-        element->itemDiscovered = 0;
+    auto canHitElement = [](const mu::engraving::EngravingItem* element) {
         if (!element->selectable() || element->isPage()) {
-            continue;
+            return false;
         }
 
         if (!element->isInteractionAvailable()) {
+            return false;
+        }
+
+        if (element->isSoundFlag()) {
+            return !toSoundFlag(element)->shouldHide();
+        }
+
+        return true;
+    };
+
+    for (mu::engraving::EngravingItem* element : elements) {
+        element->itemDiscovered = 0;
+
+        if (!canHitElement(element)) {
             continue;
         }
 
@@ -551,11 +564,7 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
         // if no relevant element hit, look nearby
         //
         for (mu::engraving::EngravingItem* element : elements) {
-            if (element->isPage() || !element->selectable()) {
-                continue;
-            }
-
-            if (!element->isInteractionAvailable()) {
+            if (!canHitElement(element)) {
                 continue;
             }
 
@@ -1461,6 +1470,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         }
 
         EngravingItem* dropElement = el->drop(m_dropData.ed);
+
         if (dropElement && dropElement->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(dropElement))) {
                 rollback();
@@ -1468,6 +1478,11 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
                 break;
             }
         }
+
+        if (dropElement && dropElement->isTextBase()) {
+            m_textAdded.send(toTextBase(dropElement));
+        }
+
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             if (!score()->noteEntryMode()) {
@@ -1946,12 +1961,17 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         rw::RWRegister::reader()->readItem(dropData->dropElement, n);
         dropData->dropElement->styleChanged();       // update to local style
 
-        mu::engraving::EngravingItem* el = target->drop(*dropData);
+        EngravingItem* el = target->drop(*dropData);
+
         if (el && el->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(el))) {
                 rollback();
                 return;
             }
+        }
+
+        if (el && el->isTextBase()) {
+            m_textAdded.send(toTextBase(el));
         }
 
         if (el && !score->inputState().noteEntryMode()) {
@@ -2182,6 +2202,7 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
             }
             e = mu::engraving::toStaffLines(e)->measure();
         }
+
         if (e->acceptDrop(ed)) {
             return e;
         }
@@ -3105,6 +3126,11 @@ mu::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
     return m_textEditingEnded;
 }
 
+async::Channel<TextBase*> NotationInteraction::textAdded() const
+{
+    return m_textAdded;
+}
+
 mu::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
 {
     return m_scoreConfigChanged;
@@ -3674,7 +3700,13 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-        score()->cmdPaste(&ma, nullptr, scale);
+        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
+
+        for (EngravingItem* element : pastedElements) {
+            if (element->isTextBase()) {
+                m_textAdded.send(toTextBase(element));
+            }
+        }
     }
 
     apply();
@@ -4194,16 +4226,27 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     }
 
     startEdit();
-    mu::engraving::TextBase* textBox = score()->addText(type, item);
+    mu::engraving::TextBase* text = score()->addText(type, item);
 
-    if (!textBox) {
+    if (!text) {
         rollback();
         return;
     }
 
+    if (text->isInstrumentChange()) {
+        if (!selectInstrument(toInstrumentChange(text))) {
+            rollback();
+            return;
+        }
+    }
+
     apply();
-    showItem(textBox);
-    startEditText(textBox);
+    m_textAdded.send(text);
+    showItem(text);
+
+    if (!text->isInstrumentChange()) {
+        startEditText(text);
+    }
 }
 
 mu::Ret NotationInteraction::canAddImageToItem(const EngravingItem* item) const
@@ -4484,6 +4527,7 @@ ScoreConfig NotationInteraction::scoreConfig() const
     config.isShowUnprintableElements = score()->showUnprintable();
     config.isShowFrames = score()->showFrames();
     config.isShowPageMargins = score()->showPageborders();
+    config.isShowSoundFlags = score()->showSoundFlags();
     config.isMarkIrregularMeasures = score()->markIrregularMeasures();
 
     return config;
@@ -4500,6 +4544,7 @@ void NotationInteraction::setScoreConfig(const ScoreConfig& config)
     score()->setShowUnprintable(config.isShowUnprintableElements);
     score()->setShowFrames(config.isShowFrames);
     score()->setShowPageborders(config.isShowPageMargins);
+    score()->setShowSoundFlags(config.isShowSoundFlags);
     score()->setMarkIrregularMeasures(config.isMarkIrregularMeasures);
 
     EngravingItem* selectedElement = selection()->element();
@@ -4524,6 +4569,13 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
         return true;
     }
 
+    if (m_editData.element && m_editData.element->isStaffText()) {
+        EngravingItem* element = newSelectedElements.front();
+        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+            return false;
+        }
+    }
+
     return newSelectedElements.front() != m_editData.element;
 }
 
@@ -4535,6 +4587,13 @@ bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*
 
     if (newSelectedElements.size() != 1) {
         return true;
+    }
+
+    if (m_editData.element && m_editData.element->isStaffText()) {
+        EngravingItem* element = newSelectedElements.front();
+        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+            return false;
+        }
     }
 
     return newSelectedElements.front() != score()->selection().element();

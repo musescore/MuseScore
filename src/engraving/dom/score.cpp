@@ -729,6 +729,16 @@ void Score::setShowPageborders(bool v)
     m_showPageborders = v;
 }
 
+void Score::setShowSoundFlags(bool v)
+{
+    if (m_showSoundFlags == v) {
+        return;
+    }
+
+    m_showSoundFlags = v;
+    setLayoutAll();
+}
+
 //---------------------------------------------------------
 //   setMarkIrregularMeasures
 //---------------------------------------------------------

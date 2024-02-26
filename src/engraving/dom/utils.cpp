@@ -585,6 +585,27 @@ int string2pitch(const String& s)
     return (octave + 1) * PITCH_DELTA_OCTAVE + pitchIndex;
 }
 
+String convertPitchStringFlatsAndSharpsToUnicode(const String& str)
+{
+    if (str.isEmpty()) {
+        return String();
+    }
+
+    String value = String(str[0]);
+    for (size_t i = 1; i < str.size(); ++i) {
+        Char symbol = str.at(i).toLower();
+        if (symbol == u'b') {
+            value.append(u'♭');
+        } else if (symbol == u'#') {
+            value.append(u'♯');
+        } else {
+            value.append(symbol);
+        }
+    }
+
+    return value;
+}
+
 /*!
  * An array of all supported interval sorted by size.
  *
@@ -1377,5 +1398,20 @@ String bendAmountToString(int fulls, int quarts)
     }
 
     return string;
+}
+
+InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item)
+{
+    const Part* part = item->part();
+    if (!part) {
+        return InstrumentTrackId();
+    }
+
+    mu::engraving::InstrumentTrackId trackId {
+        part->id(),
+        part->instrumentId(item->tick()).toStdString()
+    };
+
+    return trackId;
 }
 }

@@ -86,6 +86,8 @@ public:
     std::string auxChannelName(audio::aux_channel_idx_t index) const override;
     async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
 
+    async::Promise<audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const override;
+
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
@@ -136,6 +138,12 @@ private:
     void onSelectionChanged();
     void seekListSelection();
     void seekRangeSelection();
+
+    void addSoundFlagsToExistingTracks();
+    void updateSoundFlagsForExistingTracks();
+    void updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, const audio::AudioResourceMeta& oldMeta,
+                          const audio::AudioResourceMeta& newMeta);
+    void addSoundFlagIfNeed(mu::engraving::StaffText* staffText);
 
     void togglePlay();
     void rewind(const actions::ActionData& args);
@@ -228,6 +236,7 @@ private:
 
     bool m_isExportingAudio = false;
     bool m_isRangeSelection = false;
+    bool m_blockSoundFlagsUpdate = false;
 };
 }
 

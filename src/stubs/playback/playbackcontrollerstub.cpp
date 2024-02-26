@@ -112,6 +112,13 @@ mu::async::Channel<mu::audio::aux_channel_idx_t, std::string> PlaybackController
     return {};
 }
 
+mu::async::Promise<mu::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
+{
+    return async::Promise<mu::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
+        return reject(int(Ret::Code::UnknownError), "stub");
+    });
+}
+
 void PlaybackControllerStub::playElements(const std::vector<const notation::EngravingItem*>&)
 {
 }

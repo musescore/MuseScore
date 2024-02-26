@@ -135,6 +135,7 @@
 #include "../../dom/system.h"
 #include "../../dom/systemdivider.h"
 #include "../../dom/systemtext.h"
+#include "../../dom/soundflag.h"
 
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
@@ -179,7 +180,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
                                   Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
-                                  Symbol, FSymbol, System, SystemDivider, SystemText,
+                                  Symbol, FSymbol, System, SystemDivider, SystemText, SoundFlag,
                                   TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                   Vibrato, Volta,
                                   WhammyBar>;
@@ -592,7 +593,8 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE
+    }) {
         writeProperty(item, xml, id);
     }
     writeItemProperties(item, xml, ctx);
@@ -2443,7 +2445,19 @@ void TWrite::write(const StaffState* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const StaffText* item, XmlWriter& xml, WriteContext& ctx)
 {
-    write(static_cast<const StaffTextBase*>(item), xml, ctx);
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx);
+
+    if (const SoundFlag* flag = item->soundFlag()) {
+        writeItem(flag, xml, ctx);
+    }
+
+    xml.endElement();
 }
 
 void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
@@ -2451,8 +2465,14 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
     if (!ctx.canWrite(item)) {
         return;
     }
-    xml.startElement(item);
 
+    xml.startElement(item);
+    writeProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
+{
     for (const ChannelActions& s : item->channelActions()) {
         int channel = s.channel;
         for (const String& name : s.midiActionNames) {
@@ -2481,9 +2501,8 @@ void TWrite::write(const StaffTextBase* item, XmlWriter& xml, WriteContext& ctx)
         int swingRatio = item->swingParameters().swingRatio;
         xml.tag("swing", { { "unit", TConv::toXml(swingUnit) }, { "ratio", swingRatio } });
     }
-    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 
-    xml.endElement();
+    writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
 }
 
 void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
@@ -2683,6 +2702,25 @@ void TWrite::write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
 {
     write(static_cast<const StaffTextBase*>(item), xml, ctx);
+}
+
+void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
+{
+    if (item->soundPresets().empty() && item->playingTechniques().empty()) {
+        return;
+    }
+
+    xml.startElement(item);
+
+    if (!item->soundPresets().empty()) {
+        xml.tag("presets", item->soundPresets().join(u","));
+    }
+
+    if (!item->playingTechniques().empty()) {
+        xml.tag("playingTechniques", item->playingTechniques().join(u","));
+    }
+
+    xml.endElement();
 }
 
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)

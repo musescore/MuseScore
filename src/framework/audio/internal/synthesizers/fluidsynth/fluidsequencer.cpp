@@ -44,7 +44,7 @@ int FluidSequencer::currentExpressionLevel() const
     return expressionLevel(dynamicLevel(m_playbackPosition));
 }
 
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const PlaybackParamMap&)
 {
     m_offStreamEvents.clear();
 
@@ -52,34 +52,26 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes
         m_onOffStreamFlushed();
     }
 
-    updatePlaybackEvents(m_offStreamEvents, changes);
+    updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
 
-void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
+void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                            const mpe::PlaybackParamMap&)
 {
+    m_dynamicLevelMap = dynamics;
+
     m_mainStreamEvents.clear();
+    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, changes);
+    updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
-}
 
-void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
-{
-    m_dynamicEvents.clear();
-
-    for (const auto& pair : changes) {
-        midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
-        event.setIndex(midi::EXPRESSION_CONTROLLER);
-        event.setData(expressionLevel(pair.second));
-
-        m_dynamicEvents[pair.first].emplace(std::move(event));
-    }
-
+    updateDynamicEvents(m_dynamicEvents, dynamics);
     updateDynamicChangesIterator();
 }
 
@@ -129,6 +121,17 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, 64);
             appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx);
         }
+    }
+}
+
+void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& changes)
+{
+    for (const auto& pair : changes) {
+        midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
+        event.setIndex(midi::EXPRESSION_CONTROLLER);
+        event.setData(expressionLevel(pair.second));
+
+        destination[pair.first].emplace(std::move(event));
     }
 }
 

@@ -195,6 +195,15 @@ Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
     }, AudioThread::ID);
 }
 
+Promise<SoundPresetList> TracksHandler::availableSoundPresets(const AudioResourceMeta& resourceMeta) const
+{
+    return Promise<SoundPresetList>([this, resourceMeta](auto resolve, auto /*reject*/) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        return resolve(resolver()->resolveAvailableSoundPresets(resourceMeta));
+    }, AudioThread::ID);
+}
+
 Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
     return Promise<AudioInputParams>([this, sequenceId, trackId](auto resolve, auto reject) {

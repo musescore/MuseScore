@@ -87,6 +87,7 @@ public:
         Pitch,
         Harp,
         StringTunings,
+        Playback,
         Custom
     };
     Q_ENUM(Type)

@@ -38,18 +38,18 @@ class ProjectAudioSettings : public IProjectAudioSettings
 {
     INJECT_STATIC(playback::IPlaybackConfiguration, playbackConfig)
 public:
-    audio::AudioOutputParams masterAudioOutputParams() const override;
+    const audio::AudioOutputParams& masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
 
     bool containsAuxOutputParams(audio::aux_channel_idx_t index) const override;
-    audio::AudioOutputParams auxOutputParams(audio::aux_channel_idx_t index) const override;
+    const audio::AudioOutputParams& auxOutputParams(audio::aux_channel_idx_t index) const override;
     void setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) override;
 
-    audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& partId) const override;
+    const audio::AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackInputParams(const engraving::InstrumentTrackId& partId, const audio::AudioInputParams& params) override;
     void clearTrackInputParams() override;
 
-    audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
+    const audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
 
     SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;

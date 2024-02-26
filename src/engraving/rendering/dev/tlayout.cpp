@@ -369,6 +369,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STAFFTYPE_CHANGE:
         layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
         break;
+    case ElementType::SOUND_FLAG:
+        layoutSoundFlag(item_cast<const SoundFlag*>(item), static_cast<SoundFlag::LayoutData*>(ldata));
+        break;
     case ElementType::STEM:
         layoutStem(item_cast<const Stem*>(item), static_cast<Stem::LayoutData*>(ldata), ctx.conf());
         break;
@@ -5006,6 +5009,10 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     }
 
     Autoplace::autoplaceSegmentElement(item, ldata);
+
+    if (SoundFlag* flag = item->soundFlag()) {
+        layoutSoundFlag(flag, flag->mutldata());
+    }
 }
 
 void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -5251,6 +5258,33 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
     item->move(PointF(-parentSegment->x() + item->spatium(), 0.0));
 
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
+}
+
+void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata)
+{
+    const Score* score = item->score();
+    if (score && !score->showSoundFlags()) {
+        return;
+    }
+
+    const EngravingItem* parent = toStaffText(item->parentItem());
+    if (!parent) {
+        return;
+    }
+
+    double spatium = item->spatium();
+    double iconHeight = spatium * 3.0;
+
+    RectF parentBbox = parent->ldata()->bbox();
+    RectF iconBBox = RectF(parentBbox.x(), parentBbox.y(), iconHeight, iconHeight);
+
+    iconBBox.moveCenter(parentBbox.center());
+
+    // <icon><space><text>
+    double space = spatium / 2.0;
+    iconBBox.setX(parentBbox.x() - iconBBox.width() - space);
+
+    ldata->setBbox(iconBBox);
 }
 
 void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)

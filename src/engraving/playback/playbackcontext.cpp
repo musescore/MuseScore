@@ -27,6 +27,8 @@
 #include "dom/measure.h"
 #include "dom/part.h"
 #include "dom/playtechannotation.h"
+#include "dom/stafftext.h"
+#include "dom/soundflag.h"
 #include "dom/repeatlist.h"
 #include "dom/score.h"
 #include "dom/segment.h"
@@ -59,6 +61,44 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
     return it->second;
 }
 
+PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int nominalPositionTick) const
+{
+    mu::mpe::PlaybackParamMap result;
+
+    auto it = mu::findLessOrEqual(m_playbackParamMap, nominalPositionTick);
+    for (; it != m_playbackParamMap.end(); ++it) {
+        result.insert_or_assign(timestampFromTicks(score, it->first), it->second);
+    }
+
+    return result;
+}
+
+PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score) const
+{
+    mu::mpe::PlaybackParamMap result;
+
+    for (const auto& pair : m_playbackParamMap) {
+        result.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
+    }
+
+    return result;
+}
+
+DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
+{
+    DynamicLevelMap result;
+
+    for (const auto& pair : m_dynamicsMap) {
+        result.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
+    }
+
+    if (result.empty()) {
+        result.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    }
+
+    return result;
+}
+
 void PlaybackContext::update(const ID partId, const Score* score)
 {
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
@@ -81,21 +121,7 @@ void PlaybackContext::clear()
 {
     m_dynamicsMap.clear();
     m_playTechniquesMap.clear();
-}
-
-DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
-{
-    DynamicLevelMap result;
-
-    for (const auto& pair : m_dynamicsMap) {
-        result.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
-    }
-
-    if (result.empty()) {
-        result.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
-    }
-
-    return result;
+    m_playbackParamMap.clear();
 }
 
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) const
@@ -160,6 +186,25 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     }
 
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
+}
+
+void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick)
+{
+    if (flag->soundPresets().empty() && flag->playingTechniques().empty()) {
+        return;
+    }
+
+    mpe::PlaybackParamList params;
+
+    for (const String& presetCode : flag->soundPresets()) {
+        params.emplace_back(mpe::PlaybackParam { mpe::SOUND_PRESET_PARAM_CODE, Val(presetCode.toStdString()) });
+    }
+
+    for (const String& techniqueCode : flag->playingTechniques()) {
+        params.emplace_back(mpe::PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(techniqueCode.toStdString()) });
+    }
+
+    m_playbackParamMap.emplace(segmentPositionTick, std::move(params));
 }
 
 void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
@@ -285,6 +330,13 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
         if (annotation->isPlayTechAnnotation()) {
             updatePlayTechMap(toPlayTechAnnotation(annotation), segmentPositionTick);
             continue;
+        }
+
+        if (annotation->isStaffText()) {
+            if (const SoundFlag* flag = toStaffText(annotation)->soundFlag()) {
+                updatePlaybackParamMap(flag, segmentPositionTick);
+                continue;
+            }
         }
     }
 

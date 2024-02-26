@@ -46,12 +46,14 @@ static constexpr int MAX_SUPPORTED_NOTE = 108; // VST equivalent for C8
 void VstSequencer::init(ParamsMapping&& mapping)
 {
     m_mapping = std::move(mapping);
+    m_inited = true;
 
-    updateDynamicChanges(m_dynamicLevelMap);
-    updateMainStreamEvents(m_playbackEventsMap);
+    updateMainStreamEvents(m_playbackEventsMap, m_dynamicLevelMap, {});
+
+    m_playbackEventsMap.clear();
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap&)
 {
     m_offStreamEvents.clear();
 
@@ -59,30 +61,31 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
         m_onOffStreamFlushed();
     }
 
-    updatePlaybackEvents(m_offStreamEvents, changes);
+    updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
+                                          const mpe::PlaybackParamMap&)
 {
+    m_dynamicLevelMap = dynamics;
+
+    if (!m_inited) {
+        m_playbackEventsMap = events;
+        return;
+    }
+
     m_mainStreamEvents.clear();
+    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, changes);
+    updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
-}
 
-void VstSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
-{
-    m_dynamicEvents.clear();
-
-    for (const auto& pair : changes) {
-        m_dynamicEvents[pair.first].emplace(expressionLevel(pair.second));
-    }
-
+    updateDynamicEvents(m_dynamicEvents, dynamics);
     updateDynamicChangesIterator();
 }
 
@@ -92,9 +95,9 @@ audio::gain_t VstSequencer::currentGain() const
     return expressionLevel(currentDynamicLevel);
 }
 
-void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
 {
-    for (const auto& pair : changes) {
+    for (const auto& pair : events) {
         for (const mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
@@ -115,6 +118,13 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, SUSTAIN_IDX);
             appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES);
         }
+    }
+}
+
+void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& dynamics)
+{
+    for (const auto& pair : dynamics) {
+        destination[pair.first].emplace(expressionLevel(pair.second));
     }
 }
 

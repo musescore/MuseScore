@@ -92,6 +92,7 @@
 #include "../../dom/sticking.h"
 #include "../../dom/systemdivider.h"
 #include "../../dom/systemtext.h"
+#include "./../dom/soundflag.h"
 
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
@@ -307,6 +308,7 @@ public:
     static void layoutStretchedBend(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
     static void layoutStringTunings(StringTunings* item, LayoutContext& ctx);
+    static void layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata);
 
     static void layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata);

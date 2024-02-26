@@ -22,14 +22,16 @@
 #ifndef MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
 #define MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
 
+#include <QObject>
+
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/actiontypes.h"
 
-#include "context/iglobalcontext.h"
-#include "engraving/dom/engravingitem.h"
 #include "modularity/ioc.h"
-#include <QObject>
+#include "context/iglobalcontext.h"
+
+#include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
 class AbstractElementPopupModel : public QObject, public async::Asyncable, public actions::Actionable
@@ -47,7 +49,8 @@ public:
         TYPE_UNDEFINED = -1,
         TYPE_HARP_DIAGRAM,
         TYPE_CAPO,
-        TYPE_STRING_TUNINGS
+        TYPE_STRING_TUNINGS,
+        TYPE_SOUND_FLAG
     };
     Q_ENUM(PopupModelType)
 
