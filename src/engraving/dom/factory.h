@@ -160,7 +160,7 @@ public:
 
     static StaffText* createStaffText(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF, bool isAccessibleEnabled = true);
 
-    static SoundFlag* createSoundFlag(Segment* parent, bool isAccessibleEnabled = true);
+    static SoundFlag* createSoundFlag(EngravingItem* parent, bool isAccessibleEnabled = true);
 
     static Expression* createExpression(Segment* parent, bool isAccessibleEnabled = true);
 

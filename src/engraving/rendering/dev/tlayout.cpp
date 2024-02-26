@@ -5258,54 +5258,9 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
 
 void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata)
 {
-    bool isTextVisible = item->isTextVisible();
-
-    ldata->clearBbox();
-
-    if (isTextVisible) {
-        layoutBaseTextBase(item, ldata);
-    }
-
-    RectF bbox = ldata->bbox();
-
-    double textHeight = draw::FontMetrics::boundingRect(item->font(), item->xmlText()).height();
-    RectF iconBBox = RectF(bbox.x(), bbox.y(), textHeight * 1.5, textHeight * 1.5);
-    iconBBox.moveCenter(bbox.center());
-    iconBBox.setX(bbox.x());
-    ldata->iconBBox = iconBBox;
-
-    // <icon><space><text>
-    bbox.setWidth(iconBBox.width() + (isTextVisible ? textHeight / 4.0 + bbox.width() : 0));
-
-    if (!isTextVisible || item->xmlText().empty()) {
-        bbox.setHeight(textHeight);
-
-        iconBBox.moveCenter(bbox.center());
-        iconBBox.setX(bbox.x());
-        ldata->iconBBox = iconBBox;
-    }
-
-    ldata->setBbox(bbox);
-
-    if (isTextVisible) {
-        double xMove = iconBBox.width() + textHeight / 4.0;
-        for (TextBlock& block : ldata->blocks) {
-            auto& fragments = block.fragments();
-            for (std::list<TextFragment>::iterator it = fragments.begin(); it != fragments.end(); ++it) {
-                it->pos.setX(it->pos.x() + xMove);
-            }
-        }
-    }
-
-    if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
-        const Measure* m = s->measure();
-        LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(m->ldata()->isSetPos());
-        LD_CONDITION(s->ldata()->isSetPos());
-    }
-
-    Autoplace::autoplaceSegmentElement(item, ldata);
+    UNUSED(item);
+    UNUSED(ldata);
+    NOT_IMPLEMENTED;
 }
 
 void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)

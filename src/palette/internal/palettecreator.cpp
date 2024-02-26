@@ -584,9 +584,10 @@ PalettePtr PaletteCreator::newPlaybackPalette()
     sp->setDrawGrid(true);
     sp->setVisible(true);
 
-    auto soundFlag = makeElement<SoundFlag>(gpaletteScore);
-    soundFlag->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Sound flag")));
-    sp->appendElement(soundFlag, QT_TRANSLATE_NOOP("palette", "Sound flag"))->setElementTranslated(true);
+    auto staffText = makeElement<StaffText>(gpaletteScore);
+    staffText->setSoundFlag(Factory::createSoundFlag(staffText.get()));
+    staffText->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Sound flag")));
+    sp->appendElement(staffText, QT_TRANSLATE_NOOP("palette", "Sound flag"))->setElementTranslated(true);
 
     return sp;
 }
