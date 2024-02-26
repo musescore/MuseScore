@@ -2539,7 +2539,7 @@ bool NotationUiActions::isScoreConfigChecked(const actions::ActionCode& code, co
         return cfg.isShowPageMargins;
     }
     if (SHOW_SOUND_FLAGS == code) {
-        return cfg.isShowPageMargins;
+        return cfg.isShowSoundFlags;
     }
     if (SHOW_IRREGULAR_CODE == code) {
         return cfg.isMarkIrregularMeasures;
