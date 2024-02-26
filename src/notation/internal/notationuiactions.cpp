@@ -496,7 +496,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Display page view"),
              IconCode::Code::PAGE_VIEW
              ),
-#ifndef NDEBUG
     UiAction("view-mode-float",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
@@ -504,7 +503,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Floating"),
              IconCode::Code::PAGE_VIEW // TODO, Icon needed?
              ),
-#endif
     UiAction("view-mode-continuous",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,

@@ -38,6 +38,8 @@
 
 #include "notation/notationtypes.h"
 
+#include "global/iglobalconfiguration.h"
+
 namespace mu::appshell {
 class NotationStatusBarModel : public QObject, public async::Asyncable, public actions::Actionable
 {
@@ -48,6 +50,7 @@ class NotationStatusBarModel : public QObject, public async::Asyncable, public a
     INJECT(ui::IUiActionsRegister, actionsRegister)
     INJECT(workspace::IWorkspaceConfiguration, workspaceConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
     Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem NOTIFY currentWorkspaceActionChanged)
