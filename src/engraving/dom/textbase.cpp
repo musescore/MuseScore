@@ -854,6 +854,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     double m = format.fontSize();
     double spatiumScaling = 0.0;
+    bool scalingApplied = false;
 
     if (t->isInstrumentName()) {
         spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / SPATIUM20;
@@ -863,6 +864,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     if (t->sizeIsSpatiumDependent()) {
         m *= spatiumScaling;
+        scalingApplied = true;
     }
     if (format.valign() != VerticalAlignment::AlignNormal) {
         m *= subScriptSize;
@@ -880,6 +882,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
                 m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
                 if (t->isDynamic()) {
                     m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
+                    scalingApplied = true;
                     if (t->style().styleB(Sid::dynamicsOverrideFont)) {
                         std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                         family = String::fromStdString(fontName2);
@@ -890,6 +893,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
                             m *= t->style().styleD(a.sid);
                             if (t->sizeIsSpatiumDependent()) {
                                 m *= spatiumScaling;
+                                scalingApplied = true;
                             }
                             break;
                         }
@@ -899,11 +903,6 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             // We use a default font size of 10pt for historical reasons,
             // but Smufl standard is 20pt so multiply x2 here.
             m *= 2;
-            if (mu::engraving::TextBase::engravingConfiguration()->adaptFontSizesToSmallResolution()) {
-                if (t->textStyleType() == TextStyleType::OTTAVA) {
-                    m *= spatiumScaling;
-                }
-            }
         } else if (t->isTempoText()) {
             family = t->style().styleSt(Sid::MusicalTextFont);
             fontType = draw::Font::Type::MusicSymbolText;
@@ -953,6 +952,13 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         font.setItalic(format.italic());
         font.setUnderline(format.underline());
         font.setStrike(format.strike());
+    }
+    if (TextBase::engravingConfiguration()->adaptFontSizesToSmallResolution()
+        && !scalingApplied) {
+        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA
+            || t->textStyleType() == TextStyleType::DEFAULT) {
+            m *= spatiumScaling;
+        }
     }
 
     font.setFamily(family, fontType);
