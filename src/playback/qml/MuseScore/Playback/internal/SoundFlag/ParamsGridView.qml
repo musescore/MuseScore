@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
@@ -33,6 +34,10 @@ Column {
     property alias model: repeaterPreset.model
     property var selectionModel: null
 
+    property bool isTruncated: flickable.contentHeight > prv.flickableMaxHeight
+
+    property bool needAddPaddingForScrollbar: false
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "SoundFlagParams" + title
         direction: NavigationPanel.Vertical
@@ -42,6 +47,12 @@ Column {
     signal toggleParamRequested(string paramCode)
 
     spacing: 8
+
+    QtObject {
+        id: prv
+
+        property int flickableMaxHeight: 132
+    }
 
     StyledTextLabel {
         id: titleLabel
@@ -56,14 +67,21 @@ Column {
         id: flickable
 
         width: parent.width
-        height: Math.min(contentHeight, 70)
+        height: Math.min(contentHeight, prv.flickableMaxHeight)
 
         contentHeight: gridView.implicitHeight
+
+        ScrollBar.vertical: StyledScrollBar {
+            id: scrollBar
+
+            padding: 0
+            policy: root.isTruncated ? ScrollBar.AlwaysOn : ScrollBar.AsNeeded
+        }
 
         GridLayout {
             id: gridView
 
-            width: parent.width
+            width: parent.width - (root.needAddPaddingForScrollbar ? scrollBar.width + 8 : 0)
 
             columns: 2
             rows: Math.ceil(root.model.length / 2)
@@ -81,8 +99,6 @@ Column {
 
                     Layout.preferredWidth: (gridView.width - gridView.rowSpacing) / 2
                     Layout.preferredHeight: implicitHeight
-
-                    text: modelData["name"]
 
                     accentButton: root.selectionModel.indexOf(modelData["code"]) !== -1
 
@@ -102,6 +118,13 @@ Column {
 
                     onClicked: {
                         root.toggleParamRequested(modelData["code"])
+                    }
+
+                    contentItem: StyledTextLabel {
+                        width: button.width - 24 // 12px padding on each side
+
+                        text: modelData["name"]
+                        font: ui.theme.bodyFont
                     }
                 }
             }
