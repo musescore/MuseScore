@@ -35,6 +35,7 @@
 #include "../../dom/tempotext.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftextbase.h"
+#include "../../dom/soundflag.h"
 #include "../../dom/capo.h"
 
 #include "../../dom/drumset.h"
@@ -163,7 +164,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Rasgueado, RehearsalMark, Rest,
                                  Ornament, Ottava,
                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
-                                 Symbol, FSymbol, System, SystemDivider, SystemText,
+                                 Symbol, FSymbol, System, SystemDivider, SystemText, SoundFlag,
                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                  Vibrato, Volta,
                                  WhammyBar>;
@@ -2330,6 +2331,19 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
 
     sym->setPos(PointF());
     sym->setSym(symId, scoreFont);
+}
+
+void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (tag == "soundPreset") {
+            item->setSoundPreset(xml.readText());
+        } else if (!readProperties(static_cast<StaffTextBase*>(item), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(FSymbol* sym, XmlReader& e, ReadContext& ctx)

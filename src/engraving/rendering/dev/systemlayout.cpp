@@ -1179,7 +1179,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
-            if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isSystemText() || e->isTripletFeel()) {
+            if (e->isPlayTechAnnotation() || e->isCapo() || e->isStringTunings() || e->isSystemText() || e->isSoundFlag()
+                || e->isTripletFeel()) {
                 TLayout::layoutItem(e, ctx);
             }
         }

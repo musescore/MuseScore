@@ -112,6 +112,7 @@
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
+#include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -295,6 +296,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
+        break;
+    case ElementType::SOUND_FLAG:           draw(item_cast<const SoundFlag*>(item), painter);
         break;
 
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
@@ -2290,6 +2293,12 @@ void SingleDraw::draw(const SystemDivider* item, Painter* painter)
 }
 
 void SingleDraw::draw(const SystemText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const SoundFlag* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);

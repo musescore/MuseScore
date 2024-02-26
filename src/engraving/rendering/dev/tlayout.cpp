@@ -132,6 +132,7 @@
 #include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
+#include "dom/soundflag.h"
 
 #include "dom/tempotext.h"
 #include "dom/text.h"
@@ -368,6 +369,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::STAFFTYPE_CHANGE:
         layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
+        break;
+    case ElementType::SOUND_FLAG:
+        layoutSoundFlag(item_cast<const SoundFlag*>(item), static_cast<SoundFlag::LayoutData*>(ldata));
         break;
     case ElementType::STEM:
         layoutStem(item_cast<const Stem*>(item), static_cast<Stem::LayoutData*>(ldata), ctx.conf());
@@ -5251,6 +5255,21 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
     item->move(PointF(-parentSegment->x() + item->spatium(), 0.0));
 
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
+}
+
+void TLayout::layoutSoundFlag(const SoundFlag* item, StaffText::LayoutData* ldata)
+{
+    layoutBaseTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(s->ldata()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)

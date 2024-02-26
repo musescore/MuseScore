@@ -1260,6 +1260,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::EXPRESSION:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
@@ -1419,6 +1420,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::EXPRESSION:
     case ElementType::STAFF_TEXT:
     case ElementType::SYSTEM_TEXT:
+    case ElementType::SOUND_FLAG:
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:

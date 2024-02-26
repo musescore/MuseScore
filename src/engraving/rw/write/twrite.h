@@ -148,6 +148,7 @@ class StringTunings;
 class System;
 class SystemDivider;
 class SystemText;
+class SoundFlag;
 
 class TempoText;
 class Text;
@@ -283,6 +284,7 @@ public:
     static void write(const System* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const SystemDivider* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const SystemText* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const SoundFlag* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const TempoText* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Text* item, XmlWriter& xml, WriteContext& ctx);

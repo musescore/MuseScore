@@ -104,6 +104,7 @@ class StaffTypeChange;
 class StringTunings;
 class Symbol;
 class SystemText;
+class SoundFlag;
 
 class TempoText;
 class Text;
@@ -213,6 +214,7 @@ public:
     static void layout(StringTunings* item, const Context& ctx);
     static void layout(Symbol* item, const Context& ctx);
     static void layout(SystemText* item, const Context& ctx);
+    static void layout(SoundFlag* item, const Context& ctx);
 
     static void layout(TempoText* item, const Context& ctx);
     static void layout(TextLine* item, const Context& ctx);

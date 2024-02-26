@@ -135,6 +135,7 @@
 #include "../../dom/system.h"
 #include "../../dom/systemdivider.h"
 #include "../../dom/systemtext.h"
+#include "../../dom/soundflag.h"
 
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
@@ -179,7 +180,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
                                   Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
-                                  Symbol, FSymbol, System, SystemDivider, SystemText,
+                                  Symbol, FSymbol, System, SystemDivider, SystemText, SoundFlag,
                                   TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                   Vibrato, Volta,
                                   WhammyBar>;
@@ -592,7 +593,8 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE
+    }) {
         writeProperty(item, xml, id);
     }
     writeItemProperties(item, xml, ctx);
@@ -2685,6 +2687,14 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
     write(static_cast<const StaffTextBase*>(item), xml, ctx);
 }
 
+void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+    writeProperty(item, xml, Pid::SOUND_PRESET);
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
+    xml.endElement();
+}
+
 void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -3027,6 +3037,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     ElementType et = e1->type();
                     if ((et == ElementType::REHEARSAL_MARK)
                         || (et == ElementType::SYSTEM_TEXT)
+                        || (et == ElementType::SOUND_FLAG)
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::CAPO)

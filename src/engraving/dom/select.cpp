@@ -1022,6 +1022,7 @@ ByteArray Selection::symbolListMimeData() const
         case ElementType::CAPO:
         case ElementType::STRING_TUNINGS:
         case ElementType::STAFF_TEXT:
+        case ElementType::SOUND_FLAG:
             seg = toStaffTextBase(e)->segment();
             break;
         case ElementType::STICKING:
