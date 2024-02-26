@@ -4588,6 +4588,13 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
         return true;
     }
 
+    if (m_editData.element && m_editData.element->isStaffText()) {
+        EngravingItem* element = newSelectedElements.front();
+        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+            return false;
+        }
+    }
+
     return newSelectedElements.front() != m_editData.element;
 }
 
@@ -4599,6 +4606,13 @@ bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*
 
     if (newSelectedElements.size() != 1) {
         return true;
+    }
+
+    if (m_editData.element && m_editData.element->isStaffText()) {
+        EngravingItem* element = newSelectedElements.front();
+        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+            return false;
+        }
     }
 
     return newSelectedElements.front() != score()->selection().element();
