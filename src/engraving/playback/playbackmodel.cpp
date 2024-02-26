@@ -867,8 +867,7 @@ InstrumentTrackId PlaybackModel::idKey(const EngravingItem* item) const
         return chordSymbolsTrackId(item->part()->id());
     }
 
-    return { item->part()->id(),
-             item->part()->instrumentId(item->tick()).toStdString() };
+    return makeInstrumentTrackId(item);
 }
 
 InstrumentTrackId PlaybackModel::idKey(const std::vector<const EngravingItem*>& items) const

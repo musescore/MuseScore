@@ -76,7 +76,6 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/systemtext.h"
-#include "engraving/dom/soundflag.h"
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"
@@ -105,7 +104,6 @@ MAKE_ELEMENT(Hairpin, score->dummy()->segment())
 MAKE_ELEMENT(SystemText, score->dummy()->segment())
 MAKE_ELEMENT(TempoText, score->dummy()->segment())
 MAKE_ELEMENT(StaffText, score->dummy()->segment())
-MAKE_ELEMENT(SoundFlag, score->dummy()->segment())
 MAKE_ELEMENT(Expression, score->dummy()->segment())
 MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
 MAKE_ELEMENT(Capo, score->dummy()->segment())
@@ -135,7 +133,6 @@ PaletteTreePtr PaletteCreator::newMasterPaletteTree()
     tree->append(newRepeatsPalette());
     tree->append(newBarLinePalette());
     tree->append(newLayoutPalette());
-    tree->append(newPlaybackPalette());
     tree->append(newBracketsPalette());
     tree->append(newOrnamentsPalette());
     tree->append(newBreathPalette());
@@ -172,7 +169,6 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
     defaultPalette->append(newRepeatsPalette(true));
     defaultPalette->append(newBarLinePalette(true));
     defaultPalette->append(newLayoutPalette());
-    defaultPalette->append(newPlaybackPalette());
     defaultPalette->append(newBracketsPalette());
     defaultPalette->append(newOrnamentsPalette(true));
     defaultPalette->append(newBreathPalette(true));
@@ -572,22 +568,6 @@ PalettePtr PaletteCreator::newLayoutPalette()
     }
     sp->appendActionIcon(ActionIconType::STAFF_TYPE_CHANGE, "insert-staff-type-change");
     sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
-
-    return sp;
-}
-
-PalettePtr PaletteCreator::newPlaybackPalette()
-{
-    PalettePtr sp = std::make_shared<Palette>(Palette::Type::Playback);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Playback"));
-    sp->setGridSize(100, 28);
-    sp->setMag(0.85);
-    sp->setDrawGrid(true);
-
-    auto staffText = makeElement<StaffText>(gpaletteScore);
-    staffText->setSoundFlag(Factory::createSoundFlag(staffText.get()));
-    staffText->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Sound flag")));
-    sp->appendElement(staffText, QT_TRANSLATE_NOOP("palette", "Sound flag"))->setElementTranslated(true);
 
     return sp;
 }

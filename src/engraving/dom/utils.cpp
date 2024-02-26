@@ -1399,4 +1399,19 @@ String bendAmountToString(int fulls, int quarts)
 
     return string;
 }
+
+InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item)
+{
+    const Part* part = item->part();
+    if (!part) {
+        return InstrumentTrackId();
+    }
+
+    mu::engraving::InstrumentTrackId trackId {
+        part->id(),
+        part->instrumentId(item->tick()).toStdString()
+    };
+
+    return trackId;
+}
 }

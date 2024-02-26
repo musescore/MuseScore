@@ -139,6 +139,10 @@ private:
     void seekListSelection();
     void seekRangeSelection();
 
+    void addSoundFlagsToExistingTracks();
+    void updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, audio::AudioSourceType sourceType);
+    void addSoundFlagIfNeed(mu::engraving::StaffText* staffText);
+
     void togglePlay();
     void rewind(const actions::ActionData& args);
     void play();

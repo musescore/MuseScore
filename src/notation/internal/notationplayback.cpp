@@ -37,6 +37,9 @@
 #include "engraving/dom/system.h"
 #include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
+#include "engraving/dom/stafftext.h"
+#include "engraving/dom/soundflag.h"
+#include "engraving/dom/utils.h"
 
 #include "notationerrors.h"
 
@@ -50,9 +53,9 @@ static constexpr int PLAYBACK_TAIL_SECS = 3;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
                                    async::Notification notationChanged)
-    : m_getScore(getScore)
+    : m_getScore(getScore), m_notationChanged(notationChanged)
 {
-    notationChanged.onNotify(this, [this]() {
+    m_notationChanged.onNotify(this, [this]() {
         updateLoopBoundaries();
     });
 }
@@ -383,4 +386,136 @@ void NotationPlayback::setTempoMultiplier(double multiplier)
     score->masterScore()->updateRepeatListTempo();
 
     m_playbackModel.reload();
+}
+
+void NotationPlayback::addSoundFlag(StaffText* staffText)
+{
+    TRACEFUNC;
+
+    if (doAddSoundFlag(staffText)) {
+        m_notationChanged.notify();
+    }
+}
+
+bool NotationPlayback::doAddSoundFlag(mu::engraving::StaffText* staffText)
+{
+    IF_ASSERT_FAILED(staffText) {
+        return false;
+    }
+
+    if (staffText->hasSoundFlag()) {
+        return false;
+    }
+
+    SoundFlag* soundFlag = Factory::createSoundFlag(staffText);
+    staffText->add(soundFlag);
+
+    const LinkedObjects* links = staffText->links();
+    if (!links) {
+        return true;
+    }
+
+    for (EngravingObject* obj : *links) {
+        if (obj && obj->isStaffText()) {
+            toStaffText(obj)->add(soundFlag->clone());
+        }
+    }
+
+    return true;
+}
+
+void NotationPlayback::addSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)
+{
+    TRACEFUNC;
+
+    std::vector<StaffText*> staffTextList = collectStaffText(trackIdSet, false /*withSoundFlags*/);
+    if (staffTextList.empty()) {
+        return;
+    }
+
+    bool notationChanged = false;
+
+    for (StaffText* staffText : staffTextList) {
+        notationChanged |= doAddSoundFlag(staffText);
+    }
+
+    if (notationChanged) {
+        m_notationChanged.notify();
+    }
+}
+
+void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
+{
+    TRACEFUNC;
+
+    std::vector<StaffText*> staffTextList = collectStaffText(trackIdSet, true /*withSoundFlags*/);
+    if (staffTextList.empty()) {
+        return;
+    }
+
+    for (StaffText* staffText : staffTextList) {
+        staffText->remove(staffText->soundFlag());
+
+        const LinkedObjects* links = staffText->links();
+        if (!links) {
+            continue;
+        }
+
+        for (EngravingObject* obj : *links) {
+            if (obj && obj->isStaffText()) {
+                StaffText* linkedStaffText = toStaffText(obj);
+                linkedStaffText->remove(linkedStaffText->soundFlag());
+            }
+        }
+    }
+
+    m_playbackModel.reload();
+    m_notationChanged.notify();
+}
+
+std::vector<StaffText*> NotationPlayback::collectStaffText(const InstrumentTrackIdSet& trackIdSet, bool withSoundFlags) const
+{
+    TRACEFUNC;
+
+    std::vector<StaffText*> result;
+
+    if (trackIdSet.empty()) {
+        return result;
+    }
+
+    const Score* score = this->score();
+    IF_ASSERT_FAILED(score) {
+        return result;
+    }
+
+    const Measure* fm = score->firstMeasure();
+    if (!fm) {
+        return result;
+    }
+
+    for (const Segment* seg = fm->first(SegmentType::ChordRest); seg; seg = seg->next1(SegmentType::ChordRest)) {
+        for (EngravingItem* annotation : seg->annotations()) {
+            if (!annotation || !annotation->isStaffText()) {
+                continue;
+            }
+
+            StaffText* staffText = toStaffText(annotation);
+            bool hasSoundFlag = staffText->hasSoundFlag();
+
+            if (withSoundFlags && !hasSoundFlag) {
+                continue;
+            }
+
+            if (!withSoundFlags && hasSoundFlag) {
+                continue;
+            }
+
+            InstrumentTrackId trackId = mu::engraving::makeInstrumentTrackId(annotation);
+            if (mu::contains(trackIdSet, trackId)) {
+                result.push_back(staffText);
+            }
+        }
+    }
+
+    return result;
 }
