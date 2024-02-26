@@ -854,6 +854,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     double m = format.fontSize();
     double spatiumScaling = 0.0;
+    bool scalingApplied = false;
 
     if (t->isInstrumentName()) {
         spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / SPATIUM20;
@@ -863,6 +864,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     if (t->sizeIsSpatiumDependent()) {
         m *= spatiumScaling;
+        scalingApplied = true;
     }
     if (format.valign() != VerticalAlignment::AlignNormal) {
         m *= subScriptSize;
@@ -870,7 +872,6 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     String family;
     draw::Font::Type fontType = draw::Font::Type::Unknown;
-    bool scalingApplied = false;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
             || t->textStyleType() == TextStyleType::TUPLET || t->textStyleType() == TextStyleType::PEDAL || t->isStringTunings()) {
