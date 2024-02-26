@@ -104,22 +104,24 @@ EngravingObject::~EngravingObject()
         m_parent->removeChild(this);
     }
 
-    if (!this->isType(ElementType::ROOT_ITEM)
-        && !this->isType(ElementType::DUMMY)
-        && !this->isType(ElementType::SCORE)) {
+    {
+        bool isPaletteScore = score()->isPaletteScore();
+        bool canMoveToDummy = !this->isType(ElementType::ROOT_ITEM)
+                              && !this->isType(ElementType::DUMMY)
+                              && !this->isType(ElementType::SCORE)
+                              && score()->dummy() != nullptr;
+
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
-            c->m_parent = nullptr;
-            c->moveToDummy();
-        }
-    } else {
-        bool isPaletteScore = score()->isPaletteScore();
-        for (EngravingObject* c : m_children) {
-            c->m_parent = nullptr;
-            if (!isPaletteScore) {
+            if (canMoveToDummy) {
+                c->moveToDummy();
+            } else if (!isPaletteScore) {
                 delete c;
+            } else {
+                c->m_parent = nullptr;
             }
         }
+
         m_children.clear();
     }
 

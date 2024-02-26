@@ -572,8 +572,7 @@ RectF EngravingFont::bbox(SymId id, const SizeF& mag) const
     }
 
     RectF r = sym(id).bbox;
-    return RectF(r.x() * mag.width(), r.y() * mag.height(),
-                 r.width() * mag.width(), r.height() * mag.height());
+    return r.scale(mag);
 }
 
 RectF EngravingFont::bbox(const SymIdList& s, double mag) const
@@ -606,6 +605,95 @@ Shape EngravingFont::shape(const SymIdList& s, const SizeF& mag) const
         pos.rx() += advance(id, mag.width());
     }
     return sh;
+}
+
+Shape EngravingFont::shapeWithCutouts(SymId id, double mag)
+{
+    return shapeWithCutouts(id, SizeF(mag, mag));
+}
+
+Shape EngravingFont::shapeWithCutouts(SymId id, const SizeF& mag)
+{
+    Shape& shape = sym(id).shapeWithCutouts;
+    if (shape.empty()) {
+        constructShapeWithCutouts(shape, id);
+    }
+
+    return shape.scaled(mag);
+}
+
+void EngravingFont::constructShapeWithCutouts(Shape& shape, SymId id)
+{
+    RectF boundingBox = bbox(id, 1.0);
+    double bottom = boundingBox.bottom();
+    double top = boundingBox.top();
+    double left = boundingBox.left();
+    double right = boundingBox.right();
+
+    PointF cutOutNW = smuflAnchor(id, SmuflAnchorId::cutOutNW, 1.0);
+    PointF cutOutNE = smuflAnchor(id, SmuflAnchorId::cutOutNE, 1.0);
+    PointF cutOutSW = smuflAnchor(id, SmuflAnchorId::cutOutSW, 1.0);
+    PointF cutOutSE = smuflAnchor(id, SmuflAnchorId::cutOutSE, 1.0);
+
+    bool nwNull = cutOutNW.isNull();
+    bool neNull = cutOutNE.isNull();
+    bool swNull = cutOutSW.isNull();
+    bool seNull = cutOutSE.isNull();
+
+    if (nwNull && neNull && swNull && seNull) {
+        shape = Shape(bbox(id, 1.0));
+        return;
+    }
+
+    if (nwNull) {
+        cutOutNW = PointF(left, top);
+    }
+    if (neNull) {
+        cutOutNE = PointF(right, top);
+    }
+    if (swNull) {
+        cutOutSW = PointF(left, bottom);
+    }
+    if (seNull) {
+        cutOutSE = PointF(right, bottom);
+    }
+
+    double leftInset = std::max(cutOutNW.x(), cutOutSW.x());
+    double rightInset = std::min(cutOutNE.x(), cutOutSE.x());
+    double topInset = std::max(cutOutNW.y(), cutOutNE.y());
+    double bottomInset = std::min(cutOutSW.y(), cutOutSE.y());
+
+    std::vector<RectF> rects;
+    rects.reserve(6); //at most
+
+    // bottom rect
+    rects.emplace_back(RectF(PointF(cutOutSW.x(), bottom), PointF(cutOutSE.x(), topInset)).normalized());
+    // right rect
+    bool rightRectPlaced = false;
+    if (!seNull) {
+        rects.emplace_back(RectF(PointF(right, cutOutSE.y()), PointF(leftInset, cutOutNE.y())).normalized());
+        rightRectPlaced = true;
+    }
+    // top rect
+    bool topRectPlaced = false;
+    if (!rightRectPlaced || !neNull) {
+        rects.emplace_back(RectF(PointF(cutOutNW.x(), top), PointF(cutOutNE.x(), bottomInset)).normalized());
+        topRectPlaced = true;
+    }
+    // left rect
+    if (!topRectPlaced || !nwNull) {
+        rects.emplace_back(RectF(PointF(left, cutOutSW.y()), PointF(rightInset, cutOutNW.y())).normalized());
+    }
+    // center horizontal rect if needed
+    if (leftInset > rightInset && topInset < bottomInset) {
+        rects.emplace_back(RectF(PointF(left, bottomInset), PointF(right, topInset)).normalized());
+    }
+    // center vertical rect if needed
+    if (leftInset < rightInset && topInset > bottomInset) {
+        rects.emplace_back(RectF(PointF(leftInset, bottom), PointF(rightInset, top)).normalized());
+    }
+
+    shape = Shape(rects);
 }
 
 // =============================================

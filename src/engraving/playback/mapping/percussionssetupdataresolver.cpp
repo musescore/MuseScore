@@ -106,6 +106,8 @@ PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* inst
         { "congas", { SoundId::Conga, SoundCategory::Percussions, {}, {} } },
         { "cuica", { SoundId::Cuica, SoundCategory::Percussions, {}, {} } },
         { "drumset", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
+        { "drum-kit-4", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
+        { "drum-kit-5", { SoundId::Drumset, SoundCategory::Percussions, {}, {} } },
         { "military-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Military }, {} } },
         { "frame-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Frame }, {} } },
         { "piccolo-snare-drum", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Snare,

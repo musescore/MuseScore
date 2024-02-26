@@ -33,6 +33,15 @@ using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
 
+Shape::Shape(const std::vector<RectF>& rects, const EngravingItem* p)
+{
+    m_type = Type::Composite;
+    m_elements.reserve(rects.size());
+    for (const RectF& rect : rects) {
+        m_elements.emplace_back(ShapeElement(rect, p));
+    }
+}
+
 //---------------------------------------------------------
 //   addHorizontalSpacing
 //    This methods creates "walls". They are represented by
@@ -89,8 +98,28 @@ void Shape::translateY(double yo)
 Shape Shape::translated(const PointF& pt) const
 {
     Shape s;
+    s.m_elements.reserve(m_elements.size());
     for (const ShapeElement& r : m_elements) {
         s.add(r.translated(pt), r.item());
+    }
+    return s;
+}
+
+Shape& Shape::scale(const SizeF& mag)
+{
+    for (RectF& r : m_elements) {
+        r.scale(mag);
+    }
+    invalidateBBox();
+    return *this;
+}
+
+Shape Shape::scaled(const SizeF& mag) const
+{
+    Shape s;
+    s.m_elements.reserve(m_elements.size());
+    for (const ShapeElement& r : m_elements) {
+        s.add(r.scaled(mag), r.item());
     }
     return s;
 }
@@ -434,6 +463,14 @@ void Shape::removeInvisibles()
 {
     mu::remove_if(m_elements, [](ShapeElement& shapeElement) {
         return !shapeElement.item() || !shapeElement.item()->visible();
+    });
+    invalidateBBox();
+}
+
+void Shape::removeTypes(const std::set<ElementType>& types)
+{
+    mu::remove_if(m_elements, [&types](ShapeElement& shapeElement) {
+        return shapeElement.item() && mu::contains(types, shapeElement.item()->type());
     });
     invalidateBBox();
 }

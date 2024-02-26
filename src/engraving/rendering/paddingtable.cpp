@@ -51,6 +51,7 @@ void PaddingTable::createTable(const MStyle& style)
         = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
     table[ElementType::NOTE][ElementType::REST] = style.styleMM(Sid::minNoteDistance);
     table[ElementType::NOTE][ElementType::CLEF] = 1.0 * spatium;
+    table[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
     table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;

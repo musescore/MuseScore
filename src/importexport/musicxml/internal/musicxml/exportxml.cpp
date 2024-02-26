@@ -6038,7 +6038,11 @@ static const FretDiagram* findFretDiagram(track_idx_t strack, track_idx_t etrack
 
 static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff_idx_t sstaff)
 {
-    bool instrChangeHandled  = false;
+    if (!exp->canWrite(e)) {
+        return false;
+    }
+
+    bool instrChangeHandled = false;
 
     // note: write the changed instrument details (transposition) here,
     // optionally writing the associated staff text is done below
@@ -6086,10 +6090,6 @@ static void annotations(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
         // if (fd) LOGD("annotations seg %p found fretboard diagram %p", seg, fd);
 
         for (const EngravingItem* e : seg->annotations()) {
-            if (!exp->canWrite(e)) {
-                continue;
-            }
-
             track_idx_t wtrack = mu::nidx;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
@@ -8162,12 +8162,17 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
     //      relative = QString(" relative-x=\"%1\"").arg(QString::number(rx,'f',2));
     //      }
     int rootTpc = h->rootTpc();
+    XmlWriter::Attributes harmonyAttrs;
+    if (!h->isStyled(Pid::PLACEMENT)) {
+        harmonyAttrs.push_back({ "placement", (h->placement() == PlacementV::BELOW) ? "below" : "above" });
+    }
+    harmonyAttrs.push_back({ "print-frame", h->hasFrame() ? "yes" : "no" });     // .append(relative));
+    if (!h->visible()) {
+        harmonyAttrs.push_back({ "print-object", "no" });
+    }
+    addColorAttr(h, harmonyAttrs);
+    _xml.startElement("harmony", harmonyAttrs);
     if (rootTpc != Tpc::TPC_INVALID) {
-        XmlWriter::Attributes harmonyAttrs;
-        bool frame = h->hasFrame();
-        harmonyAttrs.push_back({ "print-frame", frame ? "yes" : "no" });     // .append(relative));
-        addColorAttr(h, harmonyAttrs);
-        _xml.startElement("harmony", harmonyAttrs);
         _xml.startElement("root");
         _xml.tag("root-step", tpc2stepName(rootTpc));
         int alter = int(tpc2alter(rootTpc));
@@ -8245,7 +8250,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
             }
         } else {
             if (h->extensionName().empty()) {
-                _xml.tag("kind", "");
+                _xml.tag("kind", "none");
             } else {
                 _xml.tag("kind", { { "text", h->extensionName() } }, "");
             }
@@ -8268,15 +8273,11 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         if (fd) {
             writeMusicXML(fd, _xml);
         }
-
-        _xml.endElement();
     } else {
         //
         // export an unrecognized Chord
         // which may contain arbitrary text
         //
-        _xml.startElement("harmony", { { "print-frame", h->hasFrame() ? "yes" : "no" } });
-
         const String textName = h->hTextName();
         switch (h->harmonyType()) {
         case HarmonyType::NASHVILLE: {
@@ -8299,8 +8300,8 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         }
         break;
         }
-        _xml.endElement();           // harmony
     }
+    _xml.endElement();
 }
 
 //---------------------------------------------------------

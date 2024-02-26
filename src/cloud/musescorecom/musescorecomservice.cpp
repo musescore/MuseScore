@@ -93,6 +93,8 @@ AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
     serverConfig.serverCode = MUSESCORE_COM_CLOUD_CODE;
     serverConfig.serverUrl = MUSESCORECOM_CLOUD_URL;
 
+    serverConfig.serverAvailabilityUrl = MUSESCORECOM_API_ROOT_URL + "/system/healthcheck";
+
     serverConfig.authorizationUrl = MUSESCORECOM_CLOUD_URL + "/oauth/authorize";
     serverConfig.signUpUrl = MUSESCORECOM_CLOUD_URL + "/oauth/authorize-new";
     serverConfig.signInSuccessUrl = MUSESCORECOM_CLOUD_URL + "/desktop-signin-success";

@@ -426,6 +426,7 @@ enum class Sid {
     smallStaffMag,
     smallClefMag,
     genClef,
+    hideTabClefAfterFirst,
     genKeysig,
     genCourtesyTimesig,
     genCourtesyKeysig,
@@ -1605,6 +1606,10 @@ enum class Sid {
     wahShowTabCommon,
     golpeShowTabSimple,
     golpeShowTabCommon,
+
+    tabShowTiedFret,
+    tabParenthesizeTiedFret,
+    parenthesizeTiedFretIfArticulation,
 
     chordlineThickness,
 

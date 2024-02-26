@@ -260,6 +260,14 @@ Measure* DomAccessor::firstMeasure()
     return score()->firstMeasure();
 }
 
+Measure* DomAccessor::tick2measure(const Fraction& tick)
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->tick2measure(tick);
+}
+
 const SpannerMap& DomAccessor::spannerMap() const
 {
     IF_ASSERT_FAILED(score()) {

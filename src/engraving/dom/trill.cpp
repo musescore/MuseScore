@@ -207,11 +207,6 @@ EngravingItem* Trill::linkedClone()
     return linkedTrill;
 }
 
-Trill::~Trill()
-{
-    delete m_ornament;
-}
-
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------

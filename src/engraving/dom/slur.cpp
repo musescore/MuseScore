@@ -381,6 +381,13 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
             || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
             return true;
         }
+        // Ornament accidentals on start or end chord
+        if (item->isAccidental() && parent->isOrnament()) {
+            EngravingItem* parentParent = parent->parentItem();
+            if (parentParent && (parentParent == startCR || parentParent == endCR)) {
+                return true;
+            }
+        }
         // Items that are on the start segment but in a different voice
         if ((item->tick() == startCR->tick() && item->track() != startCR->track())
             || (item->tick() == endCR->tick() && item->track() != endCR->track())) {

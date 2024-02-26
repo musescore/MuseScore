@@ -27,6 +27,7 @@
 
 #include "dom/slur.h"
 #include "dom/chord.h"
+#include "dom/score.h"
 #include "dom/system.h"
 #include "dom/staff.h"
 #include "dom/stafftype.h"
@@ -304,30 +305,18 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         }
     } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE) {
         // beginning of system
-        ChordRest* firstCr = system->firstChordRest(item->track());
+        ChordRest* firstCr = system->firstChordRest(item->track2());
         double y = p1.y();
         if (firstCr && firstCr == item->endCR()) {
             constrainLeftAnchor = true;
         }
         if (firstCr && firstCr->isChord()) {
             Chord* chord = toChord(firstCr);
-            if (chord) {
-                // if both up or both down, deal with avoiding stems and beams
-                Note* upNote = chord->upNote();
-                Note* downNote = chord->downNote();
-                // account for only the stem length that is above the top note (or below the bottom note)
-                double stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
-                if (item->up()) {
-                    y = chord->upNote()->pos().y() - (chord->upNote()->height() / 2);
-                    if (chord->up() && chord->stem() && firstCr != item->endCR()) {
-                        y -= stemLength;
-                    }
-                } else {
-                    y = chord->downNote()->pos().y() + (chord->downNote()->height() / 2);
-                    if (!chord->up() && chord->stem() && firstCr != item->endCR()) {
-                        y += stemLength;
-                    }
-                }
+            Shape chordShape = chord->shape();
+            chordShape.removeTypes({ ElementType::ACCIDENTAL });
+            y = item->up() ? chordShape.top() : chordShape.bottom();
+            bool isAboveStem = chord->stem() && chord->up() == item->up();
+            if (!isAboveStem) {
                 y += continuedSlurOffsetY * (item->up() ? -1 : 1);
             }
         }
@@ -404,22 +393,11 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             y += 0.25 * item->spatium() * (item->up() ? -1 : 1);
         } else if (lastCr && lastCr->isChord()) {
             Chord* chord = toChord(lastCr);
-            if (chord) {
-                Note* upNote = chord->upNote();
-                Note* downNote = chord->downNote();
-                // account for only the stem length that is above the top note (or below the bottom note)
-                double stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
-                if (item->up()) {
-                    y = chord->upNote()->pos().y() - (chord->upNote()->height() / 2);
-                    if (chord->up() && chord->stem()) {
-                        y -= stemLength;
-                    }
-                } else {
-                    y = chord->downNote()->pos().y() + (chord->downNote()->height() / 2);
-                    if (!chord->up() && chord->stem()) {
-                        y += stemLength;
-                    }
-                }
+            Shape chordShape = chord->shape();
+            chordShape.removeTypes({ ElementType::ACCIDENTAL });
+            y = item->up() ? chordShape.top() : chordShape.bottom();
+            bool isAboveStem = chord->stem() && chord->up() == item->up();
+            if (!isAboveStem) {
                 y += continuedSlurOffsetY * (item->up() ? -1 : 1);
             }
             double diff = item->up() ? y - p1.y() : p1.y() - y;
@@ -1089,7 +1067,13 @@ static bool tieSegmentShouldBeSkipped(Tie* item)
         return false;
     }
 
-    return !st->showBackTied() || (startNote && startNote->harmonic());
+    if (startNote->isContinuationOfBend()) {
+        return true;
+    }
+
+    ShowTiedFret showTiedFret = item->style().value(Sid::tabShowTiedFret).value<ShowTiedFret>();
+
+    return showTiedFret == ShowTiedFret::NONE;
 }
 
 TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
@@ -1164,8 +1148,12 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     return segment;
 }
 
-TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
+TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system, LayoutContext& ctx)
 {
+    if (item->staffType() && item->staffType()->isTabStaff()) {
+        // On TAB, the presence of this tie may require to add a parenthesis
+        ChordLayout::layout(item->endNote()->chord(), ctx);
+    }
     // do not layout ties in tablature if not showing back-tied fret marks
     if (tieSegmentShouldBeSkipped(item)) {
         if (!item->segmentsEmpty()) {
@@ -1248,24 +1236,20 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
     const bool up = tie->up();
     const bool inside = tie->isInside();
+    const bool noteIsHiddenFret = note->shouldHideFret();
     const int upSign = up ? -1 : 1;
     const int leftRightSign = start ? +1 : -1;
     const double noteWidth = note->width();
     const double noteHeight = note->height();
     const double spatium = tie->spatium();
 
-    double baseX, baseY = 0.0;
-    if (inside) {
-        baseX = start ? noteWidth : 0.0;
-    } else {
-        baseX = noteOpticalCenterForTie(note, up);
-        baseY = upSign * noteHeight / 2;
-    }
+    double baseX = (inside && !noteIsHiddenFret) ? (start ? noteWidth : 0.0) : noteOpticalCenterForTie(note, up);
+    double baseY = inside ? 0.0 : upSign * noteHeight / 2;
 
     result += PointF(baseX, baseY);
 
     double visualInsetSp = 0.0;
-    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
+    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH || noteIsHiddenFret) {
         visualInsetSp = 0.2;
     } else if (note->hasAnotherStraightAboveOrBelow(up)) {
         visualInsetSp = 0.45;
@@ -1352,7 +1336,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     Tie* tie = tieSegment->tie();
     Note* note = start ? tie->startNote() : tie->endNote();
-    if (!note) {
+    if (!note || note->shouldHideFret()) {
         return;
     }
 
@@ -1450,7 +1434,7 @@ void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Ch
         return;
     }
 
-    Shape noteShape = note->shape().translated(note->pos() + chordSystemPos);
+    Shape noteShape = note->shape().translate(note->pos() + chordSystemPos);
     double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
 
     resultingX = start ? std::max(resultingX, xNoteEdge) : std::min(resultingX, xNoteEdge);
@@ -1514,7 +1498,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     const double halfLineThicknessCorrection = 0.5 * staffLineThickness * upSign;
     const double protrusion = abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
-    const double badIntersectionLimit = 0.20 * spatium; // TODO: style
+    const double badIntersectionLimit = 0.15 * spatium; // TODO: style
 
     bool badIntersection = protrusion < badIntersectionLimit && (isEndInsideStaff || isEndInsideLedgerLines);
     if (badIntersection) {
@@ -1542,8 +1526,8 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         return;
     }
 
-    double outwardMargin = -upSign * (yOuterApogee - (closestLineToArc * spatium - halfLineThicknessCorrection));
-    double inwardMargin = upSign * (yInnerApogee - (closestLineToArc * spatium + halfLineThicknessCorrection));
+    double outwardMargin = -upSign * (yOuterApogee - (closestLineToArc * staffLineDist - halfLineThicknessCorrection));
+    double inwardMargin = upSign * (yInnerApogee - (closestLineToArc * staffLineDist + halfLineThicknessCorrection));
     const double badArcIntersectionLimit = tieLength < 3 * spatium ? 0.1 * spatium : 0.15 * spatium;
 
     bool increaseArc = outwardMargin - 0.5 * badArcIntersectionLimit < inwardMargin;
@@ -1612,7 +1596,8 @@ bool SlurTieLayout::hasEndPointAboveNote(TieSegment* tieSegment)
     PointF tieStartPos = tieSegment->ups(Grip::START).pos();
     PointF tieEndPos = tieSegment->ups(Grip::END).pos();
 
-    return tieStartPos.x() < startNotePos.x() + startNote->width() || tieEndPos.x() > endNotePos.x();
+    return (tieStartPos.x() < startNotePos.x() + startNote->width() && !startNote->shouldHideFret())
+           || (tieEndPos.x() > endNotePos.x() && !endNote->shouldHideFret());
 }
 
 void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies)

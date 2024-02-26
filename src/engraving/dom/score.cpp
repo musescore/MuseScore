@@ -262,8 +262,8 @@ Score::~Score()
 
     imageStore.clearUnused();
 
-    delete m_rootItem;
     delete m_shadowNote;
+    delete m_rootItem;
 }
 
 mu::async::Channel<POS, unsigned> Score::posChanged() const

@@ -221,7 +221,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutChordLine(item_cast<const ChordLine*>(item), static_cast<ChordLine::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::CLEF:
-        layoutClef(item_cast<const Clef*>(item), static_cast<Clef::LayoutData*>(ldata));
+        layoutClef(item_cast<const Clef*>(item), static_cast<Clef::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::CAPO:
         layoutCapo(item_cast<const Capo*>(item), static_cast<Capo::LayoutData*>(ldata), ctx);
@@ -491,13 +491,15 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
         return { SymId::noSym, SymId::noSym };
     };
 
+    Shape shape;
+
     // Single?
     SymId singleSym = accidentalSingleSym(item);
     if (singleSym != SymId::noSym && conf.engravingFont()->isValid(singleSym)) {
         Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
         ldata->syms.push_back(s);
 
-        ldata->addBbox(item->symBbox(singleSym));
+        shape.add(item->symShapeWithCutouts(singleSym));
     }
     // Multi
     else {
@@ -515,7 +517,7 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
             Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
                                            item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
             ldata->syms.push_back(ls);
-            ldata->addBbox(item->symBbox(bracketSyms.first));
+            shape.add(item->symBbox(bracketSyms.first), item);
 
             x += item->symAdvance(bracketSyms.first) + margin;
         }
@@ -524,7 +526,7 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
         SymId mainSym = item->symId();
         Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
         ldata->syms.push_back(ms);
-        ldata->addBbox(item->symBbox(mainSym).translated(x, 0.0));
+        shape.add(item->symShapeWithCutouts(mainSym).translated(PointF(x, 0.0)));
 
         // Right
         if (bracketSyms.second != SymId::noSym) {
@@ -533,9 +535,11 @@ void TLayout::layoutAccidental(const Accidental* item, Accidental::LayoutData* l
             Accidental::LayoutData::Sym rs(bracketSyms.second, x,
                                            item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
             ldata->syms.push_back(rs);
-            ldata->addBbox(item->symBbox(bracketSyms.second).translated(x, 0.0));
+            shape.add(item->symBbox(bracketSyms.second).translated(x, 0.0), item);
         }
     }
+
+    ldata->setShape(shape);
 }
 
 void TLayout::layoutActionIcon(const ActionIcon* item, ActionIcon::LayoutData* ldata)
@@ -1619,7 +1623,7 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     }
 }
 
-void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
+void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LD_INDEPENDENT;
 
@@ -1635,10 +1639,12 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
-        Fraction tick = clefSeg->tick();
+        const Fraction tick = clefSeg->tick();
+        const Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
         bool show = st->genClef();            // check staff type allows clef display
         StaffGroup staffGroup = st->group();
+        const bool hideClef = st->isTabStaff() ? conf.styleB(Sid::hideTabClefAfterFirst) : !conf.styleB(Sid::genClef);
 
         // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
         if (staffGroup != StaffGroup::TAB) {
@@ -1647,7 +1653,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
 
         // check clef is compatible with staff type group:
         if (ClefInfo::staffGroup(item->clefType()) != staffGroup) {
-            if (tick > Fraction(0, 1) && !item->generated()) {     // if clef is not generated, hide it
+            if (tick > Fraction(0, 1) && (!item->generated() || hideClef)) {     // if clef is not generated, hide it
                 show = false;
             } else {                            // if generated, replace with initial clef type
                 // TODO : instead of initial staff clef (which is assumed to be compatible)
@@ -2644,7 +2650,7 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
     }
     double y0   = segm1->ldata()->pos().y();
     double yTot = segm2->ldata()->pos().y() + segm2->ipos2().y() - y0;
-    yTot -= yStaffDifference(segm2->system(), segm2->staffIdx(), segm1->system(), segm1->staffIdx());
+    yTot -= yStaffDifference(segm2->system(), track2staff(item->track2()), segm1->system(), track2staff(item->track()));
     double ratio = mu::divide(yTot, xTot, 1.0);
     // interpolate y-coord of intermediate points across total width and height
     double xCurr = 0.0;
@@ -2656,7 +2662,7 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
         segm->rypos2() = yCurr - segm->ldata()->pos().y();           // position segm. end point at yCurr
         // next segment shall start where this segment stopped, corrected for the staff y-difference
         SpannerSegment* nextSeg = const_cast<Glissando*>(item)->segmentAt(i + 1);
-        yCurr += yStaffDifference(nextSeg->system(), nextSeg->staffIdx(), segm->system(), segm->staffIdx());
+        yCurr += yStaffDifference(nextSeg->system(), track2staff(item->track2()), segm->system(), track2staff(item->track()));
         segm = nextSeg;
         segm->rypos2() += segm->ldata()->pos().y() - yCurr;          // adjust next segm. vertical length
         segm->mutldata()->setPosY(yCurr);                                // position next segm. start point at yCurr
@@ -2775,7 +2781,7 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
                 }
             }
         }
-        _shape.add(graceShape.translated(mu::PointF(offset, 0.0)));
+        _shape.add(graceShape.translate(mu::PointF(offset, 0.0)));
         double xpos = offset - item->parent()->rxoffset() - item->parent()->ldata()->pos().x();
         grace->setPos(xpos, 0.0);
     }
@@ -2885,7 +2891,7 @@ void TLayout::layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ct
     SysStaff* staff = item->system()->staff(item->staffIdx());
     Skyline& skyline = staff->skyline();
     SkylineLine& skylineLine = tabStaff ? skyline.north() : (item->guitarBend()->ldata()->up() ? skyline.north() : skyline.south());
-    skylineLine.add(item->shape().translated(item->pos()));
+    skylineLine.add(item->shape().translate(item->pos()));
 
     fillGuitarBendSegmentShape(item, ldata);
 }
@@ -2895,7 +2901,7 @@ void TLayout::fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBe
     Shape shape;
     shape.add(ldata->bbox(), item);
     if (!item->bendText()->empty()) {
-        shape.add(item->bendText()->shape().translated(item->bendText()->pos()));
+        shape.add(item->bendText()->shape().translate(item->bendText()->pos()));
     }
     ldata->setShape(shape);
 }
@@ -3126,7 +3132,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
         bool above = item->spanner()->placeAbove();
         SkylineLine sl(!above);
         Shape sh = item->shape();
-        sl.add(sh.translated(item->pos()));
+        sl.add(sh.translate(item->pos()));
         if (above) {
             d  = item->system()->topDistance(item->staffIdx(), sl);
             if (d > -md) {
@@ -4259,7 +4265,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
 
     Accidental* acc = item->accidental();
     if (acc && acc->addToSkyline()) {
-        shape.add(acc->ldata()->bbox().translated(acc->pos()), acc);
+        shape.add(acc->ldata()->shape().translated(acc->pos()));
     }
     for (auto e : item->el()) {
         if (e->addToSkyline()) {
@@ -4280,7 +4286,7 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
             // isn't fully known yet, so we use an approximation
             double sp = item->spatium();
             PointF approxRelPos(noteBBox.width() + 0.25 * sp, -0.25 * sp);
-            shape.add(bendSeg->shape().translated(approxRelPos));
+            shape.add(bendSeg->shape().translate(approxRelPos));
         }
     }
 

@@ -1240,7 +1240,7 @@ void ChordRest::checkStaffMoveValidity()
     staff_idx_t minStaff = part()->startTrack() / VOICES;
     staff_idx_t maxStaff = part()->endTrack() / VOICES;
     bool isDestinationValid = targetStaff && targetStaff->visible() && idx >= minStaff && idx < maxStaff
-                              && targetStaffType->group() == baseStaffType->group();
+                              && targetStaffType->group() == baseStaffType->group() && targetStaff->isLinked() == baseStaff->isLinked();
     if (!isDestinationValid) {
         LOGD("staffMove out of scope %zu + %d min %zu max %zu",
              staffIdx(), m_staffMove, minStaff, maxStaff);
@@ -1250,9 +1250,15 @@ void ChordRest::checkStaffMoveValidity()
             // destination staff becomes valid (e.g. unihidden)
             m_storedStaffMove = m_staffMove;
         }
-        undoChangeProperty(Pid::STAFF_MOVE, 0);
+        setStaffMove(0);
     } else if (!m_staffMove && m_storedStaffMove) {
-        undoChangeProperty(Pid::STAFF_MOVE, m_storedStaffMove);
+        setStaffMove(m_storedStaffMove);
+        m_storedStaffMove = 0;
+    }
+
+    if (isDestinationValid) {
+        // Move valid, clear stored move
+        m_storedStaffMove = 0;
     }
 }
 }

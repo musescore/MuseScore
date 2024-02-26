@@ -345,7 +345,15 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->layoutInfo->calculateAnchors(chordRests, item->notes());
         item->setStartAnchor(item->layoutInfo->startAnchor());
         item->setEndAnchor(item->layoutInfo->endAnchor());
-        item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
+        double xDiff = item->endAnchor().x() - item->startAnchor().x();
+        double yDiff = item->endAnchor().y() - item->startAnchor().y();
+        if (abs(xDiff) < 0.5 * item->spatium()) {
+            // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
+            // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
+            item->setSlope(0.0);
+        } else {
+            item->setSlope(yDiff / xDiff);
+        }
         item->setBeamDist(item->layoutInfo->beamDist());
     } else {
         item->setSlope(0.0);
@@ -363,7 +371,6 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->startAnchor() = PointF(x1, y);
         item->endAnchor() = PointF(x2, y);
         item->layoutInfo->setAnchors(item->startAnchor(), item->endAnchor());
-        item->setBeamWidth(item->layoutInfo->beamWidth());
     }
 
     item->beamFragments()[frag]->py1[fragmentIndex] = item->startAnchor().y() - item->pagePos().y();
@@ -885,12 +892,12 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         restToBeamPadding = 0.35 * spatium;
     }
 
-    Shape beamShape = beam->shape().translated(beam->pagePos());
+    Shape beamShape = beam->shape().translate(beam->pagePos());
     beamShape.remove_if([&](ShapeElement& el) {
         return el.item() && el.item()->isBeamSegment() && toBeamSegment(el.item())->isBeamlet;
     });
 
-    Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
+    Shape restShape = rest->shape().translate(rest->pagePos() - rest->offset());
     double minBeamToRestXDist = up && firstRest ? 0.1 * spatium : 0.0;
 
     double restToBeamClearance = up

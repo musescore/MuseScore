@@ -32,6 +32,7 @@ FocusScope {
     property alias menuItemComponent: expandableSection.menuItemComponent
 
     property alias title: expandableSection.title
+    property alias titleFont: expandableSection.titleFont
 
     property alias isExpanded: expandableSection.isExpanded
 

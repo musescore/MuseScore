@@ -5122,6 +5122,12 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
         track_idx_t track    = staffIdx * VOICES;
         Clef* clef   = toClef(destSeg->element(track));
 
+        StaffType* staffType = staff->staffType(e->tick());
+        StaffGroup staffGroup = staffType->group();
+        if (ClefInfo::staffGroup(ct) != staffGroup) {
+            continue;
+        }
+
         if (clef) {
             //
             // for transposing instruments, differentiate
@@ -6160,6 +6166,14 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                         }
                     }
                 }
+
+                if (sp->isTextLine() && sp != nsp) {
+                    EngravingItem* parent = sp->parentItem();
+                    if (parent && parent->isNote()) {
+                        nsp->setParent(parent->findLinkedInStaff(staff));
+                    }
+                }
+
                 doUndoAddElement(nsp);
             } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND) {
                 doUndoAddElement(toSpanner(ne));

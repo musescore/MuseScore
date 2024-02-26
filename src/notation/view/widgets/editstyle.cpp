@@ -38,6 +38,7 @@
 #include "engraving/dom/figuredbass.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/realizedharmony.h"
+#include "engraving/dom/stafftype.h"
 #include "engraving/dom/text.h"
 #include "engraving/style/textstyle.h"
 #include "engraving/types/symnames.h"
@@ -61,7 +62,7 @@ static const QStringList ALL_PAGE_CODES {
     "header-and-footer",
     "measure-number",
     "system",
-    "clefs",
+    "clefs-key-and-time-signatures",
     "accidentals",
     "measure",
     "barlines",
@@ -252,6 +253,29 @@ EditStyle::EditStyle(QWidget* parent)
     QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
+
+    QButtonGroup* tabShowTiedFrets = new QButtonGroup(this);
+    tabShowTiedFrets->addButton(tabShowTiesAndFret, int(ShowTiedFret::TIE_AND_FRET));
+    tabShowTiedFrets->addButton(tabShowTies, int(ShowTiedFret::TIE));
+    tabShowTiedFrets->addButton(tabShowNone, int(ShowTiedFret::NONE));
+
+    QButtonGroup* tabParenthFrets = new QButtonGroup(this);
+    tabParenthFrets->addButton(tabParenthSystem, int(ParenthesizeTiedFret::START_OF_SYSTEM));
+    tabParenthFrets->addButton(tabParenthMeasure, int(ParenthesizeTiedFret::START_OF_MEASURE));
+    tabParenthFrets->addButton(tabParenthNone, int(ParenthesizeTiedFret::NEVER));
+
+    void (QButtonGroup::* tabShowTiedFretsButtonClicked)(QAbstractButton*) = &QButtonGroup::buttonClicked;
+    connect(tabShowTiedFrets, tabShowTiedFretsButtonClicked, this, [this](QAbstractButton*){
+        updateParenthesisIndicatingTiesGroupState();
+    });
+
+    QButtonGroup* clefVisibility = new QButtonGroup(this);
+    clefVisibility->addButton(radioShowAllClefs, true);
+    clefVisibility->addButton(radioHideClefs, false);
+
+    QButtonGroup* keysigVisibility = new QButtonGroup(this);
+    keysigVisibility->addButton(radioShowAllKeys, true);
+    keysigVisibility->addButton(radioHideKeys, false);
 
     // ====================================================
     // Style widgets
@@ -501,8 +525,9 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::smallNoteMag,             true,  smallNoteSize,                resetSmallNoteSize },
         { StyleId::smallClefMag,             true,  smallClefSize,                resetSmallClefSize },
         { StyleId::lastSystemFillLimit,      true,  lastSystemFillThreshold,      resetLastSystemFillThreshold },
-        { StyleId::genClef,                  false, genClef,                      0 },
-        { StyleId::genKeysig,                false, genKeysig,                    0 },
+        { StyleId::hideTabClefAfterFirst,    false, hideTabClefs,                 0 },
+        { StyleId::genClef,                  false, clefVisibility,               0 },
+        { StyleId::genKeysig,                false, keysigVisibility,             0 },
         { StyleId::genCourtesyTimesig,       false, genCourtesyTimesig,           0 },
         { StyleId::genCourtesyKeysig,        false, genCourtesyKeysig,            0 },
         { StyleId::genCourtesyClef,          false, genCourtesyClef,              0 },
@@ -625,6 +650,10 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::wahShowTabCommon, false, wahShowTabCommon, 0 },
         { StyleId::golpeShowTabSimple, false, golpeShowTabSimple, 0 },
         { StyleId::golpeShowTabCommon, false, golpeShowTabCommon, 0 },
+
+        { StyleId::tabShowTiedFret, false, tabShowTiedFrets, 0 },
+        { StyleId::tabParenthesizeTiedFret, false, tabParenthFrets, 0 },
+        { StyleId::parenthesizeTiedFretIfArticulation, false, tabParenthArticulation, 0 },
     };
 
     // ====================================================
@@ -879,6 +908,9 @@ EditStyle::EditStyle(QWidget* parent)
     connect(minSystemDistance,   QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStyle::systemMinDistanceValueChanged);
     connect(maxSystemDistance,   QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStyle::systemMaxDistanceValueChanged);
 
+    connect(radioShowAllClefs, &QRadioButton::toggled, this, &EditStyle::clefVisibilityChanged);
+    connect(radioHideClefs,    &QRadioButton::toggled, this, &EditStyle::clefVisibilityChanged);
+
     accidentalsGroup->setVisible(false);   // disable, not yet implemented
 
     // ====================================================
@@ -1075,9 +1107,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(textStyleColor, &Awl::ColorLabel::colorChanged, [=]() {
         textStyleValueChanged(TextStylePropertyType::Color, textStyleColor->color());
     });
-
-    // TODO: bring back the tab styles button and make sure right styles are applied as default
-    resetTabStylesButton->setVisible(false);
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
     textStyles->setCurrentRow(s_lastSubPageRow);
@@ -1356,9 +1385,10 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "system";
 
     case ElementType::CLEF:
-        return "clefs";
-
     case ElementType::KEYSIG:
+    case ElementType::TIMESIG:
+        return "clefs-key-and-time-signatures";
+
     case ElementType::ACCIDENTAL:
         return "accidentals";
 
@@ -1667,7 +1697,7 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             v = cb->currentIndex();
-        } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+        } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
             QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
             v = bool(bg->checkedId());
         } else {
@@ -1779,7 +1809,7 @@ void EditStyle::setValues()
             bool value = val.toBool();
             if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
                 voicingSelectWidget->interpretBox->setCurrentIndex(value);
-            } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+            } else if (sw.idx == StyleId::articulationKeepTogether || sw.idx == StyleId::genClef || sw.idx == StyleId::genKeysig) { // special case for bool represented by a two-item buttonGroup
                 qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
                 qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
             } else {
@@ -1953,6 +1983,8 @@ void EditStyle::setValues()
     for (const LineStyleSelect* lineStyleSelect : m_lineStyleSelects) {
         lineStyleSelect->update();
     }
+
+    updateParenthesisIndicatingTiesGroupState();
 }
 
 //---------------------------------------------------------
@@ -2437,4 +2469,22 @@ void EditStyle::resetUserStyleName()
 {
     styleName->clear();
     endEditUserStyleName();
+}
+
+void EditStyle::updateParenthesisIndicatingTiesGroupState()
+{
+    groupBox_2->setEnabled(tabShowTies->isChecked() || tabShowNone->isChecked());
+}
+
+void EditStyle::clefVisibilityChanged(bool checked)
+{
+    if (!checked) {
+        return;
+    }
+    if (radioHideClefs->isChecked()) {
+        hideTabClefs->setChecked(true);
+        hideTabClefs->setEnabled(false);
+    } else {
+        hideTabClefs->setEnabled(true);
+    }
 }

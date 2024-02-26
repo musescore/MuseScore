@@ -55,6 +55,7 @@ public:
 #endif
 
     const EngravingItem* item() const { return m_item; }
+    void setItem(const EngravingItem* item) { m_item = item; }
     bool ignoreForLayout() const { return m_ignoreForLayout; }
 
 private:
@@ -81,6 +82,7 @@ public:
         : m_type(t) {}
     Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
         : m_type(t) { setBBox(r, p); }
+    Shape(const std::vector<mu::RectF>& rects, const EngravingItem* p = nullptr);
 
     Type type() const { return m_type; }
     bool isComposite() const { return m_type == Type::Composite; }
@@ -128,12 +130,14 @@ public:
     // ---
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
+    std::vector<ShapeElement>& elements() { return m_elements; }
 
     std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
     std::optional<ShapeElement> find_first(ElementType type) const;
     std::optional<ShapeElement> get_first() const;
 
     void removeInvisibles();
+    void removeTypes(const std::set<ElementType>& types);
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
@@ -141,6 +145,8 @@ public:
     void translateX(double);
     void translateY(double);
     Shape translated(const mu::PointF&) const;
+    Shape& scale(const mu::SizeF&);
+    Shape scaled(const mu::SizeF&) const;
 
     const mu::RectF& bbox() const;
     double minVerticalDistance(const Shape&) const;

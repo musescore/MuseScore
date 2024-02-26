@@ -828,7 +828,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
                         // add element to skyline
                         if (e->addToSkyline()) {
-                            skyline.add(e->shape().translated(e->pos() + p));
+                            skyline.add(e->shape().translate(e->pos() + p));
                             // add grace notes to skyline
                             if (e->isChord()) {
                                 GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
@@ -836,10 +836,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                                 TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
                                 TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
                                 if (!graceBefore.empty()) {
-                                    skyline.add(graceBefore.shape().translated(graceBefore.pos() + p));
+                                    skyline.add(graceBefore.shape().translate(graceBefore.pos() + p));
                                 }
                                 if (!graceAfter.empty()) {
-                                    skyline.add(graceAfter.shape().translated(graceAfter.pos() + p));
+                                    skyline.add(graceAfter.shape().translate(graceAfter.pos() + p));
                                 }
                             }
                             // If present, add ornament cue note to skyline
@@ -879,6 +879,24 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
         }
     }
+
+    //-------------------------------------------------------------
+    // layout ties and guitar bends
+    //-------------------------------------------------------------
+
+    bool useRange = false;    // TODO: lineMode();
+    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
+    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
+    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+
+    // ties
+    if (ctx.conf().isLinearMode()) {
+        doLayoutTiesLinear(system, ctx);
+    } else {
+        doLayoutTies(system, sl, stick, etick, ctx);
+    }
+    // guitar bends
+    layoutGuitarBends(sl, ctx);
 
     //-------------------------------------------------------------
     // layout articulations, fingering and stretched bends
@@ -942,20 +960,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
     // layout slurs
     //-------------------------------------------------------------
-
-    bool useRange = false;    // TODO: lineMode();
-    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
-    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
-    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
-
-    // ties
-    if (ctx.conf().isLinearMode()) {
-        doLayoutTiesLinear(system);
-    } else {
-        doLayoutTies(system, sl, stick, etick);
-    }
-    // guitar bends
-    layoutGuitarBends(sl, ctx);
 
     // slurs
     std::vector<Spanner*> spanner;
@@ -1306,7 +1310,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick)
+void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick, LayoutContext& ctx)
 {
     UNUSED(etick);
 
@@ -1317,14 +1321,14 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
             }
             Chord* c = toChord(e);
             for (Chord* ch : c->graceNotes()) {
-                layoutTies(ch, system, stick);
+                layoutTies(ch, system, stick, ctx);
             }
-            layoutTies(c, system, stick);
+            layoutTies(c, system, stick, ctx);
         }
     }
 }
 
-void SystemLayout::doLayoutTiesLinear(System* system)
+void SystemLayout::doLayoutTiesLinear(System* system, LayoutContext& ctx)
 {
     constexpr Fraction start = Fraction(0, 1);
     for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
@@ -1338,9 +1342,9 @@ void SystemLayout::doLayoutTiesLinear(System* system)
                 }
                 Chord* c = toChord(e);
                 for (Chord* ch : c->graceNotes()) {
-                    layoutTies(ch, system, start);
+                    layoutTies(ch, system, start, ctx);
                 }
-                layoutTies(c, system, start);
+                layoutTies(c, system, start, ctx);
             }
         }
     }
@@ -1355,10 +1359,7 @@ void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutCont
                 TLayout::layoutGuitarBend(bendBack, ctx);
             }
 
-            Note* startOfTie = note;
-            while (startOfTie->tieBack() && startOfTie->tieBack()->startNote()) {
-                startOfTie = startOfTie->tieBack()->startNote();
-            }
+            Note* startOfTie = note->firstTiedNote();
             if (startOfTie != note) {
                 GuitarBend* bendBack2 = startOfTie->bendBack();
                 if (bendBack2) {
@@ -1534,7 +1535,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     }
 }
 
-void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
+void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick, LayoutContext& ctx)
 {
     SysStaff* staff = system->staff(ch->staffIdx());
     if (!staff->show()) {
@@ -1554,7 +1555,7 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
         t = note->tieBack();
         if (t) {
             if (t->startNote()->tick() < stick) {
-                TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system);
+                TieSegment* ts = SlurTieLayout::tieLayoutBack(t, system, ctx);
                 if (ts && ts->addToSkyline()) {
                     staff->skyline().add(ts->shape().translate(ts->pos()));
                     stackedBackwardTies.push_back(ts);
@@ -1562,8 +1563,10 @@ void SystemLayout::layoutTies(Chord* ch, System* system, const Fraction& stick)
             }
         }
     }
-    SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);
-    SlurTieLayout::resolveVerticalTieCollisions(stackedBackwardTies);
+    if (!ch->staffType()->isTabStaff()) {
+        SlurTieLayout::resolveVerticalTieCollisions(stackedForwardTies);
+        SlurTieLayout::resolveVerticalTieCollisions(stackedBackwardTies);
+    }
 }
 
 /****************************************************************************
@@ -1649,7 +1652,7 @@ void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
     }
     Fraction stick = system->measures().front()->tick();
     Fraction etick = system->measures().back()->endTick();
-    doLayoutTies(system, segList, stick, etick);
+    doLayoutTies(system, segList, stick, etick, ctx);
     layoutGuitarBends(segList, ctx);
 }
 
@@ -1717,7 +1720,9 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 }
 
                 double squeezeFactor2 = ctx.state().segmentShapeSqueezeFactor();
-                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor2);
+                double minDist = HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor2);
+                minDist = std::max(minDist, 0.0);
+                double margin = segment.width() - minDist;
 
                 double reducedMargin = margin * (1 - std::max(squeezeFactor2, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);

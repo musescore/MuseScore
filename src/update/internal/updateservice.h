@@ -24,6 +24,8 @@
 
 #include "async/asyncable.h"
 
+#include "global/types/version.h"
+
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "network/inetworkmanagercreator.h"
@@ -50,11 +52,14 @@ public:
     framework::Progress updateProgress() override;
 
 private:
+    RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
+
     std::string platformFileSuffix() const;
     ISystemInfo::CpuArchitecture assetArch(const QString& asset) const;
-
-    RetVal<ReleaseInfo> parseRelease(const QByteArray& json) const;
     QJsonObject resolveReleaseAsset(const QJsonObject& release) const;
+
+    PrevReleasesNotesList previousReleasesNotes(const framework::Version& updateVersion) const;
+    PrevReleasesNotesList parsePreviousReleasesNotes(const QByteArray& json) const;
 
     void clear();
 

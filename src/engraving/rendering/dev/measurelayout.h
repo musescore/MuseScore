@@ -51,6 +51,8 @@ public:
     static void layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx);
 
     static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
+    static Segment* addHeaderClef(Measure* m, bool isFirstClef, const Staff* staff, LayoutContext& ctx);
+    static Segment* addHeaderKeySig(Measure* m, bool isFirstKeysig, const Staff* staff, LayoutContext& ctx);
     static void addSystemHeader(Measure* m, bool isFirstSystem, LayoutContext& ctx);
     static void removeSystemHeader(Measure* m);
     static void addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx);
@@ -77,6 +79,8 @@ private:
     static double computeMinMeasureWidth(Measure* m, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
+
+    static void checkStaffMoveValidity(Measure* measure, const LayoutContext& ctx);
 };
 }
 
