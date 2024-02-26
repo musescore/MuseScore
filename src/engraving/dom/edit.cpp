@@ -1485,20 +1485,17 @@ std::vector<EngravingItem*> Score::addSoundFlagToSelection()
 
         if (element->isStaffText()) {
             StaffText* staffText = toStaffText(element);
-            Segment* segment = staffText->segment();
 
-            SoundFlag* flag = Factory::createSoundFlag(segment);
-            flag->setXmlText(staffText->xmlText());
+            SoundFlag* flag = Factory::createSoundFlag(staffText);
 
             flag->setTrack(staffText->track());
-            flag->setIsTextVisible(!staffText->xmlText().empty());
-
-            flag->setParent(segment);
+            flag->setParent(staffText);
 
             //! try to predict preset id by text
-            flag->setSoundPresets({ staffText->xmlText().simplified().remove(Char(' ')) });
+            if (flag->soundPresets().empty() && !staffText->xmlText().empty()) {
+                flag->setSoundPresets({ staffText->xmlText().simplified().remove(Char(' ')) });
+            }
 
-            score()->undoRemoveElement(staffText);
             score()->undoAddElement(flag);
 
             addedElements.push_back(flag);
@@ -1510,10 +1507,17 @@ std::vector<EngravingItem*> Score::addSoundFlagToSelection()
 
             Segment* segment = chordRest->segment();
 
-            SoundFlag* flag = Factory::createSoundFlag(segment);
-            flag->setXmlText(mtrc("engraving", "Sound flag"));
-            flag->setTrack(trackZeroVoice(chordRest->track()));
-            flag->setParent(segment);
+            StaffText* staffText = Factory::createStaffText(segment);
+            staffText->setTrack(trackZeroVoice(chordRest->track()));
+            staffText->setParent(segment);
+
+            staffText->setXmlText(mtrc("engraving", "Sound flag"));
+
+            score()->undoAddElement(staffText);
+
+            SoundFlag* flag = Factory::createSoundFlag(staffText);
+            flag->setTrack(staffText->track());
+            flag->setParent(staffText);
 
             score()->undoAddElement(flag);
 

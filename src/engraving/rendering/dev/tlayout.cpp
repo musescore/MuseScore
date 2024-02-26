@@ -5000,6 +5000,10 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
 {
     layoutBaseTextBase(item, ldata);
 
+    if (item->soundFlag() && item->score()->showSoundFlags()) {
+        layoutSoundFlag(item->soundFlag(), item->soundFlag()->mutldata());
+    }
+
     if (item->autoplace()) {
         const Segment* s = toSegment(item->explicitParent());
         const Measure* m = s->measure();
@@ -5258,9 +5262,18 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
 
 void TLayout::layoutSoundFlag(const SoundFlag* item, SoundFlag::LayoutData* ldata)
 {
-    UNUSED(item);
-    UNUSED(ldata);
-    NOT_IMPLEMENTED;
+    if (!item->score()->showSoundFlags()) {
+        return;
+    }
+
+    StaffText* staffText = toStaffText(item->parentItem());
+    RectF parentBbox = staffText->ldata()->bbox();
+
+    double iconHeight = parentBbox.height() * 1.5;
+    double space = iconHeight / 6.0;
+    RectF iconBBox = RectF(parentBbox.x() - (iconHeight + space), parentBbox.y() - space, iconHeight, iconHeight);
+
+    ldata->setBbox(iconBBox);
 }
 
 void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)

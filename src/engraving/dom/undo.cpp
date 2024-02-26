@@ -3151,15 +3151,12 @@ void ChangeSoundFlag::flip(EditData*)
 
     SoundFlag::Params params = m_soundFlag->params();
     SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
-    bool isTextVisible = m_soundFlag->isTextVisible();
 
     m_soundFlag->setSoundPresets(m_presets);
     m_soundFlag->setParams(m_params);
-    m_soundFlag->setIsTextVisible(m_isTextVisible);
 
     m_presets = std::move(presets);
     m_params = std::move(params);
-    m_isTextVisible = isTextVisible;
 }
 
 void ChangeSpanArpeggio::flip(EditData*)

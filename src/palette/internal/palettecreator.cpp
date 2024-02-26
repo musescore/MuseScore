@@ -580,9 +580,9 @@ PalettePtr PaletteCreator::newPlaybackPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Playback);
     sp->setName(QT_TRANSLATE_NOOP("palette", "Playback"));
-    sp->setGridSize(90, 30);
+    sp->setGridSize(100, 28);
+    sp->setMag(0.85);
     sp->setDrawGrid(true);
-    sp->setVisible(true);
 
     auto staffText = makeElement<StaffText>(gpaletteScore);
     staffText->setSoundFlag(Factory::createSoundFlag(staffText.get()));

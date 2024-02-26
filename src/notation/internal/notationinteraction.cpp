@@ -1460,14 +1460,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             }
         }
 
-        EngravingItem* dropElement = nullptr;
-
-        if (el->isStaffText() && m_dropData.ed.dropElement->isSoundFlag()) {
-            std::vector<EngravingItem*> addedElements = score()->addSoundFlagToSelection();
-            dropElement = !addedElements.empty() ? addedElements.front() : nullptr;
-        } else {
-            dropElement = el->drop(m_dropData.ed);
-        }
+        EngravingItem* dropElement = el->drop(m_dropData.ed);
 
         if (dropElement && dropElement->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(dropElement))) {
@@ -1940,7 +1933,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
     dropData->modifiers   = keyboardModifier(modifiers);
     dropData->dropElement = e;
 
-    if (target->acceptDrop(*dropData) || (target->isStaffText() && e && e->isSoundFlag())) {
+    if (target->acceptDrop(*dropData)) {
         // use same code path as drag&drop
 
         ByteArray a = e->mimeData();
@@ -1954,14 +1947,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         rw::RWRegister::reader()->readItem(dropData->dropElement, n);
         dropData->dropElement->styleChanged();       // update to local style
 
-        EngravingItem* el = nullptr;
-
-        if (target->isStaffText() && type == ElementType::SOUND_FLAG) {
-            std::vector<EngravingItem*> addedElements = score->addSoundFlagToSelection();
-            el = !addedElements.empty() ? addedElements.front() : nullptr;
-        } else {
-            el = target->drop(*dropData);
-        }
+        EngravingItem* el = target->drop(*dropData);
 
         if (el && el->isInstrumentChange()) {
             if (!selectInstrument(toInstrumentChange(el))) {
@@ -2197,10 +2183,6 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
                 continue;
             }
             e = mu::engraving::toStaffLines(e)->measure();
-        }
-
-        if (e->isStaffText() && ed.dropElement && ed.dropElement->isSoundFlag()) {
-            return e;
         }
 
         if (e->acceptDrop(ed)) {

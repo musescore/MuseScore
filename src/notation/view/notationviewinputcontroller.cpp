@@ -113,12 +113,6 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (type == ElementType::STAFF_TEXT) {
-            if (toStaffText(selectedItem)->hasSoundFlag()) {
-                type = ElementType::SOUND_FLAG;
-            }
-        }
-
         if (AbstractElementPopupModel::supportsPopup(type)) {
             m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
         }

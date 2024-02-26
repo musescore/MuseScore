@@ -35,10 +35,12 @@ class SoundFlag final : public EngravingItem
     DECLARE_CLASSOF(ElementType::SOUND_FLAG)
 
 public:
-    SoundFlag(EngravingItem* parent = nullptr);
+    explicit SoundFlag(EngravingItem* parent = nullptr);
 
     SoundFlag* clone() const override;
     bool isEditable() const override;
+
+    void setSelected(bool f) override;
 
     using PresetCodes = StringList;
     using Params = std::map<String, Val>;
@@ -49,27 +51,16 @@ public:
     const Params& params() const;
     void setParams(const Params& params);
 
-    bool isTextVisible() const;
-    void setIsTextVisible(bool visible);
-
-    void undoChangeSoundFlag(const PresetCodes& presets, const Params& params, bool isTextVisible);
+    void undoChangeSoundFlag(const PresetCodes& presets, const Params& params);
 
     char16_t iconCode() const;
     draw::Font iconFont() const;
+    void setIconFontSize(double size);
     Color iconBackgroundColor() const;
-
-    RectF canvasBoundingIconRect() const;
-
-    struct LayoutData : public TextBase::LayoutData {
-        RectF iconBBox;
-    };
-    DECLARE_LAYOUTDATA_METHODS(SoundFlag)
 
 private:
     PresetCodes m_soundPresets;
     Params m_params;
-
-    bool m_isTextVisible = false;
 
     draw::Font m_iconFont;
 };

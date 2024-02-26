@@ -42,6 +42,12 @@ public:
 
     bool canBeExcludedFromOtherParts() const override { return true; }
 
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+
 private:
     PropertyValue propertyDefault(Pid id) const override;
 };

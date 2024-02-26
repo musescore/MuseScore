@@ -2700,10 +2700,6 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
         xml.tag("presets", item->soundPresets().join(u","));
     }
 
-    if (item->isTextVisible()) {
-        xml.tag("showText", true);
-    }
-
     if (!item->params().empty()) {
         xml.startElement("Params");
         for (const auto& pair : item->params()) {

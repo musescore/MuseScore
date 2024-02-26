@@ -2344,8 +2344,6 @@ void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext&)
 
         if (tag == "presets") {
             item->setSoundPresets(xml.readText().split(u","));
-        } else if (tag == "showText") {
-            item->setIsTextVisible(xml.readBool());
         } else if (tag == "Params") {
             SoundFlag::Params params;
 
