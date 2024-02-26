@@ -78,11 +78,11 @@ void NotationViewInputController::init()
             setViewMode(ViewMode::PAGE);
         });
 
-#ifndef NDEBUG
-        dispatcher()->reg(this, "view-mode-float", [this]() {
-            setViewMode(ViewMode::FLOAT);
-        });
-#endif
+        if (globalConfiguration()->devModeEnabled()) {
+            dispatcher()->reg(this, "view-mode-float", [this]() {
+                setViewMode(ViewMode::FLOAT);
+            });
+        }
 
         dispatcher()->reg(this, "view-mode-continuous", [this]() {
             setViewMode(ViewMode::LINE);

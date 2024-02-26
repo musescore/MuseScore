@@ -38,6 +38,8 @@
 
 #include "playback/iplaybackcontroller.h"
 
+#include "global/iglobalconfiguration.h"
+
 class QQuickItem;
 
 namespace mu::notation {
@@ -87,6 +89,7 @@ class NotationViewInputController : public actions::Actionable, public async::As
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(context::IGlobalContext, globalContext)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     NotationViewInputController(IControlledView* view);
