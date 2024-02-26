@@ -870,6 +870,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     String family;
     draw::Font::Type fontType = draw::Font::Type::Unknown;
+    bool scalingApplied = false;
     if (format.fontFamily() == "ScoreText") {
         if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
             || t->textStyleType() == TextStyleType::TUPLET || t->textStyleType() == TextStyleType::PEDAL || t->isStringTunings()) {
@@ -880,6 +881,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
                 m = MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE;
                 if (t->isDynamic()) {
                     m *= t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
+                    scalingApplied = true;
                     if (t->style().styleB(Sid::dynamicsOverrideFont)) {
                         std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
                         family = String::fromStdString(fontName2);
@@ -890,6 +892,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
                             m *= t->style().styleD(a.sid);
                             if (t->sizeIsSpatiumDependent()) {
                                 m *= spatiumScaling;
+                                scalingApplied = true;
                             }
                             break;
                         }
@@ -899,11 +902,6 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             // We use a default font size of 10pt for historical reasons,
             // but Smufl standard is 20pt so multiply x2 here.
             m *= 2;
-            if (mu::engraving::TextBase::engravingConfiguration()->adaptFontSizesToSmallResolution()) {
-                if (t->textStyleType() == TextStyleType::OTTAVA) {
-                    m *= spatiumScaling;
-                }
-            }
         } else if (t->isTempoText()) {
             family = t->style().styleSt(Sid::MusicalTextFont);
             fontType = draw::Font::Type::MusicSymbolText;
@@ -953,6 +951,13 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
         font.setItalic(format.italic());
         font.setUnderline(format.underline());
         font.setStrike(format.strike());
+    }
+    if (TextBase::engravingConfiguration()->adaptFontSizesToSmallResolution()
+        && !scalingApplied) {
+        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA
+            || t->textStyleType() == TextStyleType::DEFAULT) {
+            m *= spatiumScaling;
+        }
     }
 
     font.setFamily(family, fontType);
