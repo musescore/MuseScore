@@ -228,9 +228,6 @@ public:
     static bool testWriteStyleToScore;
     static bool useRead302InTestMode;
 
-    static int sampleRate;
-    static int mtcType;
-
     static bool saveTemplateMode;
     static bool noGui;
 

@@ -2659,7 +2659,7 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
     }
 }
 
-double Segment::computeDurationStretch(Segment* prevSeg, Fraction minTicks, Fraction maxTicks)
+double Segment::computeDurationStretch(const Segment* prevSeg, Fraction minTicks, Fraction maxTicks)
 {
     auto doComputeDurationStretch = [&] (Fraction curTicks) -> double
     {

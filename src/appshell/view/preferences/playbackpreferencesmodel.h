@@ -30,6 +30,7 @@
 #include "midi/imidiconfiguration.h"
 #include "midi/imidioutport.h"
 #include "midi/imidiinport.h"
+#include "playback/iplaybackconfiguration.h"
 
 namespace mu::appshell {
 class PlaybackPreferencesModel : public QObject, public async::Asyncable

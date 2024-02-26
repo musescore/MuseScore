@@ -24,6 +24,15 @@
 
 #include "iinteractiveuriregister.h"
 
+template<>
+struct std::hash<mu::Uri>
+{
+    std::size_t operator()(const mu::Uri& uri) const noexcept
+    {
+        return std::hash<std::string> {}(uri.toString());
+    }
+};
+
 namespace mu::ui {
 class InteractiveUriRegister : public IInteractiveUriRegister
 {
@@ -32,24 +41,8 @@ public:
     ContainerMeta meta(const Uri& uri) const override;
 
 private:
-    QHash<Uri, ContainerMeta> m_uriHash;
+    std::unordered_map<Uri, ContainerMeta> m_uriMap;
 };
-}
-
-namespace mu {
-#ifdef MU_QT5_COMPAT
-inline uint qHash(const Uri& uri)
-{
-    return qHash(QString::fromStdString(uri.toString()));
-}
-
-#else
-inline size_t qHash(const Uri& uri)
-{
-    return qHash(QString::fromStdString(uri.toString()));
-}
-
-#endif
 }
 
 #endif // MU_UI_INTERACTIVEURIREGISTER_H

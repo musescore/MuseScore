@@ -64,9 +64,6 @@ double MScore::nudgeStep10;
 double MScore::nudgeStep50;
 int MScore::defaultPlayDuration;
 
-int MScore::sampleRate  = 44100;
-int MScore::mtcType;
-
 bool MScore::noExcerpts = false;
 bool MScore::noImages = false;
 bool MScore::pdfPrinting = false;

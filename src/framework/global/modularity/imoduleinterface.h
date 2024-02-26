@@ -22,6 +22,6 @@
 #ifndef MU_MODULARITY_IMODULEINTERFACE_H
 #define MU_MODULARITY_IMODULEINTERFACE_H
 
-#include "../thirdparty/kors_modularity/modularity/imoduleinterface.h"
+#include "../thirdparty/kors_modularity/modularity/imoduleinterface.h" // IWYU pragma: export
 
 #endif // MU_MODULARITY_IMODULEINTERFACE_H

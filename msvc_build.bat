@@ -40,7 +40,7 @@ IF "%GENERATOR_NAME%"=="" (
 )
 
 IF "%GENERATOR_NAME%"=="" (
-   ECHO "No supported version of Microsoft Visual Studio (2017, 2019 or 2022) found."
+   ECHO "No supported version of Microsoft Visual Studio (2019 or 2022) found."
    GOTO :END
 )
 
@@ -143,7 +143,7 @@ IF /I "%1"=="clean" (
    REM Usage: CALL :FIND_GENERATOR
    REM Detects the highest supported VS version installed and sets GENERATOR_NAME to the appropriate CMake generator name.
 
-   REM vswhere.exe is a helper utility that is automatically installed with VS2017 and later (and always at a fixed location).
+   REM vswhere.exe is a helper utility that is always installed at a fixed location since VS2017.
    SET VSWHERE="%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
    IF NOT EXIST %VSWHERE% EXIT /B !ERRORLEVEL!
 

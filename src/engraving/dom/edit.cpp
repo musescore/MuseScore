@@ -1014,10 +1014,9 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
                         if (trem->chord2() == chord) {
                             continue;
                         }
-                        auto newP = std::tuple<Fraction, Fraction, TremoloTwoChord*, track_idx_t>(
-                            cr->tick(),
-                            trem->chord2()->segment()->tick(), trem,
-                            track);
+
+                        std::tuple<Fraction, Fraction, TremoloTwoChord*, track_idx_t> newP
+                            = { cr->tick(), trem->chord2()->segment()->tick(), trem, track };
                         tremoloChordTicks.push_back(newP);
                     }
                 }
@@ -1126,7 +1125,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         Fraction chord1Tick = std::get<0>(tremPair);
         Fraction chord2Tick = std::get<1>(tremPair);
         TremoloTwoChord* trem = std::get<2>(tremPair);
-        int track = std::get<3>(tremPair);
+        track_idx_t track = std::get<3>(tremPair);
 
         undo(new MoveTremolo(trem->score(), chord1Tick, chord2Tick, trem, track));
     }

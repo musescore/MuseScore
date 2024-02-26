@@ -177,7 +177,7 @@ public:
 
     double stretch() const { return m_stretch; }
     void setStretch(double v) { m_stretch = v; }
-    double computeDurationStretch(Segment* prevSeg, Fraction minTicks, Fraction maxTicks);
+    double computeDurationStretch(const Segment* prevSeg, Fraction minTicks, Fraction maxTicks);
 
     Fraction rtick() const override { return m_tick; }
     void setRtick(const Fraction& v) { assert(v >= Fraction(0, 1)); m_tick = v; }

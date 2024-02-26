@@ -51,26 +51,14 @@ struct ElementKey
     {
         return !(*this == key);
     }
+
+    bool operator<(const ElementKey& other) const
+    {
+        return std::tie(type, subtype) < std::tie(other.type, other.subtype);
+    }
 };
 
-using ElementKeyList = QList<ElementKey>;
-using ElementKeySet = QSet<ElementKey>;
-
-#ifdef MU_QT5_COMPAT
-inline uint qHash(const ElementKey& key)
-{
-    QString subtypePart = key.subtype >= 0 ? QString::number(key.subtype) : "";
-    return qHash(QString::number(static_cast<int>(key.type)) + subtypePart);
-}
-
-#else
-inline size_t qHash(const ElementKey& key)
-{
-    QString subtypePart = key.subtype >= 0 ? QString::number(key.subtype) : "";
-    return qHash(QString::number(static_cast<int>(key.type)) + subtypePart);
-}
-
-#endif
+using ElementKeySet = std::set<ElementKey>;
 
 class CommonTypes
 {
