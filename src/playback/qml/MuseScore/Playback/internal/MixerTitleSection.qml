@@ -64,6 +64,7 @@ MixerPanelSection {
         border.width: 1
 
         StyledTextLabel {
+            id: textLabel
             anchors.centerIn: parent
 
             font: ui.theme.bodyBoldFont
@@ -72,6 +73,21 @@ MixerPanelSection {
             width: margin + parent.width + margin
 
             text: channelItem.title
+        }
+
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+
+            hoverEnabled: true
+
+            onContainsMouseChanged: {
+                if (mouseArea.containsMouse && textLabel.truncated) {
+                    ui.tooltip.show(mouseArea, channelItem.title)
+                } else {
+                    ui.tooltip.hide(mouseArea)
+                }
+            }
         }
     }
 }
