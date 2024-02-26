@@ -65,6 +65,8 @@ Item {
 
             visible: hasPresets
 
+            needAddPaddingForScrollbar: modifySoundView.isTruncated || playingTechniquesGridView.isTruncated
+
             onToggleParamRequested: {
                 root.model.togglePreset(paramCode)
             }
@@ -85,6 +87,8 @@ Item {
             navigationPanel.order: root.navigationPanelOrderStart + 1
 
             visible: hasPlayingTechniques
+
+            needAddPaddingForScrollbar: modifySoundView.isTruncated || playingTechniquesGridView.isTruncated
 
             onToggleParamRequested: {
                 root.model.togglePlayingTechnique(paramCode)

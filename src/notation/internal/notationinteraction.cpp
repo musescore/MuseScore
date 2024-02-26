@@ -532,13 +532,26 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
         }
     }
 
-    for (mu::engraving::EngravingItem* element : elements) {
-        element->itemDiscovered = 0;
+    auto canHitElement = [](const mu::engraving::EngravingItem* element) {
         if (!element->selectable() || element->isPage()) {
-            continue;
+            return false;
         }
 
         if (!element->isInteractionAvailable()) {
+            return false;
+        }
+
+        if (element->isSoundFlag()) {
+            return !toSoundFlag(element)->shouldHide();
+        }
+
+        return true;
+    };
+
+    for (mu::engraving::EngravingItem* element : elements) {
+        element->itemDiscovered = 0;
+
+        if (!canHitElement(element)) {
             continue;
         }
 
@@ -552,11 +565,7 @@ std::vector<mu::engraving::EngravingItem*> NotationInteraction::hitElements(cons
         // if no relevant element hit, look nearby
         //
         for (mu::engraving::EngravingItem* element : elements) {
-            if (element->isPage() || !element->selectable()) {
-                continue;
-            }
-
-            if (!element->isInteractionAvailable()) {
+            if (!canHitElement(element)) {
                 continue;
             }
 
@@ -3710,7 +3719,13 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-        score()->cmdPaste(&ma, nullptr, scale);
+        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
+
+        for (EngravingItem* element : pastedElements) {
+            if (element->isTextBase()) {
+                m_textAdded.send(toTextBase(element));
+            }
+        }
     }
 
     apply();
@@ -4582,6 +4597,13 @@ bool NotationInteraction::needEndTextEditing(const std::vector<EngravingItem*>& 
         return true;
     }
 
+    if (m_editData.element && m_editData.element->isStaffText()) {
+        EngravingItem* element = newSelectedElements.front();
+        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+            return false;
+        }
+    }
+
     return newSelectedElements.front() != m_editData.element;
 }
 
@@ -4593,6 +4615,13 @@ bool NotationInteraction::needEndElementEditing(const std::vector<EngravingItem*
 
     if (newSelectedElements.size() != 1) {
         return true;
+    }
+
+    if (m_editData.element && m_editData.element->isStaffText()) {
+        EngravingItem* element = newSelectedElements.front();
+        if (element && element->isSoundFlag() && element->parentItem() == m_editData.element) {
+            return false;
+        }
     }
 
     return newSelectedElements.front() != score()->selection().element();

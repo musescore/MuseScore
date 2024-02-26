@@ -22,7 +22,10 @@
 
 #include "soundflag.h"
 
+#include <climits>
+
 #include "undo.h"
+#include "linkedobjects.h"
 
 using namespace mu::engraving;
 
@@ -30,9 +33,10 @@ SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
     m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+    m_iconFont.setPointSizeF(spatium() * 2.0);
 
-    static constexpr double DEFAULT_FONT_SIZE = 8.0;
-    m_iconFont.setPointSizeF(DEFAULT_FONT_SIZE);
+    //! draw on top of all elements
+    setZ(INT_MAX);
 }
 
 SoundFlag* SoundFlag::clone() const
@@ -75,6 +79,18 @@ void SoundFlag::setPlayingTechniques(const PlayingTechniqueCodes& techniques)
     m_playingTechniques = techniques;
 }
 
+void SoundFlag::clear()
+{
+    if (m_soundPresets.empty() && m_playingTechniques.empty()) {
+        return;
+    }
+
+    m_soundPresets.clear();
+    m_playingTechniques.clear();
+
+    triggerLayout();
+}
+
 bool SoundFlag::shouldHide() const
 {
     if (const Score* score = this->score()) {
@@ -110,6 +126,20 @@ void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTec
     }
 
     score()->undo(new ChangeSoundFlag(this, presets, techniques));
+    triggerLayout();
+
+    const LinkedObjects* links = this->links();
+    if (!links) {
+        return;
+    }
+
+    for (EngravingObject* obj : *links) {
+        if (obj->isSoundFlag()) {
+            SoundFlag* linkedSoundFlag = toSoundFlag(obj);
+            score()->undo(new ChangeSoundFlag(linkedSoundFlag, presets, techniques));
+            linkedSoundFlag->triggerLayout();
+        }
+    }
 }
 
 char16_t SoundFlag::iconCode() const

@@ -54,7 +54,7 @@ StyledPopupView {
     Column {
         id: content
 
-        width: 300
+        width: 294
 
         spacing: 12
 
@@ -76,6 +76,9 @@ StyledPopupView {
             spacing: 6
 
             StyledIconLabel {
+                Layout.preferredWidth: 24
+                Layout.preferredHeight: width
+
                 iconCode: IconCode.AUDIO
             }
 
@@ -85,12 +88,12 @@ StyledPopupView {
                 Layout.fillWidth: true
 
                 text: soundFlagModel.title
-                font: ui.theme.bodyBoldFont
+                font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
 
             MenuButton {
-                Layout.preferredWidth: 20
+                Layout.preferredWidth: 24
                 Layout.preferredHeight: width
 
                 menuModel: soundFlagModel.contextMenuModel

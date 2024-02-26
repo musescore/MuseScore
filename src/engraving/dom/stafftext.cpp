@@ -25,6 +25,7 @@
 #include "soundflag.h"
 #include "segment.h"
 #include "score.h"
+#include "undo.h"
 
 using namespace mu::engraving;
 
@@ -45,6 +46,17 @@ StaffText::StaffText(const StaffText& t)
     if (t.m_soundFlag) {
         setSoundFlag(t.m_soundFlag->clone());
     }
+}
+
+EngravingItem* StaffText::linkedClone()
+{
+    StaffText* clone = static_cast<StaffText*>(StaffTextBase::linkedClone());
+
+    if (clone->m_soundFlag && m_soundFlag) {
+        score()->undo(new Link(clone->m_soundFlag, m_soundFlag));
+    }
+
+    return clone;
 }
 
 PropertyValue StaffText::propertyDefault(Pid id) const

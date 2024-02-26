@@ -36,6 +36,7 @@ public:
     StaffText(const StaffText&);
 
     StaffText* clone() const override { return new StaffText(*this); }
+    EngravingItem* linkedClone() override;
 
     bool canBeExcludedFromOtherParts() const override { return true; }
 

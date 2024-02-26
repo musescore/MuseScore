@@ -62,6 +62,8 @@ static const Harmony* findChordSymbol(const EngravingItem* item)
 
 void PlaybackModel::load(Score* score)
 {
+    TRACEFUNC;
+
     if (!score || score->measures()->empty() || !score->lastMeasure()) {
         return;
     }
@@ -102,6 +104,8 @@ void PlaybackModel::load(Score* score)
 
 void PlaybackModel::reload()
 {
+    TRACEFUNC;
+
     int trackFrom = 0;
     size_t trackTo = m_score->ntracks();
 
@@ -225,7 +229,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
 
     const PlaybackContext& ctx = m_playbackCtxMap[trackId];
 
-    int minTick = std::numeric_limits<int>::min();
+    int minTick = std::numeric_limits<int>::max();
 
     for (const EngravingItem* item : playableItems) {
         if (item->isHarmony()) {
