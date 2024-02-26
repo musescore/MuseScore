@@ -1492,7 +1492,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         sPos.p2 = computeDefaultStartOrEndPoint(item, Grip::END);
     }
 
-    correctForCrossStaff(item, sPos);
+    correctForCrossStaff(item, sPos, sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     forceHorizontal(item, sPos);
 
     item->fixupSegments(segmentCount);
@@ -1669,7 +1669,7 @@ double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
     return 0.5 * (cutOutLeft.x() + cutOutRight.x());
 }
 
-void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos)
+void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos, SpannerSegmentType type)
 {
     Chord* startChord = tie->startNote() ? tie->startNote()->chord() : nullptr;
     Chord* endChord = tie->endNote() ? tie->endNote()->chord() : nullptr;
@@ -1678,24 +1678,37 @@ void SlurTieLayout::correctForCrossStaff(Tie* tie, SlurTiePos& sPos)
         return;
     }
 
-    if (startChord->vStaffIdx() != tie->staffIdx() && sPos.system1 && sPos.system1 == sPos.system2) {
-        double yOrigin = sPos.system1->staff(tie->staffIdx())->y();
-        double yMoved = sPos.system1->staff(startChord->vStaffIdx())->y();
-        double yDiff = yMoved - yOrigin;
-        double curY = sPos.p1.y();
-        sPos.p1.setY(curY + yDiff);
-    }
+    bool startStaffDiff = startChord->vStaffIdx() != tie->staffIdx();
+    bool endStaffDiff = endChord ? endChord->vStaffIdx() != tie->staffIdx() : false;
+    double curY1 = sPos.p1.y();
+    double curY2 = sPos.p2.y();
 
-    if (!endChord) {
-        return;
-    }
-
-    if (endChord->vStaffIdx() != tie->staffIdx() && sPos.system2 && sPos.system2 == sPos.system1) {
-        double yOrigin = sPos.system2->staff(tie->staffIdx())->y();
-        double yMoved = sPos.system2->staff(endChord->vStaffIdx())->y();
-        double yDiff = yMoved - yOrigin;
-        double curY = sPos.p2.y();
-        sPos.p2.setY(curY + yDiff);
+    if (type == SpannerSegmentType::BEGIN) {
+        // Cross-system start tie
+        if (startStaffDiff && sPos.system1) {
+            double yOrigin = sPos.system1->staff(tie->staffIdx())->y();
+            double yMoved = sPos.system1->staff(startChord->vStaffIdx())->y();
+            double yDiff = yMoved - yOrigin;
+            sPos.p1.setY(curY1 + yDiff);
+            sPos.p2.setY(curY2 + yDiff);
+        }
+    } else if (type == SpannerSegmentType::SINGLE) {
+        // Same system single tie
+        if (startStaffDiff && sPos.system1) {
+            double yOrigin = sPos.system1->staff(tie->staffIdx())->y();
+            double yMoved = sPos.system1->staff(startChord->vStaffIdx())->y();
+            double yDiff = yMoved - yOrigin;
+            sPos.p1.setY(curY1 + yDiff);
+        }
+        if (!endChord) {
+            return;
+        }
+        if (endStaffDiff && sPos.system2) {
+            double yOrigin = sPos.system2->staff(tie->staffIdx())->y();
+            double yMoved = sPos.system2->staff(endChord->vStaffIdx())->y();
+            double yDiff = yMoved - yOrigin;
+            sPos.p2.setY(curY2 + yDiff);
+        }
     }
 }
 
