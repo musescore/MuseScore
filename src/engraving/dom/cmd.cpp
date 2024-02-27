@@ -4263,18 +4263,20 @@ void Score::cmdResequenceRehearsalMarks()
         return;
     }
 
-    RehearsalMark* last = 0;
+    RehearsalMark* last = nullptr;
     for (Segment* s = selection().startSegment(); s && s != selection().endSegment(); s = s->next1()) {
         for (EngravingItem* e : s->annotations()) {
             if (e->type() == ElementType::REHEARSAL_MARK) {
                 RehearsalMark* rm = toRehearsalMark(e);
-                if (last) {
-                    String rmText = nextRehearsalMarkText(last, rm);
-                    for (EngravingObject* le : rm->linkList()) {
-                        le->undoChangeProperty(Pid::TEXT, rmText);
+                if (rm->isTopSystemObject()) {
+                    if (last) {
+                        String rmText = nextRehearsalMarkText(last, rm);
+                        for (EngravingObject* le : rm->linkList()) {
+                            le->undoChangeProperty(Pid::TEXT, rmText);
+                        }
                     }
+                    last = rm;
                 }
-                last = rm;
             }
         }
     }
