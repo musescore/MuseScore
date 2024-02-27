@@ -117,7 +117,7 @@ public:
     MusicXmlLyricsExtend() {}
     void init();
     void addLyric(Lyrics* const lyric);
-    void setExtend(const int no, const track_idx_t track, const Fraction& tick);
+    void setExtend(const int no, const track_idx_t track, const Fraction& tick, const Lyrics* prevAddedLyrics);
 
 private:
     std::set<Lyrics*> m_lyrics;

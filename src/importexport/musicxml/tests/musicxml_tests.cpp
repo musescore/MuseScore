@@ -730,6 +730,12 @@ TEST_F(Musicxml_Tests, lyricExtension1) {
 TEST_F(Musicxml_Tests, lyricExtension2) {
     mxmlImportTestRef("testLyricExtensions");
 }
+TEST_F(Musicxml_Tests, lyricExtension3) {
+    mxmlIoTest("testLyricExtension2");
+}
+TEST_F(Musicxml_Tests, lyricExtension4) {
+    mxmlImportTestRef("testLyricExtension2");
+}
 TEST_F(Musicxml_Tests, lyricsVoice2a) {
     mxmlIoTest("testLyricsVoice2a");
 }
