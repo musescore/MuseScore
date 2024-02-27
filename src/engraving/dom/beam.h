@@ -249,6 +249,7 @@ private:
 
     bool m_up = true;
 
+    int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
     bool m_userModified[2]{ false };    // 0: auto/down  1: up
     bool m_isGrace = false;
     bool m_cross = false;
