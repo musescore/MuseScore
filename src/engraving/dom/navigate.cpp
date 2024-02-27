@@ -1019,17 +1019,20 @@ EngravingItem* Score::prevElement()
 
 Lyrics* prevLyrics(const Lyrics* lyrics)
 {
-    track_idx_t currTrack = lyrics->track();
-    Segment* seg = lyrics->segment();
+    Segment* seg = lyrics->explicitParent() ? lyrics->segment() : nullptr;
     if (!seg) {
         return nullptr;
     }
     Segment* prevSegment = seg;
     while ((prevSegment = prevSegment->prev1(mu::engraving::SegmentType::ChordRest))) {
-        EngravingItem* el = prevSegment->element(currTrack);
-        Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
-        if (prevLyrics) {
-            return prevLyrics;
+        const track_idx_t strack = lyrics->staffIdx() * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t track = strack; track < etrack; ++track) {
+            EngravingItem* el = prevSegment->element(track);
+            Lyrics* prevLyrics = el && el->isChord() ? toChordRest(el)->lyrics(lyrics->no(), lyrics->placement()) : nullptr;
+            if (prevLyrics) {
+                return prevLyrics;
+            }
         }
     }
     return nullptr;
