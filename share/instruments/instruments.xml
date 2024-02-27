@@ -7868,7 +7868,7 @@
                   <trackName>China Cymbal</trackName>
                   <longName>China Cymbal</longName>
                   <shortName>Ch. Cym.</shortName>
-                  <description>Chinese cymbal.</description>
+                  <description>China cymbal for drum kit.</description>
                   <musicXMLid>metal.cymbal.chinese</musicXMLid>
                   <clef>PERC</clef>
                   <stafftype staffTypePreset="perc1Line">percussion</stafftype>
