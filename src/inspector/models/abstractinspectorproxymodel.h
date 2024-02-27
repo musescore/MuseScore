@@ -76,7 +76,7 @@ protected:
     void setModels(const QList<AbstractInspectorModel*>& models);
 
 private:
-    QHash<InspectorModelType, AbstractInspectorModel*> m_modelsHash;
+    QHash<InspectorModelType, AbstractInspectorModel*> m_models;
     InspectorModelType m_defaultSubModelType = InspectorModelType::TYPE_UNDEFINED;
 };
 }

@@ -41,16 +41,16 @@ QVariantList AbstractInspectorProxyModel::models() const
 
 QObject* AbstractInspectorProxyModel::modelByType(InspectorModelType type) const
 {
-    return m_modelsHash.value(type);
+    return m_models.value(type);
 }
 
 QObject* AbstractInspectorProxyModel::firstModel() const
 {
-    if (m_modelsHash.empty()) {
+    if (m_models.empty()) {
         return nullptr;
     }
 
-    return m_modelsHash.values().first();
+    return m_models.values().first();
 }
 
 InspectorModelType AbstractInspectorProxyModel::defaultSubModelType() const
@@ -70,7 +70,7 @@ void AbstractInspectorProxyModel::setDefaultSubModelType(InspectorModelType mode
 
 bool AbstractInspectorProxyModel::isMultiModel() const
 {
-    return m_modelsHash.count() > 1;
+    return m_models.count() > 1;
 }
 
 void AbstractInspectorProxyModel::requestElements()
@@ -107,7 +107,7 @@ void AbstractInspectorProxyModel::setModels(const QList<AbstractInspectorModel*>
             continue;
         }
 
-        auto oldModel = m_modelsHash.take(model->modelType());
+        auto oldModel = m_models.take(model->modelType());
 
         delete oldModel;
         oldModel = nullptr;
@@ -120,7 +120,7 @@ void AbstractInspectorProxyModel::setModels(const QList<AbstractInspectorModel*>
 
         InspectorModelType modelType = model->modelType();
 
-        if (m_modelsHash.contains(modelType)) {
+        if (m_models.contains(modelType)) {
             continue;
         }
 
@@ -128,7 +128,7 @@ void AbstractInspectorProxyModel::setModels(const QList<AbstractInspectorModel*>
             emit isEmptyChanged();
         });
 
-        m_modelsHash[modelType] = model;
+        m_models[modelType] = model;
     }
 
     emit modelsChanged();
@@ -170,5 +170,5 @@ void AbstractInspectorProxyModel::updateModels(const ElementKeySet& newElementKe
 
 QList<AbstractInspectorModel*> AbstractInspectorProxyModel::modelList() const
 {
-    return m_modelsHash.values();
+    return m_models.values();
 }
