@@ -31,7 +31,6 @@
 #include "internal/encoders/wavencoder.h"
 
 #include "audioerrors.h"
-#include "log.h"
 
 #include "log.h"
 
