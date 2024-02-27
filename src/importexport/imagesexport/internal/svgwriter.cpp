@@ -116,7 +116,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
         size_t stavesCount = system->staves().size();
 
         for (size_t staffIndex = 0; staffIndex < stavesCount; ++staffIndex) {
-            if (score->staff(staffIndex)->isLinesInvisible(mu::engraving::Fraction(0, 1)) || !score->staff(staffIndex)->show()) {
+            if (!score->staff(staffIndex)->show()) {
                 continue; // ignore invisible staves
             }
 
@@ -133,45 +133,55 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
             // MuseScore draws staff lines by measure, but for SVG they can
             // generally be drawn once for each system. This makes a big
             // difference for scores that scroll horizontally on a single
-            // page. But there are exceptions to this rule:
-            //
-            //   ~ One (or more) invisible measure(s) in a system/staff ~
-            //   ~ One (or more) elements of type HBOX or VBOX          ~
-            //
-            // In these cases the SVG staff lines for the system/staff
-            // are drawn by measure.
-            //
-            bool byMeasure = false;
-            for (mu::engraving::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
-                if (!measure->isMeasure() || !mu::engraving::toMeasure(measure)->visible(staffIndex)) {
-                    byMeasure = true;
-                    break;
-                }
-            }
+            // page.
 
-            if (byMeasure) {     // Draw visible staff lines by measure
-                for (mu::engraving::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
-                    if (measure->isMeasure() && mu::engraving::toMeasure(measure)->visible(staffIndex)) {
-                        mu::engraving::StaffLines* sl = mu::engraving::toMeasure(measure)->staffLines(static_cast<int>(staffIndex));
-                        printer.setElement(sl);
-                        scoreRenderer()->paintItem(painter, sl);
+            mu::engraving::StaffLines* concatenatedSL = nullptr;
+            StaffType* prevStaffType = nullptr;
+            for (mu::engraving::MeasureBase* measure = firstMeasure; measure; measure = system->nextMeasure(measure)) {
+                if (!measure->isMeasure()) {
+                    if (concatenatedSL != nullptr) {
+                        printer.setElement(concatenatedSL);
+                        scoreRenderer()->paintItem(painter, concatenatedSL);
+                        concatenatedSL = nullptr;
+                        prevStaffType = nullptr;
+                    }
+                    continue;
+                }
+
+                Measure* m = mu::engraving::toMeasure(measure);
+                mu::engraving::StaffLines* sl = m->staffLines(static_cast<int>(staffIndex));
+
+                if ((!m->visible(staffIndex) && !m->isCutawayClef(staffIndex)) || !sl->visible()
+                    || (score->staff(staffIndex)->staffType(m->tick()) != prevStaffType)) {
+                    if (concatenatedSL != nullptr) {
+                        printer.setElement(concatenatedSL);
+                        scoreRenderer()->paintItem(painter, concatenatedSL);
+                        concatenatedSL = nullptr;
+                        prevStaffType = nullptr;
                     }
                 }
-            } else {   // Draw staff lines once per system
-                mu::engraving::StaffLines* firstSL = system->firstMeasure()->staffLines(static_cast<int>(staffIndex))->clone();
-                mu::engraving::StaffLines* lastSL =  system->lastMeasure()->staffLines(static_cast<int>(staffIndex));
 
-                qreal lastX =  lastSL->ldata()->bbox().right()
-                              + lastSL->pagePos().x()
-                              - firstSL->pagePos().x();
-                std::vector<mu::LineF> lines = firstSL->lines();
-                for (size_t l = 0, c = lines.size(); l < c; l++) {
-                    lines[l].setP2(mu::PointF(lastX, lines[l].p2().y()));
+                if (concatenatedSL == nullptr) {
+                    if ((m->visible(staffIndex) || m->isCutawayClef(staffIndex)) && sl->visible()) {
+                        concatenatedSL = sl->clone();
+                        prevStaffType = score->staff(staffIndex)->staffType(m->tick());
+                    }
+                } else {
+                    qreal lastX = sl->ldata()->bbox().right()
+                                  + sl->pagePos().x()
+                                  - concatenatedSL->pagePos().x();
+                    std::vector<mu::LineF> lines = concatenatedSL->lines();
+                    for (size_t l = 0, c = lines.size(); l < c; l++) {
+                        lines[l].setP2(mu::PointF(lastX, lines[l].p2().y()));
+                    }
+                    concatenatedSL->setLines(lines);
                 }
-                firstSL->setLines(lines);
-
-                printer.setElement(firstSL);
-                scoreRenderer()->paintItem(painter, firstSL);
+            }
+            if (concatenatedSL != nullptr) {
+                printer.setElement(concatenatedSL);
+                scoreRenderer()->paintItem(painter, concatenatedSL);
+                concatenatedSL = nullptr;
+                prevStaffType = nullptr;
             }
         }
     }
