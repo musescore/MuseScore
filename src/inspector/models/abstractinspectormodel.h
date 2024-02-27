@@ -249,4 +249,12 @@ using InspectorModelTypeSet = std::set<InspectorModelType>;
 using InspectorSectionTypeSet = std::set<InspectorSectionType>;
 }
 
+#ifdef MU_QT5_COMPAT
+inline uint qHash(mu::inspector::InspectorModelType t)
+{
+    return qHash(int(t));
+}
+
+#endif
+
 #endif // MU_INSPECTOR_ABSTRACTINSPECTORMODEL_H
