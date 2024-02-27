@@ -29,7 +29,6 @@ if (MUE_BUILD_AUDIO_MODULE)
 endif ()
 
 add_subdirectory(draw)
-add_subdirectory(fonts)
 
 if (MUE_BUILD_MIDI_MODULE)
     add_subdirectory(midi)

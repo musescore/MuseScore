@@ -22,7 +22,6 @@
 
 #include "testing/environment.h"
 
-#include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
 #include "engraving/tests/utils/scorerw.h"
@@ -39,7 +38,6 @@ using namespace mu::iex::mei;
 static mu::testing::SuiteEnvironment importexport_se(
 {
     new mu::draw::DrawModule(),         // needs for engraving
-    new mu::fonts::FontsModule(),       // needs for engraving
     new mu::engraving::EngravingModule(),
     new mu::iex::mei::MeiModule()
 },

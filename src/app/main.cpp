@@ -46,7 +46,6 @@
 #endif
 
 #include "framework/draw/drawmodule.h"
-#include "framework/fonts/fontsmodule.h"
 
 #ifdef MUE_BUILD_MIDI_MODULE
 #include "framework/midi/midimodule.h"
@@ -264,7 +263,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::actions::ActionsModule());
     app.addModule(new mu::audio::AudioModule());
     app.addModule(new mu::draw::DrawModule());
-    app.addModule(new mu::fonts::FontsModule());
     app.addModule(new mu::midi::MidiModule());
     app.addModule(new mu::mpe::MpeModule());
 #ifdef MUE_BUILD_MUSESAMPLER_MODULE

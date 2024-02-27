@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/finalemaestro/metadata.json">../../../../fonts/finalemaestro/FinaleMaestro.json</file>
+        <file alias="fonts/finalemaestro/FinaleMaestro.otf">../../../../fonts/finalemaestro/FinaleMaestro.otf</file>
+        <file alias="fonts/finalemaestro/FinaleMaestroText.otf">../../../../fonts/finalemaestro/FinaleMaestroText-Regular.otf</file>
+	    </qresource>
+</RCC>

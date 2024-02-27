@@ -31,7 +31,6 @@ set(MODULE_TEST_SRC
 )
 
 set(MODULE_TEST_LINK
-    fonts
     engraving
     iex_guitarpro
 )

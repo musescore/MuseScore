@@ -125,7 +125,6 @@ set(LINK_LIB
     ${QT_LIBRARIES}
     global
     draw
-    fonts
     network
 
     braille

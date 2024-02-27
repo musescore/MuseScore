@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-    <file alias="fonts/smufl/classes.json">../../../fonts/smufl/classes.json</file>
-    <file alias="fonts/smufl/ranges.json">../../../fonts/smufl/ranges.json</file>
-    <file alias="fonts/smufl/glyphnames.json">../../../fonts/smufl/glyphnames.json</file>
-    </qresource>
-</RCC>

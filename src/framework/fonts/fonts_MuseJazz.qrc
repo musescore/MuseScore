@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/musejazz/metadata.json">../../../fonts/musejazz/metadata.json</file>
-        <file alias="fonts/musejazz/MuseJazz.otf">../../../fonts/musejazz/MuseJazz.otf</file>
-        <file alias="fonts/musejazz/MuseJazzText.otf">../../../fonts/musejazz/MuseJazzText.otf</file>
-    </qresource>
-</RCC>

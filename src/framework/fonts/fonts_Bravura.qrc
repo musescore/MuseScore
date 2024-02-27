@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/bravura/metadata.json">../../../fonts/bravura/bravura_metadata.json</file>
-        <file alias="fonts/bravura/Bravura.otf">../../../fonts/bravura/Bravura.otf</file>
-        <file alias="fonts/bravura/BravuraText.otf">../../../fonts/bravura/BravuraText.otf</file>
-	    </qresource>
-</RCC>

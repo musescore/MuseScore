@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/FreeSerif.ttf">../../../fonts/FreeSerif.ttf</file>
-        <file alias="fonts/FreeSerifBold.ttf">../../../fonts/FreeSerifBold.ttf</file>
-        <file alias="fonts/FreeSerifItalic.ttf">../../../fonts/FreeSerifItalic.ttf</file>
-        <file alias="fonts/FreeSerifBoldItalic.ttf">../../../fonts/FreeSerifBoldItalic.ttf</file>
-	    </qresource>
-</RCC>

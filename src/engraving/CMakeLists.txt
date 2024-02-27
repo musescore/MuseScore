@@ -19,7 +19,26 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set(MODULE engraving)
-set(MODULE_QRC engraving.qrc)
+set(MODULE_QRC
+    engraving.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Smufl.qrc
+)
+
+set(MODULE_BIG_QRC
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Bravura.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Campania.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Edwin.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FreeSans.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FreeSerif.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Gootville.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Leland.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_MScore.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_MuseJazz.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Petaluma.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FinaleMaestro.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_FinaleBroadway.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/data/fonts/fonts_Tabulature.qrc
+    )
 
 include(${CMAKE_CURRENT_LIST_DIR}/dom/dom.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)

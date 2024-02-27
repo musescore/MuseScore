@@ -22,7 +22,6 @@
 
 #include "testing/environment.h"
 
-#include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
 #include "engraving/tests/utils/scorerw.h"
@@ -33,7 +32,6 @@
 static mu::testing::SuiteEnvironment importexport_se(
 {
     new mu::draw::DrawModule(),
-    new mu::fonts::FontsModule(), // needs for engraving
     new mu::engraving::EngravingModule()
 },
     nullptr,
