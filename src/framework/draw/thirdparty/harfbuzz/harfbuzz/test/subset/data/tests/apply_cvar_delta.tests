@@ -1,0 +1,12 @@
+FONTS:
+Comfortaa-Regular-new.ttf
+
+PROFILES:
+default.txt
+
+SUBSETS:
+*
+
+INSTANCES:
+wght=700
+wght=300

@@ -1,0 +1,13 @@
+FONTS:
+Roboto-Regular.smallcaps.ttf
+
+PROFILES:
+default.txt
+retain-gids.txt
+
+SUBSETS:
+ABC
+AC
+C
+A
+ÊË

@@ -25,6 +25,8 @@
 #include "global/allocator.h"
 
 #include "draw/ifontprovider.h"
+#include "draw/internal/ifontsdatabase.h"
+
 #include "infrastructure/smufl.h"
 #include "infrastructure/localfileinfoprovider.h"
 
@@ -129,6 +131,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
 
 #ifndef ENGRAVING_NO_INTERNAL
     // Init fonts
+#ifdef MUE_COMPILE_USE_QTFONTMETRICS
     {
         // Symbols
         Smufl::init();
@@ -194,12 +197,61 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
         fontProvider->insertSubstitution(u"Finale Broadway Text", u"MuseJazz Text");
         fontProvider->insertSubstitution(u"ScoreFont",      u"Leland Text");// alias for current Musical Text Font
     }
+#else // MUE_COMPILE_USE_QTFONTMETRICS
+    {
+        using namespace mu::draw;
+
+        std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
+
+        // Text
+        fdb->addFont(FontDataKey("Edwin", false, false), ":/fonts/edwin/Edwin-Roman.otf");
+        fdb->addFont(FontDataKey("Edwin", false, true), ":/fonts/edwin/Edwin-Italic.otf");
+        fdb->addFont(FontDataKey("Edwin", true, false), ":/fonts/edwin/Edwin-Bold.otf");
+        fdb->addFont(FontDataKey("Edwin", true, true), ":/fonts/edwin/Edwin-BdIta.otf");
+
+        // MusicSymbol[Text]
+        fdb->addFont(FontDataKey("Bravura"), ":/fonts/bravura/Bravura.otf");
+        fdb->addFont(FontDataKey("Bravura Text"), ":/fonts/bravura/BravuraText.otf");
+        fdb->addFont(FontDataKey("Leland"), ":/fonts/leland/Leland.otf");
+        fdb->addFont(FontDataKey("Leland Text"), ":/fonts/leland/LelandText.otf");
+
+        // Tabulature
+        //fdb->addFont(FontDataKey("MuseScoreTab"), ":/fonts/MuseScoreTab.ttf");
+        fdb->addFont(FontDataKey("FreeSerif"), ":/fonts/FreeSerif.ttf");
+
+        fdb->setDefaultFont(Font::Type::Unknown, FontDataKey("Edwin"));
+        fdb->setDefaultFont(Font::Type::Text, FontDataKey("Edwin"));
+        fdb->setDefaultFont(Font::Type::MusicSymbolText, FontDataKey("Bravura Text"));
+        fdb->setDefaultFont(Font::Type::MusicSymbol, FontDataKey("Bravura"));
+        fdb->setDefaultFont(Font::Type::Tablature, FontDataKey("FreeSerif"));
+
+        // Symbols
+        Smufl::init();
+
+        m_engravingfonts->addFont("Leland",     "Leland",      ":/fonts/leland/Leland.otf");
+        m_engravingfonts->addFont("Bravura",    "Bravura",     ":/fonts/bravura/Bravura.otf");
+        m_engravingfonts->addFont("Emmentaler", "MScore",      ":/fonts/mscore/mscore.ttf");
+        m_engravingfonts->addFont("Gonville",   "Gootville",   ":/fonts/gootville/Gootville.otf");
+        m_engravingfonts->addFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/MuseJazz.otf");
+        m_engravingfonts->addFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/Petaluma.otf");
+        m_engravingfonts->addFont("Finale Maestro", "Finale Maestro", ":/fonts/finalemaestro/FinaleMaestro.otf");
+        m_engravingfonts->addFont("Finale Broadway", "Finale Broadway", ":/fonts/finalebroadway/FinaleBroadway.otf");
+
+        m_engravingfonts->setFallbackFont("Bravura");
+
+        //! NOTE It may be necessary to draw something with these fonts without requesting the fonts themselves
+        //! (for example, simply specifying the family name for painter).
+        //! But if they are not loaded, then they are not added to the font database and,
+        //! accordingly, they are drawn incorrectly
+        m_engravingfonts->loadAllFonts();
+    }
+#endif // MUE_COMPILE_USE_QTFONTMETRICS
 
     m_configuration->init();
 
     DefaultStyle::instance()->init(m_configuration->defaultStyleFilePath(),
                                    m_configuration->partStyleFilePath());
-#endif
+#endif // ENGRAVING_NO_INTERNAL
 
     MScore::init();     // initialize dom
 

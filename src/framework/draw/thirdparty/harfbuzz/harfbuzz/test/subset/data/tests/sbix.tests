@@ -1,0 +1,13 @@
+FONTS:
+sbix.ttf
+
+PROFILES:
+default.txt
+drop-hints.txt
+drop-hints-retain-gids.txt
+retain-gids.txt
+
+SUBSETS:
+X
+Y
+XY

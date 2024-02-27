@@ -1,0 +1,3 @@
+--layout-features=*
+--notdef-outline
+--retain-gids

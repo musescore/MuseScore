@@ -1,0 +1,11 @@
+FONTS:
+RobotoMono.ttf
+
+PROFILES:
+default.txt
+
+SUBSETS:
+*
+
+INSTANCES:
+wght=700

@@ -1,0 +1,5 @@
+subdir('api')
+subdir('shape')
+subdir('subset')
+subdir('fuzzing')
+subdir('threads')

@@ -24,4 +24,12 @@
 
 #include "../thirdparty/kors_modularity/modularity/imoduleinterface.h" // IWYU pragma: export
 
+namespace mu::modularity {
+using IModuleExportInterface = kors::modularity::IModuleExportInterface;
+using IModuleExportCreator = kors::modularity::IModuleExportCreator;
+
+using IModuleInternalInterface = kors::modularity::IModuleInternalInterface;
+using IModuleInternalCreator = kors::modularity::IModuleInternalCreator;
+}
+
 #endif // MU_MODULARITY_IMODULEINTERFACE_H

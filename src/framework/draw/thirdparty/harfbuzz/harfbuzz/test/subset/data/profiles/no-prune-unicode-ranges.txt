@@ -1,0 +1,1 @@
+--no-prune-unicode-ranges

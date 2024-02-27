@@ -26,9 +26,14 @@
 #ifndef DRAW_NO_INTERNAL
 #include "internal/qfontprovider.h"
 #include "internal/qimageprovider.h"
+
+#include "internal/fontprovider.h"
+#include "internal/fontsengine.h"
+#include "internal/fontsdatabase.h"
 #endif
 
 using namespace mu::draw;
+using namespace mu::modularity;
 
 std::string DrawModule::moduleName() const
 {
@@ -38,7 +43,26 @@ std::string DrawModule::moduleName() const
 void DrawModule::registerExports()
 {
 #ifndef DRAW_NO_INTERNAL
-    mu::modularity::ioc()->registerExport<draw::IFontProvider>(moduleName(), new QFontProvider());
-    mu::modularity::ioc()->registerExport<draw::IImageProvider>(moduleName(), new QImageProvider());
+
+    ioc()->registerExport<draw::IImageProvider>(moduleName(), new QImageProvider());
+
+#ifdef MUE_COMPILE_USE_QTFONTMETRICS
+    ioc()->registerExport<draw::IFontProvider>(moduleName(), new QFontProvider());
+#else
+    m_fontsEngine = std::make_shared<FontsEngine>();
+    ioc()->registerExport<draw::IFontProvider>(moduleName(), new FontProvider());
+    ioc()->registerExport<draw::IFontsEngine>(moduleName(), m_fontsEngine);
+    ioc()->registerExport<draw::IFontsDatabase>(moduleName(), new FontsDatabase());
+#endif // MUE_COMPILE_USE_QTFONTMETRICS
+
+#endif // DRAW_NO_INTERNAL
+}
+
+void DrawModule::onInit(const IApplication::RunMode&)
+{
+#ifndef DRAW_NO_INTERNAL
+#ifndef MUE_COMPILE_USE_QTFONTMETRICS
+    m_fontsEngine->init();
 #endif
+#endif // DRAW_NO_INTERNAL
 }

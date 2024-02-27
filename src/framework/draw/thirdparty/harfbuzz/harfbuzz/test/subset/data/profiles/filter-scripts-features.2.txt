@@ -1,0 +1,2 @@
+--layout-scripts=grek,latn
+--layout-features=liga
