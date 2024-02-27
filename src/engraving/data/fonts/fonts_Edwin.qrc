@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/edwin/Edwin-Roman.otf">../../../../fonts/edwin/Edwin-Roman.otf</file>
+        <file alias="fonts/edwin/Edwin-Bold.otf">../../../../fonts/edwin/Edwin-Bold.otf</file>
+        <file alias="fonts/edwin/Edwin-Italic.otf">../../../../fonts/edwin/Edwin-Italic.otf</file>
+        <file alias="fonts/edwin/Edwin-BdIta.otf">../../../../fonts/edwin/Edwin-BdIta.otf</file>
+            </qresource>
+</RCC>

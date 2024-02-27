@@ -23,7 +23,6 @@
 #include "testing/environment.h"
 
 #include "engraving/engravingmodule.h"
-#include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 
 #include "engraving/dom/instrtemplate.h"
@@ -34,7 +33,6 @@
 static mu::testing::SuiteEnvironment diagnostics_se(
 {
     new mu::draw::DrawModule(),
-    new mu::fonts::FontsModule(),
     new mu::engraving::EngravingModule()
 },
     nullptr,

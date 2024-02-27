@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/petaluma/metadata.json">../../../fonts/petaluma/petaluma_metadata.json</file>
-        <file alias="fonts/petaluma/Petaluma.otf">../../../fonts/petaluma/Petaluma.otf</file>
-        <file alias="fonts/petaluma/PetalumaText.otf">../../../fonts/petaluma/PetalumaText.otf</file>
-        <file alias="fonts/petaluma/PetalumaScript.otf">../../../fonts/petaluma/PetalumaScript.otf</file>
-	    </qresource>
-</RCC>

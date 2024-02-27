@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="fonts/gootville/metadata.json">../../../../fonts/gootville/metadata.json</file>
+        <file alias="fonts/gootville/Gootville.otf">../../../../fonts/gootville/Gootville.otf</file>
+        <file alias="fonts/gootville/GootvilleText.otf">../../../../fonts/gootville/GootvilleText.otf</file>
+	    </qresource>
+</RCC>

@@ -27,7 +27,6 @@ set(MODULE_TEST_SRC
 
 set(MODULE_TEST_LINK
     draw
-    fonts
     diagnostics
     engraving
     accessibility

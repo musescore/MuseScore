@@ -33,7 +33,6 @@ set(MODULE_TEST_SRC
 set(MODULE_TEST_LINK
     braille
     engraving
-    fonts
     accessibility
     )
 

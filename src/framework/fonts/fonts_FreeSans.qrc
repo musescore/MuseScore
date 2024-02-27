@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file alias="fonts/FreeSans.ttf">../../../fonts/FreeSans.ttf</file>
-    </qresource>
-</RCC>

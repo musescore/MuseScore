@@ -22,7 +22,6 @@
 
 #include "testing/environment.h"
 
-#include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
 #include "importexport/musicxml/musicxmlmodule.h"
@@ -40,7 +39,6 @@ using namespace mu::engraving;
 static mu::testing::SuiteEnvironment musicxml_se(
 {
     new mu::draw::DrawModule(),
-    new mu::fonts::FontsModule(), // needs for engraving
     new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },

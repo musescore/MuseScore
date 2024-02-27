@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+    <file alias="fonts/fonts_tablature.xml">../../../../fonts/fonts_tablature.xml</file>
+    <file alias="fonts/fonts_figuredbass.xml">../../../../fonts/fonts_figuredbass.xml</file>
+    </qresource>
+</RCC>
