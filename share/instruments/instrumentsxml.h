@@ -3979,15 +3979,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Bell Tree", "bell-tree longName"),
 //: shortName for Bell Tree; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Be. Tr.", "bell-tree shortName"),
 
-//: description for Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bells.", "bells description"),
-//: trackName for Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bells", "bells trackName"),
-//: longName for Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Bells", "bells longName"),
-//: shortName for Bells; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Be.", "bells shortName"),
-
 //: description for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bowl gongs.", "bowl-gongs description"),
 //: trackName for Bowl Gongs; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
