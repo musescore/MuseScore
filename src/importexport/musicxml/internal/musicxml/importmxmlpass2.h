@@ -278,6 +278,9 @@ public:
     void deleteHandledSpanner(SLine* const& spanner);
     int divs() { return m_divs; }
 
+    SLine* delayedOttava() { return m_delayedOttava; }
+    void setDelayedOttava(SLine* ottava) { m_delayedOttava = ottava; }
+
 private:
     void addError(const String& error);      // Add an error to be shown in the GUI
     void initPartState(const String& partId);
@@ -359,6 +362,7 @@ private:
     Harmony* m_harmony = nullptr;                  // Current harmony
     Chord* m_tremStart = nullptr;                  // Starting chord for current tremolo
     FiguredBass* m_figBass = nullptr;              // Current figured bass element (to attach to next note)
+    SLine* m_delayedOttava = nullptr;              // Current delayed ottava
     int m_multiMeasureRestCount = 0;
     int m_measureNumber = 0;                       // Current measure number as written in the score
     MusicXmlLyricsExtend m_extendedLyrics;         // Lyrics with "extend" requiring fixup
