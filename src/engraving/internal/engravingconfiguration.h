@@ -97,7 +97,7 @@ public:
     bool guitarProMultivoiceEnabled() const override;
     bool minDistanceForPartialSkylineCalculated() const override;
     bool specificSlursLayoutWorkaround() const override;
-    bool adaptFontSizesToSmallResolution() const override;
+    bool adaptFontSizes() const override;
 
 private:
     async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;
