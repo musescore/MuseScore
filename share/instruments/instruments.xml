@@ -1052,17 +1052,13 @@
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="recorder">
+                  <init>soprano-recorder</init>
                   <family>recorders</family>
+                  <trackName>Recorder</trackName>
+                  <longName> Recorder</longName>
+                  <shortName>Rec.</shortName>
                   <description>Soprano or descant recorder, pitched in C.</description>
                   <musicXMLid>wind.flutes.recorder</musicXMLid>
-                  <clef>G8va</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>72-93</aPitchRange>
-                  <pPitchRange>72-98</pPitchRange>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 74; MS General: Recorder-->
-                        <program value="74"/> <!--Recorder-->
-                  </Channel>
                   <genre>common</genre>
                   <genre>classroom</genre>
             </Instrument>
@@ -1081,6 +1077,8 @@
                         <!--MIDI: Bank 0, Prog 74; MS General: Recorder-->
                         <program value="74"/> <!--Recorder-->
                   </Channel>
+                  <genre>common</genre>
+                  <genre>classroom</genre>
                   <genre>earlymusic</genre>
             </Instrument>
             <Instrument id="tenor-recorder">
@@ -13883,7 +13881,7 @@
                   <trackName>Viola da gamba</trackName>
                   <longName>Viola da gamba</longName>
                   <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba (staff notation).</description>
+                  <description>Viola da gamba, also known as Bass viol (staff notation).</description>
                   <StringData>
                         <frets>13</frets>
                         <string>33</string>
@@ -13912,15 +13910,31 @@
                   </Channel>
                   <genre>earlymusic</genre>
             </Instrument>
+            <Instrument id="bass-viol">
+                <init>viola-da-gamba</init>
+                <family>viols</family>
+                <trackName>Bass viol</trackName>
+                <longName>Bass viol</longName>
+                <shortName>B. Vl.</shortName>
+                <description>Bass viol, also known as Viola da gamba.</description>
+            </Instrument>
             <Instrument id="viola-da-gamba-tablature">
                   <init>viola-da-gamba</init>
                   <family>viols</family>
                   <trackName>Viola da gamba (tablature)</trackName>
                   <longName>Viola da gamba</longName>
                   <shortName>Vla. d. g.</shortName>
-                  <description>Viola da gamba (tablature).</description>
+                  <description>Viola da gamba, also known as Bass viol (tablature).</description>
                   <stafftype staffTypePreset="tab6StrFrench">tablature</stafftype>
                   <genre>earlymusic</genre>
+            </Instrument>
+            <Instrument id="bass-viol-tablature">
+                  <init>viola-da-gamba-tablature</init>
+                  <family>viols</family>
+                  <trackName>Bass viol (tablature)</trackName>
+                  <longName>Bass viol</longName>
+                  <shortName>B. Vl.</shortName>
+                  <description>Bass viol, also known as Viola da gamba (tablature).</description>
             </Instrument>
             <Instrument id="violone">
                   <family>viols</family>
