@@ -1,0 +1,2 @@
+--notdef-outline
+--no-hinting

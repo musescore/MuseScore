@@ -1,0 +1,1 @@
+--drop-tables-=GDEF,GPOS

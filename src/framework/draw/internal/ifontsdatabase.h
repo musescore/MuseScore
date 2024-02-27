@@ -1,0 +1,50 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2024 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MU_DRAW_IFONTSDATABASE_H
+#define MU_DRAW_IFONTSDATABASE_H
+
+#include "global/modularity/imoduleinterface.h"
+#include "global/io/path.h"
+
+#include "../types/fontstypes.h"
+
+namespace mu::draw {
+class IFontsDatabase : public mu::modularity::IModuleExportInterface
+{
+    INTERFACE_ID(mu::draw::IFontsDatabase)
+public:
+    virtual ~IFontsDatabase() = default;
+
+    virtual void setDefaultFont(mu::draw::Font::Type type, const FontDataKey& key) = 0;
+
+    virtual int addFont(const FontDataKey& key, const mu::io::path_t& path) = 0;
+
+    virtual FontDataKey actualFont(const FontDataKey& requireKey, mu::draw::Font::Type type) const = 0;
+    virtual std::vector<FontDataKey> substitutionFonts(mu::draw::Font::Type type) const = 0;
+    virtual FontData fontData(const FontDataKey& requireKey, mu::draw::Font::Type type) const = 0;
+    virtual mu::io::path_t fontPath(const FontDataKey& requireKey, mu::draw::Font::Type type) const = 0;
+
+    virtual void addAdditionalFonts(const mu::io::path_t& path) = 0;
+};
+}
+
+#endif // MU_DRAW_IFONTSDATABASE_H

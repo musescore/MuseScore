@@ -42,6 +42,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/font.h
     ${CMAKE_CURRENT_LIST_DIR}/types/drawdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/fontstypes.h
 
     ${CMAKE_CURRENT_LIST_DIR}/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/painter.h
@@ -75,17 +76,47 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimageprovider.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimageprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
-    include(cmake/SetupFreeType.cmake)
-    set(MODULE_INCLUDE ${FREETYPE_INCLUDE_DIRS})
-    set(MODULE_LINK ${FREETYPE_LIBRARIES})
+    if (MUE_COMPILE_USE_QTFONTMETRICS)
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
+        )
+
+        include(cmake/SetupFreeType.cmake)
+        set(MODULE_INCLUDE ${FREETYPE_INCLUDE_DIRS})
+        set(MODULE_LINK ${FREETYPE_LIBRARIES})
+    else()
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsengine.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/ifontsdatabase.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/ifontface.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontprovider.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsdatabase.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontsengine.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfaceft.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/fontfacedu.h
+        )
+
+        include(cmake/SetupFreeType.cmake)
+        add_subdirectory(thirdparty/harfbuzz)
+
+        set(MODULE_INCLUDE
+            ${FREETYPE_INCLUDE_DIRS}
+            ${CMAKE_CURRENT_LIST_DIR}/thirdparty/harfbuzz/harfbuzz/src
+        )
+        set(MODULE_LINK ${FREETYPE_LIBRARIES} harfbuzz)
+    endif()
 
 endif()
 

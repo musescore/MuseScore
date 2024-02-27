@@ -22,14 +22,22 @@
 #ifndef MU_DRAW_DRAWMODULE_H
 #define MU_DRAW_DRAWMODULE_H
 
+#include <memory>
+
 #include "global/modularity/imodulesetup.h"
 
 namespace mu::draw {
+class FontsEngine;
 class DrawModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
     void registerExports() override;
+    void onInit(const IApplication::RunMode& mode) override;
+
+private:
+
+    std::shared_ptr<FontsEngine> m_fontsEngine;
 };
 }
 

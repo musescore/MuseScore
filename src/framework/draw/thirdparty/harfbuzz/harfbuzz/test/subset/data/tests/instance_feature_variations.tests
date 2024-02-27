@@ -1,0 +1,12 @@
+FONTS:
+MPLUS1-Variable.ttf
+
+PROFILES:
+default.txt
+
+SUBSETS:
+ポ
+
+INSTANCES:
+wght=100
+wght=400

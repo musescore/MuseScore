@@ -1,0 +1,13 @@
+FONTS:
+IndicTestJalandhar-Regular.ttf
+
+PROFILES:
+default.txt
+drop-hints.txt
+keep-gdef.txt
+
+SUBSETS:
+ਁ
+ਅਆ
+ਇਛ
+*

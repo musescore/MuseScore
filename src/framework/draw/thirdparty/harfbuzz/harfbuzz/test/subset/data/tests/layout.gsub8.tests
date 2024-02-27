@@ -1,0 +1,17 @@
+FONTS:
+gsub8_manually_created.otf
+
+PROFILES:
+layout-test.txt
+layout-test-retain-gids.txt
+
+SUBSETS:
+a
+A
+ABC
+ABCDEF
+ABCDEFG
+ABCDEFGHI
+ABCDEFM
+ABCDEFQ
+*

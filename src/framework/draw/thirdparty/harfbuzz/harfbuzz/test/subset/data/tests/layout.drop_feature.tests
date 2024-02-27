@@ -1,0 +1,10 @@
+FONTS:
+SpectralSC-ExtraLightItalic.ttf
+
+PROFILES:
+default.txt
+glyph-names.txt
+notdef-outline.txt
+
+SUBSETS:
+*
