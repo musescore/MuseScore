@@ -485,7 +485,7 @@ PropertyValue Lyrics::propertyDefault(Pid id) const
     case Pid::VERSE:
         return 0;
     case Pid::ALIGN:
-        if (isMelisma()) {
+        if (isMelisma() && m_separator && m_separator->ticks().isNotZero()) {
             return style().styleV(Sid::lyricsMelismaAlign);
         }
     // fall through
