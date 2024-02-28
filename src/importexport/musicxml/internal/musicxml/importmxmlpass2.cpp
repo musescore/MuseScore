@@ -6849,7 +6849,7 @@ static void addArpeggio(ChordRest* cr, const String& arpeggioType, const int arp
         track_idx_t arpTrack = curArp->track();
         track_idx_t span = cr->track() - curArp->track();
         if (chordTrack > arpTrack && span != 0) {
-            curArp->setSpan(span + 1);
+            curArp->setSpan(static_cast<int>(span + 1));
         }
     } else {
         if (!arpeggioType.empty() && cr->type() == ElementType::CHORD) {
