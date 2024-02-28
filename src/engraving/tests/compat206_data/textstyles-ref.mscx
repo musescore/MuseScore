@@ -89,7 +89,7 @@
       <partInstrumentFrameWidth>0</partInstrumentFrameWidth>
       <expressionFontFace>MuseJazz Text</expressionFontFace>
       <expressionFontSize>12</expressionFontSize>
-      <expressionFontSpatiumDependent>0</expressionFontSpatiumDependent>
+      <expressionFontStyle>0</expressionFontStyle>
       <expressionFramePadding>0</expressionFramePadding>
       <expressionFrameWidth>0</expressionFrameWidth>
       <tempoFontFace>MuseJazz Text</tempoFontFace>

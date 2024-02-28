@@ -116,7 +116,6 @@ public:
     virtual bool guitarProMultivoiceEnabled() const = 0;
     virtual bool minDistanceForPartialSkylineCalculated() const = 0;
     virtual bool specificSlursLayoutWorkaround() const = 0;
-    virtual bool adaptFontSizesToSmallResolution() const = 0;
 };
 }
 

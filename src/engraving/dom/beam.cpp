@@ -293,7 +293,7 @@ void Beam::calcBeamBreaks(const ChordRest* cr, const ChordRest* prevCr, int leve
 
 void Beam::spatiumChanged(double oldValue, double newValue)
 {
-    int idx = (!m_up) ? 0 : 1;
+    int idx = directionIdx();
     if (m_userModified[idx]) {
         double diff = newValue / oldValue;
         for (BeamFragment* f : m_fragments) {
@@ -321,7 +321,7 @@ public:
 
 void Beam::editDrag(EditData& ed)
 {
-    int idx  = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     double dy = ed.delta.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = m_fragments[bed->editFragment];
@@ -353,7 +353,7 @@ void Beam::editDrag(EditData& ed)
 
 std::vector<PointF> Beam::gripsPositions(const EditData& ed) const
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = m_fragments[bed->editFragment];
 
@@ -530,7 +530,7 @@ PairF Beam::beamPos() const
         return PairF(0.0, 0.0);
     }
     BeamFragment* f = m_fragments.back();
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     double _spatium = spatium();
     return PairF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
 }
@@ -545,7 +545,7 @@ void Beam::setBeamPos(const PairF& bp)
         m_fragments.push_back(new BeamFragment);
     }
     BeamFragment* f = m_fragments.back();
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     m_userModified[idx] = true;
     setGenerated(false);
 
@@ -564,7 +564,7 @@ void Beam::setNoSlope(bool b)
 
     // Make flat if usermodified
     if (m_noSlope) {
-        int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+        int idx = directionIdx();
         if (m_userModified[idx]) {
             BeamFragment* f = m_fragments.back();
             f->py1[idx] = f->py2[idx] = (f->py1[idx] + f->py2[idx]) * 0.5;
@@ -578,7 +578,7 @@ void Beam::setNoSlope(bool b)
 
 bool Beam::userModified() const
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     return m_userModified[idx];
 }
 
@@ -588,7 +588,7 @@ bool Beam::userModified() const
 
 void Beam::setUserModified(bool val)
 {
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     m_userModified[idx] = val;
 }
 
@@ -793,7 +793,7 @@ ActionIconType Beam::actionIconTypeForBeamMode(BeamMode mode)
 
 RectF Beam::drag(EditData& ed)
 {
-    int idx  = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     double dy = ed.pos.y() - ed.lastPos.y();
     BeamEditData* bed = static_cast<BeamEditData*>(ed.getData(this).get());
     BeamFragment* f = m_fragments[bed->editFragment];
@@ -836,7 +836,7 @@ void Beam::initBeamEditData(EditData& ed)
 
     PointF pt(ed.normalizedStartMove - pagePos());
     double ydiff = 100000000.0;
-    int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
+    int idx = directionIdx();
     int i = 0;
     for (BeamFragment* f : m_fragments) {
         double d = fabs(f->py1[idx] - pt.y());

@@ -276,7 +276,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         { "Instrument Name (Short)", TextStyleType::INSTRUMENT_SHORT },
         { "Instrument Name (Part)",  TextStyleType::INSTRUMENT_EXCERPT },
         { "Dynamics",                TextStyleType::DYNAMICS },
-        { "Technique",               TextStyleType::EXPRESSION },
+        { "Technique",               TextStyleType::IGNORED_TYPES },
         { "Tempo",                   TextStyleType::TEMPO },
         { "Metronome",               TextStyleType::METRONOME },
         { "Measure Number",          TextStyleType::MEASURE_NUMBER },
@@ -312,6 +312,11 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
 
     if (ss == TextStyleType::IGNORED_TYPES) {
         return;
+    }
+
+    if (ss == TextStyleType::DEFAULT) {
+        // This could be false in older files but newer files must have this true
+        sizeIsSpatiumDependent = true;
     }
 
     bool isExcessStyle = false;

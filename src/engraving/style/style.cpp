@@ -392,6 +392,8 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                 set(Sid::TieMinDistance,  Spatium(_val));
                 set(Sid::SlurMinDistance, Spatium(_val));
             }
+        } else if (tag == "defaultFontSpatiumDependent") {
+            e.skipCurrentElement(); // obsolete
         } else if (!readProperties(e)) {
             e.unknown();
         }
