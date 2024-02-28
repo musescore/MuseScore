@@ -800,6 +800,9 @@ TEST_F(Musicxml_Tests, noteAttributes2) {
 TEST_F(Musicxml_Tests, noteAttributes3) {
     mxmlIoTest("testNoteAttributes3");
 }
+TEST_F(Musicxml_Tests, noteAttributes4) {
+    mxmlImportTestRef("testNoteAttributes2");
+}
 TEST_F(Musicxml_Tests, noteColor) {
     mxmlIoTest("testNoteColor");
 }

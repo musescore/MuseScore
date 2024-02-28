@@ -3259,7 +3259,9 @@ void MusicXMLParserDirection::otherDirection()
             { String(u"l.v. down"), SymId::articLaissezVibrerBelow },
             { String(u"8vb"), SymId::ottavaBassaVb },
             { String(u"Treble clef"), SymId::gClef },
-            { String(u"Bass clef"), SymId::fClef }
+            { String(u"Bass clef"), SymId::fClef },
+            { String(u"Caesura"), SymId::caesura },
+            { String(u"Thick caesura"), SymId::caesuraThick }
         };
         String t = _e.readElementText();
         String val = mu::value(otherDirectionStrings, t);
@@ -6963,6 +6965,7 @@ static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
         // b->setTrack(trk + voice); TODO check next line
         b->setTrack(cr->track());
         b->setSymId(breath);
+        b->setPlacement(b->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
         seg->add(b);
     }
 }
