@@ -53,9 +53,7 @@ public:
     FBBox glyphBbox(glyph_idx_t idx) const override;
     f26dot6_t glyphAdvance(glyph_idx_t idx) const override;
 
-#ifdef MU_DRAW_TEXTRENDER
     const msdfgen::Shape& glyphShape(glyph_idx_t idx) const override;
-#endif
 
 private:
 
@@ -65,9 +63,7 @@ private:
     FaceKey m_key;
     bool m_isSymbolMode = false;
     FData* m_data = nullptr;
-#ifdef MU_DRAW_TEXTRENDER
     mutable std::unordered_map<glyph_idx_t, msdfgen::Shape> m_cache;
-#endif
 };
 }
 

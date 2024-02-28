@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+	<desc>Test a simple triangle for accuracy</desc>
+	<path d="M0 0h512v512H0z" fill="black"/>
+	<path d="
+	M256,156 l100,200h-200z
+	"
+	fill="white"/>
+</svg>

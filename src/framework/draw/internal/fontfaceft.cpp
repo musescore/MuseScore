@@ -31,9 +31,7 @@
 #include FT_TRUETYPE_TABLES_H
 #include <hb-ft.h>
 
-#ifdef MU_DRAW_TEXTRENDER
 #include <ext/import-font.h>
-#endif
 
 #include "global/types/bytearray.h"
 #include "global/io/file.h"
@@ -307,7 +305,6 @@ f26dot6_t FontFaceFT::glyphAdvance(glyph_idx_t idx) const
     }
 }
 
-#ifdef MU_DRAW_TEXTRENDER
 const msdfgen::Shape& FontFaceFT::glyphShape(glyph_idx_t idx) const
 {
     static const msdfgen::Shape null;
@@ -334,8 +331,6 @@ const msdfgen::Shape& FontFaceFT::glyphShape(glyph_idx_t idx) const
 
     return m_cache.insert(std::move(v)).first->second;
 }
-
-#endif
 
 f26dot6_t FontFaceFT::leading() const
 {

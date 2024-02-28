@@ -232,7 +232,9 @@ void QPainterProvider::drawPolygon(const PointF* points, size_t pointCount, Poly
 
 void QPainterProvider::drawText(const PointF& point, const String& text)
 {
-    m_painter->drawText(point.toQPointF(), text);
+    QPointF p = point.toQPointF();
+    QString t = text.toQString();
+    m_painter->drawText(p, t);
 }
 
 void QPainterProvider::drawText(const RectF& rect, int flags, const String& text)
