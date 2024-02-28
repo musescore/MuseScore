@@ -1141,11 +1141,11 @@ EditStyle::EditStyle(QWidget* parent)
     });
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
-    textStyles->setCurrentRow(s_lastSubPageRow);
+    textStyles->setCurrentRow(configuration()->styleDialogLastSubPageIndex());
 
     connect(pageList, &QListWidget::currentRowChanged, pageStack, &QStackedWidget::setCurrentIndex);
     connect(pageList, &QListWidget::currentRowChanged, this, &EditStyle::on_pageRowSelectionChanged);
-    pageList->setCurrentRow(s_lastPageRow);
+    pageList->setCurrentRow(configuration()->styleDialogLastPageIndex());
 
     adjustPagesStackSize(0);
 
@@ -1381,10 +1381,6 @@ QString EditStyle::currentSubPageCode() const
 {
     return m_currentSubPageCode;
 }
-
-int EditStyle::s_lastPageRow = 0;
-
-int EditStyle::s_lastSubPageRow = 0;
 
 QString EditStyle::pageCodeForElement(const EngravingItem* element)
 {
@@ -1900,7 +1896,7 @@ void EditStyle::on_resetTabStylesButton_clicked()
 
 void EditStyle::on_pageRowSelectionChanged()
 {
-    s_lastPageRow = pageList->currentRow();
+    configuration()->setStyleDialogLastPageIndex(pageList->currentRow());
 }
 
 //---------------------------------------------------------
@@ -2644,7 +2640,7 @@ void EditStyle::textStyleChanged(int row)
                                                  || tid == TextStyleType::HARP_PEDAL_DIAGRAM);
     row_textStyleMusicalSymbolsScale->setEnabled(tid != TextStyleType::TUPLET || tupletUseSymbols->isChecked());
 
-    s_lastSubPageRow = row;
+    configuration()->setStyleDialogLastSubPageIndex(row);
 }
 
 //---------------------------------------------------------

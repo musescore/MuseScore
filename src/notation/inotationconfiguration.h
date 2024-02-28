@@ -194,6 +194,14 @@ public:
 
     virtual io::path_t styleFileImportPath() const = 0;
     virtual void setStyleFileImportPath(const io::path_t& path) = 0;
+
+    virtual int styleDialogLastPageIndex() const = 0;
+    virtual void setStyleDialogLastPageIndex(int value) = 0;
+
+    virtual int styleDialogLastSubPageIndex() const = 0;
+    virtual void setStyleDialogLastSubPageIndex(int value) = 0;
+
+    virtual void resetStyleDialogPageIndices() = 0;
 };
 }
 

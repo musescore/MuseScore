@@ -150,9 +150,6 @@ private slots:
 private:
     QString m_currentPageCode;
     QString m_currentSubPageCode;
-
-    static int s_lastPageRow;
-    static int s_lastSubPageRow;
 };
 }
 

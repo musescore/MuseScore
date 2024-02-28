@@ -223,6 +223,10 @@ void NotationConfiguration::init()
 
     mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
     mu::engraving::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
+
+    context()->currentProjectChanged().onNotify(this, [this]() {
+        resetStyleDialogPageIndices();
+    });
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -887,4 +891,30 @@ mu::io::path_t NotationConfiguration::styleFileImportPath() const
 void NotationConfiguration::setStyleFileImportPath(const io::path_t& path)
 {
     settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
+}
+
+int NotationConfiguration::styleDialogLastPageIndex() const
+{
+    return m_styleDialogLastPageIndex;
+}
+
+void NotationConfiguration::setStyleDialogLastPageIndex(int value)
+{
+    m_styleDialogLastPageIndex = value;
+}
+
+int NotationConfiguration::styleDialogLastSubPageIndex() const
+{
+    return m_styleDialogLastSubPageIndex;
+}
+
+void NotationConfiguration::setStyleDialogLastSubPageIndex(int value)
+{
+    m_styleDialogLastSubPageIndex = value;
+}
+
+void NotationConfiguration::resetStyleDialogPageIndices()
+{
+    setStyleDialogLastPageIndex(0);
+    setStyleDialogLastSubPageIndex(0);
 }
