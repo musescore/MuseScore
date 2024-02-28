@@ -30,9 +30,7 @@
 #include "global/modularity/ioc.h"
 #include "ifontsdatabase.h"
 
-#ifdef MU_DRAW_TEXTRENDER
-#include "fontrendercache.h"
-#endif
+//#include "fontrendercache.h"
 
 namespace mu::draw {
 class IFontFace;
@@ -66,9 +64,7 @@ public:
     double symAdvance(const mu::draw::Font& f, char32_t ucs4) const override;
 
     // For draw
-#ifdef MU_DRAW_TEXTRENDER
     std::vector<GlyphImage> render(const mu::draw::Font& f, const std::u32string& text) const override;
-#endif
 
     // For dev
     using FontFaceFactory = std::function<IFontFace* (const mu::io::path_t&)>;
@@ -101,9 +97,7 @@ private:
     mutable std::vector<IFontFace*> m_loadedFaces;
     mutable std::vector<RequireFace*> m_requiredFaces;
 
-#ifdef MU_DRAW_TEXTRENDER
-    mutable FontRenderCache m_renderCache;
-#endif
+    //mutable FontRenderCache m_renderCache;
 };
 }
 

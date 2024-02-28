@@ -27,10 +27,7 @@
 #include "global/modularity/imoduleinterface.h"
 #include "types/font.h"
 #include "types/geometry.h"
-
-#ifdef MU_DRAW_TEXTRENDER
 #include "types/fontstypes.h"
-#endif
 
 namespace mu::draw {
 class IFontsEngine : public mu::modularity::IModuleExportInterface
@@ -59,9 +56,7 @@ public:
     virtual double symAdvance(const mu::draw::Font& f, char32_t ucs4) const = 0;
 
     // Draw
-#ifdef MU_DRAW_TEXTRENDER
     virtual std::vector<GlyphImage> render(const mu::draw::Font& f, const std::u32string& text) const = 0;
-#endif
 };
 }
 

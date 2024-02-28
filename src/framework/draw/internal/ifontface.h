@@ -22,9 +22,7 @@
 #ifndef MU_DRAW_IFONTFACE_H
 #define MU_DRAW_IFONTFACE_H
 
-#ifdef MU_DRAW_TEXTRENDER
 #include <msdfgen.h>
-#endif
 
 #include "global/io/path.h"
 #include "types/fontstypes.h"
@@ -66,13 +64,10 @@ public:
     virtual FBBox glyphBbox(glyph_idx_t idx) const = 0;
     virtual f26dot6_t glyphAdvance(glyph_idx_t idx) const = 0;
 
-#ifdef MU_DRAW_TEXTRENDER
     virtual const msdfgen::Shape& glyphShape(glyph_idx_t idx) const = 0;
-#endif
 };
 }
 
-#ifdef MU_DRAW_TEXTRENDER
 inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
 {
     if (s1.inverseYAxis != s2.inverseYAxis) {
@@ -135,7 +130,5 @@ inline bool operator==(const msdfgen::Shape& s1, const msdfgen::Shape& s2)
 
     return true;
 }
-
-#endif
 
 #endif // MU_DRAW_IFONTFACE_H

@@ -21,10 +21,8 @@
  */
 #include "fontsengine.h"
 
-#ifdef MU_DRAW_TEXTRENDER
 #include <msdfgen.h>
 #include <ext/import-font.h>
-#endif
 
 #include "global/io/fileinfo.h"
 
@@ -41,12 +39,10 @@ static const double DEFAULT_PIXEL_SIZE = 100.0;
 static const double SYMBOLS_PIXEL_SIZE = 200.0;
 static const double LOADED_PIXEL_SIZE = 200.0;
 
-#ifdef MU_DRAW_TEXTRENDER
 static const double TEXT_LINE_SCALE = 1.2;
 
 static const int SDF_WIDTH = 64;
 static const int SDF_HEIGHT = 64;
-#endif
 
 static inline mu::RectF fromFBBox(const FBBox& bb, double scale)
 {
@@ -97,9 +93,7 @@ FontsEngine::~FontsEngine()
 
 void FontsEngine::init()
 {
-#ifdef MU_DRAW_TEXTRENDER
-    m_renderCache.init();
-#endif
+    //m_renderCache.init();
 }
 
 double FontsEngine::lineSpacing(const mu::draw::Font& f) const
@@ -358,7 +352,6 @@ double FontsEngine::symAdvance(const mu::draw::Font& f, char32_t ucs4) const
     return from_f26d6(advance) * rf->pixelScale();
 }
 
-#ifdef MU_DRAW_TEXTRENDER
 static void generateSdf(GlyphImage& out, glyph_idx_t glyphIdx, const IFontFace* face)
 {
     struct Bounds
@@ -462,10 +455,10 @@ std::vector<GlyphImage> FontsEngine::render(const mu::draw::Font& f, const std::
 
             for (const GlyphPos& g : glyphs) {
                 if (NOT_RENDER_GLYPHS.find(g.idx) == NOT_RENDER_GLYPHS.end()) {
-                    GlyphImage image = m_renderCache.load(fontFace->key(), g.idx);
+                    GlyphImage image;// = m_renderCache.load(fontFace->key(), g.idx);
                     if (image.isNull()) {
                         generateSdf(image, g.idx, fontFace);
-                        m_renderCache.store(fontFace->key(), g.idx, image);
+                        //m_renderCache.store(fontFace->key(), g.idx, image);
                     }
 
                     image.rect = scaleRect(image.rect, pixelScale);
@@ -483,8 +476,6 @@ std::vector<GlyphImage> FontsEngine::render(const mu::draw::Font& f, const std::
 
     return images;
 }
-
-#endif
 
 void FontsEngine::setFontFaceFactory(const FontFaceFactory& f)
 {
