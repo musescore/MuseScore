@@ -24,6 +24,7 @@
 #include "async/async.h"
 #include "settings.h"
 #include "themeconverter.h"
+#include "platform/macos/macosplatformtheme.h"
 
 #include <QScreen>
 #include <QFontDatabase>
@@ -231,6 +232,9 @@ void UiConfiguration::initThemes()
 
     platformTheme()->platformThemeChanged().onNotify(this, [this]() {
         synchThemeWithSystemIfNecessary();
+
+        // updates the accent color if running macOS
+        synchAccentColorWithSystemIfNecessary();
     });
 
     updateSystemThemeListeningStatus();
@@ -241,6 +245,10 @@ void UiConfiguration::initThemes()
 
     updateThemes();
     updateCurrentTheme();
+
+    // macOS: check & update accent color if set to follow system theme
+    // in case it was changed while MuseScore was closed
+    synchAccentColorWithSystemIfNecessary();
 }
 
 void UiConfiguration::updateCurrentTheme()
@@ -295,6 +303,13 @@ ValNt<bool> UiConfiguration::isFollowSystemTheme() const
 void UiConfiguration::setFollowSystemTheme(bool follow)
 {
     settings()->setSharedValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(follow));
+
+    // enabling followSystemTheme on macOS should sync the accent color to the system setting
+    // for some reasno, trying to do this in updateSystemThemeListeningStatus causes MuseScore
+    // to crash during startup. i wasn't able to figure out how or why :(
+    if (QSysInfo::productType() == "osx" && follow) {
+        synchAccentColorWithSystemIfNecessary();
+    }
 }
 
 void UiConfiguration::updateSystemThemeListeningStatus()
@@ -314,6 +329,30 @@ void UiConfiguration::synchThemeWithSystemIfNecessary()
     }
 
     doSetIsDarkMode(platformTheme()->isSystemThemeDark());
+}
+
+void UiConfiguration::synchAccentColorWithSystemIfNecessary()
+{
+    if (!m_isFollowSystemTheme.val) {
+        return;
+    }
+
+    // macOS-specific accent color handling
+    #ifdef Q_OS_MAC
+    // get the accent color index pertaining to the user's macOS system colorString
+    int MSAccentColorIndex = MacOSPlatformTheme::getAccentColorIndex();
+    // change the actual accent color setting
+    // can get QStringList of hex values of accent color options for current theme with possibleAccentColors()
+    QStringList themeAccents = possibleAccentColors();
+    QString colorString = themeAccents[MSAccentColorIndex];
+    QColor newAccentColor = QColor(colorString);
+    setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newAccentColor));
+    #endif
+
+    #ifdef Q_OS_WIN
+    // windows system accent color implmentation can go here
+    return;
+    #endif
 }
 
 void UiConfiguration::notifyAboutCurrentThemeChanged()
