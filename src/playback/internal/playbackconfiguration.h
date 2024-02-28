@@ -70,8 +70,8 @@ public:
     SoundProfileName defaultProfileForNewProjects() const override;
     void setDefaultProfileForNewProjects(const SoundProfileName& name) override;
 
-    bool isSoundFlagsMultiSelectionEnabled() const override;
-    void setIsSoundFlagsMultiSelectionEnabled(bool enabled) override;
+    bool soundPresetsMultiSelectionEnabled() const override;
+    void setSoundPresetsMultiSelectionEnabled(bool enabled) override;
 
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;

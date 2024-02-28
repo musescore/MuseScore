@@ -3213,13 +3213,13 @@ void ChangeSoundFlag::flip(EditData*)
     }
 
     SoundFlag::PresetCodes presets = m_soundFlag->soundPresets();
-    SoundFlag::PlayingTechniqueCodes techniques = m_soundFlag->playingTechniques();
+    SoundFlag::PlayingTechniqueCode technique = m_soundFlag->playingTechnique();
 
     m_soundFlag->setSoundPresets(m_presets);
-    m_soundFlag->setPlayingTechniques(m_playingTechniques);
+    m_soundFlag->setPlayingTechnique(m_playingTechnique);
 
     m_presets = std::move(presets);
-    m_playingTechniques = std::move(techniques);
+    m_playingTechnique = std::move(technique);
 }
 
 void ChangeSpanArpeggio::flip(EditData*)

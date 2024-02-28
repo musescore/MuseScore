@@ -35,9 +35,54 @@
 
 using namespace mu;
 using namespace mu::playback;
+using namespace mu::engraving;
+using namespace mu::audio;
 
 static const QString RESET_MENU_ID = "reset";
 static const QString MULTI_SELECTION_MENU_ID = "multi-selection";
+
+static QVariantList buildAvailablePresetsModel(const SoundPresetList& availablePresets)
+{
+    QVariantList model;
+
+    if (availablePresets.size() <= 1) {
+        return model; // only default preset is available; don't show it
+    }
+
+    for (const SoundPreset& preset : availablePresets) {
+        QVariantMap item;
+        item["code"] = preset.code.toQString();
+        item["name"] = preset.name.toQString();
+
+        model << item;
+    }
+
+    return model;
+}
+
+static QVariantList buildAvailablePlayingTechniquesModel(const std::set<String>& availableTechniqueCodes)
+{
+    QVariantList model;
+
+    if (availableTechniqueCodes.empty()) {
+        return model;
+    }
+
+    QVariantMap ordinaryItem;
+    ordinaryItem["code"] = QString::fromStdString(mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
+    ordinaryItem["name"] = qtrc("playback", "Ord. (default)");
+    model << ordinaryItem;
+
+    for (const String& playingTechniqueCode : availableTechniqueCodes) {
+        QVariantMap item;
+        item["code"] = playingTechniqueCode.toQString();
+        item["name"] = playingTechniqueCode.toQString();
+
+        model << item;
+    }
+
+    return model;
+}
 
 SoundFlagSettingsModel::SoundFlagSettingsModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_SOUND_FLAG, parent)
@@ -46,7 +91,7 @@ SoundFlagSettingsModel::SoundFlagSettingsModel(QObject* parent)
 
 bool SoundFlagSettingsModel::inited() const
 {
-    return m_isPresetsInited && m_isPlayingTechniquesInited;
+    return m_availablePresetsInited;
 }
 
 void SoundFlagSettingsModel::init()
@@ -65,48 +110,35 @@ void SoundFlagSettingsModel::init()
 
     initTitle();
     initAvailablePresets();
-    initAvailablePlayingTechniques();
 
-    emit showTextChanged();
-    emit textChanged();
     emit contextMenuModelChanged();
 }
 
 void SoundFlagSettingsModel::initTitle()
 {
     const audio::AudioInputParams& params = currentAudioInputParams();
-    audio::AudioSourceType type = params.type();
 
-    QString title;
     QString name = audio::audioSourceName(params).toQString();
     QString category = audio::audioSourceCategoryName(params).toQString();
-
-    if (audio::AudioSourceType::MuseSampler == type) {
-        title = category + ": " + name;
-    }
+    QString title = category + ": " + name;
 
     setTitle(title);
 }
 
 void SoundFlagSettingsModel::initAvailablePresets()
 {
-    playbackController()->availableSoundPresets(makeInstrumentTrackId(m_item))
-    .onResolve(this, [this](const audio::SoundPresetList& presets) {
-        setAvailablePresets(presets);
+    m_availablePresetsInited = false;
 
-        m_isPresetsInited = true;
+    playbackController()->availableSoundPresets(makeInstrumentTrackId(m_item))
+    .onResolve(this, [this](const SoundPresetList& presets) {
+        setAvailableSoundPresets(presets);
+
+        m_availablePresetsInited = true;
         emit initedChanged();
     });
 
-    emit presetCodesChanged();
-}
-
-void SoundFlagSettingsModel::initAvailablePlayingTechniques()
-{
-    NOT_IMPLEMENTED;
-
-    m_isPlayingTechniquesInited = true;
-    emit initedChanged();
+    emit selectedPresetCodesChanged();
+    emit selectedPlayingTechniqueCodeChanged();
 }
 
 void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
@@ -115,32 +147,38 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
         return;
     }
 
-    QStringList presetCodes = this->presetCodes();
+    QStringList newPresetCodes;
 
-    if (playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
-        if (presetCodes.contains(presetCode)) {
-            if (presetCodes.size() == 1) {
+    if (playbackConfiguration()->soundPresetsMultiSelectionEnabled()) {
+        newPresetCodes = selectedPresetCodes();
+
+        if (newPresetCodes.contains(presetCode)) {
+            if (newPresetCodes.size() == 1) {
                 return;
             }
 
-            presetCodes.removeAll(presetCode);
+            newPresetCodes.removeOne(presetCode);
         } else {
-            presetCodes.push_back(presetCode);
+            newPresetCodes.push_back(presetCode);
         }
     } else {
-        presetCodes = QStringList{ presetCode };
+        newPresetCodes = QStringList{ presetCode };
     }
 
-    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+    SoundFlag* soundFlag = toSoundFlag(m_item);
 
     beginCommand();
-    soundFlag->undoChangeSoundFlag(StringList(presetCodes), soundFlag->playingTechniques());
-    updateStaffText();
+    soundFlag->undoChangeSoundFlag(StringList(newPresetCodes), soundFlag->playingTechnique());
+    bool needUpdateNotation = updateStaffText();
     endCommand();
 
-    updateNotation();
+    if (needUpdateNotation) {
+        updateNotation();
+    }
 
-    emit presetCodesChanged();
+    loadAvailablePlayingTechniques();
+
+    emit selectedPresetCodesChanged();
 }
 
 void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechniqueCode)
@@ -149,36 +187,18 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
         return;
     }
 
-    QStringList playingTechniquesCodes = this->playingTechniquesCodes();
-
-    if (playbackConfiguration()->isSoundFlagsMultiSelectionEnabled()) {
-        if (playingTechniquesCodes.contains(playingTechniqueCode)) {
-            if (playingTechniquesCodes.size() == 1) {
-                return;
-            }
-
-            playingTechniquesCodes.removeAll(playingTechniqueCode);
-        } else {
-            playingTechniquesCodes.push_back(playingTechniqueCode);
-        }
-    } else {
-        playingTechniquesCodes = QStringList{ playingTechniqueCode };
-    }
-
-    engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+    SoundFlag* soundFlag = toSoundFlag(m_item);
 
     beginCommand();
-
-    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), StringList(playingTechniquesCodes));
+    soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), String(playingTechniqueCode));
     bool needUpdateNotation = updateStaffText();
-
     endCommand();
 
     if (needUpdateNotation) {
         updateNotation();
     }
 
-    emit playingTechniquesCodesChanged();
+    emit selectedPlayingTechniqueCodeChanged();
 }
 
 uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title)
@@ -202,7 +222,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
 {
     uicomponents::MenuItemList items;
 
-    uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset"));
+    uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("global", "Reset"));
 
     ui::UiAction resetAction = resetItem->action();
     resetAction.iconCode = ui::IconCode::Code::UNDO;
@@ -218,7 +238,7 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
     multiSelectionItem->setAction(multiSelectionAction);
 
     ui::UiActionState multiSelectionActionState = multiSelectionItem->state();
-    multiSelectionActionState.checked = playbackConfiguration()->isSoundFlagsMultiSelectionEnabled();
+    multiSelectionActionState.checked = playbackConfiguration()->soundPresetsMultiSelectionEnabled();
     multiSelectionItem->setState(multiSelectionActionState);
 
     items << multiSelectionItem;
@@ -229,11 +249,11 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
 void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
 {
     if (menuId == RESET_MENU_ID) {
-        engraving::SoundFlag* soundFlag = engraving::toSoundFlag(m_item);
+        SoundFlag* soundFlag = toSoundFlag(m_item);
 
         beginCommand();
 
-        soundFlag->undoChangeSoundFlag(StringList(), StringList());
+        soundFlag->undoChangeSoundFlag(StringList(), String());
         bool needUpdateNotation = updateStaffText();
 
         endCommand();
@@ -242,56 +262,51 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
             updateNotation();
         }
 
-        emit presetCodesChanged();
-        emit playingTechniquesCodesChanged();
+        emit selectedPresetCodesChanged();
+        emit selectedPlayingTechniqueCodeChanged();
     } else if (menuId == MULTI_SELECTION_MENU_ID) {
-        playbackConfiguration()->setIsSoundFlagsMultiSelectionEnabled(!playbackConfiguration()->isSoundFlagsMultiSelectionEnabled());
+        playbackConfiguration()->setSoundPresetsMultiSelectionEnabled(!playbackConfiguration()->soundPresetsMultiSelectionEnabled());
         emit contextMenuModelChanged();
     }
 }
 
-engraving::StaffText* SoundFlagSettingsModel::staffText() const
-{
-    engraving::EngravingItem* parent = m_item->parentItem();
-    return parent && parent->isStaffText() ? engraving::toStaffText(parent) : nullptr;
-}
-
 bool SoundFlagSettingsModel::updateStaffText()
 {
-    String oldStaffText = this->text();
+    EngravingItem* parent = m_item->parentItem();
+    if (!parent || !parent->isStaffText()) {
+        return false;
+    }
 
     String newText = mtrc("engraving", "Staff text");
+    const SoundFlag* soundFlag = toSoundFlag(m_item);
+    const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();
 
-    auto getParamsNames = [](const QVariantList& params, const StringList& selectedParams) -> String {
-        if (selectedParams.empty()) {
-            return {};
+    StringList strs;
+
+    for (const SoundPreset& preset : m_availablePresets) {
+        if (mu::contains(activePresetCodes, preset.code)) {
+            strs << preset.name;
         }
-
-        StringList paramsNames;
-        for (const String& paramCode : selectedParams) {
-            for (const QVariant& paramVar : params) {
-                if (paramVar.toMap()["code"].toString() == paramCode) {
-                    paramsNames.push_back(paramVar.toMap()["name"].toString().toLower());
-                }
-            }
-        }
-
-        return !paramsNames.empty() ? paramsNames.join(u", ") : u"";
-    };
-
-    String presetsNames = getParamsNames(m_availablePresets, engraving::toSoundFlag(m_item)->soundPresets());
-    if (!presetsNames.empty()) {
-        newText = presetsNames;
     }
 
-    String playingTechniquesNames = getParamsNames(m_availablePlayingTechniques, engraving::toSoundFlag(m_item)->playingTechniques());
-    if (!playingTechniquesNames.empty()) {
-        newText = !presetsNames.empty() ? (presetsNames + u", " + playingTechniquesNames) : playingTechniquesNames;
+    const SoundFlag::PlayingTechniqueCode& techniqueCode = soundFlag->playingTechnique();
+    if (!techniqueCode.empty()) {
+        if (techniqueCode.toStdString() == mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+            strs << mtrc("playback", "ordinary");
+        } else {
+            strs << soundFlag->playingTechnique();
+        }
     }
 
-    bool isTextChanged = oldStaffText != newText;
+    if (!strs.empty()) {
+        newText = strs.join(u", ").toLower();
+    }
+
+    StaffText* staffTextItem = toStaffText(parent);
+    bool isTextChanged = staffTextItem->xmlText() != newText;
+
     if (isTextChanged) {
-        staffText()->undoChangeProperty(mu::engraving::Pid::TEXT, newText);
+        staffTextItem->undoChangeProperty(Pid::TEXT, newText);
     }
 
     return isTextChanged;
@@ -306,9 +321,9 @@ project::IProjectAudioSettingsPtr SoundFlagSettingsModel::audioSettings() const
     return globalContext()->currentProject()->audioSettings();
 }
 
-const audio::AudioInputParams& SoundFlagSettingsModel::currentAudioInputParams() const
+const AudioInputParams& SoundFlagSettingsModel::currentAudioInputParams() const
 {
-    return audioSettings()->trackInputParams(mu::engraving::makeInstrumentTrackId(m_item));
+    return audioSettings()->trackInputParams(makeInstrumentTrackId(m_item));
 }
 
 QString SoundFlagSettingsModel::title() const
@@ -326,22 +341,6 @@ void SoundFlagSettingsModel::setTitle(const QString& title)
     emit titleChanged();
 }
 
-QString SoundFlagSettingsModel::text() const
-{
-    engraving::StaffText* staffText = this->staffText();
-    return staffText ? staffText->xmlText().toQString() : QString();
-}
-
-void SoundFlagSettingsModel::setText(const QString& text)
-{
-    if (this->text() == text) {
-        return;
-    }
-
-    changeItemProperty(mu::engraving::Pid::TEXT, text);
-    emit textChanged();
-}
-
 QRect SoundFlagSettingsModel::iconRect() const
 {
     return m_item ? fromLogical(m_item->canvasBoundingRect()).toQRect() : QRect();
@@ -349,49 +348,22 @@ QRect SoundFlagSettingsModel::iconRect() const
 
 QVariantList SoundFlagSettingsModel::availablePresets() const
 {
-    return m_availablePresets;
+    return m_availablePresetsModel;
 }
 
-void SoundFlagSettingsModel::setAvailablePresets(const audio::SoundPresetList& presets)
-{
-    QVariantList presetsList;
-    for (const audio::SoundPreset& preset : presets) {
-        QVariantMap map;
-        map["code"] = QString::fromStdString(preset.code);
-        map["name"] = QString::fromStdString(preset.name);
-
-        presetsList << map;
-    }
-
-    if (m_availablePresets == presetsList) {
-        return;
-    }
-
-    m_availablePresets = presetsList;
-    emit availablePresetsChanged();
-}
-
-QStringList SoundFlagSettingsModel::presetCodes() const
+QStringList SoundFlagSettingsModel::selectedPresetCodes() const
 {
     if (!m_item) {
         return {};
     }
 
-    QStringList availablePresetCodes;
-    for (const QVariant& presetVar : m_availablePresets) {
-        availablePresetCodes << presetVar.toMap()["code"].toString();
-    }
-
     QStringList result;
-    for (const String& presetCode : engraving::toSoundFlag(m_item)->soundPresets()) {
-        QString code = presetCode.toQString();
-        if (availablePresetCodes.contains(code)) {
-            result.push_back(code);
-        }
+    for (const String& presetCode : toSoundFlag(m_item)->soundPresets()) {
+        result << presetCode.toQString();
     }
 
-    if (result.empty() && !availablePresetCodes.empty()) {
-        result = QStringList{ availablePresetCodes.first() };
+    if (result.empty() && !m_availablePresets.empty()) {
+        result << m_availablePresets.front().code.toQString();
     }
 
     return result;
@@ -399,50 +371,57 @@ QStringList SoundFlagSettingsModel::presetCodes() const
 
 QVariantList SoundFlagSettingsModel::availablePlayingTechniques() const
 {
-    return m_availablePlayingTechniques;
+    return m_availablePlayingTechniquesModel;
 }
 
-void SoundFlagSettingsModel::setAvailablePlayingTechniques(const audio::SoundPreset::PlayingTechniqueList& playingTechniques)
+void SoundFlagSettingsModel::setAvailableSoundPresets(const SoundPresetList& presets)
 {
-    QVariantList playingTechniquesList;
-    for (const audio::SoundPreset::PlayingTechnique& playingTechnique : playingTechniques) {
-        QVariantMap map;
-        map["code"] = QString::fromStdString(playingTechnique.code);
-        map["name"] = QString::fromStdString(playingTechnique.name);
-
-        playingTechniquesList << map;
-    }
-
-    if (m_availablePlayingTechniques == playingTechniquesList) {
+    if (m_availablePresets == presets) {
         return;
     }
 
-    m_availablePlayingTechniques = playingTechniquesList;
-    emit availablePlayingTechniquesChanged();
+    m_availablePresets = presets;
+    m_availablePresetsModel = buildAvailablePresetsModel(presets);
+    emit availablePresetsChanged();
+
+    loadAvailablePlayingTechniques();
 }
 
-QStringList SoundFlagSettingsModel::playingTechniquesCodes() const
+void SoundFlagSettingsModel::loadAvailablePlayingTechniques()
 {
-    if (!m_item) {
-        return {};
-    }
+    QStringList selectedPresetCodes = this->selectedPresetCodes();
+    std::set<String> availablePlayingTechniqueCodes;
 
-    QStringList availablePlayingTechniquesCodes;
-    for (const QVariant& playingTechniqueVar : m_availablePlayingTechniques) {
-        availablePlayingTechniquesCodes << playingTechniqueVar.toMap()["code"].toString();
-    }
+    for (const SoundPreset& preset : m_availablePresets) {
+        if (!selectedPresetCodes.contains(preset.code)) {
+            continue;
+        }
 
-    QStringList result;
-    for (const String& playingTechniqueCode : engraving::toSoundFlag(m_item)->playingTechniques()) {
-        QString code = playingTechniqueCode.toQString();
-        if (availablePlayingTechniquesCodes.contains(code)) {
-            result.push_back(code);
+        auto techniqueIt = preset.attributes.find(PLAYING_TECHNIQUES_ATTRIBUTE);
+        if (techniqueIt == preset.attributes.end()) {
+            continue;
+        }
+
+        for (const String& code : techniqueIt->second.split(u"|")) {
+            availablePlayingTechniqueCodes << code;
         }
     }
 
-    if (result.empty() && !availablePlayingTechniquesCodes.empty()) {
-        result = QStringList{ availablePlayingTechniquesCodes.first() };
+    QVariantList newModel = buildAvailablePlayingTechniquesModel(availablePlayingTechniqueCodes);
+    if (m_availablePlayingTechniquesModel == newModel) {
+        return;
     }
 
-    return result;
+    m_availablePlayingTechniquesModel = std::move(newModel);
+    emit availablePlayingTechniquesChanged();
+}
+
+QString SoundFlagSettingsModel::selectedPlayingTechniqueCode() const
+{
+    if (!m_item) {
+        return QString();
+    }
+
+    const SoundFlag::PlayingTechniqueCode& code = toSoundFlag(m_item)->playingTechnique();
+    return code.toQString();
 }

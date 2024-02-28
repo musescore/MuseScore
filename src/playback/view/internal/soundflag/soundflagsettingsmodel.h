@@ -1,4 +1,4 @@
-/*
+﻿/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -33,10 +33,6 @@
 
 #include "notation/view/abstractelementpopupmodel.h"
 
-namespace mu::engraving {
-class StaffText;
-}
-
 namespace mu::playback {
 class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
 {
@@ -48,15 +44,14 @@ class SoundFlagSettingsModel : public notation::AbstractElementPopupModel
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged FINAL)
 
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
-    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged FINAL)
 
     Q_PROPERTY(QRect iconRect READ iconRect NOTIFY iconRectChanged FINAL)
 
     Q_PROPERTY(QVariantList availablePresets READ availablePresets NOTIFY availablePresetsChanged FINAL)
-    Q_PROPERTY(QStringList presetCodes READ presetCodes NOTIFY presetCodesChanged FINAL)
+    Q_PROPERTY(QStringList selectedPresetCodes READ selectedPresetCodes NOTIFY selectedPresetCodesChanged FINAL)
 
     Q_PROPERTY(QVariantList availablePlayingTechniques READ availablePlayingTechniques NOTIFY availablePlayingTechniquesChanged FINAL)
-    Q_PROPERTY(QStringList playingTechniquesCodes READ playingTechniquesCodes NOTIFY playingTechniquesCodesChanged FINAL)
+    Q_PROPERTY(QString selectedPlayingTechniqueCode READ selectedPlayingTechniqueCode NOTIFY selectedPlayingTechniqueCodeChanged FINAL)
 
     Q_PROPERTY(QVariantList contextMenuModel READ contextMenuModel NOTIFY contextMenuModelChanged FINAL)
 
@@ -75,48 +70,39 @@ public:
     QString title() const;
     void setTitle(const QString& title);
 
-    QString text() const;
-    void setText(const QString& text);
-
     QRect iconRect() const;
 
     QVariantList availablePresets() const;
-    void setAvailablePresets(const audio::SoundPresetList& presets);
-
-    QStringList presetCodes() const;
+    QStringList selectedPresetCodes() const;
 
     QVariantList availablePlayingTechniques() const;
-    void setAvailablePlayingTechniques(const audio::SoundPreset::PlayingTechniqueList& playingTechniques);
-
-    QStringList playingTechniquesCodes() const;
+    QString selectedPlayingTechniqueCode() const;
 
 signals:
-    void titleChanged();
-    void showTextChanged();
-    void textChanged();
+    void initedChanged();
 
     void iconRectChanged();
 
+    void titleChanged();
+
     void availablePresetsChanged();
-    void presetCodesChanged();
+    void selectedPresetCodesChanged();
 
     void availablePlayingTechniquesChanged();
-    void playingTechniquesCodesChanged();
+    void selectedPlayingTechniqueCodeChanged();
 
     void contextMenuModelChanged();
 
-    void initedChanged();
-
 private:
     project::IProjectAudioSettingsPtr audioSettings() const;
-
     const audio::AudioInputParams& currentAudioInputParams() const;
 
     void initTitle();
     void initAvailablePresets();
     void initAvailablePlayingTechniques();
 
-    engraving::StaffText* staffText() const;
+    void setAvailableSoundPresets(const audio::SoundPresetList& presets);
+    void loadAvailablePlayingTechniques();
 
     uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title);
 
@@ -124,11 +110,12 @@ private:
 
     QString m_title;
 
-    QVariantList m_availablePresets;
-    QVariantList m_availablePlayingTechniques;
+    audio::SoundPresetList m_availablePresets;
 
-    bool m_isPresetsInited = false;
-    bool m_isPlayingTechniquesInited = false;
+    QVariantList m_availablePresetsModel;
+    QVariantList m_availablePlayingTechniquesModel;
+
+    bool m_availablePresetsInited = false;
 };
 }
 

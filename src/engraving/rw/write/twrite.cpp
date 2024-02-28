@@ -2876,7 +2876,7 @@ void TWrite::write(const SystemText* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 {
-    if (item->soundPresets().empty() && item->playingTechniques().empty()) {
+    if (item->soundPresets().empty() && item->playingTechnique().empty()) {
         return;
     }
 
@@ -2886,8 +2886,8 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
         xml.tag("presets", item->soundPresets().join(u","));
     }
 
-    if (!item->playingTechniques().empty()) {
-        xml.tag("playingTechniques", item->playingTechniques().join(u","));
+    if (!item->playingTechnique().empty()) {
+        xml.tag("playingTechnique", item->playingTechnique());
     }
 
     xml.endElement();

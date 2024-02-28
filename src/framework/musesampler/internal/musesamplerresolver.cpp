@@ -144,17 +144,29 @@ SoundPresetList MuseSamplerResolver::resolveSoundPresets(const audio::AudioResou
     ms_PresetList presets = m_libHandler->getPresetList(instrument.msInstrument);
     SoundPresetList result;
 
-    int num = 0;
-
-    while (auto msPreset = m_libHandler->getNextPreset(presets)) {
+    while (const char* presetCode = m_libHandler->getNextPreset(presets)) {
         SoundPreset soundPreset;
-        soundPreset.code = msPreset;
-        soundPreset.name = msPreset;
-        soundPreset.isDefault = num == 0;
-        result.emplace_back(std::move(soundPreset));
+        soundPreset.code = presetCode;
+        soundPreset.name = presetCode;
+        loadSoundPresetAttributes(soundPreset.attributes, instrument.instrumentId, presetCode);
 
-        ++num;
+        result.emplace_back(std::move(soundPreset));
     }
+
+    if (result.empty()) {
+        // All instruments always have at least 1 preset (default)
+        // If getPresetList returns an empty list, the default preset is implicitly defined as ""
+        static const String DEFAULT_PRESET_CODE(u"Default");
+
+        SoundPreset defaultPreset;
+        defaultPreset.code = DEFAULT_PRESET_CODE;
+        defaultPreset.name = DEFAULT_PRESET_CODE;
+        loadSoundPresetAttributes(defaultPreset.attributes, instrument.instrumentId, "");
+
+        result.emplace_back(std::move(defaultPreset));
+    }
+
+    result.front().isDefault = true;
 
     return result;
 }
@@ -211,6 +223,18 @@ bool MuseSamplerResolver::checkLibrary() const
     }
 
     return true;
+}
+
+void MuseSamplerResolver::loadSoundPresetAttributes(SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const
+{
+    const char* articulations_cstr = m_libHandler->getTextArticulations(instrumentId, presetCode);
+    if (articulations_cstr) {
+        String articulation = String::fromAscii(articulations_cstr);
+
+        if (!articulation.empty()) {
+            attributes.emplace(PLAYING_TECHNIQUES_ATTRIBUTE, std::move(articulation));
+        }
+    }
 }
 
 String MuseSamplerResolver::buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const

@@ -42,19 +42,19 @@ public:
     void setSelected(bool f) override;
 
     using PresetCodes = StringList;
-    using PlayingTechniqueCodes = StringList;
+    using PlayingTechniqueCode = String;
 
     const PresetCodes& soundPresets() const;
     void setSoundPresets(const PresetCodes& soundPresets);
 
-    const PlayingTechniqueCodes& playingTechniques() const;
-    void setPlayingTechniques(const PlayingTechniqueCodes& techniques);
+    const PlayingTechniqueCode& playingTechnique() const;
+    void setPlayingTechnique(const PlayingTechniqueCode& technique);
 
     void clear();
 
     bool shouldHide() const;
 
-    void undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCodes& techniques);
+    void undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCode& technique);
 
     char16_t iconCode() const;
     draw::Font iconFont() const;
@@ -63,7 +63,7 @@ public:
 
 private:
     PresetCodes m_soundPresets;
-    PlayingTechniqueCodes m_playingTechniques;
+    PlayingTechniqueCode m_playingTechnique;
 
     draw::Font m_iconFont;
 };
