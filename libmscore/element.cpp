@@ -1927,6 +1927,11 @@ void Element::triggerLayoutAll() const
             score()->setLayoutAll(staffIdx(), this);
       }
 
+void Element::triggerLayoutToEnd() const
+      {
+      score()->setLayout(tick(), score()->endTick(), staffIdx(), staffIdx(), this);
+      }
+
 //---------------------------------------------------------
 //   control
 //---------------------------------------------------------

@@ -137,6 +137,8 @@ void MeasureBase::add(Element* e)
                         setLineBreak(true);
                         setSectionBreak(false);
                         setNoBreak(false);
+                        if (b->startWithMeasureOne())
+                              triggerLayoutToEnd();
                         break;
                   case LayoutBreak::SECTION:
                         setLineBreak(false);
@@ -176,7 +178,8 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::SECTION:
                         setSectionBreak(false);
                         score()->setPause(endTick(), 0);
-                        triggerLayout();
+                        if (lb->startWithMeasureOne())
+                              triggerLayoutToEnd();
                         break;
                   case LayoutBreak::NOBREAK:
                         setNoBreak(false);

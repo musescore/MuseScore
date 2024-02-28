@@ -513,6 +513,7 @@ class Element : public ScoreElement {
 
       virtual void triggerLayout() const;
       virtual void triggerLayoutAll() const;
+      virtual void triggerLayoutToEnd() const;
       virtual void drawEditMode(QPainter*, EditData&);
 
       void autoplaceSegmentElement(bool above, bool add);        // helper functions

@@ -291,9 +291,15 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      triggerLayout();
-      if (parent() && measure()->next())
-            measure()->next()->triggerLayout();
+
+      if (propertyId == Pid::START_WITH_MEASURE_ONE)
+            triggerLayoutToEnd();
+      else {
+            triggerLayout();
+            if (parent() && measure()->next())
+                  measure()->next()->triggerLayout();
+            }
+
       setGenerated(false);
       return true;
       }
