@@ -218,7 +218,7 @@ public:
     MusicXMLParserNotations(XmlStreamReader& e, Score* score, MxmlLogger* logger);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap);
     String errors() const { return m_errors; }
     MusicXmlTupletDesc tupletDesc() const { return m_tupletDesc; }
     String tremoloType() const { return m_tremoloType; }
@@ -228,6 +228,7 @@ private:
     void addError(const String& error);      // Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
     void addTechnical(const Notation& notation, Note* note);
+    void arpeggio();
     void harmonic();
     void articulations();
     void dynamics();
@@ -255,6 +256,7 @@ private:
     String m_wavyLineType;
     int m_wavyLineNo = 0;
     String m_arpeggioType;
+    int m_arpeggioNo = 0;
     bool m_slurStop = false;
     bool m_slurStart = false;
     bool m_wavyLineStop = false;
@@ -303,7 +305,7 @@ private:
     void divisions();
     Note* note(const String& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev, Fraction& dura,
                Fraction& missingCurr, String& currentVoice, GraceChordList& gcl, size_t& gac, Beams& currBeams, FiguredBassList& fbl,
-               int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+               int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();

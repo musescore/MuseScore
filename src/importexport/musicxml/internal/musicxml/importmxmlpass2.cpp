@@ -2321,6 +2321,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     MxmlTupletStates tupletStates;         // Tuplet state for each voice in the current part
     Tuplets tuplets;         // Current tuplet for each voice in the current part
     DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
+    ArpeggioMap arpMap;
 
     // collect candidates for courtesy accidentals to work out at measure end
     std::map<Note*, int> alterMap;
@@ -2351,7 +2352,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
             // note: chord and grace note handling done in note()
             // dura > 0 iff valid rest or first note of chord found
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
-                           tupletStates, tuplets);
+                           tupletStates, tuplets, arpMap);
             if (n && !n->chord()->isGrace()) {
                 prevChord = n->chord();          // remember last non-grace chord
             }
@@ -5200,7 +5201,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
                                 FiguredBassList& fbl,
                                 int& alt,
                                 MxmlTupletStates& tupletStates,
-                                Tuplets& tuplets)
+                                Tuplets& tuplets, ArpeggioMap& arpMap)
 {
     if (m_e.asciiAttribute("print-spacing") == "no") {
         notePrintSpacingNo(dura);
@@ -5537,7 +5538,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
 
     // handle notations
     if (cr) {
-        notations.addToScore(cr, note, noteStartTime.ticks(), m_slurs, m_glissandi, m_spanners, m_trills, m_tie);
+        notations.addToScore(cr, note, noteStartTime.ticks(), m_slurs, m_glissandi, m_spanners, m_trills, m_tie, arpMap);
 
         // if no tie added yet, convert the "tie" into "tied" and add it.
         if (note && !note->tieFor() && !tieType.empty()) {
@@ -6720,6 +6721,19 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
     }
 }
 
+void MusicXMLParserNotations::arpeggio()
+{
+    m_arpeggioType = m_e.attribute("direction");
+    if (m_arpeggioType == "") {
+        m_arpeggioType = u"none";
+    }
+    m_arpeggioNo = m_e.intAttribute("number");
+    if (m_arpeggioNo == 0) {
+        m_arpeggioNo = 1;
+    }
+    m_e.skipCurrentElement();  // skip but don't log
+}
+
 //---------------------------------------------------------
 //   mordentNormalOrInverted
 //---------------------------------------------------------
@@ -6816,25 +6830,47 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
 //   addArpeggio
 //---------------------------------------------------------
 
-static void addArpeggio(ChordRest* cr, const String& arpeggioType,
+static void addArpeggio(ChordRest* cr, const String& arpeggioType, const int arpeggioNo, ArpeggioMap& arpMap,
                         MxmlLogger* logger, const XmlStreamReader* const xmlreader)
 {
+    // If no current arpeggio with same number add new
+    // If not, expand span
     // no support for arpeggio on rest
-    if (!arpeggioType.empty() && cr->type() == ElementType::CHORD) {
-        Arpeggio* arpeggio = Factory::createArpeggio(mu::engraving::toChord(cr));
-        arpeggio->setArpeggioType(ArpeggioType::NORMAL);
-        if (arpeggioType == "up") {
-            arpeggio->setArpeggioType(ArpeggioType::UP);
-        } else if (arpeggioType == "down") {
-            arpeggio->setArpeggioType(ArpeggioType::DOWN);
-        } else if (arpeggioType == "non-arpeggiate") {
-            arpeggio->setArpeggioType(ArpeggioType::BRACKET);
-        } else {
-            logger->logError(String(u"unknown arpeggio type %1").arg(arpeggioType), xmlreader);
+    const std::vector<MusicXmlArpeggioDesc> arps = mu::values(arpMap, cr->tick().ticks());
+    Arpeggio* curArp = nullptr;
+    for (const MusicXmlArpeggioDesc arp : arps) {
+        if (arp.no == arpeggioNo) {
+            curArp = arp.arp;
         }
-        // there can be only one
-        if (!(static_cast<Chord*>(cr))->arpeggio()) {
-            cr->add(arpeggio);
+    }
+
+    if (curArp) {
+        track_idx_t chordTrack = cr->track();
+        track_idx_t arpTrack = curArp->track();
+        track_idx_t span = cr->track() - curArp->track();
+        if (chordTrack > arpTrack && span != 0) {
+            curArp->setSpan(span + 1);
+        }
+    } else {
+        if (!arpeggioType.empty() && cr->type() == ElementType::CHORD) {
+            Arpeggio* arpeggio = Factory::createArpeggio(mu::engraving::toChord(cr));
+            arpeggio->setArpeggioType(ArpeggioType::NORMAL);
+            if (arpeggioType == "up") {
+                arpeggio->setArpeggioType(ArpeggioType::UP);
+            } else if (arpeggioType == "down") {
+                arpeggio->setArpeggioType(ArpeggioType::DOWN);
+            } else if (arpeggioType == "non-arpeggiate") {
+                arpeggio->setArpeggioType(ArpeggioType::BRACKET);
+            } else {
+                logger->logError(String(u"unknown arpeggio type %1").arg(arpeggioType), xmlreader);
+            }
+            // there can be only one
+            if (!(static_cast<Chord*>(cr))->arpeggio()) {
+                cr->add(arpeggio);
+
+                MusicXmlArpeggioDesc arpDesc(arpeggio, arpeggioNo);
+                arpMap.insert(std::pair<int, MusicXmlArpeggioDesc>(cr->tick().ticks(), arpDesc));
+            }
         }
     }
 }
@@ -7117,11 +7153,7 @@ void MusicXMLParserNotations::parse()
 {
     while (m_e.readNextStartElement()) {
         if (m_e.name() == "arpeggiate") {
-            m_arpeggioType = m_e.attribute("direction");
-            if (m_arpeggioType == "") {
-                m_arpeggioType = u"none";
-            }
-            m_e.skipCurrentElement();  // skip but don't log
+            arpeggio();
         } else if (m_e.name() == "articulations") {
             articulations();
         } else if (m_e.name() == "dynamics") {
@@ -7225,9 +7257,9 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                                         TrillStack& trills, Tie*& tie)
+                                         TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap)
 {
-    addArpeggio(cr, m_arpeggioType, m_logger, &m_e);
+    addArpeggio(cr, m_arpeggioType, m_arpeggioNo, arpMap, m_logger, &m_e);
     addBreath(cr, cr->tick(), m_breath);
     addWavyLine(cr, Fraction::fromTicks(tick), m_wavyLineNo, m_wavyLineType, spanners, trills, m_logger, &m_e);
 
