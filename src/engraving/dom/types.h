@@ -410,8 +410,8 @@ enum class SegmentType {
     TimeSigAnnounce    = 0x1000,
     All                = -1,   ///< Includes all barline types
     /// Alias for `BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine`
-    BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine
-                         ///\}
+    BarLineType        = BeginBarLine | StartRepeatBarLine | BarLine | EndBarLine,
+    ///\}
 };
 
 constexpr SegmentType operator|(const SegmentType t1, const SegmentType t2)
@@ -423,6 +423,9 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
 {
     return static_cast<int>(t1) & static_cast<int>(t2);
 }
+
+constexpr SegmentType SPANNER_ANCHOR_SEG_TYPE = SegmentType::ChordRest | SegmentType::BeginBarLine | SegmentType::BarLine
+                                                | SegmentType::EndBarLine;
 
 //---------------------------------------------------------
 //   FontStyle
