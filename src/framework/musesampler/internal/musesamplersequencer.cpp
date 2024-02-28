@@ -96,8 +96,11 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
         m_onOffStreamFlushed();
     }
 
-    m_offStreamPresetsStr = buildPresetsStr(params);
-    const char* presets_cstr = m_offStreamPresetsStr.c_str();
+    m_offStreamCache.clear();
+    parseOffStreamParams(params, m_offStreamCache.presets, m_offStreamCache.textArticulation);
+
+    const char* presets_cstr = m_offStreamCache.presets.empty() ? m_defaultPresetCode.c_str() : m_offStreamCache.presets.c_str();
+    const char* textArticulation_cstr = m_offStreamCache.textArticulation.c_str();
 
     for (const auto& pair : events) {
         for (const auto& event : pair.second) {
@@ -121,7 +124,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
             ms_NoteArticulation articulationFlag = noteArticulationTypes(noteEvent);
 
             AuditionStartNoteEvent noteOn;
-            noteOn.msEvent = { pitch, centsOffset, articulationFlag, 0.5, presets_cstr };
+            noteOn.msEvent = { pitch, centsOffset, articulationFlag, 0.5, presets_cstr, textArticulation_cstr };
             noteOn.msTrack = track;
             m_offStreamEvents[timestampFrom].emplace(std::move(noteOn));
 
@@ -144,7 +147,7 @@ void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& 
 
     clearAllTracks();
 
-    loadPresets(params);
+    loadParams(params);
     loadNoteEvents(events);
     loadDynamicEvents(dynamics);
 
@@ -223,13 +226,9 @@ const TrackList& MuseSamplerSequencer::allTracks() const
     return m_tracks->allTracks();
 }
 
-void MuseSamplerSequencer::loadPresets(const mpe::PlaybackParamMap& params)
+void MuseSamplerSequencer::loadParams(const mpe::PlaybackParamMap& params)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
-        return;
-    }
-
-    if (!m_samplerLib->createPresetChange || !m_samplerLib->addPreset) { // added in 0.6
         return;
     }
 
@@ -239,20 +238,12 @@ void MuseSamplerSequencer::loadPresets(const mpe::PlaybackParamMap& params)
         for (const mpe::PlaybackParam& param : pair.second) {
             if (param.code == mpe::SOUND_PRESET_PARAM_CODE) {
                 soundPresets.emplace_back(param.val.toString());
+            } else if (param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
+                addTextArticulation(param.val.toString(), pair.first);
             }
         }
 
-        if (soundPresets.empty()) {
-            continue;
-        }
-
-        for (ms_Track track : allTracks()) {
-            ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, track, pair.first);
-
-            for (const std::string& presetCode : soundPresets) {
-                m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.c_str());
-            }
-        }
+        addPresets(soundPresets, pair.first);
     }
 }
 
@@ -367,6 +358,37 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Vibrato)) {
         addVibrato(noteEvent, noteEventId, track);
+    }
+}
+
+void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCode, long long startUs)
+{
+    ms_TextArticulationEvent evt;
+    evt._start_us = startUs;
+
+    if (articulationCode != mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+        evt._articulation = articulationCode.c_str();
+    } else {
+        evt._articulation = ""; // resets the active articulation
+    }
+
+    for (ms_Track track : allTracks()) {
+        m_samplerLib->addTextArticulationEvent(m_sampler, track, evt);
+    }
+}
+
+void MuseSamplerSequencer::addPresets(const std::vector<std::string>& presets, long long startUs)
+{
+    if (presets.empty()) {
+        return;
+    }
+
+    for (ms_Track track : allTracks()) {
+        ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, track, startUs);
+
+        for (const std::string& presetCode : presets) {
+            m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.c_str());
+        }
     }
 }
 
@@ -521,21 +543,24 @@ ms_NoteArticulation MuseSamplerSequencer::noteArticulationTypes(const mpe::NoteE
     return static_cast<ms_NoteArticulation>(result);
 }
 
-std::string MuseSamplerSequencer::buildPresetsStr(const mpe::PlaybackParamMap& params) const
+void MuseSamplerSequencer::parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets,
+                                                std::string& textArticulation) const
 {
     if (params.empty()) {
-        return m_defaultPresetCode;
+        return;
     }
 
-    StringList presets;
+    StringList presetList;
 
     for (const auto& pair : params) {
         for (const mpe::PlaybackParam& param : pair.second) {
             if (param.code == mpe::SOUND_PRESET_PARAM_CODE) {
-                presets.emplace_back(String::fromStdString(param.val.toString()));
+                presetList.emplace_back(String::fromStdString(param.val.toString()));
+            } else if (param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
+                textArticulation = param.val.toString();
             }
         }
     }
 
-    return presets.join(u"|").toStdString();
+    presets = presetList.join(u"|").toStdString();
 }

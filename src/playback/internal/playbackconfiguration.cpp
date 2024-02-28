@@ -35,10 +35,11 @@ using namespace mu::audio;
 static const std::string moduleName("playback");
 
 static const Settings::Key PLAYBACK_CURSOR_TYPE_KEY(moduleName, "application/playback/cursorType");
-static const Settings::Key PLAYBACK_SOUND_FLAGS_MULTI_SELECTION_KEY(moduleName, "application/playback/soundFlagsMultiSelectionEnabled");
 static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playOnClick");
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
+
+static const Settings::Key SOUND_PRESETS_MULTI_SELECTION_KEY(moduleName, "application/playback/soundPresetsMultiSelectionEnabled");
 
 static const Settings::Key MIXER_LABELS_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/labelsSectionVisible");
 static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/soundSectionVisible");
@@ -86,6 +87,7 @@ void PlaybackConfiguration::init()
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(PlaybackCursorType::STEPPED));
+    settings()->setDefaultValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(false));
 
     for (MixerSectionType sectionType : allMixerSectionTypes()) {
         bool sectionEnabledByDefault = sectionType != MixerSectionType::Volume;
@@ -225,14 +227,14 @@ void PlaybackConfiguration::setDefaultProfileForNewProjects(const SoundProfileNa
     settings()->setSharedValue(DEFAULT_SOUND_PROFILE_FOR_NEW_PROJECTS, Val(name.toStdString()));
 }
 
-bool PlaybackConfiguration::isSoundFlagsMultiSelectionEnabled() const
+bool PlaybackConfiguration::soundPresetsMultiSelectionEnabled() const
 {
-    return settings()->value(PLAYBACK_SOUND_FLAGS_MULTI_SELECTION_KEY).toBool();
+    return settings()->value(SOUND_PRESETS_MULTI_SELECTION_KEY).toBool();
 }
 
-void PlaybackConfiguration::setIsSoundFlagsMultiSelectionEnabled(bool enabled)
+void PlaybackConfiguration::setSoundPresetsMultiSelectionEnabled(bool enabled)
 {
-    settings()->setSharedValue(PLAYBACK_SOUND_FLAGS_MULTI_SELECTION_KEY, Val(enabled));
+    settings()->setSharedValue(SOUND_PRESETS_MULTI_SELECTION_KEY, Val(enabled));
 }
 
 const SoundProfileName& PlaybackConfiguration::fallbackSoundProfileStr() const

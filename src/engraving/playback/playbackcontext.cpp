@@ -190,7 +190,7 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
 
 void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick)
 {
-    if (flag->soundPresets().empty() && flag->playingTechniques().empty()) {
+    if (flag->soundPresets().empty() && flag->playingTechnique().empty()) {
         return;
     }
 
@@ -200,8 +200,8 @@ void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int se
         params.emplace_back(mpe::PlaybackParam { mpe::SOUND_PRESET_PARAM_CODE, Val(presetCode.toStdString()) });
     }
 
-    for (const String& techniqueCode : flag->playingTechniques()) {
-        params.emplace_back(mpe::PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(techniqueCode.toStdString()) });
+    if (!flag->playingTechnique().empty()) {
+        params.emplace_back(mpe::PlaybackParam { mpe::PLAY_TECHNIQUE_PARAM_CODE, Val(flag->playingTechnique().toStdString()) });
     }
 
     m_playbackParamMap.emplace(segmentPositionTick, std::move(params));

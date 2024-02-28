@@ -54,6 +54,8 @@ private:
     bool checkLibrary() const;
     bool isVersionSupported() const;
 
+    void loadSoundPresetAttributes(audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;
+
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
 
     MuseSamplerLibHandlerPtr m_libHandler = nullptr;

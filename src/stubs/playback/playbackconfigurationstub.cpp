@@ -119,11 +119,11 @@ void PlaybackConfigurationStub::setDefaultProfileForNewProjects(const SoundProfi
 {
 }
 
-bool PlaybackConfigurationStub::isSoundFlagsMultiSelectionEnabled() const
+bool PlaybackConfigurationStub::soundPresetsMultiSelectionEnabled() const
 {
     return false;
 }
 
-void PlaybackConfigurationStub::setIsSoundFlagsMultiSelectionEnabled(bool)
+void PlaybackConfigurationStub::setSoundPresetsMultiSelectionEnabled(bool)
 {
 }

@@ -386,28 +386,19 @@ struct AudioDevice {
 
 using AudioDeviceList = std::vector<AudioDevice>;
 
+using SoundPresetAttributes = std::map<String, String>;
+static const String PLAYING_TECHNIQUES_ATTRIBUTE(u"playing_techniques");
+
 struct SoundPreset
 {
-    struct PlayingTechnique {
-        std::string code;
-        std::string name;
-        bool isDefault = false;
-
-        bool operator==(const PlayingTechnique& other) const
-        {
-            return code == other.code && name == other.name && isDefault == other.isDefault;
-        }
-    };
-    using PlayingTechniqueList = std::vector<PlayingTechnique>;
-
-    std::string code;
-    std::string name;
+    String code;
+    String name;
     bool isDefault = false;
-    PlayingTechniqueList playingTechniques;
+    SoundPresetAttributes attributes;
 
     bool operator==(const SoundPreset& other) const
     {
-        return code == other.code && name == other.name && isDefault == other.isDefault && playingTechniques == other.playingTechniques;
+        return code == other.code && name == other.name && isDefault == other.isDefault && attributes == other.attributes;
     }
 
     bool isValid() const

@@ -1654,11 +1654,11 @@ class ChangeSoundFlag : public UndoCommand
 {
     SoundFlag* m_soundFlag = nullptr;
     SoundFlag::PresetCodes m_presets;
-    SoundFlag::PlayingTechniqueCodes m_playingTechniques;
+    SoundFlag::PlayingTechniqueCode m_playingTechnique;
 
 public:
-    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::PlayingTechniqueCodes& techniques)
-        : m_soundFlag(soundFlag), m_presets(presets), m_playingTechniques(techniques) {}
+    ChangeSoundFlag(SoundFlag* soundFlag, const SoundFlag::PresetCodes& presets, const SoundFlag::PlayingTechniqueCode& technique)
+        : m_soundFlag(soundFlag), m_presets(presets), m_playingTechnique(technique) {}
 
     void flip(EditData*) override;
     UNDO_NAME("ChangeSoundFlag")
