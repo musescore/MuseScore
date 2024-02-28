@@ -80,7 +80,7 @@ StyledDialogView {
 You can share drafts with others and publish your finished scores publicly too.")
                 buttonText: qsTrc("project/save", "Save to the cloud")
 
-                imageSource: "internal/SaveToCloud/images/Cloud.png"
+                imageSource: "qrc:/SaveToCloud/images/Cloud.png"
 
                 navigation.panel: optionsNavPanel
                 navigation.column: 1
@@ -97,7 +97,7 @@ You can share drafts with others and publish your finished scores publicly too."
                 description: qsTrc("project/save", "If you prefer to save your files on your computer, you can do that here.")
                 buttonText: qsTrc("project/save", "Save to computer")
 
-                imageSource: "internal/SaveToCloud/images/Laptop.png"
+                imageSource: "qrc:/SaveToCloud/images/Laptop.png"
 
                 navigation.panel: optionsNavPanel
                 navigation.column: 2
