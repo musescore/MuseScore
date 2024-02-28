@@ -3668,8 +3668,8 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
                 text = u"backward hook";
             }
         } else if ((blp >= i && bln < i)
-                    || (bmn == BeamMode::BEGIN16 && i > 1)
-                    || (bmn == BeamMode::BEGIN32 && i > 2)) {
+                   || (bmn == BeamMode::BEGIN16 && i > 1)
+                   || (bmn == BeamMode::BEGIN32 && i > 2)) {
             text = u"end";
         } else if (blp >= i && bln >= i) {
             text = u"continue";
