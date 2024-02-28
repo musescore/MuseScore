@@ -67,7 +67,7 @@ Item {
 
         delegate: FlatButton {
             height: 30
-
+            property bool isMixerToggled: false
             property var item: Boolean(model) ? model.itemRole : null
 
             text: Boolean(item) ? item.title : ""
@@ -85,12 +85,15 @@ Item {
             navigation.panel: root.navigationPanel
             navigation.name: toolTipTitle
             navigation.order: model.index
+            accessible.name: (item.checkable ? (isMixerToggled ? item.title + qsTrc("  ", " On ", "  ") :
+                                                                 item.title + qsTrc("  ", " Off ", "  ")) : item.text)
 
             transparent: true
             orientation: Qt.Horizontal
 
             onClicked: {
                 toolbarModel.handleMenuItem(item.id)
+                isMixerToggled = !isMixerToggled
             }
         }
     }
