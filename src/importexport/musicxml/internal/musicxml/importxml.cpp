@@ -109,12 +109,16 @@ static bool extractRootfile(const String& name, ByteArray& data)
  Validate and import MusicXML data from file \a name contained in ByteArray \a data into score \a score.
  */
 
-static Err doValidateAndImport(Score* score, const String& name, const ByteArray& data)
+static Err doValidateAndImport(Score* score, const String& name, const ByteArray& data, bool forceMode)
 {
-    // validate the file
-    Err res = MusicxmlValidation::validate(name, data);
-    if (res != Err::NoError) {
-        return res;
+    Err res;
+
+    if (!forceMode) {
+        // Validate the file
+        res = MusicxmlValidation::validate(name, data);
+        if (res != Err::NoError) {
+            return res;
+        }
     }
 
     // actually do the import
@@ -128,7 +132,7 @@ static Err doValidateAndImport(Score* score, const String& name, const ByteArray
 //    return Err::File* errors
 //---------------------------------------------------------
 
-Err importMusicXml(MasterScore* score, const String& name)
+Err importMusicXml(MasterScore* score, const String& name, bool forceMode)
 {
     ScoreLoad sl;     // suppress warnings for undo push/pop
 
@@ -149,7 +153,7 @@ Err importMusicXml(MasterScore* score, const String& name)
     xmlFile.close();
 
     // and import it
-    return doValidateAndImport(score, name, data);
+    return doValidateAndImport(score, name, data, forceMode);
 }
 
 //---------------------------------------------------------
@@ -161,7 +165,7 @@ Err importMusicXml(MasterScore* score, const String& name)
  Import compressed MusicXML file \a name into the Score.
  */
 
-Err importCompressedMusicXml(MasterScore* score, const String& name)
+Err importCompressedMusicXml(MasterScore* score, const String& name, bool forceMode)
 {
     //LOGD("importCompressedMusicXml(%p, %s)", score, muPrintable(name));
 
@@ -176,7 +180,7 @@ Err importCompressedMusicXml(MasterScore* score, const String& name)
     }
 
     // and import it
-    return doValidateAndImport(score, name, data);
+    return doValidateAndImport(score, name, data, forceMode);
 }
 
 //---------------------------------------------------------
