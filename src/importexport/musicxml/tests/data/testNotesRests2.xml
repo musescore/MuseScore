@@ -160,6 +160,7 @@
         <duration>8</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <beam number="1">continue</beam>
         </note>
       <note>
         <pitch>
@@ -210,6 +211,7 @@
         <duration>8</duration>
         <voice>1</voice>
         <type>eighth</type>
+        <beam number="1">continue</beam>
         </note>
       <note>
         <pitch>
@@ -252,6 +254,8 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         </note>
       <note>
         <pitch>
@@ -350,6 +354,8 @@
         <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
         </note>
       <note>
         <pitch>
