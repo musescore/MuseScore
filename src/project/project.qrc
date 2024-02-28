@@ -42,8 +42,8 @@
         <file>qml/MuseScore/Project/internal/NewScore/TitleListView.qml</file>
         <file>qml/MuseScore/Project/MigrationDialog.qml</file>
         <file>qml/MuseScore/Project/internal/SaveToCloud/SaveLocationOption.qml</file>
-        <file>qml/MuseScore/Project/internal/SaveToCloud/images/Cloud.png</file>
-        <file>qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
+        <file alias="SaveToCloud/images/Cloud.png">qml/MuseScore/Project/internal/SaveToCloud/images/Cloud.png</file>
+        <file alias="SaveToCloud/images/Laptop.png">qml/MuseScore/Project/internal/SaveToCloud/images/Laptop.png</file>
         <file>qml/MuseScore/Project/ProjectPropertiesDialog.qml</file>
         <file>qml/MuseScore/Project/ProjectUploadedDialog.qml</file>
         <file>qml/MuseScore/Project/AudioGenerationSettingsDialog.qml</file>
