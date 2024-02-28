@@ -210,6 +210,7 @@ private slots:
       void noteAttributes1() { mxmlIoTest("testNoteAttributes1"); }
       void noteAttributes2() { mxmlIoTestRef("testNoteAttributes2"); }
       void noteAttributes3() { mxmlIoTest("testNoteAttributes3"); }
+      void noteAttributes4() { mxmlImportTestRef("testNoteAttributes2"); }
       void noteColor() { mxmlIoTest("testNoteColor"); }
       void noteheadParentheses() { mxmlIoTest("testNoteheadParentheses"); }
       void noteheads() { mxmlIoTest("testNoteheads"); }

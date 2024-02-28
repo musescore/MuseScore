@@ -3632,7 +3632,9 @@ void MusicXMLParserDirection::otherDirection()
                   { QString("l.v. down"), SymId::articLaissezVibrerBelow },
                   { QString("8vb"), SymId::ottavaBassaVb },
                   { QString("Treble clef"), SymId::gClef },
-                  { QString("Bass clef"), SymId::fClef }
+                  { QString("Bass clef"), SymId::fClef },
+                  { QString("Caesura"), SymId::caesura },
+                  { QString("Thick caesura"), SymId::caesuraThick }
                   };
             QString t = _e.readElementText();
             QString val = otherDirectionStrings.value(t);
@@ -7602,6 +7604,7 @@ static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
             // b->setTrack(trk + voice); TODO check next line
             b->setTrack(cr->track());
             b->setSymId(breath);
+            b->setPlacement(b->propertyDefault(Pid::PLACEMENT).value<Placement>());
             const Fraction& ticks = cr->ticks();
             const auto seg = cr->measure()->getSegment(SegmentType::Breath, tick + ticks);
             seg->add(b);
