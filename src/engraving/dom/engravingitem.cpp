@@ -1934,6 +1934,13 @@ void EngravingItem::triggerLayoutAll() const
     }
 }
 
+void EngravingItem::triggerLayoutToEnd() const
+{
+    if (explicitParent()) {
+        score()->setLayout(tick(), score()->endTick(), staffIdx(), staffIdx(), this);
+    }
+}
+
 //---------------------------------------------------------
 //   addData
 //---------------------------------------------------------
