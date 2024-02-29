@@ -4271,12 +4271,6 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
 
         ldata->restSyms = restSyms;
         ldata->symsWidth = symsWidth;
-
-        //double symHeight = item->symBbox(ldata->restSyms.at(0)).height();
-        //ldata->setBbox(RectF((ldata->restWidth() - ldata->symsWidth) * .5, -item->spatium(), ldata->symsWidth, symHeight));
-    } else { // H-bar
-        //double vStrokeHeight = ctx.conf().styleMM(Sid::mmRestHBarVStrokeHeight);
-        //ldata->setBbox(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
     }
 
     // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
