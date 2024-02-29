@@ -22,9 +22,11 @@ set(MODULE_TEST ui_tests)
 
 set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/navigationcontroller_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mocks/navigationmocks.h
     ${CMAKE_CURRENT_LIST_DIR}/mocks/mainwindowmock.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/navigationcontroller_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/qmltooltip_tests.cpp
     )
 
 set(MODULE_TEST_LINK
