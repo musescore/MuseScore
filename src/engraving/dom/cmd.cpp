@@ -1855,21 +1855,6 @@ static void upDownChromatic(bool up, int pitch, Note* n, Key key, int tpc1, int 
 }
 
 //---------------------------------------------------------
-//   setTpc
-//---------------------------------------------------------
-
-static void setTpc(Note* oNote, int tpc, int& newTpc1, int& newTpc2)
-{
-    if (oNote->concertPitch()) {
-        newTpc1 = tpc;
-        newTpc2 = oNote->transposeTpc(tpc);
-    } else {
-        newTpc2 = tpc;
-        newTpc1 = oNote->transposeTpc(tpc);
-    }
-}
-
-//---------------------------------------------------------
 //   upDown
 ///   Increment/decrement pitch of note by one or by an octave.
 //---------------------------------------------------------
@@ -1992,31 +1977,33 @@ void Score::upDown(bool up, UpDownMode mode)
 
             case UpDownMode::DIATONIC:
             {
-                int tpc = oNote->tpc();
-                if (up) {
-                    if (tpc > Tpc::TPC_A + int(key)) {
-                        if (pitch < 127) {
-                            newPitch = pitch + 1;
-                            setTpc(oNote, tpc - 5, newTpc1, newTpc2);
-                        }
+                Note* firstTiedNote = oNote->firstTiedNote();
+                int newLine = firstTiedNote->line() + (up ? -1 : 1);
+                Staff* vStaff = score()->staff(firstTiedNote->chord()->vStaffIdx());
+                Key key = vStaff->key(tick);
+                Key cKey = vStaff->concertKey(tick);
+                Interval interval = vStaff->part()->instrument(tick)->transpose();
+
+                bool error = false;
+                AccidentalVal accOffs = firstTiedNote->chord()->measure()->findAccidental(
+                    firstTiedNote->chord()->segment(), firstTiedNote->chord()->vStaffIdx(), newLine, error);
+                if (error) {
+                    accOffs = Accidental::subtype2value(AccidentalType::NONE);
+                }
+                int nStep = absStep(newLine, vStaff->clef(tick));
+                int octave = nStep / 7;
+                int testPitch = step2pitch(nStep) + octave * 12 + int(accOffs);
+
+                if (testPitch <= 127 && testPitch > 0) {
+                    newPitch = testPitch;
+                    if (!firstTiedNote->concertPitch()) {
+                        newPitch += interval.chromatic;
                     } else {
-                        if (pitch < 126) {
-                            newPitch = pitch + 2;
-                            setTpc(oNote, tpc + 2, newTpc1, newTpc2);
-                        }
+                        interval.flip();
+                        key = transposeKey(cKey, interval, vStaff->part()->preferSharpFlat());
                     }
-                } else {
-                    if (tpc > Tpc::TPC_C + int(key)) {
-                        if (pitch > 1) {
-                            newPitch = pitch - 2;
-                            setTpc(oNote, tpc - 2, newTpc1, newTpc2);
-                        }
-                    } else {
-                        if (pitch > 0) {
-                            newPitch = pitch - 1;
-                            setTpc(oNote, tpc + 5, newTpc1, newTpc2);
-                        }
-                    }
+                    newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
+                    newTpc2 = pitch2tpc(newPitch - firstTiedNote->transposition(), key, Prefer::NEAREST);
                 }
             }
             break;
