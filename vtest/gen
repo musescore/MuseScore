@@ -26,7 +26,8 @@ echo "VTEST_DIR: $VTEST_DIR"
 if test -n "$1"; then
       SRC=$1
 else
-      SRC="mmrest-1 bravura-mmrest gonville-mmrest mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
+      SRC="bravura-mmrest gonville-mmrest\
+       mmrest-1 mmrest-2 mmrest-4 mmrest-5 mmrest-6 mmrest-7 mmrest-8 mmrest-9\
        mmrest-10 mmrest-11 mmrest-12 mmrest-13 mmrest-14 mmrest-15 mmrest-16 mmrest-17 mmrest-18\
        mmrest-19 mmrest-20 mmrest-21 mmrest-22 mmrest-23\
        fermata-1 fmrest-1 fmrest-2 fmrest-3 fmrest-4 fmrest-5 fmrest-6 measure-repeat-1\
@@ -59,8 +60,7 @@ else
        accidental-16 accidental-17 accidental-18 accidental-19 accidental-20\
        accidental-21 accidental-22 accidental-23\
        accidental-mirror\
-       tie-1 tie-2 tie-3 \
-       grace-1 grace-2 grace-3 grace-4 grace-5 \
+       tie-1 tie-2 tie-3 grace-1 grace-2 grace-3 grace-4 grace-5 \
        tuplets-1 tuplets-2 tuplets-3 tuplets-4 breath-1\
        harmony-1 harmony-2 harmony-3 harmony-4 harmony-5 harmony-6 harmony-7\
        harmony-8 harmony-9 harmony-10 harmony-11 harmony-12 harmony-13 harmony-14 harmony-15\
