@@ -222,6 +222,17 @@
             <followText>1</followText>
             <text><font size="12"/><b>Grave</b></text>
             </Tempo>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <placement>above</placement>
+              </HairPin>
+            <next>
+              <location>
+                <measures>3</measures>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Lyrics>
@@ -304,6 +315,13 @@
           <StaffText>
             <text><i>increasingly grave in spirit</i></text>
             </StaffText>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-3</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>
