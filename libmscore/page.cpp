@@ -453,7 +453,7 @@ QString Page::replaceTextMacros(const QString& s) const
                               break;
                         case 'm':
                               if (score()->dirty())
-                                    d += QLocale().toString(QDate::currentDate(), QLocale::ShortFormat);
+                                    d += QLocale().toString(QTime::currentTime(), QLocale::ShortFormat);
                               else
                                     d += QLocale().toString(masterScore()->fileInfo()->lastModified().time(), QLocale::ShortFormat);
                               break;
