@@ -3633,30 +3633,24 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         LOGD("Beam::writeMusicXml(): cannot find ChordRest");
         return;
     }
-    int blp = -1;   // beam level previous chord
-    int blc = -1;   // beam level current chord
-    int bln = -1;   // beam level next chord
-    BeamMode bmc = BeamMode::AUTO; // beam mode current chord
-    BeamMode bmn = BeamMode::AUTO; // beam mode next chord
-    // find beam level previous chord
+    int blp = -1;   // beam level previous chord or rest
+    int blc = -1;   // beam level current chord or rest
+    int bln = -1;   // beam level next chord or rest
+    BeamMode bmc = BeamMode::AUTO; // beam mode current chord or rest
+    BeamMode bmn = BeamMode::AUTO; // beam mode next chord or rest
+    // find beam level previous chord or rest
     for (size_t i = idx - 1; blp == -1 && i != mu::nidx; --i) {
         const auto crst = elements[i];
-        if (crst->isChord()) {
-            blp = toChord(crst)->beams();
-        }
+        blp = crst->beams();
     }
-    // find beam level current chord
-    if (cr->isChord()) {
-        blc = toChord(cr)->beams();
-        bmc = toChord(cr)->beamMode();
-    }
-    // find beam level next chord
+    // find beam level current chord or rest
+    blc = cr->beams();
+    bmc = cr->beamMode();
+    // find beam level next chord or rest
     for (size_t i = idx + 1; bln == -1 && i < elements.size(); ++i) {
         const auto crst = elements[i];
-        if (crst->isChord()) {
-            bln = toChord(crst)->beams();
-            bmn = toChord(crst)->beamMode();
-        }
+        bln = crst->beams();
+        bmn = crst->beamMode();
     }
     // find beam type and write
     for (int i = 1; i <= blc; ++i) {
@@ -3680,7 +3674,7 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         } else if (blp >= i && bln >= i) {
             text = u"continue";
         }
-        if (text != "") {
+        if (!text.empty()) {
             String tag = u"beam";
             tag += String(u" number=\"%1\"").arg(i);
             if (text == u"begin") {
@@ -4401,6 +4395,10 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyric
 
     if (staff) {
         m_xml.tag("staff", static_cast<int>(staff));
+    }
+
+    if (rest->beam()) {
+        writeBeam(m_xml, rest, rest->beam());
     }
 
     Notations notations;
