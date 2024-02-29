@@ -471,6 +471,10 @@ void MixerChannelItem::setMuted(bool mute)
 
     emit soloMuteStateChanged(soloMuteState);
     emit mutedChanged();
+
+    if (mute && m_outParams.solo) {
+        setSolo(false);
+    }
 }
 
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)
