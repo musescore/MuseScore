@@ -3071,16 +3071,21 @@ void MusicXMLParserDirection::direction(const QString& partId,
             _logger->logError("spanner already started", &_e);
             delete desc._sp;
         } else {
+            QString spannerPlacement = placement;
+            // Case-based defaults
+            if (spannerPlacement.isEmpty() && desc._sp->isHairpin()) {
+                spannerPlacement = isVocalStaff ? "above" : "below";
+            }
             if (spdesc._isStopped) {
                 _pass2.addSpanner(desc);
                 // handleSpannerStart and handleSpannerStop must be called in order
                 // due to allocation of elements in the map
-                handleSpannerStart(desc._sp, track, placement, tick + _offset, spanners);
+                handleSpannerStart(desc._sp, track, spannerPlacement, tick + _offset, spanners);
                 handleSpannerStop(spdesc._sp, spdesc._track2, spdesc._tick2, spanners);
                 _pass2.clearSpanner(desc);
             } else {
                 _pass2.addSpanner(desc);
-                handleSpannerStart(desc._sp, track, placement, tick + _offset, spanners);
+                handleSpannerStart(desc._sp, track, spannerPlacement, tick + _offset, spanners);
                 spdesc._isStarted = true;
             }
         }
