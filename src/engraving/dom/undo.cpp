@@ -1979,7 +1979,7 @@ void ChangeStyleValues::flip(EditData*)
     for (auto& pair : m_values) {
         PropertyValue oldValue = style.styleV(pair.first);
         if (oldValue == pair.second) {
-            return;
+            continue;
         }
 
         changeStyleValue(m_score, pair.first, oldValue, pair.second);
