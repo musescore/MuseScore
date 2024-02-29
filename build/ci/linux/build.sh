@@ -30,7 +30,6 @@ ARTIFACTS_DIR=build.artifacts
 CRASH_REPORT_URL=""
 BUILD_MODE=""
 SUFFIX="" # appended to `mscore` command name to avoid conflicts (e.g. `mscoredev`)
-YOUTUBE_API_KEY=""
 QT5_COMPAT="OFF"
 
 while [[ "$#" -gt 0 ]]; do
@@ -38,7 +37,6 @@ while [[ "$#" -gt 0 ]]; do
         -n|--number) BUILD_NUMBER="$2"; shift ;;
         --crash_log_url) CRASH_REPORT_URL="$2"; shift ;;
         --build_mode) BUILD_MODE="$2"; shift ;;
-        --youtube_api_key) YOUTUBE_API_KEY="$2"; shift ;;
         --arch) PACKARCH="$2"; shift ;;
         --qt5_compat) QT5_COMPAT="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
@@ -48,7 +46,6 @@ done
 
 if [ -z "$BUILD_NUMBER" ]; then echo "error: not set BUILD_NUMBER"; exit 1; fi
 if [ -z "$BUILD_MODE" ]; then BUILD_MODE=$(cat $ARTIFACTS_DIR/env/build_mode.env); fi
-if [ -z "$YOUTUBE_API_KEY" ]; then YOUTUBE_API_KEY=""; fi
 
 MUSESCORE_BUILD_MODE=dev
 
@@ -63,7 +60,6 @@ echo "MUSESCORE_BUILD_MODE: $MUSESCORE_BUILD_MODE"
 echo "BUILD_NUMBER: $BUILD_NUMBER"
 echo "CRASH_REPORT_URL: $CRASH_REPORT_URL"
 echo "BUILD_MODE: $BUILD_MODE"
-echo "YOUTUBE_API_KEY: $YOUTUBE_API_KEY"
 
 echo "=== ENVIRONMENT === "
 
@@ -97,7 +93,6 @@ MUSESCORE_REVISION=$MUSESCORE_REVISION \
 MUSESCORE_CRASHREPORT_URL=$CRASH_REPORT_URL \
 MUSESCORE_BUILD_VST_MODULE=$BUILD_VST \
 MUSESCORE_VST3_SDK_PATH=$VST3_SDK_PATH \
-MUSESCORE_YOUTUBE_API_KEY=$YOUTUBE_API_KEY \
 MUSESCORE_QT5_COMPAT=$QT5_COMPAT \
 MUSESCORE_BUILD_CRASHPAD_CLIENT=${MUSESCORE_BUILD_CRASHPAD_CLIENT:-"ON"} \
 MUSESCORE_BUILD_UPDATE_MODULE=${MUSESCORE_BUILD_UPDATE_MODULE:-"ON"} \

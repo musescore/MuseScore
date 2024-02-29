@@ -63,7 +63,6 @@ fi
 #      if: env.DO_BUILD == 'true'
 if [ $DO_BUILD == 'true' ]; then
 #      run: |
-#        YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
 #        C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         bash ./build/ci/linux/build.sh -n ${github_run_id}
 fi

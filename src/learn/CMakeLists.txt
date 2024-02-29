@@ -38,9 +38,5 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/learnpagemodel.h
     )
 
-set(MODULE_DEF ${MODULE_DEF}
-    -DMUE_LEARN_YOUTUBE_API_KEY="${MUE_LEARN_YOUTUBE_API_KEY}"
-)
-
 include(SetupModule)
 

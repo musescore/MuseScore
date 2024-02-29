@@ -185,8 +185,7 @@ jobs:
       shell: cmd
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
-        IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="" )
-        build\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
+        build\ci\windows\build.bat -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
     - name: Generate dump symbols
       if: env.DO_BUILD == 'true'
       shell: bash
@@ -336,8 +335,7 @@ jobs:
       shell: cmd
       run: |
         IF ${{ env.SENTRY_URL != 0 }} == true ( SET C_URL="${{ env.SENTRY_URL }}" ) ELSE ( SET C_URL="" )
-        IF ${{ secrets.YOUTUBE_API_KEY != 0 }} == true ( SET YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }} ) ELSE ( SET YT_API_KEY="" )
-        build\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --youtube_api_key %YT_API_KEY% --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
+        build\ci\windows\build.bat --portable ON -n ${{ env.BUILD_NUMBER }} --crash_log_url %C_URL% --qt5_compat ${{ env.QT5_COMPAT }}
     - name: Package
       if: env.DO_BUILD == 'true'
       shell: cmd
