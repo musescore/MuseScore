@@ -2102,15 +2102,16 @@ void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& 
 
 //---------------------------------------------------------
 //   createBracket
-//   Create a bracket if it spans more then one visible system
-//   If measure is NULL adds the bracket in front of the system, else in front of the measure.
-//   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
 Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                      std::vector<Bracket*>& bl,
                                      Measure* measure)
 {
+    if (!measure) {
+        return nullptr;
+    }
+
     size_t nstaves = system->staves().size();
     staff_idx_t firstStaff = staffIdx;
     staff_idx_t lastStaff = staffIdx + bi->bracketSpan() - 1;
