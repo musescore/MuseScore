@@ -1267,6 +1267,10 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         }
 
         Chord* chord = toChord(cr);
+        if (!chord->stem()) {
+            continue;
+        }
+
         double addition = 0.0;
 
         if (level > 0) {
