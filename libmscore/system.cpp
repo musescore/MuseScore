@@ -535,13 +535,13 @@ void System::addBrackets(Measure* measure)
 
 //---------------------------------------------------------
 //   createBracket
-//   Create a bracket if it spans more then one visible system
-//   If measure is NULL adds the bracket in front of the system, else in front of the measure.
-//   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
 Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket *>& bl, Measure* measure)
       {
+      if (!measure)
+            return nullptr;
+
       int nstaves = _staves.size();
       int firstStaff = staffIdx;
       int lastStaff = staffIdx + bi->bracketSpan() - 1;

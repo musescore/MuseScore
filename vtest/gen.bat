@@ -41,7 +41,7 @@ set SRC=bravura-mmrest,gonville-mmrest, ^
  harmony-8,harmony-9,harmony-10,harmony-11,harmony-12,harmony-13,harmony-14,harmony-15, ^
  figured-bass-1, ^
  beams-1,beams-2,beams-3,beams-4,beams-5,beams-6,beams-7,beams-8,beams-9,beams-10, ^
- beams-11,beams-12,beams-13,beams-14,beams-15,beams-16,beams-17,beams-18,beams-19 ^
+ beams-11,beams-12,beams-13,beams-14,beams-15,beams-16,beams-17,beams-18,beams-19, brackets-2, ^
  user-offset-1,user-offset-2,chord-space-1,chord-space-2,tablature-1,image-1, ^
  lyrics-1,lyrics-2,lyrics-3,lyrics-4,lyrics-5,lyrics-6,lyrics-7,lyrics-8,lyrics-9, ^
  voice-1,voice-2,slash-1,slash-2, ^
