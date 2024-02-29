@@ -4725,20 +4725,6 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
             }
 
       //-------------------------------------------------------------
-      // Jump, Marker
-      //-------------------------------------------------------------
-
-      for (MeasureBase* mb : system->measures()) {
-            if (!mb->isMeasure())
-                  continue;
-            Measure* m = toMeasure(mb);
-            for (Element* e : m->el()) {
-                  if (e->isJump() || e->isMarker())
-                        e->layout();
-                  }
-            }
-
-      //-------------------------------------------------------------
       // FretDiagram
       //-------------------------------------------------------------
 
@@ -4752,23 +4738,10 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
             //-------------------------------------------------------------
             // Harmony, 2nd place
-            // We have FretDiagrams, we want the Harmony above this and
-            // above the volta.
             //-------------------------------------------------------------
 
             layoutHarmonies(sl);
             alignHarmonies(system, sl, false, styleP(Sid::maxFretShiftAbove), styleP(Sid::maxFretShiftBelow));
-            }
-
-      //-------------------------------------------------------------
-      // TempoText
-      //-------------------------------------------------------------
-
-      for (const Segment* s : sl) {
-            for (Element* e : s->annotations()) {
-                  if (e->isTempoText())
-                        e->layout();
-                  }
             }
 
       //-------------------------------------------------------------
@@ -4812,6 +4785,31 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                         }
 
                   voltaSegments.erase(voltaSegments.begin(), voltaSegments.begin() + idx);
+                  }
+            }
+
+      //-------------------------------------------------------------
+      // TempoText
+      //-------------------------------------------------------------
+
+      for (const Segment* s : sl) {
+            for (Element* e : s->annotations()) {
+                  if (e->isTempoText())
+                        e->layout();
+                  }
+            }
+
+      //-------------------------------------------------------------
+      // Jump, Marker
+      //-------------------------------------------------------------
+
+      for (MeasureBase* mb : system->measures()) {
+            if (!mb->isMeasure())
+                  continue;
+            Measure* m = toMeasure(mb);
+            for (Element* e : m->el()) {
+                  if (e->isJump() || e->isMarker())
+                        e->layout();
                   }
             }
 
