@@ -130,6 +130,9 @@ void MeasureBase::add(EngravingItem* e)
             setLineBreak(false);
             setSectionBreak(true);
             setNoBreak(false);
+            if (b->startWithMeasureOne()) {
+                triggerLayoutToEnd();
+            }
             break;
         case LayoutBreakType:: NOBREAK:
             setPageBreak(false);
@@ -141,7 +144,6 @@ void MeasureBase::add(EngravingItem* e)
         if (next()) {
             next()->triggerLayout();
         }
-//            triggerLayoutAll();     // TODO
     }
     triggerLayout();
     m_el.push_back(e);
@@ -167,6 +169,9 @@ void MeasureBase::remove(EngravingItem* el)
         case LayoutBreakType::SECTION:
             setSectionBreak(false);
             score()->setPause(endTick(), 0);
+            if (lb->startWithMeasureOne()) {
+                triggerLayoutToEnd();
+            }
             break;
         case LayoutBreakType::NOBREAK:
             setNoBreak(false);

@@ -241,10 +241,16 @@ bool LayoutBreak::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     }
-    triggerLayout();
-    if (explicitParent() && measure()->next()) {
-        measure()->next()->triggerLayout();
+
+    if (propertyId == Pid::START_WITH_MEASURE_ONE) {
+        triggerLayoutToEnd();
+    } else {
+        triggerLayout();
+        if (explicitParent() && measure()->next()) {
+            measure()->next()->triggerLayout();
+        }
     }
+
     setGenerated(false);
     return true;
 }
