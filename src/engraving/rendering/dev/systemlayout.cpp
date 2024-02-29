@@ -1229,6 +1229,27 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
+    // FretDiagram
+    //-------------------------------------------------------------
+
+    if (hasFretDiagram) {
+        for (const Segment* s : sl) {
+            for (EngravingItem* e : s->annotations()) {
+                if (e->isFretDiagram()) {
+                    TLayout::layoutItem(e, ctx);
+                }
+            }
+        }
+
+        //-------------------------------------------------------------
+        // Harmony, 2nd place
+        //-------------------------------------------------------------
+
+        HarmonyLayout::layoutHarmonies(sl, ctx);
+        HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
+    }
+
+    //-------------------------------------------------------------
     // layout Voltas for current system
     //-------------------------------------------------------------
 
@@ -1274,29 +1295,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
             voltaSegments.erase(voltaSegments.begin(), voltaSegments.begin() + idx);
         }
-    }
-
-    //-------------------------------------------------------------
-    // FretDiagram
-    //-------------------------------------------------------------
-
-    if (hasFretDiagram) {
-        for (const Segment* s : sl) {
-            for (EngravingItem* e : s->annotations()) {
-                if (e->isFretDiagram()) {
-                    TLayout::layoutItem(e, ctx);
-                }
-            }
-        }
-
-        //-------------------------------------------------------------
-        // Harmony, 2nd place
-        // We have FretDiagrams, we want the Harmony above this and
-        // above the volta.
-        //-------------------------------------------------------------
-
-        HarmonyLayout::layoutHarmonies(sl, ctx);
-        HarmonyLayout::alignHarmonies(system, sl, false, ctx.conf().maxFretShiftAbove(), ctx.conf().maxFretShiftBelow());
     }
 
     //-------------------------------------------------------------
