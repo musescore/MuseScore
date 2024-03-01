@@ -4763,7 +4763,7 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   // we assume voltas are sorted left to right (by tick values)
                   qreal y = 0;
                   int idx = 0;
-                  Volta* prevVolta = 0;
+                  Volta* prevVolta = nullptr;
                   for (SpannerSegment* ss : voltaSegments) {
                         Volta* volta = toVolta(ss->spanner());
                         if (prevVolta && prevVolta != volta) {
@@ -4771,7 +4771,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                               if (prevVolta->tick2() != volta->tick())
                                     break;
                               }
-                        y = qMin(y, ss->rypos());
+                        if (ss->addToSkyline())
+                              y = qMin(y, ss->rypos());
                         ++idx;
                         prevVolta = volta;
                         }
