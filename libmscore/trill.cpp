@@ -158,16 +158,28 @@ void TrillSegment::layout()
                         break;
                   case Trill::Type::UPPRALL_LINE:
                               symbolLine(SymId::ornamentBottomLeftConcaveStroke,
-                                 SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                                         SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
                         break;
                   case Trill::Type::DOWNPRALL_LINE:
                               symbolLine(SymId::ornamentLeftVerticalStroke,
-                                 SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                                         SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
                         break;
                   }
             }
-      else
-            symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+      else {
+            switch (trill()->trillType()) {
+                  case Trill::Type::TRILL_LINE:
+                  case Trill::Type::PRALLPRALL_LINE:
+                        symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+                        break;
+                  case Trill::Type::UPPRALL_LINE:
+                  case Trill::Type::DOWNPRALL_LINE:
+                        symbolLine(SymId::ornamentZigZagLineNoRightEnd,
+                                   SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+                        break;
+                  }
+            }
+
       if (isStyled(Pid::OFFSET))
             roffset() = trill()->propertyDefault(Pid::OFFSET).toPointF();
 
