@@ -43,7 +43,7 @@
           <line>0</line>
           <voice>0</voice>
           <name>Side Stick</name>
-          <stem>2</stem>
+          <stem>1</stem>
           <shortcut>A</shortcut>
           </Drum>
         <Drum pitch="38">
@@ -51,7 +51,7 @@
           <line>0</line>
           <voice>0</voice>
           <name>Acoustic Snare</name>
-          <stem>2</stem>
+          <stem>1</stem>
           <shortcut>B</shortcut>
           </Drum>
         <clef>PERC</clef>
