@@ -65,6 +65,7 @@ public:
     MOCK_METHOD(async::Notification, dragChanged, (), (const, override));
 
     MOCK_METHOD(bool, isDragCopyStarted, (), (const, override));
+    MOCK_METHOD(bool, dragCopyAllowed, (const EngravingItem*), (const, override));
     MOCK_METHOD(void, startDragCopy, (const EngravingItem*, QObject*), (override));
     MOCK_METHOD(void, endDragCopy, (), (override));
 

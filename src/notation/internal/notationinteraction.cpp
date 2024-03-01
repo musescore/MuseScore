@@ -1131,17 +1131,30 @@ bool NotationInteraction::isDragCopyStarted() const
     return m_drag != nullptr;
 }
 
+bool NotationInteraction::dragCopyAllowed(const EngravingItem* element) const
+{
+    if (!element) {
+        return false;
+    }
+
+    switch (element->type()) {
+    case ElementType::MEASURE:
+    case ElementType::NOTE:
+    case ElementType::VBOX:
+    // TODO: Bends can't be copy-dragged until corresponding SingleLayout::layout and SingleDraw::draw methods have been implemented
+    case ElementType::GUITAR_BEND:
+    case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::GUITAR_BEND_HOLD:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::GUITAR_BEND_TEXT:
+        return false;
+    default: return true;
+    }
+}
+
 //! NOTE: Copied from ScoreView::cloneElement
 void NotationInteraction::startDragCopy(const EngravingItem* element, QObject* dragSource)
 {
-    if (!element) {
-        return;
-    }
-
-    if (element->isMeasure() || element->isNote() || element->isVBox()) {
-        return;
-    }
-
     if (isDragStarted()) {
         endDragCopy();
     }

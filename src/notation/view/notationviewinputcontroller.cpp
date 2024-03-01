@@ -605,7 +605,9 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     if (keyState == (Qt::ShiftModifier | Qt::ControlModifier)) {
-        viewInteraction()->startDragCopy(hitElement, m_view->asItem());
+        if (viewInteraction()->dragCopyAllowed(hitElement)) {
+            viewInteraction()->startDragCopy(hitElement, m_view->asItem());
+        }
         return;
     }
 
