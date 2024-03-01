@@ -7064,7 +7064,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Concert Bass Drum</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -7094,7 +7094,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Side Stick</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="38"> <!--Acoustic Snare-->
@@ -7102,7 +7102,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Snare</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
                   <Channel>
@@ -7555,7 +7555,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Side Stick</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="38"> <!--Acoustic Snare-->
@@ -7563,7 +7563,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Snare</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
                   <Channel>
@@ -7616,7 +7616,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Side Stick</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="40"> <!--Electric Snare-->
@@ -7624,7 +7624,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Snare</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
                   <Channel>
@@ -7880,7 +7880,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Chinese Cymbal</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -7908,7 +7908,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Cowbell</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -7935,7 +7935,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Crash Cymbal 1</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -7966,7 +7966,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Crash Cymbal 2</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -8174,7 +8174,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Ride Cymbal 1</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Drum pitch="53"> <!--Ride Bell-->
@@ -8182,7 +8182,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Ride Bell</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
                   <Channel>
@@ -8235,7 +8235,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Splash Cymbal</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -8318,7 +8318,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Mute Triangle</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>B</shortcut>
                   </Drum>
                   <Drum pitch="81"> <!--Open Triangle-->
@@ -8326,7 +8326,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Open Triangle</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -8410,7 +8410,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Claves</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
@@ -8625,7 +8625,7 @@
                         <line>0</line>
                         <voice>0</voice>
                         <name>Maracas</name>
-                        <stem>2</stem>
+                        <stem>1</stem>
                         <shortcut>A</shortcut>
                   </Drum>
                   <Channel>
