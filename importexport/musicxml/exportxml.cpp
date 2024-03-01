@@ -5735,6 +5735,8 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
                   if (track == wtrack) {
                         if (e->type() == ElementType::FIGURED_BASS) {
                               const FiguredBass* fb = dynamic_cast<const FiguredBass*>(e);
+                              if (fb->numOfItems() == 0)
+                                    return;
                               //qDebug("figuredbass() track %d seg %p fb %p seg %p tick %d ticks %d cr %p tick %d ticks %d",
                               //       track, seg, fb, fb->segment(), fb->segment()->tick(), fb->ticks(), cr, cr->tick(), cr->actualTicks());
                               bool extend = fb->ticks() > cr->actualTicks();
@@ -5750,7 +5752,6 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
                               const bool writeDuration = fb->ticks() < cr->actualTicks();
                               fb->writeMusicXML(xml, true, crEndTick.ticks(), fbEndTick.ticks(),
                                                 writeDuration, divisions);
-
                               // Check for changing figures under a single note (each figure stored in a separate segment)
                               for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
                                     for (Element* annot : segNext->annotations()) {
