@@ -6337,6 +6337,9 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
             if (track == wtrack) {
                 if (e->type() == ElementType::FIGURED_BASS) {
                     const FiguredBass* fb = dynamic_cast<const FiguredBass*>(e);
+                    if (fb->items().empty()) {
+                        return;
+                    }
                     //LOGD("figuredbass() track %d seg %p fb %p seg %p tick %d ticks %d cr %p tick %d ticks %d",
                     //       track, seg, fb, fb->segment(), fb->segment()->tick(), fb->ticks(), cr, cr->tick(), cr->actualTicks());
                     bool extend = fb->ticks() > cr->actualTicks();
@@ -6352,7 +6355,6 @@ static void figuredBass(XmlWriter& xml, track_idx_t strack, track_idx_t etrack, 
                     const bool writeDuration = fb->ticks() < cr->actualTicks();
                     writeMusicXML(fb, xml, true, crEndTick.ticks(), fbEndTick.ticks(),
                                   writeDuration, divisions);
-
                     // Check for changing figures under a single note (each figure stored in a separate segment)
                     for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
                         for (EngravingItem* annot : segNext->annotations()) {
