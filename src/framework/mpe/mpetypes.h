@@ -66,6 +66,7 @@ using timestamp_t = usecs_t;
 using duration_t = usecs_t;
 using duration_percentage_t = percentage_t;
 using voice_layer_idx_t = uint_fast8_t;
+using staff_layer_idx_t = uint_fast16_t;
 
 constexpr inline duration_percentage_t occupiedPercentage(const timestamp_t timestamp,
                                                           const duration_t overallDuration)

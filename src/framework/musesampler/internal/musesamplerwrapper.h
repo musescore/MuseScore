@@ -31,11 +31,14 @@
 #include "libhandler.h"
 #include "musesamplersequencer.h"
 
+#include "imusesamplertracks.h"
+
 namespace mu::musesampler {
-class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer
+class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
+    public std::enable_shared_from_this<MuseSamplerWrapper>
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, ms_InstrumentInfo instrument, const audio::AudioSourceParams& params);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const audio::AudioSourceParams& params);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
@@ -55,12 +58,17 @@ private:
     void setupEvents(const mpe::PlaybackData& playbackData) override;
     void updateRenderingMode(const audio::RenderMode mode) override;
 
+    // IMuseSamplerTracks
+    const TrackList& allTracks() const override;
+    ms_Track addTrack() override;
+
     audio::msecs_t playbackPosition() const override;
     void setPlaybackPosition(const audio::msecs_t newPosition) override;
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    std::string resolveDefaultPresetCode(ms_InstrumentInfo instrument) const;
+    InstrumentInfo resolveInstrument(const mpe::PlaybackSetupData& setupData) const;
+    std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
     void setCurrentPosition(const audio::samples_t samples);
@@ -69,9 +77,9 @@ private:
     async::Channel<unsigned int> m_audioChannelsCountChanged;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
-    ms_InstrumentInfo m_instrument = nullptr;
     ms_MuseSampler m_sampler = nullptr;
-    ms_Track m_track = nullptr;
+    InstrumentInfo m_instrument;
+    TrackList m_tracks;
     ms_OutputBuffer m_bus;
 
     audio::samples_t m_currentPosition = 0;
