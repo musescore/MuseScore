@@ -103,6 +103,7 @@ public:
     async::Notification dragChanged() const override;
 
     bool isDragCopyStarted() const override;
+    bool dragCopyAllowed(const EngravingItem* element) const override;
     void startDragCopy(const EngravingItem* element, QObject* dragSource) override;
     void endDragCopy() override;
 
