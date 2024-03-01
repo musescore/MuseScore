@@ -1248,7 +1248,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             // we assume voltas are sorted left to right (by tick values)
             double y = 0;
             int idx = 0;
-            Volta* prevVolta = 0;
+            Volta* prevVolta = nullptr;
             for (SpannerSegment* ss : voltaSegments) {
                 Volta* volta = toVolta(ss->spanner());
                 if (prevVolta && prevVolta != volta) {
@@ -1257,7 +1257,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         break;
                     }
                 }
-                y = std::min(y, ss->ldata()->pos().y());
+                if (ss->addToSkyline()) {
+                    y = std::min(y, ss->ldata()->pos().y());
+                }
                 ++idx;
                 prevVolta = volta;
             }
