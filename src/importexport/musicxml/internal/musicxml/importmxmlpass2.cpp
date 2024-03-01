@@ -3062,16 +3062,21 @@ void MusicXMLParserDirection::direction(const String& partId,
             m_logger->logError(u"spanner already started", &m_e);
             delete desc.sp;
         } else {
+            String spannerPlacement = placement;
+            // Case-based defaults
+            if (spannerPlacement.empty() && desc.sp->isHairpin()) {
+                spannerPlacement = isVocalStaff ? u"above" : u"below";
+            }
             if (spdesc.isStopped) {
                 m_pass2.addSpanner(desc);
                 // handleSpannerStart and handleSpannerStop must be called in order
                 // due to allocation of elements in the map
-                handleSpannerStart(desc.sp, track, placement, tick + m_offset, spanners);
+                handleSpannerStart(desc.sp, track, spannerPlacement, tick + m_offset, spanners);
                 handleSpannerStop(spdesc.sp, spdesc.track2, spdesc.tick2, spanners);
                 m_pass2.clearSpanner(desc);
             } else {
                 m_pass2.addSpanner(desc);
-                handleSpannerStart(desc.sp, track, placement, tick + m_offset, spanners);
+                handleSpannerStart(desc.sp, track, spannerPlacement, tick + m_offset, spanners);
                 spdesc.isStarted = true;
             }
         }
