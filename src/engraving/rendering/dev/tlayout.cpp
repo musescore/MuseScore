@@ -6255,7 +6255,8 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
 {
     LAYOUT_CALL_ITEM(item);
     TrillSegment::LayoutData* ldata = item->mutldata();
-    EngravingItem* startItem = item->trill()->startElement();
+    Trill* trill = item->trill();
+    EngravingItem* startItem = trill->startElement();
     Chord* startChord = startItem && startItem->isChord() ? toChord(startItem) : nullptr;
     if (startChord) {
         // Semi-hack: spanners don't have staffMove property, so we change
@@ -6270,8 +6271,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
         ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
     }
 
-    bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
-    Trill* trill = item->trill();
+    bool accidentalGoesBelow = trill->trillType() == TrillType::DOWNPRALL_LINE;
     Ornament* ornament = trill->ornament();
     if (ornament) {
         if (item->isSingleBeginType()) {
@@ -6289,7 +6289,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
     }
 
     if (item->isSingleType() || item->isBeginType()) {
-        switch (item->trill()->trillType()) {
+        switch (trill->trillType()) {
         case TrillType::TRILL_LINE:
             item->symbolLine(SymId::ornamentTrill, SymId::wiggleTrill);
             break;
@@ -6305,7 +6305,7 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
                              SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
             break;
         }
-        Accidental* a = item->trill()->accidental();
+        Accidental* a = trill->accidental();
         if (a) {
             double vertMargin = 0.35 * item->spatium();
             RectF box = item->symBbox(item->symbols().front());
@@ -6320,11 +6320,21 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
             a->setParent(item);
         }
     } else {
-        item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+        switch (trill->trillType()) {
+        case TrillType::TRILL_LINE:
+        case TrillType::PRALLPRALL_LINE:
+            item->symbolLine(SymId::wiggleTrill, SymId::wiggleTrill);
+            break;
+        case TrillType::UPPRALL_LINE:
+        case TrillType::DOWNPRALL_LINE:
+            item->symbolLine(SymId::ornamentZigZagLineNoRightEnd,
+                             SymId::ornamentZigZagLineNoRightEnd, SymId::ornamentZigZagLineWithRightEnd);
+            break;
+        }
     }
 
     if (item->isStyled(Pid::OFFSET)) {
-        item->roffset() = item->trill()->propertyDefault(Pid::OFFSET).value<PointF>();
+        item->roffset() = trill->propertyDefault(Pid::OFFSET).value<PointF>();
     }
 
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
