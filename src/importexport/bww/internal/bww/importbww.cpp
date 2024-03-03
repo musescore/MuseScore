@@ -129,9 +129,11 @@ static void setTempo(mu::engraving::Score* score, int tempo)
     mu::engraving::TempoText* tt = new mu::engraving::TempoText(segment);
     tt->setTempo(double(tempo) / 60.0);
     tt->setTrack(0);
-    QString tempoText = mu::engraving::TempoText::duration2tempoTextString(mu::engraving::DurationType::V_QUARTER);
-    tempoText += QString(" = %1").arg(tempo);
-    tt->setPlainText(tempoText);
+    tt->setFollowText(true);
+    mu::String tempoText = mu::engraving::TempoText::duration2tempoTextString(mu::engraving::DurationType::V_QUARTER);
+    tempoText += u" = ";
+    tempoText += mu::String::number(tempo);;
+    tt->setXmlText(tempoText);
     segment->add(tt);
 }
 
