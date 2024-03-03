@@ -4784,14 +4784,21 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
     auto layoutRestDots = [](const Rest* item, const LayoutConfiguration& conf, Rest::LayoutData* ldata)
     {
         const_cast<Rest*>(item)->checkDots();
-        double x = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
-        double dx = conf.styleMM(Sid::dotDotDistance) * item->mag();
+        double visibleX = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
+        double visibleDX = conf.styleMM(Sid::dotDotDistance) * item->mag();
+        double invisibleX = item->symWidthNoLedgerLines(ldata);
         double y = item->dotLine() * item->spatium() * .5;
         for (NoteDot* dot : item->dotList()) {
             NoteDot::LayoutData* dotldata = dot->mutldata();
             TLayout::layoutNoteDot(dot, dotldata);
-            dotldata->setPos(x, y);
-            x += dx;
+            if (dot->visible()) {
+                dotldata->setPos(visibleX, y);
+                visibleX += visibleDX;
+            } else {
+                invisibleX +=  0.1 * item->spatium();
+                dotldata->setPos(invisibleX, y);
+                invisibleX += item->symWidth(SymId::augmentationDot) * dot->mag();
+            }
         }
     };
 
