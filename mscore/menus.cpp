@@ -515,7 +515,7 @@ PalettePanel* MuseScore::newDynamicsPalettePanel(bool defaultPalettePanel)
             "pppppp", "ppppp", "pppp",
             "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
             "ffff", "fffff", "ffffff",
-            "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+            "fp", "pf", "sf", "sfz", "sff", "sffz", "sfff", "sfffz", "sfp", "sfpp",
             "rfz", "rf", "fz", "m", "r", "s", "z", "n"
             };
       static const std::vector<const char*> arrayDefault = {
