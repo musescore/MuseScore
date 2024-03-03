@@ -253,7 +253,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     // set clef, key and time signature in the first measure
     if (measureNumber == 1) {
         // clef
-        mu::engraving::Segment* s = currentMeasure->getSegment(mu::engraving::SegmentType::Clef, tick);
+        mu::engraving::Segment* s = currentMeasure->getSegment(mu::engraving::SegmentType::HeaderClef, tick);
         mu::engraving::Clef* clef = Factory::createClef(s);
         clef->setClefType(mu::engraving::ClefType::G);
         clef->setTrack(0);
