@@ -74,8 +74,8 @@ Item {
             navigation.panel: root.navPanel
             navigation.name: toolTipTitle
             navigation.order: model.index
-            accessible.name: (item.checkable ? (item.checked ? item.title + qsTrc("  ", " On ", "  ") :
-                                                               item.title + qsTrc("  ", " Off ", "  ")) : btn.text)
+            accessible.name: (item.checkable ? (item.checked ? item.title + "  " + qsTrc("global", "On") :
+                                                               item.title + "  " + qsTrc("global", "Off")) : btn.text)
 
             onClicked: {
                 if (menuLoader.isMenuOpened || item.subitems.length) {

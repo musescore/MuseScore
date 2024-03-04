@@ -37,6 +37,8 @@ void NotationToolBarModel::load()
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         load();
     });
+
+    AbstractMenuModel::load();
 }
 
 MenuItem* NotationToolBarModel::makeItem(const actions::ActionCode& actionCode)
