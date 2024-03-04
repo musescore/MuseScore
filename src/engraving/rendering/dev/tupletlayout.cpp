@@ -28,6 +28,7 @@
 #include "dom/stafftype.h"
 #include "dom/chord.h"
 #include "dom/note.h"
+#include "dom/score.h"
 #include "dom/stem.h"
 #include "dom/system.h"
 #include "dom/measure.h"
@@ -170,6 +171,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double stemRight     = (style.styleMM(Sid::tupletStemRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
     double noteLeft      = (style.styleMM(Sid::tupletNoteLeftDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr1->mag();
     double noteRight     = (style.styleMM(Sid::tupletNoteRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
+    bool stretchBracket  = item->bracketAlignRight() && item->hasBracket();
 
     int move = 0;
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
@@ -257,7 +259,10 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 item->p1().setY(item->p2().y());
             }
         }
-
+        // if desired, extend the tuplet bracket to the full rhythmic duration
+        if (stretchBracket) {
+            stretchBracket = stretchBracketToFillDuration(item, cr2);
+        }
         // outOfStaff
         if (outOfStaff) {
             double min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
@@ -351,6 +356,10 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 item->p1().setY(item->p2().y());
             }
         }
+        // if desired, extend the tuplet bracket to the full rhythmic duration
+        if (stretchBracket) {
+            stretchBracket = stretchBracketToFillDuration(item, cr2);
+        }
         // outOfStaff
         if (outOfStaff) {
             double max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
@@ -402,7 +411,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     if (!cr1->isChord()) {
         item->p1().rx() = cr1->abbox().left() - noteLeft;
     }
-    if (!cr2->isChord()) {
+    if (!cr2->isChord() && !stretchBracket) {
         Shape shape = cr2->ldata()->shape();
         auto shEl = shape.find_if([](const ShapeElement& i) { return i.item() && i.item()->isChordRest(); });
         DO_ASSERT(shEl);
@@ -593,5 +602,35 @@ bool TupletLayout::notTopTuplet(ChordRest* cr)
     }
 
     // no tuplet or not first element
+    return false;
+}
+
+bool TupletLayout::stretchBracketToFillDuration(Tuplet* tuplet, const DurationElement* endCR)
+{
+    if (!(endCR && endCR->explicitParent() && endCR->explicitParent()->isSegment())) {
+        return;
+    }
+    double x2 = 0.0;
+    Segment* currentSeg = toSegment(endCR->explicitParent());
+    Segment* seg = tuplet->score()->tick2segmentMM(tuplet->tick() + tuplet->ticks(), false, SegmentType::ChordRest);
+
+    if (seg && currentSeg->measure() == seg->measure()) {
+        // next chordrest found in same measure
+        x2 = seg->pagePos().x();
+    } else {
+        // next chordrest is in next measure
+        // lay out to end (barline) of current measure instead
+        seg = currentSeg->next(SegmentType::EndBarLine);
+        if (!seg) {
+            seg = currentSeg->measure()->last();
+        }
+        x2 = seg->enabled() ? seg->pagePos().x() : seg->measure()->width() + seg->measure()->pagePos().x();
+    }
+    x2 -= tuplet->spatium();  // leave gap to next segment (1sp)
+
+    if (x2 > tuplet->p2().rx()) {
+        tuplet->p2().rx() = x2;
+        return true;
+    }
     return false;
 }

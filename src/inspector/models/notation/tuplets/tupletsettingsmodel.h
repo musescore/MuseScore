@@ -32,6 +32,7 @@ class TupletSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * directionType READ directionType CONSTANT)
     Q_PROPERTY(PropertyItem * numberType READ numberType CONSTANT)
     Q_PROPERTY(PropertyItem * bracketType READ bracketType CONSTANT)
+    Q_PROPERTY(PropertyItem * bracketAlignRight READ bracketAlignRight CONSTANT)
     Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
 
 public:
@@ -40,6 +41,7 @@ public:
     PropertyItem* directionType() const;
     PropertyItem* numberType() const;
     PropertyItem* bracketType() const;
+    PropertyItem* bracketAlignRight() const;
     PropertyItem* lineThickness() const;
 
     Q_INVOKABLE QVariantList possibleNumberTypes() const;
@@ -53,6 +55,7 @@ private:
     PropertyItem* m_directionType = nullptr;
     PropertyItem* m_numberType = nullptr;
     PropertyItem* m_bracketType = nullptr;
+    PropertyItem* m_bracketAlignRight = nullptr;
     PropertyItem* m_lineThickness = nullptr;
 };
 }

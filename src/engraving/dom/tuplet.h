@@ -82,6 +82,7 @@ public:
     TupletBracketType bracketType() const { return m_bracketType; }
     void setNumberType(TupletNumberType val) { m_numberType = val; }
     void setBracketType(TupletBracketType val) { m_bracketType = val; }
+    bool bracketAlignRight() const { return m_bracketAlignRight; }
     bool hasBracket() const { return m_hasBracket; }
     void setHasBracket(bool b) { m_hasBracket = b; }
     Millimetre bracketWidth() const { return m_bracketWidth; }
@@ -177,6 +178,7 @@ private:
     DirectionV m_direction = DirectionV::AUTO;
     TupletNumberType m_numberType = TupletNumberType::SHOW_NUMBER;
     TupletBracketType m_bracketType = TupletBracketType::AUTO_BRACKET;
+    bool m_bracketAlignRight = false;
     Millimetre m_bracketWidth;
 
     bool m_hasBracket = false;

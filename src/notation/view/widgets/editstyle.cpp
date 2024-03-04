@@ -507,6 +507,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tupletStemRightDistance, false, tupletStemRightDistance, resetTupletStemRightDistance },
         { StyleId::tupletNoteLeftDistance,  false, tupletNoteLeftDistance,  resetTupletNoteLeftDistance },
         { StyleId::tupletNoteRightDistance, false, tupletNoteRightDistance, resetTupletNoteRightDistance },
+        { StyleId::tupletBracketAlignRight, false, tupletBracketAlignRight, resetTupletBracketAlignRight },
         { StyleId::tupletBracketWidth,      false, tupletBracketWidth,      resetTupletBracketWidth },
         { StyleId::tupletBracketHookHeight, false, tupletBracketHookHeight, resetTupletBracketHookHeight },
         { StyleId::tupletDirection,         false, tupletDirection,         resetTupletDirection },

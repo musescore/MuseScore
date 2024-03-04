@@ -120,6 +120,7 @@ enum class Pid {
     TIMESIG_ACTUAL,
     NUMBER_TYPE,
     BRACKET_TYPE,
+    BRACKET_ALIGN_RIGHT,
     NORMAL_NOTES,
     ACTUAL_NOTES,
     P1,

@@ -54,6 +54,11 @@ PropertyItem* TupletSettingsModel::bracketType() const
     return m_bracketType;
 }
 
+PropertyItem* TupletSettingsModel::bracketAlignRight() const
+{
+    return m_bracketAlignRight;
+}
+
 PropertyItem* TupletSettingsModel::lineThickness() const
 {
     return m_lineThickness;
@@ -90,6 +95,7 @@ void TupletSettingsModel::createProperties()
     m_directionType = buildPropertyItem(mu::engraving::Pid::DIRECTION);
     m_numberType = buildPropertyItem(mu::engraving::Pid::NUMBER_TYPE);
     m_bracketType = buildPropertyItem(mu::engraving::Pid::BRACKET_TYPE);
+    m_bracketAlignRight = buildPropertyItem(mu::engraving::Pid::BRACKET_ALIGN_RIGHT);
     m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
 }
 
@@ -98,6 +104,7 @@ void TupletSettingsModel::loadProperties()
     loadPropertyItem(m_directionType);
     loadPropertyItem(m_numberType);
     loadPropertyItem(m_bracketType);
+    loadPropertyItem(m_bracketAlignRight);
     loadPropertyItem(m_lineThickness, formatDoubleFunc);
 }
 
@@ -106,5 +113,6 @@ void TupletSettingsModel::resetProperties()
     m_directionType->resetToDefault();
     m_numberType->resetToDefault();
     m_bracketType->resetToDefault();
+    m_bracketAlignRight->resetToDefault();
     m_lineThickness->resetToDefault();
 }
