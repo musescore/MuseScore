@@ -3116,19 +3116,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "open", "trombone-treble channel"),
 //: channel for Trombone (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "trombone-treble channel"),
 
-//: description for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass Trombone (usually pitched in F).", "contrabass-trombone description"),
-//: trackName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass Trombone", "contrabass-trombone trackName"),
-//: longName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass Trombone", "contrabass-trombone longName"),
-//: shortName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Cb. Tbn.", "contrabass-trombone shortName"),
-//: channel for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "open", "contrabass-trombone channel"),
-//: channel for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "contrabass-trombone channel"),
-
 //: description for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Bass trombone (pitched in B♭).", "bass-trombone description"),
 //: trackName for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -3141,6 +3128,19 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "B. Tbn.", "bass-trombone shortName"
 QT_TRANSLATE_NOOP3("engraving/instruments", "open", "bass-trombone channel"),
 //: channel for Bass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "bass-trombone channel"),
+
+//: description for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass Trombone (usually pitched in F).", "contrabass-trombone description"),
+//: trackName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass Trombone", "contrabass-trombone trackName"),
+//: longName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Contrabass Trombone", "contrabass-trombone longName"),
+//: shortName for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Cb. Tbn.", "contrabass-trombone shortName"),
+//: channel for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "open", "contrabass-trombone channel"),
+//: channel for Contrabass Trombone; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "contrabass-trombone channel"),
 
 //: description for Cimbasso; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Instrument with a similar range to the contrabass trombone, most commonly encountered in 19th-century Italian opera scores.", "cimbasso description"),
@@ -5060,6 +5060,56 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "staccato", "harp channel"),
 //: channel for Harp; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "flageoletti", "harp channel"),
 
+//: description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).", "guitar-steel description"),
+//: trackName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar", "guitar-steel trackName"),
+//: longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar", "guitar-steel longName"),
+//: shortName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-steel shortName"),
+//: channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-steel channel"),
+//: channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-steel channel"),
+//: channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "jazz", "guitar-steel channel"),
+
+//: description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-string guitar (staff notation, with normal treble clef).", "guitar-steel-treble-clef description"),
+//: trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar (treble clef)", "guitar-steel-treble-clef trackName"),
+//: longName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar", "guitar-steel-treble-clef longName"),
+//: shortName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-steel-treble-clef shortName"),
+
+//: description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).", "guitar-nylon description"),
+//: trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Classical Guitar", "guitar-nylon trackName"),
+//: longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Classical Guitar", "guitar-nylon longName"),
+//: shortName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-nylon shortName"),
+//: channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-nylon channel"),
+//: channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-nylon channel"),
+
+//: description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-string guitar (staff notation, with normal treble clef).", "guitar-nylon-treble-clef description"),
+//: trackName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar (treble clef)", "guitar-nylon-treble-clef trackName"),
+//: longName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar", "guitar-nylon-treble-clef longName"),
+//: shortName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-nylon-treble-clef shortName"),
+//: channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-nylon-treble-clef channel"),
+//: channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-nylon-treble-clef channel"),
+
 //: description for Cavaquinho; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Small Portuguese 4-string guitar (staff notation).", "cavaquinho description"),
 //: trackName for Cavaquinho; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
@@ -5131,56 +5181,6 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Guitar (treble clef)", "el
 QT_TRANSLATE_NOOP3("engraving/instruments", "Electric Guitar", "electric-guitar-treble-clef longName"),
 //: shortName for Electric Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "El. Guit.", "electric-guitar-treble-clef shortName"),
-
-//: description for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).", "guitar-steel description"),
-//: trackName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar", "guitar-steel trackName"),
-//: longName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar", "guitar-steel longName"),
-//: shortName for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-steel shortName"),
-//: channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-steel channel"),
-//: channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-steel channel"),
-//: channel for Acoustic Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "jazz", "guitar-steel channel"),
-
-//: description for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic steel-string guitar (staff notation, with normal treble clef).", "guitar-steel-treble-clef description"),
-//: trackName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic Guitar (treble clef)", "guitar-steel-treble-clef trackName"),
-//: longName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar", "guitar-steel-treble-clef longName"),
-//: shortName for Acoustic Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-steel-treble-clef shortName"),
-
-//: description for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).", "guitar-nylon description"),
-//: trackName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Classical Guitar", "guitar-nylon trackName"),
-//: longName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Classical Guitar", "guitar-nylon longName"),
-//: shortName for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-nylon shortName"),
-//: channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-nylon channel"),
-//: channel for Classical Guitar; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-nylon channel"),
-
-//: description for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Acoustic nylon-string guitar (staff notation, with normal treble clef).", "guitar-nylon-treble-clef description"),
-//: trackName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar (treble clef)", "guitar-nylon-treble-clef trackName"),
-//: longName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guitar", "guitar-nylon-treble-clef longName"),
-//: shortName for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Guit.", "guitar-nylon-treble-clef shortName"),
-//: channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "open", "guitar-nylon-treble-clef channel"),
-//: channel for Guitar (treble clef); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "mute", "guitar-nylon-treble-clef channel"),
 
 //: description for Electric Guitar (tablature); Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Electric guitar (tablature).", "electric-guitar-tablature description"),
