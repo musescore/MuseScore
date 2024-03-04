@@ -1523,21 +1523,23 @@ static void updateStyles(Score* score,
             // and text types used in the title frame
             // Some further tweaking may still be required.
 
-            if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN
-                || tid == Tid::HARMONY_ROMAN
-                || isTitleFrameStyle(tid))
+            if (tid == Tid::LYRICS_ODD || tid == Tid::LYRICS_EVEN)
                   continue;
+
+            bool needUseDefaultSize = tid == Tid::HARMONY_ROMAN
+                                      || isTitleFrameStyle(tid);
+
             const TextStyle* ts = textStyle(tid);
             for (const StyledProperty& a :* ts) {
-                  if (a.pid == Pid::FONT_FACE && !wordFamily.isEmpty() && !needUseDefaultFont)
+                  if (a.pid == Pid::FONT_FACE && !needUseDefaultFont)
                         score->style().set(a.sid, wordFamily);
-                  else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon)
+                  else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon && !needUseDefaultSize)
                         score->style().set(a.sid, dblWordSize);
                   }
             }
 
       // handle lyrics odd and even lines separately
-      if (!lyricFamily.isEmpty() && !needUseDefaultFont) {
+      if (!needUseDefaultFont) {
             score->style().set(Sid::lyricsOddFontFace, lyricFamily);
             score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
             }
@@ -1707,6 +1709,8 @@ void MusicXMLParserPass1::defaults()
              qPrintable(wordFontFamily), qPrintable(wordFontSize),
              qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
       */
+      wordFontFamily = wordFontFamily.isEmpty() ? "Edwin" : wordFontFamily;
+      lyricFontFamily = lyricFontFamily.isEmpty() ? wordFontFamily : lyricFontFamily;
       updateStyles(_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
 
       _score->setDefaultsRead(true); // TODO only if actually succeeded ?
