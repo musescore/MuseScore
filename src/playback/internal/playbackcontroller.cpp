@@ -80,11 +80,6 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
-static bool supportsSoundFlags(AudioResourceType type)
-{
-    return type == AudioResourceType::MuseSamplerSoundPack;
-}
-
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
@@ -386,72 +381,12 @@ void PlaybackController::seekRangeSelection()
     seek(tick.val);
 }
 
-void PlaybackController::addSoundFlagsToExistingTracks()
+void PlaybackController::onAudioResourceChanged(const InstrumentTrackId& trackId,
+                                                const AudioResourceMeta& oldMeta,
+                                                const AudioResourceMeta& newMeta)
 {
-    TRACEFUNC;
-
     INotationPlaybackPtr notationPlayback = this->notationPlayback();
     if (!notationPlayback) {
-        return;
-    }
-
-    InstrumentTrackIdSet trackIdSet;
-
-    for (const InstrumentTrackId& trackId : notationPlayback->existingTrackIdSet()) {
-        const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
-
-        if (supportsSoundFlags(params.resourceMeta.type)) {
-            trackIdSet.insert(trackId);
-        }
-    }
-
-    if (!trackIdSet.empty()) {
-        notationPlayback->addSoundFlags(trackIdSet);
-    }
-}
-
-void PlaybackController::updateSoundFlagsForExistingTracks()
-{
-    TRACEFUNC;
-
-    if (m_blockSoundFlagsUpdate) {
-        return;
-    }
-
-    INotationPlaybackPtr notationPlayback = this->notationPlayback();
-    if (!notationPlayback) {
-        return;
-    }
-
-    InstrumentTrackIdSet addSoundFlagsTrackIdSet;
-    InstrumentTrackIdSet removeSoundFlagsTrackIdSet;
-
-    for (const InstrumentTrackId& trackId : notationPlayback->existingTrackIdSet()) {
-        const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
-
-        if (supportsSoundFlags(params.resourceMeta.type)) {
-            addSoundFlagsTrackIdSet.insert(trackId);
-        } else {
-            removeSoundFlagsTrackIdSet.insert(trackId);
-        }
-    }
-
-    if (!addSoundFlagsTrackIdSet.empty()) {
-        notationPlayback->addSoundFlags(addSoundFlagsTrackIdSet);
-    }
-
-    if (!removeSoundFlagsTrackIdSet.empty()) {
-        notationPlayback->removeSoundFlags(removeSoundFlagsTrackIdSet);
-    }
-}
-
-void PlaybackController::updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId,
-                                          const AudioResourceMeta& oldMeta,
-                                          const AudioResourceMeta& newMeta)
-{
-    TRACEFUNC;
-
-    if (m_blockSoundFlagsUpdate) {
         return;
     }
 
@@ -459,35 +394,33 @@ void PlaybackController::updateSoundFlags(const mu::engraving::InstrumentTrackId
         return;
     }
 
-    INotationPlaybackPtr notationPlayback = this->notationPlayback();
-    if (!notationPlayback) {
-        return;
-    }
-
-    if (!supportsSoundFlags(newMeta.type)) {
-        notationPlayback->removeSoundFlags({ trackId });
-        return;
-    }
-
-    if (oldMeta.type == newMeta.type) { // same audio source but different sounds
-        notationPlayback->clearSoundFlags({ trackId });
-    } else {
-        notationPlayback->addSoundFlags({ trackId });
-    }
+    notationPlayback->removeSoundFlags({ trackId });
 }
 
-void PlaybackController::addSoundFlagIfNeed(mu::engraving::StaffText* staffText)
+void PlaybackController::addSoundFlagsIfNeed(const std::vector<EngravingItem*>& selection)
 {
-    INotationPlaybackPtr notationPlayback = this->notationPlayback();
-    if (!staffText || !notationPlayback) {
+    if (selection.empty()) {
         return;
     }
 
-    mu::engraving::InstrumentTrackId trackId = mu::engraving::makeInstrumentTrackId(staffText);
-    const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
+    std::vector<StaffText*> staffTextList;
 
-    if (supportsSoundFlags(params.resourceMeta.type)) {
-        notationPlayback->addSoundFlag(staffText);
+    for (EngravingItem* item : selection) {
+        if (!item || !item->isStaffText()) {
+            continue;
+        }
+
+        InstrumentTrackId trackId = mu::engraving::makeInstrumentTrackId(item);
+        const AudioInputParams& params = audioSettings()->trackInputParams(trackId);
+
+        bool supportsSoundFlags = params.type() == AudioSourceType::MuseSampler;
+        if (supportsSoundFlags) {
+            staffTextList.push_back(toStaffText(item));
+        }
+    }
+
+    if (!staffTextList.empty()) {
+        notationPlayback()->addSoundFlags(staffTextList);
     }
 }
 
@@ -581,6 +514,8 @@ void PlaybackController::onSelectionChanged()
         if (!isLoopEnabled()) {
             seekListSelection();
         }
+
+        addSoundFlagsIfNeed(selection->elements());
 
         return;
     }
@@ -1199,7 +1134,7 @@ void PlaybackController::subscribeOnAudioParamsChanges()
 
         if (search != m_instrumentTrackIdMap.end()) {
             const AudioResourceMeta& oldMeta = audioSettings()->trackInputParams(search->first).resourceMeta;
-            updateSoundFlags(search->first, oldMeta, params.resourceMeta);
+            onAudioResourceChanged(search->first, oldMeta, params.resourceMeta);
 
             audioSettings()->setTrackInputParams(search->first, params);
         }
@@ -1263,8 +1198,6 @@ void PlaybackController::setupSequenceTracks()
         if (m_loadingTrackCount == 0) {
             m_loadingProgress.finished.send(make_ok());
             m_isPlayAllowedChanged.notify();
-
-            addSoundFlagsToExistingTracks();
         }
     };
 
@@ -1538,11 +1471,7 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
         return;
     }
 
-    m_blockSoundFlagsUpdate = true;
-    DEFER {
-        m_blockSoundFlagsUpdate = false;
-        updateSoundFlagsForExistingTracks();
-    };
+    notationPlayback()->removeSoundFlags(notationPlayback()->existingTrackIdSet());
 
     const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
 
@@ -1552,7 +1481,6 @@ void PlaybackController::applyProfile(const SoundProfileName& profileName)
         }
 
         const mpe::PlaybackData& playbackData = notationPlayback()->trackPlaybackData(pair.first);
-
         AudioInputParams newInputParams { profile.findResource(playbackData.setupData), {} };
 
         playback()->tracks()->setInputParams(m_currentSequenceId, pair.second, std::move(newInputParams));
@@ -1617,12 +1545,6 @@ void PlaybackController::setNotation(notation::INotationPtr notation)
     m_notation->interaction()->textEditingEnded().onReceive(this, [this](engraving::TextBase* text) {
         if (text->isHarmony()) {
             playElements({ text });
-        }
-    });
-
-    m_notation->interaction()->textAdded().onReceive(this, [this](engraving::TextBase* text) {
-        if (text->isStaffText()) {
-            addSoundFlagIfNeed(toStaffText(text));
         }
     });
 

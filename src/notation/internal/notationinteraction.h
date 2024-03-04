@@ -148,7 +148,6 @@ public:
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
     async::Channel<TextBase*> textEditingEnded() const override;
-    async::Channel<TextBase*> textAdded() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;

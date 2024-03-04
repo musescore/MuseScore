@@ -1498,10 +1498,6 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             }
         }
 
-        if (dropElement && dropElement->isTextBase()) {
-            m_textAdded.send(toTextBase(dropElement));
-        }
-
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             if (!score()->noteEntryMode()) {
@@ -1987,10 +1983,6 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
                 rollback();
                 return;
             }
-        }
-
-        if (el && el->isTextBase()) {
-            m_textAdded.send(toTextBase(el));
         }
 
         if (el && !score->inputState().noteEntryMode()) {
@@ -3145,11 +3137,6 @@ mu::async::Channel<TextBase*> NotationInteraction::textEditingEnded() const
     return m_textEditingEnded;
 }
 
-async::Channel<TextBase*> NotationInteraction::textAdded() const
-{
-    return m_textAdded;
-}
-
 mu::async::Channel<ScoreConfigType> NotationInteraction::scoreConfigChanged() const
 {
     return m_scoreConfigChanged;
@@ -3719,13 +3706,7 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         QMimeDataAdapter ma(mimeData);
-        std::vector<EngravingItem*> pastedElements = score()->cmdPaste(&ma, nullptr, scale);
-
-        for (EngravingItem* element : pastedElements) {
-            if (element->isTextBase()) {
-                m_textAdded.send(toTextBase(element));
-            }
-        }
+        score()->cmdPaste(&ma, nullptr, scale);
     }
 
     apply();
@@ -4260,7 +4241,6 @@ void NotationInteraction::addText(TextStyleType type, EngravingItem* item)
     }
 
     apply();
-    m_textAdded.send(text);
     showItem(text);
 
     if (!text->isInstrumentChange()) {
