@@ -98,6 +98,8 @@ Item {
         menuItem.checkable = itemInfo.checkable
         menuItem.separator = !Boolean(itemInfo.title)
         menuItem.role = itemInfo.role
+        menuItem.icon.source = itemInfo.nativeMenuBarIconPath
+        menuItem.icon.mask = true
     }
 
     Component {

@@ -111,6 +111,16 @@ QString MenuItem::portableShortcuts() const
     return QString::fromStdString(shortcuts::Shortcut::sequencesToString(m_action.shortcuts));
 }
 
+QString MenuItem::nativeMenuBarIconPath() const
+{
+    return m_nativeMenuBarIconPath;
+}
+
+void MenuItem::setNativeMenuBarIconPath(const QString& path)
+{
+    m_nativeMenuBarIconPath = path;
+}
+
 void MenuItem::setId(const QString& id)
 {
     if (m_id == id) {
