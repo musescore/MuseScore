@@ -11,6 +11,7 @@
       <pageEvenBottomMargin>0.590551</pageEvenBottomMargin>
       <pageOddTopMargin>0.590551</pageOddTopMargin>
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
+      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
       <hideEmptyStaves>1</hideEmptyStaves>
       <dontHideStavesInFirstSystem>0</dontHideStavesInFirstSystem>
