@@ -5598,27 +5598,6 @@
                         <program value="59"/> <!--Muted Trumpet-->
                   </Channel>
             </Instrument>
-            <Instrument id="contrabass-trombone">
-                  <family>trombones</family>
-                  <trackName>Contrabass Trombone</trackName>
-                  <longName>Contrabass Trombone</longName>
-                  <shortName>Cb. Tbn.</shortName>
-                  <description>Contrabass Trombone (usually pitched in F).</description>
-                  <musicXMLid>brass.trombone.contrabass</musicXMLid>
-                  <clef>F</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-55</aPitchRange>
-                  <pPitchRange>28-58</pPitchRange>
-                  <Channel name="open">
-                        <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
-                        <program value="57"/> <!--Trombone-->
-                  </Channel>
-                  <Channel name="mute">
-                        <!--MIDI: Bank 0, Prog 59; MS General: Harmon Mute Trumpet-->
-                        <program value="59"/> <!--Muted Trumpet-->
-                  </Channel>
-                  <genre>orchestra</genre>
-            </Instrument>
             <Instrument id="bass-trombone">
                   <family>trombones</family>
                   <trackName>Bass Trombone</trackName>
@@ -5642,6 +5621,27 @@
                   <genre>orchestra</genre>
                   <genre>concertband</genre>
                   <genre>marching</genre>
+            </Instrument>
+            <Instrument id="contrabass-trombone">
+                  <family>trombones</family>
+                  <trackName>Contrabass Trombone</trackName>
+                  <longName>Contrabass Trombone</longName>
+                  <shortName>Cb. Tbn.</shortName>
+                  <description>Contrabass Trombone (usually pitched in F).</description>
+                  <musicXMLid>brass.trombone.contrabass</musicXMLid>
+                  <clef>F</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>28-55</aPitchRange>
+                  <pPitchRange>28-58</pPitchRange>
+                  <Channel name="open">
+                        <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
+                        <program value="57"/> <!--Trombone-->
+                  </Channel>
+                  <Channel name="mute">
+                        <!--MIDI: Bank 0, Prog 59; MS General: Harmon Mute Trumpet-->
+                        <program value="59"/> <!--Muted Trumpet-->
+                  </Channel>
+                  <genre>orchestra</genre>
             </Instrument>
             <Instrument id="cimbasso">
                   <family>trombones</family>
@@ -11278,6 +11278,138 @@
                   <genre>common</genre>
                   <genre>orchestra</genre>
             </Instrument>
+            <Instrument id="guitar-steel">
+                  <family>guitars</family>
+                  <trackName>Acoustic Guitar</trackName>
+                  <longName>Acoustic Guitar</longName>
+                  <shortName>Guit.</shortName>
+                  <description>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</description>
+                  <musicXMLid>pluck.guitar.acoustic</musicXMLid>
+                  <StringData>
+                        <frets>20</frets>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>59</string>
+                        <string>64</string>
+                  </StringData>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-83</aPitchRange>
+                  <pPitchRange>40-84</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel name="open">
+                        <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
+                  </Channel>
+                  <Channel name="mute">
+                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
+                        <program value="28"/> <!--Electric Guitar (muted)-->
+                  </Channel>
+                  <Channel name="jazz">
+                        <!--MIDI: Bank 0, Prog 26; MS General: Jazz Guitar-->
+                        <program value="26"/> <!--Electric Guitar (jazz)-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+                  <genre>jazz</genre>
+                  <genre>classroom</genre>
+            </Instrument>
+            <Instrument id="guitar-steel-treble-clef">
+                  <family>guitars</family>
+                  <trackName>Acoustic Guitar (treble clef)</trackName>
+                  <longName>Guitar</longName>
+                  <shortName>Guit.</shortName>
+                  <description>Acoustic steel-string guitar (staff notation, with normal treble clef).</description>
+                  <musicXMLid>pluck.guitar.acoustic</musicXMLid>
+                  <StringData>
+                        <frets>20</frets>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                        <string>71</string>
+                        <string>76</string>
+                  </StringData>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-83</aPitchRange>
+                  <pPitchRange>40-84</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel>
+                        <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
+                        <program value="25"/> <!--Acoustic Guitar (steel)-->
+                  </Channel>
+            </Instrument>
+            <Instrument id="guitar-nylon">
+                  <family>guitars</family>
+                  <trackName>Classical Guitar</trackName>
+                  <longName>Classical Guitar</longName>
+                  <shortName>Guit.</shortName>
+                  <description>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</description>
+                  <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>40</string>
+                        <string>45</string>
+                        <string>50</string>
+                        <string>55</string>
+                        <string>59</string>
+                        <string>64</string>
+                  </StringData>
+                  <clef>G8vb</clef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-83</aPitchRange>
+                  <pPitchRange>40-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <Channel name="open">
+                        <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                  </Channel>
+                  <Channel name="mute">
+                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
+                        <program value="28"/> <!--Electric Guitar (muted)-->
+                  </Channel>
+                  <genre>common</genre>
+                  <genre>popular</genre>
+            </Instrument>
+            <Instrument id="guitar-nylon-treble-clef">
+                  <family>guitars</family>
+                  <trackName>Guitar (treble clef)</trackName>
+                  <longName>Guitar</longName>
+                  <shortName>Guit.</shortName>
+                  <description>Acoustic nylon-string guitar (staff notation, with normal treble clef).</description>
+                  <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
+                  <StringData>
+                        <frets>19</frets>
+                        <string>52</string>
+                        <string>57</string>
+                        <string>62</string>
+                        <string>67</string>
+                        <string>71</string>
+                        <string>76</string>
+                  </StringData>
+                  <transposingClef>G</transposingClef>
+                  <concertClef>G8vb</concertClef>
+                  <barlineSpan>1</barlineSpan>
+                  <aPitchRange>40-83</aPitchRange>
+                  <pPitchRange>40-83</pPitchRange>
+                  <singleNoteDynamics>0</singleNoteDynamics>
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  <Channel name="open">
+                        <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
+                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
+                  </Channel>
+                  <Channel name="mute">
+                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
+                        <program value="28"/> <!--Electric Guitar (muted)-->
+                  </Channel>
+            </Instrument>
             <Instrument id="cavaquinho">
                   <family>guitars</family>
                   <trackName>Cavaquinho</trackName>
@@ -11451,138 +11583,6 @@
                   <Channel>
                         <!--MIDI: Bank 0, Prog 27; MS General: Clean Guitar-->
                         <program value="27"/> <!--Electric Guitar (clean)-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="guitar-steel">
-                  <family>guitars</family>
-                  <trackName>Acoustic Guitar</trackName>
-                  <longName>Acoustic Guitar</longName>
-                  <shortName>Guit.</shortName>
-                  <description>Acoustic steel-string guitar (staff notation, with 8va bassa treble clef).</description>
-                  <musicXMLid>pluck.guitar.acoustic</musicXMLid>
-                  <StringData>
-                        <frets>20</frets>
-                        <string>40</string>
-                        <string>45</string>
-                        <string>50</string>
-                        <string>55</string>
-                        <string>59</string>
-                        <string>64</string>
-                  </StringData>
-                  <clef>G8vb</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-84</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel name="open">
-                        <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
-                        <program value="25"/> <!--Acoustic Guitar (steel)-->
-                  </Channel>
-                  <Channel name="mute">
-                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
-                        <program value="28"/> <!--Electric Guitar (muted)-->
-                  </Channel>
-                  <Channel name="jazz">
-                        <!--MIDI: Bank 0, Prog 26; MS General: Jazz Guitar-->
-                        <program value="26"/> <!--Electric Guitar (jazz)-->
-                  </Channel>
-                  <genre>common</genre>
-                  <genre>popular</genre>
-                  <genre>jazz</genre>
-                  <genre>classroom</genre>
-            </Instrument>
-            <Instrument id="guitar-steel-treble-clef">
-                  <family>guitars</family>
-                  <trackName>Acoustic Guitar (treble clef)</trackName>
-                  <longName>Guitar</longName>
-                  <shortName>Guit.</shortName>
-                  <description>Acoustic steel-string guitar (staff notation, with normal treble clef).</description>
-                  <musicXMLid>pluck.guitar.acoustic</musicXMLid>
-                  <StringData>
-                        <frets>20</frets>
-                        <string>52</string>
-                        <string>57</string>
-                        <string>62</string>
-                        <string>67</string>
-                        <string>71</string>
-                        <string>76</string>
-                  </StringData>
-                  <transposingClef>G</transposingClef>
-                  <concertClef>G8vb</concertClef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-84</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>
-                  <Channel>
-                        <!--MIDI: Bank 0, Prog 25; MS General: Steel String Guitar-->
-                        <program value="25"/> <!--Acoustic Guitar (steel)-->
-                  </Channel>
-            </Instrument>
-            <Instrument id="guitar-nylon">
-                  <family>guitars</family>
-                  <trackName>Classical Guitar</trackName>
-                  <longName>Classical Guitar</longName>
-                  <shortName>Guit.</shortName>
-                  <description>Acoustic nylon-string guitar (staff notation, with 8va bassa treble clef).</description>
-                  <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
-                  <StringData>
-                        <frets>19</frets>
-                        <string>40</string>
-                        <string>45</string>
-                        <string>50</string>
-                        <string>55</string>
-                        <string>59</string>
-                        <string>64</string>
-                  </StringData>
-                  <clef>G8vb</clef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-83</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <Channel name="open">
-                        <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
-                  </Channel>
-                  <Channel name="mute">
-                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
-                        <program value="28"/> <!--Electric Guitar (muted)-->
-                  </Channel>
-                  <genre>common</genre>
-                  <genre>popular</genre>
-            </Instrument>
-            <Instrument id="guitar-nylon-treble-clef">
-                  <family>guitars</family>
-                  <trackName>Guitar (treble clef)</trackName>
-                  <longName>Guitar</longName>
-                  <shortName>Guit.</shortName>
-                  <description>Acoustic nylon-string guitar (staff notation, with normal treble clef).</description>
-                  <musicXMLid>pluck.guitar.nylon-string</musicXMLid>
-                  <StringData>
-                        <frets>19</frets>
-                        <string>52</string>
-                        <string>57</string>
-                        <string>62</string>
-                        <string>67</string>
-                        <string>71</string>
-                        <string>76</string>
-                  </StringData>
-                  <transposingClef>G</transposingClef>
-                  <concertClef>G8vb</concertClef>
-                  <barlineSpan>1</barlineSpan>
-                  <aPitchRange>40-83</aPitchRange>
-                  <pPitchRange>40-83</pPitchRange>
-                  <singleNoteDynamics>0</singleNoteDynamics>
-                  <transposeDiatonic>-7</transposeDiatonic>
-                  <transposeChromatic>-12</transposeChromatic>
-                  <Channel name="open">
-                        <!--MIDI: Bank 0, Prog 24; MS General: Nylon String Guitar-->
-                        <program value="24"/> <!--Acoustic Guitar (nylon)-->
-                  </Channel>
-                  <Channel name="mute">
-                        <!--MIDI: Bank 0, Prog 28; MS General: Palm Muted Guitar-->
-                        <program value="28"/> <!--Electric Guitar (muted)-->
                   </Channel>
             </Instrument>
             <Instrument id="electric-guitar-tablature">
