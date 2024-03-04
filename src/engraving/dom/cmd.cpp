@@ -72,6 +72,7 @@
 #include "stem.h"
 #include "stringdata.h"
 #include "system.h"
+#include "spacer.h"
 #include "tie.h"
 #include "timesig.h"
 #include "tremolo.h"
@@ -126,6 +127,54 @@ static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std
     }
 
     return { startTick, endTick };
+}
+
+//---------------------------------------------------------
+//    For use with Score::scanElements.
+//    Reset positions and autoplacement for the given
+//    element.
+//---------------------------------------------------------
+
+static void resetElementPosition(void*, EngravingItem* e)
+{
+    if (e->generated()) {
+        return;
+    }
+
+    e->undoResetProperty(Pid::AUTOPLACE);
+    e->undoResetProperty(Pid::OFFSET);
+    e->setOffsetChanged(false);
+    if (e->isSpanner()) {
+        e->undoResetProperty(Pid::OFFSET2);
+    }
+}
+
+static void resetTextProperties(void*, EngravingItem* e)
+{
+    if (e->generated() || !e->isTextBase()) {
+        return;
+    }
+
+    static const std::vector<Pid> TEXT_STYLE_TO_RESET {
+        Pid::FONT_FACE,
+        Pid::FONT_SIZE,
+        Pid::FONT_STYLE,
+        Pid::SIZE_SPATIUM_DEPENDENT,
+        Pid::FRAME_TYPE,
+        Pid::TEXT_LINE_SPACING,
+        Pid::FRAME_FG_COLOR,
+        Pid::FRAME_BG_COLOR,
+        Pid::FRAME_WIDTH,
+        Pid::FRAME_PADDING,
+        Pid::FRAME_ROUND,
+        Pid::ALIGN
+    };
+
+    for (Pid pid : TEXT_STYLE_TO_RESET) {
+        // TODO: use undoResetProperty: https://github.com/musescore/MuseScore/issues/16516
+        // But for now, we'll use resetPropety since undoResetProperty leads to various problems
+        e->resetProperty(pid);
+    }
 }
 
 //---------------------------------------------------------
@@ -2441,6 +2490,144 @@ void Score::cmdAddStretch(double val)
     }
 }
 
+void Score::cmdResetToDefaultLayout()
+{
+    TRACEFUNC;
+
+    StyleIdSet dontResetTheseStyles {
+        Sid::lyricsPlacement,
+        Sid::repeatBarTips,
+        Sid::startBarlineSingle,
+        Sid::startBarlineMultiple,
+        Sid::dividerLeft,
+        Sid::dividerRightY,
+        Sid::useStraightNoteFlags,
+        Sid::mrNumberSeries,
+        Sid::mrNumberEveryXMeasures,
+        Sid::mrNumberSeriesWithParentheses,
+        Sid::oneMeasureRepeatShow1,
+        Sid::fourMeasureRepeatShowExtenders,
+        Sid::useWideBeams,
+        Sid::hairpinPlacement,
+        Sid::pedalPlacement,
+        Sid::trillPlacement,
+        Sid::vibratoPlacement,
+        Sid::harmonyPlacement,
+        Sid::romanNumeralPlacement,
+        Sid::nashvilleNumberPlacement,
+        Sid::harmonyVoiceLiteral,
+        Sid::harmonyVoicing,
+        Sid::harmonyDuration,
+        Sid::capoPosition,
+        Sid::fretNumPos,
+        Sid::fretPlacement,
+        Sid::fretStrings,
+        Sid::fretFrets,
+        Sid::fretNut,
+        Sid::fretOrientation,
+        Sid::showPageNumber,
+        Sid::showPageNumberOne,
+        Sid::pageNumberOddEven,
+        Sid::showMeasureNumber,
+        Sid::showMeasureNumberOne,
+        Sid::measureNumberInterval,
+        Sid::measureNumberSystem,
+        Sid::measureNumberAllStaves,
+        Sid::genClef,
+        Sid::hideTabClefAfterFirst,
+        Sid::genKeysig,
+        Sid::genCourtesyTimesig,
+        Sid::genCourtesyKeysig,
+        Sid::genCourtesyClef,
+        Sid::swingRatio,
+        Sid::swingUnit,
+        Sid::useStandardNoteNames,
+        Sid::useGermanNoteNames,
+        Sid::useFullGermanNoteNames,
+        Sid::useSolfeggioNoteNames,
+        Sid::useFrenchNoteNames,
+        Sid::automaticCapitalization,
+        Sid::lowerCaseMinorChords,
+        Sid::lowerCaseBassNotes,
+        Sid::allCapsNoteNames,
+        Sid::chordStyle,
+        Sid::chordsXmlFile,
+        Sid::chordDescriptionFile,
+        Sid::concertPitch,
+        Sid::createMultiMeasureRests,
+        Sid::minEmptyMeasures,
+        Sid::hideEmptyStaves,
+        Sid::dontHideStavesInFirstSystem,
+        Sid::enableIndentationOnFirstSystem,
+        Sid::firstSystemIndentationValue,
+        Sid::hideInstrumentNameIfOneInstrument,
+        Sid::gateTime,
+        Sid::tenutoGateTime,
+        Sid::staccatoGateTime,
+        Sid::slurGateTime,
+        Sid::SectionPause,
+        Sid::showHeader,
+        Sid::headerFirstPage,
+        Sid::headerOddEven,
+        Sid::evenHeaderL,
+        Sid::evenHeaderC,
+        Sid::evenHeaderR,
+        Sid::oddHeaderL,
+        Sid::oddHeaderC,
+        Sid::oddHeaderR,
+        Sid::showFooter,
+        Sid::footerFirstPage,
+        Sid::footerOddEven,
+        Sid::evenFooterL,
+        Sid::evenFooterC,
+        Sid::evenFooterR,
+        Sid::oddFooterL,
+        Sid::oddFooterC,
+        Sid::oddFooterR,
+        Sid::tupletOufOfStaff,
+        Sid::tupletDirection,
+        Sid::tupletBracketType,
+        Sid::dynamicsPlacement,
+        Sid::textLinePlacement,
+        Sid::harpPedalDiagramPlacement,
+        Sid::harpPedalTextDiagramPlacement,
+        Sid::expressionPlacement,
+        Sid::tupletNumberType,
+        Sid::mmRestShowMeasureNumberRange,
+        Sid::mmRestRangeBracketType,
+        Sid::mmRestRangeVPlacement,
+        Sid::staffTextPlacement,
+        Sid::repeatLeftPlacement,
+        Sid::repeatRightPlacement,
+        Sid::instrumentChangePlacement,
+        Sid::stickingPlacement,
+        Sid::letRingPlacement,
+        Sid::palmMutePlacement,
+        Sid::pageWidth,
+        Sid::pageHeight,
+        Sid::pagePrintableWidth,
+        Sid::pageEvenTopMargin,
+        Sid::pageEvenBottomMargin,
+        Sid::pageEvenLeftMargin,
+        Sid::pageOddTopMargin,
+        Sid::pageOddBottomMargin,
+        Sid::pageOddLeftMargin,
+        Sid::pageTwosided,
+        Sid::spatium,
+        Sid::concertPitch,
+        Sid::createMultiMeasureRests
+    };
+
+    auto resetPositionAndTextProperties = [](void* ptr, EngravingItem* e) {
+        resetElementPosition(ptr, e);
+        resetTextProperties(ptr, e);
+    };
+
+    cmdResetMeasuresLayout();
+    scanElements(nullptr, resetPositionAndTextProperties);
+    cmdResetAllStyles(dontResetTheseStyles);
+}
+
 //---------------------------------------------------------
 //   cmdResetBeamMode
 //---------------------------------------------------------
@@ -2481,33 +2668,65 @@ void Score::cmdResetBeamMode()
 
 void Score::cmdResetTextStyleOverrides()
 {
-    static const std::vector<Pid> propertiesToReset {
-        Pid::FONT_FACE,
-        Pid::FONT_SIZE,
-        Pid::FONT_STYLE,
-        Pid::SIZE_SPATIUM_DEPENDENT,
-        Pid::FRAME_TYPE,
-        Pid::TEXT_LINE_SPACING,
-        Pid::FRAME_FG_COLOR,
-        Pid::FRAME_BG_COLOR,
-        Pid::FRAME_WIDTH,
-        Pid::FRAME_PADDING,
-        Pid::FRAME_ROUND,
-        Pid::ALIGN
-    };
+    TRACEFUNC;
 
-    for (Page* page : pages()) {
-        auto elements = page->elements();
+    scanElements(nullptr, resetTextProperties);
+}
 
-        for (EngravingItem* element : elements) {
-            if (!element || !element->isTextBase()) {
-                continue;
-            }
+void Score::cmdResetAllStyles(const StyleIdSet& exceptTheseOnes)
+{
+    TRACEFUNC;
 
-            for (Pid propertyId : propertiesToReset) {
-                element->resetProperty(propertyId);
+    int beginIdx = int(Sid::NOSTYLE) + 1;
+    int endIdx = int(Sid::STYLES);
+
+    StyleIdSet stylesToReset;
+
+    for (int idx = beginIdx; idx < endIdx; idx++) {
+        Sid styleId = Sid(idx);
+        if (!mu::contains(exceptTheseOnes, styleId)) {
+            stylesToReset.insert(styleId);
+        }
+    }
+
+    score()->resetStyleValues(stylesToReset);
+}
+
+// Removes system/page breaks and spacers
+void Score::cmdResetMeasuresLayout()
+{
+    TRACEFUNC;
+
+    std::vector<EngravingItem*> itemsToRemove;
+
+    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+        if (mb->isMeasure()) {
+            mb->undoResetProperty(Pid::USER_STRETCH);
+
+            for (const MStaff* staff : toMeasure(mb)->mstaves()) {
+                if (Spacer* spacer = staff->vspacerDown()) {
+                    itemsToRemove.push_back(spacer);
+                }
+
+                if (Spacer* spacer = staff->vspacerUp()) {
+                    itemsToRemove.push_back(spacer);
+                }
             }
         }
+
+        if (!mb->lineBreak() && !mb->pageBreak()) {
+            continue;
+        }
+
+        for (EngravingItem* item : mb->el()) {
+            if (item->isLayoutBreak()) {
+                itemsToRemove.push_back(item);
+            }
+        }
+    }
+
+    for (EngravingItem* item : itemsToRemove) {
+        undoRemoveElement(item);
     }
 }
 
@@ -2547,32 +2766,10 @@ void Score::cmdResetNoteAndRestGroupings()
     }
 }
 
-//---------------------------------------------------------
-//   resetElementShapePosition
-//    For use with Score::scanElements.
-//    Reset positions and autoplacement for the given
-//    element.
-//---------------------------------------------------------
-
-static void resetElementPosition(void*, EngravingItem* e)
-{
-    if (e->generated()) {
-        return;
-    }
-    e->undoResetProperty(Pid::AUTOPLACE);
-    e->undoResetProperty(Pid::OFFSET);
-    e->setOffsetChanged(false);
-    if (e->isSpanner()) {
-        e->undoResetProperty(Pid::OFFSET2);
-    }
-}
-
-//---------------------------------------------------------
-//   cmdResetAllPositions
-//---------------------------------------------------------
-
 void Score::cmdResetAllPositions(bool undoable)
 {
+    TRACEFUNC;
+
     if (undoable) {
         startCmd();
     }
@@ -2581,10 +2778,6 @@ void Score::cmdResetAllPositions(bool undoable)
         endCmd();
     }
 }
-
-//---------------------------------------------------------
-//   resetAutoplace
-//---------------------------------------------------------
 
 void Score::resetAutoplace()
 {
@@ -4464,7 +4657,7 @@ void Score::cmdToggleMmrest()
 {
     bool val = !style().styleB(Sid::createMultiMeasureRests);
     deselectAll();
-    undo(new ChangeStyleVal(this, Sid::createMultiMeasureRests, val));
+    undoChangeStyleVal(Sid::createMultiMeasureRests, val);
 }
 
 //---------------------------------------------------------
@@ -4475,7 +4668,7 @@ void Score::cmdToggleHideEmpty()
 {
     bool val = !style().styleB(Sid::hideEmptyStaves);
     deselectAll();
-    undo(new ChangeStyleVal(this, Sid::hideEmptyStaves, val));
+    undoChangeStyleVal(Sid::hideEmptyStaves, val);
 }
 
 //---------------------------------------------------------

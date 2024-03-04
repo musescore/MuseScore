@@ -2494,7 +2494,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
             InstrumentName* iname = mu::value(staff->instrumentNames, idx);
             if (iname == 0) {
                 iname = new InstrumentName(system);
-                // iname->setGenerated(true);
+                iname->setGenerated(true);
                 iname->setParent(system);
                 iname->setSysStaff(staff);
                 iname->setTrack(staffIdx * VOICES);

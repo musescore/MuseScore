@@ -326,8 +326,10 @@ public:
     bool makeMeasureRepeatGroup(Measure*, int numMeasures, staff_idx_t staffIdx);
     void cmdFlip();
     void resetUserStretch();
+    void cmdResetToDefaultLayout();
     void cmdResetBeamMode();
     void cmdResetTextStyleOverrides();
+    void cmdResetAllStyles(const StyleIdSet& exceptTheseOnes = {});
     bool canInsertClef(ClefType) const;
     void cmdInsertClef(ClefType);
     void removeChordRest(ChordRest* cr, bool clearSegment);
@@ -407,6 +409,7 @@ public:
     void undoRemoveBracket(Bracket*);
     void undoInsertTime(const Fraction& tick, const Fraction& len);
     void undoChangeStyleVal(Sid idx, const PropertyValue& v);
+    void undoChangeStyleValues(std::unordered_map<Sid, PropertyValue> values);
     void undoChangePageNumberOffset(int po);
     void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
 
@@ -622,6 +625,7 @@ public:
     PageSizeSetAccessor pageSize() { return PageSizeSetAccessor(m_style); }
 
     void resetStyleValue(Sid styleToReset);
+    void resetStyleValues(const StyleIdSet& styleIdSet);
 
     void setStyle(const MStyle& s, const bool overlap = false);
     bool loadStyle(const String&, bool ign = false, const bool overlap = false);
@@ -981,6 +985,8 @@ private:
     friend class write::Writer;
 
     static std::set<Score*> validScores;
+
+    void cmdResetMeasuresLayout();
 
     ScoreChangesRange changesRange() const;
 

@@ -40,7 +40,7 @@ public:
     virtual bool canApplyToAllParts() const = 0;
     virtual void applyToAllParts() = 0;
 
-    virtual void resetAllStyleValues(const std::set<StyleId>& exceptTheseOnes = {}) = 0;
+    virtual void resetAllStyleValues(const StyleIdSet& exceptTheseOnes = {}) = 0;
 
     virtual async::Notification styleChanged() const = 0;
 
