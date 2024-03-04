@@ -2787,39 +2787,6 @@ void Score::resetAutoplace()
 }
 
 //---------------------------------------------------------
-//   resetDefaults
-//    Resets slur and tie positioning. Used in score migration.
-//---------------------------------------------------------
-
-void Score::resetSlurTieDefaults()
-{
-    TRACEFUNC;
-
-    for (System* sys : systems()) {
-        for (SpannerSegment* spannerSegment : sys->spannerSegments()) {
-            if (spannerSegment->isSlurTieSegment()) {
-                bool retainDirection = true;
-                SlurTieSegment* slurTieSegment = toSlurTieSegment(spannerSegment);
-                if (slurTieSegment->slurTie()->isTie()) {
-                    Tie* tie = toTie(slurTieSegment->slurTie());
-                    if (tie->isInside()) {
-                        retainDirection = false;
-                    }
-                }
-                auto dir = slurTieSegment->slurTie()->slurDirection();
-                bool autoplace = slurTieSegment->slurTie()->autoplace();
-                slurTieSegment->reset();
-                if (retainDirection) {
-                    slurTieSegment->slurTie()->setSlurDirection(dir);
-                }
-                slurTieSegment->slurTie()->setAutoplace(autoplace);
-            }
-        }
-    }
-    doLayout();
-}
-
-//---------------------------------------------------------
 //   move
 //    move current selection
 //---------------------------------------------------------

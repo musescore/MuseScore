@@ -5694,11 +5694,6 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         m_resetAutoplace = false;
         resetAutoplace();
     }
-
-    if (m_resetDefaults) {
-        m_resetDefaults = false;
-        resetSlurTieDefaults();
-    }
 }
 
 void Score::createPaddingTable()
