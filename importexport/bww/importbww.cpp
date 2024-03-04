@@ -108,9 +108,10 @@ static void setTempo(Ms::Score* score, int tempo)
       Ms::TempoText* tt = new Ms::TempoText(score);
       tt->setTempo(double(tempo)/60.0);
       tt->setTrack(0);
+      tt->setFollowText(true);
       QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::TDuration::DurationType::V_QUARTER);
       tempoText += QString(" = %1").arg(tempo);
-      tt->setPlainText(tempoText);
+      tt->setXmlText(tempoText);
       Ms::Measure* measure = score->firstMeasure();
       Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0,1));
       segment->add(tt);
@@ -247,7 +248,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
             Ms::Clef* clef = new Ms::Clef(score);
             clef->setClefType(Ms::ClefType::G);
             clef->setTrack(0);
-            Ms::Segment* s = currentMeasure->getSegment(Ms::SegmentType::Clef, tick);
+            Ms::Segment* s = currentMeasure->getSegment(Ms::SegmentType::HeaderClef, tick);
             s->add(clef);
             // keysig
             Ms::KeySigEvent key;
