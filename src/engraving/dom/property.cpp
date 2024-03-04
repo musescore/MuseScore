@@ -109,6 +109,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TIMESIG_ACTUAL,          true,  0,                       P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "actual time signature") },
     { Pid::NUMBER_TYPE,             false, "numberType",            P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "number type") },
     { Pid::BRACKET_TYPE,            false, "bracketType",           P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bracket type") },
+    { Pid::BRACKET_ALIGN_RIGHT,     false, "bracketAlignRight",     P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "align bracket right") },
     { Pid::NORMAL_NOTES,            false, "normalNotes",           P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "normal notes") },
     { Pid::ACTUAL_NOTES,            false, "actualNotes",           P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "actual notes") },
     { Pid::P1,                      false, "p1",                    P_TYPE::POINT,              PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "p1") },

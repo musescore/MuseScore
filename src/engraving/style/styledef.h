@@ -634,6 +634,7 @@ enum class Sid {
     tupletStemRightDistance,
     tupletNoteLeftDistance,
     tupletNoteRightDistance,
+    tupletBracketAlignRight,
     tupletBracketWidth,
     tupletDirection,
     tupletNumberType,

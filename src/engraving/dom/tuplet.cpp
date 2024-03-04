@@ -47,6 +47,7 @@ static const ElementStyle tupletStyle {
     { Sid::tupletDirection,                    Pid::DIRECTION },
     { Sid::tupletNumberType,                   Pid::NUMBER_TYPE },
     { Sid::tupletBracketType,                  Pid::BRACKET_TYPE },
+    { Sid::tupletBracketAlignRight,            Pid::BRACKET_ALIGN_RIGHT },
     { Sid::tupletBracketWidth,                 Pid::LINE_WIDTH },
     { Sid::tupletFontFace,                     Pid::FONT_FACE },
     { Sid::tupletFontSize,                     Pid::FONT_SIZE },
@@ -66,6 +67,7 @@ Tuplet::Tuplet(Measure* parent)
     m_direction    = DirectionV::AUTO;
     m_numberType   = TupletNumberType::SHOW_NUMBER;
     m_bracketType  = TupletBracketType::AUTO_BRACKET;
+    m_bracketAlignRight = false;
     m_ratio        = Fraction(1, 1);
     m_number       = 0;
     m_hasBracket   = false;
@@ -84,6 +86,7 @@ Tuplet::Tuplet(const Tuplet& t)
     m_direction    = t.m_direction;
     m_numberType   = t.m_numberType;
     m_bracketType  = t.m_bracketType;
+    m_bracketAlignRight = t.m_bracketAlignRight;
     m_bracketWidth = t.m_bracketWidth;
 
     m_isUp          = t.m_isUp;
@@ -537,6 +540,8 @@ PropertyValue Tuplet::getProperty(Pid propertyId) const
         return int(m_numberType);
     case Pid::BRACKET_TYPE:
         return int(m_bracketType);
+    case Pid::BRACKET_ALIGN_RIGHT:
+        return m_bracketAlignRight;
     case Pid::LINE_WIDTH:
         return m_bracketWidth;
     case Pid::NORMAL_NOTES:
@@ -574,6 +579,9 @@ bool Tuplet::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::BRACKET_TYPE:
         setBracketType(TupletBracketType(v.toInt()));
+        break;
+    case Pid::BRACKET_ALIGN_RIGHT:
+        m_bracketAlignRight = v.toBool();
         break;
     case Pid::LINE_WIDTH:
         setBracketWidth(v.value<Millimetre>());

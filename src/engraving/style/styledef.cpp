@@ -623,6 +623,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tupletStemRightDistance, "tupletStemRightDistance", Spatium(.5) },
     { Sid::tupletNoteLeftDistance,  "tupletNoteLeftDistance",  Spatium(0.0) },
     { Sid::tupletNoteRightDistance, "tupletNoteRightDistance", Spatium(0.0) },
+    { Sid::tupletBracketAlignRight, "tupletBracketAlignRight", false },
     { Sid::tupletBracketWidth,      "tupletBracketWidth",      Spatium(0.1) },
     { Sid::tupletDirection,         "tupletDirection",         DirectionV::AUTO },
     { Sid::tupletNumberType,        "tupletNumberType",        int(TupletNumberType::SHOW_NUMBER) },

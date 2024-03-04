@@ -40,6 +40,7 @@ public:
     static void layout(DurationElement* de, LayoutContext& ctx);
     static bool isTopTuplet(ChordRest* cr);
     static bool notTopTuplet(ChordRest* cr);
+    static bool stretchBracketToFillDuration(Tuplet* tuplet, const DurationElement* endCR);
 };
 }
 
