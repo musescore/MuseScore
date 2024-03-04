@@ -95,6 +95,7 @@ public:
     virtual async::Notification dragChanged() const = 0;
 
     virtual bool isDragCopyStarted() const = 0;
+    virtual bool dragCopyAllowed(const EngravingItem* element) const = 0;
     virtual void startDragCopy(const EngravingItem* element, QObject* dragSource) = 0;
     virtual void endDragCopy() = 0;
 
