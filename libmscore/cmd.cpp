@@ -1384,8 +1384,17 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
       Chord* oc      = 0;
 
       bool first = true;
+      Fraction totalLen = cr->rtick() + f;
       for (Fraction f2 : qAsConst(flist)) {
             f  -= f2;
+            if (totalLen.reduced() > Fraction(1, 1)) {
+                  if (auto nm = cr1->measure()->nextMeasure()) {
+                        if (auto seg = nm->first(SegmentType::ChordRest)) {
+                              expandVoice(seg, track);
+                              totalLen.setNumerator(totalLen.numerator() - totalLen.denominator());
+                              }
+                        }
+                  }
             makeGap(cr1->segment(), cr1->track(), f2, tuplet, first);
 
             if (cr->isRest()) {
@@ -1462,10 +1471,12 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                   }
             Measure* m  = cr1->measure();
             Measure* m1 = m->nextMeasure();
-            if (m1 == 0)
+            if (!m1)
                   break;
             Segment* s = m1->first(SegmentType::ChordRest);
             cr1 = toChordRest(s->element(track));
+            if (!cr1)
+                  break;
             }
       connectTies();
       }
