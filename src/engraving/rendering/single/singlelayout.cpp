@@ -978,6 +978,7 @@ void SingleLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
 void SingleLayout::layout(GuitarBend*, const Context&)
 {
     NOT_IMPLEMENTED;
+    //! NOTE: Bends can be removed from disallowed elements in NotationInteraction::dragCopyAllowed once this has been implemented
 }
 
 void SingleLayout::layout(GuitarBendSegment*, const Context&)
