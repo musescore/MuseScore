@@ -288,14 +288,12 @@ public:
     void addMeasure(MeasureBase*, MeasureBase*);
     void linkMeasures(Score* score);
     void setResetAutoplace() { m_resetAutoplace = true; }
-    void setResetDefaults() { m_resetDefaults = true; }
 
     Excerpt* excerpt() { return m_excerpt; }
     void setExcerpt(Excerpt* e) { m_excerpt = e; }
 
     // methods for resetting elements for pre-4.0 score migration
     void resetAutoplace();
-    void resetSlurTieDefaults();
 
     void cmdAddBracket();
     void cmdAddParentheses();
@@ -1079,7 +1077,6 @@ private:
 
     ScoreOrder m_scoreOrder;                 // used for score ordering
     bool m_resetAutoplace = false;
-    bool m_resetDefaults = false;
     int m_mscVersion = Constants::MSC_VERSION;     // version of current loading *.msc file
 
     bool m_isOpen = false;
