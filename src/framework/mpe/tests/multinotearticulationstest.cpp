@@ -40,6 +40,7 @@ protected:
         firstNoteData.nominalTimestamp = 0;
         firstNoteData.nominalDuration = 500;
         firstNoteData.voiceIdx = 0; // first voice
+        firstNoteData.staffIdx = 0; // first staff;
         firstNoteData.nominalPitchLevel = pitchLevel(PitchClass::A, 3);
         firstNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
@@ -48,6 +49,7 @@ protected:
         secondNoteData.nominalTimestamp = 500;
         secondNoteData.nominalDuration = 500;
         secondNoteData.voiceIdx = 0; // first voice
+        secondNoteData.staffIdx = 0; // first staff;
         secondNoteData.nominalPitchLevel = pitchLevel(PitchClass::C, 4);
         secondNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
@@ -56,6 +58,7 @@ protected:
         thirdNoteData.nominalTimestamp = 1000;
         thirdNoteData.nominalDuration = 500;
         thirdNoteData.voiceIdx = 0; // first voice
+        thirdNoteData.staffIdx = 0; // first staff;
         thirdNoteData.nominalPitchLevel = pitchLevel(PitchClass::A, 3);
         thirdNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
@@ -64,6 +67,7 @@ protected:
         fourthNoteData.nominalTimestamp = 1500;
         fourthNoteData.nominalDuration = 500;
         fourthNoteData.voiceIdx = 0; // first voice
+        fourthNoteData.staffIdx = 0; // first staff;
         fourthNoteData.nominalPitchLevel = pitchLevel(PitchClass::C, 4);
         fourthNoteData.nominalDynamicLevel = dynamicLevelFromType(DynamicType::f);
 
@@ -77,6 +81,7 @@ protected:
         timestamp_t nominalTimestamp = 0;
         duration_t nominalDuration = 0;
         voice_layer_idx_t voiceIdx = 0;
+        staff_layer_idx_t staffIdx = 0;
 
         pitch_level_t nominalPitchLevel = 0;
 
@@ -119,6 +124,7 @@ TEST_F(Engraving_MultiNoteArticulationsTest, StandardPattern)
         NoteEvent noteEvent(pair.second.nominalTimestamp,
                             pair.second.nominalDuration,
                             pair.second.voiceIdx,
+                            pair.second.staffIdx,
                             pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
                             appliedArticulations,
@@ -217,6 +223,7 @@ TEST_F(Engraving_MultiNoteArticulationsTest, GlissandoPattern)
         NoteEvent noteEvent(pair.second.nominalTimestamp,
                             pair.second.nominalDuration,
                             pair.second.voiceIdx,
+                            pair.second.staffIdx,
                             pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
                             appliedArticulations[pair.first],
@@ -300,6 +307,7 @@ TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
         NoteEvent noteEvent(pair.second.nominalTimestamp,
                             pair.second.nominalDuration,
                             pair.second.voiceIdx,
+                            pair.second.staffIdx,
                             pair.second.nominalPitchLevel,
                             pair.second.nominalDynamicLevel,
                             appliedArticulations[pair.first],

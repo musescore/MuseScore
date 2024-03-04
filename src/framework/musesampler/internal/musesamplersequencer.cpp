@@ -79,12 +79,12 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
 };
 
-void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, ms_Track track,
+void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks,
                                 std::string&& defaultPresetCode)
 {
-    m_samplerLib = std::move(samplerLib);
-    m_sampler = std::move(sampler);
-    m_track = std::move(track);
+    m_samplerLib = samplerLib;
+    m_sampler = sampler;
+    m_tracks = tracks;
     m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
@@ -107,6 +107,11 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
 
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
 
+            ms_Track track = resolveTrack(noteEvent.arrangementCtx().staffLayerIndex);
+            IF_ASSERT_FAILED(track) {
+                continue;
+            }
+
             mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
             mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
 
@@ -115,10 +120,14 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
             pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, centsOffset);
             ms_NoteArticulation articulationFlag = noteArticulationTypes(noteEvent);
 
-            ms_AuditionStartNoteEvent_3 noteOn = { pitch, centsOffset, articulationFlag, 0.5, presets_cstr };
+            AuditionStartNoteEvent noteOn;
+            noteOn.msEvent = { pitch, centsOffset, articulationFlag, 0.5, presets_cstr };
+            noteOn.msTrack = track;
             m_offStreamEvents[timestampFrom].emplace(std::move(noteOn));
 
-            ms_AuditionStopNoteEvent noteOff = { pitch };
+            AuditionStopNoteEvent noteOff;
+            noteOff.msEvent = { pitch };
+            noteOff.msTrack = track;
             m_offStreamEvents[timestampTo].emplace(std::move(noteOff));
         }
     }
@@ -129,24 +138,94 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
 void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
                                                   const mpe::PlaybackParamMap& params)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
-    m_samplerLib->clearTrack(m_sampler, m_track);
-    LOGN() << "Requested to clear track";
+    clearAllTracks();
 
     loadPresets(params);
     loadNoteEvents(events);
     loadDynamicEvents(dynamics);
 
-    m_samplerLib->finalizeTrack(m_sampler, m_track);
-    LOGN() << "Requested to finalize track";
+    finalizeAllTracks();
+}
+
+void MuseSamplerSequencer::clearAllTracks()
+{
+    m_layerIdxToTrackIdx.clear();
+
+    for (ms_Track track : allTracks()) {
+        m_samplerLib->clearTrack(m_sampler, track);
+    }
+}
+
+void MuseSamplerSequencer::finalizeAllTracks()
+{
+    for (ms_Track track : allTracks()) {
+        m_samplerLib->finalizeTrack(m_sampler, track);
+    }
+}
+
+ms_Track MuseSamplerSequencer::resolveTrack(mpe::staff_layer_idx_t staffLayerIdx)
+{
+    const TrackList& tracks = m_tracks->allTracks();
+
+    layer_idx_t layerIdx = staffLayerIdx;
+    auto it = m_layerIdxToTrackIdx.find(layerIdx);
+
+    // A track has already been assigned to this layer
+    if (it != m_layerIdxToTrackIdx.end()) {
+        if (it->second < tracks.size()) {
+            return tracks.at(it->second);
+        }
+
+        m_layerIdxToTrackIdx.erase(it);
+    }
+
+    // Try to find a free track
+    std::unordered_set<track_idx_t> assignedTracks;
+    for (const auto& pair: m_layerIdxToTrackIdx) {
+        assignedTracks.insert(pair.second);
+    }
+
+    for (track_idx_t trackIdx = 0; trackIdx < tracks.size(); ++trackIdx) {
+        if (!mu::contains(assignedTracks, trackIdx)) {
+            m_layerIdxToTrackIdx.emplace(layerIdx, trackIdx);
+            return tracks.at(trackIdx);
+        }
+    }
+
+    // Add a new track
+    ms_Track newTrack = m_tracks->addTrack();
+    if (newTrack) {
+        m_layerIdxToTrackIdx.emplace(layerIdx, tracks.size());
+        return newTrack;
+    }
+
+    // Could not add the track. Use 1st track as a fallback
+    if (!tracks.empty()) {
+        m_layerIdxToTrackIdx.emplace(layerIdx, 0);
+        return tracks.front();
+    }
+
+    UNREACHABLE;
+    return nullptr;
+}
+
+const TrackList& MuseSamplerSequencer::allTracks() const
+{
+    IF_ASSERT_FAILED(m_tracks) {
+        static const TrackList dummy;
+        return dummy;
+    }
+
+    return m_tracks->allTracks();
 }
 
 void MuseSamplerSequencer::loadPresets(const mpe::PlaybackParamMap& params)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
@@ -167,17 +246,19 @@ void MuseSamplerSequencer::loadPresets(const mpe::PlaybackParamMap& params)
             continue;
         }
 
-        ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, m_track, pair.first);
+        for (ms_Track track : allTracks()) {
+            ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, track, pair.first);
 
-        for (const std::string& presetCode : soundPresets) {
-            m_samplerLib->addPreset(m_sampler, m_track, presetChange, presetCode.c_str());
+            for (const std::string& presetCode : soundPresets) {
+                m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.c_str());
+            }
         }
     }
 }
 
 void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
     }
 
@@ -196,33 +277,40 @@ void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
 
 void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes)
 {
-    for (const auto& pair : changes) {
-        m_samplerLib->addDynamicsEvent(m_sampler, m_track, pair.first, dynamicLevelRatio(pair.second));
+    for (ms_Track track : allTracks()) {
+        for (const auto& pair : changes) {
+            m_samplerLib->addDynamicsEvent(m_sampler, track, pair.first, dynamicLevelRatio(pair.second));
+        }
     }
 }
 
 void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 {
-    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+    IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_tracks) {
         return;
     }
 
-    auto voice = noteEvent.arrangementCtx().voiceLayerIndex;
+    ms_Track track = resolveTrack(noteEvent.arrangementCtx().staffLayerIndex);
+    IF_ASSERT_FAILED(track) {
+        return;
+    }
 
-    for (auto& art : noteEvent.expressionCtx().articulations) {
+    mpe::voice_layer_idx_t voiceIdx = noteEvent.arrangementCtx().voiceLayerIndex;
+
+    for (const auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
 
         if (art.first == mpe::ArticulationType::Pedal) {
             // Pedal on:
-            m_samplerLib->addPedalEvent(m_sampler, m_track, art.second.meta.timestamp, 1.0);
+            m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp, 1.0);
             // Pedal off:
-            m_samplerLib->addPedalEvent(m_sampler, m_track, art.second.meta.timestamp + art.second.meta.overallDuration, 0.0);
+            m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp + art.second.meta.overallDuration, 0.0);
         }
 
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this starts an articulation range, indicate the start
             if (art.second.occupiedFrom == 0 && art.second.occupiedTo != mpe::HUNDRED_PERCENT) {
-                if (m_samplerLib->addTrackEventRangeStart(m_sampler, m_track, voice, ms_art) != ms_Result_OK) {
+                if (m_samplerLib->addTrackEventRangeStart(m_sampler, track, voiceIdx, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range start";
                 } else {
                     LOGN() << "added start range for: " << static_cast<int>(ms_art);
@@ -240,8 +328,8 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
     if (!m_samplerLib->addNoteEvent(
             m_sampler,
-            m_track,
-            voice,
+            track,
+            voiceIdx,
             noteEvent.arrangementCtx().nominalTimestamp,
             noteEvent.arrangementCtx().nominalDuration,
             pitch,
@@ -264,7 +352,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
             // If this ends an articulation range, indicate the end
             LOGN() << "range: " << art.second.occupiedFrom << " to " << art.second.occupiedTo;
             if (art.second.occupiedFrom != 0 && art.second.occupiedTo == mpe::HUNDRED_PERCENT) {
-                if (m_samplerLib->addTrackEventRangeEnd(m_sampler, m_track, voice, ms_art) != ms_Result_OK) {
+                if (m_samplerLib->addTrackEventRangeEnd(m_sampler, track, voiceIdx, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range end";
                 } else {
                     LOGN() << "added end range for: " << static_cast<int>(ms_art);
@@ -274,14 +362,15 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 
     if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Multibend)) {
-        addPitchBends(noteEvent, noteEventId);
+        addPitchBends(noteEvent, noteEventId, track);
     }
+
     if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Vibrato)) {
-        addVibrato(noteEvent, noteEventId);
+        addVibrato(noteEvent, noteEventId, track);
     }
 }
 
-void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId)
+void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
     if (!m_samplerLib->addPitchBend) { // added in 0.5
         return;
@@ -310,11 +399,11 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
         pitchBend._offset_cents = pitchLevelToCents(nextIt->second);
         pitchBend._type = PitchBend_Bezier;
 
-        m_samplerLib->addPitchBend(m_sampler, m_track, pitchBend);
+        m_samplerLib->addPitchBend(m_sampler, track, pitchBend);
     }
 }
 
-void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId)
+void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
     if (!m_samplerLib->addVibrato) { // added in 0.5
         return;
@@ -332,7 +421,7 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
     vibrato._duration_us = duration;
     vibrato._depth_cents = VIBRATO_DEPTH_CENTS;
 
-    m_samplerLib->addVibrato(m_sampler, m_track, vibrato);
+    m_samplerLib->addVibrato(m_sampler, track, vibrato);
 }
 
 void MuseSamplerSequencer::pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const

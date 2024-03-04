@@ -97,6 +97,7 @@ inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingCont
 
 struct NominalNoteCtx {
     voice_idx_t voiceIdx = 0;
+    staff_idx_t staffIdx = 0;
     mpe::timestamp_t timestamp = 0;
     mpe::duration_t duration = 0;
     BeatsPerSecond tempo = 0;
@@ -108,6 +109,7 @@ struct NominalNoteCtx {
 
     explicit NominalNoteCtx(const Note* note, const RenderingContext& ctx)
         : voiceIdx(note->voice()),
+        staffIdx(note->staffIdx()),
         timestamp(ctx.nominalTimestamp),
         duration(ctx.nominalDuration),
         tempo(ctx.beatsPerSecond),
@@ -165,6 +167,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
     return mpe::NoteEvent(ctx.timestamp,
                           ctx.duration,
                           static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
+                          static_cast<mpe::staff_layer_idx_t>(ctx.staffIdx),
                           ctx.pitchLevel,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations,
@@ -177,6 +180,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::PitchCurve
     return mpe::NoteEvent(ctx.timestamp,
                           ctx.duration,
                           static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
+                          static_cast<mpe::staff_layer_idx_t>(ctx.staffIdx),
                           ctx.pitchLevel,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations,
@@ -190,6 +194,7 @@ inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& c
     return mpe::NoteEvent(ctx.nominalTimestamp,
                           noteNominalDuration(note, ctx),
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
+                          static_cast<mpe::staff_layer_idx_t>(note->staffIdx()),
                           notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
                           ctx.nominalDynamicLevel,
                           ctx.commonArticulations,
@@ -204,6 +209,7 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::duration_t
     return mpe::NoteEvent(ctx.timestamp + timestampOffset,
                           eventDuration,
                           static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
+                          static_cast<mpe::staff_layer_idx_t>(ctx.staffIdx),
                           ctx.pitchLevel + pitchLevelOffset,
                           ctx.chordCtx.nominalDynamicLevel,
                           ctx.chordCtx.commonArticulations,
@@ -218,6 +224,7 @@ inline mpe::NoteEvent buildFixedNoteEvent(const Note* note, const mpe::timestamp
     return mpe::NoteEvent(actualTimestamp,
                           actualDuration,
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
+                          static_cast<mpe::staff_layer_idx_t>(note->staffIdx()),
                           notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
                           actualDynamicLevel,
                           articulations,

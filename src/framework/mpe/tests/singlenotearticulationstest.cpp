@@ -38,6 +38,7 @@ protected:
         m_nominalTimestamp = 0; // msecs
         m_nominalDuration = 500; // msecs
         m_voiceIdx = 0; // first voice
+        m_staffIdx = 0; // first staff
 
         // [GIVEN] Pitch data of the note
         m_pitchClass = PitchClass::A;
@@ -55,6 +56,7 @@ protected:
     timestamp_t m_nominalTimestamp;
     duration_t m_nominalDuration;
     voice_layer_idx_t m_voiceIdx;
+    staff_layer_idx_t m_staffIdx;
 
     PitchClass m_pitchClass;
     octave_t m_octave;
@@ -91,6 +93,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, StandardPattern)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
@@ -141,6 +144,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, StaccatoPattern)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
@@ -188,6 +192,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
@@ -245,6 +250,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, AccentPattern_Nominal_MezzoForte)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
@@ -316,6 +322,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, PocoTenuto)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
@@ -367,6 +374,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, QuickFall)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
@@ -418,6 +426,7 @@ TEST_F(Engraving_SingleNoteArticulationsTest, Scoop)
     NoteEvent event(m_nominalTimestamp,
                     m_nominalDuration,
                     m_voiceIdx,
+                    m_staffIdx,
                     pitchLevel(m_pitchClass, m_octave),
                     m_nominalDynamic,
                     std::move(appliedArticulations),
