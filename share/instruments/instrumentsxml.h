@@ -3996,13 +3996,13 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Chains", "chains longName"),
 //: shortName for Chains; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Chn.", "chains shortName"),
 
-//: description for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese cymbal.", "chinese-cymbal description"),
-//: trackName for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese Cymbal", "chinese-cymbal trackName"),
-//: longName for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Chinese Cymbal", "chinese-cymbal longName"),
-//: shortName for Chinese Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "China cymbal for drum kit.", "chinese-cymbal description"),
+//: trackName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "China Cymbal", "chinese-cymbal trackName"),
+//: longName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "China Cymbal", "chinese-cymbal longName"),
+//: shortName for China Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Ch. Cym.", "chinese-cymbal shortName"),
 
 //: description for Cowbell; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
