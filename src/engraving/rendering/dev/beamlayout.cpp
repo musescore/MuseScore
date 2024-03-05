@@ -280,6 +280,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
                     if (newChordUpValue != prevChordUpValue && !toChord(cr)->isGrace()) {
                         // A change in stem direction may require to recompute note positions
                         ChordLayout::layoutChords1(ctx, cr->segment(), cr->staffIdx());
+                        cr->segment()->createShape(cr->staffIdx());
                     } else {
                         ChordLayout::layoutStem(toChord(cr), ctx);
                     }
