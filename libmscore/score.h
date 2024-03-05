@@ -132,7 +132,7 @@ enum class Pad : char {
 //   LayoutMode
 //    PAGE   The normal page view, honors page and line breaks.
 //    LINE   The panoramic view, one long system
-//    FLOAT  The "reflow" mode, ignore page and line breaks
+//    FLOAT  The "reflow" mode, ignore page and line breaks, stave spacer up, fixed and down
 //    SYSTEM The "never ending page", page break are turned into line break
 //---------------------------------------------------------
 
