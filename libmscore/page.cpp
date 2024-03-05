@@ -94,7 +94,8 @@ void Page::appendSystem(System* s)
 
 void Page::draw(QPainter* painter) const
       {
-      if (score()->layoutMode() != LayoutMode::PAGE)
+      bool shouldDraw = score()->pageMode() || score()->floatMode();
+      if (!shouldDraw)
             return;
       //
       // draw header/footer
@@ -213,7 +214,8 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
 
 qreal Page::headerExtension() const
       {
-      if (!score()->pageMode())
+      bool shouldLayoutHeader = score()->pageMode() || score()->floatMode();
+      if (!shouldLayoutHeader)
             return 0.0;
 
       int n = no() + 1 + score()->pageNumberOffset();
@@ -256,7 +258,8 @@ qreal Page::headerExtension() const
 
 qreal Page::footerExtension() const
       {
-      if (!score()->pageMode())
+      bool shouldLayoutFooter = score()->pageMode() || score()->floatMode();
+      if (!shouldLayoutFooter)
             return 0.0;
 
       int n = no() + 1 + score()->pageNumberOffset();
