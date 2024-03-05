@@ -1347,10 +1347,10 @@ void Timeline::keyMeta(Segment* seg, int* stagger, int pos)
         keyText = "\u266E";
         tooltip = TConv::translatedUserName(Key::C);
     } else if (int(newKey) < 0) {
-        keyText = QString::number(abs(int(newKey))) + "\u266D";
+        keyText = QString::number(std::abs(int(newKey))) + "\u266D";
         tooltip = TConv::translatedUserName(newKey);
     } else {
-        keyText = QString::number(abs(int(newKey))) + "\u266F";
+        keyText = QString::number(std::abs(int(newKey))) + "\u266F";
         tooltip = TConv::translatedUserName(newKey);
     }
 
@@ -2345,8 +2345,8 @@ void Timeline::mouseMoveEvent(QMouseEvent* event)
     if (state == ViewState::NORMAL) {
         if (event->modifiers() == Qt::ShiftModifier) {
             // Slight wiggle room for selection (Same as score)
-            if (abs(newLoc.x() - _oldLoc.x()) > 2
-                || abs(newLoc.y() - _oldLoc.y()) > 2) {
+            if (std::abs(newLoc.x() - _oldLoc.x()) > 2
+                || std::abs(newLoc.y() - _oldLoc.y()) > 2) {
                 interaction()->clearSelection();
                 updateGrid();
                 state = ViewState::LASSO;
@@ -2365,8 +2365,8 @@ void Timeline::mouseMoveEvent(QMouseEvent* event)
     if (state == ViewState::LASSO) {
         QRect tmp = QRect((_oldLoc.x() < newLoc.x()) ? _oldLoc.x() : newLoc.x(),
                           (_oldLoc.y() < newLoc.y()) ? _oldLoc.y() : newLoc.y(),
-                          abs(newLoc.x() - _oldLoc.x()),
-                          abs(newLoc.y() - _oldLoc.y()));
+                          std::abs(newLoc.x() - _oldLoc.x()),
+                          std::abs(newLoc.y() - _oldLoc.y()));
         _selectionBox->setRect(tmp);
     } else if (state == ViewState::DRAG) {
         int x_offset = int(_oldLoc.x()) - int(newLoc.x());

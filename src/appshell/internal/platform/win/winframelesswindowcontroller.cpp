@@ -205,8 +205,8 @@ bool WinFramelessWindowController::calculateWindowSize(MSG* message, qintptr* re
 
     minMaxInfo->ptMaxSize.x = monitorWorkAreaRect.right - monitorWorkAreaRect.left;
     minMaxInfo->ptMaxSize.y =  monitorWorkAreaRect.bottom - monitorWorkAreaRect.top;
-    minMaxInfo->ptMaxPosition.x = abs(windowRect.left - monitorRect.left);
-    minMaxInfo->ptMaxPosition.y = abs(windowRect.top - monitorRect.top);
+    minMaxInfo->ptMaxPosition.x = std::abs(windowRect.left - monitorRect.left);
+    minMaxInfo->ptMaxPosition.y = std::abs(windowRect.top - monitorRect.top);
     minMaxInfo->ptMinTrackSize.x =  minMaxInfo->ptMaxSize.x;
     minMaxInfo->ptMinTrackSize.y =  minMaxInfo->ptMaxSize.y;
 

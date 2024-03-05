@@ -747,7 +747,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
         int ntpc2;
         bool accidental = m_is.noteEntryMode() && m_is.accidentalType() != AccidentalType::NONE;
         bool forceAccidental = false;
-        if (abs(valTmp) != 7 || accidental) {
+        if (std::abs(valTmp) != 7 || accidental) {
             int line      = on->line() - valTmp;
             Fraction tick      = chord->tick();
             Staff* estaff = staff(on->staffIdx() + chord->staffMove());

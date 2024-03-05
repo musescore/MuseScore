@@ -299,7 +299,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
                 tie = sc->notes()[0]->tieBack();
                 if (!tie->segmentsEmpty()) {
                     endPoint = tie->segmentAt(static_cast<int>(tie->nsegments()) - 1)->ups(Grip::END).pos();
-                    if (abs(endPoint.y() - p1.y()) < tieClearance) {
+                    if (std::abs(endPoint.y() - p1.y()) < tieClearance) {
                         p1.rx() += horizontalTieClearance;
                     }
                 }
@@ -1081,7 +1081,7 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
 
     // Collision clearance at the center of the slur
     double spatium = slurSeg->spatium();
-    double slurLength = abs(p2.x() / spatium);
+    double slurLength = std::abs(p2.x() / spatium);
     double clearance;
     if (slurLength < 4) {
         clearance = 0.15 * spatium;
@@ -1199,7 +1199,7 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
                 // Move left Bezier point up(/down) and outwards
                 p3 += PointF(-abs(shapeLeftStep), shapeLeftStep);
                 // and a bit also the right point to compensate asymmetry
-                p4 += PointF(abs(shapeLeftStep), shapeLeftStep) / 2.0;
+                p4 += PointF(std::abs(shapeLeftStep), shapeLeftStep) / 2.0;
             }
             if (collision.mid) {     // Move both Bezier points up(/down)
                 p3 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
@@ -1207,7 +1207,7 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
             }
             if (collision.right) {
                 // Move right Bezier point up(/down) and outwards
-                p4 += PointF(abs(shapeRightStep), shapeRightStep);
+                p4 += PointF(std::abs(shapeRightStep), shapeRightStep);
                 // and a bit also the left point to compensate asymmetry
                 p3 += PointF(-abs(shapeRightStep), shapeRightStep) / 2.0;
             }
@@ -1243,7 +1243,7 @@ void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p
         }
         // Enforce non-ugliness rules
         // 1) Slur cannot be taller than it is wide
-        const double maxRelativeHeight = abs(p2.x());
+        const double maxRelativeHeight = std::abs(p2.x());
         p3 = slur->up() ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
         p4 = slur->up() ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
         // 2) Tangent rule: p3 and p4 cannot be further left than p1 nor further right than p2
@@ -1885,7 +1885,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     const bool isEndInsideLedgerLines = !isEndInsideStaff && !tieSegment->tie()->isOuterTieOfChord(Grip::START);
 
     const double halfLineThicknessCorrection = 0.5 * staffLineThickness * upSign;
-    const double protrusion = abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
+    const double protrusion = std::abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
     const double badIntersectionLimit = 0.15 * spatium; // TODO: style
 
     bool badIntersection = protrusion < badIntersectionLimit && (isEndInsideStaff || isEndInsideLedgerLines);
@@ -2160,7 +2160,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 
     const double minShoulderHeight = tieSeg->style().styleMM(Sid::tieMinShoulderHeight);
     const double maxShoulderHeight = tieSeg->style().styleMM(Sid::tieMaxShoulderHeight);
-    double shoulderH = minShoulderHeight + _spatium * 0.3 * sqrt(abs(tieLengthInSp - 1));
+    double shoulderH = minShoulderHeight + _spatium * 0.3 * sqrt(std::abs(tieLengthInSp - 1));
     shoulderH = std::clamp(shoulderH, minShoulderHeight, maxShoulderHeight);
 
     shoulderH -= shoulderOffset.y();
@@ -2538,7 +2538,7 @@ void SlurTieLayout::fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthIn
         double percent = pow(sin(0.5 * M_PI * (double(i) / double(nbShapes))), 2);
         const PointF point = b.pointAtPercent(percent);
         RectF re = RectF(startPoint, point).normalized();
-        double approxThicknessAtPercent = (1 - 2 * abs(0.5 - percent)) * midThickness;
+        double approxThicknessAtPercent = (1 - 2 * std::abs(0.5 - percent)) * midThickness;
         if (re.height() < approxThicknessAtPercent) {
             double adjust = (approxThicknessAtPercent - re.height()) * .5;
             re.adjust(0.0, -adjust, 0.0, adjust);

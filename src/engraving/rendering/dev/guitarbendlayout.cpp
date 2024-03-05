@@ -294,7 +294,7 @@ void GuitarBendLayout::avoidBadStaffLineIntersection(GuitarBendSegment* item, Po
     if (isInsideStaff && item->autoplace()) {
         const double minLineDist = 0.5 * item->style().styleMM(Sid::staffLineWidth) + 0.15 * spatium;
         double pointLineDist = point.y() - closestStaffLineY;
-        if (abs(pointLineDist) < minLineDist) {
+        if (std::abs(pointLineDist) < minLineDist) {
             point.setY(closestStaffLineY + upSign * minLineDist);
         }
     }

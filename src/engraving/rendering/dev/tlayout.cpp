@@ -3678,7 +3678,7 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
     if (item->isCustom() && !item->isAtonal()) {
         double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if necessary
-        for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
+        for (int i = 1; i <= std::abs(t1) && std::abs(t1) <= 7; ++i) {
             bool drop = false;
             for (const CustDef& cd: item->customKeyDefs()) {
                 int degree = item->degInKey(cd.degree);
@@ -3851,10 +3851,10 @@ void TLayout::layoutKeySig(const KeySig* item, KeySig::LayoutData* ldata, const 
                 }
             }
         }
-        if (abs(t1) <= 7) {
+        if (std::abs(t1) <= 7) {
             SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
             int lineIndexOffset = t1 > 0 ? 0 : 7;
-            for (int i = 0; i < abs(t1); ++i) {
+            for (int i = 0; i < std::abs(t1); ++i) {
                 keySigAddLayout(item, conf, symbol, lines[lineIndexOffset + i], ldata);
             }
         } else {

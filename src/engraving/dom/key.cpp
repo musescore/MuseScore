@@ -482,7 +482,7 @@ SymId KeySigEvent::symInKey(SymId sym, int degree) const
     int accIndex = std::distance(std::begin(accTable), std::find(std::begin(accTable), std::end(accTable), sym));
 
     // non transposed key
-    if (keyval == 0 || abs(keyval) > 7) {
+    if (keyval == 0 || std::abs(keyval) > 7) {
         return sym;
     }
 
@@ -491,7 +491,7 @@ SymId KeySigEvent::symInKey(SymId sym, int degree) const
         return SymId::noSym;
     }
 
-    for (int i = 1; i <= abs(keyval); ++i) {
+    for (int i = 1; i <= std::abs(keyval); ++i) {
         if ((degree * 2 + 2) % 7 == (keyval < 0 ? 8 - i : i) % 7) {
             accIndex += keyval < 0 ? -1 : 1;
         }

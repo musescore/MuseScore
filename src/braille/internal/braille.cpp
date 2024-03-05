@@ -1017,8 +1017,8 @@ int Braille::computeInterval(Note* note1, Note* note2, bool ignoreOctave)
     }
 
     int interval = notes.indexOf(note2PitchName) + 1;
-    if (!ignoreOctave && abs(note1->epitch() - note2->epitch()) >= 12) {
-        interval += (abs(note1->epitch() - note2->epitch()) / 12) * 8 - 1;
+    if (!ignoreOctave && std::abs(note1->epitch() - note2->epitch()) >= 12) {
+        interval += (std::abs(note1->epitch() - note2->epitch()) / 12) * 8 - 1;
     }
 
     return interval;

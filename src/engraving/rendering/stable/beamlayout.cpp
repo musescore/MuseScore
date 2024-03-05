@@ -1524,7 +1524,7 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
             if (topSlant == 0 || bottomSlant == 0 || forceHoriz) {
                 // if one of the slants is 0, the whole slant is zero
             } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
-                int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
+                int slant = (std::abs(topSlant) < std::abs(bottomSlant)) ? topSlant : bottomSlant;
                 slant = std::min(std::abs(slant), BeamTremoloLayout::getMaxSlope(item->ldata()));
                 double slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
                 item->startAnchor().ry() += (slope / 2);

@@ -250,7 +250,7 @@ int getOctave(const braille_code* code)
 int getOctaveDiff(NoteName source, NoteName dest)
 {
     // Calculate interval between notes assuming they are in the same octave.
-    int interval = abs(static_cast<int>(dest) - static_cast<int>(source));
+    int interval = std::abs(static_cast<int>(dest) - static_cast<int>(source));
     ++interval; // so unison == 1
 
     if (interval >= 6) {

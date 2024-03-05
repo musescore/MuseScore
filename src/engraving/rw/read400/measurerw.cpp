@@ -552,7 +552,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
                 Interval vi = staff->part()->instrument(tick)->transpose();
                 Interval vk = calculateInterval(cKey, key);
                 bool concertPitch = ctx.style().styleB(Sid::concertPitch);
-                if (!concertPitch && vk.chromatic != abs(vi.chromatic)) {
+                if (!concertPitch && vk.chromatic != std::abs(vi.chromatic)) {
                     InstrumentChange* ic = toInstrumentChange(el);
                     for (KeySig* ks : ic->keySigs(true)) {
                         KeySigEvent ke = ks->keySigEvent();

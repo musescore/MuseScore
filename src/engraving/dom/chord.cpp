@@ -1423,7 +1423,7 @@ double Chord::calcDefaultStemLength()
     // extraHeight represents the extra vertical distance between notehead and stem start
     // eg. slashed noteheads etc
     double extraHeight = (ldata()->up ? upNote()->stemUpSE().y() : downNote()->stemDownNW().y()) / intrinsicMag() / _spatium;
-    int shortestStem = style().styleB(Sid::useWideBeams) ? 12 : (style().styleD(Sid::shortestStem) + abs(extraHeight)) * 4;
+    int shortestStem = style().styleB(Sid::useWideBeams) ? 12 : (style().styleD(Sid::shortestStem) + std::abs(extraHeight)) * 4;
     int quarterSpacesPerLine = std::floor(lineDistance * 2);
     int chordHeight = (downLine() - upLine()) * quarterSpacesPerLine; // convert to quarter spaces
     int stemLength = defaultStemLength;
