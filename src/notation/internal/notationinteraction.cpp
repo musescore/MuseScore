@@ -3455,7 +3455,7 @@ mu::Ret NotationInteraction::canAddBoxes() const
         return make_ok();
     }
 
-    static const std::vector<ElementType> boxesTypes {
+    static const ElementTypeSet BOX_TYPES {
         ElementType::VBOX, ElementType::HBOX, ElementType::TBOX
     };
 
@@ -3464,7 +3464,7 @@ mu::Ret NotationInteraction::canAddBoxes() const
             return make_ok();
         }
 
-        if (std::find(boxesTypes.cbegin(), boxesTypes.cend(), element->type()) != boxesTypes.cend()) {
+        if (mu::contains(BOX_TYPES, element->type())) {
             return make_ok();
         }
     }
@@ -3494,14 +3494,14 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
             break;
         }
 
-        auto elements = selection()->elements();
+        const std::vector<EngravingItem*>& elements = selection()->elements();
         IF_ASSERT_FAILED(!elements.empty()) {
             // This would contradict the fact that selection()->isNone() == false at this point
             return;
         }
 
-        for (mu::engraving::EngravingItem* item : elements) {
-            mu::engraving::MeasureBase* itemMeasure = item->findMeasureBase();
+        for (const EngravingItem* item : elements) {
+            const MeasureBase* itemMeasure = item->findMeasureBase();
             if (!itemMeasure) {
                 continue;
             }
@@ -4376,12 +4376,12 @@ void NotationInteraction::removeSelectedMeasures()
         firstMeasure = measureRange.startMeasure;
         lastMeasure = measureRange.endMeasure;
     } else {
-        auto elements = selection()->elements();
+        const std::vector<EngravingItem*>& elements = selection()->elements();
         if (elements.empty()) {
             return;
         }
 
-        for (auto element : elements) {
+        for (EngravingItem* element : elements) {
             mu::engraving::MeasureBase* elementMeasure = element->findMeasureBase();
 
             if (!firstMeasure || firstMeasure->index() > elementMeasure->index()) {

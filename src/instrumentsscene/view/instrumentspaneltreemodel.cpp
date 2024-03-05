@@ -270,7 +270,7 @@ void InstrumentsPanelTreeModel::updateSelectedRows()
 
     m_selectionModel->clear();
 
-    std::vector<EngravingItem*> selectedElements = m_notation->interaction()->selection()->elements();
+    const std::vector<EngravingItem*>& selectedElements = m_notation->interaction()->selection()->elements();
     if (selectedElements.empty()) {
         return;
     }
