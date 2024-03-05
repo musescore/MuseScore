@@ -1152,7 +1152,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
     if (item->isCustom() && !item->isAtonal()) {
         double accidentalGap = ctx.style().styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if necessary
-        for (int i = 1; i <= abs(key) && abs(key) <= 7; ++i) {
+        for (int i = 1; i <= std::abs(key) && std::abs(key) <= 7; ++i) {
             bool drop = false;
             for (const CustDef& cd: item->customKeyDefs()) {
                 int degree = item->degInKey(cd.degree);

@@ -576,7 +576,7 @@ void Beam::computeAndSetSlope()
 {
     double xDiff = endAnchor().x() - startAnchor().x();
     double yDiff = endAnchor().y() - startAnchor().y();
-    if (abs(xDiff) < 0.5 * spatium()) {
+    if (std::abs(xDiff) < 0.5 * spatium()) {
         // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
         // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
         setSlope(0.0);

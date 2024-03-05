@@ -108,7 +108,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
 
         PointF anchor = chordBeamAnchor(ldata, chordRest, ChordBeamAnchorType::Middle) - item->pagePos();
 
-        int slope = abs(dictator - pointer);
+        int slope = std::abs(dictator - pointer);
         double reduction = 0.0;
         if (!isFlat) {
             if (slope <= 3) {
@@ -174,7 +174,7 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(const BeamBase::LayoutDat
     int dictatorBeams = strokeCount(ldata, isStartDictator ? startChord : endChord);
     int pointerBeams = strokeCount(ldata, isStartDictator ? endChord : startChord);
     int maxDictatorReduce = stemLengthDictator - minStemLengths[std::max(dictatorBeams - 1, 0)];
-    maxDictatorReduce = std::min(abs(dictator - middleLine), maxDictatorReduce);
+    maxDictatorReduce = std::min(std::abs(dictator - middleLine), maxDictatorReduce);
 
     bool isFlat = dictator == pointer;
     bool isAscending = startChord->line() > endChord->line();
@@ -404,7 +404,7 @@ void BeamTremoloLayout::addMiddleLineSlant(const BeamBase::LayoutData* ldata, in
     }
     bool isOnMiddleLine = pointer == middleLine && (std::abs(pointer - dictator) < 2);
     if (isOnMiddleLine) {
-        if (abs(desiredSlant) == 1 || interval == 1 || (beamCount == 2 && ldata->beamSpacing != 4 && !isSmall)) {
+        if (std::abs(desiredSlant) == 1 || interval == 1 || (beamCount == 2 && ldata->beamSpacing != 4 && !isSmall)) {
             dictator = middleLine + (ldata->up ? -1 : 1);
         } else {
             dictator = middleLine + (ldata->up ? -2 : 2);
@@ -576,8 +576,8 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     int beamCountD = strokeCount(ldata, isStartDictator ? startChord : endChord);
     int beamCountP = strokeCount(ldata, isStartDictator ? endChord : startChord);
 
-    int stemLengthStart = abs(round((startAnchorBase - ldata->startAnchor.y()) / ldata->spatium * 4));
-    int stemLengthEnd = abs(round((endAnchorBase - ldata->endAnchor.y()) / ldata->spatium * 4));
+    int stemLengthStart = std::abs(round((startAnchorBase - ldata->startAnchor.y()) / ldata->spatium * 4));
+    int stemLengthEnd = std::abs(round((endAnchorBase - ldata->endAnchor.y()) / ldata->spatium * 4));
     int stemLengthDictator = isStartDictator ? stemLengthStart : stemLengthEnd;
     bool isSmall = ldata->mag() < 1. || ldata->isGrace;
     if (endAnchor.x() > startAnchor.x()) {
@@ -834,7 +834,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(BeamBase::LayoutData* ldata, const
             if (topSlant == 0 || bottomSlant == 0 || forceHoriz) {
                 // if one of the slants is 0, the whole slant is zero
             } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
-                int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
+                int slant = (std::abs(topSlant) < std::abs(bottomSlant)) ? topSlant : bottomSlant;
                 slant = std::min(std::abs(slant), getMaxSlope(ldata));
                 double slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
                 ldata->startAnchor.ry() += (slope / 2);

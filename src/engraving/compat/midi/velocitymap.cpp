@@ -185,7 +185,7 @@ void VelocityMap::addDynamic(Fraction tick, int value)
 
 void VelocityMap::addHairpin(Fraction stick, Fraction etick, int change, ChangeMethod method, ChangeDirection direction)
 {
-    change = abs(change);
+    change = std::abs(change);
     change *= (direction == ChangeDirection::INCREASING) ? 1 : -1;
     insert({ stick, VelocityEvent(stick, etick, change, method, direction) });
 }
