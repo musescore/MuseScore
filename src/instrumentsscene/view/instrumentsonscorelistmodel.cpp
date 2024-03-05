@@ -193,13 +193,13 @@ void InstrumentsOnScoreListModel::loadOrders()
 
 int InstrumentsOnScoreListModel::resolveInstrumentSequenceNumber(const String& instrumentId) const
 {
-    const InstrumentTemplateList& templates = repository()->instrumentTemplates();
-    for (const InstrumentTemplate* templ : templates) {
-        if (templ->id == instrumentId) {
-            return templ->sequenceOrder;
-        }
+    const InstrumentTemplate& templ = repository()->instrumentTemplate(instrumentId);
+    if (templ.isValid()) {
+        return templ.sequenceOrder;
     }
-    return templates.size();
+
+    const InstrumentTemplateList& allTemplates = repository()->instrumentTemplates();
+    return allTemplates.size();
 }
 
 void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentIdList)
