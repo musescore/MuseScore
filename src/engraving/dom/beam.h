@@ -163,6 +163,7 @@ public:
     void setNoSlope(bool b);
 
     double slope() const { return m_slope; }
+    void computeAndSetSlope();
     void setSlope(double val) { m_slope = val; }
 
     const mu::PointF& startAnchor() const { return m_startAnchor; }
