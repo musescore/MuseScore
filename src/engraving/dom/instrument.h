@@ -324,6 +324,8 @@ public:
     bool isDifferentInstrument(const Instrument& i) const;
 
     String id() const { return m_id; }
+    const String& soundId() const { return m_soundId; }
+    void setSoundId(const String& id) { m_soundId = id; }
     String family() const;
     void setId(const String& id) { m_id = id; }
     void setMinPitchP(int v) { m_minPitchP = v; }
@@ -413,6 +415,7 @@ private:
     StaffNameList m_shortNames;
     String m_trackName;
     String m_id;
+    String m_soundId;
 
     int m_minPitchA = 0;
     int m_maxPitchA = 0;

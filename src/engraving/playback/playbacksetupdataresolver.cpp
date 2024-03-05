@@ -35,6 +35,12 @@ using namespace mu::mpe;
 
 void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
 {
+    if (!instrument->soundId().empty()) {
+        result = PlaybackSetupData::fromString(instrument->soundId());
+        result.musicXmlSoundId = std::make_optional(instrument->musicXmlId().toStdString());
+        return;
+    }
+
     if (KeyboardsSetupDataResolver::resolve(instrument, result)) {
         return;
     }

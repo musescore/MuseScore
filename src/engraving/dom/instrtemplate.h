@@ -83,6 +83,7 @@ public:
     InstrumentTemplate& operator=(const InstrumentTemplate&);
 
     String id;
+    String soundId;
     String trackName;
     StaffNameList longNames;     ///< shown on first system
     StaffNameList shortNames;    ///< shown on followup systems

@@ -226,6 +226,7 @@ InstrumentTemplate::InstrumentTemplate(const InstrumentTemplate& t)
 void InstrumentTemplate::init(const InstrumentTemplate& t)
 {
     id = t.id;
+    soundId = t.soundId;
     trackName = t.trackName;
     longNames = t.longNames;
     shortNames = t.shortNames;
@@ -286,6 +287,11 @@ bool InstrumentTemplate::isValid() const
 void InstrumentTemplate::write(XmlWriter& xml) const
 {
     xml.startElement("Instrument",  { { "id", id } });
+
+    if (!soundId.empty()) {
+        xml.tag("soundId", soundId);
+    }
+
     write::TWrite::write(&longNames, xml, "longName");
     write::TWrite::write(&shortNames, xml, "shortName");
 
@@ -418,7 +424,9 @@ void InstrumentTemplate::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
 
-        if (tag == "longName" || tag == "name") {                   // "name" is obsolete
+        if (tag == "soundId") {
+            soundId = e.readText();
+        } else if (tag == "longName" || tag == "name") {                   // "name" is obsolete
             int pos = e.intAttribute("pos", 0);
             for (std::list<StaffName>::iterator i = longNames.begin(); i != longNames.end(); ++i) {
                 if ((*i).pos() == pos) {

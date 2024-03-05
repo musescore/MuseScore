@@ -74,6 +74,7 @@ Instrument::Instrument(String id)
 Instrument::Instrument(const Instrument& i)
 {
     m_id           = i.m_id;
+    m_soundId      = i.m_soundId;
     m_longNames    = i.m_longNames;
     m_shortNames   = i.m_shortNames;
     m_trackName    = i.m_trackName;
@@ -105,6 +106,7 @@ void Instrument::operator=(const Instrument& i)
     delete m_drumset;
 
     m_id           = i.m_id;
+    m_soundId      = i.m_soundId;
     m_longNames    = i.m_longNames;
     m_shortNames   = i.m_shortNames;
     m_trackName    = i.m_trackName;
@@ -1129,13 +1131,10 @@ String Instrument::abbreviatureAsPlainText() const
     return !m_shortNames.empty() ? m_shortNames.front().toPlainText() : String();
 }
 
-//---------------------------------------------------------
-//   fromTemplate
-//---------------------------------------------------------
-
 Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 {
     Instrument instrument(templ->id);
+    instrument.setSoundId(templ->soundId);
     instrument.setAmateurPitchRange(templ->minPitchA, templ->maxPitchA);
     instrument.setProfessionalPitchRange(templ->minPitchP, templ->maxPitchP);
 

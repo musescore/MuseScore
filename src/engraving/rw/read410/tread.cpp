@@ -843,7 +843,9 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     partAudioSetting.instrumentId = trackId;
 
     const AsciiStringView tag(e.name());
-    if (tag == "longName") {
+    if (tag == "soundId") {
+        item->setSoundId(e.readText());
+    } else if (tag == "longName") {
         StaffName name;
         TRead::read(&name, e);
         item->appendLongName(name);

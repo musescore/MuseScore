@@ -1643,6 +1643,11 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     } else {
         xml.startElement("Instrument", { { "id", item->id() } });
     }
+
+    if (!item->soundId().empty()) {
+        xml.tag("soundId", item->soundId());
+    }
+
     write(&item->longNames(), xml, "longName");
     write(&item->shortNames(), xml, "shortName");
 //      if (!_trackName.empty())
