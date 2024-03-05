@@ -3,6 +3,7 @@ corruption:
 crash:
 - RomanPudashkin
 - DmitryArefiev
+- zacjansheski
 engraving:
 - oktophonie
 VST:
@@ -18,7 +19,3 @@ accessibility:
 cloud:
 - shoogle
 - cbjeukendrup
-"needs review":
-- bkunda
-regression:
-- DmitryArefiev
