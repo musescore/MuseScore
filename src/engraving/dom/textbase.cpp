@@ -2924,7 +2924,7 @@ String TextBase::getHtmlStartTag(double newSize, double& curSize, const String& 
                                  VerticalAlignment vAlign)
 {
     String s;
-    if (fabs(newSize - curSize) > 0.1) {
+    if (std::fabs(newSize - curSize) > 0.1) {
         curSize = newSize;
         s += String(u"<font size=\"%1\"/>").arg(newSize);
     }

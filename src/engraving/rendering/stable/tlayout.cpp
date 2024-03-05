@@ -4222,7 +4222,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         if (item->fixed()) {
             const_cast<Note*>(item)->setFretString(u"/");
         } else {
-            const_cast<Note*>(item)->setFretString(tab->fretString(fabs(item->fret()), item->string(), item->deadNote()));
+            const_cast<Note*>(item)->setFretString(tab->fretString(std::fabs(item->fret()), item->string(), item->deadNote()));
 
             if (item->negativeFretUsed()) {
                 const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
@@ -5824,12 +5824,12 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         double endHookWidth = 0.0;
 
         if (tl->beginHookType() == HookType::HOOK_45) {
-            beginHookWidth = fabs(beginHookHeight * .4);
+            beginHookWidth = std::fabs(beginHookHeight * .4);
             pp1.rx() += beginHookWidth;
         }
 
         if (tl->endHookType() == HookType::HOOK_45) {
-            endHookWidth = fabs(endHookHeight * .4);
+            endHookWidth = std::fabs(endHookHeight * .4);
             pp2.rx() -= endHookWidth;
         }
 
