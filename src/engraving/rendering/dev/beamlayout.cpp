@@ -342,7 +342,7 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         item->startAnchor().setY(startY);
         item->endAnchor().setY(endY);
         item->mutldata()->setAnchors(item->startAnchor(), item->endAnchor());
-        item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
+        item->computeAndSetSlope();
         createBeamSegments(item, ctx, chordRests);
         BeamLayout::setTremAnchors(item, ctx);
         return;
@@ -356,15 +356,7 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notes());
         item->setStartAnchor(item->ldata()->startAnchor);
         item->setEndAnchor(item->ldata()->endAnchor);
-        double xDiff = item->endAnchor().x() - item->startAnchor().x();
-        double yDiff = item->endAnchor().y() - item->startAnchor().y();
-        if (abs(xDiff) < 0.5 * item->spatium()) {
-            // Temporary safeguard: a beam this short is invalid, and exists only as a temporary state,
-            // so don't try to compute the slope as it will be wrong. Needs a better solution in future.
-            item->setSlope(0.0);
-        } else {
-            item->setSlope(yDiff / xDiff);
-        }
+        item->computeAndSetSlope();
         item->setBeamDist(item->ldata()->beamDist);
     } else {
         item->setSlope(0.0);
