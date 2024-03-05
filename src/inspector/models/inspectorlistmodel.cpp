@@ -336,6 +336,6 @@ void InspectorListModel::updateElementList()
     }
 
     INotationSelectionPtr selection = notation->interaction()->selection();
-    auto elements = selection->elements();
+    const std::vector<EngravingItem*>& elements = selection->elements();
     setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
 }
