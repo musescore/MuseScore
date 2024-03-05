@@ -67,6 +67,7 @@
 #include "sig.h"
 #include "slur.h"
 #include "staff.h"
+#include "stafftext.h"
 #include "stafftype.h"
 #include "stafftypechange.h"
 #include "stem.h"
@@ -2782,6 +2783,32 @@ void Score::resetAutoplace()
     TRACEFUNC;
 
     scanElements(nullptr, resetElementPosition);
+}
+
+void Score::clearSoundFlag(StaffText* staffText)
+{
+    SoundFlag* soundFlag = staffText->soundFlag();
+    IF_ASSERT_FAILED(soundFlag) {
+        return;
+    }
+
+    soundFlag->clear();
+
+    const LinkedObjects* links = staffText->links();
+    if (!links) {
+        return;
+    }
+
+    for (EngravingObject* obj : *links) {
+        if (obj && obj->isStaffText()) {
+            soundFlag = toStaffText(obj)->soundFlag();
+            IF_ASSERT_FAILED(soundFlag) {
+                continue;
+            }
+
+            soundFlag->clear();
+        }
+    }
 }
 
 //---------------------------------------------------------

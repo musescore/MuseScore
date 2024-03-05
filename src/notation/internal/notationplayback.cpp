@@ -453,26 +453,7 @@ void NotationPlayback::clearSoundFlags(const engraving::InstrumentTrackIdSet& tr
     }
 
     for (StaffText* staffText : staffTextList) {
-        SoundFlag* soundFlag = staffText->soundFlag();
-        IF_ASSERT_FAILED(soundFlag) {
-            continue;
-        }
-        soundFlag->clear();
-
-        const LinkedObjects* links = staffText->links();
-        if (!links) {
-            continue;
-        }
-
-        for (EngravingObject* obj : *links) {
-            if (obj && obj->isStaffText()) {
-                soundFlag = toStaffText(obj)->soundFlag();
-                IF_ASSERT_FAILED(soundFlag) {
-                    continue;
-                }
-                soundFlag->clear();
-            }
-        }
+        score()->clearSoundFlag(staffText);
     }
 
     score()->update();

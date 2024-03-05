@@ -2835,6 +2835,12 @@ void Score::deleteItem(EngravingItem* el)
         LOGD("cannot remove %s", el->typeName());
         break;
 
+    case ElementType::SOUND_FLAG:
+        if (StaffText* staffText = toStaffText(el->parentItem())) {
+            clearSoundFlag(staffText);
+        }
+        break;
+
     case ElementType::TEXT:
         if ((el->explicitParent() && el->explicitParent()->isTBox()) || el->isTBox()) {
             el->undoChangeProperty(Pid::TEXT, String());
@@ -2916,7 +2922,6 @@ void Score::deleteItem(EngravingItem* el)
         undoRemoveElement(el);
     }
     break;
-
     default:
         undoRemoveElement(el);
         break;

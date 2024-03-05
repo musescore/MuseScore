@@ -297,6 +297,8 @@ public:
     // methods for resetting elements for pre-4.0 score migration
     void resetAutoplace();
 
+    void clearSoundFlag(StaffText* staffText);
+
     void cmdAddBracket();
     void cmdAddParentheses();
     void cmdAddParentheses(EngravingItem* el);
