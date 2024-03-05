@@ -152,8 +152,8 @@ AccessibleItemPtr Page::createAccessible()
 
 double Page::headerExtension() const
 {
-    if (!score()->isLayoutMode(LayoutMode::PAGE)
-        || !score()->isLayoutMode(LayoutMode::FLOAT)) {
+    bool shouldLayoutHeader = score()->isLayoutMode(LayoutMode::PAGE) || score()->isLayoutMode(LayoutMode::FLOAT);
+    if (!shouldLayoutHeader) {
         return 0.0;
     }
 
@@ -196,8 +196,8 @@ double Page::headerExtension() const
 
 double Page::footerExtension() const
 {
-    if (!score()->isLayoutMode(LayoutMode::PAGE)
-        || !score()->isLayoutMode(LayoutMode::FLOAT)) {
+    bool shouldLayoutFooter = score()->isLayoutMode(LayoutMode::PAGE) || score()->isLayoutMode(LayoutMode::FLOAT);
+    if (!shouldLayoutFooter) {
         return 0.0;
     }
 

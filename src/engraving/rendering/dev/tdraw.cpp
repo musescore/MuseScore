@@ -2337,8 +2337,8 @@ void TDraw::draw(const OttavaSegment* item, Painter* painter)
 void TDraw::draw(const Page* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    if (!item->score()->isLayoutMode(LayoutMode::PAGE)
-        || !item->score()->isLayoutMode(LayoutMode::FLOAT)) {
+    bool shouldDraw = item->score()->isLayoutMode(LayoutMode::PAGE) || item->score()->isLayoutMode(LayoutMode::FLOAT);
+    if (!shouldDraw) {
         return;
     }
     //
