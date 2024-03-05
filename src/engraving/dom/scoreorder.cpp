@@ -586,17 +586,16 @@ void ScoreOrder::write(XmlWriter& xml) const
 
 void ScoreOrder::updateInstruments(const Score* score)
 {
-    for (Part* part : score->parts()) {
+    for (const Part* part : score->parts()) {
         InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate || !ii.instrTemplate->family) {
             continue;
         }
 
-        InstrumentFamily* family = ii.instrTemplate->family;
         InstrumentOverwrite io;
-        io.id = family->id;
-        io.name = family->name;
-        instrumentMap.insert({ ii.instrTemplate->id, io });
+        io.id = ii.instrTemplate->family->id;
+        io.name = ii.instrTemplate->family->name;
+        instrumentMap.emplace(ii.instrTemplate->id, std::move(io));
     }
 }
 }

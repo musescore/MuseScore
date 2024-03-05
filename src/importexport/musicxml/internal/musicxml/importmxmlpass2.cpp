@@ -491,7 +491,7 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
 {
     Instrument instr;
 
-    InstrumentTemplate* it = nullptr;
+    const InstrumentTemplate* it = nullptr;
     if (!mxmlInstr.sound.isEmpty()) {
         it = mu::engraving::searchTemplateForMusicXmlId(mxmlInstr.sound);
     }

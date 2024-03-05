@@ -3890,7 +3890,7 @@ void Score::updateBracesAndBarlines(Part* part, size_t newIndex)
     }
 
     if (part->nstaves() == 2) {
-        InstrumentTemplate* tp = searchTemplate(part->instrumentId());
+        const InstrumentTemplate* tp = searchTemplate(part->instrumentId());
         if (tp) {
             if (tp->barlineSpan[0] > 0) {
                 staff(part->staves()[0]->idx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, tp->barlineSpan[0]);

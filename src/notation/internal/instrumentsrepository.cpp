@@ -125,12 +125,11 @@ void InstrumentsRepository::load()
     for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
         m_groups << group;
 
-        for (InstrumentTemplate* templ : group->instrumentTemplates) {
+        for (const InstrumentTemplate* templ : group->instrumentTemplates) {
             if (templ->trackName.isEmpty() || templ->longNames.empty()) {
                 continue;
             }
 
-            templ->groupId = group->id;
             m_instrumentTemplates << templ;
         }
     }

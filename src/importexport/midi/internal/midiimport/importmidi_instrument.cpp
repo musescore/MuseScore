@@ -37,7 +37,7 @@
 using namespace mu::engraving;
 
 namespace mu::engraving {
-extern std::vector<InstrumentGroup*> instrumentGroups;
+extern std::vector<const InstrumentGroup*> instrumentGroups;
 }
 
 namespace mu::iex::midi {
@@ -173,7 +173,7 @@ static const InstrumentTemplate* findInstrument(const String& groupId, const Str
 {
     const InstrumentTemplate* instr = nullptr;
 
-    for (const InstrumentGroup* group: std::as_const(instrumentGroups)) {
+    for (const InstrumentGroup* group: instrumentGroups) {
         if (group->id == groupId) {
             for (const InstrumentTemplate* templ: group->instrumentTemplates) {
                 if (templ->id == instrId) {
@@ -194,7 +194,7 @@ const InstrumentTemplate* findClosestInstrument(const MTrack& track)
     int maxLessProgram = -1;
     const InstrumentTemplate* closestTemplate = nullptr;
 
-    for (const InstrumentGroup* group: std::as_const(instrumentGroups)) {
+    for (const InstrumentGroup* group: instrumentGroups) {
         for (const InstrumentTemplate* templ: group->instrumentTemplates) {
             if (templ->staffGroup == StaffGroup::TAB) {
                 continue;
@@ -226,7 +226,7 @@ std::vector<const InstrumentTemplate*> findInstrumentsForProgram(const MTrack& t
         trackPitches = findAllPitches(track);
     }
 
-    for (const InstrumentGroup* group: std::as_const(instrumentGroups)) {
+    for (const InstrumentGroup* group: instrumentGroups) {
         for (const InstrumentTemplate* templ: group->instrumentTemplates) {
             if (templ->staffGroup == StaffGroup::TAB) {
                 continue;
@@ -341,9 +341,9 @@ int findMaxPitchDiff(const std::pair<int, int>& minMaxPitch, const InstrumentTem
     return diff;
 }
 
-static bool hasCommonGenre(const std::list<InstrumentGenre*>& genres)
+static bool hasCommonGenre(const std::list<const InstrumentGenre*>& genres)
 {
-    for (InstrumentGenre* genre : genres) {
+    for (const InstrumentGenre* genre : genres) {
         if (genre->id == "common") {
             return true;
         }

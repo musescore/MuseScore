@@ -172,7 +172,7 @@ void MCursor::addPart(const String& instrument)
 {
     Part* part   = new Part(m_score);
     Staff* staff = Factory::createStaff(part);
-    InstrumentTemplate* it = searchTemplate(instrument);
+    const InstrumentTemplate* it = searchTemplate(instrument);
     IF_ASSERT_FAILED(it) {
         return;
     }
