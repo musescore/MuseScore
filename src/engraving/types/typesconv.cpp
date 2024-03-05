@@ -760,6 +760,8 @@ static const std::vector<DynamicItem> DYNAMIC_TYPES = {
     { DynamicType::SFZ,     "sfz",              SymId::dynamicSforzato },
     { DynamicType::SFF,     "sff",              SymId::noSym },
     { DynamicType::SFFZ,    "sffz",             SymId::dynamicSforzatoFF },
+    { DynamicType::SFFF,    "sfff",             SymId::noSym },
+    { DynamicType::SFFFZ,   "sfffz",            SymId::noSym },
     { DynamicType::SFP,     "sfp",              SymId::dynamicSforzandoPiano },
     { DynamicType::SFPP,    "sfpp",             SymId::dynamicSforzandoPianissimo },
 
