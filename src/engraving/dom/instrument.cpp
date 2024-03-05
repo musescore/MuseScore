@@ -205,8 +205,8 @@ String Instrument::recognizeId() const
     String fallback;
     int bestMatchStrength = 0;     // higher when fallback ID provides better match for instrument data
 
-    for (InstrumentGroup* g : instrumentGroups) {
-        for (InstrumentTemplate* it : g->instrumentTemplates) {
+    for (const InstrumentGroup* g : instrumentGroups) {
+        for (const InstrumentTemplate* it : g->instrumentTemplates) {
             if (it->musicXMLid != musicXmlId()) {
                 continue;
             }
@@ -252,7 +252,7 @@ String Instrument::recognizeId() const
 
 int Instrument::recognizeMidiProgram() const
 {
-    InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(m_musicXmlId);
+    const InstrumentTemplate* tmplInstrumentId = mu::engraving::searchTemplateForMusicXmlId(m_musicXmlId);
 
     if (tmplInstrumentId && !tmplInstrumentId->channel.empty() && tmplInstrumentId->channel[0].program() >= 0) {
         return tmplInstrumentId->channel[0].program();
@@ -264,7 +264,7 @@ int Instrument::recognizeMidiProgram() const
     mu::join(nameList, m_longNames.toStringList());
     mu::join(nameList, m_shortNames.toStringList());
 
-    InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
+    const InstrumentTemplate* tmplByName = mu::engraving::searchTemplateForInstrNameList(nameList);
 
     if (tmplByName && !tmplByName->channel.empty() && tmplByName->channel[0].program() >= 0) {
         return tmplByName->channel[0].program();
@@ -1231,7 +1231,7 @@ InstrChannel* Instrument::playbackChannel(int idx, MasterScore* score)
 bool Instrument::getSingleNoteDynamicsFromTemplate() const
 {
     String templateName = trackName().toLower().replace(u" ", u"-").replace(u"♭", u"b");
-    InstrumentTemplate* tp = searchTemplate(templateName);
+    const InstrumentTemplate* tp = searchTemplate(templateName);
     if (tp) {
         return tp->singleNoteDynamics;
     }
