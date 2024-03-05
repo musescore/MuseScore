@@ -42,24 +42,18 @@ void InstrumentsRepository::init()
 
 const InstrumentTemplateList& InstrumentsRepository::instrumentTemplates() const
 {
-    return m_instrumentTemplates;
+    return m_instrumentTemplateList;
 }
 
 const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const std::string& instrumentId) const
 {
-    const InstrumentTemplateList& templates = m_instrumentTemplates;
-
-    auto it = std::find_if(templates.begin(), templates.end(), [instrumentId](const InstrumentTemplate* templ) {
-        return templ->id == instrumentId;
-    });
-
-    if (it == m_instrumentTemplates.cend()) {
-        static InstrumentTemplate dummy;
+    auto it = m_instrumentTemplateMap.find(String::fromStdString(instrumentId));
+    if (it == m_instrumentTemplateMap.end()) {
+        static const InstrumentTemplate dummy;
         return dummy;
     }
 
-    const InstrumentTemplate* templ = *it;
-    return *templ;
+    return *it->second;
 }
 
 const ScoreOrderList& InstrumentsRepository::orders() const
@@ -85,12 +79,12 @@ const ScoreOrder& InstrumentsRepository::order(const std::string& orderId) const
 
 const InstrumentGenreList& InstrumentsRepository::genres() const
 {
-    return m_genres;
+    return mu::engraving::instrumentGenres;
 }
 
 const InstrumentGroupList& InstrumentsRepository::groups() const
 {
-    return m_groups;
+    return mu::engraving::instrumentGroups;
 }
 
 const InstrumentStringTuningsMap& InstrumentsRepository::stringTuningsPresets() const
@@ -102,9 +96,8 @@ void InstrumentsRepository::load()
 {
     TRACEFUNC;
 
-    m_instrumentTemplates.clear();
-    m_genres.clear();
-    m_groups.clear();
+    m_instrumentTemplateList.clear();
+    m_instrumentTemplateMap.clear();
     mu::engraving::clearInstrumentTemplates();
 
     muse::io::path_t instrumentsPath = configuration()->instrumentListPath();
@@ -118,19 +111,14 @@ void InstrumentsRepository::load()
         }
     }
 
-    for (const InstrumentGenre* genre : mu::engraving::instrumentGenres) {
-        m_genres << genre;
-    }
-
     for (const InstrumentGroup* group : mu::engraving::instrumentGroups) {
-        m_groups << group;
-
         for (const InstrumentTemplate* templ : group->instrumentTemplates) {
             if (templ->trackName.isEmpty() || templ->longNames.empty()) {
                 continue;
             }
 
-            m_instrumentTemplates << templ;
+            m_instrumentTemplateList.push_back(templ);
+            m_instrumentTemplateMap.insert_or_assign(templ->id, templ);
         }
     }
 
@@ -210,7 +198,7 @@ bool InstrumentsRepository::loadStringTuningsPresets(const muse::io::path_t& pat
         std::string id = presetInfoObj.contains("familyId") ? presetInfoObj.value("familyId").toStdString()
                          : presetInfoObj.value("instrumentId").toStdString();
 
-        m_stringTuningsPresets.emplace(id, strings);
+        m_stringTuningsPresets.emplace(std::move(id), std::move(strings));
     }
 
     return true;

@@ -57,9 +57,11 @@ private:
 
     bool loadStringTuningsPresets(const muse::io::path_t& path);
 
-    InstrumentTemplateList m_instrumentTemplates;
-    InstrumentGroupList m_groups;
-    InstrumentGenreList m_genres;
+    using InstrumentTemplateMap = std::unordered_map<String, const InstrumentTemplate*>;
+
+    InstrumentTemplateList m_instrumentTemplateList;
+    InstrumentTemplateMap m_instrumentTemplateMap;
+
     InstrumentStringTuningsMap m_stringTuningsPresets;
 };
 }

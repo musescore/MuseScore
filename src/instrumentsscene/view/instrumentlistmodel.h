@@ -100,7 +100,7 @@ private:
     {
         QString name;
         notation::InstrumentTemplateList templates;
-        int currentTemplateIndex = 0;
+        size_t currentTemplateIndex = 0;
 
         bool operator==(const CombinedInstrument& instrument) const
         {
@@ -111,8 +111,6 @@ private:
     using Instruments = QList<CombinedInstrument>;
 
     void init(const QString& genreId, const QString& groupId);
-
-    QString resolveInstrumentGroupId(const muse::String& instrumentId) const;
 
     void loadGenres();
     void loadGroups();
