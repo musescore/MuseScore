@@ -83,6 +83,10 @@ const std::vector<Dyn> Dynamic::DYN_LIST = {
     { DynamicType::SFF,     126, -18, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
     { DynamicType::SFFZ,    126, -18, true,
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
+    { DynamicType::SFFF,    127, -18, true,
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym>" },
+    { DynamicType::SFFFZ,   127, -18, true,
+      "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicForte</sym><sym>dynamicZ</sym>" },
     { DynamicType::SFP,     112, -47, true, "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym>" },
     { DynamicType::SFPP,    112, -79, true,
       "<sym>dynamicSforzando</sym><sym>dynamicForte</sym><sym>dynamicPiano</sym><sym>dynamicPiano</sym>" },
@@ -210,6 +214,8 @@ bool Dynamic::isVelocityChangeAvailable() const
     case DynamicType::SFZ:
     case DynamicType::SFF:
     case DynamicType::SFFZ:
+    case DynamicType::SFFF:
+    case DynamicType::SFFFZ:
     case DynamicType::SFP:
     case DynamicType::SFPP:
     case DynamicType::RFZ:
