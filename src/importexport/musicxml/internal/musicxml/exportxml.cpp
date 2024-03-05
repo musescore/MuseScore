@@ -4966,7 +4966,6 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     directionETag(m_xml, staff);
 }
 
-
 //---------------------------------------------------------
 //   harp pedal
 //---------------------------------------------------------
