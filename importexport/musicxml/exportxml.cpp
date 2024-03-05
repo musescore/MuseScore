@@ -2554,10 +2554,19 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
                   QString tag = tagName;
                   if (s == "other")
                         tag += " smufl=\"" + accidentalType2SmuflMxmlString(acc->accidentalType()) + "\"";
-                  if (acc->bracket() == AccidentalBracket::BRACKET)
+                  if (acc->bracket() == AccidentalBracket::BRACKET) {
+                        if (acc->role() == AccidentalRole::USER)
+                              tag += " editorial=\"yes\"";
                         tag += " bracket=\"yes\"";
-                  else if (acc->bracket() == AccidentalBracket::PARENTHESIS)
+                        }
+                  else if (acc->bracket() == AccidentalBracket::PARENTHESIS) {
+                        if (acc->role() == AccidentalRole::USER)
+                              tag += " cautionary=\"yes\"";
                         tag += " parentheses=\"yes\"";
+                        }
+                  //else if (!acc->isMicrotonal(acc->accidentalType())      // (exclude microtonal accidentals)
+                  //         && acc->role() == AccidentalRole::USER)        // no way to tell "cautionary" from "editorial"
+                  //      tag += " cautionary=\"yes\" parentheses=\"no\""; // so pick one, but neither parenthesis nor bracket ;-)
                   if (tagName == "accidental-mark") {
                         if (acc->placeAbove())
                              tag += " placement=\"above\"";
