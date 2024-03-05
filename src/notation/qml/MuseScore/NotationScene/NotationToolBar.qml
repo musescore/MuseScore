@@ -67,6 +67,7 @@ Item {
 
         delegate: FlatButton {
             height: 30
+            
             property var item: Boolean(model) ? model.itemRole : null
 
             text: Boolean(item) ? item.title : ""
