@@ -2025,12 +2025,12 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         double endHookWidth = 0.0;
 
         if (tl->beginHookType() == HookType::HOOK_45) {
-            beginHookWidth = fabs(beginHookHeight * .4);
+            beginHookWidth = std::fabs(beginHookHeight * .4);
             pp1.rx() += beginHookWidth;
         }
 
         if (tl->endHookType() == HookType::HOOK_45) {
-            endHookWidth = fabs(endHookHeight * .4);
+            endHookWidth = std::fabs(endHookHeight * .4);
             pp2.rx() -= endHookWidth;
         }
 

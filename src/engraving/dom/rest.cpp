@@ -151,7 +151,7 @@ mu::RectF Rest::drag(EditData& ed)
 
     // Limit horizontal drag range
     static const double xDragRange = spatium() * 5;
-    if (fabs(s.x()) > xDragRange) {
+    if (std::fabs(s.x()) > xDragRange) {
         s.rx() = xDragRange * (s.x() < 0 ? -1.0 : 1.0);
     }
     setOffset(PointF(s.x(), s.y()));

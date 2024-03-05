@@ -852,7 +852,7 @@ void Beam::initBeamEditData(EditData& ed)
     int idx = directionIdx();
     int i = 0;
     for (BeamFragment* f : m_fragments) {
-        double d = fabs(f->py1[idx] - pt.y());
+        double d = std::fabs(f->py1[idx] - pt.y());
         if (d < ydiff) {
             ydiff = d;
             bed->editFragment = i;
