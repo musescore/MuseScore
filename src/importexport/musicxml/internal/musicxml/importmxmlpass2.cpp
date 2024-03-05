@@ -2329,6 +2329,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
     Tuplets tuplets;         // Current tuplet for each voice in the current part
     DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
     ArpeggioMap arpMap;
+    DelayedArpMap delayedArps;
 
     // collect candidates for courtesy accidentals to work out at measure end
     QMap<Note*, int> alterMap;
@@ -2359,7 +2360,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             // note: chord and grace note handling done in note()
             // dura > 0 iff valid rest or first note of chord found
             Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
-                           tupletStates, tuplets, arpMap);
+                           tupletStates, tuplets, arpMap, delayedArps);
             if (n && !n->chord()->isGrace()) {
                 prevChord = n->chord();          // remember last non-grace chord
             }
@@ -5200,7 +5201,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                                 FiguredBassList& fbl,
                                 int& alt,
                                 MxmlTupletStates& tupletStates,
-                                Tuplets& tuplets, ArpeggioMap& arpMap)
+                                Tuplets& tuplets, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
 {
     if (_e.attributes().value("print-spacing") == "no") {
         notePrintSpacingNo(dura);
@@ -5537,7 +5538,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
     // handle notations
     if (cr) {
-        notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie, arpMap);
+        notations.addToScore(cr, note, noteStartTime.ticks(), _slurs, _glissandi, _spanners, _trills, _tie, arpMap, delayedArps);
 
         // if no tie added yet, convert the "tie" into "tied" and add it.
         if (note && !note->tieFor() && !tieType.isEmpty()) {
@@ -6835,9 +6836,23 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
 //   addArpeggio
 //---------------------------------------------------------
 
-static void addArpeggio(ChordRest* cr, const QString& arpeggioType, const int arpeggioNo, ArpeggioMap& arpMap,
-                        MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
+static void addArpeggio(ChordRest* cr, QString& arpeggioType, int arpeggioNo, ArpeggioMap& arpMap,
+                        MxmlLogger* logger, const QXmlStreamReader* const xmlreader, DelayedArpMap& delayedArps)
 {
+    if (cr->isRest() && !arpeggioType.isEmpty()) {
+        // If the arpeggio is attached to a rest, store to add to the next available chord
+        DelayedArpeggio delayedArp(arpeggioType, arpeggioNo);
+        delayedArps.insert(std::pair<int, DelayedArpeggio>(cr->tick().ticks(), delayedArp));
+    } else {
+        // Retrieve stored arpeggio to add to this chord
+        DelayedArpeggio delayedArp = mu::value(delayedArps, cr->tick().ticks(), DelayedArpeggio(u"", 0));
+        if (!delayedArp._arpeggioType.isEmpty()) {
+            arpeggioType = delayedArp._arpeggioType;
+            arpeggioNo = delayedArp._arpeggioNo;
+            delayedArps.erase(cr->tick().ticks());
+        }
+    }
+
     // If no current arpeggio with same number add new
     // If not, expand span
     // no support for arpeggio on rest
@@ -7272,9 +7287,9 @@ void MusicXMLParserNotations::addNotation(const Notation& notation, ChordRest* c
 
 void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs,
                                          Glissando* glissandi[MAX_NUMBER_LEVEL][2], MusicXmlSpannerMap& spanners,
-                                         TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap)
+                                         TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap, DelayedArpMap& delayedArps)
 {
-    addArpeggio(cr, _arpeggioType, _arpeggioNo, arpMap, _logger, &_e);
+    addArpeggio(cr, _arpeggioType, _arpeggioNo, arpMap, _logger, &_e, delayedArps);
     addBreath(cr, cr->tick(), _breath);
     addWavyLine(cr, Fraction::fromTicks(tick), _wavyLineNo, _wavyLineType, spanners, trills, _logger, &_e);
 

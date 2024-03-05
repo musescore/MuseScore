@@ -193,6 +193,20 @@ private:
 //   forward references and defines
 //---------------------------------------------------------
 
+struct DelayedArpeggio
+{
+    QString _arpeggioType = "";
+    int _arpeggioNo = 0;
+
+    DelayedArpeggio(String arpType, int no)
+        : _arpeggioType(arpType), _arpeggioNo(no) {}
+
+    DelayedArpeggio()
+        : _arpeggioType(QString()), _arpeggioNo(0) {}
+
+    void clear() { _arpeggioType = ""; _arpeggioNo = 0; }
+};
+
 class FretDiagram;
 class FiguredBassItem;
 class Glissando;
@@ -209,6 +223,7 @@ using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
+using DelayedArpMap = std::map<int, DelayedArpeggio>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -220,7 +235,7 @@ public:
     MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
@@ -308,7 +323,8 @@ private:
     void transpose(const QString& partId, const Fraction& tick);
     Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
                Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beams& currBeams,
-               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap);
+               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap,
+               DelayedArpMap& delayedArps);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
