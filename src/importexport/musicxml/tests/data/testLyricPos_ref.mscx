@@ -139,6 +139,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <placement>above</placement>
+              <offset x="0" y="1.143"/>
               <text>Lyrics</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -151,6 +152,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <placement>above</placement>
+              <offset x="0" y="1.143"/>
               <text>above</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -163,6 +165,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <placement>above</placement>
+              <offset x="0" y="1.143"/>
               <text>the</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -175,6 +178,7 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <placement>above</placement>
+              <offset x="0" y="1.143"/>
               <text>stave</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -191,6 +195,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>Lyrics</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -202,6 +207,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>below</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -213,6 +219,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>the</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -224,6 +231,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>stave!</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
