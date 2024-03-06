@@ -2564,9 +2564,9 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
                               tag += " cautionary=\"yes\"";
                         tag += " parentheses=\"yes\"";
                         }
-                  //else if (!acc->isMicrotonal(acc->accidentalType())      // (exclude microtonal accidentals)
-                  //         && acc->role() == AccidentalRole::USER)        // no way to tell "cautionary" from "editorial"
-                  //      tag += " cautionary=\"yes\" parentheses=\"no\""; // so pick one, but neither parenthesis nor bracket ;-)
+                  else if (!acc->isMicrotonal(acc->accidentalType())     // (exclude microtonal accidentals)
+                           && acc->role() == AccidentalRole::USER)       // no way to tell "cautionary" from "editorial"
+                        tag += " cautionary=\"yes\" parentheses=\"no\""; // so pick one, but neither parenthesis nor bracket ;-)
                   if (tagName == "accidental-mark") {
                         if (acc->placeAbove())
                              tag += " placement=\"above\"";
