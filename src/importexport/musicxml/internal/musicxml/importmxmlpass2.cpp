@@ -6259,6 +6259,8 @@ void MusicXMLParserLyric::parse()
     const auto lyricNumber = _e.attributes().value("number").toString();
     const QColor lyricColor { _e.attributes().value("color").toString() };
     const QString placement = _e.attributes().value("placement").toString();
+    double relX = _e.attributes().value("relative-x").toDouble() / 10 * DPMM;
+    double relY = _e.attributes().value("relative-y").toDouble() / 10 * DPMM;
     QString extendType;
     QString formattedText;
 
@@ -6315,6 +6317,14 @@ void MusicXMLParserLyric::parse()
     if (!placement.isEmpty()) {
         lyric->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
         lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
+
+    if (relX != 0 || relY != 0) {
+        PointF offset = lyric->offset();
+        offset.setX(relX != 0 ? relX : lyric->offset().x());
+        offset.setY(relY != 0 ? relY : lyric->offset().y());
+        lyric->setOffset(offset);
+        lyric->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
     }
 
     const auto l = lyric.release();
