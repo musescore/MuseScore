@@ -2834,9 +2834,9 @@ static void writeAccidental(XmlWriter& xml, const String& tagName, const Acciden
                     attrs.emplace_back(std::make_pair("cautionary", "yes"));
                 }
                 attrs.emplace_back(std::make_pair("parentheses", "yes"));
-                //} else if (acc->role() == AccidentalRole::USER) {            // no way to tell "cautionary" from "editorial"
-                //    attrs.emplace_back(std::make_pair("cautionary", "yes")); // so pick one
-                //    attrs.emplace_back(std::make_pair("parentheses", "no")); // but use neither parenthesis nor bracket ;-)
+            } else if (acc->role() == AccidentalRole::USER) {            // no way to tell "cautionary" from "editorial"
+                attrs.emplace_back(std::make_pair("cautionary", "yes")); // so pick one
+                attrs.emplace_back(std::make_pair("parentheses", "no")); // but use neither parenthesis nor bracket ;-)
             }
             if (tagName == "accidental-mark") {
                 if (acc->placeAbove()) {
