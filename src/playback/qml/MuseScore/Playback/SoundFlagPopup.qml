@@ -42,6 +42,9 @@ StyledPopupView {
         root.updatePosition()
     }
 
+    openPolicies: PopupView.Default | PopupView.OpenOnContentReady
+    isContentReady: soundFlagModel.inited
+
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {

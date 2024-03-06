@@ -187,11 +187,11 @@ MenuView {
             })
 
             root.subMenuLoader.opened.connect(function(itemId) {
-                root.closePolicy = PopupView.NoAutoClose
+                root.closePolicies = PopupView.NoAutoClose
             })
 
             root.subMenuLoader.closed.connect(function(force) {
-                root.closePolicy = PopupView.CloseOnPressOutsideParent
+                root.closePolicies = PopupView.CloseOnPressOutsideParent
 
                 if (force) {
                     root.close(true)
