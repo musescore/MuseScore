@@ -36,11 +36,13 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: museSoundsParams.navigationPanelOrderEnd
 
-    contentWidth: content.childrenRect.width
+    contentWidth: content.width
     contentHeight: content.childrenRect.height
     onContentHeightChanged: {
         root.updatePosition()
     }
+
+    showArrow: false
 
     openPolicies: PopupView.Default | PopupView.OpenOnContentReady
     isContentReady: soundFlagModel.inited
@@ -48,8 +50,10 @@ StyledPopupView {
     signal elementRectChanged(var elementRect)
 
     function updatePosition() {
+        const marginFromElement = 12
         var popupHeight = root.contentHeight + root.margins * 2 + root.padding * 2
-        root.y = -popupHeight
+        root.y = -popupHeight - marginFromElement
+        root.x = (root.parent.width / 2) - (root.width / 2) + root.margins
 
         root.setOpensUpward(true)
     }
