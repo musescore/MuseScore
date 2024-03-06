@@ -143,6 +143,12 @@ void PopupView::init()
     //connect(m_window, &IPopupWindow::aboutToClose, this, &PopupView::aboutToClose);
     connect(m_window, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(aboutToClose(QQuickCloseEvent*)));
 
+    connect(this, &PopupView::isContentReadyChanged, this, [this](){
+        if (isContentReady() && m_shouldOpenOnReady) {
+            doOpen();
+        }
+    });
+
     emit windowChanged();
 }
 
@@ -160,8 +166,8 @@ void PopupView::initCloseController()
 
     m_closeController->setParentItem(parentItem());
     m_closeController->setWindow(window());
-    m_closeController->setPopupHasFocus(m_openPolicy != OpenPolicy::NoActivateFocus);
-    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicy == CloseOnPressOutsideParent);
+    m_closeController->setPopupHasFocus(!(m_openPolicies & OpenPolicy::NoActivateFocus));
+    m_closeController->setIsCloseOnPressOutsideParent(m_closePolicies & CloseOnPressOutsideParent);
 
     m_closeController->closeNotification().onNotify(this, [this]() {
         close(true);
@@ -188,6 +194,16 @@ QWindow* PopupView::qWindow() const
 }
 
 void PopupView::open()
+{
+    if ((m_openPolicies & OpenOnContentReady) && !m_isContentReady) {
+        m_shouldOpenOnReady = true;
+        return;
+    }
+
+    doOpen();
+}
+
+void PopupView::doOpen()
 {
     if (isOpened()) {
         repositionWindowIfNeed();
@@ -235,7 +251,7 @@ void PopupView::open()
     resolveNavigationParentControl();
 
     QScreen* screen = resolveScreen();
-    m_window->show(screen, viewGeometry(), m_openPolicy != OpenPolicy::NoActivateFocus);
+    m_window->show(screen, viewGeometry(), !(m_openPolicies & OpenPolicy::NoActivateFocus));
 
     m_globalPos = QPointF(); // invalidate
 
@@ -300,14 +316,14 @@ bool PopupView::isOpened() const
     return m_window ? m_window->isVisible() : false;
 }
 
-PopupView::OpenPolicy PopupView::openPolicy() const
+PopupView::OpenPolicies PopupView::openPolicies() const
 {
-    return m_openPolicy;
+    return m_openPolicies;
 }
 
-PopupView::ClosePolicy PopupView::closePolicy() const
+PopupView::ClosePolicies PopupView::closePolicies() const
 {
-    return m_closePolicy;
+    return m_closePolicies;
 }
 
 bool PopupView::activateParentOnClose() const
@@ -419,19 +435,19 @@ void PopupView::setLocalY(qreal y)
     repositionWindowIfNeed();
 }
 
-void PopupView::setOpenPolicy(PopupView::OpenPolicy openPolicy)
+void PopupView::setOpenPolicies(PopupView::OpenPolicies openPolicies)
 {
-    if (m_openPolicy == openPolicy) {
+    if (m_openPolicies == openPolicies) {
         return;
     }
 
-    m_openPolicy = openPolicy;
+    m_openPolicies = openPolicies;
 
     if (m_closeController) {
-        m_closeController->setPopupHasFocus(m_openPolicy != OpenPolicy::NoActivateFocus);
+        m_closeController->setPopupHasFocus(!(m_openPolicies & OpenPolicy::NoActivateFocus));
     }
 
-    emit openPolicyChanged(m_openPolicy);
+    emit openPoliciesChanged(m_openPolicies);
 }
 
 void PopupView::repositionWindowIfNeed()
@@ -445,19 +461,19 @@ void PopupView::repositionWindowIfNeed()
     }
 }
 
-void PopupView::setClosePolicy(ClosePolicy closePolicy)
+void PopupView::setClosePolicies(ClosePolicies closePolicies)
 {
-    if (m_closePolicy == closePolicy) {
+    if (m_closePolicies == closePolicies) {
         return;
     }
 
-    m_closePolicy = closePolicy;
+    m_closePolicies = closePolicies;
 
     if (m_closeController) {
-        m_closeController->setIsCloseOnPressOutsideParent(closePolicy == CloseOnPressOutsideParent);
+        m_closeController->setIsCloseOnPressOutsideParent(closePolicies & CloseOnPressOutsideParent);
     }
 
-    emit closePolicyChanged(closePolicy);
+    emit closePoliciesChanged(closePolicies);
 }
 
 void PopupView::setObjectId(QString objectId)
@@ -808,4 +824,19 @@ QQmlEngine* PopupView::engine() const
     }
 
     return qmlEngine(this);
+}
+
+bool PopupView::isContentReady() const
+{
+    return m_isContentReady;
+}
+
+void PopupView::setIsContentReady(bool ready)
+{
+    if (m_isContentReady == ready) {
+        return;
+    }
+
+    m_isContentReady = ready;
+    emit isContentReadyChanged();
 }
