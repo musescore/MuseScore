@@ -408,8 +408,8 @@ if (OS_IS_WIN)
 
     # Install ssl
     install(FILES
-            ${DEPENDENCIES_DIR}/libcrypto-1_1-x64.dll
-            ${DEPENDENCIES_DIR}/libssl-1_1-x64.dll
+            ${DEPENDENCIES_LIB_DIR}/libcrypto-1_1-x64.dll
+            ${DEPENDENCIES_LIB_DIR}/libssl-1_1-x64.dll
             DESTINATION bin)
 
     if (WIN_PORTABLE)

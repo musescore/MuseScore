@@ -186,9 +186,16 @@ else()
 endif()
 
 if (OS_IS_WIN)
-    set(DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
-    link_directories(${DEPENDENCIES_DIR})
-    include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+    include(FetchContent)
+    FetchContent_Declare(
+      musescore_prebuild_win_deps
+      GIT_REPOSITORY https://github.com/musescore/musescore_prebuild_win_deps.git
+      GIT_TAG        HEAD
+    )
+    FetchContent_MakeAvailable(musescore_prebuild_win_deps)
+    set(DEPENDENCIES_DIR ${musescore_prebuild_win_deps_SOURCE_DIR})
+    set(DEPENDENCIES_LIB_DIR ${DEPENDENCIES_DIR}/libx64)
+    set(DEPENDENCIES_INC ${DEPENDENCIES_DIR}/include)
 endif(OS_IS_WIN)
 
 include(FindSndFile)
