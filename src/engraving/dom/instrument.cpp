@@ -1054,10 +1054,10 @@ void InstrumentList::setInstrument(Instrument* instr, int tick)
     }
 }
 
-bool InstrumentList::contains(const std::string& instrumentId) const
+bool InstrumentList::contains(const String& instrumentId) const
 {
     for (const auto& pair : *this) {
-        if (pair.second->id().toStdString() == instrumentId) {
+        if (pair.second->id() == instrumentId) {
             return true;
         }
     }

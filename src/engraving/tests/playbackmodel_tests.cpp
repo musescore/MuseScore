@@ -120,7 +120,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -155,7 +155,7 @@ TEST_F(Engraving_PlaybackModelTests, Two_Ending_Repeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -214,7 +214,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events per timestamp matches expectations
     auto isExpectedTimestamp = [&expectedSizePerTimestamp](timestamp_t timestamp) {
@@ -276,7 +276,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] The duration of the tied note matches expectations
     size_t noteEventCount = 0;
@@ -324,7 +324,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Fine)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -360,7 +360,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Coda)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -395,7 +395,7 @@ TEST_F(Engraving_PlaybackModelTests, Dal_Segno_Al_Fine)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -430,7 +430,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -469,7 +469,7 @@ TEST_F(Engraving_PlaybackModelTests, Spanners)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events matches expectations
     EXPECT_EQ(result.size(), expectedNumberOfEvents);
@@ -544,7 +544,7 @@ TEST_F(Engraving_PlaybackModelTests, Dynamics)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).dynamicLevelMap;
+    const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).dynamicLevelMap;
 
     // [THEN] Dynamic level map matches expectations
     EXPECT_EQ(dynamicLevelMap.size(), 51);
@@ -630,7 +630,7 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -693,7 +693,7 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
 
     // [WHEN] Request events for Winds
     const PlaybackEventsMap& windsResult
-        = model.resolveTrackPlaybackData(windsPart->id(), windsPart->instrumentId().toStdString()).originEvents;
+        = model.resolveTrackPlaybackData(windsPart->id(), windsPart->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(windsResult.size(), NOTE_COUNT);
@@ -714,7 +714,7 @@ TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
 
     // [WHEN] Request events for Voice
     const PlaybackEventsMap& voiceResult
-        = model.resolveTrackPlaybackData(voicePart->id(), voicePart->instrumentId().toStdString()).originEvents;
+        = model.resolveTrackPlaybackData(voicePart->id(), voicePart->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(voiceResult.size(), NOTE_COUNT);
@@ -765,7 +765,7 @@ TEST_F(Engraving_PlaybackModelTests, Single_Measure_Repeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -802,7 +802,7 @@ TEST_F(Engraving_PlaybackModelTests, Multi_Measure_Repeat)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
@@ -839,7 +839,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
     // [THEN] Updated events map will match our expectations
     result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelMap&,
@@ -884,7 +884,7 @@ TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId()).originEvents;
 
     // [GIVEN] Expected events durations
     auto quarterAtTempo = [](double tempo) { return static_cast<duration_t>(QUARTER_NOTE_DURATION / (tempo / 120.0)); };
@@ -1090,7 +1090,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
     // [GIVEN] Expected note event
     const mu::mpe::NoteEvent& expectedEvent = std::get<mu::mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
@@ -1155,7 +1155,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
     model.setprofilesRepository(m_repositoryMock);
     model.load(score);
 
-    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
+    PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
     // [GIVEN] Expected note event
     const PlaybackEventList& expectedEvents = result.originEvents.at(thirdChordTimestamp);
@@ -1208,28 +1208,28 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     ASSERT_EQ(score->parts().size(), 12);
 
     // [GIVEN] Expected setup data for each instrument
-    std::unordered_map<std::string, mpe::PlaybackSetupData> expectedSetupData = {
-        { "sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, {} } },
-        { "marching-tenor-drums", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
-                                                                                 SoundSubCategory::Snare,
-                                                                                 SoundSubCategory::Tenor }, {} } },
-        { "hand-clap", { SoundId::Clap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
-        { "guitar-steel", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
-                                                                       SoundSubCategory::Steel,
-                                                                       SoundSubCategory::Plucked }, {} } },
-        { "bass-steel-drums", { SoundId::SteelDrums, SoundCategory::Percussions, { SoundSubCategory::Metal,
-                                                                                   SoundSubCategory::Steel,
-                                                                                   SoundSubCategory::Bass }, {} } },
-        { "alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto }, {} } },
-        { "f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner }, {} } },
-        { "bass-harmonica-hohner", { SoundId::Harmonica, SoundCategory::Winds, { SoundSubCategory::Bass,
-                                                                                 SoundSubCategory::Hohner }, {} } },
-        { "chinese-tom-toms", { SoundId::TomToms, SoundCategory::Percussions, { SoundSubCategory::Chinese }, {} } },
-        { "electric-piano", { SoundId::Piano, SoundCategory::Keyboards, { SoundSubCategory::Electric }, {} } },
-        { "crystal-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
-                                                                               SoundSubCategory::FX_Crystal }, {} } },
-        { "boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
-                                                                    SoundSubCategory::Boy }, {} } },
+    std::unordered_map<String, mpe::PlaybackSetupData> expectedSetupData = {
+        { u"sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, {} } },
+        { u"marching-tenor-drums", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
+                                                                                  SoundSubCategory::Snare,
+                                                                                  SoundSubCategory::Tenor }, {} } },
+        { u"hand-clap", { SoundId::Clap, SoundCategory::Percussions, { SoundSubCategory::Hand }, {} } },
+        { u"guitar-steel", { SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
+                                                                        SoundSubCategory::Steel,
+                                                                        SoundSubCategory::Plucked }, {} } },
+        { u"bass-steel-drums", { SoundId::SteelDrums, SoundCategory::Percussions, { SoundSubCategory::Metal,
+                                                                                    SoundSubCategory::Steel,
+                                                                                    SoundSubCategory::Bass }, {} } },
+        { u"alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto }, {} } },
+        { u"f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner }, {} } },
+        { u"bass-harmonica-hohner", { SoundId::Harmonica, SoundCategory::Winds, { SoundSubCategory::Bass,
+                                                                                  SoundSubCategory::Hohner }, {} } },
+        { u"chinese-tom-toms", { SoundId::TomToms, SoundCategory::Percussions, { SoundSubCategory::Chinese }, {} } },
+        { u"electric-piano", { SoundId::Piano, SoundCategory::Keyboards, { SoundSubCategory::Electric }, {} } },
+        { u"crystal-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
+                                                                                SoundSubCategory::FX_Crystal }, {} } },
+        { u"boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
+                                                                     SoundSubCategory::Boy }, {} } },
     };
 
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
@@ -1243,7 +1243,7 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     // [THEN] Result matches with our expectations
     for (const Part* part : score->parts()) {
         for (const auto& pair : part->instruments()) {
-            const std::string& instrumentId = pair.second->id().toStdString();
+            const String& instrumentId = pair.second->id();
             const PlaybackData& result = model.resolveTrackPlaybackData(part->id(), instrumentId);
 
             EXPECT_EQ(result.setupData, expectedSetupData.at(instrumentId));

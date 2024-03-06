@@ -838,7 +838,7 @@ bool TRead::readProperties(Instrument* item, XmlReader& e, ReadContext& ctx, Par
     PartAudioSettingsCompat partAudioSetting;
     InstrumentTrackId trackId;
     if (part && part->score()) {
-        trackId = { part->score()->parts().size() + 1, item->id().toStdString() };//part is not assigned to score, _id field is not correct
+        trackId = { part->score()->parts().size() + 1, item->id() };//part is not assigned to score, _id field is not correct
     }
     partAudioSetting.instrumentId = trackId;
 
