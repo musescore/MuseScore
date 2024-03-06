@@ -205,7 +205,7 @@ set(Z_LIB )
 if (CC_IS_MSVC)
     include(FindStaticLibrary)
     set(Z_LIB zlibstat)
-    set(Z_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
+    set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
 elseif (CC_IS_EMSCRIPTEN)
     #zlib included in main linker
 else ()

@@ -1,11 +1,11 @@
 include(GetPlatformInfo)
 
 if (OS_IS_WIN AND (NOT MINGW))
-    find_path(SNDFILE_INCDIR sndfile.h PATHS ${PROJECT_SOURCE_DIR}/dependencies/include;)
+    find_path(SNDFILE_INCDIR sndfile.h PATHS ${DEPENDENCIES_INC};)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
-    find_library(SNDFILE_LIB NAMES sndfile libsndfile-1 PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+    find_library(SNDFILE_LIB NAMES sndfile libsndfile-1 PATHS ${DEPENDENCIES_LIB_DIR} NO_DEFAULT_PATH)
     set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll")
-    find_library(SNDFILE_DLL NAMES sndfile libsndfile-1 PATHS ${DEPENDENCIES_DIR} NO_DEFAULT_PATH)
+    find_library(SNDFILE_DLL NAMES sndfile libsndfile-1 PATHS ${DEPENDENCIES_LIB_DIR} NO_DEFAULT_PATH)
     message(STATUS "Found sndfile DLL: ${SNDFILE_DLL}")
 
 elseif (OS_IS_WASM)

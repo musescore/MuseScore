@@ -130,7 +130,7 @@ option(MUE_CRASHPAD_HANDLER_PATH "Path to custom crashpad_handler executable (op
 option(MUE_ENABLE_CUSTOM_ALLOCATOR "Enable custom allocator (used for engraving)" OFF)
 
 # === Compile ===
-option(MUE_COMPILE_QT5_COMPAT "Build with Qt5" ON)
+option(MUE_COMPILE_QT5_COMPAT "Build with Qt5" OFF)
 option(MUE_COMPILE_BUILD_64 "Build 64 bit version of editor" ON)
 option(MUE_COMPILE_BUILD_MACOS_APPLE_SILICON "Build for Apple Silicon architecture. Only applicable on Macs with Apple Silicon, and requires suitable Qt version." OFF)
 option(MUE_COMPILE_INSTALL_QTQML_FILES "Whether to bundle qml files along with the installation (relevant on MacOS only)" ON)
@@ -186,9 +186,16 @@ else()
 endif()
 
 if (OS_IS_WIN)
-    set(DEPENDENCIES_DIR "${PROJECT_SOURCE_DIR}/dependencies/libx64")
-    link_directories(${DEPENDENCIES_DIR})
-    include_directories(${PROJECT_SOURCE_DIR}/dependencies/include)
+    include(FetchContent)
+    FetchContent_Declare(
+      musescore_prebuild_win_deps
+      GIT_REPOSITORY https://github.com/musescore/musescore_prebuild_win_deps.git
+      GIT_TAG        HEAD
+    )
+    FetchContent_MakeAvailable(musescore_prebuild_win_deps)
+    set(DEPENDENCIES_DIR ${musescore_prebuild_win_deps_SOURCE_DIR})
+    set(DEPENDENCIES_LIB_DIR ${DEPENDENCIES_DIR}/libx64)
+    set(DEPENDENCIES_INC ${DEPENDENCIES_DIR}/include)
 endif(OS_IS_WIN)
 
 include(FindSndFile)
