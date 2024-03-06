@@ -75,6 +75,15 @@ StyledPopupView {
 
             spacing: 6
 
+            NavigationPanel {
+                id: navPanel
+                name: "SoundFlagSettings"
+                direction: NavigationPanel.Vertical
+                section: root.notationViewNavigationSection
+                order: root.navigationOrderStart
+                accessible.name: qsTrc("playback", "Sound flag settings")
+            }
+
             StyledIconLabel {
                 Layout.preferredWidth: 24
                 Layout.preferredHeight: width
@@ -90,6 +99,18 @@ StyledPopupView {
                 text: soundFlagModel.title
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
+
+                NavigationControl {
+                    name: "SoundFlagTitle"
+                    enabled: titleLabel.enabled && titleLabel.visible
+                    panel: navPanel
+
+                    order: 1
+
+                    accessible.role: MUAccessible.StaticText
+                    accessible.visualItem: titleLabel
+                    accessible.name: titleLabel.text
+                }
             }
 
             MenuButton {
@@ -98,14 +119,9 @@ StyledPopupView {
 
                 menuModel: soundFlagModel.contextMenuModel
 
-                navigation.panel: NavigationPanel {
-                    id: menuNavPanel
-                    name: "SoundFlagMenu"
-                    direction: NavigationPanel.Vertical
-                    section: root.notationViewNavigationSection
-                    order: museSoundsParams.navigationPanelOrderEnd + 1
-                    accessible.name: qsTrc("notation", "Sound flag menu")
-                }
+                navigation.panel: navPanel
+                navigation.order: 2
+                navigation.accessible.name: qsTrc("playback", "Sound flag menu")
 
                 onHandleMenuItem: function(itemId) {
                     soundFlagModel.handleContextMenuItem(itemId)
@@ -123,7 +139,7 @@ StyledPopupView {
             visible: soundFlagModel.inited
 
             navigationPanelSection: root.notationViewNavigationSection
-            navigationPanelOrderStart: root.navigationOrderStart
+            navigationPanelOrderStart: navPanel.order + 1
         }
     }
 }

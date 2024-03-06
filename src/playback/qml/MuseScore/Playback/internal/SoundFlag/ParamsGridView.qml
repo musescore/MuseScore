@@ -100,6 +100,7 @@ Column {
                     Layout.preferredWidth: (gridView.width - gridView.rowSpacing) / 2
                     Layout.preferredHeight: implicitHeight
 
+                    text: modelData["name"]
                     accentButton: root.selectionModel.indexOf(modelData["code"]) !== -1
 
                     drawFocusBorderInsideRect: true
@@ -116,6 +117,8 @@ Column {
                         }
                     }
 
+                    accessible.name: text + "; " + (accentButton ? qsTrc("global", "On") : qsTrc("global", "Off"))
+
                     onClicked: {
                         root.toggleParamRequested(modelData["code"])
                     }
@@ -123,7 +126,7 @@ Column {
                     contentItem: StyledTextLabel {
                         width: button.width - 24 // 12px padding on each side
 
-                        text: modelData["name"]
+                        text: button.text
                         font: ui.theme.bodyFont
                     }
                 }
