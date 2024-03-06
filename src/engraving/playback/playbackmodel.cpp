@@ -44,8 +44,8 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 using namespace mu::async;
 
-static const std::string METRONOME_INSTRUMENT_ID("metronome");
-static const std::string CHORD_SYMBOLS_INSTRUMENT_ID("chord_symbols");
+static const String METRONOME_INSTRUMENT_ID(u"metronome");
+static const String CHORD_SYMBOLS_INSTRUMENT_ID(u"chord_symbols");
 
 const InstrumentTrackId PlaybackModel::METRONOME_TRACK_ID = { 999, METRONOME_INSTRUMENT_ID };
 
@@ -190,7 +190,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrac
     return m_playbackDataMap[trackId];
 }
 
-const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const std::string& instrumentId)
+const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, const String& instrumentId)
 {
     return resolveTrackPlaybackData(idKey(partId, instrumentId));
 }
@@ -293,7 +293,7 @@ void PlaybackModel::updateSetupData()
 {
     for (const Part* part : m_score->parts()) {
         for (const auto& pair : part->instruments()) {
-            InstrumentTrackId trackId = idKey(part->id(), pair.second->id().toStdString());
+            InstrumentTrackId trackId = idKey(part->id(), pair.second->id());
 
             if (!trackId.isValid() || containsTrack(trackId)) {
                 continue;
@@ -891,7 +891,7 @@ InstrumentTrackId PlaybackModel::idKey(const std::vector<const EngravingItem*>& 
     return result;
 }
 
-InstrumentTrackId PlaybackModel::idKey(const ID& partId, const std::string& instrumentId) const
+InstrumentTrackId PlaybackModel::idKey(const ID& partId, const String& instrumentId) const
 {
     return { partId, instrumentId };
 }

@@ -635,12 +635,12 @@ InstrumentTrackIdSet PlaybackController::instrumentTrackIdSetForRangePlayback() 
 
     for (const Part* part: selectedParts) {
         if (const Instrument* startInstrument = part->instrument(startTick)) {
-            result.insert({ part->id(), startInstrument->id().toStdString() });
+            result.insert({ part->id(), startInstrument->id() });
         }
 
         for (auto [tick, instrument] : part->instruments()) {
             if (tick > startTicks) {
-                result.insert({ part->id(), instrument->id().toStdString() });
+                result.insert({ part->id(), instrument->id() });
             }
         }
 
@@ -878,7 +878,7 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
         return;
     }
 
-    const std::string primaryInstrId = part->instrument()->id().toStdString();
+    const String primaryInstrId = part->instrument()->id();
     if (instrumentTrackId.instrumentId == primaryInstrId) {
         const std::string trackName = part->partName().toStdString();
         doAddTrack(instrumentTrackId, trackName, onFinished);
