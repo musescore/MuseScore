@@ -3419,9 +3419,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
             else {
                   QString spannerPlacement = placement();
                   // Case-based defaults
-                  if (spannerPlacement.isEmpty() && desc._sp->isHairpin()) {
-                      spannerPlacement = isVocalStaff ? "above" : "below";
-                  }
+                  if (spannerPlacement.isEmpty()) {
+                        if (desc._sp->isHairpin())
+                              spannerPlacement = isVocalStaff ? "above" : "below";
+                        else
+                              spannerPlacement = totalY() < 0 ? "above" : "below";
+                        }
                   if (spdesc._isStopped) {
                         _pass2.addSpanner(desc);
                         // handleSpannerStart and handleSpannerStop must be called in order
