@@ -51,9 +51,11 @@ static Accidental* accidental(XmlStreamReader& e, Score* score)
     const bool cautionary = e.asciiAttribute("cautionary") == "yes";
     const bool editorial = e.asciiAttribute("editorial") == "yes";
     const bool parentheses = e.asciiAttribute("parentheses") == "yes";
+    const bool noParentheses = e.asciiAttribute("parentheses") == "no";
     const bool brackets = e.asciiAttribute("bracket") == "yes";
+    const bool noBrackets = e.asciiAttribute("bracket") == "no";
     const Color accColor = Color(e.asciiAttribute("color").ascii());
-    String smufl = e.attribute("smufl");
+    const String smufl = e.attribute("smufl");
 
     const String s = e.readText();
     const AccidentalType type = mxmlString2accidentalType(s, smufl);
@@ -61,12 +63,14 @@ static Accidental* accidental(XmlStreamReader& e, Score* score)
     if (type != AccidentalType::NONE) {
         auto a = Factory::createAccidental(score->dummy());
         a->setAccidentalType(type);
-        if (cautionary || parentheses) {
+        if (cautionary || editorial) { // no way to tell one from the other
+            a->setRole(AccidentalRole::USER);
+        } // except via the use of parentheses vs. brackets
+        if (noParentheses || noBrackets) { // explicitly none wanted
+        } else if (parentheses || cautionary) { // set to "yes" or "cautionary" and not set at all
             a->setBracket(AccidentalBracket(AccidentalBracket::PARENTHESIS));
-            a->setRole(AccidentalRole::USER);
-        } else if (editorial || brackets) {
+        } else if (brackets || editorial) { // set to "yes" or "editorial" and not set at all
             a->setBracket(AccidentalBracket(AccidentalBracket::BRACKET));
-            a->setRole(AccidentalRole::USER);
         }
         if (accColor.isValid()) {
             a->setColor(accColor);
@@ -74,7 +78,7 @@ static Accidental* accidental(XmlStreamReader& e, Score* score)
         return a;
     }
 
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------
