@@ -135,7 +135,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     } else {
         item->setIsUp(item->direction() == DirectionV::UP);
     }
-
+    double _up = item->isUp() ? -1.0 : 1.0;
     //
     // find first and last chord of tuplet
     // (tuplets can be nested)
@@ -188,9 +188,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double l2l = vHeadDistance;      // left bracket vertical distance
     double l2r = vHeadDistance;      // right bracket vertical distance right
 
-    if (item->isUp()) {
-        vHeadDistance = -vHeadDistance;
-    }
+    vHeadDistance = _up * vHeadDistance;
 
     item->setP1(cr1->pagePos());
     item->setP2(cr2->pagePos());
@@ -434,20 +432,19 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     item->p2() += item->userP2();
     xx1 -= mp.x();
 
-    item->p1().ry() -= l2l * (item->isUp() ? 1.0 : -1.0);
-    item->p2().ry() -= l2r * (item->isUp() ? 1.0 : -1.0);
+    item->p1().ry() += _up * l2l;
+    item->p2().ry() += _up * l2r;
 
     // l2l l2r, mp, _p1, _p2 const
 
-    // center number
-    double x3 = 0.0;
-    double numberWidth = 0.0;
     if (item->number()) {
+        // center number
         Text::LayoutData* numLdata = item->number()->mutldata();
         TLayout::layoutText(item->number(), numLdata);
-        numberWidth = numLdata->bbox().width();
+        double numberWidth = numLdata->bbox().width();
+        double x3 = 0.0;
+        double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 + _up * l1;
 
-        double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
         // for beamed tuplets, center number on beam - if they don't have a bracket
         if (cr1->beam() && cr2->beam() && cr1->beam() == cr2->beam() && !item->hasBracket()) {
             const ChordRest* crr = toChordRest(cr1);
@@ -465,58 +462,34 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         }
 
         numLdata->setPos(PointF(x3, y3) - ldata->pos());
-    }
 
-    if (item->hasBracket()) {
-        double slope = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
+        // create brackets if needed,
+        // ensure enough space for the number
+        if (item->hasBracket()) {
+            double slope = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
+            double numPadding = (numberWidth + _spatium) * .5;
 
-        if (item->isUp()) {
-            if (item->number()) {
-                //set width of bracket hole
-                double x     = x3 - numberWidth * .5 - _spatium * .5;
-                item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
-                double y     = item->p1().y() + (x - item->p1().x()) * slope;
-                item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
-                item->bracketL[1] = PointF(item->p1().x(), item->p1().y() - l1);
-                item->bracketL[2] = PointF(x,   y - l1);
+            // left bracket
+            double x     = x3 - numPadding;
+            item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); 
+            double y     = item->p1().y() + (x - item->p1().x()) * slope;
+            item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
+            item->bracketL[1] = PointF(item->p1().x(), item->p1().y() + _up * l1);
+            item->bracketL[2] = PointF(x,   y + _up * l1);
 
-                //set width of bracket hole
-                x           = x3 + numberWidth * .5 + _spatium * .5;
-                item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1); // ensure enough space for the number
-                y           = item->p1().y() + (x - item->p1().x()) * slope;
-                item->bracketR[0] = PointF(x,   y - l1);
-                item->bracketR[1] = PointF(item->p2().x(), item->p2().y() - l1);
-                item->bracketR[2] = PointF(item->p2().x(), item->p2().y());
-            } else {
-                item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
-                item->bracketL[1] = PointF(item->p1().x(), item->p1().y() - l1);
-                item->bracketL[2] = PointF(item->p2().x(), item->p2().y() - l1);
-                item->bracketL[3] = PointF(item->p2().x(), item->p2().y());
-            }
-        } else {
-            if (item->number()) {
-                //set width of bracket hole
-                double x     = x3 - numberWidth * .5 - _spatium * .5;
-                item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); // ensure enough space for the number
-                double y     = item->p1().y() + (x - item->p1().x()) * slope;
-                item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
-                item->bracketL[1] = PointF(item->p1().x(), item->p1().y() + l1);
-                item->bracketL[2] = PointF(x,   y + l1);
-
-                //set width of bracket hole
-                x           = x3 + numberWidth * .5 + _spatium * .5;
-                item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1);
-                y           = item->p1().y() + (x - item->p1().x()) * slope;
-                item->bracketR[0] = PointF(x,   y + l1);
-                item->bracketR[1] = PointF(item->p2().x(), item->p2().y() + l1);
-                item->bracketR[2] = PointF(item->p2().x(), item->p2().y());
-            } else {
-                item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
-                item->bracketL[1] = PointF(item->p1().x(), item->p1().y() + l1);
-                item->bracketL[2] = PointF(item->p2().x(), item->p2().y() + l1);
-                item->bracketL[3] = PointF(item->p2().x(), item->p2().y());
-            }
+            // right bracket
+            x           = x3 + numPadding;
+            item->p2().rx() = std::max(item->p2().x(), x + 0.5 * l1);
+            y           = item->p1().y() + (x - item->p1().x()) * slope;
+            item->bracketR[0] = PointF(x,   y + _up * l1);
+            item->bracketR[1] = PointF(item->p2().x(), item->p2().y() + _up * l1);
+            item->bracketR[2] = PointF(item->p2().x(), item->p2().y());
         }
+    } else if (item->hasBracket()) {
+        item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
+        item->bracketL[1] = PointF(item->p1().x(), item->p1().y() + _up * l1);
+        item->bracketL[2] = PointF(item->p2().x(), item->p2().y() + _up * l1);
+        item->bracketL[3] = PointF(item->p2().x(), item->p2().y());
     }
 
     // collect bounding box
