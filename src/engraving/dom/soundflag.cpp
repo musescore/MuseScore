@@ -69,24 +69,24 @@ void SoundFlag::setSoundPresets(const PresetCodes& soundPresets)
     m_soundPresets = soundPresets;
 }
 
-const SoundFlag::PlayingTechniqueCodes& SoundFlag::playingTechniques() const
+const SoundFlag::PlayingTechniqueCode& SoundFlag::playingTechnique() const
 {
-    return m_playingTechniques;
+    return m_playingTechnique;
 }
 
-void SoundFlag::setPlayingTechniques(const PlayingTechniqueCodes& techniques)
+void SoundFlag::setPlayingTechnique(const PlayingTechniqueCode& technique)
 {
-    m_playingTechniques = techniques;
+    m_playingTechnique = technique;
 }
 
 void SoundFlag::clear()
 {
-    if (m_soundPresets.empty() && m_playingTechniques.empty()) {
+    if (m_soundPresets.empty() && m_playingTechnique.empty()) {
         return;
     }
 
     m_soundPresets.clear();
-    m_playingTechniques.clear();
+    m_playingTechnique.clear();
 
     triggerLayout();
 }
@@ -103,7 +103,7 @@ bool SoundFlag::shouldHide() const
         }
     }
 
-    if (!m_soundPresets.empty() || !m_playingTechniques.empty()) {
+    if (!m_soundPresets.empty() || !m_playingTechnique.empty()) {
         return false;
     }
 
@@ -119,13 +119,13 @@ bool SoundFlag::shouldHide() const
     return true;
 }
 
-void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCodes& techniques)
+void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCode& technique)
 {
-    if (m_soundPresets == presets && m_playingTechniques == techniques) {
+    if (m_soundPresets == presets && m_playingTechnique == technique) {
         return;
     }
 
-    score()->undo(new ChangeSoundFlag(this, presets, techniques));
+    score()->undo(new ChangeSoundFlag(this, presets, technique));
     triggerLayout();
 
     const LinkedObjects* links = this->links();
@@ -136,7 +136,7 @@ void SoundFlag::undoChangeSoundFlag(const PresetCodes& presets, const PlayingTec
     for (EngravingObject* obj : *links) {
         if (obj->isSoundFlag()) {
             SoundFlag* linkedSoundFlag = toSoundFlag(obj);
-            score()->undo(new ChangeSoundFlag(linkedSoundFlag, presets, techniques));
+            score()->undo(new ChangeSoundFlag(linkedSoundFlag, presets, technique));
             linkedSoundFlag->triggerLayout();
         }
     }

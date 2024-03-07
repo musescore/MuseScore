@@ -228,6 +228,10 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     INotationInteraction::HitElementContext newContext = hitContext(score, false /*last note*/);
     newContext.element->setSelected(true);
 
+    std::vector<EngravingItem*> selectedElements {
+        newContext.element
+    };
+
     EXPECT_CALL(*m_interaction, hitElement(_, _))
     .WillOnce(Return(newContext.element));
 
@@ -246,6 +250,9 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Drag_From_Selec
     //! [GIVEN] There is a range selection
     ON_CALL(*m_selection, isRange())
     .WillByDefault(Return(true));
+
+    ON_CALL(*m_selection, elements())
+    .WillByDefault(ReturnRef(selectedElements));
 
     //! [GIVEN] No note enter mode, no playing
     EXPECT_CALL(m_view, isNoteEnterMode())
@@ -327,7 +334,7 @@ TEST_F(NotationViewInputControllerTests, Mouse_Press_Range_Start_Play_From_First
 
     selectElements.push_back(oldContext.element);
     EXPECT_CALL(*m_selection, elements())
-    .WillOnce(Return(selectElements));
+    .WillOnce(ReturnRef(selectElements));
 
     //! [THEN] We will seek first note in the range
     EXPECT_CALL(*m_playbackController, seekElement(oldContext.element))

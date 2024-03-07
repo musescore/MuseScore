@@ -404,13 +404,13 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
         return INVALID_VOICE;
     }
 
-    std::vector<EngravingItem*> selectedElements = selection()->elements();
+    const std::vector<EngravingItem*>& selectedElements = selection()->elements();
     if (selectedElements.empty()) {
         return INVALID_VOICE;
     }
 
     int voice = INVALID_VOICE;
-    for (const EngravingItem* element : selection()->elements()) {
+    for (const EngravingItem* element : selectedElements) {
         int elementVoice = static_cast<int>(element->voice());
         if (elementVoice != voice && voice != INVALID_VOICE) {
             return INVALID_VOICE;
@@ -512,13 +512,14 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
         return INVALID_DURATION_TYPE;
     }
 
-    if (selection()->elements().empty()) {
+    const std::vector<EngravingItem*>& selectedElements = selection()->elements();
+    if (selectedElements.empty()) {
         return INVALID_DURATION_TYPE;
     }
 
     DurationType result = INVALID_DURATION_TYPE;
     bool isFirstElement = true;
-    for (const EngravingItem* element: selection()->elements()) {
+    for (const EngravingItem* element: selectedElements) {
         const ChordRest* chordRest = elementToChordRest(element);
         if (!chordRest) {
             continue;

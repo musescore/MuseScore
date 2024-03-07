@@ -42,9 +42,10 @@ Ret NotationSoloMuteState::read(const engraving::MscReader& reader, const io::pa
     for (const QJsonValue track : tracksArray) {
         QJsonObject trackObject = track.toObject();
 
-        ID partId = trackObject.value("partId").toString();
-        std::string instrumentId = trackObject.value("instrumentId").toString().toStdString();
-        InstrumentTrackId id = { partId, instrumentId };
+        InstrumentTrackId id = {
+            trackObject.value("partId").toString(),
+            trackObject.value("instrumentId").toString()
+        };
 
         QJsonObject soloMuteObj = trackObject.value("soloMuteState").toObject();
         SoloMuteState soloMuteState;
@@ -64,7 +65,7 @@ Ret NotationSoloMuteState::write(io::IODevice* out)
 
     for (auto pair : m_trackSoloMuteStatesMap) {
         QJsonObject currentTrack;
-        currentTrack["instrumentId"] = QString::fromStdString(pair.first.instrumentId);
+        currentTrack["instrumentId"] = pair.first.instrumentId.toQString();
         currentTrack["partId"] = pair.first.partId.toQString();
 
         QJsonObject soloMuteStateObject;

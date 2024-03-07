@@ -802,7 +802,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
         return;
     }
 
-    std::vector<EngravingItem*> elements = viewInteraction()->selection()->elements();
+    const std::vector<EngravingItem*>& elements = viewInteraction()->selection()->elements();
     if (elements.empty()) {
         return;
     }

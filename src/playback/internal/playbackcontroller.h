@@ -144,11 +144,10 @@ private:
     void seekListSelection();
     void seekRangeSelection();
 
-    void addSoundFlagsToExistingTracks();
-    void updateSoundFlagsForExistingTracks();
-    void updateSoundFlags(const mu::engraving::InstrumentTrackId& trackId, const audio::AudioResourceMeta& oldMeta,
-                          const audio::AudioResourceMeta& newMeta);
-    void addSoundFlagIfNeed(mu::engraving::StaffText* staffText);
+    void onAudioResourceChanged(const mu::engraving::InstrumentTrackId& trackId, const audio::AudioResourceMeta& oldMeta,
+                                const audio::AudioResourceMeta& newMeta);
+
+    void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
     void togglePlay();
     void rewind(const actions::ActionData& args);
@@ -243,7 +242,6 @@ private:
 
     bool m_isExportingAudio = false;
     bool m_isRangeSelection = false;
-    bool m_blockSoundFlagsUpdate = false;
 };
 }
 

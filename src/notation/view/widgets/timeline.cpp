@@ -2052,7 +2052,7 @@ void Timeline::drawSelection()
 
         if (stave == -1 && it != metaLabelsSet.end()) {
             //Make sure the element is correct
-            std::vector<EngravingItem*> elementList = interaction()->selection()->elements();
+            const std::vector<EngravingItem*>& elementList = interaction()->selection()->elements();
             EngravingItem* targetElement = static_cast<EngravingItem*>(graphicsItem->data(4).value<void*>());
             Segment* seg = static_cast<Segment*>(graphicsItem->data(6).value<void*>());
 

@@ -38,7 +38,7 @@ public:
     MOCK_METHOD(QMimeData*, mimeData, (), (const, override));
 
     MOCK_METHOD(EngravingItem*, element, (), (const, override));
-    MOCK_METHOD(std::vector<EngravingItem*>, elements, (), (const, override));
+    MOCK_METHOD(const std::vector<EngravingItem*>&, elements, (), (const, override));
 
     MOCK_METHOD(std::vector<Note*>, notes, (NoteFilter filter), (const, override));
 

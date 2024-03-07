@@ -58,7 +58,7 @@ Item {
 
             title: qsTrc("playback", "Modify sound")
             model: root.model.availablePresets
-            selectionModel: root.model.presetCodes
+            selectionModel: root.model.selectedPresetCodes
 
             navigationPanel.section: root.navigationPanelSection
             navigationPanel.order: root.navigationPanelOrderStart
@@ -79,9 +79,9 @@ Item {
 
             width: parent.width
 
-            title: qsTrc("playback", "Choose playing technique")
+            title: qsTrc("playback", "Extended techniques")
             model: root.model.availablePlayingTechniques
-            selectionModel: root.model.playingTechniquesCodes
+            selectionModel: [ root.model.selectedPlayingTechniqueCode ]
 
             navigationPanel.section: root.navigationPanelSection
             navigationPanel.order: root.navigationPanelOrderStart + 1

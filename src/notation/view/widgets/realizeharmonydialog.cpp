@@ -48,7 +48,7 @@ RealizeHarmonyDialog::RealizeHarmonyDialog(QWidget* parent)
         return;
     }
 
-    std::vector<mu::engraving::EngravingItem*> selectedElements = interaction->selection()->elements();
+    const std::vector<mu::engraving::EngravingItem*>& selectedElements = interaction->selection()->elements();
     QList<mu::engraving::Harmony*> selectedHarmonyList;
 
     for (mu::engraving::EngravingItem* element : selectedElements) {

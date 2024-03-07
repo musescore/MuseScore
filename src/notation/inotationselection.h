@@ -44,7 +44,7 @@ public:
     virtual QMimeData* mimeData() const = 0;
 
     virtual EngravingItem* element() const = 0;
-    virtual std::vector<EngravingItem*> elements() const = 0;
+    virtual const std::vector<EngravingItem*>& elements() const = 0;
 
     virtual std::vector<Note*> notes(NoteFilter filter = NoteFilter::All) const = 0;
 
