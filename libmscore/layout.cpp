@@ -1984,11 +1984,8 @@ void LayoutContext::layoutPage(Page* page, qreal restHeight, qreal footerPadding
 
       if (sList.empty() || MScore::noVerticalStretch || score->enableVerticalSpread() || score->layoutMode() == LayoutMode::SYSTEM) {
             if (score->layoutMode() == LayoutMode::FLOAT) {
-                  qreal y = 0.0;
-                  if (gaps > 0)
-                      y = restHeight * .5;
                   for (System* system : page->systems())
-                        system->move(QPointF(0.0, y));
+                        system->move(QPointF(0.0, 0.0));
                   }
             else if ((score->layoutMode() != LayoutMode::SYSTEM) && score->enableVerticalSpread())
                   distributeStaves(page, footerPadding);
