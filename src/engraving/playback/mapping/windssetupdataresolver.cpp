@@ -419,7 +419,7 @@ PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument
         SoundId::Flute,
     };
 
-    if (mu::contains(supportPrimaryAndSecondaryCategories, search->second.id)) {
+    if (mu::contains(supportPrimaryAndSecondaryCategories, search->second.soundId())) {
         SoundSubCategory category = instrument->isPrimary() ? SoundSubCategory::Primary : SoundSubCategory::Secondary;
         PlaybackSetupData setupData = search->second;
         setupData.subCategorySet.insert(category);
