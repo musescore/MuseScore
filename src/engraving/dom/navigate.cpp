@@ -33,6 +33,7 @@
 #include "segment.h"
 #include "spanner.h"
 #include "staff.h"
+#include "soundflag.h"
 #include "guitarbend.h"
 
 using namespace mu;
@@ -834,6 +835,11 @@ EngravingItem* Score::nextElement()
         case ElementType::LAYOUT_BREAK: {
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
         }
+        case ElementType::SOUND_FLAG:
+            if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {
+                return parent;
+            }
+            break;
         default:
             break;
         }
