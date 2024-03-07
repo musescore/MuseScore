@@ -2272,7 +2272,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
             if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
                 // this is the system header gap
                 w = HorizontalSpacing::minHorizontalDistance(s, ns, true, ctx.state().segmentShapeSqueezeFactor());
-                isSystemHeader = false;
+                isSystemHeader = !ns->isChordRestType();
             } else {
                 w = HorizontalSpacing::minHorizontalDistance(s, ns, false, ctx.state().segmentShapeSqueezeFactor());
                 if (s->isChordRestType()) {

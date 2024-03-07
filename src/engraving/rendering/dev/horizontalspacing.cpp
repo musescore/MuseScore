@@ -131,7 +131,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
 
     // Header exceptions that need additional space (more than the padding)
     double absoluteMinHeaderDist = 1.5 * f->spatium();
-    if (systemHeaderGap) {
+    if (systemHeaderGap && !f->isStartRepeatBarLineType()) {
         if (f->isTimeSigType()) {
             w = std::max(w, f->minRight() + f->style().styleMM(Sid::systemHeaderTimeSigDistance));
         } else {
