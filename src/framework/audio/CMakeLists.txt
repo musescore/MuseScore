@@ -23,7 +23,7 @@ set(MODULE_ALIAS muse::audio)
 
 include(GetPlatformInfo)
 
-if (OS_IS_WIN)
+if (OS_IS_WIN AND (NOT MINGW))
     set(DRIVER_SRC
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
@@ -37,24 +37,23 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
-elseif(OS_IS_LIN OR OS_IS_FBSD)
+elseif(OS_IS_LIN OR OS_IS_FBSD OR MINGW)
+    set(JACK_SRC "")
     if (MUSE_MODULE_AUDIO_JACK)
-        set(DRIVER_SRC
+        set(JACK_SRC
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.h
-        )
-    else()
-        set(DRIVER_SRC
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
-        )
-    endif()
+           )
+    endif(MUSE_MODULE_AUDIO_JACK)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.h
+        ${JACK_SRC}
+       )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
@@ -275,24 +274,31 @@ else ()
         )
 endif()
 
-if (MUSE_MODULE_AUDIO_JACK)
-    find_package(Jack REQUIRED)
-    set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS} )
-    set(MODULE_LINK ${MODULE_LINK} ${JACK_LIBRARIES} pthread )
-    find_package(ALSA REQUIRED)
-    set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
-    set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
-else ()
-    if (OS_IS_MAC)
-        find_library(AudioToolbox NAMES AudioToolbox)
-        find_library(CoreAudio NAMES CoreAudio)
-        set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
-    elseif (OS_IS_WIN)
-        set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
-    elseif (OS_IS_LIN)
+if (OS_IS_MAC)
+    find_library(AudioToolbox NAMES AudioToolbox)
+    find_library(CoreAudio NAMES CoreAudio)
+    set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
+elseif (OS_IS_WIN AND (NOT (MINGW)))
+    set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
+elseif (OS_IS_LIN)
+    if (MUSE_MODULE_AUDIO_JACK)
         find_package(ALSA REQUIRED)
-        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS} )
-        set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
+        find_package(Jack REQUIRED)
+        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS})
+        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${ALSA_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS} ${ALSA_LIBRARIES} pthread)
+    else()
+        find_package(ALSA REQUIRED)
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread)
+    endif()
+elseif (MINGW)
+    if (MUSE_MODULE_AUDIO_JACK)
+        find_package(Jack REQUIRED)
+        set(MODULE_INCLUDE_PRIVATE ${MODULE_INCLUDE_PRIVATE} ${JACK_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS} pthread)
+    else()
+        set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
     endif()
 endif()
 
