@@ -2239,6 +2239,7 @@ void Note::updateAccidental(AccidentalState* as)
                         Accidental* a = new Accidental(score());
                         a->setParent(this);
                         a->setAccidentalType(acci);
+                        a->setVisible(visible());
                         score()->undoAddElement(a);
                         }
                   else if (_accidental->accidentalType() != acci) {
