@@ -30,9 +30,11 @@ df -h .
 BUILD_TOOLS=$HOME/build_tools
 ENV_FILE=$BUILD_TOOLS/environment.sh
 QT5_COMPAT="OFF"
+COMPILER="gcc" # gcc, clang
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        --compiler) COMPILER="$2"; shift ;;
         --qt5_compat) QT5_COMPAT="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -153,17 +155,32 @@ echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 ##########################################################################
 
 # COMPILER
-gcc_version="10"
-sudo apt-get install -y --no-install-recommends "g++-${gcc_version}"
-sudo update-alternatives \
-  --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
-  --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
+if [ "$COMPILER" == "gcc" ]; then
 
-echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
-echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
+  gcc_version="10"
+  sudo apt install -y --no-install-recommends "g++-${gcc_version}"
+  sudo update-alternatives \
+    --install /usr/bin/gcc gcc "/usr/bin/gcc-${gcc_version}" 40 \
+    --slave /usr/bin/g++ g++ "/usr/bin/g++-${gcc_version}"
 
-gcc-${gcc_version} --version
-g++-${gcc_version} --version
+  echo export CC="/usr/bin/gcc-${gcc_version}" >> ${ENV_FILE}
+  echo export CXX="/usr/bin/g++-${gcc_version}" >> ${ENV_FILE}
+
+  gcc-${gcc_version} --version
+  g++-${gcc_version} --version
+
+elif [ "$COMPILER" == "clang" ]; then
+
+  sudo apt install clang
+  echo export CC="/usr/bin/clang" >> ${ENV_FILE}
+  echo export CXX="/usr/bin/clang++" >> ${ENV_FILE}
+
+  clang --version
+  clang++ --version
+
+else 
+  echo "Unknown compiler: $COMPILER"
+fi
 
 # CMAKE
 # Get newer CMake (only used cached version if it is the same)
