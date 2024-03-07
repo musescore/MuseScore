@@ -91,7 +91,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
     err = snd_seq_open(&handle, "hw", streams, 0);
     if (err < 0) {
-        /* Use snd_strerror(errno) to get the error here. */
+        LOGE("snd_seq_open failed: err: %s", snd_strerror(err));
         return ret;
     }
 
@@ -117,7 +117,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
 
             if (canConnect) {
                 MidiDevice dev;
-                dev.name = snd_seq_client_info_get_name(cinfo);
+                dev.name = "ALSA/" + std::string(snd_seq_client_info_get_name(cinfo));
                 int client = snd_seq_port_info_get_client(pinfo);
                 int port = snd_seq_port_info_get_port(pinfo);
                 dev.id = makeUniqueDeviceId(index++, client, port);
