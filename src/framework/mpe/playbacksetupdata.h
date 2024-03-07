@@ -31,7 +31,9 @@
 namespace muse::mpe {
 struct PlaybackSetupData
 {
-    SoundId id = SoundId::Undefined;
+    using ID = std::variant<SoundId, mu::String>;
+
+    ID id = SoundId::Undefined;
     SoundCategory category = SoundCategory::Undefined;
     SoundSubCategories subCategorySet;
 
@@ -39,9 +41,18 @@ struct PlaybackSetupData
 
     PlaybackSetupData() = default;
 
-    PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& subCategorySet = {})
+    PlaybackSetupData(ID id, SoundCategory category, SoundSubCategories&& subCategorySet = {})
         : id(id), category(category), subCategorySet(std::move(subCategorySet))
     {}
+
+    SoundId soundId() const
+    {
+        if (std::holds_alternative<SoundId>(id)) {
+            return std::get<SoundId>(id);
+        }
+
+        return SoundId::Undefined;
+    }
 
     bool contains(const SoundSubCategory subcategory) const
     {
@@ -72,23 +83,39 @@ struct PlaybackSetupData
 
     bool isValid() const
     {
-        return id != SoundId::Undefined
-               && category != SoundCategory::Undefined;
+        if (category == SoundCategory::Undefined) {
+            return false;
+        }
+
+        if (std::holds_alternative<SoundId>(id)) {
+            return std::get<SoundId>(id) != SoundId::Undefined;
+        } else if (std::holds_alternative<String>(id)) {
+            return !std::get<String>(id).empty();
+        }
+
+        return false;
     }
 
     String toString() const
     {
         String result;
 
+        String idAsStr;
+        if (std::holds_alternative<SoundId>(id)) {
+            idAsStr = soundIdToString(std::get<SoundId>(id));
+        } else if (std::holds_alternative<String>(id)) {
+            idAsStr = std::get<String>(id);
+        }
+
         if (!subCategorySet.empty()) {
             result = String(u"%1.%2.%3")
                      .arg(soundCategoryToString(category))
-                     .arg(soundIdToString(id))
+                     .arg(idAsStr)
                      .arg(subCategorySet.toString());
         } else {
             result = String(u"%1.%2")
                      .arg(soundCategoryToString(category))
-                     .arg(soundIdToString(id));
+                     .arg(idAsStr);
         }
 
         return result;
@@ -111,8 +138,17 @@ struct PlaybackSetupData
             subCategories = SoundSubCategories::fromString(subStrList.at(2));
         }
 
+        ID id;
+
+        SoundId soundId = soundIdFromString(subStrList.at(1));
+        if (soundId != SoundId::Undefined) {
+            id = soundId;
+        } else {
+            id = subStrList.at(1);
+        }
+
         PlaybackSetupData result = {
-            soundIdFromString(subStrList.at(1)),
+            id,
             soundCategoryFromString(subStrList.at(0)),
             std::move(subCategories)
         };
@@ -128,7 +164,6 @@ static const PlaybackSetupData GENERIC_SETUP_DATA = {
 };
 
 static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
-
 }
 
 #endif // MUSE_MPE_PLAYBACKSETUPDATA_H
