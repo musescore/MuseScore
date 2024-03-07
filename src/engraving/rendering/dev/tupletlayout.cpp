@@ -200,212 +200,118 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
     double xx1 = item->p1().x();   // use to center the number on the beam
 
-    double leftNoteEdge = 0.0; // page coordinates
-    double rightNoteEdge = 0.0;
     if (cr1->isChord()) {
         const Chord* chord1 = toChord(cr1);
-        leftNoteEdge = chord1->up() ? chord1->downNote()->abbox().left() : chord1->upNote()->abbox().left();
+        double leftNoteEdge = chord1->up() ? chord1->downNote()->abbox().left() : chord1->upNote()->abbox().left(); // page coordinates
+        Stem* stem = chord1->stem();
+        if (stem) {
+            xx1 = stem->abbox().x();
+        }
+        if (chord1->up() == item->isUp() && stem) {
+            item->p1().ry() = item->isUp() ? stem->abbox().top() : stem->abbox().bottom();
+            l2l = vStemDistance;
+            item->p1().rx() = stem->abbox().left() - stemLeft;
+        } else {
+            item->p1().ry() = item->isUp() ? chord1->upNote()->abbox().top() : chord1->downNote()->abbox().bottom();
+            item->p1().rx() = leftNoteEdge - noteLeft;
+        }
     }
     if (cr2->isChord()) {
         const Chord* chord2 = toChord(cr2);
-        rightNoteEdge = chord2->up() ? chord2->downNote()->abbox().right() : chord2->upNote()->abbox().right();
+        double rightNoteEdge = chord2->up() ? chord2->downNote()->abbox().right() : chord2->upNote()->abbox().right();
+        Stem* stem = chord2->stem();
+        if (chord2->up() == item->isUp() && stem) {
+            item->p2().ry() = item->isUp() ? stem->abbox().top() : stem->abbox().bottom();
+            l2r = vStemDistance;
+            item->p2().rx() = stem->abbox().right() + stemRight;
+        } else {
+            item->p2().ry() = item->isUp() ? chord2->upNote()->abbox().top() : chord2->downNote()->abbox().bottom();
+            item->p2().rx() = rightNoteEdge + noteRight;
+        }
     }
 
-    if (item->isUp()) {
-        if (cr1->isChord()) {
-            const Chord* chord1 = toChord(cr1);
-            Stem* stem = chord1->stem();
-            if (stem) {
-                xx1 = stem->abbox().x();
-            }
-            if (chord1->up() && stem) {
-                item->p1().ry() = stem->abbox().y();
-                l2l = vStemDistance;
-                item->p1().rx() = stem->abbox().left() - stemLeft;
-            } else {
-                item->p1().ry() = chord1->upNote()->abbox().top();
-                item->p1().rx() = leftNoteEdge - noteLeft;
-            }
+    // special case: one of the bracket endpoints is a rest
+    if (!cr1->isChord() && cr2->isChord()) {
+        if (item->p2().y() < item->p1().y() == item->isUp()) {
+            item->p1().setY(item->p2().y());
+        } else {
+            item->p2().setY(item->p1().y());
         }
+    } else if (cr1->isChord() && !cr2->isChord()) {
+        if (item->p1().y() < item->p2().y() == item->isUp()) {
+            item->p2().setY(item->p1().y());
+        } else {
+            item->p1().setY(item->p2().y());
+        }
+    }
 
-        if (cr2->isChord()) {
-            const Chord* chord2 = toChord(cr2);
-            Stem* stem = chord2->stem();
-            if (stem && chord2->up()) {
-                item->p2().ry() = stem->abbox().top();
-                l2r = vStemDistance;
-                item->p2().rx() = stem->abbox().right() + stemRight;
-            } else {
-                item->p2().ry() = chord2->upNote()->abbox().top();
-                item->p2().rx() = rightNoteEdge + noteRight;
-            }
-        }
-        //
-        // special case: one of the bracket endpoints is
-        // a rest
-        //
-        if (!cr1->isChord() && cr2->isChord()) {
-            if (item->p2().y() < item->p1().y()) {
-                item->p1().setY(item->p2().y());
-            } else {
-                item->p2().setY(item->p1().y());
-            }
-        } else if (cr1->isChord() && !cr2->isChord()) {
-            if (item->p1().y() < item->p2().y()) {
-                item->p2().setY(item->p1().y());
-            } else {
-                item->p1().setY(item->p2().y());
-            }
-        }
-        // if desired, extend the tuplet bracket to the full rhythmic duration
-        if (stretchBracket) {
-            stretchBracket = stretchBracketToFillDuration(item, cr2);
-        }
-        // outOfStaff
-        if (outOfStaff) {
-            double min = cr1->measure()->staffabbox(cr1->staffIdx() + move).y();
-            if (min < item->p1().y()) {
-                item->p1().ry() = min;
-                l2l = vStemDistance;
-            }
-            min = cr2->measure()->staffabbox(cr2->staffIdx() + move).y();
-            if (min < item->p2().y()) {
-                item->p2().ry() = min;
-                l2r = vStemDistance;
-            }
-        }
+    // if desired, extend the tuplet bracket to the full rhythmic duration
+    if (stretchBracket) {
+        stretchBracket = stretchBracketToFillDuration(item, cr2);
+    }
 
-        // check that slope is no more than max
-        double d = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
-        if (d < -maxSlope) {
+    // outOfStaff
+    if (outOfStaff) {
+        double closestY = item->isUp() ? cr1->measure()->staffabbox(cr1->staffIdx() + move).top()
+                          : cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
+        if (closestY < item->p1().y() == item->isUp()) {
+            item->p1().ry() = closestY;
+            l2l = vStemDistance;
+        }
+        closestY = item->isUp() ? cr2->measure()->staffabbox(cr2->staffIdx() + move).top()
+                   : cr2->measure()->staffabbox(cr2->staffIdx() + move).bottom();
+        if (closestY < item->p2().y() == item->isUp()) {
+            item->p2().ry() = closestY;
+            l2r = vStemDistance;
+        }
+    }
+
+    // check that slope is no more than max
+    double d = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
+    if (d < -maxSlope) {
+        if (item->isUp()) {
             // move p1 y up
             item->p1().ry() = item->p2().y() + maxSlope * (item->p2().x() - item->p1().x());
-        } else if (d > maxSlope) {
+        } else {
+            // move p2 y down
+            item->p2().ry() = item->p1().y() - maxSlope * (item->p2().x() - item->p1().x());
+        }
+    } else if (d > maxSlope) {
+        if (item->isUp()) {
             // move p2 y up
             item->p2().ry() = item->p1().ry() + maxSlope * (item->p2().x() - item->p1().x());
-        }
-
-        // check for collisions
-        size_t n = item->elements().size();
-        if (n >= 3) {
-            d = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
-            for (size_t i = 1; i < (n - 1); ++i) {
-                const EngravingItem* e = item->elements().at(i);
-                if (e->isChord()) {
-                    const Chord* chord = toChord(e);
-                    const Stem* stem = chord->stem();
-                    if (stem) {
-                        RectF r(chord->up() ? stem->abbox() : chord->upNote()->abbox());
-                        double y3 = r.top();
-                        double x3 = r.x() + r.width() * .5;
-                        double y0 = item->p1().y() + (x3 - item->p1().x()) * d;
-                        double c  = y0 - y3;
-                        if (c > 0) {
-                            item->p1().ry() -= c;
-                            item->p2().ry() -= c;
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        if (cr1->isChord()) {
-            const Chord* chord1 = toChord(cr1);
-            Stem* stem = chord1->stem();
-            if (stem) {
-                xx1 = stem->abbox().x();
-            }
-            if (!chord1->up() && stem) {
-                item->p1().ry() = stem->abbox().bottom();
-                l2l = vStemDistance;
-                item->p1().rx() = stem->abbox().left() - stemLeft;
-            } else {
-                item->p1().ry() = chord1->downNote()->abbox().bottom();
-                item->p1().rx() = leftNoteEdge - noteLeft;
-            }
-        }
-
-        if (cr2->isChord()) {
-            const Chord* chord2 = toChord(cr2);
-            Stem* stem = chord2->stem();
-            if (stem && !chord2->up()) {
-                item->p2().ry() = stem->abbox().bottom();
-                l2r = vStemDistance;
-                item->p2().rx() = stem->abbox().right() + stemRight;
-            } else {
-                item->p2().ry() = chord2->downNote()->abbox().bottom();
-                item->p2().rx() = rightNoteEdge + noteRight;
-            }
-        }
-        //
-        // special case: one of the bracket endpoints is
-        // a rest
-        //
-        if (!cr1->isChord() && cr2->isChord()) {
-            if (item->p2().y() > item->p1().y()) {
-                item->p1().setY(item->p2().y());
-            } else {
-                item->p2().setY(item->p1().y());
-            }
-        } else if (cr1->isChord() && !cr2->isChord()) {
-            if (item->p1().y() > item->p2().y()) {
-                item->p2().setY(item->p1().y());
-            } else {
-                item->p1().setY(item->p2().y());
-            }
-        }
-        // if desired, extend the tuplet bracket to the full rhythmic duration
-        if (stretchBracket) {
-            stretchBracket = stretchBracketToFillDuration(item, cr2);
-        }
-        // outOfStaff
-        if (outOfStaff) {
-            double max = cr1->measure()->staffabbox(cr1->staffIdx() + move).bottom();
-            if (max > item->p1().y()) {
-                item->p1().ry() = max;
-                l2l = vStemDistance;
-            }
-            max = cr2->measure()->staffabbox(cr2->staffIdx() + move).bottom();
-            if (max > item->p2().y()) {
-                item->p2().ry() = max;
-                l2r = vStemDistance;
-            }
-        }
-        // check that slope is no more than max
-        double d = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
-        if (d < -maxSlope) {
-            // move p1 y up
-            item->p2().ry() = item->p1().y() - maxSlope * (item->p2().x() - item->p1().x());
-        } else if (d > maxSlope) {
-            // move p2 y up
+        } else {
+            // move p1 y down
             item->p1().ry() = item->p2().ry() - maxSlope * (item->p2().x() - item->p1().x());
         }
+    }
 
-        // check for collisions
-        size_t n = item->elements().size();
-        if (n >= 3) {
-            d  = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
-            for (size_t i = 1; i < (n - 1); ++i) {
-                EngravingItem* e = item->elements()[i];
-                if (e->isChord()) {
-                    const Chord* chord = toChord(e);
-                    const Stem* stem = chord->stem();
-                    if (stem) {
-                        RectF r(chord->up() ? chord->downNote()->abbox() : stem->abbox());
-                        double y3 = r.bottom();
-                        double x3 = r.x() + r.width() * .5;
-                        double y0 = item->p1().y() + (x3 - item->p1().x()) * d;
-                        double c  = y0 - y3;
-                        if (c < 0) {
-                            item->p1().ry() -= c;
-                            item->p2().ry() -= c;
-                        }
+    // check for collisions
+    size_t n = item->elements().size();
+    if (n >= 3) {
+        d = (item->p2().y() - item->p1().y()) / (item->p2().x() - item->p1().x());
+        for (size_t i = 1; i < (n - 1); ++i) {
+            const EngravingItem* e = item->elements().at(i);
+            if (e->isChord()) {
+                const Chord* chord = toChord(e);
+                const Stem* stem = chord->stem();
+                if (stem) {
+                    RectF r(item->isUp() ? (chord->up() ? stem->abbox() : chord->upNote()->abbox())
+                            : (chord->up() ? chord->downNote()->abbox() : stem->abbox()));
+                    double y3 = item->isUp() ? r.top() : r.bottom();
+                    double x3 = r.x() + r.width() * .5;
+                    double y0 = item->p1().y() + (x3 - item->p1().x()) * d;
+                    double c  = y0 - y3;
+                    if (c > 0 == item->isUp()) {
+                        item->p1().ry() -= c;
+                        item->p2().ry() -= c;
                     }
                 }
             }
         }
     }
 
+    // adjust x for rests
     if (!cr1->isChord()) {
         item->p1().rx() = cr1->abbox().left() - noteLeft;
     }
@@ -471,7 +377,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 
             // left bracket
             double x     = x3 - numPadding;
-            item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1); 
+            item->p1().rx() = std::min(item->p1().x(), x - 0.5 * l1);
             double y     = item->p1().y() + (x - item->p1().x()) * slope;
             item->bracketL[0] = PointF(item->p1().x(), item->p1().y());
             item->bracketL[1] = PointF(item->p1().x(), item->p1().y() + _up * l1);
