@@ -134,6 +134,8 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
     if (systemHeaderGap) {
         if (f->isTimeSigType()) {
             w = std::max(w, f->minRight() + f->style().styleMM(Sid::systemHeaderTimeSigDistance));
+        } else if (f->isStartRepeatBarLineType()) {
+            w = std::max(w, f->minRight() + f->style().styleMM(Sid::barNoteDistance));
         } else {
             w = std::max(w, f->minRight() + f->style().styleMM(Sid::systemHeaderDistance));
         }
