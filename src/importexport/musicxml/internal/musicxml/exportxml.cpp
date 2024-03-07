@@ -76,6 +76,7 @@
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmonicmark.h"
 #include "engraving/dom/harmony.h"
+#include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/jump.h"
 #include "engraving/dom/key.h"
@@ -368,6 +369,7 @@ public:
     void words(TextBase const* const text, staff_idx_t staff);
     void tboxTextAsWords(TextBase const* const text, const staff_idx_t staff, PointF position);
     void rehearsal(RehearsalMark const* const rmk, staff_idx_t staff);
+    void harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t staff);
     void hairpin(Hairpin const* const hp, staff_idx_t staff, const Fraction& tick);
     void ottava(Ottava const* const ot, staff_idx_t staff, const Fraction& tick);
     void pedal(Pedal const* const pd, staff_idx_t staff, const Fraction& tick);
@@ -4473,12 +4475,13 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                  */
                 pel = seg->parentItem();
             }
-        } else if (el->type() == ElementType::DYNAMIC
+        } else if (el->type() == ElementType::CAPO
+                   || el->type() == ElementType::DYNAMIC
+                   || el->type() == ElementType::HARP_DIAGRAM
                    || el->type() == ElementType::INSTRUMENT_CHANGE
+                   || el->type() == ElementType::PLAYTECH_ANNOTATION
                    || el->type() == ElementType::REHEARSAL_MARK
                    || el->type() == ElementType::STAFF_TEXT
-                   || el->type() == ElementType::PLAYTECH_ANNOTATION
-                   || el->type() == ElementType::CAPO
                    || el->type() == ElementType::STRING_TUNINGS
                    || el->type() == ElementType::SYMBOL
                    || el->type() == ElementType::TEXT) {
@@ -4957,6 +4960,40 @@ void ExportMusicXml::rehearsal(RehearsalMark const* const rmk, staff_idx_t staff
     mttm.writeTextFragments(rmk->fragmentList(), m_xml);
     m_xml.endElement();
     const auto offset = calculateTimeDeltaInDivisions(rmk->tick(), tick(), m_div);
+    if (offset) {
+        m_xml.tag("offset", offset);
+    }
+    directionETag(m_xml, staff);
+}
+
+//---------------------------------------------------------
+//   harp pedal
+//---------------------------------------------------------
+
+void ExportMusicXml::harpPedals(HarpPedalDiagram const* const hpd, staff_idx_t staff)
+{
+    if (hpd->textStyleType() != TextStyleType::HARP_PEDAL_DIAGRAM) {
+        return;
+    }
+
+    directionTag(m_xml, m_attr, hpd);
+    m_xml.startElement("direction-type");
+    XmlWriter::Attributes harpPedalAttrs;
+    if (!hpd->isStyled(Pid::PLACEMENT)) {
+        harpPedalAttrs.push_back({ "placement", (hpd->placement() == PlacementV::BELOW) ? "below" : "above" });
+    }
+    addColorAttr(hpd, harpPedalAttrs);
+    m_xml.startElement("harp-pedals", harpPedalAttrs);
+    const std::vector <String> pedalSteps = { u"D", u"C", u"B", u"E", u"F", u"G", u"A" };
+    for (size_t idx = 0; idx < pedalSteps.size(); idx++) {
+        m_xml.startElement("pedal-tuning");
+        m_xml.tag("pedal-step", pedalSteps.at(idx));
+        m_xml.tag("pedal-alter", static_cast<int>(hpd->getPedalState().at(idx)) - 1);
+        m_xml.endElement();
+    }
+    m_xml.endElement();
+    m_xml.endElement();
+    const auto offset = calculateTimeDeltaInDivisions(hpd->tick(), tick(), m_div);
     if (offset) {
         m_xml.tag("offset", offset);
     }
@@ -6154,6 +6191,8 @@ static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, staff
         exp->words(toTextBase(e), sstaff);
     } else if (e->isDynamic()) {
         exp->dynamic(toDynamic(e), sstaff);
+    } else if (e->isHarpPedalDiagram()) {
+        exp->harpPedals(toHarpPedalDiagram(e), sstaff);
     } else if (e->isRehearsalMark()) {
         exp->rehearsal(toRehearsalMark(e), sstaff);
     } else {
