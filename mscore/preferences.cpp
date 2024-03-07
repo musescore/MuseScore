@@ -603,7 +603,7 @@ QMap<QString, QVariant> Preferences::getDefaultLocalPreferences() {
       bool tmp = useLocalPrefs;
       useLocalPrefs = false;
       QMap<QString, QVariant> defaultLocalPreferences;
-      for (const QString &s : {PREF_UI_CANVAS_BG_USECOLOR,
+      for (const char* const& s : {PREF_UI_CANVAS_BG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR,
                         PREF_UI_CANVAS_FG_USECOLOR_IN_PALETTES,
                         PREF_UI_CANVAS_BG_COLOR,

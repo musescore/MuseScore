@@ -6668,9 +6668,9 @@ void ScoreFont::scanUserFonts(const QString& path, bool system)
             if (!font.face)
                   font.load(system);
             if (system)
-                  _systemScoreFonts << font;
+                  _systemScoreFonts.push_back(font);
             else
-                  _userScoreFonts << font;
+                  _userScoreFonts.push_back(font);
             }
 
       _allScoreFonts = _builtinScoreFonts;
