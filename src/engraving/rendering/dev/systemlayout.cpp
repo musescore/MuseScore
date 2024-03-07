@@ -2304,6 +2304,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             }
             dist = std::max(dist, d + minVerticalDistance);
         }
+        dist = std::max(dist, minVertSpaceForCrossStaffBeams(system, si1, si2));
         ss->setYOff(yOffset);
         ss->setbbox(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
         ss->saveLayout();
@@ -2349,6 +2350,59 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             }
         }
     }
+}
+
+double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2)
+{
+    double minSpace = -DBL_MAX;
+    track_idx_t startTrack = staffIdx1 * VOICES;
+    track_idx_t endTrack = staffIdx2 * VOICES + VOICES;
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& segment : toMeasure(mb)->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                EngravingItem* item = segment.elementAt(track);
+                if (!item || !item->isChord()) {
+                    continue;
+                }
+                Beam* beam = toChord(item)->beam();
+                if (!beam || !beam->cross() || !beam->autoplace() || beam->elements().front() != item) {
+                    continue;
+                }
+                Note* highestOfBottomStaff = nullptr;
+                Note* lowestOfTopStaff = nullptr;
+                for (ChordRest* cr : beam->elements()) {
+                    if (!cr->isChord()) {
+                        continue;
+                    }
+                    Chord* chord = toChord(cr);
+                    bool isUnderCrossBeam = cr->isUnderSideOfCrossBeam(beam);
+                    if (isUnderCrossBeam && chord->vStaffIdx() == staffIdx2) {
+                        if (!highestOfBottomStaff || chord->upNote()->line() < highestOfBottomStaff->line()) {
+                            highestOfBottomStaff = chord->upNote();
+                        }
+                    } else if (!isUnderCrossBeam && chord->vStaffIdx() == staffIdx1) {
+                        if (!lowestOfTopStaff || chord->downNote()->line() > lowestOfTopStaff->line()) {
+                            lowestOfTopStaff = chord->downNote();
+                        }
+                    }
+                }
+                if (!highestOfBottomStaff || !lowestOfTopStaff) {
+                    continue;
+                }
+                double bottomYOfTopStaff = lowestOfTopStaff->y() + lowestOfTopStaff->chord()->minStemLength();
+                double topYofBottomStaff = highestOfBottomStaff->y() - highestOfBottomStaff->chord()->minStemLength();
+                minSpace = std::max(minSpace, bottomYOfTopStaff - topYofBottomStaff);
+            }
+        }
+    }
+
+    return minSpace;
 }
 
 void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)

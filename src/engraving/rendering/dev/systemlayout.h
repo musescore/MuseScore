@@ -78,6 +78,7 @@ private:
     static void addBrackets(System* system, Measure* measure, LayoutContext& ctx);
     static Bracket* createBracket(System* system, LayoutContext& ctx, BracketItem* bi, size_t column, staff_idx_t staffIdx,
                                   std::vector<Bracket*>& bl, Measure* measure);
+    static double minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2);
 };
 }
 
