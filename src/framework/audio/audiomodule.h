@@ -25,7 +25,8 @@
 #include <memory>
 
 #include "modularity/imodulesetup.h"
-#include "global/async/asyncable.h"
+#include "async/asyncable.h"
+#include "async/channel.h"
 
 #include "iaudiodriver.h"
 

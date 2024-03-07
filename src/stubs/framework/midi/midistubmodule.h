@@ -23,6 +23,9 @@
 #define MU_MIDI_MIDISTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
+#include "async/asyncable.h"
+#include "async/channel.h"
+#include "framework/midi/miditypes.h"
 
 namespace mu::midi {
 class MidiModule : public modularity::IModuleSetup
@@ -32,6 +35,7 @@ public:
 
     std::string moduleName() const override;
     void registerExports() override;
+    mu::async::Channel<tick_t, mu::midi::Event>* getMidiInputQueue();
 };
 }
 
