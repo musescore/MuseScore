@@ -60,18 +60,6 @@ DurationElement::DurationElement(const DurationElement& e)
 DurationElement::~DurationElement()
 {
     if (m_tuplet) {
-        // Note that this sanity check is different from and unrelated to the next `if` condition.
-        // See tuplet.h for the difference between `_tuplet->contains` (which involves `_tuplet->
-        // _currentElements`) and `tuplet->_allElements`.
-        assert(mu::contains(m_tuplet->m_allElements, this));
-
-        if (m_tuplet->contains(this)) {
-            while (Tuplet* t = topTuplet()) { // delete tuplets from top to bottom
-                delete t;   // Tuplet destructor removes references to the deleted object
-            }
-        }
-        // else, the tuplet is in the UndoStack and will be deleted there
-
         setTuplet(nullptr);
     }
 }

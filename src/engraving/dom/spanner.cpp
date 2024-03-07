@@ -33,6 +33,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
+#include "types/typesconv.h"
 
 #include "log.h"
 
@@ -1095,7 +1096,11 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    return score()->tick2leftSegment(tick2(), style().styleB(Sid::createMultiMeasureRests), systemFlag());
+    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
+    Measure* m = mmRest ? score()->tick2measureMM(tick()) : score()->tick2measure(tick());
+
+    SegmentType st = (systemFlag() && tick2() == score()->endTick()) || m->isMMRest() ? SPANNER_ANCHOR_SEG_TYPE : SegmentType::ChordRest;
+    return score()->tick2leftSegment(tick2(), mmRest, st);
 }
 
 //---------------------------------------------------------

@@ -477,6 +477,7 @@ public:
 
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
+    virtual void triggerLayoutToEnd() const;
     virtual void drawEditMode(draw::Painter* painter, EditData& editData, double currentViewScaling);
 
     double styleP(Sid idx) const;
