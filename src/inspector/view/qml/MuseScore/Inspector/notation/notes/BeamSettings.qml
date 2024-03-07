@@ -167,13 +167,24 @@ FocusableItem {
                 }
             }
 
+            DirectionSection {
+                id: beamDirection
+                visible: root.model ? !(root.model.iscrossStaffMoveAvailable) : true
+
+                titleText: qsTrc("inspector", "Beam direction")
+                propertyItem: root.model ? root.model.stemDirection : null
+
+                navigationPanel: root.navigationPanel
+                navigationRowStart: featheringRightSection.navigationRowEnd + 1
+            }
+
             InspectorPropertyView { // PLACEHOLDER
                 id: crossStaffMove
                 visible: root.model ? root.model.iscrossStaffMoveAvailable : false
 
                 navigationName: "Move cross-staff beam"
                 navigationPanel: root.navigation.panel
-                navigationRowStart: featheringRightSection.navigationRowEnd + 1
+                navigationRowStart: beamDirection.navigationRowEnd + 1
 
                 titleText: qsTrc("inspector", "Move cross-staff beam")
                 propertyItem: root.model ? root.model.crossStaffMove : null

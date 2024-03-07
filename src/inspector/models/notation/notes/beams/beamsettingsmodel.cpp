@@ -77,6 +77,8 @@ void BeamSettingsModel::createProperties()
         loadBeamHeightProperties();
     });
 
+    m_stemDirection = buildPropertyItem(mu::engraving::Pid::STEM_DIRECTION);
+
     m_crossStaffMove = buildPropertyItem(mu::engraving::Pid::BEAM_CROSS_STAFF_MOVE,
                                          [this](const mu::engraving::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
@@ -99,6 +101,7 @@ void BeamSettingsModel::loadProperties()
         Pid::BEAM_NO_SLOPE,
         Pid::USER_MODIFIED,
         Pid::BEAM_CROSS_STAFF_MOVE,
+        Pid::STEM_DIRECTION,
     };
 
     loadProperties(propertyIdSet);
@@ -131,6 +134,7 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
         updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
     }
 
+    loadPropertyItem(m_stemDirection);
     loadPropertyItem(m_crossStaffMove);
     updateIscrossStaffMoveAvailable();
 }
@@ -160,6 +164,7 @@ void BeamSettingsModel::resetProperties()
     m_beamHeightRight->resetToDefault();
     m_forceHorizontal->resetToDefault();
     m_customPositioned->resetToDefault();
+    m_stemDirection->resetToDefault();
     m_crossStaffMove->resetToDefault();
 
     m_cachedBeamHeights = PairF();
@@ -171,6 +176,11 @@ void BeamSettingsModel::resetProperties()
 PropertyItem* BeamSettingsModel::forceHorizontal()
 {
     return m_forceHorizontal;
+}
+
+PropertyItem* BeamSettingsModel::stemDirection() const
+{
+    return m_stemDirection;
 }
 
 PropertyItem* BeamSettingsModel::crossStaffMove() const
