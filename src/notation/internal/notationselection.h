@@ -44,7 +44,7 @@ public:
     QMimeData* mimeData() const override;
 
     EngravingItem* element() const override;
-    std::vector<EngravingItem*> elements() const override;
+    const std::vector<EngravingItem*>& elements() const override;
 
     std::vector<Note*> notes(NoteFilter filter) const override;
 

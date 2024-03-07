@@ -877,7 +877,7 @@ enum class SlurStyleType {
 
 struct InstrumentTrackId {
     ID partId = 0;
-    std::string instrumentId;
+    String instrumentId;
 
     bool operator ==(const InstrumentTrackId& other) const
     {
@@ -1084,7 +1084,7 @@ struct std::hash<mu::engraving::InstrumentTrackId>
     std::size_t operator()(const mu::engraving::InstrumentTrackId& s) const noexcept
     {
         std::size_t h1 = std::hash<int> {}(static_cast<int>(s.partId.toUint64()));
-        std::size_t h2 = std::hash<std::string> {}(s.instrumentId);
+        std::size_t h2 = std::hash<mu::String> {}(s.instrumentId);
         return h1 ^ (h2 << 1);
     }
 };

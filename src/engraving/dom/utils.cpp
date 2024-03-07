@@ -1407,9 +1407,9 @@ InstrumentTrackId makeInstrumentTrackId(const EngravingItem* item)
         return InstrumentTrackId();
     }
 
-    mu::engraving::InstrumentTrackId trackId {
+    InstrumentTrackId trackId {
         part->id(),
-        part->instrumentId(item->tick()).toStdString()
+        part->instrumentId(item->tick())
     };
 
     return trackId;

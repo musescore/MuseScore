@@ -192,6 +192,8 @@ struct MuseSamplerLibHandler
     ms_Instrument_get_name getInstrumentName = nullptr;
     ms_Instrument_get_category getInstrumentCategory = nullptr;
     ms_Instrument_get_package getInstrumentPackage = nullptr;
+    ms_Instrument_get_pack_name getInstrumentPackName = nullptr;
+    ms_Instrument_get_vendor_name getInstrumentVendorName = nullptr;
     ms_Instrument_get_musicxml_sound getMusicXmlSoundId = nullptr;
     ms_Instrument_get_mpe_sound getMpeSoundId = nullptr;
     ms_Instrument_get_reverb_level getReverbLevel = nullptr;
@@ -200,6 +202,8 @@ struct MuseSamplerLibHandler
     ms_PresetList_get_next getNextPreset = nullptr;
     ms_MuseSampler_create_preset_change createPresetChange = nullptr;
     ms_MuseSampler_add_preset addPreset = nullptr;
+    ms_get_text_articulations getTextArticulations = nullptr;
+    ms_MuseSampler_add_track_text_articulation_event addTextArticulationEvent = nullptr;
 
     ms_MuseSampler_create create = nullptr;
     ms_MuseSampler_destroy destroy = nullptr;
@@ -314,6 +318,14 @@ public:
         getInstrumentName = (ms_Instrument_get_name)getLibFunc(m_lib, "ms_Instrument_get_name");
         getInstrumentCategory = (ms_Instrument_get_category)getLibFunc(m_lib, "ms_Instrument_get_category");
         getInstrumentPackage = (ms_Instrument_get_package)getLibFunc(m_lib, "ms_Instrument_get_package");
+        if (at_least_v_0_6) {
+            getInstrumentVendorName = (ms_Instrument_get_vendor_name)getLibFunc(m_lib, "ms_Instrument_get_vendor_name");
+            getInstrumentPackName = (ms_Instrument_get_pack_name)getLibFunc(m_lib, "ms_Instrument_get_pack_name");
+        } else {
+            getInstrumentVendorName = [](ms_InstrumentInfo) { return ""; };
+            getInstrumentPackName = [](ms_InstrumentInfo) { return ""; };
+        }
+
         getMusicXmlSoundId = (ms_Instrument_get_musicxml_sound)getLibFunc(m_lib, "ms_Instrument_get_musicxml_sound");
         getMpeSoundId = (ms_Instrument_get_mpe_sound)getLibFunc(m_lib, "ms_Instrument_get_mpe_sound");
 
@@ -476,6 +488,14 @@ public:
         if (at_least_v_0_6) {
             createPresetChange = (ms_MuseSampler_create_preset_change)getLibFunc(m_lib, "ms_MuseSampler_create_preset_change");
             addPreset = (ms_MuseSampler_add_preset)getLibFunc(m_lib, "ms_MuseSampler_add_preset");
+            getTextArticulations = (ms_get_text_articulations)getLibFunc(m_lib, "ms_get_text_articulations");
+            addTextArticulationEvent = (ms_MuseSampler_add_track_text_articulation_event)
+                                       getLibFunc(m_lib, "ms_MuseSampler_add_track_text_articulation_event");
+        } else {
+            createPresetChange = [](ms_MuseSampler, ms_Track, long long) { return -1; };
+            addPreset = [](ms_MuseSampler, ms_Track, ms_PresetChange, const char*) { return ms_Result_Error; };
+            getTextArticulations = [](int, const char*) { return ""; };
+            addTextArticulationEvent = [](ms_MuseSampler, ms_Track, ms_TextArticulationEvent) { return ms_Result_Error; };
         }
 
         stopLivePlayNote = (ms_MuseSampler_stop_liveplay_note)getLibFunc(m_lib, "ms_MuseSampler_stop_liveplay_note");
@@ -524,6 +544,8 @@ public:
                && getInstrumentName
                && getInstrumentCategory
                && getInstrumentPackage
+               && getInstrumentPackName
+               && getInstrumentVendorName
                && getMusicXmlSoundId
                && getMpeSoundId
                && getPresetList
@@ -587,6 +609,8 @@ private:
                << "\n ms_PresetList_get_next - " << reinterpret_cast<uint64_t>(getNextPreset)
                << "\n ms_MuseSampler_create_preset_change - " << reinterpret_cast<uint64_t>(createPresetChange)
                << "\n ms_MuseSampler_add_preset - " << reinterpret_cast<uint64_t>(addPreset)
+               << "\n ms_get_text_articulations - " << reinterpret_cast<uint64_t>(getTextArticulations)
+               << "\n ms_MuseSampler_add_track_text_articulation_event - " << reinterpret_cast<uint64_t>(addTextArticulationEvent)
                << "\n ms_MuseSampler_create - " << reinterpret_cast<uint64_t>(create)
                << "\n ms_MuseSampler_destroy - " << reinterpret_cast<uint64_t>(destroy)
                << "\n ms_MuseSampler_init - " << reinterpret_cast<uint64_t>(initSampler)

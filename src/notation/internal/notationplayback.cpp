@@ -388,17 +388,27 @@ void NotationPlayback::setTempoMultiplier(double multiplier)
     m_playbackModel.reload();
 }
 
-void NotationPlayback::addSoundFlag(StaffText* staffText)
+void NotationPlayback::addSoundFlags(const std::vector<StaffText*>& staffTextList)
 {
     TRACEFUNC;
 
-    if (doAddSoundFlag(staffText)) {
+    if (staffTextList.empty()) {
+        return;
+    }
+
+    bool added = false;
+
+    for (StaffText* staffText : staffTextList) {
+        added |= doAddSoundFlag(staffText);
+    }
+
+    if (added) {
         score()->update();
         m_notationChanged.notify();
     }
 }
 
-bool NotationPlayback::doAddSoundFlag(mu::engraving::StaffText* staffText)
+bool NotationPlayback::doAddSoundFlag(StaffText* staffText)
 {
     IF_ASSERT_FAILED(staffText) {
         return false;
@@ -425,65 +435,6 @@ bool NotationPlayback::doAddSoundFlag(mu::engraving::StaffText* staffText)
     return true;
 }
 
-void NotationPlayback::addSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)
-{
-    TRACEFUNC;
-
-    std::vector<StaffText*> staffTextList = collectStaffText(trackIdSet, false /*withSoundFlags*/);
-    if (staffTextList.empty()) {
-        return;
-    }
-
-    bool notationChanged = false;
-
-    for (StaffText* staffText : staffTextList) {
-        notationChanged |= doAddSoundFlag(staffText);
-    }
-
-    if (notationChanged) {
-        score()->update();
-        m_notationChanged.notify();
-    }
-}
-
-void NotationPlayback::clearSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)
-{
-    TRACEFUNC;
-
-    std::vector<StaffText*> staffTextList = collectStaffText(trackIdSet, true /*withSoundFlags*/);
-    if (staffTextList.empty()) {
-        return;
-    }
-
-    for (StaffText* staffText : staffTextList) {
-        SoundFlag* soundFlag = staffText->soundFlag();
-        IF_ASSERT_FAILED(soundFlag) {
-            continue;
-        }
-        soundFlag->clear();
-
-        const LinkedObjects* links = staffText->links();
-        if (!links) {
-            continue;
-        }
-
-        for (EngravingObject* obj : *links) {
-            if (obj && obj->isStaffText()) {
-                soundFlag = toStaffText(obj)->soundFlag();
-                IF_ASSERT_FAILED(soundFlag) {
-                    continue;
-                }
-                soundFlag->clear();
-            }
-        }
-    }
-
-    score()->update();
-
-    m_playbackModel.reload();
-    m_notationChanged.notify();
-}
-
 void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
 {
     TRACEFUNC;
@@ -494,6 +445,10 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
     }
 
     for (StaffText* staffText : staffTextList) {
+        if (!staffText->hasSoundFlag()) {
+            continue;
+        }
+
         staffText->remove(staffText->soundFlag());
 
         const LinkedObjects* links = staffText->links();
@@ -502,8 +457,12 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
         }
 
         for (EngravingObject* obj : *links) {
-            if (obj && obj->isStaffText()) {
+            if (obj && obj->isStaffText() && obj != staffText) {
                 StaffText* linkedStaffText = toStaffText(obj);
+                if (!linkedStaffText->hasSoundFlag()) {
+                    continue;
+                }
+
                 linkedStaffText->remove(linkedStaffText->soundFlag());
             }
         }

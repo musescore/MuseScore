@@ -175,7 +175,7 @@ void MixerPanelModel::onTrackAdded(const TrackId& trackId)
     if (instrumentIt != instrumentTracks.end()) {
         const InstrumentTrackId& instrumentTrackId = instrumentIt->first;
         const Part* part = masterNotationParts()->part(instrumentTrackId.partId);
-        bool isPrimary = part ? part->instrument()->id().toStdString() == instrumentTrackId.instrumentId : true;
+        bool isPrimary = part ? part->instrument()->id() == instrumentTrackId.instrumentId : true;
         MixerChannelItem* item = buildInstrumentChannelItem(trackId, instrumentTrackId, isPrimary);
         int index = resolveInsertIndex(instrumentTrackId);
 

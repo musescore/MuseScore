@@ -278,10 +278,10 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     for (const QJsonValue value : tracksArray) {
         QJsonObject trackObject = value.toObject();
 
-        ID partId = trackObject.value("partId").toString();
-        std::string instrumentId = trackObject.value("instrumentId").toString().toStdString();
-
-        InstrumentTrackId id = { partId, instrumentId };
+        InstrumentTrackId id = {
+            trackObject.value("partId").toString(),
+            trackObject.value("instrumentId").toString()
+        };
 
         audio::AudioInputParams inParams = inputParamsFromJson(trackObject.value("in").toObject());
         audio::AudioOutputParams outParams = outputParamsFromJson(trackObject.value("out").toObject());
@@ -611,7 +611,7 @@ QJsonObject ProjectAudioSettings::buildTrackObject(const InstrumentTrackId& id) 
     QJsonObject result;
 
     result.insert("partId", id.partId.toQString());
-    result.insert("instrumentId", QString::fromStdString(id.instrumentId));
+    result.insert("instrumentId", id.instrumentId.toQString());
 
     auto inputParamsSearch = m_trackInputParamsMap.find(id);
     if (inputParamsSearch != m_trackInputParamsMap.end()) {

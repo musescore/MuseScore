@@ -197,6 +197,7 @@ typedef struct ms_AuditionStartNoteEvent_3
     ms_NoteArticulation _articulation;
     double _dynamics;
     const char* _active_presets; // presets that are selected for this note. list is separated by "|"
+    const char* _active_text_articulation; // text articulation that is active for this note. Can be empty
 } ms_AuditionStartNoteEvent_3;
 
 typedef struct ms_AuditionStopNoteEvent
@@ -247,6 +248,13 @@ typedef struct ms_VibratoInfo
     int _depth_cents;
 } ms_VibratoInfo;
 
+// Added in v0.6
+typedef struct ms_TextArticulationEvent
+{
+    long long _start_us;
+    const char* _articulation; // articulation name
+} ms_TextArticulationEvent;
+
 typedef ms_Result (* ms_init)();
 typedef ms_Result (* ms_disable_reverb)();
 typedef int (* ms_contains_instrument)(const char* mpe_id, const char* musicxml_id);
@@ -259,6 +267,8 @@ typedef int (* ms_Instrument_get_id)(ms_InstrumentInfo instrument);
 typedef const char*(* ms_Instrument_get_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
+typedef const char*(* ms_Instrument_get_pack_name)(ms_InstrumentInfo);
+typedef const char*(* ms_Instrument_get_vendor_name)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
 typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);
@@ -327,8 +337,9 @@ typedef ms_Result (* ms_MuseSampler_all_notes_off)(ms_MuseSampler);
 
 // Added in 0.6
 typedef ms_PresetChange (* ms_MuseSampler_create_preset_change)(ms_MuseSampler ms, ms_Track track, long long location_us);
-
 typedef ms_Result (* ms_MuseSampler_add_preset)(ms_MuseSampler ms, ms_Track track, ms_PresetChange preset_change, const char* preset_name);
+typedef const char*(* ms_get_text_articulations)(int instrument_id, const char* preset_name);
+typedef ms_Result (* ms_MuseSampler_add_track_text_articulation_event)(ms_MuseSampler ms, ms_Track track, ms_TextArticulationEvent evt);
 
 namespace mu::musesampler {
 using track_idx_t = size_t;

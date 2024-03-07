@@ -77,11 +77,13 @@ private:
     ms_Track resolveTrack(mpe::staff_layer_idx_t staffLayerIdx);
     const TrackList& allTracks() const;
 
-    void loadPresets(const mpe::PlaybackParamMap& changes);
+    void loadParams(const mpe::PlaybackParamMap& changes);
     void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
     void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addTextArticulation(const std::string& articulationCode, long long startUs);
+    void addPresets(const std::vector<std::string>& presets, long long startUs);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
@@ -91,7 +93,8 @@ private:
 
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
     ms_NoteArticulation noteArticulationTypes(const mpe::NoteEvent& noteEvent) const;
-    std::string buildPresetsStr(const mpe::PlaybackParamMap& params) const;
+
+    void parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
     ms_MuseSampler m_sampler = nullptr;
@@ -100,7 +103,17 @@ private:
     using layer_idx_t = size_t;
     std::unordered_map<layer_idx_t, track_idx_t> m_layerIdxToTrackIdx;
 
-    std::string m_offStreamPresetsStr;
+    struct {
+        std::string presets;
+        std::string textArticulation;
+
+        void clear()
+        {
+            presets.clear();
+            textArticulation.clear();
+        }
+    } m_offStreamCache;
+
     std::string m_defaultPresetCode;
 };
 }
