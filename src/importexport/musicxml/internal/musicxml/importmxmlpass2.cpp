@@ -3101,10 +3101,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 {
     return (tick + _offset < Fraction(5, 1)) // Only early in the piece
-           && _rehearsalText == ""
-           && _metroText == ""
+           && _rehearsalText.isEmpty()
+           && _metroText.isEmpty()
            && _tpoSound < 0.1
-           && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
+           && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics),?(\\sand|\\s&amp;)?\\s)*[Bb]y\\s+(?!$)"));
 }
 
 //---------------------------------------------------------
