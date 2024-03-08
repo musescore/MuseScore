@@ -193,6 +193,9 @@
       <Family id="trombones">
             <name>Trombones</name>
       </Family>
+      <Family id="cimbassos">
+            <name>Cimbassos</name>
+      </Family>
       <Family id="sackbuts">
             <name>Sackbuts</name>
       </Family>
@@ -5607,8 +5610,8 @@
                   <musicXMLid>brass.trombone.bass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>32-68</aPitchRange>
-                  <pPitchRange>21-72</pPitchRange>
+                  <aPitchRange>32-65</aPitchRange>
+                  <pPitchRange>21-77</pPitchRange>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5631,8 +5634,8 @@
                   <musicXMLid>brass.trombone.contrabass</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>28-55</aPitchRange>
-                  <pPitchRange>20-58</pPitchRange>
+                  <aPitchRange>28-62</aPitchRange>
+                  <pPitchRange>18-72</pPitchRange>
                   <Channel name="open">
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
                         <program value="57"/> <!--Trombone-->
@@ -5644,7 +5647,7 @@
                   <genre>orchestra</genre>
             </Instrument>
             <Instrument id="cimbasso">
-                  <family>trombones</family>
+                  <family>cimbassos</family>
                   <trackName>Cimbasso</trackName>
                   <longName>Cimbasso</longName>
                   <shortName>Cim.</shortName>
@@ -5652,7 +5655,7 @@
                   <musicXMLid>brass.cimbasso</musicXMLid>
                   <clef>F</clef>
                   <barlineSpan>1</barlineSpan>
-                  <aPitchRange>26-64</aPitchRange>
+                  <aPitchRange>28-62</aPitchRange>
                   <pPitchRange>24-72</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 57; MS General: Trombone-->
