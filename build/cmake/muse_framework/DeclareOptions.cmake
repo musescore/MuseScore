@@ -9,7 +9,7 @@ endmacro()
 declare_muse_module_opt(ACCESSIBILITY ON)
 declare_muse_module_opt(ACTIONS ON)
 declare_muse_module_opt(AUDIO ON)
-option(MUSE_MODULE_AUDIO_JACK "Enable jack support" OFF)
+option(MUSE_MODULE_AUDIO_JACK "Enable jack support" ON)
 option(MUSE_MODULE_AUDIO_EXPORT "Enable audio export" ON)
 
 declare_muse_module_opt(CLOUD ON)

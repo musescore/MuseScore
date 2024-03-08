@@ -190,6 +190,14 @@ endif()
 
 set(QT_SUPPORT ON)
 
+if (MUSE_MODULE_AUDIO_JACK)
+    if (OS_IS_LIN OR MINGW)
+        add_definitions(-DJACK_AUDIO)
+    else()
+        set(MUSE_MODULE_AUDIO_JACK OFF)
+    endif()
+endif()
+
 if (NOT MUE_BUILD_IMPORTEXPORT_MODULE)
     set(MUE_BUILD_VIDEOEXPORT_MODULE OFF)
 endif()
