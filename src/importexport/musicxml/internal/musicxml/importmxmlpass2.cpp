@@ -2906,13 +2906,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
     if (isLyricBracket()) {
         return;
     } else if (isLikelyCredit(tick)) {
-        Text* t = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
-        t->setXmlText(_wordsText.trimmed());
-        auto firstMeasure = _score->measures()->first();
-        VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
-        double spatium = _score->style().styleD(Sid::spatium);
-        vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
-        vbox->add(t);
+        addTextToHeader(TextStyleType::COMPOSER);
+    } else if (isLikelySource(tick)) {
+        addTextToHeader(TextStyleType::SUBTITLE);
     } else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
@@ -3124,6 +3120,28 @@ bool MusicXMLParserDirection::isLyricBracket() const
            && _metroText == ""
            && _dynamicsList.isEmpty()
            && _tpoSound < 0.1;
+}
+
+bool MusicXMLParserDirection::isLikelySource(const Fraction& tick) const
+{
+    static const QRegularExpression re("^\\s*[Ff]rom\\s+(?!$)");
+
+    return (tick + _offset < Fraction(5, 1)) // Only early in the piece
+           && _rehearsalText.isEmpty()
+           && _metroText.isEmpty()
+           && _tpoSound < 0.1
+           && _wordsText.contains(re);
+}
+
+Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType) const
+{
+    Text* t = Factory::createText(_score->dummy(), textStyleType);
+    t->setXmlText(_wordsText.trimmed());
+    auto firstMeasure = _score->measures()->first();
+    VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
+    double spatium = _score->style().styleD(Sid::spatium);
+    vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
+    vbox->add(t);
 }
 
 //---------------------------------------------------------

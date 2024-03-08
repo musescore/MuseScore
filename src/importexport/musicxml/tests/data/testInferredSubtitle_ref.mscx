@@ -46,7 +46,7 @@
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Inferred Subtitle</metaTag>
+    <metaTag name="workTitle">Inferred Credits</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -113,15 +113,20 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.78222</height>
+        <height>4.13594</height>
         <Text>
           <style>title</style>
-          <offset x="0" y="-0.07525"/>
-          <text><font size="22"/>Inferred Subtitle</text>
+          <offset x="0" y="-0.1505"/>
+          <text><font size="22"/>Inferred Credits</text>
           </Text>
         <Text>
           <style>composer</style>
           <text>Words and Music by Henry Ives</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <text>from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem</text>
           </Text>
         </VBox>
       <Measure>

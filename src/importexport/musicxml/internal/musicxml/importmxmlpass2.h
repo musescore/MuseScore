@@ -455,6 +455,8 @@ private:
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     bool isLyricBracket() const;
+    bool isLikelySource(const Fraction& tick) const;
+    Text* addTextToHeader(const TextStyleType textStyleType) const;
 };
 
 //---------------------------------------------------------

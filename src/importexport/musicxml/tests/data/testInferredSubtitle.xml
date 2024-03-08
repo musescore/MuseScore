@@ -2,7 +2,7 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="3.1">
   <work>
-    <work-title>Inferred Subtitle</work-title>
+    <work-title>Inferred Credits</work-title>
     </work>
   <identification>
     <creator type="composer">Henry Ives</creator>
@@ -42,12 +42,9 @@
     </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words default-x="600" default-y="1611.43" justify="center" valign="top" font-size="22">Inferred Subtitle</credit-words>
+    <credit-words default-x="600" default-y="1611.86" justify="center" valign="top" font-size="22">Inferred Credits</credit-words>
     </credit>
   <part-list>
-    <part-group type="start" number="1">
-      <group-symbol>brace</group-symbol>
-      </part-group>
     <score-part id="P1">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
@@ -64,7 +61,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="293.97">
+    <measure number="1" width="288.37">
       <print>
         <system-layout>
           <system-margins>
@@ -90,10 +87,14 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words relative-y="10.00">Words and Music by Henry Ives</words>
+          <words default-y="34.66" relative-y="10.00">Words and Music by Henry Ives
+</words>
+          <words>
+</words>
+          <words></words>
           </direction-type>
         </direction>
-      <note default-x="80.72" default-y="-15.00">
+      <note default-x="73.72" default-y="-15.00">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -108,7 +109,20 @@
           <text>ha</text>
           </lyric>
         </note>
-      <note default-x="117.18" default-y="-15.00">
+      <direction placement="above">
+        <direction-type>
+          <words default-y="34.66" relative-y="10.00">
+          
+from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem
+
+
+
+
+</words>
+          </direction-type>
+        </direction>
+      <note default-x="110.42" default-y="-15.00">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -136,7 +150,7 @@
         <type>half</type>
         </note>
       </measure>
-    <measure number="2" width="202.30">
+    <measure number="2" width="203.70">
       <note default-x="26.30" default-y="-45.00">
         <pitch>
           <step>D</step>
@@ -164,21 +178,21 @@
         <type>half</type>
         </note>
       </measure>
-    <measure number="3" width="160.22">
+    <measure number="3" width="161.62">
       <note>
         <rest measure="yes"/>
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="160.22">
+    <measure number="4" width="161.62">
       <note>
         <rest measure="yes"/>
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="161.86">
+    <measure number="5" width="163.26">
       <note>
         <rest measure="yes"/>
         <duration>8</duration>
