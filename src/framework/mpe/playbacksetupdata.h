@@ -39,9 +39,8 @@ struct PlaybackSetupData
 
     PlaybackSetupData() = default;
 
-    PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& subCategorySet = {},
-                      std::optional<std::string> musicXmlSoundId = std::nullopt)
-        : id(id), category(category), subCategorySet(std::move(subCategorySet)), musicXmlSoundId(std::move(musicXmlSoundId))
+    PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& subCategorySet = {})
+        : id(id), category(category), subCategorySet(std::move(subCategorySet))
     {}
 
     bool contains(const SoundSubCategory subcategory) const

@@ -65,13 +65,13 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
         static const PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
             SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
                                                        SoundSubCategory::Nylon,
-                                                       SoundSubCategory::Plucked }, {}
+                                                       SoundSubCategory::Plucked }
         };
 
         result = CHORD_SYMBOLS_SETUP_DATA;
     } else {
         static const PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
-            SoundId::Piano, SoundCategory::Keyboards, {}, {}
+            SoundId::Piano, SoundCategory::Keyboards
         };
 
         result = CHORD_SYMBOLS_SETUP_DATA;
@@ -81,7 +81,7 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
 void PlaybackSetupDataResolver::resolveMetronomeSetupData(PlaybackSetupData& result) const
 {
     static const PlaybackSetupData METRONOME_SETUP_DATA = {
-        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }, {}
+        SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }
     };
 
     result = METRONOME_SETUP_DATA;
