@@ -293,7 +293,7 @@ static constexpr int MAX_STAVES  = 4;
 
 struct InstrumentKey
 {
-    QString instrumentId;
+    muse::String instrumentId;
     muse::ID partId;
     Fraction tick = mu::engraving::Fraction(0, 1);
 };

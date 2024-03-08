@@ -210,7 +210,7 @@ void InstrumentsOnScoreListModel::addInstruments(const QStringList& instrumentId
     ItemList items = this->items();
 
     for (const QString& id : instrumentIdList) {
-        const InstrumentTemplate& templ = repository()->instrumentTemplate(id.toStdString());
+        const InstrumentTemplate& templ = repository()->instrumentTemplate(id);
         if (!templ.isValid()) {
             continue;
         }

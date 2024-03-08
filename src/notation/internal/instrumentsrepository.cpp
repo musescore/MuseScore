@@ -45,9 +45,9 @@ const InstrumentTemplateList& InstrumentsRepository::instrumentTemplates() const
     return m_instrumentTemplateList;
 }
 
-const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const std::string& instrumentId) const
+const InstrumentTemplate& InstrumentsRepository::instrumentTemplate(const String& instrumentId) const
 {
-    auto it = m_instrumentTemplateMap.find(String::fromStdString(instrumentId));
+    auto it = m_instrumentTemplateMap.find(instrumentId);
     if (it == m_instrumentTemplateMap.end()) {
         static const InstrumentTemplate dummy;
         return dummy;
@@ -61,7 +61,7 @@ const ScoreOrderList& InstrumentsRepository::orders() const
     return mu::engraving::instrumentOrders;
 }
 
-const ScoreOrder& InstrumentsRepository::order(const std::string& orderId) const
+const ScoreOrder& InstrumentsRepository::order(const String& orderId) const
 {
     const ScoreOrderList& orders = mu::engraving::instrumentOrders;
 
