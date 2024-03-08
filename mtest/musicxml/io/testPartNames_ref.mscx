@@ -826,6 +826,7 @@
             <Lyrics>
               <ticks>26880</ticks>
               <ticks_f>56/4</ticks_f>
+              <offset x="0" y="-1.7145"/>
               <text>yes!</text>
               </Lyrics>
             <Note>
@@ -1233,6 +1234,7 @@
             <Lyrics>
               <ticks>26880</ticks>
               <ticks_f>56/4</ticks_f>
+              <offset x="0" y="-1.7145"/>
               <text>no</text>
               </Lyrics>
             <Note>

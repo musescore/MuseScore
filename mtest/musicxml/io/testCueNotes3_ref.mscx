@@ -151,6 +151,7 @@
           <Chord>
             <durationType>half</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>Whose</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -162,6 +163,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>broad</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -175,6 +177,7 @@
             <Lyrics>
               <ticks>480</ticks>
               <ticks_f>1/4</ticks_f>
+              <offset x="0" y="-1.7145"/>
               <text>stripes</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -216,6 +219,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>and</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -229,6 +233,7 @@
             <small>1</small>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>bright</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -251,6 +256,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>stars</text>
               </Lyrics>
             <Articulation>
@@ -276,6 +282,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>through</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -290,6 +297,7 @@
           <Chord>
             <durationType>half</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>the</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -307,6 +315,7 @@
             <small>1</small>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>per'l's</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -334,6 +343,7 @@
             <dots>1</dots>
             <durationType>half</durationType>
             <Lyrics>
+              <offset x="0" y="-1.7145"/>
               <text>fight</text>
               </Lyrics>
             <StemDirection>up</StemDirection>

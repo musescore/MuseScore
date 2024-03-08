@@ -238,6 +238,7 @@
             <Lyrics>
               <ticks>9600</ticks>
               <ticks_f>20/4</ticks_f>
+              <offset x="0" y="-1.71429"/>
               <text>ahh</text>
               </Lyrics>
             <Note>
