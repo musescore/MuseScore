@@ -196,7 +196,11 @@ if (NOT MUE_BUILD_AUDIO_MODULE)
 endif()
 
 if (MUE_ENABLE_AUDIO_JACK)
-    add_definitions(-DJACK_AUDIO)
+    if (OS_IS_LIN OR MINGW)
+        add_definitions(-DJACK_AUDIO)
+    else()
+        set(MUE_ENABLE_AUDIO_JACK OFF)
+    endif()
 endif()
 
 if (NOT MUE_BUILD_IMPORTEXPORT_MODULE)
