@@ -548,7 +548,7 @@ static void addText(VBox* vbx, Score*, const String& strTxt, const TextStyleType
 {
     if (!strTxt.isEmpty()) {
         Text* text = Factory::createText(vbx, stl);
-        text->setXmlText(strTxt);
+        text->setXmlText(strTxt.trimmed());
         vbx->add(text);
     }
 }
@@ -576,13 +576,13 @@ static void addText2(VBox* vbx, Score*, const String& strTxt, const TextStyleTyp
         // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
         // This overrides the formatting and introduces proper composer text
         Text* text = Factory::createText(vbx, TextStyleType::COMPOSER);
-        text->setXmlText(strTxt);
+        text->setXmlText(strTxt.trimmed());
         text->setOffset(mu::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
     } else if (!strTxt.isEmpty()) {
         Text* text = Factory::createText(vbx, stl);
-        text->setXmlText(strTxt);
+        text->setXmlText(strTxt.trimmed());
         text->setAlign(align);
         text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
         text->setOffset(mu::PointF(0.0, yoffs));

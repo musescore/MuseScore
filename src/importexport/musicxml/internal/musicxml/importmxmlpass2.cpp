@@ -2895,13 +2895,9 @@ void MusicXMLParserDirection::direction(const String& partId,
     if (isLyricBracket()) {
         return;
     } else if (isLikelyCredit(tick)) {
-        Text* t = Factory::createText(m_score->dummy(), TextStyleType::COMPOSER);
-        t->setXmlText(m_wordsText.trimmed());
-        auto firstMeasure = m_score->measures()->first();
-        VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(m_score);
-        double spatium = m_score->style().styleD(Sid::spatium);
-        vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
-        vbox->add(t);
+        addTextToHeader(TextStyleType::COMPOSER);
+    } else if (isLikelySource(tick)) {
+        addTextToHeader(TextStyleType::SUBTITLE);
     } else if (m_wordsText != "" || m_rehearsalText != "" || m_metroText != "") {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
@@ -3123,6 +3119,28 @@ bool MusicXMLParserDirection::isLyricBracket() const
            && m_metroText.empty()
            && m_dynamicsList.empty()
            && m_tpoSound < 0.1;
+}
+
+bool MusicXMLParserDirection::isLikelySource(const Fraction& tick) const
+{
+    static const std::wregex re = std::wregex(L"^\\s*[Ff]rom\\s+(?!$)");
+
+    return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
+           && m_tpoSound < 0.1
+           && m_wordsText.contains(re);
+}
+
+Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType) const
+{
+    Text* t = Factory::createText(m_score->dummy(), textStyleType);
+    t->setXmlText(m_wordsText.trimmed());
+    auto firstMeasure = m_score->measures()->first();
+    VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(m_score);
+    double spatium = m_score->style().styleD(Sid::spatium);
+    vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
+    vbox->add(t);
 }
 
 //---------------------------------------------------------
