@@ -110,6 +110,11 @@ bool ImportPreferencesModel::needUseDefaultFont() const
     return musicXmlConfiguration()->needUseDefaultFont();
 }
 
+bool ImportPreferencesModel::inferTextType() const
+{
+    return musicXmlConfiguration()->inferTextType();
+}
+
 int ImportPreferencesModel::currentShortestNote() const
 {
     return midiImportExportConfiguration()->midiShortestNote();
@@ -173,6 +178,16 @@ void ImportPreferencesModel::setNeedUseDefaultFont(bool value)
 
     musicXmlConfiguration()->setNeedUseDefaultFont(value);
     emit needUseDefaultFontChanged(value);
+}
+
+void ImportPreferencesModel::setInferTextType(bool value)
+{
+    if (value == inferTextType()) {
+        return;
+    }
+
+    musicXmlConfiguration()->setInferTextType(value);
+    emit inferTextTypeChanged(value);
 }
 
 void ImportPreferencesModel::setCurrentShortestNote(int note)
