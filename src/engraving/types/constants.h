@@ -90,7 +90,7 @@ struct Constants
 //       - Corrections to key signature and transposition (#18998)
 //       - New inside/outside style for ties
 
-//    4.40 (Version 4.2)
+//    4.40 (Version 4.4)
 //       - New property for cross-staff beam positioning
 
     constexpr static int DIVISION = 480;
