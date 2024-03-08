@@ -308,35 +308,9 @@ struct Tempo
 
 static constexpr int MAX_STAVES  = 4;
 
-struct ClefPair
-{
-    ClefType concertClef = ClefType::G;
-    ClefType transposingClef = ClefType::G;
-};
-
-struct PitchRange
-{
-    int min = 0;
-    int max = 0;
-
-    PitchRange() = default;
-    PitchRange(int min, int max)
-        : min(min), max(max) {}
-
-    bool operator ==(const PitchRange& other) const
-    {
-        return min == other.min && max == other.max;
-    }
-
-    bool operator !=(const PitchRange& other) const
-    {
-        return !operator ==(other);
-    }
-};
-
 struct InstrumentKey
 {
-    QString instrumentId;
+    String instrumentId;
     ID partId;
     Fraction tick = mu::engraving::Fraction(0, 1);
 };

@@ -31,10 +31,10 @@ public:
     InstrumentsRepositoryStub() = default;
 
     const InstrumentTemplateList& instrumentTemplates() const override;
-    const InstrumentTemplate& instrumentTemplate(const std::string& instrumentId) const override;
+    const InstrumentTemplate& instrumentTemplate(const mu::String& instrumentId) const override;
 
     const ScoreOrderList& orders() const override;
-    const ScoreOrder& order(const std::string& orderId) const override;
+    const ScoreOrder& order(const mu::String& orderId) const override;
 
     const InstrumentGenreList& genres() const override;
     const InstrumentGroupList& groups() const override;

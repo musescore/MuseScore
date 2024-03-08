@@ -28,8 +28,8 @@ using namespace mu::notation;
 
 mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
 {
-    QStringList params {
-        "canSelectMultipleInstruments=true"
+    StringList params {
+        u"canSelectMultipleInstruments=true"
     };
 
     return selectInstruments(params);
@@ -37,9 +37,9 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
 
 mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
-    QStringList params {
-        "canSelectMultipleInstruments=false",
-        "currentInstrumentId=" + currentInstrumentKey.instrumentId
+    StringList params {
+        u"canSelectMultipleInstruments=false",
+        u"currentInstrumentId=" + currentInstrumentKey.instrumentId
     };
 
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
@@ -52,9 +52,9 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const Instrum
     return RetVal<Instrument>::make_ok(Instrument::fromTemplate(&templ));
 }
 
-mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const QStringList& params) const
+mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(const StringList& params) const
 {
-    QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
+    String uri = String("musescore://instruments/select?%1").arg(params.join(u"&"));
     RetVal<Val> retVal = interactive()->open(uri.toStdString());
     if (!retVal.ret) {
         return retVal.ret;
@@ -78,14 +78,14 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
         pi.isExistingPart = map["isExistingPart"].toBool();
         pi.isSoloist = map["isSoloist"].toBool();
 
-        std::string instrumentId = map["instrumentId"].toString();
+        String instrumentId = String::fromStdString(map["instrumentId"].toString());
         pi.instrumentTemplate = instrumentsRepository()->instrumentTemplate(instrumentId);
 
         result.instruments << pi;
     }
 
     ValMap order = content["scoreOrder"].toMap();
-    result.scoreOrder = instrumentsRepository()->order(order["id"].toString());
+    result.scoreOrder = instrumentsRepository()->order(String::fromStdString(order["id"].toString()));
     result.scoreOrder.customized = order["customized"].toBool();
 
     return RetVal<PartInstrumentListScoreOrder>::make_ok(result);
