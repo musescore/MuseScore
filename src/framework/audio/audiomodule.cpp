@@ -44,6 +44,7 @@
 #include "internal/soundfontrepository.h"
 
 // synthesizers
+#include "internal/synthesizers/midioutputsynth/midioutputresolver.h"
 #include "internal/synthesizers/fluidsynth/fluidresolver.h"
 #include "internal/synthesizers/synthresolver.h"
 
@@ -296,7 +297,9 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
 
         auto fluidResolver = std::make_shared<FluidResolver>();
+        auto midiOutputResolver = std::make_shared<MidiOutputResolver>();
         m_synthResolver->registerResolver(AudioSourceType::Fluid, fluidResolver);
+        m_synthResolver->registerResolver(AudioSourceType::MidiOutput, midiOutputResolver);
         m_synthResolver->init(m_configuration->defaultAudioInputParams());
 
         // Initialize IPlayback facade and make sure that it's initialized after the audio-engine

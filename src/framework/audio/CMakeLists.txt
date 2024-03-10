@@ -225,6 +225,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsoundfontparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/midioutputsynth/midioutputsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/midioutputsynth/midioutputsynth.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/midioutputsynth/midioutputresolver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/midioutputsynth/midioutputresolver.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.h
     )
