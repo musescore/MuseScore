@@ -5423,7 +5423,7 @@ void NotationInteraction::addMelisma()
     // there will be no melisma anyway), set a temporary melisma duration
     if (fromLyrics == lyrics && nextSegment) {
         score()->startCmd();
-        lyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, Fraction::fromTicks(mu::engraving::Lyrics::TEMP_MELISMA_TICKS));
+        lyrics->undoChangeProperty(mu::engraving::Pid::LYRIC_TICKS, mu::engraving::Lyrics::TEMP_MELISMA_TICKS);
         score()->setLayoutAll();
         score()->endCmd();
     }
