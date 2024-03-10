@@ -165,6 +165,7 @@ FocusScope {
             selectByMouse: true
             selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
             selectedTextColor: ui.theme.fontPrimaryColor
+            placeholderTextColor: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate || activeFocus
 
             text: root.currentText === undefined ? "" : root.currentText
