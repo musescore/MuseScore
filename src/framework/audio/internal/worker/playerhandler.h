@@ -48,6 +48,9 @@ public:
     async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const override;
     async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const override;
 
+    async::Channel<TrackId, midi::Event> midiEvent() const override;
+    async::Channel<TrackId> playingNotesRevoked() const override;
+
 private:
     ITrackSequencePtr sequence(const TrackSequenceId id) const;
     void ensureSubscriptions(const ITrackSequencePtr s) const;
@@ -56,6 +59,8 @@ private:
 
     mutable async::Channel<TrackSequenceId, msecs_t> m_playbackPositionMsecsChanged;
     mutable async::Channel<TrackSequenceId, PlaybackStatus> m_playbackStatusChanged;
+    mutable async::Channel<TrackId, midi::Event> m_noteMidiEvent;
+    mutable async::Channel<TrackId> m_playingNotesRevoked;
 };
 }
 

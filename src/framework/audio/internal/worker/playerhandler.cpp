@@ -162,6 +162,20 @@ Channel<TrackSequenceId, PlaybackStatus> PlayerHandler::playbackStatusChanged() 
     return m_playbackStatusChanged;
 }
 
+Channel<TrackId, mu::midi::Event> PlayerHandler::midiEvent() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_noteMidiEvent;
+}
+
+Channel<TrackId> PlayerHandler::playingNotesRevoked() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+
+    return m_playingNotesRevoked;
+}
+
 ITrackSequencePtr PlayerHandler::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
