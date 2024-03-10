@@ -53,6 +53,7 @@ Item {
                 StyledIconLabel {
                     font.family: ui.theme.musicalFont.family
                     font.pixelSize: 60
+                    height: 30
                     lineHeightMode: Text.FixedHeight
                     lineHeight: 30
                     iconCode: modelData
@@ -70,6 +71,7 @@ Item {
                 StyledIconLabel {
                     font.family: ui.theme.musicalFont.family
                     font.pixelSize: 60
+                    height: 30
                     lineHeightMode: Text.FixedHeight
                     lineHeight: 30
                     iconCode: modelData
