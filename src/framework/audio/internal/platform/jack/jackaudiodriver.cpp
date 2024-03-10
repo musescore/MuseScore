@@ -43,6 +43,9 @@
 using namespace mu::audio;
 using namespace mu::midi;
 namespace mu::audio {
+static jack_nframes_t cur_frame;
+static int cur_state;
+
 /*
  * MIDI
  */
@@ -126,6 +129,37 @@ mu::Ret sendEvent(const Event& e, void* pb)
     return Ret(true);
 }
 
+void handle_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
+{
+    jack_client_t* client = static_cast<jack_client_t*>(state->m_jackDeviceHandle);
+    unsigned int jackSamplerate = jack_get_sample_rate(client);
+    jack_position_t pos;
+    jack_transport_state_t ts = jack_transport_query(client, &pos);
+
+    if (cur_state != ts) {
+        state->m_playbackController->remotePlayOrStop(ts == JackTransportStarting || ts == JackTransportRolling);
+        cur_state = ts;
+    }
+
+    if (pos.valid & JackPositionBBT) {
+        LOGW("jack-transport: tempo change: new bpm: %f (NOT SUPPORTED)\n", pos.beats_per_minute);
+    }
+
+    // FIX: was + 1, but be safe and add a whole second (samplerate)
+    if (labs((long int)cur_frame - (long int)pos.frame) > nframes + jackSamplerate) {
+        if (state->m_playbackController->isPlaying()) {
+            LOGW("jack-transport: frame=%u changed position from %u\n", pos.frame, cur_frame);
+            // calling seek directly isn't allowed (not same thread)
+            // state->m_playbackController->seek(static_cast<audio::msecs_t>(pos.frame));
+            // state->dispatcher()->dispatch("rewind", mu::actions::ActionData::make_arg1<msecs_t>(milliseconds));
+            // state->playback()->player()->playbackPositionMsecs().send(state->m_playbackController->currentTrackSequenceId(), milliseconds);
+            msecs_t milliseconds = static_cast<msecs_t>((double)pos.frame * 1000 / (double)jackSamplerate);
+            state->m_playbackController->remoteSeek(milliseconds);
+            cur_frame = pos.frame;
+        }
+    }
+}
+
 /*
  * AUDIO
  */
@@ -149,6 +183,9 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     //    LOGI() << "---- JACK-midi output sendEvent SORRY, not connected";
     //    return make_ret(Err::MidiNotConnected);
     // }
+
+    handle_jack_midi_transport(state, nframes);
+
     if (!state->m_midiOutputPorts.empty()) {
         jack_port_t* port = state->m_midiOutputPorts.front();
         if (port) {
@@ -220,8 +257,9 @@ static void jack_cleanup_callback(void*)
 }
 }
 
-JackDriverState::JackDriverState()
+JackDriverState::JackDriverState(std::shared_ptr<playback::IPlaybackController> playbackController)
 {
+    m_playbackController = playbackController;
     m_deviceId = JACK_DEFAULT_DEVICE_ID;
     m_deviceName = JACK_DEFAULT_IDENTIFY_AS;
 }
@@ -321,6 +359,9 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     const char* portType = JACK_DEFAULT_MIDI_TYPE;
     jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
     m_midiOutputPorts.push_back(port);
+
+    cur_frame = 0; // FIX: get play state/pos
+    cur_state = false; // FIX: ditto
 
     return true;
 }

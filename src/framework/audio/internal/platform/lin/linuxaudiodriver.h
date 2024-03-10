@@ -29,10 +29,12 @@
 #include "iaudiodriver.h"
 
 #include "audiodeviceslistener.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::audio {
 class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
 {
+    INJECT(playback::IPlaybackController, playbackController)
 public:
     LinuxAudioDriver();
     ~LinuxAudioDriver();

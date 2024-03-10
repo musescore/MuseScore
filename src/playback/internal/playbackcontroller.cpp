@@ -131,6 +131,24 @@ void PlaybackController::init()
             stop();
         }
     });
+
+    m_remoteSeek.onReceive(this, [this](const audio::msecs_t msecs) {
+        seek(msecs);
+    });
+
+    m_remotePlayOrStop.onReceive(this, [this](const bool playOrStop) {
+        if (playOrStop) {
+            if (isPlaying()) {
+                resume();
+            } else {
+                play();
+            }
+        } else {
+            if (isPlaying()) {
+                pause();
+            }
+        }
+    });
 }
 
 void PlaybackController::updateCurrentTempo()
@@ -217,6 +235,22 @@ void PlaybackController::seek(const audio::msecs_t msecs)
     }
 
     playback()->player()->seek(m_currentSequenceId, msecs);
+}
+
+void PlaybackController::remoteSeek(const audio::msecs_t msecs)
+{
+    IF_ASSERT_FAILED(playback()) {
+        return;
+    }
+    m_remoteSeek.send(msecs);
+}
+
+void PlaybackController::remotePlayOrStop(const bool playOrStop)
+{
+    if (!isPlayAllowed()) {
+        return;
+    }
+    m_remotePlayOrStop.send(playOrStop);
 }
 
 Notification PlaybackController::playbackPositionChanged() const
