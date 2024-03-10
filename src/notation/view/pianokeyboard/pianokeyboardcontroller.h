@@ -26,6 +26,8 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "audio/iplayback.h"
+#include "playback/iplaybackcontroller.h"
 
 #include "pianokeyboardtypes.h"
 
@@ -33,6 +35,8 @@ namespace mu::notation {
 class PianoKeyboardController : public muse::async::Asyncable
 {
     INJECT(context::IGlobalContext, context)
+    INJECT(muse::audio::IPlayback, playback)
+    INJECT(playback::IPlaybackController, playbackController)
 
 public:
     PianoKeyboardController() = default;
@@ -49,14 +53,26 @@ public:
 
 private:
     INotationPtr currentNotation() const;
+    IMasterNotationPtr currentMasterNotation() const;
+    INotationPlaybackPtr masterNotationPlayback() const;
 
     void onNotationChanged();
     void updateNotesKeys(const std::vector<const Note*>& receivedNotes);
 
+    void onNoteMidiEventReceived(muse::audio::TrackId trackId, const muse::midi::Event& event);
+
     void sendNoteOn(piano_key_t key);
     void sendNoteOff(piano_key_t key);
 
+    void addPlayedKey(muse::audio::TrackId trackId, std::optional<piano_key_t> key);
+    void removePlayedKey(muse::audio::TrackId trackId, std::optional<piano_key_t> key);
+    void removePlayedTrackKeys(muse::audio::TrackId trackId);
+
+    muse::audio::TrackId instrumentTrackIdToTrackId(InstrumentTrackId trackId) const;
+    InstrumentTrackId trackIdToInstrumentTrackId(muse::audio::TrackId trackId) const;
+
     std::optional<piano_key_t> m_pressedKey = std::nullopt;
+    std::unordered_map<piano_key_t, std::unordered_set<muse::audio::TrackId> > m_playedKeys;
     std::unordered_set<piano_key_t> m_keys;
     std::unordered_set<piano_key_t> m_otherNotesInChord;
 
