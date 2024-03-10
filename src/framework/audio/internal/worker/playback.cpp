@@ -145,6 +145,18 @@ IAudioOutputPtr Playback::audioOutput() const
     return m_audioOutputPtr;
 }
 
+async::Channel<TrackId, midi::Event> Playback::midiEvent() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    return m_noteMidiEvent;
+}
+
+async::Channel<TrackId> Playback::playingNotesRevoked() const
+{
+    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
+    return m_playingNotesRevoked;
+}
+
 ITrackSequencePtr Playback::sequence(const TrackSequenceId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;

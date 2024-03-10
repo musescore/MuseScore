@@ -26,6 +26,8 @@
 #include "global/async/channel.h"
 #include "global/async/promise.h"
 
+#include "midi/midievent.h"
+
 #include "audiotypes.h"
 
 namespace muse::audio {
@@ -62,6 +64,10 @@ public:
 
     // 4. Adjust a Sequence output
     virtual std::shared_ptr<IAudioOutput> audioOutput() const = 0;
+
+    // 5. Listen to note MIDI events
+    virtual async::Channel<TrackId, midi::Event> midiEvent() const = 0;
+    virtual async::Channel<TrackId> playingNotesRevoked() const = 0;
 };
 
 using IPlaybackPtr = std::shared_ptr<IPlayback>;

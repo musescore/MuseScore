@@ -56,6 +56,9 @@ public:
     ITracksPtr tracks() const override;
     IAudioOutputPtr audioOutput() const override;
 
+    async::Channel<TrackId, midi::Event> midiEvent() const override;
+    async::Channel<TrackId> playingNotesRevoked() const override;
+
 protected:
     // IGetTrackSequence
     ITrackSequencePtr sequence(const TrackSequenceId id) const override;
@@ -68,6 +71,9 @@ private:
 
     async::Channel<TrackSequenceId> m_sequenceAdded;
     async::Channel<TrackSequenceId> m_sequenceRemoved;
+
+    mutable async::Channel<TrackId, midi::Event> m_noteMidiEvent;
+    mutable async::Channel<TrackId> m_playingNotesRevoked;
 };
 }
 
