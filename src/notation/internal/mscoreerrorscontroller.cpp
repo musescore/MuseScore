@@ -144,6 +144,10 @@ void MScoreErrorsController::checkAndShowMScoreError()
         title = trc("notation", "This key signature cannot be deleted");
         message = trc("notation", "Please replace it with a key signature from the palettes instead.");
         break;
+    case MsError::CANNOT_JOIN_MEASURE_STAFFTYPE_CHANGE:
+        title = trc("notation", "This measures cannot be joined");
+        message = trc("notation", "It is not possible, to join measure with staff type change.");
+        break;
     }
 
     IInteractive::Result result
