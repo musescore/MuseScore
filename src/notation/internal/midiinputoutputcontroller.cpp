@@ -22,6 +22,8 @@
 #include "midiinputoutputcontroller.h"
 
 #include "midi/miditypes.h"
+#include "audio/iplayer.h"
+#include "audio/iaudiooutput.h"
 
 #include "log.h"
 
@@ -67,6 +69,10 @@ void MidiInputOutputController::init()
         }
 
         onMidiEventReceived(tick, event);
+    });
+
+    playback()->player()->midiEvent().onReceive(this, [this](audio::TrackId trackId, const midi::Event& event) {
+        handleOutputEvent(trackId, event);
     });
 }
 
@@ -161,4 +167,41 @@ mu::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const m
     }
 
     return midi::MidiDeviceID();
+}
+
+void MidiInputOutputController::handleOutputEvent(audio::TrackId trackId, const midi::Event& event)
+{
+    IMasterNotationPtr masterNotation = globalContext()->currentMasterNotation();
+    if (!masterNotation) {
+        return;
+    }
+
+    INotationPlaybackPtr notationPlayback = masterNotation->playback();
+    if (!notationPlayback) {
+        return;
+    }
+
+    auto& trackIdMap = playbackController()->instrumentTrackIdMap();
+    InstrumentTrackId instrumentTrackId;
+    for (const auto& pair : trackIdMap) {
+        if (pair.second == trackId) {
+            instrumentTrackId = pair.first;
+            break;
+        }
+    }
+
+    if (!instrumentTrackId.isValid()) {
+        return;
+    }
+
+    auto handleEvent = [this, event](audio::AudioOutputParams params) {
+        if (!params.muted) {
+            midiOutPort()->sendEvent(event);
+        }
+    };
+
+    std::shared_ptr<audio::IAudioOutput> audioOutput = playback()->audioOutput();
+    if (audioOutput) {
+        audioOutput->outputParams(playbackController()->currentTrackSequenceId(), trackId).onResolve(this, handleEvent);
+    }
 }
