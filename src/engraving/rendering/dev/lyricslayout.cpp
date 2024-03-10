@@ -151,7 +151,6 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         // HACK separator should have non-zero length to get its layout
         // always triggered. A proper ticks length will be set later on the
         // separator layout.
-        item->separator()->setTicks(Fraction::fromTicks(1));
         item->separator()->setTrack(item->track());
         item->separator()->setTrack2(item->track());
         item->separator()->setVisible(item->visible());
@@ -163,6 +162,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
             item->setSeparator(nullptr);
         }
     }
+    item->separator()->setTicks(Lyrics::TEMP_MELISMA_TICKS);
 
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
@@ -179,6 +179,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     PointF o(item->propertyDefault(Pid::OFFSET).value<PointF>());
 
     // Negate ChordRest offset
+    ChordRest* cr = item->chordRest();
     double x = o.x() - cr->x();
 
     TLayout::layoutBaseTextBase1(item, ctx);
@@ -238,6 +239,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
         if (tempMelismaTicks) {
             item->lyrics()->setTicks(Fraction(0, 1));
         }
+        assert(item->lyrics());
 
         // Lyrics::_ticks points to the beginning of the last spanned segment,
         // but the line shall include it:
@@ -325,6 +327,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 
 void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
+    assert(item->lyricsLine()->lyrics());
     LyricsLineSegment::LayoutData* ldata = item->mutldata();
     item->ryoffset() = 0.0;
 

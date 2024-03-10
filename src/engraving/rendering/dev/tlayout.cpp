@@ -6698,7 +6698,7 @@ SpannerSegment* TLayout::layoutSystem(LyricsLine* line, System* system, LayoutCo
     // if temp melisma extend the first line segment to be
     // after the lyrics syllable (otherwise the melisma segment
     // will be too short).
-    const bool tempMelismaTicks = (line->lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
+    const bool tempMelismaTicks = (line->lyrics()->ticks() == Lyrics::TEMP_MELISMA_TICKS);
     if (tempMelismaTicks && line->spannerSegments().size() > 0 && line->spannerSegments().front() == lineSegm) {
         lineSegm->rxpos2() += line->lyrics()->width();
     }

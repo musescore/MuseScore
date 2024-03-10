@@ -47,7 +47,7 @@ public:
     // it should be cleared to 0 at some point, so that it will not be carried over
     // if the melisma is not extended beyond a single chord, but no suitable place to do this
     // has been identified yet.
-    static constexpr int TEMP_MELISMA_TICKS      = 1;
+    static constexpr Fraction TEMP_MELISMA_TICKS = Fraction::fromTicks(1);
 
     // WORD_MIN_DISTANCE has never been implemented
     // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
