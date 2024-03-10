@@ -112,6 +112,7 @@ static const String CATEGORIES_ATTRIBUTE("categories");
 
 enum class AudioResourceType {
     Undefined = -1,
+    MidiOutput,
     FluidSoundfont,
     VstPlugin,
     MusePlugin,
@@ -217,6 +218,7 @@ struct AudioFxParams {
         switch (resourceMeta.type) {
         case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
         case AudioResourceType::MusePlugin: return AudioFxType::MuseFx;
+        case AudioResourceType::MidiOutput:
         case AudioResourceType::FluidSoundfont:
         case AudioResourceType::MuseSamplerSoundPack:
         case AudioResourceType::Undefined: break;
@@ -294,6 +296,7 @@ struct AudioOutputParams {
 
 enum class AudioSourceType {
     Undefined = -1,
+    MidiOutput,
     Fluid,
     Vsti,
     MuseSampler
@@ -302,6 +305,7 @@ enum class AudioSourceType {
 inline AudioSourceType sourceTypeFromResourceType(AudioResourceType type)
 {
     switch (type) {
+    case AudioResourceType::MidiOutput: return AudioSourceType::MidiOutput;
     case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
     case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
     case AudioResourceType::MuseSamplerSoundPack: return AudioSourceType::MuseSampler;
