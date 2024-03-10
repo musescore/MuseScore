@@ -76,7 +76,9 @@ private:
     TrackId m_trackId = -1;
     mpe::PlaybackData m_playbackData;
     synth::ISynthesizerPtr m_synth = nullptr;
+    synth::ISynthesizerPtr m_midiOutputSynth = nullptr;
     AudioInputParams m_params;
+    AudioInputParams m_midiOutputSynthParams;
     async::Channel<AudioInputParams> m_paramsChanges;
 
     samples_t m_sampleRate = 0;

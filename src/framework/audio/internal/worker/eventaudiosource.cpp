@@ -47,6 +47,10 @@ EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackDat
         m_playbackData.dynamicLevelMap = dynamics;
         m_playbackData.paramMap = params;
     });
+
+    m_midiOutputSynthParams.resourceMeta.type = AudioResourceType::MidiOutput;
+    m_midiOutputSynthParams.resourceMeta.id = "MidiOutput";
+    m_midiOutputSynthParams.resourceMeta.vendor = "MIDI";
 }
 
 EventAudioSource::~EventAudioSource()
@@ -76,6 +80,11 @@ void EventAudioSource::setIsActive(const bool active)
 
     m_synth->setIsActive(active);
     m_synth->flushSound();
+
+    if (m_midiOutputSynth) {
+        m_midiOutputSynth->setIsActive(active);
+        m_midiOutputSynth->flushSound();
+    }
 }
 
 void EventAudioSource::setSampleRate(unsigned int sampleRate)
@@ -121,6 +130,10 @@ samples_t EventAudioSource::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
+    if (m_midiOutputSynth) {
+        m_midiOutputSynth->process(buffer, samplesPerChannel);
+    }
+
     return m_synth->process(buffer, samplesPerChannel);
 }
 
@@ -134,6 +147,11 @@ void EventAudioSource::seek(const msecs_t newPositionMsecs)
 
     m_synth->setPlaybackPosition(newPositionMsecs);
     m_synth->revokePlayingNotes();
+
+    if (m_midiOutputSynth) {
+        m_midiOutputSynth->setPlaybackPosition(newPositionMsecs);
+        m_midiOutputSynth->revokePlayingNotes();
+    }
 }
 
 const AudioInputParams& EventAudioSource::inputParams() const
@@ -148,6 +166,11 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
     }
 
     SynthCtx ctx = currentSynthCtx();
+
+    m_midiOutputSynth = synthResolver()->resolveSynth(m_trackId, m_midiOutputSynthParams, m_playbackData.setupData);
+    if (!m_midiOutputSynth) {
+        LOGE() << "Failed to resolve MIDI output synth";
+    }
 
     m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams, m_playbackData.setupData);
 
@@ -169,6 +192,10 @@ void EventAudioSource::applyInputParams(const AudioInputParams& requiredParams)
         restoreSynthCtx(std::move(ctx));
     } else {
         m_synth->setIsActive(false);
+
+        if (m_midiOutputSynth) {
+            m_midiOutputSynth->setIsActive(false);
+        }
     }
 
     m_params = m_synth->params();
@@ -193,6 +220,11 @@ void EventAudioSource::restoreSynthCtx(SynthCtx&& ctx)
 {
     m_synth->setPlaybackPosition(ctx.playbackPosition);
     m_synth->setIsActive(ctx.isActive);
+
+    if (m_midiOutputSynth) {
+        m_midiOutputSynth->setPlaybackPosition(ctx.playbackPosition);
+        m_midiOutputSynth->setIsActive(ctx.isActive);
+    }
 }
 
 void EventAudioSource::setupSource()
@@ -205,4 +237,9 @@ void EventAudioSource::setupSource()
 
     m_synth->setSampleRate(m_sampleRate);
     m_synth->setup(m_playbackData);
+
+    if (m_midiOutputSynth) {
+        m_midiOutputSynth->setSampleRate(m_sampleRate);
+        m_midiOutputSynth->setup(m_playbackData);
+    }
 }
