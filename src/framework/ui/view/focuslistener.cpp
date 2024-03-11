@@ -33,6 +33,7 @@ FocusListener::FocusListener(QObject* parent)
 
 QQuickItem* FocusListener::item() const
 {
+
     return m_item;
 }
 
@@ -41,8 +42,8 @@ void FocusListener::setItem(QQuickItem* item)
     if (m_item == item) {
         return;
     }
-
     m_item = item;
+    m_item->forceActiveFocus();
     listenFocusChanged();
 
     emit itemChanged();
