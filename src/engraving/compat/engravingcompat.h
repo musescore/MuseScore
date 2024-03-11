@@ -19,23 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IPROJECTMIGRATOR_H
-#define MU_PROJECT_IPROJECTMIGRATOR_H
 
-#include "modularity/imoduleinterface.h"
-#include "types/ret.h"
-#include "engraving/engravingproject.h"
+#ifndef MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
+#define MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
 
-namespace mu::project {
-class IProjectMigrator : MODULE_EXPORT_INTERFACE
-{
-    INTERFACE_ID(IProjectMigrator)
-
-public:
-    virtual ~IProjectMigrator() = default;
-
-    virtual Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) = 0;
-};
+namespace mu::engraving {
+class MasterScore;
 }
 
-#endif // MU_PROJECT_IPROJECTMIGRATOR_H
+namespace mu::engraving::compat {
+class EngravingCompat
+{
+public:
+    static void doPostLayoutCompatIfNeeded(MasterScore* score);
+
+private:
+    static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
+};
+} // namespace mu::engraving::compat
+
+#endif // MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H

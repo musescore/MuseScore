@@ -37,7 +37,6 @@ public:
     ProjectMigrator() = default;
 
     Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) override;
-    void doPostLayoutMigrationIfNeeded(engraving::EngravingProjectPtr project) override;
 
 private:
 
@@ -49,8 +48,6 @@ private:
     bool applyEdwinStyle(mu::engraving::MasterScore* score);
     bool resetAllElementsPositions(mu::engraving::MasterScore* score);
     void resetStyleSettings(mu::engraving::MasterScore* score);
-
-    bool relayoutUserModifiedCrossStaffBeams(mu::engraving::MasterScore* score);
 
     bool m_resetStyleSettings{ false };
 };
