@@ -136,33 +136,29 @@ void handle_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
     unsigned int jackSamplerate = jack_get_sample_rate(client);
     jack_position_t pos;
     jack_transport_state_t ts = jack_transport_query(client, &pos);
-    if (pos.frame >= g_jackTransportDelay) {
-        pos.frame -= g_jackTransportDelay;
-    }
 
     if (cur_state != ts) {
         state->m_playbackController->remotePlayOrStop(ts == JackTransportStarting || ts == JackTransportRolling);
         cur_state = ts;
     }
 
-    if (pos.valid & JackPositionBBT) {
-        LOGW("jack-transport: tempo change: new bpm: %f (NOT SUPPORTED)\n", pos.beats_per_minute);
+    if (pos.frame >= g_jackTransportDelay) {
+        pos.frame -= g_jackTransportDelay;
+    } else {
+        pos.frame = 0; // dont advance position before we've caught up delay
     }
 
-    // FIX: was + 1, but be safe and add a whole second (samplerate)
     if (labs((long int)cur_frame - (long int)pos.frame) > nframes + 1) {
-        if (state->m_playbackController->isPlaying()) {
-            LOGW("jack-transport: frame=%u changed position from %u\n", pos.frame, cur_frame);
-            // calling seek directly isn't allowed (not same thread)
-            // state->m_playbackController->seek(static_cast<audio::msecs_t>(pos.frame));
-            // state->dispatcher()->dispatch("rewind", mu::actions::ActionData::make_arg1<msecs_t>(milliseconds));
-            // state->playback()->player()->playbackPositionMsecs().send(state->m_playbackController->currentTrackSequenceId(), milliseconds);
-            msecs_t milliseconds = static_cast<msecs_t>((double)pos.frame * 1000 / (double)jackSamplerate);
-            state->m_playbackController->remoteSeek(milliseconds);
-        }
+        LOGW("jack-transport: frame=%u changed position from %u\n", pos.frame, cur_frame);
+        msecs_t milliseconds = static_cast<msecs_t>((double)pos.frame * 1000 / (double)jackSamplerate);
+        state->m_playbackController->remoteSeek(milliseconds);
     }
 
     cur_frame = pos.frame;
+
+    if (pos.valid & JackPositionBBT) {
+        LOGW("jack-transport: tempo change: new bpm: %f (NOT SUPPORTED)\n", pos.beats_per_minute);
+    }
 }
 
 /*
