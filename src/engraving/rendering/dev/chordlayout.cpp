@@ -2354,6 +2354,10 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             std::unordered_map<int, Note*> alreadyAdded;
             bool finished = false;
             for (Note* otherNote : bottomUpNotes) {
+                // Make sure invisible dots have no effect on visible dots, but are still layed out sensibly
+                if (otherNote->visible() != note->visible()) {
+                    continue;
+                }
                 int dotMove = otherNote->dotPosition() == DirectionV::UP ? -1 : 1;
                 int otherDotLoc = otherNote->line() + dotMove;
                 bool added = alreadyAdded.count(otherDotLoc);
@@ -2374,6 +2378,9 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             if (!finished) {
                 alreadyAdded.clear();
                 for (Note* otherNote : topDownNotes) {
+                    if (otherNote->visible() != note->visible()) {
+                        continue;
+                    }
                     int dotMove = otherNote->dotPosition() == DirectionV::DOWN ? 1 : -1;
                     int otherDotLoc = otherNote->line() + dotMove;
                     bool added = alreadyAdded.count(otherDotLoc);
@@ -2397,7 +2404,6 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             IF_ASSERT_FAILED(finished) {
                 // this should never happen
                 // the note is on a line and topDownNotes and bottomUpNotes are all of the lined notes
-                LOGI() << "tick: " << note->tick().toString();
                 note->setDotRelativeLine(0);
             }
         } else {
@@ -2862,7 +2868,7 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
                                      std::vector<int>& anchoredDots)
 {
     Measure* measure = c->measure();
-    bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks());
+    bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks(), true);
     bool hasUpperCrossNotes = false;
     bool hasLowerCrossNotes = false;
     staff_idx_t partTopStaff = c->part()->startTrack() / VOICES;
