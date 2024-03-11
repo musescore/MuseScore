@@ -1779,6 +1779,48 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
 }
 
 //---------------------------------------------------------
+//   reformatHeaderVBox
+//---------------------------------------------------------
+/**
+ Due to inconsistencies with spacing and inferred text,
+ the header VBox frequently has collisions. This cleans
+ those (as a temporary fix for a more robust collision-prevention
+ system in Boxes).
+ */
+
+static void reformatHeaderVBox(MeasureBase* mb)
+{
+    if (!mb->isVBox()) {
+        return;
+    }
+
+    VBox* headerVBox = toVBox(mb);
+    double totalHeight = 0;
+    double offsetHeight = 0;
+    double lineSpacingMultiplier = 0.5;
+
+    for (auto e : headerVBox->el()) {
+        if (!e->isText()) {
+            continue;
+        }
+        Text* t = toText(e);
+        TLayout::layoutText(t, t->mutldata());
+
+        totalHeight += t->height();
+        if (t->align() == AlignV::TOP) {
+            totalHeight += t->lineHeight() * lineSpacingMultiplier;
+            t->setOffset(t->offset().x(), offsetHeight);
+            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+            offsetHeight += t->height();
+            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
+        }
+    }
+
+    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
+    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
+}
+
+//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -1808,8 +1850,11 @@ void MusicXMLParserPass2::scorePartwise()
             addBarlineToMeasure(lm, lm->endTick(), std::move(b));
         }
     }
-
     addError(checkAtEndElement(_e, "score-partwise"));
+
+    if (_hasInferredHeaderText) {
+        reformatHeaderVBox(_score->measures()->first());
+    }
 }
 
 //---------------------------------------------------------
@@ -2908,13 +2953,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
     } else if (isLikelyCredit(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::COMPOSER);
         if (inferredText) {
+            _pass2.setHasInferredHeaderText(true);
             hideRedundantHeaderText(inferredText, { "lyricist", "composer", "poet" });
         }
     } else if (isLikelySource(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::SUBTITLE);
         if (inferredText) {
-            if (_score->metaTag(u"source").isEmpty()) {
-                _score->setMetaTag(u"source", inferredText->plainText());
+            _pass2.setHasInferredHeaderText(true);
+            if (_score->metaTag(QString("source")).isEmpty()) {
+                _score->setMetaTag(QString("source"), inferredText->plainText());
             }
             hideRedundantHeaderText(inferredText, { "source" });
         }
