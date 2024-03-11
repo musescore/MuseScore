@@ -86,7 +86,7 @@ Item {
             navigation.name: toolTipTitle
             navigation.order: model.index
             accessible.name: (item.checkable ? (item.checked ? item.title + "  " + qsTrc("global", "On") :
-                                                               item.title + "  " + qsTrc("global", "Off")) : item.text)
+                                                               item.title + "  " + qsTrc("global", "Off")) : item.title)
 
             transparent: true
             orientation: Qt.Horizontal
