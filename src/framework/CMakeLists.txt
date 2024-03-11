@@ -55,6 +55,9 @@ if (MUE_BUILD_SHORTCUTS_MODULE)
     add_subdirectory(shortcuts)
 endif()
 
+if (MUE_BUILD_EXTENSIONS_MODULE)
+    add_subdirectory(extensions)
+endif()
 
 if (MUE_BUILD_VST_MODULE)
     add_subdirectory(vst)
