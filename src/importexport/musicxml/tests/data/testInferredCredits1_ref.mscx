@@ -48,7 +48,7 @@
 the video game: a tone poem</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Inferred Credits</metaTag>
+    <metaTag name="workTitle">Inferred Credits 1</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -118,7 +118,7 @@ the video game: a tone poem</metaTag>
         <height>14.9017</height>
         <Text>
           <style>title</style>
-          <text><font size="22"/>Inferred Credits</text>
+          <text><font size="22"/>Inferred Credits 1</text>
           </Text>
         <Text>
           <style>composer</style>

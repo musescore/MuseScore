@@ -745,6 +745,39 @@ static bool mustAddWordToVbox(const String& creditType)
 }
 
 //---------------------------------------------------------
+//   isLikelySubtitleText
+//---------------------------------------------------------
+
+bool isLikelySubtitleText(const String& text, const bool caseInsensitive = true)
+{
+    std::regex::flag_type caseOption = caseInsensitive ? std::regex::icase : std::regex::ECMAScript;
+    return text.trimmed().contains(std::wregex(L"^[Ff]rom\\s+(?!$)", caseOption))
+           || text.trimmed().contains(std::wregex(L"^Theme from\\s+(?!$)", caseOption))
+           || text.trimmed().contains(std::wregex(L"(Op\\.?\\s?\\d+)\\s?(No\\.?\\s?\\d+)?", caseOption))
+           || text.trimmed().contains(std::wregex(L"^\\(.*[Ff]rom\\s.*\\)$", caseOption));
+}
+
+//---------------------------------------------------------
+//   inferSubTitleFromTitle
+//---------------------------------------------------------
+
+// Extracts a likely subtitle from the title string
+// Returns the inferred subtitle
+
+static String inferSubTitleFromTitle(const String& title)
+{
+    String inferredSubTitle;
+    static const std::regex re("\\n");
+    for (const String& line : title.split(re)) {
+        if (isLikelySubtitleText(line, true)) {
+            inferredSubTitle = line;
+            break;
+        }
+    }
+    return inferredSubTitle;
+}
+
+//---------------------------------------------------------
 //   addCreditWords
 //---------------------------------------------------------
 
@@ -810,6 +843,7 @@ static void createDefaultHeader(Score* score)
 {
     String strTitle;
     String strSubTitle;
+    String inferredStrSubTitle;
     String strComposer;
     String strLyricist;
     String strTranslator;
@@ -819,12 +853,16 @@ static void createDefaultHeader(Score* score)
         if (strTitle.isEmpty()) {
             strTitle = score->metaTag(u"workTitle");
         }
+        inferredStrSubTitle = inferSubTitleFromTitle(strTitle);
     }
     if (!(score->metaTag(u"movementNumber").isEmpty() && score->metaTag(u"workNumber").isEmpty())) {
         strSubTitle = score->metaTag(u"movementNumber");
         if (strSubTitle.isEmpty()) {
             strSubTitle = score->metaTag(u"workNumber");
         }
+    } else if (!inferredStrSubTitle.isEmpty()) {
+        strSubTitle = inferredStrSubTitle;
+        strTitle.replace(inferredStrSubTitle, u"");
     }
     String metaComposer = score->metaTag(u"composer");
     String metaLyricist = score->metaTag(u"lyricist");

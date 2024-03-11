@@ -113,6 +113,7 @@ using MxmlTupletStates = std::map<String, MxmlTupletState>;
 
 void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
 Fraction missingTupletDuration(const Fraction duration);
+bool isLikelySubtitleText(const String& text, const bool caseInsensitive);
 
 //---------------------------------------------------------
 //   MusicXMLParserPass1

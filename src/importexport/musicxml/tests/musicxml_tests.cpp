@@ -673,8 +673,11 @@ TEST_F(Musicxml_Tests, incorrectStaffNumber1) {
 TEST_F(Musicxml_Tests, incorrectStaffNumber2) {
     mxmlIoTestRef("testIncorrectStaffNumber2");
 }
-TEST_F(Musicxml_Tests, inferredSubtitle) {
-    mxmlImportTestRef("testInferredSubtitle");
+TEST_F(Musicxml_Tests, inferredCredits1) {
+    mxmlImportTestRef("testInferredCredits1");
+}
+TEST_F(Musicxml_Tests, inferredCredits2) {
+    mxmlImportTestRef("testInferredCredits2");
 }
 TEST_F(Musicxml_Tests, instrumentChangeMIDIportExport) {
     mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport");
