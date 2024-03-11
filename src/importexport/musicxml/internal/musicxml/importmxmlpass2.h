@@ -294,6 +294,7 @@ public:
     void clearSpanner(const MusicXmlSpannerDesc& desc);
     void deleteHandledSpanner(SLine* const& spanner);
     int divs() { return m_divs; }
+    void setHasInferredHeaderText(bool b) { m_hasInferredHeaderText = b; }
 
     SLine* delayedOttava() { return m_delayedOttava; }
     void setDelayedOttava(SLine* ottava) { m_delayedOttava = ottava; }
@@ -371,6 +372,7 @@ private:
     Tie* m_tie = nullptr;
     Volta* m_lastVolta = nullptr;
     bool m_hasDrumset;                             // drumset defined TODO: move to pass 1
+    bool m_hasInferredHeaderText = false;
 
     MusicXmlSpannerMap m_spanners;
 
