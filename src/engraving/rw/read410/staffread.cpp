@@ -63,6 +63,9 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
                     score->measures()->add(measure);
+                    if (m && m->mmRest()) {
+                        m->mmRest()->setNext(measure);
+                    }
                     score->checkSpanner(ctx.tick(), ctx.tick() + measure->ticks(), /*removeOrphans*/ false);
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->tick() + measure->ticks());
@@ -74,6 +77,7 @@ void StaffRead::readStaff(Score* score, XmlReader& e, ReadContext& ctx)
                     if (m1) {
                         m1->setMMRest(measure);
                         measure->setTick(m1->tick());
+                        measure->setPrev(m1->prev());
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {

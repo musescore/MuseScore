@@ -3094,6 +3094,9 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
                     score->measures()->add(measure);
+                    if (m && m->mmRest()) {
+                        m->mmRest()->setNext(measure);
+                    }
                     ctx.setLastMeasure(measure);
                     ctx.setTick(measure->endTick());
                 } else {
@@ -3104,6 +3107,7 @@ static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
                     if (lm) {
                         lm->setMMRest(measure);
                         measure->setTick(lm->tick());
+                        measure->setPrev(lm->prev());
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
