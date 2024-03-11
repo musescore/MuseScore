@@ -146,7 +146,7 @@ void handle_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
     }
 
     // FIX: was + 1, but be safe and add a whole second (samplerate)
-    if (labs((long int)cur_frame - (long int)pos.frame) > nframes + jackSamplerate) {
+    if (labs((long int)cur_frame - (long int)pos.frame) > nframes + 1) {
         if (state->m_playbackController->isPlaying()) {
             LOGW("jack-transport: frame=%u changed position from %u\n", pos.frame, cur_frame);
             // calling seek directly isn't allowed (not same thread)
