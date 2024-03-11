@@ -167,6 +167,7 @@ public:
     Diagnostic diagnostic() const;
     Autobot autobot() const;
     AudioPluginRegistration audioPluginRegistration() const;
+    int m_transportDelay = 0;
 
 private:
     void printLongVersion() const;

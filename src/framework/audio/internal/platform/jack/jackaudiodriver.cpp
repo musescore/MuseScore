@@ -39,6 +39,7 @@
 
 #define JACK_DEFAULT_DEVICE_ID "jack"
 #define JACK_DEFAULT_IDENTIFY_AS "MuseScore"
+extern int g_jackTransportDelay;
 
 using namespace mu::audio;
 using namespace mu::midi;
@@ -135,6 +136,9 @@ void handle_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
     unsigned int jackSamplerate = jack_get_sample_rate(client);
     jack_position_t pos;
     jack_transport_state_t ts = jack_transport_query(client, &pos);
+    if (pos.frame >= g_jackTransportDelay) {
+        pos.frame -= g_jackTransportDelay;
+    }
 
     if (cur_state != ts) {
         state->m_playbackController->remotePlayOrStop(ts == JackTransportStarting || ts == JackTransportRolling);
@@ -301,6 +305,7 @@ int jack_srate_callback(jack_nframes_t newSampleRate, void* args)
 
 bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
+    LOGW("using jackTransportDelay: %i", g_jackTransportDelay);
     if (isOpened()) {
         LOGW() << "Jack is already opened";
         return true;
