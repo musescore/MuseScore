@@ -85,8 +85,8 @@ public:
 
     void adjustPrevious();
 
-    bool isRemoveInvalidSegments() const { return m_isRemoveInvalidSegments; }
-    void setIsRemoveInvalidSegments() { m_isRemoveInvalidSegments = true; }
+    bool needRemoveInvalidSegments() const { return m_needRemoveInvalidSegments; }
+    void setNeedRemoveInvalidSegments() { m_needRemoveInvalidSegments = true; }
     void removeInvalidSegments();
 
     bool even() const { return m_even; }
@@ -120,7 +120,7 @@ private:
     Fraction m_ticks;          // if > 0 then draw an underline to tick() + _ticks (melisma)
     LyricsSyllabic m_syllabic = LyricsSyllabic::SINGLE;
     LyricsLine* m_separator = nullptr;
-    bool m_isRemoveInvalidSegments = false;
+    bool m_needRemoveInvalidSegments = false;
 };
 
 //---------------------------------------------------------

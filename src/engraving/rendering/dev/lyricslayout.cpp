@@ -136,7 +136,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     ChordRest* cr = item->chordRest();
-    if (item->isRemoveInvalidSegments()) {
+    if (item->needRemoveInvalidSegments()) {
         item->removeInvalidSegments();
     }
     if (item->ticks() > Fraction(0, 1) || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
