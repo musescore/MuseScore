@@ -19,14 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "extensionsprovider.h"
+#ifndef MU_EXTENSIONS_EXTENSIONSLOADER_H
+#define MU_EXTENSIONS_EXTENSIONSLOADER_H
 
-#include "extensionsloader.h"
+#include "global/io/path.h"
 
-using namespace mu::extensions;
+#include "../extensionstypes.h"
 
-ManifestList ExtensionsProvider::manifestList() const
+namespace mu::extensions {
+class ExtensionsLoader
 {
-    ExtensionsLoader loader;
-    return loader.loadManifesList(configure()->defaultPath(), configure()->userPath());
+public:
+    ExtensionsLoader() = default;
+
+    ManifestList loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const;
+
+private:
+    ManifestList manifesList(const io::path_t& rootPath) const;
+    mu::io::paths_t manifestPaths(const io::path_t& rootPath) const;
+    Manifest parseManifest(const io::path_t& path) const;
+};
 }
+
+#endif // MU_EXTENSIONS_EXTENSIONSLOADER_H

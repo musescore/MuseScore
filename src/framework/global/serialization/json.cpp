@@ -611,7 +611,7 @@ bool JsonObject::contains(const std::string& key) const
     return o.find(key) != o.cend();
 }
 
-JsonValue JsonObject::value(const std::string& key) const
+JsonValue JsonObject::value(const std::string& key, JsonValue def) const
 {
     const picojson::object& o = object_const(m_data);
     auto it = o.find(key);
@@ -620,7 +620,7 @@ JsonValue JsonObject::value(const std::string& key) const
         d->val = it->second;
         return JsonValue(d);
     }
-    return JsonValue();
+    return def;
 }
 
 JsonObject& JsonObject::set(const std::string& key, bool v)

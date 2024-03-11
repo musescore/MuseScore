@@ -19,14 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "extensionsprovider.h"
-
-#include "extensionsloader.h"
+#include "extensionsconfigure.h"
 
 using namespace mu::extensions;
 
-ManifestList ExtensionsProvider::manifestList() const
+mu::io::path_t ExtensionsConfigure::defaultPath() const
 {
-    ExtensionsLoader loader;
-    return loader.loadManifesList(configure()->defaultPath(), configure()->userPath());
+    return globalConfiguration()->appDataPath() + "/extensions";
+}
+
+mu::io::path_t ExtensionsConfigure::userPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/extensions";
 }

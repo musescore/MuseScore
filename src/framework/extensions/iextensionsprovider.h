@@ -24,6 +24,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "extensionstypes.h"
+
 namespace mu::extensions {
 class IExtensionsProvider : MODULE_EXPORT_INTERFACE
 {
@@ -31,6 +33,8 @@ class IExtensionsProvider : MODULE_EXPORT_INTERFACE
 public:
 
     virtual ~IExtensionsProvider() = default;
+
+    virtual ManifestList manifestList() const = 0;
 };
 }
 

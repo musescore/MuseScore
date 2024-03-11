@@ -19,14 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "extensionsprovider.h"
+#ifndef MU_EXTENSIONS_EXTENSIONSCONFIGURE_H
+#define MU_EXTENSIONS_EXTENSIONSCONFIGURE_H
 
-#include "extensionsloader.h"
+#include "../iextensionsconfigure.h"
 
-using namespace mu::extensions;
+#include "modularity/ioc.h"
+#include "global/iglobalconfiguration.h"
 
-ManifestList ExtensionsProvider::manifestList() const
+namespace mu::extensions {
+class ExtensionsConfigure : public IExtensionsConfigure
 {
-    ExtensionsLoader loader;
-    return loader.loadManifesList(configure()->defaultPath(), configure()->userPath());
+    Inject<IGlobalConfiguration> globalConfiguration;
+
+public:
+    ExtensionsConfigure() = default;
+
+    io::path_t defaultPath() const override;
+    io::path_t userPath() const override;
+};
 }
+
+#endif // MU_EXTENSIONS_EXTENSIONSCONFIGURE_H

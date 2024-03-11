@@ -26,6 +26,7 @@
 #include "modularity/ioc.h"
 
 #include "internal/extensionsprovider.h"
+#include "internal/extensionsconfigure.h"
 
 #include "log.h"
 
@@ -42,6 +43,7 @@ void ExtensionsModule::registerExports()
     m_extensionsProvider = std::make_shared<ExtensionsProvider>();
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_extensionsProvider);
+    ioc()->registerExport<IExtensionsConfigure>(moduleName(), new ExtensionsConfigure());
 }
 
 void ExtensionsModule::registerUiTypes()
