@@ -155,9 +155,10 @@ void handle_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
             // state->playback()->player()->playbackPositionMsecs().send(state->m_playbackController->currentTrackSequenceId(), milliseconds);
             msecs_t milliseconds = static_cast<msecs_t>((double)pos.frame * 1000 / (double)jackSamplerate);
             state->m_playbackController->remoteSeek(milliseconds);
-            cur_frame = pos.frame;
         }
     }
+
+    cur_frame = pos.frame;
 }
 
 /*
