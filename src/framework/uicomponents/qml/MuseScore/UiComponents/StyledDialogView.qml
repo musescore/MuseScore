@@ -39,8 +39,6 @@ DialogView {
 
     property alias navigationSection: navSec
 
-    property bool closeOnEscape : true
-
     contentWidth: 240
     contentHeight: contentBody.childrenRect.height
 
@@ -48,6 +46,10 @@ DialogView {
         navSec.requestActive()
         root.navigationActivateRequested()
         accessibilityActiveTimer.start()
+    }
+
+    onRejectRequested: {
+        root.reject();
     }
 
     signal navigationActivateRequested()
@@ -81,12 +83,6 @@ DialogView {
             onActiveChanged: {
                 if (navSec.active) {
                     rootContainer.forceActiveFocus()
-                }
-            }
-
-            onNavigationEvent: function(event) {
-                if (event.type === NavigationEvent.Escape && root.closeOnEscape) {
-                    root.close()
                 }
             }
         }

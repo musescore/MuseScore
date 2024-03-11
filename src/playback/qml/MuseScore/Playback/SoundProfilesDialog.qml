@@ -39,6 +39,10 @@ StyledDialogView {
         id: profilesListModel
     }
 
+    onConfirmRequested: {
+        root.hide()
+    }
+
     onNavigationActivateRequested: {
         profilesListView.itemAtIndex(0).navigation.requestActive()
     }
@@ -254,7 +258,7 @@ StyledDialogView {
                 navigation.order: 2
 
                 onClicked: {
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

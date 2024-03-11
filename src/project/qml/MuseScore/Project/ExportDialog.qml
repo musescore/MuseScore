@@ -50,6 +50,16 @@ StyledDialogView {
         exportScoresListView.focusOnFirst()
     }
 
+    onConfirmRequested: {
+        if (exportModel.selectionLength <= 0) {
+            return
+        }
+
+        if (exportModel.exportScores()) {
+            root.hide()
+        }
+    }
+
     onClosed: {
         exportModel.updateExportInfo()
     }
@@ -158,15 +168,13 @@ StyledDialogView {
                         accentButton: true
 
                         onClicked: {
-                            if (exportModel.exportScores()) {
-                                root.hide();
-                            }
+                            root.confirmRequested()
                         }
                     }
 
                     onStandardButtonClicked: function(buttonId) {
                         if (buttonId === ButtonBoxModel.Cancel) {
-                            root.hide()
+                            root.rejectRequested()
                         }
                     }
                 }

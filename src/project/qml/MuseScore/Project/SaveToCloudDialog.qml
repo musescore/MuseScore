@@ -42,6 +42,18 @@ StyledDialogView {
 
     margins: 20
 
+    onConfirmRequested: {
+        root.done(SaveToCloudResponse.Ok, {
+                  name: root.name,
+                  visibility: root.visibility,
+                  replaceExisting: root.replaceExisting
+                  })
+    }
+
+    onRejectRequested: {
+        root.done(SaveToCloudResponse.Cancel)
+    }
+
     function done(response, data = {}) {
         let value = Object.assign(({ response: response }), data)
 
@@ -261,17 +273,13 @@ StyledDialogView {
                     accentButton: true
 
                     onClicked: {
-                        root.done(SaveToCloudResponse.Ok, {
-                                      name: root.name,
-                                      visibility: root.visibility,
-                                      replaceExisting: root.replaceExisting
-                                  })
+                        root.confirmRequested()
                     }
                 }
 
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {
-                        root.done(SaveToCloudResponse.Cancel)
+                        root.rejectRequested()
                     }
                 }
             }

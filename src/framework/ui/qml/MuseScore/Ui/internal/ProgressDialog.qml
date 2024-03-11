@@ -33,7 +33,6 @@ StyledDialogView {
 
     modal: true
     frameless: true
-    closeOnEscape: false
 
     contentWidth: content.width
     contentHeight: content.height
@@ -46,6 +45,10 @@ StyledDialogView {
         onFinished: {
             root.close()
         }
+    }
+
+    onRejectRequested: {
+        model.cancel()
     }
 
     Component.onCompleted: {
@@ -98,8 +101,7 @@ StyledDialogView {
             text: qsTrc("global", "Cancel")
 
             onClicked: {
-                model.cancel()
-                root.reject()
+                root.rejectRequested()
             }
         }
     }

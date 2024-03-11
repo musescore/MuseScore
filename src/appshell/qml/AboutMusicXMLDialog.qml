@@ -34,6 +34,10 @@ StyledDialogView {
     contentHeight: 312
     contentWidth: 456
 
+    onConfirmRequested: {
+        root.hide()
+    }
+
     AboutModel {
         id: aboutModel
     }
@@ -122,7 +126,7 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Ok) {
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

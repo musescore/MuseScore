@@ -53,6 +53,27 @@ StyledDialogView {
         }
     }
 
+    onConfirmRequested: {
+        preferencesModel.apply()
+
+        var ok = true
+        var pages = preferencesModel.availablePages()
+
+        for (var i in pages) {
+            var page = pages[i]
+            var obj = root.prv.pagesObjects[page.id]
+            ok &= obj.apply()
+        }
+
+        if (ok) {
+            root.hide()
+        }
+    }
+
+    onRejectRequested: {
+        preferencesModel.cancel()
+    }
+
     Component.onCompleted: {
         preferencesModel.load(root.currentPageId)
 
@@ -161,25 +182,11 @@ StyledDialogView {
             }
 
             onRejectRequested: {
-                preferencesModel.cancel()
-                root.reject()
+                root.rejectRequested()
             }
 
             onApplyRequested: {
-                preferencesModel.apply()
-
-                var ok = true
-                var pages = preferencesModel.availablePages()
-
-                for (var i in pages) {
-                    var page = pages[i]
-                    var obj = root.prv.pagesObjects[page.id]
-                    ok &= obj.apply()
-                }
-
-                if (ok) {
-                    root.hide()
-                }
+                root.confirmRequested()
             }
         }
     }

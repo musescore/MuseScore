@@ -43,6 +43,7 @@ RowLayout {
     property var customButtons: []
     property int defaultButtonId: 0
 
+    property alias buttonBox: buttonBox
     property alias navigation: navPanel
 
     signal clicked(int buttonId, bool showAgain)
@@ -56,7 +57,7 @@ RowLayout {
         for (var i = 0; i < root.customButtons.length; i++) {
             var customButton = root.customButtons[i]
 
-            var button = buttons.addButton(customButton.text, customButton.buttonId, customButton.role, customButton.isAccent, customButton.isLeftSide)
+            var button = buttonBox.addButton(customButton.text, customButton.buttonId, customButton.role, customButton.isAccent, customButton.isLeftSide)
 
             const buttonId = customButton.buttonId
             button.clicked.connect(function() {
@@ -66,7 +67,7 @@ RowLayout {
     }
 
     function focusOnFirst() {
-        var btn = buttons.firstFocusBtn
+        var btn = buttonBox.firstFocusBtn
         if (btn) {
             btn.navigation.requestActive()
         }
@@ -109,12 +110,12 @@ RowLayout {
 
         onNavigationEvent: function(event) {
             if (event.type === NavigationEvent.AboutActive) {
-                var btn = buttons.firstFocusBtn
+                var btn = buttonBox.firstFocusBtn
                 if (Boolean(btn) && btn.enabled) {
                     event.setData("controlIndex", [ btn.navigation.row, btn.navigation.column ])
                 }
             } else {
-                buttons.restoreAccessibility()
+                buttonBox.restoreAccessibility()
                 accessibleInfo.resetFocus()
             }
         }
@@ -128,7 +129,7 @@ RowLayout {
         accessibleParent: navPanel.accessible
         visualItem: root
         role: MUAccessible.Button
-        name: root.title + " " + root.text + " " + buttons.firstFocusBtn.text
+        name: root.title + " " + root.text + " " + buttonBox.firstFocusBtn.text
 
         function readInfo() {
             accessibleInfo.ignored = false
@@ -166,7 +167,7 @@ RowLayout {
         readonly property real textsImplicitWidthBounded: Math.min(420, textsImplicitWidth)
 
         // But if the buttons need more space, then the dialog becomes as wide as necessary
-        Layout.preferredWidth: Math.max(buttons.implicitWidth, textsImplicitWidthBounded)
+        Layout.preferredWidth: Math.max(buttonBox.implicitWidth, textsImplicitWidthBounded)
 
         spacing: 18
 
@@ -205,7 +206,7 @@ RowLayout {
                 checked: false
 
                 navigation.panel: navPanel
-                navigation.column: buttons.count + 1
+                navigation.column: buttonBox.count + 1
 
                 onClicked: {
                     checked = !checked
@@ -214,7 +215,7 @@ RowLayout {
         }
 
         ButtonBox {
-            id: buttons
+            id: buttonBox
 
             width: parent.width
 

@@ -35,6 +35,11 @@ StyledDialogView {
 
     title: "Sample dialog"
 
+    onConfirmRequested: {
+        root.ret = {errcode: 0, value: input.value }
+        root.hide()
+    }
+
     Rectangle {
         anchors.fill: parent
         color: root.isApplyColor ? root.color : "#666666"
@@ -71,15 +76,14 @@ StyledDialogView {
             FlatButton {
                 text: "Cancel"
                 onClicked: {
-                    root.reject()
+                    root.rejectRequested()
                 }
             }
 
             FlatButton {
                 text: "OK"
                 onClicked: {
-                    root.ret = {errcode: 0, value: input.value }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

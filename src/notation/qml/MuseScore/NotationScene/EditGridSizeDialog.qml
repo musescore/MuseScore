@@ -37,6 +37,11 @@ StyledDialogView {
         id: model
     }
 
+    onConfirmRequested: {
+        model.apply()
+        root.hide()
+    }
+
     Component.onCompleted: {
         model.load()
     }
@@ -146,10 +151,9 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 } else if (buttonId === ButtonBoxModel.Ok) {
-                    model.apply()
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

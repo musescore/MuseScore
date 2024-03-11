@@ -35,6 +35,11 @@ StyledDialogView {
 
     property string scoreManagerUrl: ""
 
+    onConfirmRequested: {
+        Qt.openUrlExternally("https://youtu.be/6LP4U_BF23w")
+        root.hide()
+    }
+
     onNavigationActivateRequested: {
         watchVideoButton.navigation.requestActive()
     }
@@ -234,8 +239,7 @@ StyledDialogView {
                             }
 
                             onClicked: {
-                                Qt.openUrlExternally("https://youtu.be/6LP4U_BF23w")
-                                root.hide()
+                                root.confirmRequested()
                             }
                         }
                     }
@@ -269,7 +273,7 @@ StyledDialogView {
                     navigation.column: 3
 
                     onClicked: {
-                        root.hide()
+                        root.rejectRequested()
                     }
                 }
             }
