@@ -26,6 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "../iextensionsprovider.h"
+#include "global/iinteractive.h"
 
 namespace mu::extensions {
 class DevExtensionsListModel : public QObject
@@ -33,11 +34,13 @@ class DevExtensionsListModel : public QObject
     Q_OBJECT
 
     Inject<IExtensionsProvider> provider;
+    Inject<IInteractive> interactive;
 
 public:
     DevExtensionsListModel(QObject* parent = nullptr);
 
     Q_INVOKABLE QVariantList extensionsList();
+    Q_INVOKABLE void clicked(const QString& uri);
 };
 }
 

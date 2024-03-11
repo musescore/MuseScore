@@ -42,3 +42,8 @@ QVariantList DevExtensionsListModel::extensionsList()
 
     return list;
 }
+
+void DevExtensionsListModel::clicked(const QString& uri)
+{
+    interactive()->open(uri.toStdString());
+}

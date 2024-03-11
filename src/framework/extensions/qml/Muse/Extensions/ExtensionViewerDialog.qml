@@ -19,31 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSMODULE_H
+import QtQuick 2.15
 
-#include <memory>
-#include <string>
+import MuseScore.UiComponents 1.0
 
-#include "modularity/imodulesetup.h"
+StyledDialogView {
 
-namespace mu::extensions {
-class ExtensionsProvider;
-class ExtensionsModule : public modularity::IModuleSetup
-{
-public:
+    property alias uri: viewer.uri
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    title: viewer.title
 
-private:
+    contentWidth: viewer.width
+    contentHeight: viewer.height
 
-    std::shared_ptr<ExtensionsProvider> m_extensionsProvider;
-};
+    ExtensionViewer {
+        id: viewer
+    }
+
 }
-
-#endif // MU_EXTENSIONS_EXTENSIONSMODULE_H

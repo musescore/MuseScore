@@ -31,6 +31,8 @@ Rectangle {
                 + "\n uri: " + modelData.uri
                 + "\n type: " + modelData.type
             }
+
+            onClicked: devModel.clicked(modelData.uri)
         }
     }
 }

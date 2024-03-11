@@ -19,24 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_IEXTENSIONSCONFIGURE_H
-#define MU_EXTENSIONS_IEXTENSIONSCONFIGURE_H
+#include "extensionsconfiguration.h"
 
-#include "modularity/imoduleinterface.h"
+using namespace mu::extensions;
 
-#include "global/io/path.h"
-
-namespace mu::extensions {
-class IExtensionsConfigure : MODULE_EXPORT_INTERFACE
+mu::io::path_t ExtensionsConfiguration::defaultPath() const
 {
-    INTERFACE_ID(IExtensionsConfigure);
-public:
-
-    virtual ~IExtensionsConfigure() = default;
-
-    virtual io::path_t defaultPath() const = 0;
-    virtual io::path_t userPath() const = 0;
-};
+    return globalConfiguration()->appDataPath() + "/extensions";
 }
 
-#endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURE_H
+mu::io::path_t ExtensionsConfiguration::userPath() const
+{
+    return globalConfiguration()->userAppDataPath() + "/extensions";
+}

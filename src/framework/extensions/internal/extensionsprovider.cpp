@@ -25,8 +25,26 @@
 
 using namespace mu::extensions;
 
-ManifestList ExtensionsProvider::manifestList() const
+const ManifestList& ExtensionsProvider::manifestList() const
 {
-    ExtensionsLoader loader;
-    return loader.loadManifesList(configure()->defaultPath(), configure()->userPath());
+    if (m_manifests.empty()) {
+        ExtensionsLoader loader;
+        m_manifests = loader.loadManifesList(configuration()->defaultPath(), configuration()->userPath());
+    }
+    return m_manifests;
+}
+
+const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
+{
+    const ManifestList& list = manifestList();
+    auto it = std::find_if(list.begin(), list.end(), [uri](const Manifest& m) {
+        return m.uri == uri;
+    });
+
+    if (it != list.end()) {
+        return *it;
+    }
+
+    static Manifest _dymmy;
+    return _dymmy;
 }

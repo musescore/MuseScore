@@ -23,17 +23,21 @@
 #define MU_EXTENSIONS_EXTENSIONSPROVIDER_H
 
 #include "modularity/ioc.h"
-#include "../iextensionsconfigure.h"
+#include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
 
 namespace mu::extensions {
 class ExtensionsProvider : public IExtensionsProvider
 {
-    Inject<IExtensionsConfigure> configure;
+    Inject<IExtensionsConfiguration> configuration;
 public:
     ExtensionsProvider() = default;
 
-    ManifestList manifestList() const override;
+    const ManifestList& manifestList() const override;
+    const Manifest& manifest(const Uri& uri) const override;
+
+private:
+    mutable ManifestList m_manifests;
 };
 }
 

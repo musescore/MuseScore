@@ -25,8 +25,10 @@
 
 #include "modularity/ioc.h"
 
+#include "ui/iinteractiveuriregister.h"
+
 #include "internal/extensionsprovider.h"
-#include "internal/extensionsconfigure.h"
+#include "internal/extensionsconfiguration.h"
 
 #include "devtools/devextensionslistmodel.h"
 
@@ -34,6 +36,11 @@
 
 using namespace mu::extensions;
 using namespace mu::modularity;
+
+static void extensions_init_qrc()
+{
+    Q_INIT_RESOURCE(extensions);
+}
 
 std::string ExtensionsModule::moduleName() const
 {
@@ -45,12 +52,25 @@ void ExtensionsModule::registerExports()
     m_extensionsProvider = std::make_shared<ExtensionsProvider>();
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_extensionsProvider);
-    ioc()->registerExport<IExtensionsConfigure>(moduleName(), new ExtensionsConfigure());
+    ioc()->registerExport<IExtensionsConfiguration>(moduleName(), new ExtensionsConfiguration());
+}
+
+void ExtensionsModule::registerResources()
+{
+    extensions_init_qrc();
 }
 
 void ExtensionsModule::registerUiTypes()
 {
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
+}
+
+void ExtensionsModule::resolveImports()
+{
+    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerQmlUri(Uri("musescore://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
+    }
 }
 
 void ExtensionsModule::onInit(const IApplication::RunMode& mode)

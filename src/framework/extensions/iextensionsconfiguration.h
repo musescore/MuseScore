@@ -19,31 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSMODULE_H
+#ifndef MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
+#define MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
 
-#include <memory>
-#include <string>
+#include "modularity/imoduleinterface.h"
 
-#include "modularity/imodulesetup.h"
+#include "global/io/path.h"
 
 namespace mu::extensions {
-class ExtensionsProvider;
-class ExtensionsModule : public modularity::IModuleSetup
+class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IExtensionsConfiguration);
 public:
 
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    virtual ~IExtensionsConfiguration() = default;
 
-private:
-
-    std::shared_ptr<ExtensionsProvider> m_extensionsProvider;
+    virtual io::path_t defaultPath() const = 0;
+    virtual io::path_t userPath() const = 0;
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSMODULE_H
+#endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
