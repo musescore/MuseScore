@@ -35,6 +35,8 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
 {
     TRACEFUNC;
 
+    LOGD() << "try load extensions, def: " << defPath << ", user: " << extPath;
+
     ManifestList defaultManifests = manifesList(defPath);
     ManifestList externalManifests = manifesList(extPath);
 
@@ -75,14 +77,6 @@ mu::io::paths_t ExtensionsLoader::manifestPaths(const io::path_t& rootPath) cons
         LOGE() << "failed scan files, err: " << paths.ret.toString();
     }
     return paths.val;
-}
-
-static Type typeFromString(const std::string& str)
-{
-    if (str == "form") {
-        return Type::Form;
-    }
-    return Type::Undefined;
 }
 
 Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const

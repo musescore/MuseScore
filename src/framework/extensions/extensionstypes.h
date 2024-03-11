@@ -44,6 +44,23 @@ enum class Type {
     Form
 };
 
+static inline Type typeFromString(const std::string& str)
+{
+    if (str == "form") {
+        return Type::Form;
+    }
+    return Type::Undefined;
+}
+
+static inline std::string typeToString(const Type& type)
+{
+    switch (type) {
+    case Type::Undefined: return "undefined";
+    case Type::Form: return "form";
+    }
+    return std::string();
+}
+
 struct Manifest {
     Uri uri;
     Type type = Type::Undefined;
