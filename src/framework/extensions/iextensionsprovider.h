@@ -34,7 +34,8 @@ public:
 
     virtual ~IExtensionsProvider() = default;
 
-    virtual ManifestList manifestList() const = 0;
+    virtual const ManifestList& manifestList() const = 0;
+    virtual const Manifest& manifest(const Uri& uri) const = 0;
 };
 }
 

@@ -19,25 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSCONFIGURE_H
-#define MU_EXTENSIONS_EXTENSIONSCONFIGURE_H
+import QtQuick 2.15
 
-#include "../iextensionsconfigure.h"
+Rectangle {
 
-#include "modularity/ioc.h"
-#include "global/iglobalconfiguration.h"
+    id: root
 
-namespace mu::extensions {
-class ExtensionsConfigure : public IExtensionsConfigure
-{
-    Inject<IGlobalConfiguration> globalConfiguration;
+    property string uri: ""
 
-public:
-    ExtensionsConfigure() = default;
+    property string title: "ExtensionsViewer"
 
-    io::path_t defaultPath() const override;
-    io::path_t userPath() const override;
-};
+    width: 800
+    height: 500
+
+    Text {
+        text: root.uri
+    }
+
 }
-
-#endif // MU_EXTENSIONS_EXTENSIONSCONFIGURE_H

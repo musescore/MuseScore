@@ -32,6 +32,7 @@
 #include "../iinteractiveprovider.h"
 #include "../iinteractiveuriregister.h"
 #include "../imainwindow.h"
+#include "extensions/iextensionsprovider.h"
 #include "types/retval.h"
 
 namespace mu::ui {
@@ -53,8 +54,9 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 {
     Q_OBJECT
 
-    INJECT(IInteractiveUriRegister, uriRegister)
-    INJECT(IMainWindow, mainWindow)
+    Inject<IInteractiveUriRegister> uriRegister;
+    Inject<IMainWindow> mainWindow;
+    Inject<extensions::IExtensionsProvider> extensionsProvider;
 
 public:
     explicit InteractiveProvider();
@@ -134,6 +136,7 @@ private:
 
     void raiseWindowInStack(QObject* newActiveWindow);
 
+    void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QObject* object, const UriQuery& q) const;
     void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title, const IInteractive::Text& text,
@@ -145,6 +148,7 @@ private:
     Ret toRet(const QVariant& jsr) const;
     RetVal<Val> toRetVal(const QVariant& jsrv) const;
 
+    RetVal<OpenData> openExtensionDialog(const UriQuery& q);
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
     RetVal<OpenData> openQml(const UriQuery& q);
     RetVal<Val> openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
