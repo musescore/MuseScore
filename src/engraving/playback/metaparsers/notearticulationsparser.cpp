@@ -27,6 +27,7 @@
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"
+#include "internal/symbolsmetaparser.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;
@@ -70,7 +71,7 @@ void NoteArticulationsParser::doParse(const EngravingItem* item, const Rendering
     parseSpanners(note, ctx, result);
 }
 
-ArticulationType NoteArticulationsParser::articulationTypeByNotehead(const NoteHeadGroup noteheadGroup)
+ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const NoteHeadGroup noteheadGroup)
 {
     switch (noteheadGroup) {
     case NoteHeadGroup::HEAD_CROSS:
@@ -150,21 +151,31 @@ void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingCo
 
 void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    mpe::ArticulationType typeByNoteHead = articulationTypeByNotehead(note->headGroup());
+    ArticulationTypeSet types;
+    mpe::ArticulationType typeByNoteHeadGroup = articulationTypeByNoteheadGroup(note->headGroup());
 
-    if (typeByNoteHead == mpe::ArticulationType::Undefined) {
-        return;
+    if (typeByNoteHeadGroup != mpe::ArticulationType::Undefined) {
+        types.insert(typeByNoteHeadGroup);
+    } else if (note->ldata()->cachedNoteheadSym.has_value()) {
+        SymId symId = note->ldata()->cachedNoteheadSym.value(); // fastest way to get the notehead symbol
+        types = SymbolsMetaParser::symbolToArticulations(symId);
     }
 
-    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(typeByNoteHead);
-    if (pattern.empty()) {
-        return;
-    }
+    for (mpe::ArticulationType type : types) {
+        if (type == mpe::ArticulationType::Undefined) {
+            continue;
+        }
 
-    appendArticulationData(mpe::ArticulationMeta(typeByNoteHead,
-                                                 pattern,
-                                                 ctx.nominalTimestamp,
-                                                 ctx.nominalDuration), result);
+        const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+        if (pattern.empty()) {
+            continue;
+        }
+
+        appendArticulationData(mpe::ArticulationMeta(type,
+                                                     pattern,
+                                                     ctx.nominalTimestamp,
+                                                     ctx.nominalDuration), result);
+    }
 }
 
 void NoteArticulationsParser::parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
