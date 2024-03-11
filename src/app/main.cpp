@@ -186,6 +186,8 @@
 #include "stubs/plugins/pluginsstubmodule.h"
 #endif
 
+#include "extensions/extensionsmodule.h"
+
 #include "print/printmodule.h"
 
 #ifdef MUE_BUILD_PROJECT_MODULE
@@ -327,6 +329,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::palette::PaletteModule());
     app.addModule(new mu::playback::PlaybackModule());
     app.addModule(new mu::plugins::PluginsModule());
+    app.addModule(new mu::extensions::ExtensionsModule());
     app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::update::UpdateModule());

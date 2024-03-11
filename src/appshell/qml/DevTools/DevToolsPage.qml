@@ -50,6 +50,7 @@ DockPage {
         case "crashhandler": root.central = crashhandlerComp; break
         case "corruptscore": root.central = corruptScoreComp; break
         case "mpe": root.central = mpeComponent; break
+        case "extensions": root.central = extensionsComp; break
         case "navigation": root.central = keynavComp; break
         }
     }
@@ -81,7 +82,8 @@ DockPage {
                         { "name": "crashhandler", "title": "Crash handler" },
                         { "name": "corruptscore", "title": "Corrupt score" },
                         { "name": "mpe", "title": "MPE" },
-                        { "name": "navigation", "title": "KeyNav" }
+                        { "name": "extensions", "title": "Extensions" },
+                        //{ "name": "navigation", "title": "KeyNav" } broken
                     ]
 
                     onSelected: function(name) {
@@ -129,6 +131,14 @@ DockPage {
 
         Loader {
             source: "qrc:/qml/DevTools/MPE/ArticulationsProfileEditorView.qml"
+        }
+    }
+
+    Component {
+        id: extensionsComp
+
+        Loader {
+            source: "qrc:/qml/DevTools/Extensions/ExtensionsListView.qml"
         }
     }
 

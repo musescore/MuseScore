@@ -25,3 +25,9 @@ install (DIRECTORY
       DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
       PATTERN ".*" EXCLUDE
       )
+
+  install (DIRECTORY
+        extensions
+        DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+        PATTERN ".*" EXCLUDE
+        )

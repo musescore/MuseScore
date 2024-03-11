@@ -28,6 +28,8 @@
 #include "internal/extensionsprovider.h"
 #include "internal/extensionsconfigure.h"
 
+#include "devtools/devextensionslistmodel.h"
+
 #include "log.h"
 
 using namespace mu::extensions;
@@ -48,6 +50,7 @@ void ExtensionsModule::registerExports()
 
 void ExtensionsModule::registerUiTypes()
 {
+    qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
 }
 
 void ExtensionsModule::onInit(const IApplication::RunMode& mode)
