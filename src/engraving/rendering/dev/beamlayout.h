@@ -56,7 +56,7 @@ public:
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
-    static void checkCrossPosAndStemConsistency(Beam* beam, LayoutContext &ctx);
+    static void checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx);
 
     static PointF chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static double chordBeamAnchorY(const Beam* item, const ChordRest* chord);
