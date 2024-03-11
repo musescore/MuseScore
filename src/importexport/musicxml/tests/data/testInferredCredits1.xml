@@ -2,7 +2,7 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 3.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="3.1">
   <work>
-    <work-title>Inferred Credits</work-title>
+    <work-title>Inferred Credits 1</work-title>
     </work>
   <identification>
     <creator type="composer">Henry Ives</creator>
@@ -43,7 +43,7 @@
     </defaults>
   <credit page="1">
     <credit-type>title</credit-type>
-    <credit-words default-x="600" default-y="1611.86" justify="center" valign="top" font-size="22">Inferred Credits</credit-words>
+    <credit-words default-x="600" default-y="1611.86" justify="center" valign="top" font-size="22">Inferred Credits 1</credit-words>
     </credit>
   <part-list>
     <score-part id="P1">

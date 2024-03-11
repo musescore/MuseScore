@@ -2956,7 +2956,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             _pass2.setHasInferredHeaderText(true);
             hideRedundantHeaderText(inferredText, { "lyricist", "composer", "poet" });
         }
-    } else if (isLikelySource(tick)) {
+    } else if (isLikelySubtitle(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::SUBTITLE);
         if (inferredText) {
             _pass2.setHasInferredHeaderText(true);
@@ -3178,15 +3178,13 @@ bool MusicXMLParserDirection::isLyricBracket() const
            && _tpoSound < 0.1;
 }
 
-bool MusicXMLParserDirection::isLikelySource(const Fraction& tick) const
+bool MusicXMLParserDirection::isLikelySubtitle(const Fraction& tick) const
 {
-    static const QRegularExpression re("^\\s*[Ff]rom\\s+(?!$)");
-
     return (tick + _offset < Fraction(5, 1)) // Only early in the piece
            && _rehearsalText.isEmpty()
            && _metroText.isEmpty()
            && _tpoSound < 0.1
-           && _wordsText.contains(re);
+           && isLikelySubtitleText(_wordsText, false);
 }
 
 Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)

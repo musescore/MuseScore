@@ -43,11 +43,12 @@
     <metaTag name="lyricist">Henry Ives</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="source">from MUSESCORE: the musical: the graphic novel:
-the video game: a tone poem</metaTag>
+    <metaTag name="source">Op.1 No.43</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Inferred Credits</metaTag>
+    <metaTag name="workTitle">Inferred Credits 2
+from MUSESCORE: the musical: a tone poem
+</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -114,10 +115,25 @@ the video game: a tone poem</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>14.9017</height>
+        <height>19.313</height>
         <Text>
           <style>title</style>
-          <text><font size="22"/>Inferred Credits</text>
+          <text>Inferred Credits 2</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <offset x="0" y="9.71627"/>
+          <text>from MUSESCORE: the musical: a tone poem</text>
+          </Text>
+        <Text>
+          <visible>0</visible>
+          <style>composer</style>
+          <text>Henry Ives</text>
+          </Text>
+        <Text>
+          <visible>0</visible>
+          <style>poet</style>
+          <text>Henry Ives</text>
           </Text>
         <Text>
           <style>composer</style>
@@ -125,9 +141,8 @@ the video game: a tone poem</metaTag>
           </Text>
         <Text>
           <style>subtitle</style>
-          <offset x="0" y="9.71627"/>
-          <text>from MUSESCORE: the musical: the graphic novel:
-the video game: a tone poem</text>
+          <offset x="0" y="16.8209"/>
+          <text>Op.1 No.43</text>
           </Text>
         </VBox>
       <Measure>
@@ -143,7 +158,7 @@ the video game: a tone poem</text>
             </TimeSig>
           <StaffText>
             <text>Lyrics to be sung by candlelight
-        (and this not to be inferred)</text>
+(and this not to be inferred)</text>
             </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
@@ -211,6 +226,11 @@ the video game: a tone poem</text>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <StaffText>
+            <text>This music has been legally downloaded.
+Do not photocopy.
+</text>
+            </StaffText>
           </voice>
         </Measure>
       <Measure>
