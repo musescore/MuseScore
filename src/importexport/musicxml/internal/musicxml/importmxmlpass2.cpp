@@ -3064,8 +3064,12 @@ void MusicXMLParserDirection::direction(const String& partId,
         } else {
             String spannerPlacement = placement;
             // Case-based defaults
-            if (spannerPlacement.empty() && desc.sp->isHairpin()) {
-                spannerPlacement = isVocalStaff ? u"above" : u"below";
+            if (spannerPlacement.empty()) {
+                if (desc.sp->isHairpin()) {
+                    spannerPlacement = isVocalStaff ? u"above" : u"below";
+                } else {
+                    spannerPlacement = totalY() < 0 ? u"above" : u"below";
+                }
             }
             if (spdesc.isStopped) {
                 m_pass2.addSpanner(desc);
