@@ -1041,6 +1041,9 @@ TEST_F(Musicxml_Tests, trackHandling) {
 TEST_F(Musicxml_Tests, tremolo) {
     mxmlIoTest("testTremolo");
 }
+TEST_F(Musicxml_Tests, trills) {
+    mxmlMscxExportTestRef("testTrills");
+}
 TEST_F(Musicxml_Tests, tuplets1) {
     mxmlIoTestRef("testTuplets1");
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
+<museScore version="4.40">
   <Score>
     <Division>480</Division>
     <Style>
@@ -14,6 +14,7 @@
       <pageOddBottomMargin>0.590551</pageOddBottomMargin>
       <lyricsOddFontSize>11</lyricsOddFontSize>
       <lyricsEvenFontSize>11</lyricsEvenFontSize>
+      <romanNumeralFontFace>Edwin</romanNumeralFontFace>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
       <tupletFontSize>10</tupletFontSize>
       <fingeringFontSize>10</fingeringFontSize>

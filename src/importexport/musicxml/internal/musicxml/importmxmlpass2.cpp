@@ -1218,7 +1218,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         map[u"up-bow"]           = SymId::stringsUpBow;
         map[u"down-bow"]         = SymId::stringsDownBow;
         map[u"detached-legato"]  = SymId::articTenutoStaccatoAbove;
-        map[u"spiccato"]         = SymId::articStaccatissimoAbove;
+        map[u"spiccato"]         = SymId::articStaccatissimoStrokeAbove;
         map[u"snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
         map[u"schleifer"]        = SymId::ornamentPrecompSlide;
         map[u"open"]             = SymId::brassMuteOpen;
@@ -3064,8 +3064,12 @@ void MusicXMLParserDirection::direction(const String& partId,
         } else {
             String spannerPlacement = placement;
             // Case-based defaults
-            if (spannerPlacement.empty() && desc.sp->isHairpin()) {
-                spannerPlacement = isVocalStaff ? u"above" : u"below";
+            if (spannerPlacement.empty()) {
+                if (desc.sp->isHairpin()) {
+                    spannerPlacement = isVocalStaff ? u"above" : u"below";
+                } else {
+                    spannerPlacement = totalY() < 0 ? u"above" : u"below";
+                }
             }
             if (spdesc.isStopped) {
                 m_pass2.addSpanner(desc);

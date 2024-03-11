@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
+<museScore version="4.40">
   <Score>
     <Division>480</Division>
     <Style>
@@ -14,6 +14,8 @@
       <pageOddBottomMargin>0.5</pageOddBottomMargin>
       <pageTwosided>0</pageTwosided>
       <minSystemDistance>12</minSystemDistance>
+      <lyricsOddFontFace>Times New Roman</lyricsOddFontFace>
+      <lyricsEvenFontFace>Times New Roman</lyricsEvenFontFace>
       <barWidth>0.15625</barWidth>
       <endBarWidth>0.5</endBarWidth>
       <stemWidth>0.125</stemWidth>
@@ -21,6 +23,7 @@
       <ledgerLineWidth>0.15625</ledgerLineWidth>
       <chordSymbolAFontFace>Times New Roman</chordSymbolAFontFace>
       <chordSymbolBFontFace>Times New Roman</chordSymbolBFontFace>
+      <romanNumeralFontFace>Times New Roman</romanNumeralFontFace>
       <nashvilleNumberFontFace>Times New Roman</nashvilleNumberFontFace>
       <smallNoteMag>0.75</smallNoteMag>
       <graceNoteMag>0.6</graceNoteMag>
@@ -29,10 +32,16 @@
       <tieEndWidth>0.0625</tieEndWidth>
       <tieMidWidth>0.21875</tieMidWidth>
       <tupletFontFace>Times New Roman</tupletFontFace>
+      <titleFontFace>Times New Roman</titleFontFace>
+      <subTitleFontFace>Times New Roman</subTitleFontFace>
+      <composerFontFace>Times New Roman</composerFontFace>
+      <lyricistFontFace>Times New Roman</lyricistFontFace>
       <fingeringFontFace>Times New Roman</fingeringFontFace>
       <lhGuitarFingeringFontFace>Times New Roman</lhGuitarFingeringFontFace>
       <rhGuitarFingeringFontFace>Times New Roman</rhGuitarFingeringFontFace>
       <stringNumberFontFace>Times New Roman</stringNumberFontFace>
+      <harpPedalDiagramFontFace>Times New Roman</harpPedalDiagramFontFace>
+      <harpPedalTextDiagramFontFace>Times New Roman</harpPedalTextDiagramFontFace>
       <longInstrumentFontFace>Times New Roman</longInstrumentFontFace>
       <shortInstrumentFontFace>Times New Roman</shortInstrumentFontFace>
       <partInstrumentFontFace>Times New Roman</partInstrumentFontFace>

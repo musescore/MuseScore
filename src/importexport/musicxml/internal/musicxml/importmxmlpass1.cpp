@@ -1496,24 +1496,26 @@ static void updateStyles(Score* score,
         // and text types used in the title frame
         // Some further tweaking may still be required.
 
-        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN
-            || tid == TextStyleType::HARMONY_ROMAN
-            || isTitleFrameStyle(tid)
-            || isHarpPedalStyle(tid)) {
+        if (tid == TextStyleType::LYRICS_ODD || tid == TextStyleType::LYRICS_EVEN) {
             continue;
         }
+
+        bool needUseDefaultSize = tid == TextStyleType::HARMONY_ROMAN
+                                  || isTitleFrameStyle(tid)
+                                  || isHarpPedalStyle(tid);
+
         const TextStyle* ts = textStyle(tid);
         for (const auto& a :*ts) {
-            if (a.pid == Pid::FONT_FACE && wordFamily != "" && !needUseDefaultFont) {
+            if (a.pid == Pid::FONT_FACE && !needUseDefaultFont) {
                 score->style().set(a.sid, wordFamily);
-            } else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon) {
+            } else if (a.pid == Pid::FONT_SIZE && dblWordSize > epsilon && !needUseDefaultSize) {
                 score->style().set(a.sid, dblWordSize);
             }
         }
     }
 
     // handle lyrics odd and even lines separately
-    if (!lyricFamily.empty() && !needUseDefaultFont) {
+    if (!needUseDefaultFont) {
         score->style().set(Sid::lyricsOddFontFace, lyricFamily);
         score->style().set(Sid::lyricsEvenFontFace, lyricFamily);
     }
@@ -1706,7 +1708,10 @@ void MusicXMLParserPass1::defaults()
            muPrintable(wordFontFamily), muPrintable(wordFontSize),
            muPrintable(lyricFontFamily), muPrintable(lyricFontSize));
     */
+    wordFontFamily = wordFontFamily.empty() ? u"Edwin" : wordFontFamily;
+    lyricFontFamily = lyricFontFamily.empty() ? wordFontFamily : lyricFontFamily;
     updateStyles(m_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
+
     scaleCopyrightText(m_score);
 }
 
