@@ -101,10 +101,13 @@ void NotationViewInputController::onNotationChanged()
     }
 
     notation->interaction()->selectionChanged().onNotify(this, [this, notation]() {
-        const EngravingItem* selectedItem = notation->interaction()->selection()->element();
+        EngravingItem* selectedItem = notation->interaction()->selection()->element();
         ElementType type = selectedItem ? selectedItem->type() : ElementType::INVALID;
 
-        if (selectedItem && selectedItem == m_prevHitElement) {
+        bool noChanges = selectedItem && m_prevSelectedElement == selectedItem;
+        m_prevSelectedElement = selectedItem;
+
+        if (noChanges) {
             return;
         }
 

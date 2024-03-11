@@ -189,6 +189,7 @@ private:
     PointF m_beginPoint;
 
     mu::engraving::EngravingItem* m_prevHitElement = nullptr;
+    mu::engraving::EngravingItem* m_prevSelectedElement = nullptr;
     bool m_shouldTogglePopupOnLeftClickRelease = false;
 };
 }
