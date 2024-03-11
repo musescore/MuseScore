@@ -1096,11 +1096,13 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
-    Measure* m = mmRest ? score()->tick2measureMM(tick()) : score()->tick2measure(tick());
+    bool useMMrest = style().styleB(Sid::createMultiMeasureRests);
 
-    SegmentType st = (systemFlag() && tick2() == score()->endTick()) || m->isMMRest() ? SPANNER_ANCHOR_SEG_TYPE : SegmentType::ChordRest;
-    return score()->tick2leftSegment(tick2(), mmRest, st);
+    Measure* m = useMMrest ? score()->tick2measureMM(tick()) : score()->tick2measure(tick());
+    bool mmRestFound = m && m->isMMRest();
+
+    SegmentType st = (systemFlag() && tick2() == score()->endTick()) || mmRestFound ? SPANNER_ANCHOR_SEG_TYPE : SegmentType::ChordRest;
+    return score()->tick2leftSegment(tick2(), useMMrest, st);
 }
 
 //---------------------------------------------------------
