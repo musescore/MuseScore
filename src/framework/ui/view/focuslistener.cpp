@@ -33,7 +33,6 @@ FocusListener::FocusListener(QObject* parent)
 
 QQuickItem* FocusListener::item() const
 {
-
     return m_item;
 }
 
