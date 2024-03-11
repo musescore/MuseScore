@@ -26,21 +26,11 @@
 
 using namespace mu::engraving;
 
-void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+mu::mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, OrnamentStyle ornamentStyle)
 {
-    IF_ASSERT_FAILED(item->isArticulationFamily()) {
-        return;
-    }
-
-    const Articulation* articulationSymbol = toArticulation(item);
-
-    if (!articulationSymbol->playArticulation()) {
-        return;
-    }
-
     mpe::ArticulationTypeSet types;
 
-    switch (articulationSymbol->symId()) {
+    switch (symId) {
     case SymId::articAccentAbove:
     case SymId::articAccentBelow:
         types.emplace(mpe::ArticulationType::Accent);
@@ -158,7 +148,6 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     case SymId::stringsMuteOff:
         types.emplace(mpe::ArticulationType::Open);
         break;
-
     case SymId::pluckedLeftHandPizzicato:
         types.emplace(mpe::ArticulationType::Pizzicato);
         break;
@@ -339,14 +328,14 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     case SymId::ornamentTrill:
     case SymId::ornamentShake3:
     case SymId::ornamentShakeMuffat1:
-        if (articulationSymbol->ornamentStyle() == OrnamentStyle::DEFAULT) {
+        if (ornamentStyle == OrnamentStyle::DEFAULT) {
             types.emplace(mpe::ArticulationType::Trill);
         } else {
             types.emplace(mpe::ArticulationType::TrillBaroque);
         }
         break;
     case SymId::ornamentShortTrill:
-        if (articulationSymbol->ornamentStyle() == OrnamentStyle::DEFAULT) {
+        if (ornamentStyle == OrnamentStyle::DEFAULT) {
             types.emplace(mpe::ArticulationType::UpperMordent);
         } else {
             types.emplace(mpe::ArticulationType::UpperMordentBaroque);
@@ -427,6 +416,23 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
     default:
         break;
     }
+
+    return types;
+}
+
+void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
+{
+    IF_ASSERT_FAILED(item->isArticulationFamily()) {
+        return;
+    }
+
+    const Articulation* articulationSymbol = toArticulation(item);
+
+    if (!articulationSymbol->playArticulation()) {
+        return;
+    }
+
+    mpe::ArticulationTypeSet types = symbolToArticulations(articulationSymbol->symId(), articulationSymbol->ornamentStyle());
 
     for (mpe::ArticulationType type : types) {
         const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
