@@ -19,14 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "extensionsprovider.h"
+#ifndef MU_EXTENSIONS_IEXTENSIONSCONFIGURE_H
+#define MU_EXTENSIONS_IEXTENSIONSCONFIGURE_H
 
-#include "extensionsloader.h"
+#include "modularity/imoduleinterface.h"
 
-using namespace mu::extensions;
+#include "global/io/path.h"
 
-ManifestList ExtensionsProvider::manifestList() const
+namespace mu::extensions {
+class IExtensionsConfigure : MODULE_EXPORT_INTERFACE
 {
-    ExtensionsLoader loader;
-    return loader.loadManifesList(configure()->defaultPath(), configure()->userPath());
+    INTERFACE_ID(IExtensionsConfigure);
+public:
+
+    virtual ~IExtensionsConfigure() = default;
+
+    virtual io::path_t defaultPath() const = 0;
+    virtual io::path_t userPath() const = 0;
+};
 }
+
+#endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURE_H

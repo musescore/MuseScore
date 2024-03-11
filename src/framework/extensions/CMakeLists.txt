@@ -23,14 +23,19 @@ set(MODULE extensions)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/extensionsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/extensionsmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/extensionstypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfigure.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsconfigure.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsconfigure.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsloader.h
     )
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 include(SetupModule)
-
-
 
