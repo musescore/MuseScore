@@ -94,6 +94,9 @@ void PlaybackConfiguration::init()
     for (MixerSectionType sectionType : allMixerSectionTypes()) {
         bool sectionEnabledByDefault = sectionType != MixerSectionType::Volume;
         settings()->setDefaultValue(mixerSectionVisibleKey(sectionType), Val(sectionEnabledByDefault));
+        settings()->valueChanged(mixerSectionVisibleKey(sectionType)).onReceive(this, [this, sectionType](const Val& val) {
+            m_isMixerSectionVisibleChanged.send(sectionType, val.toBool());
+        });
     }
 
     settings()->setDefaultValue(MUTE_HIDDEN_INSTRUMENTS, Val(true));
@@ -163,6 +166,11 @@ bool PlaybackConfiguration::isMixerSectionVisible(MixerSectionType sectionType) 
 void PlaybackConfiguration::setMixerSectionVisible(MixerSectionType sectionType, bool visible)
 {
     settings()->setSharedValue(mixerSectionVisibleKey(sectionType), Val(visible));
+}
+
+mu::async::Channel<MixerSectionType, bool> PlaybackConfiguration::isMixerSectionVisibleChanged() const
+{
+    return m_isMixerSectionVisibleChanged;
 }
 
 bool PlaybackConfiguration::isAuxSendVisible(aux_channel_idx_t index) const

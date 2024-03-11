@@ -47,6 +47,7 @@ public:
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
+    virtual async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const = 0;
 
     virtual bool isAuxSendVisible(audio::aux_channel_idx_t index) const = 0;
     virtual void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) = 0;
