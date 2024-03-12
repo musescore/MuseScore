@@ -931,6 +931,9 @@ TEST_F(Musicxml_Tests, stringData) {
 TEST_F(Musicxml_Tests, stringVoiceName) {
     mxmlIoTestRef("testStringVoiceName");
 }
+TEST_F(Musicxml_Tests, swing) {
+    mxmlMscxExportTestRef("testSwing");
+}
 TEST_F(Musicxml_Tests, systemBrackets1) {
     mxmlIoTest("testSystemBrackets1");
 }
