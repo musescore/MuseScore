@@ -25,12 +25,52 @@
 #include <QQmlContext>
 
 using namespace mu::extensions;
+namespace mu::extensions {
+class QmlApiEngine : public mu::api::IApiEngine
+{
+public:
+    QmlApiEngine(QQmlEngine* e)
+        : m_engine(e) {}
+
+    QJSValue newQObject(QObject* o) override
+    {
+        if (!o->parent()) {
+            o->setParent(m_engine);
+        }
+        return m_engine->newQObject(o);
+    }
+
+    QJSValue newObject() override
+    {
+        return m_engine->newObject();
+    }
+
+    QJSValue newArray(size_t length = 0) override
+    {
+        return m_engine->newArray(uint(length));
+    }
+
+private:
+    QQmlEngine* m_engine = nullptr;
+};
+}
+
+ExtensionsUiEngine::~ExtensionsUiEngine()
+{
+    delete m_api;
+    delete m_apiEngine;
+    delete m_engine;
+}
 
 void ExtensionsUiEngine::setup(QQmlEngine* e)
 {
     //! NOTE Needed for UI components, should not be used directly in extensions
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
     e->rootContext()->setContextProperty("ui", ui);
+
+    m_apiEngine = new QmlApiEngine(e);
+    m_api = new QmlExtApi(m_apiEngine, e);
+    m_engine->globalObject().setProperty("api", e->newQObject(m_api));
 
     //! NOTE We prohibit importing default modules;
     //! only what is in the `qmlext` folder will be imported.

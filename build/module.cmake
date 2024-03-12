@@ -30,6 +30,7 @@
 # set(MODULE_BIG_QRC somename.qrc)            - set big resource (qrc) file
 # set(MODULE_UI ...)                          - set ui headers
 # set(MODULE_QML_IMPORT ...)                  - set Qml import for QtCreator (so that there is code highlighting, jump, etc.)
+# set(MODULE_QMLEXT_IMPORT ...)               - set Qml extensions import for QtCreator (so that there is code highlighting, jump, etc.)
 # set(MODULE_USE_PCH_NONE ON)                 - set for disable PCH for module
 # set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
 # set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
@@ -77,6 +78,10 @@ endif()
 
 if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
     set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
+endif()
+
+if (NOT ${MODULE_QMLEXT_IMPORT} STREQUAL "")
+    set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QMLEXT_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
 if (CC_IS_EMSCRIPTEN)
