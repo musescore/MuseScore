@@ -22,7 +22,7 @@
 #ifndef MU_API_SHORTCUTSAPI_H
 #define MU_API_SHORTCUTSAPI_H
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 
 #include "modularity/ioc.h"
 #include "shortcuts/ishortcutscontroller.h"

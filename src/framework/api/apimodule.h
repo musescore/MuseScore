@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_APIOBJECT_H
-#define MU_API_APIOBJECT_H
+#ifndef MU_API_APIMODULE_H
+#define MU_API_APIMODULE_H
 
-#include <QObject>
-
-#include "iapiengine.h"
+#include "modularity/imodulesetup.h"
 
 namespace mu::api {
-class ApiObject : public QObject
+class ApiModule : public modularity::IModuleSetup
 {
-    Q_OBJECT
-
 public:
-    explicit ApiObject(IApiEngine* e);
 
-    IApiEngine* engine() const;
-
-private:
-
-    IApiEngine* m_engine = nullptr;
+    std::string moduleName() const override;
+    void registerExports() override;
 };
 }
 
-#endif // MU_API_APIOBJECT_H
+#endif // MU_API_APIMODULE_H

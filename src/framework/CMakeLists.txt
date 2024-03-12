@@ -55,6 +55,7 @@ if (MUE_BUILD_SHORTCUTS_MODULE)
     add_subdirectory(shortcuts)
 endif()
 
+add_subdirectory(api)
 if (MUE_BUILD_EXTENSIONS_MODULE)
     add_subdirectory(extensions)
 endif()

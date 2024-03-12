@@ -38,7 +38,6 @@
 #include "internal/autobotactions.h"
 #include "internal/autobotscriptsrepository.h"
 
-#include "internal/api/apiregister.h"
 #include "internal/api/logapi.h"
 #include "internal/api/autobotapi.h"
 #include "internal/api/dispatcherapi.h"
@@ -71,8 +70,6 @@ void AutobotModule::registerExports()
     modularity::ioc()->registerExport<IAutobot>(moduleName(), m_autobot);
     modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), m_configuration);
     modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
-
-    modularity::ioc()->registerExport<IApiRegister>(moduleName(), new ApiRegister());
 
     // draw::Painter::extended = AbPaintProvider::instance();
 }

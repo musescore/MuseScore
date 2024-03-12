@@ -59,14 +59,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotinteractive.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/iapiregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiobject.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiobject.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/jsretval.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiutils.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.cpp

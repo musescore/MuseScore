@@ -19,30 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_APIREGISTER_H
-#define MU_API_APIREGISTER_H
+#ifndef MU_API_IAPIREGISTER_H
+#define MU_API_IAPIREGISTER_H
 
-#include <map>
-
-#include "iapiregister.h"
+#include "modularity/imoduleinterface.h"
+#include "iapiengine.h"
+#include "api/apiobject.h"
 
 namespace mu::api {
-class ApiRegister : public IApiRegister
+class IApiRegister : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(mu::api::IApiRegister)
 public:
-    ApiRegister() = default;
+    virtual ~IApiRegister() = default;
 
-    void regApiCreator(const std::string& module, const std::string& api, ICreator* c) override;
-    ApiObject* createApi(const std::string& api, IApiEngine* e) const override;
-
-private:
-    struct ApiCreator {
-        std::string module;
-        ICreator* c = nullptr;
+    struct ICreator {
+        virtual ~ICreator() {}
+        virtual ApiObject* create(IApiEngine* e) = 0;
     };
 
-    std::map<std::string, ApiCreator> m_creators;
+    virtual void regApiCreator(const std::string& module, const std::string& api, ICreator* c) = 0;
+    virtual ApiObject* createApi(const std::string& api, IApiEngine* e) const = 0;
+};
+
+template<class T>
+struct ApiCreator : public IApiRegister::ICreator
+{
+    ApiObject* create(IApiEngine* e) { return new T(e); }
 };
 }
 
-#endif // MU_API_APIREGISTER_H
+#endif // MU_API_IAPIREGISTER_H

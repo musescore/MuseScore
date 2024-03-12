@@ -25,7 +25,7 @@
 #include <QString>
 #include <QJSValue>
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 #include "ui/inavigationcontroller.h"
