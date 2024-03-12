@@ -81,7 +81,7 @@ public:
 signals:
     void initedChanged();
 
-    void iconRectChanged();
+    void iconRectChanged(const QRect& rect);
 
     void titleChanged();
 
@@ -94,6 +94,8 @@ signals:
     void contextMenuModelChanged();
 
 private:
+    void load();
+
     project::IProjectAudioSettingsPtr audioSettings() const;
     const audio::AudioInputParams& currentAudioInputParams() const;
 

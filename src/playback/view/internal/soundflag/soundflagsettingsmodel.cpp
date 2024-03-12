@@ -99,11 +99,23 @@ void SoundFlagSettingsModel::init()
     TRACEFUNC;
 
     connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRect&) {
-        emit iconRectChanged();
+        QRect rect = iconRect();
+        if (rect.isValid()) {
+            emit iconRectChanged(rect);
+        }
     });
 
     AbstractElementPopupModel::init();
 
+    connect(this, &AbstractElementPopupModel::dataChanged, [this]() {
+        load();
+    });
+
+    load();
+}
+
+void SoundFlagSettingsModel::load()
+{
     IF_ASSERT_FAILED(m_item && m_item->isSoundFlag()) {
         return;
     }
