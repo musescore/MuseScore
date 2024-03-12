@@ -66,7 +66,13 @@ PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int
     mu::mpe::PlaybackParamMap result;
 
     auto it = mu::findLessOrEqual(m_playbackParamMap, nominalPositionTick);
-    for (; it != m_playbackParamMap.end(); ++it) {
+    if (it == m_playbackParamMap.end()) {
+        return result;
+    }
+
+    auto endIt = m_playbackParamMap.upper_bound(nominalPositionTick);
+
+    for (; it != endIt; ++it) {
         result.insert_or_assign(timestampFromTicks(score, it->first), it->second);
     }
 
