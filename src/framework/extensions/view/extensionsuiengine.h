@@ -29,7 +29,10 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "qmlextapi.h"
+
 namespace mu::extensions {
+class QmlApiEngine;
 class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
 {
     Q_OBJECT
@@ -38,6 +41,7 @@ class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
 
 public:
     ExtensionsUiEngine() = default;
+    ~ExtensionsUiEngine();
 
     QQmlEngine* qmlEngine() const;
 
@@ -47,6 +51,8 @@ private:
     void setup(QQmlEngine* e);
 
     QQmlEngine* m_engine = nullptr;
+    QmlApiEngine* m_apiEngine = nullptr;
+    QmlExtApi* m_api = nullptr;
 };
 }
 

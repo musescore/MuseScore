@@ -30,6 +30,11 @@ InteractiveApi::InteractiveApi(IApiEngine* e)
 {
 }
 
+void InteractiveApi::info(const QString& title, const QString& text)
+{
+    interactive()->info(title.toStdString(), text.toStdString());
+}
+
 void InteractiveApi::openUrl(const QString& url)
 {
     interactive()->openUrl(QUrl(url));
