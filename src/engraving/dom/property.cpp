@@ -142,6 +142,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEAM_POS,                false, 0,                       P_TYPE::PAIR_REAL,          PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "beam position") },
     { Pid::BEAM_MODE,               true, "BeamMode",               P_TYPE::BEAM_MODE,          PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "beam mode") },
     { Pid::BEAM_NO_SLOPE,           true, "noSlope",                P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "without slope") },
+    { Pid::BEAM_CROSS_STAFF_MOVE,         true, "crossStaffMove",          P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "beam staff move") },
     { Pid::USER_LEN,                false, "userLen",               P_TYPE::MILLIMETRE,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "length") },
     { Pid::SHOW_STEM_SLASH,         true,  "showStemSlash",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "show stem slash") },
 

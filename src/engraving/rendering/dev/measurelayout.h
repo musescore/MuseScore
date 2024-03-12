@@ -48,7 +48,6 @@ public:
     static void layoutMeasureNumber(Measure* m, LayoutContext& ctx);
     static void layoutMMRestRange(Measure* m, LayoutContext& ctx);
     static void layoutMeasureElements(Measure* m, LayoutContext& ctx);
-    static void layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx);
 
     static double createEndBarLines(Measure* m, bool isLastMeasureInSystem, LayoutContext& ctx);
     static Segment* addHeaderClef(Measure* m, bool isFirstClef, const Staff* staff, LayoutContext& ctx);

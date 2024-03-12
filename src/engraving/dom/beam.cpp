@@ -61,6 +61,7 @@ Beam::Beam(System* parent)
     : BeamBase(ElementType::BEAM, parent)
 {
     initElementStyle(&beamStyle);
+    resetProperty(Pid::BEAM_CROSS_STAFF_MOVE);
 }
 
 //---------------------------------------------------------
@@ -91,6 +92,7 @@ Beam::Beam(const Beam& b)
     m_cross            = b.m_cross;
     m_fullCross        = b.m_fullCross;
     m_slope            = b.m_slope;
+    _crossStaffMove = b._crossStaffMove;
 }
 
 //---------------------------------------------------------
@@ -449,6 +451,7 @@ void Beam::reset()
     }
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
     undoResetProperty(Pid::BEAM_NO_SLOPE);
+    undoResetProperty(Pid::BEAM_CROSS_STAFF_MOVE);
     undoChangeProperty(Pid::GENERATED, true);
 }
 
@@ -628,7 +631,7 @@ PropertyValue Beam::getProperty(Pid propertyId) const
         }
         return true;
     default:
-        return EngravingItem::getProperty(propertyId);
+        return BeamBase::getProperty(propertyId);
     }
 }
 
@@ -671,7 +674,7 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
         }
     // fall through
     default:
-        if (!EngravingItem::setProperty(propertyId, v)) {
+        if (!BeamBase::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -694,7 +697,7 @@ PropertyValue Beam::propertyDefault(Pid id) const
     case Pid::GROW_RIGHT:     return 1.0;
     case Pid::USER_MODIFIED:  return false;
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
-    default:                  return EngravingItem::propertyDefault(id);
+    default:                  return BeamBase::propertyDefault(id);
     }
 }
 

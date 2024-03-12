@@ -95,8 +95,6 @@ public:
     bool isBuzzRoll() const { return m_tremoloType == TremoloType::BUZZ_ROLL; }
     bool twoNotes() const { return m_tremoloType >= TremoloType::C8; }    // is it a two note tremolo?
     int lines() const { return m_lines; }
-    bool up() const { return m_up; }
-    void setUp(bool up) { m_up = up; }
 
     bool placeMidStem() const;
 
@@ -144,6 +142,9 @@ public:
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
     void clearBeamSegments();
 
+    int maxMove() const override { return std::max(m_chord1->staffMove(), m_chord2->staffMove()); }
+    int minMove() const override { return std::min(m_chord1->staffMove(), m_chord2->staffMove()); }
+
     //! NOTE for palettes
     mu::draw::PainterPath basePath(double stretch = 0) const;
     const mu::draw::PainterPath& path() const { return m_path; }
@@ -163,7 +164,6 @@ private:
     Chord* m_chord1 = nullptr;
     Chord* m_chord2 = nullptr;
     TDuration m_durationType;
-    bool m_up = true;
     bool m_userModified[2]{ false };                // 0: auto/down  1: up
     DirectionV m_direction = DirectionV::AUTO;
     std::vector<BeamSegment*> m_beamSegments;

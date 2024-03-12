@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "beamsettingsmodel.h"
+#include "engraving/dom/beam.h"
 
 #include "translation.h"
 
@@ -75,6 +76,12 @@ void BeamSettingsModel::createProperties()
         onPropertyValueChanged(pid, newValue);
         loadBeamHeightProperties();
     });
+
+    m_crossStaffMove = buildPropertyItem(mu::engraving::Pid::BEAM_CROSS_STAFF_MOVE,
+                                         [this](const mu::engraving::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        loadPropertyItem(m_crossStaffMove);
+    });
 }
 
 void BeamSettingsModel::requestElements()
@@ -91,6 +98,7 @@ void BeamSettingsModel::loadProperties()
         Pid::BEAM_POS,
         Pid::BEAM_NO_SLOPE,
         Pid::USER_MODIFIED,
+        Pid::BEAM_CROSS_STAFF_MOVE,
     };
 
     loadProperties(propertyIdSet);
@@ -122,6 +130,9 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
     if (m_featheringHeightLeft->value().isValid() && m_featheringHeightRight->value().isValid()) {
         updateFeatheringMode(m_featheringHeightLeft->value().toDouble(), m_featheringHeightRight->value().toDouble());
     }
+
+    loadPropertyItem(m_crossStaffMove);
+    updateIscrossStaffMoveAvailable();
 }
 
 void BeamSettingsModel::loadBeamHeightProperties()
@@ -149,6 +160,7 @@ void BeamSettingsModel::resetProperties()
     m_beamHeightRight->resetToDefault();
     m_forceHorizontal->resetToDefault();
     m_customPositioned->resetToDefault();
+    m_crossStaffMove->resetToDefault();
 
     m_cachedBeamHeights = PairF();
 
@@ -159,6 +171,16 @@ void BeamSettingsModel::resetProperties()
 PropertyItem* BeamSettingsModel::forceHorizontal()
 {
     return m_forceHorizontal;
+}
+
+PropertyItem* BeamSettingsModel::crossStaffMove() const
+{
+    return m_crossStaffMove;
+}
+
+bool BeamSettingsModel::iscrossStaffMoveAvailable() const
+{
+    return m_iscrossStaffMoveAvailable;
 }
 
 PropertyItem* BeamSettingsModel::customPositioned()
@@ -214,6 +236,22 @@ void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right
         m_featheringMode = newFeathering;
         emit featheringModeChanged(m_featheringMode);
     }
+}
+
+void BeamSettingsModel::updateIscrossStaffMoveAvailable()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        if (!item->isBeam()) {
+            continue;
+        }
+        if (!toBeam(item)->cross()) {
+            available = false;
+            break;
+        }
+    }
+
+    setIscrossStaffMoveAvailable(available);
 }
 
 bool BeamSettingsModel::isBeamHeightLocked() const
@@ -295,6 +333,16 @@ void BeamSettingsModel::setFeatheringMode(BeamTypes::FeatheringMode featheringMo
     }
 
     emit featheringModeChanged(featheringMode);
+}
+
+void BeamSettingsModel::setIscrossStaffMoveAvailable(bool iscrossStaffMoveAvailable)
+{
+    if (m_iscrossStaffMoveAvailable == iscrossStaffMoveAvailable) {
+        return;
+    }
+
+    m_iscrossStaffMoveAvailable = iscrossStaffMoveAvailable;
+    emit iscrossStaffMoveAvailableChanged(iscrossStaffMoveAvailable);
 }
 
 void BeamSettingsModel::onCurrentNotationChanged()

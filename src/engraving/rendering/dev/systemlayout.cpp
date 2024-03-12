@@ -520,9 +520,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     layoutSystemElements(system, ctx);
     SystemLayout::layout2(system, ctx);     // compute staff distances
-    for (MeasureBase* mb : system->measures()) {
-        MeasureLayout::layoutCrossStaff(mb, ctx);
-    }
+
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
     // but, lc might be used elsewhere so we need to be careful

@@ -151,6 +151,7 @@ enum class Pid {
     BEAM_POS,
     BEAM_MODE,
     BEAM_NO_SLOPE,
+    BEAM_CROSS_STAFF_MOVE,
     USER_LEN,         // used for stems
     SHOW_STEM_SLASH,  // used for grace notes
 

@@ -34,6 +34,7 @@
 
 using namespace mu;
 using namespace mu::project;
+using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
@@ -197,5 +198,58 @@ bool ProjectMigrator::applyEdwinStyle(mu::engraving::MasterScore* score)
 bool ProjectMigrator::resetAllElementsPositions(mu::engraving::MasterScore* score)
 {
     score->setResetAutoplace();
+    return true;
+}
+
+void ProjectMigrator::doPostLayoutMigrationIfNeeded(engraving::EngravingProjectPtr project)
+{
+    mu::engraving::MasterScore* score = project->masterScore();
+
+    bool needRelayout = false;
+
+    if (relayoutUserModifiedCrossStaffBeams(score)) {
+        needRelayout = true;
+    }
+    // As we progress, likely that more things will be done here
+
+    if (needRelayout) {
+        score->update();
+    }
+}
+
+bool ProjectMigrator::relayoutUserModifiedCrossStaffBeams(engraving::MasterScore* score)
+{
+    bool found = false;
+
+    auto findBeam = [&found, score](ChordRest* cr) {
+        Beam* beam = cr->beam();
+        if (beam && beam->userModified() && beam->cross() && beam->elements().front() == cr) {
+            found = true;
+            beam->triggerLayout();
+        }
+    };
+
+    for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* item : seg.elist()) {
+                if (!item) {
+                    continue;
+                }
+                findBeam(toChordRest(item));
+                if (item->isChord()) {
+                    for (Chord* grace : toChord(item)->graceNotes()) {
+                        findBeam(grace);
+                    }
+                }
+            }
+        }
+    }
+
     return true;
 }

@@ -35,6 +35,7 @@ public:
     virtual ~IProjectMigrator() = default;
 
     virtual Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) = 0;
+    virtual void doPostLayoutMigrationIfNeeded(engraving::EngravingProjectPtr project) = 0;
 };
 }
 

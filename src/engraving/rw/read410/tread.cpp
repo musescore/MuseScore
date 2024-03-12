@@ -1761,6 +1761,7 @@ void TRead::read(Beam* b, XmlReader& e, ReadContext& ctx)
             e.skipCurrentElement();
         } else if (tag == "y1" || tag == "y2") { // obsolete
             e.skipCurrentElement();
+        } else if (readProperty(b, tag, e, ctx, Pid::BEAM_CROSS_STAFF_MOVE)) {
         } else if (!readItemProperties(b, e, ctx)) {
             e.unknown();
         }

@@ -57,6 +57,8 @@ FocusableItem {
             navigationRowStart: root.navigationRowStart
         }
 
+
+
         Column {
             spacing: 12
 
@@ -64,11 +66,6 @@ FocusableItem {
             width: parent.width
 
             enabled: root.model ? !root.model.isEmpty : false
-
-            SeparatorLine {
-                anchors.margins: -12
-                visible: featheringControlsColumn.visible
-            }
 
             Column {
                 id: featheringControlsColumn
@@ -170,9 +167,35 @@ FocusableItem {
                 }
             }
 
-            SeparatorLine {
-                anchors.margins: -12
-                visible: featheringControlsColumn.visible
+            InspectorPropertyView { // PLACEHOLDER
+                id: crossStaffMove
+                visible: root.model ? root.model.iscrossStaffMoveAvailable : false
+
+                navigationName: "Move cross-staff beam"
+                navigationPanel: root.navigation.panel
+                navigationRowStart: featheringRightSection.navigationRowEnd + 1
+
+                titleText: qsTrc("inspector", "Move cross-staff beam")
+                propertyItem: root.model ? root.model.crossStaffMove : null
+
+                Row {
+                    spacing: 4
+                    width: parent.width
+
+                    FlatRadioButton {
+                        width: 0.5 * parent.width - 2
+                        iconCode: IconCode.ARROW_UP
+                        checked: root.model ? root.model.crossStaffMove.value < 0 : false
+                        onClicked: root.model.crossStaffMove.value -= 1
+                    }
+
+                    FlatRadioButton {
+                        width: 0.5 * parent.width - 2
+                        iconCode: IconCode.ARROW_DOWN
+                        checked: root.model ? root.model.crossStaffMove.value > 0 : false
+                        onClicked: root.model.crossStaffMove.value += 1
+                    }
+                }
             }
 
             PropertyCheckBox {

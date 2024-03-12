@@ -56,6 +56,7 @@ public:
     static void breakCrossMeasureBeams(Measure* measure, LayoutContext& ctx);
     static void layoutNonCrossBeams(Segment* s, LayoutContext& ctx);
     static void verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext& ctx);
+    static void checkCrossPosAndStemConsistency(Beam* beam, LayoutContext &ctx);
 
     static PointF chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static double chordBeamAnchorY(const Beam* item, const ChordRest* chord);
@@ -74,7 +75,7 @@ private:
                                         const ChordRest* startCr, const ChordRest* endCr, std::set<ChordRest*>& stemShortenedCrs);
     static void createBeamletSegment(Beam* item, const LayoutContext& ctx, ChordRest* chord, bool isBefore, int level);
 
-    static bool layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, int frag);
+    static bool computeUpForMovedCross(Beam* item);
 };
 }
 

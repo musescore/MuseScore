@@ -303,6 +303,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                         ChordRest* cr = toChordRest(e2);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
+                            BeamLayout::checkCrossPosAndStemConsistency(cr->beam(), ctx);
                             for (EngravingItem* item : cr->beam()->elements()) {
                                 if (!item || !item->isRest()) {
                                     continue;
@@ -329,6 +330,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             for (Chord* cc : c->graceNotes()) {
                                 if (cc->beam() && cc->beam()->elements().front() == cc) {
                                     TLayout::layoutBeam(cc->beam(), ctx);
+                                    BeamLayout::checkCrossPosAndStemConsistency(cc->beam(), ctx);
                                 }
                                 ChordLayout::layoutSpanners(cc, ctx);
                                 for (EngravingItem* element : cc->el()) {

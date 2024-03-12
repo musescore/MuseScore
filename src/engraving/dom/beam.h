@@ -127,8 +127,6 @@ public:
 
     void move(const mu::PointF&) override;
 
-    bool up() const { return m_up; }
-    void setUp(bool v) { m_up = v; }
     void setId(int i) const { m_id = i; }
     int id() const { return m_id; }
 
@@ -186,9 +184,9 @@ public:
     bool fullCross() const { return m_fullCross; }
     void setFullCross(bool v) { m_fullCross = v; }
 
-    int minMove() { return m_minMove; }
+    int minMove() const { return m_minMove; }
     void setMinMove(int val) { m_minMove = val; }
-    int maxMove() { return m_maxMove; }
+    int maxMove() const { return m_maxMove; }
     void setMaxMove(int val) { m_maxMove = val; }
 
     void addSkyline(Skyline&);
@@ -230,6 +228,8 @@ public:
 
     const Chord* findChordWithCustomStemDirection() const;
 
+    inline int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
+
 private:
 
     friend class Factory;
@@ -248,9 +248,6 @@ private:
     std::vector<BeamSegment*> m_beamSegments;
     DirectionV m_direction = DirectionV::AUTO;
 
-    bool m_up = true;
-
-    int directionIdx() const { return (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1; }
     bool m_userModified[2]{ false };    // 0: auto/down  1: up
     bool m_isGrace = false;
     bool m_cross = false;
@@ -274,6 +271,7 @@ private:
 
     int m_minMove = 0;                   // set in layout1()
     int m_maxMove = 0;
+    int m_crossBeamPos = 0;
 
     bool m_noSlope = false;
     real_t m_slope = 0.0;

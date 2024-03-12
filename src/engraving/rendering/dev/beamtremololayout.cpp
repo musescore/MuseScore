@@ -529,7 +529,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     }
     ldata->isGrace = startChord->isGrace();
     ldata->notes = notes;
-    if (calculateAnchorsCross(ldata, ctx.conf())) {
+    if (calculateAnchorsCross(item, ldata, ctx.conf())) {
         return true;
     }
 
@@ -592,6 +592,7 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
         // Adjust inner stems
         offsetBeamToRemoveCollisions(item, ldata, chordRests, dictator, pointer, startAnchor.x(), endAnchor.x(), isFlat, isStartDictator);
     }
+
     int beamCount = std::max(beamCountD, beamCountP);
     if (!ldata->tab) {
         if (!ldata->isGrace) {
@@ -618,8 +619,25 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
     return true;
 }
 
-bool BeamTremoloLayout::calculateAnchorsCross(BeamBase::LayoutData* ldata, const LayoutConfiguration& conf)
+bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    if (item->minMove() == item->maxMove()) {
+        return false; // not cross or fully moved
+    }
+
+    bool hasChordAboveBeam = false;
+    bool hasChordBelowBeam = false;
+    for (const ChordRest* cr : ldata->elements) {
+        if (cr->isUnderSideOfCrossBeam(item)) {
+            hasChordBelowBeam = true;
+        } else {
+            hasChordAboveBeam = true;
+        }
+    }
+    if (!(hasChordAboveBeam && hasChordBelowBeam)) {
+        return false; // cross but must be laid out like a non-cross
+    }
+
     double spatium = conf.spatium();
     //int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
     ChordRest* startCr = ldata->elements.front();
@@ -646,30 +664,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(BeamBase::LayoutData* ldata, const
     bool penultimateBottomIsSame = false;
     double maxY = std::numeric_limits<double>::max();
     double minY = std::numeric_limits<double>::min();
-    int otherStaff = 0;
-    bool isFirstChord = true;
-    int firstChordStaff = 0;
-    bool allOneStaff = true;
-    for (ChordRest* c : ldata->elements) {
-        if (!c || !c->isChord()) {
-            continue;
-        }
-        if (otherStaff == 0) {
-            otherStaff = c->staffMove();
-        }
-        if (isFirstChord) {
-            firstChordStaff = otherStaff;
-            isFirstChord = false;
-        } else {
-            if (c->staffMove() != firstChordStaff) {
-                allOneStaff = false;
-                break; // this beam is cross
-            }
-        }
-    }
-    if (otherStaff == 0 || allOneStaff) {
-        return false; // not cross
-    }
+
     // Find the notes on the top and bottom of staves
     //
     bool checkNextTop = false;
@@ -679,7 +674,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(BeamBase::LayoutData* ldata, const
             continue;
         }
         Chord* c = toChord(cr);
-        if ((c->staffMove() == otherStaff && otherStaff > 0) || (c->staffMove() != otherStaff && otherStaff < 0)) {
+        if (c->isUnderSideOfCrossBeam(item)) {
             // this chord is on the bottom staff
             if (penultimateBottomIsSame) {
                 // the chord we took as the penultimate bottom note wasn't.
@@ -1037,7 +1032,7 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
-    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam->pagePos().x();
+    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : cr->beam()->pagePos().x();
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
 
     if (!cr->isChord() || !toChord(cr)->stem()) {
