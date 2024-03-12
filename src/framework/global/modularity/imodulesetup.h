@@ -41,6 +41,7 @@ public:
 
     virtual void registerResources() {}
     virtual void registerUiTypes() {}
+    virtual void registerApi() {}
 
     virtual void onPreInit(const IApplication::RunMode& mode) { (void)mode; }
     virtual void onInit(const IApplication::RunMode& mode) { (void)mode; }

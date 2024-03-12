@@ -24,7 +24,11 @@
 #include "modularity/ioc.h"
 #include "internal/actionsdispatcher.h"
 
+#include "framework/api/iapiregister.h"
+#include "api/dispatcherapi.h"
+
 using namespace mu::actions;
+using namespace mu::modularity;
 
 std::string ActionsModule::moduleName() const
 {
@@ -33,5 +37,15 @@ std::string ActionsModule::moduleName() const
 
 void ActionsModule::registerExports()
 {
-    modularity::ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+    ioc()->registerExport<IActionsDispatcher>("actions", new ActionsDispatcher());
+}
+
+void ActionsModule::registerApi()
+{
+    using namespace mu::api;
+
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    if (api) {
+        api->regApiCreator(moduleName(), "api.dispatcher", new ApiCreator<DispatcherApi>());
+    }
 }

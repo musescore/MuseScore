@@ -147,6 +147,19 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
         ${CMAKE_CURRENT_LIST_DIR}/settings.h
 
+        ${CMAKE_CURRENT_LIST_DIR}/api/apiobject.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/api/apiobject.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/jsretval.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/apiutils.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/logapi.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/api/logapi.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/interactiveapi.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/api/interactiveapi.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/processapi.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/api/processapi.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/filesystemapi.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/api/filesystemapi.h
+
         ${CMAKE_CURRENT_LIST_DIR}/internal/application.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/application.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/globalconfiguration.cpp

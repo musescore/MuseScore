@@ -62,6 +62,10 @@
 #include "view/internal/errordetailsmodel.h"
 #include "view/internal/progressdialogmodel.h"
 
+#include "framework/api/iapiregister.h"
+#include "api/navigationapi.h"
+#include "api/keyboardapi.h"
+
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
@@ -116,6 +120,17 @@ void UiModule::resolveImports()
     if (ir) {
         ir->registerWidgetUri<TestDialog>(Uri("musescore://devtools/interactive/testdialog"));
         ir->registerQmlUri(Uri("musescore://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
+    }
+}
+
+void UiModule::registerApi()
+{
+    using namespace mu::api;
+
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    if (api) {
+        api->regApiCreator(moduleName(), "api.navigation", new ApiCreator<NavigationApi>());
+        api->regApiCreator(moduleName(), "api.keyboard", new ApiCreator<KeyboardApi>());
     }
 }
 

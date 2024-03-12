@@ -19,19 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACTIONS_ACTIONSMODULE_H
-#define MU_ACTIONS_ACTIONSMODULE_H
+#ifndef MU_API_APIOBJECT_H
+#define MU_API_APIOBJECT_H
 
-#include "modularity/imodulesetup.h"
+#include <QObject>
 
-namespace mu::actions {
-class ActionsModule : public modularity::IModuleSetup
+#include "framework/api/iapiengine.h"
+
+//! NOTE This class requires a `cpp` file.
+//! If we move it to the `api` module, we will have to link it to all other modules.
+//! That’s why it’s located here, because the `global` module links to everything.
+
+namespace mu::api {
+class ApiObject : public QObject
 {
+    Q_OBJECT
+
 public:
-    std::string moduleName() const override;
-    void registerExports() override;
-    void registerApi() override;
+    explicit ApiObject(IApiEngine* e);
+
+    IApiEngine* engine() const;
+
+private:
+
+    IApiEngine* m_engine = nullptr;
 };
 }
 
-#endif // MU_ACTIONS_ACTIONSMODULE_H
+#endif // MU_API_APIOBJECT_H

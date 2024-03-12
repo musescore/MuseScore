@@ -61,32 +61,12 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/scriptapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/jsretval.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/apiutils.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/logapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/autobotapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/autobotapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/dispatcherapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/dispatcherapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/navigationapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/navigationapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/contextapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/shortcutsapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/interactiveapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/interactiveapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/keyboardapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/keyboardapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/accessibilityapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/accessibilityapi.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/diagnosticsapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/api/diagnosticsapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/processapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/processapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/filesystemapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/api/filesystemapi.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h

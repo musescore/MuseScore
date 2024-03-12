@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_DISPATCHERAPI_H
-#define MU_API_DISPATCHERAPI_H
+#ifndef MU_ACTIONS_DISPATCHERAPI_H
+#define MU_ACTIONS_DISPATCHERAPI_H
 
 #include <QVariant>
 
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_API_DISPATCHERAPI_H
+#endif // MU_ACTIONS_DISPATCHERAPI_H

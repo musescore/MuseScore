@@ -37,10 +37,14 @@
 #include "internal/shortcutscontroller.h"
 #include "internal/midiremote.h"
 #include "internal/shortcutsconfiguration.h"
+
 #include "view/shortcutsmodel.h"
 #include "view/editshortcutmodel.h"
 #include "view/mididevicemappingmodel.h"
 #include "view/editmidimappingmodel.h"
+
+#include "framework/api/iapiregister.h"
+#include "api/shortcutsapi.h"
 
 #include "ui/iuiengine.h"
 
@@ -71,6 +75,16 @@ void ShortcutsModule::registerExports()
     ioc()->registerExport<IShortcutsController>(moduleName(), m_shortcutsController);
     ioc()->registerExport<IMidiRemote>(moduleName(), m_midiRemote);
     ioc()->registerExport<IShortcutsConfiguration>(moduleName(), m_configuration);
+}
+
+void ShortcutsModule::registerApi()
+{
+    using namespace mu::api;
+
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    if (api) {
+        api->regApiCreator(moduleName(), "api.shortcuts", new ApiCreator<ShortcutsApi>());
+    }
 }
 
 void ShortcutsModule::registerResources()

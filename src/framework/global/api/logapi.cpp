@@ -25,29 +25,29 @@
 
 using namespace mu::api;
 
-LogApi::LogApi(IApiEngine* e)
+LogApi::LogApi(api::IApiEngine* e)
     : ApiObject(e)
 {
 }
 
 void LogApi::error(const QString& message)
 {
-    error("Script", message);
+    error("Api", message);
 }
 
 void LogApi::warn(const QString& message)
 {
-    warn("Script", message);
+    warn("Api", message);
 }
 
 void LogApi::info(const QString& message)
 {
-    info("Script", message);
+    info("Api", message);
 }
 
 void LogApi::debug(const QString& message)
 {
-    debug("Script", message);
+    debug("Api", message);
 }
 
 void LogApi::error(const QString& tag, const QString& message)

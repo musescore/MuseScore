@@ -29,6 +29,9 @@
 #include "internal/accessibilityconfiguration.h"
 #include "internal/qaccessibleinterfaceregister.h"
 
+#include "framework/api/iapiregister.h"
+#include "api/accessibilityapi.h"
+
 #include "log.h"
 
 using namespace mu::accessibility;
@@ -56,6 +59,16 @@ void AccessibilityModule::resolveImports()
         accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
 #endif
         accr->registerInterfaceGetter("mu::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
+    }
+}
+
+void AccessibilityModule::registerApi()
+{
+    using namespace mu::api;
+
+    auto api = ioc()->resolve<IApiRegister>(moduleName());
+    if (api) {
+        api->regApiCreator(moduleName(), "api.accessibility", new ApiCreator<AccessibilityApi>());
     }
 }
 
