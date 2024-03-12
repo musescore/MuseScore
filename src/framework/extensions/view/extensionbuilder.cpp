@@ -37,13 +37,13 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     setTitle(m.title);
 
-    QQmlEngine* e = new QQmlEngine(this);
-    //QQmlEngine* e = qmlEngine(this);
-
-    QQmlComponent component = QQmlComponent(e, m.qmlFilePath.toQString());
+    //! NOTE We create extension UI using a separate engine to control what we provide,
+    //! making it easier to maintain backward compatibility and stability.
+    QQmlComponent component = QQmlComponent(engine()->qmlEngine(), m.qmlFilePath.toQString());
     if (!component.isReady()) {
         LOGE() << "Failed to load QML file: " << m.qmlFilePath << ", from extension: " << uri;
         LOGE() << component.errorString();
+        return;
     }
 
     m_contentItem = component.createWithInitialProperties({ { "parent", QVariant::fromValue(itemParent) } });
