@@ -1836,7 +1836,7 @@ void MusicXMLParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(m_e, u"score-partwise"));
 
-    if (m_hasInferredHeaderText) {
+    if (m_pass1.hasInferredHeaderText()) {
         reformatHeaderVBox(m_score->measures()->first());
     }
 }
@@ -2942,13 +2942,13 @@ void MusicXMLParserDirection::direction(const String& partId,
     } else if (isLikelyCredit(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::COMPOSER);
         if (inferredText) {
-            m_pass2.setHasInferredHeaderText(true);
+            m_pass1.setHasInferredHeaderText(true);
             hideRedundantHeaderText(inferredText, { u"lyricist", u"composer", u"poet" });
         }
     } else if (isLikelySubtitle(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::SUBTITLE);
         if (inferredText) {
-            m_pass2.setHasInferredHeaderText(true);
+            m_pass1.setHasInferredHeaderText(true);
             if (m_score->metaTag(u"source").isEmpty()) {
                 m_score->setMetaTag(u"source", inferredText->plainText());
             }
@@ -3149,13 +3149,11 @@ void MusicXMLParserDirection::direction(const String& partId,
 
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 {
-    static const std::wregex re(L"^\\s*((Words|Music|Lyrics),?(\\sand|\\s&amp;)?\\s)*[Bb]y\\s+(?!$)");
-
     return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1
-           && m_wordsText.contains(re);
+           && isLikelyCreditText(m_wordsText, false);
 }
 
 //---------------------------------------------------------

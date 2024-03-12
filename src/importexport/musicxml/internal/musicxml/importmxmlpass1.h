@@ -113,6 +113,7 @@ using MxmlTupletStates = std::map<String, MxmlTupletState>;
 
 void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
 Fraction missingTupletDuration(const Fraction duration);
+bool isLikelyCreditText(const String& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const String& text, const bool caseInsensitive);
 
 //---------------------------------------------------------
@@ -183,6 +184,12 @@ public:
     bool hasBeamingInfo() const { return m_hasBeamingInfo; }
     bool isVocalStaff(const String& id) const { return m_parts.at(id).isVocalStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* score, const int miny = 0, const int maxy = 75);
+    void createDefaultHeader(Score* const score);
+    void createMeasuresAndVboxes(Score* const score, const std::vector<Fraction>& ml, const std::vector<Fraction>& ms,
+                                 const std::set<int>& systemStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,
+                                 const CreditWordsList& crWords, const Size& pageSize);
+    void setHasInferredHeaderText(bool b) { m_hasInferredHeaderText = b; }
+    bool hasInferredHeaderText() const { return m_hasInferredHeaderText; }
     int maxDiff() const { return m_maxDiff; }
     void insertAdjustedDuration(Fraction key, Fraction value) { m_adjustedDurations.insert({ key, value }); }
     std::map<Fraction, Fraction>& adjustedDurations() { return m_adjustedDurations; }
@@ -209,6 +216,7 @@ private:
     MxmlLogger* m_logger = nullptr;              // Error logger
     String m_errors;                             // Errors to present to the user
     bool m_hasBeamingInfo = false;               // Whether the score supports or contains beaming info
+    bool m_hasInferredHeaderText = false;
 
     // part specific data (TODO: move to part-specific class)
     Fraction m_timeSigDura;                      // Measure duration according to last timesig read

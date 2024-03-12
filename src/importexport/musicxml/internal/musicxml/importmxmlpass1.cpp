@@ -753,8 +753,19 @@ bool isLikelySubtitleText(const String& text, const bool caseInsensitive = true)
     std::regex::flag_type caseOption = caseInsensitive ? std::regex::icase : std::regex::ECMAScript;
     return text.trimmed().contains(std::wregex(L"^[Ff]rom\\s+(?!$)", caseOption))
            || text.trimmed().contains(std::wregex(L"^Theme from\\s+(?!$)", caseOption))
-           || text.trimmed().contains(std::wregex(L"(Op\\.?\\s?\\d+)\\s?(No\\.?\\s?\\d+)?", caseOption))
-           || text.trimmed().contains(std::wregex(L"^\\(.*[Ff]rom\\s.*\\)$", caseOption));
+           || text.trimmed().contains(std::wregex(L"(((Op\\.?\\s?\\d+)|(No\\.?\\s?\\d+))\\s?)+", caseOption))
+           || text.trimmed().contains(std::wregex(L"\\(.*[Ff]rom\\s.*\\)", caseOption));
+}
+
+//---------------------------------------------------------
+//   isLikelyCreditText
+//---------------------------------------------------------
+
+bool isLikelyCreditText(const String& text, const bool caseInsensitive = true)
+{
+    std::regex::flag_type caseOption = caseInsensitive ? std::regex::icase : std::regex::ECMAScript;
+    return text.trimmed().contains(std::wregex(L"^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)", caseOption))
+           || text.trimmed().contains(std::wregex(L"^(Traditional|Trad\\.)", caseOption));
 }
 
 //---------------------------------------------------------
@@ -764,17 +775,31 @@ bool isLikelySubtitleText(const String& text, const bool caseInsensitive = true)
 // Extracts a likely subtitle from the title string
 // Returns the inferred subtitle
 
-static String inferSubTitleFromTitle(const String& title)
+static void inferFromTitle(String& title, String& inferredSubtitle, String& inferredCredits)
 {
-    String inferredSubTitle;
-    static const std::regex re("\\n");
-    for (const String& line : title.split(re)) {
+    StringList subtitleLines;
+    StringList creditLines;
+    StringList titleLines = title.split(std::regex("\\n"));
+    for (int i = titleLines.size() - 1; i > 0; --i) {
+        String line = titleLines[i];
+        if (isLikelyCreditText(line, true)) {
+            for (int j = titleLines.size() - 1; j >= i; --j) {
+                creditLines.insert(0, titleLines[j]);
+                titleLines.removeAt(j);
+            }
+            continue;
+        }
         if (isLikelySubtitleText(line, true)) {
-            inferredSubTitle = line;
-            break;
+            for (int j = titleLines.size() - 1; j >= i; --j) {
+                subtitleLines.insert(0, titleLines[j]);
+                titleLines.removeAt(j);
+            }
+            continue;
         }
     }
-    return inferredSubTitle;
+    title = titleLines.join(u"\n");
+    inferredSubtitle = subtitleLines.join(u"\n");
+    inferredCredits = creditLines.join(u"\n");
 }
 
 //---------------------------------------------------------
@@ -839,11 +864,12 @@ static VBox* addCreditWords(Score* score, const CreditWordsList& crWords,
 //   createMeasuresAndVboxes
 //---------------------------------------------------------
 
-static void createDefaultHeader(Score* score)
+void MusicXMLParserPass1::createDefaultHeader(Score* score)
 {
     String strTitle;
     String strSubTitle;
     String inferredStrSubTitle;
+    String inferredStrComposer;
     String strComposer;
     String strLyricist;
     String strTranslator;
@@ -853,22 +879,27 @@ static void createDefaultHeader(Score* score)
         if (strTitle.isEmpty()) {
             strTitle = score->metaTag(u"workTitle");
         }
-        inferredStrSubTitle = inferSubTitleFromTitle(strTitle);
+        inferFromTitle(strTitle, inferredStrSubTitle, inferredStrComposer);
     }
     if (!(score->metaTag(u"movementNumber").isEmpty() && score->metaTag(u"workNumber").isEmpty())) {
         strSubTitle = score->metaTag(u"movementNumber");
         if (strSubTitle.isEmpty()) {
             strSubTitle = score->metaTag(u"workNumber");
         }
-    } else if (!inferredStrSubTitle.isEmpty()) {
+    }
+    if (!inferredStrSubTitle.isEmpty()) {
         strSubTitle = inferredStrSubTitle;
-        strTitle.replace(inferredStrSubTitle, u"");
+        m_hasInferredHeaderText = true;
     }
     String metaComposer = score->metaTag(u"composer");
     String metaLyricist = score->metaTag(u"lyricist");
     String metaTranslator = score->metaTag(u"translator");
     if (!metaComposer.isEmpty()) {
         strComposer = metaComposer;
+    }
+    if (!inferredStrComposer.isEmpty()) {
+        strComposer = inferredStrComposer;
+        m_hasInferredHeaderText = true;
     }
     if (metaLyricist.isEmpty()) {
         metaLyricist = score->metaTag(u"poet");
@@ -897,13 +928,13 @@ static void createDefaultHeader(Score* score)
  Create required measures with correct number, start tick and length for Score \a score.
  */
 
-static void createMeasuresAndVboxes(Score* score,
-                                    const std::vector<Fraction>& ml,
-                                    const std::vector<Fraction>& ms,
-                                    const std::set<int>& systemStartMeasureNrs,
-                                    const std::set<int>& pageStartMeasureNrs,
-                                    const CreditWordsList& crWords,
-                                    const Size& pageSize)
+void MusicXMLParserPass1::createMeasuresAndVboxes(Score* score,
+                                                  const std::vector<Fraction>& ml,
+                                                  const std::vector<Fraction>& ms,
+                                                  const std::set<int>& systemStartMeasureNrs,
+                                                  const std::set<int>& pageStartMeasureNrs,
+                                                  const CreditWordsList& crWords,
+                                                  const Size& pageSize)
 {
     if (crWords.empty()) {
         createDefaultHeader(score);
