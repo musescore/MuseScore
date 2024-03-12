@@ -26,8 +26,8 @@
 #include <QMap>
 
 #include "modularity/ioc.h"
-#include "iapiregister.h"
-#include "iapiengine.h"
+#include "api/iapiregister.h"
+#include "api/iapiengine.h"
 
 namespace mu::api {
 class ScriptApi : public QObject

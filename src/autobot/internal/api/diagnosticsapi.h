@@ -24,7 +24,7 @@
 
 #include <QString>
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 #include "jsretval.h"
 
 #include "modularity/ioc.h"

@@ -24,7 +24,7 @@
 
 #include <QJSValue>
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"

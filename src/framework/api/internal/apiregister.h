@@ -19,28 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_LOGAPI_H
-#define MU_API_LOGAPI_H
+#ifndef MU_API_APIREGISTER_H
+#define MU_API_APIREGISTER_H
 
-#include "api/apiobject.h"
+#include <map>
+
+#include "../iapiregister.h"
 
 namespace mu::api {
-class LogApi : public ApiObject
+class ApiRegister : public IApiRegister
 {
-    Q_OBJECT
 public:
-    explicit LogApi(IApiEngine* e);
+    ApiRegister() = default;
 
-    Q_INVOKABLE void error(const QString& message);
-    Q_INVOKABLE void warn(const QString& message);
-    Q_INVOKABLE void info(const QString& message);
-    Q_INVOKABLE void debug(const QString& message);
+    void regApiCreator(const std::string& module, const std::string& api, ICreator* c) override;
+    ApiObject* createApi(const std::string& api, IApiEngine* e) const override;
 
-    Q_INVOKABLE void error(const QString& tag, const QString& message);
-    Q_INVOKABLE void warn(const QString& tag, const QString& message);
-    Q_INVOKABLE void info(const QString& tag, const QString& message);
-    Q_INVOKABLE void debug(const QString& tag, const QString& message);
+private:
+    struct ApiCreator {
+        std::string module;
+        ICreator* c = nullptr;
+    };
+
+    std::map<std::string, ApiCreator> m_creators;
 };
 }
 
-#endif // LOGAPI_H
+#endif // MU_API_APIREGISTER_H

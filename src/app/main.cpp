@@ -186,6 +186,7 @@
 #include "stubs/plugins/pluginsstubmodule.h"
 #endif
 
+#include "api/apimodule.h"
 #include "extensions/extensionsmodule.h"
 
 #include "print/printmodule.h"
@@ -330,6 +331,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::playback::PlaybackModule());
     app.addModule(new mu::plugins::PluginsModule());
     app.addModule(new mu::extensions::ExtensionsModule());
+    app.addModule(new mu::api::ApiModule());
     app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::update::UpdateModule());

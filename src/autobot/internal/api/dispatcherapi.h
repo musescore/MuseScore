@@ -24,7 +24,7 @@
 
 #include <QVariant>
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"

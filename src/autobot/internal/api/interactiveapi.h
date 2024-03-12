@@ -22,7 +22,7 @@
 #ifndef MU_API_INTERACTIVEAPI_H
 #define MU_API_INTERACTIVEAPI_H
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"

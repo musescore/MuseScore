@@ -19,34 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_IAPIREGISTER_H
-#define MU_API_IAPIREGISTER_H
+#ifndef MU_API_APIOBJECT_H
+#define MU_API_APIOBJECT_H
 
-#include "modularity/imoduleinterface.h"
+#include <QObject>
+
 #include "iapiengine.h"
-#include "apiobject.h"
 
 namespace mu::api {
-class IApiRegister : MODULE_EXPORT_INTERFACE
+class ApiObject : public QObject
 {
-    INTERFACE_ID(IApiRegister)
+    Q_OBJECT
+
 public:
-    virtual ~IApiRegister() = default;
+    explicit ApiObject(IApiEngine* e)
+        : m_engine(e) {}
 
-    struct ICreator {
-        virtual ~ICreator() {}
-        virtual ApiObject* create(IApiEngine* e) = 0;
-    };
+    IApiEngine* engine() const { return m_engine; }
 
-    virtual void regApiCreator(const std::string& module, const std::string& api, ICreator* c) = 0;
-    virtual ApiObject* createApi(const std::string& api, IApiEngine* e) const = 0;
-};
+private:
 
-template<class T>
-struct ApiCreator : public IApiRegister::ICreator
-{
-    ApiObject* create(IApiEngine* e) { return new T(e); }
+    IApiEngine* m_engine = nullptr;
 };
 }
 
-#endif // MU_API_IAPIREGISTER_H
+#endif // MU_API_APIOBJECT_H

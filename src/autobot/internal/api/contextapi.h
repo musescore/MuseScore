@@ -25,7 +25,7 @@
 #include <QJSValue>
 #include <QHash>
 
-#include "apiobject.h"
+#include "api/apiobject.h"
 
 #include "modularity/ioc.h"
 #include "autobot/iautobot.h"

@@ -26,7 +26,7 @@
 
 #include "global/types/ret.h"
 #include "global/serialization/json.h"
-#include "internal/api/iapiengine.h"
+#include "api/iapiengine.h"
 #include "log.h"
 
 namespace mu::autobot {
