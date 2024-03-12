@@ -457,6 +457,7 @@ private:
     bool isLikelyCredit(const Fraction& tick) const;
     bool isLyricBracket() const;
     bool isLikelySubtitle(const Fraction& tick) const;
+    bool isLikelyLegallyDownloaded(const Fraction& tick) const;
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
 };

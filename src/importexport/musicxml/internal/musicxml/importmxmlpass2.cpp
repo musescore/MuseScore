@@ -2965,6 +2965,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
             hideRedundantHeaderText(inferredText, { "source" });
         }
+    } else if (isLikelyLegallyDownloaded(tick)) {
+        // Ignore (TBD: print to footer?)
+        return;
     } else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
@@ -3185,6 +3188,15 @@ bool MusicXMLParserDirection::isLikelySubtitle(const Fraction& tick) const
            && _metroText.isEmpty()
            && _tpoSound < 0.1
            && isLikelySubtitleText(_wordsText, false);
+}
+
+bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) const
+{
+    return (tick + _offset < Fraction(5, 1))   // Only early in the piece
+           && _rehearsalText.isEmpty()
+           && _metroText.isEmpty()
+           && _tpoSound < 0.1
+           && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.\\sDo not photocopy\\."));
 }
 
 Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)
