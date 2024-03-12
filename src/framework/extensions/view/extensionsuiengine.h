@@ -19,46 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONBUILDER_H
-#define MU_EXTENSIONS_EXTENSIONBUILDER_H
+#ifndef MU_EXTENSIONS_EXTENSIONSUIENGINE_H
+#define MU_EXTENSIONS_EXTENSIONSUIENGINE_H
 
 #include <QObject>
-#include <QQmlComponent>
 
-#include "modularity/ioc.h"
-#include "../iextensionsprovider.h"
 #include "../iextensionsuiengine.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
+
 namespace mu::extensions {
-class ExtensionBuilder : public QObject
+class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
-    Q_PROPERTY(QObject * contentItem READ contentItem NOTIFY contentItemChanged FINAL)
-
-    Inject<IExtensionsProvider> provider;
-    Inject<IExtensionsUiEngine> engine;
+    Inject<ui::IUiEngine> uiEngine;
 
 public:
-    ExtensionBuilder(QObject* parent = nullptr);
+    ExtensionsUiEngine() = default;
 
-    QString title() const;
-    QObject* contentItem() const;
-
-    Q_INVOKABLE void load(const QString& uri, QObject* itemParent);
-
-signals:
-    void titleChanged();
-    void contentItemChanged();
+    QQmlEngine* qmlEngine() const;
 
 private:
 
-    void setTitle(QString title);
+    QQmlEngine* engine();
+    void setup(QQmlEngine* e);
 
-    QString m_title;
-    QObject* m_contentItem = nullptr;
+    QQmlEngine* m_engine = nullptr;
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONBUILDER_H
+#endif // MU_EXTENSIONS_EXTENSIONSUIENGINE_H

@@ -31,6 +31,7 @@
 #include "internal/extensionsconfiguration.h"
 
 #include "view/extensionbuilder.h"
+#include "view/extensionsuiengine.h"
 
 #include "devtools/devextensionslistmodel.h"
 
@@ -55,6 +56,7 @@ void ExtensionsModule::registerExports()
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_extensionsProvider);
     ioc()->registerExport<IExtensionsConfiguration>(moduleName(), new ExtensionsConfiguration());
+    ioc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine());
 }
 
 void ExtensionsModule::registerResources()

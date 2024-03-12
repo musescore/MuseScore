@@ -1,5 +1,7 @@
 import QtQuick 2.15
 
+import Muse.Controls 1.0
+
 Rectangle {
 
     id: root
@@ -9,8 +11,12 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    Text {
+    StyledTextLabel {
         text: "Main 1"
+    }
+
+    FlatButton {
+
     }
 
 }

@@ -26,6 +26,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/extensionstypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iextensionsuiengine.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsprovider.h
@@ -36,6 +37,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/extensionsuiengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/extensionsuiengine.h
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.h
