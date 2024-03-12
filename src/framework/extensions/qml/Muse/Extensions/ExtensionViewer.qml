@@ -21,19 +21,25 @@
  */
 import QtQuick 2.15
 
+import Muse.Extensions 1.0
+
 Rectangle {
 
     id: root
 
     property string uri: ""
 
-    property string title: "ExtensionsViewer"
+    property alias title: builder.title
 
-    width: 800
-    height: 500
+    width: builder.contentItem ? builder.contentItem.implicitWidth : 800
+    height: builder.contentItem ? builder.contentItem.implicitHeight : 600
 
-    Text {
-        text: root.uri
+    Component.onCompleted: {
+        builder.load(root.uri, root)
+    }
+
+    ExtensionBuilder {
+        id: builder
     }
 
 }

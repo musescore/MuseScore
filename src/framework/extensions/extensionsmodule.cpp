@@ -30,6 +30,8 @@
 #include "internal/extensionsprovider.h"
 #include "internal/extensionsconfiguration.h"
 
+#include "view/extensionbuilder.h"
+
 #include "devtools/devextensionslistmodel.h"
 
 #include "log.h"
@@ -62,6 +64,7 @@ void ExtensionsModule::registerResources()
 
 void ExtensionsModule::registerUiTypes()
 {
+    qmlRegisterType<ExtensionBuilder>("Muse.Extensions", 1, 0, "ExtensionBuilder");
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
 }
 

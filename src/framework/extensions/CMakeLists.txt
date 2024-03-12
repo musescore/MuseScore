@@ -34,6 +34,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsloader.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.h
+
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.h
     )
