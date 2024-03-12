@@ -184,6 +184,10 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
     bool needUpdateNotation = updateStaffText();
     endCommand();
 
+    if (currentNotation()->interaction()->isTextEditingStarted()) {
+        currentNotation()->interaction()->endEditText();
+    }
+
     if (needUpdateNotation) {
         updateNotation();
     }
@@ -205,6 +209,10 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), String(playingTechniqueCode));
     bool needUpdateNotation = updateStaffText();
     endCommand();
+
+    if (currentNotation()->interaction()->isTextEditingStarted()) {
+        currentNotation()->interaction()->endEditText();
+    }
 
     if (needUpdateNotation) {
         updateNotation();
