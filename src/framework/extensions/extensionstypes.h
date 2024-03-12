@@ -25,20 +25,9 @@
 #include <vector>
 #include "global/types/uri.h"
 #include "global/types/string.h"
+#include "global/io/path.h"
 
 namespace mu::extensions {
-/*
-manifest.json
-{
-
-"uri": String,                    // Example: musescore://module/target/name
-"type": String,                   // Values: form
-"title": String,                  //
-"apiversion": String              // Optional default 1
-"enabled": Boolean,               // Optional default true
-"visible": Boolean,               // Optional default true
-}*/
-
 enum class Type {
     Undefined = 0,
     Form
@@ -61,6 +50,20 @@ static inline std::string typeToString(const Type& type)
     return std::string();
 }
 
+/*
+manifest.json
+{
+
+"uri": String,                    // Example: musescore://module/target/name
+"type": String,                   // Values: form
+"title": String,                  //
+"apiversion": String              // Optional default 1
+"enabled": Boolean,               // Optional default true
+"visible": Boolean,               // Optional default true
+
+"qmlFile": String                 // Path (name) of qml file
+}*/
+
 struct Manifest {
     Uri uri;
     Type type = Type::Undefined;
@@ -68,6 +71,8 @@ struct Manifest {
     int apiversion = 1;
     bool enabled = true;
     bool visible = true;
+
+    mu::io::path_t qmlFilePath;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
 };

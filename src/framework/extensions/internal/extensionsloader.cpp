@@ -23,6 +23,7 @@
 
 #include "global/io/dir.h"
 #include "global/io/file.h"
+#include "global/io/fileinfo.h"
 #include "global/serialization/json.h"
 
 #include "log.h"
@@ -64,6 +65,7 @@ ManifestList ExtensionsLoader::manifesList(const io::path_t& rootPath) const
     io::paths_t paths = manifestPaths(rootPath);
     for (const io::path_t& path : paths) {
         Manifest manifest = parseManifest(path);
+        resolvePaths(manifest, io::FileInfo(path).dirPath());
         manifests.push_back(manifest);
     }
 
@@ -102,6 +104,12 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.apiversion = obj.value("apiversion", 1).toInt();
     m.enabled = obj.value("enabled", true).toBool();
     m.visible = obj.value("enabled", true).toBool();
+    m.qmlFilePath = obj.value("qmlFile").toStdString();
 
     return m;
+}
+
+void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) const
+{
+    m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
 }
