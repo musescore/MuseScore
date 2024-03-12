@@ -19,28 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_APIOBJECT_H
-#define MU_API_APIOBJECT_H
+#include "apiobject.h"
 
-#include <QObject>
+using namespace mu::api;
 
-#include "iapiengine.h"
-
-namespace mu::api {
-class ApiObject : public QObject
+ApiObject::ApiObject(IApiEngine* e)
+    : m_engine(e)
 {
-    Q_OBJECT
-
-public:
-    explicit ApiObject(IApiEngine* e)
-        : m_engine(e) {}
-
-    IApiEngine* engine() const { return m_engine; }
-
-private:
-
-    IApiEngine* m_engine = nullptr;
-};
 }
 
-#endif // MU_API_APIOBJECT_H
+IApiEngine* ApiObject::engine() const
+{
+    return m_engine;
+}

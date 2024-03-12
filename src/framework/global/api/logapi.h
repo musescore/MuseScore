@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_LOGAPI_H
-#define MU_API_LOGAPI_H
+#ifndef MU_GLOBAL_LOGAPI_H
+#define MU_GLOBAL_LOGAPI_H
 
 #include "api/apiobject.h"
 
 namespace mu::api {
-class LogApi : public ApiObject
+class LogApi : public api::ApiObject
 {
     Q_OBJECT
 public:
-    explicit LogApi(IApiEngine* e);
+    explicit LogApi(api::IApiEngine* e);
 
     Q_INVOKABLE void error(const QString& message);
     Q_INVOKABLE void warn(const QString& message);
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // LOGAPI_H
+#endif // MU_GLOBAL_LOGAPI_H

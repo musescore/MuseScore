@@ -33,12 +33,21 @@ class QmlExtApi : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
-    //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     Q_PROPERTY(QJSValue context READ context CONSTANT)
-    //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
+
+    //! NOTE Providing these APIs requires approval
+    //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
+    //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     //Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
     //Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+
+    //! ATTENTION
+    //! Don't add these APIs here.
+    //! We do not control the authors of extensions;
+    //! using these APIs they can deliberately or accidentally harm the user's system.
+    //Q_PROPERTY(QJSValue process READ process CONSTANT)
+    //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
     Inject<api::IApiRegister> apiRegister;
 

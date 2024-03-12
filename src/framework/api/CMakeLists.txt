@@ -25,7 +25,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/apimodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iapiregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iapiengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/apiobject.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/apiregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/apiregister.h

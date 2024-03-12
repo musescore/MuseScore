@@ -24,8 +24,8 @@
 
 #include <QString>
 
-#include "api/apiobject.h"
-#include "jsretval.h"
+#include "global/api/apiobject.h"
+#include "global/api/jsretval.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/idiagnosticdrawprovider.h"

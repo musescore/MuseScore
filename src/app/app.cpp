@@ -152,9 +152,11 @@ int App::run(int argc, char** argv)
     }
 
     globalModule.resolveImports();
+    globalModule.registerApi();
     for (mu::modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
         m->resolveImports();
+        m->registerApi();
     }
 
     // ====================================================

@@ -36,6 +36,7 @@ public:
 
     void registerExports() override;
     void resolveImports() override;
+    void registerApi() override;
 
     void onInit(const IApplication::RunMode& mode) override;
 

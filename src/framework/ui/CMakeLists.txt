@@ -72,6 +72,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/inavigationcontroller.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/api/navigationapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/navigationapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/keyboardapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/keyboardapi.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/interactiveuriregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/uiengine.cpp
