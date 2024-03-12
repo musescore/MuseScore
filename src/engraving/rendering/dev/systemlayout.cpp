@@ -1648,7 +1648,11 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
         if (!mb->isMeasure()) {
             continue;
         }
+        bool somethingChanged = false;
         for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
             for (EngravingItem* e : seg.elist()) {
                 if (!e || !e->isChord()) {
                     continue;
@@ -1656,11 +1660,13 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                 Chord* chord = toChord(e);
                 if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())) {
                     bool prevUp = chord->up();
+                    Stem* stem = chord->stem();
+                    double prevStemLength = stem ? stem->length() : 0.0;
                     ChordLayout::computeUp(chord, ctx);
-                    if (chord->up() != prevUp) {
+                    if (chord->up() != prevUp || (stem && stem->length() != prevStemLength)) {
                         // If the chord has changed direction needs to be re-laid out
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
-                        seg.createShape(chord->vStaffIdx());
+                        somethingChanged = true;
                     }
                 } else if (chord->tremoloTwoChord()) {
                     TremoloTwoChord* t = chord->tremoloTwoChord();
@@ -1671,10 +1677,13 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                         ChordLayout::computeUp(chord, ctx);
                         if (chord->up() != prevUp) {
                             ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
-                            seg.createShape(chord->vStaffIdx());
+                            somethingChanged = true;
                         }
                     }
                 }
+            }
+            if (somethingChanged) {
+                seg.createShapes();
             }
         }
     }

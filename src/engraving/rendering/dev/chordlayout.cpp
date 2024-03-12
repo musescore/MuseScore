@@ -1237,15 +1237,20 @@ void ChordLayout::computeUpBeamCase(Chord* item, Beam* beam, const LayoutContext
 
 bool ChordLayout::isChordBelowBeam(Chord* item, Beam* beam)
 {
-    assert(!beam->beamSegments().empty());
+    assert(!beam->beamFragments().empty());
 
-    PointF base = beam->pagePos();
     Note* baseNote = item->up() ? item->downNote() : item->upNote();
     double noteY = baseNote->pagePos().y();
     double noteX = item->stemPosX() + item->pagePos().x();
-    BeamSegment* seg = beam->beamSegments().front();
-    PointF startAnchor = seg->line.p1() + base;
-    PointF endAnchor = seg->line.p2() + base;
+
+    PointF base = beam->pagePos();
+    const BeamFragment* fragment = beam->beamFragments().front();
+    double startY = fragment->py1[beam->directionIdx()] + base.y();
+    double endY = fragment->py2[beam->directionIdx()] + base.y();
+    double startX = beam->startAnchor().x();
+    double endX = beam->endAnchor().x();
+    PointF startAnchor(startX, startY);
+    PointF endAnchor(endX, endY);
 
     if (item == beam->elements().front()) {
         return noteY > startAnchor.y();
@@ -1255,7 +1260,7 @@ bool ChordLayout::isChordBelowBeam(Chord* item, Beam* beam)
         return noteY > endAnchor.y();
     }
 
-    double proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+    double proportionAlongX = RealIsEqual(startX, endX) ? 0.0 : (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
     double desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
     return noteY > desiredY;
 }
