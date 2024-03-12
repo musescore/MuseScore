@@ -981,6 +981,45 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
             return;
         }
 
+        if (playbackController()->isPlaying()) {
+            // Use current playback location (instead of selection) to move
+            auto beat = playbackController()->currentBeat();
+            int targetBeatIdx = beat.beatIndex;
+            int targetMeasureIdx = beat.measureIndex;
+            int increment = (direction == MoveDirection::Right ? 1 : -1);
+
+            if (quickly) {
+                // Move to next/prev measure
+                targetBeatIdx = 0;
+                targetMeasureIdx += increment;
+            } else {
+                // Move to next/prev beat
+                targetBeatIdx += increment;
+                if (targetBeatIdx > beat.maxBeatIndex) {
+                    // Next measure
+                    targetBeatIdx = 0;
+                    targetMeasureIdx += 1;
+                } else if (targetBeatIdx < 0) {
+                    // Previous measure
+                    targetBeatIdx = beat.maxBeatIndex;
+                    targetMeasureIdx -= 1;
+                }
+            }
+
+            //Check invalid measure
+            if (targetMeasureIdx > beat.maxMeasureIndex) {
+                targetBeatIdx = beat.maxBeatIndex;
+                targetMeasureIdx = beat.maxMeasureIndex;
+            } else if (targetMeasureIdx < 0) {
+                targetBeatIdx = 0;
+                targetMeasureIdx = 0;
+            }
+
+            audio::msecs_t targetMs = playbackController()->beatToMilliseconds(targetMeasureIdx, targetBeatIdx);
+            playbackController()->seek(targetMs);
+            return;
+        }
+
         if (selectedElement && selectedElement->isTextBase()) {
             interaction->nudge(direction, quickly);
         } else {
