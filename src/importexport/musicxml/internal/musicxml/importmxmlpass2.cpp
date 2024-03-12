@@ -1852,7 +1852,7 @@ void MusicXMLParserPass2::scorePartwise()
     }
     addError(checkAtEndElement(_e, "score-partwise"));
 
-    if (_hasInferredHeaderText) {
+    if (_pass1.hasInferredHeaderText()) {
         reformatHeaderVBox(_score->measures()->first());
     }
 }
@@ -2953,15 +2953,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
     } else if (isLikelyCredit(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::COMPOSER);
         if (inferredText) {
-            _pass2.setHasInferredHeaderText(true);
+            _pass1.setHasInferredHeaderText(true);
             hideRedundantHeaderText(inferredText, { "lyricist", "composer", "poet" });
         }
     } else if (isLikelySubtitle(tick)) {
         Text* inferredText = addTextToHeader(TextStyleType::SUBTITLE);
         if (inferredText) {
-            _pass2.setHasInferredHeaderText(true);
-            if (_score->metaTag(QString("source")).isEmpty()) {
-                _score->setMetaTag(QString("source"), inferredText->plainText());
+            _pass1.setHasInferredHeaderText(true);
+            if (_score->metaTag(u"source").isEmpty()) {
+                _score->setMetaTag(u"source", inferredText->plainText());
             }
             hideRedundantHeaderText(inferredText, { "source" });
         }
@@ -3163,7 +3163,7 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
            && _rehearsalText.isEmpty()
            && _metroText.isEmpty()
            && _tpoSound < 0.1
-           && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics),?(\\sand|\\s&amp;)?\\s)*[Bb]y\\s+(?!$)"));
+           && isLikelyCreditText(_wordsText, false);
 }
 
 //---------------------------------------------------------

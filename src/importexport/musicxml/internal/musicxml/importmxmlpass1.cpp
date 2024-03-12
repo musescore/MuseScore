@@ -754,7 +754,6 @@ static bool mustAddWordToVbox(const QString& creditType)
 
 bool isLikelySubtitleText(const QString& text, const bool caseInsensitive = true)
 {
-    // CaseSensitivity caseOption = caseInsensitive ? CaseSensitivity::CaseSensitive : CaseSensitivity::CaseInsensitive;
     QRegularExpression::PatternOption caseOption
         = caseInsensitive ? QRegularExpression::CaseInsensitiveOption : QRegularExpression::NoPatternOption;
 
@@ -765,23 +764,50 @@ bool isLikelySubtitleText(const QString& text, const bool caseInsensitive = true
 }
 
 //---------------------------------------------------------
+//   isLikelyCreditText
+//---------------------------------------------------------
+
+bool isLikelyCreditText(const QString& text, const bool caseInsensitive = true)
+{
+    QRegularExpression::PatternOption caseOption
+        = caseInsensitive ? QRegularExpression::CaseInsensitiveOption : QRegularExpression::NoPatternOption;
+    return text.trimmed().contains(QRegularExpression("^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)",
+                                                      caseOption))
+           || text.trimmed().contains(QRegularExpression("^(Traditional|Trad\\.)", caseOption));
+}
+
+//---------------------------------------------------------
 //   inferSubTitleFromTitle
 //---------------------------------------------------------
 
 // Extracts a likely subtitle from the title string
 // Returns the inferred subtitle
 
-static String inferSubTitleFromTitle(const String& title)
+static void inferFromTitle(QString& title, QString& inferredSubtitle, QString& inferredCredits)
 {
-    String inferredSubTitle;
-    static const std::regex re("\\n");
-    for (const String& line : title.split(re)) {
+    StringList subtitleLines;
+    StringList creditLines;
+    StringList titleLines = title.split(QRegularExpression("\\n"));
+    for (int i = titleLines.size() - 1; i > 0; --i) {
+        String line = titleLines[i];
+        if (isLikelyCreditText(line, true)) {
+            for (int j = titleLines.size() - 1; j >= i; --j) {
+                creditLines.insert(0, titleLines[j]);
+                titleLines.removeAt(j);
+            }
+            continue;
+        }
         if (isLikelySubtitleText(line, true)) {
-            inferredSubTitle = line;
-            break;
+            for (int j = titleLines.size() - 1; j >= i; --j) {
+                subtitleLines.insert(0, titleLines[j]);
+                titleLines.removeAt(j);
+            }
+            continue;
         }
     }
-    return inferredSubTitle;
+    title = titleLines.join(u"\n");
+    inferredSubtitle = subtitleLines.join(u"\n");
+    inferredCredits = creditLines.join(u"\n");
 }
 
 //---------------------------------------------------------
@@ -846,11 +872,12 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
 //   createMeasuresAndVboxes
 //---------------------------------------------------------
 
-static void createDefaultHeader(Score* const score)
+void MusicXMLParserPass1::createDefaultHeader(Score* const score)
 {
     QString strTitle;
     QString strSubTitle;
     QString inferredStrSubTitle;
+    QString inferredStrComposer;
     QString strComposer;
     QString strLyricist;
     QString strTranslator;
@@ -860,22 +887,27 @@ static void createDefaultHeader(Score* const score)
         if (strTitle.isEmpty()) {
             strTitle = score->metaTag(u"workTitle");
         }
-        inferredStrSubTitle = inferSubTitleFromTitle(strTitle);
+        inferFromTitle(strTitle, inferredStrSubTitle, inferredStrComposer);
     }
     if (!(score->metaTag(u"movementNumber").isEmpty() && score->metaTag(u"workNumber").isEmpty())) {
         strSubTitle = score->metaTag(u"movementNumber");
         if (strSubTitle.isEmpty()) {
             strSubTitle = score->metaTag(u"workNumber");
         }
-    } else if (!inferredStrSubTitle.isEmpty()) {
+    }
+    if (!inferredStrSubTitle.isEmpty()) {
         strSubTitle = inferredStrSubTitle;
-        strTitle.replace(inferredStrSubTitle, "");
+        _hasInferredHeaderText = true;
     }
     QString metaComposer = score->metaTag(u"composer");
     QString metaLyricist = score->metaTag(u"lyricist");
     QString metaTranslator = score->metaTag(u"translator");
     if (!metaComposer.isEmpty()) {
         strComposer = metaComposer;
+    }
+    if (!inferredStrComposer.isEmpty()) {
+        strComposer = inferredStrComposer;
+        _hasInferredHeaderText = true;
     }
     if (metaLyricist.isEmpty()) {
         metaLyricist = score->metaTag(u"poet");
@@ -904,12 +936,12 @@ static void createDefaultHeader(Score* const score)
  Create required measures with correct number, start tick and length for Score \a score.
  */
 
-static void createMeasuresAndVboxes(Score* const score,
-                                    const QVector<Fraction>& ml, const QVector<Fraction>& ms,
-                                    const std::set<int>& systemStartMeasureNrs,
-                                    const std::set<int>& pageStartMeasureNrs,
-                                    const CreditWordsList& crWords,
-                                    const QSize pageSize)
+void MusicXMLParserPass1::createMeasuresAndVboxes(Score* const score,
+                                                  const QVector<Fraction>& ml, const QVector<Fraction>& ms,
+                                                  const std::set<int>& systemStartMeasureNrs,
+                                                  const std::set<int>& pageStartMeasureNrs,
+                                                  const CreditWordsList& crWords,
+                                                  const QSize pageSize)
 {
     if (crWords.empty()) {
         createDefaultHeader(score);

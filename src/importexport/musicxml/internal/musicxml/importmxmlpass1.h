@@ -110,7 +110,8 @@ using MxmlTupletStates = std::map<QString, MxmlTupletState>;
 
 void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
 Fraction missingTupletDuration(const Fraction duration);
-bool isLikelySubtitleText(const QString &text, const bool caseInsensitive);
+bool isLikelyCreditText(const QString& text, const bool caseInsensitive);
+bool isLikelySubtitleText(const QString& text, const bool caseInsensitive);
 
 //---------------------------------------------------------
 //   MusicXMLParserPass1
@@ -180,6 +181,12 @@ public:
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
     bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
     static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+    void createDefaultHeader(Score* const score);
+    void createMeasuresAndVboxes(Score* const score, const QVector<Fraction>& ml, const QVector<Fraction>& ms,
+                                 const std::set<int>& systemStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,
+                                 const CreditWordsList& crWords, const QSize pageSize);
+    void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
+    bool hasInferredHeaderText() const { return _hasInferredHeaderText; }
     const int maxDiff() { return _maxDiff; }
     void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert(key, value); }
     QMap<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }
@@ -206,6 +213,7 @@ private:
     MxmlLogger* _logger;                        ///< Error logger
     QString _errors;                            ///< Errors to present to the user
     bool _hasBeamingInfo;                       ///< Whether the score supports or contains beaming info
+    bool _hasInferredHeaderText = false;
 
     // part specific data (TODO: move to part-specific class)
     Fraction _timeSigDura;                      ///< Measure duration according to last timesig read

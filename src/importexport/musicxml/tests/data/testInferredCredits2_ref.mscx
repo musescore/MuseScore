@@ -48,6 +48,7 @@
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Inferred Credits 2
 from MUSESCORE: the musical: a tone poem
+Words &amp; Music by also Henry Ives (and ampersands)
 </metaTag>
     <Part id="1">
       <Staff id="1">
@@ -126,18 +127,12 @@ from MUSESCORE: the musical: a tone poem
           <text>from MUSESCORE: the musical: a tone poem</text>
           </Text>
         <Text>
-          <visible>0</visible>
           <style>composer</style>
-          <text>Henry Ives</text>
+          <text>Words &amp; Music by also Henry Ives (and ampersands)</text>
           </Text>
         <Text>
-          <visible>0</visible>
           <style>poet</style>
           <text>Henry Ives</text>
-          </Text>
-        <Text>
-          <style>composer</style>
-          <text>Words &amp; Music by Henry Ives (and ampersands)</text>
           </Text>
         <Text>
           <style>subtitle</style>
