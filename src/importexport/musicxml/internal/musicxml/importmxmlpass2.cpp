@@ -2954,6 +2954,9 @@ void MusicXMLParserDirection::direction(const String& partId,
             }
             hideRedundantHeaderText(inferredText, { u"source" });
         }
+    } else if (isLikelyLegallyDownloaded(tick)) {
+        // Ignore (TBD: print to footer?)
+        return;
     } else if (m_wordsText != "" || m_rehearsalText != "" || m_metroText != "") {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
@@ -3184,6 +3187,15 @@ bool MusicXMLParserDirection::isLikelySubtitle(const Fraction& tick) const
            && m_metroText.empty()
            && m_tpoSound < 0.1
            && isLikelySubtitleText(m_wordsText, false);
+}
+
+bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) const
+{
+    return (tick + m_offset < Fraction(5, 1))   // Only early in the piece
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
+           && m_tpoSound < 0.1
+           && m_wordsText.contains(std::wregex(L"This music has been legally downloaded\\.\\sDo not photocopy\\."));
 }
 
 Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)
