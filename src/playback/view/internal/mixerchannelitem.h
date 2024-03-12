@@ -28,13 +28,13 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "iplaybackconfiguration.h"
 #include "iinteractive.h"
+#include "context/iglobalcontext.h"
+#include "iplaybackconfiguration.h"
+
+#include "ui/view/navigationpanel.h"
 
 #include "audio/audiotypes.h"
-#include "ui/view/navigationpanel.h"
-#include "project/iprojectaudiosettings.h"
-
 #include "inputresourceitem.h"
 #include "outputresourceitem.h"
 #include "auxsenditem.h"
@@ -65,6 +65,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
     INJECT(IInteractive, interactive)
+    INJECT(context::IGlobalContext, context)
     INJECT(IPlaybackConfiguration, configuration)
 
 public:
@@ -158,6 +159,8 @@ signals:
     void auxSendItemListChanged();
 
 protected:
+    notation::INotationPlaybackPtr notationPlayback() const;
+
     void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
     void resetAudioChannelsVolumePressure();
 
@@ -177,6 +180,8 @@ protected:
 
     void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
     void closeEditor(AbstractAudioResourceItem* item);
+
+    bool askAboutChangingSound();
 
     Type m_type = Type::Unknown;
 
