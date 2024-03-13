@@ -1240,7 +1240,7 @@ void Tuplet::sanitizeTuplet()
 
       Fraction testDuration(0,1);
       for (DurationElement* de : elements()) {
-            if (de == 0)
+            if (!de)
                   continue;
             Fraction elementDuration(0,1);
             if (de->isTuplet()){
@@ -1320,6 +1320,8 @@ void Tuplet::addMissingElements()
       // first, fill in any holes in the middle of the tuplet
       Fraction expectedTick = elements().front()->tick();
       for (DurationElement* de : elements()) {
+            if (!de)
+                  continue;
             if (de->tick() != expectedTick) {
                   missingElementsDuration -= addMissingElement(expectedTick, de->tick());
                   if (missingElementsDuration.isZero())
