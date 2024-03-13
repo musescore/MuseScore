@@ -98,21 +98,37 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     m.enabled = true;
     m.visible = true;
 
+    auto dropQuotes = [](const String& str) {
+        if (str.size() < 3) {
+            return String();
+        }
+        return str.mid(1, str.size() - 2);
+    };
+
+    int needProperties = 2; // title, description
+    int propertiesFound = 0;
     String content = String::fromUtf8(data);
-    StringList lines = content.split(u'\n');
-    for (const String& _line : lines) {
-        if (_line.startsWith(u'/')) { // comment
-            continue;
+    size_t current, previous = 0;
+    current = content.indexOf(u"\n");
+    while (current != std::string::npos) {
+        String line = content.mid(previous, current - previous).trimmed();
+
+        if (line.startsWith(u'/')) { // comment
+            // noop
+        } else if (line.startsWith(u"title:")) {
+            m.title = dropQuotes(line.mid(6).trimmed());
+            ++propertiesFound;
+        } else if (line.startsWith(u"description:")) {
+            m.description = dropQuotes(line.mid(12).trimmed());
+            ++propertiesFound;
         }
 
-        String line = _line.trimmed();
-        if (line.startsWith(u"title:")) {
-            m.title = line.mid(6).trimmed();
+        if (propertiesFound == needProperties) {
+            break;
         }
 
-        if (line.startsWith(u"description:")) {
-            m.description = line.mid(12).trimmed();
-        }
+        previous = current + 1;
+        current = content.indexOf(u"\n", previous);
     }
 
     return m;
