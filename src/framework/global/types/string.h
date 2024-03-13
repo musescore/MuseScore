@@ -257,6 +257,7 @@ public:
     static String fromUtf16LE(const ByteArray& data);
 
     static String fromUtf8(const char* str);
+    static String fromUtf8(const ByteArray& data);
     ByteArray toUtf8() const;
 
     static String fromAscii(const char* str, size_t size = mu::nidx);

@@ -62,6 +62,7 @@ manifest.json
 "uri": String,                    // Example: musescore://module/target/name
 "type": String,                   // Values: form
 "title": String,                  //
+"description": String,            //
 "apiversion": String              // Optional default 2
 "enabled": Boolean,               // Optional default true
 "visible": Boolean,               // Optional default true
@@ -73,6 +74,7 @@ struct Manifest {
     Uri uri;
     Type type = Type::Undefined;
     String title;
+    String description;
     int apiversion = DEFAULT_API_VERSION;
     bool enabled = true;
     bool visible = true;

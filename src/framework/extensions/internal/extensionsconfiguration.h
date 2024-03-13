@@ -37,6 +37,10 @@ public:
 
     io::path_t defaultPath() const override;
     io::path_t userPath() const override;
+
+    // legacy plugins
+    io::path_t pluginsDefaultPath() const override;
+    io::path_t pluginsUserPath() const override;
 };
 }
 

@@ -36,6 +36,10 @@ public:
 
     virtual io::path_t defaultPath() const = 0;
     virtual io::path_t userPath() const = 0;
+
+    // legacy plugins
+    virtual io::path_t pluginsDefaultPath() const = 0;
+    virtual io::path_t pluginsUserPath() const = 0;
 };
 }
 

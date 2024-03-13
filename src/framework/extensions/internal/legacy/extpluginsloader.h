@@ -19,30 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "extensionsconfiguration.h"
+#ifndef MU_EXTENSIONS_EXTPLUGINSLOADER_H
+#define MU_EXTENSIONS_EXTPLUGINSLOADER_H
 
-#include "global/settings.h"
+#include "../../extensionstypes.h"
 
-using namespace mu::extensions;
-
-static const mu::Settings::Key USER_PLUGINS_PATH("plugins", "application/paths/myPlugins");
-
-mu::io::path_t ExtensionsConfiguration::defaultPath() const
+namespace mu::extensions::legacy {
+//! NOTE Searches and parses qml files of old plugins
+class ExtPluginsLoader
 {
-    return globalConfiguration()->appDataPath() + "/extensions";
+public:
+    ExtPluginsLoader() = default;
+
+    ManifestList loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const;
+
+private:
+
+    ManifestList manifesList(const io::path_t& rootPath) const;
+    mu::io::paths_t qmlsPaths(const io::path_t& rootPath) const;
+    Manifest parseManifest(const io::path_t& path) const;
+    void resolvePaths(Manifest& m, const io::path_t& rootDirPath) const;
+};
 }
 
-mu::io::path_t ExtensionsConfiguration::userPath() const
-{
-    return globalConfiguration()->userAppDataPath() + "/extensions";
-}
-
-mu::io::path_t ExtensionsConfiguration::pluginsDefaultPath() const
-{
-    return globalConfiguration()->appDataPath() + "/plugins";
-}
-
-mu::io::path_t ExtensionsConfiguration::pluginsUserPath() const
-{
-    return settings()->value(USER_PLUGINS_PATH).toPath();
-}
+#endif // MU_EXTENSIONS_EXTPLUGINSLOADER_H
