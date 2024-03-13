@@ -2875,7 +2875,9 @@ void TDraw::draw(const SoundFlag* item, draw::Painter* painter)
     painter->drawEllipse(item->ldata()->bbox());
 
     mu::draw::Font f(item->iconFont());
+    f.setPointSizeF(item->spatium() * 2.0);
     painter->setFont(f);
+
     painter->setPen(!item->selected() ? item->curColor() : Color::WHITE);
     painter->drawText(item->ldata()->bbox(), draw::AlignCenter, Char(item->iconCode()));
 }

@@ -47,13 +47,13 @@ PopupView {
     contentWidth: 240
     contentHeight: content.contentBodyHeight
 
-    closePolicy: PopupView.CloseOnPressOutsideParent
+    closePolicies: PopupView.CloseOnPressOutsideParent
 
     x: (root.parent.width / 2) - (root.width / 2)
     y: root.parent.height
 
     onOpened: {
-        if (openPolicy !== PopupView.NoActivateFocus && content.navigationSection) {
+        if (!(openPolicies & PopupView.NoActivateFocus) && content.navigationSection) {
             content.navigationSection.requestActive()
         }
     }

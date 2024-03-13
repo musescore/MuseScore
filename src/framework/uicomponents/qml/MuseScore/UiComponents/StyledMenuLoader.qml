@@ -55,7 +55,7 @@ Loader {
     sourceComponent: StyledMenu {
         id: itemMenu
 
-        openPolicy: PopupView.NoActivateFocus
+        openPolicies: PopupView.NoActivateFocus
 
         onHandleMenuItem: function(itemId) {
             itemMenu.close()

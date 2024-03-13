@@ -33,7 +33,6 @@ SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
     m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
-    m_iconFont.setPointSizeF(spatium() * 2.0);
 
     //! draw on top of all elements
     setZ(INT_MAX);
