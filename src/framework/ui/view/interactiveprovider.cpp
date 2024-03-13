@@ -187,23 +187,29 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
     m_openingUriQuery = q;
     RetVal<OpenData> openedRet;
 
-    extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
-    if (ext.isValid()) {
-        openedRet = openExtensionDialog(q);
-    } else {
-        ContainerMeta openMeta = uriRegister()->meta(q.uri());
+    //! NOTE Currently, extensions do not replace the default functionality
+    //! But in the future, we may allow extensions to replace the current functionality
+    //! (first check for the presence of an extension with this uri,
+    //! and if it is found, then open it)
 
-        switch (openMeta.type) {
-        case ContainerType::QWidgetDialog:
-            openedRet = openWidgetDialog(q);
-            break;
-        case ContainerType::PrimaryPage:
-        case ContainerType::QmlDialog:
-            openedRet = openQml(q);
-            break;
-        case ContainerType::Undefined:
+    ContainerMeta openMeta = uriRegister()->meta(q.uri());
+    switch (openMeta.type) {
+    case ContainerType::QWidgetDialog:
+        openedRet = openWidgetDialog(q);
+        break;
+    case ContainerType::PrimaryPage:
+    case ContainerType::QmlDialog:
+        openedRet = openQml(q);
+        break;
+    case ContainerType::Undefined: {
+        //! NOTE Not found default, try extension
+        extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
+        if (ext.isValid()) {
+            openedRet = openExtensionDialog(q);
+        } else {
             openedRet.ret = make_ret(Ret::Code::UnknownError);
         }
+    }
     }
 
     if (!openedRet.ret) {

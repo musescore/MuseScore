@@ -36,6 +36,8 @@ public:
     const ManifestList& manifestList() const override;
     const Manifest& manifest(const Uri& uri) const override;
 
+    Ret run(const Uri& uri) override;
+
 private:
     mutable ManifestList m_manifests;
 };
