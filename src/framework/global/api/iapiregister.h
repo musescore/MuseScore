@@ -39,6 +39,7 @@ public:
     };
 
     virtual void regApiCreator(const std::string& module, const std::string& api, ICreator* c) = 0;
+    virtual void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) = 0;
     virtual ApiObject* createApi(const std::string& api, IApiEngine* e) const = 0;
 };
 

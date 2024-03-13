@@ -72,6 +72,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inavigation.h
     ${CMAKE_CURRENT_LIST_DIR}/inavigationcontroller.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/api/themeapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/themeapi.h
     ${CMAKE_CURRENT_LIST_DIR}/api/navigationapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/api/navigationapi.h
     ${CMAKE_CURRENT_LIST_DIR}/api/keyboardapi.cpp
@@ -102,8 +104,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/interactiveprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/uitheme.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/uitheme.h
     ${CMAKE_CURRENT_LIST_DIR}/view/iconcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/musicalsymbolcodes.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmltranslation.cpp

@@ -35,6 +35,7 @@ class QmlExtApi : public QObject
     Q_PROPERTY(QJSValue log READ log CONSTANT)
     Q_PROPERTY(QJSValue context READ context CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
+    Q_PROPERTY(QJSValue theme READ theme CONSTANT)
 
     //! NOTE Providing these APIs requires approval
     //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
@@ -55,12 +56,13 @@ public:
     QmlExtApi(api::IApiEngine* engine, QObject* parent);
 
     QJSValue log() const { return api("api.log"); }
-    QJSValue autobot() const { return api("api.autobot"); }
+    QJSValue context() const { return api("api.context"); }
+    QJSValue interactive() const { return api("api.interactive"); }
+    QJSValue theme() const { return api("api.theme"); }
+
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }
-    QJSValue context() const { return api("api.context"); }
     QJSValue shortcuts() const { return api("api.shortcuts"); }
-    QJSValue interactive() const { return api("api.interactive"); }
     QJSValue keyboard() const { return api("api.keyboard"); }
     QJSValue accessibility() const { return api("api.accessibility"); }
 

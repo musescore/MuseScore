@@ -80,8 +80,8 @@ if (NOT ${MODULE_QML_IMPORT} STREQUAL "")
     set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QML_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
-if (NOT ${MODULE_QMLEXT_IMPORT} STREQUAL "")
-    set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QMLEXT_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
+if (NOT ${MODULE_QMLAPI_IMPORT} STREQUAL "")
+    set(QML_IMPORT_PATH "${QML_IMPORT_PATH};${MODULE_QMLAPI_IMPORT}" CACHE STRING "QtCreator extra import paths for QML modules" FORCE)
 endif()
 
 if (CC_IS_EMSCRIPTEN)
