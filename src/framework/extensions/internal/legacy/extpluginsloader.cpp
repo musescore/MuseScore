@@ -88,13 +88,13 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
         return Manifest();
     }
 
-    String basename = io::FileInfo(path).baseName().toLower();
+    io::FileInfo fi(path);
 
     Manifest m;
-    m.uri = Uri("musescore://extensions/legacy/" + basename.toStdString());
+    m.uri = Uri("musescore://extensions/legacy/" + fi.baseName().toLower().toStdString());
     m.type = Type::Form;
     m.apiversion = 1;
-    m.qmlFilePath = path;
+    m.qmlFilePath = fi.fileName();
     m.enabled = true;
     m.visible = true;
 

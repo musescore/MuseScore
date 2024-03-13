@@ -37,6 +37,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/api/qmlpluginapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/api/qmlpluginapi.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.h
