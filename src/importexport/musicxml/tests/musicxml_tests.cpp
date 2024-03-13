@@ -384,6 +384,9 @@ TEST_F(Musicxml_Tests, arpGliss2) {
 TEST_F(Musicxml_Tests, arpGliss3) {
     mxmlIoTest("testArpGliss3");
 }
+TEST_F(Musicxml_Tests, arpOnRest) {
+    mxmlImportTestRef("testArpOnRest");
+}
 TEST_F(Musicxml_Tests, articulationCombination) {
     mxmlIoTestRef("testArticulationCombination");
 }
