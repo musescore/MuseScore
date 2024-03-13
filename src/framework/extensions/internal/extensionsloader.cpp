@@ -101,7 +101,7 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.uri = Uri(obj.value("uri").toStdString());
     m.type = typeFromString(obj.value("type").toStdString());
     m.title = obj.value("title").toString();
-    m.apiversion = obj.value("apiversion", 1).toInt();
+    m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
     m.enabled = obj.value("enabled", true).toBool();
     m.visible = obj.value("enabled", true).toBool();
     m.qmlFilePath = obj.value("qmlFilePath").toStdString();
