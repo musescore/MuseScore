@@ -71,7 +71,8 @@ manifest.json
 "enabled": Boolean,               // Optional default true
 "visible": Boolean,               // Optional default true
 
-"qmlFilePath": String                 // Path (name) of qml file
+"qmlFilePath": String             // Path (name) of qml file of form
+"jsFilePath": String              // Path (name) of js file of macros
 }*/
 
 struct Manifest {
@@ -84,6 +85,7 @@ struct Manifest {
     bool visible = true;
 
     mu::io::path_t qmlFilePath;
+    mu::io::path_t jsFilePath;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
 };

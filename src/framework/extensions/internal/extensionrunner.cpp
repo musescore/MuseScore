@@ -19,41 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSUIENGINE_H
-#define MU_EXTENSIONS_EXTENSIONSUIENGINE_H
+#include "extensionrunner.h"
 
-#include <QObject>
+#include "scriptengine.h"
 
-#include "../iextensionsuiengine.h"
+#include "log.h"
 
-#include "modularity/ioc.h"
-#include "ui/iuiengine.h"
+using namespace mu::extensions;
 
-#include "../api/qmlextapi.h"
-
-namespace mu::extensions {
-class QmlApiEngine;
-class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
+mu::Ret ExtensionRunner::run(const Manifest& manifest)
 {
-    Q_OBJECT
+    ScriptEngine engine;
+    engine.setScriptPath(manifest.jsFilePath);
+    Ret ret = engine.evaluate();
+    if (!ret) {
+        LOGE() << "failed evaluate js script: " << manifest.jsFilePath
+               << ", err: " << ret.toString();
+        return ret;
+    }
 
-    Inject<ui::IUiEngine> uiEngine;
+    ret = engine.call("main");
+    if (!ret) {
+        LOGE() << "failed call main function of script: " << manifest.jsFilePath
+               << ", err: " << ret.toString();
+    }
 
-public:
-    ExtensionsUiEngine() = default;
-    ~ExtensionsUiEngine();
-
-    QQmlEngine* qmlEngine() const;
-
-private:
-
-    QQmlEngine* engine();
-    void setup(QQmlEngine* e);
-
-    QQmlEngine* m_engine = nullptr;
-    QmlApiEngine* m_apiEngine = nullptr;
-    api::QmlExtApi* m_api = nullptr;
-};
+    return ret;
 }
-
-#endif // MU_EXTENSIONS_EXTENSIONSUIENGINE_H

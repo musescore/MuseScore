@@ -28,12 +28,23 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsuiengine.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/api/qmlextapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/qmlextapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/scriptapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/scriptapi.h
+
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionrunner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionrunner.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scriptengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/scriptengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.h
@@ -44,8 +55,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.h
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionsuiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionsuiengine.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmlextapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/qmlextapi.h
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.h

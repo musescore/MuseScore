@@ -19,41 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSUIENGINE_H
-#define MU_EXTENSIONS_EXTENSIONSUIENGINE_H
+#include "scriptapi.h"
 
-#include <QObject>
+#include "log.h"
 
-#include "../iextensionsuiengine.h"
+using namespace mu::api;
 
-#include "modularity/ioc.h"
-#include "ui/iuiengine.h"
-
-#include "../api/qmlextapi.h"
-
-namespace mu::extensions {
-class QmlApiEngine;
-class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
+ScriptApi::ScriptApi(api::IApiEngine* engine, QObject* parent)
+    : QObject(parent), m_engine(engine)
 {
-    Q_OBJECT
-
-    Inject<ui::IUiEngine> uiEngine;
-
-public:
-    ExtensionsUiEngine() = default;
-    ~ExtensionsUiEngine();
-
-    QQmlEngine* qmlEngine() const;
-
-private:
-
-    QQmlEngine* engine();
-    void setup(QQmlEngine* e);
-
-    QQmlEngine* m_engine = nullptr;
-    QmlApiEngine* m_apiEngine = nullptr;
-    api::QmlExtApi* m_api = nullptr;
-};
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSUIENGINE_H
+QJSValue ScriptApi::api(const std::string& name) const
+{
+    if (!apiRegister()) {
+        return QJSValue();
+    }
+
+    Api a = m_apis.value(name);
+    if (!a.jsval.isUndefined()) {
+        return a.jsval;
+    }
+
+    a.obj = apiRegister()->createApi(name, m_engine);
+    if (!a.obj) {
+        LOGW() << "Not allowed api: " << name;
+        return QJSValue();
+    }
+
+    a.jsval = m_engine->newQObject(a.obj);
+
+    m_apis[name] = a;
+
+    return a.jsval;
+}

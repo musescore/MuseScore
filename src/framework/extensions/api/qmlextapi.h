@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,53 +19,54 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_SCRIPTAPI_H
-#define MU_API_SCRIPTAPI_H
+#ifndef MU_EXTENSIONS_QMLEXTAPI_H
+#define MU_EXTENSIONS_QMLEXTAPI_H
 
 #include <QObject>
-#include <QMap>
 
 #include "modularity/ioc.h"
 #include "api/iapiregister.h"
 #include "api/iapiengine.h"
 
-namespace mu::autobot {
-class ScriptApi : public QObject
+namespace mu::api {
+class QmlExtApi : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
-    Q_PROPERTY(QJSValue autobot READ autobot CONSTANT)
-    Q_PROPERTY(QJSValue dispatcher READ dispatcher CONSTANT)
-    Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
     Q_PROPERTY(QJSValue context READ context CONSTANT)
-    Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
-    Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
-    Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
-    Q_PROPERTY(QJSValue diagnostics READ diagnostics CONSTANT)
-    Q_PROPERTY(QJSValue process READ process CONSTANT)
-    Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
+    Q_PROPERTY(QJSValue theme READ theme CONSTANT)
 
-    INJECT(api::IApiRegister, apiRegister)
+    //! NOTE Providing these APIs requires approval
+    //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
+    //Q_PROPERTY(QJSValue navigation READ navigation CONSTANT)
+    //Q_PROPERTY(QJSValue keyboard READ keyboard CONSTANT)
+    //Q_PROPERTY(QJSValue accessibility READ accessibility CONSTANT)
+
+    //! ATTENTION
+    //! Don't add these APIs here.
+    //! We do not control the authors of extensions;
+    //! using these APIs they can deliberately or accidentally harm the user's system.
+    //Q_PROPERTY(QJSValue process READ process CONSTANT)
+    //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
+
+    Inject<api::IApiRegister> apiRegister;
 
 public:
-    ScriptApi(api::IApiEngine* engine, QObject* parent);
+    QmlExtApi(api::IApiEngine* engine, QObject* parent);
 
     QJSValue log() const { return api("api.log"); }
-    QJSValue autobot() const { return api("api.autobot"); }
+    QJSValue context() const { return api("api.context"); }
+    QJSValue interactive() const { return api("api.interactive"); }
+    QJSValue theme() const { return api("api.theme"); }
+
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }
-    QJSValue context() const { return api("api.context"); }
     QJSValue shortcuts() const { return api("api.shortcuts"); }
-    QJSValue interactive() const { return api("api.interactive"); }
     QJSValue keyboard() const { return api("api.keyboard"); }
     QJSValue accessibility() const { return api("api.accessibility"); }
-    QJSValue diagnostics() const { return api("api.diagnostics"); }
-    QJSValue process() const { return api("api.process"); }
-    QJSValue filesystem() const { return api("api.filesystem"); }
 
 private:
-
     QJSValue api(const std::string& name) const;
 
     struct Api
@@ -79,4 +80,4 @@ private:
 };
 }
 
-#endif // MU_API_SCRIPTAPI_H
+#endif // MU_EXTENSIONS_QMLEXTAPI_H

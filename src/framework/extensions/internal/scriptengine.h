@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_SCRIPTENGINE_H
-#define MU_AUTOBOT_SCRIPTENGINE_H
+#ifndef MU_EXTENSIONS_SCRIPTENGINE_H
+#define MU_EXTENSIONS_SCRIPTENGINE_H
 
 #include <QString>
 #include <QJSValue>
@@ -29,17 +29,18 @@
 #include <QByteArray>
 
 #include "modularity/ioc.h"
-#include "io/ifilesystem.h"
-#include "types/ret.h"
+#include "global/io/ifilesystem.h"
+#include "global/types/ret.h"
 
-#include "api/iapiengine.h"
-#include "api/scriptapi.h"
+#include "global/api/iapiengine.h"
+#include "../api/scriptapi.h"
 
-namespace mu::autobot {
+namespace mu::extensions {
 class JsModuleLoader;
 class ScriptEngine : public api::IApiEngine
 {
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<io::IFileSystem> fileSystem;
+
 public:
     ScriptEngine();
     ~ScriptEngine();
@@ -73,6 +74,7 @@ public:
     QJSValue newArray(size_t length = 0) override;
 
     static void dump(const QString& name, const QJSValue& val);
+    static mu::Ret jsValueToRet(const QJSValue& val);
 
 private:
 
@@ -88,7 +90,7 @@ private:
     };
 
     QJSEngine* m_engine = nullptr;
-    ScriptApi* m_api = nullptr;
+    api::ScriptApi* m_api = nullptr;
     JsModuleLoader* m_moduleLoader = nullptr;
     bool m_isRequireMode = false;
     io::path_t m_scriptPath;
@@ -97,4 +99,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_SCRIPTENGINE_H
+#endif // MU_EXTENSIONS_SCRIPTENGINE_H

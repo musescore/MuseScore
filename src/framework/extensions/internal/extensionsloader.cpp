@@ -106,6 +106,7 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.enabled = obj.value("enabled", true).toBool();
     m.visible = obj.value("enabled", true).toBool();
     m.qmlFilePath = obj.value("qmlFilePath").toStdString();
+    m.jsFilePath = obj.value("jsFilePath").toStdString();
 
     return m;
 }
@@ -113,4 +114,5 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
 void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) const
 {
     m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
+    m.jsFilePath = rootDirPath + "/" + m.jsFilePath;
 }
