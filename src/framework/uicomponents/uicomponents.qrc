@@ -86,6 +86,6 @@
         <file>qml/MuseScore/UiComponents/treeview/ScrollBar.qml</file>
         <file>qml/MuseScore/UiComponents/treeview/images/header.png</file>
         <file>qml/MuseScore/UiComponents/StyledGroupBox.qml</file>
-        <file>qmlext/Muse/Controls/qmldir</file>
+        <file>api/Muse/Controls/qmldir</file>
     </qresource>
 </RCC>
