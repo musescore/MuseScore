@@ -48,7 +48,7 @@ UiEngine::UiEngine()
     //! NOTE At the moment, UiTheme is also QProxyStyle
     //! Inside the theme, QApplication::setStyle(this) is calling and the QStyleSheetStyle becomes as parent.
     //! So, the UiTheme will be deleted when will deleted the application (as a child of QStyleSheetStyle).
-    m_theme = new UiTheme();
+    m_theme = new ThemeApi();
 }
 
 UiEngine::~UiEngine()
@@ -155,7 +155,7 @@ QmlApi* UiEngine::api() const
     return m_api;
 }
 
-UiTheme* UiEngine::theme() const
+mu::api::ThemeApi* UiEngine::theme() const
 {
     return m_theme;
 }

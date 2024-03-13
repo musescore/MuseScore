@@ -9,7 +9,7 @@ Rectangle {
     implicitHeight: 400
     implicitWidth: 400
 
-    color: ui.theme.backgroundPrimaryColor
+    color: api.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
         api.log.info("Component.onCompleted from ext1")

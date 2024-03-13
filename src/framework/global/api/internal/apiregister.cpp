@@ -25,6 +25,15 @@
 
 using namespace mu::api;
 
+struct SingletonApiCreator : public IApiRegister::ICreator
+{
+    ApiObject* obj = nullptr;
+    SingletonApiCreator(ApiObject* o)
+        : obj(o) {}
+
+    ApiObject* create(IApiEngine*) { return obj; }
+};
+
 void ApiRegister::regApiCreator(const std::string& module, const std::string& api, ICreator* c)
 {
     ApiCreator ac;
@@ -41,6 +50,11 @@ void ApiRegister::regApiCreator(const std::string& module, const std::string& ap
     ac.module = module;
     ac.c = c;
     m_creators[api] = ac;
+}
+
+void ApiRegister::regApiSingltone(const std::string& module, const std::string& api, ApiObject* o)
+{
+    regApiCreator(module, api, new SingletonApiCreator(o));
 }
 
 ApiObject* ApiRegister::createApi(const std::string& api, IApiEngine* e) const

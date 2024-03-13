@@ -27,7 +27,7 @@
 #include <memory>
 
 #include "../iuiengine.h"
-#include "../view/uitheme.h"
+#include "../api/themeapi.h"
 #include "../view/qmltooltip.h"
 #include "../view/qmltranslation.h"
 #include "../view/interactiveprovider.h"
@@ -44,7 +44,7 @@ class UiEngine : public QObject, public IUiEngine
 
     INJECT(languages::ILanguagesService, languagesService)
 
-    Q_PROPERTY(UiTheme * theme READ theme NOTIFY themeChanged)
+    Q_PROPERTY(api::ThemeApi * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)
 
     Q_PROPERTY(QQuickItem * rootItem READ rootItem WRITE setRootItem NOTIFY rootItemChanged)
@@ -58,7 +58,7 @@ public:
     static UiEngine* instance();
 
     QmlApi* api() const;
-    UiTheme* theme() const;
+    api::ThemeApi* theme() const;
     QmlToolTip* tooltip() const;
     InteractiveProvider* interactiveProvider_property() const;
     std::shared_ptr<InteractiveProvider> interactiveProvider() const;
@@ -82,8 +82,7 @@ public slots:
     void setRootItem(QQuickItem* rootItem);
 
 signals:
-    void themeChanged(UiTheme* theme);
-
+    void themeChanged(api::ThemeApi* theme);
     void rootItemChanged(QQuickItem* rootItem);
 
 private:
@@ -94,7 +93,7 @@ private:
 
     QQmlEngine* m_engine = nullptr;
     QStringList m_sourceImportPaths;
-    UiTheme* m_theme = nullptr;
+    api::ThemeApi* m_theme = nullptr;
     QmlTranslation* m_translation = nullptr;
     std::shared_ptr<InteractiveProvider> m_interactiveProvider = nullptr;
     QmlApi* m_api = nullptr;

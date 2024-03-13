@@ -33,6 +33,7 @@ public:
     ApiRegister() = default;
 
     void regApiCreator(const std::string& module, const std::string& api, ICreator* c) override;
+    void regApiSingltone(const std::string& module, const std::string& api, ApiObject* o) override;
     ApiObject* createApi(const std::string& api, IApiEngine* e) const override;
 
 private:

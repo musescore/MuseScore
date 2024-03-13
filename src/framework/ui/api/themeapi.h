@@ -20,23 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_UITHEME_H
-#define MU_UI_UITHEME_H
+#ifndef MU_API_THEMEAPI_H
+#define MU_API_THEMEAPI_H
 
 #include <QFont>
 #include <QPainter>
 #include <QProxyStyle>
 
+#include "global/api/apiobject.h"
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "async/asyncable.h"
 
-namespace mu::ui {
-class UiTheme : public QProxyStyle, public async::Asyncable
+namespace mu::api {
+class ProxyStyle;
+class ThemeApi : public ApiObject, public async::Asyncable
 {
     Q_OBJECT
-
-    INJECT(IUiConfiguration, configuration)
 
     Q_PROPERTY(bool isDark READ isDark NOTIFY themeChanged)
 
@@ -87,7 +87,12 @@ class UiTheme : public QProxyStyle, public async::Asyncable
     Q_PROPERTY(int flickableMaxVelocity READ flickableMaxVelocity CONSTANT)
 
 public:
-    UiTheme();
+
+    Inject<ui::IUiConfiguration> configuration;
+
+public:
+    ThemeApi();
+    ~ThemeApi();
 
     void init();
     void update();
@@ -137,32 +142,10 @@ public:
 
     int flickableMaxVelocity() const;
 
-    void polish(QWidget* widget) override;
-    void unpolish(QWidget* widget) override;
-
-    void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const override;
-    void drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter,
-                            const QWidget* widget = nullptr) const override;
-    QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
-                         const QWidget* widget = nullptr) const override;
-    int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const override;
-    QSize sizeFromContents(ContentsType type, const QStyleOption* option, const QSize& contentsSize,
-                           const QWidget* widget = nullptr) const override;
-    QIcon standardIcon(QStyle::StandardPixmap standardIcon, const QStyleOption* option = nullptr,
-                       const QWidget* widget = nullptr) const override;
-    int styleHint(StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr,
-                  QStyleHintReturn* returnData = nullptr) const override;
-
 signals:
     void themeChanged();
 
 private:
-    struct StyleState {
-        bool enabled = false;
-        bool hovered = false;
-        bool pressed = false;
-        bool focused = false;
-    };
 
     void initThemeValues();
 
@@ -179,16 +162,6 @@ private:
     void setupWidgetTheme();
 
     void notifyAboutThemeChanged();
-
-    void drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
-                              const QColor& defaultBackground) const;
-    void drawCheckboxIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool checked, bool indeterminate,
-                               bool inMenu) const;
-    void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
-    void drawLineEditBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool editing) const;
-    void drawIndicatorIcon(QPainter* painter, const QRect& rect, const StyleState& styleState, QStyle::PrimitiveElement element) const;
-    void drawViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
-    void drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const;
 
     QFont m_bodyFont;
     QFont m_bodyBoldFont;
@@ -226,7 +199,50 @@ private:
     qreal m_buttonOpacityHover = 0;
     qreal m_buttonOpacityHit = 0;
     qreal m_itemOpacityDisabled = 0;
+
+    ProxyStyle* m_style = nullptr;
+};
+
+class ProxyStyle : public QProxyStyle
+{
+public:
+    ProxyStyle(ThemeApi* t);
+
+    void polish(QWidget* widget) override;
+    void unpolish(QWidget* widget) override;
+
+    void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const override;
+    void drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter,
+                            const QWidget* widget = nullptr) const override;
+    QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
+                         const QWidget* widget = nullptr) const override;
+    int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const override;
+    QSize sizeFromContents(ContentsType type, const QStyleOption* option, const QSize& contentsSize,
+                           const QWidget* widget = nullptr) const override;
+    QIcon standardIcon(QStyle::StandardPixmap standardIcon, const QStyleOption* option = nullptr,
+                       const QWidget* widget = nullptr) const override;
+    int styleHint(StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr,
+                  QStyleHintReturn* returnData = nullptr) const override;
+private:
+    struct StyleState {
+        bool enabled = false;
+        bool hovered = false;
+        bool pressed = false;
+        bool focused = false;
+    };
+
+    void drawButtonBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool accentButton, bool flat,
+                              const QColor& defaultBackground) const;
+    void drawCheckboxIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool checked, bool indeterminate,
+                               bool inMenu) const;
+    void drawRadioButtonIndicator(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
+    void drawLineEditBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool editing) const;
+    void drawIndicatorIcon(QPainter* painter, const QRect& rect, const StyleState& styleState, QStyle::PrimitiveElement element) const;
+    void drawViewItemBackground(QPainter* painter, const QRect& rect, const StyleState& styleState, bool selected) const;
+    void drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const;
+
+    ThemeApi* m_theme = nullptr;
 };
 }
 
-#endif // MU_UI_UITHEME_H
+#endif // MU_API_THEMEAPI_H

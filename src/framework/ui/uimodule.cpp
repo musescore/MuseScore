@@ -48,6 +48,8 @@
 #include "view/mainwindowbridge.h"
 #endif
 
+#include "internal/uiengine.h"
+
 #include "view/qmltooltip.h"
 #include "view/iconcodes.h"
 #include "view/musicalsymbolcodes.h"
@@ -131,6 +133,7 @@ void UiModule::registerApi()
     if (api) {
         api->regApiCreator(moduleName(), "api.navigation", new ApiCreator<NavigationApi>());
         api->regApiCreator(moduleName(), "api.keyboard", new ApiCreator<KeyboardApi>());
+        api->regApiSingltone(moduleName(), "api.theme", UiEngine::instance()->theme());
     }
 }
 
@@ -142,7 +145,7 @@ void UiModule::registerResources()
 void UiModule::registerUiTypes()
 {
     qmlRegisterUncreatableType<UiEngine>("MuseScore.Ui", 1, 0, "UiEngine", "Cannot create an UiEngine");
-    qmlRegisterUncreatableType<UiTheme>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
+    qmlRegisterUncreatableType<api::ThemeApi>("MuseScore.Ui", 1, 0, "QmlTheme", "Cannot create a QmlTheme");
     qmlRegisterUncreatableType<QmlToolTip>("MuseScore.Ui", 1, 0, "QmlToolTip", "Cannot create a QmlToolTip");
     qmlRegisterUncreatableType<IconCode>("MuseScore.Ui", 1, 0, "IconCode", "Cannot create an IconCode");
     qmlRegisterUncreatableType<MusicalSymbolCodes>("MuseScore.Ui", 1, 0, "MusicalSymbolCodes",
