@@ -48,6 +48,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginrunner.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginrunner.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/api/qmlpluginapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/api/qmlpluginapi.h
 
@@ -65,5 +67,4 @@ set(MODULE_QRC extensions.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 include(SetupModule)
-
 
