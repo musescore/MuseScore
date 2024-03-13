@@ -24,6 +24,8 @@
 
 #include "modularity/imoduleinterface.h"
 
+#include "global/types/ret.h"
+
 #include "extensionstypes.h"
 
 namespace mu::extensions {
@@ -36,6 +38,8 @@ public:
 
     virtual const ManifestList& manifestList() const = 0;
     virtual const Manifest& manifest(const Uri& uri) const = 0;
+
+    virtual Ret run(const Uri& uri) = 0;
 };
 }
 

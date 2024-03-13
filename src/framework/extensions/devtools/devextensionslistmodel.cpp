@@ -43,7 +43,17 @@ QVariantList DevExtensionsListModel::extensionsList()
     return list;
 }
 
-void DevExtensionsListModel::clicked(const QString& uri)
+void DevExtensionsListModel::clicked(const QString& uri_)
 {
-    interactive()->open(uri.toStdString());
+    Uri uri(uri_.toStdString());
+    Manifest m = provider()->manifest(uri);
+    switch (m.type) {
+    case Type::Form:
+        interactive()->open(uri);
+        break;
+    case Type::Macros:
+        provider()->run(uri);
+    default:
+        break;
+    }
 }

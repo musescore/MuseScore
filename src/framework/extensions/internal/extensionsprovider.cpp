@@ -58,3 +58,8 @@ const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
     static Manifest _dymmy;
     return _dymmy;
 }
+
+mu::Ret ExtensionsProvider::run(const Uri&)
+{
+    return make_ret(Ret::Code::NotImplemented);
+}
