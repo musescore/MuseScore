@@ -2342,15 +2342,16 @@ static void readBox(XmlReader& e, ReadContext& ctx, Box* b)
     b->setBoxHeight(Spatium(0));       // override default set in constructor
     b->setBoxWidth(Spatium(0));
     b->setAutoSizeEnabled(false);
+    System* bSystem = b->system() ? b->system() : ctx.dummy()->system();
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "HBox") {
-            HBox* hb = Factory::createHBox(b->system());
+            HBox* hb = Factory::createHBox(bSystem);
             readBox(e, ctx, hb);
             b->add(hb);
         } else if (tag == "VBox") {
-            VBox* vb = Factory::createVBox(b->system());
+            VBox* vb = Factory::createVBox(bSystem);
             readBox(e, ctx, vb);
             b->add(vb);
         } else if (!readBoxProperties(e, ctx, b)) {
