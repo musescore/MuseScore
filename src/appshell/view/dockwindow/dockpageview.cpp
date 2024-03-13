@@ -292,7 +292,7 @@ void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
             continue;
         }
 
-        ui::INavigationSection* section = panel ? panel->section() : nullptr;
+        ui::INavigationSection* section = panel->section();
         if (section && !orderedSections.contains(section)) {
             auto index = section->index();
             index.setOrder(i++);

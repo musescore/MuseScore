@@ -468,7 +468,7 @@ void DockBase::setFramePanelOrder(int order)
         return;
     }
 
-    if (!frame->beingDeletedLater()) {
+    if (frame->beingDeletedLater()) {
         return;
     }
 
