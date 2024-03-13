@@ -379,7 +379,7 @@
         </note>      
 			<direction>
 				<direction-type>
-					<words default-y='-59'>4
+                                        <words default-y='-59'>4-5
 </words>
 				</direction-type>
         <offset>-1</offset>

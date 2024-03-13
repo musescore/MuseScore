@@ -3037,7 +3037,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             }
 
             if (isLikelyFingering()) {
-                m_logger->logDebugInfo(QString("Inferring fingering: %1").arg(m_wordsText));
+                m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(m_wordsText));
                 MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, m_wordsText, track,
                                                                                              placement(), measure, tick + m_offset);
                 inferredFingerings.push_back(inferredFingering);
@@ -3554,7 +3554,7 @@ static Marker* findMarker(const String& repeat, Score* score)
 bool MusicXMLParserDirection::isLikelyFingering() const
 {
     // One or more newline-separated digits, possibly lead or trailed by whitespace
-    static const std::wregex re(L"^\\s*[0-5pimac](?:\\n[0-5pimac])*\\s*$");
+    static const std::wregex re(L"^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$");
     return m_wordsText.contains(re)
            && m_rehearsalText.empty()
            && m_metroText.empty()
@@ -3565,7 +3565,7 @@ bool MusicXMLParserDirection::isLikelyFingering() const
 //   MusicXMLInferredFingering
 //---------------------------------------------------------
 
-MusicXMLInferredFingering::MusicXMLInferredFingering(qreal totalY,
+MusicXMLInferredFingering::MusicXMLInferredFingering(double totalY,
                                                      EngravingItem* element,
                                                      String& text,
                                                      int track,
