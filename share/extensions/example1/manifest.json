@@ -3,5 +3,5 @@
     "type": "form",
     "title": "Example 1 (default)",
 
-    "qmlFile": "Main.qml"
+    "qmlFilePath": "Main.qml"
 }

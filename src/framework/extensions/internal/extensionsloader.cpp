@@ -104,7 +104,7 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.apiversion = obj.value("apiversion", 1).toInt();
     m.enabled = obj.value("enabled", true).toBool();
     m.visible = obj.value("enabled", true).toBool();
-    m.qmlFilePath = obj.value("qmlFile").toStdString();
+    m.qmlFilePath = obj.value("qmlFilePath").toStdString();
 
     return m;
 }

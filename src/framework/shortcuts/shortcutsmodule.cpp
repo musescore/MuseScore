@@ -43,7 +43,7 @@
 #include "view/mididevicemappingmodel.h"
 #include "view/editmidimappingmodel.h"
 
-#include "framework/api/iapiregister.h"
+#include "global/api/iapiregister.h"
 #include "api/shortcutsapi.h"
 
 #include "ui/iuiengine.h"

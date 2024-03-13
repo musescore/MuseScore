@@ -62,7 +62,7 @@
 #include "view/internal/errordetailsmodel.h"
 #include "view/internal/progressdialogmodel.h"
 
-#include "framework/api/iapiregister.h"
+#include "global/api/iapiregister.h"
 #include "api/navigationapi.h"
 #include "api/keyboardapi.h"
 

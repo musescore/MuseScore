@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-#include "framework/api/iapiengine.h"
+#include "iapiengine.h"
 
 //! NOTE This class requires a `cpp` file.
 //! If we move it to the `api` module, we will have to link it to all other modules.

@@ -169,7 +169,6 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB languages)
     list(APPEND LINK_LIB plugins)
     list(APPEND LINK_LIB extensions)
-    list(APPEND LINK_LIB api)
     list(APPEND LINK_LIB multiinstances)
 
     if (MUE_BUILD_IMPORTEXPORT_MODULE)

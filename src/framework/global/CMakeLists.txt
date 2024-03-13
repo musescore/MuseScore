@@ -147,6 +147,10 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/settings.cpp
         ${CMAKE_CURRENT_LIST_DIR}/settings.h
 
+        ${CMAKE_CURRENT_LIST_DIR}/api/iapiregister.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/iapiengine.h
+        ${CMAKE_CURRENT_LIST_DIR}/api/internal/apiregister.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/api/internal/apiregister.h
         ${CMAKE_CURRENT_LIST_DIR}/api/apiobject.cpp
         ${CMAKE_CURRENT_LIST_DIR}/api/apiobject.h
         ${CMAKE_CURRENT_LIST_DIR}/api/jsretval.h
