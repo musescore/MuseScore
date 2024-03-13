@@ -19,20 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "extensionsloader.h"
+#include "extpluginsloader.h"
 
 #include "global/io/dir.h"
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
-#include "global/serialization/json.h"
 
 #include "log.h"
 
-const std::string MANIFEST("manifest.json");
-
 using namespace mu::extensions;
+using namespace mu::extensions::legacy;
 
-ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const
+ManifestList ExtPluginsLoader::loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const
 {
     TRACEFUNC;
 
@@ -59,10 +57,10 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
     return retList;
 }
 
-ManifestList ExtensionsLoader::manifesList(const io::path_t& rootPath) const
+ManifestList ExtPluginsLoader::manifesList(const io::path_t& rootPath) const
 {
     ManifestList manifests;
-    io::paths_t paths = manifestPaths(rootPath);
+    io::paths_t paths = qmlsPaths(rootPath);
     for (const io::path_t& path : paths) {
         Manifest manifest = parseManifest(path);
         resolvePaths(manifest, io::FileInfo(path).dirPath());
@@ -72,16 +70,16 @@ ManifestList ExtensionsLoader::manifesList(const io::path_t& rootPath) const
     return manifests;
 }
 
-mu::io::paths_t ExtensionsLoader::manifestPaths(const io::path_t& rootPath) const
+mu::io::paths_t ExtPluginsLoader::qmlsPaths(const io::path_t& rootPath) const
 {
-    RetVal<io::paths_t> paths = io::Dir::scanFiles(rootPath, { MANIFEST });
+    RetVal<io::paths_t> paths = io::Dir::scanFiles(rootPath, { "*.qml" });
     if (!paths.ret) {
         LOGE() << "failed scan files, err: " << paths.ret.toString();
     }
     return paths.val;
 }
 
-Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
+Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
 {
     ByteArray data;
     Ret ret = io::File::readFile(path, data);
@@ -90,27 +88,37 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
         return Manifest();
     }
 
-    std::string jsonErr;
-    JsonObject obj = JsonDocument::fromJson(data, &jsonErr).rootObject();
-    if (!jsonErr.empty()) {
-        LOGE() << "failed parse json, err: " << jsonErr;
-        return Manifest();
-    }
+    String basename = io::FileInfo(path).baseName().toLower();
 
     Manifest m;
-    m.uri = Uri(obj.value("uri").toStdString());
-    m.type = typeFromString(obj.value("type").toStdString());
-    m.title = obj.value("title").toString();
-    m.description = obj.value("description").toString();
-    m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
-    m.enabled = obj.value("enabled", true).toBool();
-    m.visible = obj.value("enabled", true).toBool();
-    m.qmlFilePath = obj.value("qmlFilePath").toStdString();
+    m.uri = Uri("musescore://extensions/legacy/" + basename.toStdString());
+    m.type = Type::Form;
+    m.apiversion = 1;
+    m.qmlFilePath = path;
+    m.enabled = true;
+    m.visible = true;
+
+    String content = String::fromUtf8(data);
+    StringList lines = content.split(u'\n');
+    for (const String& _line : lines) {
+        if (_line.startsWith(u'/')) { // comment
+            continue;
+        }
+
+        String line = _line.trimmed();
+        if (line.startsWith(u"title:")) {
+            m.title = line.mid(6).trimmed();
+        }
+
+        if (line.startsWith(u"description:")) {
+            m.description = line.mid(12).trimmed();
+        }
+    }
 
     return m;
 }
 
-void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) const
+void ExtPluginsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) const
 {
     m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
 }

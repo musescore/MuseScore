@@ -21,7 +21,10 @@
  */
 #include "extensionsprovider.h"
 
+#include "global/containers.h"
+
 #include "extensionsloader.h"
+#include "legacy/extpluginsloader.h"
 
 using namespace mu::extensions;
 
@@ -29,7 +32,14 @@ const ManifestList& ExtensionsProvider::manifestList() const
 {
     if (m_manifests.empty()) {
         ExtensionsLoader loader;
-        m_manifests = loader.loadManifesList(configuration()->defaultPath(), configuration()->userPath());
+        m_manifests = loader.loadManifesList(configuration()->defaultPath(),
+                                             configuration()->userPath());
+
+        legacy::ExtPluginsLoader pluginsLoader;
+        ManifestList plugins = pluginsLoader.loadManifesList(configuration()->pluginsDefaultPath(),
+                                                             configuration()->pluginsUserPath());
+
+        mu::join(m_manifests, plugins);
     }
     return m_manifests;
 }

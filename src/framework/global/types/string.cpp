@@ -508,6 +508,16 @@ String String::fromUtf8(const char* str)
     return s;
 }
 
+String String::fromUtf8(const ByteArray& data)
+{
+    if (data.empty()) {
+        return String();
+    }
+    String s;
+    UtfCodec::utf8to16(std::string_view(data.constChar(), data.size()), s.mutStr());
+    return s;
+}
+
 ByteArray String::toUtf8() const
 {
     ByteArray ba;
