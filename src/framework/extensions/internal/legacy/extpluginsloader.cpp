@@ -92,7 +92,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
 
     Manifest m;
     m.uri = Uri("musescore://extensions/legacy/" + fi.baseName().toLower().toStdString());
-    m.type = Type::Form;
+    m.type = Type::Macros;
     m.apiversion = 1;
     m.qmlFilePath = fi.fileName();
     m.enabled = true;
@@ -105,7 +105,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
         return str.mid(1, str.size() - 2);
     };
 
-    int needProperties = 2; // title, description
+    int needProperties = 3; // title, description, pluginType
     int propertiesFound = 0;
     String content = String::fromUtf8(data);
     size_t current, previous = 0;
@@ -120,6 +120,12 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
             ++propertiesFound;
         } else if (line.startsWith(u"description:")) {
             m.description = dropQuotes(line.mid(12).trimmed());
+            ++propertiesFound;
+        } else if (line.startsWith(u"pluginType:")) {
+            String pluginType = dropQuotes(line.mid(11).trimmed());
+            if (pluginType == "dialog") {
+                m.type = Type::Form;
+            }
             ++propertiesFound;
         }
 
