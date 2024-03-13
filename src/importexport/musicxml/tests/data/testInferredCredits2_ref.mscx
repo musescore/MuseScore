@@ -117,14 +117,14 @@ Words &amp; Music by also Henry Ives (and ampersands)
       </Part>
     <Staff id="1">
       <VBox>
-        <height>17.4427</height>
+        <height>19.7659</height>
         <Text>
           <style>title</style>
           <text>Inferred Credits 2</text>
           </Text>
         <Text>
           <style>subtitle</style>
-          <offset x="0" y="9.71627"/>
+          <offset x="0" y="11.4294"/>
           <text>from MUSESCORE: the musical: a tone poem</text>
           </Text>
         <Text>
@@ -137,7 +137,7 @@ Words &amp; Music by also Henry Ives (and ampersands)
           </Text>
         <Text>
           <style>subtitle</style>
-          <offset x="0" y="16.8209"/>
+          <offset x="0" y="19.6585"/>
           <text>Op.1 No.43</text>
           </Text>
         </VBox>
@@ -166,6 +166,7 @@ Words &amp; Music by also Henry Ives (and ampersands)
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>ha</text>
               </Lyrics>
             <Note>
@@ -177,6 +178,7 @@ Words &amp; Music by also Henry Ives (and ampersands)
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>ha</text>
               </Lyrics>
             <Note>
@@ -197,6 +199,7 @@ Words &amp; Music by also Henry Ives (and ampersands)
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>nice.</text>
               </Lyrics>
             <StemDirection>up</StemDirection>

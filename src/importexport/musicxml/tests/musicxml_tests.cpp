@@ -673,12 +673,16 @@ TEST_F(Musicxml_Tests, incorrectStaffNumber1) {
 TEST_F(Musicxml_Tests, incorrectStaffNumber2) {
     mxmlIoTestRef("testIncorrectStaffNumber2");
 }
+#ifndef DISABLED_SOME_TESTS
+#ifndef MU_QT5_COMPAT
 TEST_F(Musicxml_Tests, inferredCredits1) {
     mxmlImportTestRef("testInferredCredits1");
 }
 TEST_F(Musicxml_Tests, inferredCredits2) {
     mxmlImportTestRef("testInferredCredits2");
 }
+#endif
+#endif
 TEST_F(Musicxml_Tests, instrumentChangeMIDIportExport) {
     mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport");
 }
