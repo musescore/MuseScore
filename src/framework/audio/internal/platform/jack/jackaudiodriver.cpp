@@ -44,9 +44,13 @@ extern int g_jackTransportDelay;
 using namespace mu::audio;
 using namespace mu::midi;
 namespace mu::audio {
-static jack_nframes_t cur_frame;
-static int cur_state;
-
+// variables to communicate between soft-realtime jack thread and musescore
+static jack_nframes_t muse_frame; // musescore frame and state
+static jack_transport_state_t muse_state;
+static jack_nframes_t jack_frame; // jack frame and state
+static jack_transport_state_t jack_state;
+static int g_musescore_is_synced; // tells jack-transport if musescore is synced
+static jack_nframes_t g_nframes;
 /*
  * MIDI
  */
@@ -130,35 +134,119 @@ mu::Ret sendEvent(const Event& e, void* pb)
     return Ret(true);
 }
 
-void handle_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
+bool is_muse_jack_frame_sync(jack_nframes_t mf, jack_nframes_t jf)
+{
+    return labs((long int)jack_frame - (long int)muse_frame) < g_nframes + 1;
+}
+
+bool is_muse_jack_state_sync(jack_transport_state_t ms, jack_transport_state_t js)
+{
+    if (muse_state == JackTransportRolling) {
+        return jack_state == JackTransportRolling
+               || jack_state == JackTransportStarting;
+    } else {
+        return jack_state == JackTransportStopped;
+    }
+}
+
+void check_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
 {
     jack_client_t* client = static_cast<jack_client_t*>(state->m_jackDeviceHandle);
     unsigned int jackSamplerate = jack_get_sample_rate(client);
-    jack_position_t pos;
-    jack_transport_state_t ts = jack_transport_query(client, &pos);
-
-    if (cur_state != ts) {
-        state->m_playbackController->remotePlayOrStop(ts == JackTransportStarting || ts == JackTransportRolling);
-        cur_state = ts;
+    muse_frame = static_cast<unsigned int>(state->m_playbackController->playbackPositionInSeconds() * jackSamplerate);
+    if (muse_frame > g_jackTransportDelay) {
+        muse_frame -= g_jackTransportDelay;
     }
 
-    if (pos.frame >= g_jackTransportDelay) {
-        pos.frame -= g_jackTransportDelay;
+    if (state->m_playbackController->isPlaying()) {
+        muse_state = JackTransportRolling;
     } else {
-        pos.frame = 0; // dont advance position before we've caught up delay
+        muse_state = JackTransportStopped;
     }
 
-    if (labs((long int)cur_frame - (long int)pos.frame) > nframes + 1) {
-        LOGW("jack-transport: frame=%u changed position from %u\n", pos.frame, cur_frame);
-        msecs_t milliseconds = static_cast<msecs_t>((double)pos.frame * 1000 / (double)jackSamplerate);
+    jack_position_t jpos;
+    jack_transport_state_t ts = jack_transport_query(client, &jpos);
+    jack_frame = jpos.frame;
+    jack_state = ts;
+    if ((!(is_muse_jack_state_sync(muse_state, jack_state)))
+        || (!(is_muse_jack_frame_sync(muse_frame, jack_frame)))) {
+        g_musescore_is_synced = 0;
+    }
+
+    if (g_musescore_is_synced) {
+        return;
+    }
+
+    /*
+    LOGW("jack-transport: mframe=%u jframe=%u  ms=%s  js=%s %i\n",
+         muse_frame, jack_frame,
+         (muse_state == JackTransportStopped ? "stop" :
+          (muse_state == JackTransportStarting ? "start" :
+           (muse_state == JackTransportRolling ? "roll" : "other"))),
+         (jack_state == JackTransportStopped ? "stop" :
+          (jack_state == JackTransportStarting ? "start" :
+           (jack_state == JackTransportRolling ? "roll" : "other"))),
+         g_jackTransportDelay);
+    */
+
+    bool state_sync = false;
+    if (muse_state == JackTransportStopped
+        && (jack_state == JackTransportStarting || jack_state == JackTransportRolling)) {
+        state->m_playbackController->remotePlayOrStop(true);
+    } else if (muse_state == JackTransportRolling
+               && jack_state == JackTransportStopped) {
+        state->m_playbackController->remotePlayOrStop(false);
+    } else {
+        state_sync = true;
+    }
+
+    if (!(is_muse_jack_frame_sync(muse_frame, jack_frame))) {
+        jack_nframes_t jump = jack_frame;
+        if (jump > g_jackTransportDelay) {
+            jump -= g_jackTransportDelay;
+        } else {
+            jump = 0;
+        }
+        msecs_t milliseconds = static_cast<msecs_t>((double)jump * 1000 / (double)jackSamplerate);
+        LOGW("jack-transport: musescore-seek mframe=%u jframe=%u\n",
+             muse_frame, jack_frame);
         state->m_playbackController->remoteSeek(milliseconds);
+        // dont wait a whole period to update new position
+        muse_frame = static_cast<unsigned int>(state->m_playbackController->playbackPositionInSeconds() * jackSamplerate)
+                     - g_jackTransportDelay;
+        // assume we are in sync
+        g_musescore_is_synced = 1;
+    } else {
+        g_musescore_is_synced = state_sync; // only sync if state and position matches jack
+        LOGW("jack-transport: SYNCED!\n");
     }
+}
 
-    cur_frame = pos.frame;
-
-    if (pos.valid & JackPositionBBT) {
-        LOGW("jack-transport: tempo change: new bpm: %f (NOT SUPPORTED)\n", pos.beats_per_minute);
+// because jack callbacks are soft-realtime we use no resources
+static int handle_jack_sync(jack_transport_state_t ts, jack_position_t* pos, void* args)
+{
+    if (jack_frame != pos->frame
+        || jack_state != ts
+        || (!is_muse_jack_frame_sync(jack_frame, muse_frame))
+        || (!is_muse_jack_state_sync(jack_state, muse_state))
+        ) {
+        jack_frame = pos->frame;
+        jack_state = ts;
+        g_musescore_is_synced = 0;
     }
+    /*
+    LOGW("jack-transport: SYNC ms=%s ts=%s  m/j-frame: %lu/%lu  sync? %s\n",
+         (muse_state == JackTransportStopped ? "stop" :
+          (muse_state == JackTransportStarting ? "start" :
+           (muse_state == JackTransportRolling ? "roll" : "other"))),
+         (ts == JackTransportStopped ? "stop" :
+          (ts == JackTransportStarting ? "start" :
+           (ts == JackTransportRolling ? "roll" : "other"))),
+         muse_frame,
+         jack_frame,
+         g_musescore_is_synced ? "---- YES ----" : " -- no --");
+    */
+    return g_musescore_is_synced;
 }
 
 /*
@@ -185,7 +273,7 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     //    return make_ret(Err::MidiNotConnected);
     // }
 
-    handle_jack_midi_transport(state, nframes);
+    check_jack_midi_transport(state, nframes);
 
     if (!state->m_midiOutputPorts.empty()) {
         jack_port_t* port = state->m_midiOutputPorts.front();
@@ -251,6 +339,12 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     }
 
     return 0;
+}
+
+static int handle_buffersize_change(jack_nframes_t nframes, void* arg)
+{
+    g_nframes = nframes;
+    return 0; // successfully reallocated buffer
 }
 
 static void jack_cleanup_callback(void*)
@@ -346,7 +440,8 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
     jack_on_shutdown(handle, jack_cleanup_callback, (void*)this);
     jack_set_process_callback(handle, jack_process_callback, (void*)this);
-
+    jack_set_sync_callback(handle, handle_jack_sync, (void*)this);
+    jack_set_buffer_size_callback(handle, handle_buffersize_change, NULL);
     if (jack_activate(handle)) {
         LOGE() << "cannot activate client";
         return false;
@@ -362,8 +457,13 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
     m_midiOutputPorts.push_back(port);
 
-    cur_frame = 0; // FIX: get play state/pos
-    cur_state = false; // FIX: ditto
+    muse_frame = static_cast<unsigned int>(m_playbackController->playbackPositionInSeconds() * jackSamplerate) - g_jackTransportDelay;
+
+    if (m_playbackController->isPlaying()) {
+        muse_state = JackTransportRolling;
+    } else {
+        muse_state = JackTransportStopped;
+    }
 
     return true;
 }

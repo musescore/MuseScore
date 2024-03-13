@@ -150,7 +150,7 @@ void CommandLineParser::init()
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
 
-    m_parser.addOption(QCommandLineOption("transportDelay", "Delay in frames caused by MuseScore buffering", "0"));
+    m_parser.addOption(QCommandLineOption("transportDelay", "Delay in frames caused by MuseScore buffering", "1024"));
 
     // Internal
     m_parser.addOption(internalCommandLineOption("score-display-name-override",

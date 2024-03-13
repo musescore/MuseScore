@@ -44,7 +44,7 @@
 using namespace mu::app;
 using namespace mu::appshell;
 
-int g_jackTransportDelay = 0;
+int g_jackTransportDelay;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::GlobalModule globalModule;
