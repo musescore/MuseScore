@@ -43,7 +43,8 @@
 
 #include "io/internal/filesystem.h"
 
-#include "framework/api/iapiregister.h"
+#include "api/internal/apiregister.h"
+#include "api/iapiregister.h"
 #include "api/logapi.h"
 #include "api/interactiveapi.h"
 #include "api/filesystemapi.h"
@@ -77,6 +78,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
     ioc()->registerExport<IProcess>(moduleName(), new Process());
+    ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 }
 
 void GlobalModule::registerApi()

@@ -24,7 +24,7 @@
 #include "modularity/ioc.h"
 #include "internal/actionsdispatcher.h"
 
-#include "framework/api/iapiregister.h"
+#include "global/api/iapiregister.h"
 #include "api/dispatcherapi.h"
 
 using namespace mu::actions;

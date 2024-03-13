@@ -29,7 +29,7 @@
 #include "internal/accessibilityconfiguration.h"
 #include "internal/qaccessibleinterfaceregister.h"
 
-#include "framework/api/iapiregister.h"
+#include "global/api/iapiregister.h"
 #include "api/accessibilityapi.h"
 
 #include "log.h"
