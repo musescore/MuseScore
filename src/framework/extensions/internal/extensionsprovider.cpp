@@ -26,6 +26,8 @@
 #include "extensionsloader.h"
 #include "legacy/extpluginsloader.h"
 
+#include "extensionrunner.h"
+
 using namespace mu::extensions;
 
 const ManifestList& ExtensionsProvider::manifestList() const
@@ -59,7 +61,22 @@ const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
     return _dymmy;
 }
 
-mu::Ret ExtensionsProvider::run(const Uri&)
+mu::Ret ExtensionsProvider::run(const Uri& uri)
 {
-    return make_ret(Ret::Code::NotImplemented);
+    const Manifest& m = manifest(uri);
+    if (!m.isValid()) {
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    //! TODO Add check of type
+
+    Ret ret;
+    if (m.apiversion == 1) {
+        ret = make_ret(Ret::Code::NotImplemented);
+    } else {
+        ExtensionRunner runner;
+        ret = runner.run(m);
+    }
+
+    return ret;
 }

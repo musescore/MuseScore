@@ -1,5 +1,7 @@
 {
     "uri": "musescore://extensions/example_2",
-    "type": "form",
-    "title": "Example 2 (default)"
+    "type": "macros",
+    "title": "Example 2 (default)",
+
+    "jsFilePath": "main.js"
 }

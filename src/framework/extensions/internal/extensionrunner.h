@@ -19,41 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSUIENGINE_H
-#define MU_EXTENSIONS_EXTENSIONSUIENGINE_H
+#ifndef MU_EXTENSIONS_EXTENSIONRUNNER_H
+#define MU_EXTENSIONS_EXTENSIONRUNNER_H
 
-#include <QObject>
-
-#include "../iextensionsuiengine.h"
-
-#include "modularity/ioc.h"
-#include "ui/iuiengine.h"
-
-#include "../api/qmlextapi.h"
+#include "global/types/ret.h"
+#include "../extensionstypes.h"
 
 namespace mu::extensions {
-class QmlApiEngine;
-class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
+class ExtensionRunner
 {
-    Q_OBJECT
-
-    Inject<ui::IUiEngine> uiEngine;
-
 public:
-    ExtensionsUiEngine() = default;
-    ~ExtensionsUiEngine();
+    ExtensionRunner() = default;
 
-    QQmlEngine* qmlEngine() const;
-
-private:
-
-    QQmlEngine* engine();
-    void setup(QQmlEngine* e);
-
-    QQmlEngine* m_engine = nullptr;
-    QmlApiEngine* m_apiEngine = nullptr;
-    api::QmlExtApi* m_api = nullptr;
+    Ret run(const Manifest& manifest);
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSUIENGINE_H
+#endif // MU_EXTENSIONS_EXTENSIONRUNNER_H
