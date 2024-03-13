@@ -178,7 +178,7 @@ FocusableItem {
                 navigationRowStart: featheringRightSection.navigationRowEnd + 1
             }
 
-            InspectorPropertyView { // PLACEHOLDER
+            InspectorPropertyView {
                 id: crossStaffMove
                 visible: root.model ? root.model.iscrossStaffMoveAvailable : false
 
@@ -194,17 +194,25 @@ FocusableItem {
                     width: parent.width
 
                     FlatRadioButton {
+                        id: crossBeamUp
                         width: 0.5 * parent.width - 2
                         iconCode: IconCode.ARROW_UP
                         checked: root.model ? root.model.crossStaffMove.value < 0 : false
                         onClicked: root.model.crossStaffMove.value -= 1
+
+                        navigation.panel: root.navigation.panel
+                        navigation.row: crossStaffMove.navigationRowStart
                     }
 
                     FlatRadioButton {
+                        id: crossBeamDown
                         width: 0.5 * parent.width - 2
                         iconCode: IconCode.ARROW_DOWN
                         checked: root.model ? root.model.crossStaffMove.value > 0 : false
                         onClicked: root.model.crossStaffMove.value += 1
+
+                        navigation.panel: root.navigation.panel
+                        navigation.row: crossBeamUp.navigation.row + 1
                     }
                 }
             }
@@ -218,7 +226,7 @@ FocusableItem {
 
                 navigation.name: "ForceHorizontal"
                 navigation.panel: root.navigationPanel
-                navigation.row: featheringRightSection.navigationRowEnd + 1
+                navigation.row: crossBeamDown.navigation.row + 1
             }
 
             ExpandableBlank {
