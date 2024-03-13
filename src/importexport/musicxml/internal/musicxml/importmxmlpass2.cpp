@@ -3557,18 +3557,17 @@ static Marker* findMarker(const QString& repeat, Score* score)
 bool MusicXMLParserDirection::isLikelyFingering() const
 {
     // One or more newline-separated digits, possibly lead or trailed by whitespace
-    static const QRegularExpression re("^\\s*[0-5pimac](?:\\n[0-5pimac])*\\s*$");
+    static const QRegularExpression re("^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$");
     return _wordsText.contains(re)
            && _rehearsalText.isEmpty()
-           && _metroText.isEmpty()
-           && _tpoSound < 0.1;
+           && _metroText.isEmpty();
 }
 
 //---------------------------------------------------------
 //   MusicXMLInferredFingering
 //---------------------------------------------------------
 
-MusicXMLInferredFingering::MusicXMLInferredFingering(qreal totalY,
+MusicXMLInferredFingering::MusicXMLInferredFingering(double totalY,
                                                      EngravingItem* element,
                                                      QString& text,
                                                      int track,
