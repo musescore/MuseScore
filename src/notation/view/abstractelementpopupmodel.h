@@ -90,6 +90,7 @@ private:
     INotationSelectionPtr selection() const;
 
     engraving::ElementType elementType() const;
+    const engraving::ElementTypeSet& dependentElementTypes() const;
 
     void updateItemRect();
 
