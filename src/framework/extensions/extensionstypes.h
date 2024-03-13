@@ -35,13 +35,16 @@ constexpr int DEFAULT_API_VERSION = 2;
 
 enum class Type {
     Undefined = 0,
-    Form
+    Form,       // Have UI, controls, user interaction
+    Macros      // Without UI, they just do some script
 };
 
 static inline Type typeFromString(const std::string& str)
 {
     if (str == "form") {
         return Type::Form;
+    } else if (str == "macros") {
+        return Type::Macros;
     }
     return Type::Undefined;
 }
@@ -51,6 +54,7 @@ static inline std::string typeToString(const Type& type)
     switch (type) {
     case Type::Undefined: return "undefined";
     case Type::Form: return "form";
+    case Type::Macros: return "macros";
     }
     return std::string();
 }
@@ -60,14 +64,14 @@ manifest.json
 {
 
 "uri": String,                    // Example: musescore://module/target/name
-"type": String,                   // Values: form
+"type": String,                   // Values: form, macros
 "title": String,                  //
 "description": String,            //
 "apiversion": String              // Optional default 2
 "enabled": Boolean,               // Optional default true
 "visible": Boolean,               // Optional default true
 
-"qmlFile": String                 // Path (name) of qml file
+"qmlFilePath": String                 // Path (name) of qml file
 }*/
 
 struct Manifest {
