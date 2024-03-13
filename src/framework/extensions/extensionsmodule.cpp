@@ -71,7 +71,7 @@ void ExtensionsModule::registerUiTypes()
     qmlRegisterType<ExtensionBuilder>("Muse.Extensions", 1, 0, "ExtensionBuilder");
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
 
-    //legacy::QmlPluginApi::registerQmlTypes();
+    legacy::QmlPluginApi::registerQmlTypes();
 }
 
 void ExtensionsModule::resolveImports()

@@ -27,6 +27,7 @@
 #include "legacy/extpluginsloader.h"
 
 #include "extensionrunner.h"
+#include "legacy/extpluginrunner.h"
 
 using namespace mu::extensions;
 
@@ -72,7 +73,8 @@ mu::Ret ExtensionsProvider::run(const Uri& uri)
 
     Ret ret;
     if (m.apiversion == 1) {
-        ret = make_ret(Ret::Code::NotImplemented);
+        legacy::ExtPluginRunner runner;
+        ret = runner.run(m);
     } else {
         ExtensionRunner runner;
         ret = runner.run(m);

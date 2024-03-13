@@ -19,26 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_QMLPLUGINAPI_H
-#define MU_EXTENSIONS_QMLPLUGINAPI_H
+#ifndef MU_EXTENSIONS_EXTPLUGINRUNNER_H
+#define MU_EXTENSIONS_EXTPLUGINRUNNER_H
 
-#include <QQuickItem>
+#include "global/types/ret.h"
+
+#include "../../extensionstypes.h"
+
+#include "modularity/ioc.h"
+#include "../../iextensionsuiengine.h"
 
 namespace mu::extensions::legacy {
-class QmlPluginApi : public QQuickItem
+//! NOTE Run old plugins without UI
+//! But they are still qml files, so they are run as qml
+class ExtPluginRunner
 {
-    Q_OBJECT
+    Inject<IExtensionsUiEngine> engine;
 
 public:
-    QmlPluginApi(QQuickItem* parent = nullptr);
+    ExtPluginRunner() = default;
 
-    static void registerQmlTypes();
-
-    void runPlugin() { emit run(); }
-
-signals:
-    void run();
+    Ret run(const Manifest& manifest);
 };
 }
 
-#endif // MU_EXTENSIONS_QMLPLUGINAPI_H
+#endif // MU_EXTENSIONS_EXTPLUGINRUNNER_H
