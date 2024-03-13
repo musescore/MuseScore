@@ -38,7 +38,7 @@ class LyricsLayout
 public:
     LyricsLayout() = default;
 
-    static void layout(Lyrics* item, LayoutContext& ctx);
+    static void layout(Lyrics* item, LayoutContext& ctx, bool updatePosOnly = false);
     static void layout(LyricsLine* item, LayoutContext& ctx);
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 

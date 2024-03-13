@@ -62,7 +62,7 @@ static Lyrics* searchNextLyrics(Segment* s, staff_idx_t staffIdx, int verse, Pla
     return l;
 }
 
-void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
+void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx, bool updatePosOnly)
 {
     if (!item->explicitParent()) {   // palette & clone trick
         item->setPos(PointF());
@@ -136,35 +136,40 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     }
 
     ChordRest* cr = item->chordRest();
-    if (item->isRemoveInvalidSegments()) {
-        item->removeInvalidSegments();
-    }
-    if (item->ticks() > Fraction(0, 1) || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
-        if (!item->separator()) {
-            LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
-            separator->setTick(cr->tick());
-            item->setSeparator(separator);
-            ctx.mutDom().addUnmanagedSpanner(item->separator());
+
+    // For resetting a lyric's position when its LyricLine is invisible
+    // This is to avoid left aligned lyrics with no melisma
+    if (!updatePosOnly) {
+        if (item->isRemoveInvalidSegments()) {
+            item->removeInvalidSegments();
         }
-        item->separator()->setParent(item);
-        item->separator()->setTick(cr->tick());
-        // HACK separator should have non-zero length to get its layout
-        // always triggered. A proper ticks length will be set later on the
-        // separator layout.
-        item->separator()->setTicks(Fraction::fromTicks(1));
-        item->separator()->setTrack(item->track());
-        item->separator()->setTrack2(item->track());
-        item->separator()->setVisible(item->visible());
-        // bbox().setWidth(bbox().width());  // ??
-    } else {
-        if (item->separator()) {
-            item->separator()->removeUnmanaged();
-            delete item->separator();
-            item->setSeparator(nullptr);
+        if (item->ticks() > Fraction(0, 1) || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
+            if (!item->separator()) {
+                LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
+                separator->setTick(cr->tick());
+                item->setSeparator(separator);
+                ctx.mutDom().addUnmanagedSpanner(item->separator());
+            }
+            item->separator()->setParent(item);
+            item->separator()->setTick(cr->tick());
+            // HACK separator should have non-zero length to get its layout
+            // always triggered. A proper ticks length will be set later on the
+            // separator layout.
+            item->separator()->setTicks(Fraction::fromTicks(1));
+            item->separator()->setTrack(item->track());
+            item->separator()->setTrack2(item->track());
+            item->separator()->setVisible(item->visible());
+            // bbox().setWidth(bbox().width());  // ??
+        } else {
+            if (item->separator()) {
+                item->separator()->removeUnmanaged();
+                delete item->separator();
+                item->setSeparator(nullptr);
+            }
         }
     }
 
-    if (item->isMelisma() || hasNumber) {
+    if ((item->isMelisma() && item->separator()->ticks().isNotZero()) || hasNumber) {
         // use the melisma style alignment setting
         if (item->isStyled(Pid::ALIGN)) {
             item->setAlign(ctx.conf().styleV(Sid::lyricsMelismaAlign).value<Align>());
@@ -232,20 +237,21 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
     bool tempMelismaTicks = (item->lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
+    Lyrics* lyric = item->lyrics();
     if (item->isEndMelisma()) {           // melisma
         item->setLineWidth(ctx.conf().styleMM(Sid::lyricsLineThickness));
         // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
         if (tempMelismaTicks) {
-            item->lyrics()->setTicks(Fraction(0, 1));
+            lyric->setTicks(Fraction(0, 1));
         }
 
         // Lyrics::_ticks points to the beginning of the last spanned segment,
         // but the line shall include it:
         // include the duration of this last segment in the melisma duration
-        Segment* lyricsSegment   = item->lyrics()->segment();
+        Segment* lyricsSegment   = lyric->segment();
         Fraction lyricsStartTick = lyricsSegment->tick();
-        Fraction lyricsEndTick   = item->lyrics()->endTick();
-        track_idx_t lyricsTrack  = item->lyrics()->track();
+        Fraction lyricsEndTick   = lyric->endTick();
+        track_idx_t lyricsTrack  = lyric->track();
 
         // find segment with tick >= endTick
         const Segment* s = lyricsSegment;
@@ -294,12 +300,12 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
                 if (!e || e->type() != ElementType::CHORD || ps->tick() > item->tick() + item->ticks()) {
                     // nope, nothing to do but set ticks to 0
                     // this will result in melisma being deleted later
-                    item->lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
+                    lyric->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
                     item->setTicks(Fraction(0, 1));
                     return;
                 }
             }
-            item->lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - lyricsStartTick);
+            lyric->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - lyricsStartTick);
         }
         // Spanner::computeEndElement() will actually ignore this value and use the (earlier) lyrics()->endTick() instead
         // still, for consistency with other lines, we should set the ticks for this to the computed (later) value
@@ -307,10 +313,10 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
             item->setTicks(s->tick() - lyricsStartTick);
         }
     } else {                                    // dash(es)
-        item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
+        item->setNextLyrics(searchNextLyrics(lyric->segment(),
                                              item->staffIdx(),
-                                             item->lyrics()->no(),
-                                             item->lyrics()->placement()
+                                             lyric->no(),
+                                             lyric->placement()
                                              ));
 
         item->setTick2(item->nextLyrics() ? item->nextLyrics()->segment()->tick() : item->tick());
@@ -318,8 +324,10 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
     if (item->ticks().isNotZero()) {                  // only do layout if some time span
         // do layout with non-0 duration
         if (tempMelismaTicks) {
-            item->lyrics()->setTicks(Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
+            lyric->setTicks(Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
         }
+    } else {
+        layout(lyric, ctx, true);
     }
 }
 
