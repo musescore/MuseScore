@@ -430,7 +430,13 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
 
                   int lastVal = MidiRenderer::ARTICULATION_CONV_FACTOR;
                   int endPoint = change.second.ticks();
-                  int lastVelocity = velocityMap.upper_bound(change.first.ticks())->second;
+                  int lastVelocity = 0;
+                  auto lastValocityIt = velocityMap.upper_bound(change.first.ticks());
+                  if (lastValocityIt != velocityMap.end())
+                        lastVelocity = lastValocityIt->second;
+                  else if (!velocityMap.empty())
+                        lastVelocity = velocityMap.cbegin()->second;
+
                   for (int t = change.first.ticks(); t <= endPoint; t++) {
                         int mult = multEvents.val(Fraction::fromTicks(t));
                         if (mult == lastVal || mult == CONVERSION_FACTOR)
