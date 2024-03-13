@@ -28,6 +28,11 @@
 #include "global/io/path.h"
 
 namespace mu::extensions {
+//! NOTE Api versions:
+//! 1 - plugins from 3х
+//! 2 - extensions
+constexpr int DEFAULT_API_VERSION = 2;
+
 enum class Type {
     Undefined = 0,
     Form
@@ -57,7 +62,7 @@ manifest.json
 "uri": String,                    // Example: musescore://module/target/name
 "type": String,                   // Values: form
 "title": String,                  //
-"apiversion": String              // Optional default 1
+"apiversion": String              // Optional default 2
 "enabled": Boolean,               // Optional default true
 "visible": Boolean,               // Optional default true
 
@@ -68,7 +73,7 @@ struct Manifest {
     Uri uri;
     Type type = Type::Undefined;
     String title;
-    int apiversion = 1;
+    int apiversion = DEFAULT_API_VERSION;
     bool enabled = true;
     bool visible = true;
 
