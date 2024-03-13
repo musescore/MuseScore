@@ -668,6 +668,9 @@ TEST_F(Musicxml_Tests, inferredCredits1) {
 TEST_F(Musicxml_Tests, inferredCredits2) {
     mxmlImportTestRef("testInferredCredits2");
 }
+TEST_F(Musicxml_Tests, inferredFingerings) {
+    mxmlImportTestRef("testInferredFingerings");
+}
 TEST_F(Musicxml_Tests, instrumentChangeMIDIportExport) {
     mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport");
 }
