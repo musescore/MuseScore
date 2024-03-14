@@ -1194,14 +1194,14 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
     score->updateChannel();
     fillScoreVelocities(score, m_context);
 
+    // create sustain pedal events
+    renderSpanners(events, pitchWheelRender);
+
     // create note & other events
     for (const Staff* st : score->staves()) {
         renderStaff(events, st, pitchWheelRender);
     }
     events.fixupMIDI();
-
-    // create sustain pedal events
-    renderSpanners(events, pitchWheelRender);
 
     EventsHolder pitchWheelEvents = pitchWheelRender.renderPitchWheel();
     events.mergePitchWheelEvents(pitchWheelEvents);
