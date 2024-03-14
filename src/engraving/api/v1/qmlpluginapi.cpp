@@ -26,6 +26,10 @@
 
 #include "global/muversion.h"
 
+#include "engraving/compat/dummyelement.h"
+#include "engraving/compat/scoreaccess.h"
+#include "engraving/dom/factory.h"
+
 // api
 #include "score.h"
 #include "instrument.h"
@@ -33,21 +37,6 @@
 #include "elements.h"
 #include "tie.h"
 #include "selection.h"
-
-// #include "engraving/compat/dummyelement.h"
-// #include "engraving/compat/scoreaccess.h"
-// #include "engraving/dom/factory.h"
-// #include "engraving/dom/masterscore.h"
-
-//
-//
-// #include "enums.h"
-// #include "fraction.h"
-// #include "instrument.h"
-// #include "part.h"
-//
-//
-// #include "util.h"
 
 #include "log.h"
 
@@ -77,231 +66,6 @@ Enum* PluginAPI::segmentTypeEnum = nullptr;
 Enum* PluginAPI::spannerAnchorEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
 Enum* PluginAPI::harmonyTypeEnum = nullptr;
-
-PluginAPI::PluginAPI(QQuickItem* parent)
-    : QQuickItem(parent)
-{
-    setRequiresScore(true); // by default plugins require a score to work
-}
-
-apiv1::Score* PluginAPI::curScore() const
-{
-    if (currentScore()) {
-        return wrap<apiv1::Score>(currentScore(), Ownership::SCORE);
-    }
-
-    return nullptr;
-}
-
-QQmlListProperty<apiv1::Score> PluginAPI::scores()
-{
-    NOT_IMPLEMENTED;
-
-    static std::vector<mu::engraving::Score*> scores;
-
-    return wrapContainerProperty<Score>(this, scores);
-}
-
-//---------------------------------------------------------
-//   writeScore
-///   Writes a score to a file.
-///   \param s The score which should be saved.
-///   \param name Path where to save the score, with or
-///   without the filename extension (the extension is
-///   determined by \p ext parameter).
-///   \param ext Filename extension \b without the dot,
-///   e.g. \p "mscz" or \p "pdf". Determines the file
-///   format to be used.
-//---------------------------------------------------------
-
-// bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
-// {
-//     if (!s || !s->score()) {
-//         return false;
-//     }
-
-//     UNUSED(name);
-//     UNUSED(ext);
-
-//     NOT_IMPLEMENTED;
-//     return false;
-// }
-
-//---------------------------------------------------------
-//   readScore
-///   Reads the score from a file and opens it in a new tab
-///   \param name Path to the file to be opened.
-///   \param noninteractive Can be used to avoid a "save
-///   changes" dialog on closing a score that is either
-///   imported or was created with an older version of
-///   MuseScore.
-//---------------------------------------------------------
-
-// Score* PluginAPI::readScore(const QString& name, bool noninteractive)
-// {
-//     UNUSED(name);
-//     UNUSED(noninteractive);
-
-//     NOT_IMPLEMENTED;
-//     return nullptr;
-// }
-
-//---------------------------------------------------------
-//   closeScore
-//---------------------------------------------------------
-
-// void PluginAPI::closeScore(mu::plugins::api::Score* score)
-// {
-//     UNUSED(score);
-
-//     NOT_IMPLEMENTED;
-// }
-
-//---------------------------------------------------------
-//   newElement
-///   Creates a new element with the given type. The
-///   element can be then added to a score via Cursor::add.
-///   \param elementType EngravingItem type, should be the value
-///   from PluginAPI::PluginAPI::EngravingItem enumeration.
-//---------------------------------------------------------
-
-// EngravingItem* PluginAPI::newElement(int elementType)
-// {
-//     mu::engraving::Score* score = currentScore();
-
-//     if (!score) {
-//         return nullptr;
-//     }
-
-//     if (elementType <= int(ElementType::INVALID) || elementType >= int(ElementType::ROOT_ITEM)) {
-//         LOGW("PluginAPI::newElement: Wrong type ID: %d", elementType);
-//         return nullptr;
-//     }
-
-//     const ElementType type = ElementType(elementType);
-//     mu::engraving::EngravingItem* e = Factory::createItem(type, score->dummy());
-//     return wrap(e, Ownership::PLUGIN);
-// }
-
-//---------------------------------------------------------
-//   removeElement
-///   Disposes of an EngravingItem and its children.
-///   \param EngravingItem type.
-///   \since MuseScore 3.3
-//---------------------------------------------------------
-
-// void PluginAPI::removeElement(mu::plugins::api::EngravingItem* wrapped)
-// {
-//     mu::engraving::Score* score = wrapped->element()->score();
-//     score->deleteItem(wrapped->element());
-// }
-
-//---------------------------------------------------------
-//   newScore
-//---------------------------------------------------------
-
-// Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, int measures)
-// {
-//     if (currentScore()) {
-//         currentScore()->endCmd();
-//     }
-
-//     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
-
-//     // TODO: Set path/filename
-//     NOT_IMPLEMENTED << "setting path/filename";
-
-//     score->appendPart(Score::instrTemplateFromName(part));
-//     score->appendMeasures(measures);
-//     score->doLayout();
-
-//     // TODO: Open score
-//     NOT_IMPLEMENTED << "opening the newly created score";
-
-//     qApp->processEvents();
-//     Q_ASSERT(currentScore() == score);
-//     score->startCmd();
-//     return wrap<Score>(score, Ownership::SCORE);
-// }
-
-// void PluginAPI::cmd(const QString& s)
-// {
-//     static const QMap<QString, QString> COMPAT_CMD_MAP = {
-//         { "escape", "notation-escape" },
-//         { "cut", "notation-cut" },
-//         { "copy", "notation-copy" },
-//         { "paste", "notation-paste" },
-//         { "paste-half", "notation-paste-half" },
-//         { "paste-double", "notation-paste-double" },
-//         { "select-all", "notation-select-all" },
-//         { "delete", "notation-delete" },
-//         { "next-chord", "notation-move-right" },
-//         { "prev-chord", "notation-move-left" },
-//         { "prev-measure", "notation-move-left-quickly" }
-//     };
-
-//     actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
-// }
-
-void PluginAPI::openLog(const QString&)
-{
-    DEPRECATED;
-}
-
-void PluginAPI::closeLog()
-{
-    DEPRECATED;
-}
-
-void PluginAPI::log(const QString& txt)
-{
-    LOGD() << txt;
-}
-
-void PluginAPI::logn(const QString& txt)
-{
-    LOGD() << txt;
-}
-
-void PluginAPI::log2(const QString& txt, const QString& txt2)
-{
-    LOGD() << txt << txt2;
-}
-
-//---------------------------------------------------------
-//   newQProcess
-///   Not enabled currently (so excluded from plugin docs)
-//---------------------------------------------------------
-
-// MsProcess* PluginAPI::newQProcess()
-// {
-//     return 0;   // TODO: new MsProcess(this);
-// }
-
-//---------------------------------------------------------
-//   PluginAPI::fraction
-///  Creates a new fraction with the given numerator and
-///  denominator
-//---------------------------------------------------------
-
-// FractionWrapper* PluginAPI::fraction(int num, int den) const
-// {
-//     return wrap(mu::engraving::Fraction(num, den));
-// }
-
-// void PluginAPI::quit()
-// {
-//     emit closeRequested();
-// }
-
-mu::engraving::Score* PluginAPI::currentScore() const
-{
-    if (context()->currentNotation()) {
-        return context()->currentNotation()->elements()->msScore();
-    }
-
-    return nullptr;
-}
 
 //---------------------------------------------------------
 //   PluginAPI::registerQmlTypes
@@ -344,6 +108,232 @@ void PluginAPI::registerQmlTypes()
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
     qmlTypesRegistered = true;
+}
+
+PluginAPI::PluginAPI(QQuickItem* parent)
+    : QQuickItem(parent)
+{
+    setRequiresScore(true); // by default plugins require a score to work
+}
+
+apiv1::Score* PluginAPI::curScore() const
+{
+    if (currentScore()) {
+        return wrap<apiv1::Score>(currentScore(), Ownership::SCORE);
+    }
+
+    return nullptr;
+}
+
+QQmlListProperty<apiv1::Score> PluginAPI::scores()
+{
+    NOT_IMPLEMENTED;
+
+    static std::vector<mu::engraving::Score*> scores;
+
+    return wrapContainerProperty<Score>(this, scores);
+}
+
+//---------------------------------------------------------
+//   writeScore
+///   Writes a score to a file.
+///   \param s The score which should be saved.
+///   \param name Path where to save the score, with or
+///   without the filename extension (the extension is
+///   determined by \p ext parameter).
+///   \param ext Filename extension \b without the dot,
+///   e.g. \p "mscz" or \p "pdf". Determines the file
+///   format to be used.
+//---------------------------------------------------------
+
+bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
+{
+    if (!s || !s->score()) {
+        return false;
+    }
+
+    UNUSED(name);
+    UNUSED(ext);
+
+    NOT_IMPLEMENTED;
+    return false;
+}
+
+//---------------------------------------------------------
+//   readScore
+///   Reads the score from a file and opens it in a new tab
+///   \param name Path to the file to be opened.
+///   \param noninteractive Can be used to avoid a "save
+///   changes" dialog on closing a score that is either
+///   imported or was created with an older version of
+///   MuseScore.
+//---------------------------------------------------------
+
+apiv1::Score* PluginAPI::readScore(const QString& name, bool noninteractive)
+{
+    UNUSED(name);
+    UNUSED(noninteractive);
+
+    NOT_IMPLEMENTED;
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   closeScore
+//---------------------------------------------------------
+
+void PluginAPI::closeScore(apiv1::Score* score)
+{
+    UNUSED(score);
+
+    NOT_IMPLEMENTED;
+}
+
+//---------------------------------------------------------
+//   newElement
+///   Creates a new element with the given type. The
+///   element can be then added to a score via Cursor::add.
+///   \param elementType EngravingItem type, should be the value
+///   from PluginAPI::PluginAPI::EngravingItem enumeration.
+//---------------------------------------------------------
+
+apiv1::EngravingItem* PluginAPI::newElement(int elementType)
+{
+    mu::engraving::Score* score = currentScore();
+
+    if (!score) {
+        return nullptr;
+    }
+
+    if (elementType <= int(ElementType::INVALID) || elementType >= int(ElementType::ROOT_ITEM)) {
+        LOGW("PluginAPI::newElement: Wrong type ID: %d", elementType);
+        return nullptr;
+    }
+
+    const ElementType type = ElementType(elementType);
+    mu::engraving::EngravingItem* e = Factory::createItem(type, score->dummy());
+    return wrap(e, Ownership::PLUGIN);
+}
+
+//---------------------------------------------------------
+//   removeElement
+///   Disposes of an EngravingItem and its children.
+///   \param EngravingItem type.
+///   \since MuseScore 3.3
+//---------------------------------------------------------
+
+void PluginAPI::removeElement(apiv1::EngravingItem* wrapped)
+{
+    mu::engraving::Score* score = wrapped->element()->score();
+    score->deleteItem(wrapped->element());
+}
+
+//---------------------------------------------------------
+//   newScore
+//---------------------------------------------------------
+
+apiv1::Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, int measures)
+{
+    if (currentScore()) {
+        currentScore()->endCmd();
+    }
+
+    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
+
+    // TODO: Set path/filename
+    NOT_IMPLEMENTED << "setting path/filename";
+
+    score->appendPart(Score::instrTemplateFromName(part));
+    score->appendMeasures(measures);
+    score->doLayout();
+
+    // TODO: Open score
+    NOT_IMPLEMENTED << "opening the newly created score";
+
+    qApp->processEvents();
+    Q_ASSERT(currentScore() == score);
+    score->startCmd();
+    return wrap<Score>(score, Ownership::SCORE);
+}
+
+void PluginAPI::cmd(const QString& s)
+{
+    static const QMap<QString, QString> COMPAT_CMD_MAP = {
+        { "escape", "notation-escape" },
+        { "cut", "notation-cut" },
+        { "copy", "notation-copy" },
+        { "paste", "notation-paste" },
+        { "paste-half", "notation-paste-half" },
+        { "paste-double", "notation-paste-double" },
+        { "select-all", "notation-select-all" },
+        { "delete", "notation-delete" },
+        { "next-chord", "notation-move-right" },
+        { "prev-chord", "notation-move-left" },
+        { "prev-measure", "notation-move-left-quickly" }
+    };
+
+    actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
+}
+
+void PluginAPI::openLog(const QString&)
+{
+    DEPRECATED;
+}
+
+void PluginAPI::closeLog()
+{
+    DEPRECATED;
+}
+
+void PluginAPI::log(const QString& txt)
+{
+    LOGD() << txt;
+}
+
+void PluginAPI::logn(const QString& txt)
+{
+    LOGD() << txt;
+}
+
+void PluginAPI::log2(const QString& txt, const QString& txt2)
+{
+    LOGD() << txt << txt2;
+}
+
+//---------------------------------------------------------
+//   newQProcess
+///   Not enabled currently (so excluded from plugin docs)
+//---------------------------------------------------------
+
+MsProcess* PluginAPI::newQProcess()
+{
+    NOT_IMPLEMENTED;
+    return nullptr;
+}
+
+//---------------------------------------------------------
+//   PluginAPI::fraction
+///  Creates a new fraction with the given numerator and
+///  denominator
+//---------------------------------------------------------
+
+FractionWrapper* PluginAPI::fraction(int num, int den) const
+{
+    return wrap(mu::engraving::Fraction(num, den));
+}
+
+void PluginAPI::quit()
+{
+    emit closeRequested();
+}
+
+mu::engraving::Score* PluginAPI::currentScore() const
+{
+    if (context()->currentNotation()) {
+        return context()->currentNotation()->elements()->msScore();
+    }
+
+    return nullptr;
 }
 
 QString PluginAPI::pluginType() const
