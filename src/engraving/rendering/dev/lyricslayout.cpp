@@ -135,34 +135,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         item->styleChanged();
     }
 
-    ChordRest* cr = item->chordRest();
-    if (item->isRemoveInvalidSegments()) {
-        item->removeInvalidSegments();
-    }
-    if (item->ticks() > Fraction(0, 1) || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
-        if (!item->separator()) {
-            LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
-            separator->setTick(cr->tick());
-            item->setSeparator(separator);
-            ctx.mutDom().addUnmanagedSpanner(item->separator());
-        }
-        item->separator()->setParent(item);
-        item->separator()->setTick(cr->tick());
-        // HACK separator should have non-zero length to get its layout
-        // always triggered. A proper ticks length will be set later on the
-        // separator layout.
-        item->separator()->setTicks(Fraction::fromTicks(1));
-        item->separator()->setTrack(item->track());
-        item->separator()->setTrack2(item->track());
-        item->separator()->setVisible(item->visible());
-        // bbox().setWidth(bbox().width());  // ??
-    } else {
-        if (item->separator()) {
-            item->separator()->removeUnmanaged();
-            delete item->separator();
-            item->setSeparator(nullptr);
-        }
-    }
+    createOrRemoveLyricsLine(item, ctx);
 
     if (item->isMelisma() || hasNumber) {
         // use the melisma style alignment setting
@@ -179,6 +152,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     PointF o(item->propertyDefault(Pid::OFFSET).value<PointF>());
 
     // Negate ChordRest offset
+    ChordRest* cr = item->chordRest();
     double x = o.x() - cr->x();
 
     TLayout::layoutBaseTextBase1(item, ctx);
@@ -231,82 +205,9 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 
 void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 {
-    bool tempMelismaTicks = (item->lyrics()->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
     if (item->isEndMelisma()) {           // melisma
         item->setLineWidth(ctx.conf().styleMM(Sid::lyricsLineThickness));
-        // if lyrics has a temporary one-chord melisma, set to 0 ticks (just its own chord)
-        if (tempMelismaTicks) {
-            item->lyrics()->setTicks(Fraction(0, 1));
-        }
-
-        // Lyrics::_ticks points to the beginning of the last spanned segment,
-        // but the line shall include it:
-        // include the duration of this last segment in the melisma duration
-        Segment* lyricsSegment   = item->lyrics()->segment();
-        Fraction lyricsStartTick = lyricsSegment->tick();
-        Fraction lyricsEndTick   = item->lyrics()->endTick();
-        track_idx_t lyricsTrack  = item->lyrics()->track();
-
-        // find segment with tick >= endTick
-        const Segment* s = lyricsSegment;
-        while (s && s->tick() < lyricsEndTick) {
-            s = s->nextCR(lyricsTrack, true);
-        }
-        if (!s) {
-            // user probably deleted measures at end of score, leaving this melisma too long
-            // set s to last segment and reset lyricsEndTick to trigger FIXUP code below
-            s = ctx.dom().lastSegment();
-            lyricsEndTick = Fraction(-1, 1);
-        }
-        EngravingItem* se = s->element(lyricsTrack);
-        // everything is OK if we have reached a chord at right tick on right track
-        if (s->tick() == lyricsEndTick && se && se->type() == ElementType::CHORD) {
-            // advance to next CR, or last segment if no next CR
-            s = s->nextCR(lyricsTrack, true);
-            if (!s) {
-                s = ctx.dom().lastSegment();
-            }
-        } else {
-            // FIXUP - lyrics tick count not valid
-            // this happens if edits to score have removed the original end segment
-            // so let's fix it here
-            // s is already pointing to segment past endTick (or to last segment)
-            // we should shorten the lyrics tick count to make this work
-            const Segment* ns = s;
-            const Segment* ps = s->prev1(SegmentType::ChordRest);
-            while (ps && ps != lyricsSegment) {
-                EngravingItem* pe = ps->element(lyricsTrack);
-                // we're looking for an actual chord on this track
-                if (pe && pe->type() == ElementType::CHORD) {
-                    break;
-                }
-                s = ps;
-                ps = ps->prev1(SegmentType::ChordRest);
-            }
-            if (!ps || ps == lyricsSegment) {
-                // either there is no valid previous CR, or the previous CR is the one the lyric starts on
-                // we don't want to make the melisma longer arbitrarily, but there is a possibility that the next
-                // CR won't extend the melisma, so let's check it
-                ps = ns;
-                s = ps->nextCR(lyricsTrack, true);
-                EngravingItem* e = s ? s->element(lyricsTrack) : nullptr;
-                // check to make sure we have a chord
-                if (!e || e->type() != ElementType::CHORD || ps->tick() > item->tick() + item->ticks()) {
-                    // nope, nothing to do but set ticks to 0
-                    // this will result in melisma being deleted later
-                    item->lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
-                    item->setTicks(Fraction(0, 1));
-                    return;
-                }
-            }
-            item->lyrics()->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - lyricsStartTick);
-        }
-        // Spanner::computeEndElement() will actually ignore this value and use the (earlier) lyrics()->endTick() instead
-        // still, for consistency with other lines, we should set the ticks for this to the computed (later) value
-        if (s) {
-            item->setTicks(s->tick() - lyricsStartTick);
-        }
-    } else {                                    // dash(es)
+    } else { // dash(es)
         item->setNextLyrics(searchNextLyrics(item->lyrics()->segment(),
                                              item->staffIdx(),
                                              item->lyrics()->no(),
@@ -315,16 +216,11 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 
         item->setTick2(item->nextLyrics() ? item->nextLyrics()->segment()->tick() : item->tick());
     }
-    if (item->ticks().isNotZero()) {                  // only do layout if some time span
-        // do layout with non-0 duration
-        if (tempMelismaTicks) {
-            item->lyrics()->setTicks(Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS));
-        }
-    }
 }
 
 void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
+    assert(item->lyricsLine()->lyrics());
     LyricsLineSegment::LayoutData* ldata = item->mutldata();
     item->ryoffset() = 0.0;
 
@@ -741,5 +637,118 @@ void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
             }
         }
         break;
+    }
+}
+
+void LyricsLayout::createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx)
+{
+    if (item->needRemoveInvalidSegments()) {
+        item->removeInvalidSegments();
+    }
+
+    auto isEndMelisma = [item]() {
+        return item->ticks().isNotZero();
+    };
+
+    Fraction lyricsLineTicks = Lyrics::TEMP_MELISMA_TICKS;
+
+    // Update the end tick
+    if (isEndMelisma()) {
+        const track_idx_t track = item->track();
+
+        const Segment* const startSegment = item->segment();
+        const Fraction startTick = startSegment->tick();
+
+        // if lyrics has a temporary one-chord melisma, interpret as 0 ticks (just its own chord)
+        Fraction itemEndTick = item->ticks() == Lyrics::TEMP_MELISMA_TICKS ? startTick : item->endTick();
+        Fraction endTick = itemEndTick;
+
+        const Segment* endSegment = startSegment;
+        while (endSegment && endSegment->tick() < endTick) {
+            endSegment = endSegment->nextCR(track, true);
+        }
+        if (!endSegment) {
+            // user probably deleted measures at end of score, leaving this melisma too long
+            // set endSegment to last segment and reset lyricsEndTick to trigger FIXUP code below
+            endSegment = ctx.dom().lastSegment();
+            endTick = Fraction(-1, 1);
+        }
+
+        EngravingItem* endSegmentElement = endSegment->element(track);
+        if (endSegment->tick() == endTick && endSegmentElement && endSegmentElement->type() == ElementType::CHORD) {
+            // everything is OK if we have reached a chord at right tick on right track
+            // advance to next CR, or last segment if no next CR
+            endSegment = endSegment->nextCR(track, true);
+            if (!endSegment) {
+                endSegment = ctx.dom().lastSegment();
+            }
+        } else {
+            // FIXUP - lyrics tick count not valid
+            // this happens if edits to score have removed the original end segment
+            // so let's fix it here
+            // endSegment is already pointing to segment past endTick (or to last segment)
+            // we should shorten the lyrics tick count to make this work
+            const Segment* ns = endSegment;
+            const Segment* ps = endSegment->prev1(SegmentType::ChordRest);
+            while (ps && ps != startSegment) {
+                EngravingItem* pe = ps->element(track);
+                // we're looking for an actual chord on this track
+                if (pe && pe->type() == ElementType::CHORD) {
+                    break;
+                }
+                endSegment = ps;
+                ps = ps->prev1(SegmentType::ChordRest);
+            }
+
+            if (!ps || ps == startSegment) {
+                // either there is no valid previous CR, or the previous CR is the one the lyric starts on
+                // we don't want to make the melisma longer arbitrarily, but there is a possibility that the next
+                // CR won't extend the melisma, so let's check it
+                ps = ns;
+                endSegment = ps->nextCR(track, true);
+                EngravingItem* e = endSegment ? endSegment->element(track) : nullptr;
+
+                // check to make sure we have a chord
+                if (!e || e->type() != ElementType::CHORD || ps->tick() > itemEndTick) {
+                    // nope, nothing to do but set ticks to 0
+                    // this will result in no melisma
+                    item->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(0));
+                } else {
+                    item->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - startTick);
+                }
+            } else {
+                item->undoChangeProperty(Pid::LYRIC_TICKS, ps->tick() - startTick);
+            }
+        }
+
+        if (endSegment) {
+            // Lyrics::_ticks points to the beginning of the last spanned segment,
+            // but the line shall include it:
+            // include the duration of this last segment in the melisma duration
+            lyricsLineTicks = endSegment->tick() - startTick;
+        }
+    }
+
+    ChordRest* cr = item->chordRest();
+
+    if (isEndMelisma() || item->syllabic() == LyricsSyllabic::BEGIN || item->syllabic() == LyricsSyllabic::MIDDLE) {
+        if (!item->separator()) {
+            LyricsLine* separator = new LyricsLine(ctx.mutDom().dummyParent());
+            separator->setTick(cr->tick());
+            item->setSeparator(separator);
+            ctx.mutDom().addUnmanagedSpanner(item->separator());
+        }
+        item->separator()->setParent(item);
+        item->separator()->setTick(cr->tick());
+        item->separator()->setTicks(lyricsLineTicks);
+        item->separator()->setTrack(item->track());
+        item->separator()->setTrack2(item->track());
+        item->separator()->setVisible(item->visible());
+    } else {
+        if (item->separator()) {
+            item->separator()->removeUnmanaged();
+            delete item->separator();
+            item->setSeparator(nullptr);
+        }
     }
 }

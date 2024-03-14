@@ -43,6 +43,9 @@ public:
     static void layout(LyricsLineSegment* item, LayoutContext& ctx);
 
     static void layoutLyrics(LayoutContext& ctx, System* system);
+
+private:
+    static void createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx);
 };
 }
 #endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H

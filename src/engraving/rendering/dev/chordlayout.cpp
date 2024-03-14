@@ -3683,7 +3683,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfigurati
             // for horizontal spacing we only need the lyrics width:
             x1 = std::min(x1, l->ldata()->bbox().x() - lmargin + l->pos().x());
             x2 = std::max(x2, l->ldata()->bbox().x() + l->ldata()->bbox().width() + rmargin + l->pos().x());
-            if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
+            if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS) {
                 x2 += item->spatium();
             }
             shape.addHorizontalSpacing(l, x1, x2);
