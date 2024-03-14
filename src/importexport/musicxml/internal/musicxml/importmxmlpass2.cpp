@@ -6274,6 +6274,8 @@ void MusicXMLParserLyric::parse()
     const Color lyricColor = Color::fromString(m_e.asciiAttribute("color").ascii());
     const bool printLyric = m_e.asciiAttribute("print-object") != "no";
     const String placement = m_e.attribute("placement");
+    double relX = m_e.doubleAttribute("relative-x") / 10 * DPMM;
+    double relY = m_e.doubleAttribute("relative-y") / 10 * DPMM;
     String extendType;
     String formattedText;
 
@@ -6331,6 +6333,14 @@ void MusicXMLParserLyric::parse()
     if (!placement.empty()) {
         lyric->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
         lyric->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
+
+    if (relX != 0 || relY != 0) {
+        PointF offset = lyric->offset();
+        offset.setX(relX != 0 ? relX : lyric->offset().x());
+        offset.setY(relY != 0 ? relY : lyric->offset().y());
+        lyric->setOffset(offset);
+        lyric->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
     }
 
     const auto l = lyric.release();

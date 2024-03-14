@@ -146,11 +146,13 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>here</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>surp</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -162,11 +164,13 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>are</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>rise</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -178,10 +182,12 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>some</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>there</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -194,10 +200,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>ly</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>is</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -214,10 +222,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>rics</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>a</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -229,11 +239,13 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>that</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>brack</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -245,11 +257,13 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>end</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>et</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -262,10 +276,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>with</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>in</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -283,10 +299,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>out</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>the</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -298,10 +316,12 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>a</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>X</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -314,10 +334,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>brack</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>M</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
@@ -330,10 +352,12 @@
             <durationType>quarter</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>et</text>
               </Lyrics>
             <Lyrics>
               <no>1</no>
+              <offset x="0" y="-1.71429"/>
               <text>L</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -357,6 +381,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>nice</text>
               </Lyrics>
             <StemDirection>up</StemDirection>
