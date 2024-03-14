@@ -116,7 +116,6 @@ void TextLineBaseSegment::spatiumChanged(double ov, double nv)
 {
     LineSegment::spatiumChanged(ov, nv);
 
-    textLineBase()->spatiumChanged(ov, nv);
     m_text->spatiumChanged(ov, nv);
     m_endText->spatiumChanged(ov, nv);
 }
