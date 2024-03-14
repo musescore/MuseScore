@@ -38,6 +38,7 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void resolveImports() override;
+    void registerApi() override;
     void onInit(const IApplication::RunMode& mode) override;
 
 private:

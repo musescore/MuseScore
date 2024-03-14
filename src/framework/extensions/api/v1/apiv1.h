@@ -19,18 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
-#define MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
+#ifndef MU_EXTENSIONS_APIV1_APIV1_H
+#define MU_EXTENSIONS_APIV1_APIV1_H
 
 namespace mu::extensions::apiv1 {
-class IPluginApiV1
+class ApiV1
 {
 public:
 
-    virtual ~IPluginApiV1() = default;
-
-    virtual void runPlugin() = 0;
+    static void registerQmlTypes();
 };
 }
-
-#endif // MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
+#endif // MU_EXTENSIONS_APIV1_APIV1_H

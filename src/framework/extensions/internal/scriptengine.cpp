@@ -34,7 +34,7 @@ using namespace mu::api;
 ScriptEngine::ScriptEngine()
 {
     m_engine = new QJSEngine();
-    m_api = new ScriptApi(this, m_engine);
+    m_api = new api::ScriptApi(this, m_engine);
 
     m_engine->globalObject().setProperty("api", newQObject(m_api));
 

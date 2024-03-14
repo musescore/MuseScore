@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_API_ELEMENTS_H
-#define MU_ENGRAVING_API_ELEMENTS_H
+#ifndef MU_ENGRAVING_APIV1_ELEMENTS_H
+#define MU_ENGRAVING_APIV1_ELEMENTS_H
 
 #include "scoreelement.h"
 
