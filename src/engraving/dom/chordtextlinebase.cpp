@@ -41,4 +41,9 @@ ChordTextLineBase::ChordTextLineBase(const ElementType& type, EngravingItem* par
     : TextLineBase(type, parent, f)
 {
 }
+
+void ChordTextLineBase::doComputeEndElement()
+{
+    setEndElement(score()->findCRinStaff(tick2(), track2staff(track2())));
+}
 }

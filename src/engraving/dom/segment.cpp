@@ -2554,7 +2554,7 @@ bool Segment::canWriteSpannerStartEnd(track_idx_t track) const
         }
     }
 
-    return false;
+    return score()->lastMeasure()->last() == this;
 }
 
 double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const

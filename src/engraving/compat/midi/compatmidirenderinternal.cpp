@@ -805,7 +805,8 @@ CompatMidiRendererInternal::ChordParams CompatMidiRendererInternal::collectChord
         if (spanner->isLetRing()) {
             LetRing* letRing = toLetRing(spanner);
             chordParams.letRing = true;
-            chordParams.endLetRingTick = letRing->endCR()->tick().ticks() + letRing->endCR()->ticks().ticks() + tickOffset;
+            ChordRest* endCR = letRing->endCR();
+            chordParams.endLetRingTick = (endCR ? endCR->tick().ticks() + endCR->ticks().ticks() : letRing->tick2().ticks()) + tickOffset;
         } else if (spanner->isPalmMute()) {
             chordParams.palmMute = true;
         }

@@ -77,6 +77,10 @@ static void isLayoutDone(void* data, EngravingItem* e)
         // another valid exception
         return;
     }
+    if (e->isTimeTickAnchor()) {
+        // not expected to be laid out
+        return;
+    }
 
     // If layout of element is done it (usually?) has a valid
     // bounding box (bbox).

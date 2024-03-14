@@ -36,6 +36,8 @@ class ChordTextLineBase : public TextLineBase
 public:
     ChordTextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
+    void doComputeEndElement() override;
+
 protected:
     friend class TextLineBaseSegment;
 };

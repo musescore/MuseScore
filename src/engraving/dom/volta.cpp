@@ -352,7 +352,7 @@ PointF Volta::linePos(Grip grip, System** system) const
         }
         x -= 0.5 * lineWidth();
     } else {
-        if (segment->tick() == (*system)->endTick()) {
+        if ((*system) && segment->tick() == (*system)->endTick()) {
             x += segment->width();
             x -= 0.5 * lineWidth();
         } else if (segment->segmentType() & SegmentType::BarLineType) {

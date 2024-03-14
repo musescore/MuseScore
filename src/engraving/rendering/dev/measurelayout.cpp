@@ -2194,7 +2194,7 @@ void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
         while (prevSeg && !prevSeg->isChordRestType()) {
             prevSeg = prevSeg->prev();
         }
-        if (!prevSeg) {
+        if (!prevSeg || prevSeg->ticks().isZero()) {
             continue;
         }
 

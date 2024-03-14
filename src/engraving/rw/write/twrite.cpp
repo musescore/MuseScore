@@ -3378,19 +3378,6 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             }
         }
 
-        //write spanner ending after the last segment, on the last tick
-        if (clip || eseg == 0) {
-            for (Spanner* s : spanners) {
-                if ((s->tick2() == endTick)
-                    && !s->isSlur()
-                    && (s->track2() == track || (s->track2() == mu::nidx && s->track() == track))
-                    && (!clip || s->tick() >= sseg->tick())
-                    ) {
-                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
-                }
-            }
-        }
-
         if (voiceTagWritten) {
             xml.endElement();       // </voice>
         }

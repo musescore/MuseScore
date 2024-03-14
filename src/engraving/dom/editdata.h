@@ -247,7 +247,7 @@ public:
     PointF moveDelta;           ///< Mouse offset from the start of mouse move
     bool hRaster = false;
     bool vRaster = false;
-    bool editTextualProperties = false;
+    bool editTextualProperties = true;
 
     int key = 0;
     bool isKeyRelease = false;

@@ -347,4 +347,9 @@ String Trill::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
+
+void Trill::doComputeEndElement()
+{
+    setEndElement(score()->findCRinStaff(tick2(), track2staff(track2())));
+}
 }
