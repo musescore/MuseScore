@@ -754,4 +754,3 @@ void Cursor::setInputStateString(int string)
     const int visString = _score->staff(staffIdx())->staffType(istate.tick())->visualStringToPhys(string);
     istate.setString(visString);
 }
-
