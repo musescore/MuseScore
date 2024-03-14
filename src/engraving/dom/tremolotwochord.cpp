@@ -178,13 +178,13 @@ void TremoloTwoChord::setTremoloType(TremoloType t)
 
 void TremoloTwoChord::reset()
 {
+    EngravingItem::reset();
     if (userModified()) {
         //undoChangeProperty(Pid::BEAM_POS, PropertyValue::fromValue(beamPos()));
         undoChangeProperty(Pid::USER_MODIFIED, false);
     }
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
     resetProperty(Pid::BEAM_NO_SLOPE);
-    setGenerated(true);
 }
 
 //---------------------------------------------------------

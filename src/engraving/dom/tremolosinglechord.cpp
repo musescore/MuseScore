@@ -200,9 +200,9 @@ void TremoloSingleChord::computeShape()
 
 void TremoloSingleChord::reset()
 {
+    EngravingItem::reset();
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
     resetProperty(Pid::BEAM_NO_SLOPE);
-    setGenerated(true);
 }
 
 //---------------------------------------------------------
