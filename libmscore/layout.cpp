@@ -4315,6 +4315,9 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
                   }
             }
 
+      if (sl.empty())
+            return;
+
       //-------------------------------------------------------------
       // layout beams
       //  Needs to be done before creating skylines as stem lengths
