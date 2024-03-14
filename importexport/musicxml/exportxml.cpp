@@ -2779,8 +2779,6 @@ static std::vector<QString> symIdToArtics(const SymId sid)
                   return { "staccato" };
                   break;
 
-            case SymId::articStaccatissimoAbove:
-            case SymId::articStaccatissimoBelow:
             case SymId::articStaccatissimoWedgeAbove:
             case SymId::articStaccatissimoWedgeBelow:
                   return { "staccatissimo" };
@@ -2851,6 +2849,8 @@ static std::vector<QString> symIdToArtics(const SymId sid)
                   return { "tenuto", "accent" };
                   break;
 
+            case SymId::articStaccatissimoAbove:
+            case SymId::articStaccatissimoBelow:
             case SymId::articStaccatissimoStrokeAbove:
             case SymId::articStaccatissimoStrokeBelow:
                   return { "spiccato" };

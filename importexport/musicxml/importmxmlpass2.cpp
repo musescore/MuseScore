@@ -1196,7 +1196,7 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       {
       QMap<QString, SymId> map;       // map MusicXML articulation name to MuseScore symbol
       map["accent"]           = SymId::articAccentAbove;
-      map["staccatissimo"]    = SymId::articStaccatissimoAbove;
+      map["staccatissimo"]    = SymId::articStaccatissimoWedgeAbove;
       map["staccato"]         = SymId::articStaccatoAbove;
       map["tenuto"]           = SymId::articTenutoAbove;
       map["strong-accent"]    = SymId::articMarcatoAbove;
@@ -1207,7 +1207,7 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
       map["up-bow"]           = SymId::stringsUpBow;
       map["down-bow"]         = SymId::stringsDownBow;
       map["detached-legato"]  = SymId::articTenutoStaccatoAbove;
-      map["spiccato"]         = SymId::articStaccatissimoStrokeAbove;
+      map["spiccato"]         = SymId::articStaccatissimoAbove;
       map["snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
       map["schleifer"]        = SymId::ornamentPrecompSlide;
       map["open"]             = SymId::brassMuteOpen;
