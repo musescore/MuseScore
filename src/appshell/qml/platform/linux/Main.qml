@@ -42,7 +42,7 @@ AppWindow {
     }
 
     Component.onCompleted: {
-        platformMenuBar.setSource("PlatformMenuBar.qml");
+        platformMenuBar.setSource("../PlatformMenuBar.qml");
         if (platformMenuBar.item.available) {
             platformMenuBar.item.load();
             appMenuBar.active = 0;
