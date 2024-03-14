@@ -50,7 +50,9 @@
 
 #include "compat/scoreaccess.h"
 
+#ifndef ENGRAVING_NO_API
 #include "api/v1/qmlpluginapi.h"
+#endif
 
 #include "log.h"
 
@@ -117,7 +119,9 @@ void EngravingModule::resolveImports()
 
 void EngravingModule::registerApi()
 {
+#ifndef ENGRAVING_NO_API
     apiv1::PluginAPI::registerQmlTypes();
+#endif
 }
 
 void EngravingModule::registerResources()
