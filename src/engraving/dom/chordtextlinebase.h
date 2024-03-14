@@ -38,8 +38,6 @@ public:
 
 protected:
     friend class TextLineBaseSegment;
-
-    mu::PointF linePos(Grip, System**) const override;
 };
 } // namespace mu::engraving
 

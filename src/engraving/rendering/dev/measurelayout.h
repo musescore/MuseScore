@@ -64,6 +64,8 @@ public:
     static void computeWidth(Measure* m, LayoutContext& ctx, Fraction minTicks, Fraction maxTicks, double stretchCoeff,
                              bool overrideMinMeasureWidth = false);
 
+    static void layoutTimeTickAnchors(Measure* m, LayoutContext& ctx);
+
 private:
 
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);

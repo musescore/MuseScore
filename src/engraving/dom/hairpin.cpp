@@ -99,11 +99,20 @@ bool HairpinSegment::acceptDrop(EditData& data) const
 EngravingItem* HairpinSegment::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    if (e->isDynamic()) {
-        Dynamic* d = toDynamic(e);
-        hairpin()->undoChangeProperty(Pid::END_TEXT, d->xmlText());
+    if (!e->isDynamic()) {
+        return nullptr;
     }
-    return 0;
+
+    Fraction endTick = hairpin()->tick2();
+    Measure* measure = score()->tick2measure(endTick);
+    Segment* segment = measure->getChordRestOrTimeTickSegment(endTick);
+
+    Dynamic* d = new Dynamic(*toDynamic(e));
+    d->setTrack(hairpin()->track());
+    d->setParent(segment);
+    score()->undoAddElement(d);
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -266,6 +275,71 @@ Sid HairpinSegment::getPropertyStyle(Pid pid) const
         break;
     }
     return TextLineBaseSegment::getPropertyStyle(pid);
+}
+
+Dynamic* HairpinSegment::findDynamic(bool start) const
+{
+    Fraction refTick = start ? hairpin()->tick() : hairpin()->tick2();
+    Measure* measure = score()->tick2measure(start ? refTick : refTick - Fraction::eps());
+    if (!measure) {
+        return nullptr;
+    }
+
+    std::vector<Dynamic*> dynamics;
+    dynamics.reserve(2);
+
+    if (start) {
+        for (Segment* segment = measure->last(); segment; segment = segment->prev1()) {
+            if (segment->system() != system()) {
+                continue;
+            }
+            if (segment->tick() > refTick) {
+                continue;
+            }
+            if (segment->tick() < refTick) {
+                break;
+            }
+            for (EngravingItem* item : segment->annotations()) {
+                if (item->isDynamic() && item->track() == track()) {
+                    dynamics.push_back(toDynamic(item));
+                }
+            }
+            if (dynamics.size() > 0) {
+                break;
+            }
+        }
+    } else {
+        for (Segment* segment = measure->first(); segment; segment = segment->next1()) {
+            if (segment->system() != system()) {
+                continue;
+            }
+            if (segment->tick() < refTick) {
+                continue;
+            }
+            if (segment->tick() > refTick) {
+                break;
+            }
+            for (EngravingItem* item : segment->annotations()) {
+                if (item->isDynamic() && item->track() == track()) {
+                    dynamics.push_back(toDynamic(item));
+                }
+            }
+            if (dynamics.size() > 0) {
+                break;
+            }
+        }
+    }
+
+    if (dynamics.size() == 0) {
+        return nullptr;
+    }
+
+    if (dynamics.size() > 1) {
+        std::sort(dynamics.begin(), dynamics.end(),
+                  [](Dynamic* dyn1, Dynamic* dyn2) { return dyn1->anchorToEndOfPrevious() && !dyn2->anchorToEndOfPrevious(); });
+    }
+
+    return start ? dynamics.back() : dynamics.front();
 }
 
 Sid Hairpin::getPropertyStyle(Pid pid) const
@@ -543,5 +617,35 @@ String Hairpin::accessibleInfo() const
         rez += u": " + mtrc("engraving", "Custom");
     }
     return rez;
+}
+
+PointF Hairpin::linePos(Grip grip, System** system) const
+{
+    bool start = grip == Grip::START;
+
+    Segment* segment = start ? startSegment() : endSegment();
+    if (!segment) {
+        return PointF();
+    }
+
+    if (!start) {
+        Fraction curTick = segment->tick();
+        while (true) {
+            Segment* prevSeg = segment->prev1();
+            if (prevSeg && prevSeg->tick() == curTick) {
+                segment = prevSeg;
+            } else {
+                break;
+            }
+        }
+    }
+
+    *system = segment->measure()->system();
+    double x = segment->x() + segment->measure()->x();
+    if (!start && !segment->isTimeTickType()) {
+        x -= spatium();
+    }
+
+    return PointF(x, 0.0);
 }
 }

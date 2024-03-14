@@ -23,6 +23,7 @@
 
 #include "translation.h"
 
+#include "anchors.h"
 #include "chord.h"
 #include "chordrest.h"
 #include "location.h"
@@ -413,6 +414,11 @@ bool SpannerSegment::isUserModified() const
     return modified;
 }
 
+bool SpannerSegment::allowTimeAnchor() const
+{
+    return spanner()->allowTimeAnchor();
+}
+
 //---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
@@ -726,30 +732,34 @@ void Spanner::computeStartElement()
 {
     EngravingItem* oldStartElement = m_startElement;
 
+    doComputeStartElement();
+
+    if (oldStartElement && oldStartElement->isChord()) {
+        toChord(oldStartElement)->removeStartingSpanner(this);
+    }
+
+    Chord* startChord = m_startElement && m_startElement->isChord() ? toChord(m_startElement) : nullptr;
+    if (startChord) {
+        startChord->addStartingSpanner(this);
+    }
+}
+
+void Spanner::doComputeStartElement()
+{
     switch (m_anchor) {
     case Anchor::SEGMENT: {
+        Segment* startSeg = startSegment();
+        if (!startSeg) {
+            return;
+        }
         if (systemFlag()) {
             m_startElement = startSegment();
         } else {
-            Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-            if (!seg || seg->empty() || !seg->element(track())) {
-                seg = score()->tick2segment(tick(), false, SegmentType::ChordRest);
-            }
-            m_startElement = nullptr;
-            if (seg) {
-                EngravingItem* e = seg->element(track());
-                if (e) {
-                    m_startElement = e;
-                } else {
-                    track_idx_t strack = (track() / VOICES) * VOICES;
-                    track_idx_t etrack = strack + VOICES;
-                    for (track_idx_t t = strack; t < etrack; ++t) {
-                        if (seg->element(t)) {
-                            m_startElement = seg->element(t);
-                            break;
-                        }
-                    }
-                }
+            EngravingItem* startEl = startSeg->elementAt(track());
+            if (startEl) {
+                m_startElement = startEl;
+            } else {
+                m_startElement = startSeg->elementAt(trackZeroVoice(track()));
             }
         }
     }
@@ -763,15 +773,6 @@ void Spanner::computeStartElement()
     case Anchor::NOTE:
         break;
     }
-
-    if (oldStartElement && oldStartElement->isChord()) {
-        toChord(oldStartElement)->removeStartingSpanner(this);
-    }
-
-    Chord* startChord = m_startElement && m_startElement->isChord() ? toChord(m_startElement) : nullptr;
-    if (startChord) {
-        startChord->addStartingSpanner(this);
-    }
 }
 
 //---------------------------------------------------------
@@ -780,84 +781,14 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
 {
-    EngravingItem* oldEndElement = m_endElement;
-
     if (score()->isPaletteScore()) {
-        // return immediately to prevent lots of
-        // "no element found" messages from appearing
         m_endElement = nullptr;
         return;
     }
 
-    switch (m_anchor) {
-    case Anchor::SEGMENT: {
-        if (track2() == mu::nidx) {
-            setTrack2(track());
-        }
-        if (ticks().isZero() && isTextLine() && explicitParent()) {           // special case palette
-            setTicks(score()->lastSegment()->tick() - m_tick);
-        }
-        if (systemFlag()) {
-            m_endElement = endSegment();
-        } else if (isLyricsLine() && toLyricsLine(this)->isEndMelisma()) {
-            // lyrics endTick should already indicate the segment we want
-            // except for TEMP_MELISMA_TICKS case
-            Lyrics* l = toLyricsLine(this)->lyrics();
-            Fraction tick = (l->ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
-            Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
-            if (!s) {
-                LOGD("%s no end segment for tick %d", typeName(), tick.ticks());
-                return;
-            }
-            voice_idx_t t = trackZeroVoice(track2());
-            // take the first chordrest we can find;
-            // linePos will substitute one in current voice if available
-            for (voice_idx_t v = 0; v < VOICES; ++v) {
-                m_endElement = s->element(t + v);
-                if (m_endElement) {
-                    break;
-                }
-            }
-        } else {
-            // find last cr on this staff that ends before tick2
-            m_endElement = score()->findCRinStaff(tick2(), track2() / VOICES);
-        }
-        if (!m_endElement) {
-            LOGD("%s no end element for tick %d", typeName(), tick2().ticks());
-            return;
-        }
+    EngravingItem* oldEndElement = m_endElement;
 
-        if (endCR() && !endCR()->measure()->isMMRest() && !systemFlag()) {
-            ChordRest* cr = endCR();
-            Fraction nticks = cr->tick() + cr->actualTicks() - m_tick;
-            if ((m_ticks - nticks) > Fraction(0, 1)) {
-                LOGD("%s ticks changed, %d -> %d", typeName(), m_ticks.ticks(), nticks.ticks());
-                setTicks(nticks);
-                if (isOttava()) {
-                    staff()->updateOttava();
-                }
-            }
-        }
-    }
-    break;
-
-    case Anchor::MEASURE:
-        m_endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
-        if (!m_endElement) {
-            LOGD("Spanner::computeEndElement(), measure not found for tick %d\n", tick2().ticks() - 1);
-            m_endElement = score()->lastMeasure();
-        }
-        break;
-    case Anchor::NOTE:
-        if (!m_endElement) {
-            ChordRest* cr = score()->findCR(tick2(), track2());
-            if (cr && cr->isChord()) {
-                m_endElement = toChord(cr)->upNote();
-            }
-        }
-    case Anchor::CHORD:
-        break;
-    }
+    doComputeEndElement();
 
     if (oldEndElement && oldEndElement->isChord()) {
         toChord(oldEndElement)->removeEndingSpanner(this);
@@ -866,6 +797,37 @@ void Spanner::computeEndElement()
     Chord* endChord = m_endElement && m_endElement->isChord() ? toChord(m_endElement) : nullptr;
     if (endChord) {
         endChord->addEndingSpanner(this);
+    }
+}
+
+void Spanner::doComputeEndElement()
+{
+    switch (m_anchor) {
+    case Anchor::SEGMENT: {
+        Segment* endSeg = endSegment();
+        if (!endSeg) {
+            return;
+        }
+        if (systemFlag()) {
+            m_endElement = endSeg;
+        } else {
+            EngravingItem* endEl = endSeg->elementAt(track2());
+            if (endEl) {
+                m_endElement = endEl;
+            } else {
+                m_endElement = endSeg->elementAt(trackZeroVoice(track2()));
+            }
+        }
+    }
+    break;
+
+    case Anchor::MEASURE:
+        m_endElement = score()->tick2measure(tick2() - Fraction(1, 1920));
+        break;
+
+    case Anchor::NOTE:
+    case Anchor::CHORD:
+        break;
     }
 }
 
@@ -1083,11 +1045,21 @@ ChordRest* Spanner::findEndCR() const
 Segment* Spanner::startSegment() const
 {
     assert(score() != NULL);
-    Segment* rightSegment = score()->tick2rightSegment(tick(), style().styleB(Sid::createMultiMeasureRests));
-    if (rightSegment && rightSegment->tick() < tick2()) {
-        return rightSegment;
+
+    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
+    Fraction startTick = tick();
+
+    Segment* startSeg = score()->tick2segment(startTick, true, SegmentType::ChordRest, mmRest);
+
+    if (!startSeg || !startSeg->elementAt(track())) {
+        startSeg = score()->tick2segment(startTick, true, SegmentType::TimeTick, mmRest);
     }
-    return score()->tick2leftSegment(tick(), style().styleB(Sid::createMultiMeasureRests));
+
+    if (!startSeg) {
+        startSeg = score()->tick2rightSegment(startTick, mmRest);
+    }
+
+    return startSeg;
 }
 
 //---------------------------------------------------------
@@ -1096,12 +1068,27 @@ Segment* Spanner::startSegment() const
 
 Segment* Spanner::endSegment() const
 {
-    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
-    Measure* m = mmRest ? score()->tick2measureMM(tick()) : score()->tick2measure(tick());
+    assert(score() != NULL);
 
-    SegmentType st = (systemFlag() && tick2() == score()->endTick())
-                     || (m && m->isMMRest()) ? SPANNER_ANCHOR_SEG_TYPE : SegmentType::ChordRest;
-    return score()->tick2leftSegment(tick2(), mmRest, st);
+    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
+
+    Fraction endTick = tick2();
+
+    Segment* endSeg = score()->tick2segment(endTick, true, SegmentType::ChordRest, mmRest);
+    if (!endSeg || !endSeg->elementAt(track())) {
+        endSeg = score()->tick2segment(endTick, true, SegmentType::TimeTick, mmRest);
+    }
+
+    if (!endSeg && !endTick.isZero() && endTick == score()->endTick()) {
+        Measure* lastMeasure = score()->lastMeasure();
+        return EditTimeTickAnchors::createTimeTickAnchor(lastMeasure, endTick - lastMeasure->tick(), track2staff(track2()));
+    }
+
+    if (!endSeg) {
+        endSeg = score()->tick2leftSegment(endTick, mmRest);
+    }
+
+    return endSeg;
 }
 
 //---------------------------------------------------------

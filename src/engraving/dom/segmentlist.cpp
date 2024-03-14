@@ -79,6 +79,7 @@ void SegmentList::check()
         case SegmentType::EndBarLine:
         case SegmentType::TimeSigAnnounce:
         case SegmentType::KeySigAnnounce:
+        case SegmentType::TimeTick:
             break;
         default:
             ASSERT_X(String(u"SegmentList::check: invalid segment type: %1").arg(int(s->segmentType())));

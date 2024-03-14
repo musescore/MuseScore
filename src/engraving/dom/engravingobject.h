@@ -176,6 +176,7 @@ class TextLineSegment;
 class Tie;
 class TieSegment;
 class TimeSig;
+class TimeTickAnchor;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -451,6 +452,7 @@ public:
     CONVERT(GraceNotesGroup, GRACE_NOTES_GROUP)
     CONVERT(FretCircle, FRET_CIRCLE)
     CONVERT(StringTunings, STRING_TUNINGS)
+    CONVERT(TimeTickAnchor, TIME_TICK_ANCHOR)
 #undef CONVERT
 
     virtual bool isEngravingItem() const { return false; }   // overridden in element.h
@@ -823,6 +825,7 @@ CONVERT(FretCircle)
 CONVERT(DeadSlapped)
 CONVERT(StringTunings)
 CONVERT(SoundFlag)
+CONVERT(TimeTickAnchor)
 #undef CONVERT
 }
 

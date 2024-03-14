@@ -204,6 +204,7 @@ enum class ElementType {
     GUITAR_BEND_TEXT,
     TREMOLO_TWOCHORD,
     TREMOLO_SINGLECHORD,
+    TIME_TICK_ANCHOR,
 
     ROOT_ITEM,
     DUMMY,

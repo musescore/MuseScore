@@ -94,6 +94,8 @@ public:
 
     String accessibleInfo() const override;
 
+    PointF linePos(Grip grip, System** system) const override;
+
 private:
     std::vector<int> m_endings;
 };

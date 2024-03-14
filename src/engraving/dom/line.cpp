@@ -26,6 +26,7 @@
 
 #include "containers.h"
 
+#include "anchors.h"
 #include "barline.h"
 #include "chord.h"
 #include "lyrics.h"
@@ -91,8 +92,13 @@ PointF LineSegment::leftAnchorPosition(const double& systemPositionY) const
 
     PointF result;
 
-    System* s;
-    result = line()->linePos(Grip::START, &s);
+    Segment* startSeg = line()->startSegment();
+    if (!startSeg) {
+        return result;
+    }
+
+    System* s = startSeg->measure()->system();
+    result = startSeg->pos() + startSeg->measure()->pos();
     result.ry() += systemPositionY - system()->pos().y();
 
     if (s) {
@@ -113,8 +119,13 @@ PointF LineSegment::rightAnchorPosition(const double& systemPositionY) const
 
     PointF result;
 
-    System* s;
-    result = line()->linePos(Grip::END, &s);
+    Segment* endSeg = line()->endSegment();
+    if (!endSeg) {
+        return result;
+    }
+
+    System* s = endSeg->measure()->system();
+    result = endSeg->pos() + endSeg->measure()->pos();
     result.ry() += systemPositionY - system()->pos().y();
 
     if (s) {
@@ -203,6 +214,8 @@ void LineSegment::startEditDrag(EditData& ed)
     if (ed.modifiers & AltModifier) {
         setAutoplace(false);
     }
+
+    updateAnchors(ed);
 }
 
 bool LineSegment::isEditAllowed(EditData& ed) const
@@ -225,10 +238,6 @@ bool LineSegment::isEditAllowed(EditData& ed) const
 
 bool LineSegment::edit(EditData& ed)
 {
-    if (!isEditAllowed(ed)) {
-        return false;
-    }
-
     const bool moveStart = ed.curGrip == Grip::START;
     const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::MIDDLE;
 
@@ -237,6 +246,22 @@ bool LineSegment::edit(EditData& ed)
     SLine* l              = line();
     track_idx_t track = l->track();
     track_idx_t track2 = l->track2();      // assumed to be same as track
+
+    bool allowTimeAnchor = line()->allowTimeAnchor();
+
+    if (ed.key == KeyboardKey::Key_Shift) {
+        if (ed.isKeyRelease) {
+            EditTimeTickAnchors::cleanupAnchors(this);
+        } else {
+            EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
+        }
+        triggerLayout();
+        return true;
+    }
+
+    if (!isEditAllowed(ed)) {
+        return false;
+    }
 
     switch (l->anchor()) {
     case Spanner::Anchor::SEGMENT:
@@ -254,17 +279,18 @@ bool LineSegment::edit(EditData& ed)
             LOGD("LineSegment::edit: no start/end segment");
             return true;
         }
+        EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
         if (ed.key == Key_Left) {
             if (moveStart) {
-                s1 = prevSeg1(s1, track);
+                s1 = allowTimeAnchor ? s1->prev1ChordRestOrTimeTick() : s1->prev1WithElemsOnStaff(track2staff(track));
             } else if (moveEnd) {
-                s2 = prevSeg1(s2, track2);
+                s2 = allowTimeAnchor ? s2->prev1ChordRestOrTimeTick() : s2->prev1WithElemsOnStaff(track2staff(track2));
             }
         } else if (ed.key == Key_Right) {
             if (moveStart) {
-                s1 = nextSeg1(s1, track);
+                s1 = allowTimeAnchor ? s1->next1ChordRestOrTimeTick() : s1->next1WithElemsOnStaff(track2staff(track));
             } else if (moveEnd) {
-                Segment* ns2 = nextSeg1(s2, track2);
+                Segment* ns2 = allowTimeAnchor ? s2->next1ChordRestOrTimeTick() : s2->next1WithElemsOnStaff(track2staff(track2));
                 if (ns2) {
                     s2 = ns2;
                 } else {
@@ -438,7 +464,7 @@ Segment* LineSegment::findSegmentForGrip(Grip grip, PointF pos) const
 
     Segment* seg = nullptr;   // don't prefer any segment while searching line position
     staff_idx_t staffIndex = oldStaffIndex;
-    score()->dragPosition(pos, &staffIndex, &seg, spacingFactor);
+    score()->dragPosition(pos, &staffIndex, &seg, spacingFactor, allowTimeAnchor());
 
     return seg;
 }
@@ -467,8 +493,8 @@ PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSe
         return PointF();
     }
 
-    const PointF oldBase = oldSeg->canvasPos() + PointF(oldSeg->width(), 0);
-    const PointF newBase = newSeg->canvasPos() + PointF(newSeg->widthInStaff(staffIndex), 0);
+    const PointF oldBase = oldSeg->canvasPos();
+    const PointF newBase = newSeg->canvasPos();
     return oldBase - newBase;
 }
 
@@ -508,15 +534,16 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
 
     SLine* l = line();
     const bool left = (grip == Grip::START);
-    Segment* const oldSeg = left ? l->startSegment() : score()->tick2leftSegmentMM(l->tick2() - Fraction::eps());
+    Segment* const oldSeg = left ? l->startSegment() : l->endSegment();
     System* const oldSystem = system();
 
     if (!newSeg || oldSeg == newSeg) {
         return nullptr;
     }
 
-    Fraction startTick = left ? newSeg->tick() : l->tick();
-    Fraction endTick = left ? l->tick2() : lastSegmentEndTick(newSeg, l);
+    Fraction newSegTick = newSeg->tick();
+    Fraction startTick = left ? newSegTick : l->tick();
+    Fraction endTick = left ? l->tick2() : (newSegTick == startTick ? newSegTick + newSeg->ticks() : newSegTick);
 
     if (endTick <= startTick) {
         if (left) {
@@ -527,6 +554,9 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     }
 
     bool anchorChanged = false;
+
+    System* sys = system();
+    PointF oldPos = line()->linePos(grip, &sys);
 
     if (l->tick() != startTick) {
         l->undoChangeProperty(Pid::SPANNER_TICK, startTick);
@@ -543,7 +573,8 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
         renderer()->layoutItem(l);
         return left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
-        const PointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));
+        PointF newPos = line()->linePos(grip, &sys);
+        PointF delta = oldPos - newPos;
         if (left) {
             setOffset(offset() + delta);
             m_offset2 -= delta;
@@ -721,7 +752,19 @@ void LineSegment::editDrag(EditData& ed)
             }
         }
     }
+
+    updateAnchors(ed);
+
     triggerLayout();
+}
+
+void LineSegment::updateAnchors(EditData& ed) const
+{
+    if (ed.curGrip != Grip::START && ed.curGrip != Grip::END) {
+        return;
+    }
+    EditTimeTickAnchors::updateAnchors(this, ed.curGrip == Grip::START ? line()->tick() : line()->tick2(),
+                                       ed.curGrip == Grip::START ? line()->track() : line()->track2());
 }
 
 //---------------------------------------------------------
@@ -808,294 +851,63 @@ SLine::SLine(const SLine& s)
     m_dashGapLen  = s.m_dashGapLen;
 }
 
-//---------------------------------------------------------
-//   linePos
-///   - Anchor::NOTE:  return anchor note position in system
-///                    coordinates
-///   - Anchor::CHORD: not implemented
-///   - Other:         return (x position in system coordinates, 0)
-//---------------------------------------------------------
-
-PointF SLine::linePos(Grip grip, System** sys) const
+PointF SLine::linePos(Grip grip, System** system) const
 {
-    double x = 0.0;
-    double sp = staff() ? staff()->spatium(tick()) : 0;
+    bool start = grip == Grip::START;
+    bool mmRest = style().styleB(Sid::createMultiMeasureRests);
+
     switch (anchor()) {
+    case Spanner::Anchor::NOTE:
+    {
+        EngravingItem* item = start ? startElement() : endElement();
+        Note* note = item && item->isNote() ? toNote(item) : nullptr;
+        if (!note) {
+            return PointF();
+        }
+        *system = note->chord()->segment()->measure()->system();
+        if (!(*system)) {
+            return PointF();
+        }
+        return note->pagePos() - (*system)->pagePos();
+    }
+    case Spanner::Anchor::CHORD:
     case Spanner::Anchor::SEGMENT:
     {
-        ChordRest* cr;
-        if (grip == Grip::START) {
-            cr = (startElement() && startElement()->isChordRest()) ? toChordRest(startElement()) : nullptr;
-            if (cr && type() == ElementType::OTTAVA) {
-                // some sources say to center the text over the notehead
-                // others say to start the text just to left of notehead
-                // some say to include accidental, others don't
-                // our compromise - left align, but account for accidental
-                if (cr->durationType() == DurationType::V_MEASURE && !cr->measure()->hasVoices(cr->staffIdx())) {
-                    x = cr->x();                            // center for measure rests
-                }
-//TODO                              else if (cr->spaceLw > 0.0)
-//                                    x = -cr->spaceLw;  // account for accidentals, etc
-            }
-        } else {
-            cr = (endElement() && endElement()->isChordRest()) ? toChordRest(endElement()) : nullptr;
-            if (isOttava()) {
-                if (cr && cr->durationType() == DurationType::V_MEASURE) {
-                    x = cr->x() + cr->width() + sp;
-                } else if (cr) {
-                    // lay out just past right edge of all notes for this segment on this staff
-
-                    Segment* s = cr->segment();
-
-                    track_idx_t startTrack = staffIdx() * VOICES;
-                    track_idx_t endTrack   = startTrack + VOICES;
-                    double width    = 0.0;
-
-                    // don’t consider full measure rests, which are centered
-                    // (TODO: what if there is only a full measure rest?)
-
-                    for (track_idx_t track = startTrack; track < endTrack; ++track) {
-                        ChordRest* cr1 = toChordRest(s->element(track));
-                        if (!cr1) {
-                            continue;
-                        }
-                        if (cr1->isChord()) {
-                            for (Note* n : toChord(cr1)->notes()) {
-                                width = std::max(width, n->shape().right() + n->pos().x() + cr1->pos().x());
-                            }
-                        } else if (cr1->isRest() && (cr1->actualDurationType() != DurationType::V_MEASURE)) {
-                            width = std::max(width, cr1->ldata()->bbox().right() + cr1->pos().x());
-                        }
-                    }
-
-                    x = width + sp;
-
-                    // extend past chord/rest
-                    // but don't overlap next chord/rest
-
-                    bool crFound = false;
-                    track_idx_t n = staffIdx() * VOICES;
-                    Segment* ns = s->next();
-                    while (ns) {
-                        for (voice_idx_t i = 0; i < VOICES; ++i) {
-                            if (ns->element(n + i)) {
-                                crFound = true;
-                                break;
-                            }
-                        }
-                        if (crFound) {
-                            break;
-                        }
-                        ns = ns->next();
-                    }
-                    if (crFound) {
-                        double nextNoteDistance = ns->x() - s->x() + lineWidth();
-                        if (x > nextNoteDistance) {
-                            x = std::max(width, nextNoteDistance);
-                        }
-                    }
-                }
-            } else if (isLyricsLine() && explicitParent() && toLyrics(explicitParent())->ticks() > Fraction(0, 1)) {
-                // melisma line
-                // it is possible CR won't be in correct track
-                // prefer element in current track if available
-                if (!cr) {
-                    LOGD("no end for lyricsline segment - start %d, ticks %d", tick().ticks(), ticks().ticks());
-                } else if (cr->track() != track()) {
-                    EngravingItem* e = cr->segment()->element(track());
-                    if (e) {
-                        cr = toChordRest(e);
-                    }
-                }
-
-                // layout to right edge of CR
-                // except if CR is start element, in which case use a nominal length
-                if (cr && cr != toChordRest(startElement())) {
-                    x = cr->rightEdge();
+        Segment* segment = start ? startSegment() : endSegment();
+        if (!segment) {
+            return PointF();
+        }
+        if (anchor() == Spanner::Anchor::CHORD && !segment->isChordRestType()) {
+            return PointF();
+        }
+        if (!start) {
+            Fraction curTick = segment->tick();
+            while (true) {
+                Segment* prevSeg = mmRest ? segment->prev1MM() : segment->prev1();
+                if (prevSeg && prevSeg->tick() == curTick) {
+                    segment = prevSeg;
                 } else {
-                    x = spatium() - style().styleMM(Sid::minNoteDistance);
-                }
-            } else if (isHairpin() || isTrill() || isVibrato() || isTextLine() || isLyricsLine() || isGradualTempoChange()) {
-                // (for LYRICSLINE, this is hyphen; melisma line is handled above)
-                // lay out to just before next chordrest on this staff, or barline
-                // tick2 actually tells us the right chordrest to look for
-                if (cr && endElement()->explicitParent() && endElement()->explicitParent()->type() == ElementType::SEGMENT) {
-                    double x2 = cr->x() /* TODO + cr->space().rw() */;
-                    Segment* currentSeg = toSegment(endElement()->explicitParent());
-                    Segment* seg = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
-                    if (!seg) {
-                        // no end segment found, use measure width
-                        x2 = endElement()->parentItem()->parentItem()->width() - sp;
-                    } else if (currentSeg->measure() == seg->measure()) {
-                        // next chordrest found in same measure;
-                        // end line 1sp to left
-                        x2 = std::max(x2, seg->x() - sp);
-                    } else {
-                        // next chordrest is in next measure
-                        // lay out to end (barline) of current measure instead
-                        seg = currentSeg->next(SegmentType::EndBarLine);
-                        if (!seg) {
-                            seg = currentSeg->measure()->last();
-                        }
-                        // allow lyrics hyphen to extend to barline
-                        // other lines stop 1sp short
-                        double gap = (type() == ElementType::LYRICSLINE) ? 0.0 : sp;
-                        double x3 = seg->enabled() ? seg->x() : seg->measure()->width();
-                        x2 = std::max(x2, x3 - gap);
-                    }
-                    x = x2 - endElement()->parentItem()->x();
+                    break;
                 }
             }
         }
-
-        Measure* m = nullptr;
-        if (cr) {
-            m = cr->measure();
-            x += cr->segment()->pos().x() + m->pos().x();
-        } else {
-            Segment* segment = (grip == Grip::START) ? startSegment() : endSegment();
-            if (grip == Grip::END && segment && segment->rtick().ticks() == 0) {
-                // The line should end on the left-most segment at this tick. If endSegment() is the first of
-                // the measure, we need to look back for other segments (eg endBarLine) in the prev measure
-                Segment* prevSegment = segment->prev1MM();
-                while (prevSegment && prevSegment->tick() == segment->tick()) {
-                    segment = prevSegment;
-                    prevSegment = segment->prev1MM();
-                }
-            }
-            if (segment) {
-                m = segment->measure();
-                if (m->isMMRest() && m->mmRest()) {
-                    m = m->mmRest();
-                }
-                x += m->pos().x() + segment->pos().x() - (grip == Grip::START ? 0 : sp);
-            }
-        }
-
-        if (m) {
-            *sys = m->system();
-        } else {
-            *sys = 0;
-        }
+        *system = segment->measure()->system();
+        double x = segment->x() + segment->measure()->x() - (start ? 0.0 : spatium());
+        return PointF(x, 0.0);
     }
-    break;
-
     case Spanner::Anchor::MEASURE:
     {
-        // anchor() == Anchor::MEASURE
-        const Measure* m;
-        if (grip == Grip::START) {
-            m = startMeasure();
-            // start after clef/keysig/timesig/barline
-            double offset = 0.0;
-            Segment* s = m->first(SegmentType::ChordRest);
-            if (s) {
-                s = s->prev();
-                if (s && s->enabled()) {
-                    offset = s->x();
-                    EngravingItem* e = s->element(staffIdx() * VOICES);
-                    if (e) {
-                        offset += e->width();
-                    }
-                }
-            }
-            x = m->pos().x() + offset;
-            if (style().styleB(Sid::createMultiMeasureRests) && m->hasMMRest()) {
-                x = m->mmRest()->pos().x();
-            }
-        } else {
-            double _spatium = spatium();
-
-            if (style().styleB(Sid::createMultiMeasureRests)) {
-                // find the actual measure where the volta should stop
-                m = startMeasure();
-                if (m->hasMMRest()) {
-                    m = m->mmRest();
-                }
-                while (m->nextMeasureMM() && (m->endTick() < tick2())) {
-                    m = m->nextMeasureMM();
-                }
-            } else {
-                m = endMeasure();
-            }
-
-            // back up to barline (skip courtesy elements)
-            Segment* seg = m->last();
-            while (seg && seg->segmentType() != SegmentType::EndBarLine) {
-                seg = seg->prev();
-            }
-            if (!seg || !seg->enabled()) {
-                // no end bar line; look for BeginBarLine or StartRepeatBarLine of next measure
-                Measure* nm = m->nextMeasure();
-                if (nm->system() == m->system()) {
-                    seg = nm->first(SegmentType::BeginBarLine | SegmentType::StartRepeatBarLine);
-                }
-            }
-            double mwidth = seg && seg->measure() == m ? seg->x() : m->ldata()->bbox().right();
-            x = m->pos().x() + mwidth;
-            // align to barline
-            if (seg && (seg->segmentType() & SegmentType::BarLineType)) {
-                EngravingItem* e = seg->element(0);
-                if (e && e->type() == ElementType::BAR_LINE) {
-                    BarLineType blt = toBarLine(e)->barLineType();
-                    switch (blt) {
-                    case BarLineType::END_REPEAT:
-                        // skip dots
-                        x += symWidth(SymId::repeatDot);
-                        x += style().styleS(Sid::endBarDistance).val() * _spatium;
-                    // fall through
-                    case BarLineType::DOUBLE:
-                        // center on leftmost (thinner) barline
-                        x += style().styleS(Sid::doubleBarWidth).val() * _spatium * 0.5;
-                        break;
-                    case BarLineType::START_REPEAT:
-                        // center on leftmost (thicker) barline
-                        x += style().styleS(Sid::endBarWidth).val() * _spatium * 0.5;
-                        break;
-                    default:
-                        // center on barline
-                        x += style().styleS(Sid::barWidth).val() * _spatium * 0.5;
-                        break;
-                    }
-                }
-            }
-        }
-
-        m = m->coveringMMRestOrThis();
-
-        assert(m->system());
-        *sys = m->system();
-    }
-    break;
-
-    case Spanner::Anchor::NOTE: {
-        EngravingItem* e = grip == Grip::START ? startElement() : endElement();
-        if (!e) {
+        Measure* measure = score()->tick2measureMM(start ? tick() : tick2());
+        if (!measure) {
             return PointF();
         }
-        Note* n = toNote(e);
-        System* s = n->chord()->segment()->system();
-        if (s == 0) {
-            LOGD("no system: %s  start %s chord parent %s\n", typeName(), n->typeName(), n->chord()->explicitParent()->typeName());
-            return PointF();
-        }
-        *sys = s;
-        // return the position of the anchor note relative to the system
-//                  PointF     elemPagePos = e->pagePos();                   // DEBUG
-//                  PointF     systPagePos = s->pagePos();
-//                  double       staffYPage  = s->staffYpage(e->staffIdx());
-        PointF p = n->pagePos() - s->pagePos();
-        if (!isGlissando()) {
-            p.rx() += n->headWidth() * 0.5;
-        }
-        return p;
+        *system = measure->system();
+        double x = measure->x();
+        return PointF(x, 0.0);
     }
-
-    case Spanner::Anchor::CHORD:
-        ASSERT_X("Sline::linePos(): anchor not implemented");
-        break;
+    default:
+        return PointF();
     }
-    return PointF(x, 0.0);
 }
 
 //---------------------------------------------------------

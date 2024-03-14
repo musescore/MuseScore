@@ -70,6 +70,8 @@ public:
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
+    Dynamic* findDynamic(bool start) const;
+
 private:
 
     void startEditDrag(EditData&) override;
@@ -156,6 +158,8 @@ public:
     {
         return m_hairpinType == HairpinType::CRESC_LINE || m_hairpinType == HairpinType::DECRESC_LINE;
     }
+
+    PointF linePos(Grip grip, System** system) const override;
 
 private:
 

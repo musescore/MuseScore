@@ -133,6 +133,7 @@
 #include "dom/textlinebase.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
+#include "dom/anchors.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
@@ -356,6 +357,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TIE_SEGMENT:          draw(item_cast<const TieSegment*>(item), painter);
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
+        break;
+    case ElementType::TIME_TICK_ANCHOR:     draw(item_cast<const TimeTickAnchor*>(item), painter);
         break;
     case ElementType::TREMOLO_SINGLECHORD:  draw(item_cast<const TremoloSingleChord*>(item), painter);
         break;
@@ -3025,6 +3028,24 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
         item->drawSymbol(SymId::timeSigParensLeft,  painter, ldata->pointLargeLeftParen,  item->scale().width());
         item->drawSymbol(SymId::timeSigParensRight, painter, ldata->pointLargeRightParen, item->scale().width());
     }
+}
+
+void TDraw::draw(const TimeTickAnchor* item, draw::Painter* painter)
+{
+    if (!item->isDraw()) {
+        return;
+    }
+
+    static const Color lighterColor = Color(204, 234, 255);
+    static const Color darkerColor = Color(153, 213, 255);
+
+    Brush brush;
+    brush.setColor(item->ldata()->darker() ? darkerColor : lighterColor);
+    brush.setStyle(BrushStyle::SolidPattern);
+    painter->setBrush(brush);
+    painter->setNoPen();
+
+    painter->drawRect(item->ldata()->bbox());
 }
 
 void TDraw::draw(const TremoloSingleChord* item, draw::Painter* painter)

@@ -150,6 +150,9 @@ public:
     bool isDash() const { return !isEndMelisma(); }
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
 
+    PointF linePos(Grip grip, System** system) const override;
+    void doComputeEndElement() override;
+
 protected:
     Lyrics* m_nextLyrics = nullptr;
 };

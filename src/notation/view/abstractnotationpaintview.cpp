@@ -1156,6 +1156,13 @@ void AbstractNotationPaintView::keyPressEvent(QKeyEvent* event)
     return;
 }
 
+void AbstractNotationPaintView::keyReleaseEvent(QKeyEvent* event)
+{
+    if (isInited()) {
+        m_inputController->keyReleaseEvent(event);
+    }
+}
+
 bool AbstractNotationPaintView::event(QEvent* event)
 {
     QEvent::Type eventType = event->type();

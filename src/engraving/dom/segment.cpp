@@ -95,6 +95,7 @@ const char* Segment::subTypeName(SegmentType t)
     case SegmentType::EndBarLine:           return "EndBarLine";
     case SegmentType::KeySigAnnounce:       return "Key Sig Precaution";
     case SegmentType::TimeSigAnnounce:      return "Time Sig Precaution";
+    case SegmentType::TimeTick:             return "Time tick";
     default:
         return "??";
     }
@@ -317,6 +318,41 @@ Segment* Segment::next1(SegmentType types) const
     return 0;
 }
 
+Segment* Segment::next1ChordRestOrTimeTick() const
+{
+    Segment* nextSeg = next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    while (nextSeg && nextSeg->tick() == tick()) {
+        nextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    }
+    if (!nextSeg) {
+        return nullptr;
+    }
+
+    Segment* nextNextSeg = nextSeg->next1(SegmentType::ChordRest | SegmentType::TimeTick);
+    if (!nextNextSeg) {
+        return nextSeg;
+    }
+
+    if (nextSeg->tick() == nextNextSeg->tick()) {
+        return nextSeg->isChordRestType() ? nextSeg : nextNextSeg;
+    }
+
+    return nextSeg;
+}
+
+Segment* Segment::next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType)
+{
+    Segment* next = next1(segType);
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES - 1;
+    while (next && !next->hasElements(startTrack, endTrack)) {
+        next = next->next1(segType);
+    }
+
+    return next;
+}
+
 Segment* Segment::next1MM(SegmentType types) const
 {
     for (Segment* s = next1MM(); s; s = s->next1MM()) {
@@ -395,6 +431,41 @@ Segment* Segment::prev1() const
     }
     Measure* m = measure()->prevMeasure();
     return m ? m->last() : 0;
+}
+
+Segment* Segment::prev1ChordRestOrTimeTick() const
+{
+    Segment* prevSeg = prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    while (prevSeg && prevSeg->tick() == tick()) {
+        prevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    }
+    if (!prevSeg) {
+        return nullptr;
+    }
+
+    Segment* prevPrevSeg = prevSeg->prev1(SegmentType::ChordRest | SegmentType::TimeTick);
+    if (!prevPrevSeg) {
+        return prevSeg;
+    }
+
+    if (prevSeg->tick() == prevPrevSeg->tick()) {
+        return prevSeg->isChordRestType() ? prevSeg : prevPrevSeg;
+    }
+
+    return prevSeg;
+}
+
+Segment* Segment::prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType)
+{
+    Segment* prev = prev1(segType);
+
+    track_idx_t startTrack = staffIdx * VOICES;
+    track_idx_t endTrack = startTrack + VOICES - 1;
+    while (prev && !prev->hasElements(startTrack, endTrack)) {
+        prev = prev->prev1(segType);
+    }
+
+    return prev;
 }
 
 Segment* Segment::prev1enabled() const
@@ -718,6 +789,12 @@ void Segment::add(EngravingItem* el)
         setEmpty(false);
         break;
 
+    case ElementType::TIME_TICK_ANCHOR:
+        assert(m_segmentType == SegmentType::TimeTick);
+        m_elist[track] = el;
+        setEmpty(false);
+        break;
+
     default:
         ASSERT_X(String(u"Segment::add() unknown %1").arg(String::fromAscii(el->typeName())));
         return;
@@ -766,6 +843,7 @@ void Segment::remove(EngravingItem* el)
 
     case ElementType::MMREST:
     case ElementType::MEASURE_REPEAT:
+    case ElementType::TIME_TICK_ANCHOR:
         m_elist[track] = 0;
         break;
 
@@ -2460,6 +2538,23 @@ void Segment::setSpacing(double val)
 double Segment::spacing() const
 {
     return m_spacing;
+}
+
+bool Segment::canWriteSpannerStartEnd(track_idx_t track) const
+{
+    if (isChordRestType() && elementAt(track)) {
+        return true;
+    }
+
+    if (isTimeTickType()) {
+        Segment* crSegAtSameTick
+            = score()->tick2segment(tick(), true, SegmentType::ChordRest, style().styleB(Sid::createMultiMeasureRests));
+        if (!crSegAtSameTick || !crSegAtSameTick->elementAt(track)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const

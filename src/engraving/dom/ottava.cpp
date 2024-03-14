@@ -22,6 +22,7 @@
 
 #include "ottava.h"
 
+#include "chordrest.h"
 #include "score.h"
 #include "staff.h"
 #include "system.h"
@@ -379,5 +380,35 @@ String Ottava::accessibleInfo() const
 const char* Ottava::ottavaTypeName(OttavaType type)
 {
     return ottavaDefault[int(type)].name;
+}
+
+PointF Ottava::linePos(Grip grip, System** system) const
+{
+    if (grip == Grip::START) {
+        return TextLineBase::linePos(grip, system);
+    }
+
+    bool extendToEndOfDuration = false; // TODO: style
+    if (extendToEndOfDuration) {
+        return SLine::linePos(grip, system);
+    }
+
+    ChordRest* endCr = endElement() && endElement()->isChordRest() ? toChordRest(endElement()) : nullptr;
+    if (!endCr) {
+        return PointF();
+    }
+
+    Segment* seg = endCr->segment();
+
+    *system = seg->measure()->system();
+
+    double x = endCr->rightEdge() + seg->x() + seg->measure()->x() + spatium();
+
+    return PointF(x, 0.0);
+}
+
+void Ottava::doComputeEndElement()
+{
+    setEndElement(score()->findCRinStaff(tick2(), track2staff(track())));
 }
 }

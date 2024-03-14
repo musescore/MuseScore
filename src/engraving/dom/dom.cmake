@@ -25,6 +25,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/actionicon.h
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ambitus.h
+    ${CMAKE_CURRENT_LIST_DIR}/anchors.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/anchors.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.cpp
     ${CMAKE_CURRENT_LIST_DIR}/arpeggio.h
     ${CMAKE_CURRENT_LIST_DIR}/articulation.cpp

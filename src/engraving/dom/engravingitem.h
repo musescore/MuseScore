@@ -647,6 +647,8 @@ public:
 
     virtual void move(const PointF& s) { mutldata()->move(s); }
 
+    virtual bool allowTimeAnchor() const { return false; }
+
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
 
