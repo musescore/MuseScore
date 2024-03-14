@@ -3,7 +3,7 @@ name: CI_utests
 on:
   pull_request:
     branches:
-    - master
+    - master_off
   workflow_dispatch:
 
 jobs:

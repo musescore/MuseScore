@@ -17,6 +17,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>. 
+#
 
 cmake_minimum_required(VERSION 3.16)
 
@@ -210,7 +211,7 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 # Add source tree
 ###########################################
 
-if (MUE_BUILD_UNIT_TESTS)
+if (MUE_BUILD_UNIT_TESTS OR MUE_BUILD_ENGRAVING_VTESTS)
     enable_testing()
     message(STATUS "Enabled testing")
 

@@ -114,6 +114,7 @@ endif()
 ###########################################
 if(BUILD_CONFIGURE MATCHES "VTEST")
     set(MUE_BUILD_UNIT_TESTS OFF)
+    set(MUE_BUILD_ENGRAVING_VTESTS ON)
     set(MUE_ENABLE_LOGGER_DEBUGLEVEL ON)
     set(MUE_BUILD_ASAN ON)
 
