@@ -52,7 +52,7 @@ class BeamSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * stemDirection READ stemDirection)
     Q_PROPERTY(PropertyItem * crossStaffMove READ crossStaffMove CONSTANT)
     Q_PROPERTY(
-        bool iscrossStaffMoveAvailable READ iscrossStaffMoveAvailable WRITE setIscrossStaffMoveAvailable NOTIFY iscrossStaffMoveAvailableChanged)
+        bool isCrossStaffMoveAvailable READ isCrossStaffMoveAvailable WRITE setisCrossStaffMoveAvailable NOTIFY isCrossStaffMoveAvailableChanged)
 
 public:
     explicit BeamSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -76,17 +76,17 @@ public:
 
     PropertyItem* stemDirection() const;
     PropertyItem* crossStaffMove() const;
-    bool iscrossStaffMoveAvailable() const;
+    bool isCrossStaffMoveAvailable() const;
 
 public slots:
     void setIsBeamHeightLocked(bool isBeamHeightLocked);
     void setFeatheringMode(BeamTypes::FeatheringMode featheringMode);
-    void setIscrossStaffMoveAvailable(bool iscrossStaffMoveAvailable);
+    void setisCrossStaffMoveAvailable(bool isCrossStaffMoveAvailable);
 
 signals:
     void isBeamHeightLockedChanged(bool isBeamHeightLocked);
     void featheringModeChanged(BeamTypes::FeatheringMode featheringMode);
-    void iscrossStaffMoveAvailableChanged(bool iscrossStaffMoveAvailable);
+    void isCrossStaffMoveAvailableChanged(bool isCrossStaffMoveAvailable);
 
 private:
     void createProperties() override;
@@ -105,7 +105,7 @@ private:
 
     void updateFeatheringMode(const qreal left, const qreal right);
 
-    void updateIscrossStaffMoveAvailable();
+    void updateisCrossStaffMoveAvailable();
 
     void onCurrentNotationChanged() override;
 
@@ -126,7 +126,7 @@ private:
 
     PropertyItem* m_stemDirection = nullptr;
     PropertyItem* m_crossStaffMove = nullptr;
-    bool m_iscrossStaffMoveAvailable = false;
+    bool m_isCrossStaffMoveAvailable = false;
 };
 }
 

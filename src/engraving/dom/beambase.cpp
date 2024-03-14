@@ -31,6 +31,7 @@ BeamBase::BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags 
 BeamBase::BeamBase(const BeamBase& b)
     : EngravingItem(b)
 {
+    _crossStaffMove = b._crossStaffMove;
 }
 
 void BeamBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
@@ -90,12 +91,12 @@ int BeamBase::crossStaffIdx() const
 
 int BeamBase::defaultCrossStaffIdx() const
 {
-    double average = 0.5 * (static_cast<double>(minMove()) + static_cast<double>(maxMove()));
+    double average = 0.5 * (static_cast<double>(minCRMove()) + static_cast<double>(maxCRMove()));
     return std::ceil(average);
 }
 
 bool BeamBase::acceptCrossStaffMove(int move) const
 {
     int newCrossStaffIdx = defaultCrossStaffIdx() + move;
-    return newCrossStaffIdx >= minMove() && newCrossStaffIdx <= maxMove() + 1;
+    return newCrossStaffIdx >= minCRMove() && newCrossStaffIdx <= maxCRMove() + 1;
 }

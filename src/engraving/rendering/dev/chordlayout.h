@@ -60,7 +60,7 @@ public:
     static void computeUp(const Chord* item, ChordRest::LayoutData* ldata, const LayoutContext& ctx);
     static void computeUp(ChordRest* item, const LayoutContext& ctx);
     static int computeAutoStemDirection(const std::vector<int>& noteDistances);
-    static bool isChordBelowBeam(Chord* item, Beam* beam);
+    static bool isChordPosBelowBeam(Chord* item, Beam* beam);
 
     static void layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx);
     static double layoutChords2(std::vector<Note*>& notes, bool up, LayoutContext& ctx);

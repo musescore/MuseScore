@@ -142,8 +142,8 @@ public:
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
     void clearBeamSegments();
 
-    int maxMove() const override { return std::max(m_chord1->staffMove(), m_chord2->staffMove()); }
-    int minMove() const override { return std::min(m_chord1->staffMove(), m_chord2->staffMove()); }
+    int maxCRMove() const override;
+    int minCRMove() const override;
 
     //! NOTE for palettes
     mu::draw::PainterPath basePath(double stretch = 0) const;

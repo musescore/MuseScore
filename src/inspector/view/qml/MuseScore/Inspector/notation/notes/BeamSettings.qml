@@ -57,8 +57,6 @@ FocusableItem {
             navigationRowStart: root.navigationRowStart
         }
 
-
-
         Column {
             spacing: 12
 
@@ -169,7 +167,7 @@ FocusableItem {
 
             DirectionSection {
                 id: beamDirection
-                visible: root.model ? !(root.model.iscrossStaffMoveAvailable) : true
+                visible: root.model ? !(root.model.isCrossStaffMoveAvailable) : true
 
                 titleText: qsTrc("inspector", "Beam direction")
                 propertyItem: root.model ? root.model.stemDirection : null
@@ -180,11 +178,12 @@ FocusableItem {
 
             InspectorPropertyView {
                 id: crossStaffMove
-                visible: root.model ? root.model.iscrossStaffMoveAvailable : false
+                visible: root.model ? root.model.isCrossStaffMoveAvailable : false
 
                 navigationName: "Move cross-staff beam"
-                navigationPanel: root.navigation.panel
+                navigationPanel: root.navigationPanel
                 navigationRowStart: beamDirection.navigationRowEnd + 1
+                navigationRowEnd: crossBeamDown.navigation.row
 
                 titleText: qsTrc("inspector", "Move cross-staff beam")
                 propertyItem: root.model ? root.model.crossStaffMove : null
@@ -198,10 +197,12 @@ FocusableItem {
                         width: 0.5 * parent.width - 2
                         iconCode: IconCode.ARROW_UP
                         checked: root.model ? root.model.crossStaffMove.value < 0 : false
-                        onClicked: root.model.crossStaffMove.value -= 1
+                        onClicked: {
+                            root.model.crossStaffMove.value -= 1
+                        }
 
-                        navigation.panel: root.navigation.panel
-                        navigation.row: crossStaffMove.navigationRowStart
+                        navigation.panel: root.navigationPanel
+                        navigation.row: crossStaffMove.navigationRowStart + 1
                     }
 
                     FlatRadioButton {
@@ -209,9 +210,11 @@ FocusableItem {
                         width: 0.5 * parent.width - 2
                         iconCode: IconCode.ARROW_DOWN
                         checked: root.model ? root.model.crossStaffMove.value > 0 : false
-                        onClicked: root.model.crossStaffMove.value += 1
+                        onClicked: {
+                            root.model.crossStaffMove.value += 1
+                        }
 
-                        navigation.panel: root.navigation.panel
+                        navigation.panel: root.navigationPanel
                         navigation.row: crossBeamUp.navigation.row + 1
                     }
                 }
@@ -226,7 +229,7 @@ FocusableItem {
 
                 navigation.name: "ForceHorizontal"
                 navigation.panel: root.navigationPanel
-                navigation.row: crossBeamDown.navigation.row + 1
+                navigation.row: crossStaffMove.navigationRowEnd + 1
             }
 
             ExpandableBlank {

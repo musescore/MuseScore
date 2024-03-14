@@ -1223,19 +1223,20 @@ void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 void ChordLayout::computeUpBeamCase(Chord* item, Beam* beam, const LayoutContext& ctx)
 {
     if (item == beam->elements().front()) {
+        // TODO: remove this
         BeamLayout::layout(beam, ctx);
     }
 
     if (!beam->userModified() && !beam->cross()) {
         item->setUp(beam->up());
     } else if (beam->cross()) {
-        item->setUp(item->isUnderSideOfCrossBeam(beam));
+        item->setUp(item->isBelowCrossBeam(beam));
     } else if (beam->userModified()) {
-        item->setUp(isChordBelowBeam(item, beam));
+        item->setUp(isChordPosBelowBeam(item, beam));
     }
 }
 
-bool ChordLayout::isChordBelowBeam(Chord* item, Beam* beam)
+bool ChordLayout::isChordPosBelowBeam(Chord* item, Beam* beam)
 {
     assert(!beam->beamFragments().empty());
 

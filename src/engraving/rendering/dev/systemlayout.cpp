@@ -2390,7 +2390,7 @@ double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t 
                         continue;
                     }
                     Chord* chord = toChord(cr);
-                    bool isUnderCrossBeam = cr->isUnderSideOfCrossBeam(beam);
+                    bool isUnderCrossBeam = cr->isBelowCrossBeam(beam);
                     if (isUnderCrossBeam && chord->vStaffIdx() == staffIdx2) {
                         if (!highestOfBottomStaff || chord->upNote()->line() < highestOfBottomStaff->line()) {
                             highestOfBottomStaff = chord->upNote();

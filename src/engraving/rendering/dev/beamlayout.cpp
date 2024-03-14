@@ -200,8 +200,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
             Chord* chord = toChord(cr);
             staffIdx = chord->vStaffIdx();
             int i = chord->staffMove();
-            item->setMinMove(std::min(item->minMove(), i));
-            item->setMaxMove(std::max(item->maxMove(), i));
+            item->setMinMove(std::min(item->minCRMove(), i));
+            item->setMaxMove(std::max(item->maxCRMove(), i));
 
             for (int distance : chord->noteDistances()) {
                 item->notes().push_back(distance);
@@ -212,7 +212,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     std::sort(item->notes().begin(), item->notes().end());
     ldata->setMag(mag);
 
-    item->setCross(item->minMove() != item->maxMove());
+    item->setCross(item->minCRMove() != item->maxCRMove());
 
     //
     // determine beam stem direction
@@ -226,9 +226,9 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     if (computeUpForMovedCross(item)) {
     } else if (item->beamDirection() != DirectionV::AUTO) {
         item->setUp(item->beamDirection() == DirectionV::UP);
-    } else if (item->maxMove() > 0) {
+    } else if (item->maxCRMove() > 0) {
         item->setUp(false);
-    } else if (item->minMove() < 0) {
+    } else if (item->minCRMove() < 0) {
         item->setUp(true);
     } else if (item->isGrace()) {
         if (hasMultipleVoices) {
@@ -258,11 +258,11 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 
     bool isEntirelyMoved = false;
-    if (item->minMove() == item->maxMove() && item->minMove() != 0) {
+    if (item->minCRMove() == item->maxCRMove() && item->minCRMove() != 0) {
         isEntirelyMoved = true;
         item->setStaffIdx(staffIdx);
         if (item->beamDirection() == DirectionV::AUTO) {
-            item->setUp(item->maxMove() > 0);
+            item->setUp(item->maxCRMove() > 0);
         }
     } else if (item->elements().size()) {
         item->setStaffIdx(item->elements().at(0)->staffIdx());
@@ -956,7 +956,7 @@ void BeamLayout::checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx)
         }
         Chord* chord = toChord(cr);
         bool currentUp = chord->up();
-        bool actualUp = ChordLayout::isChordBelowBeam(chord, beam);
+        bool actualUp = ChordLayout::isChordPosBelowBeam(chord, beam);
         if (actualUp != currentUp) {
             inconsistencyFound = true;
             chord->setUp(actualUp);
@@ -1416,7 +1416,7 @@ bool BeamLayout::computeUpForMovedCross(Beam* item)
     bool isAboveAllChords = true;
     bool isBelowAllChords = true;
     for (ChordRest* cr : item->elements()) {
-        if (cr->isUnderSideOfCrossBeam(item)) {
+        if (cr->isBelowCrossBeam(item)) {
             isBelowAllChords = false;
         } else {
             isAboveAllChords = false;
@@ -1463,7 +1463,7 @@ void BeamLayout::setTremAnchors(Beam* item, const LayoutContext& ctx)
             if (item->userModified()) {
                 tremUp = c->up();
             } else if (item->cross() && t->chord1()->staffMove() == t->chord2()->staffMove()) {
-                tremUp = t->chord1()->staffMove() == item->maxMove();
+                tremUp = t->chord1()->staffMove() == item->maxCRMove();
             }
             TremAnchor tremAnchor;
             tremAnchor.chord1 = c;

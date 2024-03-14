@@ -1231,7 +1231,7 @@ void ChordRest::undoAddAnnotation(EngravingItem* a)
     score()->undoAddElement(a);
 }
 
-bool ChordRest::isUnderSideOfCrossBeam(const BeamBase* beamBase) const
+bool ChordRest::isBelowCrossBeam(const BeamBase* beamBase) const
 {
     return staffMove() >= beamBase->crossStaffIdx();
 }

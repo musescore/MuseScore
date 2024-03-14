@@ -81,6 +81,6 @@ bool EngravingCompat::relayoutUserModifiedCrossStaffBeams(MasterScore* score)
         }
     }
 
-    return true;
+    return found;
 }
 } // namespace mu::engraving::compat

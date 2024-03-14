@@ -86,13 +86,12 @@ Beam::Beam(const Beam& b)
     for (const BeamFragment* f : b.m_fragments) {
         m_fragments.push_back(new BeamFragment(*f));
     }
-    m_minMove          = b.m_minMove;
-    m_maxMove          = b.m_maxMove;
+    m_minCRMove          = b.m_minCRMove;
+    m_maxCRMove          = b.m_maxCRMove;
     m_isGrace          = b.m_isGrace;
     m_cross            = b.m_cross;
     m_fullCross        = b.m_fullCross;
     m_slope            = b.m_slope;
-    _crossStaffMove = b._crossStaffMove;
 }
 
 //---------------------------------------------------------

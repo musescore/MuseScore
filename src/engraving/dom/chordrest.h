@@ -198,7 +198,7 @@ public:
     TabDurationSymbol* tabDur() const { return m_tabDur; }
     void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
 
-    bool isUnderSideOfCrossBeam(const BeamBase* beamBase) const;
+    bool isBelowCrossBeam(const BeamBase* beamBase) const;
 
     struct LayoutData : public DurationElement::LayoutData {
         ld_field<bool> up = { "[ChordRest] up", true }; // actual stem direction

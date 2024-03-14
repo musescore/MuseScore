@@ -621,14 +621,14 @@ bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutD
 
 bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    if (item->minMove() == item->maxMove()) {
+    if (item->minCRMove() == item->maxCRMove()) {
         return false; // not cross or fully moved
     }
 
     bool hasChordAboveBeam = false;
     bool hasChordBelowBeam = false;
     for (const ChordRest* cr : ldata->elements) {
-        if (cr->isUnderSideOfCrossBeam(item)) {
+        if (cr->isBelowCrossBeam(item)) {
             hasChordBelowBeam = true;
         } else {
             hasChordAboveBeam = true;
@@ -674,7 +674,7 @@ bool BeamTremoloLayout::calculateAnchorsCross(const BeamBase* item, BeamBase::La
             continue;
         }
         Chord* c = toChord(cr);
-        if (c->isUnderSideOfCrossBeam(item)) {
+        if (c->isBelowCrossBeam(item)) {
             // this chord is on the bottom staff
             if (penultimateBottomIsSame) {
                 // the chord we took as the penultimate bottom note wasn't.
@@ -1032,7 +1032,7 @@ int BeamTremoloLayout::getBeamCount(const BeamBase::LayoutData* ldata, const std
 
 double BeamTremoloLayout::chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
-    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : cr->beam()->pagePos().x();
+    double pagePosX = ldata->trem ? ldata->trem->pagePos().x() : ldata->beam->pagePos().x();
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
 
     if (!cr->isChord() || !toChord(cr)->stem()) {

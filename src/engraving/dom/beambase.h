@@ -43,8 +43,8 @@ class BeamBase : public EngravingItem
 
 public:
 
-    virtual int maxMove() const = 0;
-    virtual int minMove() const = 0;
+    virtual int maxCRMove() const = 0;
+    virtual int minCRMove() const = 0;
 
     virtual PropertyValue getProperty(Pid propertyId) const override;
     virtual bool setProperty(Pid propertyId, const PropertyValue&) override;

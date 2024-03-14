@@ -184,10 +184,10 @@ public:
     bool fullCross() const { return m_fullCross; }
     void setFullCross(bool v) { m_fullCross = v; }
 
-    int minMove() const { return m_minMove; }
-    void setMinMove(int val) { m_minMove = val; }
-    int maxMove() const { return m_maxMove; }
-    void setMaxMove(int val) { m_maxMove = val; }
+    int minCRMove() const override { return m_minCRMove; }
+    void setMinMove(int val) { m_minCRMove = val; }
+    int maxCRMove() const override { return m_maxCRMove; }
+    void setMaxMove(int val) { m_maxCRMove = val; }
 
     void addSkyline(Skyline&);
 
@@ -269,8 +269,8 @@ private:
 
     mutable int m_id = 0;                // used in read()/write()
 
-    int m_minMove = 0;                   // set in layout1()
-    int m_maxMove = 0;
+    int m_minCRMove = 0;                   // set in layout1()
+    int m_maxCRMove = 0;
     int m_crossBeamPos = 0;
 
     bool m_noSlope = false;

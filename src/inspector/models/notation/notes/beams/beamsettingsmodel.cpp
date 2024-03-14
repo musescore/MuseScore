@@ -136,7 +136,7 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
 
     loadPropertyItem(m_stemDirection);
     loadPropertyItem(m_crossStaffMove);
-    updateIscrossStaffMoveAvailable();
+    updateisCrossStaffMoveAvailable();
 }
 
 void BeamSettingsModel::loadBeamHeightProperties()
@@ -188,9 +188,9 @@ PropertyItem* BeamSettingsModel::crossStaffMove() const
     return m_crossStaffMove;
 }
 
-bool BeamSettingsModel::iscrossStaffMoveAvailable() const
+bool BeamSettingsModel::isCrossStaffMoveAvailable() const
 {
-    return m_iscrossStaffMoveAvailable;
+    return m_isCrossStaffMoveAvailable;
 }
 
 PropertyItem* BeamSettingsModel::customPositioned()
@@ -248,7 +248,7 @@ void BeamSettingsModel::updateFeatheringMode(const qreal left, const qreal right
     }
 }
 
-void BeamSettingsModel::updateIscrossStaffMoveAvailable()
+void BeamSettingsModel::updateisCrossStaffMoveAvailable()
 {
     bool available = true;
     for (EngravingItem* item : m_elementList) {
@@ -261,7 +261,7 @@ void BeamSettingsModel::updateIscrossStaffMoveAvailable()
         }
     }
 
-    setIscrossStaffMoveAvailable(available);
+    setisCrossStaffMoveAvailable(available);
 }
 
 bool BeamSettingsModel::isBeamHeightLocked() const
@@ -345,14 +345,14 @@ void BeamSettingsModel::setFeatheringMode(BeamTypes::FeatheringMode featheringMo
     emit featheringModeChanged(featheringMode);
 }
 
-void BeamSettingsModel::setIscrossStaffMoveAvailable(bool iscrossStaffMoveAvailable)
+void BeamSettingsModel::setisCrossStaffMoveAvailable(bool isCrossStaffMoveAvailable)
 {
-    if (m_iscrossStaffMoveAvailable == iscrossStaffMoveAvailable) {
+    if (m_isCrossStaffMoveAvailable == isCrossStaffMoveAvailable) {
         return;
     }
 
-    m_iscrossStaffMoveAvailable = iscrossStaffMoveAvailable;
-    emit iscrossStaffMoveAvailableChanged(iscrossStaffMoveAvailable);
+    m_isCrossStaffMoveAvailable = isCrossStaffMoveAvailable;
+    emit isCrossStaffMoveAvailableChanged(isCrossStaffMoveAvailable);
 }
 
 void BeamSettingsModel::onCurrentNotationChanged()
