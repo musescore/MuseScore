@@ -184,6 +184,13 @@ public:
 
     MOCK_METHOD(io::path_t, styleFileImportPath, (), (const, override));
     MOCK_METHOD(void, setStyleFileImportPath, (const io::path_t&), (override));
+
+    MOCK_METHOD(int, styleDialogLastPageIndex, (), (const, override));
+    MOCK_METHOD(void, setStyleDialogLastPageIndex, (int), (override));
+    MOCK_METHOD(int, styleDialogLastSubPageIndex, (), (const, override));
+    MOCK_METHOD(void, setStyleDialogLastSubPageIndex, (int), (override));
+
+    MOCK_METHOD(void, resetStyleDialogPageIndices, (), (override));
 };
 }
 
