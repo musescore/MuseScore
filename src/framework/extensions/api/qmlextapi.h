@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_QMLEXTAPI_H
-#define MU_EXTENSIONS_QMLEXTAPI_H
+#ifndef MU_EXTENSIONS_API_QMLEXTAPI_H
+#define MU_EXTENSIONS_API_QMLEXTAPI_H
 
 #include <QObject>
 
@@ -28,7 +28,7 @@
 #include "api/iapiregister.h"
 #include "api/iapiengine.h"
 
-namespace mu::api {
+namespace mu::extensions::api {
 class QmlExtApi : public QObject
 {
     Q_OBJECT
@@ -50,10 +50,10 @@ class QmlExtApi : public QObject
     //Q_PROPERTY(QJSValue process READ process CONSTANT)
     //Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    Inject<api::IApiRegister> apiRegister;
+    Inject<mu::api::IApiRegister> apiRegister;
 
 public:
-    QmlExtApi(api::IApiEngine* engine, QObject* parent);
+    QmlExtApi(mu::api::IApiEngine* engine, QObject* parent);
 
     QJSValue log() const { return api("api.log"); }
     QJSValue context() const { return api("api.context"); }
@@ -71,13 +71,13 @@ private:
 
     struct Api
     {
-        api::ApiObject* obj = nullptr;
+        mu::api::ApiObject* obj = nullptr;
         QJSValue jsval;
     };
 
-    api::IApiEngine* m_engine = nullptr;
+    mu::api::IApiEngine* m_engine = nullptr;
     mutable QMap<std::string, Api> m_apis;
 };
 }
 
-#endif // MU_EXTENSIONS_QMLEXTAPI_H
+#endif // MU_EXTENSIONS_API_QMLEXTAPI_H

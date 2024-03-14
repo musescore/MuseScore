@@ -24,18 +24,21 @@
 
 #include <QObject>
 #include <QQmlComponent>
+#include <QQuickItem>
 
 #include "modularity/ioc.h"
 #include "../iextensionsprovider.h"
 #include "../iextensionsuiengine.h"
 
+#include "global/async/asyncable.h"
+
 namespace mu::extensions {
-class ExtensionBuilder : public QObject
+class ExtensionBuilder : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QString title READ title NOTIFY titleChanged FINAL)
-    Q_PROPERTY(QObject * contentItem READ contentItem NOTIFY contentItemChanged FINAL)
+    Q_PROPERTY(QQuickItem * contentItem READ contentItem NOTIFY contentItemChanged FINAL)
 
     Inject<IExtensionsProvider> provider;
     Inject<IExtensionsUiEngine> engine;
@@ -44,7 +47,7 @@ public:
     ExtensionBuilder(QObject* parent = nullptr);
 
     QString title() const;
-    QObject* contentItem() const;
+    QQuickItem* contentItem() const;
 
     Q_INVOKABLE void load(const QString& uri, QObject* itemParent);
 
@@ -57,7 +60,7 @@ private:
     void setTitle(QString title);
 
     QString m_title;
-    QObject* m_contentItem = nullptr;
+    QQuickItem* m_contentItem = nullptr;
 };
 }
 

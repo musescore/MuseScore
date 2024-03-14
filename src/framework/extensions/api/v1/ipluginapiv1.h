@@ -19,26 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_QMLPLUGINAPI_H
-#define MU_EXTENSIONS_QMLPLUGINAPI_H
+#ifndef MU_EXTENSIONS_IPLUGINAPIV1_H
+#define MU_EXTENSIONS_IPLUGINAPIV1_H
 
-#include <QQuickItem>
-
-namespace mu::extensions::legacy {
-class QmlPluginApi : public QQuickItem
+namespace mu::extensions::apiv1 {
+class IPluginApiV1
 {
-    Q_OBJECT
-
 public:
-    QmlPluginApi(QQuickItem* parent = nullptr);
 
-    static void registerQmlTypes();
+    virtual ~IPluginApiV1() = default;
 
-    void runPlugin() { emit run(); }
-
-signals:
-    void run();
+    virtual void runPlugin() = 0;
 };
 }
 
-#endif // MU_EXTENSIONS_QMLPLUGINAPI_H
+#endif // MU_EXTENSIONS_IPLUGINAPIV1_H

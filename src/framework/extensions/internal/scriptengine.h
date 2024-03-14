@@ -37,7 +37,7 @@
 
 namespace mu::extensions {
 class JsModuleLoader;
-class ScriptEngine : public api::IApiEngine
+class ScriptEngine : public mu::api::IApiEngine
 {
     Inject<io::IFileSystem> fileSystem;
 

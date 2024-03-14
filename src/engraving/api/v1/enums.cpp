@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,18 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "qmlpluginapi.h"
 
-#include <QtQml>
+#include "enums.h"
 
-using namespace mu::extensions::legacy;
+#include "log.h"
 
-QmlPluginApi::QmlPluginApi(QQuickItem* parent)
-    : QQuickItem(parent)
+using namespace mu::engraving::apiv1;
+
+//---------------------------------------------------------
+//   Enum::Enum
+//---------------------------------------------------------
+
+Enum::Enum(const QMetaEnum& _enum, QObject* parent)
+    : QQmlPropertyMap(this, parent)
 {
-}
+    IF_ASSERT_FAILED(_enum.isValid()) {
+        return;
+    }
 
-void QmlPluginApi::registerQmlTypes()
-{
-    qmlRegisterType<QmlPluginApi>("MuseScore", 3, 0, "MuseScore");
+    const int nkeys = _enum.keyCount();
+    for (int i = 0; i < nkeys; ++i) {
+        insert(_enum.key(i), _enum.value(i));
+    }
 }

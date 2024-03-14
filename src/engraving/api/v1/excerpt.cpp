@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,38 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "qmlextapi.h"
 
-#include "log.h"
+#include "excerpt.h"
 
-using namespace mu::api;
-using namespace mu::extensions::api;
+#include "engraving/dom/score.h"
 
-QmlExtApi::QmlExtApi(IApiEngine* engine, QObject* parent)
-    : QObject(parent), m_engine(engine)
+// api
+#include "score.h"
+
+using namespace mu::engraving::apiv1;
+Score* Excerpt::partScore()
 {
+    return wrap<mu::engraving::apiv1::Score>(e->excerptScore(), Ownership::SCORE);
 }
 
-QJSValue QmlExtApi::api(const std::string& name) const
+//---------------------------------------------------------
+//   wrap
+///   \cond PLUGIN_API \private \endcond
+//---------------------------------------------------------
+
+mu::engraving::apiv1::Excerpt* mu::engraving::apiv1::excerptWrap(mu::engraving::Excerpt* e)
 {
-    if (!apiRegister()) {
-        return QJSValue();
-    }
-
-    Api a = m_apis.value(name);
-    if (!a.jsval.isUndefined()) {
-        return a.jsval;
-    }
-
-    a.obj = apiRegister()->createApi(name, m_engine);
-    if (!a.obj) {
-        LOGW() << "Not allowed api: " << name;
-        return QJSValue();
-    }
-
-    a.jsval = m_engine->newQObject(a.obj);
-
-    m_apis[name] = a;
-
-    return a.jsval;
+    return excerptWrap<mu::engraving::apiv1::Excerpt>(e);
 }
