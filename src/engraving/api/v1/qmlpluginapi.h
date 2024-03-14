@@ -196,6 +196,8 @@ signals:
     /// Implement \p onRun() function in your plugin to handle this signal.
     void run();
 
+    void closeRequested();
+
     /**
      * Notifies plugin about changes in score state.
      * Called after each user (or plugin) action which may have changed a
@@ -265,15 +267,15 @@ public:
     QQmlListProperty<apiv1::Score> scores();
     // /// \endcond
 
-    // Q_INVOKABLE mu::plugins::api::Score* newScore(const QString& name, const QString& part, int measures);
-    // Q_INVOKABLE mu::plugins::api::EngravingItem* newElement(int);
-    // Q_INVOKABLE void removeElement(mu::plugins::api::EngravingItem* wrapped);
-    // Q_INVOKABLE void cmd(const QString&);
-    // /** \cond PLUGIN_API \private \endcond */
-    // Q_INVOKABLE mu::plugins::api::MsProcess* newQProcess();
-    // Q_INVOKABLE bool writeScore(mu::plugins::api::Score*, const QString& name, const QString& ext);
-    // Q_INVOKABLE mu::plugins::api::Score* readScore(const QString& name, bool noninteractive = false);
-    // Q_INVOKABLE void closeScore(mu::plugins::api::Score*);
+    Q_INVOKABLE apiv1::Score* newScore(const QString& name, const QString& part, int measures);
+    Q_INVOKABLE apiv1::EngravingItem* newElement(int);
+    Q_INVOKABLE void removeElement(apiv1::EngravingItem* wrapped);
+    Q_INVOKABLE void cmd(const QString&);
+    /** \cond PLUGIN_API \private \endcond */
+    Q_INVOKABLE apiv1::MsProcess* newQProcess();
+    Q_INVOKABLE bool writeScore(apiv1::Score*, const QString& name, const QString& ext);
+    Q_INVOKABLE apiv1::Score* readScore(const QString& name, bool noninteractive = false);
+    Q_INVOKABLE void closeScore(apiv1::Score*);
 
     Q_INVOKABLE void log(const QString&);
     Q_INVOKABLE void logn(const QString&);
@@ -281,9 +283,9 @@ public:
     Q_INVOKABLE void openLog(const QString&);
     Q_INVOKABLE void closeLog();
 
-    // Q_INVOKABLE mu::plugins::api::FractionWrapper* fraction(int numerator, int denominator) const;
+    Q_INVOKABLE apiv1::FractionWrapper* fraction(int numerator, int denominator) const;
 
-    // Q_INVOKABLE void quit();
+    Q_INVOKABLE void quit();
 
     QString pluginType() const;
     void setPluginType(const QString& newPluginType);
