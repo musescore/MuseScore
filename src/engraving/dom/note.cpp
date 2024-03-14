@@ -2137,6 +2137,7 @@ void Note::updateAccidental(AccidentalState* as)
                 Accidental* a = Factory::createAccidental(this);
                 a->setParent(this);
                 a->setAccidentalType(acci);
+                a->setVisible(visible());
                 score()->undoAddElement(a);
             } else if (m_accidental->accidentalType() != acci) {
                 Accidental* a = m_accidental->clone();
