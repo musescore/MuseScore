@@ -19,18 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
-#define MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
+#include "apiv1.h"
 
-namespace mu::extensions::apiv1 {
-class IPluginApiV1
+#include <QtQml>
+
+#include "messagedialog.h"
+#include "filedialog.h"
+#include "qqmlsettings_p.h"
+
+using namespace mu::extensions::apiv1;
+
+void ApiV1::registerQmlTypes()
 {
-public:
-
-    virtual ~IPluginApiV1() = default;
-
-    virtual void runPlugin() = 0;
-};
+    qmlRegisterUncreatableType<StandardButton>("MuseScore", 3, 0, "StandardButton", "Cannot create an enumeration");
+    qmlRegisterType<MessageDialog>("MuseScore", 3, 0, "MessageDialog");
+    qmlRegisterType<QQmlSettings>("MuseScore", 3, 0, "Settings");
+    qmlRegisterType<FileDialog>("MuseScore", 3, 0, "FileDialog");
 }
-
-#endif // MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H

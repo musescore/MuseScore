@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_API_FRACTION_H
-#define MU_ENGRAVING_API_FRACTION_H
+#ifndef MU_ENGRAVING_APIV1_FRACTION_H
+#define MU_ENGRAVING_APIV1_FRACTION_H
 
 #include <QQmlEngine>
 

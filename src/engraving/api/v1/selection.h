@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_API_SELECTION_H
-#define MU_ENGRAVING_API_SELECTION_H
+#ifndef MU_ENGRAVING_APIV1_SELECTION_H
+#define MU_ENGRAVING_APIV1_SELECTION_H
 
 // api
 #include "elements.h"

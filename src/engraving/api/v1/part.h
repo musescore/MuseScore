@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_API_PART_H
-#define MU_ENGRAVING_API_PART_H
+#ifndef MU_ENGRAVING_APIV1_PART_H
+#define MU_ENGRAVING_APIV1_PART_H
 
 #include "extensions/api/qmllistproperty.h"
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_API_INSTRUMENT_H
-#define MU_ENGRAVING_API_INSTRUMENT_H
+#ifndef MU_ENGRAVING_APIV1_INSTRUMENT_H
+#define MU_ENGRAVING_APIV1_INSTRUMENT_H
 
 #include "engraving/dom/instrument.h"
 #include "extensions/api/qmllistproperty.h"

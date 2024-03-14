@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_API_APITYPES_H
-#define MU_ENGRAVING_API_APITYPES_H
+#ifndef MU_ENGRAVING_APIV1_APITYPES_H
+#define MU_ENGRAVING_APIV1_APITYPES_H
 
 #include <QObject>
 
@@ -3595,4 +3595,4 @@ Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Syllabic);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::Anchor);
 Q_DECLARE_METATYPE(mu::engraving::apiv1::enums::SymId);
 
-#endif // MU_ENGRAVING_API_APITYPES_H
+#endif // MU_ENGRAVING_APIV1_APITYPES_H

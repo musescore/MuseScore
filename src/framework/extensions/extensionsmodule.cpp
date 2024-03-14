@@ -33,6 +33,8 @@
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
 
+#include "api/v1/apiv1.h"
+
 #include "devtools/devextensionslistmodel.h"
 
 #include "log.h"
@@ -76,6 +78,11 @@ void ExtensionsModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("musescore://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
     }
+}
+
+void ExtensionsModule::registerApi()
+{
+    apiv1::ApiV1::registerQmlTypes();
 }
 
 void ExtensionsModule::onInit(const IApplication::RunMode& mode)
