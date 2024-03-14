@@ -457,6 +457,11 @@ EngravingItem* Dynamic::drop(EditData& ed)
     return item;
 }
 
+int Dynamic::dynamicVelocity(DynamicType t)
+{
+    return DYN_LIST[int(t)].velocity;
+}
+
 TranslatableString Dynamic::subtypeUserName() const
 {
     return TranslatableString::untranslatable(TConv::toXml(dynamicType()).ascii());

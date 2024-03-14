@@ -121,6 +121,7 @@ public:
     bool acceptDrop(EditData& ed) const override;
     EngravingItem* drop(EditData& ed) override;
 
+    static int dynamicVelocity(DynamicType t);
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
 
     bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }

@@ -3006,9 +3006,13 @@ void MusicXMLParserDirection::direction(const String& partId,
             }
         } else {
             if (m_wordsText != "" || m_metroText != "") {
-                t = Factory::createStaffText(m_score->dummy()->segment());
-                t->setXmlText(m_wordsText + m_metroText);
                 isExpressionText = m_wordsText.contains(u"<i>") && m_metroText.empty();
+                if (isExpressionText) {
+                    t = Factory::createExpression(m_score->dummy()->segment());
+                } else {
+                    t = Factory::createStaffText(m_score->dummy()->segment());
+                }
+                t->setXmlText(m_wordsText + m_metroText);
             } else {
                 t = Factory::createRehearsalMark(m_score->dummy()->segment());
                 if (!m_rehearsalText.contains(u"<b>")) {
@@ -3331,7 +3335,9 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
             m_enclosure      = m_e.attribute("enclosure");
-            m_wordsText += xmlpass2::nextPartOfFormattedString(m_e);
+            String nextPart = xmlpass2::nextPartOfFormattedString(m_e);
+            textToDynamic(nextPart);
+            m_wordsText += nextPart;
         } else if (m_e.name() == "rehearsal") {
             m_enclosure      = m_e.attribute("enclosure");
             if (m_enclosure == "") {
@@ -3698,6 +3704,27 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
 {
     auto dd = new MusicXMLDelayedDirectionElement(m_totalY, m_element, m_track, m_placement, m_measure, m_tick);
     return dd;
+}
+
+//---------------------------------------------------------
+//   textToDynamic
+//---------------------------------------------------------
+/**
+ Attempts to convert text to dynamic text. No-op if unable.
+ */
+void MusicXMLParserDirection::textToDynamic(String& text)
+{
+    String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    // try to find a dynamic - xml representation or
+    // if found add to dynamics list and set text to blank string
+    if (TConv::dynamicValid(simplifiedText.toStdString())) {
+        DynamicType dt = TConv::fromXml(simplifiedText.toStdString(), DynamicType::OTHER);
+        if (dt != DynamicType::OTHER) {
+            m_dynaVelocity = String::number(round(Dynamic::dynamicVelocity(dt) / 0.9));
+            m_dynamicsList.push_back(Dynamic::dynamicText(dt));
+            text.clear();
+        }
+    }
 }
 
 //---------------------------------------------------------

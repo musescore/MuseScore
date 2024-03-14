@@ -85,6 +85,7 @@ public:
     static DynamicType dynamicType(SymId v);
     static DynamicType dynamicType(const AsciiStringView& string);
     static AsciiStringView toXml(DynamicType v);
+    static bool dynamicValid(const AsciiStringView& tag);
     static DynamicType fromXml(const AsciiStringView& tag, DynamicType def);
     static String translatedUserName(DynamicRange v);
     static String toXml(DynamicRange v);
