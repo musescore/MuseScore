@@ -24,29 +24,36 @@
 
 #include <QQmlEngine>
 
-#include "engraving/compat/dummyelement.h"
-#include "engraving/compat/scoreaccess.h"
-#include "engraving/dom/factory.h"
-#include "engraving/dom/masterscore.h"
+#include "global/muversion.h"
 
+// api
+#include "score.h"
+#include "instrument.h"
 #include "cursor.h"
 #include "elements.h"
-#include "enums.h"
-#include "fraction.h"
-#include "instrument.h"
-#include "part.h"
-#include "score.h"
-#include "selection.h"
 #include "tie.h"
-#include "util.h"
+#include "selection.h"
 
-#include "messagedialog.h"
-#include "qqmlsettings_p.h"
-#include "filedialog.h"
+// #include "engraving/compat/dummyelement.h"
+// #include "engraving/compat/scoreaccess.h"
+// #include "engraving/dom/factory.h"
+// #include "engraving/dom/masterscore.h"
+
+//
+//
+// #include "enums.h"
+// #include "fraction.h"
+// #include "instrument.h"
+// #include "part.h"
+//
+//
+// #include "util.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::apiv1;
 
-namespace mu::plugins::api {
 Enum* PluginAPI::elementTypeEnum = nullptr;
 Enum* PluginAPI::accidentalTypeEnum = nullptr;
 Enum* PluginAPI::beamModeEnum = nullptr;
@@ -71,34 +78,22 @@ Enum* PluginAPI::spannerAnchorEnum = nullptr;
 Enum* PluginAPI::symIdEnum = nullptr;
 Enum* PluginAPI::harmonyTypeEnum = nullptr;
 
-//---------------------------------------------------------
-//   PluginAPI
-//---------------------------------------------------------
-
 PluginAPI::PluginAPI(QQuickItem* parent)
-    : QmlPlugin(parent)
+    : QQuickItem(parent)
 {
-    setRequiresScore(true);                // by default plugins require a score to work
+    setRequiresScore(true); // by default plugins require a score to work
 }
 
-//---------------------------------------------------------
-//   curScore
-//---------------------------------------------------------
-
-Score* PluginAPI::curScore() const
+apiv1::Score* PluginAPI::curScore() const
 {
     if (currentScore()) {
-        return wrap<Score>(currentScore(), Ownership::SCORE);
+        return wrap<apiv1::Score>(currentScore(), Ownership::SCORE);
     }
 
     return nullptr;
 }
 
-//---------------------------------------------------------
-//   scores
-//---------------------------------------------------------
-
-QQmlListProperty<Score> PluginAPI::scores()
+QQmlListProperty<apiv1::Score> PluginAPI::scores()
 {
     NOT_IMPLEMENTED;
 
@@ -119,18 +114,18 @@ QQmlListProperty<Score> PluginAPI::scores()
 ///   format to be used.
 //---------------------------------------------------------
 
-bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
-{
-    if (!s || !s->score()) {
-        return false;
-    }
+// bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
+// {
+//     if (!s || !s->score()) {
+//         return false;
+//     }
 
-    UNUSED(name);
-    UNUSED(ext);
+//     UNUSED(name);
+//     UNUSED(ext);
 
-    NOT_IMPLEMENTED;
-    return false;
-}
+//     NOT_IMPLEMENTED;
+//     return false;
+// }
 
 //---------------------------------------------------------
 //   readScore
@@ -142,25 +137,25 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 ///   MuseScore.
 //---------------------------------------------------------
 
-Score* PluginAPI::readScore(const QString& name, bool noninteractive)
-{
-    UNUSED(name);
-    UNUSED(noninteractive);
+// Score* PluginAPI::readScore(const QString& name, bool noninteractive)
+// {
+//     UNUSED(name);
+//     UNUSED(noninteractive);
 
-    NOT_IMPLEMENTED;
-    return nullptr;
-}
+//     NOT_IMPLEMENTED;
+//     return nullptr;
+// }
 
 //---------------------------------------------------------
 //   closeScore
 //---------------------------------------------------------
 
-void PluginAPI::closeScore(mu::plugins::api::Score* score)
-{
-    UNUSED(score);
+// void PluginAPI::closeScore(mu::plugins::api::Score* score)
+// {
+//     UNUSED(score);
 
-    NOT_IMPLEMENTED;
-}
+//     NOT_IMPLEMENTED;
+// }
 
 //---------------------------------------------------------
 //   newElement
@@ -170,23 +165,23 @@ void PluginAPI::closeScore(mu::plugins::api::Score* score)
 ///   from PluginAPI::PluginAPI::EngravingItem enumeration.
 //---------------------------------------------------------
 
-EngravingItem* PluginAPI::newElement(int elementType)
-{
-    mu::engraving::Score* score = currentScore();
+// EngravingItem* PluginAPI::newElement(int elementType)
+// {
+//     mu::engraving::Score* score = currentScore();
 
-    if (!score) {
-        return nullptr;
-    }
+//     if (!score) {
+//         return nullptr;
+//     }
 
-    if (elementType <= int(ElementType::INVALID) || elementType >= int(ElementType::ROOT_ITEM)) {
-        LOGW("PluginAPI::newElement: Wrong type ID: %d", elementType);
-        return nullptr;
-    }
+//     if (elementType <= int(ElementType::INVALID) || elementType >= int(ElementType::ROOT_ITEM)) {
+//         LOGW("PluginAPI::newElement: Wrong type ID: %d", elementType);
+//         return nullptr;
+//     }
 
-    const ElementType type = ElementType(elementType);
-    mu::engraving::EngravingItem* e = Factory::createItem(type, score->dummy());
-    return wrap(e, Ownership::PLUGIN);
-}
+//     const ElementType type = ElementType(elementType);
+//     mu::engraving::EngravingItem* e = Factory::createItem(type, score->dummy());
+//     return wrap(e, Ownership::PLUGIN);
+// }
 
 //---------------------------------------------------------
 //   removeElement
@@ -195,121 +190,82 @@ EngravingItem* PluginAPI::newElement(int elementType)
 ///   \since MuseScore 3.3
 //---------------------------------------------------------
 
-void PluginAPI::removeElement(mu::plugins::api::EngravingItem* wrapped)
-{
-    mu::engraving::Score* score = wrapped->element()->score();
-    score->deleteItem(wrapped->element());
-}
+// void PluginAPI::removeElement(mu::plugins::api::EngravingItem* wrapped)
+// {
+//     mu::engraving::Score* score = wrapped->element()->score();
+//     score->deleteItem(wrapped->element());
+// }
 
 //---------------------------------------------------------
 //   newScore
 //---------------------------------------------------------
 
-Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, int measures)
+// Score* PluginAPI::newScore(const QString& /*name*/, const QString& part, int measures)
+// {
+//     if (currentScore()) {
+//         currentScore()->endCmd();
+//     }
+
+//     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
+
+//     // TODO: Set path/filename
+//     NOT_IMPLEMENTED << "setting path/filename";
+
+//     score->appendPart(Score::instrTemplateFromName(part));
+//     score->appendMeasures(measures);
+//     score->doLayout();
+
+//     // TODO: Open score
+//     NOT_IMPLEMENTED << "opening the newly created score";
+
+//     qApp->processEvents();
+//     Q_ASSERT(currentScore() == score);
+//     score->startCmd();
+//     return wrap<Score>(score, Ownership::SCORE);
+// }
+
+// void PluginAPI::cmd(const QString& s)
+// {
+//     static const QMap<QString, QString> COMPAT_CMD_MAP = {
+//         { "escape", "notation-escape" },
+//         { "cut", "notation-cut" },
+//         { "copy", "notation-copy" },
+//         { "paste", "notation-paste" },
+//         { "paste-half", "notation-paste-half" },
+//         { "paste-double", "notation-paste-double" },
+//         { "select-all", "notation-select-all" },
+//         { "delete", "notation-delete" },
+//         { "next-chord", "notation-move-right" },
+//         { "prev-chord", "notation-move-left" },
+//         { "prev-measure", "notation-move-left-quickly" }
+//     };
+
+//     actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
+// }
+
+void PluginAPI::openLog(const QString&)
 {
-    if (currentScore()) {
-        currentScore()->endCmd();
-    }
-
-    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
-
-    // TODO: Set path/filename
-    NOT_IMPLEMENTED << "setting path/filename";
-
-    score->appendPart(Score::instrTemplateFromName(part));
-    score->appendMeasures(measures);
-    score->doLayout();
-
-    // TODO: Open score
-    NOT_IMPLEMENTED << "opening the newly created score";
-
-    qApp->processEvents();
-    Q_ASSERT(currentScore() == score);
-    score->startCmd();
-    return wrap<Score>(score, Ownership::SCORE);
+    DEPRECATED;
 }
-
-//---------------------------------------------------------
-//   cmd
-//---------------------------------------------------------
-
-void PluginAPI::cmd(const QString& s)
-{
-    static const QMap<QString, QString> COMPAT_CMD_MAP = {
-        { "escape", "notation-escape" },
-        { "cut", "notation-cut" },
-        { "copy", "notation-copy" },
-        { "paste", "notation-paste" },
-        { "paste-half", "notation-paste-half" },
-        { "paste-double", "notation-paste-double" },
-        { "select-all", "notation-select-all" },
-        { "delete", "notation-delete" },
-        { "next-chord", "notation-move-right" },
-        { "prev-chord", "notation-move-left" },
-        { "prev-measure", "notation-move-left-quickly" }
-    };
-
-    actionsDispatcher()->dispatch(COMPAT_CMD_MAP.value(s, s).toStdString());
-}
-
-//---------------------------------------------------------
-//   openLog
-//---------------------------------------------------------
-
-void PluginAPI::openLog(const QString& name)
-{
-    if (logFile.isOpen()) {
-        logFile.close();
-    }
-    logFile.setFileName(name);
-    if (!logFile.open(QIODevice::WriteOnly)) {
-        LOGD("PluginAPI::openLog: failed");
-    }
-}
-
-//---------------------------------------------------------
-//   closeLog
-//---------------------------------------------------------
 
 void PluginAPI::closeLog()
 {
-    if (logFile.isOpen()) {
-        logFile.close();
-    }
+    DEPRECATED;
 }
-
-//---------------------------------------------------------
-//   log
-//---------------------------------------------------------
 
 void PluginAPI::log(const QString& txt)
 {
-    if (logFile.isOpen()) {
-        logFile.write(txt.toLocal8Bit());
-    }
+    LOGD() << txt;
 }
-
-//---------------------------------------------------------
-//   logn
-//---------------------------------------------------------
 
 void PluginAPI::logn(const QString& txt)
 {
-    log(txt);
-    if (logFile.isOpen()) {
-        logFile.write("\n");
-    }
+    LOGD() << txt;
 }
-
-//---------------------------------------------------------
-//   log2
-//---------------------------------------------------------
 
 void PluginAPI::log2(const QString& txt, const QString& txt2)
 {
-    logFile.write(txt.toLocal8Bit());
-    logFile.write(txt2.toLocal8Bit());
-    logFile.write("\n");
+    LOGD() << txt << txt2;
 }
 
 //---------------------------------------------------------
@@ -317,10 +273,10 @@ void PluginAPI::log2(const QString& txt, const QString& txt2)
 ///   Not enabled currently (so excluded from plugin docs)
 //---------------------------------------------------------
 
-MsProcess* PluginAPI::newQProcess()
-{
-    return 0;   // TODO: new MsProcess(this);
-}
+// MsProcess* PluginAPI::newQProcess()
+// {
+//     return 0;   // TODO: new MsProcess(this);
+// }
 
 //---------------------------------------------------------
 //   PluginAPI::fraction
@@ -328,15 +284,15 @@ MsProcess* PluginAPI::newQProcess()
 ///  denominator
 //---------------------------------------------------------
 
-FractionWrapper* PluginAPI::fraction(int num, int den) const
-{
-    return wrap(mu::engraving::Fraction(num, den));
-}
+// FractionWrapper* PluginAPI::fraction(int num, int den) const
+// {
+//     return wrap(mu::engraving::Fraction(num, den));
+// }
 
-void PluginAPI::quit()
-{
-    emit closeRequested();
-}
+// void PluginAPI::quit()
+// {
+//     emit closeRequested();
+// }
 
 mu::engraving::Score* PluginAPI::currentScore() const
 {
@@ -353,17 +309,10 @@ mu::engraving::Score* PluginAPI::currentScore() const
 
 void PluginAPI::registerQmlTypes()
 {
-#ifdef MUE_DISABLE_PLUGINS_TYPES
-    return;
-#endif
-
     static bool qmlTypesRegistered = false;
     if (qmlTypesRegistered) {
         return;
     }
-
-    qmlRegisterType<MsProcess>("MuseScore", 3, 0, "QProcess");
-    qmlRegisterType<FileIO, 1>("FileIO",    3, 0, "FileIO");
 
     if (-1 == qmlRegisterType<PluginAPI>("MuseScore", 3, 0, "MuseScore")) {
         LOGW("qmlRegisterType failed: MuseScore");
@@ -371,7 +320,7 @@ void PluginAPI::registerQmlTypes()
 
     qmlRegisterUncreatableType<Enum>("MuseScore", 3, 0, "MuseScoreEnum", "Cannot create an enumeration");
 
-    qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
+    //qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
 
     qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
     qmlRegisterAnonymousType<ScoreElement>("MuseScore", 3);
@@ -394,11 +343,125 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
-    qmlRegisterUncreatableType<StandardButton>("MuseScore", 3, 0, "StandardButton", "Cannot create an enumeration");
-    qmlRegisterType<MessageDialog>("MuseScore", 3, 0, "MessageDialog");
-    qmlRegisterType<QQmlSettings>("MuseScore", 3, 0, "Settings");
-    qmlRegisterType<FileDialog>("MuseScore", 3, 0, "FileDialog");
-
     qmlTypesRegistered = true;
 }
-} // namespace mu::plugins::api
+
+QString PluginAPI::pluginType() const
+{
+    return m_pluginType;
+}
+
+void PluginAPI::setPluginType(const QString& newPluginType)
+{
+    m_pluginType = newPluginType;
+}
+
+QString PluginAPI::menuPath() const
+{
+    return QString();
+}
+
+void PluginAPI::setMenuPath(const QString&)
+{
+    DEPRECATED;
+}
+
+QString PluginAPI::title() const
+{
+    return m_title;
+}
+
+void PluginAPI::setTitle(const QString& newTitle)
+{
+    m_title = newTitle;
+}
+
+QString PluginAPI::version() const
+{
+    return m_version;
+}
+
+void PluginAPI::setVersion(const QString& newVersion)
+{
+    m_version = newVersion;
+}
+
+QString PluginAPI::description() const
+{
+    return m_description;
+}
+
+void PluginAPI::setDescription(const QString& newDescription)
+{
+    m_description = newDescription;
+}
+
+QString PluginAPI::dockArea() const
+{
+    return QString();
+}
+
+void PluginAPI::setDockArea(const QString&)
+{
+    DEPRECATED;
+}
+
+bool PluginAPI::requiresScore() const
+{
+    return m_requiresScore;
+}
+
+void PluginAPI::setRequiresScore(bool newRequiresScore)
+{
+    m_requiresScore = newRequiresScore;
+}
+
+QString PluginAPI::thumbnailName() const
+{
+    return m_thumbnailName;
+}
+
+void PluginAPI::setThumbnailName(const QString& newThumbnailName)
+{
+    m_thumbnailName = newThumbnailName;
+}
+
+QString PluginAPI::categoryCode() const
+{
+    return m_categoryCode;
+}
+
+void PluginAPI::setCategoryCode(const QString& newCategoryCode)
+{
+    m_categoryCode = newCategoryCode;
+}
+
+int PluginAPI::division() const
+{
+    return engraving::Constants::DIVISION;
+}
+
+int PluginAPI::mscoreVersion() const
+{
+    return mscoreMajorVersion() * 10000 + mscoreMinorVersion() * 100 + mscoreUpdateVersion();
+}
+
+int PluginAPI::mscoreMajorVersion() const
+{
+    return MUVersion::majorVersion();
+}
+
+int PluginAPI::mscoreMinorVersion() const
+{
+    return MUVersion::minorVersion();
+}
+
+int PluginAPI::mscoreUpdateVersion() const
+{
+    return MUVersion::patchVersion();
+}
+
+qreal PluginAPI::mscoreDPI() const
+{
+    return engraving::DPI;
+}

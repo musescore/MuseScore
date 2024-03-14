@@ -23,12 +23,13 @@
 
 #include <QQmlComponent>
 
-#include "api/qmlpluginapi.h"
+#include "../../api/v1/ipluginapiv1.h"
 
 #include "log.h"
 
 using namespace mu::extensions;
 using namespace mu::extensions::legacy;
+using namespace mu::extensions::apiv1;
 
 mu::Ret ExtPluginRunner::run(const Manifest& m)
 {
@@ -49,7 +50,7 @@ mu::Ret ExtPluginRunner::run(const Manifest& m)
         return make_ret(Ret::Code::UnknownError);
     }
 
-    QmlPluginApi* plugin = qobject_cast<QmlPluginApi*>(obj);
+    IPluginApiV1* plugin = dynamic_cast<IPluginApiV1*>(obj);
     if (!plugin) {
         LOGE() << "Qml Object not MuseScore plugin: " << m.qmlFilePath
                << ", from extension: " << m.uri.toString();

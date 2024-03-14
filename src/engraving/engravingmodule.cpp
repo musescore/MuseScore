@@ -50,6 +50,8 @@
 
 #include "compat/scoreaccess.h"
 
+#include "api/v1/qmlpluginapi.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -111,6 +113,11 @@ Versions:
 
 void EngravingModule::resolveImports()
 {
+}
+
+void EngravingModule::registerApi()
+{
+    apiv1::PluginAPI::registerQmlTypes();
 }
 
 void EngravingModule::registerResources()

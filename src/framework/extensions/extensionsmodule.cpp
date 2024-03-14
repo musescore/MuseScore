@@ -30,8 +30,6 @@
 #include "internal/extensionsprovider.h"
 #include "internal/extensionsconfiguration.h"
 
-#include "internal/legacy/api/qmlpluginapi.h"
-
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
 
@@ -70,8 +68,6 @@ void ExtensionsModule::registerUiTypes()
 {
     qmlRegisterType<ExtensionBuilder>("Muse.Extensions", 1, 0, "ExtensionBuilder");
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
-
-    legacy::QmlPluginApi::registerQmlTypes();
 }
 
 void ExtensionsModule::resolveImports()

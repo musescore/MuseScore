@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2024 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,38 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "qmlextapi.h"
 
-#include "log.h"
+#include "tie.h"
 
-using namespace mu::api;
-using namespace mu::extensions::api;
+using namespace mu::engraving::apiv1;
 
-QmlExtApi::QmlExtApi(IApiEngine* engine, QObject* parent)
-    : QObject(parent), m_engine(engine)
-{
-}
+Note* Tie::startNote() { return wrap<Note>(toTie(e)->startNote()); }
 
-QJSValue QmlExtApi::api(const std::string& name) const
-{
-    if (!apiRegister()) {
-        return QJSValue();
-    }
+Note* Tie::endNote() { return wrap<Note>(toTie(e)->endNote()); }
 
-    Api a = m_apis.value(name);
-    if (!a.jsval.isUndefined()) {
-        return a.jsval;
-    }
-
-    a.obj = apiRegister()->createApi(name, m_engine);
-    if (!a.obj) {
-        LOGW() << "Not allowed api: " << name;
-        return QJSValue();
-    }
-
-    a.jsval = m_engine->newQObject(a.obj);
-
-    m_apis[name] = a;
-
-    return a.jsval;
-}
+Tie* mu::engraving::apiv1::tieWrap(mu::engraving::Tie* tie) { return wrap<Tie>(tie); }

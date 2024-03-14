@@ -24,8 +24,9 @@
 #include "log.h"
 
 using namespace mu::api;
+using namespace mu::extensions::api;
 
-ScriptApi::ScriptApi(api::IApiEngine* engine, QObject* parent)
+ScriptApi::ScriptApi(mu::api::IApiEngine* engine, QObject* parent)
     : QObject(parent), m_engine(engine)
 {
 }

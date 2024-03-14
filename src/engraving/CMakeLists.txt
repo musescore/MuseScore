@@ -45,6 +45,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/api/v1/api_v1.cmake)
 
 set(MODULE_SRC
 
@@ -273,6 +274,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/pitchutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/expressionutils.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/utils/arrangementutils.h
+
+    ${API_V1_SRC}
     )
 
 if (ENGRAVING_NO_ACCESSIBILITY)
