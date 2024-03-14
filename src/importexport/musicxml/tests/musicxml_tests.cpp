@@ -681,6 +681,9 @@ TEST_F(Musicxml_Tests, inferredCredits2) {
 TEST_F(Musicxml_Tests, inferredFingerings) {
     mxmlImportTestRef("testInferredFingerings");
 }
+TEST_F(Musicxml_Tests, inferredDynamicsExpression) {
+    mxmlImportTestRef("testInferredDynamicsExpression");
+}
 TEST_F(Musicxml_Tests, inferredTempoText) {
     mxmlImportTestRef("testInferredTempoText");
 }

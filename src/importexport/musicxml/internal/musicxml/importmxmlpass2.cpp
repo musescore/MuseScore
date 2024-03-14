@@ -3020,9 +3020,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
         } else {
             if (_wordsText != "" || _metroText != "") {
-                t = Factory::createStaffText(_score->dummy()->segment());
+                isExpressionText = _wordsText.contains(u"<i>") && _metroText.isEmpty();
+                if (isExpressionText) {
+                    t = Factory::createExpression(_score->dummy()->segment());
+                } else {
+                    t = Factory::createStaffText(_score->dummy()->segment());
+                }
                 t->setXmlText(_wordsText + _metroText);
-                isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
             } else {
                 t = Factory::createRehearsalMark(_score->dummy()->segment());
                 if (!_rehearsalText.contains("<b>")) {
@@ -3332,12 +3336,15 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                 n--;          // make zero-based
             }
         }
-        QString type = _e.attributes().value("type").toString();
+
+        String type = _e.attributes().value("type").toString();
         if (_e.name() == "metronome") {
             _metroText = metronome(_tpoMetro);
         } else if (_e.name() == "words") {
             _enclosure      = _e.attributes().value("enclosure").toString();
-            _wordsText += xmlpass2::nextPartOfFormattedString(_e);
+            String nextPart = xmlpass2::nextPartOfFormattedString(_e);
+            textToDynamic(nextPart);
+            _wordsText += nextPart;
         } else if (_e.name() == "rehearsal") {
             _enclosure      = _e.attributes().value("enclosure").toString();
             if (_enclosure == "") {
@@ -3704,6 +3711,27 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
 {
     auto dd = new MusicXMLDelayedDirectionElement(m_totalY, m_element, m_track, m_placement, m_measure, m_tick);
     return dd;
+}
+
+//---------------------------------------------------------
+//   textToDynamic
+//---------------------------------------------------------
+/**
+ Attempts to convert text to dynamic text. No-op if unable.
+ */
+void MusicXMLParserDirection::textToDynamic(String& text)
+{
+    String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    // try to find a dynamic - xml representation or
+    // if found add to dynamics list and set text to blank string
+    if (TConv::dynamicValid(simplifiedText.toStdString())) {
+        DynamicType dt = TConv::fromXml(simplifiedText.toStdString(), DynamicType::OTHER);
+        if (dt != DynamicType::OTHER) {
+            _dynaVelocity = String::number(round(Dynamic::dynamicVelocity(dt) / 0.9));
+            _dynamicsList.push_back(Dynamic::dynamicText(dt));
+            text.clear();
+        }
+    }
 }
 
 //---------------------------------------------------------
