@@ -274,25 +274,11 @@ enum class ArticulationType {
     Plop,
     Scoop,
     BrassBend,
-    Multibend,
     SlideOutDown,
     SlideOutUp,
     SlideInAbove,
     SlideInBelow,
     VolumeSwell,
-
-    // multi-note articulations
-    Crescendo,
-    Decrescendo,
-    DiscreteGlissando,
-    ContinuousGlissando,
-    Legato,
-    Pedal,
-    Arpeggio,
-    ArpeggioUp,
-    ArpeggioDown,
-    ArpeggioStraightUp,
-    ArpeggioStraightDown,
 
     Vibrato,
     WideVibrato,
@@ -333,36 +319,48 @@ enum class ArticulationType {
     Slap,
     Pop,
 
+    // multi-note articulations
+    Crescendo,
+    Decrescendo,
+    DiscreteGlissando,
+    ContinuousGlissando,
+    Legato,
+    Pedal,
+    Multibend,
+    Arpeggio,
+    ArpeggioUp,
+    ArpeggioDown,
+    ArpeggioStraightUp,
+    ArpeggioStraightDown,
+
     Last
 };
 
 using ArticulationTypeSet = std::unordered_set<ArticulationType>;
 
-inline bool isSingleNoteArticulation(const ArticulationType type)
-{
-    static const ArticulationTypeSet SINGLE_NOTE_TYPES = {
-        ArticulationType::Standard, ArticulationType::Staccato, ArticulationType::Staccatissimo,
-        ArticulationType::Tenuto, ArticulationType::Marcato, ArticulationType::Accent,
-        ArticulationType::SoftAccent, ArticulationType::LaissezVibrer,
-        ArticulationType::Subito, ArticulationType::FadeIn, ArticulationType::FadeOut,
-        ArticulationType::Harmonic, ArticulationType::PalmMute, ArticulationType::Mute, ArticulationType::Open,
-        ArticulationType::Pizzicato, ArticulationType::SnapPizzicato, ArticulationType::RandomPizzicato,
-        ArticulationType::UpBow, ArticulationType::DownBow, ArticulationType::Detache,
-        ArticulationType::Martele, ArticulationType::Jete, ArticulationType::GhostNote,
-        ArticulationType::CrossNote, ArticulationType::CircleNote, ArticulationType::TriangleNote,
-        ArticulationType::DiamondNote, ArticulationType::Fall, ArticulationType::QuickFall,
-        ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
-        ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
-        ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell,
-        ArticulationType::Vibrato,
-    };
-
-    return SINGLE_NOTE_TYPES.find(type) != SINGLE_NOTE_TYPES.cend();
-}
-
 inline bool isMultiNoteArticulation(const ArticulationType type)
 {
-    return !isSingleNoteArticulation(type);
+    static const ArticulationTypeSet MULTI_TYPES = {
+        ArticulationType::Crescendo,
+        ArticulationType::Decrescendo,
+        ArticulationType::DiscreteGlissando,
+        ArticulationType::ContinuousGlissando,
+        ArticulationType::Legato,
+        ArticulationType::Pedal,
+        ArticulationType::Multibend,
+        ArticulationType::Arpeggio,
+        ArticulationType::ArpeggioUp,
+        ArticulationType::ArpeggioDown,
+        ArticulationType::ArpeggioStraightUp,
+        ArticulationType::ArpeggioStraightDown,
+    };
+
+    return mu::contains(MULTI_TYPES, type);
+}
+
+inline bool isSingleNoteArticulation(const ArticulationType type)
+{
+    return !isMultiNoteArticulation(type);
 }
 
 inline bool isRangedArticulation(const ArticulationType type)

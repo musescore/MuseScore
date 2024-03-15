@@ -1004,14 +1004,6 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
     return empty;
 }
 
-static const mpe::ArticulationTypeSet LEGATO_CC_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Legato, mpe::ArticulationType::Acciaccatura,
-    mpe::ArticulationType::PreAppoggiatura, mpe::ArticulationType::PostAppoggiatura,
-    mpe::ArticulationType::Trill, mpe::ArticulationType::TrillBaroque,
-    mpe::ArticulationType::Tremolo8th, mpe::ArticulationType::Tremolo16th,
-    mpe::ArticulationType::Tremolo32nd, mpe::ArticulationType::Tremolo64th
-};
-
 static const mpe::ArticulationTypeSet PEDAL_CC_SUPPORTED_TYPES = {
     mpe::ArticulationType::Pedal
 };
@@ -1022,11 +1014,6 @@ static const mpe::ArticulationTypeSet BEND_SUPPORTED_TYPES = {
     mpe::ArticulationType::Fall, mpe::ArticulationType::QuickFall, mpe::ArticulationType::Doit,
     mpe::ArticulationType::Plop, mpe::ArticulationType::Scoop, mpe::ArticulationType::SlideOutDown,
     mpe::ArticulationType::SlideInAbove, mpe::ArticulationType::SlideInBelow
-};
-
-static const mpe::ArticulationTypeSet AFTERTOUCH_SUPPORTED_TYPES = {
-    mpe::ArticulationType::Vibrato, mpe::ArticulationType::MoltoVibrato,
-    mpe::ArticulationType::SenzaVibrato, mpe::ArticulationType::WideVibrato
 };
 
 struct ChannelMap {
