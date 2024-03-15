@@ -31,6 +31,8 @@ Rectangle {
 
     property alias title: builder.title
 
+    signal closeRequested()
+
     color: ui.theme.backgroundPrimaryColor
     width: builder.contentItem ? builder.contentItem.implicitWidth : 800
     height: builder.contentItem ? builder.contentItem.implicitHeight : 600
@@ -41,6 +43,8 @@ Rectangle {
 
     ExtensionBuilder {
         id: builder
+
+        onCloseRequested: root.closeRequested()
     }
 
 }

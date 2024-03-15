@@ -325,6 +325,7 @@ FractionWrapper* PluginAPI::fraction(int num, int den) const
 void PluginAPI::quit()
 {
     emit closeRequested();
+    m_closeRequested.notify();
 }
 
 mu::engraving::Score* PluginAPI::currentScore() const

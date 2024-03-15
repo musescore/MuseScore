@@ -26,7 +26,7 @@
 
 #include "pluginserrors.h"
 
-#include "api/qmlplugin.h"
+#include "engraving/api/v1/qmlpluginapi.h"
 
 #include "log.h"
 
@@ -57,18 +57,18 @@ mu::Ret PluginView::load(const QUrl& url)
 
     if (!m_component->isReady()) {
         LOGE() << "Failed to load QML plugin from " << url;
-        LOGE() << m_component->errors().at(0).toString();
+        LOGE() << m_component->errorString();
         return make_ret(Err::PluginLoadError);
     }
 
-    m_qmlPlugin = qobject_cast<QmlPlugin*>(m_component->create());
+    m_qmlPlugin = dynamic_cast<mu::engraving::apiv1::PluginAPI*>(m_component->create());
 
     if (!m_qmlPlugin) {
         LOGE() << "Failed to create instance of QML plugin from " << url;
         return make_ret(Err::PluginLoadError);
     }
 
-    connect(m_qmlPlugin, &QmlPlugin::closeRequested, [this]() {
+    m_qmlPlugin->closeRequest().onNotify(this, [this]() {
         if (m_dialogView && m_dialogView->isOpened()) {
             m_dialogView->close();
         }
@@ -104,7 +104,7 @@ QString PluginView::name() const
         return QString();
     }
 
-    return m_qmlPlugin->title();
+    return qmlPlugin()->title();
 }
 
 QString PluginView::description() const
@@ -122,7 +122,7 @@ QVersionNumber PluginView::version() const
         return QVersionNumber();
     }
 
-    return QVersionNumber::fromString(m_qmlPlugin->version());
+    return QVersionNumber::fromString(qmlPlugin()->version());
 }
 
 QString PluginView::thumbnailName() const
@@ -152,7 +152,7 @@ bool PluginView::requiresScore() const
     return m_qmlPlugin->requiresScore();
 }
 
-QmlPlugin* PluginView::qmlPlugin() const
+mu::engraving::apiv1::PluginAPI* PluginView::qmlPlugin() const
 {
     return m_qmlPlugin;
 }

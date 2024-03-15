@@ -33,13 +33,19 @@
 
 #include "uicomponents/view/dialogview.h"
 
+#include "global/async/asyncable.h"
+
 class QQmlComponent;
 class QQuickView;
+
+namespace mu::engraving::apiv1 {
+class PluginAPI;
+}
 
 namespace mu::plugins {
 class QmlPlugin;
 
-class PluginView : public QObject
+class PluginView : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -59,7 +65,7 @@ public:
     QString categoryCode() const;
     bool requiresScore() const;
 
-    QmlPlugin* qmlPlugin() const;
+    engraving::apiv1::PluginAPI* qmlPlugin() const;
 
     void run();
 
@@ -74,7 +80,7 @@ private:
 
     void destroyView();
 
-    QmlPlugin* m_qmlPlugin = nullptr;
+    mu::engraving::apiv1::PluginAPI* m_qmlPlugin = nullptr;
     QQmlComponent* m_component = nullptr;
     uicomponents::DialogView* m_dialogView = nullptr;
 };
