@@ -1665,6 +1665,20 @@ void ChangePart::flip(EditData*)
       instrument = oi;
       }
 
+static void changeChordStyle(Score* score)
+      {
+      score->style().chordList()->unload();
+      qreal emag = score->styleD(Sid::chordExtensionMag);
+      qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
+      qreal mmag = score->styleD(Sid::chordModifierMag);
+      qreal madjust = score->styleD(Sid::chordModifierAdjust);
+      score->style().chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+      if (score->styleB(Sid::chordsXmlFile))
+            score->style().chordList()->read("chords.xml");
+      score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+      score->style().setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
+      }
+
 //---------------------------------------------------------
 //   ChangeStyle
 //---------------------------------------------------------
@@ -1689,6 +1703,7 @@ void ChangeStyle::flip(EditData*)
             }
 
       score->setStyle(style, overlap);
+      changeChordStyle(score);
       score->styleChanged();
       style = tmp;
       }
@@ -1713,18 +1728,8 @@ void ChangeStyleVal::flip(EditData*)
                   case Sid::chordExtensionAdjust:
                   case Sid::chordModifierMag:
                   case Sid::chordModifierAdjust:
-                  case Sid::chordDescriptionFile: {
-                        score->style().chordList()->unload();
-                        qreal emag = score->styleD(Sid::chordExtensionMag);
-                        qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
-                        qreal mmag = score->styleD(Sid::chordModifierMag);
-                        qreal madjust = score->styleD(Sid::chordModifierAdjust);
-                        score->style().chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
-                        if (score->styleB(Sid::chordsXmlFile))
-                            score->style().chordList()->read("chords.xml");
-                        score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
-                        score->style().setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
-                        }
+                  case Sid::chordDescriptionFile:
+                        changeChordStyle(score);
                         break;
                   case Sid::spatium:
                         score->spatiumChanged(v.toDouble(), value.toDouble());
