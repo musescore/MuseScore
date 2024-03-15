@@ -3044,6 +3044,10 @@ void NotationInteraction::endEditText()
     notifyAboutTextEditingEnded(toTextBase(element));
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
+
+    /*if (changeTextToDynamic()) {
+        score()->removeElement(element);
+    }*/
 }
 
 void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
@@ -3842,21 +3846,44 @@ void NotationInteraction::addDynamicToSelection(DynamicType type)
         return;
     }
 
-    mu::engraving::EditData editData(&m_scoreCallbacks);
-
-    EngravingItem* dynamicItem = 0;
-    for (EngravingItem* item : selection()->elements()) {
-        if (item->type() == ElementType::NOTE) {
-            dynamicItem->setParent(item);
-            break;
-        }
-    }
-    Dynamic* dynamic = toDynamic(dynamicItem);
-    dynamic->setDynamicType(type);
-
     startEdit();
-    score()->addElement(dynamicItem);
+    score()->toggleDynamic(type);
     apply();
+}
+
+bool NotationInteraction::changeTextToDynamic() {
+    EngravingItem* element = m_editData.element;
+    
+    if (toTextBase(element)->xmlText() == "pp" || toTextBase(element)->xmlText() == "PP") {
+        addDynamicToSelection(DynamicType::PP);
+        return true;
+    }
+    /**else if (toTextBase(element)->xmlText() == "p" || toTextBase(element)->xmlText() == "P") {
+        addDynamicToSelection(DynamicType::P);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "mp" || toTextBase(element)->xmlText() == "MP") {
+        addDynamicToSelection(DynamicType::MP);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "m" || toTextBase(element)->xmlText() == "M") {
+        addDynamicToSelection(DynamicType::M);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "mf" || toTextBase(element)->xmlText() == "MF") {
+        addDynamicToSelection(DynamicType::MF);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "f" || toTextBase(element)->xmlText() == "F") {
+        addDynamicToSelection(DynamicType::F);
+        return true;
+    }
+    else if (toTextBase(element)->xmlText() == "ff" || toTextBase(element)->xmlText() == "FF") {
+        addDynamicToSelection(DynamicType::FF);
+        return true;
+    }
+    */
+    return false;
 }
 
 

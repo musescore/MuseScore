@@ -418,9 +418,7 @@ void NotationNoteInput::setDynamic(DynamicType dynamicType)
 {
     TRACEFUNC;
 
-    mu::engraving::EditData editData(m_scoreCallbacks);
-
-    score()->toggleDynamic(dynamicType, editData);
+    score()->toggleDynamic(dynamicType);
 
     notifyAboutStateChanged();
 

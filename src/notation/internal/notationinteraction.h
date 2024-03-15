@@ -185,6 +185,7 @@ public:
     void addHairpinsToSelection(HairpinType type) override;
     void addAccidentalToSelection(AccidentalType type) override;
     void addDynamicToSelection(DynamicType type) override;
+    bool changeTextToDynamic();
     void putRestToSelection() override;
     void putRest(Duration duration) override;
     void addBracketsToSelection(BracketsType type) override;

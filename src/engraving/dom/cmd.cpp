@@ -2079,61 +2079,104 @@ void Score::toggleArticulation(SymId attr)
 //   toggleDynamic
 //---------------------------------------------------------
 
-void Score::toggleDynamic(DynamicType dt, EditData& ed)
+void Score::toggleDynamic(DynamicType dt)
 {
-    /*if (m_is.dynamicType() == dt) {
-        dt = DynamicType::M;
-    }
-    if (noteEntryMode()) {
-        m_is.setDynamicType(dt);
-        m_is.setRest(false);
-    }
-    else {
-        if (selection().isNone()) {
-            ed.view()->startNoteEntryMode();
-            m_is.setDynamicType(dt);
-            m_is.setDuration(DurationType::V_QUARTER);
-            m_is.setRest(false);
+    std::set<Chord*> set;
+
+    for (EngravingItem* el : selection().elements()) {
+        if (el->isNote() || el->isChord()) {
+            Chord* cr = 0;
+            // apply dynamic to first chord/note in selection
+            if (el->isNote()) {
+                cr = toNote(el)->chord();
+                if (mu::contains(set, cr)) {
+                    continue;
+                }
+            }
+            Dynamic* dy = Factory::createDynamic(this->dummy()->segment()); 
+            dy->setDynamicType(dt);
+            dy->setVelocity(6);
+            undoAddElement(dy);
+
+            Articulation* na = Factory::createArticulation(this->dummy()->chord());
+            switch (dt) {
+            /*case DynamicType::PP:
+                na->setSymId(SymId::dynamicPP);
+                break;*/
+            case DynamicType::P:
+                na->setSymId(SymId::dynamicPiano);
+                break;
+            case DynamicType::F:
+                na->setSymId(SymId::dynamicForte);
+                break;
+            default:
+                break;
+            }
+
+            na->setAnchor(ArticulationAnchor::TOP);
+            na->setPlacement(PlacementV::ABOVE);
+
+            if (!changeDynamic(el, na)) {
+                delete na;
+            }
+
+            if (cr) {
+                set.insert(cr);
+            }
+
+            break;
         }
-        else {
-            changeDynamic(dt, ed);
-        }
-    }*/
+    }
 }
 
 //---------------------------------------------------------
 //   changeDynamic
 //---------------------------------------------------------
 
-void Score::changeDynamic(DynamicType dt, EditData& ed)
+bool Score::changeDynamic(EngravingItem* el, Articulation* a)
 {
-    /*for (EngravingItem* item : selection().elements()) {
-        Dynamic* dynamic = 0;
-        Note* note = 0;
-        switch (item->type()) {
-        case ElementType::DYNAMIC:
-            dynamic = toDynamic(item);
+    Chord* c;
+    if (el->isNote()) {
+        c = toNote(el)->chord();
+    }
+    else if (el->isChord()) {
+        c = toChord(el);
+    }
+    else {
+        return false;
+    }
+    Articulation* oa = c->hasArticulation(a);
+    if (oa) {
+        undoRemoveElement(oa);
+        return false;
+    }
 
-            if (dynamic->dynamicType() == dt) {
-                dynamic->startEdit(ed);
-                dynamic->measure()->add(dynamic);
-            }
-            else {
-                dynamic->setDynamicType(dt);
-                dynamic->startEdit(ed);
-                dynamic->measure()->add(dynamic);
-            }
-            break;
-        case ElementType::NOTE:
-            note = toNote(item);
-            dynamic->setDynamicType(dt);
-            dynamic->startEdit(ed);
-            note->add(dynamic);
-            break;
-        default:
-            break;
+    if (!a->isDouble()) {
+        a->setParent(c);
+        a->setTrack(c->track());
+        undoAddElement(a);
+        a->setAnchor(ArticulationAnchor::BOTTOM);
+        return true;
+    }
+
+    // Split the new articulation into "sub-components", only add the unique ones (not present in the chord)...
+    std::set<SymId> newSubComponentIds = splitArticulations({ a->symId() });
+    for (const SymId& id : newSubComponentIds) {
+        Articulation* articCopy = a->clone();
+        articCopy->setSymId(id);
+        articCopy->setAnchor(ArticulationAnchor::BOTTOM);
+
+        if (!c->hasArticulation(articCopy)) {
+            articCopy->setParent(c);
+            articCopy->setTrack(c->track());
+            undoAddElement(articCopy);
+            articCopy->setAnchor(ArticulationAnchor::BOTTOM);
+            continue;
         }
-    }*/
+        articCopy->setAnchor(ArticulationAnchor::BOTTOM);
+        delete articCopy;
+    }
+    return true;
 }
 
 

@@ -205,6 +205,7 @@ private:
     enum class AnchorGroup {
         ARTICULATION,
         LUTE_FINGERING,
+        DYNAMIC,
         OTHER
     };
     static AnchorGroup anchorGroup(SymId);
