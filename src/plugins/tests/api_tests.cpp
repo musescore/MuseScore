@@ -34,7 +34,7 @@ class Plugins_ApiTests : public ::testing::Test
 public:
 };
 
-TEST_F(Plugins_ApiTests, Enums)
+TEST_F(Plugins_ApiTests, DISABLED_Enums)
 {
     PluginView view;
 

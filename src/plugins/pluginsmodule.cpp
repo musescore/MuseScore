@@ -32,11 +32,8 @@
 #include "internal/pluginsactioncontroller.h"
 
 #include "view/pluginsmodel.h"
-#include "api/qmlpluginapi.h"
 
 #include "ui/iuiactionsregister.h"
-
-#include "ui/iinteractiveuriregister.h"
 
 using namespace mu::plugins;
 using namespace mu::modularity;
@@ -79,8 +76,6 @@ void PluginsModule::registerResources()
 void PluginsModule::registerUiTypes()
 {
     qmlRegisterType<PluginsModel>("MuseScore.Plugins", 1, 0, "PluginsModel");
-
-    mu::plugins::api::PluginAPI::registerQmlTypes();
 
     auto ui = ioc()->resolve<IUiEngine>(moduleName());
     if (ui) {
