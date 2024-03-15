@@ -78,8 +78,8 @@ public:
 
     BeatsPerSecond tempo(int tick) const;
 
-    double tick2time(int tick, int* sn = 0, bool ignorePauseOnTick = false) const;
-    double tick2time(int tick, double time, int* sn, bool ignorePauseOnTick = false) const;
+    double tick2time(int tick, int* sn = 0) const;
+    double tick2time(int tick, double time, int* sn) const;
     int time2tick(double time, int* sn = 0) const;
     int time2tick(double time, int tick, int* sn) const;
     int tempoSN() const { return m_tempoSN; }
