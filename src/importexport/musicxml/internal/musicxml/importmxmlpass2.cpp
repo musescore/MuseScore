@@ -1998,6 +1998,10 @@ void MusicXMLParserPass2::part()
         }
     }
 
+    for (Hairpin* hp : _inferredHairpins) {
+        hp->score()->addElement(hp);
+    }
+
     const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
     //LOGD("spanner list:");
     auto i = _spanners.constBegin();
@@ -3117,12 +3121,23 @@ void MusicXMLParserDirection::direction(const QString& partId,
             dynamicsPlacement = isVocalStaff ? "above" : "below";
         }
 
+        // Check staff and end any cresc lines which are waiting
+        InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
+        for (Hairpin* h : hairpins) {
+            if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
+                h->setTrack2(track);
+                h->setTick2(tick + _offset);
+            }
+        }
+
         // Add element to score later, after collecting all the others and sorting by default-y
         // This allows default-y to be at least respected by the order of elements
         MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
             hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset);
         delayedDirections.push_back(delayedDirection);
     }
+
+    addInferredCrescLine(track, tick, isVocalStaff);
 
     // handle the elems
     foreach (auto elem, _elems) {
@@ -3344,6 +3359,7 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
             _enclosure      = _e.attributes().value("enclosure").toString();
             String nextPart = xmlpass2::nextPartOfFormattedString(_e);
             textToDynamic(nextPart);
+            textToCrescLine(nextPart);
             _wordsText += nextPart;
         } else if (_e.name() == "rehearsal") {
             _enclosure      = _e.attributes().value("enclosure").toString();
@@ -3732,6 +3748,43 @@ void MusicXMLParserDirection::textToDynamic(String& text)
             text.clear();
         }
     }
+}
+
+void MusicXMLParserDirection::textToCrescLine(String& text)
+{
+    String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
+    bool cresc = simplifiedText.contains(u"cresc");
+    bool dim = simplifiedText.contains(u"dim");
+    if (!cresc && !dim) {
+        return;
+    }
+
+    // Create line
+    text.clear();
+    Hairpin* line = Factory::createHairpin(_score->dummy()->segment());
+
+    line->setHairpinType(cresc ? HairpinType::CRESC_LINE : HairpinType::DECRESC_LINE);
+    line->setBeginText(simplifiedText);
+    line->setProperty(Pid::LINE_VISIBLE, false);
+    _inferredHairpinStart = line;
+}
+
+void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff)
+{
+    if (!_inferredHairpinStart) {
+        return;
+    }
+
+    _inferredHairpinStart->setTrack(track);
+    _inferredHairpinStart->setTick(tick + _offset);
+
+    String spannerPlacement = _placement;
+    if (_placement.empty()) {
+        spannerPlacement = isVocalStaff ? u"above" : u"below";
+    }
+    setSLinePlacement(_inferredHairpinStart, _placement);
+
+    _pass2.addInferredHairpin(_inferredHairpinStart);
 }
 
 //---------------------------------------------------------
@@ -4265,6 +4318,16 @@ void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
     delete spanner;
 }
 
+void MusicXMLParserPass2::addInferredHairpin(Hairpin* hp)
+{
+    _inferredHairpins.push_back(hp);
+}
+
+InferredHairpinsStack MusicXMLParserPass2::getInferredHairpins()
+{
+    return _inferredHairpins;
+}
+
 //---------------------------------------------------------
 //   metronome
 //---------------------------------------------------------
@@ -4463,7 +4526,6 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
             if (fermataType == "inverted") {
                 fermata->setPlacement(PlacementV::BELOW);
             } else if (fermataType == u"") {
-                LOGI() << "Set placement: " << (int)fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>();
                 fermata->setPlacement(fermata->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
             }
         } else if (_e.name() == "repeat") {
