@@ -43,47 +43,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsactioncontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/pluginsactioncontroller.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/api/apitypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/cursor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/cursor.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/elements.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/elements.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/enums.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/enums.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/excerpt.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/excerpt.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/fraction.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/instrument.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/instrument.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/part.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/part.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/playevent.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/playevent.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlplugin.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlplugin.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlpluginapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlpluginapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/score.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/score.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/scoreelement.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/scoreelement.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/selection.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/selection.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/style.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/style.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/tie.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/tie.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/util.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/util.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmllistproperty.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/messagedialog.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/messagedialog.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/filedialog.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/filedialog.h
-    # not moved to extensions
-    # ${CMAKE_CURRENT_LIST_DIR}/api/qqmlsettings.cpp
-    # ${CMAKE_CURRENT_LIST_DIR}/api/qqmlsettings_p.h
     )
 
 if (MUE_DISABLE_PLUGINS_TYPES)
