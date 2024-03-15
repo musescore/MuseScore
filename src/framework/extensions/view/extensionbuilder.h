@@ -55,6 +55,8 @@ signals:
     void titleChanged();
     void contentItemChanged();
 
+    void closeRequested();
+
 private:
 
     void setTitle(QString title);

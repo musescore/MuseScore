@@ -25,6 +25,8 @@ import MuseScore.UiComponents 1.0
 
 StyledDialogView {
 
+    id: dialog
+
     property alias uri: viewer.uri
 
     title: viewer.title
@@ -34,6 +36,10 @@ StyledDialogView {
 
     ExtensionViewer {
         id: viewer
+
+        onCloseRequested: {
+            dialog.close()
+        }
     }
 
 }

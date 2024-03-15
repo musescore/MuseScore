@@ -83,16 +83,19 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     emit contentItemChanged();
 
-    //! NOTE For version 1 plugins we need to call run
     if (m.apiversion == 1) {
-        async::Async::call(this, [this, m]() {
-            apiv1::IPluginApiV1* plugin = dynamic_cast<apiv1::IPluginApiV1*>(m_contentItem);
+        apiv1::IPluginApiV1* plugin = dynamic_cast<apiv1::IPluginApiV1*>(m_contentItem);
+        plugin->closeRequest().onNotify(this, [this]() {
+            emit closeRequested();
+        });
+
+        //! NOTE For version 1 plugins we need to call run
+        async::Async::call(this, [plugin, m]() {
             if (!plugin) {
                 LOGE() << "Qml Object not MuseScore plugin: " << m.qmlFilePath
                        << ", from extension: " << m.uri.toString();
                 return;
             }
-
             plugin->runPlugin();
         });
     }

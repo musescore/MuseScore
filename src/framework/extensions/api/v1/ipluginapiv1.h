@@ -22,6 +22,8 @@
 #ifndef MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
 #define MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
 
+#include "global/async/notification.h"
+
 namespace mu::extensions::apiv1 {
 class IPluginApiV1
 {
@@ -30,6 +32,8 @@ public:
     virtual ~IPluginApiV1() = default;
 
     virtual void runPlugin() = 0;
+
+    virtual async::Notification closeRequest() const = 0;
 };
 }
 

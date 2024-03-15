@@ -261,7 +261,9 @@ public:
     static void registerQmlTypes();
 
     void runPlugin() override { emit run(); }
-    // void endCmd(const QMap<QString, QVariant>& stateInfo) override { emit scoreStateChanged(stateInfo); }
+    async::Notification closeRequest() const override { return m_closeRequested; }
+
+    void endCmd(const QMap<QString, QVariant>& stateInfo) { emit scoreStateChanged(stateInfo); }
 
     apiv1::Score* curScore() const;
     QQmlListProperty<apiv1::Score> scores();
@@ -331,6 +333,7 @@ private:
     bool m_requiresScore = true;
     QString m_thumbnailName;
     QString m_categoryCode;
+    async::Notification m_closeRequested;
 };
 
 #undef DECLARE_API_ENUM

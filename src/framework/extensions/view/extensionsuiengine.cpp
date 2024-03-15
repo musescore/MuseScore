@@ -120,5 +120,6 @@ void ExtensionsUiEngine::setupApiV1(QQmlEngine* e)
 
 QQmlEngine* ExtensionsUiEngine::qmlEngineApiV1() const
 {
-    return const_cast<ExtensionsUiEngine*>(this)->engineApiV1();
+    return uiEngine()->qmlEngine();
+    //return const_cast<ExtensionsUiEngine*>(this)->engineApiV1();
 }
