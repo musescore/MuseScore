@@ -43,14 +43,14 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
 
     ManifestList retList;
     for (const Manifest& m : defaultManifests) {
-        if (!m.enabled || !m.isValid()) {
+        if (!m.isValid()) {
             continue;
         }
         retList.push_back(m);
     }
 
     for (const Manifest& m : externalManifests) {
-        if (!m.enabled || !m.isValid()) {
+        if (!m.isValid()) {
             continue;
         }
         retList.push_back(m);
@@ -102,9 +102,9 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.type = typeFromString(obj.value("type").toStdString());
     m.title = obj.value("title").toString();
     m.description = obj.value("description").toString();
+    m.category = obj.value("category").toString();
+    m.thumbnail = obj.value("thumbnail").toStdString();
     m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
-    m.enabled = obj.value("enabled", true).toBool();
-    m.visible = obj.value("enabled", true).toBool();
     m.qmlFilePath = obj.value("qmlFilePath").toStdString();
     m.jsFilePath = obj.value("jsFilePath").toStdString();
 
@@ -113,6 +113,15 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
 
 void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) const
 {
-    m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
-    m.jsFilePath = rootDirPath + "/" + m.jsFilePath;
+    if (!m.thumbnail.empty()) {
+        m.thumbnail = rootDirPath + "/" + m.thumbnail;
+    }
+
+    if (!m.qmlFilePath.empty()) {
+        m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
+    }
+
+    if (!m.jsFilePath.empty()) {
+        m.jsFilePath = rootDirPath + "/" + m.jsFilePath;
+    }
 }

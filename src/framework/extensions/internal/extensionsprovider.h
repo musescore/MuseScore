@@ -25,21 +25,37 @@
 #include "modularity/ioc.h"
 #include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
+#include "global/iinteractive.h"
 
 namespace mu::extensions {
 class ExtensionsProvider : public IExtensionsProvider
 {
     Inject<IExtensionsConfiguration> configuration;
+    Inject<IInteractive> interactive;
+
 public:
     ExtensionsProvider() = default;
 
-    const ManifestList& manifestList() const override;
-    const Manifest& manifest(const Uri& uri) const override;
+    void reloadPlugins() override;
 
+    ManifestList manifestList(Filter filter = Filter::All) const override;
+    async::Notification manifestListChanged() const override;
+
+    const Manifest& manifest(const Uri& uri) const override;
+    async::Channel<Manifest> manifestChanged() const override;
+
+    KnownCategories knownCategories() const override;
+
+    Ret setEnable(const Uri& uri, bool enable) override;
+
+    Ret perform(const Uri& uri) override;
     Ret run(const Uri& uri) override;
 
 private:
+
     mutable ManifestList m_manifests;
+    async::Notification m_manifestListChanged;
+    async::Channel<Manifest> m_manifestChanged;
 };
 }
 

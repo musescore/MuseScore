@@ -90,4 +90,6 @@ void ExtensionsModule::onInit(const IApplication::RunMode& mode)
     if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
+
+    m_extensionsProvider->reloadPlugins();
 }

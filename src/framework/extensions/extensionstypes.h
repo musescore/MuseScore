@@ -23,9 +23,12 @@
 #define MU_EXTENSIONS_EXTENSIONSTYPES_H
 
 #include <vector>
+#include <map>
+
 #include "global/types/uri.h"
 #include "global/types/string.h"
 #include "global/io/path.h"
+#include "global/types/translatablestring.h"
 
 namespace mu::extensions {
 //! NOTE Api versions:
@@ -59,6 +62,11 @@ static inline std::string typeToString(const Type& type)
     return std::string();
 }
 
+enum Filter {
+    Enabled,
+    All
+};
+
 /*
 manifest.json
 {
@@ -68,8 +76,6 @@ manifest.json
 "title": String,                  //
 "description": String,            //
 "apiversion": String              // Optional default 2
-"enabled": Boolean,               // Optional default true
-"visible": Boolean,               // Optional default true
 
 "qmlFilePath": String             // Path (name) of qml file of form
 "jsFilePath": String              // Path (name) of js file of macros
@@ -80,17 +86,26 @@ struct Manifest {
     Type type = Type::Undefined;
     String title;
     String description;
+    String category;
+    mu::io::path_t thumbnail;
+    String version;
     int apiversion = DEFAULT_API_VERSION;
-    bool enabled = true;
-    bool visible = true;
+    bool requiresScore = true;
 
     mu::io::path_t qmlFilePath;
     mu::io::path_t jsFilePath;
+
+    struct Config {
+        bool enabled = false;
+        std::string shortcuts;
+    } config;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
 };
 
 using ManifestList = std::vector<Manifest>;
+
+using KnownCategories = std::map<std::string /*name*/, TranslatableString /*title*/>;
 }
 
 #endif // MU_EXTENSIONS_EXTENSIONSTYPES_H

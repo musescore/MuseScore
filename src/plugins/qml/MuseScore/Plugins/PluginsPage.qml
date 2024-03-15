@@ -190,7 +190,7 @@ Item {
             {"title": qsTrc("plugins", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
-        onEnabledChanged: {
+        onEnabledChanged: function(enabled) {
             pluginsModel.setEnable(selectedPlugin.codeKey, enabled)
         }
 

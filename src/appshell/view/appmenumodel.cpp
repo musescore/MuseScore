@@ -31,7 +31,7 @@ using namespace mu::uicomponents;
 using namespace mu::project;
 using namespace mu::workspace;
 using namespace mu::actions;
-using namespace mu::plugins;
+using namespace mu::extensions;
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
@@ -104,12 +104,12 @@ void AppMenuModel::setupConnections()
         workspacesItem.setSubitems(makeWorkspacesItems());
     });
 
-    pluginsService()->pluginsChanged().onNotify(this, [this]() {
+    extensionsProvider()->manifestListChanged().onNotify(this, [this]() {
         MenuItem& pluginsMenu = findMenu("menu-plugins");
         pluginsMenu.setSubitems(makePluginsMenuSubitems());
     });
 
-    pluginsService()->pluginChanged().onReceive(this, [this](const PluginInfo&) {
+    extensionsProvider()->manifestChanged().onReceive(this, [this](const Manifest&) {
         MenuItem& pluginsItem = findMenu("menu-plugins");
         pluginsItem.setSubitems(makePluginsMenuSubitems());
     });
@@ -638,23 +638,23 @@ MenuItemList AppMenuModel::makePluginsItems()
 {
     MenuItemList result;
 
-    IPluginsService::CategoryInfoMap categories = pluginsService()->categories();
-    PluginInfoMap enabledPlugins = pluginsService()->plugins(IPluginsService::Enabled).val;
+    KnownCategories categories = extensionsProvider()->knownCategories();
+    ManifestList enabledExtensions = extensionsProvider()->manifestList(Filter::Enabled);
 
     std::map<std::string, MenuItemList> categoriesMap;
     MenuItemList pluginsWithoutCategories;
-    for (const PluginInfo& plugin : values(enabledPlugins)) {
-        std::string categoryStr = plugin.categoryCode.toStdString();
-        if (contains(categories, categoryStr)) {
+    for (const Manifest& m : enabledExtensions) {
+        std::string categoryStr = m.category.toStdString();
+        if (mu::contains(categories, categoryStr)) {
             MenuItemList& items = categoriesMap[categoryStr];
-            items << makeMenuItem(plugin.codeKey.toStdString(), TranslatableString::untranslatable(plugin.name));
+            items << makeMenuItem(m.uri.toString(), TranslatableString::untranslatable(m.title));
         } else {
-            pluginsWithoutCategories << makeMenuItem(plugin.codeKey.toStdString(), TranslatableString::untranslatable(plugin.name));
+            pluginsWithoutCategories << makeMenuItem(m.uri.toString(), TranslatableString::untranslatable(m.title));
         }
     }
 
     for (const auto& it : categoriesMap) {
-        TranslatableString categoryTitle = value(categories, it.first, {});
+        TranslatableString categoryTitle = mu::value(categories, it.first, {});
         result << makeMenu(categoryTitle, it.second);
     }
 
