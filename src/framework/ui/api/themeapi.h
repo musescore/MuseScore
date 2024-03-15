@@ -92,6 +92,10 @@ public:
 
 public:
     ThemeApi();
+#ifdef MU_QT5_COMPAT
+    ThemeApi(const ThemeApi& api)
+        : ApiObject(api.engine()) {}
+#endif
     ~ThemeApi();
 
     void init();
