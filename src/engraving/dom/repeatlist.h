@@ -92,7 +92,7 @@ public:
     int utick2tick(int tick) const;
     int tick2utick(int tick) const;
     int utime2utick(double secs) const;
-    double utick2utime(int tick, bool ignorePauseOnTick = false) const;
+    double utick2utime(int) const;
     void updateTempo();
     int ticks() const;
 
