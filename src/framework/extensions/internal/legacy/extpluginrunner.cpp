@@ -35,7 +35,7 @@ mu::Ret ExtPluginRunner::run(const Manifest& m)
 {
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engine()->qmlEngine(), m.qmlFilePath.toQString());
+    QQmlComponent component = QQmlComponent(engine()->qmlEngineApiV1(), m.qmlFilePath.toQString());
     if (!component.isReady()) {
         LOGE() << "Failed to load QML file: " << m.qmlFilePath
                << ", from extension: " << m.uri.toString();

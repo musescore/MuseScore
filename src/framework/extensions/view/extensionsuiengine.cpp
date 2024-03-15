@@ -60,6 +60,8 @@ ExtensionsUiEngine::~ExtensionsUiEngine()
     delete m_api;
     delete m_apiEngine;
     delete m_engine;
+
+    delete m_engineApiV1;
 }
 
 void ExtensionsUiEngine::setup(QQmlEngine* e)
@@ -90,4 +92,33 @@ QQmlEngine* ExtensionsUiEngine::engine()
 QQmlEngine* ExtensionsUiEngine::qmlEngine() const
 {
     return const_cast<ExtensionsUiEngine*>(this)->engine();
+}
+
+// =====================================================
+// Api V1
+// =====================================================
+QQmlEngine* ExtensionsUiEngine::engineApiV1()
+{
+    if (!m_engineApiV1) {
+        m_engineApiV1 = new QQmlEngine(this);
+        setupApiV1(m_engineApiV1);
+    }
+
+    return m_engineApiV1;
+}
+
+void ExtensionsUiEngine::setupApiV1(QQmlEngine* e)
+{
+    //! NOTE Needed for UI components, should not be used directly in extensions
+    QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
+    e->rootContext()->setContextProperty("ui", ui);
+
+    //! NOTE Old plugins could use standard modules (for example MuseScore.UiComponents),
+    //! we need to think about how to limit this or quickly abandon old plugins.
+    e->addImportPath(":/qml");
+}
+
+QQmlEngine* ExtensionsUiEngine::qmlEngineApiV1() const
+{
+    return const_cast<ExtensionsUiEngine*>(this)->engineApiV1();
 }
