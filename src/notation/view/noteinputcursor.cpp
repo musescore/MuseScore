@@ -37,7 +37,9 @@ void NoteInputCursor::paint(mu::draw::Painter* painter)
     Color fillColor = configuration()->selectionColor(state.currentVoiceIndex);
     Color cursorRectColor = fillColor;
     cursorRectColor.setAlpha(configuration()->cursorOpacity());
-    painter->fillRect(cursorRect, cursorRectColor);
+    RectF cursorHightlightRect(cursorRect.topLeft().x() - cursorRect.width()/2, cursorRect.topLeft().y(), cursorRect.width()*2, cursorRect.height());
+    painter->fillRect(cursorHightlightRect, cursorRectColor);
+
 
     constexpr int leftLineWidth = 3;
     RectF leftLine(cursorRect.topLeft().x(), cursorRect.topLeft().y(), leftLineWidth, cursorRect.height());
