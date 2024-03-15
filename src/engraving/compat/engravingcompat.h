@@ -31,9 +31,12 @@ namespace mu::engraving::compat {
 class EngravingCompat
 {
 public:
+    static void doPreLayoutCompatIfNeeded(MasterScore* score);
     static void doPostLayoutCompatIfNeeded(MasterScore* score);
 
 private:
+    static void correctPedalEndPoints(MasterScore* score);
+
     static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
 };
 } // namespace mu::engraving::compat

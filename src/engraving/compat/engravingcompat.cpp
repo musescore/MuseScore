@@ -25,10 +25,38 @@
 #include "engraving/dom/beam.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/masterscore.h"
+#include "engraving/dom/pedal.h"
+#include "engraving/dom/spanner.h"
 
 using namespace mu::engraving;
 
 namespace mu::engraving::compat {
+void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
+{
+    if (score->mscVersion() >= 440) {
+        return;
+    }
+
+    correctPedalEndPoints(score);
+}
+
+void EngravingCompat::correctPedalEndPoints(MasterScore* score)
+{
+    // Pedal lines ending with 45° hook used to be hacked to end before their actual end duration.
+    // Hack is now removed, so we need to correct them to preserve engraving result. (M.S.)
+    for (auto pair : score->spanner()) {
+        Spanner* spanner = pair.second;
+        if (spanner->isPedal() && toPedal(spanner)->endHookType() == HookType::HOOK_45) {
+            ChordRest* endCR = score->findCRinStaff(spanner->tick2(), track2staff(spanner->track()));
+            if (endCR) {
+                for (EngravingObject* item : spanner->linkList()) {
+                    toSpanner(item)->setTick2(endCR->tick());
+                }
+            }
+        }
+    }
+}
+
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     if (score->mscVersion() >= 440) {
