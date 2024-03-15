@@ -44,6 +44,7 @@ public:
     ~ExtensionsUiEngine();
 
     QQmlEngine* qmlEngine() const;
+    QQmlEngine* qmlEngineApiV1() const;
 
 private:
 
@@ -53,6 +54,13 @@ private:
     QQmlEngine* m_engine = nullptr;
     QmlApiEngine* m_apiEngine = nullptr;
     api::QmlExtApi* m_api = nullptr;
+
+    // api v1
+
+    QQmlEngine* engineApiV1();
+    void setupApiV1(QQmlEngine* e);
+
+    QQmlEngine* m_engineApiV1 = nullptr;
 };
 }
 

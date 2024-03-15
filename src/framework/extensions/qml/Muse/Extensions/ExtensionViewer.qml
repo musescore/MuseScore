@@ -31,6 +31,7 @@ Rectangle {
 
     property alias title: builder.title
 
+    color: ui.theme.backgroundPrimaryColor
     width: builder.contentItem ? builder.contentItem.implicitWidth : 800
     height: builder.contentItem ? builder.contentItem.implicitHeight : 600
 

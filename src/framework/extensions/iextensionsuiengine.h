@@ -35,6 +35,7 @@ public:
     virtual ~IExtensionsUiEngine() = default;
 
     virtual QQmlEngine* qmlEngine() const = 0;
+    virtual QQmlEngine* qmlEngineApiV1() const = 0;
 };
 }
 

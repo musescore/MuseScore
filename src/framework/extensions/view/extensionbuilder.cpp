@@ -42,9 +42,16 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     setTitle(m.title);
 
+    QQmlEngine* engin = nullptr;
+    if (m.apiversion == 1) {
+        engin = engine()->qmlEngineApiV1();
+    } else {
+        engin = engine()->qmlEngine();
+    }
+
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engine()->qmlEngine(), m.qmlFilePath.toQString());
+    QQmlComponent component = QQmlComponent(engin, m.qmlFilePath.toQString());
     if (!component.isReady()) {
         LOGE() << "Failed to load QML file: " << m.qmlFilePath << ", from extension: " << uri;
         LOGE() << component.errorString();
