@@ -22,15 +22,12 @@
 #ifndef MU_APPSHELL_APPMENUMODEL_H
 #define MU_APPSHELL_APPMENUMODEL_H
 
-#include <memory>
-
 #ifndef MU_QT5_COMPAT
 Q_MOC_INCLUDE(< QWindow >)
 #endif
 
 #include "uicomponents/view/abstractmenumodel.h"
 
-#include "actions/actionable.h"
 #include "modularity/ioc.h"
 #include "ui/imainwindow.h"
 #include "ui/iuiactionsregister.h"
@@ -41,7 +38,7 @@ Q_MOC_INCLUDE(< QWindow >)
 #include "iappshellconfiguration.h"
 #include "project/irecentfilescontroller.h"
 #include "internal/iappmenumodelhook.h"
-#include "plugins/ipluginsservice.h"
+#include "extensions/iextensionsprovider.h"
 #include "update/iupdateconfiguration.h"
 #include "global/iglobalconfiguration.h"
 
@@ -59,7 +56,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(IAppShellConfiguration, configuration)
     INJECT(project::IRecentFilesController, recentFilesController)
     INJECT(IAppMenuModelHook, appMenuModelHook)
-    INJECT(plugins::IPluginsService, pluginsService)
+    INJECT(extensions::IExtensionsProvider, extensionsProvider)
     INJECT(update::IUpdateConfiguration, updateConfiguration)
     INJECT(IGlobalConfiguration, globalConfiguration)
 

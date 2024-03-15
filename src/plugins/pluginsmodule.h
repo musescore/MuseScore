@@ -28,7 +28,6 @@
 
 namespace mu::plugins {
 class PluginsConfiguration;
-class PluginsService;
 class PluginsUiActions;
 class PluginsActionController;
 class PluginsModule : public modularity::IModuleSetup
@@ -45,7 +44,6 @@ public:
 
 private:
     std::shared_ptr<PluginsConfiguration> m_configuration;
-    std::shared_ptr<PluginsService> m_pluginsService;
     std::shared_ptr<PluginsUiActions> m_pluginsUiActions;
     std::shared_ptr<PluginsActionController> m_pluginActionController;
 };

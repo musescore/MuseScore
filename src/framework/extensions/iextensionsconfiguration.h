@@ -26,6 +26,8 @@
 
 #include "global/io/path.h"
 
+#include "extensions/extensionstypes.h"
+
 namespace mu::extensions {
 class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
 {

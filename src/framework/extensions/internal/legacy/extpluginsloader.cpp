@@ -41,14 +41,14 @@ ManifestList ExtPluginsLoader::loadManifesList(const io::path_t& defPath, const 
 
     ManifestList retList;
     for (const Manifest& m : defaultManifests) {
-        if (!m.enabled || !m.isValid()) {
+        if (!m.isValid()) {
             continue;
         }
         retList.push_back(m);
     }
 
     for (const Manifest& m : externalManifests) {
-        if (!m.enabled || !m.isValid()) {
+        if (!m.isValid()) {
             continue;
         }
         retList.push_back(m);
@@ -95,8 +95,6 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     m.type = Type::Macros;
     m.apiversion = 1;
     m.qmlFilePath = fi.fileName();
-    m.enabled = true;
-    m.visible = true;
 
     auto dropQuotes = [](const String& str) {
         if (str.size() < 3) {
@@ -105,7 +103,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
         return str.mid(1, str.size() - 2);
     };
 
-    int needProperties = 3; // title, description, pluginType
+    int needProperties = 5; // title, description, pluginType, category, thumbnail
     int propertiesFound = 0;
     String content = String::fromUtf8(data);
     size_t current, previous = 0;
@@ -127,6 +125,12 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
                 m.type = Type::Form;
             }
             ++propertiesFound;
+        } else if (line.startsWith(u"categoryCode:")) {
+            m.category = dropQuotes(line.mid(13).trimmed());
+            ++propertiesFound;
+        } else if (line.startsWith(u"thumbnailName:")) {
+            m.thumbnail = dropQuotes(line.mid(14).trimmed()).toStdString();
+            ++propertiesFound;
         }
 
         if (propertiesFound == needProperties) {
@@ -142,5 +146,8 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
 
 void ExtPluginsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) const
 {
+    if (!m.thumbnail.empty()) {
+        m.thumbnail = rootDirPath + "/" + m.thumbnail;
+    }
     m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
 }

@@ -31,35 +31,101 @@
 
 using namespace mu::extensions;
 
-const ManifestList& ExtensionsProvider::manifestList() const
+KnownCategories ExtensionsProvider::knownCategories() const
 {
-    if (m_manifests.empty()) {
-        ExtensionsLoader loader;
-        m_manifests = loader.loadManifesList(configuration()->defaultPath(),
-                                             configuration()->userPath());
+    static KnownCategories categories {
+        { "composing-arranging-tools", TranslatableString("plugins", "Composing/arranging tools") },
+        { "color-notes", TranslatableString("plugins", "Color notes") },
+        { "playback", TranslatableString("plugins", "Playback") },
+        { "lyrics", TranslatableString("plugins", "Lyrics") }
+    };
 
-        legacy::ExtPluginsLoader pluginsLoader;
-        ManifestList plugins = pluginsLoader.loadManifesList(configuration()->pluginsDefaultPath(),
-                                                             configuration()->pluginsUserPath());
+    return categories;
+}
 
-        mu::join(m_manifests, plugins);
+void ExtensionsProvider::reloadPlugins()
+{
+    ExtensionsLoader loader;
+    m_manifests = loader.loadManifesList(configuration()->defaultPath(),
+                                         configuration()->userPath());
+
+    legacy::ExtPluginsLoader pluginsLoader;
+    ManifestList plugins = pluginsLoader.loadManifesList(configuration()->pluginsDefaultPath(),
+                                                         configuration()->pluginsUserPath());
+
+    mu::join(m_manifests, plugins);
+
+    m_manifestListChanged.notify();
+}
+
+ManifestList ExtensionsProvider::manifestList(Filter filter) const
+{
+    if (filter == Filter::Enabled) {
+        ManifestList list;
+        for (const Manifest& m : m_manifests) {
+            if (m.config.enabled) {
+                list.push_back(m);
+            }
+        }
+        return list;
     }
+
     return m_manifests;
+}
+
+mu::async::Notification ExtensionsProvider::manifestListChanged() const
+{
+    return m_manifestListChanged;
 }
 
 const Manifest& ExtensionsProvider::manifest(const Uri& uri) const
 {
-    const ManifestList& list = manifestList();
-    auto it = std::find_if(list.begin(), list.end(), [uri](const Manifest& m) {
+    auto it = std::find_if(m_manifests.begin(), m_manifests.end(), [uri](const Manifest& m) {
         return m.uri == uri;
     });
 
-    if (it != list.end()) {
+    if (it != m_manifests.end()) {
         return *it;
     }
 
     static Manifest _dymmy;
     return _dymmy;
+}
+
+mu::async::Channel<Manifest> ExtensionsProvider::manifestChanged() const
+{
+    return m_manifestChanged;
+}
+
+mu::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
+{
+    for (Manifest& m : m_manifests) {
+        if (m.uri == uri) {
+            m.config.enabled = enable;
+            m_manifestChanged.send(m);
+
+            //! TODO Add save config
+            return make_ok();
+        }
+    }
+
+    return make_ret(Ret::Code::UnknownError);
+}
+
+mu::Ret ExtensionsProvider::perform(const Uri& uri)
+{
+    const Manifest& m = manifest(uri);
+    switch (m.type) {
+    case Type::Form:
+        return interactive()->open(uri).ret;
+        break;
+    case Type::Macros:
+        return run(uri);
+    default:
+        break;
+    }
+
+    return make_ret(Ret::Code::UnknownError);
 }
 
 mu::Ret ExtensionsProvider::run(const Uri& uri)

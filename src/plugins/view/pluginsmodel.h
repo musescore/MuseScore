@@ -29,8 +29,8 @@
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
-#include "ipluginsservice.h"
-#include "ipluginsconfiguration.h"
+#include "extensions/iextensionsconfiguration.h"
+#include "extensions/iextensionsprovider.h"
 
 namespace mu::plugins {
 class PluginsModel : public QAbstractListModel, public async::Asyncable
@@ -38,8 +38,8 @@ class PluginsModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(IInteractive, interactive)
-    INJECT(IPluginsService, service)
-    INJECT(IPluginsConfiguration, configuration)
+    INJECT(extensions::IExtensionsProvider, provider)
+    INJECT(extensions::IExtensionsConfiguration, configuration)
 
 public:
     explicit PluginsModel(QObject* parent = nullptr);
@@ -49,7 +49,7 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void setEnable(const QString& codeKey, bool enable);
+    Q_INVOKABLE void setEnable(const QString& uri, bool enable);
     Q_INVOKABLE void editShortcut(QString codeKey);
     Q_INVOKABLE void reloadPlugins();
 
@@ -70,11 +70,11 @@ private:
         rShortcuts
     };
 
-    void updatePlugin(const PluginInfo& plugin);
-    int itemIndexByCodeKey(const QString& codeKey) const;
+    void updatePlugin(const extensions::Manifest& plugin);
+    int itemIndexByCodeKey(const QString& uri) const;
 
     QHash<int, QByteArray> m_roles;
-    QList<PluginInfo> m_plugins;
+    extensions::ManifestList m_plugins;
 };
 }
 

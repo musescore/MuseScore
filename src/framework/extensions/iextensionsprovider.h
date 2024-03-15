@@ -25,6 +25,8 @@
 #include "modularity/imoduleinterface.h"
 
 #include "global/types/ret.h"
+#include "global/async/notification.h"
+#include "global/async/channel.h"
 
 #include "extensionstypes.h"
 
@@ -36,9 +38,19 @@ public:
 
     virtual ~IExtensionsProvider() = default;
 
-    virtual const ManifestList& manifestList() const = 0;
-    virtual const Manifest& manifest(const Uri& uri) const = 0;
+    virtual void reloadPlugins() = 0;
 
+    virtual ManifestList manifestList(Filter filter = Filter::All) const = 0;
+    virtual async::Notification manifestListChanged() const = 0;
+
+    virtual const Manifest& manifest(const Uri& uri) const = 0;
+    virtual async::Channel<Manifest> manifestChanged() const = 0;
+
+    virtual KnownCategories knownCategories() const = 0;
+
+    virtual Ret setEnable(const Uri& uri, bool enable) = 0;
+
+    virtual Ret perform(const Uri& uri) = 0;
     virtual Ret run(const Uri& uri) = 0;
 };
 }

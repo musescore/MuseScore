@@ -32,11 +32,7 @@ using namespace mu;
 using namespace mu::plugins;
 using namespace mu::ui;
 using namespace mu::actions;
-
-PluginsUiActions::PluginsUiActions(std::shared_ptr<PluginsService> service)
-    : m_service(service)
-{
-}
+using namespace mu::extensions;
 
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
@@ -50,12 +46,12 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
 {
     UiActionList result;
 
-    for (const PluginInfo& plugin : values(m_service->plugins().val)) {
+    for (const Manifest& m : provider()->manifestList()) {
         UiAction action;
-        action.code = codeFromQString(plugin.codeKey);
-        action.uiCtx = plugin.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
-        action.scCtx = plugin.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
-        action.description = TranslatableString("plugins", "Run plugin %1").arg(plugin.codeKey);
+        action.code = m.uri.toString();
+        action.uiCtx = m.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
+        action.scCtx = m.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
+        action.description = TranslatableString("plugins", "Run plugin %1").arg(m.title);
         action.title = action.description;
 
         result.push_back(action);

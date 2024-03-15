@@ -22,13 +22,13 @@
 
 #include "pluginsmodel.h"
 
-#include "containers.h"
 #include "translation.h"
-#include "log.h"
-
 #include "shortcuts/shortcutstypes.h"
 
+#include "log.h"
+
 using namespace mu::plugins;
+using namespace mu::extensions;
 using namespace mu::async;
 
 static constexpr int INVALID_INDEX = -1;
@@ -49,23 +49,19 @@ PluginsModel::PluginsModel(QObject* parent)
 void PluginsModel::load()
 {
     beginResetModel();
-    m_plugins.clear();
 
-    RetVal<PluginInfoMap> plugins = service()->plugins();
-    if (!plugins.ret) {
-        LOGE() << plugins.ret.toString();
+    m_plugins = provider()->manifestList();
+    if (m_plugins.empty()) {
+        LOGE() << "Not found plugins";
+        return;
     }
 
-    for (const PluginInfo& plugin : values(plugins.val)) {
-        m_plugins << plugin;
-    }
-
-    std::sort(m_plugins.begin(), m_plugins.end(), [](const PluginInfo& l, const PluginInfo& r) {
-        return l.name < r.name;
+    std::sort(m_plugins.begin(), m_plugins.end(), [](const Manifest& l, const Manifest& r) {
+        return l.title < r.title;
     });
 
-    Channel<PluginInfo> pluginChanged = service()->pluginChanged();
-    pluginChanged.onReceive(this, [this](const PluginInfo& plugin) {
+    Channel<Manifest> manifestChanged = provider()->manifestChanged();
+    manifestChanged.onReceive(this, [this](const Manifest& plugin) {
         updatePlugin(plugin);
     });
 
@@ -78,30 +74,30 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    PluginInfo plugin = m_plugins[index.row()];
+    Manifest plugin = m_plugins.at(index.row());
 
     switch (role) {
     case rCode:
-        return plugin.codeKey;
+        return QString::fromStdString(plugin.uri.toString());
     case rName:
-        return plugin.name;
+        return plugin.title.toQString();
     case rDescription:
-        return plugin.description;
+        return plugin.description.toQString();
     case rThumbnailUrl:
-        if (plugin.thumbnailUrl.isEmpty()) {
+        if (plugin.thumbnail.empty()) {
             return "qrc:/qml/MuseScore/Plugins/internal/resources/placeholder.png";
         }
 
-        return plugin.thumbnailUrl;
+        return QUrl::fromLocalFile(plugin.thumbnail.toQString());
     case rEnabled:
-        return plugin.enabled;
+        return plugin.config.enabled;
     case rCategory:
-        return plugin.categoryCode;
+        return plugin.category.toQString();
     case rVersion:
-        return plugin.version.toString();
+        return plugin.version.toQString();
     case rShortcuts:
-        if (!plugin.shortcuts.empty()) {
-            return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.shortcuts));
+        if (!plugin.config.shortcuts.empty()) {
+            return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.config.shortcuts));
         }
 
         //: No keyboard shortcut is assigned to this plugin.
@@ -113,7 +109,7 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
 
 int PluginsModel::rowCount(const QModelIndex&) const
 {
-    return m_plugins.count();
+    return static_cast<int>(m_plugins.size());
 }
 
 QHash<int, QByteArray> PluginsModel::roleNames() const
@@ -121,9 +117,9 @@ QHash<int, QByteArray> PluginsModel::roleNames() const
     return m_roles;
 }
 
-void PluginsModel::setEnable(const QString& codeKey, bool enable)
+void PluginsModel::setEnable(const QString& uri, bool enable)
 {
-    Ret ret = service()->setEnable(codeKey, enable);
+    Ret ret = provider()->setEnable(Uri(uri.toStdString()), enable);
     emit finished();
 
     if (!ret) {
@@ -154,14 +150,14 @@ void PluginsModel::editShortcut(QString codeKey)
 
 void PluginsModel::reloadPlugins()
 {
-    service()->reloadPlugins();
+    provider()->reloadPlugins();
 }
 
 QVariantList PluginsModel::categories() const
 {
     QVariantList result;
 
-    for (const auto& category: service()->categories()) {
+    for (const auto& category : provider()->knownCategories()) {
         QVariantMap obj;
         obj["code"] = QString::fromStdString(category.first);
         obj["title"] = category.second.qTranslated();
@@ -172,26 +168,27 @@ QVariantList PluginsModel::categories() const
     return result;
 }
 
-void PluginsModel::updatePlugin(const PluginInfo& plugin)
+void PluginsModel::updatePlugin(const Manifest& plugin)
 {
-    for (int i = 0; i < m_plugins.count(); ++i) {
-        if (m_plugins[i].codeKey == plugin.codeKey) {
-            PluginInfo tmp = m_plugins[i];
+    for (size_t i = 0; i < m_plugins.size(); ++i) {
+        if (m_plugins.at(i).uri == plugin.uri) {
+            Manifest tmp = m_plugins.at(i);
             m_plugins[i] = plugin;
-            m_plugins[i].thumbnailUrl = tmp.thumbnailUrl;
-            m_plugins[i].categoryCode = tmp.categoryCode;
-            QModelIndex index = createIndex(i, 0);
+            m_plugins[i].thumbnail = tmp.thumbnail;
+            m_plugins[i].category = tmp.category;
+            QModelIndex index = createIndex(int(i), 0);
             emit dataChanged(index, index);
             return;
         }
     }
 }
 
-int PluginsModel::itemIndexByCodeKey(const QString& codeKey) const
+int PluginsModel::itemIndexByCodeKey(const QString& uri_) const
 {
-    for (int i = 0; i < m_plugins.count(); ++i) {
-        if (m_plugins[i].codeKey == codeKey) {
-            return i;
+    Uri uri(uri_.toStdString());
+    for (size_t i = 0; i < m_plugins.size(); ++i) {
+        if (m_plugins[i].uri == uri) {
+            return static_cast<int>(i);
         }
     }
 

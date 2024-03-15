@@ -47,6 +47,13 @@ public:
 
     inline bool operator==(const Uri& uri) const { return m_path == uri.m_path && m_scheme == uri.m_scheme; }
     inline bool operator!=(const Uri& uri) const { return !(*this == uri); }
+    inline bool operator <(const Uri& uri) const
+    {
+        if (m_scheme != uri.m_scheme) {
+            return m_scheme < uri.m_scheme;
+        }
+        return m_path < uri.m_path;
+    }
 
     std::string toString() const;
 

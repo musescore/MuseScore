@@ -25,13 +25,16 @@
 #include "async/asyncable.h"
 #include "ui/iuiactionsmodule.h"
 
-#include "pluginsservice.h"
+#include "modularity/ioc.h"
+#include "extensions/iextensionsprovider.h"
 
 namespace mu::plugins {
 class PluginsUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
+    Inject<extensions::IExtensionsProvider> provider;
+
 public:
-    PluginsUiActions(std::shared_ptr<PluginsService> service);
+    PluginsUiActions() = default;
 
     const ui::UiActionList& actionsList() const override;
 
@@ -43,8 +46,6 @@ public:
 
 private:
     mutable ui::UiActionList m_actions;
-
-    std::shared_ptr<PluginsService> m_service;
 };
 }
 
