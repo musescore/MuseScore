@@ -39,6 +39,7 @@ enum class CrossMeasure : signed char {
 };
 
 class Articulation;
+class BeamBase;
 class Lyrics;
 class Measure;
 class Score;
@@ -196,6 +197,8 @@ public:
 
     TabDurationSymbol* tabDur() const { return m_tabDur; }
     void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
+
+    bool isBelowCrossBeam(const BeamBase* beamBase) const;
 
     struct LayoutData : public DurationElement::LayoutData {
         ld_field<bool> up = { "[ChordRest] up", true }; // actual stem direction

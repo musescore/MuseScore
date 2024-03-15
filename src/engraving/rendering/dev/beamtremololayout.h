@@ -92,7 +92,7 @@ private:
                                  int interval, int middleLine, bool Flat);
     static bool noSlope(const Beam* beam);
     static int strokeCount(const BeamBase::LayoutData* ldata, ChordRest* cr);
-    static bool calculateAnchorsCross(BeamBase::LayoutData* ldata, const LayoutConfiguration& conf);
+    static bool calculateAnchorsCross(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutConfiguration& conf);
     static bool computeTremoloUp(const BeamBase::LayoutData* ldata);
 };
 } // namespace mu::engraving

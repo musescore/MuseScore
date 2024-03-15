@@ -679,8 +679,9 @@ void TWrite::write(const Beam* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::BEAM_NO_SLOPE);
     writeProperty(item, xml, Pid::GROW_LEFT);
     writeProperty(item, xml, Pid::GROW_RIGHT);
+    writeProperty(item, xml, Pid::BEAM_CROSS_STAFF_MOVE);
 
-    int idx = (item->beamDirection() == DirectionV::AUTO || item->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+    int idx = item->directionIdx();
     if (item->userModified()) {
         double _spatium = item->spatium();
         for (BeamFragment* f : item->beamFragments()) {

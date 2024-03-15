@@ -520,9 +520,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
     layoutSystemElements(system, ctx);
     SystemLayout::layout2(system, ctx);     // compute staff distances
-    for (MeasureBase* mb : system->measures()) {
-        MeasureLayout::layoutCrossStaff(mb, ctx);
-    }
+
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
     // but, lc might be used elsewhere so we need to be careful
@@ -1650,7 +1648,11 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
         if (!mb->isMeasure()) {
             continue;
         }
+        bool somethingChanged = false;
         for (Segment& seg : toMeasure(mb)->segments()) {
+            if (!seg.isChordRestType()) {
+                continue;
+            }
             for (EngravingItem* e : seg.elist()) {
                 if (!e || !e->isChord()) {
                     continue;
@@ -1658,11 +1660,13 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                 Chord* chord = toChord(e);
                 if (chord->beam() && (chord->beam()->cross() || chord->beam()->userModified())) {
                     bool prevUp = chord->up();
+                    Stem* stem = chord->stem();
+                    double prevStemLength = stem ? stem->length() : 0.0;
                     ChordLayout::computeUp(chord, ctx);
-                    if (chord->up() != prevUp) {
+                    if (chord->up() != prevUp || (stem && stem->length() != prevStemLength)) {
                         // If the chord has changed direction needs to be re-laid out
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
-                        seg.createShape(chord->vStaffIdx());
+                        somethingChanged = true;
                     }
                 } else if (chord->tremoloTwoChord()) {
                     TremoloTwoChord* t = chord->tremoloTwoChord();
@@ -1673,10 +1677,13 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                         ChordLayout::computeUp(chord, ctx);
                         if (chord->up() != prevUp) {
                             ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
-                            seg.createShape(chord->vStaffIdx());
+                            somethingChanged = true;
                         }
                     }
                 }
+            }
+            if (somethingChanged) {
+                seg.createShapes();
             }
         }
     }
@@ -2306,6 +2313,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             }
             dist = std::max(dist, d + minVerticalDistance);
         }
+        dist = std::max(dist, minVertSpaceForCrossStaffBeams(system, si1, si2));
         ss->setYOff(yOffset);
         ss->setbbox(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
         ss->saveLayout();
@@ -2351,6 +2359,59 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             }
         }
     }
+}
+
+double SystemLayout::minVertSpaceForCrossStaffBeams(System* system, staff_idx_t staffIdx1, staff_idx_t staffIdx2)
+{
+    double minSpace = -DBL_MAX;
+    track_idx_t startTrack = staffIdx1 * VOICES;
+    track_idx_t endTrack = staffIdx2 * VOICES + VOICES;
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        for (Segment& segment : toMeasure(mb)->segments()) {
+            if (!segment.isChordRestType()) {
+                continue;
+            }
+            for (track_idx_t track = startTrack; track < endTrack; ++track) {
+                EngravingItem* item = segment.elementAt(track);
+                if (!item || !item->isChord()) {
+                    continue;
+                }
+                Beam* beam = toChord(item)->beam();
+                if (!beam || !beam->cross() || !beam->autoplace() || beam->elements().front() != item) {
+                    continue;
+                }
+                Note* highestOfBottomStaff = nullptr;
+                Note* lowestOfTopStaff = nullptr;
+                for (ChordRest* cr : beam->elements()) {
+                    if (!cr->isChord()) {
+                        continue;
+                    }
+                    Chord* chord = toChord(cr);
+                    bool isUnderCrossBeam = cr->isBelowCrossBeam(beam);
+                    if (isUnderCrossBeam && chord->vStaffIdx() == staffIdx2) {
+                        if (!highestOfBottomStaff || chord->upNote()->line() < highestOfBottomStaff->line()) {
+                            highestOfBottomStaff = chord->upNote();
+                        }
+                    } else if (!isUnderCrossBeam && chord->vStaffIdx() == staffIdx1) {
+                        if (!lowestOfTopStaff || chord->downNote()->line() > lowestOfTopStaff->line()) {
+                            lowestOfTopStaff = chord->downNote();
+                        }
+                    }
+                }
+                if (!highestOfBottomStaff || !lowestOfTopStaff) {
+                    continue;
+                }
+                double bottomYOfTopStaff = lowestOfTopStaff->y() + lowestOfTopStaff->chord()->minStemLength();
+                double topYofBottomStaff = highestOfBottomStaff->y() - highestOfBottomStaff->chord()->minStemLength();
+                minSpace = std::max(minSpace, bottomYOfTopStaff - topYofBottomStaff);
+            }
+        }
+    }
+
+    return minSpace;
 }
 
 void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)

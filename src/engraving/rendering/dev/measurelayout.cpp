@@ -132,8 +132,6 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
             }
         }
     }
-
-    MeasureLayout::layoutCrossStaff(item, ctx);
 }
 
 static const std::unordered_set<ElementType> BREAK_TYPES {
@@ -1299,56 +1297,6 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 // for end barlines, x position was set in createEndBarLines
                 if (s.segmentType() != SegmentType::EndBarLine) {
                     e->mutldata()->setPosX(0.0);
-                }
-            }
-        }
-    }
-}
-
-//---------------------------------------------------
-//    layoutCrossStaff()
-//    layout all elements that require knowledge of staff
-//    distances (determined in System::layout2), such as cross-staff beams
-//---------------------------------------------------
-void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
-{
-    if (!mb->isMeasure()) {
-        return;
-    }
-
-    Measure* m = toMeasure(mb);
-    if (!m) {
-        return;
-    }
-
-    for (Segment& s : m->segments()) {
-        if (!s.enabled()) {
-            continue;
-        }
-        for (EngravingItem* e : s.elist()) {
-            if (!e) {
-                continue;
-            }
-            if (e->isChord()) {
-                Chord* c = toChord(e);
-                Beam* beam = c->beam();
-                TremoloTwoChord* tremolo = c->tremoloTwoChord();
-                if ((beam && (beam->cross() || beam->userModified()))
-                    || (tremolo && tremolo->userModified())) {
-                    bool prevUp = c->up();
-                    ChordLayout::computeUp(c, ctx); // for cross-staff beams
-                    if (c->up() != prevUp) {
-                        // Chord has changed direction, lay out again
-                        ChordLayout::layoutChords1(ctx, &s, c->vStaffIdx());
-                        s.createShape(c->vStaffIdx());
-                    }
-                }
-                if (!c->graceNotes().empty()) {
-                    for (Chord* grace : c->graceNotes()) {
-                        if (grace->beam() && (grace->beam()->cross() || grace->beam()->userModified())) {
-                            ChordLayout::computeUp(grace, ctx); // for cross-staff beams
-                        }
-                    }
                 }
             }
         }

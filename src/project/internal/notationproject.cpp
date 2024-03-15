@@ -34,9 +34,11 @@
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
+#include "engraving/compat/engravingcompat.h"
 #include "engraving/infrastructure/mscio.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/style/defaultstyle.h"
+#include "engraving/rendering/dev/beamlayout.h"
 
 #include "iprojectautosaver.h"
 #include "notation/notationerrors.h"
@@ -194,6 +196,8 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     masterScore->lockUpdates(false);
     masterScore->setLayoutAll();
     masterScore->update();
+
+    mu::engraving::compat::EngravingCompat::doPostLayoutCompatIfNeeded(m_engravingProject->masterScore());
 
     // Load audio settings
     bool tryCompatAudio = false;

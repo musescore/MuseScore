@@ -31,4 +31,72 @@ BeamBase::BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags 
 BeamBase::BeamBase(const BeamBase& b)
     : EngravingItem(b)
 {
+    _crossStaffMove = b._crossStaffMove;
+}
+
+void BeamBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
+{
+    if (id == Pid::BEAM_CROSS_STAFF_MOVE) {
+        if (!acceptCrossStaffMove(v.toInt())) {
+            return;
+        }
+        undoResetProperty(Pid::USER_MODIFIED);
+        undoResetProperty(Pid::BEAM_POS);
+    }
+    EngravingItem::undoChangeProperty(id, v, ps);
+}
+
+PropertyValue BeamBase::getProperty(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::BEAM_CROSS_STAFF_MOVE:
+        return crossStaffMove();
+    default:
+        return EngravingItem::getProperty(propertyId);
+    }
+}
+
+bool BeamBase::setProperty(Pid propertyId, const PropertyValue& v)
+{
+    switch (propertyId) {
+    case Pid::BEAM_CROSS_STAFF_MOVE:
+        setCrossStaffMove(v.toInt());
+        break;
+    default:
+        if (!EngravingItem::setProperty(propertyId, v)) {
+            return false;
+        }
+        break;
+    }
+
+    triggerLayout();
+    setGenerated(false);
+    return true;
+}
+
+PropertyValue BeamBase::propertyDefault(Pid propertyId) const
+{
+    switch (propertyId) {
+    case Pid::BEAM_CROSS_STAFF_MOVE:
+        return 0;
+    default:
+        return EngravingItem::propertyDefault(propertyId);
+    }
+}
+
+int BeamBase::crossStaffIdx() const
+{
+    return defaultCrossStaffIdx() + _crossStaffMove;
+}
+
+int BeamBase::defaultCrossStaffIdx() const
+{
+    double average = 0.5 * (static_cast<double>(minCRMove()) + static_cast<double>(maxCRMove()));
+    return std::ceil(average);
+}
+
+bool BeamBase::acceptCrossStaffMove(int move) const
+{
+    int newCrossStaffIdx = defaultCrossStaffIdx() + move;
+    return newCrossStaffIdx >= minCRMove() && newCrossStaffIdx <= maxCRMove() + 1;
 }

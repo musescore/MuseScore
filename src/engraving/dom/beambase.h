@@ -38,7 +38,24 @@ class BeamBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BeamBase)
     DECLARE_CLASSOF(ElementType::INVALID) // dummy
+
+    M_PROPERTY2(int, crossStaffMove, setCrossStaffMove, 0)
+
 public:
+
+    virtual int maxCRMove() const = 0;
+    virtual int minCRMove() const = 0;
+
+    virtual PropertyValue getProperty(Pid propertyId) const override;
+    virtual bool setProperty(Pid propertyId, const PropertyValue&) override;
+    virtual PropertyValue propertyDefault(Pid propertyId) const override;
+
+    int crossStaffIdx() const;
+
+    bool up() const { return m_up; }
+    void setUp(bool v) { m_up = v; }
+
+    void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps = PropertyFlags::NOSTYLE) override;
 
     struct LayoutData : public EngravingItem::LayoutData {
         BeamType beamType = BeamType::INVALID;
@@ -67,6 +84,12 @@ public:
 protected:
     BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags = ElementFlag::NOTHING);
     BeamBase(const BeamBase&);
+
+    bool m_up = true;
+
+private:
+    int defaultCrossStaffIdx() const;
+    bool acceptCrossStaffMove(int move) const;
 };
 }
 

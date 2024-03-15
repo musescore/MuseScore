@@ -572,6 +572,16 @@ void TremoloTwoChord::clearBeamSegments()
     m_beamSegments.clear();
 }
 
+int TremoloTwoChord::maxCRMove() const
+{
+    return std::max(m_chord1->staffMove(), m_chord2->staffMove());
+}
+
+int TremoloTwoChord::minCRMove() const
+{
+    return std::min(m_chord1->staffMove(), m_chord2->staffMove());
+}
+
 // used for palettes
 PainterPath TremoloTwoChord::basePath(double stretch) const
 {

@@ -34,6 +34,7 @@
 
 using namespace mu;
 using namespace mu::project;
+using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");

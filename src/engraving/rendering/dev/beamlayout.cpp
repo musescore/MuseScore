@@ -200,8 +200,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
             Chord* chord = toChord(cr);
             staffIdx = chord->vStaffIdx();
             int i = chord->staffMove();
-            item->setMinMove(std::min(item->minMove(), i));
-            item->setMaxMove(std::max(item->maxMove(), i));
+            item->setMinMove(std::min(item->minCRMove(), i));
+            item->setMaxMove(std::max(item->maxCRMove(), i));
 
             for (int distance : chord->noteDistances()) {
                 item->notes().push_back(distance);
@@ -212,6 +212,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     std::sort(item->notes().begin(), item->notes().end());
     ldata->setMag(mag);
 
+    item->setCross(item->minCRMove() != item->maxCRMove());
+
     //
     // determine beam stem direction
     //
@@ -221,11 +223,12 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     ChordRest* firstNote = item->elements().front();
     Measure* measure = firstNote->measure();
     bool hasMultipleVoices = measure->hasVoices(firstNote->staffIdx(), item->tick(), item->ticks());
-    if (item->beamDirection() != DirectionV::AUTO) {
+    if (computeUpForMovedCross(item)) {
+    } else if (item->beamDirection() != DirectionV::AUTO) {
         item->setUp(item->beamDirection() == DirectionV::UP);
-    } else if (item->maxMove() > 0) {
+    } else if (item->maxCRMove() > 0) {
         item->setUp(false);
-    } else if (item->minMove() < 0) {
+    } else if (item->minCRMove() < 0) {
         item->setUp(true);
     } else if (item->isGrace()) {
         if (hasMultipleVoices) {
@@ -254,13 +257,12 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
         item->notes()[i] += middleStaffLine;
     }
 
-    item->setCross(item->minMove() != item->maxMove());
     bool isEntirelyMoved = false;
-    if (item->minMove() == item->maxMove() && item->minMove() != 0) {
+    if (item->minCRMove() == item->maxCRMove() && item->minCRMove() != 0) {
         isEntirelyMoved = true;
         item->setStaffIdx(staffIdx);
         if (item->beamDirection() == DirectionV::AUTO) {
-            item->setUp(item->maxMove() > 0);
+            item->setUp(item->maxCRMove() > 0);
         }
     } else if (item->elements().size()) {
         item->setStaffIdx(item->elements().at(0)->staffIdx());
@@ -270,21 +272,13 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     item->setSlope(0.0);
 
     for (ChordRest* cr : item->elements()) {
-        const bool staffMove = cr->isChord() ? toChord(cr)->staffMove() : false;
-        if (!item->cross() || !staffMove) {
-            if (cr->up() != item->up()) {
-                bool prevChordUpValue = cr->up();
-                bool newChordUpValue = isEntirelyMoved ? item->up() : (item->up() != staffMove);
-                cr->setUp(newChordUpValue);
-                if (cr->isChord()) {
-                    if (newChordUpValue != prevChordUpValue && !toChord(cr)->isGrace()) {
-                        // A change in stem direction may require to recompute note positions
-                        ChordLayout::layoutChords1(ctx, cr->segment(), cr->staffIdx());
-                        cr->segment()->createShape(cr->staffIdx());
-                    } else {
-                        ChordLayout::layoutStem(toChord(cr), ctx);
-                    }
-                }
+        bool prevUp = cr->up();
+        ChordLayout::computeUp(cr, ctx);
+        if (cr->isChord() && cr->up() != prevUp) {
+            ChordLayout::layoutChords1(ctx, cr->segment(), cr->staffIdx());
+            cr->segment()->createShape(cr->staffIdx());
+            if (toChord(cr)->isGrace()) {
+                ChordLayout::layoutStem(toChord(cr), ctx);
             }
         }
     }
@@ -327,7 +321,7 @@ void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector
         item->setBeamWidth(item->beamWidth() * ctx.conf().styleD(Sid::graceNoteMag));
     }
 
-    int fragmentIndex = (item->beamDirection() == DirectionV::AUTO || item->beamDirection() == DirectionV::DOWN) ? 0 : 1;
+    int fragmentIndex = item->directionIdx();
     if (item->userModified()) {
         BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
         double startY = item->beamFragments()[frag]->py1[fragmentIndex];
@@ -947,6 +941,47 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     TLayout::layoutBeam(beam, ctx);
 }
 
+void BeamLayout::checkCrossPosAndStemConsistency(Beam* beam, LayoutContext& ctx)
+{
+    if (!beam->cross() || !beam->userModified()) {
+        return;
+    }
+
+    int correctCrossStaffIdx = 0;
+    bool inconsistencyFound = false;
+
+    for (ChordRest* cr : beam->elements()) {
+        if (!cr->isChord()) {
+            continue;
+        }
+        Chord* chord = toChord(cr);
+        bool currentUp = chord->up();
+        bool actualUp = ChordLayout::isChordPosBelowBeam(chord, beam);
+        if (actualUp != currentUp) {
+            inconsistencyFound = true;
+            chord->setUp(actualUp);
+            ChordLayout::layoutChords1(ctx, chord->segment(), chord->staffIdx());
+        }
+        if (actualUp) {
+            correctCrossStaffIdx = std::min(correctCrossStaffIdx, chord->staffMove());
+        } else {
+            correctCrossStaffIdx = std::max(correctCrossStaffIdx, chord->staffMove() + 1);
+        }
+    }
+
+    int beamCrossStaffIdx = beam->crossStaffIdx();
+    if (beamCrossStaffIdx != correctCrossStaffIdx) {
+        inconsistencyFound = true;
+        int curCrossStaffMove = beam->crossStaffMove();
+        int diff = correctCrossStaffIdx - beamCrossStaffIdx;
+        beam->setProperty(Pid::BEAM_CROSS_STAFF_MOVE, curCrossStaffMove + diff);
+    }
+
+    if (inconsistencyFound) {
+        BeamLayout::layout(beam, ctx);
+    }
+}
+
 void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)
 {
     item->clearBeamSegments();
@@ -1373,228 +1408,32 @@ void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, Chor
     item->beamSegments().push_back(b);
 }
 
-bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, int frag)
+bool BeamLayout::computeUpForMovedCross(Beam* item)
 {
-    int fragmentIndex = (item->beamDirection() == DirectionV::AUTO || item->beamDirection() == DirectionV::DOWN) ? 0 : 1;
-    ChordRest* startCr = item->elements().front();
-    ChordRest* endCr = item->elements().back();
-
-    const double quarterSpace = item->spatium() / 4;
-    // imagine a line of beamed notes all in a row on the same staff. the first and last of those
-    // are the 'outside' notes, and the slant of the beam is going to be affected by the 'middle' notes
-    // between them.
-    // we have to keep track of this for both staves.
-    Chord* topFirst = nullptr;
-    Chord* topLast = nullptr;
-    Chord* bottomFirst = nullptr;
-    Chord* bottomLast = nullptr;
-    int maxMiddleTopLine = std::numeric_limits<int>::min(); // lowest note in the top staff
-    int minMiddleBottomLine = std::numeric_limits<int>::max(); // highest note in the bottom staff
-    int prevTopLine = maxMiddleTopLine; // previous note's line position (top)
-    int prevBottomLine = minMiddleBottomLine; // previous note's line position (bottom)
-    // if the immediate neighbor of one of the two 'outside' notes on either the top or bottom
-    // are the same as that outside note, we need to record it so that we can add a 1/4 space slant.
-    bool secondTopIsSame = false;
-    bool secondBottomIsSame = false;
-    bool penultimateTopIsSame = false;
-    bool penultimateBottomIsSame = false;
-    double maxY = std::numeric_limits<double>::max();
-    double minY = std::numeric_limits<double>::min();
-    int otherStaff = 0;
-    // recompute _minMove and _maxMove as they may have shifted since last layout
-    item->setMinMove(std::numeric_limits<int>::max());
-    item->setMaxMove(std::numeric_limits<int>::min());
-    for (ChordRest* c : chordRests) {
-        IF_ASSERT_FAILED(c) {
-            continue;
-        }
-        int staffMove = c->staffMove();
-        item->setMinMove(std::min(item->minMove(), staffMove));
-        item->setMaxMove(std::max(item->maxMove(), staffMove));
-
-        if (staffMove != 0) {
-            otherStaff = staffMove;
-        }
-    }
-    if (otherStaff == 0 || item->minMove() == item->maxMove()) {
+    if (!item->cross()) {
         return false;
     }
-    // Find the notes on the top and bottom of staves
-    //
-    bool checkNextTop = false;
-    bool checkNextBottom = false;
-    for (ChordRest* cr : chordRests) {
-        if (!cr->isChord()) {
-            continue;
-        }
-        Chord* c = toChord(cr);
-        if ((c->staffMove() == otherStaff && otherStaff > 0) || (c->staffMove() != otherStaff && otherStaff < 0)) {
-            // this chord is on the bottom staff
-            if (penultimateBottomIsSame) {
-                // the chord we took as the penultimate bottom note wasn't.
-                // so treat it properly as a middle note
-                minMiddleBottomLine = std::min(minMiddleBottomLine, prevBottomLine);
-                penultimateBottomIsSame = false;
-            }
-            checkNextTop = false; // we are no longer looking for the second note in the top
-                                  // staff being the same as the first--this note is on the bottom.
-            if (!bottomFirst) {
-                bottomFirst = c;
-                checkNextBottom = true; // this was the first bottom note, so check for second next time
-            } else {
-                penultimateBottomIsSame = prevBottomLine == c->line();
-                if (!penultimateBottomIsSame) {
-                    minMiddleBottomLine = std::min(minMiddleBottomLine, prevBottomLine);
-                }
-                if (checkNextBottom) {
-                    // this is the second bottom note, so we should see if this one is same line as first
-                    secondBottomIsSame = c->line() == bottomFirst->line();
-                    checkNextBottom = false;
-                } else {
-                    prevBottomLine = c->line();
-                }
-                bottomLast = c;
-            }
-            maxY = std::min(maxY, BeamTremoloLayout::chordBeamAnchorY(item->ldata(), toChord(c)));
+    bool isAboveAllChords = true;
+    bool isBelowAllChords = true;
+    for (ChordRest* cr : item->elements()) {
+        if (cr->isBelowCrossBeam(item)) {
+            isBelowAllChords = false;
         } else {
-            // this chord is on the top staff
-            if (penultimateTopIsSame) {
-                // the chord we took as the penultimate top note wasn't.
-                // so treat it properly as a middle note
-                maxMiddleTopLine = std::max(maxMiddleTopLine, prevTopLine);
-                penultimateTopIsSame = false;
-            }
-            checkNextBottom = false; // no longer looking for a bottom second note since this is on top
-            if (!topFirst) {
-                topFirst = c;
-                checkNextTop = true;
-            } else {
-                penultimateTopIsSame = prevTopLine == c->line();
-                if (!penultimateTopIsSame) {
-                    maxMiddleTopLine = std::max(maxMiddleTopLine, prevTopLine);
-                }
-                if (checkNextTop) {
-                    secondTopIsSame = c->line() == topFirst->line();
-                    checkNextTop = false;
-                } else {
-                    prevTopLine = c->line();
-                }
-                topLast = c;
-            }
-            minY = std::max(minY, BeamTremoloLayout::chordBeamAnchorY(item->ldata(), toChord(c)));
+            isAboveAllChords = false;
         }
     }
-    item->startAnchor().ry() = (maxY + minY) / 2;
-    item->endAnchor().ry() = (maxY + minY) / 2;
-    item->setSlope(0);
 
-    if (!item->noSlope()) {
-        int topFirstLine = topFirst ? topFirst->downNote()->line() : 0;
-        int topLastLine = topLast ? topLast->downNote()->line() : 0;
-        int bottomFirstLine = bottomFirst ? bottomFirst->upNote()->line() : 0;
-        int bottomLastLine = bottomLast ? bottomLast->upNote()->line() : 0;
-        bool constrainTopToQuarter = false;
-        bool constrainBottomToQuarter = false;
-        if ((topFirstLine > topLastLine && secondTopIsSame)
-            || (topFirstLine < topLastLine && penultimateTopIsSame)) {
-            constrainTopToQuarter = true;
-        }
-        if ((bottomFirstLine < bottomLastLine && secondBottomIsSame)
-            || (bottomFirstLine > bottomLastLine && penultimateBottomIsSame)) {
-            constrainBottomToQuarter = true;
-        }
-        if (!topLast && !bottomLast && topFirst && bottomFirst) {
-            // if there are only two notes, one on each staff, special case
-            // take max slope into account
-            double yFirst, yLast;
-            if (topFirst->tick() < bottomFirst->tick()) {
-                yFirst = topFirst->stemPos().y();
-                yLast = bottomFirst->stemPos().y();
-            } else {
-                yFirst = bottomFirst->stemPos().y();
-                yLast = topFirst->stemPos().y();
-            }
-            int desiredSlant = round((yFirst - yLast) / item->spatium());
-            int slant = std::min(std::abs(desiredSlant), BeamTremoloLayout::getMaxSlope(item->ldata()));
-            slant *= (desiredSlant < 0) ? -quarterSpace : quarterSpace;
-            item->startAnchor().ry() += (slant / 2);
-            item->endAnchor().ry() -= (slant / 2);
-        } else if (!topLast || !bottomLast) {
-            // otherwise, if there is only one note on one of the staves, use slope from other staff
-            int startNote = 0;
-            int endNote = 0;
-            bool forceHoriz = false;
-            if (!topLast) {
-                startNote = bottomFirstLine;
-                endNote = bottomLastLine;
-                if (minMiddleBottomLine <= std::min(startNote, endNote)) {
-                    // there is a note closer to the beam than the start and end notes
-                    // we force horizontal beam here.
-                    forceHoriz = true;
-                }
-            } else if (!bottomLast) {
-                startNote = topFirstLine;
-                endNote = topLastLine;
-                if (maxMiddleTopLine >= std::max(startNote, endNote)) {
-                    // same as above, for the top staff
-                    // force horizontal.
-                    forceHoriz = true;
-                }
-            }
-
-            if (!forceHoriz) {
-                int slant = startNote - endNote;
-                slant = std::min(std::abs(slant), BeamTremoloLayout::getMaxSlope(item->ldata()));
-                if ((!bottomLast && constrainTopToQuarter) || (!topLast && constrainBottomToQuarter)) {
-                    slant = 1;
-                }
-                double slope = slant * (startNote > endNote ? quarterSpace : -quarterSpace);
-                item->startAnchor().ry() += (slope / 2);
-                item->endAnchor().ry() -= (slope / 2);
-            } // otherwise, do nothing, beam is already horizontal.
-        } else {
-            // otherwise, there are at least two notes on each staff
-            // (that is, topLast and bottomLast are both set)
-            bool forceHoriz = false;
-            if (topFirstLine == topLastLine || bottomFirstLine == bottomLastLine) {
-                // if outside notes on top or bottom staff are on the same staff line, slope = 0
-                // no further adjustment needed, the beam is already well-placed and horizontal
-                forceHoriz = true;
-            }
-            // otherwise, we have to compare the slopes from the top staff and bottom staff.
-            int topSlant = topFirstLine - topLastLine;
-            if (constrainTopToQuarter && topSlant != 0) {
-                topSlant = topFirstLine < topLastLine ? -1 : 1;
-            }
-            int bottomSlant = bottomFirstLine - bottomLastLine;
-            if (constrainBottomToQuarter && bottomSlant != 0) {
-                bottomSlant = bottomFirstLine < bottomLastLine ? -1 : 1;
-            }
-            if ((maxMiddleTopLine >= std::max(topFirstLine, topLastLine)
-                 || (minMiddleBottomLine <= std::min(bottomFirstLine, bottomLastLine)))) {
-                forceHoriz = true;
-            }
-            if (topSlant == 0 || bottomSlant == 0 || forceHoriz) {
-                // if one of the slants is 0, the whole slant is zero
-            } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
-                int slant = (std::abs(topSlant) < std::abs(bottomSlant)) ? topSlant : bottomSlant;
-                slant = std::min(std::abs(slant), BeamTremoloLayout::getMaxSlope(item->ldata()));
-                double slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
-                item->startAnchor().ry() += (slope / 2);
-                item->endAnchor().ry() -= (slope / 2);
-            } else {
-                // if the two slopes are in opposite directions, flat!
-                // nothing needs to be done, the beam is already horizontal and placed nicely
-            }
-        }
-        item->startAnchor().setX(BeamTremoloLayout::chordBeamAnchorX(item->ldata(), startCr, ChordBeamAnchorType::Start));
-        item->endAnchor().setX(BeamTremoloLayout::chordBeamAnchorX(item->ldata(), endCr, ChordBeamAnchorType::End));
-        item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
+    if (isAboveAllChords) {
+        item->setUp(true);
+        return true;
     }
-    item->beamFragments()[frag]->py1[fragmentIndex] = item->startAnchor().y() - item->pagePos().y();
-    item->beamFragments()[frag]->py2[fragmentIndex] = item->endAnchor().y() - item->pagePos().y();
-    createBeamSegments(item, ctx, chordRests);
-    return true;
+
+    if (isBelowAllChords) {
+        item->setUp(false);
+        return true;
+    }
+
+    return false;
 }
 
 PointF BeamLayout::chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType)
@@ -1624,7 +1463,7 @@ void BeamLayout::setTremAnchors(Beam* item, const LayoutContext& ctx)
             if (item->userModified()) {
                 tremUp = c->up();
             } else if (item->cross() && t->chord1()->staffMove() == t->chord2()->staffMove()) {
-                tremUp = t->chord1()->staffMove() == item->maxMove();
+                tremUp = t->chord1()->staffMove() == item->maxCRMove();
             }
             TremAnchor tremAnchor;
             tremAnchor.chord1 = c;
