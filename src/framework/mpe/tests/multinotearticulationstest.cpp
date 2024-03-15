@@ -326,3 +326,38 @@ TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
                   actualResult);
     }
 }
+
+TEST_F(Engraving_MultiNoteArticulationsTest, IsMultiNoteArticulation)
+{
+    const ArticulationTypeSet MULTI_TYPES = {
+        ArticulationType::Trill,
+        ArticulationType::Crescendo,
+        ArticulationType::Decrescendo,
+        ArticulationType::DiscreteGlissando,
+        ArticulationType::ContinuousGlissando,
+        ArticulationType::Legato,
+        ArticulationType::Pedal,
+        ArticulationType::Multibend,
+        ArticulationType::Arpeggio,
+        ArticulationType::ArpeggioUp,
+        ArticulationType::ArpeggioDown,
+        ArticulationType::ArpeggioStraightUp,
+        ArticulationType::ArpeggioStraightDown,
+    };
+
+    const ArticulationTypeSet RANGED_TYPES {
+        ArticulationType::Legato,
+        ArticulationType::Pedal,
+        ArticulationType::Multibend,
+    };
+
+    for (int i = int(ArticulationType::Standard); i < int(ArticulationType::Last); ++i) {
+        ArticulationType type = ArticulationType(i);
+        bool isMulti = mu::contains(MULTI_TYPES, type);
+        bool isRanged = mu::contains(RANGED_TYPES, type);
+
+        EXPECT_EQ(mpe::isMultiNoteArticulation(type), isMulti);
+        EXPECT_EQ(mpe::isSingleNoteArticulation(type), !isMulti);
+        EXPECT_EQ(mpe::isRangedArticulation(type), isRanged);
+    }
+}
