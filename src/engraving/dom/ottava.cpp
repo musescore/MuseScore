@@ -402,7 +402,14 @@ PointF Ottava::linePos(Grip grip, System** system) const
 
     *system = seg->measure()->system();
 
-    double x = endCr->rightEdge() + seg->x() + seg->measure()->x() + spatium();
+    // End 1sp after the right edge of the end chord, but don't overlap followig segments
+    double x = seg->staffShape(endCr->staffIdx()).right() + seg->x() + seg->measure()->x() + spatium();
+    Segment* followingCRseg = score()->tick2segment(endCr->tick() + endCr->actualTicks(), true, SegmentType::ChordRest);
+    if (followingCRseg) {
+        x = std::min(x, followingCRseg->x() + followingCRseg->measure()->x());
+    }
+
+    x -= 0.5 * lineWidth();
 
     return PointF(x, 0.0);
 }
