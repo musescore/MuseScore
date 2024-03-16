@@ -36,6 +36,7 @@ using namespace mu::dock;
 
 static const ActionCode FULL_SCREEN_CODE("fullscreen");
 static const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
+static const ActionCode TOGGLE_BRAILLE_ACTION_CODE("toggle-braille-panel");
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
@@ -152,6 +153,15 @@ const UiActionList ApplicationUiActions::m_actions = {
              Checkable::Yes
              ),
 
+    // Braille panel
+    UiAction(TOGGLE_BRAILLE_ACTION_CODE,
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "&Braille"),
+             TranslatableString("action", "Show/hide braille panel"),
+             Checkable::Yes
+             ),
+
     // Horizontal panels
     UiAction("toggle-timeline",
              mu::context::UiCtxNotationOpened,
@@ -214,6 +224,10 @@ void ApplicationUiActions::init()
         m_actionCheckedChanged.send({ TOGGLE_NAVIGATOR_ACTION_CODE });
     });
 
+    brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send({ TOGGLE_BRAILLE_ACTION_CODE });
+    });
+
     dockWindowProvider()->windowChanged().onNotify(this, [this]() {
         listenOpenedDocksChanged(dockWindowProvider()->window());
     });
@@ -273,6 +287,10 @@ bool ApplicationUiActions::actionChecked(const UiAction& act) const
         return configuration()->isNotationNavigatorVisible();
     }
 
+    if (dockName == NOTATION_BRAILLE_PANEL_NAME) {
+        return brailleConfiguration()->braillePanelEnabled();
+    }
+
     const IDockWindow* window = dockWindowProvider()->window();
     return window ? window->isDockOpen(dockName) : false;
 }
@@ -299,6 +317,7 @@ const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockA
         { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
 
         { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
+        { TOGGLE_BRAILLE_ACTION_CODE, NOTATION_BRAILLE_PANEL_NAME },
 
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },

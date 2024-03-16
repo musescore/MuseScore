@@ -194,6 +194,7 @@ MenuItem* AppMenuModel::makeViewMenu()
         makeMenuItem("inspector"),
         makeMenuItem("toggle-selection-filter"),
         makeMenuItem("toggle-navigator"),
+        makeMenuItem("toggle-braille-panel"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),
         makeMenuItem("toggle-piano-keyboard"),

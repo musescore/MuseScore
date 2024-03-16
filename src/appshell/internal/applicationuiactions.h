@@ -28,6 +28,7 @@
 #include "context/iuicontextresolver.h"
 #include "async/asyncable.h"
 #include "ui/imainwindow.h"
+#include "view/preferences/braillepreferencesmodel.h"
 
 #include "view/dockwindow/idockwindowprovider.h"
 
@@ -37,6 +38,7 @@ class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncabl
     INJECT(ui::IMainWindow, mainWindow)
     INJECT(dock::IDockWindowProvider, dockWindowProvider)
     INJECT(IAppShellConfiguration, configuration)
+    INJECT(braille::IBrailleConfiguration, brailleConfiguration)
 
 public:
     ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller);
