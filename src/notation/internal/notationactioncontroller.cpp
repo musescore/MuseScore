@@ -669,14 +669,9 @@ void NotationActionController::toggleNoteInput()
         noteInput->startNoteInput();
     }
 
-    auto notationAccessibility = currentNotationAccessibility();
-    if (!notationAccessibility) {
-        return;
-    }
-
     ui::UiActionState state = actionRegister()->actionState("note-input");
     std::string stateTitle = state.checked ? trc("notation", "Note input mode") : trc("notation", "Normal mode");
-    notationAccessibility->setTriggeredCommand(stateTitle);
+    notifyAccessibilityAboutVoiceInfo(stateTitle);
 }
 
 void NotationActionController::toggleNoteInputMethod(NoteInputMethod method)
@@ -2107,12 +2102,20 @@ void NotationActionController::registerNoteAction(const mu::actions::ActionCode&
 
 void NotationActionController::registerPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
 {
-    registerAction(code, [this, padding]() { padNote(padding); });
+    registerAction(code, [this, padding, code]()
+    {
+        padNote(padding);
+        notifyAccessibilityAboutActionTriggered(code);
+    });
 }
 
 void NotationActionController::registerTabPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
 {
-    registerAction(code, [this, padding]() { padNote(padding); }, &NotationActionController::isTablatureStaff);
+    registerAction(code, [this, padding, code]()
+    {
+        padNote(padding);
+        notifyAccessibilityAboutActionTriggered(code);
+    }, &NotationActionController::isTablatureStaff);
 }
 
 void NotationActionController::registerMoveSelectionAction(const mu::actions::ActionCode& code, MoveSelectionType type,
@@ -2202,4 +2205,20 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
             }
         }
     }, enabler);
+}
+
+void NotationActionController::notifyAccessibilityAboutActionTriggered(const actions::ActionCode& ActionCode)
+{
+    const ui::UiAction action = actionRegister()->action(ActionCode);
+    std::string titleStr  = action.title.qTranslatedWithoutMnemonic().toStdString();
+
+    notifyAccessibilityAboutVoiceInfo(titleStr);
+}
+
+void NotationActionController::notifyAccessibilityAboutVoiceInfo(const std::string& info)
+{
+    auto notationAccessibility = currentNotationAccessibility();
+    if (notationAccessibility) {
+        notationAccessibility->setTriggeredCommand(info);
+    }
 }

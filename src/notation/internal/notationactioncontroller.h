@@ -250,6 +250,9 @@ private:
     void registerAction(const mu::actions::ActionCode&, void (INotationInteraction::*)(P1, P2), P1, P2, PlayMode = PlayMode::NoPlay,
                         bool (NotationActionController::*)() const = &NotationActionController::isNotationPage);
 
+    void notifyAccessibilityAboutActionTriggered(const mu::actions::ActionCode& actionCode);
+    void notifyAccessibilityAboutVoiceInfo(const std::string& info);
+
     async::Notification m_currentNotationNoteInputChanged;
 
     using IsActionEnabledFunc = std::function<bool ()>;
