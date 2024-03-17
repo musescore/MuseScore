@@ -82,11 +82,6 @@ HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
 {
 }
 
-int HairpinSegment::subtype() const
-{
-    return hairpin()->subtype();
-}
-
 bool HairpinSegment::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
@@ -330,11 +325,6 @@ Hairpin::Hairpin(Segment* parent)
     m_playHairpin           = true;
 }
 
-int Hairpin::subtype() const
-{
-    return static_cast<int>(m_hairpinType);
-}
-
 DynamicType Hairpin::dynamicTypeFrom() const
 {
     ByteArray ba = beginText().toAscii();
@@ -534,14 +524,50 @@ String Hairpin::accessibleInfo() const
     String rez = TextLineBase::accessibleInfo();
     switch (hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
-        rez += u": " + mtrc("engraving", "Crescendo");
+        rez += u": " + mtrc("engraving", "Crescendo hairpin");
         break;
     case HairpinType::DECRESC_HAIRPIN:
-        rez += u": " + mtrc("engraving", "Decrescendo");
+        rez += u": " + mtrc("engraving", "Decrescendo hairpin");
+        break;
+    case HairpinType::CRESC_LINE:
+        rez += u": " + mtrc("engraving", "Crescendo line");
+        break;
+    case HairpinType::DECRESC_LINE:
+        rez += u": " + mtrc("engraving", "Decrescendo line");
         break;
     default:
         rez += u": " + mtrc("engraving", "Custom");
     }
     return rez;
+}
+
+//---------------------------------------------------------
+//   translatedSubtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Hairpin::subtypeUserName() const
+{
+    switch (hairpinType()) {
+    case HairpinType::CRESC_HAIRPIN:
+        return TranslatableString("engraving", "Crescendo hairpin");
+    case HairpinType::DECRESC_HAIRPIN:
+        return TranslatableString("engraving", "Decrescendo hairpin");
+    case HairpinType::CRESC_LINE:
+        return TranslatableString("engraving", "Crescendo line");
+    case HairpinType::DECRESC_LINE:
+        return TranslatableString("engraving", "Decrescendo line");
+    default:
+        return TranslatableString("engraving", "Custom");
+    }
+}
+
+TranslatableString HairpinSegment::subtypeUserName() const
+{
+    return hairpin()->subtypeUserName();
+}
+
+int HairpinSegment::subtype() const
+{
+    return hairpin()->subtype();
 }
 }

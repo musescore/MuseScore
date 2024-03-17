@@ -74,6 +74,9 @@ public:
 
     String accessibleInfo() const override;
 
+    int subtype() const override { return int(m_chordLineType) + 5; }
+    TranslatableString subtypeUserName() const override;
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

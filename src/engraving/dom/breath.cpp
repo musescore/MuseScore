@@ -184,6 +184,15 @@ String Breath::accessibleInfo() const
     return SymNames::translatedUserNameForSymId(m_symId);
 }
 
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Breath::subtypeUserName() const
+{
+    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
+}
+
 void Breath::added()
 {
     IF_ASSERT_FAILED(score()) {

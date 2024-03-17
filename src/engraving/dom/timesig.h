@@ -27,6 +27,8 @@
 
 #include "groups.h"
 
+#include <functional>
+
 namespace mu::engraving {
 class Segment;
 
@@ -62,6 +64,13 @@ public:
     TimeSig* clone() const override { return new TimeSig(*this); }
 
     TimeSigType timeSigType() const { return m_timeSigType; }
+
+    int subtype() const override
+    {
+        return static_cast<int>(std::hash<std::string> {}(ssig().toStdString()));
+    }
+
+    TranslatableString subtypeUserName() const override;
 
     bool operator==(const TimeSig&) const;
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }

@@ -1137,6 +1137,20 @@ EngravingItem* BarLine::prevSegmentElement()
 }
 
 //---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString BarLine::subtypeUserName() const
+{
+    for (const auto& i : barLineTable) {
+        if (i.type == barLineType()) {
+            return TranslatableString("engraving/sym", i.userName);
+        }
+    }
+    return TranslatableString();
+}
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

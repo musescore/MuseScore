@@ -194,6 +194,15 @@ String MeasureRepeat::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+//   translatedSubtypeUserName
+//---------------------------------------------------------
+
+String MeasureRepeat::translatedSubtypeUserName() const
+{
+    return mtrc("engraving", "%1 measure(s)").arg(numMeasures());
+}
+
+//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 
