@@ -1778,6 +1778,9 @@ void TextBase::createBlocks(LayoutData* ldata) const
 //---------------------------------------------------------
 bool TextBase::prepareFormat(const String& token, CharFormat& format)
 {
+    static String prevFontFace;
+    static double prevFontSize = 0;
+
     if (token == "b") {
         format.setBold(true);
         return true;
@@ -1809,15 +1812,26 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format)
     } else if (token.startsWith(u"font ")) {
         String remainder = token.mid(5);
         if (remainder.startsWith(u"size=\"")) {
+            prevFontSize = format.fontSize();
             format.setFontSize(parseNumProperty(remainder.mid(6)));
             return true;
         } else if (remainder.startsWith(u"face=\"")) {
             String face = parseStringProperty(remainder.mid(6));
             face = unEscape(face);
+            prevFontFace = format.fontFamily();
             format.setFontFamily(face);
             return true;
         } else {
             LOGD("cannot parse html property <%s> in text <%s>", muPrintable(token), muPrintable(m_text));
+        }
+    } else if (token == u"/font") {
+        if (prevFontSize) {
+            format.setFontSize(prevFontSize);
+            prevFontSize = 0;
+        }
+        if (!prevFontFace.isEmpty()) {
+            format.setFontFamily(prevFontFace);
+            prevFontFace = u"";
         }
     }
     return false;
