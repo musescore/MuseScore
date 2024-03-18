@@ -31,6 +31,8 @@
 
 #include "io/path.h"
 
+#include "log.h"
+
 namespace mu {
 inline void* loadLib(const io::path_t& path)
 {

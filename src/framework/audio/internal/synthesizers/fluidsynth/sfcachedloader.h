@@ -25,10 +25,6 @@
 
 #include <cstdio>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
 
@@ -167,9 +163,5 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
     return result;
 }
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // MU_AUDIO_SFCACHEDLOADER_H

@@ -24,6 +24,7 @@
 
 #include "global/translation.h"
 
+#include "wasapitypes.h"
 #include "wasapiaudioclient.h"
 #include "audiodeviceslistener.h"
 
@@ -212,7 +213,7 @@ AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
     // Get the string identifier of the audio renderer
     hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
 
-    IAsyncOperation<DeviceInformationCollection> deviceRequest
+    winrt::Windows::Foundation::IAsyncOperation<DeviceInformationCollection> deviceRequest
         = DeviceInformation::FindAllAsync(AudioSelector, {});
 
     DeviceInformationCollection devices = nullptr;
