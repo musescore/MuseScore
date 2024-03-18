@@ -4115,6 +4115,12 @@ static Segment* setChord(Score* score, Segment* segment, track_idx_t track, cons
             LOGD("reached end of score");
             break;
         }
+
+        //it is possible that the next measure's ticks have not been computed yet. compute them now
+        if (nseg->ticks().isZero()) {
+            nseg->measure()->computeTicks();
+        }
+
         segment = nseg;
 
         cr = toChordRest(segment->element(track));
