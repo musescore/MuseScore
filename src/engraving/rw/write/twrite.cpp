@@ -2715,7 +2715,7 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
         xml.tag("invisible", item->invisible());
     }
     if (item->color() != engravingConfiguration()->defaultColor()) {
-        xml.tag("color", item->color().toString().c_str());
+        xml.tagProperty(Pid::COLOR, item->color());
     }
     if (item->group() == StaffGroup::STANDARD) {
         xml.tag("noteheadScheme", TConv::toXml(item->noteHeadScheme()), TConv::toXml(NoteHeadScheme::HEAD_NORMAL));
