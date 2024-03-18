@@ -28,6 +28,7 @@
 #include "global/iglobalconfiguration.h"
 #include "io/ifilesystem.h"
 #include "ui/iuiconfiguration.h"
+#include "context/iglobalcontext.h"
 #include "engraving/iengravingconfiguration.h"
 
 #include "../inotationconfiguration.h"

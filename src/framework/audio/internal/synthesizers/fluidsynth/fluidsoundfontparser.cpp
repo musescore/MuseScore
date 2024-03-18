@@ -22,16 +22,9 @@
 
 #include "fluidsoundfontparser.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+#include <fluidsynth.h>
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
-
-#ifdef __cplusplus
-}
-#endif
 
 #include "defer.h"
 
