@@ -515,6 +515,14 @@ static void addText(VBox* vbx, Score* s, const QString strTxt, const Tid stl)
             }
       }
 
+static bool overrideTextStyleForComposer(const QString& creditString)
+{
+    // HACK: check if the string is likely to contain composer credit, so the proper text style can be applied.
+    // TODO: introduce a flag to decide if we want to do this or not.
+    static const QRegularExpression re("\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+");
+    return creditString.contains(re);
+}
+
 //---------------------------------------------------------
 //   addText2
 //---------------------------------------------------------
@@ -526,7 +534,16 @@ static void addText(VBox* vbx, Score* s, const QString strTxt, const Tid stl)
 
 static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, const Align align, const double yoffs)
       {
-      if (!strTxt.isEmpty()) {
+      if (overrideTextStyleForComposer(strTxt)) {
+            // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
+            // This overrides the formatting and introduces proper composer text
+            Text* text = new Text(s, Tid::COMPOSER);
+            text->setXmlText(strTxt);
+            text->setXmlText(strTxt.trimmed());
+            text->setOffset(QPointF(0.0, yoffs));
+            text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+          vbx->add(text);
+      } else      if (!strTxt.isEmpty()) {
             Text* text = new Text(s, stl);
             text->setXmlText(strTxt.trimmed());
             text->setAlign(align);
@@ -1362,6 +1379,8 @@ static QString nextPartOfFormattedString(QXmlStreamReader& e)
       // replace HTML entities
       txt = decodeEntities(txt);
       QString syms       = text2syms(txt);
+      if (overrideTextStyleForComposer(syms))
+            return syms;
 
       QString importedtext;
 
