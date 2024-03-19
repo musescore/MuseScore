@@ -99,6 +99,13 @@ private:
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
+#ifndef NO_QT_SUPPORT
+inline uint qHash(mu::notation::PopupModelType key)
+{
+    return ::qHash(int(key));
+}
+
+#endif
 } //namespace mu::notation
 
 #ifndef NO_QT_SUPPORT
