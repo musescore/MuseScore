@@ -766,6 +766,9 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         }
     }
 
+    if (sl.empty()) {
+        return;
+    }
     //-------------------------------------------------------------
     // layout beams
     //  Needs to be done before creating skylines as stem lengths
