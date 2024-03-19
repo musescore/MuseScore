@@ -23,6 +23,7 @@
 #define MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
 
 #include <QObject>
+#include <QHash>
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
@@ -90,6 +91,7 @@ private:
     INotationSelectionPtr selection() const;
 
     engraving::ElementType elementType() const;
+    const engraving::ElementTypeSet& dependentElementTypes() const;
 
     void updateItemRect();
 
@@ -98,6 +100,13 @@ private:
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
+#ifndef NO_QT_SUPPORT
+inline uint qHash(mu::notation::PopupModelType key)
+{
+    return ::qHash(int(key));
+}
+
+#endif
 } //namespace mu::notation
 
 #ifndef NO_QT_SUPPORT
