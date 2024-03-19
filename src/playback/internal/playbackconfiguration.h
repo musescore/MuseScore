@@ -49,6 +49,7 @@ public:
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
+    async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const override;
 
     bool isAuxSendVisible(audio::aux_channel_idx_t index) const override;
     void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) override;
@@ -78,6 +79,7 @@ private:
 
     async::Channel<audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
     async::Channel<audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
+    async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
 
     async::Channel<bool> m_muteHiddenInstrumentsChanged;
 };

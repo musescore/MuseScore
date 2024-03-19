@@ -86,6 +86,8 @@ private:
     void toggleAuxSend(const actions::ActionData& args);
     void toggleAuxChannel(const actions::ActionData& args);
 
+    void emitMixerSectionVisibilityChanged(MixerSectionType sectionType);
+
     void setViewMenuItemChecked(const QString& itemId, bool checked);
 };
 }

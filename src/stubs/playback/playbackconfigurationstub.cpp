@@ -65,6 +65,11 @@ void PlaybackConfigurationStub::setMixerSectionVisible(MixerSectionType, bool)
 {
 }
 
+mu::async::Channel<MixerSectionType, bool> PlaybackConfigurationStub::isMixerSectionVisibleChanged() const
+{
+    return {};
+}
+
 bool PlaybackConfigurationStub::isAuxSendVisible(audio::aux_channel_idx_t) const
 {
     return false;
