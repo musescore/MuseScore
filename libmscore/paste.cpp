@@ -821,6 +821,11 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                               undoAddElement(d);
                               }
                         else if (tag == "HairPin") {
+                              if (destTrack >= maxTrack) {
+                                    qDebug("PasteSymbols: no track for %s", tag.toLocal8Bit().data());
+                                    e.skipCurrentElement();
+                                    continue;
+                                    }
                               Hairpin* h = new Hairpin(this);
                               h->setTrack(destTrack);
                               h->read(e);
