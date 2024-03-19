@@ -1515,7 +1515,7 @@ void Score::addElement(EngravingItem* element)
         // create playlist does not work here bc. tremolos may not be complete
         // createPlayEvents(toChord(element));
         break;
-
+    }
     case ElementType::NOTE:
     case ElementType::TREMOLO:
     case ElementType::ARTICULATION:
