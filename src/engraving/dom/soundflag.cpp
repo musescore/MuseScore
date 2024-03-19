@@ -111,7 +111,7 @@ bool SoundFlag::shouldHide() const
     }
 
     const EngravingItem* parent = parentItem();
-    if (parent && parent->selected()) {
+    if (parent && parent->selected() && score()->selection().isSingle()) {
         return false;
     }
 
