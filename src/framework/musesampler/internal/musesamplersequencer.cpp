@@ -47,6 +47,7 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::Tremolo16th, ms_NoteArticulation_Tremolo2 },
     { mpe::ArticulationType::Tremolo32nd, ms_NoteArticulation_Tremolo3 },
     { mpe::ArticulationType::Tremolo64th, ms_NoteArticulation_Tremolo3 },
+    { mpe::ArticulationType::TremoloBuzz, ms_NoteArticulation_BuzzTremolo },
 
     { mpe::ArticulationType::DiscreteGlissando, ms_NoteArticulation_Glissando },
     { mpe::ArticulationType::ContinuousGlissando, ms_NoteArticulation_Portamento },

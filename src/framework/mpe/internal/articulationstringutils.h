@@ -110,6 +110,7 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::Tremolo16th, "Tremolo16th" },
     { ArticulationType::Tremolo32nd, "Tremolo32nd" },
     { ArticulationType::Tremolo64th, "Tremolo64th" },
+    { ArticulationType::TremoloBuzz, "TremoloBuzz" },
     { ArticulationType::UpperMordent, "ShortTrill" },
     { ArticulationType::Trill, "Trill" },
     { ArticulationType::TrillBaroque, "TrillBaroque" },
