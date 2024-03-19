@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.20">
-  <programVersion>4.3.0</programVersion>
+<museScore version="4.40">
+  <programVersion>4.4.0</programVersion>
   <programRevision></programRevision>
-  <LastEID>1098</LastEID>
+  <LastEID>1278</LastEID>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -265,11 +265,44 @@
           </voice>
         </Measure>
       <Measure>
+        <startRepeat/>
+        <endRepeat>2</endRepeat>
+        <LayoutBreak>
+          <eid>5269924872273</eid>
+          <subtype>section</subtype>
+          <pause>5</pause>
+          </LayoutBreak>
         <voice>
+          <StaffText>
+            <eid>5377299054640</eid>
+            <offset x="23.607" y="-3.78592"/>
+            <text>Pause: 5s</text>
+            </StaffText>
+          <Chord>
+            <eid>5184025526388</eid>
+            <durationType>whole</durationType>
+            <Note>
+              <eid>5179730558996</eid>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <eid>5467493367924</eid>
+            <durationType>half</durationType>
+            <Note>
+              <eid>5463198400532</eid>
+              <pitch>76</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
           <Rest>
-            <eid>1606317768730</eid>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
+            <eid>5454608465946</eid>
+            <durationType>half</durationType>
             </Rest>
           </voice>
         </Measure>

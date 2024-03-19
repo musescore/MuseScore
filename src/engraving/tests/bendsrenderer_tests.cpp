@@ -93,7 +93,7 @@ protected:
         int chordPosTick = chord->tick().ticks();
         int chordDurationTicks = chord->actualTicks().ticks();
 
-        auto tnd = timestampAndDurationFromStartAndDurationTicks(m_score, chordPosTick, chordDurationTicks);
+        auto tnd = timestampAndDurationFromStartAndDurationTicks(m_score, chordPosTick, chordDurationTicks, 0);
 
         BeatsPerSecond bps = m_score->tempomap()->tempo(chordPosTick);
         TimeSigFrac timeSignatureFraction = m_score->sigmap()->timesig(chordPosTick).timesig();
