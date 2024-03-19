@@ -152,6 +152,12 @@ void NotationPageModel::toggleDock(const QString& name)
         return;
     }
 
+    if (name == NOTATION_BRAILLE_PANEL_NAME) {
+        brailleConfiguration()->setBraillePanelEnabled(!isBraillePanelVisible());
+        emit isBraillePanelVisibleChanged();
+        return;
+    }
+
     dispatcher()->dispatch("dock-toggle", ActionData::make_arg1<QString>(name));
 }
 

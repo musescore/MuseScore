@@ -675,6 +675,10 @@
     <seq>F10</seq>
     </SC>
   <SC>
+    <key>toggle-braille-panel</key>
+    <seq>Alt+F11</seq>
+    </SC>
+  <SC>
     <key>toggle-timeline</key>
     <seq>F12</seq>
     </SC>
