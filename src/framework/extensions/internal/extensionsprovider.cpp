@@ -55,6 +55,11 @@ void ExtensionsProvider::reloadPlugins()
 
     mu::join(m_manifests, plugins);
 
+    std::map<Uri, Manifest::Config> configs = configuration()->manifestConfigs();
+    for (Manifest& m : m_manifests) {
+        m.config = mu::value(configs, m.uri);
+    }
+
     m_manifestListChanged.notify();
 }
 
@@ -99,17 +104,26 @@ mu::async::Channel<Manifest> ExtensionsProvider::manifestChanged() const
 
 mu::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
 {
+    bool ok = false;
+    std::map<Uri, Manifest::Config> allconfigs;
     for (Manifest& m : m_manifests) {
         if (m.uri == uri) {
             m.config.enabled = enable;
             m_manifestChanged.send(m);
-
-            //! TODO Add save config
-            return make_ok();
+            ok = true;
         }
+
+        allconfigs[m.uri] = m.config;
     }
 
-    return make_ret(Ret::Code::UnknownError);
+    Ret ret;
+    if (ok) {
+        ret = configuration()->setManifestConfigs(allconfigs);
+    } else {
+        ret = make_ret(Ret::Code::UnknownError);
+    }
+
+    return ret;
 }
 
 mu::Ret ExtensionsProvider::perform(const Uri& uri)

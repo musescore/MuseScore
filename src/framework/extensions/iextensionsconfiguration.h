@@ -25,8 +25,9 @@
 #include "modularity/imoduleinterface.h"
 
 #include "global/io/path.h"
+#include "global/types/ret.h"
 
-#include "extensions/extensionstypes.h"
+#include "extensionstypes.h"
 
 namespace mu::extensions {
 class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
@@ -38,6 +39,9 @@ public:
 
     virtual io::path_t defaultPath() const = 0;
     virtual io::path_t userPath() const = 0;
+
+    virtual Ret setManifestConfigs(const std::map<Uri, Manifest::Config>& configs) = 0;
+    virtual std::map<Uri, Manifest::Config> manifestConfigs() const = 0;
 
     // legacy plugins
     virtual io::path_t pluginsDefaultPath() const = 0;

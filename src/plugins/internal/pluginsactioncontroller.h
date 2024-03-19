@@ -29,13 +29,16 @@
 #include "iinteractive.h"
 #include "actions/iactionsdispatcher.h"
 #include "extensions/iextensionsprovider.h"
+#include "ui/iuiactionsregister.h"
 
 namespace mu::plugins {
+class PluginsUiActions;
 class PluginsActionController : public actions::Actionable, public async::Asyncable
 {
     INJECT(IInteractive, interactive)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(extensions::IExtensionsProvider, provider)
+    INJECT(ui::IUiActionsRegister, uiActionsRegister)
 
 public:
     void init();
@@ -44,6 +47,8 @@ private:
     void registerPlugins();
 
     void onPluginTriggered(const Uri& uri);
+
+    std::shared_ptr<PluginsUiActions> m_pluginsUiActions;
 };
 }
 

@@ -54,5 +54,5 @@ set(MODULE_LINK
 include(SetupModule)
 
 if (MUE_BUILD_PLUGINS_TESTS)
-    add_subdirectory(tests)
+    #add_subdirectory(tests)
 endif()

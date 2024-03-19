@@ -85,11 +85,7 @@ void ExtensionsModule::registerApi()
     apiv1::ApiV1::registerQmlTypes();
 }
 
-void ExtensionsModule::onInit(const IApplication::RunMode& mode)
+void ExtensionsModule::onDelayedInit()
 {
-    if (mode != IApplication::RunMode::GuiApp) {
-        return;
-    }
-
     m_extensionsProvider->reloadPlugins();
 }
