@@ -889,6 +889,20 @@ bool MeiImporter::readMeiHead(pugi::xml_node root)
         }
     }
 
+    // check for dedicated elements (only for import)
+    pugi::xml_node composer = root.select_node("//meiHead/fileDesc/titleStmt/composer").node();
+    if (composer) {
+        m_score->setMetaTag(u"composer", String(composer.text().as_string()));
+    }
+    pugi::xml_node lyricist = root.select_node("//meiHead/fileDesc/titleStmt/lyricist").node();
+    if (lyricist) {
+        m_score->setMetaTag(u"lyricist", String(lyricist.text().as_string()));
+    }
+    pugi::xml_node arranger = root.select_node("//meiHead/fileDesc/titleStmt/arranger").node();
+    if (arranger) {
+        m_score->setMetaTag(u"arranger", String(arranger.text().as_string()));
+    }
+
     StringList persNames;
     // the creator types commonly found in MusicXML
     persNames << u"arranger" << u"composer" << u"lyricist" << u"translator";
