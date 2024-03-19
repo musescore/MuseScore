@@ -1336,6 +1336,11 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
         //  ignore if there is already a timesig
         //  with same values
         //
+        if (local) {
+            select(ots, SelectType::SINGLE, staffIdx);
+        } else {
+            selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, seg);
+        }
         delete ts;
         return;
     }
@@ -1391,6 +1396,12 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 nsig->undoChangeProperty(Pid::GROUP_NODES, ts->groups().nodes());
                 nsig->setSelected(false);
                 nsig->setDropTarget(false);
+            }
+
+            if (local) {
+                select(ots, SelectType::SINGLE, staffIdx);
+            } else {
+                selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, seg);
             }
         }
     } else {
@@ -1473,6 +1484,12 @@ void Score::cmdAddTimeSig(Measure* fm, staff_idx_t staffIdx, TimeSig* ts, bool l
                 if (score->isMaster()) {
                     masterTimeSigs[nsig->track()] = nsig;
                 }
+            }
+
+            if (local) {
+                select(ots, SelectType::SINGLE, staffIdx);
+            } else {
+                selectElementsWithSameTypeOnSegment(ElementType::TIMESIG, seg);
             }
         }
     }
