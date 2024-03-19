@@ -547,6 +547,10 @@ void Segment::removeStaff(staff_idx_t staff)
 
 void Segment::checkElement(EngravingItem* el, track_idx_t track)
 {
+    // prevent segmentation fault on out of bounds index
+    IF_ASSERT_FAILED(track < m_elist.size()) {
+        return;
+    }
     // generated elements can be overwritten
     if (m_elist[track] && !m_elist[track]->generated()) {
         LOGD("add(%s): there is already a %s at track %zu tick %d",
