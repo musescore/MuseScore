@@ -38,8 +38,6 @@ public:
     StaffText* clone() const override { return new StaffText(*this); }
     EngravingItem* linkedClone() override;
 
-    bool canBeExcludedFromOtherParts() const override { return true; }
-
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     EngravingObjectList scanChildren() const override;
 

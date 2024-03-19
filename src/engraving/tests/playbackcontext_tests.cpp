@@ -116,3 +116,52 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
 
     delete score;
 }
+
+TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
+{
+    // [GIVEN] Score with sound flags
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "sound_flags.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing sound flags
+    PlaybackContext ctx;
+
+    // [WHEN] Parse the sound flags
+    ctx.update(parts.front()->id(), score);
+
+    // [WHEN] Get the actual params
+    PlaybackParamMap params = ctx.playbackParamMap(score);
+
+    // [THEN] Expected params
+    PlaybackParamList studio  { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Studio") } };
+    PlaybackParamList pop { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Pop") } };
+    PlaybackParamList orchestral  { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Orchestral") } };
+
+    PlaybackParamMap expectedParams {
+        { timestampFromTicks(score, 960), studio },
+        { timestampFromTicks(score, 3840), pop },
+        { timestampFromTicks(score, 5760), orchestral },
+    };
+
+    EXPECT_EQ(params, expectedParams);
+
+    // [THEN] We can get the params for a specific tick
+    params = ctx.playbackParamMap(score, 0);
+    EXPECT_TRUE(params.empty());
+
+    params = ctx.playbackParamMap(score, 960);
+    ASSERT_EQ(params.size(), 1);
+    EXPECT_EQ(params.begin()->second, studio);
+
+    params = ctx.playbackParamMap(score, 4500);
+    ASSERT_EQ(params.size(), 1);
+    EXPECT_EQ(params.begin()->second, pop);
+
+    params = ctx.playbackParamMap(score, 8000);
+    ASSERT_EQ(params.size(), 1);
+    EXPECT_EQ(params.begin()->second, orchestral);
+
+    delete score;
+}

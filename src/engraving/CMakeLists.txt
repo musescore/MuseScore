@@ -147,6 +147,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/writescorehook.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/dummyelement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/dummyelement.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/engravingcompat.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/engravingcompat.h
 
     ${COMPAT_MIDI_SRC}
 

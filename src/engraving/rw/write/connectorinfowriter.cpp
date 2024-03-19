@@ -105,11 +105,13 @@ SpannerWriter::SpannerWriter(XmlWriter& xml, WriteContext* ctx, const EngravingI
     : ConnectorInfoWriter(xml, ctx, current, sp, track, frac)
 {
     const bool clipboardmode = ctx->clipboardmode();
-    if (!sp->startElement() || !sp->endElement()) {
+    if ((!sp->startElement() || !sp->endElement())
+        && (sp->anchor() == Spanner::Anchor::CHORD || sp->anchor() == Spanner::Anchor::NOTE)) {
         LOGW("SpannerWriter: spanner (%s) doesn't have an endpoint!", sp->typeName());
         return;
     }
-    if (current->isMeasure() || current->isSegment() || (sp->startElement()->type() != current->type())) {
+    if (current->isMeasure() || current->isSegment() || !sp->startElement() || !sp->endElement()
+        || (sp->startElement()->type() != current->type())) {
         // (The latter is the hairpins' case, for example, though they are
         // covered by the other checks too.)
         // We cannot determine position of the spanner from its start/end

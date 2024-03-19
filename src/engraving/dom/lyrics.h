@@ -47,7 +47,7 @@ public:
     // it should be cleared to 0 at some point, so that it will not be carried over
     // if the melisma is not extended beyond a single chord, but no suitable place to do this
     // has been identified yet.
-    static constexpr int TEMP_MELISMA_TICKS      = 1;
+    static constexpr Fraction TEMP_MELISMA_TICKS = Fraction::fromTicks(1);
 
     // WORD_MIN_DISTANCE has never been implemented
     // static constexpr double  LYRICS_WORD_MIN_DISTANCE = 0.33;     // min. distance between lyrics from different words
@@ -85,8 +85,8 @@ public:
 
     void adjustPrevious();
 
-    bool isRemoveInvalidSegments() const { return m_isRemoveInvalidSegments; }
-    void setIsRemoveInvalidSegments() { m_isRemoveInvalidSegments = true; }
+    bool needRemoveInvalidSegments() const { return m_needRemoveInvalidSegments; }
+    void setNeedRemoveInvalidSegments() { m_needRemoveInvalidSegments = true; }
     void removeInvalidSegments();
 
     bool even() const { return m_even; }
@@ -120,7 +120,7 @@ private:
     Fraction m_ticks;          // if > 0 then draw an underline to tick() + _ticks (melisma)
     LyricsSyllabic m_syllabic = LyricsSyllabic::SINGLE;
     LyricsLine* m_separator = nullptr;
-    bool m_isRemoveInvalidSegments = false;
+    bool m_needRemoveInvalidSegments = false;
 };
 
 //---------------------------------------------------------

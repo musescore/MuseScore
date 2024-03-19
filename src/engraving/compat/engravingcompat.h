@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,33 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LYRICSLAYOUT_DEV_H
-#define MU_ENGRAVING_LYRICSLAYOUT_DEV_H
 
-#include "layoutcontext.h"
+#ifndef MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
+#define MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H
 
 namespace mu::engraving {
-class Score;
-class System;
-class Lyrics;
-class LyricsLine;
-class LyricsLineSegment;
+class MasterScore;
 }
 
-namespace mu::engraving::rendering::dev {
-class LyricsLayout
+namespace mu::engraving::compat {
+class EngravingCompat
 {
 public:
-    LyricsLayout() = default;
-
-    static void layout(Lyrics* item, LayoutContext& ctx);
-    static void layout(LyricsLine* item, LayoutContext& ctx);
-    static void layout(LyricsLineSegment* item, LayoutContext& ctx);
-
-    static void layoutLyrics(LayoutContext& ctx, System* system);
+    static void doPreLayoutCompatIfNeeded(MasterScore* score);
+    static void doPostLayoutCompatIfNeeded(MasterScore* score);
 
 private:
-    static void createOrRemoveLyricsLine(Lyrics* item, LayoutContext& ctx);
+    static void undoStaffTextExcludeFromPart(MasterScore* masterScore);
+
+    static bool relayoutUserModifiedCrossStaffBeams(MasterScore* score);
 };
-}
-#endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H
+} // namespace mu::engraving::compat
+
+#endif // MU_ENGRAVING_COMPAT_ENGRAVINGCOMPAT_H

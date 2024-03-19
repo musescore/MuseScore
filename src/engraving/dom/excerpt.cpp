@@ -1115,19 +1115,6 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
             dstTrack  = 0;
             dstTrack2 = 0;
             cloneSpanner(s, dstScore, dstTrack, dstTrack2);
-        } else if (s->isHairpin()) {
-            //always export these spanners to first voice of the destination staff
-
-            std::vector<track_idx_t> track1;
-            for (track_idx_t ii = s->track(); ii < s->track() + VOICES; ii++) {
-                mu::join(track1, mu::values(trackList, ii));
-            }
-
-            for (track_idx_t track : track1) {
-                if (!(track % VOICES)) {
-                    cloneSpanner(s, dstScore, track, track);
-                }
-            }
         } else {
             if (mu::value(trackList, s->track(), mu::nidx) == mu::nidx
                 || mu::value(trackList, s->track2(), mu::nidx) == mu::nidx) {

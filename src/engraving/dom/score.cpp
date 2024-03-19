@@ -1511,11 +1511,26 @@ void Score::addElement(EngravingItem* element)
     break;
 
     case ElementType::CHORD:
+    {
         setPlaylistDirty();
-        // create playlist does not work here bc. tremolos may not be complete
-        // createPlayEvents(toChord(element));
+        // May need to reconnect slur when inserting new chord
+        SpannerMap& smap = spannerMap();
+        Fraction tick = element->tick();
+        auto spanners = smap.findOverlapping(tick.ticks(), tick.ticks());
+        for (auto interval : spanners) {
+            Spanner* s = interval.value;
+            if (s->track() != element->track() || !s->isSlur()) {
+                continue;
+            }
+            if (!s->startElement() && s->tick() == tick) {
+                s->setStartElement(element);
+            }
+            if (!s->endElement() && s->tick2() == tick) {
+                s->setEndElement(element);
+            }
+        }
         break;
-
+    }
     case ElementType::NOTE:
     case ElementType::TREMOLO:
     case ElementType::ARTICULATION:

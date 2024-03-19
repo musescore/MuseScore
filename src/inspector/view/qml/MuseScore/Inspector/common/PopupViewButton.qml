@@ -70,7 +70,7 @@ FlatButton {
         anchorItem: root.anchorItem
         contentWidth: root.popupAvailableWidth - 2 * margins
 
-        closePolicy: PopupView.NoAutoClose
+        closePolicies: PopupView.NoAutoClose
 
         contentData: Loader {
             id: contentLoader

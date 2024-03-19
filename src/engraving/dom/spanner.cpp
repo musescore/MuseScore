@@ -803,7 +803,7 @@ void Spanner::computeEndElement()
             // lyrics endTick should already indicate the segment we want
             // except for TEMP_MELISMA_TICKS case
             Lyrics* l = toLyricsLine(this)->lyrics();
-            Fraction tick = (l->ticks().ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
+            Fraction tick = (l->ticks() == Lyrics::TEMP_MELISMA_TICKS) ? l->tick() : l->endTick();
             Segment* s = score()->tick2segment(tick, true, SegmentType::ChordRest);
             if (!s) {
                 LOGD("%s no end segment for tick %d", typeName(), tick.ticks());

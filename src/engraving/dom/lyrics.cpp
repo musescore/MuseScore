@@ -330,7 +330,7 @@ void Lyrics::adjustPrevious()
                 } else {
                     prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
                 }
-                prev->setIsRemoveInvalidSegments();
+                prev->setNeedRemoveInvalidSegments();
                 prev->triggerLayout();
             }
         }
@@ -373,7 +373,7 @@ void Lyrics::removeFromScore()
     Lyrics* prev = prevLyrics(this);
     if (prev) {
         // check to make sure we haven't created an invalid segment by deleting this lyric
-        prev->setIsRemoveInvalidSegments();
+        prev->setNeedRemoveInvalidSegments();
     }
 }
 
@@ -429,8 +429,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         m_ticks = v.value<Fraction>();
         if (scr && m_ticks <= scr->ticks()) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
-            setIsRemoveInvalidSegments();
-            renderer()->layoutItem(this);
+            setNeedRemoveInvalidSegments();
         }
         break;
     case Pid::VERSE:
@@ -548,7 +547,7 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
 
 void Lyrics::removeInvalidSegments()
 {
-    m_isRemoveInvalidSegments = false;
+    m_needRemoveInvalidSegments = false;
     if (m_separator && isMelisma() && m_ticks < m_separator->startCR()->ticks()) {
         setTicks(Fraction(0, 1));
         m_separator->setTicks(Fraction(0, 1));
