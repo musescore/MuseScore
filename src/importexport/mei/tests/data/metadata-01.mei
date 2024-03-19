@@ -5,7 +5,8 @@
    <meiHead>
       <fileDesc>
          <titleStmt>
-            <title>Metadata test (title)</title>
+            <title type="main">Metadata test (title)</title>
+            <title type="subordinate">Subtitle</title>
             <respStmt>
                <persName role="arranger">Arranger of the piece</persName>
                <persName role="composer">Composer of the piece</persName>
