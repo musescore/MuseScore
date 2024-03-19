@@ -28,6 +28,7 @@
 
 #include "dom/score.h"
 #include "dom/repeatlist.h"
+#include "dom/tempo.h"
 #include "dom/chord.h"
 #include "dom/note.h"
 #include "dom/tie.h"
@@ -45,14 +46,26 @@ inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
-inline mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick)
+inline mpe::duration_t pauseUs(const Score* score, const int tick)
 {
-    return timestampFromTicks(score, endTick) - timestampFromTicks(score, startTick);
+    double secs = score->tempomap()->pauseSecs(tick);
+    return RealIsNull(secs) ? 0 : secs* 1000000;
 }
 
-inline mpe::duration_t durationFromStartAndTicks(const Score* score, const int startTick, const int ticks)
+inline mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick,
+                                                   const int tickPositionOffset)
 {
-    return durationFromStartAndEndTick(score, startTick, startTick + ticks);
+    mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick + tickPositionOffset);
+    mpe::timestamp_t endTimestamp = timestampFromTicks(score, endTick + tickPositionOffset);
+    mpe::duration_t pause = pauseUs(score, endTick);
+
+    return endTimestamp - startTimestamp - pause;
+}
+
+inline mpe::duration_t durationFromStartAndTicks(const Score* score, const int startTick, const int durationTicks,
+                                                 const int tickPositionOffset)
+{
+    return durationFromStartAndEndTick(score, startTick, startTick + durationTicks, tickPositionOffset);
 }
 
 struct TimestampAndDuration {
@@ -61,10 +74,14 @@ struct TimestampAndDuration {
 };
 
 inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
-                                                                          const int startTick, const int durationTicks)
+                                                                          const int startTick, const int durationTicks,
+                                                                          const int tickPositionOffset)
 {
-    mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick);
-    mpe::duration_t duration = timestampFromTicks(score, startTick + durationTicks) - startTimestamp;
+    int startTickWithOffset = startTick + tickPositionOffset;
+    mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTickWithOffset);
+    mpe::timestamp_t endTimestamp = timestampFromTicks(score, startTickWithOffset + durationTicks);
+    mpe::duration_t pause = pauseUs(score, startTick + durationTicks);
+    mpe::duration_t duration = endTimestamp - startTimestamp - pause;
 
     return { startTimestamp, duration };
 }
@@ -100,7 +117,7 @@ inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* fi
                   ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
                   : startTick + secondNote->chord()->actualTicks().ticks();
 
-    return firstNoteDuration + durationFromStartAndEndTick(score, startTick + tickPositionOffset, endTick + tickPositionOffset);
+    return firstNoteDuration + durationFromStartAndEndTick(score, startTick, endTick, tickPositionOffset);
 }
 
 static constexpr int CROTCHET_TICKS = Constants::DIVISION;

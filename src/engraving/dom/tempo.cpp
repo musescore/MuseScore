@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "global/containers.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -87,6 +89,8 @@ void TempoMap::setPause(int tick, double pause)
         BeatsPerSecond t = tempo(tick);
         insert(std::pair<const int, TEvent>(tick, TEvent(t, pause, TempoType::PAUSE)));
     }
+
+    m_pauses[tick] = pause;
     normalize();
 }
 
@@ -151,6 +155,7 @@ void TempoMap::dump() const
 void TempoMap::clear()
 {
     std::map<int, TEvent>::clear();
+    m_pauses.clear();
     ++m_tempoSN;
 }
 
@@ -167,6 +172,13 @@ void TempoMap::clearRange(int tick1, int tick2)
     if (first == last) {
         return;
     }
+
+    if (!m_pauses.empty()) {
+        for (auto it = first; it != last; ++it) {
+            m_pauses.erase(it->first);
+        }
+    }
+
     erase(first, last);
     ++m_tempoSN;
 }
@@ -201,6 +213,11 @@ BeatsPerSecond TempoMap::tempo(int tick) const
     };
 
     return findTempo(tick) * m_tempoMultiplier;
+}
+
+double TempoMap::pauseSecs(int tick) const
+{
+    return mu::value(m_pauses, tick, 0.0);
 }
 
 //---------------------------------------------------------

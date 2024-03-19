@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_TEMPO_H
 
 #include <map>
+#include <unordered_map>
 
 #include "global/allocator.h"
 #include "global/async/notification.h"
@@ -78,6 +79,7 @@ public:
     void dump() const;
 
     BeatsPerSecond tempo(int tick) const;
+    double pauseSecs(int tick) const;
 
     double tick2time(int tick, int* sn = 0) const;
     double tick2time(int tick, double time, int* sn) const;
@@ -100,6 +102,8 @@ private:
     int m_tempoSN = 0; // serial no to track tempo changes
     BeatsPerSecond m_tempo; // tempo if not using tempo list (beats per second)
     BeatsPerSecond m_tempoMultiplier;
+
+    std::unordered_map<int, double> m_pauses;
 };
 } // namespace mu::engraving
 #endif
