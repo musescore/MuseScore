@@ -99,11 +99,23 @@ void SoundFlagSettingsModel::init()
     TRACEFUNC;
 
     connect(this, &SoundFlagSettingsModel::itemRectChanged, this, [this](const QRect&) {
-        emit iconRectChanged();
+        QRect rect = iconRect();
+        if (rect.isValid()) {
+            emit iconRectChanged(rect);
+        }
     });
 
     AbstractElementPopupModel::init();
 
+    connect(this, &AbstractElementPopupModel::dataChanged, [this]() {
+        load();
+    });
+
+    load();
+}
+
+void SoundFlagSettingsModel::load()
+{
     IF_ASSERT_FAILED(m_item && m_item->isSoundFlag()) {
         return;
     }
@@ -172,6 +184,10 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
     bool needUpdateNotation = updateStaffText();
     endCommand();
 
+    if (currentNotation()->interaction()->isTextEditingStarted()) {
+        currentNotation()->interaction()->endEditText();
+    }
+
     if (needUpdateNotation) {
         updateNotation();
     }
@@ -193,6 +209,10 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     soundFlag->undoChangeSoundFlag(soundFlag->soundPresets(), String(playingTechniqueCode));
     bool needUpdateNotation = updateStaffText();
     endCommand();
+
+    if (currentNotation()->interaction()->isTextEditingStarted()) {
+        currentNotation()->interaction()->endEditText();
+    }
 
     if (needUpdateNotation) {
         updateNotation();
