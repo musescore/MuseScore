@@ -848,7 +848,7 @@ void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert:
 
 /**
  * Read the <meiHead> and stores it as a custom MuseScore metatag
- * Also
+ * Also try to fill in some metadata
  */
 
 bool MeiImporter::readMeiHead(pugi::xml_node root)
@@ -869,9 +869,24 @@ bool MeiImporter::readMeiHead(pugi::xml_node root)
     docHeader.save(strStream, "", output_flags);
     m_score->setMetaTag(u"meiHead", String::fromStdString(strStream.str()));
 
-    pugi::xml_node workTitleNode = root.select_node("//meiHead/fileDesc/titleStmt/title").node();
-    if (workTitleNode) {
-        m_score->setMetaTag(u"workTitle", String(workTitleNode.text().as_string()));
+    pugi::xml_node firstTitleNode = root.select_node("//meiHead/fileDesc/titleStmt/title").node();
+    if (firstTitleNode) {
+        // assume the first title to be the main title
+        m_score->setMetaTag(u"workTitle", String(firstTitleNode.text().as_string()));
+    }
+    pugi::xpath_node_set workTitleNodes = root.select_nodes("//meiHead/fileDesc/titleStmt/title[@type]");
+    for (pugi::xpath_node workTitleNode : workTitleNodes) {
+        const String type = String(workTitleNode.node().attribute("type").as_string());
+        if (type == u"main") {
+            if (m_score->metaTag(u"workTitle").isEmpty()) {
+                m_score->setMetaTag(u"workTitle", String(workTitleNode.node().text().as_string()));
+            }
+        } else if (type == u"subordinate") {
+            m_score->setMetaTag(u"subtitle", String(workTitleNode.node().text().as_string()));
+        } else {
+            const String metaTag = type + u"Title";
+            m_score->setMetaTag(metaTag, String(workTitleNode.node().text().as_string()));
+        }
     }
 
     StringList persNames;

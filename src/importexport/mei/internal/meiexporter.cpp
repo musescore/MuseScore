@@ -180,6 +180,12 @@ bool MeiExporter::writeHeader()
         pugi::xml_node title = titleStmt.append_child("title");
         if (!m_score->metaTag(u"workTitle").isEmpty()) {
             title.text().set(m_score->metaTag(u"workTitle").toStdString().c_str());
+            title.append_attribute("type") = u"main";
+        }
+        if (!m_score->metaTag(u"subtitle").isEmpty()) {
+            pugi::xml_node title = titleStmt.append_child("title");
+            title.text().set(m_score->metaTag(u"subtitle").toStdString().c_str());
+            title.append_attribute("type") = u"subordinate";
         }
 
         pugi::xml_node respStmt;
