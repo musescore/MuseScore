@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLUGINS_PLUGINSUIACTIONS_H
-#define MU_PLUGINS_PLUGINSUIACTIONS_H
+#ifndef MU_EXTENSIONS_EXTENSIONSUIACTIONS_H
+#define MU_EXTENSIONS_EXTENSIONSUIACTIONS_H
 
 #include "async/asyncable.h"
 #include "ui/iuiactionsmodule.h"
@@ -28,13 +28,13 @@
 #include "modularity/ioc.h"
 #include "extensions/iextensionsprovider.h"
 
-namespace mu::plugins {
-class PluginsUiActions : public ui::IUiActionsModule, public async::Asyncable
+namespace mu::extensions {
+class ExtensionsUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
     Inject<extensions::IExtensionsProvider> provider;
 
 public:
-    PluginsUiActions() = default;
+    ExtensionsUiActions() = default;
 
     const ui::UiActionList& actionsList() const override;
 
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_PLUGINS_PLUGINSUIACTIONS_H
+#endif // MU_EXTENSIONS_EXTENSIONSUIACTIONS_H

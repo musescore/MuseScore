@@ -19,21 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "pluginsactioncontroller.h"
+#include "extensionsactioncontroller.h"
 
 #include "translation.h"
 
-#include "pluginsuiactions.h"
+#include "extensionsuiactions.h"
 
 #include "log.h"
 
-using namespace mu::plugins;
 using namespace mu::extensions;
-using namespace mu::actions;
 
-void PluginsActionController::init()
+void ExtensionsActionController::init()
 {
-    m_pluginsUiActions = std::make_shared<PluginsUiActions>();
+    m_uiActions = std::make_shared<ExtensionsUiActions>();
     registerPlugins();
 
     provider()->manifestListChanged().onNotify(this, [this](){
@@ -41,7 +39,7 @@ void PluginsActionController::init()
     });
 }
 
-void PluginsActionController::registerPlugins()
+void ExtensionsActionController::registerPlugins()
 {
     dispatcher()->unReg(this);
 
@@ -55,10 +53,10 @@ void PluginsActionController::registerPlugins()
         interactive()->open("musescore://home?section=plugins");
     });
 
-    uiActionsRegister()->reg(m_pluginsUiActions);
+    uiActionsRegister()->reg(m_uiActions);
 }
 
-void PluginsActionController::onPluginTriggered(const Uri& uri)
+void ExtensionsActionController::onPluginTriggered(const Uri& uri)
 {
     const Manifest& m = provider()->manifest(uri);
     if (!m.isValid()) {
@@ -72,8 +70,8 @@ void PluginsActionController::onPluginTriggered(const Uri& uri)
     }
 
     IInteractive::Result result = interactive()->warning(
-        qtrc("plugins", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
-        trc("plugins", "Alternatively, you can enable it at any time from Home > Plugins."),
+        qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
+        trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
         { IInteractive::Button::No, IInteractive::Button::Yes });
 
     if (result.standardButton() == IInteractive::Button::Yes) {

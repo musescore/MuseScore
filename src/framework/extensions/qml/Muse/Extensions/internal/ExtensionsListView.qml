@@ -23,7 +23,7 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Plugins 1.0
+import Muse.Extensions 1.0
 
 Column {
     id: root
@@ -126,7 +126,7 @@ Column {
                 _item.navigation.requestActive()
             }
 
-            PluginItem {
+            ExtensionItem {
                 id: _item
 
                 width: view.actualCellWidth

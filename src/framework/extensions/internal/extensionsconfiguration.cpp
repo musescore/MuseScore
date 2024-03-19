@@ -54,6 +54,16 @@ mu::io::path_t ExtensionsConfiguration::pluginsUserPath() const
     return settings()->value(USER_PLUGINS_PATH).toPath();
 }
 
+void ExtensionsConfiguration::setUserPluginsPath(const io::path_t& path)
+{
+    settings()->setSharedValue(USER_PLUGINS_PATH, Val(path));
+}
+
+mu::async::Channel<mu::io::path_t> ExtensionsConfiguration::pluginsUserPathChanged() const
+{
+    return m_pluginsUserPathChanged;
+}
+
 mu::Ret ExtensionsConfiguration::setManifestConfigs(const std::map<Uri, Manifest::Config>& configs)
 {
     JsonArray arr;

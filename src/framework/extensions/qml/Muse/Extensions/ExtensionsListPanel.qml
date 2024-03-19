@@ -24,7 +24,7 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Plugins 1.0
+import Muse.Extensions 1.0
 
 import "internal"
 
@@ -40,15 +40,15 @@ Item {
     property NavigationSection navigationSection: null
 
     function categories() {
-        return pluginsModel.categories()
+        return extensionsModel.categories()
     }
 
     function reloadPlugins() {
-        pluginsModel.reloadPlugins()
+        extensionsModel.reloadPlugins()
     }
 
-    PluginsModel {
-        id: pluginsModel
+    ExtensionsListModel {
+        id: extensionsModel
 
         onFinished: {
             prv.lastNavigatedExtension = null
@@ -72,7 +72,7 @@ Item {
     }
 
     Component.onCompleted: {
-        pluginsModel.load()
+        extensionsModel.load()
     }
 
     GradientRectangle {
@@ -109,11 +109,11 @@ Item {
 
             spacing: 24
 
-            PluginsListView {
+            ExtensionsListView {
                 id: enabledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Enabled")
+                title: qsTrc("extensions", "Enabled")
                 visible: count > 0
 
                 search: root.search
@@ -121,7 +121,7 @@ Item {
                 selectedCategory: root.selectedCategory
                 selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
 
-                model: pluginsModel
+                model: extensionsModel
 
                 flickableItem: column
 
@@ -140,11 +140,11 @@ Item {
                 }
             }
 
-            PluginsListView {
+            ExtensionsListView {
                 id: disabledPluginsView
 
                 width: parent.width
-                title: qsTrc("plugins", "Disabled")
+                title: qsTrc("extensions", "Disabled")
                 visible: count > 0
 
                 search: root.search
@@ -152,7 +152,7 @@ Item {
                 selectedCategory: root.selectedCategory
                 selectedPluginCodeKey: prv.selectedPlugin ? prv.selectedPlugin.codeKey : ""
 
-                model: pluginsModel
+                model: extensionsModel
 
                 flickableItem: column
 
@@ -185,17 +185,17 @@ Item {
         isEnabled: Boolean(selectedPlugin) ? selectedPlugin.enabled : false
 
         additionalInfoModel: [
-            {"title": qsTrc("plugins", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
+            {"title": qsTrc("extensions", "Version:"), "value": Boolean(selectedPlugin) ? selectedPlugin.version : "" },
             //: Keyboard shortcut
-            {"title": qsTrc("plugins", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
+            {"title": qsTrc("extensions", "Shortcut:"), "value": Boolean(selectedPlugin) ? selectedPlugin.shortcuts : ""}
         ]
 
-        onEnabledChanged: function(enabled) {
-            pluginsModel.setEnable(selectedPlugin.codeKey, enabled)
+        onEnabledChanged: {
+            extensionsModel.setEnable(selectedPlugin.codeKey, enabled)
         }
 
         onEditShortcutRequested: {
-            Qt.callLater(pluginsModel.editShortcut, selectedPlugin.codeKey)
+            Qt.callLater(extensionsModel.editShortcut, selectedPlugin.codeKey)
             panel.close()
         }
 

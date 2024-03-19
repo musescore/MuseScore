@@ -20,20 +20,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pluginsmodel.h"
+#include "extensionsmodel.h"
 
 #include "translation.h"
 #include "shortcuts/shortcutstypes.h"
 
 #include "log.h"
 
-using namespace mu::plugins;
 using namespace mu::extensions;
 using namespace mu::async;
 
 static constexpr int INVALID_INDEX = -1;
 
-PluginsModel::PluginsModel(QObject* parent)
+ExtensionsListModel::ExtensionsListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     m_roles.insert(rCode, "codeKey");
@@ -46,7 +45,7 @@ PluginsModel::PluginsModel(QObject* parent)
     m_roles.insert(rShortcuts, "shortcuts");
 }
 
-void PluginsModel::load()
+void ExtensionsListModel::load()
 {
     beginResetModel();
 
@@ -68,7 +67,7 @@ void PluginsModel::load()
     endResetModel();
 }
 
-QVariant PluginsModel::data(const QModelIndex& index, int role) const
+QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -85,7 +84,7 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         return plugin.description.toQString();
     case rThumbnailUrl:
         if (plugin.thumbnail.empty()) {
-            return "qrc:/qml/MuseScore/Plugins/internal/resources/placeholder.png";
+            return "qrc:/qml/Muse/Extensions/internal/resources/placeholder.png";
         }
 
         return QUrl::fromLocalFile(plugin.thumbnail.toQString());
@@ -101,23 +100,23 @@ QVariant PluginsModel::data(const QModelIndex& index, int role) const
         }
 
         //: No keyboard shortcut is assigned to this plugin.
-        return qtrc("plugins", "Not defined");
+        return qtrc("extensions", "Not defined");
     }
 
     return QVariant();
 }
 
-int PluginsModel::rowCount(const QModelIndex&) const
+int ExtensionsListModel::rowCount(const QModelIndex&) const
 {
     return static_cast<int>(m_plugins.size());
 }
 
-QHash<int, QByteArray> PluginsModel::roleNames() const
+QHash<int, QByteArray> ExtensionsListModel::roleNames() const
 {
     return m_roles;
 }
 
-void PluginsModel::setEnable(const QString& uri, bool enable)
+void ExtensionsListModel::setEnable(const QString& uri, bool enable)
 {
     Ret ret = provider()->setEnable(Uri(uri.toStdString()), enable);
     emit finished();
@@ -127,7 +126,7 @@ void PluginsModel::setEnable(const QString& uri, bool enable)
     }
 }
 
-void PluginsModel::editShortcut(QString codeKey)
+void ExtensionsListModel::editShortcut(QString codeKey)
 {
     int index = itemIndexByCodeKey(codeKey);
     if (index == INVALID_INDEX) {
@@ -148,12 +147,12 @@ void PluginsModel::editShortcut(QString codeKey)
     }
 }
 
-void PluginsModel::reloadPlugins()
+void ExtensionsListModel::reloadPlugins()
 {
     provider()->reloadPlugins();
 }
 
-QVariantList PluginsModel::categories() const
+QVariantList ExtensionsListModel::categories() const
 {
     QVariantList result;
 
@@ -168,7 +167,7 @@ QVariantList PluginsModel::categories() const
     return result;
 }
 
-void PluginsModel::updatePlugin(const Manifest& plugin)
+void ExtensionsListModel::updatePlugin(const Manifest& plugin)
 {
     for (size_t i = 0; i < m_plugins.size(); ++i) {
         if (m_plugins.at(i).uri == plugin.uri) {
@@ -183,7 +182,7 @@ void PluginsModel::updatePlugin(const Manifest& plugin)
     }
 }
 
-int PluginsModel::itemIndexByCodeKey(const QString& uri_) const
+int ExtensionsListModel::itemIndexByCodeKey(const QString& uri_) const
 {
     Uri uri(uri_.toStdString());
     for (size_t i = 0; i < m_plugins.size(); ++i) {

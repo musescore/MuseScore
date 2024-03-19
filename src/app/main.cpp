@@ -180,13 +180,9 @@
 #include "stubs/playback/playbackstubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_PLUGINS_MODULE
-#include "plugins/pluginsmodule.h"
-#else
-#include "stubs/plugins/pluginsstubmodule.h"
-#endif
-
+#ifdef MUE_BUILD_EXTENSIONS_MODULE
 #include "extensions/extensionsmodule.h"
+#endif
 
 #include "print/printmodule.h"
 
@@ -328,8 +324,9 @@ int main(int argc, char** argv)
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::palette::PaletteModule());
     app.addModule(new mu::playback::PlaybackModule());
-    app.addModule(new mu::plugins::PluginsModule());
+#ifdef MUE_BUILD_EXTENSIONS_MODULE
     app.addModule(new mu::extensions::ExtensionsModule());
+#endif
     app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::update::UpdateModule());

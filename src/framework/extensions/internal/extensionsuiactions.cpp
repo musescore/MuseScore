@@ -19,17 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "pluginsuiactions.h"
+#include "extensionsuiactions.h"
 
-#include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
+#include "global/types/translatablestring.h"
 
-#include "containers.h"
-#include "types/translatablestring.h"
 #include "log.h"
 
-using namespace mu;
-using namespace mu::plugins;
 using namespace mu::ui;
 using namespace mu::actions;
 using namespace mu::extensions;
@@ -38,11 +34,11 @@ static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
     mu::context::UiCtxAny,
     mu::context::CTX_ANY,
-    TranslatableString("action", "&Manage plugins…"),
-    TranslatableString("action", "Manage plugins…")
+    mu::TranslatableString("action", "&Manage plugins…"),
+    mu::TranslatableString("action", "Manage plugins…")
     );
 
-const mu::ui::UiActionList& PluginsUiActions::actionsList() const
+const mu::ui::UiActionList& ExtensionsUiActions::actionsList() const
 {
     UiActionList result;
 
@@ -51,7 +47,7 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
         action.code = m.uri.toString();
         action.uiCtx = m.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
         action.scCtx = m.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
-        action.description = TranslatableString("plugins", "Run plugin %1").arg(m.title);
+        action.description = TranslatableString("extensions", "Run plugin %1").arg(m.title);
         action.title = action.description;
 
         result.push_back(action);
@@ -64,23 +60,23 @@ const mu::ui::UiActionList& PluginsUiActions::actionsList() const
     return m_actions;
 }
 
-bool PluginsUiActions::actionEnabled(const UiAction&) const
+bool ExtensionsUiActions::actionEnabled(const UiAction&) const
 {
     return true;
 }
 
-mu::async::Channel<ActionCodeList> PluginsUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> ExtensionsUiActions::actionEnabledChanged() const
 {
     static async::Channel<actions::ActionCodeList> ch;
     return ch;
 }
 
-bool PluginsUiActions::actionChecked(const UiAction&) const
+bool ExtensionsUiActions::actionChecked(const UiAction&) const
 {
     return false;
 }
 
-mu::async::Channel<ActionCodeList> PluginsUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> ExtensionsUiActions::actionCheckedChanged() const
 {
     static async::Channel<actions::ActionCodeList> ch;
     return ch;

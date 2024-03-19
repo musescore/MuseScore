@@ -46,6 +46,12 @@ public:
     // legacy plugins
     io::path_t pluginsDefaultPath() const override;
     io::path_t pluginsUserPath() const override;
+    void setUserPluginsPath(const io::path_t& path) override;
+    async::Channel<io::path_t> pluginsUserPathChanged() const override;
+
+private:
+
+    async::Channel<io::path_t> m_pluginsUserPathChanged;
 };
 }
 

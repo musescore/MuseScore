@@ -167,9 +167,11 @@ endif()
 if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB cloud)
     list(APPEND LINK_LIB languages)
-    list(APPEND LINK_LIB plugins)
-    list(APPEND LINK_LIB extensions)
     list(APPEND LINK_LIB multiinstances)
+
+    if (MUE_BUILD_EXTENSIONS_MODULE)
+        list(APPEND LINK_LIB extensions)
+    endif()
 
     if (MUE_BUILD_IMPORTEXPORT_MODULE)
         set(LINK_LIB ${LINK_LIB}

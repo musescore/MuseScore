@@ -34,10 +34,10 @@ using namespace mu::extensions;
 KnownCategories ExtensionsProvider::knownCategories() const
 {
     static KnownCategories categories {
-        { "composing-arranging-tools", TranslatableString("plugins", "Composing/arranging tools") },
-        { "color-notes", TranslatableString("plugins", "Color notes") },
-        { "playback", TranslatableString("plugins", "Playback") },
-        { "lyrics", TranslatableString("plugins", "Lyrics") }
+        { "composing-arranging-tools", TranslatableString("extensions", "Composing/arranging tools") },
+        { "color-notes", TranslatableString("extensions", "Color notes") },
+        { "playback", TranslatableString("extensions", "Playback") },
+        { "lyrics", TranslatableString("extensions", "Lyrics") }
     };
 
     return categories;
