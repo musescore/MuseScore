@@ -694,11 +694,6 @@ void Segment::add(EngravingItem* el)
                     measure()->setHasVoices(track / VOICES, true);
                 }
             }
-            // the tick position of a tuplet is the tick position of its
-            // first element:
-//                  ChordRest* cr = toChordRest(el);
-//                  if (cr->tuplet() && !cr->tuplet()->elements().empty() && cr->tuplet()->elements().front() == cr && cr->tuplet()->tick() < 0)
-//                        cr->tuplet()->setTick(cr->tick());
             score()->setPlaylistDirty();
         }
     // fall through
