@@ -191,6 +191,8 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
         m_engravingProject->masterScore()->loadStyle(stylePath.toQString());
     }
 
+    mu::engraving::compat::EngravingCompat::doPreLayoutCompatIfNeeded(m_engravingProject->masterScore());
+
     masterScore->lockUpdates(false);
     masterScore->setLayoutAll();
     masterScore->update();

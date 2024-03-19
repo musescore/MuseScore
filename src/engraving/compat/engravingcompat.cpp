@@ -29,6 +29,48 @@
 using namespace mu::engraving;
 
 namespace mu::engraving::compat {
+void EngravingCompat::doPreLayoutCompatIfNeeded(MasterScore* score)
+{
+    if (score->mscVersion() >= 440) {
+        return;
+    }
+
+    if (score->mscVersion() >= 420) {
+        undoStaffTextExcludeFromPart(score);
+    }
+}
+
+void EngravingCompat::undoStaffTextExcludeFromPart(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
+            if (!mb->isMeasure()) {
+                continue;
+            }
+            for (Segment& segment : toMeasure(mb)->segments()) {
+                if (!segment.isChordRestType()) {
+                    continue;
+                }
+                for (EngravingItem* item : segment.annotations()) {
+                    if (!item || !item->isStaffText()) {
+                        continue;
+                    }
+                    if (item->excludeFromOtherParts()) {
+                        item->undoChangeProperty(Pid::EXCLUDE_FROM_OTHER_PARTS, false);
+                        for (EngravingObject* linkedItem : item->linkList()) {
+                            if (linkedItem == item && !linkedItem->score()->isMaster()) {
+                                toEngravingItem(item)->setAppearanceLinkedToMaster(false);
+                            } else if (linkedItem != item) {
+                                linkedItem->undoChangeProperty(Pid::VISIBLE, false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void EngravingCompat::doPostLayoutCompatIfNeeded(MasterScore* score)
 {
     if (score->mscVersion() >= 440) {
