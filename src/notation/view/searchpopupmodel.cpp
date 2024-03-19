@@ -34,10 +34,10 @@ void SearchPopupModel::load()
 
 void SearchPopupModel::search(const QString& text)
 {
-    mu::engraving::EngravingItem* element = notation()->elements()->search(text.toStdString());
-    if (element) {
-        notation()->interaction()->select({ element }, SelectType::SINGLE);
-        notation()->interaction()->showItem(element);
+    auto elements = notation()->elements()->search(text);
+    if (!elements.empty() && std::find(elements.begin(), elements.end(), nullptr) == elements.end()) {
+        notation()->interaction()->select(elements, elements.size() == 1 ? SelectType::SINGLE : SelectType::RANGE);
+        notation()->interaction()->showItem(elements.front());
     } else {
         notation()->interaction()->clearSelection();
     }
