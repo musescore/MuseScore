@@ -852,6 +852,11 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
                     d->setParent(destCR->segment());
                     score->undoAddElement(d);
                 } else if (tag == "HairPin") {
+                    if (destTrack >= maxTrack) {
+                        LOGD("PasteSymbols: no track for %s", tag.ascii());
+                        e.skipCurrentElement();
+                        continue;
+                    }
                     Hairpin* h = Factory::createHairpin(score->dummy()->segment());
                     h->setTrack(destTrack);
                     TRead::read(h, e, ctx);
