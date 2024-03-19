@@ -3489,6 +3489,8 @@ void Score::cmdDeleteSelection()
                             break;
                         }
                     }
+                } else if (e->isSoundFlag()) {
+                    tick = e->tick();
                 } else if (e->explicitParent()
                            && (e->explicitParent()->isSegment() || e->explicitParent()->isChord() || e->explicitParent()->isNote()
                                || e->explicitParent()->isRest())) {
