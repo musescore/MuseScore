@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 #include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
-#include "plugins/ipluginsconfiguration.h"
+#include "extensions/iextensionsconfiguration.h"
 #include "audio/iaudioconfiguration.h"
 #include "vst/ivstconfiguration.h"
 #include "iappshellconfiguration.h"
@@ -38,12 +38,12 @@ class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncab
 {
     Q_OBJECT
 
-    INJECT(project::IProjectConfiguration, projectConfiguration)
-    INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(plugins::IPluginsConfiguration, pluginsConfiguration)
-    INJECT(audio::IAudioConfiguration, audioConfiguration)
-    INJECT(vst::IVstConfiguration, vstConfiguration)
-    INJECT(IAppShellConfiguration, configuration)
+    Inject<project::IProjectConfiguration> projectConfiguration;
+    Inject<notation::INotationConfiguration> notationConfiguration;
+    Inject<extensions::IExtensionsConfiguration> extensionsConfiguration;
+    Inject<audio::IAudioConfiguration> audioConfiguration;
+    Inject<vst::IVstConfiguration> vstConfiguration;
+    Inject<IAppShellConfiguration> configuration;
 
 public:
     explicit FoldersPreferencesModel(QObject* parent = nullptr);

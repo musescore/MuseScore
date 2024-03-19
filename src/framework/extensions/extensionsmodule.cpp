@@ -29,9 +29,11 @@
 
 #include "internal/extensionsprovider.h"
 #include "internal/extensionsconfiguration.h"
+#include "internal/extensionsactioncontroller.h"
 
 #include "view/extensionbuilder.h"
 #include "view/extensionsuiengine.h"
+#include "view/extensionsmodel.h"
 
 #include "api/v1/apiv1.h"
 
@@ -54,9 +56,10 @@ std::string ExtensionsModule::moduleName() const
 
 void ExtensionsModule::registerExports()
 {
-    m_extensionsProvider = std::make_shared<ExtensionsProvider>();
+    m_provider = std::make_shared<ExtensionsProvider>();
+    m_actionController = std::make_shared<ExtensionsActionController>();
 
-    ioc()->registerExport<IExtensionsProvider>(moduleName(), m_extensionsProvider);
+    ioc()->registerExport<IExtensionsProvider>(moduleName(), m_provider);
     ioc()->registerExport<IExtensionsConfiguration>(moduleName(), new ExtensionsConfiguration());
     ioc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine());
 }
@@ -68,6 +71,7 @@ void ExtensionsModule::registerResources()
 
 void ExtensionsModule::registerUiTypes()
 {
+    qmlRegisterType<ExtensionsListModel>("Muse.Extensions", 1, 0, "ExtensionsListModel");
     qmlRegisterType<ExtensionBuilder>("Muse.Extensions", 1, 0, "ExtensionBuilder");
     qmlRegisterType<DevExtensionsListModel>("Muse.Extensions", 1, 0, "DevExtensionsListModel");
 }
@@ -85,7 +89,16 @@ void ExtensionsModule::registerApi()
     apiv1::ApiV1::registerQmlTypes();
 }
 
+void ExtensionsModule::onInit(const IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_actionController->init();
+}
+
 void ExtensionsModule::onDelayedInit()
 {
-    m_extensionsProvider->reloadPlugins();
+    m_provider->reloadPlugins();
 }

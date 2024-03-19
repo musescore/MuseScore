@@ -88,10 +88,6 @@ if (MUE_BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif()
 
-if (MUE_BUILD_PLUGINS_MODULE)
-    add_subdirectory(plugins)
-endif()
-
 add_subdirectory(print)
 
 if (MUE_BUILD_PROJECT_MODULE)

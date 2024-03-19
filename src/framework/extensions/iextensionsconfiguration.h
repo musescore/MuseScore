@@ -26,6 +26,7 @@
 
 #include "global/io/path.h"
 #include "global/types/ret.h"
+#include "global/async/channel.h"
 
 #include "extensionstypes.h"
 
@@ -46,6 +47,8 @@ public:
     // legacy plugins
     virtual io::path_t pluginsDefaultPath() const = 0;
     virtual io::path_t pluginsUserPath() const = 0;
+    virtual void setUserPluginsPath(const io::path_t& path) = 0;
+    virtual async::Channel<io::path_t> pluginsUserPathChanged() const = 0;
 };
 }
 

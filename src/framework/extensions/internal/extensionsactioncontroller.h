@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLUGINS_PLUGINACTIONCONTROLLER_H
-#define MU_PLUGINS_PLUGINACTIONCONTROLLER_H
+#ifndef MU_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
+#define MU_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
@@ -31,14 +31,14 @@
 #include "extensions/iextensionsprovider.h"
 #include "ui/iuiactionsregister.h"
 
-namespace mu::plugins {
-class PluginsUiActions;
-class PluginsActionController : public actions::Actionable, public async::Asyncable
+namespace mu::extensions {
+class ExtensionsUiActions;
+class ExtensionsActionController : public actions::Actionable, public async::Asyncable
 {
-    INJECT(IInteractive, interactive)
-    INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(extensions::IExtensionsProvider, provider)
-    INJECT(ui::IUiActionsRegister, uiActionsRegister)
+    Inject<IInteractive> interactive;
+    Inject<actions::IActionsDispatcher> dispatcher;
+    Inject<extensions::IExtensionsProvider> provider;
+    Inject<ui::IUiActionsRegister> uiActionsRegister;
 
 public:
     void init();
@@ -48,8 +48,8 @@ private:
 
     void onPluginTriggered(const Uri& uri);
 
-    std::shared_ptr<PluginsUiActions> m_pluginsUiActions;
+    std::shared_ptr<ExtensionsUiActions> m_uiActions;
 };
 }
 
-#endif // MU_PLUGINS_PLUGINACTIONCONTROLLER_H
+#endif // MU_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H

@@ -49,6 +49,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/scriptengine.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/jsmoduleloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsactioncontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/extensionsactioncontroller.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/legacy/extpluginsloader.h
@@ -59,6 +63,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionbuilder.h
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionsuiengine.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/extensionsuiengine.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/extensionsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/extensionsmodel.h
 
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/devtools/devextensionslistmodel.h

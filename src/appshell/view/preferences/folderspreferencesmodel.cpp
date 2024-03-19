@@ -97,8 +97,8 @@ void FoldersPreferencesModel::load()
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {
-            FolderType::Plugins, qtrc("appshell/preferences", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString(),
-            pluginsConfiguration()->userPluginsPath().toQString()
+            FolderType::Plugins, qtrc("appshell/preferences", "Plugins"), extensionsConfiguration()->pluginsUserPath().toQString(),
+            extensionsConfiguration()->pluginsUserPath().toQString()
         },
         {
             FolderType::SoundFonts, qtrc("appshell/preferences", "SoundFonts"), pathsToString(
@@ -132,7 +132,7 @@ void FoldersPreferencesModel::setupConnections()
         setFolderPaths(FolderType::Templates, path.toQString());
     });
 
-    pluginsConfiguration()->userPluginsPathChanged().onReceive(this, [this](const io::path_t& path) {
+    extensionsConfiguration()->pluginsUserPathChanged().onReceive(this, [this](const io::path_t& path) {
         setFolderPaths(FolderType::Plugins, path.toQString());
     });
 
@@ -166,7 +166,7 @@ void FoldersPreferencesModel::saveFolderPaths(FoldersPreferencesModel::FolderTyp
     }
     case FolderType::Plugins: {
         io::path_t folderPath = paths.toStdString();
-        pluginsConfiguration()->setUserPluginsPath(folderPath);
+        extensionsConfiguration()->setUserPluginsPath(folderPath);
         break;
     }
     case FolderType::SoundFonts: {

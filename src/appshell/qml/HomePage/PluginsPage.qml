@@ -25,7 +25,7 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Plugins 1.0
+import Muse.Extensions 1.0
 
 FocusScope {
     id: root
@@ -41,7 +41,7 @@ FocusScope {
 
     NavigationSection {
         id: navSec
-        name: "Plugins"
+        name: "Extensions"
         enabled: root.enabled && root.visible
         order: 3
         onActiveChanged: function(active) {
@@ -159,7 +159,7 @@ FocusScope {
 
             anchors.right: parent.right
 
-            text: qsTrc("plugins", "Reload plugins")
+            text: qsTrc("extensions", "Reload plugins")
             icon: IconCode.UPDATE
             orientation: Qt.Horizontal
 
@@ -173,7 +173,7 @@ FocusScope {
         }
     }
 
-    PluginsPage {
+    ExtensionsListPanel {
         id: pluginsPage
 
         anchors.top: topLayout.bottom

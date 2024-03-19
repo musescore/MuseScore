@@ -60,10 +60,6 @@ if (NOT MUE_BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif()
 
-if (NOT MUE_BUILD_PLUGINS_MODULE)
-    add_subdirectory(plugins)
-endif()
-
 if (NOT MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()

@@ -29,6 +29,7 @@
 
 namespace mu::extensions {
 class ExtensionsProvider;
+class ExtensionsActionController;
 class ExtensionsModule : public modularity::IModuleSetup
 {
 public:
@@ -39,11 +40,13 @@ public:
     void registerUiTypes() override;
     void resolveImports() override;
     void registerApi() override;
+    void onInit(const IApplication::RunMode& mode) override;
     void onDelayedInit() override;
 
 private:
 
-    std::shared_ptr<ExtensionsProvider> m_extensionsProvider;
+    std::shared_ptr<ExtensionsProvider> m_provider;
+    std::shared_ptr<ExtensionsActionController> m_actionController;
 };
 }
 

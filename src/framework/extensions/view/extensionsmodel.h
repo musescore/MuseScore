@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PLUGINS_PLUGINSMODEL_H
-#define MU_PLUGINS_PLUGINSMODEL_H
+#ifndef MU_EXTENSIONS_EXTENSIONSMODEL_H
+#define MU_EXTENSIONS_EXTENSIONSMODEL_H
 
 #include <QAbstractListModel>
 #include <QList>
@@ -32,17 +32,17 @@
 #include "extensions/iextensionsconfiguration.h"
 #include "extensions/iextensionsprovider.h"
 
-namespace mu::plugins {
-class PluginsModel : public QAbstractListModel, public async::Asyncable
+namespace mu::extensions {
+class ExtensionsListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IInteractive, interactive)
-    INJECT(extensions::IExtensionsProvider, provider)
-    INJECT(extensions::IExtensionsConfiguration, configuration)
+    Inject<IInteractive> interactive;
+    Inject<IExtensionsProvider> provider;
+    Inject<IExtensionsConfiguration> configuration;
 
 public:
-    explicit PluginsModel(QObject* parent = nullptr);
+    explicit ExtensionsListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -70,12 +70,12 @@ private:
         rShortcuts
     };
 
-    void updatePlugin(const extensions::Manifest& plugin);
+    void updatePlugin(const Manifest& plugin);
     int itemIndexByCodeKey(const QString& uri) const;
 
     QHash<int, QByteArray> m_roles;
-    extensions::ManifestList m_plugins;
+    ManifestList m_plugins;
 };
 }
 
-#endif // MU_PLUGINS_PLUGINSMODEL_H
+#endif // MU_EXTENSIONS_EXTENSIONSMODEL_H

@@ -65,7 +65,7 @@ DockPage {
 
         switch (name) {
         case "scores": root.central = scoresComp; break
-        case "plugins": root.central = pluginsComp; break
+        case "extensions": root.central = extensionsComp; break
         case "audio": root.central = audioComp; break
         case "learn": root.central = learnComp; break
         case "account": root.central = accountComp; break
@@ -118,7 +118,7 @@ DockPage {
     }
 
     Component {
-        id: pluginsComp
+        id: extensionsComp
 
         PluginsPage {
             section: root.subSection
