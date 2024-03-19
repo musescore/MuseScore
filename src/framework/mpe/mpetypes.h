@@ -311,6 +311,7 @@ enum class ArticulationType {
     Tremolo16th,
     Tremolo32nd,
     Tremolo64th,
+    TremoloBuzz,
 
     Trill,
     TrillBaroque,
@@ -366,6 +367,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
         ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell,
         ArticulationType::Vibrato,
+        ArticulationType::TremoloBuzz,
     };
 
     return SINGLE_NOTE_TYPES.find(type) != SINGLE_NOTE_TYPES.cend();
