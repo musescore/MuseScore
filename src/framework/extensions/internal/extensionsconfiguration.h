@@ -26,17 +26,22 @@
 
 #include "modularity/ioc.h"
 #include "global/iglobalconfiguration.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
 namespace mu::extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration
 {
     Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     ExtensionsConfiguration() = default;
 
     io::path_t defaultPath() const override;
     io::path_t userPath() const override;
+
+    Ret setManifestConfigs(const std::map<Uri, Manifest::Config>& configs) override;
+    std::map<Uri, Manifest::Config> manifestConfigs() const override;
 
     // legacy plugins
     io::path_t pluginsDefaultPath() const override;

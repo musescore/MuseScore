@@ -51,7 +51,6 @@ std::string PluginsModule::moduleName() const
 void PluginsModule::registerExports()
 {
     m_configuration = std::make_shared<PluginsConfiguration>();
-    m_pluginsUiActions = std::make_shared<PluginsUiActions>();
     m_pluginActionController = std::make_shared<PluginsActionController>();
 
     ioc()->registerExport<IPluginsConfiguration>(moduleName(), m_configuration);
@@ -59,10 +58,6 @@ void PluginsModule::registerExports()
 
 void PluginsModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(m_pluginsUiActions);
-    }
 }
 
 void PluginsModule::registerResources()
@@ -87,15 +82,10 @@ void PluginsModule::onInit(const IApplication::RunMode& mode)
     }
 
     m_configuration->init();
+
+    m_pluginActionController->init();
 }
 
 void PluginsModule::onDelayedInit()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        //! NOTE: Re-registration of actions for new available plugins
-        ar->reg(m_pluginsUiActions);
-    }
-
-    m_pluginActionController->init();
 }

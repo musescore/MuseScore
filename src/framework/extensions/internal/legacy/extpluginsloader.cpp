@@ -91,7 +91,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     io::FileInfo fi(path);
 
     Manifest m;
-    m.uri = Uri("musescore://extensions/legacy/" + fi.baseName().toLower().toStdString());
+    m.uri = Uri("musescore://extensions/v1/" + fi.baseName().toLower().toStdString());
     m.type = Type::Macros;
     m.apiversion = 1;
     m.qmlFilePath = fi.fileName();

@@ -21,8 +21,10 @@
  */
 #include "pluginsactioncontroller.h"
 
-#include "containers.h"
 #include "translation.h"
+
+#include "pluginsuiactions.h"
+
 #include "log.h"
 
 using namespace mu::plugins;
@@ -31,6 +33,7 @@ using namespace mu::actions;
 
 void PluginsActionController::init()
 {
+    m_pluginsUiActions = std::make_shared<PluginsUiActions>();
     registerPlugins();
 
     provider()->manifestListChanged().onNotify(this, [this](){
@@ -51,6 +54,8 @@ void PluginsActionController::registerPlugins()
     dispatcher()->reg(this, "manage-plugins", [this]() {
         interactive()->open("musescore://home?section=plugins");
     });
+
+    uiActionsRegister()->reg(m_pluginsUiActions);
 }
 
 void PluginsActionController::onPluginTriggered(const Uri& uri)

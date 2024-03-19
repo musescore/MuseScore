@@ -24,7 +24,6 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "pluginsservicestub.h"
 #include "pluginsconfigurationstub.h"
 
 using namespace mu::plugins;
@@ -43,7 +42,6 @@ std::string PluginsModule::moduleName() const
 
 void PluginsModule::registerExports()
 {
-    ioc()->registerExport<IPluginsService>(moduleName(), new PluginsServiceStub());
     ioc()->registerExport<IPluginsConfiguration>(moduleName(), new PluginsConfigurationStub());
 }
 
