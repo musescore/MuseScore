@@ -74,7 +74,8 @@ mu::io::paths_t ExtPluginsLoader::qmlsPaths(const io::path_t& rootPath) const
 {
     RetVal<io::paths_t> paths = io::Dir::scanFiles(rootPath, { "*.qml" });
     if (!paths.ret) {
-        LOGE() << "failed scan files, err: " << paths.ret.toString();
+        LOGE() << "failed scan files, err: " << paths.ret.toString()
+               << ", path: " << rootPath;
     }
     return paths.val;
 }

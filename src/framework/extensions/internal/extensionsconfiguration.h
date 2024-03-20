@@ -28,14 +28,18 @@
 #include "global/iglobalconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
 
+#include "global/async/asyncable.h"
+
 namespace mu::extensions {
-class ExtensionsConfiguration : public IExtensionsConfiguration
+class ExtensionsConfiguration : public IExtensionsConfiguration, public mu::async::Asyncable
 {
     Inject<IGlobalConfiguration> globalConfiguration;
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     ExtensionsConfiguration() = default;
+
+    void init();
 
     io::path_t defaultPath() const override;
     io::path_t userPath() const override;

@@ -24,6 +24,7 @@
 #include "global/settings.h"
 #include "global/serialization/json.h"
 #include "global/io/file.h"
+#include "global/io/dir.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "log.h"
@@ -33,6 +34,18 @@ using namespace mu::extensions;
 static const mu::Settings::Key USER_PLUGINS_PATH("plugins", "application/paths/myPlugins");
 
 static const std::string EXTENSIONS_RESOURCE_NAME("EXTENSIONS");
+
+void ExtensionsConfiguration::init()
+{
+    settings()->setDefaultValue(USER_PLUGINS_PATH, Val(globalConfiguration()->userDataPath() + "/Plugins"));
+    settings()->valueChanged(USER_PLUGINS_PATH).onReceive(nullptr, [this](const Val& val) {
+        m_pluginsUserPathChanged.send(val.toString());
+    });
+
+    if (!pluginsUserPath().empty()) {
+        io::Dir::mkpath(pluginsUserPath());
+    }
+}
 
 mu::io::path_t ExtensionsConfiguration::defaultPath() const
 {
@@ -96,10 +109,12 @@ std::map<mu::Uri, Manifest::Config> ExtensionsConfiguration::manifestConfigs() c
     {
         TRACEFUNC;
 
+        mu::io::path_t configPath = pluginsUserPath() + "/config.json";
         mi::ReadResourceLockGuard lock_guard(multiInstancesProvider.get(), EXTENSIONS_RESOURCE_NAME);
-        Ret ret = io::File::readFile(pluginsUserPath() + "/config.json", data);
+        Ret ret = io::File::readFile(configPath, data);
         if (!ret) {
-            LOGE() << "failed read config data, err: " << ret.toString();
+            LOGE() << "failed read config data, err: " << ret.toString()
+                   << ", file: " << configPath;
             return {};
         }
     }

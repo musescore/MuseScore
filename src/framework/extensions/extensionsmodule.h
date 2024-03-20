@@ -30,6 +30,7 @@
 namespace mu::extensions {
 class ExtensionsProvider;
 class ExtensionsActionController;
+class ExtensionsConfiguration;
 class ExtensionsModule : public modularity::IModuleSetup
 {
 public:
@@ -45,6 +46,7 @@ public:
 
 private:
 
+    std::shared_ptr<ExtensionsConfiguration> m_configuration;
     std::shared_ptr<ExtensionsProvider> m_provider;
     std::shared_ptr<ExtensionsActionController> m_actionController;
 };
