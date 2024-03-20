@@ -100,7 +100,7 @@ private:
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
 #ifndef NO_QT_SUPPORT
-inline uint qHash(mu::notation::PopupModelType key)
+inline size_t qHash(mu::notation::PopupModelType key)
 {
     return ::qHash(int(key));
 }
