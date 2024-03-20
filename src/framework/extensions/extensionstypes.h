@@ -75,10 +75,12 @@ manifest.json
 "type": String,                   // Values: form, macros
 "title": String,                  //
 "description": String,            //
+"category": String,               //
+"thumbnail": String,              //
+"version": String,                //
 "apiversion": String              // Optional default 2
 
-"qmlFilePath": String             // Path (name) of qml file of form
-"jsFilePath": String              // Path (name) of js file of macros
+"main": String                    // Path (name) of main file (qml or js)
 }*/
 
 struct Manifest {
@@ -92,8 +94,7 @@ struct Manifest {
     int apiversion = DEFAULT_API_VERSION;
     bool requiresScore = true;
 
-    mu::io::path_t qmlFilePath;
-    mu::io::path_t jsFilePath;
+    mu::io::path_t main;
 
     struct Config {
         bool enabled = false;

@@ -26,6 +26,7 @@
 #include <QQuickItem>
 
 #include "extensions/api/v1/ipluginapiv1.h"
+#include "global/api/apiobject.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"

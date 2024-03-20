@@ -36,9 +36,9 @@ mu::Ret ExtPluginRunner::run(const Manifest& m)
 {
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engine()->qmlEngineApiV1(), m.qmlFilePath.toQString());
+    QQmlComponent component = QQmlComponent(engine()->qmlEngineApiV1(), m.main.toQString());
     if (!component.isReady()) {
-        LOGE() << "Failed to load QML file: " << m.qmlFilePath
+        LOGE() << "Failed to load QML file: " << m.main
                << ", from extension: " << m.uri.toString();
         LOGE() << component.errorString();
         return make_ret(Err::ExtLoadError);
@@ -46,14 +46,14 @@ mu::Ret ExtPluginRunner::run(const Manifest& m)
 
     QObject* obj = component.create();
     if (!obj) {
-        LOGE() << "Failed to create QML Object: " << m.qmlFilePath
+        LOGE() << "Failed to create QML Object: " << m.main
                << ", from extension: " << m.uri.toString();
         return make_ret(Err::ExtLoadError);
     }
 
     IPluginApiV1* plugin = dynamic_cast<IPluginApiV1*>(obj);
     if (!plugin) {
-        LOGE() << "Qml Object not MuseScore plugin: " << m.qmlFilePath
+        LOGE() << "Qml Object not MuseScore plugin: " << m.main
                << ", from extension: " << m.uri.toString();
         return make_ret(Err::ExtBadFormat);
     }
