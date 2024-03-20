@@ -32,22 +32,18 @@
 #include "mscore.h"
 #include "notedot.h"
 #include "note.h"
-#include "ottava.h"
 #include "page.h"
 #include "part.h"
 #include "repeat.h"
 #include "score.h"
 #include "segment.h"
-#include "sig.h"
 #include "slur.h"
 #include "staff.h"
 #include "stem.h"
 #include "stemslash.h"
-#include "sticking.h"
 #include "style.h"
 #include "sym.h"
 #include "system.h"
-#include "text.h"
 #include "tie.h"
 #include "timesig.h"
 #include "tremolo.h"
@@ -55,8 +51,6 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
-#include "breath.h"
-#include "tempotext.h"
 #include "systemdivider.h"
 #include "hook.h"
 #include "ambitus.h"
@@ -3910,21 +3904,21 @@ static void processLines(System* system, std::vector<Spanner*> lines, bool align
 
       if (align && segments.size() > 1) {
             const int nstaves = system->staves()->size();
-            constexpr qreal minY = -1000000.0;
             const qreal defaultY = segments[0]->rypos();
-            std::vector<qreal> y(nstaves, minY);
+            std::vector<double> yAbove(nstaves, -DBL_MAX);
+            std::vector<double> yBelow(nstaves, -DBL_MAX);
 
             for (SpannerSegment* ss : segments) {
                   if (ss->visible()) {
-                        qreal& staffY = y[ss->staffIdx()];
+                        qreal& staffY =  ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];
                         staffY = qMax(staffY, ss->rypos());
                         }
                   }
             for (SpannerSegment* ss : segments) {
                   if (!ss->isStyled(Pid::OFFSET))
                         continue;
-                  const qreal staffY = y[ss->staffIdx()];
-                  if (staffY > minY)
+                  const qreal& staffY =  ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];
+                  if (staffY > -DBL_MAX)
                         ss->rypos() = staffY;
                   else
                         ss->rypos() = defaultY;
