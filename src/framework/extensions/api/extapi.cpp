@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "qmlextapi.h"
+#include "extapi.h"
 
 #include "log.h"
 
 using namespace mu::api;
 using namespace mu::extensions::api;
 
-QmlExtApi::QmlExtApi(IApiEngine* engine, QObject* parent)
+ExtApi::ExtApi(IApiEngine* engine, QObject* parent)
     : QObject(parent), m_engine(engine)
 {
 }
 
-QJSValue QmlExtApi::api(const std::string& name) const
+QJSValue ExtApi::api(const std::string& name) const
 {
     if (!apiRegister()) {
         return QJSValue();
