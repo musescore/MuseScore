@@ -56,11 +56,12 @@ std::string ExtensionsModule::moduleName() const
 
 void ExtensionsModule::registerExports()
 {
+    m_configuration = std::make_shared<ExtensionsConfiguration>();
     m_provider = std::make_shared<ExtensionsProvider>();
     m_actionController = std::make_shared<ExtensionsActionController>();
 
     ioc()->registerExport<IExtensionsProvider>(moduleName(), m_provider);
-    ioc()->registerExport<IExtensionsConfiguration>(moduleName(), new ExtensionsConfiguration());
+    ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IExtensionsUiEngine>(moduleName(), new ExtensionsUiEngine());
 }
 
@@ -95,6 +96,7 @@ void ExtensionsModule::onInit(const IApplication::RunMode& mode)
         return;
     }
 
+    m_configuration->init();
     m_actionController->init();
 }
 
