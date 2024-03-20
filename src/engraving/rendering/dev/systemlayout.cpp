@@ -1448,11 +1448,12 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
         const double defaultY = segments[0]->ldata()->pos().y();
-        std::vector<double> y(nstaves, -DBL_MAX);
+        std::vector<double> yAbove(nstaves, -DBL_MAX);
+        std::vector<double> yBelow(nstaves, -DBL_MAX);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
-                double& staffY = y[ss->staffIdx()];
+                double& staffY = ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];
                 staffY = std::max(staffY, ss->ldata()->pos().y());
             }
         }
@@ -1460,7 +1461,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
             if (!ss->isStyled(Pid::OFFSET)) {
                 continue;
             }
-            const double staffY = y[ss->staffIdx()];
+            const double& staffY = ss->spanner() && ss->spanner()->placeAbove() ? yAbove[ss->staffIdx()] : yBelow[ss->staffIdx()];
             if (staffY > -DBL_MAX) {
                 ss->mutldata()->setPosY(staffY);
             } else {
