@@ -31,6 +31,8 @@
 
 #include "../extensionserrors.h"
 
+#include "log.h"
+
 using namespace mu::extensions;
 
 KnownCategories ExtensionsProvider::knownCategories() const
@@ -104,6 +106,28 @@ mu::async::Channel<Manifest> ExtensionsProvider::manifestChanged() const
     return m_manifestChanged;
 }
 
+Action ExtensionsProvider::action(const UriQuery& q) const
+{
+    const Manifest& m = manifest(q.uri());
+    IF_ASSERT_FAILED(m.actions.size() > 0) {
+        return Action();
+    }
+
+    if (m.actions.size() == 1) {
+        return m.actions.at(0);
+    }
+
+    std::string code = q.param("action").toString();
+    for (const Action& a : m.actions) {
+        if (a.code == code) {
+            return a;
+        }
+    }
+
+    LOGE() << "not found action: " << code << ", uri: " << q.toString();
+    return Action();
+}
+
 mu::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
 {
     bool ok = false;
@@ -128,10 +152,10 @@ mu::Ret ExtensionsProvider::setEnable(const Uri& uri, bool enable)
     return ret;
 }
 
-mu::Ret ExtensionsProvider::perform(const Uri& uri)
+mu::Ret ExtensionsProvider::perform(const UriQuery& uri)
 {
-    const Manifest& m = manifest(uri);
-    switch (m.type) {
+    Action a = action(uri);
+    switch (a.type) {
     case Type::Form:
         return interactive()->open(uri).ret;
         break;
@@ -144,22 +168,27 @@ mu::Ret ExtensionsProvider::perform(const Uri& uri)
     return make_ret(Ret::Code::UnknownError);
 }
 
-mu::Ret ExtensionsProvider::run(const Uri& uri)
+mu::Ret ExtensionsProvider::run(const UriQuery& uri)
 {
-    const Manifest& m = manifest(uri);
-    if (!m.isValid()) {
+    Action a = action(uri);
+    return run(a);
+}
+
+mu::Ret ExtensionsProvider::run(const Action& a)
+{
+    if (!a.isValid()) {
         return make_ret(Err::ExtNotFound);
     }
 
     //! TODO Add check of type
 
     Ret ret;
-    if (m.apiversion == 1) {
+    if (a.apiversion == 1) {
         legacy::ExtPluginRunner runner;
-        ret = runner.run(m);
+        ret = runner.run(a);
     } else {
         ExtensionRunner runner;
-        ret = runner.run(m);
+        ret = runner.run(a);
     }
 
     return ret;

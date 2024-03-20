@@ -39,7 +39,7 @@ class ExtPluginRunner
 public:
     ExtPluginRunner() = default;
 
-    Ret run(const Manifest& manifest);
+    Ret run(const Action& action);
 };
 }
 

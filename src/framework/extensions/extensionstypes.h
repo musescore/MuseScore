@@ -39,7 +39,8 @@ constexpr int DEFAULT_API_VERSION = 2;
 enum class Type {
     Undefined = 0,
     Form,       // Have UI, controls, user interaction
-    Macros      // Without UI, they just do some script
+    Macros,     // Without UI, they just do some script
+    Composite   // Composite with some UI and script
 };
 
 static inline Type typeFromString(const std::string& str)
@@ -48,6 +49,8 @@ static inline Type typeFromString(const std::string& str)
         return Type::Form;
     } else if (str == "macros") {
         return Type::Macros;
+    } else if (str == "composite") {
+        return Type::Composite;
     }
     return Type::Undefined;
 }
@@ -58,6 +61,7 @@ static inline std::string typeToString(const Type& type)
     case Type::Undefined: return "undefined";
     case Type::Form: return "form";
     case Type::Macros: return "macros";
+    case Type::Composite: return "composite";
     }
     return std::string();
 }
@@ -66,6 +70,23 @@ enum Filter {
     Enabled,
     All
 };
+
+struct Action {
+    std::string code;
+    Type type = Type::Undefined;
+    String title;
+    mu::io::path_t main;
+    int apiversion = DEFAULT_API_VERSION;
+
+    bool isValid() const { return type != Type::Undefined && !code.empty(); }
+};
+
+inline UriQuery makeUriQuery(const Uri& uri, const std::string& actionCode)
+{
+    UriQuery q(uri);
+    q.addParam("action", Val(actionCode));
+    return q;
+}
 
 /*
 manifest.json
@@ -94,7 +115,7 @@ struct Manifest {
     int apiversion = DEFAULT_API_VERSION;
     bool requiresScore = true;
 
-    mu::io::path_t main;
+    std::vector<Action> actions;
 
     struct Config {
         bool enabled = false;
@@ -102,6 +123,16 @@ struct Manifest {
     } config;
 
     bool isValid() const { return type != Type::Undefined && uri.isValid(); }
+
+    Action action(const std::string& code) const
+    {
+        for (const Action& a : actions) {
+            if (a.code == code) {
+                return a;
+            }
+        }
+        return Action();
+    }
 };
 
 using ManifestList = std::vector<Manifest>;

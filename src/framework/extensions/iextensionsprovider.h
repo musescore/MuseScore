@@ -45,13 +45,14 @@ public:
 
     virtual const Manifest& manifest(const Uri& uri) const = 0;
     virtual async::Channel<Manifest> manifestChanged() const = 0;
+    virtual Action action(const UriQuery& q) const = 0;
 
     virtual KnownCategories knownCategories() const = 0;
 
     virtual Ret setEnable(const Uri& uri, bool enable) = 0;
 
-    virtual Ret perform(const Uri& uri) = 0;
-    virtual Ret run(const Uri& uri) = 0;
+    virtual Ret perform(const UriQuery& uri) = 0;
+    virtual Ret run(const UriQuery& uri) = 0;
 };
 }
 

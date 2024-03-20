@@ -43,14 +43,16 @@ const mu::ui::UiActionList& ExtensionsUiActions::actionsList() const
     UiActionList result;
 
     for (const Manifest& m : provider()->manifestList()) {
-        UiAction action;
-        action.code = m.uri.toString();
-        action.uiCtx = m.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
-        action.scCtx = m.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
-        action.description = TranslatableString("extensions", "Run plugin %1").arg(m.title);
-        action.title = action.description;
+        for (const Action& a : m.actions) {
+            UiAction action;
+            action.code = makeUriQuery(m.uri, a.code).toString();
+            action.uiCtx = m.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
+            action.scCtx = m.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
+            action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
+            action.title = action.description;
 
-        result.push_back(action);
+            result.push_back(std::move(action));
+        }
     }
 
     result.push_back(MANAGE_ACTION);

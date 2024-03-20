@@ -337,18 +337,10 @@ void InteractiveProvider::fillExtData(QmlLaunchData* data, const UriQuery& q) co
     data->setValue("type", meta.type);
 
     QVariantMap params;
-    const UriQuery::Params& p = q.params();
-    for (auto it = p.cbegin(); it != p.cend(); ++it) {
-        params[QString::fromStdString(it->first)] = it->second.toQVariant();
-    }
-
-    params["uri"] = QString::fromStdString(q.uri().toString());
+    params["uri"] = QString::fromStdString(q.toString());
 
     data->setValue("sync", params.value("sync", false));
     data->setValue("modal", params.value("modal", ""));
-
-    params.remove("sync");
-
     data->setValue("params", params);
 }
 

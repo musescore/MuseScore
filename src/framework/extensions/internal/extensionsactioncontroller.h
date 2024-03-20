@@ -46,7 +46,7 @@ public:
 private:
     void registerPlugins();
 
-    void onPluginTriggered(const Uri& uri);
+    void onPluginTriggered(const UriQuery& uri);
 
     std::shared_ptr<ExtensionsUiActions> m_uiActions;
 };

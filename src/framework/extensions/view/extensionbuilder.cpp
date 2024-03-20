@@ -38,12 +38,16 @@ ExtensionBuilder::ExtensionBuilder(QObject* parent)
 
 void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 {
-    Manifest m = provider()->manifest(Uri(uri.toStdString()));
+    Action a = provider()->action(UriQuery(uri.toStdString()));
+    if (!a.isValid()) {
+        LOGE() << "Not found action, uri: " << uri;
+        return;
+    }
 
-    setTitle(m.title);
+    setTitle(a.title);
 
     QQmlEngine* engin = nullptr;
-    if (m.apiversion == 1) {
+    if (a.apiversion == 1) {
         engin = engine()->qmlEngineApiV1();
     } else {
         engin = engine()->qmlEngine();
@@ -51,9 +55,9 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engin, m.main.toQString());
+    QQmlComponent component = QQmlComponent(engin, a.main.toQString());
     if (!component.isReady()) {
-        LOGE() << "Failed to load QML file: " << m.main << ", from extension: " << uri;
+        LOGE() << "Failed to load QML file: " << a.main << ", from extension: " << uri;
         LOGE() << component.errorString();
         return;
     }
@@ -62,7 +66,7 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     m_contentItem = qobject_cast<QQuickItem*>(obj);
     if (!m_contentItem) {
-        LOGE() << "Component not QuickItem, file: " << m.main << ", from extension: " << uri;
+        LOGE() << "Component not QuickItem, file: " << a.main << ", from extension: " << uri;
     }
 
     if (m_contentItem) {
@@ -83,17 +87,17 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     emit contentItemChanged();
 
-    if (m.apiversion == 1) {
+    if (a.apiversion == 1) {
         apiv1::IPluginApiV1* plugin = dynamic_cast<apiv1::IPluginApiV1*>(m_contentItem);
         plugin->closeRequest().onNotify(this, [this]() {
             emit closeRequested();
         });
 
         //! NOTE For version 1 plugins we need to call run
-        async::Async::call(this, [plugin, m]() {
+        async::Async::call(this, [plugin, a, uri]() {
             if (!plugin) {
-                LOGE() << "Qml Object not MuseScore plugin: " << m.main
-                       << ", from extension: " << m.uri.toString();
+                LOGE() << "Qml Object not MuseScore plugin: " << a.main
+                       << ", from extension: " << uri;
                 return;
             }
             plugin->runPlugin();

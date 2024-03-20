@@ -45,15 +45,6 @@ QVariantList DevExtensionsListModel::extensionsList()
 
 void DevExtensionsListModel::clicked(const QString& uri_)
 {
-    Uri uri(uri_.toStdString());
-    Manifest m = provider()->manifest(uri);
-    switch (m.type) {
-    case Type::Form:
-        interactive()->open(uri);
-        break;
-    case Type::Macros:
-        provider()->run(uri);
-    default:
-        break;
-    }
+    UriQuery q(uri_.toStdString());
+    provider()->perform(q);
 }
