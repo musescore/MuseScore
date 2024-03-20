@@ -118,7 +118,28 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
     m.category = obj.value("category").toString();
     m.thumbnail = obj.value("thumbnail").toStdString();
     m.apiversion = obj.value("apiversion", DEFAULT_API_VERSION).toInt();
-    m.main = obj.value("main").toStdString();
+
+    if (obj.contains("actions")) {
+        JsonArray arr = obj.value("actions").toArray();
+        for (size_t i = 0; i < arr.size(); ++i) {
+            JsonObject ao = arr.at(i).toObject();
+            Action a;
+            a.code = ao.value("code").toStdString();
+            a.type = typeFromString(ao.value("type").toStdString());
+            a.title = ao.value("title").toString();
+            a.main = ao.value("main").toStdString();
+            a.apiversion = m.apiversion;
+            m.actions.push_back(std::move(a));
+        }
+    } else {
+        Action a;
+        a.code = "main";
+        a.type = m.type;
+        a.title = m.title;
+        a.main = obj.value("main").toStdString();
+        a.apiversion = m.apiversion;
+        m.actions.push_back(std::move(a));
+    }
 
     return m;
 }
@@ -129,7 +150,7 @@ void ExtensionsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
         m.thumbnail = rootDirPath + "/" + m.thumbnail;
     }
 
-    if (!m.main.empty()) {
-        m.main = rootDirPath + "/" + m.main;
+    for (Action& a : m.actions) {
+        a.main = rootDirPath + "/" + a.main;
     }
 }

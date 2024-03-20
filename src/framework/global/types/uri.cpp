@@ -176,7 +176,7 @@ std::string UriQuery::toString() const
             str += it->first + "=" + it->second.toString() + "&";
         }
 
-        str.erase(str.size() - 2);
+        str.erase(str.size() - 1);
     }
     return str;
 }

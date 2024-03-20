@@ -95,7 +95,6 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     m.uri = Uri("musescore://extensions/v1/" + fi.baseName().toLower().toStdString());
     m.type = Type::Macros;
     m.apiversion = 1;
-    m.main = fi.fileName();
 
     auto dropQuotes = [](const String& str) {
         if (str.size() < 3) {
@@ -142,6 +141,14 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
         current = content.indexOf(u"\n", previous);
     }
 
+    Action a;
+    a.code = "main";
+    a.type = m.type;
+    a.title = m.title;
+    a.apiversion = m.apiversion;
+    a.main = fi.fileName();
+    m.actions.push_back(std::move(a));
+
     return m;
 }
 
@@ -150,5 +157,8 @@ void ExtPluginsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
     if (!m.thumbnail.empty()) {
         m.thumbnail = rootDirPath + "/" + m.thumbnail;
     }
-    m.main = rootDirPath + "/" + m.main;
+
+    for (Action& a : m.actions) {
+        a.main = rootDirPath + "/" + a.main;
+    }
 }

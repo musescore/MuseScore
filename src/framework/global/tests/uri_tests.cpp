@@ -95,3 +95,22 @@ TEST_F(Global_UriTests, UriQuery_Parce_Quoted)
     EXPECT_EQ(q.param("param2"), Val("value2"));
     EXPECT_EQ(q.param("param3"), Val("x=5"));
 }
+
+TEST_F(Global_UriTests, UriQuery_ToString)
+{
+    //! GIVEN Valid uriquery
+
+    UriQuery q("musescore://some/path");
+    q.addParam("param1", Val("value1"));
+
+    //! DO to string
+    std::string str = q.toString();
+    EXPECT_EQ(str, "musescore://some/path?param1=value1");
+
+    //! DO add param 2
+    q.addParam("param2", Val("value2"));
+
+    //! Do to string
+    std::string str2 = q.toString();
+    EXPECT_EQ(str2, "musescore://some/path?param1=value1&param2=value2");
+}

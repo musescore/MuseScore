@@ -43,15 +43,18 @@ public:
 
     const Manifest& manifest(const Uri& uri) const override;
     async::Channel<Manifest> manifestChanged() const override;
+    Action action(const UriQuery& q) const override;
 
     KnownCategories knownCategories() const override;
 
     Ret setEnable(const Uri& uri, bool enable) override;
 
-    Ret perform(const Uri& uri) override;
-    Ret run(const Uri& uri) override;
+    Ret perform(const UriQuery& uri) override;
+    Ret run(const UriQuery& uri) override;
 
 private:
+
+    Ret run(const Action& a);
 
     mutable ManifestList m_manifests;
     async::Notification m_manifestListChanged;

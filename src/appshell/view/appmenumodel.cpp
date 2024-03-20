@@ -642,15 +642,28 @@ MenuItemList AppMenuModel::makePluginsItems()
     KnownCategories categories = extensionsProvider()->knownCategories();
     ManifestList enabledExtensions = extensionsProvider()->manifestList(Filter::Enabled);
 
+    auto addMenuItems = [this](MenuItemList& items, const Manifest& m) {
+        if (m.actions.size() == 1) {
+            const extensions::Action& a = m.actions.at(0);
+            items << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
+        } else {
+            MenuItemList sub;
+            for (const extensions::Action& a : m.actions) {
+                sub << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
+            }
+            items << makeMenu(TranslatableString::untranslatable(m.title), sub);
+        }
+    };
+
     std::map<std::string, MenuItemList> categoriesMap;
     MenuItemList pluginsWithoutCategories;
     for (const Manifest& m : enabledExtensions) {
         std::string categoryStr = m.category.toStdString();
         if (mu::contains(categories, categoryStr)) {
             MenuItemList& items = categoriesMap[categoryStr];
-            items << makeMenuItem(m.uri.toString(), TranslatableString::untranslatable(m.title));
+            addMenuItems(items, m);
         } else {
-            pluginsWithoutCategories << makeMenuItem(m.uri.toString(), TranslatableString::untranslatable(m.title));
+            addMenuItems(pluginsWithoutCategories, m);
         }
     }
 

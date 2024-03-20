@@ -28,20 +28,20 @@
 
 using namespace mu::extensions;
 
-mu::Ret ExtensionRunner::run(const Manifest& manifest)
+mu::Ret ExtensionRunner::run(const Action& action)
 {
     ScriptEngine engine;
-    engine.setScriptPath(manifest.main);
+    engine.setScriptPath(action.main);
     Ret ret = engine.evaluate();
     if (!ret) {
-        LOGE() << "failed evaluate js script: " << manifest.main
+        LOGE() << "failed evaluate js script: " << action.main
                << ", err: " << ret.toString();
         return make_ret(Err::ExtLoadError);
     }
 
     ret = engine.call("main");
     if (!ret) {
-        LOGE() << "failed call main function of script: " << manifest.main
+        LOGE() << "failed call main function of script: " << action.main
                << ", err: " << ret.toString();
         return make_ret(Err::ExtBadFormat);
     }

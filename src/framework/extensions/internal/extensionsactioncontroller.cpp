@@ -44,9 +44,12 @@ void ExtensionsActionController::registerPlugins()
     dispatcher()->unReg(this);
 
     for (const Manifest& m : provider()->manifestList()) {
-        dispatcher()->reg(this, m.uri.toString(), [this, uri = m.uri]() {
-            onPluginTriggered(uri);
-        });
+        for (const Action& a : m.actions) {
+            UriQuery q = makeUriQuery(m.uri, a.code);
+            dispatcher()->reg(this, q.toString(), [this, q]() {
+                onPluginTriggered(q);
+            });
+        }
     }
 
     dispatcher()->reg(this, "manage-plugins", [this]() {
@@ -56,16 +59,16 @@ void ExtensionsActionController::registerPlugins()
     uiActionsRegister()->reg(m_uiActions);
 }
 
-void ExtensionsActionController::onPluginTriggered(const Uri& uri)
+void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
 {
-    const Manifest& m = provider()->manifest(uri);
+    const Manifest& m = provider()->manifest(q.uri());
     if (!m.isValid()) {
-        LOGE() << "Not found extension, uri: " << uri.toString();
+        LOGE() << "Not found extension, uri: " << q.uri().toString();
         return;
     }
 
     if (m.config.enabled) {
-        provider()->perform(uri);
+        provider()->perform(q);
         return;
     }
 
@@ -75,7 +78,7 @@ void ExtensionsActionController::onPluginTriggered(const Uri& uri)
         { IInteractive::Button::No, IInteractive::Button::Yes });
 
     if (result.standardButton() == IInteractive::Button::Yes) {
-        provider()->setEnable(uri, true);
-        provider()->perform(uri);
+        provider()->setEnable(q.uri(), true);
+        provider()->perform(q);
     }
 }

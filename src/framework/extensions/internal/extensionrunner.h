@@ -31,7 +31,7 @@ class ExtensionRunner
 public:
     ExtensionRunner() = default;
 
-    Ret run(const Manifest& manifest);
+    Ret run(const Action& action);
 };
 }
 

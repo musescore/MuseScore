@@ -32,29 +32,28 @@ using namespace mu::extensions;
 using namespace mu::extensions::legacy;
 using namespace mu::extensions::apiv1;
 
-mu::Ret ExtPluginRunner::run(const Manifest& m)
+mu::Ret ExtPluginRunner::run(const Action& action)
 {
+    io::path_t qmlPath = action.main;
+
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engine()->qmlEngineApiV1(), m.main.toQString());
+    QQmlComponent component = QQmlComponent(engine()->qmlEngineApiV1(), qmlPath.toQString());
     if (!component.isReady()) {
-        LOGE() << "Failed to load QML file: " << m.main
-               << ", from extension: " << m.uri.toString();
+        LOGE() << "Failed to load QML file: " << qmlPath;
         LOGE() << component.errorString();
         return make_ret(Err::ExtLoadError);
     }
 
     QObject* obj = component.create();
     if (!obj) {
-        LOGE() << "Failed to create QML Object: " << m.main
-               << ", from extension: " << m.uri.toString();
+        LOGE() << "Failed to create QML Object: " << qmlPath;
         return make_ret(Err::ExtLoadError);
     }
 
     IPluginApiV1* plugin = dynamic_cast<IPluginApiV1*>(obj);
     if (!plugin) {
-        LOGE() << "Qml Object not MuseScore plugin: " << m.main
-               << ", from extension: " << m.uri.toString();
+        LOGE() << "Qml Object not MuseScore plugin: " << qmlPath;
         return make_ret(Err::ExtBadFormat);
     }
 
