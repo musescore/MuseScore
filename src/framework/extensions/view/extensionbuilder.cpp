@@ -51,9 +51,9 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     //! NOTE We create extension UI using a separate engine to control what we provide,
     //! making it easier to maintain backward compatibility and stability.
-    QQmlComponent component = QQmlComponent(engin, m.qmlFilePath.toQString());
+    QQmlComponent component = QQmlComponent(engin, m.main.toQString());
     if (!component.isReady()) {
-        LOGE() << "Failed to load QML file: " << m.qmlFilePath << ", from extension: " << uri;
+        LOGE() << "Failed to load QML file: " << m.main << ", from extension: " << uri;
         LOGE() << component.errorString();
         return;
     }
@@ -62,7 +62,7 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     m_contentItem = qobject_cast<QQuickItem*>(obj);
     if (!m_contentItem) {
-        LOGE() << "Component not QuickItem, file: " << m.qmlFilePath << ", from extension: " << uri;
+        LOGE() << "Component not QuickItem, file: " << m.main << ", from extension: " << uri;
     }
 
     if (m_contentItem) {
@@ -92,7 +92,7 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
         //! NOTE For version 1 plugins we need to call run
         async::Async::call(this, [plugin, m]() {
             if (!plugin) {
-                LOGE() << "Qml Object not MuseScore plugin: " << m.qmlFilePath
+                LOGE() << "Qml Object not MuseScore plugin: " << m.main
                        << ", from extension: " << m.uri.toString();
                 return;
             }

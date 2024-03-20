@@ -95,7 +95,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     m.uri = Uri("musescore://extensions/v1/" + fi.baseName().toLower().toStdString());
     m.type = Type::Macros;
     m.apiversion = 1;
-    m.qmlFilePath = fi.fileName();
+    m.main = fi.fileName();
 
     auto dropQuotes = [](const String& str) {
         if (str.size() < 3) {
@@ -150,5 +150,5 @@ void ExtPluginsLoader::resolvePaths(Manifest& m, const io::path_t& rootDirPath) 
     if (!m.thumbnail.empty()) {
         m.thumbnail = rootDirPath + "/" + m.thumbnail;
     }
-    m.qmlFilePath = rootDirPath + "/" + m.qmlFilePath;
+    m.main = rootDirPath + "/" + m.main;
 }

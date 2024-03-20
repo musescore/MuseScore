@@ -3,5 +3,5 @@
     "type": "macros",
     "title": "Example 2 (default)",
 
-    "jsFilePath": "main.js"
+    "main": "main.js"
 }
