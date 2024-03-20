@@ -25,10 +25,13 @@
 #include "global/io/file.h"
 #include "global/io/fileinfo.h"
 #include "global/serialization/json.h"
+#include "global/stringutils.h"
+#include "global/runtime.h"
 
 #include "log.h"
 
 const std::string MANIFEST("manifest.json");
+const std::string DEV_EXTENSIONS("extensions/dev/");
 
 using namespace mu::extensions;
 
@@ -46,6 +49,11 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
         if (!m.isValid()) {
             continue;
         }
+
+        if (!mu::runtime::isDebug() && mu::strings::startsWith(m.uri.path(), DEV_EXTENSIONS)) {
+            continue;
+        }
+
         retList.push_back(m);
     }
 
@@ -53,6 +61,11 @@ ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const 
         if (!m.isValid()) {
             continue;
         }
+
+        if (!mu::runtime::isDebug() && mu::strings::startsWith(m.uri.path(), DEV_EXTENSIONS)) {
+            continue;
+        }
+
         retList.push_back(m);
     }
 

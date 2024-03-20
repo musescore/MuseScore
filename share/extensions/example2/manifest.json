@@ -1,5 +1,5 @@
 {
-    "uri": "musescore://extensions/example_2",
+    "uri": "musescore://extensions/dev/example_2",
     "type": "macros",
     "title": "Example 2 (default)",
 
