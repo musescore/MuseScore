@@ -26,6 +26,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/extensionsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/extensionsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/extensionstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/extensionserrors.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsuiengine.h
@@ -73,5 +74,4 @@ set(MODULE_QRC extensions.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
 include(SetupModule)
-
 

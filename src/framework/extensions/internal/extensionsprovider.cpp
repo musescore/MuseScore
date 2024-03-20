@@ -29,6 +29,8 @@
 #include "extensionrunner.h"
 #include "legacy/extpluginrunner.h"
 
+#include "../extensionserrors.h"
+
 using namespace mu::extensions;
 
 KnownCategories ExtensionsProvider::knownCategories() const
@@ -146,7 +148,7 @@ mu::Ret ExtensionsProvider::run(const Uri& uri)
 {
     const Manifest& m = manifest(uri);
     if (!m.isValid()) {
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(Err::ExtNotFound);
     }
 
     //! TODO Add check of type
