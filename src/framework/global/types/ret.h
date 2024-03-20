@@ -55,8 +55,8 @@ public:
         UiFirst         = 100,
         UiLast          = 199,
 
-        PluginsFirst    = 200,
-        PluginsLast     = 299,
+        ExtensionsFirst = 200,
+        ExtensionsLast  = 299,
 
         AudioFirst      = 300,
         AudioLast       = 399,

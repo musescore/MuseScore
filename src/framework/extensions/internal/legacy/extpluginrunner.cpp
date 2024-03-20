@@ -24,6 +24,7 @@
 #include <QQmlComponent>
 
 #include "../../api/v1/ipluginapiv1.h"
+#include "../../extensionserrors.h"
 
 #include "log.h"
 
@@ -40,21 +41,21 @@ mu::Ret ExtPluginRunner::run(const Manifest& m)
         LOGE() << "Failed to load QML file: " << m.qmlFilePath
                << ", from extension: " << m.uri.toString();
         LOGE() << component.errorString();
-        return make_ret(Ret::Code::UnknownError, component.errorString().toStdString());
+        return make_ret(Err::ExtLoadError);
     }
 
     QObject* obj = component.create();
     if (!obj) {
         LOGE() << "Failed to create QML Object: " << m.qmlFilePath
                << ", from extension: " << m.uri.toString();
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(Err::ExtLoadError);
     }
 
     IPluginApiV1* plugin = dynamic_cast<IPluginApiV1*>(obj);
     if (!plugin) {
         LOGE() << "Qml Object not MuseScore plugin: " << m.qmlFilePath
                << ", from extension: " << m.uri.toString();
-        return make_ret(Ret::Code::UnknownError);
+        return make_ret(Err::ExtBadFormat);
     }
 
     plugin->runPlugin();
