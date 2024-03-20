@@ -71,7 +71,7 @@ void ExtensionsUiEngine::setup(QQmlEngine* e)
     e->rootContext()->setContextProperty("ui", ui);
 
     m_apiEngine = new QmlApiEngine(e);
-    m_api = new api::QmlExtApi(m_apiEngine, e);
+    m_api = new api::ExtApi(m_apiEngine, e);
     m_engine->globalObject().setProperty("api", e->newQObject(m_api));
 
     //! NOTE We prohibit importing default modules;

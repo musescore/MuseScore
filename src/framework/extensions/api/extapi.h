@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_API_SCRIPTAPI_H
-#define MU_EXTENSIONS_API_SCRIPTAPI_H
+#ifndef MU_EXTENSIONS_API_EXTAPI_H
+#define MU_EXTENSIONS_API_EXTAPI_H
 
 #include <QObject>
 
@@ -29,12 +29,14 @@
 #include "api/iapiengine.h"
 
 namespace mu::extensions::api {
-class ScriptApi : public QObject
+//! NOTE Used for qml and scripts
+class ExtApi : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QJSValue log READ log CONSTANT)
     Q_PROPERTY(QJSValue context READ context CONSTANT)
     Q_PROPERTY(QJSValue interactive READ interactive CONSTANT)
+    Q_PROPERTY(QJSValue theme READ theme CONSTANT)
 
     //! NOTE Providing these APIs requires approval
     //Q_PROPERTY(QJSValue shortcuts READ shortcuts CONSTANT)
@@ -52,11 +54,12 @@ class ScriptApi : public QObject
     Inject<mu::api::IApiRegister> apiRegister;
 
 public:
-    ScriptApi(mu::api::IApiEngine* engine, QObject* parent);
+    ExtApi(mu::api::IApiEngine* engine, QObject* parent);
 
     QJSValue log() const { return api("api.log"); }
     QJSValue context() const { return api("api.context"); }
     QJSValue interactive() const { return api("api.interactive"); }
+    QJSValue theme() const { return api("api.theme"); }
 
     QJSValue dispatcher() const { return api("api.dispatcher"); }
     QJSValue navigation() const { return api("api.navigation"); }
@@ -78,4 +81,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_API_SCRIPTAPI_H
+#endif // MU_EXTENSIONS_API_EXTAPI_H

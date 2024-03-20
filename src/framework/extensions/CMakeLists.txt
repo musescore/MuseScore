@@ -30,10 +30,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iextensionsuiengine.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlextapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/qmlextapi.h
-    ${CMAKE_CURRENT_LIST_DIR}/api/scriptapi.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/api/scriptapi.h
+    ${CMAKE_CURRENT_LIST_DIR}/api/extapi.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/api/extapi.h
     ${CMAKE_CURRENT_LIST_DIR}/api/qmllistproperty.h
     ${API_V1_SRC}
 
