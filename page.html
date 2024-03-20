@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <title>Music Notation Software</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="selectionFilter">
+  <div id="app">
+    <div id="scoreEditor">
+      <!-- This is where the score editor would be rendered -->
+      <canvas id="scoreCanvas"></canvas>
+    </div>
+
+    <div id="sidebar">
+      <div id="selectionFilter">
+        <h3>Selection Filter</h3>
         <div>
           <input type="checkbox" id="voice1" checked>
           <label for="voice1">Voice 1</label>
@@ -23,6 +30,12 @@
           <input type="checkbox" id="voice4" checked>
           <label for="voice4">Voice 4</label>
         </div>
-      </div>  
+      </div>
+    </div>
+  </div>
+
+  <script src="voice-filter.js"></script>
+  <script src="score-renderer.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

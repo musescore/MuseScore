@@ -1,0 +1,19 @@
+
+#app {
+  display: flex;
+}
+
+#scoreEditor {
+  flex: 1;
+  padding: 20px;
+}
+
+#sidebar {
+  width: 200px;
+  padding: 20px;
+  border-left: 1px solid #ccc;
+}
+
+#selectionFilter div {
+  margin-bottom: 10px;
+}
