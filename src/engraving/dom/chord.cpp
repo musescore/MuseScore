@@ -3146,7 +3146,7 @@ void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFl
         }, false);
     }
 
-    EngravingItem::undoChangeProperty(id, newValue, ps);
+    ChordRest::undoChangeProperty(id, newValue, ps);
 }
 
 std::set<SymId> Chord::articulationSymbolIds() const

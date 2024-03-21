@@ -656,13 +656,20 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
     return result;
 }
 
-//---------------------------------------------------------
-//   undoSetBeamMode
-//---------------------------------------------------------
-
-void ChordRest::undoSetBeamMode(BeamMode mode)
+void ChordRest::undoChangeProperty(Pid id, const PropertyValue &newValue, PropertyFlags ps)
 {
-    undoChangeProperty(Pid::BEAM_MODE, mode);
+    if (id == Pid::BEAM_MODE) {
+        if (ticks() > Fraction(1, 8)) {
+            return;
+        }
+        BeamMode newBeamMode = newValue.value<BeamMode>();
+        if ((newBeamMode == BeamMode::BEGIN16 && ticks() > Fraction(1, 16))
+            || (newBeamMode == BeamMode::BEGIN32 && ticks() > Fraction(1, 32))) {
+            return;
+        }
+    }
+
+    EngravingItem::undoChangeProperty(id, newValue, ps);
 }
 
 //---------------------------------------------------------
