@@ -24,7 +24,6 @@
 //#include "playbacktypes.h"
 
 using namespace mu::pianoroll;
-using namespace mu::framework;
 
 static const std::string moduleName("pianoroll");
 

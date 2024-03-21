@@ -78,9 +78,9 @@ void PianorollModule::registerUiTypes()
     }
 }
 
-void PianorollModule::onInit(const framework::IApplication::RunMode& /*mode*/)
+void PianorollModule::onInit(const IApplication::RunMode& /*mode*/)
 {
-//    if (framework::IApplication::RunMode::Editor != mode) {
+//    if (IApplication::RunMode::Editor != mode) {
 //        return;
 //    }
 
