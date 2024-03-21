@@ -154,7 +154,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     }
 
     LOGI() << "log path: " << logFilePath;
-    LOGI() << "=== Started MuseScore " << MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
+    LOGI() << "=== Started MuseScore Studio " << MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace mu::profiler;

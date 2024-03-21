@@ -29,7 +29,7 @@ import MuseScore.AppShell 1.0
 StyledDialogView {
     id: root
 
-    title: qsTrc("appshell/about", "About MuseScore")
+    title: qsTrc("appshell/about", "About MuseScore Studio")
 
     contentHeight: 424
     contentWidth: 480

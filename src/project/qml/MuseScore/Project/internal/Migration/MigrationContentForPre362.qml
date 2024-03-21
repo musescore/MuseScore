@@ -94,6 +94,7 @@ Item {
             horizontalAlignment: Qt.AlignLeft
             verticalAlignment: Qt.AlignVCenter
 
+            // ...in MuseScore Studio X.X ?
             text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(root.appVersion)
         }
 
@@ -169,7 +170,7 @@ Item {
             horizontalAlignment: Qt.AlignLeft
             verticalAlignment: Qt.AlignVCenter
 
-            text: qsTrc("project/migration", "Please note: score layouts will be affected by improvements to MuseScore 4")
+            text: qsTrc("project/migration", "Please note: score layouts will be affected by improvements to MuseScore Studio")
         }
 
         FlatButton {

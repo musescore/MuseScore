@@ -45,7 +45,7 @@ Ret PrintProvider::printNotation(INotationPtr notation)
     printerDev.setPageSize(ps);
     printerDev.setPageOrientation(pageSizeInch.width() > pageSizeInch.height() ? QPageLayout::Landscape : QPageLayout::Portrait);
 
-    //printerDev.setCreator("MuseScore Version: " VERSION);
+    //printerDev.setCreator("MuseScore Studio Version: " VERSION);
     printerDev.setFullPage(true);
     if (!printerDev.setPageMargins(QMarginsF())) {
         LOGD() << "unable to clear printer margins";

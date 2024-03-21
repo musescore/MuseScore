@@ -17,7 +17,7 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #=============================================================================
 
-set(MUSESCORE_NAME "MuseScore")
+set(MUSESCORE_NAME "MuseScore Studio")
 set(MUSESCORE_VERSION_MAJOR "4")
 set(MUSESCORE_VERSION_MINOR "4")
 set(MUSESCORE_VERSION_PATCH "0")
