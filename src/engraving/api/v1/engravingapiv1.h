@@ -24,24 +24,30 @@
 
 #include "global/api/apiobject.h"
 
+#include "extensions/api/v1/iapiv1object.h"
+
 #include "score.h"
 
 namespace mu::engraving::apiv1 {
 class PluginAPI;
-class EngravingApiV1 : public mu::api::ApiObject
+class EngravingApiV1 : public mu::api::ApiObject, public extensions::apiv1::IApiV1Object
 {
+    Q_OBJECT
+
     Q_PROPERTY(apiv1::Score * curScore READ curScore CONSTANT)
 
 public:
     EngravingApiV1(mu::api::IApiEngine* e);
     ~EngravingApiV1();
 
-    Q_INVOKABLE void __setup(const QJSValueList& args);
+    void setup(QJSValue globalObject) override;
 
     void setApi(PluginAPI* api);
     PluginAPI* api() const;
 
+    //! Api V1 (qml plugin api)
     apiv1::Score* curScore() const;
+    Q_INVOKABLE void cmd(const QString& code);
 
 private:
     mutable PluginAPI* m_api = nullptr;

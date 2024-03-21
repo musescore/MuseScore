@@ -183,7 +183,7 @@ mu::Ret ExtensionsProvider::run(const Action& a)
     //! TODO Add check of type
 
     Ret ret;
-    if (a.apiversion == 1) {
+    if (a.legacyPlugin) {
         legacy::ExtPluginRunner runner;
         ret = runner.run(a);
     } else {
