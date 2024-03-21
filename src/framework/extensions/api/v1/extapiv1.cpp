@@ -26,8 +26,8 @@
 #include "messagedialog.h"
 #include "filedialog.h"
 #include "qqmlsettings_p.h"
-
 #include "util.h"
+#include "iapiv1object.h"
 
 #include "log.h"
 
@@ -57,13 +57,19 @@ void ExtApiV1::setup(QJSValue globalObj)
         return;
     }
 
-    QJSValue setupFn = engApiVal.property("__setup");
-    if (setupFn.isNull()) {
-        LOGE() << "not found __setup func in api.engraving.v1";
+    QObject* engObj = engApiVal.toQObject();
+    if (!engObj) {
+        LOGE() << "api.engraving.v1 is not QObject";
         return;
     }
 
-    setupFn.call({ globalObj });
+    IApiV1Object* engApiV1 = dynamic_cast<IApiV1Object*>(engObj);
+    if (!engApiV1) {
+        LOGE() << "api.engraving.v1 is not IApiV1Object";
+        return;
+    }
+
+    engApiV1->setup(globalObj);
 }
 
 QJSValue ExtApiV1::api(const std::string& name) const

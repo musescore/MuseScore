@@ -77,6 +77,7 @@ struct Action {
     String title;
     mu::io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
+    bool legacyPlugin = false;
 
     bool isValid() const { return type != Type::Undefined && !code.empty(); }
 };
@@ -113,6 +114,7 @@ struct Manifest {
     mu::io::path_t thumbnail;
     String version;
     int apiversion = DEFAULT_API_VERSION;
+    bool legacyPlugin = false;
     bool requiresScore = true;
 
     std::vector<Action> actions;

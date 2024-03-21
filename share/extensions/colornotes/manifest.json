@@ -1,0 +1,12 @@
+{
+    "uri": "musescore://extensions/colornotes",
+    "type": "macros",
+    "title": "Color Notes",
+    "description": "This plugin colors notes in the selection depending on their pitch as per the Boomwhackers convention",
+    "category": "color-notes",
+    "thumbnail": "color_notes.png",
+    "version":  "3.5",
+    "apiversion": 1,
+
+    "main": "main.js"
+}

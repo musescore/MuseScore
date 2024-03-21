@@ -95,6 +95,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     m.uri = Uri("musescore://extensions/v1/" + fi.baseName().toLower().toStdString());
     m.type = Type::Macros;
     m.apiversion = 1;
+    m.legacyPlugin = true;
 
     auto dropQuotes = [](const String& str) {
         if (str.size() < 3) {
@@ -146,6 +147,7 @@ Manifest ExtPluginsLoader::parseManifest(const io::path_t& path) const
     a.type = m.type;
     a.title = m.title;
     a.apiversion = m.apiversion;
+    a.legacyPlugin = m.legacyPlugin;
     a.main = fi.fileName();
     m.actions.push_back(std::move(a));
 

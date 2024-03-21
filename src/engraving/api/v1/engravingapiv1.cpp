@@ -22,7 +22,11 @@
 
 #include "engravingapiv1.h"
 
+#include <QJSValueIterator>
+
 #include "qmlpluginapi.h"
+
+#include "log.h"
 
 using namespace mu::engraving::apiv1;
 
@@ -38,12 +42,23 @@ EngravingApiV1::~EngravingApiV1()
     }
 }
 
-void EngravingApiV1::__setup(const QJSValueList& args)
+//! NOTE Don't remove please
+// static void dump(QString name, QJSValue val)
+// {
+//     LOGDA() << "val: " << name;
+//     QJSValueIterator it(val);
+//     while (it.hasNext()) {
+//         it.next();
+//         LOGDA() << it.name() << ": " << it.value().toString();
+//     }
+// }
+
+void EngravingApiV1::setup(QJSValue globalObj)
 {
-    IF_ASSERT_FAILED(args.size() == 1) {
-        return;
-    }
-    QJSValue globalObj = args.at(0);
+    QJSValue self = engine()->newQObject(this);
+
+    globalObj.setProperty("curScore", self.property("curScore"));
+    globalObj.setProperty("cmd", self.property("cmd"));
 }
 
 void EngravingApiV1::setApi(PluginAPI* api)
@@ -63,5 +78,10 @@ PluginAPI* EngravingApiV1::api() const
 
 Score* EngravingApiV1::curScore() const
 {
-    return m_api->curScore();
+    return api()->curScore();
+}
+
+void EngravingApiV1::cmd(const QString& code)
+{
+    api()->cmd(code);
 }
