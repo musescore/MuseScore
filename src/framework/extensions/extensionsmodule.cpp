@@ -35,7 +35,7 @@
 #include "view/extensionsuiengine.h"
 #include "view/extensionsmodel.h"
 
-#include "api/v1/apiv1.h"
+#include "api/v1/extapiv1.h"
 
 #include "devtools/devextensionslistmodel.h"
 
@@ -87,7 +87,7 @@ void ExtensionsModule::resolveImports()
 
 void ExtensionsModule::registerApi()
 {
-    apiv1::ApiV1::registerQmlTypes();
+    apiv1::ExtApiV1::registerQmlTypes();
 }
 
 void ExtensionsModule::onInit(const IApplication::RunMode& mode)

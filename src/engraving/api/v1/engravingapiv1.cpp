@@ -19,15 +19,49 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_APIV1_APIV1_H
-#define MU_EXTENSIONS_APIV1_APIV1_H
 
-namespace mu::extensions::apiv1 {
-class ApiV1
+#include "engravingapiv1.h"
+
+#include "qmlpluginapi.h"
+
+using namespace mu::engraving::apiv1;
+
+EngravingApiV1::EngravingApiV1(mu::api::IApiEngine* e)
+    : mu::api::ApiObject(e)
 {
-public:
-
-    static void registerQmlTypes();
-};
 }
-#endif // MU_EXTENSIONS_APIV1_APIV1_H
+
+EngravingApiV1::~EngravingApiV1()
+{
+    if (m_selfApi) {
+        delete m_api;
+    }
+}
+
+void EngravingApiV1::__setup(const QJSValueList& args)
+{
+    IF_ASSERT_FAILED(args.size() == 1) {
+        return;
+    }
+    QJSValue globalObj = args.at(0);
+}
+
+void EngravingApiV1::setApi(PluginAPI* api)
+{
+    m_api = api;
+}
+
+PluginAPI* EngravingApiV1::api() const
+{
+    if (!m_api) {
+        m_api = new PluginAPI();
+        m_selfApi = true;
+    }
+
+    return m_api;
+}
+
+Score* EngravingApiV1::curScore() const
+{
+    return m_api->curScore();
+}

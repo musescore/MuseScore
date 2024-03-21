@@ -24,12 +24,15 @@
 
 #include "global/async/notification.h"
 
+class QQmlEngine;
 namespace mu::extensions::apiv1 {
 class IPluginApiV1
 {
 public:
 
     virtual ~IPluginApiV1() = default;
+
+    virtual void setup(QQmlEngine* e) = 0;
 
     virtual void runPlugin() = 0;
 

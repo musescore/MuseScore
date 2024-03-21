@@ -61,29 +61,31 @@ ExtensionsUiEngine::~ExtensionsUiEngine()
     delete m_apiEngine;
     delete m_engine;
 
-    delete m_engineApiV1;
+    delete m_apiV1;
+    delete m_apiEngineV1;
+    delete m_engineV1;
 }
 
-void ExtensionsUiEngine::setup(QQmlEngine* e)
+void ExtensionsUiEngine::setup()
 {
     //! NOTE Needed for UI components, should not be used directly in extensions
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
-    e->rootContext()->setContextProperty("ui", ui);
+    m_engine->rootContext()->setContextProperty("ui", ui);
 
-    m_apiEngine = new QmlApiEngine(e);
-    m_api = new api::ExtApi(m_apiEngine, e);
-    m_engine->globalObject().setProperty("api", e->newQObject(m_api));
+    m_apiEngine = new QmlApiEngine(m_engine);
+    m_api = new api::ExtApi(m_apiEngine, m_engine);
+    m_engine->globalObject().setProperty("api", m_engine->newQObject(m_api));
 
     //! NOTE We prohibit importing default modules;
     //! only what is in the `api` folder will be imported.
-    e->addImportPath(":/api");
+    m_engine->addImportPath(":/api");
 }
 
 QQmlEngine* ExtensionsUiEngine::engine()
 {
     if (!m_engine) {
         m_engine = new QQmlEngine(this);
-        setup(m_engine);
+        setup();
     }
 
     return m_engine;
@@ -97,29 +99,32 @@ QQmlEngine* ExtensionsUiEngine::qmlEngine() const
 // =====================================================
 // Api V1
 // =====================================================
-QQmlEngine* ExtensionsUiEngine::engineApiV1()
+QQmlEngine* ExtensionsUiEngine::engineV1()
 {
-    if (!m_engineApiV1) {
-        m_engineApiV1 = new QQmlEngine(this);
-        setupApiV1(m_engineApiV1);
+    if (!m_engineV1) {
+        m_engineV1 = new QQmlEngine(this);
+        setupV1();
     }
 
-    return m_engineApiV1;
+    return m_engineV1;
 }
 
-void ExtensionsUiEngine::setupApiV1(QQmlEngine* e)
+void ExtensionsUiEngine::setupV1()
 {
     //! NOTE Needed for UI components, should not be used directly in extensions
     QObject* ui = dynamic_cast<QObject*>(uiEngine.get().get());
-    e->rootContext()->setContextProperty("ui", ui);
+    m_engineV1->rootContext()->setContextProperty("ui", ui);
+
+    m_apiEngineV1 = new QmlApiEngine(m_engineV1);
+    m_apiV1 = new apiv1::ExtApiV1(m_apiEngineV1, m_engineV1);
+    m_engineV1->globalObject().setProperty("api", m_engineV1->newQObject(m_apiV1));
 
     //! NOTE Old plugins could use standard modules (for example MuseScore.UiComponents),
     //! we need to think about how to limit this or quickly abandon old plugins.
-    e->addImportPath(":/qml");
+    m_engineV1->addImportPath(":/qml");
 }
 
 QQmlEngine* ExtensionsUiEngine::qmlEngineApiV1() const
 {
-    return uiEngine()->qmlEngine();
-    //return const_cast<ExtensionsUiEngine*>(this)->engineApiV1();
+    return const_cast<ExtensionsUiEngine*>(this)->engineV1();
 }

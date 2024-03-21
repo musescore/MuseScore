@@ -25,22 +25,36 @@
 
 #include "jsmoduleloader.h"
 
+#include "../api/extapi.h"
+#include "../api/v1/extapiv1.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::extensions;
 using namespace mu::api;
 
-ScriptEngine::ScriptEngine()
+ScriptEngine::ScriptEngine(int apiverion)
 {
     m_engine = new QJSEngine();
-    m_api = new api::ExtApi(this, m_engine);
 
-    m_engine->globalObject().setProperty("api", newQObject(m_api));
+    QJSValue globalObj = m_engine->globalObject();
+    if (apiverion == 1) {
+        //! NOTE API v1 provides not only one global `api` object,
+        //! but also a number of others, for example `curScore`,
+        //! this is the legacy of the Qml plugin.
+        apiv1::ExtApiV1* api = new apiv1::ExtApiV1(this, m_engine);
+        api->setup(globalObj);
+        m_api = api;
+    } else {
+        m_api = new api::ExtApi(this, m_engine);
+    }
+
+    globalObj.setProperty("api", m_engine->newQObject(m_api));
 
     m_moduleLoader = new JsModuleLoader(m_engine);
     m_moduleLoader->pushEngine(this);
-    QJSValue loaderObj = newQObject(m_moduleLoader);
+    QJSValue loaderObj = m_engine->newQObject(m_moduleLoader);
     QJSValue requireFn = loaderObj.property("require");
     m_engine->globalObject().setProperty("require", requireFn);
     m_engine->globalObject().setProperty("exports", m_engine->newObject());

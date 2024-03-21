@@ -89,6 +89,9 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
 
     if (a.apiversion == 1) {
         apiv1::IPluginApiV1* plugin = dynamic_cast<apiv1::IPluginApiV1*>(m_contentItem);
+
+        plugin->setup(engin);
+
         plugin->closeRequest().onNotify(this, [this]() {
             emit closeRequested();
         });

@@ -1,5 +1,7 @@
 
 set(API_V1_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/engravingapiv1.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingapiv1.h
     ${CMAKE_CURRENT_LIST_DIR}/qmlpluginapi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/qmlpluginapi.h
     ${CMAKE_CURRENT_LIST_DIR}/enums.cpp

@@ -23,6 +23,7 @@
 #include "qmlpluginapi.h"
 
 #include <QQmlEngine>
+#include <QJSValueIterator>
 
 #include "global/muversion.h"
 
@@ -31,6 +32,7 @@
 #include "engraving/dom/factory.h"
 
 // api
+#include "engravingapiv1.h"
 #include "score.h"
 #include "instrument.h"
 #include "cursor.h"
@@ -108,6 +110,32 @@ void PluginAPI::registerQmlTypes()
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 
     qmlTypesRegistered = true;
+}
+
+void PluginAPI::setup(QQmlEngine* e)
+{
+    // Sync PluginAPI and EngravingApiV1
+
+    QJSValue apiVal = e->globalObject().property("api");
+    if (apiVal.isNull()) {
+        LOGE() << "not found api object";
+        return;
+    }
+
+    QJSValue engravingApiVal = apiVal.property("engraving");
+    QObject* engravingApiObj = engravingApiVal.toQObject();
+    if (!engravingApiObj) {
+        LOGE() << "not found api.engraving object";
+        return;
+    }
+
+    EngravingApiV1* engravingApi = dynamic_cast<EngravingApiV1*>(engravingApiObj);
+    if (!engravingApi) {
+        LOGE() << "api.engraving object not EngravingApiV1";
+        return;
+    }
+
+    engravingApi->setApi(this);
 }
 
 PluginAPI::PluginAPI(QQuickItem* parent)
