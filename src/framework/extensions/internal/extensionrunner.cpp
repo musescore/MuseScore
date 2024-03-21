@@ -30,7 +30,7 @@ using namespace mu::extensions;
 
 mu::Ret ExtensionRunner::run(const Action& action)
 {
-    ScriptEngine engine;
+    ScriptEngine engine(action.apiversion);
     engine.setScriptPath(action.main);
     Ret ret = engine.evaluate();
     if (!ret) {

@@ -19,25 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "apiv1.h"
+#ifndef MU_ENGRAVING_APIV1_ENGRAVINGAPIV1_H
+#define MU_ENGRAVING_APIV1_ENGRAVINGAPIV1_H
 
-#include <QtQml>
+#include "global/api/apiobject.h"
 
-#include "messagedialog.h"
-#include "filedialog.h"
-#include "qqmlsettings_p.h"
+#include "score.h"
 
-#include "util.h"
-
-using namespace mu::extensions::apiv1;
-
-void ApiV1::registerQmlTypes()
+namespace mu::engraving::apiv1 {
+class PluginAPI;
+class EngravingApiV1 : public mu::api::ApiObject
 {
-    qmlRegisterType<MsProcess>("MuseScore", 3, 0, "QProcess");
-    qmlRegisterType<FileIO, 1>("FileIO",    3, 0, "FileIO");
+    Q_PROPERTY(apiv1::Score * curScore READ curScore CONSTANT)
 
-    qmlRegisterUncreatableType<StandardButton>("MuseScore", 3, 0, "StandardButton", "Cannot create an enumeration");
-    qmlRegisterType<MessageDialog>("MuseScore", 3, 0, "MessageDialog");
-    qmlRegisterType<QQmlSettings>("MuseScore", 3, 0, "Settings");
-    qmlRegisterType<FileDialog>("MuseScore", 3, 0, "FileDialog");
+public:
+    EngravingApiV1(mu::api::IApiEngine* e);
+    ~EngravingApiV1();
+
+    Q_INVOKABLE void __setup(const QJSValueList& args);
+
+    void setApi(PluginAPI* api);
+    PluginAPI* api() const;
+
+    apiv1::Score* curScore() const;
+
+private:
+    mutable PluginAPI* m_api = nullptr;
+    mutable bool m_selfApi = false;
+};
 }
+
+#endif // MU_ENGRAVING_APIV1_ENGRAVINGAPIV1_H

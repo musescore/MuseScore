@@ -30,6 +30,7 @@
 #include "ui/iuiengine.h"
 
 #include "../api/extapi.h"
+#include "../api/v1/extapiv1.h"
 
 namespace mu::extensions {
 class QmlApiEngine;
@@ -49,7 +50,7 @@ public:
 private:
 
     QQmlEngine* engine();
-    void setup(QQmlEngine* e);
+    void setup();
 
     QQmlEngine* m_engine = nullptr;
     QmlApiEngine* m_apiEngine = nullptr;
@@ -57,10 +58,12 @@ private:
 
     // api v1
 
-    QQmlEngine* engineApiV1();
-    void setupApiV1(QQmlEngine* e);
+    QQmlEngine* engineV1();
+    void setupV1();
 
-    QQmlEngine* m_engineApiV1 = nullptr;
+    QQmlEngine* m_engineV1 = nullptr;
+    QmlApiEngine* m_apiEngineV1 = nullptr;
+    apiv1::ExtApiV1* m_apiV1 = nullptr;
 };
 }
 

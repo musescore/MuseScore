@@ -261,6 +261,7 @@ public:
 
     static void registerQmlTypes();
 
+    void setup(QQmlEngine* e);
     void runPlugin() override { emit run(); }
     async::Notification closeRequest() const override { return m_closeRequested; }
 

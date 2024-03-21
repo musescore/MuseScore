@@ -33,7 +33,6 @@
 #include "global/types/ret.h"
 
 #include "global/api/iapiengine.h"
-#include "../api/extapi.h"
 
 namespace mu::extensions {
 class JsModuleLoader;
@@ -42,7 +41,7 @@ class ScriptEngine : public mu::api::IApiEngine
     Inject<io::IFileSystem> fileSystem;
 
 public:
-    ScriptEngine();
+    ScriptEngine(int apiverion);
     ~ScriptEngine();
 
     struct CallData {
@@ -90,7 +89,7 @@ private:
     };
 
     QJSEngine* m_engine = nullptr;
-    api::ExtApi* m_api = nullptr;
+    QObject* m_api = nullptr;
     JsModuleLoader* m_moduleLoader = nullptr;
     bool m_isRequireMode = false;
     io::path_t m_scriptPath;

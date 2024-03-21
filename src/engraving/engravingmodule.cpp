@@ -51,7 +51,9 @@
 #include "compat/scoreaccess.h"
 
 #ifndef ENGRAVING_NO_API
+#include "global/api/iapiregister.h"
 #include "api/v1/qmlpluginapi.h"
+#include "api/v1/engravingapiv1.h"
 #endif
 
 #include "log.h"
@@ -121,6 +123,11 @@ void EngravingModule::registerApi()
 {
 #ifndef ENGRAVING_NO_API
     apiv1::PluginAPI::registerQmlTypes();
+
+    auto api = ioc()->resolve<mu::api::IApiRegister>(moduleName());
+    if (api) {
+        api->regApiCreator(moduleName(), "api.engraving.v1", new mu::api::ApiCreator<apiv1::EngravingApiV1>());
+    }
 #endif
 }
 
