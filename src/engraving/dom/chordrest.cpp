@@ -592,6 +592,7 @@ void ChordRest::remove(EngravingItem* e)
 
 void ChordRest::removeDeleteBeam(bool beamed)
 {
+    setBeamlet(nullptr);
     if (m_beam) {
         Beam* b = m_beam;
         m_beam->remove(this);
