@@ -156,6 +156,7 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
     const auto currentWriteIdx = m_writeIndex.load(std::memory_order_acquire);
     if (currentReadIdx == currentWriteIdx) { // empty queue
         std::memcpy(dest, SILENT_FRAMES.data(), sampleCount * sizeof(float) * m_audioChannelsCount);
+        LOGE("!!! SILENT !!!");
         return;
     }
 
@@ -164,6 +165,7 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
         missingFramesTotal += (sampleCount * 2);
         LOG_AUDIO() << "\n FRAMES MISSED " << sampleCount * 2 << ", reserve: " <<
             reservedFrames(currentWriteIdx, currentReadIdx) << ", total: " << missingFramesTotal;
+        LOGE("!!! RANDOM !!!");
     }
 
     size_t newReadIdx = currentReadIdx;
