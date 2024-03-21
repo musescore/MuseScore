@@ -888,16 +888,7 @@ bool Beam::hasAllRests()
 void Beam::clearBeamSegments()
 {
     for (ChordRest* chordRest : m_elements) {
-        BeamSegment* chordRestBeamlet = chordRest->beamlet();
-        if (!chordRestBeamlet) {
-            continue;
-        }
-
-        for (BeamSegment* segment : m_beamSegments) {
-            if (segment == chordRestBeamlet) {
-                chordRest->setBeamlet(nullptr);
-            }
-        }
+        chordRest->setBeamlet(nullptr);
     }
 
     DeleteAll(m_beamSegments);
