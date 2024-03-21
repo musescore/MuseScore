@@ -3237,6 +3237,20 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     CompatUtils::assignInitialPartToExcerpts(masterScore->excerpts());
 
+    // Cleanup invalid spanners
+    std::vector<Spanner*> invalidSpanners;
+    auto spanners = score->spanner();
+    for (auto iter = spanners.begin(); iter != spanners.end(); ++iter) {
+        Spanner* spanner = (*iter).second;
+        bool invalid = spanner->tick().negative() || spanner->track() == mu::nidx;
+        if (invalid) {
+            invalidSpanners.push_back(spanner);
+        }
+    }
+    for (Spanner* invalidSpanner : invalidSpanners) {
+        score->removeElement(invalidSpanner);
+    }
+
     return Err::NoError;
 }
 
