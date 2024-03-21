@@ -82,6 +82,7 @@
 #include "dom/timesig.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolosinglechord.h"
+#include "dom/trill.h"
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
@@ -2946,6 +2947,8 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             } else if (tag == "Pedal") {
                 readPedal114(e, ctx, toPedal(s));
             } else if (tag == "Trill") {
+                Ornament* ornament = Factory::createOrnament(score->dummy()->chord());
+                toTrill(s)->setOrnament(ornament);
                 Read206::readTrill206(e, ctx, toTrill(s));
             } else {
                 assert(tag == "HairPin");

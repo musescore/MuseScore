@@ -2695,6 +2695,8 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             } else if (tag == "HairPin") {
                 Read206::readHairpin206(e, ctx, toHairpin(sp));
             } else if (tag == "Trill") {
+                Ornament* ornament = Factory::createOrnament(m->score()->dummy()->chord());
+                toTrill(sp)->setOrnament(ornament);
                 Read206::readTrill206(e, ctx, toTrill(sp));
             } else {
                 Read206::readTextLine206(e, ctx, toTextLineBase(sp));
