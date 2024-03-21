@@ -170,6 +170,17 @@ bool PlaybackModel::isChordSymbolsTrack(const InstrumentTrackId& trackId) const
     return trackId == chordSymbolsTrackId(trackId.partId);
 }
 
+bool PlaybackModel::hasSoundFlags(const InstrumentTrackId& trackId) const
+{
+    auto search = m_playbackCtxMap.find(trackId);
+
+    if (search == m_playbackCtxMap.cend()) {
+        return false;
+    }
+
+    return search->second.hasSoundFlags();
+}
+
 const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const InstrumentTrackId& trackId)
 {
     auto search = m_playbackDataMap.find(trackId);

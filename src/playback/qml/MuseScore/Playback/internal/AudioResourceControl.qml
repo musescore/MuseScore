@@ -329,7 +329,7 @@ Item {
 
                     onHandleMenuItem: function(itemId) {
                         if (root.resourceItemModel) {
-                            root.resourceItemModel.handleMenuItem(itemId)
+                            Qt.callLater(root.resourceItemModel.handleMenuItem, itemId)
                         }
                     }
 

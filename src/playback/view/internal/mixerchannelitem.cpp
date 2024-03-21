@@ -477,6 +477,12 @@ void MixerChannelItem::setMuted(bool mute)
     }
 }
 
+mu::notation::INotationPlaybackPtr MixerChannelItem::notationPlayback() const
+{
+    project::INotationProjectPtr project = context()->currentProject();
+    return project ? project->masterNotation()->playback() : nullptr;
+}
+
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)
 {
     if (chNum == 0) {
@@ -495,6 +501,12 @@ void MixerChannelItem::resetAudioChannelsVolumePressure()
 InputResourceItem* MixerChannelItem::buildInputResourceItem()
 {
     InputResourceItem* newItem = new InputResourceItem(this);
+
+    connect(newItem, &InputResourceItem::inputParamsChangeRequested, this, [this, newItem](const AudioResourceMeta& newMeta) {
+        if (askAboutChangingSound()) {
+            newItem->setParamsRecourceMeta(newMeta);
+        }
+    });
 
     connect(newItem, &InputResourceItem::inputParamsChanged, this, [this, newItem]() {
         bool audioSourceChanged = m_inputParams.type() != newItem->params().type();
@@ -638,6 +650,39 @@ void MixerChannelItem::closeEditor(AbstractAudioResourceItem* item)
 {
     interactive()->close(item->editorUri());
     item->setEditorUri(UriQuery());
+}
+
+bool MixerChannelItem::askAboutChangingSound()
+{
+    if (!configuration()->needToShowChangeSoundWarning()) {
+        return true;
+    }
+
+    if (!notationPlayback()->hasSoundFlags({ m_instrumentTrackId })) {
+        return true;
+    }
+
+    int changeBtn = int(IInteractive::Button::Apply);
+    IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
+    IInteractive::ButtonDatas buttons = {
+        interactive()->buttonData(IInteractive::Button::Cancel),
+        IInteractive::ButtonData(changeBtn, trc("playback", "Change sound"), true /*accent*/)
+    };
+
+    IInteractive::Result result = interactive()->warning(trc("playback", "Are you sure you want to change this sound?"),
+                                                         trc("playback",
+                                                             "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
+                                                         buttons, changeBtn, options);
+
+    if (result.button() == changeBtn) {
+        if (!result.showAgain()) {
+            configuration()->setNeedToShowChangeSoundWarning(false);
+        }
+
+        return true;
+    } else {
+        return false;
+    }
 }
 
 AudioFxChainOrder MixerChannelItem::resolveNewBlankOutputResourceItemOrder() const
