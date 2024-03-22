@@ -58,6 +58,49 @@ void SoundFlag::setSelected(bool f)
     EngravingItem::setSelected(f);
 }
 
+PropertyValue SoundFlag::getProperty(Pid id) const
+{
+    switch (id) {
+    case Pid::PLAY:
+        return m_play;
+    case Pid::VISIBLE:
+    case Pid::AUTOPLACE:
+    case Pid::SMALL:
+        return PropertyValue();
+    default:
+        return EngravingItem::getProperty(id);
+    }
+}
+
+bool SoundFlag::setProperty(Pid id, const PropertyValue& value)
+{
+    switch (id) {
+    case Pid::PLAY:
+        m_play = value.toBool();
+        return true;
+    case Pid::VISIBLE:
+    case Pid::AUTOPLACE:
+    case Pid::SMALL:
+        return false;
+    default:
+        return EngravingItem::setProperty(id, value);
+    }
+}
+
+PropertyValue SoundFlag::propertyDefault(Pid id) const
+{
+    switch (id) {
+    case Pid::PLAY:
+        return true;
+    case Pid::VISIBLE:
+    case Pid::AUTOPLACE:
+    case Pid::SMALL:
+        return PropertyValue();
+    default:
+        return EngravingItem::propertyDefault(id);
+    }
+}
+
 const SoundFlag::PresetCodes& SoundFlag::soundPresets() const
 {
     return m_soundPresets;
@@ -76,6 +119,16 @@ const SoundFlag::PlayingTechniqueCode& SoundFlag::playingTechnique() const
 void SoundFlag::setPlayingTechnique(const PlayingTechniqueCode& technique)
 {
     m_playingTechnique = technique;
+}
+
+bool SoundFlag::play() const
+{
+    return m_play;
+}
+
+void mu::engraving::SoundFlag::setPlay(bool play)
+{
+    m_play = play;
 }
 
 void SoundFlag::clear()

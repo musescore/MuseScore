@@ -152,6 +152,8 @@ InspectorSectionView {
                 icon: IconCode.POSITION_ARROWS
                 text: qsTrc("inspector", "Appearance")
 
+                enabled: model && !model.appearanceSettingsModel.isEmpty
+
                 popupContent: AppearanceSettings {
                     model: root.model ? root.model.appearanceSettingsModel : null
 
