@@ -40,7 +40,7 @@ protected:
     static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
 
 private:
-    static mpe::ArticulationType articulationTypeByNotehead(const NoteHeadGroup noteheadGroup);
+    static mpe::ArticulationType articulationTypeByNoteheadGroup(const NoteHeadGroup noteheadGroup);
 
     static void parsePersistentMeta(const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseGhostNote(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);

@@ -42,10 +42,13 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::Arpeggio, ms_NoteArticulation_ArpeggioUp },
     { mpe::ArticulationType::ArpeggioUp, ms_NoteArticulation_ArpeggioUp },
     { mpe::ArticulationType::ArpeggioDown, ms_NoteArticulation_ArpeggioDown },
+
     { mpe::ArticulationType::Tremolo8th, ms_NoteArticulation_Tremolo1 },
     { mpe::ArticulationType::Tremolo16th, ms_NoteArticulation_Tremolo2 },
     { mpe::ArticulationType::Tremolo32nd, ms_NoteArticulation_Tremolo3 },
     { mpe::ArticulationType::Tremolo64th, ms_NoteArticulation_Tremolo3 },
+    { mpe::ArticulationType::TremoloBuzz, ms_NoteArticulation_BuzzTremolo },
+
     { mpe::ArticulationType::DiscreteGlissando, ms_NoteArticulation_Glissando },
     { mpe::ArticulationType::ContinuousGlissando, ms_NoteArticulation_Portamento },
     { mpe::ArticulationType::Slide, ms_NoteArticulation_Portamento },
@@ -59,10 +62,18 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::Acciaccatura, ms_NoteArticulation_Acciaccatura },
 
     { mpe::ArticulationType::CrossNote, ms_NoteArticulation_XNote },
+    { mpe::ArticulationType::CrossOrnateNote, ms_NoteArticulation_OrnateXNote },
     { mpe::ArticulationType::GhostNote, ms_NoteArticulation_Ghost },
     { mpe::ArticulationType::CircleNote, ms_NoteArticulation_Circle },
+    { mpe::ArticulationType::CircleCrossNote, ms_NoteArticulation_CircleXNote },
+    { mpe::ArticulationType::CircleDotNote, ms_NoteArticulation_CircleDot },
     { mpe::ArticulationType::TriangleNote, ms_NoteArticulation_Triangle },
+    { mpe::ArticulationType::TriangleRoundDownNote, ms_NoteArticulation_TriangleRoundDown },
     { mpe::ArticulationType::DiamondNote, ms_NoteArticulation_Diamond },
+    { mpe::ArticulationType::PlusNote, ms_NoteArticulation_Plus },
+    { mpe::ArticulationType::SlashNote, ms_NoteArticulation_Slash },
+    { mpe::ArticulationType::SlashedBackwardsNote, ms_NoteArticulation_SlashRightFilled },
+    { mpe::ArticulationType::SlashedForwardsNote, ms_NoteArticulation_SlashLeftFilled },
 
     { mpe::ArticulationType::Pizzicato, ms_NoteArticulation_Pizzicato },
     { mpe::ArticulationType::SnapPizzicato, ms_NoteArticulation_SnapPizzicato },

@@ -264,9 +264,17 @@ enum class ArticulationType {
 
     GhostNote,
     CrossNote,
+    CrossOrnateNote,
     CircleNote,
+    CircleCrossNote,
+    CircleDotNote,
     TriangleNote,
+    TriangleRoundDownNote,
     DiamondNote,
+    PlusNote,
+    SlashNote,
+    SlashedBackwardsNote,
+    SlashedForwardsNote,
 
     Fall,
     QuickFall,
@@ -303,6 +311,7 @@ enum class ArticulationType {
     Tremolo16th,
     Tremolo32nd,
     Tremolo64th,
+    TremoloBuzz,
 
     Trill,
     TrillBaroque,
@@ -350,11 +359,15 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::UpBow, ArticulationType::DownBow, ArticulationType::Detache,
         ArticulationType::Martele, ArticulationType::Jete, ArticulationType::GhostNote,
         ArticulationType::CrossNote, ArticulationType::CircleNote, ArticulationType::TriangleNote,
+        ArticulationType::CrossOrnateNote, ArticulationType::CircleCrossNote, ArticulationType::CircleDotNote,
+        ArticulationType::TriangleRoundDownNote, ArticulationType::PlusNote, ArticulationType::SlashNote,
+        ArticulationType::SlashedBackwardsNote, ArticulationType::SlashedForwardsNote,
         ArticulationType::DiamondNote, ArticulationType::Fall, ArticulationType::QuickFall,
         ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
         ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
         ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell,
         ArticulationType::Vibrato,
+        ArticulationType::TremoloBuzz,
     };
 
     return SINGLE_NOTE_TYPES.find(type) != SINGLE_NOTE_TYPES.cend();

@@ -37,24 +37,18 @@ static mu::mpe::ArticulationType toArticulationType(TremoloType type)
     case TremoloType::R8:
     case TremoloType::C8:
         return mu::mpe::ArticulationType::Tremolo8th;
-        break;
-
     case TremoloType::R16:
     case TremoloType::C16:
         return mu::mpe::ArticulationType::Tremolo16th;
-        break;
-
     case TremoloType::R32:
     case TremoloType::C32:
         return mu::mpe::ArticulationType::Tremolo32nd;
-        break;
-
     case TremoloType::R64:
     case TremoloType::C64:
         return mu::mpe::ArticulationType::Tremolo64th;
-        break;
-
-    default:
+    case TremoloType::BUZZ_ROLL:
+        return mu::mpe::ArticulationType::TremoloBuzz;
+    case TremoloType::INVALID_TREMOLO:
         break;
     }
 

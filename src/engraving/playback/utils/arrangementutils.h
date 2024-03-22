@@ -77,6 +77,12 @@ inline mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, co
     return (beatsNumber / beatsPerSecond) * 1000000;
 }
 
+inline int ticksFromTempoAndDuration(const double beatsPerSecond, const mpe::duration_t duration,
+                                     const int ticksPerBeat = Constants::DIVISION)
+{
+    return (duration * beatsPerSecond * ticksPerBeat) / 1000000;
+}
+
 inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* firstNote, mpe::duration_t firstNoteDuration,
                                               const int tickPositionOffset)
 {
