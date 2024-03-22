@@ -833,7 +833,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? ctx.conf().styleS(Sid::beamWidth).val() : 0;
-                    Note* note = item->up() ? sc->upNote() : sc->downNote();
+                    Note* note = item->up() ? ec->upNote() : ec->downNote();
                     double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem2);
                     double offset3 = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
                     double sh = stemHeight + offset3;
