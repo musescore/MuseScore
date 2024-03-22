@@ -27,6 +27,7 @@
 #include "extensions/api/v1/iapiv1object.h"
 
 #include "score.h"
+#include "enums.h"
 
 namespace mu::engraving::apiv1 {
 class PluginAPI;
@@ -35,6 +36,8 @@ class EngravingApiV1 : public mu::api::ApiObject, public extensions::apiv1::IApi
     Q_OBJECT
 
     Q_PROPERTY(apiv1::Score * curScore READ curScore CONSTANT)
+
+    Q_PROPERTY(apiv1::Enum * Element READ elementEnum CONSTANT)
 
 public:
     EngravingApiV1(mu::api::IApiEngine* e);
@@ -47,7 +50,10 @@ public:
 
     //! Api V1 (qml plugin api)
     apiv1::Score* curScore() const;
+    apiv1::Enum* elementEnum() const;
+
     Q_INVOKABLE void cmd(const QString& code);
+    Q_INVOKABLE void quit();
 
 private:
     mutable PluginAPI* m_api = nullptr;

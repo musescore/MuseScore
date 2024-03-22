@@ -37,6 +37,7 @@ using namespace mu::api;
 ScriptEngine::ScriptEngine(int apiverion)
 {
     m_engine = new QJSEngine();
+    m_engine->installExtensions(QJSEngine::ConsoleExtension);
 
     QJSValue globalObj = m_engine->globalObject();
     if (apiverion == 1) {

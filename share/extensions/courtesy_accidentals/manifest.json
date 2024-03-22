@@ -1,0 +1,15 @@
+{
+    "uri": "musescore://extensions/courtesy_accidentals",
+    "type": "composite",
+    "title": "Courtesy Accidentals",
+    "description": "This plugin adds courtesy accidentals",
+    "category": "composing-arranging-tools",
+    "thumbnail": "accidentals.png",
+    "apiversion": 1,
+
+    "actions": [
+        {"code": "configure", "type": "form", "title": "Configure", "main": "configure.qml"},
+        {"code": "add", "type": "macros", "title": "Add", "main": "add.js"},
+        {"code": "remove", "type": "macros", "title": "Remove", "main": "remove.js"}
+    ]
+}
