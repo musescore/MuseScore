@@ -55,6 +55,10 @@ EngravingApiV1::~EngravingApiV1()
 
 void EngravingApiV1::setup(QJSValue globalObj)
 {
+    //! NOTE API v1 provides not only one global `api` object,
+    //! but also a number of others, for example `curScore`,
+    //! this is the legacy of the Qml plugin.
+
     QJSValue self = engine()->newQObject(this);
 
     static QSet<QString> ignote = { "objectName", "objectNameChanged" };

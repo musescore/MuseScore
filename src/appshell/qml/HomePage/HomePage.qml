@@ -65,6 +65,7 @@ DockPage {
 
         switch (name) {
         case "scores": root.central = scoresComp; break
+        case "plugins": root.central = extensionsComp; break // backward compatibility
         case "extensions": root.central = extensionsComp; break
         case "audio": root.central = audioComp; break
         case "learn": root.central = learnComp; break

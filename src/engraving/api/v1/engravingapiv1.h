@@ -29,6 +29,9 @@
 #include "qmlpluginapi.h"
 
 namespace mu::engraving::apiv1 {
+//! NOTE This API is used in `js` scripts of macros
+//! It repeats the API of the qml plugin.
+//! It is also available as `api.engraving.`
 class EngravingApiV1 : public mu::api::ApiObject, public extensions::apiv1::IApiV1Object
 {
     Q_OBJECT
