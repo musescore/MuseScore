@@ -51,25 +51,24 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
     switch (tremolo->tremoloType()) {
     case TremoloType::R8:
     case TremoloType::C8:
-        type = mpe::ArticulationType::Tremolo8th;
+        type = mu::mpe::ArticulationType::Tremolo8th;
         break;
-
     case TremoloType::R16:
     case TremoloType::C16:
-        type = mpe::ArticulationType::Tremolo16th;
+        type = mu::mpe::ArticulationType::Tremolo16th;
         break;
-
     case TremoloType::R32:
     case TremoloType::C32:
-        type = mpe::ArticulationType::Tremolo32nd;
+        type = mu::mpe::ArticulationType::Tremolo32nd;
         break;
-
     case TremoloType::R64:
     case TremoloType::C64:
-        type = mpe::ArticulationType::Tremolo64th;
+        type = mu::mpe::ArticulationType::Tremolo64th;
         break;
-
-    default:
+    case TremoloType::BUZZ_ROLL:
+        type = mu::mpe::ArticulationType::TremoloBuzz;
+        break;
+    case TremoloType::INVALID_TREMOLO:
         break;
     }
 

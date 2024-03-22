@@ -80,6 +80,15 @@ static std::string resolveAuxTrackTitle(aux_channel_idx_t index, const AudioOutp
     return mu::mtrc("playback", "Aux %1").arg(index + 1).toStdString();
 }
 
+static bool shouldLoadDrumset(const AudioResourceMeta& oldMeta, const AudioResourceMeta& newMeta)
+{
+    if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
+        return false;
+    }
+
+    return oldMeta.type == AudioResourceType::MuseSamplerSoundPack || newMeta.type == AudioResourceType::MuseSamplerSoundPack;
+}
+
 void PlaybackController::init()
 {
     dispatcher()->reg(this, PLAY_CODE, this, &PlaybackController::togglePlay);
@@ -378,6 +387,10 @@ void PlaybackController::onAudioResourceChanged(const InstrumentTrackId& trackId
 
     if (oldMeta.type == newMeta.type && oldMeta.id == newMeta.id) {
         return;
+    }
+
+    if (shouldLoadDrumset(oldMeta, newMeta)) {
+        m_drumsetLoader.loadDrumset(m_notation, trackId, newMeta);
     }
 
     notationPlayback->removeSoundFlags({ trackId });
@@ -871,6 +884,7 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
 
     AudioInputParams inParams = audioSettings()->trackInputParams(instrumentTrackId);
     AudioOutputParams outParams = trackOutputParams(instrumentTrackId);
+    AudioResourceMeta originMeta = inParams.resourceMeta;
 
     bool isMetronome = notationPlayback()->metronomeTrackId() == instrumentTrackId;
 
@@ -897,7 +911,8 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
     uint64_t playbackKey = notationPlaybackKey();
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(playbackData), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, instrumentTrackId, playbackKey, onFinished](const TrackId trackId, const AudioParams& appliedParams) {
+    .onResolve(this, [this, instrumentTrackId, playbackKey, onFinished, originMeta](const TrackId trackId,
+                                                                                    const AudioParams& appliedParams) {
         //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
         //! This situation can be if the notation was opened and immediately closed.
         if (notationPlaybackKey() != playbackKey) {
@@ -914,6 +929,10 @@ void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, 
         onFinished();
 
         m_trackAdded.send(trackId);
+
+        if (shouldLoadDrumset(originMeta, appliedParams.in.resourceMeta)) {
+            m_drumsetLoader.loadDrumset(m_notation, instrumentTrackId, appliedParams.in.resourceMeta);
+        }
     })
     .onReject(this, [instrumentTrackId, onFinished](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;

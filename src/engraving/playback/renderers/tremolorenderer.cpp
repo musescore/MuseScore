@@ -34,7 +34,8 @@ const ArticulationTypeSet& TremoloRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::Tremolo8th, mpe::ArticulationType::Tremolo16th,
-        mpe::ArticulationType::Tremolo32nd, mpe::ArticulationType::Tremolo64th
+        mpe::ArticulationType::Tremolo32nd, mpe::ArticulationType::Tremolo64th,
+        mpe::ArticulationType::TremoloBuzz,
     };
 
     return types;
@@ -62,7 +63,12 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
         overallDurationTicks = tremolo->chord1()->actualTicks().ticks() + tremolo->chord2()->actualTicks().ticks();
     }
 
-    const int stepDurationTicks = TremoloRenderer::stepDurationTicks(chord, tremolo);
+    int stepDurationTicks = 0;
+    if (preferredType == ArticulationType::TremoloBuzz) {
+        stepDurationTicks = overallDurationTicks;
+    } else {
+        stepDurationTicks = TremoloRenderer::stepDurationTicks(chord, tremolo);
+    }
 
     if (stepDurationTicks <= 0) {
         LOGE() << "Unable to render unsupported tremolo type";

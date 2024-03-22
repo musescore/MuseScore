@@ -34,6 +34,7 @@
 
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"
+#include "metaparsers/notearticulationsparser.h"
 
 #include "renderers/bendsrenderer.h"
 #include "renderers/gracechordsrenderer.h"
@@ -43,18 +44,17 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static ArticulationMap makeArticulations(ArticulationType persistentArticulationApplied, const ArticulationPattern& pattern,
-                                         timestamp_t timestamp, duration_t duration)
+static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
 {
-    ArticulationMeta meta(persistentArticulationApplied,
-                          pattern,
+    ArticulationMeta meta(ArticulationType::Standard,
+                          profile->pattern(ArticulationType::Standard),
                           timestamp,
                           duration,
                           0,
                           0);
 
     ArticulationMap articulations;
-    articulations.emplace(persistentArticulationApplied, mu::mpe::ArticulationAppliedData(std::move(meta), 0, mu::mpe::HUNDRED_PERCENT));
+    articulations.emplace(ArticulationType::Standard, mu::mpe::ArticulationAppliedData(std::move(meta), 0, mu::mpe::HUNDRED_PERCENT));
     articulations.preCalculateAverageData();
 
     return articulations;
@@ -136,8 +136,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     staff_layer_idx_t staffIdx = static_cast<staff_layer_idx_t>(chordSymbol->staffIdx());
     Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
-    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
-                                                      eventTimestamp, duration);
+    ArticulationMap articulations = makeStandardArticulationMap(profile, eventTimestamp, duration);
 
     double bps = score->tempomap()->tempo(positionTick).val;
 
@@ -176,8 +175,7 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
 
     Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
-    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
-                                                      actualTimestamp, actualDuration);
+    ArticulationMap articulations = makeStandardArticulationMap(profile, actualTimestamp, actualDuration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
@@ -295,17 +293,24 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                                                   const mpe::ArticulationType persistentArticulationApplied,
                                                   const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
 {
-    const ArticulationPattern& pattern = profile->pattern(persistentArticulationApplied);
-    ArticulationMap articulations;
+    static const ArticulationMap articulations;
 
-    if (pattern.empty()) {
-        articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
-                                          actualTimestamp, actualDuration);
-    } else {
-        articulations = makeArticulations(persistentArticulationApplied, pattern, actualTimestamp, actualDuration);
-    }
+    RenderingContext ctx(actualTimestamp,
+                         actualDuration,
+                         actualDynamicLevel,
+                         0,
+                         0,
+                         ticksFromTempoAndDuration(Constants::DEFAULT_TEMPO.val, actualDuration),
+                         Constants::DEFAULT_TEMPO,
+                         TimeSigMap::DEFAULT_TIME_SIGNATURE,
+                         persistentArticulationApplied,
+                         articulations,
+                         profile);
 
-    result.emplace_back(buildFixedNoteEvent(note, actualTimestamp, actualDuration, actualDynamicLevel, articulations));
+    NoteArticulationsParser::buildNoteArticulationMap(note, ctx, ctx.commonArticulations);
+    NominalNoteCtx noteCtx(note, ctx);
+
+    result.emplace_back(buildNoteEvent(std::move(noteCtx)));
 }
 
 void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const

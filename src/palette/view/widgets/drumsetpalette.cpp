@@ -197,6 +197,17 @@ void DrumsetPalette::previewSound(const Chord* chord, bool newChordSelected, con
     preview->setParent(inputState.segment);
     preview->setTrack(inputState.currentTrack);
 
+    const std::vector<Note*>& previewNotes = preview->notes();
+    const std::vector<Note*>& chordNotes = chord->notes();
+    IF_ASSERT_FAILED(previewNotes.size() == chordNotes.size()) {
+        return;
+    }
+
+    for (size_t i = 0; i < previewNotes.size(); ++i) {
+        SymId symId = chordNotes.at(i)->ldata()->cachedNoteheadSym.value();
+        previewNotes.at(i)->mutldata()->cachedNoteheadSym.set_value(symId);
+    }
+
     playback()->playElements({ preview });
 
     delete preview;
