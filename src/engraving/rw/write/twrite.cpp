@@ -2883,6 +2883,8 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
 
     xml.startElement(item);
 
+    writeProperty(item, xml, Pid::PLAY);
+
     if (!item->soundPresets().empty()) {
         xml.tag("presets", item->soundPresets().join(u","));
     }

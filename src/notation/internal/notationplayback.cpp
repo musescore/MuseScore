@@ -424,8 +424,8 @@ bool NotationPlayback::doAddSoundFlag(StaffText* staffText)
     }
 
     for (EngravingObject* obj : *links) {
-        if (obj && obj->isStaffText()) {
-            toStaffText(obj)->add(soundFlag->clone());
+        if (obj && obj->isStaffText() && obj != staffText) {
+            toStaffText(obj)->add(soundFlag->linkedClone());
         }
     }
 

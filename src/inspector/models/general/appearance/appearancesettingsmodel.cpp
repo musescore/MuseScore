@@ -55,7 +55,19 @@ void AppearanceSettingsModel::createProperties()
 
 void AppearanceSettingsModel::requestElements()
 {
-    m_elementList = m_repository->takeAllElements();
+    m_elementList.clear();
+
+    static const std::unordered_set<ElementType> noAvailableChangeAppearanceTypes {
+        ElementType::SOUND_FLAG
+    };
+
+    for (EngravingItem* element : m_repository->takeAllElements()) {
+        if (mu::contains(noAvailableChangeAppearanceTypes, element->type())) {
+            continue;
+        }
+
+        m_elementList << element;
+    }
 
     static const std::unordered_set<ElementType> applyOffsetToChordTypes {
         ElementType::NOTE,

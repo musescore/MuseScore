@@ -298,8 +298,14 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
 
 bool AbstractInspectorModel::showPartsSection(const QList<EngravingItem*>& selectedElementList)
 {
+    static const std::unordered_set<ElementType> noAvailableChangePartsSettingsTypes {
+        ElementType::LAYOUT_BREAK,
+        ElementType::ACCIDENTAL,
+        ElementType::SOUND_FLAG
+    };
+
     for (EngravingItem* element : selectedElementList) {
-        if ((!element->score()->isMaster() && !element->isLayoutBreak() && !element->isAccidental())
+        if ((!element->score()->isMaster() && !mu::contains(noAvailableChangePartsSettingsTypes, element->type()))
             || element->canBeExcludedFromOtherParts()) {
             return true;
         }
