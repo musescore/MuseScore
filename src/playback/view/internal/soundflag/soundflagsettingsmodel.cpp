@@ -195,6 +195,7 @@ void SoundFlagSettingsModel::togglePreset(const QString& presetCode)
     loadAvailablePlayingTechniques();
 
     emit selectedPresetCodesChanged();
+    emit contextMenuModelChanged();
 }
 
 void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechniqueCode)
@@ -219,9 +220,10 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     }
 
     emit selectedPlayingTechniqueCodeChanged();
+    emit contextMenuModelChanged();
 }
 
-uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title)
+uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title, bool enabled)
 {
     uicomponents::MenuItem* item = new uicomponents::MenuItem(this);
     item->setId(actionCode);
@@ -232,17 +234,52 @@ uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& act
     item->setAction(action);
 
     ui::UiActionState state;
-    state.enabled = true;
+    state.enabled = enabled;
     item->setState(state);
 
     return item;
+}
+
+QString SoundFlagSettingsModel::defaultPresetCode() const
+{
+    return !m_availablePresets.empty() ? m_availablePresets.front().code.toQString() : QString();
+}
+
+QString SoundFlagSettingsModel::defaultPlayingTechniqueCode() const
+{
+    return !m_availablePlayingTechniquesModel.empty()
+           ? String(m_availablePlayingTechniquesModel.front().toMap()["code"].toString())
+           : String();
 }
 
 QVariantList SoundFlagSettingsModel::contextMenuModel()
 {
     uicomponents::MenuItemList items;
 
-    uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("global", "Reset"));
+    SoundFlag* soundFlag = toSoundFlag(m_item);
+    if (!soundFlag) {
+        return {};
+    }
+
+    auto isResetEnabled = [=]() {
+        bool enabled = false;
+
+        const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();
+        const String playingTechnique = soundFlag->playingTechnique();
+
+        if (!activePresetCodes.empty()) {
+            enabled = activePresetCodes != StringList { defaultPresetCode() };
+        }
+
+        if (!playingTechnique.empty()) {
+            enabled |= playingTechnique != defaultPlayingTechniqueCode();
+        }
+
+        return enabled;
+    };
+
+    uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset to default sound"),
+                                                      isResetEnabled());
 
     ui::UiAction resetAction = resetItem->action();
     resetAction.iconCode = ui::IconCode::Code::UNDO;
@@ -273,7 +310,7 @@ void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)
 
         beginCommand();
 
-        soundFlag->undoChangeSoundFlag(StringList(), String());
+        soundFlag->undoChangeSoundFlag({ defaultPresetCode() }, defaultPlayingTechniqueCode());
         bool needUpdateNotation = updateStaffText();
 
         endCommand();
@@ -304,6 +341,10 @@ bool SoundFlagSettingsModel::updateStaffText()
     StringList strs;
 
     for (const SoundPreset& preset : m_availablePresets) {
+        if (preset.name.empty()) {
+            continue;
+        }
+
         if (mu::contains(activePresetCodes, preset.code)) {
             strs << preset.name;
         }
@@ -382,8 +423,8 @@ QStringList SoundFlagSettingsModel::selectedPresetCodes() const
         result << presetCode.toQString();
     }
 
-    if (result.empty() && !m_availablePresets.empty()) {
-        result << m_availablePresets.front().code.toQString();
+    if (result.empty()) {
+        result << defaultPresetCode();
     }
 
     return result;
@@ -405,6 +446,8 @@ void SoundFlagSettingsModel::setAvailableSoundPresets(const SoundPresetList& pre
     emit availablePresetsChanged();
 
     loadAvailablePlayingTechniques();
+
+    emit contextMenuModelChanged();
 }
 
 void SoundFlagSettingsModel::loadAvailablePlayingTechniques()
@@ -434,6 +477,7 @@ void SoundFlagSettingsModel::loadAvailablePlayingTechniques()
 
     m_availablePlayingTechniquesModel = std::move(newModel);
     emit availablePlayingTechniquesChanged();
+    emit selectedPlayingTechniqueCodeChanged();
 }
 
 QString SoundFlagSettingsModel::selectedPlayingTechniqueCode() const
@@ -442,6 +486,11 @@ QString SoundFlagSettingsModel::selectedPlayingTechniqueCode() const
         return QString();
     }
 
-    const SoundFlag::PlayingTechniqueCode& code = toSoundFlag(m_item)->playingTechnique();
-    return code.toQString();
+    QString result = toSoundFlag(m_item)->playingTechnique().toQString();
+
+    if (result.isEmpty()) {
+        result = defaultPlayingTechniqueCode();
+    }
+
+    return result;
 }

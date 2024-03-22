@@ -167,7 +167,6 @@ SoundPresetList MuseSamplerResolver::resolveSoundPresets(const audio::AudioResou
 
         SoundPreset defaultPreset;
         defaultPreset.code = DEFAULT_PRESET_CODE;
-        defaultPreset.name = DEFAULT_PRESET_CODE;
         loadSoundPresetAttributes(defaultPreset.attributes, instrument.instrumentId, "");
 
         result.emplace_back(std::move(defaultPreset));
