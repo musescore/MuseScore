@@ -17,17 +17,16 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //==============================================
 
-import QtQuick 2.0
-import MuseScore 3.0
-import "assets/accidentals.js" as Accidentals
+import QtQuick 2.15
+import MuseScore.UiComponents 1.0 as MU
 
-MuseScore {
-    title: qsTr("Remove Courtesy Accidentals")
-    version: "4.0"
-    description: qsTr("This plugin removes cautionary accidentals from the score")
-    categoryCode: "composing-arranging-tools"
-    thumbnailName: "assets/accidentals.png"
-    requiresScore: true
 
-    onRun: Accidentals.runPlugin("remove")
+MU.CheckBox {
+    property bool key: false
+    text: key ? qsTr("Add courtesy if note before key change is a grace note")
+              : qsTr("Add courtesy if note with accidental is a grace note")
+    signal changed
+    onClicked: {checked = !checked; changed()}
+    signal setv(bool checked)
+    onSetv: function(value) {checked = value; changed()}
 }
