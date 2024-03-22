@@ -1656,7 +1656,11 @@ double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
         double singleSlashWidth = note->symBbox(SymId::noteheadSlashHorizontalEnds).width();
         double noteWidth = note->width();
         double center = 0.20 * note->spatium() + 0.5 * (noteWidth - singleSlashWidth);
-        return up ? note->shape().right() - center : note->shape().left() + center;
+        Shape noteShape =  note->shape();
+        noteShape.remove_if([&](ShapeElement& s) {
+            return s.item()->pos().x() + s.item()->width() > note->pos().x() + note->width();
+        });
+        return up ? noteShape.right() - center : noteShape.left() + center;
     }
     SymId symId = note->ldata()->cachedNoteheadSym.value();
     PointF cutOutLeft = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNW : SmuflAnchorId::cutOutSW);
