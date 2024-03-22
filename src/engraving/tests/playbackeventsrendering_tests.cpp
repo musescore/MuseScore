@@ -2330,6 +2330,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
  *  @details Checks whether we correctly calculate note durations when there are pauses in the score. See:
  * https://github.com/musescore/MuseScore/issues/20669
  * https://github.com/musescore/MuseScore/issues/20557
+ * https://github.com/musescore/MuseScore/issues/21289
  */
 TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
 {
@@ -2341,24 +2342,36 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
     // [WHEN] Render the score
     PlaybackEventsMap result;
 
-    for (const Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-        for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-            const EngravingItem* el = s->element(0);
-            if (!el || !el->isChord()) {
-                continue;
-            }
+    for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
-            m_renderer.render(toChord(el), dynamicLevelFromType(mu::mpe::DynamicType::Natural),
-                              ArticulationType::Standard, m_defaultProfile, result);
+        for (const Measure* m : repeatSegment->measureList()) {
+            for (const Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+                const EngravingItem* el = s->element(0);
+                if (!el || !el->isChord()) {
+                    continue;
+                }
+
+                m_renderer.render(toChord(el), tickPositionOffset, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                                  ArticulationType::Standard, m_defaultProfile, result);
+            }
         }
     }
 
     // [THEN] Expected time and duration of each event
     timestamp_t secondMeasureTime = QUARTER_NOTE_DURATION * 4;
+
     timestamp_t thirdMeasureTime = secondMeasureTime + QUARTER_NOTE_DURATION + 2000000 + HALF_NOTE_DURATION
                                    + QUARTER_NOTE_DURATION + 4000000;
 
+    timestamp_t fourthMeasureTime = thirdMeasureTime + HALF_NOTE_DURATION + QUARTER_NOTE_DURATION
+                                    + 3000000 + QUARTER_NOTE_DURATION;
+
+    timestamp_t fifthMeasureTime = fourthMeasureTime + (WHOLE_NOTE_DURATION + 5000000) * 2; // repeat
+
     std::vector<TimestampAndDuration> expectedTnDList {
+        // 1st measure (no notes)
+
         // 2nd measure
         { secondMeasureTime, QUARTER_NOTE_DURATION }, // + 2s pause (caesura)
         { secondMeasureTime + QUARTER_NOTE_DURATION + 2000000, HALF_NOTE_DURATION },
@@ -2367,26 +2380,31 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
         // 3rd measure
         { thirdMeasureTime, HALF_NOTE_DURATION + QUARTER_NOTE_DURATION }, // tied half + quarter notes + 3s pause (caesura)
         { thirdMeasureTime + HALF_NOTE_DURATION + QUARTER_NOTE_DURATION + 3000000, QUARTER_NOTE_DURATION },
+
+        // 4th measure (whole note inside repeat + section break)
+        { fourthMeasureTime, WHOLE_NOTE_DURATION }, // + 5s pause (section break)
+        { fourthMeasureTime + WHOLE_NOTE_DURATION + 5000000, WHOLE_NOTE_DURATION }, // repeat
+
+        // 5th measure
+        { fifthMeasureTime, HALF_NOTE_DURATION },
     };
 
     EXPECT_FALSE(result.empty());
 
     int tndNum = 0;
     for (const auto& pair : result) {
-        if (pair.second.empty()) {
-            continue;
+        for (const mpe::PlaybackEvent& event : pair.second) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+
+            const TimestampAndDuration& expectedTnD = expectedTnDList.at(tndNum);
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            EXPECT_EQ(pair.first, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
+            EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
+
+            ++tndNum;
         }
-
-        ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(pair.second.front()));
-
-        const TimestampAndDuration& expectedTnD = expectedTnDList.at(tndNum);
-        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.front());
-
-        EXPECT_EQ(pair.first, expectedTnD.timestamp);
-        EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, expectedTnD.timestamp);
-        EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, expectedTnD.duration);
-
-        ++tndNum;
     }
 
     EXPECT_EQ(tndNum, expectedTnDList.size());

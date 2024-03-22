@@ -92,7 +92,7 @@ inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingCont
         return durationFromTempoAndTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
     }
 
-    return durationFromStartAndTicks(note->score(), note->tick().ticks(), note->chord()->actualTicks().ticks());
+    return durationFromStartAndTicks(note->score(), note->tick().ticks(), note->chord()->actualTicks().ticks(), 0);
 }
 
 struct NominalNoteCtx {

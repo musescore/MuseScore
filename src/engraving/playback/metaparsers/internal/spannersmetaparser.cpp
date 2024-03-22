@@ -170,5 +170,5 @@ mu::mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, cons
         return 0;
     }
 
-    return durationFromStartAndTicks(score, positionTick, durationTicks);
+    return durationFromStartAndTicks(score, positionTick, durationTicks, 0);
 }
