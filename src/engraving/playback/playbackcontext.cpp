@@ -210,6 +210,10 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
 
 void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick)
 {
+    if (!flag->play()) {
+        return;
+    }
+
     if (flag->soundPresets().empty() && flag->playingTechnique().empty()) {
         return;
     }
