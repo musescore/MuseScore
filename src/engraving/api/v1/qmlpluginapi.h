@@ -104,7 +104,7 @@ class PluginAPI : public QQuickItem, public extensions::apiv1::IPluginApiV1
      * \brief Number of MIDI ticks for 1/4 note (read only)
      * \see \ref ticklength
      */
-    Q_PROPERTY(int division READ division)
+    Q_PROPERTY(int division READ division CONSTANT)
     /** Complete version number of MuseScore in the form: MMmmuu (read only) */
     Q_PROPERTY(int mscoreVersion READ mscoreVersion CONSTANT)
     /** 1st part of the MuseScore version (read only) */
@@ -114,7 +114,7 @@ class PluginAPI : public QQuickItem, public extensions::apiv1::IPluginApiV1
     /** 3rd part of the MuseScore version (read only) */
     Q_PROPERTY(int mscoreUpdateVersion READ mscoreUpdateVersion CONSTANT)
     /** (read-only) */
-    Q_PROPERTY(qreal mscoreDPI READ mscoreDPI)
+    Q_PROPERTY(qreal mscoreDPI READ mscoreDPI CONSTANT)
     /** Current score, if any (read only) */
     Q_PROPERTY(mu::engraving::apiv1::Score * curScore READ curScore CONSTANT)
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
