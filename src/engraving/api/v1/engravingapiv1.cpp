@@ -57,8 +57,15 @@ void EngravingApiV1::setup(QJSValue globalObj)
 {
     QJSValue self = engine()->newQObject(this);
 
+    // Objects properties
     globalObj.setProperty("curScore", self.property("curScore"));
+
+    // Enums properties
+    globalObj.setProperty("Element", self.property("Element"));
+
+    // Functions
     globalObj.setProperty("cmd", self.property("cmd"));
+    globalObj.setProperty("quit", self.property("quit"));
 }
 
 void EngravingApiV1::setApi(PluginAPI* api)
@@ -81,7 +88,17 @@ Score* EngravingApiV1::curScore() const
     return api()->curScore();
 }
 
+Enum* EngravingApiV1::elementEnum() const
+{
+    return api()->get_elementTypeEnum();
+}
+
 void EngravingApiV1::cmd(const QString& code)
 {
     api()->cmd(code);
+}
+
+void EngravingApiV1::quit()
+{
+    api()->quit();
 }
