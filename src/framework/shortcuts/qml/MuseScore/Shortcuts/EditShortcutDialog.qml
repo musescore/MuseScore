@@ -141,6 +141,8 @@ StyledDialogView {
 
                 buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Save ]
 
+                navigationPanel.section: root.navigationSection
+
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {
                         root.reject()
@@ -153,7 +155,8 @@ StyledDialogView {
         }
 
         Keys.onShortcutOverride: function(event) {
-            event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab
+            event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab && event.key !== Qt.Key_Space
+                                                         && event.key !== Qt.Key_Right && event.key !== Qt.Key_Left
         }
 
         Keys.onPressed: function(event) {
