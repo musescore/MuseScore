@@ -38,10 +38,21 @@ StyledDialogView {
 
     signal applySequenceRequested(string newSequence, int conflictShortcutIndex)
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+            name: "EditShortcutSequenceDialog"
+            section: root.navigationSection
+            enabled: root.enabled && root.visible
+            order: 1
+            direction: NavigationPanel.Horizontal
+        }
+
     function startEdit(shortcut, allShortcuts) {
         model.load(shortcut, allShortcuts)
         open()
-        content.forceActiveFocus()
+    }
+
+    onNavigationActivateRequested: {
+        newSequenceField.navigation.requestActive()
     }
 
     Rectangle {
@@ -123,6 +134,9 @@ StyledDialogView {
 
                         background.border.color: ui.theme.accentColor
 
+                        navigation.panel: root.navigationPanel
+                        navigation.order: 1
+
                         hint: qsTrc("shortcuts", "Type to set shortcut")
                         readOnly: true
                         currentText: model.newSequence
@@ -141,6 +155,8 @@ StyledDialogView {
 
                 buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Save ]
 
+                navigationPanel.section: root.navigationSection
+
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {
                         root.reject()
@@ -153,7 +169,10 @@ StyledDialogView {
         }
 
         Keys.onShortcutOverride: function(event) {
-            event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab
+            if(event.key === Qt.Key_Tab) {
+                content.focus = false
+            }
+            event.accepted = event.key !== Qt.Key_Escape && event.key !== Qt.Key_Tab 
         }
 
         Keys.onPressed: function(event) {
