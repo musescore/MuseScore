@@ -2816,7 +2816,7 @@ libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elisi
             meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
         }
     } else if (elision == ElisionMiddle) {
-        // Set the elision conntecto and remove any word postion
+        // Set the elision connector and remove any word postion
         meiSyl.SetCon(libmei::sylLog_CON_b);
         meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
     } else if (elision == ElisionLast) {
