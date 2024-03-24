@@ -78,6 +78,31 @@ FocusScope {
         }
     }
 
+    StyledDropShadow {
+        anchors.fill: parent
+        source: backgroundContainer
+        radius: root.padding
+    }
+
+    Item {
+        id: backgroundContainer
+        anchors.fill: parent
+
+        Rectangle {
+            id: contentBackground
+
+            x: root.padding
+            y: root.padding
+            width: contentBody.width + root.margins * 2
+            height: contentBody.height + root.margins * 2
+
+            color: ui.theme.popupBackgroundColor
+            radius: 4
+            border.width: 1
+            border.color: ui.theme.strokeColor
+        }
+    }
+
     Item {
         id: contentContainer
         x: root.padding
@@ -91,22 +116,6 @@ FocusScope {
         scale: root.animationEnabled ? 0.7 : 1.0
         opacity: root.animationEnabled ? 0.5 : 1.0
         transformOrigin: Item.Center
-
-        StyledDropShadow {
-            anchors.fill: parent
-            anchors.topMargin: root.padding / 2
-            anchors.bottomMargin: root.padding / 2
-            source: contentBackground
-        }
-
-        Rectangle {
-            id: contentBackground
-            anchors.fill: parent
-            color: ui.theme.popupBackgroundColor
-            radius: 4
-            border.width: 1
-            border.color: ui.theme.strokeColor
-        }
 
         Canvas {
             id: arrow
