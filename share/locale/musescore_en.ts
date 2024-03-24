@@ -8609,7 +8609,7 @@ articulation markings are present</translation>
         <translation type="unfinished">Change enharmonic spelling (current mode)</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="181"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="191"/>
         <source>Score comparison tool</source>
         <translation type="unfinished">Score comparison tool</translation>
     </message>
@@ -8684,182 +8684,192 @@ articulation markings are present</translation>
         <translation type="unfinished">Auto beam</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="50"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="51"/>
         <source>Restart</source>
         <translation type="unfinished">Restart</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="55"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="56"/>
         <source>&amp;Full screen</source>
         <translation type="unfinished">&amp;Full screen</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="67"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="68"/>
         <source>About &amp;Qt…</source>
         <translation type="unfinished">About &amp;Qt…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="72"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="73"/>
         <source>About &amp;MusicXML…</source>
         <translation type="unfinished">About &amp;MusicXML…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="77"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="78"/>
         <source>Online &amp;handbook</source>
         <translation type="unfinished">Online &amp;handbook</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="83"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="84"/>
         <source>As&amp;k for help</source>
         <translation type="unfinished">As&amp;k for help</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="88"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="89"/>
         <source>Revert to &amp;factory settings</source>
         <translation type="unfinished">Revert to &amp;factory settings</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="104"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="105"/>
         <source>&amp;Playback controls</source>
         <translation type="unfinished">&amp;Playback controls</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="105"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="106"/>
         <source>Show/hide playback controls</source>
         <translation type="unfinished">Show/hide playback controls</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="112"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="113"/>
         <source>Show/hide note input toolbar</source>
         <translation type="unfinished">Show/hide note input toolbar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="120"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="121"/>
         <source>&amp;Palettes</source>
         <translation type="unfinished">&amp;Palettes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="121"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="122"/>
         <source>Show/hide palettes</source>
         <translation type="unfinished">Show/hide palettes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="127"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="128"/>
         <source>Instr&amp;uments</source>
         <translation type="unfinished">Instr&amp;uments</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="128"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="129"/>
         <source>Open instruments dialog…</source>
         <translation type="unfinished">Open instruments dialog…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="134"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="135"/>
         <source>Propert&amp;ies</source>
         <translation type="unfinished">Propert&amp;ies</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="135"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="136"/>
         <source>Show/hide properties</source>
         <translation type="unfinished">Show/hide properties</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="141"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="142"/>
         <source>Se&amp;lection filter</source>
         <translation type="unfinished">Se&amp;lection filter</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="142"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="143"/>
         <source>Show/hide selection filter</source>
         <translation type="unfinished">Show/hide selection filter</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="150"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
         <source>&amp;Navigator</source>
         <translation type="unfinished">&amp;Navigator</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="151"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="152"/>
         <source>Show/hide navigator</source>
         <translation type="unfinished">Show/hide navigator</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="159"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="160"/>
+        <source>&amp;Braille</source>
+        <translation type="unfinished">&amp;Braille</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="161"/>
+        <source>Show/hide braille panel</source>
+        <translation type="unfinished">Show/hide braille panel</translation>
+    </message>
+    <message>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="169"/>
         <source>Tim&amp;eline</source>
         <translation type="unfinished">Tim&amp;eline</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="160"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="170"/>
         <source>Show/hide timeline</source>
         <translation type="unfinished">Show/hide timeline</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="167"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="177"/>
         <source>Show/hide mixer</source>
         <translation type="unfinished">Show/hide mixer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="175"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="185"/>
         <source>Show/hide piano keyboard</source>
         <translation type="unfinished">Show/hide piano keyboard</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="189"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="199"/>
         <source>&amp;Status bar</source>
         <translation type="unfinished">&amp;Status bar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="190"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="200"/>
         <source>Show/hide status bar</source>
         <translation type="unfinished">Show/hide status bar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="198"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="208"/>
         <source>Preferences…</source>
         <translation type="unfinished">Preferences…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="89"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="90"/>
         <source>Revert to factory settings</source>
         <translation type="unfinished">Revert to factory settings</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="56"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="57"/>
         <source>Full screen</source>
         <translation type="unfinished">Full screen</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="62"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="63"/>
         <source>&amp;About MuseScore…</source>
         <translation type="unfinished">&amp;About MuseScore…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="78"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="79"/>
         <source>Open online handbook</source>
         <translation type="unfinished">Open online handbook</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="96"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
         <source>Restore the &amp;default layout</source>
         <translation type="unfinished">Restore the &amp;default layout</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="97"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="98"/>
         <source>Restore the default layout</source>
         <translation type="unfinished">Restore the default layout</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="111"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="112"/>
         <source>&amp;Note input</source>
         <translation type="unfinished">&amp;Note input</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="174"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="184"/>
         <source>Piano &amp;keyboard</source>
         <translation type="unfinished">Piano &amp;keyboard</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="197"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="207"/>
         <source>&amp;Preferences</source>
         <translation type="unfinished">&amp;Preferences</translation>
     </message>
@@ -8869,13 +8879,13 @@ articulation markings are present</translation>
         <translation type="unfinished">Check for &amp;update</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="166"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="176"/>
         <source>Mixer</source>
         <translation type="unfinished">Mixer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="44"/>
         <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="45"/>
+        <location filename="../../src/appshell/internal/applicationuiactions.cpp" line="46"/>
         <source>Quit</source>
         <translation type="unfinished">Quit</translation>
     </message>
@@ -9915,12 +9925,12 @@ articulation markings are present</translation>
         <translation type="unfinished">&amp;Multiinstances</translation>
     </message>
     <message>
-        <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="45"/>
+        <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="37"/>
         <source>&amp;Manage plugins…</source>
         <translation type="unfinished">&amp;Manage plugins…</translation>
     </message>
     <message>
-        <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="46"/>
+        <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="38"/>
         <source>Manage plugins…</source>
         <translation type="unfinished">Manage plugins…</translation>
     </message>
@@ -10331,42 +10341,42 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/add</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="217"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="218"/>
         <source>&amp;Notes</source>
         <translation type="unfinished">&amp;Notes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="218"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
         <source>&amp;Intervals</source>
         <translation type="unfinished">&amp;Intervals</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="219"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="220"/>
         <source>T&amp;uplets</source>
         <translation type="unfinished">T&amp;uplets</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="221"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
         <source>&amp;Measures</source>
         <translation type="unfinished">&amp;Measures</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="222"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="223"/>
         <source>&amp;Frames</source>
         <translation type="unfinished">&amp;Frames</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="223"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
         <source>&amp;Text</source>
         <translation type="unfinished">&amp;Text</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="224"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="225"/>
         <source>&amp;Lines</source>
         <translation type="unfinished">&amp;Lines</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="227"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="228"/>
         <source>&amp;Add</source>
         <translation type="unfinished">&amp;Add</translation>
     </message>
@@ -10374,32 +10384,32 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/diagnostic</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="355"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="356"/>
         <source>&amp;System</source>
         <translation type="unfinished">&amp;System</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="363"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="364"/>
         <source>&amp;Muse Sampler</source>
         <translation type="unfinished">&amp;Muse Sampler</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="389"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="390"/>
         <source>&amp;Accessibility</source>
         <translation type="unfinished">&amp;Accessibility</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="390"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="391"/>
         <source>&amp;Engraving</source>
         <translation type="unfinished">&amp;Engraving</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="391"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="392"/>
         <source>Auto&amp;bot</source>
         <translation type="unfinished">Auto&amp;bot</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="395"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="396"/>
         <source>&amp;Diagnostic</source>
         <translation type="unfinished">&amp;Diagnostic</translation>
     </message>
@@ -10428,12 +10438,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/format</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="243"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="244"/>
         <source>Str&amp;etch</source>
         <translation type="unfinished">Str&amp;etch</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="254"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="255"/>
         <source>F&amp;ormat</source>
         <translation type="unfinished">F&amp;ormat</translation>
     </message>
@@ -10441,7 +10451,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/help</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="343"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="344"/>
         <source>&amp;Help</source>
         <translation type="unfinished">&amp;Help</translation>
     </message>
@@ -10449,7 +10459,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/plugins</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="303"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="304"/>
         <source>&amp;Plugins</source>
         <translation type="unfinished">&amp;Plugins</translation>
     </message>
@@ -10457,17 +10467,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/tools</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="279"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="280"/>
         <source>&amp;Voices</source>
         <translation type="unfinished">&amp;Voices</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="280"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="281"/>
         <source>&amp;Measures</source>
         <translation type="unfinished">&amp;Measures</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="298"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="299"/>
         <source>&amp;Tools</source>
         <translation type="unfinished">&amp;Tools</translation>
     </message>
@@ -10475,22 +10485,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/menu/view</name>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="203"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="204"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished">&amp;Toolbars</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="204"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="205"/>
         <source>W&amp;orkspaces</source>
         <translation type="unfinished">W&amp;orkspaces</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="206"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="207"/>
         <source>&amp;Show</source>
         <translation type="unfinished">&amp;Show</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="211"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="212"/>
         <source>&amp;View</source>
         <translation type="unfinished">&amp;View</translation>
     </message>
@@ -11227,7 +11237,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/framework/audio/internal/platform/jack/jackaudiodriver.cpp" line="236"/>
         <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="249"/>
         <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="192"/>
-        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="210"/>
+        <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="211"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
         <translation type="unfinished">System default</translation>
@@ -11722,7 +11732,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished">%1; Duration: %2; %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2236"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2240"/>
         <source>Annotations:</source>
         <translation type="unfinished">Annotations:</translation>
     </message>
@@ -11732,7 +11742,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1094"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3216"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3228"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2262"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2266"/>
         <source>Start of %1</source>
         <translation type="unfinished">Start of %1</translation>
     </message>
@@ -11742,7 +11752,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/dom/chordrest.cpp" line="1096"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3220"/>
         <location filename="../../src/engraving/dom/note.cpp" line="3236"/>
-        <location filename="../../src/engraving/dom/segment.cpp" line="2277"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2281"/>
         <source>End of %1</source>
         <translation type="unfinished">End of %1</translation>
     </message>
@@ -12133,7 +12143,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="213"/>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="280"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="337"/>
         <source>Staff text</source>
         <translation type="unfinished">Staff text</translation>
     </message>
@@ -17260,6 +17270,107 @@ Fret %1 on strings %2</translation>
     </message>
 </context>
 <context>
+    <name>extensions</name>
+    <message>
+        <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
+        <source>Reload plugins</source>
+        <translation type="unfinished">Reload plugins</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="116"/>
+        <source>Enabled</source>
+        <translation type="unfinished">Enabled</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="147"/>
+        <source>Disabled</source>
+        <translation type="unfinished">Disabled</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="188"/>
+        <source>Version:</source>
+        <translation type="unfinished">Version:</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/ExtensionsListPanel.qml" line="190"/>
+        <source>Shortcut:</source>
+        <extracomment>Keyboard shortcut</extracomment>
+        <translation type="unfinished">Shortcut:</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="50"/>
+        <source>Edit shortcut</source>
+        <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
+        <translation type="unfinished">Edit shortcut</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="71"/>
+        <source>Enable</source>
+        <translation type="unfinished">Enable</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/qml/Muse/Extensions/internal/EnablePanel.qml" line="71"/>
+        <source>Disable</source>
+        <translation type="unfinished">Disable</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/extensionserrors.h" line="47"/>
+        <source>Plugin not found</source>
+        <translation type="unfinished">Plugin not found</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/extensionserrors.h" line="48"/>
+        <source>Could not load plugin</source>
+        <translation type="unfinished">Could not load plugin</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/extensionserrors.h" line="49"/>
+        <source>Plugin is not in the correct format</source>
+        <translation type="unfinished">Plugin is not in the correct format</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="76"/>
+        <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
+        <translation type="unfinished">The plugin “%1” is currently disabled. Do you want to enable it now?</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsactioncontroller.cpp" line="77"/>
+        <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
+        <translation type="unfinished">Alternatively, you can enable it at any time from Home &gt; Plugins.</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="41"/>
+        <source>Composing/arranging tools</source>
+        <translation type="unfinished">Composing/arranging tools</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="42"/>
+        <source>Color notes</source>
+        <translation type="unfinished">Color notes</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="43"/>
+        <source>Playback</source>
+        <translation type="unfinished">Playback</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsprovider.cpp" line="44"/>
+        <source>Lyrics</source>
+        <translation type="unfinished">Lyrics</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/internal/extensionsuiactions.cpp" line="51"/>
+        <source>Run plugin %1 (%2)</source>
+        <translation type="unfinished">Run plugin %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/extensions/view/extensionsmodel.cpp" line="103"/>
+        <source>Not defined</source>
+        <extracomment>No keyboard shortcut is assigned to this plugin.</extracomment>
+        <translation type="unfinished">Not defined</translation>
+    </message>
+</context>
+<context>
     <name>global</name>
     <message>
         <location filename="../../src/appshell/qml/AboutDialog.qml" line="156"/>
@@ -17825,7 +17936,6 @@ Fret %1 on strings %2</translation>
     </message>
     <message>
         <location filename="../../src/framework/global/internal/interactive.cpp" line="114"/>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="225"/>
         <source>Reset</source>
         <translation type="unfinished">Reset</translation>
     </message>
@@ -21951,22 +22061,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished">Customize toolbar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="507"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="508"/>
         <source>Insert &amp;after selection…</source>
         <translation type="unfinished">Insert &amp;after selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="508"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="509"/>
         <source>Insert &amp;before selection…</source>
         <translation type="unfinished">Insert &amp;before selection…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="510"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="511"/>
         <source>Insert at &amp;start of score…</source>
         <translation type="unfinished">Insert at &amp;start of score…</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/appmenumodel.cpp" line="511"/>
+        <location filename="../../src/appshell/view/appmenumodel.cpp" line="512"/>
         <source>Insert at &amp;end of score…</source>
         <translation type="unfinished">Insert at &amp;end of score…</translation>
     </message>
@@ -25803,22 +25913,22 @@ failed.</translation>
     </message>
     <message>
         <location filename="../../src/playback/internal/playbackcontroller.cpp" line="80"/>
-        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="599"/>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="611"/>
         <source>Aux %1</source>
         <translation type="unfinished">Aux %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="866"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="879"/>
         <source>Metronome</source>
         <translation type="unfinished">Metronome</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="876"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="889"/>
         <source>Chords</source>
         <translation type="unfinished">Chords</translation>
     </message>
     <message>
-        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1190"/>
+        <location filename="../../src/playback/internal/playbackcontroller.cpp" line="1209"/>
         <source>Loading audio samples</source>
         <translation type="unfinished">Loading audio samples</translation>
     </message>
@@ -25843,7 +25953,7 @@ failed.</translation>
         <translation type="unfinished">Mute and solo</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="153"/>
+        <location filename="../../src/playback/view/mixerpanelcontextmenumodel.cpp" line="169"/>
         <source>View</source>
         <translation type="unfinished">View</translation>
     </message>
@@ -25858,23 +25968,23 @@ failed.</translation>
         <translation type="unfinished">SoundFonts</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="329"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="345"/>
         <source>Bank %1, preset %2</source>
         <translation type="unfinished">Bank %1, preset %2</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="383"/>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="440"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="399"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="456"/>
         <source>Choose automatically</source>
         <translation type="unfinished">Choose automatically</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="423"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="439"/>
         <source>Preset %1</source>
         <translation type="unfinished">Preset %1</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="432"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="448"/>
         <source>Bank %1</source>
         <translation type="unfinished">Bank %1</translation>
     </message>
@@ -25882,6 +25992,21 @@ failed.</translation>
         <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="61"/>
         <source>Mixer channel panel %1</source>
         <translation type="unfinished">Mixer channel panel %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="669"/>
+        <source>Change sound</source>
+        <translation type="unfinished">Change sound</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="672"/>
+        <source>Are you sure you want to change this sound?</source>
+        <translation type="unfinished">Are you sure you want to change this sound?</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/mixerchannelitem.cpp" line="673"/>
+        <source>Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</source>
+        <translation type="unfinished">Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone.</translation>
     </message>
     <message>
         <location filename="../../src/playback/qml/MuseScore/Playback/internal/TempoSlider.qml" line="45"/>
@@ -25949,12 +26074,17 @@ failed.</translation>
         <translation type="unfinished">Ord. (default)</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="234"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="281"/>
+        <source>Reset to default sound</source>
+        <translation type="unfinished">Reset to default sound</translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="291"/>
         <source>Allow multiple selection</source>
         <translation type="unfinished">Allow multiple selection</translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="295"/>
+        <location filename="../../src/playback/view/internal/soundflag/soundflagsettingsmodel.cpp" line="356"/>
         <source>ordinary</source>
         <translation type="unfinished">ordinary</translation>
     </message>
@@ -25967,102 +26097,6 @@ failed.</translation>
         <location filename="../../src/playback/qml/MuseScore/Playback/SoundFlagPopup.qml" line="131"/>
         <source>Sound flag menu</source>
         <translation type="unfinished">Sound flag menu</translation>
-    </message>
-</context>
-<context>
-    <name>plugins</name>
-    <message>
-        <location filename="../../src/appshell/qml/HomePage/PluginsPage.qml" line="162"/>
-        <source>Reload plugins</source>
-        <translation type="unfinished">Reload plugins</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="50"/>
-        <source>Edit shortcut</source>
-        <extracomment>Edit the keyboard shortcut assigned to a plug-in</extracomment>
-        <translation type="unfinished">Edit shortcut</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="71"/>
-        <source>Enable</source>
-        <translation type="unfinished">Enable</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/internal/EnablePanel.qml" line="71"/>
-        <source>Disable</source>
-        <translation type="unfinished">Disable</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="116"/>
-        <source>Enabled</source>
-        <translation type="unfinished">Enabled</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="147"/>
-        <source>Disabled</source>
-        <translation type="unfinished">Disabled</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="188"/>
-        <source>Version:</source>
-        <translation type="unfinished">Version:</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/qml/MuseScore/Plugins/PluginsPage.qml" line="190"/>
-        <source>Shortcut:</source>
-        <extracomment>Keyboard shortcut</extracomment>
-        <translation type="unfinished">Shortcut:</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="80"/>
-        <source>The plugin “%1” is currently disabled. Do you want to enable it now?</source>
-        <translation type="unfinished">The plugin “%1” is currently disabled. Do you want to enable it now?</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsactioncontroller.cpp" line="81"/>
-        <source>Alternatively, you can enable it at any time from Home &gt; Plugins.</source>
-        <translation type="unfinished">Alternatively, you can enable it at any time from Home &gt; Plugins.</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/view/pluginsmodel.cpp" line="108"/>
-        <source>Not defined</source>
-        <extracomment>No keyboard shortcut is assigned to this plugin.</extracomment>
-        <translation type="unfinished">Not defined</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsservice.cpp" line="81"/>
-        <source>Composing/arranging tools</source>
-        <translation type="unfinished">Composing/arranging tools</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsservice.cpp" line="82"/>
-        <source>Color notes</source>
-        <translation type="unfinished">Color notes</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsservice.cpp" line="83"/>
-        <source>Playback</source>
-        <translation type="unfinished">Playback</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsservice.cpp" line="84"/>
-        <source>Lyrics</source>
-        <translation type="unfinished">Lyrics</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/internal/pluginsuiactions.cpp" line="58"/>
-        <source>Run plugin %1</source>
-        <translation type="unfinished">Run plugin %1</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/pluginserrors.h" line="46"/>
-        <source>Plugin not found</source>
-        <translation type="unfinished">Plugin not found</translation>
-    </message>
-    <message>
-        <location filename="../../src/plugins/pluginserrors.h" line="47"/>
-        <source>Could not load plugin</source>
-        <translation type="unfinished">Could not load plugin</translation>
     </message>
 </context>
 <context>
