@@ -288,38 +288,38 @@ Slider {
             }
         }
 
-        StyledDropShadow {
-            anchors.fill: handleRect
-            source: handleRect
-            color: "#33000000"
-            radius: 4
-            verticalOffset: 2
-        }
-
-        Rectangle {
-            id: handleRect
+        ItemWithDropShadow {
             anchors.fill: parent
-            radius: 2
-            color: "white"
+
+            shadow.color: "#33000000"
+            shadow.radius: 4
+            shadow.verticalOffset: 2
 
             Rectangle {
+                id: handleRect
                 anchors.fill: parent
                 radius: 2
-
-                color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
-                border.color: Qt.rgba(0, 0, 0, 0.7)
-                border.width: 1
+                color: "white"
 
                 Rectangle {
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: 3
-                    anchors.rightMargin: 3
+                    anchors.fill: parent
+                    radius: 2
 
-                    height: 1
-                    radius: height / 2
-                    color: "#000000"
+                    color: Utils.colorWithAlpha(ui.theme.popupBackgroundColor, 0.1)
+                    border.color: Qt.rgba(0, 0, 0, 0.7)
+                    border.width: 1
+
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 3
+                        anchors.rightMargin: 3
+
+                        height: 1
+                        radius: height / 2
+                        color: "#000000"
+                    }
                 }
             }
         }
