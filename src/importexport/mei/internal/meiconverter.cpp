@@ -2820,7 +2820,7 @@ libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elisi
         meiSyl.SetCon(libmei::sylLog_CON_b);
         meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
     } else if (elision == ElisionLast) {
-        // Make middle an initial and remove terminal work position
+        // Make middle an initial and remove terminal word position
         if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_m) {
             meiSyl.SetWordpos(libmei::sylLog_WORDPOS_i);
         } else if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_t) {
