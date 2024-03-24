@@ -1898,6 +1898,22 @@ void ChangePart::flip(EditData*)
     instrument = oi;
 }
 
+static void changeChordStyle(Score* score)
+{
+    const MStyle& style = score->style();
+    score->chordList()->unload();
+    double emag = style.styleD(Sid::chordExtensionMag);
+    double eadjust = style.styleD(Sid::chordExtensionAdjust);
+    double mmag = style.styleD(Sid::chordModifierMag);
+    double madjust = style.styleD(Sid::chordModifierAdjust);
+    score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+    if (score->style().styleB(Sid::chordsXmlFile)) {
+        score->chordList()->read(u"chords.xml");
+    }
+    score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
+    score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
+}
+
 //---------------------------------------------------------
 //   ChangeStyle
 //---------------------------------------------------------
@@ -1923,6 +1939,7 @@ void ChangeStyle::flip(EditData*)
     }
 
     score->setStyle(style, overlap);
+    changeChordStyle(score);
     score->styleChanged();
     style = tmp;
 }
@@ -1942,18 +1959,7 @@ static void changeStyleValue(Score* score, Sid idx, const PropertyValue& oldValu
     case Sid::chordModifierMag:
     case Sid::chordModifierAdjust:
     case Sid::chordDescriptionFile: {
-        const MStyle& style = score->style();
-        score->chordList()->unload();
-        double emag = style.styleD(Sid::chordExtensionMag);
-        double eadjust = style.styleD(Sid::chordExtensionAdjust);
-        double mmag = style.styleD(Sid::chordModifierMag);
-        double madjust = style.styleD(Sid::chordModifierAdjust);
-        score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
-        if (score->style().styleB(Sid::chordsXmlFile)) {
-            score->chordList()->read(u"chords.xml");
-        }
-        score->chordList()->read(style.styleSt(Sid::chordDescriptionFile));
-        score->chordList()->setCustomChordList(style.styleSt(Sid::chordStyle) == "custom");
+        changeChordStyle(score);
     }
     break;
     case Sid::spatium:
