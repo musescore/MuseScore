@@ -2776,6 +2776,13 @@ void Convert::sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, E
         default: break;
         }
     }
+
+    // @place
+    if (meiSyl.HasPlace()) {
+        lyrics->setPlacement(meiSyl.GetPlace()
+                             == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        lyrics->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
 }
 
 libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision)
@@ -2819,6 +2826,11 @@ libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elisi
         } else if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_t) {
             meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
         }
+    }
+
+    // @place
+    if (lyrics->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiSyl.SetPlace(Convert::placeToMEI(lyrics->placement()));
     }
 
     // Add extender connector
