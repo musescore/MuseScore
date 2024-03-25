@@ -43,7 +43,7 @@ using namespace mu::engraving;
 
 const PropertyValue& MStyle::value(Sid idx) const
 {
-    if (idx == Sid::NOSTYLE) {
+    if (idx == Sid::NOSTYLE || size_t(idx) >= m_values.size()) {
         static PropertyValue dummy;
         return dummy;
     }
