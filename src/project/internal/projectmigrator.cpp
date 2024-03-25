@@ -134,6 +134,12 @@ void ProjectMigrator::resetStyleSettings(mu::engraving::MasterScore* score)
     score->resetStyleValue(mu::engraving::Sid::measureSpacing);
 }
 
+bool ProjectMigrator::resetCrossBeams(engraving::MasterScore* score)
+{
+    score->setResetCrossBeams();
+    return true;
+}
+
 Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt)
 {
     TRACEFUNC;
@@ -158,6 +164,10 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 
     if (ok && score->mscVersion() < 300) {
         ok = resetAllElementsPositions(score);
+    }
+
+    if (ok && score->mscVersion() <= 206) {
+        ok = resetCrossBeams(score);
     }
 
     if (ok && score->mscVersion() != mu::engraving::Constants::MSC_VERSION) {
