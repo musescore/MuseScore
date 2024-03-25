@@ -18,7 +18,6 @@
 #include "score.h"
 #include "beam.h"
 #include "tuplet.h"
-#include "text.h"
 #include "measure.h"
 #include "barline.h"
 #include "part.h"
@@ -26,7 +25,6 @@
 #include "staff.h"
 #include "line.h"
 #include "hairpin.h"
-#include "ottava.h"
 #include "sig.h"
 #include "keysig.h"
 #include "staffstate.h"
@@ -2217,7 +2215,7 @@ qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
 qreal Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
       {
 
-      qreal ww = -1000000.0;        // can remain negative
+      qreal ww = -DBL_MAX;        // can remain negative
       for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
             if (score()->staff(staffIdx) && !score()->staff(staffIdx)->show())
                   continue;

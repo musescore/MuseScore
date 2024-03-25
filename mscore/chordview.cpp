@@ -15,7 +15,6 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/noteevent.h"
-#include "preferences.h"
 #include "musescore.h"
 #include "libmscore/mscore.h"
 #include "libmscore/score.h"
@@ -181,10 +180,10 @@ void ChordView::drawBackground(QPainter* p, const QRectF& r)
       {
       if (chord == 0)
             return;
-      QRectF r1(-1000000.0,               0.0, 1000000.0+CHORD_MAP_OFFSET, 1000000.0);
-      QRectF r2(ticks + CHORD_MAP_OFFSET, 0.0, 1000000.0, 1000000.0);
-      QRectF r3(-1000000.0,     127*keyHeight, 1000000.0+CHORD_MAP_OFFSET, keyHeight);
-      QRectF r4(ticks + CHORD_MAP_OFFSET,  127*keyHeight, 1000000.0,        keyHeight);
+      QRectF r1(-DBL_MAX,                 0.0,           DBL_MAX, DBL_MAX);
+      QRectF r2(ticks + CHORD_MAP_OFFSET, 0.0,           DBL_MAX, DBL_MAX);
+      QRectF r3(-DBL_MAX,                 127*keyHeight, DBL_MAX, keyHeight);
+      QRectF r4(ticks + CHORD_MAP_OFFSET, 127*keyHeight, DBL_MAX, keyHeight);
 
       QColor bg(0x71, 0x8d, 0xbe);
       QColor bg1 = bg.darker(150);

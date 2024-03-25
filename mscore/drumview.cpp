@@ -24,7 +24,6 @@
 #include "libmscore/chord.h"
 #include "libmscore/score.h"
 #include "libmscore/note.h"
-#include "libmscore/slur.h"
 #include "libmscore/segment.h"
 
 namespace Ms {
@@ -112,9 +111,9 @@ void DrumView::drawBackground(QPainter* p, const QRectF& r)
       Score* _score = staff->score();
 
       QRectF r1;
-      r1.setCoords(-1000000.0, 0.0, 480.0, 1000000.0);
+      r1.setCoords(-DBL_MAX, 0.0, 480.0, DBL_MAX);
       QRectF r2;
-      r2.setCoords(ticks + 480, 0.0, 1000000.0, 1000000.0);
+      r2.setCoords(ticks + 480, 0.0, DBL_MAX, DBL_MAX);
       QColor bg(0x71, 0x8d, 0xbe);
 
       p->fillRect(r, bg);

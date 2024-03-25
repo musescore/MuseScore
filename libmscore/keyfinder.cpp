@@ -521,7 +521,7 @@ static void match_profiles()
 
             for (key=0; key<56; ++key) {
                   kprob[key] = 0.0;
-                  keyscore()[key][s] = -1000000.0;
+                  keyscore()[key][s] = -DBL_MAX;
                   if (npc_or_tpc_profile==0 && (key<9 || (key>20 && key<37) || key>48))
                         continue;
                   kprob[key] = 1.0;

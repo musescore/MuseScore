@@ -11,12 +11,9 @@
 //=============================================================================
 
 #include "skyline.h"
-#include "segment.h"
+#include "shape.h"
 
 namespace Ms {
-
-static const qreal MAXIMUM_Y = 1000000.0;
-static const qreal MINIMUM_Y = -1000000.0;
 
 // #define SKL_DEBUG
 
@@ -176,7 +173,7 @@ void SkylineLine::add(qreal x, qreal y, qreal w)
             }
       if (x >= cx) {
             if (x > cx) {
-                  qreal cy = north ? MAXIMUM_Y : MINIMUM_Y;
+                  qreal cy = north ? DBL_MAX : -DBL_MAX;
                   DP("    append1 %f %f\n", cy, x - cx);
                   append(cx, cy, x - cx);
                   }
@@ -210,7 +207,7 @@ qreal Skyline::minDistance(const Skyline& s) const
 
 qreal SkylineLine::minDistance(const SkylineLine& sl) const
       {
-      qreal dist = MINIMUM_Y;
+      qreal dist = -DBL_MAX;
 
       qreal x1 = 0.0;
       qreal x2 = 0.0;
@@ -287,7 +284,7 @@ bool SkylineLine::valid() const
 
 bool SkylineLine::valid(const SkylineSegment& s) const
       {
-      return north ? (s.y != MAXIMUM_Y) : (s.y != MINIMUM_Y);
+      return north ? (s.y != DBL_MAX) : (s.y != -DBL_MAX);
       }
 
 //---------------------------------------------------------
@@ -320,12 +317,12 @@ qreal SkylineLine::max() const
       {
       qreal val;
       if (north) {
-            val = MAXIMUM_Y;
+            val = DBL_MAX;
             for (const SkylineSegment& s : *this)
                   val = qMin(val, s.y);
             }
       else {
-            val = MINIMUM_Y;
+            val = -DBL_MAX;
             for (const SkylineSegment& s : *this)
                   val = qMax(val, s.y);
             }

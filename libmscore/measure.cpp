@@ -35,19 +35,15 @@
 #include "fret.h"
 #include "glissando.h"
 #include "hairpin.h"
-#include "harmony.h"
 #include "hook.h"
 #include "icon.h"
-#include "image.h"
 #include "key.h"
 #include "keysig.h"
 #include "layoutbreak.h"
 #include "layout.h"
 #include "note.h"
-#include "ottava.h"
 #include "page.h"
 #include "part.h"
-#include "pedal.h"
 #include "pitchspelling.h"
 #include "repeat.h"
 #include "rest.h"
@@ -55,7 +51,6 @@
 #include "segment.h"
 #include "select.h"
 #include "sig.h"
-#include "slur.h"
 #include "spacer.h"
 #include "staff.h"
 #include "stafftext.h"
@@ -63,9 +58,7 @@
 #include "stem.h"
 #include "stringdata.h"
 #include "style.h"
-#include "sym.h"
 #include "system.h"
-#include "tempotext.h"
 #include "measurenumber.h"
 #include "mmrestrange.h"
 #include "tie.h"
@@ -4493,7 +4486,7 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
       if (!fs->visible())           // first enabled could be a clef change on invisible staff
             fs = fs->nextActive();
       bool first  = isFirstInSystem();
-      const Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+      const Shape ls(first ? QRectF(0.0, -DBL_MAX, 0.0, DBL_MAX) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
       if (isMMRest()) {
             // Reset MM rest to initial size and position
@@ -4615,7 +4608,7 @@ void Measure::computeMinWidth()
       // left barriere:
       //    Make sure no elements crosses the left boarder if first measure in a system.
       //
-      Shape ls(first ? QRectF(0.0, -1000000.0, 0.0, 2000000.0) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
+      Shape ls(first ? QRectF(0.0, -DBL_MAX, 0.0, DBL_MAX) : QRectF(0.0, 0.0, 0.0, spatium() * 4));
 
       x = s->minLeft(ls);
 

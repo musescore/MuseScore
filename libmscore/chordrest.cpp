@@ -19,18 +19,15 @@
 #include "staff.h"
 #include "tuplet.h"
 #include "score.h"
-#include "sym.h"
 #include "slur.h"
 #include "beam.h"
 #include "breath.h"
 #include "barline.h"
 #include "articulation.h"
 #include "tempo.h"
-#include "tempotext.h"
 #include "note.h"
 #include "arpeggio.h"
 #include "dynamic.h"
-#include "stafftext.h"
 #include "sig.h"
 #include "clef.h"
 #include "lyrics.h"
@@ -1260,8 +1257,8 @@ Shape ChordRest::shape() const
       {
       Shape shape;
       {
-      qreal x1 = 1000000.0;
-      qreal x2 = -1000000.0;
+      qreal x1 = DBL_MAX;
+      qreal x2 = -DBL_MAX;
       bool adjustWidth = false;
       for (Lyrics* l : _lyrics) {
             if (!l || !l->addToSkyline())
@@ -1283,8 +1280,8 @@ Shape ChordRest::shape() const
       }
 
       {
-      qreal x1 = 1000000.0;
-      qreal x2 = -1000000.0;
+      qreal x1 = DBL_MAX;
+      qreal x2 = -DBL_MAX;
       bool adjustWidth = false;
       for (Element* e : segment()->annotations()) {
             if (!e || !e->addToSkyline())
