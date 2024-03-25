@@ -656,7 +656,7 @@ Slur* ChordRest::slur(const ChordRest* secondChordRest) const
     return result;
 }
 
-void ChordRest::undoChangeProperty(Pid id, const PropertyValue &newValue, PropertyFlags ps)
+void ChordRest::undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps)
 {
     if (id == Pid::BEAM_MODE) {
         if (ticks() > Fraction(1, 8)) {
