@@ -378,7 +378,12 @@ void Tie::calculateIsInside()
     if (startIsSingleNote && endIsSingleNote) {
         setIsInside(style().styleV(Sid::tiePlacementSingleNote).value<TiePlacement>() == TiePlacement::INSIDE);
     } else {
-        setIsInside(style().styleV(Sid::tiePlacementChord).value<TiePlacement>() == TiePlacement::INSIDE);
+        if (style().styleV(Sid::tiePlacementChord).value<TiePlacement>() == TiePlacement::AUTO) {
+            setIsInside(!(up() ? (startN == startChord->upNote() && endN == endChord->upNote())
+                          : (startN == startChord->downNote() && endN == endChord->downNote())));
+        } else {
+            setIsInside(style().styleV(Sid::tiePlacementChord).value<TiePlacement>() == TiePlacement::INSIDE);
+        }
     }
 }
 
