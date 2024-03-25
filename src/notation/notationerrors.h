@@ -38,7 +38,6 @@ enum class Err {
     MeasureIsNotSelected,
     SelectCompleteTupletOrTremolo,
     EmptySelection,
-    NotWritable,
 };
 
 inline Ret make_ret(Err err)
@@ -70,9 +69,6 @@ inline Ret make_ret(Err err)
         break;
     case Err::EmptySelection:
         text = trc("notation", "The selection is empty");
-        break;
-    case Err::NotWritable:
-        text = trc("notation", "The specified path is not writable");
         break;
     case Err::Undefined:
     case Err::NoError:
