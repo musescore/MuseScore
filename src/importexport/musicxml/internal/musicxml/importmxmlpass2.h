@@ -501,11 +501,11 @@ private:
 class MusicXMLInferredFingering
 {
 public:
-    MusicXMLInferredFingering(double totalY, EngravingItem* element, String& text, int track, String placement, Measure* measure,
+    MusicXMLInferredFingering(double totalY, EngravingItem* element, String& text, track_idx_t track, String placement, Measure* measure,
                               Fraction tick);
     double totalY() const { return m_totalY; }
     Fraction tick() const { return m_tick; }
-    int track() const { return m_track; }
+    track_idx_t track() const { return m_track; }
     std::vector<String> fingerings() const { return m_fingerings; }
     bool findAndAddToNotes(Measure* measure);
     MusicXMLDelayedDirectionElement* toDelayedDirection();
@@ -515,7 +515,7 @@ private:
     EngravingItem* m_element;
     String m_text;
     std::vector<String> m_fingerings;
-    int m_track;
+    track_idx_t m_track;
     String m_placement;
     Measure* m_measure;
     Fraction m_tick;
