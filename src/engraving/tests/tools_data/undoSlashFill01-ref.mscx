@@ -316,7 +316,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -329,7 +328,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -365,7 +363,6 @@
           </voice>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -378,7 +375,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -391,7 +387,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -404,7 +399,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -449,7 +443,6 @@
           </voice>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
@@ -463,7 +456,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
@@ -477,7 +469,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
@@ -491,7 +482,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <small>1</small>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
@@ -512,7 +502,6 @@
           </LayoutBreak>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -525,7 +514,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -538,7 +526,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -551,7 +538,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -581,7 +567,6 @@
             <durationType>half</durationType>
             </Rest>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -594,63 +579,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <BeamMode>no</BeamMode>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>no</BeamMode>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>no</BeamMode>
-            <durationType>quarter</durationType>
-            <noStem>1</noStem>
-            <Note>
-              <pitch>0</pitch>
-              <tpc>14</tpc>
-              <head>slash</head>
-              <play>0</play>
-              <fixed>1</fixed>
-              <fixedLine>4</fixedLine>
-              </Note>
-            </Chord>
-          <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -667,7 +595,6 @@
       <Measure>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -680,7 +607,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -693,7 +619,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -706,7 +631,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -723,7 +647,6 @@
       <Measure>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -736,7 +659,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -749,7 +671,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -762,7 +683,58 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <noStem>1</noStem>
+            <Note>
+              <pitch>0</pitch>
+              <tpc>14</tpc>
+              <head>slash</head>
+              <play>0</play>
+              <fixed>1</fixed>
+              <fixedLine>4</fixedLine>
+              </Note>
+            </Chord>
+          <Chord>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
