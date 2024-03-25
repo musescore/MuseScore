@@ -356,6 +356,7 @@ private:
     void moveStringSelection(MoveDirection d);
 
     EngravingItem* dropTarget(mu::engraving::EditData& ed) const;
+    bool dragElement(const PointF& pos);
     bool dragMeasureAnchorElement(const PointF& pos);
     bool dragTimeAnchorElement(const PointF& pos);
     bool dropCanvas(EngravingItem* e);
@@ -434,6 +435,9 @@ private:
 
     DropData m_dropData;
     async::Notification m_dropChanged;
+
+    engraving::BspTree m_droppableTree;
+    Page* m_currentDropPage = nullptr;
 
     async::Channel<ScoreConfigType> m_scoreConfigChanged;
 

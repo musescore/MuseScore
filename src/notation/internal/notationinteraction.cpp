@@ -1258,13 +1258,14 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
         return false;
     }
 
-    m_dropData.ed.pos = pos;
     m_dropData.ed.modifiers = keyboardModifier(modifiers);
 
     switch (m_dropData.ed.dropElement->type()) {
     case ElementType::VOLTA:
-    case ElementType::GRADUAL_TEMPO_CHANGE:
+    case ElementType::GRADUAL_TEMPO_CHANGE: {
+        m_dropData.ed.pos = pos;
         return dragMeasureAnchorElement(pos);
+    }
     case ElementType::PEDAL:
     case ElementType::LET_RING:
     case ElementType::VIBRATO:
@@ -1272,9 +1273,10 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::OTTAVA:
     case ElementType::TRILL:
     case ElementType::HAIRPIN:
-    case ElementType::TEXTLINE:
+    case ElementType::TEXTLINE: {
+        m_dropData.ed.pos = pos;
         return dragTimeAnchorElement(pos);
-    case ElementType::IMAGE:
+    }
     case ElementType::SYMBOL:
     case ElementType::FSYMBOL:
     case ElementType::DYNAMIC:
@@ -1285,8 +1287,6 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::ARPEGGIO:
     case ElementType::BREATH:
     case ElementType::GLISSANDO:
-    case ElementType::MEASURE_NUMBER:
-    case ElementType::BRACKET:
     case ElementType::ARTICULATION:
     case ElementType::FERMATA:
     case ElementType::CHORDLINE:
@@ -1302,20 +1302,13 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
-    case ElementType::STRING_TUNINGS:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO_SINGLECHORD:
     case ElementType::TREMOLO_TWOCHORD:
-    case ElementType::LAYOUT_BREAK:
-    case ElementType::MARKER:
     case ElementType::STAFF_STATE:
     case ElementType::INSTRUMENT_CHANGE:
     case ElementType::REHEARSAL_MARK:
-    case ElementType::JUMP:
-    case ElementType::MEASURE_REPEAT:
-    case ElementType::ACTION_ICON:
     case ElementType::CHORD:
-    case ElementType::SPACER:
     case ElementType::SLUR:
     case ElementType::HARMONY:
     case ElementType::BAGPIPE_EMBELLISHMENT:
@@ -1325,18 +1318,30 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::LYRICS:
     case ElementType::FRET_DIAGRAM:
     case ElementType::HARP_DIAGRAM:
-    case ElementType::STAFFTYPE_CHANGE: {
+        return dragElement(pos);
+
+    // TODO: The following won't be necessary once all element types have been made
+    // compatible with NotationInteraction::dragElement (see above)
+    case ElementType::ACTION_ICON:
+    case ElementType::BRACKET:
+    case ElementType::IMAGE:
+    case ElementType::JUMP:
+    case ElementType::LAYOUT_BREAK:
+    case ElementType::MARKER:
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::MEASURE_REPEAT:
+    case ElementType::SPACER:
+    case ElementType::STAFFTYPE_CHANGE:
+    case ElementType::STRING_TUNINGS: {
+        m_dropData.ed.pos = pos;
         EngravingItem* e = dropTarget(m_dropData.ed);
         if (e) {
             if (!e->isMeasure()) {
                 setDropTarget(e);
             }
             return true;
-        } else {
-            return false;
         }
     }
-    break;
     default:
         break;
     }
@@ -1357,7 +1362,10 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
 
     bool accepted = false;
 
-    m_dropData.ed.pos       = pos;
+    if (m_dropData.ed.pos.isNull()) {
+        m_dropData.ed.pos = pos;
+    }
+
     m_dropData.ed.modifiers = keyboardModifier(modifiers);
     m_dropData.ed.dropElement->styleChanged();
 
@@ -1548,6 +1556,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         break;
     }
     m_dropData.ed.dropElement = nullptr;
+    m_dropData.ed.pos = PointF();
     setDropTarget(nullptr);         // this also resets dropRectangle and dropAnchor
     apply();
     // update input cursor position (must be done after layout)
@@ -2178,6 +2187,7 @@ void NotationInteraction::endDrop()
         resetDropElement();
         score()->update();
     }
+    m_dropData.ed.pos = PointF();
     setDropTarget(nullptr);
 }
 
@@ -2232,6 +2242,72 @@ EngravingItem* NotationInteraction::dropTarget(mu::engraving::EditData& ed) cons
         }
     }
     return nullptr;
+}
+
+bool NotationInteraction::dragElement(const PointF& pos)
+{
+    Page* page = point2page(pos);
+    if (!page) {
+        return false;
+    }
+
+    // Update the tree when starting a new drag, or when crossing a page
+    if (m_dropData.ed.pos.isNull() || page != m_currentDropPage) {
+        m_currentDropPage = page;
+
+        // Where "m" is the number of page elements and "n" is the number of elements accepting a drop...
+        // O(log m) operation
+        m_droppableTree.initialize(page->pageBoundingRect(), page->elements().size());
+
+        // O(m log n) operation
+        for (EngravingItem* elem : page->elements()) {
+            if (elem->acceptDrop(m_dropData.ed)) {
+                m_droppableTree.insert(elem);
+            }
+        }
+    }
+
+    // O(log n) operation
+    PointF posInPage(pos.x() - page->pos().x(), pos.y() - page->pos().y());
+    EngravingItem* targetElem = m_droppableTree.nearestNeighbor(posInPage);
+    EngravingItem* dropElem = m_dropData.ed.dropElement;
+
+    if (!targetElem || !dropElem) {
+        return false;
+    }
+
+    // Even though many engraving items accept drops of time/key signatures, these will only
+    // ever be applied to the measure itself. When dragging these items, we should target
+    // the measure instead of the item...
+    switch (dropElem->type()) {
+    case ElementType::CLEF: {
+        // Clefs are a special case - they can be applied to individual items but we should still
+        // target the measure if the item is the first in the measure...
+        if (targetElem->rtick() != Fraction(0, 1)) {
+            break;
+        }
+        // fall through
+    }
+    case ElementType::KEYSIG:
+    case ElementType::TIMESIG: {
+        Measure* targetMeasure = targetElem->findMeasure();
+        if (targetMeasure && dropElem->type() != targetElem->type()) {
+            setDropTarget(targetMeasure, true);
+            m_dropData.ed.pos = targetMeasure->canvasBoundingRect().center();
+            setAnchorLines({ LineF(pos, targetMeasure->canvasPos()) });
+            return targetMeasure->acceptDrop(m_dropData.ed);
+        }
+        // If the types match, break and draw a line to the existing item...
+        break;
+    }
+    default: break;
+    }
+
+    setDropTarget(targetElem, true);
+    m_dropData.ed.pos = targetElem->canvasBoundingRect().center();
+    setAnchorLines({ LineF(pos, targetElem->canvasBoundingRect().center()) });
+
+    return true;
 }
 
 //! NOTE Copied from ScoreView::dragMeasureAnchorElement
