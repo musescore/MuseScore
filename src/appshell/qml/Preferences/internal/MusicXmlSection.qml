@@ -31,10 +31,12 @@ BaseSection {
     property alias importLayout: importLayoutBox.checked
     property alias importBreaks: importBreaksBox.checked
     property alias needUseDefaultFont: needUseDefaultFontBox.checked
+    property alias inferTextType: inferTextTypeBox.checked
 
     signal importLayoutChangeRequested(bool importLayout)
     signal importBreaksChangeRequested(bool importBreaks)
     signal useDefaultFontChangeRequested(bool use)
+    signal inferTextTypeChangeRequested(bool inferText)
 
     CheckBox {
         id: importLayoutBox
@@ -78,6 +80,21 @@ BaseSection {
 
         onClicked: {
             root.useDefaultFontChangeRequested(!checked)
+        }
+    }
+
+    CheckBox {
+        id: inferTextTypeBox
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Infer text type based on content where possible")
+
+        navigation.name: "InferTextTypeBox"
+        navigation.panel: root.navigation
+        navigation.row: 3
+
+        onClicked: {
+            root.inferTextTypeChangeRequested(!checked)
         }
     }
 }

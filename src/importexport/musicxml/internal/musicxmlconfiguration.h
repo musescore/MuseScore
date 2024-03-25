@@ -50,6 +50,9 @@ public:
 
     bool needAskAboutApplyingNewStyle() const override;
     void setNeedAskAboutApplyingNewStyle(bool value) override;
+
+    bool inferTextType() const override;
+    void setInferTextType(bool value) override;
 };
 }
 

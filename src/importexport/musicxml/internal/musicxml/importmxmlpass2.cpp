@@ -1763,6 +1763,48 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
 }
 
 //---------------------------------------------------------
+//   reformatHeaderVBox
+//---------------------------------------------------------
+/**
+ Due to inconsistencies with spacing and inferred text,
+ the header VBox frequently has collisions. This cleans
+ those (as a temporary fix for a more robust collision-prevention
+ system in Boxes).
+ */
+
+static void reformatHeaderVBox(MeasureBase* mb)
+{
+    if (!mb->isVBox()) {
+        return;
+    }
+
+    VBox* headerVBox = toVBox(mb);
+    double totalHeight = 0;
+    double offsetHeight = 0;
+    double lineSpacingMultiplier = 0.5;
+
+    for (auto e : headerVBox->el()) {
+        if (!e->isText()) {
+            continue;
+        }
+        Text* t = toText(e);
+        TLayout::layoutText(t, t->mutldata());
+
+        totalHeight += t->height();
+        if (t->align() == AlignV::TOP) {
+            totalHeight += t->lineHeight() * lineSpacingMultiplier;
+            t->setOffset(t->offset().x(), offsetHeight);
+            t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+            offsetHeight += t->height();
+            offsetHeight += t->lineHeight() * lineSpacingMultiplier;
+        }
+    }
+
+    headerVBox->setBoxHeight(Spatium(totalHeight / headerVBox->spatium()));
+    headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
+}
+
+//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -1792,8 +1834,11 @@ void MusicXMLParserPass2::scorePartwise()
             addBarlineToMeasure(lm, lm->endTick(), std::move(b));
         }
     }
-
     addError(checkAtEndElement(m_e, u"score-partwise"));
+
+    if (m_pass1.hasInferredHeaderText()) {
+        reformatHeaderVBox(m_score->measures()->first());
+    }
 }
 
 //---------------------------------------------------------
@@ -2895,13 +2940,23 @@ void MusicXMLParserDirection::direction(const String& partId,
     if (isLyricBracket()) {
         return;
     } else if (isLikelyCredit(tick)) {
-        Text* t = Factory::createText(m_score->dummy(), TextStyleType::COMPOSER);
-        t->setXmlText(m_wordsText.trimmed());
-        auto firstMeasure = m_score->measures()->first();
-        VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(m_score);
-        double spatium = m_score->style().styleD(Sid::spatium);
-        vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
-        vbox->add(t);
+        Text* inferredText = addTextToHeader(TextStyleType::COMPOSER);
+        if (inferredText) {
+            m_pass1.setHasInferredHeaderText(true);
+            hideRedundantHeaderText(inferredText, { u"lyricist", u"composer", u"poet" });
+        }
+    } else if (isLikelySubtitle(tick)) {
+        Text* inferredText = addTextToHeader(TextStyleType::SUBTITLE);
+        if (inferredText) {
+            m_pass1.setHasInferredHeaderText(true);
+            if (m_score->metaTag(u"source").isEmpty()) {
+                m_score->setMetaTag(u"source", inferredText->plainText());
+            }
+            hideRedundantHeaderText(inferredText, { u"source" });
+        }
+    } else if (isLikelyLegallyDownloaded(tick)) {
+        // Ignore (TBD: print to footer?)
+        return;
     } else if (m_wordsText != "" || m_rehearsalText != "" || m_metroText != "") {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
@@ -3094,13 +3149,11 @@ void MusicXMLParserDirection::direction(const String& partId,
 
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 {
-    static const std::wregex re(L"^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+");
-
     return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
            && m_rehearsalText.empty()
            && m_metroText.empty()
            && m_tpoSound < 0.1
-           && m_wordsText.contains(re);
+           && isLikelyCreditText(m_wordsText, false);
 }
 
 //---------------------------------------------------------
@@ -3123,6 +3176,65 @@ bool MusicXMLParserDirection::isLyricBracket() const
            && m_metroText.empty()
            && m_dynamicsList.empty()
            && m_tpoSound < 0.1;
+}
+
+bool MusicXMLParserDirection::isLikelySubtitle(const Fraction& tick) const
+{
+    return (tick + m_offset < Fraction(5, 1)) // Only early in the piece
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
+           && m_tpoSound < 0.1
+           && isLikelySubtitleText(m_wordsText, false);
+}
+
+bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) const
+{
+    return (tick + m_offset < Fraction(5, 1))   // Only early in the piece
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
+           && m_tpoSound < 0.1
+           && m_wordsText.contains(std::wregex(L"This music has been legally downloaded\\.\\sDo not photocopy\\."));
+}
+
+Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)
+{
+    Text* t = Factory::createText(m_score->dummy(), textStyleType);
+    t->setXmlText(m_wordsText.trimmed());
+    auto firstMeasure = m_score->measures()->first();
+    VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(m_score);
+    double spatium = m_score->style().styleD(Sid::spatium);
+    vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height() / spatium / 2)); // add some height
+    vbox->add(t);
+    return t;
+}
+
+//---------------------------------------------------------
+//   hideRedundantHeaderText
+//    After inferring header text, hide redundant text.
+//    Redundant text is detected by checking all the
+//    Text elements of the inferred text's VBox against
+//    the contents of the eligible metaTags
+//---------------------------------------------------------
+
+void MusicXMLParserDirection::hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags)
+{
+    if (!inferredText->parent()->isVBox()) {
+        return;
+    }
+
+    for (auto e : toVBox(inferredText->parent())->el()) {
+        if (e == inferredText || !e->isText()) {
+            continue;
+        }
+
+        Text* t = toText(e);
+        for (const String& metaTag : metaTags) {
+            if (t->plainText() == m_score->metaTag(metaTag)) {
+                t->setVisible(false);
+                continue;
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------

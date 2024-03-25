@@ -41,13 +41,14 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Henry Ives</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="lyricist"></metaTag>
+    <metaTag name="lyricist">Henry Ives</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="source"></metaTag>
+    <metaTag name="source">from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Inferred Subtitle</metaTag>
+    <metaTag name="workTitle">Inferred Credits 1</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -114,15 +115,20 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.80427</height>
+        <height>17.7353</height>
         <Text>
           <style>title</style>
-          <offset x="0" y="-0.07525"/>
-          <text><font size="22"/>Inferred Subtitle</text>
+          <text><font size="22"/>Inferred Credits 1</text>
           </Text>
         <Text>
           <style>composer</style>
-          <text>Words and Music by Henry Ives</text>
+          <text>Words &amp; Music by Henry Ives (and ampersands)</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <offset x="0" y="11.4294"/>
+          <text>from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem</text>
           </Text>
         </VBox>
       <Measure>
@@ -136,6 +142,10 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <text>Lyrics to be sung by candlelight
+        (and this not to be inferred)</text>
+            </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>34</l1>
