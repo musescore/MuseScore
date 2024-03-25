@@ -566,9 +566,10 @@ mu::Ret NotationProject::doSave(const io::path_t& path, engraving::MscIoMode ioM
 
     // Step 1: check writable
     {
-        if (fileSystem()->exists(savePath) && !fileSystem()->isWritable(savePath)) {
+        if ((fileSystem()->exists(savePath) && !fileSystem()->isWritable(savePath))
+            || (fileSystem()->exists(targetContainerPath) && !fileSystem()->isWritable(targetContainerPath))) {
             LOGE() << "failed save, not writable path: " << savePath;
-            return make_ret(notation::Err::UnknownError);
+            return make_ret(notation::Err::NotWritable);
         }
 
         if (ioMode == engraving::MscIoMode::Dir) {

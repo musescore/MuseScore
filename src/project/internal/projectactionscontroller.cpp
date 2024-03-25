@@ -854,21 +854,6 @@ bool ProjectActionsController::saveProjectLocally(const io::path_t& filePath, Sa
         return false;
     }
 
-    // Prevents Save operation from overwriting read-only files
-    QFileInfo savePath(project->path().toQString());
-    if (savePath.exists() && !savePath.isWritable() && saveMode == SaveMode::Save) {
-        warnScoreCouldnotBeSaved(trc("project/save", "This file is read-only."));
-        return false;
-    }
-
-    else if (saveMode == SaveMode::SaveAs || saveMode == SaveMode::SaveCopy) {
-        QFileInfo saveAsPath(filePath.toQString());
-        if (saveAsPath.exists() && !saveAsPath.isWritable()) {
-            warnScoreCouldnotBeSaved(trc("project/save", "This file is read-only."));
-            return false;
-        }
-    }
-
     Ret ret = project->save(filePath, saveMode);
     if (!ret) {
         LOGE() << ret.toString();
