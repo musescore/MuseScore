@@ -30,42 +30,59 @@
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "../iupdateconfiguration.h"
-#include "../iupdateservice.h"
+
+#include "../iappupdateservice.h"
+#include "../imusesamplerupdateservice.h"
 
 #include "../iupdatescenario.h"
 
 namespace mu::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
-    INJECT(IInteractive, interactive)
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(IUpdateConfiguration, configuration)
-    INJECT(IUpdateService, updateService)
+    Inject<IInteractive> interactive;
+    Inject<muse::actions::IActionsDispatcher> dispatcher;
+    Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<IUpdateConfiguration> configuration;
+
+    Inject<IAppUpdateService> appUpdateService;
+    Inject<IMuseSamplerUpdateService> museSamplerUpdateService;
 
 public:
     void delayedInit();
 
-    void checkForUpdate() override;
+    void checkForAppUpdate() override;
+    void checkForMuseSamplerUpdate() override;
 
 private:
-    bool isCheckStarted() const;
+    bool isAppCheckStarted() const;
+    bool isMuseSamplerCheckStarted() const;
 
-    void doCheckForUpdate(bool manual);
-    void th_heckForUpdate();
+    bool shouldIgnoreMuseSamplerUpdate(const ReleaseInfo& info)const;
+    void setIgnoredMuseSamplerUpdate(const std::string& version);
+
+    void doCheckForAppUpdate(bool manual);
+    void th_checkForAppUpdate();
+
+    void doCheckForMuseSamplerUpdate(bool manual);
+    void th_checkForMuseSamplerUpdate();
 
     void processUpdateResult(int errorCode);
 
-    void showNoUpdateMsg();
-    void showReleaseInfo(const ReleaseInfo& info);
+    void showNoAppUpdateMsg();
+    void showAppReleaseInfo(const ReleaseInfo& info);
+
+    void showMuseSamplerReleaseInfo(const ReleaseInfo& info);
 
     void showServerErrorMsg();
 
     void downloadRelease();
     void closeAppAndStartInstallation(const io::path_t& installerPath);
 
-    bool m_progress = false;
-    mu::ProgressPtr m_progressChannel = nullptr;
+    bool m_appCheckProgress = false;
+    mu::ProgressPtr m_appCheckProgressChannel = nullptr;
+
+    bool m_museSamplerCheckProgress = false;
+    mu::ProgressPtr m_museSamplerCheckProgressChannel = nullptr;
 };
 }
 

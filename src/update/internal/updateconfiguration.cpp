@@ -35,6 +35,7 @@ static const std::string module_name("update");
 static const Settings::Key CHECK_FOR_UPDATE_KEY(module_name, "application/checkForUpdate");
 static const Settings::Key ALLOW_UPDATE_ON_PRERELEASE(module_name, "application/allowUpdateOnPreRelease");
 static const Settings::Key SKIPPED_VERSION_KEY(module_name, "application/skippedVersion");
+static const Settings::Key LAST_MUSESAMPLER_SHOWN_VERSION_KEY(module_name, "application/lastShownMuseSamplerReleaseVersion");
 
 static const std::string PRIVACY_POLICY_URL_PATH("/about/desktop-privacy-policy");
 
@@ -103,23 +104,40 @@ std::string UpdateConfiguration::skippedReleaseVersion() const
     return settings()->value(SKIPPED_VERSION_KEY).toString();
 }
 
-void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version) const
+void UpdateConfiguration::setSkippedReleaseVersion(const std::string& version)
 {
     settings()->setSharedValue(SKIPPED_VERSION_KEY, Val(version));
 }
 
-std::string UpdateConfiguration::checkForUpdateUrl() const
+std::string UpdateConfiguration::lastShownMuseSamplerReleaseVersion() const
+{
+    return settings()->value(LAST_MUSESAMPLER_SHOWN_VERSION_KEY).toString();
+}
+
+void UpdateConfiguration::setLastShownMuseSamplerReleaseVersion(const std::string& version)
+{
+    settings()->setSharedValue(LAST_MUSESAMPLER_SHOWN_VERSION_KEY, Val(version));
+}
+
+std::string UpdateConfiguration::checkForAppUpdateUrl() const
 {
     return !allowUpdateOnPreRelease()
            ? m_config.value("latest").toString()
            : m_config.value("latest.test").toString();
 }
 
-std::string UpdateConfiguration::previousReleasesNotesUrl() const
+std::string UpdateConfiguration::previousAppReleasesNotesUrl() const
 {
     return !allowUpdateOnPreRelease()
            ? m_config.value("all").toString()
            : m_config.value("all.test").toString();
+}
+
+std::string UpdateConfiguration::checkForMuseSamplerUpdateUrl() const
+{
+    return !allowUpdateOnPreRelease()
+           ? m_config.value("musesampler.latest").toString()
+           : m_config.value("musesampler.latest.test").toString();
 }
 
 muse::network::RequestHeaders UpdateConfiguration::updateHeaders() const

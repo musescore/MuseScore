@@ -39,6 +39,7 @@
 #elif defined(Q_OS_WIN)
 #include <QDir>
 #include <QProcess>
+#include "platform/win/wininteractivehelper.h"
 #endif
 
 #include "translation.h"
@@ -323,6 +324,21 @@ Ret Interactive::openUrl(const std::string& url) const
 Ret Interactive::openUrl(const QUrl& url) const
 {
     return QDesktopServices::openUrl(url);
+}
+
+async::Promise<Ret> Interactive::openApp(const std::string& appIdentifier) const
+{
+#ifdef Q_OS_MACOS
+    return MacOSInteractiveHelper::openApp(appIdentifier);
+#elif defined(Q_OS_WIN)
+    return WinInteractiveHelper::openApp(appIdentifier);
+#else
+    UNUSED(appIdentifier);
+    return async::Promise<Ret>([](auto, auto reject) {
+        Ret ret = make_ret(Ret::Code::NotImplemented);
+        return reject(ret.code(), ret.text());
+    });
+#endif
 }
 
 Ret Interactive::revealInFileBrowser(const io::path_t& filePath) const

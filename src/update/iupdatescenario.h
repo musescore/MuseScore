@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_IUPDATESCENARIO_H
-#define MU_APPSHELL_IUPDATESCENARIO_H
+#ifndef MU_UPDATE_IUPDATESCENARIO_H
+#define MU_UPDATE_IUPDATESCENARIO_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -32,8 +32,9 @@ class IUpdateScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IUpdateScenario() = default;
 
-    virtual void checkForUpdate() = 0;
+    virtual void checkForAppUpdate() = 0;
+    virtual void checkForMuseSamplerUpdate() = 0;
 };
 }
 
-#endif // MU_APPSHELL_IUPDATESCENARIO_H
+#endif // MU_UPDATE_IUPDATESCENARIO_H

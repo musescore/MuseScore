@@ -26,7 +26,7 @@
 #include <QObject>
 
 #include "modularity/ioc.h"
-#include "iupdateservice.h"
+#include "iappupdateservice.h"
 
 #include "async/asyncable.h"
 
@@ -35,7 +35,7 @@ class UpdateModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IUpdateService, service)
+    Inject<IAppUpdateService> service;
 
     Q_PROPERTY(int currentProgress READ currentProgress NOTIFY currentProgressChanged)
     Q_PROPERTY(int totalProgress READ totalProgress NOTIFY totalProgressChanged)

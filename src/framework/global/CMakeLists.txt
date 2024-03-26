@@ -214,6 +214,11 @@ else()
         )
         find_library(AppKit NAMES AppKit)
         list(APPEND MODULE_LINK ${AppKit})
+    elseif(OS_IS_WIN)
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wininteractivehelper.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/wininteractivehelper.h
+        )
     endif()
 endif()
 

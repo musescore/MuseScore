@@ -22,13 +22,16 @@
 #ifndef MU_GLOBAL_INTERACTIVE_H
 #define MU_GLOBAL_INTERACTIVE_H
 
-#include "../iinteractive.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/iinteractiveprovider.h"
 #include "ui/imainwindow.h"
 
+#include "../iinteractive.h"
+
 namespace mu {
-class Interactive : public IInteractive
+class Interactive : public IInteractive, public async::Asyncable
 {
     Inject<muse::ui::IInteractiveProvider> provider;
     Inject<muse::ui::IMainWindow> mainWindow;
@@ -106,6 +109,8 @@ public:
 
     Ret openUrl(const std::string& url) const override;
     Ret openUrl(const QUrl& url) const override;
+
+    async::Promise<Ret> openApp(const std::string& appIdentifier) const override;
 
     Ret revealInFileBrowser(const io::path_t& filePath) const override;
 

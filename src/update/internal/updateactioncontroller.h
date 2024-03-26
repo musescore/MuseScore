@@ -31,14 +31,14 @@
 namespace mu::update {
 class UpdateActionController : public muse::actions::Actionable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IUpdateScenario, updateScenario)
+    Inject<muse::actions::IActionsDispatcher> dispatcher;
+    Inject<IUpdateScenario> updateScenario;
 
 public:
     void init();
 
 private:
-    void checkForUpdate();
+    void checkForAppUpdate();
 };
 }
 

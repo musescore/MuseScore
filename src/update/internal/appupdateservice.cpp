@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "updateservice.h"
+#include "appupdateservice.h"
 
 #include <QBuffer>
 #include <QJsonParseError>
@@ -38,7 +38,7 @@
 using namespace mu::update;
 using namespace muse::network;
 
-mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
+mu::RetVal<ReleaseInfo> AppUpdateService::checkForUpdate()
 {
     RetVal<ReleaseInfo> result;
     result.ret = make_ret(Err::NoUpdate);
@@ -47,7 +47,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 
     QBuffer buff;
     m_networkManager = networkManagerCreator()->makeNetworkManager();
-    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForUpdateUrl()), &buff,
+    Ret getUpdateInfo = m_networkManager->get(QString::fromStdString(configuration()->checkForAppUpdateUrl()), &buff,
                                               configuration()->updateHeaders());
 
     if (!getUpdateInfo) {
@@ -91,7 +91,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     return result;
 }
 
-mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
+mu::RetVal<mu::io::path_t> AppUpdateService::downloadRelease()
 {
     RetVal<io::path_t> result;
 
@@ -128,19 +128,19 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
     return result;
 }
 
-void UpdateService::cancelUpdate()
+void AppUpdateService::cancelUpdate()
 {
     if (m_networkManager) {
         m_networkManager->abort();
     }
 }
 
-mu::Progress UpdateService::updateProgress()
+mu::Progress AppUpdateService::updateProgress()
 {
     return m_updateProgress;
 }
 
-mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) const
+mu::RetVal<ReleaseInfo> AppUpdateService::parseRelease(const QByteArray& json) const
 {
     RetVal<ReleaseInfo> result;
 
@@ -175,7 +175,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
     return result;
 }
 
-std::string UpdateService::platformFileSuffix() const
+std::string AppUpdateService::platformFileSuffix() const
 {
     switch (systemInfo()->productType()) {
     case ISystemInfo::ProductType::Windows: return "msi";
@@ -187,7 +187,7 @@ std::string UpdateService::platformFileSuffix() const
     return "";
 }
 
-mu::ISystemInfo::CpuArchitecture UpdateService::assetArch(const QString& asset) const
+mu::ISystemInfo::CpuArchitecture AppUpdateService::assetArch(const QString& asset) const
 {
     if (asset.contains("aarch64")) {
         return ISystemInfo::CpuArchitecture::Arm64;
@@ -198,7 +198,7 @@ mu::ISystemInfo::CpuArchitecture UpdateService::assetArch(const QString& asset) 
     return ISystemInfo::CpuArchitecture::x86_64;
 }
 
-QJsonObject UpdateService::resolveReleaseAsset(const QJsonObject& release) const
+QJsonObject AppUpdateService::resolveReleaseAsset(const QJsonObject& release) const
 {
     std::string fileSuffix = platformFileSuffix();
     ISystemInfo::ProductType productType = systemInfo()->productType();
@@ -229,12 +229,12 @@ QJsonObject UpdateService::resolveReleaseAsset(const QJsonObject& release) const
     return QJsonObject();
 }
 
-PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& updateVersion) const
+PrevReleasesNotesList AppUpdateService::previousReleasesNotes(const Version& updateVersion) const
 {
     PrevReleasesNotesList result;
 
     QBuffer buff;
-    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousReleasesNotesUrl()), &buff,
+    Ret getPreviousReleaseNotes = m_networkManager->get(QString::fromStdString(configuration()->previousAppReleasesNotesUrl()), &buff,
                                                         configuration()->updateHeaders());
     if (!getPreviousReleaseNotes) {
         LOGE() << "failed to get previous release notes: " << getPreviousReleaseNotes.toString();
@@ -278,7 +278,7 @@ PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& update
     return result;
 }
 
-PrevReleasesNotesList UpdateService::parsePreviousReleasesNotes(const QByteArray& json) const
+PrevReleasesNotesList AppUpdateService::parsePreviousReleasesNotes(const QByteArray& json) const
 {
     PrevReleasesNotesList result;
 
@@ -307,7 +307,7 @@ PrevReleasesNotesList UpdateService::parsePreviousReleasesNotes(const QByteArray
     return result;
 }
 
-void UpdateService::clear()
+void AppUpdateService::clear()
 {
     m_lastCheckResult = ReleaseInfo();
 

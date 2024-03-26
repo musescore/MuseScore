@@ -31,9 +31,10 @@
 
 #include "internal/updateconfiguration.h"
 #include "internal/updatescenario.h"
-#include "internal/updateservice.h"
 #include "internal/updateactioncontroller.h"
 #include "internal/updateuiactions.h"
+#include "internal/appupdateservice.h"
+#include "internal/musesamplerupdateservice.h"
 
 #include "view/updatemodel.h"
 
@@ -56,13 +57,15 @@ std::string UpdateModule::moduleName() const
 void UpdateModule::registerExports()
 {
     m_scenario = std::make_shared<UpdateScenario>();
-    m_service = std::make_shared<UpdateService>();
     m_configuration = std::make_shared<UpdateConfiguration>();
     m_actionController = std::make_shared<UpdateActionController>();
+    m_appUpdateService = std::make_shared<AppUpdateService>();
+    m_museSamplerUpdateService = std::make_shared<MuseSamplerUpdateService>();
 
     ioc()->registerExport<IUpdateScenario>(moduleName(), m_scenario);
-    ioc()->registerExport<IUpdateService>(moduleName(), m_service);
     ioc()->registerExport<IUpdateConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IAppUpdateService>(moduleName(), m_appUpdateService);
+    ioc()->registerExport<IMuseSamplerUpdateService>(moduleName(), m_museSamplerUpdateService);
 }
 
 void UpdateModule::resolveImports()
@@ -74,8 +77,9 @@ void UpdateModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://update/releaseinfo"), "MuseScore/Update/ReleaseInfoDialog.qml");
+        ir->registerQmlUri(Uri("musescore://update/appreleaseinfo"), "MuseScore/Update/AppReleaseInfoDialog.qml");
         ir->registerQmlUri(Uri("musescore://update"), "MuseScore/Update/UpdateProgressDialog.qml");
+        ir->registerQmlUri(Uri("musescore://update/musesoundsreleaseinfo"), "MuseScore/Update/MuseSoundsReleaseInfoDialog.qml");
     }
 }
 
