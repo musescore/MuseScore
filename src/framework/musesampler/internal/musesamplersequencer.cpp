@@ -61,19 +61,7 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::PostAppoggiatura, ms_NoteArticulation_Appoggiatura },
     { mpe::ArticulationType::Acciaccatura, ms_NoteArticulation_Acciaccatura },
 
-    { mpe::ArticulationType::CrossNote, ms_NoteArticulation_XNote },
-    { mpe::ArticulationType::CrossOrnateNote, ms_NoteArticulation_OrnateXNote },
-    { mpe::ArticulationType::GhostNote, ms_NoteArticulation_Ghost },
-    { mpe::ArticulationType::CircleNote, ms_NoteArticulation_Circle },
-    { mpe::ArticulationType::CircleCrossNote, ms_NoteArticulation_CircleXNote },
-    { mpe::ArticulationType::CircleDotNote, ms_NoteArticulation_CircleDot },
-    { mpe::ArticulationType::TriangleNote, ms_NoteArticulation_Triangle },
-    { mpe::ArticulationType::TriangleRoundDownNote, ms_NoteArticulation_TriangleRoundDown },
-    { mpe::ArticulationType::DiamondNote, ms_NoteArticulation_Diamond },
-    { mpe::ArticulationType::PlusNote, ms_NoteArticulation_Plus },
-    { mpe::ArticulationType::SlashNote, ms_NoteArticulation_Slash },
-    { mpe::ArticulationType::SlashedBackwardsNote, ms_NoteArticulation_SlashRightFilled },
-    { mpe::ArticulationType::SlashedForwardsNote, ms_NoteArticulation_SlashLeftFilled },
+    { mpe::ArticulationType::Open, ms_NoteArticulation_Open },
 
     { mpe::ArticulationType::Pizzicato, ms_NoteArticulation_Pizzicato },
     { mpe::ArticulationType::SnapPizzicato, ms_NoteArticulation_SnapPizzicato },
@@ -88,6 +76,22 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::ColLegno, ms_NoteArticulation_ColLegno },
     { mpe::ArticulationType::SulTasto, ms_NoteArticulation_SulTasto },
     { mpe::ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
+};
+
+static const std::unordered_map<mpe::ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = {
+    { mpe::ArticulationType::CrossNote, ms_NoteHead_XNote },
+    { mpe::ArticulationType::CrossOrnateNote, ms_NoteHead_OrnateXNote },
+    { mpe::ArticulationType::GhostNote, ms_NoteHead_Ghost },
+    { mpe::ArticulationType::CircleNote, ms_NoteHead_Circle },
+    { mpe::ArticulationType::CircleCrossNote, ms_NoteHead_CircleXNote },
+    { mpe::ArticulationType::CircleDotNote, ms_NoteHead_CircleDot },
+    { mpe::ArticulationType::TriangleNote, ms_NoteHead_Triangle },
+    { mpe::ArticulationType::TriangleRoundDownNote, ms_NoteHead_TriangleRoundDown },
+    { mpe::ArticulationType::DiamondNote, ms_NoteHead_Diamond },
+    { mpe::ArticulationType::PlusNote, ms_NoteHead_Plus },
+    { mpe::ArticulationType::SlashNote, ms_NoteHead_Slash },
+    { mpe::ArticulationType::SlashedBackwardsNote, ms_NoteHead_SlashRightFilled },
+    { mpe::ArticulationType::SlashedForwardsNote, ms_NoteHead_SlashLeftFilled },
 };
 
 void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks,
@@ -132,10 +136,13 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
             int pitch{};
             int centsOffset{};
             pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, centsOffset);
-            ms_NoteArticulation articulationFlag = noteArticulationTypes(noteEvent);
+
+            ms_NoteArticulation articulationFlag = ms_NoteArticulation_None;
+            ms_NoteHead notehead = ms_NoteHead_Normal;
+            parseArticulations(noteEvent.expressionCtx().articulations, articulationFlag, notehead);
 
             AuditionStartNoteEvent noteOn;
-            noteOn.msEvent = { pitch, centsOffset, articulationFlag, 0.5, presets_cstr, textArticulation_cstr };
+            noteOn.msEvent = { pitch, centsOffset, articulationFlag, notehead, 0.5, presets_cstr, textArticulation_cstr };
             noteOn.msTrack = track;
             m_offStreamEvents[timestampFrom].emplace(std::move(noteOn));
 
@@ -314,50 +321,35 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
             if (art.second.occupiedFrom == 0 && art.second.occupiedTo != mpe::HUNDRED_PERCENT) {
                 if (m_samplerLib->addTrackEventRangeStart(m_sampler, track, voiceIdx, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range start";
-                } else {
-                    LOGN() << "added start range for: " << static_cast<int>(ms_art);
                 }
             }
         }
     }
 
-    int pitch = 0;
-    int centsOffset = 0;
-    pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, pitch, centsOffset);
+    musesampler::NoteEvent event;
+    event._voice = voiceIdx;
+    event._location_us = noteEvent.arrangementCtx().nominalTimestamp;
+    event._duration_us = noteEvent.arrangementCtx().nominalDuration;
+    event._tempo = noteEvent.arrangementCtx().bps * 60.0; // API expects BPM
+    event._articulation = ms_NoteArticulation_None;
+    event._notehead = ms_NoteHead_Normal;
 
-    ms_NoteArticulation articulationTypes = noteArticulationTypes(noteEvent);
+    pitchAndTuning(noteEvent.pitchCtx().nominalPitchLevel, event._pitch, event._offset_cents);
+    parseArticulations(noteEvent.expressionCtx().articulations, event._articulation, event._notehead);
+
     long long noteEventId = 0;
 
-    if (!m_samplerLib->addNoteEvent(
-            m_sampler,
-            track,
-            voiceIdx,
-            noteEvent.arrangementCtx().nominalTimestamp,
-            noteEvent.arrangementCtx().nominalDuration,
-            pitch,
-            noteEvent.arrangementCtx().bps * 60.0, // API expects BPM
-            centsOffset,
-            articulationTypes,
-            noteEventId)) {
+    if (!m_samplerLib->addNoteEvent(m_sampler, track, event, noteEventId)) {
         LOGE() << "Unable to add event for track";
-    } else {
-        LOGN() << "Successfully added note event, id: " << noteEventId
-               << ", pitch: " << pitch
-               << ", timestamp: " << noteEvent.arrangementCtx().nominalTimestamp
-               << ", duration: " << noteEvent.arrangementCtx().nominalDuration
-               << ", articulations flag: " << articulationTypes;
     }
 
     for (auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
-            LOGN() << "range: " << art.second.occupiedFrom << " to " << art.second.occupiedTo;
             if (art.second.occupiedFrom != 0 && art.second.occupiedTo == mpe::HUNDRED_PERCENT) {
                 if (m_samplerLib->addTrackEventRangeEnd(m_sampler, track, voiceIdx, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range end";
-                } else {
-                    LOGN() << "added end range for: " << static_cast<int>(ms_art);
                 }
             }
         }
@@ -537,21 +529,25 @@ ms_NoteArticulation MuseSamplerSequencer::convertArticulationType(mpe::Articulat
     return static_cast<ms_NoteArticulation>(0);
 }
 
-ms_NoteArticulation MuseSamplerSequencer::noteArticulationTypes(const mpe::NoteEvent& noteEvent) const
+void MuseSamplerSequencer::parseArticulations(const mpe::ArticulationMap& articulations,
+                                              ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const
 {
-    uint64_t result = 0;
+    uint64_t artFlag = 0;
 
-    for (const auto& pair : noteEvent.expressionCtx().articulations) {
-        auto search = ARTICULATION_TYPES.find(pair.first);
-
-        if (search == ARTICULATION_TYPES.cend()) {
+    for (const auto& pair : articulations) {
+        auto artIt = ARTICULATION_TYPES.find(pair.first);
+        if (artIt != ARTICULATION_TYPES.cend()) {
+            artFlag |= convertArticulationType(pair.first);
             continue;
         }
 
-        result |= convertArticulationType(pair.first);
+        auto headIt = NOTEHEAD_TYPES.find(pair.first);
+        if (headIt != NOTEHEAD_TYPES.cend()) {
+            notehead = headIt->second;
+        }
     }
 
-    return static_cast<ms_NoteArticulation>(result);
+    articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
 }
 
 void MuseSamplerSequencer::parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets,
