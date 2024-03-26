@@ -76,6 +76,7 @@ ColumnLayout {
         horizontalAlignment: Text.AlignLeft
         verticalAlignment: Text.AlignTop
 
+        // ...in MuseScore Studio X.X ?
         text: qsTrc("project/migration", "This file was last saved in MuseScore %1").arg(root.appVersion)
     }
 

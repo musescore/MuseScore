@@ -33,7 +33,7 @@ using namespace mu::update;
 UpdateModel::UpdateModel(QObject* parent)
     : QObject(parent)
 {
-    setProgressTitle(qtrc("update", "Updating MuseScore"));
+    setProgressTitle(qtrc("update", "Updating MuseScore Studio"));
 }
 
 UpdateModel::~UpdateModel()

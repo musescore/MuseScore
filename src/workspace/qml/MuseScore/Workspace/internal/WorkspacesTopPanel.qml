@@ -108,7 +108,7 @@ Column {
     StyledTextLabel {
         id: descriptionLabel
 
-        text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore interface")
+        text: qsTrc("workspace", "Use workspaces to save different arrangements of the MuseScore Studio interface")
 
         horizontalAlignment: Qt.AlignLeft
     }
