@@ -66,7 +66,13 @@ static const ElementStyle textLineStyle {
     { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN },
     { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN },
     { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN },
+    { Sid::textLineHookHeight,                 Pid::BEGIN_HOOK_HEIGHT },
+    { Sid::textLineHookHeight,                 Pid::END_HOOK_HEIGHT },
+    { Sid::textLineLineWidth,                  Pid::LINE_WIDTH },
+    { Sid::textLineDashLineLen,                Pid::DASH_LINE_LEN },
+    { Sid::textLineDashGapLen,                 Pid::DASH_GAP_LEN },
     { Sid::textLinePlacement,                  Pid::PLACEMENT },
+    { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
@@ -89,7 +95,13 @@ static const ElementStyle systemTextLineStyle {
     { Sid::systemTextLineTextAlign,            Pid::BEGIN_TEXT_ALIGN },
     { Sid::systemTextLineTextAlign,            Pid::CONTINUE_TEXT_ALIGN },
     { Sid::systemTextLineTextAlign,            Pid::END_TEXT_ALIGN },
+    { Sid::systemTextLineHookHeight,           Pid::BEGIN_HOOK_HEIGHT },
+    { Sid::systemTextLineHookHeight,           Pid::END_HOOK_HEIGHT },
+    { Sid::systemTextLineLineWidth,            Pid::LINE_WIDTH },
+    { Sid::systemTextLineDashLineLen,          Pid::DASH_LINE_LEN },
+    { Sid::systemTextLineDashGapLen,           Pid::DASH_GAP_LEN },
     { Sid::systemTextLinePlacement,            Pid::PLACEMENT },
+    { Sid::systemTextLineLineStyle,            Pid::LINE_STYLE },
     { Sid::systemTextLinePosAbove,             Pid::OFFSET },
 };
 
