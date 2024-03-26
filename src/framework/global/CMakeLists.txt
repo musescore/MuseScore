@@ -209,18 +209,10 @@ else()
     endif()
 endif()
 
-set(FS_LIB )
-# The use of `filesystem` is disabled until
-# I figure out how to use it correctly for all platforms and compilers (including MinGW)
-# (igor.korsukov@gmail.com)
-#if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-#    set(FS_LIB stdc++fs)
-#endif()
-
 include(GetCompilerInfo)
 set(Z_LIB )
 if (CC_IS_MSVC)
-    include(FindStaticLibrary)
+    include(FindZlibStatic)
     set(Z_LIB zlibstat)
     set(Z_INCLUDE ${DEPENDENCIES_INC}/zlib)
 elseif (CC_IS_EMSCRIPTEN)
@@ -234,7 +226,6 @@ list(APPEND MODULE_INCLUDE
     )
 
 list(APPEND MODULE_LINK
-    ${FS_LIB}
     ${Z_LIB}
 )
 
