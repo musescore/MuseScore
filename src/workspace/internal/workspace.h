@@ -29,11 +29,13 @@
 
 #include "modularity/ioc.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "global/iapplication.h"
 
 namespace mu::workspace {
 class Workspace : public IWorkspace, public async::Asyncable
 {
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<IApplication> application;
 
 public:
     Workspace(const io::path_t& filePath);

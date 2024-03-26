@@ -31,18 +31,26 @@ public:
 
     Application() = default;
 
+    String name() const override;
+
+    bool unstable() const override;
+    Version version() const override;
+    Version fullVersion() const override;
+    String build() const override;
+    String revision() const override;
+
     void setRunMode(const RunMode& mode) override;
     RunMode runMode() const override;
     bool noGui() const override;
 
-    QWindow* focusWindow() const override;
-
-    bool notify(QObject* object, QEvent* event) override;
-
     void restart() override;
 
-private:
+#ifndef NO_QT_SUPPORT
+    QWindow* focusWindow() const override;
+    bool notify(QObject* object, QEvent* event) override;
+#endif
 
+private:
     RunMode m_runMode = RunMode::GuiApp;
 };
 }

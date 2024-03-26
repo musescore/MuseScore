@@ -28,6 +28,7 @@
 #include "iappshellconfiguration.h"
 #include "update/iupdateconfiguration.h"
 #include "global/iglobalconfiguration.h"
+#include "global/iapplication.h"
 
 class QUrl;
 
@@ -36,9 +37,10 @@ class AboutModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(IAppShellConfiguration, configuration)
-    INJECT(update::IUpdateConfiguration, updateConfiguration)
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IAppShellConfiguration> configuration;
+    Inject<update::IUpdateConfiguration> updateConfiguration;
+    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<IApplication> application;
 
 public:
     explicit AboutModel(QObject* parent = nullptr);

@@ -27,6 +27,7 @@
 #include "global/types/version.h"
 
 #include "modularity/ioc.h"
+#include "global/iapplication.h"
 #include "iinteractive.h"
 #include "network/inetworkmanagercreator.h"
 #include "io/ifilesystem.h"
@@ -43,6 +44,7 @@ class UpdateService : public IUpdateService, public async::Asyncable
     INJECT(IUpdateConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(ISystemInfo, systemInfo)
+    INJECT(IApplication, application)
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;

@@ -27,6 +27,7 @@
 #include "io/path.h"
 
 #include "modularity/ioc.h"
+#include "global/iapplication.h"
 #include "io/ifilesystem.h"
 #include "project/iprojectcreator.h"
 #include "project/inotationwritersregister.h"
@@ -39,6 +40,7 @@ namespace mu::converter {
 class BackendJsonWriter;
 class BackendApi
 {
+    INJECT_STATIC(IApplication, application)
     INJECT_STATIC(io::IFileSystem, fileSystem)
     INJECT_STATIC(project::IProjectCreator, notationCreator)
     INJECT_STATIC(project::INotationWritersRegister, writers)

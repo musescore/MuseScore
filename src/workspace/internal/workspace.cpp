@@ -21,7 +21,6 @@
  */
 #include "workspace.h"
 
-#include "global/muversion.h"
 #include "multiinstances/resourcelockguard.h"
 
 #include "workspacefile.h"
@@ -99,14 +98,14 @@ io::path_t Workspace::filePath() const
 
 Ret Workspace::load()
 {
-    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), fileResourceName());
+    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider.get(), fileResourceName());
     return m_file.load();
 }
 
 Ret Workspace::save()
 {
-    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), fileResourceName());
-    m_file.setMeta("app_version", Val(MUVersion::version().toStdString()));
+    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider.get(), fileResourceName());
+    m_file.setMeta("app_version", Val(application()->version().toStdString()));
     return m_file.save();
 }
 

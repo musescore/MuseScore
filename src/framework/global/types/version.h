@@ -32,9 +32,9 @@ public:
     Version(const String& versionStr);
     Version(const std::string& versionStr);
 
-    int majorVersion() const;
-    int minorVersion() const;
-    int patchVersion() const;
+    int major() const;
+    int minor() const;
+    int patch() const;
 
     String suffix() const;
     int suffixVersion() const;
@@ -42,7 +42,8 @@ public:
 
     bool preRelease() const;
 
-    String toString();
+    String toString() const;
+    std::string toStdString() const;
 
     bool operator <(const Version& other) const;
     bool operator ==(const Version& other) const;

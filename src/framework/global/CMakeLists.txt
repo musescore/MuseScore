@@ -42,8 +42,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/profiler.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
-    ${CMAKE_CURRENT_LIST_DIR}/muversion.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/muversion.h
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stringutils.h
     ${CMAKE_CURRENT_LIST_DIR}/ptrutils.h

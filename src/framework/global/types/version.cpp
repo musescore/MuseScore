@@ -103,17 +103,17 @@ Version::Version(const std::string& versionStr)
 {
 }
 
-int Version::majorVersion() const
+int Version::major() const
 {
     return m_major;
 }
 
-int Version::minorVersion() const
+int Version::minor() const
 {
     return m_minor;
 }
 
-int Version::patchVersion() const
+int Version::patch() const
 {
     return m_patch;
 }
@@ -145,7 +145,7 @@ bool Version::preRelease() const
     return !suffix().isEmpty();
 }
 
-mu::String Version::toString()
+mu::String Version::toString() const
 {
     String res = String(u"%1.%2.%3").arg(m_major, m_minor, m_patch);
 
@@ -157,17 +157,22 @@ mu::String Version::toString()
     return res;
 }
 
+std::string Version::toStdString() const
+{
+    return toString().toStdString();
+}
+
 bool Version::operator <(const Version& other) const
 {
-    if (m_major > other.majorVersion()) {
+    if (m_major > other.major()) {
         return false;
-    } else if (m_major == other.majorVersion()) {
-        if (m_minor > other.minorVersion()) {
+    } else if (m_major == other.major()) {
+        if (m_minor > other.minor()) {
             return false;
-        } else if (m_minor == other.minorVersion()) {
-            if (m_patch > other.patchVersion()) {
+        } else if (m_minor == other.minor()) {
+            if (m_patch > other.patch()) {
                 return false;
-            } else if (m_patch == other.patchVersion()) {
+            } else if (m_patch == other.patch()) {
                 if (m_suffix.isEmpty()) {
                     return false;
                 }
@@ -214,9 +219,9 @@ bool Version::operator <(const Version& other) const
 
 bool Version::operator ==(const Version& other) const
 {
-    return m_major == other.majorVersion()
-           && m_minor == other.minorVersion()
-           && m_patch == other.patchVersion()
+    return m_major == other.major()
+           && m_minor == other.minor()
+           && m_patch == other.patch()
            && m_suffix == other.suffix()
            && m_suffixVersion == other.suffixVersion();
 }

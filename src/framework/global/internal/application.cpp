@@ -21,10 +21,61 @@
  */
 #include "application.h"
 
+#ifndef NO_QT_SUPPORT
 #include <QApplication>
 #include <QProcess>
+#endif
+
+#include "types/version.h"
+
+#include "log.h"
 
 using namespace mu;
+
+String Application::name() const
+{
+    return String::fromAscii(MUSESCORE_NAME);
+}
+
+bool Application::unstable() const
+{
+#ifdef MUSESCORE_UNSTABLE
+    return true;
+#else
+    return false;
+#endif
+}
+
+Version Application::version() const
+{
+    static Version v(MUSESCORE_VERSION);
+    return v;
+}
+
+Version Application::fullVersion() const
+{
+    static Version fv(version());
+    static bool once = false;
+    if (!once) {
+        String versionLabel = String::fromAscii(MUSESCORE_VERSION_LABEL);
+        if (!versionLabel.isEmpty()) {
+            fv.setSuffix(versionLabel);
+        }
+        once = true;
+    }
+
+    return fv;
+}
+
+String Application::build() const
+{
+    return String::fromAscii(MUSESCORE_BUILD_NUMBER);
+}
+
+String Application::revision() const
+{
+    return String::fromAscii(MUSESCORE_REVISION);
+}
 
 void Application::setRunMode(const RunMode& mode)
 {
@@ -46,6 +97,7 @@ bool Application::noGui() const
     return false;
 }
 
+#ifndef NO_QT_SUPPORT
 QWindow* Application::focusWindow() const
 {
     return qApp->focusWindow();
@@ -56,8 +108,11 @@ bool Application::notify(QObject* object, QEvent* event)
     return qApp->notify(object, event);
 }
 
+#endif
+
 void Application::restart()
 {
+#ifndef NO_QT_SUPPORT
     QString program = qApp->arguments()[0];
 
     // NOTE: remove the first argument - the program name
@@ -66,4 +121,8 @@ void Application::restart()
     QCoreApplication::exit();
 
     QProcess::startDetached(program, arguments);
+
+#else
+    NOT_SUPPORTED;
+#endif
 }

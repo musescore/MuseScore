@@ -248,7 +248,7 @@ endif()
 ###########################################
 # Global definitions
 ###########################################
-
+add_definitions(-DMUSESCORE_NAME="${MUSESCORE_NAME}")
 add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
 add_definitions(-DMUSESCORE_BUILD_NUMBER="${CMAKE_BUILD_NUMBER}")
 add_definitions(-DMUSESCORE_VERSION="${MUSESCORE_VERSION}")

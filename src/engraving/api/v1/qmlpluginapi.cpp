@@ -25,9 +25,6 @@
 #include <QQmlEngine>
 #include <QJSValueIterator>
 
-#include "global/muversion.h"
-
-#include "engraving/compat/dummyelement.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
 
@@ -467,17 +464,17 @@ int PluginAPI::mscoreVersion() const
 
 int PluginAPI::mscoreMajorVersion() const
 {
-    return MUVersion::majorVersion();
+    return application()->version().major();
 }
 
 int PluginAPI::mscoreMinorVersion() const
 {
-    return MUVersion::minorVersion();
+    return application()->version().minor();
 }
 
 int PluginAPI::mscoreUpdateVersion() const
 {
-    return MUVersion::patchVersion();
+    return application()->version().patch();
 }
 
 qreal PluginAPI::mscoreDPI() const
