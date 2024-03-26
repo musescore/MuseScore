@@ -130,6 +130,20 @@ void PlaybackContext::clear()
     m_playbackParamMap.clear();
 }
 
+bool PlaybackContext::hasSoundFlags() const
+{
+    for (const auto& pair : m_playbackParamMap) {
+        for (const mpe::PlaybackParam& param : pair.second) {
+            if (param.code == mpe::SOUND_PRESET_PARAM_CODE
+                || param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) const
 {
     auto search = m_dynamicsMap.find(positionTick);
@@ -196,6 +210,10 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
 
 void PlaybackContext::updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick)
 {
+    if (!flag->play()) {
+        return;
+    }
+
     if (flag->soundPresets().empty() && flag->playingTechnique().empty()) {
         return;
     }

@@ -106,7 +106,10 @@ private:
     void setAvailableSoundPresets(const audio::SoundPresetList& presets);
     void loadAvailablePlayingTechniques();
 
-    uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title);
+    uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title, bool enabled = true);
+
+    QString defaultPresetCode() const;
+    QString defaultPlayingTechniqueCode() const;
 
     bool updateStaffText();
 

@@ -41,6 +41,12 @@ public:
 
     void setSelected(bool f) override;
 
+    PropertyValue getProperty(Pid id) const override;
+    bool setProperty(Pid id, const PropertyValue& value) override;
+    PropertyValue propertyDefault(Pid id) const override;
+
+    bool canBeExcludedFromOtherParts() const override { return false; }
+
     using PresetCodes = StringList;
     using PlayingTechniqueCode = String;
 
@@ -49,6 +55,9 @@ public:
 
     const PlayingTechniqueCode& playingTechnique() const;
     void setPlayingTechnique(const PlayingTechniqueCode& technique);
+
+    bool play() const;
+    void setPlay(bool play);
 
     void clear();
 
@@ -66,6 +75,8 @@ private:
     PlayingTechniqueCode m_playingTechnique;
 
     draw::Font m_iconFont;
+
+    bool m_play = true;
 };
 }
 

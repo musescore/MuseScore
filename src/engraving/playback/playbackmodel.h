@@ -68,6 +68,8 @@ public:
     InstrumentTrackId chordSymbolsTrackId(const ID& partId) const;
     bool isChordSymbolsTrack(const InstrumentTrackId& trackId) const;
 
+    bool hasSoundFlags(const InstrumentTrackId& trackId) const;
+
     const mpe::PlaybackData& resolveTrackPlaybackData(const InstrumentTrackId& trackId);
     const mpe::PlaybackData& resolveTrackPlaybackData(const ID& partId, const String& instrumentId);
     void triggerEventsForItems(const std::vector<const EngravingItem*>& items);

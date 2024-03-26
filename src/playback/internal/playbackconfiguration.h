@@ -69,6 +69,9 @@ public:
     bool soundPresetsMultiSelectionEnabled() const override;
     void setSoundPresetsMultiSelectionEnabled(bool enabled) override;
 
+    bool needToShowChangeSoundWarning() const override;
+    void setNeedToShowChangeSoundWarning(bool show) override;
+
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
