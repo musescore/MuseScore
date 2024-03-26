@@ -52,6 +52,7 @@ public:
 
     const audio::AudioInputParams& params() const;
     void setParams(const audio::AudioInputParams& newParams);
+    void setParamsRecourceMeta(const audio::AudioResourceMeta& newMeta);
 
     QString title() const override;
     bool isBlank() const override;
@@ -60,6 +61,7 @@ public:
 
 signals:
     void inputParamsChanged();
+    void inputParamsChangeRequested(const audio::AudioResourceMeta& newMeta);
 
 private:
     using ResourceByVendorMap = std::map<audio::AudioResourceVendor, audio::AudioResourceMetaList>;
@@ -72,7 +74,6 @@ private:
     QVariantMap buildSoundFontMenuItem(const String& soundFont, const audio::AudioResourceMetaList& availableResources,
                                        bool isCurrentSoundFont, const std::optional<midi::Program>& currentPreset) const;
 
-    void updateCurrentParams(const audio::AudioResourceMeta& newMeta);
     void updateAvailableResources(const audio::AudioResourceMetaList& availableResources);
 
     std::map<audio::AudioResourceType, ResourceByVendorMap > m_availableResourceMap;

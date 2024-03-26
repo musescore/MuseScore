@@ -48,6 +48,8 @@ public:
     void update(const ID partId, const Score* score);
     void clear();
 
+    bool hasSoundFlags() const;
+
 private:
     using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
     using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;

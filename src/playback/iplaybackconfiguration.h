@@ -67,6 +67,9 @@ public:
 
     virtual bool soundPresetsMultiSelectionEnabled() const = 0;
     virtual void setSoundPresetsMultiSelectionEnabled(bool enabled) = 0;
+
+    virtual bool needToShowChangeSoundWarning() const = 0;
+    virtual void setNeedToShowChangeSoundWarning(bool show) = 0;
 };
 }
 

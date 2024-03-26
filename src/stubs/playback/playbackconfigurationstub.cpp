@@ -127,3 +127,12 @@ bool PlaybackConfigurationStub::soundPresetsMultiSelectionEnabled() const
 void PlaybackConfigurationStub::setSoundPresetsMultiSelectionEnabled(bool)
 {
 }
+
+bool PlaybackConfigurationStub::needToShowChangeSoundWarning() const
+{
+    return false;
+}
+
+void PlaybackConfigurationStub::setNeedToShowChangeSoundWarning(bool)
+{
+}

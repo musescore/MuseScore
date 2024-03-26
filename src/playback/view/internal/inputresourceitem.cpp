@@ -109,7 +109,11 @@ void InputResourceItem::handleMenuItem(const QString& menuItemId)
                     continue;
                 }
 
-                updateCurrentParams(resourceMeta);
+                if (m_currentInputParams.resourceMeta == resourceMeta) {
+                    continue;
+                }
+
+                emit inputParamsChangeRequested(resourceMeta);
             }
         }
     }
@@ -127,6 +131,18 @@ void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
     emit titleChanged();
     emit isBlankChanged();
     emit isActiveChanged();
+}
+
+void InputResourceItem::setParamsRecourceMeta(const AudioResourceMeta& newMeta)
+{
+    m_currentInputParams.resourceMeta = newMeta;
+
+    emit titleChanged();
+    emit isBlankChanged();
+    emit isActiveChanged();
+    emit inputParamsChanged();
+
+    updateNativeEditorView();
 }
 
 QString InputResourceItem::title() const
@@ -444,18 +460,6 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
                          soundFont,
                          isCurrentSoundFont,
                          bankItems);
-}
-
-void InputResourceItem::updateCurrentParams(const AudioResourceMeta& newMeta)
-{
-    m_currentInputParams.resourceMeta = newMeta;
-
-    emit titleChanged();
-    emit isBlankChanged();
-    emit isActiveChanged();
-    emit inputParamsChanged();
-
-    updateNativeEditorView();
 }
 
 void InputResourceItem::updateAvailableResources(const AudioResourceMetaList& availableResources)

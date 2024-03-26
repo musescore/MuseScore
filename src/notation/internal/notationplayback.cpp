@@ -474,6 +474,19 @@ void NotationPlayback::removeSoundFlags(const InstrumentTrackIdSet& trackIdSet)
     m_notationChanged.notify();
 }
 
+bool NotationPlayback::hasSoundFlags(const engraving::InstrumentTrackIdSet& trackIdSet)
+{
+    TRACEFUNC;
+
+    for (const InstrumentTrackId& trackId : trackIdSet) {
+        if (m_playbackModel.hasSoundFlags(trackId)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 std::vector<StaffText*> NotationPlayback::collectStaffText(const InstrumentTrackIdSet& trackIdSet, bool withSoundFlags) const
 {
     TRACEFUNC;
