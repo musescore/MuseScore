@@ -52,7 +52,7 @@ RowLayout {
     }
 
     NumberInputField {
-        value: root.value * 100
+        value: (root.value * 100).toFixed(0)
         minValue: root.from * 100
         maxValue: root.to * 100
 
