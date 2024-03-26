@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Pianoroll/qmldir</file>
+        <file>qml/MuseScore/Pianoroll/PianorollPanel.qml</file>
+    </qresource>
+</RCC>

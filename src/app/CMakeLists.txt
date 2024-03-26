@@ -143,6 +143,7 @@ set(LINK_LIB
     project
     print
     commonscene
+    pianoroll
     palette
     inspector
     playback

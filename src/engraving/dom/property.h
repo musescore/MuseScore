@@ -439,6 +439,9 @@ enum class Pid {
     SYMBOLS_SIZE,
     SYMBOL_ANGLE,
 
+    PAN,
+    EXPRESSION,
+
     END
 };
 
@@ -467,6 +470,9 @@ extern bool propertyLink(Pid id);
 extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
+extern double propertyMaxValue(Pid id);
+extern double propertyMinValue(Pid id);
+extern double propertyDefaultValue(Pid id);
 } // namespace mu::engraving
 
 #endif

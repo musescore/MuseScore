@@ -1,0 +1,3 @@
+module MuseScore.Pianoroll
+PianorollPanel 1.0 PianorollPanel.qml
+PianorollAutomationRow 1.0 PianorollAutomationRow.qml

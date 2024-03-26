@@ -431,6 +431,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SYMBOLS_SIZE,            false, "symbolsSize",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "symbols size") },
     { Pid::SYMBOL_ANGLE,            false, "symbolAngle",           P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "symbol angle") },
 
+    { Pid::PAN,                     true,  "pan",                   P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "pan") },
+    { Pid::EXPRESSION,              true,  "expression",            P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "expression") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */
@@ -584,5 +587,59 @@ String propertyToString(Pid id, const PropertyValue& value, bool mscx)
     }
 
     return String();
+}
+
+//---------------------------------------------------------
+//   propertyMaxValue
+//---------------------------------------------------------
+
+double propertyMaxValue(Pid id)
+{
+    switch (id) {
+    case Pid::PAN:
+        return 1;
+    case Pid::EXPRESSION:
+        return 1;
+    default:
+        //Unhandled PID type
+        return 0;
+    }
+    return 0;
+}
+
+//---------------------------------------------------------
+//   propertyMinValue
+//---------------------------------------------------------
+
+double propertyMinValue(Pid id)
+{
+    switch (id) {
+    case Pid::PAN:
+        return -1;
+    case Pid::EXPRESSION:
+        return -1;
+    default:
+        //Unhandled PID type
+        return 0;
+    }
+    return 0;
+}
+
+//---------------------------------------------------------
+//   propertyMinValue
+//---------------------------------------------------------
+
+double propertyDefaultValue(Pid id)
+{
+    switch (id) {
+    case Pid::PAN:
+        return 0;
+    case Pid::EXPRESSION:
+        return 0;
+    default:
+        //Unhandled PID type
+        return 0;
+    }
+    return 0;
 }
 }
