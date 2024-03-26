@@ -25,7 +25,6 @@
 #include <QList>
 
 #include "ipc.h"
-#include "async/asyncable.h"
 
 class QLocalServer;
 class QLocalSocket;

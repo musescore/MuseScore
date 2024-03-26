@@ -72,10 +72,6 @@ if (MUE_BUILD_LEARN_MODULE)
     add_subdirectory(learn)
 endif()
 
-if (MUE_BUILD_MULTIINSTANCES_MODULE)
-    add_subdirectory(multiinstances)
-endif()
-
 if (MUE_BUILD_NOTATION_MODULE)
     add_subdirectory(notation)
 endif()
