@@ -4882,7 +4882,7 @@ String Score::extractLyrics()
     String result;
     masterScore()->setExpandRepeats(true);
     SegmentType st = SegmentType::ChordRest;
-    for (size_t track = 0; track < ntracks(); track += VOICES) {
+    for (size_t track = 0; track < ntracks(); track++) {
         bool found = false;
         size_t maxLyrics = 1;
         const RepeatList& rlist = repeatList();
@@ -4896,7 +4896,6 @@ String Score::extractLyrics()
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                 int playCount = m->playbackCount();
                 for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                    // consider voice 1 only
                     ChordRest* cr = toChordRest(seg->element(static_cast<int>(track)));
                     if (!cr || cr->lyrics().empty()) {
                         continue;
@@ -4931,7 +4930,6 @@ String Score::extractLyrics()
                 unsigned playCount = m->playbackCount();
                 if (lyricsNumber >= playCount) {
                     for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                        // consider voice 1 only
                         ChordRest* cr = toChordRest(seg->element(static_cast<int>(track)));
                         if (!cr || cr->lyrics().empty()) {
                             continue;
