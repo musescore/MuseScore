@@ -101,25 +101,9 @@ bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type)
 usecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx, int stepCount)
 {
     constexpr int MAX_TIMESTAMP_OFFSET_STEP = 60000;
-
     int offsetStep = ctx.nominalDuration / stepCount;
-    if (offsetStep < MAX_TIMESTAMP_OFFSET_STEP) {
-        return offsetStep;
-    }
 
-    if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTISSIMO_BPS_BOUND)) {
-        return MAX_TIMESTAMP_OFFSET_STEP * 1.5;
-    }
-
-    if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTO_BPS_BOUND)) {
-        return MAX_TIMESTAMP_OFFSET_STEP * 1.25;
-    }
-
-    if (RealIsEqualOrMore(ctx.beatsPerSecond.val, MODERATO_BPS_BOUND)) {
-        return MAX_TIMESTAMP_OFFSET_STEP;
-    }
-
-    return MAX_TIMESTAMP_OFFSET_STEP;
+    return std::min(offsetStep, MAX_TIMESTAMP_OFFSET_STEP);
 }
 
 std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Chord* chord, const RenderingContext& ctx)
