@@ -28,7 +28,6 @@
 #include <QSvgRenderer>
 
 #include "translation.h"
-#include "muversion.h"
 
 using namespace mu::appshell;
 
@@ -97,5 +96,5 @@ void LoadingScreenView::draw(QPainter* painter)
 
     painter->drawText(websiteRect.translated(0.0, -websiteBoundingRect.height() - versionNumberSpacing),
                       Qt::AlignBottom | alignment | Qt::TextDontClip,
-                      qtrc("appshell", "Version %1").arg(QString::fromStdString(MUVersion::fullVersion().toStdString())));
+                      qtrc("appshell", "Version %1").arg(application()->fullVersion().toString()));
 }

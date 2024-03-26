@@ -27,7 +27,8 @@
 
 #include "io/path.h"
 #include "modularity/ioc.h"
-#include "io/ifilesystem.h"
+#include "global/iapplication.h"
+#include "global/io/ifilesystem.h"
 
 namespace crashpad {
 class CrashpadClient;
@@ -36,7 +37,8 @@ class CrashpadClient;
 namespace mu::diagnostics {
 class CrashHandler
 {
-    INJECT(io::IFileSystem, fileSystem)
+    Inject<IApplication> application;
+    Inject<io::IFileSystem> fileSystem;
 
 public:
     CrashHandler() = default;

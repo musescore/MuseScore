@@ -24,9 +24,14 @@
 
 #include "../iglobalconfiguration.h"
 
+#include "modularity/ioc.h"
+#include "../iapplication.h"
+
 namespace mu {
 class GlobalConfiguration : public IGlobalConfiguration
 {
+    Inject<IApplication> application;
+
 public:
     GlobalConfiguration() = default;
 

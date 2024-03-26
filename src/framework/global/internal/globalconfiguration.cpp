@@ -27,7 +27,6 @@
 #include <QCoreApplication>
 
 #include "settings.h"
-#include "muversion.h"
 #include "log.h"
 
 using namespace mu;
@@ -40,7 +39,7 @@ static const std::string MUSESCORE_URL("https://www.musescore.org/");
 
 void GlobalConfiguration::init()
 {
-    settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(MUVersion::unstable()));
+    settings()->setDefaultValue(DEV_MODE_ENABLED_KEY, Val(application()->unstable()));
 }
 
 io::path_t GlobalConfiguration::appBinPath() const

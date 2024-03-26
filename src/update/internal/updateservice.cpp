@@ -31,7 +31,6 @@
 
 #include "../updateerrors.h"
 #include "types/version.h"
-#include "muversion.h"
 
 #include "translation.h"
 #include "log.h"
@@ -67,7 +66,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
         return result;
     }
 
-    Version current(MUVersion::fullVersion());
+    Version current(application()->fullVersion());
     Version update(releaseInfoRetVal.val.version);
 
     bool allowUpdateOnPreRelease = configuration()->allowUpdateOnPreRelease();
@@ -249,7 +248,7 @@ PrevReleasesNotesList UpdateService::previousReleasesNotes(const Version& update
         return result;
     }
 
-    Version currentVersion = Version(MUVersion::fullVersion());
+    Version currentVersion = Version(application()->fullVersion());
 
     for (const PrevReleaseNotes& releaseNotes : previousReleasesNotes) {
         Version previousVersion = Version(releaseNotes.version);

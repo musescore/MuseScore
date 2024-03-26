@@ -36,13 +36,16 @@ using ::testing::Return;
 #include "global/tests/mocks/systeminfomock.h"
 
 #include "update/internal/updateservice.h"
-#include "muversion.h"
+
+#include "modularity/ioc.h"
+#include "global/iapplication.h"
 
 using namespace mu;
 using namespace mu::update;
 
 class UpdateServiceTests : public ::testing::Test
 {
+    Inject<IApplication> application;
 public:
     void SetUp() override
     {
@@ -114,7 +117,7 @@ public:
                                         "{ \"version\": \"%1\", \"notes\": \"blabla2\" },"
                                         "{ \"version\": \"0.4.1\", \"notes\": \"blabla1\" }"
                                         "]"
-                                        "}").arg(MUVersion::fullVersion());
+                                        "}").arg(application()->fullVersion().toString());
 
         EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousReleasesNotesUrl)), _, _))
         .WillOnce(testing::Invoke(

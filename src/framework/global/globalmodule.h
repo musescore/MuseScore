@@ -35,6 +35,7 @@ namespace mu {
 class SystemInfo;
 class Invoker;
 class GlobalConfiguration;
+class Application;
 class GlobalModule : public modularity::IModuleSetup
 {
     Inject<io::IFileSystem> fileSystem;
@@ -53,6 +54,7 @@ public:
     void setLoggerLevel(const mu::logger::Level& level);
 
 private:
+    std::shared_ptr<Application> m_application;
     std::shared_ptr<GlobalConfiguration> m_configuration;
     std::shared_ptr<SystemInfo> m_systemInfo;
 

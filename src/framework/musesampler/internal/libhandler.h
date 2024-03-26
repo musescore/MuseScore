@@ -294,7 +294,7 @@ public:
         // Major versions have incompatible changes; we can only support
         // interfaces we know about.
         // TODO: check when we fixed the issue with version numbers not reporting?  Was this ever an issue?
-        if (current.majorVersion() > maximumMajorVersion) {
+        if (current.major() > maximumMajorVersion) {
             LOGE() << "MuseSampler " << current.toString() << " is not supported (too new -- update MuseScore); ignoring";
             return;
         }

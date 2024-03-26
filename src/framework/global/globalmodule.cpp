@@ -27,7 +27,6 @@
 #include "logger.h"
 #include "logremover.h"
 #include "profiler.h"
-#include "muversion.h"
 
 #include "internal/application.h"
 #include "internal/interactive.h"
@@ -67,11 +66,12 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
+    m_application = std::make_shared<Application>();
     m_configuration = std::make_shared<GlobalConfiguration>();
     s_asyncInvoker = std::make_shared<Invoker>();
     m_systemInfo = std::make_shared<SystemInfo>();
 
-    ioc()->registerExport<IApplication>(moduleName(), new Application());
+    ioc()->registerExport<IApplication>(moduleName(), m_application);
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
@@ -154,7 +154,9 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     }
 
     LOGI() << "log path: " << logFilePath;
-    LOGI() << "=== Started MuseScore " << MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
+    LOGI() << "=== Started " << m_application->name()
+           << " " << m_application->fullVersion().toString()
+           << ", build: " << m_application->build() << " ===";
 
     //! --- Setup profiler ---
     using namespace mu::profiler;

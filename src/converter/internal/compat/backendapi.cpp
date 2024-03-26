@@ -32,7 +32,6 @@
 
 #include "io/buffer.h"
 
-#include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/mscwriter.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/rw/mscsaver.h"
@@ -40,7 +39,6 @@
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
 
-#include "muversion.h"
 #include "log.h"
 
 using namespace mu;
@@ -463,8 +461,8 @@ Ret BackendApi::devInfo(const notation::INotationPtr notation, BackendJsonWriter
     TRACEFUNC
 
     QJsonObject infoObj;
-    infoObj["version"] = QString::fromStdString(String("%1(%2)").arg(MUVersion::fullVersion(),
-                                                                     MUVersion::revision()).toStdString());
+    infoObj["version"] = String("%1(%2)").arg(application()->fullVersion().toString(),
+                                              application()->revision()).toQString();
 
     jsonWriter.addKey(DEV_INFO_NAME.c_str());
     jsonWriter.addValue(QJsonDocument(infoObj).toJson(), addSeparator, true);

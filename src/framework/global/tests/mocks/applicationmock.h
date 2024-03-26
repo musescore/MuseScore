@@ -30,6 +30,15 @@ namespace mu {
 class ApplicationMock : public IApplication
 {
 public:
+
+    MOCK_METHOD(String, name, (), (const, override));
+
+    MOCK_METHOD(bool, unstable, (), (const, override));
+    MOCK_METHOD(Version, version, (), (const, override));
+    MOCK_METHOD(Version, fullVersion, (), (const, override));
+    MOCK_METHOD(String, build, (), (const, override));
+    MOCK_METHOD(String, revision, (), (const, override));
+
     MOCK_METHOD(void, setRunMode, (const RunMode&), (override));
     MOCK_METHOD(RunMode, runMode, (), (const, override));
     MOCK_METHOD(bool, noGui, (), (const, override));
