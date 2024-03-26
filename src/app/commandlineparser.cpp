@@ -108,6 +108,8 @@ void CommandLineParser::init()
     m_parser.addOption(QCommandLineOption("sound-profile",
                                           "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
                                           "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
+    m_parser.addOption(QCommandLineOption("tuning", "Load tuning file", "file"));
+    m_parser.addOption(QCommandLineOption("tuningmode", "How to apply tuneMap, 'add', 'write'", "mode"));
 
     // Video export
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
@@ -416,6 +418,14 @@ void CommandLineParser::parse(int argc, char** argv)
             QString val = m_parser.value("migration");
             m_options.project.fullMigration = (val == "full") ? true : false;
         }
+    }
+
+    if (m_parser.isSet("tuning")) {
+        m_options.notation.tuneMapFile = m_parser.value("tuning").toStdString();
+    }
+
+    if (m_parser.isSet("tuningmode")) {
+        m_options.notation.tuneMode = m_parser.value("tuningmode").toStdString();
     }
 
     // Diagnostic

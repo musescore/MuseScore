@@ -27,6 +27,7 @@
 #include "dom/chord.h"
 #include "dom/harmony.h"
 #include "dom/note.h"
+#include "dom/accidental.h"
 #include "dom/rest.h"
 #include "dom/sig.h"
 #include "dom/tempo.h"
@@ -43,6 +44,41 @@
 
 using namespace mu::engraving;
 using namespace mu::mpe;
+
+namespace mu {
+bool g_tuneMap_loaded = false;
+bool g_tuning_additive = false;
+bool g_tuning_write    = false;
+std::map<int, double> g_tunePitchMap;
+std::map<int, double> g_tuneAccidentalMap;
+
+double tuneMapGet(const mu::engraving::Note* note, int pitch, double curTuning)
+{
+    if (!g_tuneMap_loaded) {
+        return curTuning;
+    }
+    double tuning = 0;
+    if (g_tuning_additive) {
+        tuning += curTuning;
+    }
+    Accidental* acc = note->accidental();
+    if (acc) {
+        AccidentalType at = acc->accidentalType();
+        int sid = static_cast<int>(acc->symId());
+        const char* str = acc->subtype2name(at).ascii();
+        if (g_tuneAccidentalMap.find(sid) != g_tuneAccidentalMap.end()) {
+            LOGI("accidental-tune-map accidental acc-sid=%i acc-name=%s", sid, str);
+            return g_tuneAccidentalMap[sid] + tuning;
+        }
+    }
+
+    if (g_tunePitchMap.find(pitch) != g_tunePitchMap.end()) {
+        LOGI("tunemap %i, %f + %f", pitch, g_tunePitchMap[pitch], tuning);
+        return g_tunePitchMap[pitch] + tuning;
+    }
+    return tuning;
+}
+}
 
 static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
 {
@@ -142,6 +178,9 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
+        //if (g_tuning_write) {
+        //    it->setTuning(tuneMapGet(pitch, it->tuning()));
+        //}
         int tpc = pitch2tpc(pitch, key, Prefer::NEAREST);
         int octave = playingOctave(pitch, tpc);
         pitch_level_t pitchLevel = notePitchLevel(tpc, octave);
@@ -179,6 +218,9 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
+        //if (g_tuning_write) {
+        //    it->setTuning(tuneMapGet(pitch, it->tuning()));
+        //}
         int tpc = pitch2tpc(pitch, key, Prefer::NEAREST);
         int octave = playingOctave(pitch, tpc);
         pitch_level_t pitchLevel = notePitchLevel(tpc, octave);

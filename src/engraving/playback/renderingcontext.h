@@ -33,6 +33,10 @@
 #include "playback/utils/arrangementutils.h"
 #include "playback/utils/pitchutils.h"
 
+namespace mu {
+double tuneMapGet(const mu::engraving::Note* note, int pitch, double tuning);
+}
+
 namespace mu::engraving {
 struct RenderingContext {
     mpe::timestamp_t nominalTimestamp = 0;
@@ -116,7 +120,7 @@ struct NominalNoteCtx {
         userVelocityFraction(note->userVelocityFraction()),
         pitchLevel(notePitchLevel(note->playingTpc(),
                                   note->playingOctave(),
-                                  note->playingTuning())),
+                                  tuneMapGet(note, note->pitch(), note->playingTuning()))),
         chordCtx(ctx)
     {
         if (RealIsEqual(userVelocityFraction, 0.f)) {
@@ -195,7 +199,8 @@ inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& c
                           noteNominalDuration(note, ctx),
                           static_cast<mpe::voice_layer_idx_t>(note->voice()),
                           static_cast<mpe::staff_layer_idx_t>(note->staffIdx()),
-                          notePitchLevel(note->playingTpc(), note->playingOctave(), note->playingTuning()),
+                          notePitchLevel(note->playingTpc(), note->playingOctave(),
+                                         tuneMapGet(note, note->pitch(), note->playingTuning())),
                           ctx.nominalDynamicLevel,
                           ctx.commonArticulations,
                           ctx.beatsPerSecond.val,

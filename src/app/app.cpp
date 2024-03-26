@@ -22,6 +22,18 @@
 
 #include "app.h"
 
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QMap>
+#include <QString>
+#include <map>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <cctype>
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -36,6 +48,7 @@
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
 #include "muversion.h"
+#include "types/symnames.h"
 
 #include "framework/global/globalmodule.h"
 
@@ -46,6 +59,170 @@ using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::GlobalModule globalModule;
+
+namespace mu {
+extern bool g_tuneMap_loaded;
+extern bool g_tuning_additive;
+extern bool g_tuning_write;
+extern std::map<int, double> g_tunePitchMap;
+extern std::map<int, double> g_tuneAccidentalMap;
+
+// FIX: replace with musescores homegrown stuff, or move elsewhere
+bool has_suffix(const std::string& str, const std::string& suffix)
+{
+    return str.size() >= suffix.size()
+           && str.substr(str.size() - suffix.size()) == suffix;
+}
+
+struct TuningScale {
+    std::string name;
+    int numberOfNotes;
+    std::vector<double> notes;
+};
+
+double parseStringToReal(const std::string& s)
+{
+    if (s.empty()) {
+        return 0.0;
+    }
+
+    std::string num1 = "";  // Before the slash (or whole number if no slash)
+    std::string num2 = "";  // After the slash, if there is one
+    bool isDotFound = false;
+    bool isSlashFound = false;
+
+    // Parse the string
+    for (char c : s) {
+        if (isdigit(c)) {
+            if (!isSlashFound) {
+                num1 += c;
+            } else {
+                num2 += c;
+            }
+        } else if (c == '.' && !isDotFound && !isSlashFound) {
+            isDotFound = true;
+            num1 += c;
+        } else if (c == '/' && !isDotFound && !isSlashFound) {
+            isSlashFound = true;
+        } else {
+            // If any other character is found, stop parsing
+            break;
+        }
+    }
+
+    // Convert the parsed values to float and return
+    try {
+        if (isSlashFound) {
+            if (num2.empty() || std::stoi(num2) == 0) {
+                // Avoid division by zero
+                return 0.0;
+            }
+            return static_cast<float>(std::stoi(num1)) / std::stoi(num2);
+        } else {
+            return std::stof(num1);
+        }
+    } catch (...) {
+        return 0.0;  // Return 0.0 on any conversion error
+    }
+}
+
+TuningScale parseSCL(const std::string& filename)
+{
+    TuningScale scale;
+    std::ifstream infile(filename);
+
+    if (!infile.is_open()) {
+        LOGE("Failed to open SCL tuning-map file.");
+        return scale;  // Return an empty scale on error.
+    }
+
+    std::string line;
+    while (std::getline(infile, line)) {
+        // Skip comments and empty lines
+        if (line.empty() || line[0] == '!') {
+            continue;
+        }
+
+        // Read scale name
+        if (scale.name.empty()) {
+            scale.name = line;
+            continue;
+        }
+
+        // Read number of notes
+        if (scale.numberOfNotes == 0) {
+            scale.numberOfNotes = std::stoi(line);
+            continue;
+        }
+
+        // Read notes
+        scale.notes.push_back(parseStringToReal(line));
+    }
+
+    for (long unsigned int i = 0; i < scale.notes.size(); i++) {
+        g_tunePitchMap[60 + 1] = scale.notes.at(i);
+    }
+
+    return scale;
+}
+
+void tuneMapLoadSCL(const std::string tuneFilename)
+{
+    TuningScale scale = parseSCL(tuneFilename);
+    std::cout << "Scale Name: " << scale.name << std::endl;
+    std::cout << "Number of Notes: " << scale.numberOfNotes << std::endl;
+    for (const auto& note : scale.notes) {
+        std::cout << note << std::endl;
+    }
+}
+
+void tuneMapLoadJSON(const std::string tuneFilename)
+{
+    QString filename = QString::fromStdString(tuneFilename);
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning("Failed to open tunemap file.");
+        return;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+    if (document.isNull()) {
+        qWarning("Failed to parse tunemap file.");
+        return;
+    }
+
+    if (!document.isObject()) {
+        qWarning("tunemap file doesn't contain a JSON object.");
+        return;
+    }
+
+    QJsonObject jsonObject = document.object();
+    for (auto it = jsonObject.constBegin(); it != jsonObject.constEnd(); ++it) {
+        if (it.key().startsWith("midi-")) {
+            bool ok;
+            int midiNum = it.key().mid(5).toInt(&ok); // Extract the number after "midi-"
+            if (ok) {
+                g_tunePitchMap[midiNum] = it.value().toDouble();
+            }
+        } else {
+            int symId = static_cast<int>(mu::engraving::SymNames::symIdByName(AsciiStringView(it.key().toStdString())));
+            g_tuneAccidentalMap[symId] = it.value().toDouble();
+        }
+    }
+    LOGI() << "Loaded tunemaps: pitch-tunemap:" << g_tunePitchMap.size() << ",  accidental-tunemap: " << g_tuneAccidentalMap.size();
+}
+
+void tuneMapLoad(const std::string tuneFilename)
+{
+    if (has_suffix(tuneFilename, ".json")) {
+        tuneMapLoadJSON(tuneFilename);
+    } else if (has_suffix(tuneFilename, ".scl")) {
+        tuneMapLoadSCL(tuneFilename);
+    } else {
+        LOGE("file '%s' unknown filetype", tuneFilename.c_str());
+    }
+}
+}
 
 App::App()
 {
@@ -399,6 +576,19 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
 
     notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);
+
+    if (options.notation.tuneMapFile) {
+        tuneMapLoad(options.notation.tuneMapFile.value());
+        g_tuneMap_loaded = true;
+    }
+
+    if (options.notation.tuneMode) {
+        if (options.notation.tuneMapFile.value() == "add") {
+            g_tuning_additive = true;
+        } else if (options.notation.tuneMode.value() == "write") {
+            g_tuning_write = true;
+        }
+    }
 
     if (runMode == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
