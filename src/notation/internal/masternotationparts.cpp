@@ -212,16 +212,16 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
     endGlobalEdit();
 }
 
-void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
+void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable)
 {
     TRACEFUNC;
 
     startGlobalEdit();
 
-    NotationParts::replaceDrumset(instrumentKey, newDrumset);
+    NotationParts::replaceDrumset(instrumentKey, newDrumset, undoable);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->replaceDrumset(instrumentKey, newDrumset);
+        parts->replaceDrumset(instrumentKey, newDrumset, undoable);
     }
 
     endGlobalEdit();
