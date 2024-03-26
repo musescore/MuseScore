@@ -61,7 +61,7 @@ private:
     void loadLanguages();
 
     void setCurrentLanguage(const QString& languageCode);
-    QString effectiveLanguageCode(const QString& languageCode) const;
+    QString effectiveLanguageCode(QString languageCode) const;
     Ret loadLanguage(Language& lang);
 
     void th_update(const QString& languageCode, mu::Progress progress);
