@@ -24,12 +24,16 @@
 
 #include "../iwriter.h"
 
+#include "modularity/ioc.h"
+#include "global/iapplication.h"
+
 #include "writecontext.h"
 #include "../compat/writescorehook.h"
 
 namespace mu::engraving::write {
 class Writer : public rw::IWriter
 {
+    Inject<IApplication> application;
 public:
 
     bool writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* out) override;

@@ -406,7 +406,7 @@ String Page::replaceTextMacros(const String& s) const
                 break;
             case 'v':
                 if (score()->dirty()) {
-                    d += String::fromAscii(MUSESCORE_VERSION);
+                    d += score()->appVersion();
                 } else {
                     d += score()->mscoreVersion();
                 }

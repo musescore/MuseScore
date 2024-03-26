@@ -59,6 +59,11 @@ using namespace mu::io;
 
 std::shared_ptr<Invoker> GlobalModule::s_asyncInvoker = {};
 
+GlobalModule::GlobalModule()
+{
+    m_application = std::make_shared<Application>();
+}
+
 std::string GlobalModule::moduleName() const
 {
     return "global";
@@ -66,7 +71,6 @@ std::string GlobalModule::moduleName() const
 
 void GlobalModule::registerExports()
 {
-    m_application = std::make_shared<Application>();
     m_configuration = std::make_shared<GlobalConfiguration>();
     s_asyncInvoker = std::make_shared<Invoker>();
     m_systemInfo = std::make_shared<SystemInfo>();
@@ -218,4 +222,9 @@ void GlobalModule::invokeQueuedCalls()
 void GlobalModule::setLoggerLevel(const mu::logger::Level& level)
 {
     m_loggerLevel = level;
+}
+
+std::shared_ptr<Application> GlobalModule::app() const
+{
+    return m_application;
 }

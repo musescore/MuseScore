@@ -29,13 +29,10 @@
 #include <QHttpMultiPart>
 #include <QRandomGenerator>
 
-#include "async/async.h"
-#include "containers.h"
-#include "types/translatablestring.h"
-
 #include "clouderrors.h"
 #include "multiinstances/resourcelockguard.h"
 #include "network/networkerrors.h"
+#include "global/iapplication.h"
 
 #include "oauthhttpserverreplyhandler.h"
 
@@ -62,9 +59,10 @@ QString mu::cloud::userAgent()
         QSysInfo::currentCpuArchitecture()
     };
 
+    static Inject<IApplication> app;
+
     return QString("MS_EDITOR/%1.%2 (%3)")
-           .arg(MUSESCORE_VERSION)
-           .arg(MUSESCORE_BUILD_NUMBER)
+           .arg(app()->version().toString(), app()->build())
            .arg(systemInfo.join(' ')).toLatin1();
 }
 

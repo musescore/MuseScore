@@ -39,6 +39,7 @@
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
 #include "iengravingfontsprovider.h"
+#include "global/iapplication.h"
 
 #include "types/constants.h"
 
@@ -240,12 +241,13 @@ class Score : public EngravingObject
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    INJECT(draw::IImageProvider, imageProvider)
-    INJECT(IEngravingConfiguration, configuration)
-    INJECT(IEngravingFontsProvider, engravingFonts)
+    Inject<draw::IImageProvider> imageProvider;
+    Inject<IEngravingConfiguration> configuration;
+    Inject<IEngravingFontsProvider> engravingFonts;
+    Inject<IApplication> application;
 
     // internal
-    INJECT(rendering::IScoreRenderer, renderer)
+    Inject<rendering::IScoreRenderer> renderer;
 
 public:
     Score(const Score&) = delete;
@@ -799,6 +801,7 @@ public:
     int pageNumberOffset() const { return m_pageNumberOffset; }
     void setPageNumberOffset(int v) { m_pageNumberOffset = v; }
 
+    String appVersion() const { return application()->version().toString(); }
     String mscoreVersion() const { return m_mscoreVersion; }
     int mscoreRevision() const { return m_mscoreRevision; }
     void setMscoreVersion(const String& val) { m_mscoreVersion = val; }

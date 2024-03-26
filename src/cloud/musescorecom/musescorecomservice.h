@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
 #include "network/inetworkmanagercreator.h"
+#include "global/iapplication.h"
 
 #include "internal/abstractcloudservice.h"
 
@@ -36,8 +37,9 @@ namespace mu::cloud {
 class MuseScoreComService : public IMuseScoreComService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
-    INJECT(ICloudConfiguration, configuration)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    Inject<ICloudConfiguration> configuration;
+    Inject<network::INetworkManagerCreator> networkManagerCreator;
+    Inject<IApplication> application;
 
 public:
     explicit MuseScoreComService(QObject* parent = nullptr);

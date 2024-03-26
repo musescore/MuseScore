@@ -21,6 +21,9 @@
  */
 #include "updateconfiguration.h"
 
+#include "modularity/ioc.h"
+#include "global/iapplication.h"
+
 #include "settings.h"
 
 using namespace mu;
@@ -45,11 +48,13 @@ static QString userAgent()
     osName = "Linux";
 #endif
 
+    static Inject<IApplication> app;
+
     QString osVersion = QSysInfo::productVersion();
     QString cpuArchitecture = QSysInfo::currentCpuArchitecture();
 
     return QString("Musescore/%1 (%2 %3; %4)")
-           .arg(MUSESCORE_VERSION, osName, osVersion, cpuArchitecture);
+           .arg(app()->version().toString(), osName, osVersion, cpuArchitecture);
 }
 
 void UpdateConfiguration::init()

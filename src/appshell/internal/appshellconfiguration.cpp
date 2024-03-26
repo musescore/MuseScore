@@ -154,12 +154,12 @@ std::string AppShellConfiguration::musicXMLLicenseDeedUrl() const
 
 std::string AppShellConfiguration::museScoreVersion() const
 {
-    return MUSESCORE_VERSION + std::string(".") + MUSESCORE_BUILD_NUMBER;
+    return String(application()->version().toString() + u"." + application()->build()).toStdString();
 }
 
 std::string AppShellConfiguration::museScoreRevision() const
 {
-    return MUSESCORE_REVISION;
+    return application()->revision().toStdString();
 }
 
 bool AppShellConfiguration::isNotationNavigatorVisible() const
@@ -232,8 +232,8 @@ mu::Ret AppShellConfiguration::setSessionProjectsPaths(const mu::io::paths_t& pa
 std::string AppShellConfiguration::utmParameters(const std::string& utmMedium) const
 {
     return "utm_source=desktop&utm_medium=" + utmMedium
-           + "&utm_content=" + MUSESCORE_REVISION
-           + "&utm_campaign=MuseScore" + MUSESCORE_VERSION;
+           + "&utm_content=" + application()->revision().toStdString()
+           + "&utm_campaign=MuseScore" + application()->version().toStdString();
 }
 
 std::string AppShellConfiguration::currentLanguageCode() const
