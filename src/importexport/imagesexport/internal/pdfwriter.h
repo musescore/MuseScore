@@ -27,13 +27,15 @@
 
 #include "../iimagesexportconfiguration.h"
 #include "modularity/ioc.h"
+#include "global/iapplication.h"
 
 class QPdfWriter;
 
 namespace mu::iex::imagesexport {
 class PdfWriter : public AbstractImageWriter
 {
-    INJECT(IImagesExportConfiguration, configuration)
+    Inject<IImagesExportConfiguration> configuration;
+    Inject<IApplication> application;
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;

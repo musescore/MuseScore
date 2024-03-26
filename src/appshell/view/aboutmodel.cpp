@@ -92,9 +92,9 @@ void AboutModel::copyRevisionToClipboard() const
                 ? " or later" : ""))
         .arg(QSysInfo::currentCpuArchitecture())
         .arg(QSysInfo::WordSize)
-        .arg(MUSESCORE_VERSION)
-        .arg(MUSESCORE_BUILD_NUMBER)
-        .arg(MUSESCORE_REVISION));
+        .arg(application()->version().toString())
+        .arg(application()->build())
+        .arg(application()->revision()));
 }
 
 void AboutModel::toggleDevMode()

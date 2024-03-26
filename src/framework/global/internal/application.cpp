@@ -34,12 +34,12 @@ using namespace mu;
 
 String Application::name() const
 {
-    return String::fromAscii(MUSESCORE_NAME);
+    return String::fromAscii(MU_APP_NAME);
 }
 
 bool Application::unstable() const
 {
-#ifdef MUSESCORE_UNSTABLE
+#ifdef MU_APP_UNSTABLE
     return true;
 #else
     return false;
@@ -48,7 +48,7 @@ bool Application::unstable() const
 
 Version Application::version() const
 {
-    static Version v(MUSESCORE_VERSION);
+    static Version v(MU_APP_VERSION);
     return v;
 }
 
@@ -57,7 +57,7 @@ Version Application::fullVersion() const
     static Version fv(version());
     static bool once = false;
     if (!once) {
-        String versionLabel = String::fromAscii(MUSESCORE_VERSION_LABEL);
+        String versionLabel = String::fromAscii(MU_APP_VERSION_LABEL);
         if (!versionLabel.isEmpty()) {
             fv.setSuffix(versionLabel);
         }
@@ -69,12 +69,12 @@ Version Application::fullVersion() const
 
 String Application::build() const
 {
-    return String::fromAscii(MUSESCORE_BUILD_NUMBER);
+    return String::fromAscii(MU_APP_BUILD_NUMBER);
 }
 
 String Application::revision() const
 {
-    return String::fromAscii(MUSESCORE_REVISION);
+    return String::fromAscii(MU_APP_REVISION);
 }
 
 void Application::setRunMode(const RunMode& mode)

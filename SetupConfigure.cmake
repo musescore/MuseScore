@@ -248,17 +248,17 @@ endif()
 ###########################################
 # Global definitions
 ###########################################
-add_definitions(-DMUSESCORE_NAME="${MUSESCORE_NAME}")
-add_definitions(-DMUSESCORE_REVISION="${MUSESCORE_REVISION}")
-add_definitions(-DMUSESCORE_BUILD_NUMBER="${CMAKE_BUILD_NUMBER}")
-add_definitions(-DMUSESCORE_VERSION="${MUSESCORE_VERSION}")
-add_definitions(-DMUSESCORE_VERSION_LABEL="${MUSESCORE_VERSION_LABEL}")
-add_definitions(-DMUSESCORE_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}")
-add_definitions(-DMUSESCORE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
-add_definitions(-DMUSESCORE_INSTALL_NAME="${Mscore_INSTALL_NAME}")
+add_definitions(-DMU_APP_NAME="${MUSESCORE_NAME}")
+add_definitions(-DMU_APP_REVISION="${MUSESCORE_REVISION}")
+add_definitions(-DMU_APP_BUILD_NUMBER="${CMAKE_BUILD_NUMBER}")
+add_definitions(-DMU_APP_VERSION="${MUSESCORE_VERSION}")
+add_definitions(-DMU_APP_VERSION_LABEL="${MUSESCORE_VERSION_LABEL}")
+add_definitions(-DMU_APP_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}")
+add_definitions(-DMU_APP_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+add_definitions(-DMU_APP_INSTALL_NAME="${Mscore_INSTALL_NAME}")
 
 if (MUSESCORE_UNSTABLE)
-    add_definitions(-DMUSESCORE_UNSTABLE)
+    add_definitions(-DMU_APP_UNSTABLE)
 endif()
 
 if (MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE)

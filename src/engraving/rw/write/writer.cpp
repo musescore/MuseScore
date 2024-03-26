@@ -53,8 +53,8 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
     xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
 
     if (!MScore::testMode) {
-        xml.tag("programVersion", MUSESCORE_VERSION);
-        xml.tag("programRevision", MUSESCORE_REVISION);
+        xml.tag("programVersion", application()->version().toString());
+        xml.tag("programRevision", application()->revision());
         xml.tag("LastEID", score->masterScore()->getEID()->lastID());
     }
 
@@ -65,8 +65,8 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
 
     if (!onlySelection) {
         //update version values for i.e. plugin access
-        score->m_mscoreVersion = String::fromAscii(MUSESCORE_VERSION);
-        score->m_mscoreRevision = AsciiStringView(MUSESCORE_REVISION).toInt(nullptr, 16);
+        score->m_mscoreVersion = application()->version().toString();
+        score->m_mscoreRevision = application()->revision().toInt(nullptr, 16);
         score->m_mscVersion = Constants::MSC_VERSION;
     }
 

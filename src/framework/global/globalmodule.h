@@ -42,6 +42,8 @@ class GlobalModule : public modularity::IModuleSetup
 
 public:
 
+    GlobalModule();
+
     std::string moduleName() const override;
     void registerExports() override;
     void registerApi() override;
@@ -52,6 +54,8 @@ public:
     static void invokeQueuedCalls();
 
     void setLoggerLevel(const mu::logger::Level& level);
+
+    std::shared_ptr<Application> app() const;
 
 private:
     std::shared_ptr<Application> m_application;

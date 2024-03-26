@@ -23,8 +23,6 @@
 #ifndef MU_IMPORTEXPORT_EXPORTXML_H
 #define MU_IMPORTEXPORT_EXPORTXML_H
 
-#include <sstream>
-
 #include "io/iodevice.h"
 #include "global/types/string.h"
 

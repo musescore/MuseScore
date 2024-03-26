@@ -55,7 +55,7 @@ static const QString MUSESCORE_TEXT_LOGO("https://musescore.org/themes/musescore
 
 static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
-static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(MUSESCORE_VERSION));
+static const QString EDITOR_SOURCE_VALUE("Musescore Editor %1");
 static const QString PLATFORM_KEY("platform");
 
 MuseScoreComService::MuseScoreComService(QObject* parent)
@@ -103,7 +103,7 @@ AbstractCloudService::ServerConfig MuseScoreComService::serverConfig() const
     serverConfig.headers = headers();
 
     serverConfig.authorizationParameters = {
-        { EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE },
+        { EDITOR_SOURCE_KEY, EDITOR_SOURCE_VALUE.arg(application()->version().toString()) },
         { PLATFORM_KEY, QString("%1 %2 %3")
           .arg(QSysInfo::productType())
           .arg(QSysInfo::productVersion())

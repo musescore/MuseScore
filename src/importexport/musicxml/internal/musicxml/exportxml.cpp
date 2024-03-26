@@ -128,6 +128,7 @@
 
 #include "modularity/ioc.h"
 #include "../../imusicxmlconfiguration.h"
+#include "global/iapplication.h"
 #include "engraving/iengravingconfiguration.h"
 
 #include "log.h"
@@ -352,6 +353,7 @@ typedef std::map<const Instrument*, int> MxmlInstrumentMap;
 class ExportMusicXml
 {
     INJECT_STATIC(mu::iex::musicxml::IMusicXmlConfiguration, configuration)
+    INJECT_STATIC(mu::IApplication, application)
 
 public:
     ExportMusicXml(Score* s)
@@ -6766,7 +6768,7 @@ void ExportMusicXml::identification(XmlWriter& xml, Score const* const score)
         xml.tag("software", String(u"MuseScore 0.7.0"));
         xml.tag("encoding-date", String(u"2007-09-10"));
     } else {
-        xml.tag("software", String(u"MuseScore ") + String::fromAscii(MUSESCORE_VERSION));
+        xml.tag("software", String(u"MuseScore ") + application()->version().toString());
         xml.tag("encoding-date", Date::currentDate().toString(DateFormat::ISODate));
     }
 
