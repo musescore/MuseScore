@@ -212,8 +212,10 @@ class Pedal;
 class Trill;
 class MxmlLogger;
 class MusicXMLDelayedDirectionElement;
+class MusicXMLInferredFingering;
 
 using DelayedDirectionsList = std::vector<MusicXMLDelayedDirectionElement*>;
+using InferredFingeringsList = std::vector<MusicXMLInferredFingering*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
@@ -401,8 +403,9 @@ class MusicXMLParserDirection
 public:
     MusicXMLParserDirection(XmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
     void direction(const String& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
-                   DelayedDirectionsList& delayedDirections);
+                   DelayedDirectionsList& delayedDirections, InferredFingeringsList& inferredFingerings);
     double totalY() const { return m_defaultY + m_relativeY; }
+    String placement() const;
 
 private:
     void directionType(std::vector<MusicXmlSpannerDesc>& starts, std::vector<MusicXmlSpannerDesc>& stops);
@@ -427,8 +430,9 @@ private:
     bool isLikelyLegallyDownloaded(const Fraction& tick) const;
     Text* addTextToHeader(const TextStyleType textStyleType);
     void hideRedundantHeaderText(const Text* inferredText, const std::vector<String> metaTags);
+    bool isLikelyFingering() const;
 
-    bool hasTotalY() { return m_hasRelativeY || m_hasDefaultY; }
+    bool hasTotalY() const { return m_hasRelativeY || m_hasDefaultY; }
 
     XmlStreamReader& m_e;
     Score* m_score = nullptr;                              // the score
@@ -449,6 +453,7 @@ private:
     String m_sndFine;
     String m_sndSegno;
     String m_sndToCoda;
+    String m_placement;
     bool m_hasDefaultY = false;
     double m_defaultY = 0.0;
     bool m_hasRelativeY = false;
@@ -484,6 +489,39 @@ private:
     String m_placement;
     Measure* m_measure = nullptr;
     Fraction m_tick;
+};
+
+//---------------------------------------------------------
+//   MusicXMLInferredFingering
+//---------------------------------------------------------
+/**
+ Helper class to allow Direction elements to be reinterpreted as fingerings
+ */
+
+class MusicXMLInferredFingering
+{
+public:
+    MusicXMLInferredFingering(double totalY, EngravingItem* element, String& text, int track, String placement, Measure* measure,
+                              Fraction tick);
+    double totalY() const { return m_totalY; }
+    Fraction tick() const { return m_tick; }
+    int track() const { return m_track; }
+    std::vector<String> fingerings() const { return m_fingerings; }
+    bool findAndAddToNotes(Measure* measure);
+    MusicXMLDelayedDirectionElement* toDelayedDirection();
+
+private:
+    double m_totalY;
+    EngravingItem* m_element;
+    String m_text;
+    std::vector<String> m_fingerings;
+    int m_track;
+    String m_placement;
+    Measure* m_measure;
+    Fraction m_tick;
+
+    void roundTick(Measure* measure);
+    void addToNotes(std::vector<Note*>& notes) const;
 };
 } // namespace Ms
 #endif

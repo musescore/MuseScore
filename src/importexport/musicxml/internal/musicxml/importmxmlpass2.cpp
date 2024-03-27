@@ -2366,6 +2366,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     MxmlTupletStates tupletStates;         // Tuplet state for each voice in the current part
     Tuplets tuplets;         // Current tuplet for each voice in the current part
     DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
+    InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
     ArpeggioMap arpMap;
     DelayedArpMap delayedArps;
 
@@ -2377,7 +2378,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (m_e.name() == "direction") {
             MusicXMLParserDirection dir(m_e, m_score, m_pass1, *this, m_logger);
-            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections);
+            dir.direction(partId, measure, time + mTime, m_spanners, delayedDirections, inferredFingerings);
         } else if (m_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2504,6 +2505,21 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
         if (beam) {
             removeBeam(beam);
         }
+    }
+
+    // Sort and add inferred fingerings
+    std::sort(inferredFingerings.begin(), inferredFingerings.end(),
+              // Lambda: sort by absolute value of totalY
+              [](const MusicXMLInferredFingering* a, const MusicXMLInferredFingering* b) -> bool {
+        return std::abs(a->totalY()) < std::abs(b->totalY());
+    }
+              );
+    for (auto inferredFingering : inferredFingerings) {
+        if (!inferredFingering->findAndAddToNotes(measure)) {
+            // Could not find notes to add to; print as direction
+            delayedDirections.push_back(inferredFingering->toDelayedDirection());
+        }
+        delete inferredFingering;
     }
 
     // Sort and add delayed directions
@@ -2871,6 +2887,15 @@ void MusicXMLDelayedDirectionElement::addElem()
     addElemOffset(m_element, m_track, m_placement, m_measure, m_tick);
 }
 
+String MusicXMLParserDirection::placement() const
+{
+    if (m_placement == "" && hasTotalY()) {
+        return totalY() < 0 ? u"above" : u"below";
+    } else {
+        return m_placement;
+    }
+}
+
 //---------------------------------------------------------
 //   direction
 //---------------------------------------------------------
@@ -2883,11 +2908,12 @@ void MusicXMLParserDirection::direction(const String& partId,
                                         Measure* measure,
                                         const Fraction& tick,
                                         MusicXmlSpannerMap& spanners,
-                                        DelayedDirectionsList& delayedDirections)
+                                        DelayedDirectionsList& delayedDirections,
+                                        InferredFingeringsList& inferredFingerings)
 {
     //LOGD("direction tick %s", muPrintable(tick.print()));
 
-    String placement = m_e.attribute("placement");
+    m_placement = m_e.attribute("placement");
     track_idx_t track = m_pass1.trackForPart(partId);
     bool isVocalStaff = m_pass1.isVocalStaff(partId);
     bool isExpressionText = false;
@@ -3000,7 +3026,7 @@ void MusicXMLParserDirection::direction(const String& partId,
                 t->setFrameRound(0);
             }
 
-            String wordsPlacement = placement;
+            String wordsPlacement = m_placement;
             // Case-based defaults
             if (wordsPlacement.empty()) {
                 if (isVocalStaff) {
@@ -3010,17 +3036,21 @@ void MusicXMLParserDirection::direction(const String& partId,
                 }
             }
 
-            if (placement.empty() && hasTotalY()) {
-                placement = totalY() < 0 ? u"above" : u"below";
-            }
-            if (hasTotalY()) {
-                // Add element to score later, after collecting all the others and sorting by default-y
-                // This allows default-y to be at least respected by the order of elements
-                MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
-                    totalY(), t, track, placement, measure, tick + m_offset);
-                delayedDirections.push_back(delayedDirection);
+            if (isLikelyFingering()) {
+                m_logger->logDebugInfo(String(u"Inferring fingering: %1").arg(m_wordsText));
+                MusicXMLInferredFingering* inferredFingering = new MusicXMLInferredFingering(totalY(), t, m_wordsText, track,
+                                                                                             placement(), measure, tick + m_offset);
+                inferredFingerings.push_back(inferredFingering);
             } else {
-                addElemOffset(t, track, placement, measure, tick + m_offset);
+                if (hasTotalY()) {
+                    // Add element to score later, after collecting all the others and sorting by default-y
+                    // This allows default-y to be at least respected by the order of elements
+                    MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
+                        totalY(), t, track, placement(), measure, tick + m_offset);
+                    delayedDirections.push_back(delayedDirection);
+                } else {
+                    addElemOffset(t, track, placement(), measure, tick + m_offset);
+                }
             }
         }
     } else if (m_tpoSound > 0) {
@@ -3039,7 +3069,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             // TBD may want ro use tick + _offset if sound is affected
             m_score->setTempo(tick, tpo);
 
-            addElemOffset(t, track, placement, measure, tick + m_offset);
+            addElemOffset(t, track, placement(), measure, tick + m_offset);
         }
     }
 
@@ -3058,7 +3088,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             dyn->setVelocity(dynaValue);
         }
 
-        String dynamicsPlacement = placement;
+        String dynamicsPlacement = placement();
         // Case-based defaults
         if (dynamicsPlacement.empty()) {
             dynamicsPlacement = isVocalStaff ? u"above" : u"below";
@@ -3076,10 +3106,10 @@ void MusicXMLParserDirection::direction(const String& partId,
         // TODO (?) if (_hasDefaultY) elem->setYoff(_defaultY);
         if (hasTotalY()) {
             MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(
-                totalY(), elem, track, placement, measure, tick + m_offset);
+                totalY(), elem, track, placement(), measure, tick + m_offset);
             delayedDirections.push_back(delayedDirection);
         } else {
-            addElemOffset(elem, track, placement, measure, tick + m_offset);
+            addElemOffset(elem, track, placement(), measure, tick + m_offset);
         }
     }
 
@@ -3118,7 +3148,7 @@ void MusicXMLParserDirection::direction(const String& partId,
             m_logger->logError(u"spanner already started", &m_e);
             delete desc.sp;
         } else {
-            String spannerPlacement = placement;
+            String spannerPlacement = placement();
             // Case-based defaults
             if (spannerPlacement.empty()) {
                 if (desc.sp->isHairpin()) {
@@ -3515,6 +3545,120 @@ static Marker* findMarker(const String& repeat, Score* score)
         m->setMarkerType(MarkerType::TOCODA);
     }
     return m;
+}
+
+//---------------------------------------------------------
+//   isLikelyFingering
+//---------------------------------------------------------
+
+bool MusicXMLParserDirection::isLikelyFingering() const
+{
+    // One or more newline-separated digits, possibly lead or trailed by whitespace
+    static const std::wregex re(L"^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$");
+    return m_wordsText.contains(re)
+           && m_rehearsalText.empty()
+           && m_metroText.empty()
+           && m_tpoSound < 0.1;
+}
+
+//---------------------------------------------------------
+//   MusicXMLInferredFingering
+//---------------------------------------------------------
+
+MusicXMLInferredFingering::MusicXMLInferredFingering(double totalY,
+                                                     EngravingItem* element,
+                                                     String& text,
+                                                     int track,
+                                                     String placement,
+                                                     Measure* measure,
+                                                     Fraction tick)
+    : m_totalY(totalY), m_element(element),  m_text(text), m_track(track), m_placement(placement), m_measure(measure), m_tick(tick)
+{
+    m_fingerings = m_text.simplified().split(u" ");
+}
+
+//---------------------------------------------------------
+//   roundTick
+//---------------------------------------------------------
+/**
+ Round tick to multiple of gcd of measure
+ */
+
+void MusicXMLInferredFingering::roundTick(Measure* measure)
+{
+    measure->computeTicks();
+    int gcdTicks = Fraction(1, 1).ticks();
+    for (auto s = measure->segments().begin(); s != measure->segments().end(); ++s) {
+        if ((*s).isChordRestType()) {
+            gcdTicks = std::gcd(gcdTicks, (*s).ticks().ticks());
+        }
+    }
+    if (!gcdTicks || gcdTicks == Fraction(1, 1).ticks() || !(m_tick.ticks() % gcdTicks)) {
+        return;
+    }
+    int roundedTick = std::round(static_cast<double>(m_tick.ticks()) / static_cast<double>(gcdTicks)) * (gcdTicks);
+    m_tick = Fraction::fromTicks(roundedTick);
+}
+
+//---------------------------------------------------------
+//   findAndAddToNotes
+//---------------------------------------------------------
+/**
+ Attempts to find an eligible collection of notes to add inferred
+ fingerings to. Adds notes and returns true if successful, else no-op
+ and returns false.
+ */
+bool MusicXMLInferredFingering::findAndAddToNotes(Measure* measure)
+{
+    roundTick(measure);
+    std::vector<Note*> collectedNotes;
+    for (int track = m_track; track < m_track + 4; ++track) {
+        Chord* candidateChord = measure->findChord(tick(), track);
+        if (candidateChord) {
+            if (candidateChord->notes().size() >= fingerings().size()) {
+                addToNotes(candidateChord->notes());
+                return true;
+            } else {
+                collectedNotes.insert(collectedNotes.begin(),
+                                      candidateChord->notes().begin(),
+                                      candidateChord->notes().end());
+                if (collectedNotes.size() >= fingerings().size()) {
+                    addToNotes(collectedNotes);
+                    return true;
+                }
+            }
+        }
+    }
+    // No suitable notes found
+    return false;
+}
+
+//---------------------------------------------------------
+//   addToNotes
+//---------------------------------------------------------
+/**
+ Add the n fingerings to the first n collected notes
+ */
+void MusicXMLInferredFingering::addToNotes(std::vector<Note*>& notes) const
+{
+    assert(notes.size() >= m_fingerings.size());
+    for (size_t i = 0; i < m_fingerings.size(); ++i) {
+        // Fingerings in reverse order
+        addTextToNote(-1, -1,
+                      m_fingerings[m_fingerings.size() - 1 - i], m_placement, u"", -1, u"", u"", TextStyleType::FINGERING,
+                      notes[i]->score(),
+                      notes[i]);
+    }
+}
+
+//---------------------------------------------------------
+//   toDelayedDirection
+//---------------------------------------------------------
+
+MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
+{
+    auto dd = new MusicXMLDelayedDirectionElement(m_totalY, m_element, m_track, m_placement, m_measure, m_tick);
+    return dd;
 }
 
 //---------------------------------------------------------
