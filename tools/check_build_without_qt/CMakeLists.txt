@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 project(engraving_app LANGUAGES CXX)
 
@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(MU_ROOT ${CMAKE_CURRENT_LIST_DIR}/../..)
-set(PROJECT_ROOT_DIR ${MU_ROOT})
+set(MUSE_FRAMEWORK_PATH ${MU_ROOT})
 
 set(CMAKE_MODULE_PATH
     ${MU_ROOT}/build
