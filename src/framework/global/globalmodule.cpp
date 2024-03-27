@@ -34,7 +34,7 @@
 #include "internal/process.h"
 #include "internal/systeminfo.h"
 
-#ifdef MU_BUILD_UI_MODULE
+#ifdef MUE_BUILD_UI_MODULE
 #include "internal/interactive.h"
 #endif
 
@@ -88,7 +88,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IProcess>(moduleName(), new Process());
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 
-#ifdef MU_BUILD_UI_MODULE
+#ifdef MUE_BUILD_UI_MODULE
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
 #endif
 }
