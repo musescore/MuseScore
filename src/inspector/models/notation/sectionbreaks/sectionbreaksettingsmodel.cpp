@@ -40,6 +40,7 @@ void SectionBreakSettingsModel::createProperties()
     m_shouldStartWithLongInstrNames = buildPropertyItem(mu::engraving::Pid::START_WITH_LONG_NAMES);
     m_shouldResetBarNums = buildPropertyItem(mu::engraving::Pid::START_WITH_MEASURE_ONE);
     m_pauseDuration = buildPropertyItem(mu::engraving::Pid::PAUSE);
+    m_firstSystemIndent = buildPropertyItem(mu::engraving::Pid::FIRST_SYSTEM_INDENTATION);
 }
 
 void SectionBreakSettingsModel::requestElements()
@@ -52,6 +53,7 @@ void SectionBreakSettingsModel::loadProperties()
     loadPropertyItem(m_shouldStartWithLongInstrNames);
     loadPropertyItem(m_shouldResetBarNums);
     loadPropertyItem(m_pauseDuration, formatDoubleFunc);
+    loadPropertyItem(m_firstSystemIndent);
 }
 
 void SectionBreakSettingsModel::resetProperties()
@@ -59,6 +61,7 @@ void SectionBreakSettingsModel::resetProperties()
     m_shouldStartWithLongInstrNames->resetToDefault();
     m_shouldResetBarNums->resetToDefault();
     m_pauseDuration->resetToDefault();
+    m_firstSystemIndent->resetToDefault();
 }
 
 PropertyItem* SectionBreakSettingsModel::shouldStartWithLongInstrNames() const
@@ -74,4 +77,9 @@ PropertyItem* SectionBreakSettingsModel::shouldResetBarNums() const
 PropertyItem* SectionBreakSettingsModel::pauseDuration() const
 {
     return m_pauseDuration;
+}
+
+PropertyItem* SectionBreakSettingsModel::firstSystemIndent() const
+{
+    return m_firstSystemIndent;
 }
