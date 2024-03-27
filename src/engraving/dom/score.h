@@ -32,23 +32,24 @@
 #include <memory>
 #include <optional>
 
-#include "async/channel.h"
-#include "types/ret.h"
-#include "compat/midi/compatmidirenderinternal.h"
+#include "global/async/channel.h"
+#include "global/types/ret.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
-#include "iengravingfontsprovider.h"
 #include "global/iapplication.h"
+#include "../iengravingfontsprovider.h"
 
-#include "types/constants.h"
+#include "../types/constants.h"
 
-#include "rendering/iscorerenderer.h"
-#include "rendering/layoutoptions.h"
-#include "rendering/paddingtable.h"
+#include "../rendering/iscorerenderer.h"
+#include "../rendering/layoutoptions.h"
+#include "../rendering/paddingtable.h"
 
-#include "style/style.h"
-#include "style/pagestyle.h"
+#include "../style/style.h"
+#include "../style/pagestyle.h"
+
+#include "../compat/midi/compatmidirenderinternal.h"
 
 #include "chordlist.h"
 #include "input.h"

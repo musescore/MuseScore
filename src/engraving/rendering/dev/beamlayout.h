@@ -24,11 +24,10 @@
 
 #include <vector>
 
-#include "types/types.h"
+#include "../../types/types.h"
+#include "../../dom/beam.h"
 
 #include "layoutcontext.h"
-
-#include "dom/beam.h"
 
 namespace mu::engraving {
 class Beam;

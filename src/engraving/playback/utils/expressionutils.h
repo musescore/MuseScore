@@ -25,7 +25,7 @@
 
 #include "mpe/mpetypes.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 struct DynamicTransition {

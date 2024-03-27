@@ -26,12 +26,11 @@
 #include <array>
 #include <cassert>
 
-#include "io/iodevice.h"
-
-#include "types/dimension.h"
-
-#include "types/propertyvalue.h"
+#include "global/io/iodevice.h"
 #include "draw/types/geometry.h"
+
+#include "../types/dimension.h"
+#include "../types/propertyvalue.h"
 
 #include "styledef.h"
 

@@ -34,7 +34,7 @@
 # set(MODULE_USE_PCH_NONE ON)                 - set for disable PCH for module
 # set(MODULE_USE_UNITY_NONE ON)               - set for disable UNITY BUILD for module
 # set(MODULE_OVERRIDDEN_PCH ...)              - set additional precompiled headers required for module
-# set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR}) - set root dir for module
+# set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR}) - set root dir of framework
 # set(MODULE_IS_STUB ON)                      - set a mark that the module is stub
 
 # After all the settings you need to do:
@@ -46,8 +46,8 @@ else()
     message(STATUS "Configuring " ${MODULE})
 endif()
 
-if (NOT PROJECT_ROOT_DIR)
-    set(PROJECT_ROOT_DIR ${PROJECT_SOURCE_DIR})
+if (NOT MUSE_FRAMEWORK_PATH)
+    set(MUSE_FRAMEWORK_PATH ${PROJECT_SOURCE_DIR})
 endif()
 
 if (MODULE_QRC AND NOT NO_QT_SUPPORT)
@@ -88,6 +88,7 @@ if (CC_IS_EMSCRIPTEN)
     add_library(${MODULE} OBJECT)
 else()
     add_library(${MODULE}) # STATIC/SHARED set global in the SetupBuildEnvironment.cmake
+    add_library(muse::${MODULE} ALIAS ${MODULE})
 endif()
 
 if (BUILD_SHARED_LIBS)
@@ -113,7 +114,7 @@ if (MUE_COMPILE_USE_PCH)
                 set(MODULE_NOT_LINK_GLOBAL OFF)
             endif()
         else()
-            target_precompile_headers(${MODULE} PRIVATE ${PROJECT_SOURCE_DIR}/build/pch/pch.h)
+            target_precompile_headers(${MODULE} PRIVATE ${MUSE_FRAMEWORK_PATH}/build/pch/pch.h)
         endif()
     endif()
 endif(MUE_COMPILE_USE_PCH)
@@ -138,18 +139,18 @@ target_include_directories(${MODULE} PUBLIC
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${MODULE_ROOT}
-    ${PROJECT_ROOT_DIR}
-    ${PROJECT_ROOT_DIR}/src
-    ${PROJECT_ROOT_DIR}/src/framework
-    ${PROJECT_ROOT_DIR}/src/framework/global
-    ${PROJECT_ROOT_DIR}/src/engraving
-    ${PROJECT_ROOT_DIR}/thirdparty/googletest/googletest/include
+    ${MUSE_FRAMEWORK_PATH}
+    ${MUSE_FRAMEWORK_PATH}/src
+    ${MUSE_FRAMEWORK_PATH}/src/framework
+    ${MUSE_FRAMEWORK_PATH}/src/framework/global
+    ${MUSE_FRAMEWORK_PATH}/framework
+    ${MUSE_FRAMEWORK_PATH}/framework/global
+    ${MUSE_FRAMEWORK_PATH}/thirdparty/googletest/googletest/include
     ${MODULE_INCLUDE}
 )
 
 target_compile_definitions(${MODULE} PUBLIC
     ${MODULE_DEF}
-    PROJECT_ROOT_DIR="${PROJECT_ROOT_DIR}"
     ${MODULE}_QML_IMPORT="${MODULE_QML_IMPORT}"
 )
 
@@ -159,7 +160,6 @@ if (NOT ${MODULE} MATCHES global)
     endif()
 endif()
 
-set(MODULE_LINK ${QT_LIBRARIES} ${MODULE_LINK})
-set(MODULE_LINK ${CMAKE_DL_LIBS} ${MODULE_LINK})
+set(MODULE_LINK ${CMAKE_DL_LIBS} ${QT_LIBRARIES} ${MODULE_LINK})
 
 target_link_libraries(${MODULE} PRIVATE ${MODULE_LINK} )

@@ -23,9 +23,9 @@
 #ifndef MU_ENGRAVING_PROPERTY_H
 #define MU_ENGRAVING_PROPERTY_H
 
-#include "types/string.h"
+#include "global/types/string.h"
 
-#include "types/propertyvalue.h"
+#include "../types/propertyvalue.h"
 
 namespace mu::engraving {
 //------------------------------------------------------------------------

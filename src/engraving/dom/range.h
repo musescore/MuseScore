@@ -28,8 +28,8 @@
 
 #include "global/allocator.h"
 
-#include "types/fraction.h"
-#include "types/types.h"
+#include "../types/fraction.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class EngravingItem;

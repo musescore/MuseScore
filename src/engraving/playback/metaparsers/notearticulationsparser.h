@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_NOTEARTICULATIONSPARSER_H
 #define MU_ENGRAVING_NOTEARTICULATIONSPARSER_H
 
-#include "types/types.h"
+#include "../types/types.h"
 #include "metaparserbase.h"
 
 namespace mu::engraving {

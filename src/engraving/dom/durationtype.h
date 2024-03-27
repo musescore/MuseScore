@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_DURATIONTYPE_H
 #define MU_ENGRAVING_DURATIONTYPE_H
 
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Measure;

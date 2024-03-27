@@ -23,9 +23,9 @@
 #ifndef MU_ENGRAVING_HAIRPIN_H
 #define MU_ENGRAVING_HAIRPIN_H
 
-#include "textlinebase.h"
+#include "../types/types.h"
 
-#include "types/types.h"
+#include "textlinebase.h"
 
 namespace mu::engraving {
 class Hairpin;

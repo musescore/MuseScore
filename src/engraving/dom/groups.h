@@ -23,9 +23,8 @@
 #ifndef MU_ENGRAVING_GROUPS_H
 #define MU_ENGRAVING_GROUPS_H
 
-#include "durationtype.h"
-
-#include "types/groupnode.h"
+#include "../types/groupnode.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class ChordRest;

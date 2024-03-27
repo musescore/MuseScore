@@ -24,7 +24,7 @@
 
 #include <array>
 
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class MStyle;

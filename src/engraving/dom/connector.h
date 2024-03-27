@@ -26,7 +26,7 @@
 #include "global/allocator.h"
 
 #include "location.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class EngravingItem;

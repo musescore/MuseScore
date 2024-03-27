@@ -27,7 +27,7 @@
 
 #include "mscore.h"
 #include "instrument.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving::read206 {
 class Read206;

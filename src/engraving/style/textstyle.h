@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_TEXTSTYLE_H
 
 #include "styledef.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 enum class TextStylePropertyType : char {

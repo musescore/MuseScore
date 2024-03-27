@@ -25,15 +25,15 @@
 #include <memory>
 #include <cassert>
 
-#include "types/string.h"
-#include "types/types.h"
-#include "types/symid.h"
-
-#include "global/logstream.h"
-
 #ifndef NO_QT_SUPPORT
 #include <QVariant>
 #endif
+
+#include "global/types/string.h"
+#include "global/logstream.h"
+
+#include "../types/types.h"
+#include "../types/symid.h"
 
 namespace mu::engraving {
 class Groups;

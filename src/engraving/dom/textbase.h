@@ -25,11 +25,11 @@
 
 #include <variant>
 
-#include "modularity/ioc.h"
-
 #include "draw/fontmetrics.h"
 #include "draw/types/color.h"
-#include "iengravingfontsprovider.h"
+
+#include "modularity/ioc.h"
+#include "../iengravingfontsprovider.h"
 
 #include "engravingitem.h"
 #include "property.h"

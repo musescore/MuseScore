@@ -28,7 +28,7 @@
 
 #include "global/allocator.h"
 #include "types/string.h"
-#include "types/fraction.h"
+#include "../types/fraction.h"
 
 namespace mu::engraving {
 int ticks_beat(int n);

@@ -29,10 +29,10 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "../iengravingconfiguration.h"
 
 namespace mu::engraving {
 class Chord;

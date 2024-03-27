@@ -24,8 +24,8 @@
 
 #include "global/types/ret.h"
 
-#include "infrastructure/mscreader.h"
-#include "engraving/types/types.h"
+#include "../infrastructure/mscreader.h"
+#include "../types/types.h"
 
 namespace mu::engraving::compat {
 class ReadStyleHook;

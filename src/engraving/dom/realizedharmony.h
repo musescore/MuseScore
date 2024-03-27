@@ -26,7 +26,7 @@
 #include <map>
 
 #include "containers.h"
-#include "types/fraction.h"
+#include "../types/fraction.h"
 
 namespace mu::engraving {
 class Harmony;

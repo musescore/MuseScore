@@ -26,7 +26,7 @@
 #include "mpe/mpetypes.h"
 #include "mpe/events.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Segment;

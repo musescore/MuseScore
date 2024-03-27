@@ -26,7 +26,7 @@
 #include <optional>
 
 #include "textlinebase.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class GradualTempoChangeSegment;

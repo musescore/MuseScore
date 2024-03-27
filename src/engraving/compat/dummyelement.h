@@ -22,9 +22,7 @@
 #ifndef MU_ENGRAVING_DUMMYELEMENT_H
 #define MU_ENGRAVING_DUMMYELEMENT_H
 
-#include <list>
-
-#include "dom/engravingitem.h"
+#include "../dom/engravingitem.h"
 
 namespace mu::engraving {
 enum class Pid : int;

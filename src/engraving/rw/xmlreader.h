@@ -29,7 +29,7 @@
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"
 
-#include "types/fraction.h"
+#include "../types/fraction.h"
 
 namespace mu::engraving {
 class XmlReader : public XmlStreamReader

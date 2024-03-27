@@ -26,8 +26,7 @@
 #include <map>
 #include <vector>
 
-#include <compat/midi/midiinstrumenteffects.h>
-
+#include "midiinstrumenteffects.h"
 #include "midicoreevent.h"
 
 namespace mu::engraving {

@@ -23,8 +23,8 @@
 #ifndef MU_ENGRAVING_EXCERPT_H
 #define MU_ENGRAVING_EXCERPT_H
 
-#include "types/fraction.h"
-#include "types/types.h"
+#include "../types/fraction.h"
+#include "../types/types.h"
 #include "types/string.h"
 
 #include "async/notification.h"

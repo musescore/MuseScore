@@ -21,16 +21,15 @@
  */
 #include "projectmigrator.h"
 
+#include <QVersionNumber>
+
 #include "engraving/types/constants.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/undo.h"
-
-#include "rw/compat/readstyle.h"
+#include "engraving/rw/compat/readstyle.h"
 
 #include "log.h"
-
-#include <QVersionNumber>
 
 using namespace mu;
 using namespace mu::project;

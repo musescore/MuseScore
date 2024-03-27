@@ -31,10 +31,10 @@
 #include <map>
 
 #include "modularity/ioc.h"
-#include "iengravingfontsprovider.h"
+#include "../iengravingfontsprovider.h"
 
-#include "style/style.h"
-#include "compat/midi/midipatch.h"
+#include "../style/style.h"
+#include "../compat/midi/midipatch.h"
 
 #include "bend.h"
 #include "bracket.h"

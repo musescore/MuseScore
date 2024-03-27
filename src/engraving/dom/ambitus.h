@@ -27,7 +27,7 @@
 
 #include "pitchspelling.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 #include "dom/types.h"
 #include "types/dimension.h"
 
