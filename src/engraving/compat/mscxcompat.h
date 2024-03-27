@@ -22,8 +22,8 @@
 #ifndef MU_ENGRAVING_MSCXCOMPAT_H
 #define MU_ENGRAVING_MSCXCOMPAT_H
 
-#include "dom/masterscore.h"
-#include "engravingproject.h"
+#include "../dom/masterscore.h"
+#include "../engravingproject.h"
 
 namespace mu::engraving::compat {
 Ret mscxToMscz(const String& mscxFilePath, ByteArray* msczData);

@@ -25,7 +25,7 @@
 #include <cstdint>
 
 #include "eid.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class GetEID

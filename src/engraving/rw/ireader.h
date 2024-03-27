@@ -27,7 +27,7 @@
 #include <variant>
 
 #include "engravingerrors.h"
-#include "types/types.h"
+#include "../types/types.h"
 #include "xmlreader.h"
 
 namespace mu::engraving {

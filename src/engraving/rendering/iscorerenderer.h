@@ -26,7 +26,8 @@
 
 #include "modularity/imoduleinterface.h"
 #include "draw/types/geometry.h"
-#include "types/fraction.h"
+
+#include "../types/fraction.h"
 
 namespace mu::draw {
 class Painter;

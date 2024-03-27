@@ -28,10 +28,8 @@
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
 
-#include "dom/engravingitem.h"
-#include "dom/textbase.h"
-
-//! NOTE At the moment this is just a concept, not a production-ready system, a lot of work yet.
+#include "../dom/engravingitem.h"
+#include "../dom/textbase.h"
 
 namespace mu::engraving {
 class AccessibleRoot;

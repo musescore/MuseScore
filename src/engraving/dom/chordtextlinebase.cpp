@@ -27,7 +27,7 @@
 #include "segment.h"
 #include "score.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 using namespace mu;
 using namespace mu::engraving;

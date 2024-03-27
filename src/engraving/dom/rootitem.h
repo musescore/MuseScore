@@ -24,7 +24,7 @@
 
 #include "engravingitem.h"
 
-#include "compat/dummyelement.h"
+#include "../compat/dummyelement.h"
 
 namespace mu::engraving {
 class Score;

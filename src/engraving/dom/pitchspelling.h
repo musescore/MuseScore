@@ -26,7 +26,7 @@
 #include <vector>
 
 #include "types/string.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class MidiNote;

@@ -26,7 +26,9 @@
 #include <deque>
 
 #include "draw/types/color.h"
-#include "types/types.h"
+
+#include "../types/types.h"
+
 #include "engravingitem.h"
 
 namespace mu::engraving {

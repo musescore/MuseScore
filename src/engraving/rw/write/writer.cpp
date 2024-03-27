@@ -21,7 +21,7 @@
  */
 #include "writer.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 #include "dom/score.h"
 #include "dom/masterscore.h"

@@ -23,9 +23,9 @@
 #ifndef MU_ENGRAVING_FERMATA_H
 #define MU_ENGRAVING_FERMATA_H
 
-#include "engravingitem.h"
+#include "../types/types.h"
 
-#include "types/types.h"
+#include "engravingitem.h"
 
 namespace mu::engraving {
 class ChordRest;

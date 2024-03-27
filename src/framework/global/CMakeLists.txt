@@ -189,6 +189,13 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipwriter_p.h
         )
 
+    if (MU_BUILD_UI_MODULE)
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/interactive.h
+        )
+    endif()
+
     include(GetPlatformInfo)
 
     if (OS_IS_MAC)

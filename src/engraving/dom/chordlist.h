@@ -26,12 +26,12 @@
 #include <map>
 
 #include "global/allocator.h"
-#include "types/string.h"
-#include "containers.h"
-#include "io/iodevice.h"
+#include "global/types/string.h"
+#include "global/containers.h"
+#include "global/io/iodevice.h"
 
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "../iengravingconfiguration.h"
 
 namespace mu::engraving::compat {
 class ReadChordListHook;

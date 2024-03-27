@@ -35,7 +35,7 @@
 #include "mpe/events.h"
 #include "mpe/iarticulationprofilesrepository.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 #include "playbackeventsrenderer.h"
 #include "playbacksetupdataresolver.h"
 #include "playbackcontext.h"

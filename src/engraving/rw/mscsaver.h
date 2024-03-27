@@ -25,7 +25,7 @@
 #include "global/modularity/ioc.h"
 #include "draw/iimageprovider.h"
 
-#include "infrastructure/mscwriter.h"
+#include "../infrastructure/mscwriter.h"
 
 namespace mu::engraving {
 class MasterScore;

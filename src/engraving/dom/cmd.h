@@ -24,7 +24,7 @@
 
 #include <list>
 
-#include "types/types.h"
+#include "../types/types.h"
 #include "engravingobject.h"
 
 namespace mu::engraving {

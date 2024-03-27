@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_RTTI_H
 
 #include "global/runtime.h"
-#include "types/types.h"
+#include "../types/types.h"
 #include "log.h"
 
 namespace mu::engraving {

@@ -26,7 +26,7 @@
 #include "global/io/buffer.h"
 #include "global/types/retval.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 #include "../dom/masterscore.h"
 #include "../dom/audio.h"

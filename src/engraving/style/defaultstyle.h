@@ -22,10 +22,10 @@
 #ifndef MU_ENGRAVING_DEFAULTSTYLE_H
 #define MU_ENGRAVING_DEFAULTSTYLE_H
 
-#include "io/path.h"
+#include "global/io/path.h"
 
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
+#include "../iengravingconfiguration.h"
 
 #include "style.h"
 

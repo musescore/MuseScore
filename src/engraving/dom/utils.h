@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_UTILS_H
 #define MU_ENGRAVING_UTILS_H
 
-#include "types/types.h"
+#include "../types/types.h"
 
 #include "interval.h"
 

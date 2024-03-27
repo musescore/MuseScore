@@ -29,7 +29,7 @@
 
 #include "durationtype.h"
 #include "draw/types/painterpath.h"
-#include "types/types.h"
+#include "../types/types.h"
 #include "beam.h"
 #include "chord.h"
 

@@ -27,7 +27,8 @@
 #include <string_view>
 
 #include "global/logstream.h"
-#include "types/types.h"
+
+#include "../types/types.h"
 
 namespace mu::engraving {
 class EID

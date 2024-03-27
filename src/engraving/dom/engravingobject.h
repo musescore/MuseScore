@@ -27,17 +27,16 @@
 #include "types/string.h"
 
 #include "draw/types/geometry.h"
+#include "modularity/ioc.h"
+#include "diagnostics/iengravingelementsprovider.h"
 
-#include "style/styledef.h"
+#include "../style/styledef.h"
 
-#include "types/propertyvalue.h"
-#include "types/types.h"
+#include "../types/propertyvalue.h"
+#include "../types/types.h"
 
 #include "../infrastructure/rtti.h"
 #include "../infrastructure/eid.h"
-
-#include "modularity/ioc.h"
-#include "diagnostics/iengravingelementsprovider.h"
 
 namespace mu {
 class TranslatableString;

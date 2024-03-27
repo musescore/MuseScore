@@ -25,10 +25,10 @@
 
 #include <memory>
 
-#include "modularity/ioc.h"
 #include "draw/types/font.h"
 
-#include "iengravingfontsprovider.h"
+#include "modularity/ioc.h"
+#include "../iengravingfontsprovider.h"
 
 #include "bsymbol.h"
 

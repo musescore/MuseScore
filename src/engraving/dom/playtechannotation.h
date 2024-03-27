@@ -24,7 +24,7 @@
 #define MU_ENGRAVING_PLAYINGTECHNIQUEANNOTATION_H
 
 #include "stafftextbase.h"
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class PlayTechAnnotation final : public StaffTextBase

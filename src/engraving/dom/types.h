@@ -25,11 +25,12 @@
 
 #include <unordered_set>
 
-#include "containers.h"
-#include "types/types.h"
+#include "global/containers.h"
+
+#include "../types/types.h"
+#include "../style/styledef.h"
 
 #include "property.h"
-#include "style/styledef.h"
 
 namespace mu::engraving {
 class EngravingItem;

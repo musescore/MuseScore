@@ -29,7 +29,7 @@
 #include "mscore.h"
 #include "types.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class ChordRest;

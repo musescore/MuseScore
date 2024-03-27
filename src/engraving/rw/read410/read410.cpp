@@ -21,7 +21,7 @@
  */
 #include "read410.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 #include "dom/audio.h"
 #include "dom/excerpt.h"

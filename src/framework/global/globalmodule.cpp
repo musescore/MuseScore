@@ -29,11 +29,14 @@
 #include "profiler.h"
 
 #include "internal/application.h"
-#include "internal/interactive.h"
 #include "internal/invoker.h"
 #include "internal/cryptographichash.h"
 #include "internal/process.h"
 #include "internal/systeminfo.h"
+
+#ifdef MU_BUILD_UI_MODULE
+#include "internal/interactive.h"
+#endif
 
 #include "runtime.h"
 #include "async/processevents.h"
@@ -49,7 +52,9 @@
 #include "api/filesystemapi.h"
 #include "api/processapi.h"
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
 #include "diagnostics/idiagnosticspathsregister.h"
+#endif
 
 #include "log.h"
 
@@ -78,11 +83,14 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IApplication>(moduleName(), m_application);
     ioc()->registerExport<IGlobalConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<ISystemInfo>(moduleName(), m_systemInfo);
-    ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
     ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
     ioc()->registerExport<ICryptographicHash>(moduleName(), new CryptographicHash());
     ioc()->registerExport<IProcess>(moduleName(), new Process());
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
+
+#ifdef MU_BUILD_UI_MODULE
+    ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
+#endif
 }
 
 void GlobalModule::registerApi()
@@ -189,6 +197,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     });
 
     //! --- Diagnostics ---
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("appBinPath", m_configuration->appBinPath());
@@ -201,6 +210,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         pr->reg("log file", logFilePath);
         pr->reg("settings file", settings()->filePath());
     }
+#endif
 }
 
 void GlobalModule::onInit(const IApplication::RunMode&)

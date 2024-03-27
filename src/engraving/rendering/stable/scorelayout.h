@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_SCORELAYOUT_STABLE_H
 #define MU_ENGRAVING_SCORELAYOUT_STABLE_H
 
-#include "types/fraction.h"
+#include "../types/fraction.h"
 
 namespace mu::engraving {
 class Score;

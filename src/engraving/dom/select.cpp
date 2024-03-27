@@ -28,7 +28,7 @@
 #include "global/containers.h"
 #include "global/io/buffer.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 #include "rw/rwregister.h"
 

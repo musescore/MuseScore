@@ -25,25 +25,24 @@
 
 #include <optional>
 
-#include "engravingobject.h"
-#include "elementgroup.h"
-
 #include "draw/types/color.h"
 #include "draw/types/geometry.h"
 #include "draw/painter.h"
 
 #include "modularity/ioc.h"
-#include "iengravingconfiguration.h"
-#include "rendering/iscorerenderer.h"
+#include "../iengravingconfiguration.h"
+#include "../rendering/iscorerenderer.h"
 
-#include "infrastructure/ld_access.h"
-#include "infrastructure/shape.h"
-#include "infrastructure/skyline.h"
+#include "../infrastructure/ld_access.h"
+#include "../infrastructure/shape.h"
+#include "../infrastructure/skyline.h"
 
-#include "types/fraction.h"
-#include "types/symid.h"
-#include "types/types.h"
+#include "../types/fraction.h"
+#include "../types/symid.h"
+#include "../types/types.h"
 
+#include "engravingobject.h"
+#include "elementgroup.h"
 #include "editdata.h"
 
 #define DECLARE_LAYOUTDATA_METHODS(Class) \

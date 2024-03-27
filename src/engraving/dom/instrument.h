@@ -25,15 +25,15 @@
 
 #include <list>
 
-#include "containers.h"
-#include "types/string.h"
+#include "global/containers.h"
+#include "global/types/string.h"
 
 #include "clef.h"
 #include "interval.h"
 #include "notifier.h"
 #include "stringdata.h"
 
-#include "compat/midi/midicoreevent.h"
+#include "../compat/midi/midicoreevent.h"
 
 namespace mu::engraving {
 class ChannelListener;

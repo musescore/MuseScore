@@ -25,9 +25,9 @@
 
 #include <functional>
 
-#include "durationelement.h"
-#include "types/types.h"
+#include "../types/types.h"
 
+#include "durationelement.h"
 #include "fermata.h"
 
 namespace mu::engraving {

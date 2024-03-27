@@ -26,7 +26,7 @@
 #include "engravingitem.h"
 #include "draw/types/painterpath.h"
 
-#include "types/types.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class Factory;

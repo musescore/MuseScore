@@ -25,8 +25,8 @@
 #include <vector>
 #include <set>
 
-#include "types/fraction.h"
-#include "types/types.h"
+#include "../types/fraction.h"
+#include "../types/types.h"
 
 #include "style/style.h"
 #include "iengravingfont.h"

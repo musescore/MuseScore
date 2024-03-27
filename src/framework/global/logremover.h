@@ -22,7 +22,9 @@
 #ifndef MU_LOGREMOVER_H
 #define MU_LOGREMOVER_H
 
+#ifdef MU_BUILD_UNIT_TESTS
 #include <gtest/gtest_prod.h>
+#endif
 
 #include "types/string.h"
 #include "types/datetime.h"
@@ -37,7 +39,9 @@ public:
 
 private:
 
+#ifdef MU_BUILD_UNIT_TESTS
     FRIEND_TEST(Global_LogRemoverTests, ParseDate);
+#endif
 
     static void scanDir(const io::path_t& logsDir, io::paths_t& files);
     static Date parseDate(const String& fileName);
