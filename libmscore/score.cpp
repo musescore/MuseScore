@@ -4427,6 +4427,7 @@ QString Score::extractLyrics()
       SegmentType st = SegmentType::ChordRest;
       for (int track = 0; track < ntracks(); track += VOICES) {
             bool found = false;
+      for (int track = 0; track < ntracks(); track++) {
             size_t maxLyrics = 1;
             const RepeatList& rlist = repeatList();
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
@@ -4439,7 +4440,6 @@ QString Score::extractLyrics()
                   for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
                         int playCount = m->playbackCount();
                         for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                              // consider voice 1 only
                               ChordRest* cr = toChordRest(seg->element(track));
                               if (!cr || cr->lyrics().empty())
                                     continue;
@@ -4468,7 +4468,6 @@ QString Score::extractLyrics()
                         unsigned playCount = m->playbackCount();
                         if (lyricsNumber >= playCount) {
                               for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                                    // consider voice 1 only
                                     ChordRest* cr = toChordRest(seg->element(track));
                                     if (!cr || cr->lyrics().empty())
                                           continue;
