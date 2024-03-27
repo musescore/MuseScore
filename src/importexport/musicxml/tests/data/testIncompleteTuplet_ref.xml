@@ -108,7 +108,7 @@
         <duration>107</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>9</actual-notes>
           <normal-notes>8</normal-notes>
@@ -127,7 +127,7 @@
         <duration>107</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>9</actual-notes>
           <normal-notes>8</normal-notes>
@@ -180,7 +180,7 @@
         <duration>107</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>flat</accidental>
+        <accidental cautionary="yes" parentheses="no">flat</accidental>
         <time-modification>
           <actual-notes>9</actual-notes>
           <normal-notes>8</normal-notes>
@@ -198,7 +198,7 @@
         <duration>107</duration>
         <voice>1</voice>
         <type>16th</type>
-        <accidental>natural</accidental>
+        <accidental cautionary="yes" parentheses="no">natural</accidental>
         <time-modification>
           <actual-notes>9</actual-notes>
           <normal-notes>8</normal-notes>
