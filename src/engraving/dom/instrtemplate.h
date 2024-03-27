@@ -182,6 +182,10 @@ extern const InstrumentTemplate* searchTemplate(const String& name);
 extern const InstrumentTemplate* searchTemplateForMusicXmlId(const String& mxmlId);
 extern const InstrumentTemplate* searchTemplateForInstrNameList(const std::list<String>& nameList, bool useDrumset = false);
 extern const InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bool useDrumset = false);
+extern const InstrumentGenre* searchInstrumentGenre(const String& id);
+
+extern void addTemplateToGroup(const InstrumentTemplate* templ, const String& groupId);
+
 extern ClefType defaultClef(int patch);
 } // namespace mu::engraving
 #endif

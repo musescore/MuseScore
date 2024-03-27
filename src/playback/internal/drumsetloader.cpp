@@ -86,14 +86,14 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
         return;
     }
 
-    muse::String drumMapping = museSampler()->drumMapping(instrumentId);
+    muse::ByteArray drumMapping = museSampler()->drumMapping(instrumentId);
     if (drumMapping.empty()) {
         m_drumsetCache.emplace(instrumentId, std::nullopt);
         return;
     }
 
     Drumset drumset;
-    readDrumset(drumMapping.toAscii(), drumset);
+    readDrumset(drumMapping, drumset);
     replaceDrumset(notation, trackId, drumset);
 
     m_drumsetCache.emplace(instrumentId, std::move(drumset));

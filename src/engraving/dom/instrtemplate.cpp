@@ -61,10 +61,10 @@ InstrumentIndex::InstrumentIndex(int g, int i, const InstrumentTemplate* it)
     }
 }
 
-static const InstrumentGenre* searchInstrumentGenre(const String& genre)
+const InstrumentGenre* searchInstrumentGenre(const String& id)
 {
     for (const InstrumentGenre* ig : instrumentGenres) {
-        if (ig->id == genre) {
+        if (ig->id == id) {
             return ig;
         }
     }
@@ -81,11 +81,11 @@ static const InstrumentFamily* searchInstrumentFamily(const String& name)
     return nullptr;
 }
 
-static const InstrumentGroup* searchInstrumentGroup(const String& name)
+static InstrumentGroup* searchInstrumentGroup(const String& id)
 {
     for (const InstrumentGroup* g : instrumentGroups) {
-        if (g->id == name) {
-            return g;
+        if (g->id == id) {
+            return const_cast<InstrumentGroup*>(g);
         }
     }
     return nullptr;
@@ -663,7 +663,7 @@ bool loadInstrumentTemplates(const muse::io::path_t& instrTemplatesPath)
                 const AsciiStringView tag(e.name());
                 if (tag == "instrument-group" || tag == "InstrumentGroup") {
                     String idGroup(e.attribute("id"));
-                    InstrumentGroup* group = const_cast<InstrumentGroup*>(searchInstrumentGroup(idGroup));
+                    InstrumentGroup* group = searchInstrumentGroup(idGroup);
                     if (group == 0) {
                         group = new InstrumentGroup;
                         instrumentGroups.push_back(group);
@@ -789,6 +789,18 @@ const InstrumentTemplate* searchTemplateForMidiProgram(int bank, int program, bo
     }
 
     return nullptr;
+}
+
+void addTemplateToGroup(const InstrumentTemplate* templ, const String& groupId)
+{
+    IF_ASSERT_FAILED(templ) {
+        return;
+    }
+
+    InstrumentGroup* group = searchInstrumentGroup(groupId);
+    if (group) {
+        group->instrumentTemplates.push_back(templ);
+    }
 }
 
 //---------------------------------------------------------

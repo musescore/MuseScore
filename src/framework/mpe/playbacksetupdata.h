@@ -66,6 +66,21 @@ struct PlaybackSetupData
         return result;
     }
 
+    bool isKnownSound() const
+    {
+        if (soundIdFromString(id) == SoundId::Unknown) {
+            return false;
+        }
+
+        for (const String& subCategory : subCategories) {
+            if (soundSubCategoryFromString(subCategory) == SoundSubCategory::Unknown) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     bool contains(const SoundSubCategory subcategory) const
     {
         return muse::contains(subCategories, soundSubCategoryToString(subcategory));

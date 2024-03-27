@@ -24,18 +24,19 @@
 
 #include "modularity/ioc.h"
 
-#include "async/channel.h"
+#include "iinstrumentsrepository.h"
 #include "async/asyncable.h"
 
 #include "io/ifilesystem.h"
-#include "iinstrumentsrepository.h"
 #include "inotationconfiguration.h"
+#include "framework/musesampler/imusesamplerinfo.h"
 
 namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable
 {
-    INJECT(muse::io::IFileSystem, fileSystem)
-    INJECT(INotationConfiguration, configuration)
+    Inject<muse::io::IFileSystem> fileSystem;
+    Inject<INotationConfiguration> configuration;
+    Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
     void init();
@@ -52,16 +53,16 @@ public:
     const InstrumentStringTuningsMap& stringTuningsPresets() const override;
 
 private:
+    using InstrumentTemplateMap = std::unordered_map<muse::String, const InstrumentTemplate*>;
+
     void load();
     void clear();
 
     bool loadStringTuningsPresets(const muse::io::path_t& path);
-
-    using InstrumentTemplateMap = std::unordered_map<String, const InstrumentTemplate*>;
+    void loadMuseInstruments(const InstrumentTemplateMap& standardInstrumentByMusicXmlId);
 
     InstrumentTemplateList m_instrumentTemplateList;
     InstrumentTemplateMap m_instrumentTemplateMap;
-
     InstrumentStringTuningsMap m_stringTuningsPresets;
 };
 }
