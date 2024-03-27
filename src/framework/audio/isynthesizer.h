@@ -44,6 +44,9 @@ public:
     virtual msecs_t playbackPosition() const = 0;
     virtual void setPlaybackPosition(const msecs_t newPosition) = 0;
 
+    virtual TrackId trackId() const = 0;
+    virtual void setTrackId(TrackId trackId) = 0;
+
     virtual void revokePlayingNotes() = 0;
     virtual void flushSound() = 0;
 };

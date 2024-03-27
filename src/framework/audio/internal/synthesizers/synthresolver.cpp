@@ -66,7 +66,9 @@ ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioIn
         return nullptr;
     }
 
-    return resolver->resolveSynth(trackId, params);
+    ISynthesizerPtr synth = resolver->resolveSynth(trackId, params);
+    synth->setTrackId(trackId);
+    return synth;
 }
 
 ISynthesizerPtr SynthResolver::resolveDefaultSynth(const TrackId trackId) const

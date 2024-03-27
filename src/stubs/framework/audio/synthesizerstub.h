@@ -46,6 +46,9 @@ public:
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
+    TrackId trackId() const override;
+    void setTrackId(TrackId trackId) override;
+
     msecs_t playbackPosition() const override;
     void setPlaybackPosition(const msecs_t newPosition) override;
 
@@ -58,6 +61,8 @@ public:
 
 private:
     audio::AudioInputParams m_params;
+
+    TrackId m_trackId = -1;
 };
 }
 

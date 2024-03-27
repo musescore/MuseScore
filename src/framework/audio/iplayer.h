@@ -28,6 +28,8 @@
 #include "global/async/promise.h"
 #include "global/async/channel.h"
 
+#include "midi/midievent.h"
+
 #include "audiotypes.h"
 
 namespace mu::audio {
@@ -48,6 +50,9 @@ public:
 
     virtual async::Channel<TrackSequenceId, msecs_t> playbackPositionMsecs() const = 0;
     virtual async::Channel<TrackSequenceId, PlaybackStatus> playbackStatusChanged() const = 0;
+
+    virtual async::Channel<TrackId, midi::Event> midiEvent() const = 0;
+    virtual async::Channel<TrackId> playingNotesRevoked() const = 0;
 };
 
 using IPlayerPtr = std::shared_ptr<IPlayer>;

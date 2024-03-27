@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2024 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,27 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_FLUIDSYNTH_H
-#define MU_AUDIO_FLUIDSYNTH_H
-
-#include <memory>
-#include <optional>
-#include <vector>
-
-#include "global/modularity/ioc.h"
-
 #include "../../abstractsynthesizer.h"
-#include "fluidsequencer.h"
+#include "../fluidsynth/fluidsequencer.h"
+#include "iplayback.h"
+
+#ifndef MU_AUDIO_MIDIOUTPUTSYNTH_H
+#define MU_AUDIO_MIDIOUTPUTSYNTH_H
 
 namespace mu::audio::synth {
-struct Fluid;
-class FluidSynth : public AbstractSynthesizer
+class MidiOutputSynth : public AbstractSynthesizer
 {
-public:
-    FluidSynth(const audio::AudioSourceParams& params);
+    Inject<IPlayback> playback;
 
-    Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
-    void setPreset(const std::optional<midi::Program>& preset);
+public:
+    MidiOutputSynth(const AudioSourceParams& params);
 
     std::string name() const override;
     AudioSourceType type() const override;
@@ -64,55 +57,14 @@ public:
     bool isValid() const override;
 
 private:
-    struct KeyTuning {
-        std::vector<int> keys;
-        std::vector<double> pitches;
-
-        void add(int key, double tuning)
-        {
-            keys.push_back(key);
-            pitches.push_back((key * 100.0) + tuning);
-        }
-
-        int size() const
-        {
-            return static_cast<int>(keys.size());
-        }
-
-        void reset()
-        {
-            keys.clear();
-            pitches.clear();
-        }
-
-        bool isEmpty() const
-        {
-            return keys.empty() && pitches.empty();
-        }
-    };
-
-    Ret init();
-    void createFluidInstance();
-
     bool handleEvent(const midi::Event& event);
 
-    void toggleExpressionController();
-
-    int setExpressionLevel(int level);
-    int setControllerValue(const midi::Event& event);
-
-    std::shared_ptr<Fluid> m_fluid = nullptr;
-
-    async::Channel<unsigned int> m_streamsCountChanged;
-
     FluidSequencer m_sequencer;
-    std::set<io::path_t> m_sfontPaths;
     std::optional<midi::Program> m_preset;
-
-    KeyTuning m_tuning;
+    async::Channel<unsigned int> m_streamsCountChanged;
 };
 
-using FluidSynthPtr = std::shared_ptr<FluidSynth>;
+using MidiOutputSynthPtr = std::shared_ptr<MidiOutputSynth>;
 }
 
-#endif //MU_AUDIO_FLUIDSYNTH_H
+#endif //MU_AUDIO_MIDIOUTPUTSYNTH_H

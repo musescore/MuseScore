@@ -29,7 +29,9 @@
 #include "context/iglobalcontext.h"
 #include "shortcuts/imidiremote.h"
 #include "inotationconfiguration.h"
+#include "audio/iplayback.h"
 #include "async/asyncable.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::notation {
 class MidiInputOutputController : public async::Asyncable
@@ -40,6 +42,8 @@ class MidiInputOutputController : public async::Asyncable
     INJECT(context::IGlobalContext, globalContext)
     INJECT(INotationConfiguration, configuration)
     INJECT(shortcuts::IMidiRemote, midiRemote)
+    INJECT(audio::IPlayback, playback)
+    INJECT(playback::IPlaybackController, playbackController)
 
 public:
     void init();
@@ -55,6 +59,8 @@ private:
     void onMidiEventReceived(const midi::tick_t tick, const midi::Event& event);
 
     midi::MidiDeviceID firstAvailableDeviceId(const midi::MidiDeviceList& devices) const;
+
+    void handleOutputEvent(audio::TrackId trackId, const midi::Event& event);
 };
 }
 
