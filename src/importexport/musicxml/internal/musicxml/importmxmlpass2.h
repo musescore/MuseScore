@@ -124,6 +124,15 @@ private:
     QSet<Lyrics*> _lyrics;
 };
 
+struct GraceNoteLyrics {
+    Lyrics* lyric = nullptr;
+    bool extend = false;
+    int no = 0;
+
+    GraceNoteLyrics(Lyrics* lyric, bool extend, int no)
+        : lyric(lyric), extend(extend), no(no) {}
+};
+
 //---------------------------------------------------------
 //   MusicXMLParserLyric
 //---------------------------------------------------------
@@ -137,6 +146,7 @@ public:
     void parse();
 private:
     void skipLogCurrElem();
+    void readElision(QString& formattedText);
     const LyricNumberHandler _lyricNumberHandler;
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
@@ -183,6 +193,20 @@ private:
 //   forward references and defines
 //---------------------------------------------------------
 
+struct DelayedArpeggio
+{
+    QString _arpeggioType = "";
+    int _arpeggioNo = 0;
+
+    DelayedArpeggio(String arpType, int no)
+        : _arpeggioType(arpType), _arpeggioNo(no) {}
+
+    DelayedArpeggio()
+        : _arpeggioType(QString()), _arpeggioNo(0) {}
+
+    void clear() { _arpeggioType = ""; _arpeggioNo = 0; }
+};
+
 class FretDiagram;
 class FiguredBassItem;
 class Glissando;
@@ -199,6 +223,7 @@ using OttavasStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using HairpinsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
 using SpannerSet = std::set<Spanner*>;
+using DelayedArpMap = std::map<int, DelayedArpeggio>;
 
 //---------------------------------------------------------
 //   MusicXMLParserNotations
@@ -210,7 +235,7 @@ public:
     MusicXMLParserNotations(QXmlStreamReader& e, Score* score, MxmlLogger* logger);
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
-                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
+                    MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie, ArpeggioMap& arpMap, DelayedArpMap& delayedArps);
     QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
@@ -220,6 +245,7 @@ private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
     void addTechnical(const Notation& notation, Note* note);
+    void arpeggio();
     void harmonic();
     void articulations();
     void dynamics();
@@ -232,6 +258,7 @@ private:
     void technical();
     void tied();
     void tuplet();
+    void otherNotation();
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
     MxmlLogger* _logger;                              // the error logger
@@ -246,6 +273,7 @@ private:
     QString _wavyLineType;
     int _wavyLineNo { 0 };
     QString _arpeggioType;
+    int _arpeggioNo = 0;
     bool _slurStop { false };
     bool _slurStart { false };
     bool _wavyLineStop { false };
@@ -268,6 +296,8 @@ public:
     void clearSpanner(const MusicXmlSpannerDesc& desc);
     void deleteHandledSpanner(SLine* const& spanner);
     int divs() { return _divs; }
+    SLine* delayedOttava() { return _delayedOttava; }
+    void setDelayedOttava(SLine* ottava) { _delayedOttava = ottava; }
 
 private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
@@ -292,7 +322,8 @@ private:
     void transpose(const QString& partId, const Fraction& tick);
     Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
                Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beams& currBeams,
-               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+               FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets, ArpeggioMap& arpMap,
+               DelayedArpMap& delayedArps);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
@@ -351,9 +382,11 @@ private:
     Harmony* _harmony;                            ///< Current harmony
     Chord* _tremStart;                            ///< Starting chord for current tremolo
     FiguredBass* _figBass;                        ///< Current figured bass element (to attach to next note)
+    SLine* _delayedOttava = nullptr;              // Current delayed ottava
     int _multiMeasureRestCount;
     int _measureNumber;                           ///< Current measure number as written in the score
     MusicXmlLyricsExtend _extendedLyrics;         ///< Lyrics with "extend" requiring fixup
+    std::vector<GraceNoteLyrics> _graceNoteLyrics;   // Lyrics to be moved from grace note to main note
 
     MusicXmlSlash _measureStyleSlash;             ///< Are we inside a measure to be displayed as slashes?
 
@@ -413,12 +446,18 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
+    void otherDirection();
     void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
     void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
+    void handleTempo();
     QString matchRepeat() const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
     bool isLyricBracket() const;
+    bool isLikelySubtitle(const Fraction& tick) const;
+    bool isLikelyLegallyDownloaded(const Fraction& tick) const;
+    Text* addTextToHeader(const TextStyleType textStyleType);
+    void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
 };
 
 //---------------------------------------------------------

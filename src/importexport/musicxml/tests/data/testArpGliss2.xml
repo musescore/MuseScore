@@ -57,7 +57,7 @@
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -70,7 +70,7 @@
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -83,7 +83,7 @@
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <backup>
@@ -98,7 +98,7 @@
         <voice>2</voice>
         <type>whole</type>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       </measure>

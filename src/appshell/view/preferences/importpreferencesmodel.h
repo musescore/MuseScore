@@ -54,6 +54,7 @@ class ImportPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool importLayout READ importLayout WRITE setImportLayout NOTIFY importLayoutChanged)
     Q_PROPERTY(bool importBreaks READ importBreaks WRITE setImportBreaks NOTIFY importBreaksChanged)
     Q_PROPERTY(bool needUseDefaultFont READ needUseDefaultFont WRITE setNeedUseDefaultFont NOTIFY needUseDefaultFontChanged)
+    Q_PROPERTY(bool inferTextType READ inferTextType WRITE setInferTextType NOTIFY inferTextTypeChanged)
 
     Q_PROPERTY(bool meiImportLayout READ meiImportLayout WRITE setMeiImportLayout NOTIFY meiImportLayoutChanged)
 
@@ -79,6 +80,7 @@ public:
     bool importLayout() const;
     bool importBreaks() const;
     bool needUseDefaultFont() const;
+    bool inferTextType() const;
 
     int currentShortestNote() const;
 
@@ -93,6 +95,7 @@ public slots:
     void setImportLayout(bool import);
     void setImportBreaks(bool import);
     void setNeedUseDefaultFont(bool value);
+    void setInferTextType(bool value);
 
     void setCurrentShortestNote(int note);
 
@@ -106,6 +109,7 @@ signals:
     void importLayoutChanged(bool importLayout);
     void importBreaksChanged(bool importBreaks);
     void needUseDefaultFontChanged(bool needUseDefaultFont);
+    void inferTextTypeChanged(bool inferTextType);
     void currentShortestNoteChanged(int currentShortestNote);
     void needAskAboutApplyingNewStyleChanged(bool needAskAboutApplyingNewStyle);
     void meiImportLayoutChanged(bool importLayout);

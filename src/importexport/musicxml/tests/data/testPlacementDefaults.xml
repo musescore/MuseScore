@@ -124,6 +124,11 @@
           </direction-type>
         <sound tempo="35"/>
         </direction>
+        <direction>
+          <direction-type>
+            <wedge type="crescendo" number="1"/>
+            </direction-type>
+          </direction>
       <note default-x="81.56" default-y="20.00">
         <pitch>
           <step>C</step>
@@ -176,6 +181,11 @@
           <tied type="start"/>
           </notations>
         </note>
+        <direction>
+          <direction-type>
+            <wedge type="stop" number="1"/>
+            </direction-type>
+          </direction>
       </measure>
     <measure number="4" width="147.74">
       <direction> 

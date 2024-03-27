@@ -362,6 +362,7 @@ class ExportMusicXml
     Ottava const* ottavas[MAX_NUMBER_LEVEL];
     Trill const* trills[MAX_NUMBER_LEVEL];
     std::vector<const Jump*> _jumpElements;
+    ArpeggioMap _measArpeggios;
     int div;
     double millimeters;
     int tenths;
@@ -3472,9 +3473,28 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
 //   <arpeggiate direction="up"/>
 //   </notations>
 
-static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Notations& notations)
+static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Notations& notations, ArpeggioMap& arps,
+                       bool spanArp = false)
 {
     if (!ExportMusicXml::canWrite(arp)) {
+        return;
+    }
+    bool found = false;
+    int arpNo = 1;
+
+    // Number arpeggios spanning multiple voices correctly
+    const std::vector<MusicXmlArpeggioDesc> foundArps = mu::values(arps, arp->tick().ticks());
+    for (const MusicXmlArpeggioDesc arpDesc : foundArps) {
+        if (arpDesc.arp == arp) {
+            found = true;
+            arpNo = arpDesc.no;
+        } else {
+            arpNo = std::max(arpNo, arpDesc.no) + 1;
+        }
+    }
+
+    if (!found && spanArp) {
+        LOGD("span arpeggio without main arpeggio found at tick %d", arp->tick().ticks());
         return;
     }
 
@@ -3482,26 +3502,29 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
     switch (arp->arpeggioType()) {
     case ArpeggioType::NORMAL:
         notations.tag(xml, arp);
-        tagName = "arpeggiate";
+
+        tagName = "arpeggiate number=\"" + QString::number(arpNo) + "\"";
         break;
     case ArpeggioType::UP:                  // fall through
     case ArpeggioType::UP_STRAIGHT:         // not supported by MusicXML, export as normal arpeggio
         notations.tag(xml, arp);
-        tagName = "arpeggiate direction=\"up\"";
+
+        tagName = "arpeggiate direction=\"up\" number=\"" + QString::number(arpNo) + "\"";
         break;
     case ArpeggioType::DOWN:                  // fall through
     case ArpeggioType::DOWN_STRAIGHT:         // not supported by MusicXML, export as normal arpeggio
         notations.tag(xml, arp);
-        tagName = "arpeggiate direction=\"down\"";
+        tagName = "arpeggiate direction=\"down\" number=\"" + QString::number(arpNo) + "\"";
         break;
     case ArpeggioType::BRACKET:
         if (front) {
             notations.tag(xml, arp);
-            tagName = "non-arpeggiate type=\"bottom\"";
+
+            tagName = "non-arpeggiate type=\"bottom\" number=\"" + QString::number(arpNo) + "\"";
         }
         if (back) {
             notations.tag(xml, arp);
-            tagName = "non-arpeggiate type=\"top\"";
+            tagName = "non-arpeggiate type=\"top\" number=\"" + QString::number(arpNo) + "\"";
         }
         break;
     default:
@@ -3513,6 +3536,10 @@ static void arpeggiate(Arpeggio* arp, bool front, bool back, XmlWriter& xml, Not
         tagName += color2xml(arp);
         tagName += ExportMusicXml::positioningAttributes(arp);
         xml.tagRaw(tagName);
+        if (!found) {
+            MusicXmlArpeggioDesc arpDesc(arp, arpNo);
+            arps.insert(std::pair<int, MusicXmlArpeggioDesc>(arp->tick().ticks(), arpDesc));
+        }
     }
 }
 
@@ -4205,7 +4232,9 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
 
         technical.etag(_xml);
         if (chord->arpeggio()) {
-            arpeggiate(chord->arpeggio(), note == nl.front(), note == nl.back(), _xml, notations);
+            arpeggiate(chord->arpeggio(), note == nl.front(), note == nl.back(), _xml, notations, _measArpeggios);
+        } else if (chord->spanArpeggio()) {
+            arpeggiate(chord->spanArpeggio(), note == nl.front(), note == nl.back(), _xml, notations, _measArpeggios, /*spanArp=*/ true);
         }
         for (Spanner* spanner : note->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO && ExportMusicXml::canWrite(spanner)) {
@@ -5534,6 +5563,10 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>& ll, const track_idx_t tr
                 QString lyricXml = QString("lyric number=\"%1\"").arg((l)->no() + 1);
                 lyricXml += color2xml(l);
                 lyricXml += positioningAttributes(l);
+
+                if (l->placeAbove()) {
+                    lyricXml += u" placement=\"above\"";
+                }
                 _xml.startElementRaw(lyricXml);
                 LyricsSyllabic syl = (l)->syllabic();
                 QString s = "";
@@ -7650,6 +7683,7 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
     const Measure* const origM = m;
     _tboxesAboveWritten = false;
     _tboxesBelowWritten = false;
+    _measArpeggios.clear();
 
     for (staff_idx_t staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
         // some staves may need to make m point somewhere else, so just in case, ensure start in same place

@@ -57,6 +57,9 @@ public:
 
     virtual bool needAskAboutApplyingNewStyle() const = 0;
     virtual void setNeedAskAboutApplyingNewStyle(bool value) = 0;
+
+    virtual bool inferTextType() const = 0;
+    virtual void setInferTextType(bool value) = 0;
 };
 }
 

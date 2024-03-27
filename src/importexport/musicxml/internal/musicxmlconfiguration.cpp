@@ -35,6 +35,7 @@ static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/
 static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXML/exportInvisibleElements");
 static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML(module_name, "import/compatibility/apply_edwin_for_xml");
 static const Settings::Key MIGRATION_NOT_ASK_AGAIN_KEY(module_name, "import/compatibility/do_not_ask_me_again");
+static const Settings::Key MUSICXML_IMPORT_INFER_TEXT_TYPE(module_name, "import/musicXML/importInferTextType");
 
 void MusicXmlConfiguration::init()
 {
@@ -45,6 +46,7 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
     settings()->setDefaultValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(false));
     settings()->setDefaultValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(false));
+    settings()->setDefaultValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(false));
 }
 
 bool MusicXmlConfiguration::musicxmlImportBreaks() const
@@ -115,4 +117,14 @@ bool MusicXmlConfiguration::needAskAboutApplyingNewStyle() const
 void MusicXmlConfiguration::setNeedAskAboutApplyingNewStyle(bool value)
 {
     settings()->setSharedValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(!value));
+}
+
+bool MusicXmlConfiguration::inferTextType() const
+{
+    return settings()->value(MUSICXML_IMPORT_INFER_TEXT_TYPE).toBool();
+}
+
+void MusicXmlConfiguration::setInferTextType(bool value)
+{
+    settings()->setSharedValue(MUSICXML_IMPORT_INFER_TEXT_TYPE, Val(value));
 }

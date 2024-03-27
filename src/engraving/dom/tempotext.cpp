@@ -169,25 +169,26 @@ TDuration TempoText::duration() const
 }
 
 static const TempoPattern tpSym[] = {
-    TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",
+    TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym><sym>metAugmentationDot</sym>",
                  1.75 / 60.0, DurationType::V_QUARTER, 2),                                                                                                                          // double dotted 1/4
-    TempoPattern("<sym>metNoteQuarterUp</sym>\\s*<sym>metAugmentationDot</sym>",          1.5 / 60.0,  DurationType::V_QUARTER,
+    TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",          1.5 / 60.0,  DurationType::V_QUARTER,
                  1),                                                                                                                           // dotted 1/4
     TempoPattern("<sym>metNoteQuarterUp</sym>",                                           1.0 / 60.0,  DurationType::V_QUARTER),  // 1/4
-    TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",
+    TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym><sym>metAugmentationDot</sym>",
                  1.75 / 30.0, DurationType::V_HALF, 2),                                                                                                                       // double dotted 1/2
-    TempoPattern("<sym>metNoteHalfUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 30.0,  DurationType::V_HALF, 1),    // dotted 1/2
+    TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",             1.5 / 30.0,  DurationType::V_HALF, 1),    // dotted 1/2
     TempoPattern("<sym>metNoteHalfUp</sym>",                                              1.0 / 30.0,  DurationType::V_HALF),     // 1/2
-    TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>\\s*<sym>metAugmentationDot</sym>",         1.75 / 120.0,
+    TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym><sym>metAugmentationDot</sym>",         1.75 / 120.0,
                  DurationType::V_EIGHTH, 2),                                                                                                                    // double dotted 1/8
-    TempoPattern("<sym>metNote8thUp</sym>\\s*<sym>metAugmentationDot</sym>",              1.5 / 120.0, DurationType::V_EIGHTH,
+    TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",              1.5 / 120.0, DurationType::V_EIGHTH,
                  1),                                                                                                                           // dotted 1/8
     TempoPattern("<sym>metNote8thUp</sym>",                                               1.0 / 120.0, DurationType::V_EIGHTH),   // 1/8
-    TempoPattern("<sym>metNoteWhole</sym>\\s*<sym>metAugmentationDot</sym>",              1.5 / 15.0,  DurationType::V_WHOLE, 1),    // dotted whole
+    TempoPattern("<sym>metNoteWhole</sym><sym>space</sym><sym>metAugmentationDot</sym>",              1.5 / 15.0,  DurationType::V_WHOLE,
+                 1),                                                                                                                             // dotted whole
     TempoPattern("<sym>metNoteWhole</sym>",                                               1.0 / 15.0,  DurationType::V_WHOLE),    // whole
-    TempoPattern("<sym>metNote16thUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 240.0, DurationType::V_16TH, 1),  // dotted 1/16
+    TempoPattern("<sym>metNote16thUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",             1.5 / 240.0, DurationType::V_16TH, 1),  // dotted 1/16
     TempoPattern("<sym>metNote16thUp</sym>",                                              1.0 / 240.0, DurationType::V_16TH),     // 1/16
-    TempoPattern("<sym>metNote32ndUp</sym>\\s*<sym>metAugmentationDot</sym>",             1.5 / 480.0, DurationType::V_32ND, 1),  // dotted 1/32
+    TempoPattern("<sym>metNote32ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",             1.5 / 480.0, DurationType::V_32ND, 1),  // dotted 1/32
     TempoPattern("<sym>metNote32ndUp</sym>",                                              1.0 / 480.0, DurationType::V_32ND),     // 1/32
     TempoPattern("<sym>metNoteDoubleWholeSquare</sym>",                                   1.0 / 7.5,   DurationType::V_BREVE),    // longa
     TempoPattern("<sym>metNoteDoubleWhole</sym>",                                         1.0 / 7.5,   DurationType::V_BREVE),    // double whole
@@ -208,7 +209,6 @@ String TempoText::duration2tempoTextString(const TDuration dur)
     for (const TempoPattern& pa : tpSym) {
         if (pa.d == dur) {
             String res = String::fromUtf8(pa.pattern);
-            res.replace(u"\\s*", u" ");
             return res;
         }
     }

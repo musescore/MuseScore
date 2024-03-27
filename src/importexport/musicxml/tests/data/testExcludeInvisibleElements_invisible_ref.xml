@@ -692,7 +692,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -706,7 +706,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -720,7 +720,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -733,7 +733,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations print-object="no">
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -747,7 +747,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations print-object="no">
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
@@ -761,7 +761,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations print-object="no">
-          <arpeggiate/>
+          <arpeggiate number="1"/>
           </notations>
         </note>
       <note>
