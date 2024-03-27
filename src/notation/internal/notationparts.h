@@ -72,7 +72,7 @@ public:
 
     void replacePart(const ID& partId, Part* newPart) override;
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
-    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
+    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
     async::Notification partsChanged() const override;
     async::Notification scoreOrderChanged() const override;

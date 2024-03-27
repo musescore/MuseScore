@@ -43,7 +43,7 @@ public:
     bool appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
-    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
+    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) override;
 
 private:
     void startGlobalEdit();
