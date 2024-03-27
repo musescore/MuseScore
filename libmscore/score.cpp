@@ -15,7 +15,6 @@
  Implementation of class Score (partial).
 */
 
-#include <assert.h>
 #include "score.h"
 #include "fermata.h"
 #include "imageStore.h"
@@ -49,7 +48,6 @@
 #include "box.h"
 #include "utils.h"
 #include "excerpt.h"
-#include "stafftext.h"
 #include "repeatlist.h"
 #include "keysig.h"
 #include "beam.h"
@@ -4425,20 +4423,18 @@ QString Score::extractLyrics()
       QString result;
       masterScore()->setExpandRepeats(true);
       SegmentType st = SegmentType::ChordRest;
-      for (int track = 0; track < ntracks(); track += VOICES) {
-            bool found = false;
       for (int track = 0; track < ntracks(); track++) {
             size_t maxLyrics = 1;
-            const RepeatList& rlist = repeatList();
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
                   m->setPlaybackCount(0);
                   }
             // follow the repeat segments
+            const RepeatList& rlist = repeatList();
             for (const RepeatSegment* rs : rlist) {
                   Fraction startTick  = Fraction::fromTicks(rs->tick);
                   Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
                   for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                        int playCount = m->playbackCount();
+                        size_t playCount = m->playbackCount();
                         for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
                               ChordRest* cr = toChordRest(seg->element(track));
                               if (!cr || cr->lyrics().empty())
@@ -4447,14 +4443,14 @@ QString Score::extractLyrics()
                                     maxLyrics = cr->lyrics().size();
                               if (playCount >= int(cr->lyrics().size()))
                                     continue;
-                              Lyrics* l = cr->lyrics(playCount);
+                              Lyrics* l = cr->lyrics(static_cast<int>(playCount));
                               if (!l)
                                     continue;
-                              found = true;
                               QString lyric = l->plainText().trimmed();
-                              if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END)
+                              Lyrics::Syllabic ls = l->syllabic();
+                              if (ls == Lyrics::Syllabic::SINGLE || ls == Lyrics::Syllabic::END)
                                     result += lyric + " ";
-                              else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics::Syllabic::MIDDLE)
+                              else if (ls == Lyrics::Syllabic::BEGIN || ls == Lyrics::Syllabic::MIDDLE)
                                     result += lyric;
                               }
                         m->setPlaybackCount(m->playbackCount() + 1);
@@ -4463,33 +4459,31 @@ QString Score::extractLyrics()
                         }
                   }
             // consider remaining lyrics
-            for (unsigned lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
+            for (size_t lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
                   for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-                        unsigned playCount = m->playbackCount();
-                        if (lyricsNumber >= playCount) {
-                              for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                                    ChordRest* cr = toChordRest(seg->element(track));
-                                    if (!cr || cr->lyrics().empty())
-                                          continue;
-                                    if (cr->lyrics().size() > maxLyrics)
-                                          maxLyrics = cr->lyrics().size();
-                                    if (lyricsNumber >= cr->lyrics().size())
-                                          continue;
-                                    Lyrics* l = cr->lyrics(lyricsNumber);
-                                    if (!l)
-                                          continue;
-                                    found = true;
-                                    QString lyric = l->plainText().trimmed();
-                                    if (l->syllabic() == Lyrics::Syllabic::SINGLE || l->syllabic() == Lyrics::Syllabic::END)
-                                          result += lyric + " ";
-                                    else if (l->syllabic() == Lyrics::Syllabic::BEGIN || l->syllabic() == Lyrics:: Syllabic::MIDDLE)
-                                          result += lyric;
-                                    }
+                        size_t playCount = m->playbackCount();
+                        if (lyricsNumber < playCount)
+                              continue;
+                        for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                              ChordRest* cr = toChordRest(seg->element(track));
+                              if (!cr || cr->lyrics().empty())
+                                    continue;
+                              if (cr->lyrics().size() > maxLyrics)
+                                    maxLyrics = cr->lyrics().size();
+                              if (lyricsNumber >= cr->lyrics().size())
+                                    continue;
+                              Lyrics* l = cr->lyrics(static_cast<int>(lyricsNumber));
+                              if (!l)
+                                    continue;
+                              QString lyric = l->plainText().trimmed();
+                              Lyrics::Syllabic ls = l->syllabic();
+                              if (ls == Lyrics::Syllabic::SINGLE || ls == Lyrics::Syllabic::END)
+                                    result += lyric + " ";
+                              else if (ls == Lyrics::Syllabic::BEGIN || ls == Lyrics::Syllabic::MIDDLE)
+                                    result += lyric;
                               }
                         }
                   }
-            if (found)
-                  result += "\n\n";
             }
       return result.trimmed();
       }
