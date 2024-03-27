@@ -53,6 +53,7 @@ public:
 
     // Hit
     virtual EngravingItem* hitElement(const PointF& pos, float width) const = 0;
+    virtual std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const = 0;
     virtual Staff* hitStaff(const PointF& pos) const = 0;
 
     struct HitElementContext
@@ -81,6 +82,9 @@ public:
     virtual void clearSelection() = 0;
     virtual async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
+
+    // Deselect
+    virtual void deselect(EngravingItem* element) = 0;
 
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;

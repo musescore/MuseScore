@@ -73,6 +73,7 @@ public:
 
     // Hit
     EngravingItem* hitElement(const PointF& pos, float width) const override;
+    std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const override;
     Staff* hitStaff(const PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
@@ -90,6 +91,9 @@ public:
     async::Notification selectionChanged() const override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void moveSegmentSelection(MoveDirection d) override;
+
+    // Deselect
+    void deselect(EngravingItem* element) override;
 
     // SelectionFilter
     bool isSelectionTypeFiltered(SelectionFilterType type) const override;
@@ -336,7 +340,6 @@ private:
     bool needEndTextEdit() const;
 
     mu::engraving::Page* point2page(const PointF& p) const;
-    std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;
     std::vector<EngravingItem*> elementsAt(const PointF& p) const;
     EngravingItem* elementAt(const PointF& p) const;
 
