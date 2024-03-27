@@ -52,3 +52,6 @@ elseif(OS_IS_LIN)
     # Note: Must now run "gtk-update-icon-cache" to set the new icons.
 
 endif()
+
+install(FILES cloud_icon.svg DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
+install(FILES cloud_icon.png DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME})
