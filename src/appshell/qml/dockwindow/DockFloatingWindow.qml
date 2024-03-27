@@ -40,25 +40,24 @@ Item {
     anchors.fill: parent
     anchors.margins: 8 // Needed for the shadow, please sync with DOCK_WINDOW_SHADOW in docktypes.h
 
-    StyledDropShadow {
-        anchors.fill: background
-        source: background
-        radius: 8
-    }
+    ItemWithDropShadow {
+        anchors.fill: dropArea
+        shadow.radius: root.anchors.margins
 
-    Rectangle {
-        id: background
-        anchors.fill: parent
+        Rectangle {
+            id: background
+            anchors.fill: parent
 
-        color: ui.theme.backgroundPrimaryColor
-        border.color: ui.theme.strokeColor
-        border.width: 1
-        radius: 3
+            color: ui.theme.backgroundPrimaryColor
+            border.color: ui.theme.strokeColor
+            border.width: 1
+            radius: 3
+        }
     }
 
     Item {
         id: dropArea
-        anchors.fill: background
+        anchors.fill: parent
         anchors.margins: background.border.width
 
         // Clip content to our beautiful rounded rect

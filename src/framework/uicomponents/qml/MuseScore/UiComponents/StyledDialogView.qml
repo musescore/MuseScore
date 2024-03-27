@@ -91,19 +91,18 @@ DialogView {
             }
         }
 
-        StyledDropShadow {
+        ItemWithDropShadow {
             anchors.fill: parent
-            source: contentBackground
-            visible: root.frameless
-        }
+            shadow.visible: root.frameless
 
-        Rectangle {
-            id: contentBackground
-            anchors.fill: parent
-            color: ui.theme.backgroundPrimaryColor
-            radius: root.frameless ? 4 : 0
-            border.width: root.frameless ? 1 : 0
-            border.color: ui.theme.strokeColor
+            Rectangle {
+                id: contentBackground
+                anchors.fill: parent
+                color: ui.theme.backgroundPrimaryColor
+                radius: root.frameless ? 4 : 0
+                border.width: root.frameless ? 1 : 0
+                border.color: ui.theme.strokeColor
+            }
         }
 
         Item {

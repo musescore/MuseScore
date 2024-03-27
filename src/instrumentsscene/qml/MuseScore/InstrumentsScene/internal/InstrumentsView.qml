@@ -134,7 +134,7 @@ Item {
                 navigation.row: item.navigation.row
                 navigation.column: 1
                 navigation.accessible.name: itemTitleLabel.text + " " + qsTrc("instruments", "traits")
-                navigation.accessible.row: model.index
+                navigation.accessible.row: item.itemModel.index
 
                 anchors.right: parent.right
                 anchors.rightMargin: 4
