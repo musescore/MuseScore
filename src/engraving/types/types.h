@@ -581,6 +581,8 @@ enum class DynamicType : char {
     SFZ,
     SFF,
     SFFZ,
+    SFFF,
+    SFFFZ,
     SFP,
     SFPP,
     RFZ,
