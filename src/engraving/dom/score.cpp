@@ -4902,7 +4902,7 @@ String Score::extractLyrics()
                     if (cr->lyrics().size() > maxLyrics) {
                         maxLyrics = cr->lyrics().size();
                     }
-                    if (playCount >= cr->lyrics().size()) {
+                    if (playCount > cr->lyrics().size()) {
                         continue;
                     }
                     Lyrics* l = cr->lyrics(static_cast<int>(playCount));
@@ -4938,7 +4938,7 @@ String Score::extractLyrics()
                     if (cr->lyrics().size() > maxLyrics) {
                         maxLyrics = cr->lyrics().size();
                     }
-                    if (lyricsNumber >= cr->lyrics().size()) {
+                    if (lyricsNumber > cr->lyrics().size()) {
                         continue;
                     }
                     Lyrics* l = cr->lyrics(static_cast<int>(lyricsNumber));
