@@ -197,8 +197,7 @@ RenderingContext GraceChordsRenderer::buildPrincipalNoteCtx(const Score* score, 
     principalCtx.nominalPositionStartTick = timestampToTick(score, timestamp) - ctx.positionTickOffset;
     principalCtx.nominalPositionEndTick = timestampToTick(score, timestamp + duration) - ctx.positionTickOffset;
     principalCtx.nominalDurationTicks = principalCtx.nominalPositionEndTick - principalCtx.nominalPositionStartTick;
-
-    updateArticulationBoundaries(graceCtx.type, timestamp, duration, principalCtx.commonArticulations);
+    principalCtx.commonArticulations.erase(graceCtx.type);
 
     return principalCtx;
 }
@@ -229,7 +228,7 @@ duration_t GraceChordsRenderer::graceNotesMaxAvailableDuration(const Articulatio
         }
     }
 
-    duration_t minAcciacaturaDuration = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
+    duration_t minAcciacaturaDuration = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS);
 
     return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halvedDuration);
 }
