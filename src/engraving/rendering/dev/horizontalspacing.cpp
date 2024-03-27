@@ -130,7 +130,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
     double w = std::max(ww, 0.0);        // non-negative
 
     // Header exceptions that need additional space (more than the padding)
-    double absoluteMinHeaderDist = 1.5 * f->spatium();
+    double absoluteMinHeaderDist = f->style().styleMM(Sid::barNoteDistance);
     if (systemHeaderGap) {
         if (f->isTimeSigType()) {
             w = std::max(w, f->minRight() + f->style().styleMM(Sid::systemHeaderTimeSigDistance));
