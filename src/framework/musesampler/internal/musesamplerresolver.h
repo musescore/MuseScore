@@ -49,7 +49,9 @@ public:
     bool isInstalled() const override;
 
     float defaultReverbLevel(const String& instrumentSoundId) const override;
-    String drumMapping(int instrumentId) const override;
+
+    ByteArray drumMapping(int instrumentId) const override;
+    std::vector<Instrument> instruments() const override;
 
 private:
     bool checkLibrary() const;

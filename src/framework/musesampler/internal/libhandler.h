@@ -52,6 +52,7 @@ struct MuseSamplerLibHandler
     ms_Instrument_get_category getInstrumentCategory = nullptr;
     ms_Instrument_get_package getInstrumentPackage = nullptr;
     ms_Instrument_get_pack_name getInstrumentPackName = nullptr;
+    ms_Instrument_get_info_json getInstrumentInfoJson = nullptr;
     ms_Instrument_get_vendor_name getInstrumentVendorName = nullptr;
     ms_Instrument_get_musicxml_sound getMusicXmlSoundId = nullptr;
     ms_Instrument_get_mpe_sound getMpeSoundId = nullptr;
@@ -346,6 +347,7 @@ public:
         if (at_least_v_0_6) {
             getInstrumentVendorName = (ms_Instrument_get_vendor_name)getLibFunc(m_lib, "ms_Instrument_get_vendor_name");
             getInstrumentPackName = (ms_Instrument_get_pack_name)getLibFunc(m_lib, "ms_Instrument_get_pack_name");
+            getInstrumentInfoJson = (ms_Instrument_get_info_json)getLibFunc(m_lib, "ms_Instrument_get_info_json");
             createPresetChange = (ms_MuseSampler_create_preset_change)getLibFunc(m_lib, "ms_MuseSampler_create_preset_change");
             addPreset = (ms_MuseSampler_add_preset)getLibFunc(m_lib, "ms_MuseSampler_add_preset");
             getTextArticulations = (ms_get_text_articulations)getLibFunc(m_lib, "ms_get_text_articulations");
@@ -355,6 +357,7 @@ public:
         } else {
             getInstrumentVendorName = [](ms_InstrumentInfo) { return ""; };
             getInstrumentPackName = [](ms_InstrumentInfo) { return ""; };
+            getInstrumentInfoJson = [](ms_InstrumentInfo) { return ""; };
             createPresetChange = [](ms_MuseSampler, ms_Track, long long) { return -1; };
             addPreset = [](ms_MuseSampler, ms_Track, ms_PresetChange, const char*) { return ms_Result_Error; };
             getTextArticulations = [](int, const char*) { return ""; };

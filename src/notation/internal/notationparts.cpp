@@ -989,6 +989,7 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
         stt->setSmall(false);
     } else {
         stt->setSmall(templ.smallStaff[cleffIndex]);
+        stt->setLines(templ.staffLines[cleffIndex]);
         staff->setBracketType(0, templ.bracket[cleffIndex]);
         staff->setBracketSpan(0, templ.bracketSpan[cleffIndex]);
         staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
