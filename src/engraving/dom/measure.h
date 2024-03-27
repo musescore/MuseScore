@@ -217,6 +217,7 @@ public:
     double layoutStretch() const { return m_layoutStretch; }
 
     Fraction computeTicks();
+    Fraction anacrusisOffset() const;
     Fraction shortestChordRest() const;
     Fraction maxTicks() const;
 

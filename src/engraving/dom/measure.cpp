@@ -3133,6 +3133,29 @@ Fraction Measure::computeTicks()
 }
 
 //---------------------------------------------------------
+//   anacrusisOffset
+//      determine if measure is anacrusis
+//      and return tick offset relative to measure end
+//---------------------------------------------------------
+
+Fraction Measure::anacrusisOffset() const
+{
+    Fraction offset = Fraction(0, 1);
+    const MeasureBase* pm = prev();
+    ElementType pt = pm ? pm->type() : ElementType::INVALID;
+
+    if (irregular() || !pm
+        || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
+        || pt == ElementType::VBOX || pt == ElementType::HBOX
+        || pt == ElementType::FBOX || pt == ElementType::TBOX) {
+        if (timesig() - ticks() > Fraction(0, 1)) {
+            offset = timesig() - ticks();
+        }
+    }
+    return offset;
+}
+
+//---------------------------------------------------------
 //   endBarLine
 //      return the first one
 //---------------------------------------------------------
