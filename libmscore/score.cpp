@@ -4441,7 +4441,7 @@ QString Score::extractLyrics()
                                     continue;
                               if (cr->lyrics().size() > maxLyrics)
                                     maxLyrics = cr->lyrics().size();
-                              if (playCount >= int(cr->lyrics().size()))
+                              if (playCount > cr->lyrics().size())
                                     continue;
                               Lyrics* l = cr->lyrics(static_cast<int>(playCount));
                               if (!l)
@@ -4470,7 +4470,7 @@ QString Score::extractLyrics()
                                     continue;
                               if (cr->lyrics().size() > maxLyrics)
                                     maxLyrics = cr->lyrics().size();
-                              if (lyricsNumber >= cr->lyrics().size())
+                              if (lyricsNumber > cr->lyrics().size())
                                     continue;
                               Lyrics* l = cr->lyrics(static_cast<int>(lyricsNumber));
                               if (!l)
