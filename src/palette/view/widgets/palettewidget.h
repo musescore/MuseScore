@@ -201,14 +201,14 @@ private:
     int rows() const;
     int columns() const;
 
-    int cellIndexForPoint(const QPoint&) const; // Only indices of actual cells
-    int theoreticalCellIndexForPoint(const QPoint&) const; // Also indices greater than cells.size() - 1
+    int cellIndexForPoint(const QPointF&) const; // Only indices of actual cells
+    int theoreticalCellIndexForPoint(const QPointF&) const; // Also indices greater than cells.size() - 1
     QRect rectForCellAt(int idx) const;
     QPixmap pixmapForCellAt(int cellIdx) const;
 
     const std::vector<PaletteCellPtr>& actualCellsList() const;
 
-    void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
+    void applyElementAtPosition(const QPointF& pos, Qt::KeyboardModifiers modifiers);
     void applyElementAtIndex(int index, Qt::KeyboardModifiers modifiers = {});
 
     PalettePtr m_palette = nullptr;

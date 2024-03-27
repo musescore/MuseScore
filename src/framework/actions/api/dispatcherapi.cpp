@@ -38,8 +38,9 @@ void DispatcherApi::dispatch(const QString& action, const QVariantList& args)
 
 #ifdef MU_QT5_COMPAT
     for (const QVariant& arg : args) {
-        switch (arg.type()) {
-        case QVariant::Int: data.setArg<int>(index, arg.value<int>());
+        switch (arg.typeId()) {
+        case QMetaType::Int:
+            data.setArg<int>(index, arg.value<int>());
             break;
         default: {
             LOGE() << "unknown type: " << arg.typeName();

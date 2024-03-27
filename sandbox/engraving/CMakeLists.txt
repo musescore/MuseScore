@@ -23,24 +23,24 @@ set(CMAKE_MODULE_PATH
 include(SetupBuildEnvironment)
 include(GetPlatformInfo)
 
-set(QT_MIN_VERSION    "5.15.0")
-find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
-find_package(Qt5Gui ${QT_MIN_VERSION} REQUIRED)
-#find_package(Qt5Svg ${QT_MIN_VERSION} REQUIRED)
-#find_package(Qt5Widgets ${QT_MIN_VERSION} REQUIRED)
+set(QT_MIN_VERSION "6.3")
+find_package(Qt6Core ${QT_MIN_VERSION} REQUIRED)
+find_package(Qt6Gui ${QT_MIN_VERSION} REQUIRED)
+#find_package(Qt6Svg ${QT_MIN_VERSION} REQUIRED)
+#find_package(Qt6Widgets ${QT_MIN_VERSION} REQUIRED)
 
 set(QT_LIBRARIES
-    Qt5::Core
-    Qt5::Gui
-#    Qt5::Svg
-#    Qt5::Widgets
+    Qt6::Core
+    Qt6::Gui
+#    Qt6::Svg
+#    Qt6::Widgets
 )
 
 include_directories(
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Gui_INCLUDE_DIRS}
-#    ${Qt5Svg_INCLUDE_DIRS}
-#    ${Qt5Widgets_INCLUDE_DIRS}
+    ${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Gui_INCLUDE_DIRS}
+#    ${Qt6Svg_INCLUDE_DIRS}
+#    ${Qt6Widgets_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}
     ${MU_ROOT}/thirdparty/dtl
 )

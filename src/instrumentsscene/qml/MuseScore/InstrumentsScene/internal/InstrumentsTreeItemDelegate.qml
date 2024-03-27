@@ -19,19 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick
+import QtQuick.Layouts
 
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.InstrumentsScene 1.0
+import MuseScore.Ui
+import MuseScore.UiComponents
+import MuseScore.InstrumentsScene
 
 FocusableControl {
     id: root
 
-    property var item: null
-    property var treeView: undefined
-    property var index: styleData.index
+    property TreeView treeView: null
+
+    required property QtObject item
+    required property int row
+    required property var modelIndex
+    required property bool isExpanded
+    required property int depth
+
     property string filterKey
 
     readonly property int type: item ? item.type : InstrumentsTreeItemType.UNDEFINED
@@ -46,6 +51,7 @@ FocusableControl {
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
+    signal toggleExpandedRequested()
     signal removeSelectionRequested()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
@@ -56,6 +62,10 @@ FocusableControl {
     signal dragStarted()
     signal dropped()
 
+    onDoubleClicked: {
+        toggleExpandedRequested()
+    }
+
     QtObject {
         id: prv
 
@@ -64,8 +74,8 @@ FocusableControl {
         onDraggedChanged: {
             if (dragged) {
                 root.dragStarted()
-                if (styleData.isExpanded) {
-                    root.treeView.collapse(styleData.index)
+                if (root.isExpanded) {
+                    root.treeView.collapse(root.row)
                 }
             } else {
                 root.dropped()
@@ -75,10 +85,10 @@ FocusableControl {
         property var openedPopup: null
         property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
-        function openPopup(popup, item) {
+        function openPopup(popup, data) {
             if (Boolean(popup)) {
                 openedPopup = popup
-                popup.load(item)
+                popup.load(data)
                 root.popupOpened(popup.x, popup.y, popup.height)
                 popup.open()
             }
@@ -97,11 +107,7 @@ FocusableControl {
         }
     }
 
-    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
-    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-    height: parent ? parent.height : implicitHeight
-    width: parent ? parent.width : implicitWidth
+    anchors.fill: parent
 
     implicitHeight: 38
     implicitWidth: 248
@@ -114,6 +120,7 @@ FocusableControl {
 
     navigation.name: "InstrumentsTreeItemDelegate"
     navigation.column: 0
+    navigation.row: root.row
 
     navigation.accessible.role: MUAccessible.ListItem
     navigation.accessible.name: titleLabel.text
@@ -204,24 +211,24 @@ FocusableControl {
             navigation.row: root.navigation.row
             navigation.column: 1
 
-            isVisible: model && model.itemRole.isVisible
+            isVisible: root.item && root.item.isVisible
 
             onVisibleToggled: {
-                if (!model) {
+                if (!root.item) {
                     return
                 }
 
                 if (root.isSelected) {
                     root.visibilityChanged(!isVisible)
                 } else {
-                    model.itemRole.isVisible = !isVisible
+                    root.item.isVisible = !isVisible
                 }
             }
         }
 
         Item {
             Layout.fillWidth: true
-            Layout.leftMargin: 12 * styleData.depth
+            Layout.leftMargin: 12 * root.depth
             height: childrenRect.height
 
             FlatButton {
@@ -231,25 +238,20 @@ FocusableControl {
                 visible: root.isExpandable
 
                 objectName: "ExpandBtnInstrument"
-                enabled: expandButton.visible
                 navigation.panel: root.navigation.panel
                 navigation.row: root.navigation.row
                 navigation.column: 2
-                navigation.accessible.name: styleData.isExpanded
+                navigation.accessible.name: root.isExpanded
                                             //: Collapse a tree item
                                             ? qsTrc("global", "Collapse")
                                             //: Expand a tree item
                                             : qsTrc("global", "Expand")
 
                 transparent: true
-                icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
+                icon: root.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
 
                 onClicked: {
-                    if (!styleData.isExpanded) {
-                        root.treeView.expand(styleData.index)
-                    } else {
-                        root.treeView.collapse(styleData.index)
-                    }
+                    root.toggleExpandedRequested()
                 }
             }
 
@@ -262,12 +264,12 @@ FocusableControl {
                 anchors.rightMargin: 8
                 anchors.verticalCenter: expandButton.verticalCenter
 
-                text: model ? model.itemRole.title : ""
+                text: root.item ? root.item.title : ""
                 horizontalAlignment: Text.AlignLeft
-                opacity: model && model.itemRole.isVisible ? 1 : 0.75
+                opacity: root.item && root.item.isVisible ? 1 : 0.75
 
                 font: {
-                    if (Boolean(model) && root.type === InstrumentsTreeItemType.PART && model.itemRole.isVisible) {
+                    if (root.item && root.type === InstrumentsTreeItemType.PART && root.item.isVisible) {
                         return ui.theme.bodyBoldFont
                     }
 
@@ -300,23 +302,20 @@ FocusableControl {
                 }
 
                 var popup = null
-                var item = {}
+                var data = {}
 
                 if (root.type === InstrumentsTreeItemType.PART) {
-
                     popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
-                    item["partId"] = model.itemRole.id
-                    item["instrumentId"] = model.itemRole.instrumentId()
-
+                    data["partId"] = root.item.id
+                    data["instrumentId"] = root.item.instrumentId()
                 } else if (root.type === InstrumentsTreeItemType.STAFF) {
-
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 
-                    item["id"] = model.itemRole.id
+                    data["id"] = root.item.id
                 }
 
-                prv.openPopup(popup, item)
+                prv.openPopup(popup, data)
             }
 
             Behavior on opacity {
@@ -334,7 +333,7 @@ FocusableControl {
     }
 
     Behavior on opacity {
-        enabled: styleData.depth !== 0
+        enabled: root.depth !== 0
         NumberAnimation { duration: 150 }
     }
 
@@ -398,7 +397,7 @@ FocusableControl {
 
         State {
             name: "PART_EXPANDED"
-            when: styleData.isExpanded && !root.isSelected &&
+            when: root.isExpanded && !root.isSelected &&
                   root.type === InstrumentsTreeItemType.PART
 
             PropertyChanges {
@@ -440,7 +439,7 @@ FocusableControl {
             PropertyChanges {
                 target: root
                 height: implicitHeight
-                width: treeView.contentItem.width
+                width: root.treeView.contentItem.width
             }
 
             AnchorChanges {

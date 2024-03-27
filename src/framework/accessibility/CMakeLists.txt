@@ -47,13 +47,8 @@ set(MODULE_SRC
 
 if (OS_IS_LIN)
     # it needed to send a spontaneous event by activating navigation
-    if (MUE_COMPILE_QT5_COMPAT)
-        set(MODULE_INCLUDE ${Qt5Core_PRIVATE_INCLUDE_DIRS} )
-    else()
-        set(MODULE_INCLUDE ${Qt6Core_PRIVATE_INCLUDE_DIRS} )
-    endif()
+    set(MODULE_INCLUDE ${Qt6Core_PRIVATE_INCLUDE_DIRS} )
 endif()
-
 
 if (MUE_ENABLE_ACCESSIBILITY_TRACE)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_ACCESSIBILITY_TRACE )
