@@ -144,9 +144,10 @@ bool MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        Staff* excerptStaff = mu::engraving::toStaff(staff->linkedClone());
-        if (!parts->appendStaff(excerptStaff, destinationPartId)) {
-            excerptStaff->unlink();
+        Staff* excerptStaff = staff->clone();
+        if (parts->appendStaff(excerptStaff, destinationPartId)) {
+            excerptStaff->linkTo(staff);
+        } else {
             delete excerptStaff;
         }
     }
