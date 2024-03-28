@@ -3568,7 +3568,7 @@ bool MusicXMLParserDirection::isLikelyFingering() const
 MusicXMLInferredFingering::MusicXMLInferredFingering(double totalY,
                                                      EngravingItem* element,
                                                      String& text,
-                                                     int track,
+                                                     track_idx_t track,
                                                      String placement,
                                                      Measure* measure,
                                                      Fraction tick)
@@ -3612,7 +3612,7 @@ bool MusicXMLInferredFingering::findAndAddToNotes(Measure* measure)
 {
     roundTick(measure);
     std::vector<Note*> collectedNotes;
-    for (int track = m_track; track < m_track + 4; ++track) {
+    for (track_idx_t track = m_track; track < m_track + 4; ++track) {
         Chord* candidateChord = measure->findChord(tick(), track);
         if (candidateChord) {
             if (candidateChord->notes().size() >= fingerings().size()) {
