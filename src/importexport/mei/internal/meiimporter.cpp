@@ -2076,6 +2076,13 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
         m_lyricExtenders[chord->track()][no] = std::make_pair(lyrics, nullptr);
     }
 
+    // @place
+    if (meiVerse.HasPlace()) {
+        lyrics->setPlacement(meiVerse.GetPlace()
+                             == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        lyrics->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
     // Aggregate the syllable into line blocks
     Convert::textWithSmufl textBlocks;
     pugi::xpath_node_set elements = verseNode.select_nodes("./syl");

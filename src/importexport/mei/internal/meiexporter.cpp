@@ -1414,6 +1414,9 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
 
     libmei::Verse meiVerse;
     meiVerse.SetN(String::number(lyrics->no() + 1).toStdString());
+    if (lyrics->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiVerse.SetPlace(Convert::placeToMEI(lyrics->placement()));
+    }
     Convert::colorToMEI(lyrics, meiVerse);
     m_currentNode = m_currentNode.append_child();
     meiVerse.Write(m_currentNode, this->getLayerXmlIdFor(VERSE_L));
