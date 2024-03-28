@@ -20,9 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "midistubmodule.h"
-
 #include "modularity/ioc.h"
-
 #include "midiconfigurationstub.h"
 
 using namespace mu::midi;
@@ -36,4 +34,9 @@ std::string MidiModule::moduleName() const
 void MidiModule::registerExports()
 {
     ioc()->registerExport<IMidiConfiguration>(moduleName(), new MidiConfigurationStub());
+}
+
+mu::async::Channel<tick_t, mu::midi::Event>* MidiModule::getMidiInputQueue()
+{
+    return nullptr;
 }

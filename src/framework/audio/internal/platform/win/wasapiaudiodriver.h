@@ -36,7 +36,7 @@ class WasapiAudioDriver : public IAudioDriver, public async::Asyncable
 public:
     WasapiAudioDriver();
 
-    void init() override;
+    void init(void* midiModule_ptr) override;
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
     void close() override;
@@ -51,6 +51,9 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
+    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection dir) const override;
+
     void resume() override;
     void suspend() override;
 

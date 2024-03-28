@@ -26,6 +26,7 @@
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
+#include "framework/midi/midimodule.h"
 #include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
@@ -59,18 +60,11 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::audio::fx;
 
-#ifdef JACK_AUDIO
-#include "internal/platform/jack/jackaudiodriver.h"
-#endif
-
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
 #include "internal/platform/lin/linuxaudiodriver.h"
 #endif
 
-#ifdef Q_OS_FREEBSD
-#include "internal/platform/lin/linuxaudiodriver.h"
-#endif
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && !defined(MINGW)
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
 #include "internal/platform/win/wasapiaudiodriver.h"
@@ -111,15 +105,11 @@ void AudioModule::registerExports()
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
-#if defined(JACK_AUDIO)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
-#else
-
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
 #endif
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && !defined(MINGW)
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());
@@ -132,8 +122,6 @@ void AudioModule::registerExports()
 #ifdef Q_OS_WASM
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
-
-#endif // JACK_AUDIO
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
@@ -268,7 +256,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
     };
 
     if (mode == IApplication::RunMode::GuiApp) {
-        m_audioDriver->init();
+        m_audioDriver->init(static_cast<mu::midi::MidiModule*>(m_midiModule_ptr));
 
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
@@ -308,4 +296,11 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
     };
 
     m_audioWorker->run(workerSetup, workerLoopBody);
+}
+
+void AudioModule::preamble([[maybe_unused]] void* mm_ptr)
+{
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    m_midiModule_ptr = mm_ptr;
+#endif
 }

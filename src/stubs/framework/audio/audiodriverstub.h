@@ -28,7 +28,7 @@ namespace mu::audio {
 class AudioDriverStub : public IAudioDriver
 {
 public:
-    void init() override;
+    void init(void* midiModule_ptr) override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -42,6 +42,8 @@ public:
 
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
+    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection direction) const override;
 
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;

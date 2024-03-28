@@ -46,7 +46,7 @@ public:
     OSXAudioDriver();
     ~OSXAudioDriver();
 
-    void init() override;
+    void init(void* midiModule_ptr) override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -69,6 +69,8 @@ public:
     async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
+    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection dir) const override;
 
 private:
     static void OnFillBuffer(void* context, OpaqueAudioQueue* queue, AudioQueueBuffer* buffer);
@@ -82,7 +84,7 @@ private:
 
     struct Data;
 
-    std::shared_ptr<Data> m_data = nullptr;
+    std::shared_ptr<Data> m_data;
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
     mutable std::mutex m_devicesMutex;
     async::Notification m_outputDeviceChanged;

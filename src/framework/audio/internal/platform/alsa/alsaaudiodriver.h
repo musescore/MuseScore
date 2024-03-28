@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2022 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,21 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_JACKAUDIODRIVER_H
-#define MU_AUDIO_JACKAUDIODRIVER_H
+#ifndef MU_AUDIO_ALSAAUDIODRIVER_H
+#define MU_AUDIO_ALSAAUDIODRIVER_H
 
-#include <jack/jack.h>
-
-#include "framework/midi/miditypes.h"
 #include "iaudiodriver.h"
-#include "playback/iplaybackcontroller.h"
 
 namespace mu::audio {
-class JackDriverState : public AudioDriverState, public async::Asyncable
+class AlsaDriverState : public AudioDriverState
 {
 public:
-    JackDriverState(std::shared_ptr<playback::IPlaybackController>);
-    ~JackDriverState();
+    AlsaDriverState();
+    ~AlsaDriverState();
 
     std::string name() const override;
     bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
@@ -42,26 +38,20 @@ public:
     bool isOpened() const override;
     bool pushMidiEvent(mu::midi::Event& e) override;
     void registerMidiInputQueue(async::Channel<mu::midi::tick_t, mu::midi::Event >*) override;
-
+    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection direction) const override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
-    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection direction) const;
 
-    void* m_jackDeviceHandle = nullptr;
+    void* m_alsaDeviceHandle = nullptr;
+
     float* m_buffer = nullptr;
-    std::vector<jack_port_t*> m_outputPorts;
-    std::vector<jack_port_t*> m_midiInputPorts;
-    std::vector<jack_port_t*> m_midiOutputPorts;
-    ThreadSafeQueue<mu::midi::Event> m_midiQueue;
-    async::Channel<mu::midi::tick_t, mu::midi::Event >* m_eventReceived;
-    std::shared_ptr<playback::IPlaybackController> m_playbackController;
-
+    bool m_audioProcessingDone = false;
+    pthread_t m_threadHandle = 0;
 private:
-    std::string m_deviceName;
-
-    void musescore_changed_play_state();
-    void musescore_changed_position_state();
+    async::Channel<mu::midi::tick_t, mu::midi::Event >* m_eventReceived;
+    std::string m_deviceName = "default";
+    void alsaCleanup();
 };
 }
 
-#endif // MU_AUDIO_JACKAUDIODRIVER_H
+#endif // MU_AUDIO_ALSAAUDIODRIVER_H

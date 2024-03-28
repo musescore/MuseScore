@@ -38,6 +38,8 @@ public:
 
     MOCK_METHOD(void, seek, (const midi::tick_t), (override));
     MOCK_METHOD(void, seek, (const audio::msecs_t), (override));
+    MOCK_METHOD(void, remoteSeek, (const audio::msecs_t), (override));
+    MOCK_METHOD(void, remotePlayOrStop, (const bool), (override));
     MOCK_METHOD(void, reset, (), (override));
 
     MOCK_METHOD(async::Notification, playbackPositionChanged, (), (const, override));

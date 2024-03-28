@@ -32,8 +32,12 @@
 #include "modularity/imoduleinterface.h"
 
 #include "audiotypes.h"
+#include "framework/midi/miditypes.h"
+#include "framework/audio/midiqueue.h"
 
 namespace mu::audio {
+class AudioDriverState;
+
 class IAudioDriver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioDriver)
@@ -58,7 +62,7 @@ public:
         void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
     };
 
-    virtual void init() = 0;
+    virtual void init(void* midiModule_ptr) = 0;
 
     virtual std::string name() const = 0;
     virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
@@ -79,10 +83,27 @@ public:
 
     virtual std::vector<unsigned int> availableOutputDeviceBufferSizes() const = 0;
 
+    virtual bool pushMidiEvent(mu::midi::Event&) = 0;
+    virtual std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection dir) const = 0;
+
     virtual void resume() = 0;
     virtual void suspend() = 0;
 };
-using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
+
+class AudioDriverState
+{
+public:
+    virtual std::string name() const = 0;
+    virtual bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) = 0;
+    virtual void close() = 0;
+    virtual bool isOpened() const = 0;
+    virtual bool pushMidiEvent(mu::midi::Event&) = 0;
+    virtual void registerMidiInputQueue(async::Channel<mu::midi::tick_t, mu::midi::Event >*) = 0;
+    virtual std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection dir) const = 0;
+
+    IAudioDriver::Spec m_spec; // current running spec
+    std::string m_deviceId;
+};
 }
 
 #endif // MU_AUDIO_IAUDIODRIVER_H

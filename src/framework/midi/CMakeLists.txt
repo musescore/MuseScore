@@ -21,6 +21,17 @@
 set(MODULE midi)
 
 include(GetPlatformInfo)
+
+set(JACK_SRC "")
+if (MUE_ENABLE_AUDIO_JACK)
+    set(JACK_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidiinport.h
+        )
+endif()
+
 if (OS_IS_WIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
@@ -30,17 +41,27 @@ if (OS_IS_WIN)
     )
 elseif(OS_IS_LIN)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
+        ${JACK_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidiinport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidiinport.h
     )
 elseif(OS_IS_FBSD)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
+        ${JACK_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsamidiinport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxmidiinport.h
     )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC

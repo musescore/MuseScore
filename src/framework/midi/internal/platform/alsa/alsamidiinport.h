@@ -19,10 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_WINMIDIINPORT_H
-#define MU_MIDI_WINMIDIINPORT_H
+#ifndef MU_MIDI_ALSAMIDIINPORT_H
+#define MU_MIDI_ALSAMIDIINPORT_H
 
 #include <memory>
+#include <thread>
 
 #include "async/asyncable.h"
 
@@ -30,11 +31,11 @@
 #include "internal/midideviceslistener.h"
 
 namespace mu::midi {
-class WinMidiInPort : public IMidiInPort, public async::Asyncable
+class AlsaMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
-    WinMidiInPort() = default;
-    ~WinMidiInPort() = default;
+    AlsaMidiInPort() = default;
+    ~AlsaMidiInPort() = default;
 
     void init();
     void deinit();
@@ -50,17 +51,20 @@ public:
 
     async::Channel<tick_t, Event> eventReceived() const override;
 
-    // internal;
-    void doProcess(uint32_t message, tick_t timing);
-
 private:
     Ret run();
     void stop();
 
-    struct Win;
-    std::shared_ptr<Win> m_win;
+    static void process(AlsaMidiInPort* self);
+    void doProcess();
+
+    bool deviceExists(const MidiDeviceID& deviceId) const;
+
+    struct Alsa;
+    std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
-    bool m_running = false;
+    std::shared_ptr<std::thread> m_thread;
+    std::atomic<bool> m_running{ false };
     async::Notification m_deviceChanged;
 
     async::Notification m_availableDevicesChanged;
@@ -72,4 +76,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_WINMIDIINPORT_H
+#endif // MU_MIDI_ALSAMIDIINPORT_H

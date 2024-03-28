@@ -77,7 +77,7 @@ WasapiAudioDriver::WasapiAudioDriver()
     });
 }
 
-void WasapiAudioDriver::init()
+void WasapiAudioDriver::init(void* midiModule_ptr)
 {
 }
 
@@ -306,4 +306,15 @@ AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
     }
 
     return result;
+}
+
+bool WasapiAudioDriver::pushMidiEvent(mu::midi::Event&)
+{
+    return true;
+}
+
+std::vector<mu::midi::MidiDevice> WasapiAudioDriver::availableMidiDevices(mu::midi::MidiPortDirection dir) const
+{
+    std::vector<mu::midi::MidiDevice> x;
+    return x; // dummy
 }

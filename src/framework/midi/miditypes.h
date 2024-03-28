@@ -48,6 +48,15 @@ using Events = std::map<tick_t, std::vector<Event> >;
 
 static constexpr int EXPRESSION_CONTROLLER = 11;
 
+// input/output relative to context
+// ie, a MusescoreIngress port would be an external jack-midi output port
+enum class MidiPortDirection
+{
+    Any,
+    Input,
+    Output
+};
+
 struct Program {
     Program(bank_t b = 0, program_t p = 0)
         : bank(b), program(p) {}
@@ -137,8 +146,6 @@ struct MidiDevice {
         return id == other.id;
     }
 };
-
-using MidiDeviceList = std::vector<MidiDevice>;
 
 inline MidiDeviceID makeUniqueDeviceId(int index, int arg1, int arg2)
 {

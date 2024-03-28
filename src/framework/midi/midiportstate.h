@@ -19,32 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_IMIDIOUTPORT_H
-#define MU_MIDI_IMIDIOUTPORT_H
-
-#include "modularity/imoduleinterface.h"
+#ifndef MU_MIDI_MIDIPORTSTATE_H
+#define MU_MIDI_MIDIPORTSTATE_H
 
 #include "types/ret.h"
-#include "async/notification.h"
 #include "miditypes.h"
 
 namespace mu::midi {
-class IMidiOutPort : MODULE_EXPORT_INTERFACE
+class MidiPortState
 {
-    INTERFACE_ID(IMidiOutPort)
-
 public:
-    virtual ~IMidiOutPort() = default;
+    virtual ~MidiPortState() = default;
+
+    virtual void init() = 0;
+    virtual void deinit() = 0;
 
     virtual std::vector<MidiDevice> availableDevices() const = 0;
-    virtual async::Notification availableDevicesChanged() const = 0;
 
     virtual Ret connect(const MidiDeviceID& deviceID) = 0;
     virtual void disconnect() = 0;
     virtual bool isConnected() const = 0;
     virtual MidiDeviceID deviceID() const = 0;
-    virtual async::Notification deviceChanged() const = 0;
 
+    //
     // Whether the output port supports it, rather than whether the receiver supports it
     // (If the receiver does not support MIDI 2.0, then it's the output port's resposibility to convert to MIDI 1.0)
     virtual bool supportsMIDI20Output() const = 0;
@@ -53,4 +50,4 @@ public:
 };
 }
 
-#endif // MU_MIDI_IMIDIPORT_H
+#endif // MU_MIDI_MIDIPORTSTATE_H

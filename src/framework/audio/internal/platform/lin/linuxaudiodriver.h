@@ -25,18 +25,21 @@
 
 #include "async/asyncable.h"
 
+#include "framework/midi/midimodule.h"
 #include "iaudiodriver.h"
 
 #include "audiodeviceslistener.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace mu::audio {
 class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
 {
+    INJECT(playback::IPlaybackController, playbackController)
 public:
     LinuxAudioDriver();
     ~LinuxAudioDriver();
 
-    void init() override;
+    void init(void* midiModule_ptr) override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -56,11 +59,15 @@ public:
     async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
+    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection direction) const override;
 
     void resume() override;
     void suspend() override;
 
 private:
+    bool makeDevice(const AudioDeviceID& deviceId);
+    bool reopen(const AudioDeviceID& deviceId, Spec newSpec);
     async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
@@ -71,6 +78,11 @@ private:
 
     async::Notification m_bufferSizeChanged;
     async::Notification m_sampleRateChanged;
+
+    struct IAudioDriver::Spec m_spec;
+    std::unique_ptr<AudioDriverState> m_current_audioDriverState;
+
+    void* m_midiModule_ptr;
 };
 }
 

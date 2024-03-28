@@ -34,6 +34,7 @@ public:
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
+    void* m_midiModule_ptr;
 };
 }
 

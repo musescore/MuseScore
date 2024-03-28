@@ -44,7 +44,6 @@ struct OSXAudioDriver::Data {
 };
 
 OSXAudioDriver::OSXAudioDriver()
-    : m_data(nullptr)
 {
     m_data = std::make_shared<Data>();
     m_data->audioQueue = nullptr;
@@ -60,7 +59,7 @@ OSXAudioDriver::~OSXAudioDriver()
     close();
 }
 
-void OSXAudioDriver::init()
+void OSXAudioDriver::init(void* midiModule_ptr)
 {
 }
 
@@ -525,4 +524,15 @@ void OSXAudioDriver::OnFillBuffer(void* context, AudioQueueRef, AudioQueueBuffer
     Data* pData = (Data*)context;
     pData->callback(pData->mUserData, (uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
     AudioQueueEnqueueBuffer(pData->audioQueue, buffer, 0, NULL);
+}
+
+bool OSXAudioDriver::pushMidiEvent(mu::midi::Event&)
+{
+    return true; // dummy
+}
+
+std::vector<mu::midi::MidiDevice> OSXAudioDriver::availableMidiDevices(mu::midi::MidiPortDirection dir) const
+{
+    std::vector<mu::midi::MidiDevice> x;
+    return x; // dummy
 }

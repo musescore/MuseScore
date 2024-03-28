@@ -44,6 +44,8 @@
 using namespace mu::app;
 using namespace mu::appshell;
 
+int g_jackTransportDelay;
+
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::GlobalModule globalModule;
 
@@ -114,6 +116,8 @@ int App::run(int argc, char** argv)
     CommandLineParser commandLineParser;
     commandLineParser.init();
     commandLineParser.parse(argc, argv);
+
+    g_jackTransportDelay = commandLineParser.m_transportDelay;
 
     IApplication::RunMode runMode = commandLineParser.runMode();
     QCoreApplication* qapp = nullptr;

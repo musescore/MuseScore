@@ -36,6 +36,8 @@ public:
 
     void seek(const midi::tick_t tick) override;
     void seek(const audio::msecs_t msecs) override;
+    void remoteSeek(const audio::msecs_t msecs) override;
+    void remotePlayOrStop(const bool playOrStop) override;
     void reset() override;
 
     async::Notification playbackPositionChanged() const override;

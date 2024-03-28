@@ -35,7 +35,7 @@ class MidiDevicesListener
 public:
     ~MidiDevicesListener();
 
-    using ActualDevicesCallback = std::function<MidiDeviceList()>;
+    using ActualDevicesCallback = std::function<std::vector<MidiDevice>()>;
 
     void startWithCallback(const ActualDevicesCallback& callback);
 
@@ -43,7 +43,7 @@ public:
 
 private:
     void th_updateDevices();
-    void th_setDevices(const MidiDeviceList& devices);
+    void th_setDevices(const std::vector<MidiDevice>& devices);
     void stop();
 
     std::shared_ptr<std::thread> m_devicesUpdateThread;
@@ -52,7 +52,7 @@ private:
     mutable std::mutex m_mutex;
     std::condition_variable m_runningCv;
 
-    MidiDeviceList m_devices;
+    std::vector<MidiDevice> m_devices;
     async::Notification m_devicesChanged;
 
     ActualDevicesCallback m_actualDevicesCallback;

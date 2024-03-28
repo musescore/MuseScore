@@ -83,10 +83,10 @@ void WinMidiOutPort::deinit()
     }
 }
 
-MidiDeviceList WinMidiOutPort::availableDevices() const
+std::vector<MidiDevice> WinMidiOutPort::availableDevices() const
 {
     std::lock_guard lock(m_devicesMutex);
-    MidiDeviceList ret;
+    std::vector<MidiDevice> ret;
 
     ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
 

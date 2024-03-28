@@ -19,105 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "framework/audio/midiqueue.h"
 #include "linuxaudiodriver.h"
-
-#define ALSA_PCM_NEW_HW_PARAMS_API
-#include <alsa/asoundlib.h>
-
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-#include <pthread.h>
+#include "../alsa/alsaaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#if JACK_AUDIO
+#include "../jack/jackaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#endif
 
 #include "translation.h"
 #include "log.h"
 #include "runtime.h"
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
-
 using namespace mu::audio;
-
-namespace {
-struct ALSAData
-{
-    float* buffer = nullptr;
-    snd_pcm_t* alsaDeviceHandle = nullptr;
-    unsigned long samples = 0;
-    int channels = 0;
-    bool audioProcessingDone = false;
-    pthread_t threadHandle = 0;
-    IAudioDriver::Callback callback;
-    void* userdata = nullptr;
-};
-
-static ALSAData* s_alsaData{ nullptr };
-IAudioDriver::Spec s_format;
-
-static void* alsaThread(void* aParam)
-{
-    mu::runtime::setThreadName("audio_driver");
-    ALSAData* data = static_cast<ALSAData*>(aParam);
-
-    int ret = snd_pcm_wait(data->alsaDeviceHandle, 1000);
-    IF_ASSERT_FAILED(ret > 0) {
-        return nullptr;
-    }
-
-    while (!data->audioProcessingDone)
-    {
-        uint8_t* stream = (uint8_t*)data->buffer;
-        int len = data->samples * data->channels * sizeof(float);
-
-        data->callback(data->userdata, stream, len);
-
-        snd_pcm_sframes_t pcm = snd_pcm_writei(data->alsaDeviceHandle, data->buffer, data->samples);
-        if (pcm != -EPIPE) {
-        } else {
-            snd_pcm_prepare(data->alsaDeviceHandle);
-        }
-    }
-
-    LOGI() << "exit";
-    return nullptr;
-}
-
-static void alsaCleanup()
-{
-    if (!s_alsaData) {
-        return;
-    }
-
-    s_alsaData->audioProcessingDone = true;
-    if (s_alsaData->threadHandle) {
-        pthread_join(s_alsaData->threadHandle, nullptr);
-    }
-    if (nullptr != s_alsaData->alsaDeviceHandle) {
-        snd_pcm_drain(s_alsaData->alsaDeviceHandle);
-        snd_pcm_close(s_alsaData->alsaDeviceHandle);
-    }
-
-    if (nullptr != s_alsaData->buffer) {
-        delete[] s_alsaData->buffer;
-    }
-
-    delete s_alsaData;
-    s_alsaData = nullptr;
-}
-}
 
 LinuxAudioDriver::LinuxAudioDriver()
 {
-    m_deviceId = DEFAULT_DEVICE_ID;
 }
 
 LinuxAudioDriver::~LinuxAudioDriver()
 {
-    alsaCleanup();
 }
 
-void LinuxAudioDriver::init()
+void LinuxAudioDriver::init(void* mm_ptr)
 {
+    LOGI(" -- init, this: %lx", this);
+    m_midiModule_ptr = mm_ptr;
     m_devicesListener.startWithCallback([this]() {
         return availableOutputDevices();
     });
@@ -129,113 +55,118 @@ void LinuxAudioDriver::init()
 
 std::string LinuxAudioDriver::name() const
 {
-    return "MUAUDIO(ALSA)";
+    return m_current_audioDriverState->name();
 }
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    s_alsaData = new ALSAData();
-    s_alsaData->samples = spec.samples;
-    s_alsaData->channels = spec.channels;
-    s_alsaData->callback = spec.callback;
-    s_alsaData->userdata = spec.userdata;
+    /**************************************************************************/
+    // a bit lazy registering the midi-input-queue here, but midimodule isn't
+    // available at audiomodule init, because midimodule starts after audiomodule
 
-    int rc;
-    snd_pcm_t* handle;
-    rc = snd_pcm_open(&handle, outputDevice().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
-    if (rc < 0) {
+    // mu::midi::MidiModule mm = static_cast<mu::midi::MidiModule>(mm_ptr);
+    mu::midi::MidiModule* mm = static_cast<mu::midi::MidiModule*>(m_midiModule_ptr);
+    // not sure we got the identity of eventQueue (ie, passed by reference)
+#if defined(JACK_AUDIO)
+    m_current_audioDriverState->registerMidiInputQueue(mm->getMidiInputQueue());
+#endif
+    /**************************************************************************/
+
+    if (!m_current_audioDriverState->open(spec, activeSpec)) {
         return false;
     }
-
-    s_alsaData->alsaDeviceHandle = handle;
-
-    snd_pcm_hw_params_t* params;
-    snd_pcm_hw_params_alloca(&params);
-    snd_pcm_hw_params_any(handle, params);
-
-    snd_pcm_hw_params_set_access(handle, params, SND_PCM_ACCESS_RW_INTERLEAVED);
-    snd_pcm_hw_params_set_format(handle, params, SND_PCM_FORMAT_FLOAT_LE);
-    snd_pcm_hw_params_set_channels(handle, params, spec.channels);
-
-    unsigned int aSamplerate = spec.sampleRate;
-    unsigned int val = aSamplerate;
-    int dir = 0;
-    rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
-    if (rc < 0) {
-        return false;
-    }
-
-    snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
-
-    rc = snd_pcm_hw_params(handle, params);
-    if (rc < 0) {
-        return false;
-    }
-
-    snd_pcm_hw_params_get_rate(params, &val, &dir);
-    aSamplerate = val;
-
-    s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
-    //_alsaData->sampleBuffer = new short[_alsaData->samples * _alsaData->channels];
-
-    if (activeSpec) {
-        *activeSpec = spec;
-        activeSpec->format = Format::AudioF32;
-        activeSpec->sampleRate = aSamplerate;
-        s_format = *activeSpec;
-    }
-
-    s_alsaData->threadHandle = 0;
-    int ret = pthread_create(&s_alsaData->threadHandle, NULL, alsaThread, (void*)s_alsaData);
-
-    if (0 != ret) {
-        return false;
-    }
-
-    LOGD() << "Connected to " << outputDevice();
+    m_spec = *activeSpec;
     return true;
 }
 
 void LinuxAudioDriver::close()
 {
-    alsaCleanup();
+    return m_current_audioDriverState->close();
 }
 
 bool LinuxAudioDriver::isOpened() const
 {
-    return s_alsaData != nullptr;
+    return m_current_audioDriverState->isOpened();
 }
 
 AudioDeviceID LinuxAudioDriver::outputDevice() const
 {
-    return m_deviceId;
+    if (m_current_audioDriverState != nullptr) {
+        return m_current_audioDriverState->m_deviceId;
+    } else {
+        LOGE() << "device is not opened, deviceId: " << m_deviceId;
+        return m_deviceId; // FIX: should return optional type
+    }
+}
+
+bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
+{
+#if defined(JACK_AUDIO)
+    if (deviceId == "jack") {
+        m_current_audioDriverState = std::make_unique<JackDriverState>(playbackController());
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    } else if (deviceId == "alsa") {
+        m_current_audioDriverState = std::make_unique<AlsaDriverState>();
+#endif
+#else
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    if (deviceId == "alsa") {
+        m_current_audioDriverState = std::make_unique<AlsaDriverState>();
+#endif
+#endif
+    } else {
+        LOGE() << "Unknown device name: " << deviceId;
+        return false;
+    }
+    LOGI(" -- driver: %lx", m_current_audioDriverState.get());
+    return true;
+}
+
+// reopens the same device (if m_spec has changed)
+bool LinuxAudioDriver::reopen(const AudioDeviceID& deviceId, Spec newSpec)
+{
+    bool reopen = m_current_audioDriverState->isOpened();
+    // close current device if opened
+    if (reopen) {
+        m_current_audioDriverState->close();
+    }
+    // maybe change device, if needed
+    if (m_current_audioDriverState->name() != deviceId) {
+        // select the new device driver
+        if (!makeDevice(deviceId)) {
+            return false;
+        }
+    }
+    // open the device driver
+    if (!m_current_audioDriverState->open(newSpec, &newSpec)) {
+        return false;
+    }
+    return true;
 }
 
 bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 {
-    if (m_deviceId == deviceId) {
+    // When starting, no previously device has been selected
+    if (m_current_audioDriverState == nullptr) {
+        LOGW() << "no previously opened device";
+        return makeDevice(deviceId);
+    }
+    // If for some reason we select the same device, do nothing
+    if (m_current_audioDriverState->name() == deviceId) {
         return true;
     }
-
-    bool reopen = isOpened();
-    close();
-    m_deviceId = deviceId;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(s_format, &s_format);
-    }
-
-    if (ok) {
-        m_outputDeviceChanged.notify();
-    }
-
-    return ok;
+    reopen(deviceId, m_spec);
+    m_outputDeviceChanged.notify();
+    return true;
 }
 
 bool LinuxAudioDriver::resetToDefaultOutputDevice()
 {
-    return selectOutputDevice(DEFAULT_DEVICE_ID);
+#if defined(JACK_AUDIO)
+    return selectOutputDevice("jack"); // FIX:
+#else
+    return selectOutputDevice("alsa"); // FIX:
+#endif
 }
 
 mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
@@ -246,8 +177,12 @@ mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
 AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
-
+#if defined(JACK_AUDIO)
+    devices.push_back({ "jack", trc("audio", "JACK") });
+#endif
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    devices.push_back({ "alsa", trc("audio", "ALSA") });
+#endif
     return devices;
 }
 
@@ -258,29 +193,20 @@ mu::async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
 
 unsigned int LinuxAudioDriver::outputDeviceBufferSize() const
 {
-    return s_format.samples;
+    return m_current_audioDriverState->m_spec.samples;
 }
 
 bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (s_format.samples == bufferSize) {
+    if (m_spec.samples == (int)bufferSize) {
         return true;
     }
-
-    bool reopen = isOpened();
-    close();
-    s_format.samples = bufferSize;
-
-    bool ok = true;
-    if (reopen) {
-        ok = open(s_format, &s_format);
+    m_spec.samples = (int)bufferSize;
+    if (!reopen(m_current_audioDriverState->name(), m_spec)) {
+        return false;
     }
-
-    if (ok) {
-        m_bufferSizeChanged.notify();
-    }
-
-    return ok;
+    m_bufferSizeChanged.notify();
+    return true;
 }
 
 mu::async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
@@ -292,7 +218,7 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
 {
     std::vector<unsigned int> result;
 
-    unsigned int n = 4096;
+    unsigned int n = 4096; // FIX: magic number
     while (n >= MINIMUM_BUFFER_SIZE) {
         result.push_back(n);
         n /= 2;
@@ -301,6 +227,24 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
     std::sort(result.begin(), result.end());
 
     return result;
+}
+
+bool LinuxAudioDriver::pushMidiEvent(mu::midi::Event& e)
+{
+    if (m_current_audioDriverState) {
+        m_current_audioDriverState->pushMidiEvent(e);
+        return true;
+    }
+    return false;
+}
+
+std::vector<mu::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices(mu::midi::MidiPortDirection direction) const
+{
+    if (m_current_audioDriverState) {
+        return m_current_audioDriverState->availableMidiDevices(direction);
+    }
+    std::vector<mu::midi::MidiDevice> x;
+    return x;
 }
 
 void LinuxAudioDriver::resume()

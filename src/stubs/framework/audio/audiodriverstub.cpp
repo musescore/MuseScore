@@ -23,7 +23,7 @@
 
 using namespace mu::audio;
 
-void AudioDriverStub::init()
+void AudioDriverStub::init(void* midiModule_ptr)
 {
 }
 
@@ -102,4 +102,15 @@ void AudioDriverStub::resume()
 
 void AudioDriverStub::suspend()
 {
+}
+
+bool AudioDriverStub::pushMidiEvent(mu::midi::Event&)
+{
+    return true;
+}
+
+std::vector<mu::midi::MidiDevice> AudioDriverStub::availableMidiDevices(mu::midi::MidiPortDirection direction) const
+{
+    std::vector<mu::midi::MidiDevice> x;
+    return x; // dummy
 }

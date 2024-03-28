@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,24 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_WINMIDIINPORT_H
-#define MU_MIDI_WINMIDIINPORT_H
+#ifndef MU_MIDI_LINUXMIDIOUTPORT_H
+#define MU_MIDI_LINUXMIDIOUTPORT_H
 
 #include <memory>
 
 #include "async/asyncable.h"
-
-#include "imidiinport.h"
+#include "framework/audio/audiomodule.h"
+#include "midi/imidioutport.h"
 #include "internal/midideviceslistener.h"
 
+#if defined(JACK_AUDIO)
+#include "internal/platform/jack/jackmidioutport.h"
+#endif
+
+#include "internal/platform/alsa/alsamidioutport.h"
+
 namespace mu::midi {
-class WinMidiInPort : public IMidiInPort, public async::Asyncable
+class LinuxMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
-    WinMidiInPort() = default;
-    ~WinMidiInPort() = default;
+    LinuxMidiOutPort() = default;
+    ~LinuxMidiOutPort() = default;
 
-    void init();
+    void init(std::shared_ptr<mu::audio::AudioModule> am);
     void deinit();
 
     std::vector<MidiDevice> availableDevices() const override;
@@ -48,19 +54,14 @@ public:
     MidiDeviceID deviceID() const override;
     async::Notification deviceChanged() const override;
 
-    async::Channel<tick_t, Event> eventReceived() const override;
+    bool supportsMIDI20Output() const override;
 
-    // internal;
-    void doProcess(uint32_t message, tick_t timing);
+    Ret sendEvent(const Event& e) override;
 
 private:
-    Ret run();
-    void stop();
+    bool deviceExists(const MidiDeviceID& deviceId) const;
 
-    struct Win;
-    std::shared_ptr<Win> m_win;
     MidiDeviceID m_deviceID;
-    bool m_running = false;
     async::Notification m_deviceChanged;
 
     async::Notification m_availableDevicesChanged;
@@ -68,8 +69,14 @@ private:
 
     mutable std::mutex m_devicesMutex;
 
-    async::Channel<tick_t, Event > m_eventReceived;
+    std::shared_ptr<mu::audio::AudioModule> m_audioModule;
+
+    MidiPortState* m_midiOutPortCurrent;
+#if defined(JACK_AUDIO)
+    std::unique_ptr<JackMidiOutPort> m_midiOutPortJack;
+#endif
+    std::unique_ptr<AlsaMidiOutPort> m_midiOutPortAlsa;
 };
 }
 
-#endif // MU_MIDI_WINMIDIINPORT_H
+#endif // MU_MIDI_ALSAMIDIOUTPORT_H

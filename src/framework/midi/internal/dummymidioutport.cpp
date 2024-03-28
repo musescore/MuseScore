@@ -30,7 +30,7 @@ void DummyMidiOutPort::init()
 {
 }
 
-MidiDeviceList DummyMidiOutPort::availableDevices() const
+std::vector<MidiDevice> DummyMidiOutPort::availableDevices() const
 {
     MidiDevice d;
     d.id = "dummy";

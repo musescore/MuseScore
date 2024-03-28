@@ -25,12 +25,13 @@
 #include <memory>
 
 #include "modularity/imodulesetup.h"
+#include "framework/audio/audiomodule.h"
 
 namespace mu::midi {
 class MidiConfiguration;
 #if defined(Q_OS_LINUX)
-class AlsaMidiOutPort;
-class AlsaMidiInPort;
+class LinuxMidiOutPort;
+class LinuxMidiInPort;
 #elif defined(Q_OS_FREEBSD)
 class AlsaMidiOutPort;
 class AlsaMidiInPort;
@@ -54,12 +55,16 @@ public:
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
 
+    void preamble(mu::audio::AudioModule* am);
+    mu::async::Channel<tick_t, mu::midi::Event>* getMidiInputQueue();
+
 private:
     std::shared_ptr<MidiConfiguration> m_configuration;
 
     #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    std::shared_ptr<AlsaMidiOutPort> m_midiOutPort;
-    std::shared_ptr<AlsaMidiInPort> m_midiInPort;
+    std::shared_ptr<mu::audio::AudioModule> m_audioModule;
+    std::shared_ptr<LinuxMidiOutPort> m_midiOutPort;
+    std::shared_ptr<LinuxMidiInPort> m_midiInPort;
 
     #elif defined(Q_OS_WIN)
     std::shared_ptr<WinMidiOutPort> m_midiOutPort;

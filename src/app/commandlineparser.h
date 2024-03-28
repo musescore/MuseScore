@@ -167,6 +167,7 @@ public:
     Diagnostic diagnostic() const;
     Autobot autobot() const;
     AudioPluginRegistration audioPluginRegistration() const;
+    int m_transportDelay = 1024; // equal to BUFFER_SIZE
 
 private:
     void printLongVersion() const;

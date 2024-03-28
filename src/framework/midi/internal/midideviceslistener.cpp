@@ -67,7 +67,7 @@ void MidiDevicesListener::th_updateDevices()
     std::unique_lock<std::mutex> lock(m_mutex);
 
     while (m_isRunning) {
-        MidiDeviceList devices = m_actualDevicesCallback();
+        std::vector<MidiDevice> devices = m_actualDevicesCallback();
 
         th_setDevices(devices);
 
@@ -75,7 +75,7 @@ void MidiDevicesListener::th_updateDevices()
     }
 }
 
-void MidiDevicesListener::th_setDevices(const MidiDeviceList& devices)
+void MidiDevicesListener::th_setDevices(const std::vector<MidiDevice>& devices)
 {
     if (devices == m_devices) {
         return;
