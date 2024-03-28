@@ -217,6 +217,16 @@ Color EngravingConfiguration::fontPrimaryColor() const
     return Color(uiConfiguration()->currentTheme().values[ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString());
 }
 
+Color EngravingConfiguration::timeTickAnchorColorLighter() const
+{
+    return Color(204, 234, 255);
+}
+
+Color EngravingConfiguration::timeTickAnchorColorDarker() const
+{
+    return Color(153, 213, 255);
+}
+
 double EngravingConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();

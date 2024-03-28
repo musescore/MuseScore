@@ -773,6 +773,7 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
         } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
+        } else if (readProperty(d, tag, e, ctx, Pid::ANCHOR_TO_END_OF_PREVIOUS)) {
         } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();
         }
@@ -3242,6 +3243,8 @@ void TRead::read(Location* l, XmlReader& e, ReadContext&)
             l->setGraceIndex(e.readInt());
         } else if (tag == "notes") {
             l->setNote(e.readInt());
+        } else if (tag == "timeTick") {
+            l->setIsTimeTick(e.readBool());
         } else {
             e.unknown();
         }

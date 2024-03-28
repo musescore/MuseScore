@@ -117,6 +117,8 @@ public:
 
     bool isUserModified() const override;
 
+    bool allowTimeAnchor() const override;
+
 protected:
 
     SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
@@ -209,6 +211,7 @@ public:
 
     void computeStartElement();
     void computeEndElement();
+
     static Note* endElementFromSpanner(Spanner* sp, EngravingItem* newStart);
     static Note* startElementFromSpanner(Spanner* sp, EngravingItem* newEnd);
     void setNoteSpan(Note* startNote, Note* endNote);
@@ -257,10 +260,15 @@ public:
 
     bool isUserModified() const override;
 
+    virtual bool allowTimeAnchor() const { return false; }
+
 protected:
 
     Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     Spanner(const Spanner&);
+
+    virtual void doComputeStartElement();
+    virtual void doComputeEndElement();
 
 private:
 

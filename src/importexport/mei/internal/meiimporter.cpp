@@ -494,11 +494,12 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
     }
     m_uids->reg(item, meiElement.m_xmlId);
 
-    m_score->addElement(item);
-
     item->setTick(chordRest->tick());
     item->setStartElement(chordRest);
     item->setTrack(chordRest->track());
+    item->setTrack2(chordRest->track());
+
+    m_score->addElement(item);
 
     // Add it to the map for setting spanner end in MeiImporter::addSpannerEnds
     m_openSpannerMap[item] = node;
@@ -3127,13 +3128,7 @@ void MeiImporter::addSpannerEnds()
             spannerMapEntry.first->setTick2(chordRest->tick());
             spannerMapEntry.first->setEndElement(chordRest);
             spannerMapEntry.first->setTrack2(chordRest->track());
-            // Special handling of hairpin
-            if (spannerMapEntry.first->isHairpin()) {
-                // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
-                spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
-            }
-            // Special handling of ottava and pedal
-            else if (spannerMapEntry.first->isOttava() || spannerMapEntry.first->isPedal()) {
+            if (spannerMapEntry.first->isOttava()) {
                 // Set the tick2 to include the duration of the ChordRest
                 spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
                 // Special handling of ottava

@@ -2682,6 +2682,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                    || tag == "Volta") {
             Spanner* sp = toSpanner(Factory::createItemByName(tag, ctx.dummy()));
             sp->setTrack(ctx.track());
+            sp->setTrack2(sp->track());
             sp->setTick(ctx.tick());
             sp->eraseSpannerSegments();
             ctx.addSpanner(e.intAttribute("id", -1), sp);

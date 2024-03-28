@@ -27,6 +27,7 @@
 
 #include "types/typesconv.h"
 
+#include "barline.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -313,6 +314,57 @@ void Volta::setTempo() const
 String Volta::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), text());
+}
+
+PointF Volta::linePos(Grip grip, System** system) const
+{
+    bool start = grip == Grip::START;
+
+    Segment* segment = score()->tick2leftSegment(start ? tick() : tick2(), true,
+                                                 SegmentType::ChordRest | SegmentType::StartRepeatBarLine | SegmentType::EndBarLine);
+    if (!segment) {
+        return PointF();
+    }
+
+    if (start && segment->rtick().isZero()) {
+        Segment* prev = segment->prev1enabled();
+        if (prev && prev->isEndBarLineType()) {
+            segment = prev;
+        }
+    } else if (!start) {
+        Segment* prev = segment;
+        while (prev && !prev->isEndBarLineType() && prev->tick() == segment->tick()) {
+            prev = prev->prev1enabled();
+        }
+        if (prev && prev->isEndBarLineType()) {
+            segment = prev;
+        }
+    }
+
+    *system = segment->measure()->system();
+    double x = segment->x() + segment->measure()->x();
+
+    if (start) {
+        if (segment->isChordRestType()) {
+            x -= style().styleMM(Sid::barNoteDistance);
+        } else if (segment->segmentType() & SegmentType::BarLineType) {
+            x += segment->width();
+        }
+        x -= 0.5 * lineWidth();
+    } else {
+        if ((*system) && segment->tick() == (*system)->endTick()) {
+            x += segment->staffShape(0).right();
+            x -= 0.5 * lineWidth();
+        } else if (segment->segmentType() & SegmentType::BarLineType) {
+            BarLine* barLine = toBarLine(segment->elementAt(track()));
+            if (barLine->barLineType() == BarLineType::END_REPEAT || barLine->barLineType() == BarLineType::END_START_REPEAT) {
+                x += symWidth(SymId::repeatDot) + style().styleMM(Sid::repeatBarlineDotSeparation);
+            }
+            x += 0.5 * lineWidth();
+        }
+    }
+
+    return PointF(x, 0.0);
 }
 
 //---------------------------------------------------------

@@ -31,6 +31,7 @@
 
 #include "accidental.h"
 #include "actionicon.h"
+#include "anchors.h"
 #include "barline.h"
 #include "beam.h"
 #include "bracket.h"
@@ -703,6 +704,23 @@ Segment* Measure::findFirstR(SegmentType st, const Fraction& t) const
         }
     }
     return 0;
+}
+
+Segment* Measure::getChordRestOrTimeTickSegment(const Fraction& f)
+{
+    Segment* seg = findSegment(SegmentType::ChordRest, f);
+    if (!seg) {
+        seg = findSegment(SegmentType::TimeTick, f);
+    }
+    if (!seg) {
+        if (f - tick() == ticks()) { // end of measure
+            seg = getSegment(SegmentType::TimeTick, f);
+        } else {
+            seg = getSegment(SegmentType::ChordRest, f);
+        }
+    }
+
+    return seg;
 }
 
 //---------------------------------------------------------
@@ -3096,7 +3114,12 @@ Fraction Measure::computeTicks()
     }
     while (ns) {
         Segment* s = ns;
-        ns         = s->nextActive();
+        Segment* nextSeg = s->nextActive();
+        ns = nextSeg;
+        while (s->isChordRestType() && ns && ns->isTimeTickType()) {
+            // Ignore timeTick segments when computing duration of chordRest segments
+            ns = ns->nextActive();
+        }
         Fraction nticks = (ns ? ns->rtick() : ticks()) - s->rtick();
         if (nticks.isNotZero()) {
             if (nticks < minTick) {
@@ -3104,6 +3127,7 @@ Fraction Measure::computeTicks()
             }
         }
         s->setTicks(nticks);
+        ns = nextSeg;
     }
     return minTick;
 }
@@ -3351,7 +3375,7 @@ void Measure::respaceSegments()
     // Start respacing segments
     for (Segment& s : m_segments) {
         s.mutldata()->setPosX(x);
-        if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
+        if (s.enabled() && s.visible() && !s.allElementsInvisible() && !s.isTimeTickType()) {
             x += s.width(LD_ACCESS::BAD);
         }
     }

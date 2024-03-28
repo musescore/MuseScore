@@ -7439,7 +7439,7 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
         if (tickIsInMiddleOfMeasure(barln->tick(), m)) {
             barlineMiddle(barln);
         }
-    } else if (el->isKeySig() || el->isTimeSig() || el->isBreath()) {
+    } else if (el->isKeySig() || el->isTimeSig() || el->isBreath() || el->isTimeTickAnchor()) {
         // handled elsewhere
     } else {
         LOGD("ExportMusicXml::write unknown segment type %s", el->typeName());
@@ -7763,6 +7763,9 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
     track_idx_t etrack = strack + VOICES;
     for (track_idx_t track = strack; track < etrack; ++track) {
         for (auto seg = m->first(); seg; seg = seg->next()) {
+            if (seg->isTimeTickType()) {
+                continue;
+            }
             const auto el = seg->element(track);
             if (!el) {
                 continue;

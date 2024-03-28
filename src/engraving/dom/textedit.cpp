@@ -727,6 +727,21 @@ void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
     score()->update();
 }
 
+void TextBase::startEditNonTextual(EditData& ed)
+{
+    EngravingItem::startEdit(ed);
+}
+
+bool TextBase::editNonTextual(EditData& ed)
+{
+    return EngravingItem::edit(ed);
+}
+
+void TextBase::endEditNonTextual(EditData& ed)
+{
+    EngravingItem::endEdit(ed);
+}
+
 //---------------------------------------------------------
 //  ChangeText::insertText
 //---------------------------------------------------------

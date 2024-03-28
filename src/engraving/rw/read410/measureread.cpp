@@ -24,6 +24,7 @@
 #include "translation.h"
 
 #include "../dom/ambitus.h"
+#include "../dom/anchors.h"
 #include "../dom/barline.h"
 #include "../dom/beam.h"
 #include "../dom/breath.h"
@@ -224,6 +225,9 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
             Location loc = Location::relative();
             TRead::read(&loc, e, ctx);
             ctx.setLocation(loc);
+            if (loc.isTimeTick()) {
+                EditTimeTickAnchors::createTimeTickAnchor(measure, ctx.tick() - measure->tick(), track2staff(ctx.track()));
+            }
         } else if (tag == "tick") {             // obsolete?
             LOGD() << "read midi tick";
             ctx.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
@@ -436,7 +440,7 @@ void MeasureRead::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, in
         //----------------------------------------------------
         // Annotation
         else if (tag == "Dynamic") {
-            segment = measure->getSegment(SegmentType::ChordRest, ctx.tick());
+            segment = measure->getChordRestOrTimeTickSegment(ctx.tick());
             Dynamic* dyn = Factory::createDynamic(segment);
             dyn->setTrack(ctx.track());
             TRead::read(dyn, e, ctx);

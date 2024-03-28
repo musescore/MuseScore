@@ -73,6 +73,9 @@ public:
     LineSegment* createLineSegment(System* parent) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
+    Pedal* findNextInStaff() const;
+    bool connect45HookToNext() const;
+
     friend class PedalLine;
 };
 } // namespace mu::engraving

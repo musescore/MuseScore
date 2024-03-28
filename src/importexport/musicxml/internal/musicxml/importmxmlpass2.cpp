@@ -7266,6 +7266,7 @@ static void addWavyLine(ChordRest* cr, const Fraction& tick,
             } else {
                 trill = Factory::createTrill(cr->score()->dummy());
                 trill->setTrack(trk);
+                trill->setTrack2(trk);
                 if (wavyLineType == u"start") {
                     spanners[trill] = std::pair<int, int>(tick.ticks(), -1);
                     // LOGD("trill=%p inserted at first tick %d", trill, tick);

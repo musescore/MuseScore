@@ -340,6 +340,10 @@ public:
     virtual void endEdit(EditData&) override;
     void movePosition(EditData&, TextCursor::MoveOperation);
 
+    virtual void startEditNonTextual(EditData&);
+    virtual bool editNonTextual(EditData&);
+    virtual void endEditNonTextual(EditData&);
+
     bool deleteSelectedText(EditData&);
 
     void selectAll(TextCursor*);

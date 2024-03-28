@@ -55,6 +55,9 @@ public:
     MOCK_METHOD(draw::Color, noteBackgroundColor, (), (const, override));
     MOCK_METHOD(draw::Color, fontPrimaryColor, (), (const, override));
 
+    MOCK_METHOD(draw::Color, timeTickAnchorColorLighter, (), (const, override));
+    MOCK_METHOD(draw::Color, timeTickAnchorColorDarker, (), (const, override));
+
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
     MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));

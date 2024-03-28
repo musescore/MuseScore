@@ -78,6 +78,9 @@ public:
     static Location positionForElement(const EngravingItem* e, bool absfrac = true);
     static PropertyValue getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end);
 
+    void setIsTimeTick(bool v) { m_isTimeTick = v; }
+    bool isTimeTick() const { return m_isTimeTick; }
+
     bool operator==(const Location& other) const;
     bool operator!=(const Location& other) const { return !(*this == other); }
 
@@ -95,6 +98,7 @@ private:
     int m_graceIndex = 0;
     int m_note = 0;
     bool m_rel = false;
+    bool m_isTimeTick = false;
 };
 } // namespace mu::engraving
 #endif

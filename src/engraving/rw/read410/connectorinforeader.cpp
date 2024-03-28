@@ -338,6 +338,7 @@ void ConnectorInfoReader::readAddConnector(Measure* item, ConnectorInfoReader* i
         Fraction spTick   = pasteMode ? lTick : (item->tick() + lTick);
         if (info->isStart()) {
             sp->setTrack(l.track());
+            sp->setTrack2(sp->track());
             sp->setTick(spTick);
             item->score()->addSpanner(sp);
         } else if (info->isEnd()) {

@@ -1695,7 +1695,11 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
             rw::RWRegister::reader()->readItem(spanner, e);
             spanner->styleChanged();
-            score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
+            if (spanner->isHairpin() && cr1 == cr2) {
+                score->addHairpinToChordRest(toHairpin(spanner), cr1);
+            } else {
+                score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
+            }
             if (spanner->isVoiceSpecific()) {
                 spanner->setTrack(cr1->track());
             }
@@ -2001,7 +2005,7 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         if (el && !score->inputState().noteEntryMode()) {
             doSelect({ el }, mu::engraving::SelectType::SINGLE, 0);
             if (el->needStartEditingAfterSelecting()) {
-                startEditElement(el);
+                startEditElement(el, false);
             }
         }
         dropData->dropElement = nullptr;
@@ -2916,7 +2920,7 @@ bool NotationInteraction::isTextSelected() const
 
 bool NotationInteraction::isTextEditingStarted() const
 {
-    return m_editData.element && m_editData.element->isTextBase();
+    return m_editData.element && m_editData.element->isTextBase() && m_editData.editTextualProperties;
 }
 
 bool NotationInteraction::textEditingAllowed(const EngravingItem* element) const
@@ -2938,6 +2942,7 @@ void NotationInteraction::startEditText(EngravingItem* element, const PointF& cu
         m_editData.element = element;
     }
 
+    m_editData.editTextualProperties = true;
     m_editData.startMove = bindCursorPosToText(cursorPos, m_editData.element);
     m_editData.element->startEdit(m_editData);
 
@@ -3236,7 +3241,7 @@ bool NotationInteraction::isElementEditStarted() const
     return m_editData.element != nullptr;
 }
 
-void NotationInteraction::startEditElement(EngravingItem* element)
+void NotationInteraction::startEditElement(EngravingItem* element, bool editTextualProperties)
 {
     if (!element) {
         return;
@@ -3246,9 +3251,10 @@ void NotationInteraction::startEditElement(EngravingItem* element)
         return;
     }
 
-    if (element->isTextBase()) {
+    if (element->isTextBase() && editTextualProperties) {
         startEditText(element);
     } else if (element->isEditable()) {
+        m_editData.editTextualProperties = false;
         element->startEdit(m_editData);
         m_editData.element = element;
     }
@@ -3327,6 +3333,12 @@ void NotationInteraction::editElement(QKeyEvent* event)
 
     m_editData.key = event->key();
     m_editData.s = event->text();
+
+    if (event->type() == QKeyEvent::Type::KeyRelease) {
+        m_editData.isKeyRelease = true;
+    } else {
+        m_editData.isKeyRelease = false;
+    }
 
     // Brackets may be deleted and replaced
     bool isBracket = m_editData.element->isBracket();

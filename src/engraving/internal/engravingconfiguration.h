@@ -70,6 +70,9 @@ public:
     draw::Color noteBackgroundColor() const override;
     draw::Color fontPrimaryColor() const override;
 
+    draw::Color timeTickAnchorColorLighter() const override;
+    draw::Color timeTickAnchorColorDarker() const override;
+
     double guiScaling() const override;
 
     draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
