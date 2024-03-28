@@ -76,6 +76,10 @@ StyledFlickable {
 
     TextArea.flickable: TextArea {
         id: brailleTextArea
+        color: ui.theme.fontPrimaryColor
+        font {
+            pixelSize: ui.theme.bodyFont.pixelSize
+        }
         text: brailleModel.brailleInfo
         wrapMode: Text.AlignLeft
 
@@ -134,7 +138,7 @@ StyledFlickable {
         cursorDelegate: Rectangle {
             id: brailleCursor
             visible: brailleTextArea.cursorVisible
-            color: brailleModel.cursorColor
+            color: ui.theme.isDark && brailleModel.cursorColor == "black" ? ui.theme.fontPrimaryColor : brailleModel.cursorColor
             width: brailleTextArea.cursorRectangle.width
 
             SequentialAnimation {
