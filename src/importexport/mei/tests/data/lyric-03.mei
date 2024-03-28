@@ -46,51 +46,51 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m7dfgxh" n="1">
+                  <measure xml:id="m1uxzfrh" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <mRest xml:id="m1kn1r12" />
+                           <mRest xml:id="mjnev58" />
                         </layer>
                      </staff>
                      <staff xml:id="m1s2" n="2">
                         <layer xml:id="m1s2l1" n="1">
-                           <note xml:id="nby93rw" dur="2" pname="e" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1pxadli" dur="2" pname="e" oct="3">
+                              <verse xml:id="v7dzb1t" n="1">
                                  <syl>No</syl>
                               </verse>
-                              <verse n="2">
+                              <verse xml:id="v1oicmnf" n="2">
                                  <syl con="b">Y</syl>
                                  <syl con="d" wordpos="i">aun</syl>
                               </verse>
                            </note>
-                           <note xml:id="nbbbbz5" dur="2" pname="d" oct="3">
-                              <verse n="1">
+                           <note xml:id="n14askkr" dur="2" pname="d" oct="3">
+                              <verse xml:id="vhto3ot" n="1">
                                  <syl>me</syl>
                               </verse>
-                              <verse n="2">
+                              <verse xml:id="v1y9rhzl" n="2">
                                  <syl con="u" wordpos="t">que</syl>
                               </verse>
                            </note>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="mqii3rj" n="2">
+                  <measure xml:id="mi1v1mq" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="nsp8gk3" dur="2" pname="e" oct="3">
-                              <verse n="2">
+                           <note xml:id="n1jjysxq" dur="2" pname="e" oct="3">
+                              <verse xml:id="v1c6na19" n="2">
                                  <syl con="b">Y</syl>
                                  <syl con="d" wordpos="i">aun</syl>
                               </verse>
-                              <verse n="1">
+                              <verse xml:id="v9umrxa" n="1">
                                  <syl>No</syl>
                               </verse>
                            </note>
-                           <note xml:id="nxmzkig" dur="2" pname="d" oct="3">
-                              <verse n="2">
+                           <note xml:id="ntuqugc" dur="2" pname="d" oct="3">
+                              <verse xml:id="v1aceag6" n="2">
                                  <syl con="u" wordpos="t">que</syl>
                               </verse>
-                              <verse n="1">
+                              <verse xml:id="vdcheh5" n="1">
                                  <syl>me</syl>
                               </verse>
                            </note>
@@ -98,55 +98,55 @@
                      </staff>
                      <staff xml:id="m2s2" n="2">
                         <layer xml:id="m2s2l1" n="1">
-                           <note xml:id="nddwgya" dots="1" dur="4" pname="g" oct="3">
-                              <verse n="1">
+                           <note xml:id="ntf287w" dots="1" dur="4" pname="g" oct="3">
+                              <verse xml:id="v18u9e7r" n="1">
                                  <syl>las</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1dm486y" type="mscore-beam-none" dur="8" pname="a" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1jk9sjb" type="mscore-beam-none" dur="8" pname="a" oct="3">
+                              <verse xml:id="v4khd50" n="1">
                                  <syl con="d" wordpos="i">a</syl>
                               </verse>
                            </note>
-                           <note xml:id="nwmhp3d" dur="4" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="nr5q5xc" dur="4" pname="b" oct="3">
+                              <verse xml:id="v24d0yo" n="1">
                                  <syl con="d" wordpos="m">mues</syl>
                               </verse>
                            </note>
-                           <note xml:id="nedir16" dur="4" pname="a" oct="3">
-                              <verse n="1">
+                           <note xml:id="n182ade5" dur="4" pname="a" oct="3">
+                              <verse xml:id="v1j6a45c" n="1">
                                  <syl wordpos="t">tres</syl>
                               </verse>
-                              <verse n="2">
+                              <verse xml:id="v3s7o8v" n="2">
                                  <syl>por</syl>
                               </verse>
                            </note>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="mkem1fs" n="3">
+                  <measure xml:id="m1p58ago" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="n13my0zz" dots="1" dur="4" pname="g" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1v2b2o8" dots="1" dur="4" pname="g" oct="3">
+                              <verse xml:id="vclmpw4" n="1">
                                  <syl>las</syl>
                               </verse>
                            </note>
-                           <note xml:id="n2jpl76" type="mscore-beam-none" dur="8" pname="a" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1808fd5" type="mscore-beam-none" dur="8" pname="a" oct="3">
+                              <verse xml:id="v1icmfie" n="1">
                                  <syl con="d" wordpos="i">a</syl>
                               </verse>
                            </note>
-                           <note xml:id="nq4y8hs" dur="4" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="n6fmq4y" dur="4" pname="b" oct="3">
+                              <verse xml:id="v1d5697c" n="1">
                                  <syl con="d" wordpos="m">mues</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1iqpq3" dur="4" pname="a" oct="3">
-                              <verse n="2">
+                           <note xml:id="n1w3xqzp" dur="4" pname="a" oct="3">
+                              <verse xml:id="v1cmfd2f" n="2">
                                  <syl>por</syl>
                               </verse>
-                              <verse n="1">
+                              <verse xml:id="v1ns6v57" n="1">
                                  <syl wordpos="t">tres</syl>
                               </verse>
                            </note>
@@ -154,84 +154,84 @@
                      </staff>
                      <staff xml:id="m3s2" n="2">
                         <layer xml:id="m3s2l1" n="1">
-                           <note xml:id="n1k36cxv" dur="4" pname="e" oct="3">
-                              <verse n="1">
+                           <note xml:id="npbt8bw" dur="4" pname="e" oct="3">
+                              <verse xml:id="vns6ctv" n="1">
                                  <syl con="u">màs,</syl>
                               </verse>
-                              <verse n="2">
+                              <verse xml:id="v4voy4l" n="2">
                                  <syl con="d" wordpos="i">ve</syl>
                               </verse>
                            </note>
-                           <note xml:id="nd2vydm" dur="2" pname="g" oct="3" />
-                           <note xml:id="nhzej64" dur="4" pname="f" oct="3">
+                           <note xml:id="n1akb46l" dur="2" pname="g" oct="3" />
+                           <note xml:id="n4wb3dx" dur="4" pname="f" oct="3">
                               <accid accid.ges="s" />
                            </note>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m1b0fgrf" n="4">
+                  <measure xml:id="mhr90f2" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <note xml:id="n1s7bm2v" dur="4" pname="e" oct="3">
-                              <verse n="2">
+                           <note xml:id="nurw0or" dur="4" pname="e" oct="3">
+                              <verse xml:id="v1k61v7z" n="2">
                                  <syl con="d" wordpos="i">ve</syl>
                               </verse>
-                              <verse n="1">
+                              <verse xml:id="vbvgpfy" n="1">
                                  <syl con="u">màs,</syl>
                               </verse>
                            </note>
-                           <note xml:id="nc4zdd6" dur="2" pname="g" oct="3" />
-                           <note xml:id="n2ktc2w" dur="4" pname="f" oct="3">
+                           <note xml:id="nse7b0v" dur="2" pname="g" oct="3" />
+                           <note xml:id="n28c8ra" dur="4" pname="f" oct="3">
                               <accid accid.ges="s" />
                            </note>
                         </layer>
                      </staff>
                      <staff xml:id="m4s2" n="2">
                         <layer xml:id="m4s2l1" n="1">
-                           <note xml:id="n1lnivur" dur="4" pname="g" oct="3">
-                              <verse n="2">
+                           <note xml:id="n1iery8p" dur="4" pname="g" oct="3">
+                              <verse xml:id="v1cz75nv" n="2">
                                  <syl wordpos="t">llas,</syl>
                               </verse>
                            </note>
-                           <note xml:id="n16i3uer" dur="4" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1nf677a" dur="4" pname="b" oct="3">
+                              <verse xml:id="v19ek10b" n="1">
                                  <syl>no</syl>
                               </verse>
                            </note>
-                           <note xml:id="n54yqfv" dur="4" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1k2il3j" dur="4" pname="b" oct="3">
+                              <verse xml:id="v1a5hohm" n="1">
                                  <syl>me</syl>
                               </verse>
                            </note>
-                           <note xml:id="n16jnhat" dur="4" pname="d" oct="4">
-                              <verse n="1">
+                           <note xml:id="n7hdbbt" dur="4" pname="d" oct="4">
+                              <verse xml:id="vffonzc" n="1">
                                  <syl>las</syl>
                               </verse>
                            </note>
                         </layer>
                      </staff>
-                     <tie xml:id="t1nubb4d" startid="#n16jnhat" endid="#n126ssky" />
+                     <tie xml:id="tb404dp" startid="#n7hdbbt" endid="#n15gsjx0" />
                   </measure>
-                  <measure xml:id="m3z5xlf" n="5">
+                  <measure xml:id="ms9bxa8" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
-                           <note xml:id="n1b2epkf" dur="4" pname="g" oct="3">
-                              <verse n="2">
+                           <note xml:id="n1poa7rg" dur="4" pname="g" oct="3">
+                              <verse xml:id="v1wr2uhi" n="2">
                                  <syl wordpos="t">llas,</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1bk4fdy" dur="4" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1bcouh5" dur="4" pname="b" oct="3">
+                              <verse xml:id="v1ndnsir" n="1">
                                  <syl>no</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1r2sfqq" dur="4" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="nnzfgf3" dur="4" pname="b" oct="3">
+                              <verse xml:id="vn392fk" n="1">
                                  <syl>me</syl>
                               </verse>
                            </note>
-                           <note xml:id="nafpbc4" dur="4" pname="d" oct="4">
-                              <verse n="1">
+                           <note xml:id="n1kji621" dur="4" pname="d" oct="4">
+                              <verse xml:id="veyhl1l" n="1">
                                  <syl>las</syl>
                               </verse>
                            </note>
@@ -239,108 +239,108 @@
                      </staff>
                      <staff xml:id="m5s2" n="2">
                         <layer xml:id="m5s2l1" n="1">
-                           <note xml:id="n126ssky" type="mscore-beam-none" dur="8" pname="d" oct="4" />
-                           <note xml:id="ni861rj" type="mscore-beam-none" dur="8" pname="c" oct="4">
-                              <verse n="1">
+                           <note xml:id="n15gsjx0" type="mscore-beam-none" dur="8" pname="d" oct="4" />
+                           <note xml:id="n1np39sw" type="mscore-beam-none" dur="8" pname="c" oct="4">
+                              <verse xml:id="vjopso3" n="1">
                                  <syl con="d" wordpos="i">a</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1gvmeta" type="mscore-beam-none" dur="8" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="n12bstud" type="mscore-beam-none" dur="8" pname="b" oct="3">
+                              <verse xml:id="v1r472pc" n="1">
                                  <syl con="d" wordpos="m">mues</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1t466x7" type="mscore-beam-none" dur="8" pname="a" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1ozkh6u" type="mscore-beam-none" dur="8" pname="a" oct="3">
+                              <verse xml:id="vdb4k5j" n="1">
                                  <syl wordpos="t">tres</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1ohelry" dur="4" pname="g" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1h4s9k3" dur="4" pname="g" oct="3">
+                              <verse xml:id="v15p9r10" n="1">
                                  <syl>màs,</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1i1jjha" dur="4" pname="f" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1j124bs" dur="4" pname="f" oct="3">
+                              <verse xml:id="v143ph3h" n="1">
                                  <syl>no</syl>
                               </verse>
                               <accid accid.ges="s" />
                            </note>
                         </layer>
                      </staff>
-                     <tie xml:id="t1vwwdgk" startid="#nafpbc4" endid="#n1lfxkfj" />
+                     <tie xml:id="t1sfxl9j" startid="#n1kji621" endid="#nnn8gvl" />
                   </measure>
-                  <measure xml:id="m16jzkcw" n="6">
+                  <measure xml:id="mu2qzyk" n="6">
                      <staff xml:id="m6s1" n="1">
                         <layer xml:id="m6s1l1" n="1">
-                           <note xml:id="n1lfxkfj" type="mscore-beam-none" dur="8" pname="d" oct="4" />
-                           <note xml:id="n1aq7xen" type="mscore-beam-none" dur="8" pname="c" oct="4">
-                              <verse n="1">
+                           <note xml:id="nnn8gvl" type="mscore-beam-none" dur="8" pname="d" oct="4" />
+                           <note xml:id="n1pngs7y" type="mscore-beam-none" dur="8" pname="c" oct="4">
+                              <verse xml:id="v1e49fsq" n="1">
                                  <syl con="d" wordpos="i">a</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1duz6ct" type="mscore-beam-none" dur="8" pname="b" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1gvrvu4" type="mscore-beam-none" dur="8" pname="b" oct="3">
+                              <verse xml:id="v1r6xeu3" n="1">
                                  <syl con="d" wordpos="m">mues</syl>
                               </verse>
                            </note>
-                           <note xml:id="n14zvpe1" type="mscore-beam-none" dur="8" pname="a" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1qz1oyi" type="mscore-beam-none" dur="8" pname="a" oct="3">
+                              <verse xml:id="vjt7d99" n="1">
                                  <syl wordpos="t">tres</syl>
                               </verse>
                            </note>
-                           <note xml:id="nsradhq" dur="4" pname="c" oct="4">
-                              <verse n="1">
+                           <note xml:id="n154l5pf" dur="4" pname="c" oct="4">
+                              <verse xml:id="vtms2oh" n="1">
                                  <syl con="u">màs</syl>
                               </verse>
                            </note>
-                           <note xml:id="n7h5nxh" dur="4" pname="b" oct="3" />
+                           <note xml:id="n4xdxhs" dur="4" pname="b" oct="3" />
                         </layer>
                      </staff>
                      <staff xml:id="m6s2" n="2">
                         <layer xml:id="m6s2l1" n="1">
-                           <note xml:id="n15obwp" dur="4" pname="e" oct="3">
-                              <verse n="1">
+                           <note xml:id="n10z5abs" dur="4" pname="e" oct="3">
+                              <verse xml:id="v1rgmhkt" n="1">
                                  <syl>me</syl>
                               </verse>
                            </note>
-                           <note xml:id="n1rw9ri3" dur="4" pname="d" oct="3">
-                              <verse n="1">
+                           <note xml:id="n5t2ac8" dur="4" pname="d" oct="3">
+                              <verse xml:id="v12m670o" n="1">
                                  <syl>las</syl>
                               </verse>
                            </note>
-                           <note xml:id="nslx6ap" dur="4" pname="e" oct="3">
-                              <verse n="1">
+                           <note xml:id="nk6kexm" dur="4" pname="e" oct="3">
+                              <verse xml:id="vfygwyv" n="1">
                                  <syl>a -</syl>
                               </verse>
                            </note>
-                           <note xml:id="n35lkoi" dur="4" pname="g" oct="3">
-                              <verse n="1">
+                           <note xml:id="nlci25e" dur="4" pname="g" oct="3">
+                              <verse xml:id="voqc8hl" n="1">
                                  <syl con="d" wordpos="i">mues</syl>
                               </verse>
                            </note>
                         </layer>
                      </staff>
-                     <tie xml:id="t1qzf5dw" startid="#n35lkoi" endid="#n1s41g5" />
+                     <tie xml:id="tr9bijo" startid="#nlci25e" endid="#n1t43qgh" />
                   </measure>
-                  <measure xml:id="m1ol5cwr" right="end" n="7">
+                  <measure xml:id="mp6l9ao" right="end" n="7">
                      <staff xml:id="m7s1" n="1">
                         <layer xml:id="m7s1l1" n="1">
-                           <note xml:id="n1yeji7t" dur="2" pname="a" oct="3" />
-                           <note xml:id="n55idfo" dur="2" pname="g" oct="3" />
+                           <note xml:id="n15y450r" dur="2" pname="a" oct="3" />
+                           <note xml:id="n1b1wk29" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
                      <staff xml:id="m7s2" n="2">
                         <layer xml:id="m7s2l1" n="1">
-                           <note xml:id="n1s41g5" dur="4" pname="g" oct="3" />
-                           <note xml:id="n1palri9" dur="4" pname="f" oct="3">
-                              <verse n="1">
+                           <note xml:id="n1t43qgh" dur="4" pname="g" oct="3" />
+                           <note xml:id="n1l29cs4" dur="4" pname="f" oct="3">
+                              <verse xml:id="vmjs1b3" n="1">
                                  <syl wordpos="t">tres</syl>
                               </verse>
                               <accid accid.ges="s" />
                            </note>
-                           <note xml:id="nay8iho" dur="2" pname="g" oct="3">
-                              <verse n="1">
+                           <note xml:id="n16gx2cb" dur="2" pname="g" oct="3">
+                              <verse xml:id="v167msuu" n="1">
                                  <syl>màs</syl>
                               </verse>
                            </note>
