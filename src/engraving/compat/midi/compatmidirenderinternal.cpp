@@ -1110,13 +1110,12 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
             pedalEventList.pop_back();
             pedalEventList.push_back(std::pair<int,
                                                std::pair<bool,
-                                                         int> >(st + (2 - MScore::pedalEventsMinTicks),
+                                                         int> >(st - MScore::pedalEventsMinTicks,
                                                                 std::pair<bool, int>(false, staff)));
         }
-        int a = st + 2;
-        pedalEventList.push_back(std::pair<int, std::pair<bool, int> >(a, std::pair<bool, int>(true, staff)));
+        pedalEventList.push_back(std::pair<int, std::pair<bool, int> >(st, std::pair<bool, int>(true, staff)));
 
-        int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
+        int t = s->tick2().ticks() - MScore::pedalEventsMinTicks;
         const RepeatSegment& lastRepeat = *score->repeatList().back();
         if (t > lastRepeat.utick + lastRepeat.len()) {
             t = lastRepeat.utick + lastRepeat.len();
@@ -1195,14 +1194,14 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
     score->updateChannel();
     fillScoreVelocities(score, m_context);
 
+    // create sustain pedal events
+    renderSpanners(events, pitchWheelRender);
+
     // create note & other events
     for (const Staff* st : score->staves()) {
         renderStaff(events, st, pitchWheelRender);
     }
     events.fixupMIDI();
-
-    // create sustain pedal events
-    renderSpanners(events, pitchWheelRender);
 
     EventsHolder pitchWheelEvents = pitchWheelRender.renderPitchWheel();
     events.mergePitchWheelEvents(pitchWheelEvents);
