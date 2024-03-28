@@ -43,7 +43,7 @@ mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
     }
 
     if (current->isManaged(key)) {
-        LOGD() << "get data from current workspace, key: " << key_to_string(key);
+        LOGD() << "get data from current workspace, key: " << key;
         return current->rawData(key);
     }
 
@@ -52,7 +52,7 @@ mu::RetVal<QByteArray> WorkspacesDataProvider::rawData(DataKey key) const
         return RetVal<QByteArray>(make_ret(Ret::Code::InternalError));
     }
 
-    LOGD() << "get data from default workspace, key: " << key_to_string(key);
+    LOGD() << "get data from default workspace, key: " << key;
     return def->rawData(key);
 }
 
@@ -65,7 +65,7 @@ mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
 
     Ret ret = false;
     if (current->isManaged(key)) {
-        LOGD() << "set data to current workspace, key: " << key_to_string(key);
+        LOGD() << "set data to current workspace, key: " << key;
         ret = current->setRawData(key, data);
     }
 
@@ -75,7 +75,7 @@ mu::Ret WorkspacesDataProvider::setRawData(DataKey key, const QByteArray& data)
             return make_ret(Ret::Code::InternalError);
         }
 
-        LOGD() << "set data to default workspace, key: " << key_to_string(key);
+        LOGD() << "set data to default workspace, key: " << key;
         ret = def->setRawData(key, data);
     }
 

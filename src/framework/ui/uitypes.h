@@ -36,6 +36,7 @@
 #include "types/translatablestring.h"
 #include "types/val.h"
 #include "view/iconcodes.h"
+#include "workspace/workspacetypes.h"
 
 namespace mu::ui {
 using ThemeCode = std::string;
@@ -327,6 +328,11 @@ struct ToolConfig
 
     bool isValid() const { return !items.isEmpty(); }
 };
+
+// workspaces
+inline const workspace::DataKey WS_UiSettings("ui_settings");
+inline const workspace::DataKey WS_UiStates("ui_states");
+inline const workspace::DataKey WS_UiToolConfigs("ui_toolconfigs");
 }
 
 #endif // MU_UI_UITYPES_H

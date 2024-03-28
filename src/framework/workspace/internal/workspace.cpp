@@ -53,12 +53,12 @@ std::string Workspace::title() const
 
 bool Workspace::isManaged(const DataKey& key) const
 {
-    return m_file.meta(key_to_string(key)).toBool();
+    return m_file.meta(key).toBool();
 }
 
 void Workspace::setIsManaged(const DataKey& key, bool val)
 {
-    m_file.setMeta(key_to_string(key), Val(val));
+    m_file.setMeta(key, Val(val));
 }
 
 RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
@@ -71,13 +71,13 @@ RetVal<QByteArray> Workspace::rawData(const DataKey& key) const
 
     RetVal<QByteArray> rv;
     rv.ret = make_ret(Ret::Code::Ok);
-    rv.val = m_file.data(key_to_string(key));
+    rv.val = m_file.data(key);
     return rv;
 }
 
 Ret Workspace::setRawData(const DataKey& key, const QByteArray& data)
 {
-    m_file.setData(key_to_string(key), data);
+    m_file.setData(key, data);
     return make_ret(Ret::Code::Ok);
 }
 

@@ -22,16 +22,10 @@
 #ifndef MU_PALETTE_PALETTETYPES_H
 #define MU_PALETTE_PALETTETYPES_H
 
-#include "internal/palette/palettetree.h"
 #include "workspace/workspacetypes.h"
 
 namespace mu::palette {
-struct PaletteWorkspaceData : public workspace::AbstractData
-{
-    mu::engraving::PaletteTreePtr tree;
-};
-
-using PaletteWorkspaceDataPtr = std::shared_ptr<PaletteWorkspaceData>;
+inline const workspace::DataKey WS_Palettes("palettes");
 }
 
 #endif // MU_PALETTE_PALETTETYPES_H
