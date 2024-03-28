@@ -256,18 +256,30 @@ void MuseSamplerSequencer::loadParams(const mpe::PlaybackParamMap& params)
         return;
     }
 
-    for (const auto& pair : params) {
-        std::vector<std::string> soundPresets;
+    for (const auto& paramsPair : params) {
+        std::unordered_map<mpe::staff_layer_idx_t, std::vector<std::string> > soundPresets;
 
-        for (const mpe::PlaybackParam& param : pair.second) {
+        for (const mpe::PlaybackParam& param : paramsPair.second) {
             if (param.code == mpe::SOUND_PRESET_PARAM_CODE) {
-                soundPresets.emplace_back(param.val.toString());
+                soundPresets[param.staffLayerIndex].emplace_back(param.val.toString());
             } else if (param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
-                addTextArticulation(param.val.toString(), pair.first);
+                ms_Track track = resolveTrack(param.staffLayerIndex);
+                IF_ASSERT_FAILED(track) {
+                    continue;
+                }
+
+                addTextArticulation(param.val.toString(), paramsPair.first, track);
             }
         }
 
-        addPresets(soundPresets, pair.first);
+        for (const auto& presetsPair : soundPresets) {
+            ms_Track track = resolveTrack(presetsPair.first);
+            IF_ASSERT_FAILED(track) {
+                continue;
+            }
+
+            addPresets(presetsPair.second, paramsPair.first, track);
+        }
     }
 }
 
@@ -370,7 +382,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     }
 }
 
-void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCode, long long startUs)
+void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCode, long long startUs, ms_Track track)
 {
     ms_TextArticulationEvent evt;
     evt._start_us = startUs;
@@ -381,23 +393,19 @@ void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCo
         evt._articulation = ""; // resets the active articulation
     }
 
-    for (ms_Track track : allTracks()) {
-        m_samplerLib->addTextArticulationEvent(m_sampler, track, evt);
-    }
+    m_samplerLib->addTextArticulationEvent(m_sampler, track, evt);
 }
 
-void MuseSamplerSequencer::addPresets(const std::vector<std::string>& presets, long long startUs)
+void MuseSamplerSequencer::addPresets(const std::vector<std::string>& presets, long long startUs, ms_Track track)
 {
     if (presets.empty()) {
         return;
     }
 
-    for (ms_Track track : allTracks()) {
-        ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, track, startUs);
+    ms_PresetChange presetChange = m_samplerLib->createPresetChange(m_sampler, track, startUs);
 
-        for (const std::string& presetCode : presets) {
-            m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.c_str());
-        }
+    for (const std::string& presetCode : presets) {
+        m_samplerLib->addPreset(m_sampler, track, presetChange, presetCode.c_str());
     }
 }
 

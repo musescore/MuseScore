@@ -2353,6 +2353,8 @@ void TRead::read(SoundFlag* item, XmlReader& xml, ReadContext&)
             item->setSoundPresets(xml.readText().split(u","));
         } else if (tag == "playingTechnique") {
             item->setPlayingTechnique(xml.readText());
+        } else if (tag == "applyToAllStaves") {
+            item->setApplyToAllStaves(xml.readBool());
         } else {
             xml.unknown();
         }

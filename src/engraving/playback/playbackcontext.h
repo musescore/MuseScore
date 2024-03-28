@@ -41,7 +41,7 @@ public:
     mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
     mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
-    mpe::PlaybackParamMap playbackParamMap(const Score* score, const int nominalPositionTick) const;
+    mpe::PlaybackParamMap playbackParamMap(const Score* score, const int nominalPositionTick, const staff_idx_t staffIdx) const;
     mpe::PlaybackParamMap playbackParamMap(const Score* score) const;
     mpe::DynamicLevelMap dynamicLevelMap(const Score* score) const;
 
@@ -59,12 +59,13 @@ private:
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void updatePlaybackParamMap(const SoundFlag* flag, const int segmentPositionTick);
-    void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick, const mpe::dynamic_level_t dynamicLevel);
+    void updatePlaybackParamMap(const ID partId, const Score* score, const SoundFlag* flag, const int segmentPositionTick);
+    void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
+                                   const mu::mpe::dynamic_level_t dynamicLevel);
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);
-    void handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
+    void handleAnnotations(const ID partId, const Score* score, const Segment* segment, const int segmentPositionTick);
 
     void removeDynamicData(const int from, const int to);
     void removePlayTechniqueData(const int from, const int to);

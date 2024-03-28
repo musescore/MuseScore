@@ -2722,6 +2722,8 @@ void TWrite::write(const SoundFlag* item, XmlWriter& xml, WriteContext&)
         xml.tag("playingTechnique", item->playingTechnique());
     }
 
+    writeProperty(item, xml, Pid::APPLY_TO_ALL_STAVES);
+
     xml.endElement();
 }
 

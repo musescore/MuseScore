@@ -67,6 +67,8 @@ PropertyValue SoundFlag::getProperty(Pid id) const
     case Pid::AUTOPLACE:
     case Pid::SMALL:
         return PropertyValue();
+    case Pid::APPLY_TO_ALL_STAVES:
+        return m_applyToAllStaves;
     default:
         return EngravingItem::getProperty(id);
     }
@@ -82,6 +84,9 @@ bool SoundFlag::setProperty(Pid id, const PropertyValue& value)
     case Pid::AUTOPLACE:
     case Pid::SMALL:
         return false;
+    case Pid::APPLY_TO_ALL_STAVES:
+        m_applyToAllStaves = value.toBool();
+        return true;
     default:
         return EngravingItem::setProperty(id, value);
     }
@@ -96,6 +101,8 @@ PropertyValue SoundFlag::propertyDefault(Pid id) const
     case Pid::AUTOPLACE:
     case Pid::SMALL:
         return PropertyValue();
+    case Pid::APPLY_TO_ALL_STAVES:
+        return true;
     default:
         return EngravingItem::propertyDefault(id);
     }
@@ -129,6 +136,16 @@ bool SoundFlag::play() const
 void mu::engraving::SoundFlag::setPlay(bool play)
 {
     m_play = play;
+}
+
+bool SoundFlag::applyToAllStaves() const
+{
+    return m_applyToAllStaves;
+}
+
+void SoundFlag::setApplyToAllStaves(bool apply)
+{
+    m_applyToAllStaves = apply;
 }
 
 void SoundFlag::clear()
