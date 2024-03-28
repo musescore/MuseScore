@@ -20,24 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_WORKSPACE_WORKSPACELISTMODEL_H
-#define MU_WORKSPACE_WORKSPACELISTMODEL_H
+#ifndef MU_WORKSPACES_WORKSPACELISTMODEL_H
+#define MU_WORKSPACES_WORKSPACELISTMODEL_H
 
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
-#include "iworkspacemanager.h"
-#include "iinteractive.h"
+#include "workspace/iworkspacemanager.h"
+#include "global/iinteractive.h"
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
 namespace mu::workspace {
 class WorkspaceListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(IWorkspaceManager, workspacesManager)
-    INJECT(IInteractive, interactive)
+    Inject<IWorkspaceManager> workspacesManager;
+    Inject<IInteractive> interactive;
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
 
@@ -76,4 +76,4 @@ private:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACELISTMODEL_H
+#endif // MU_WORKSPACES_WORKSPACELISTMODEL_H

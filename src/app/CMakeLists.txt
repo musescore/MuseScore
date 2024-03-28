@@ -135,6 +135,7 @@ set(LINK_LIB
     context
     shortcuts
     workspace
+    workspacescene
     audio
     mpe
     midi

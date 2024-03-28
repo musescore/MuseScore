@@ -95,7 +95,7 @@ if (MUE_BUILD_UPDATE_MODULE)
 endif()
 
 if (MUE_BUILD_WORKSPACE_MODULE)
-    add_subdirectory(workspace)
+    add_subdirectory(workspacescene)
 endif()
 
 # Stubs

@@ -200,6 +200,7 @@
 
 #ifdef MUE_BUILD_WORKSPACE_MODULE
 #include "workspace/workspacemodule.h"
+#include "workspacescene/workspacescenemodule.h"
 #else
 #include "stubs/workspace/workspacestubmodule.h"
 #endif
@@ -331,6 +332,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::update::UpdateModule());
     app.addModule(new mu::workspace::WorkspaceModule());
+    app.addModule(new mu::workspace::WorkspaceSceneModule());
 
 #ifdef Q_OS_WASM
     app.addModule(new mu::wasmtest::WasmTestModule());
