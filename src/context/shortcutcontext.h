@@ -25,15 +25,15 @@
 #include <array>
 #include <string>
 
+#include "shortcuts/shortcutcontext.h"
 #include "global/containers.h"
 
 namespace mu::context {
-static const std::string CTX_ANY("any");
-static const std::string CTX_NOTATION_OPENED("notation-opened");
-static const std::string CTX_NOTATION_FOCUSED("notation-focused");
-
-//! NOTE special context for navigation shortcuts because the notation has its own navigation system
-static const std::string CTX_NOT_NOTATION_FOCUSED("not-notation-focused");
+// common shortcuts (re declared for convenience)
+static const std::string CTX_ANY = shortcuts::CTX_ANY;
+static const std::string CTX_NOTATION_OPENED = shortcuts::CTX_PROJECT_OPENED;
+static const std::string CTX_NOTATION_FOCUSED = shortcuts::CTX_PROJECT_FOCUSED;
+static const std::string CTX_NOT_NOTATION_FOCUSED = shortcuts::CTX_NOT_PROJECT_FOCUSED;
 
 /// We're not [in note input on a TAB staff] (i.e. either not in note input mode, or in note input mode but not on a TAB staff)
 static const std::string CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB("notation-not-note-input-staff-tab");
@@ -42,26 +42,31 @@ static const std::string CTX_NOTATION_NOTE_INPUT_STAFF_TAB("notation-note-input-
 
 static const std::string CTX_NOTATION_TEXT_EDITING("notation-text-editing");
 
-inline bool shortcutContextHasLowerPriorityThan(const std::string& ctx1, const std::string& ctx2)
+class ShortcutContextPriority : public shortcuts::IShortcutContextPriority
 {
-    static const std::array<std::string, 7> CONTEXTS_BY_INCREASING_PRIORITY {
-        CTX_ANY,
+public:
 
-        CTX_NOTATION_OPENED,
-        CTX_NOT_NOTATION_FOCUSED,
-        CTX_NOTATION_FOCUSED,
+    bool hasLowerPriorityThan(const std::string& ctx1, const std::string& ctx2) const override
+    {
+        static const std::array<std::string, 7> CONTEXTS_BY_INCREASING_PRIORITY {
+            CTX_ANY,
 
-        CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
-        CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
+            CTX_NOTATION_OPENED,
+            CTX_NOT_NOTATION_FOCUSED,
+            CTX_NOTATION_FOCUSED,
 
-        CTX_NOTATION_TEXT_EDITING
-    };
+            CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
+            CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
 
-    size_t index1 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx1);
-    size_t index2 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx2);
+            CTX_NOTATION_TEXT_EDITING
+        };
 
-    return index1 < index2;
-}
+        size_t index1 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx1);
+        size_t index2 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx2);
+
+        return index1 < index2;
+    }
+};
 }
 
 #endif // MU_CONTEXT_SHORTCUTCONTEXT_H

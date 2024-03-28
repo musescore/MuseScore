@@ -22,6 +22,7 @@
 #include "projectuiactions.h"
 
 #include "types/translatablestring.h"
+#include "context/shortcutcontext.h"
 
 using namespace mu::project;
 using namespace mu::ui;

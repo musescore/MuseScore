@@ -23,6 +23,7 @@
 #include "paletteuiactions.h"
 
 #include "context/uicontext.h"
+#include "context/shortcutcontext.h"
 #include "types/translatablestring.h"
 
 using namespace mu::palette;

@@ -25,12 +25,14 @@
 
 #include <optional>
 
-#include "types/retval.h"
-#include "async/notification.h"
-
 #include "modularity/imoduleinterface.h"
 
+#include "global/types/retval.h"
+#include "global/types/val.h"
+#include "global/async/notification.h"
+
 #include "uitypes.h"
+#include "uiaction.h"
 
 class QByteArray;
 class QWindow;

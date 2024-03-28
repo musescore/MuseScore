@@ -24,6 +24,7 @@
 #include "async/notifylist.h"
 #include "types/translatablestring.h"
 
+#include "context/shortcutcontext.h"
 #include "internal/notationuiactions.h"
 
 #include "log.h"

@@ -21,7 +21,8 @@
  */
 #include "updateuiactions.h"
 
-#include "context/uicontext.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
 using namespace mu::update;
@@ -29,8 +30,8 @@ using namespace mu::ui;
 
 const UiActionList UpdateUiActions::m_actions = {
     UiAction("check-update",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Check for &update")
              )
 };

@@ -52,6 +52,22 @@ bool ShortcutsController::isRegistered(const std::string& sequence) const
     return shortcutsRegister()->isRegistered(sequence);
 }
 
+static bool defaultHasLowerPriorityThan(const std::string& ctx1, const std::string& ctx2)
+{
+    static const std::array<std::string, 7> CONTEXTS_BY_INCREASING_PRIORITY {
+        CTX_ANY,
+
+        CTX_PROJECT_OPENED,
+        CTX_NOT_PROJECT_FOCUSED,
+        CTX_PROJECT_FOCUSED,
+    };
+
+    size_t index1 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx1);
+    size_t index2 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx2);
+
+    return index1 < index2;
+}
+
 ActionCode ShortcutsController::resolveAction(const std::string& sequence) const
 {
     ShortcutList shortcutsForSequence = shortcutsRegister()->shortcutsForSequence(sequence);
@@ -76,8 +92,12 @@ ActionCode ShortcutsController::resolveAction(const std::string& sequence) const
         allowedShortcuts.push_back(sc);
     }
 
-    allowedShortcuts.sort([](const Shortcut& f, const Shortcut& s) {
-        return context::shortcutContextHasLowerPriorityThan(f.context, s.context);
+    allowedShortcuts.sort([this](const Shortcut& f, const Shortcut& s) {
+        if (shortcutContextPriority()) {
+            return shortcutContextPriority()->hasLowerPriorityThan(f.context, s.context);
+        } else {
+            return defaultHasLowerPriorityThan(f.context, s.context);
+        }
     });
 
     return !allowedShortcuts.empty() ? allowedShortcuts.back().action : ActionCode();

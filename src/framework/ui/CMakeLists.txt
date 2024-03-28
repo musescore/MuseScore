@@ -65,6 +65,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iuiconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/uierrors.h
     ${CMAKE_CURRENT_LIST_DIR}/uitypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/uiaction.h
     ${CMAKE_CURRENT_LIST_DIR}/imainwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiactionsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iuiactionsmodule.h

@@ -25,9 +25,9 @@
 #include <QObject>
 #include <QString>
 
-#include "async/asyncable.h"
+#include "global/async/asyncable.h"
 
-#include "ui/uitypes.h"
+#include "ui/uiaction.h"
 
 namespace mu {
 class TranslatableString;

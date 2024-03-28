@@ -22,6 +22,8 @@
 #include "playbackuiactions.h"
 
 #include "ui/view/iconcodes.h"
+#include "context/uicontext.h"
+#include "context/shortcutcontext.h"
 #include "types/translatablestring.h"
 
 using namespace mu::playback;

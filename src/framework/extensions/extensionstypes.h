@@ -115,7 +115,7 @@ struct Manifest {
     String version;
     int apiversion = DEFAULT_API_VERSION;
     bool legacyPlugin = false;
-    bool requiresScore = true;
+    bool requiresProject = true;
 
     std::vector<Action> actions;
 

@@ -23,7 +23,7 @@
 #define MU_CONTEXT_IUICONTEXTRESOLVER_H
 
 #include "ui/iuicontextresolver.h"
-#include "uicontext.h"
+#include "uicontext.h" // IWYU pragma: export
 
 namespace mu::context {
 //! NOTE only for convenience

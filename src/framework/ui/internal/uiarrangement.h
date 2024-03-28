@@ -29,10 +29,10 @@
 #include <QJsonObject>
 #include <QMap>
 
+#include "global/async/asyncable.h"
 #include "modularity/ioc.h"
 #include "workspace/iworkspacesdataprovider.h"
-#include "async/asyncable.h"
-#include "uitypes.h"
+#include "uiaction.h"
 
 namespace mu::ui {
 class UiArrangement : public async::Asyncable

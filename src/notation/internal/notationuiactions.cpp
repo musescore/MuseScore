@@ -25,6 +25,7 @@
 
 #include "types/translatablestring.h"
 #include "ui/view/iconcodes.h"
+#include "context/shortcutcontext.h"
 
 using namespace mu;
 using namespace mu::notation;
