@@ -33,7 +33,9 @@
 #include "internal/workspaceuiactions.h"
 #include "internal/workspacesdataprovider.h"
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
 #include "diagnostics/idiagnosticspathsregister.h"
+#endif
 
 using namespace mu::workspace;
 using namespace mu::modularity;
@@ -74,6 +76,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
     m_provider->init();
     m_actionController->init();
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
@@ -81,6 +84,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
             pr->reg("workspace", p);
         }
     }
+#endif
 }
 
 void WorkspaceModule::onDeinit()

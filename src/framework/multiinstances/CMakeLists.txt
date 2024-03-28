@@ -27,6 +27,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/multiinstancesmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/multiinstancesmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/imultiinstancesprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/resourcelockguard.h
     ${CMAKE_CURRENT_LIST_DIR}/mitypes.h
 
@@ -54,4 +55,3 @@ set(MODULE_SRC
     )
 
 include(SetupModule)
-

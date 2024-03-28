@@ -23,6 +23,7 @@
 #define MU_EXTENSIONS_APIV1_EXTAPIV1_H
 
 #include <QObject>
+#include <QMap>
 
 #include "modularity/ioc.h"
 #include "api/iapiregister.h"

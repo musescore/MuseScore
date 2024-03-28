@@ -90,4 +90,4 @@ set(MODULE_QRC midi.qrc)
 
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)

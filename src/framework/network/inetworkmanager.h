@@ -23,7 +23,6 @@
 #define MU_NETWORK_INETWORKMANAGER_H
 
 #include "types/ret.h"
-#include "async/channel.h"
 #include "global/progress.h"
 #include "networktypes.h"
 

@@ -89,20 +89,40 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     if (msg.type == MsgType::Request && msg.method == METHOD_PROJECT_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
         io::path_t scorePath = io::path_t(msg.args.at(0));
-        bool isOpened = projectFilesController()->isProjectOpened(scorePath);
+        bool isOpened = false;
+        if (projectProvider()) {
+            isOpened = projectProvider()->isProjectOpened(scorePath);
+        } else {
+            LOGW() << "Unable perform request, not found implementation of IProjectProvider";
+        }
         m_ipcChannel->response(METHOD_PROJECT_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
     } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_PROJECT) {
         CHECK_ARGS_COUNT(1);
         io::path_t scorePath = io::path_t(msg.args.at(0));
-        bool isOpened = projectFilesController()->isProjectOpened(scorePath);
+        bool isOpened = false;
+        if (projectProvider()) {
+            isOpened = projectProvider()->isProjectOpened(scorePath);
+        } else {
+            LOGW() << "Unable perform request, not found implementation of IProjectProvider";
+        }
         if (isOpened) {
             mainWindow()->requestShowOnFront();
         }
     } else if (msg.type == MsgType::Request && msg.method == METHOD_IS_WITHOUT_PROJECT) {
-        bool isAnyOpened = projectFilesController()->isAnyProjectOpened();
+        bool isAnyOpened = false;
+        if (projectProvider()) {
+            isAnyOpened = projectProvider()->isAnyProjectOpened();
+        } else {
+            LOGW() << "Unable perform request, not found implementation of IProjectProvider";
+        }
         m_ipcChannel->response(METHOD_IS_WITHOUT_PROJECT, { QString::number(!isAnyOpened) }, msg.srcID);
     } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT) {
-        bool isAnyOpened = projectFilesController()->isAnyProjectOpened();
+        bool isAnyOpened = false;
+        if (projectProvider()) {
+            isAnyOpened = projectProvider()->isAnyProjectOpened();
+        } else {
+            LOGW() << "Unable perform request, not found implementation of IProjectProvider";
+        }
         if (!isAnyOpened) {
             mainWindow()->requestShowOnFront();
         }

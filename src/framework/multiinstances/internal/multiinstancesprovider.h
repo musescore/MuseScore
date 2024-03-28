@@ -34,16 +34,18 @@
 #include "actions/actionable.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
-#include "project/iprojectfilescontroller.h"
 #include "ui/imainwindow.h"
+#include "../iprojectprovider.h"
 
 namespace mu::mi {
 class MultiInstancesProvider : public IMultiInstancesProvider, public actions::Actionable, public async::Asyncable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
-    INJECT(project::IProjectFilesController, projectFilesController)
-    INJECT(ui::IMainWindow, mainWindow)
+    Inject<actions::IActionsDispatcher> dispatcher;
+    Inject<IInteractive> interactive;
+    Inject<ui::IMainWindow> mainWindow;
+
+    //! NOTE May be missing because it must be implemented outside the framework
+    Inject<IProjectProvider> projectProvider;
 
 public:
     MultiInstancesProvider() = default;

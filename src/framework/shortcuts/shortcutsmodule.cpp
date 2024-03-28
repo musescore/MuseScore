@@ -48,7 +48,9 @@
 
 #include "ui/iuiengine.h"
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
 #include "diagnostics/idiagnosticspathsregister.h"
+#endif
 
 using namespace mu::shortcuts;
 using namespace mu::modularity;
@@ -119,10 +121,12 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     m_shortcutsRegister->init();
     m_midiRemote->init();
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
         pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());
         pr->reg("midiMappingUserAppDataPath", m_configuration->midiMappingUserAppDataPath());
     }
+#endif
 }
