@@ -251,7 +251,7 @@ bool LineSegment::edit(EditData& ed)
 
     if (ed.key == KeyboardKey::Key_Shift) {
         if (ed.isKeyRelease) {
-            EditTimeTickAnchors::cleanupAnchors(this);
+            score()->hideAnchors();
         } else {
             EditTimeTickAnchors::updateAnchors(this, moveStart ? spanner()->tick() : spanner()->tick2(), moveStart ? track : track2);
         }

@@ -467,10 +467,6 @@ String Dynamic::translatedSubtypeUserName() const
     return String::fromAscii(TConv::toXml(dynamicType()).ascii());
 }
 
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
 void Dynamic::startEdit(EditData& ed)
 {
     if (ed.editTextualProperties) {
@@ -493,7 +489,7 @@ bool Dynamic::editNonTextual(EditData& ed)
 {
     if (ed.key == Key_Shift) {
         if (ed.isKeyRelease) {
-            EditTimeTickAnchors::cleanupAnchors(this);
+            score()->hideAnchors();
         } else {
             EditTimeTickAnchors::updateAnchors(this, tick(), track());
         }
@@ -505,70 +501,94 @@ bool Dynamic::editNonTextual(EditData& ed)
         return false;
     }
 
-    Segment* curSeg = segment();
-
     bool leftRightKey = ed.key == Key_Left || ed.key == Key_Right;
     bool altMod = ed.modifiers & AltModifier;
     bool shiftMod = ed.modifiers & ShiftModifier;
 
-    bool changeTimeAnchorType = shiftMod && altMod && leftRightKey;
-    if (changeTimeAnchorType) {
-        undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
-        if (anchorToEndOfPrevious() && curSeg->rtick().isZero() && ed.key == Key_Left) {
-            Segment* endOfPrevMeasTick = curSeg->prev1(SegmentType::TimeTick);
-            if (endOfPrevMeasTick && endOfPrevMeasTick->tick() == curSeg->tick()) {
-                score()->undoChangeParent(this, endOfPrevMeasTick, staffIdx());
-                if (snappedExpression()) {
-                    score()->undoChangeParent(snappedExpression(), endOfPrevMeasTick, staffIdx());
-                }
-                return true;
-            }
-        } else if (!anchorToEndOfPrevious() && curSeg->rtick() == curSeg->measure()->ticks() && ed.key == Key_Right) {
-            Segment* startOfNextMeas = curSeg->next1(SegmentType::ChordRest);
-            if (startOfNextMeas && startOfNextMeas->tick() == curSeg->tick()) {
-                score()->undoChangeParent(this, startOfNextMeas, staffIdx());
-                if (snappedExpression()) {
-                    score()->undoChangeParent(snappedExpression(), startOfNextMeas, staffIdx());
-                }
-                return true;
-            }
-        }
-        if ((anchorToEndOfPrevious() && ed.key == Key_Left)
-            || (!anchorToEndOfPrevious() && ed.key == Key_Right)) {
+    bool changeAnchorType = shiftMod && altMod && leftRightKey;
+    if (changeAnchorType) {
+        if (changeTimeAnchorType(ed)) {
             return true;
         }
     }
 
-    bool moveSegment = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
-    if (moveSegment) {
-        if (!altMod && anchorToEndOfPrevious()) {
-            undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
-            return true;
-        }
-        Segment* curSeg = segment();
-        if (!curSeg) {
-            return false;
-        }
-
-        bool forward = ed.key == Key_Right;
-        Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
-        if (!newSeg) {
-            return false;
-        }
-
-        score()->undoChangeParent(this, newSeg, staffIdx());
-        if (snappedExpression()) {
-            score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
-        }
-
-        EditTimeTickAnchors::updateAnchors(this, tick(), staffIdx());
-        return true;
+    bool moveSeg = shiftMod && (ed.key == Key_Left || ed.key == Key_Right);
+    if (moveSeg) {
+        return moveSegment(ed);
     }
 
     if (shiftMod) {
         return false;
     }
 
+    if (!nudge(ed)) {
+        return false;
+    }
+
+    triggerLayout();
+    return true;
+}
+
+bool Dynamic::changeTimeAnchorType(const EditData& ed)
+{
+    Segment* curSeg = segment();
+
+    undoChangeProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS, !anchorToEndOfPrevious(), propertyFlags(Pid::ANCHOR_TO_END_OF_PREVIOUS));
+    if (anchorToEndOfPrevious() && curSeg->rtick().isZero() && ed.key == Key_Left) {
+        Segment* endOfPrevMeasTick = curSeg->prev1(SegmentType::TimeTick);
+        if (endOfPrevMeasTick && endOfPrevMeasTick->tick() == curSeg->tick()) {
+            score()->undoChangeParent(this, endOfPrevMeasTick, staffIdx());
+            if (snappedExpression()) {
+                score()->undoChangeParent(snappedExpression(), endOfPrevMeasTick, staffIdx());
+            }
+            return true;
+        }
+    } else if (!anchorToEndOfPrevious() && curSeg->rtick() == curSeg->measure()->ticks() && ed.key == Key_Right) {
+        Segment* startOfNextMeas = curSeg->next1(SegmentType::ChordRest);
+        if (startOfNextMeas && startOfNextMeas->tick() == curSeg->tick()) {
+            score()->undoChangeParent(this, startOfNextMeas, staffIdx());
+            if (snappedExpression()) {
+                score()->undoChangeParent(snappedExpression(), startOfNextMeas, staffIdx());
+            }
+            return true;
+        }
+    }
+    if ((anchorToEndOfPrevious() && ed.key == Key_Left)
+        || (!anchorToEndOfPrevious() && ed.key == Key_Right)) {
+        return true;
+    }
+
+    return false;
+}
+
+bool Dynamic::moveSegment(const EditData& ed)
+{
+    if (!ed.modifiers & AltModifier && anchorToEndOfPrevious()) {
+        undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
+        return true;
+    }
+    Segment* curSeg = segment();
+    if (!curSeg) {
+        return false;
+    }
+
+    bool forward = ed.key == Key_Right;
+    Segment* newSeg = forward ? curSeg->next1ChordRestOrTimeTick() : curSeg->prev1ChordRestOrTimeTick();
+    if (!newSeg) {
+        return false;
+    }
+
+    score()->undoChangeParent(this, newSeg, staffIdx());
+    if (snappedExpression()) {
+        score()->undoChangeParent(snappedExpression(), newSeg, staffIdx());
+    }
+
+    EditTimeTickAnchors::updateAnchors(this, tick(), staffIdx());
+    return true;
+}
+
+bool Dynamic::nudge(const EditData& ed)
+{
     bool ctrlMod = ed.modifiers & ControlModifier;
     double step = spatium() * (ctrlMod ? MScore::nudgeStep10 : MScore::nudgeStep);
     PointF addOffset = PointF();
@@ -589,8 +609,6 @@ bool Dynamic::editNonTextual(EditData& ed)
         return false;
     }
     undoChangeProperty(Pid::OFFSET, offset() + addOffset, PropertyFlags::UNSTYLED);
-
-    triggerLayout();
     return true;
 }
 
@@ -622,10 +640,6 @@ void Dynamic::editDrag(EditData& ed)
 
     EngravingItem::editDrag(ed);
 }
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
 
 void Dynamic::endEdit(EditData& ed)
 {

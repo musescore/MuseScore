@@ -210,9 +210,8 @@ public:
     virtual void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     void computeStartElement();
-    virtual void doComputeStartElement();
     void computeEndElement();
-    virtual void doComputeEndElement();
+
     static Note* endElementFromSpanner(Spanner* sp, EngravingItem* newStart);
     static Note* startElementFromSpanner(Spanner* sp, EngravingItem* newEnd);
     void setNoteSpan(Note* startNote, Note* endNote);
@@ -267,6 +266,9 @@ protected:
 
     Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     Spanner(const Spanner&);
+
+    virtual void doComputeStartElement();
+    virtual void doComputeEndElement();
 
 private:
 

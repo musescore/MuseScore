@@ -123,12 +123,18 @@ public:
 
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
 
+    bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
+    void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
     M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
-    M_PROPERTY2(bool, anchorToEndOfPrevious, setAnchorToEndOfPrevious, false)
+
+    bool changeTimeAnchorType(const EditData& ed);
+    bool moveSegment(const EditData& ed);
+    bool nudge(const EditData& ed);
 
     DynamicType m_dynamicType = DynamicType::OTHER;
     Expression* m_snappedExpression = nullptr;
@@ -142,6 +148,8 @@ private:
     DynamicSpeed m_velChangeSpeed = DynamicSpeed::NORMAL;
 
     static const std::vector<Dyn> DYN_LIST;
+
+    bool m_anchorToEndOfPrevious = false;
 };
 } // namespace mu::engraving
 

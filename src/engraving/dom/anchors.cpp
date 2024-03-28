@@ -40,11 +40,11 @@ namespace mu::engraving {
 void EditTimeTickAnchors::updateAnchors(const EngravingItem* item, Fraction absTick, track_idx_t track)
 {
     if (!item->allowTimeAnchor()) {
-        item->score()->resetShowAnchors();
+        item->score()->hideAnchors();
         return;
     }
 
-    Score* score = item->score();
+    const Score* score = item->score();
     Measure* measure = score->tick2measure(absTick);
     if (!measure) {
         return;
@@ -88,23 +88,21 @@ void EditTimeTickAnchors::updateAnchors(Measure* measure, staff_idx_t staffIdx)
     score->updateShowAnchors(staffIdx, measure->tick(), measure->endTick());
 }
 
-Segment* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx)
+TimeTickAnchor* EditTimeTickAnchors::createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx)
 {
     Segment* segment = measure->getSegmentR(SegmentType::TimeTick, relTick);
 
     track_idx_t track = staff2track(staffIdx);
     EngravingItem* element = segment->elementAt(track);
-    TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : new TimeTickAnchor(segment);
-    anchor->setParent(segment);
-    anchor->setTrack(track);
-    segment->add(anchor);
+    TimeTickAnchor* anchor = element ? toTimeTickAnchor(element) : nullptr;
+    if (!anchor) {
+        anchor = Factory::createTimeTickAnchor(segment);
+        anchor->setParent(segment);
+        anchor->setTrack(track);
+        segment->add(anchor);
+    }
 
-    return segment;
-}
-
-void EditTimeTickAnchors::cleanupAnchors(EngravingItem* editedItem)
-{
-    editedItem->score()->resetShowAnchors();
+    return anchor;
 }
 
 /********************************************

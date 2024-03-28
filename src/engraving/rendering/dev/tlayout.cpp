@@ -3014,8 +3014,8 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     ldata->setIsSkipDraw(false);
 
     const double _spatium = item->spatium();
-    Dynamic* sd = item->findDynamic(true);
-    Dynamic* ed = item->findDynamic(false);
+    Dynamic* sd = item->findStartDynamic();
+    Dynamic* ed = item->findEndDynamic();
     double dymax = item->hairpin()->placeBelow() ? -DBL_MAX : DBL_MAX;
     if (item->autoplace() && !ctx.conf().isPaletteMode()
         && item->explicitParent() // TODO: remove this line (this might happen when Ctrl+Shift+Dragging an item)

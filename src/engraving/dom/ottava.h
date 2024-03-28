@@ -132,6 +132,7 @@ public:
     PointF linePos(Grip grip, System** system) const override;
     bool allowTimeAnchor() const override { return false; }
 
+protected:
     void doComputeEndElement();
 
 private:

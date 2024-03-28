@@ -568,7 +568,7 @@ public:
     void setMarkIrregularMeasures(bool v);
     void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
-    void resetShowAnchors() { m_showAnchors.reset(); }
+    void hideAnchors() { m_showAnchors.reset(); }
     void updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick);
     const ShowAnchors& showAnchors() const { return m_showAnchors; }
 

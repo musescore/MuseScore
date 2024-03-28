@@ -3036,8 +3036,8 @@ void TDraw::draw(const TimeTickAnchor* item, draw::Painter* painter)
         return;
     }
 
-    static const Color lighterColor = Color(204, 234, 255);
-    static const Color darkerColor = Color(153, 213, 255);
+    static const Color lighterColor = item->engravingConfiguration()->timeTickAnchorColorLighter();
+    static const Color darkerColor =  item->engravingConfiguration()->timeTickAnchorColorDarker();
 
     Brush brush;
     brush.setColor(item->ldata()->darker() ? darkerColor : lighterColor);

@@ -2090,7 +2090,7 @@ void EngravingItem::endDrag(EditData& ed)
         score()->undoPropertyChanged(this, pd.id, pd.data, f);
         setGenerated(false);
     }
-    score()->resetShowAnchors();
+    score()->hideAnchors();
 }
 
 //---------------------------------------------------------
@@ -2229,7 +2229,7 @@ void EngravingItem::endEditDrag(EditData& ed)
     if (changed) {
         undoChangeProperty(Pid::GENERATED, false);
     }
-    score()->resetShowAnchors();
+    score()->hideAnchors();
 }
 
 //---------------------------------------------------------

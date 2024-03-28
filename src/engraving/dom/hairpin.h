@@ -70,7 +70,8 @@ public:
 
     std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
-    Dynamic* findDynamic(bool start) const;
+    Dynamic* findStartDynamic() const;
+    Dynamic* findEndDynamic() const;
 
 private:
 

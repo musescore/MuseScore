@@ -1082,7 +1082,8 @@ Segment* Spanner::endSegment() const
     if (!endSeg && !endTick.isZero()) {
         Measure* measure = mmRest ? score()->tick2measureMM(endTick) : score()->tick2measure(endTick);
         if (measure) {
-            return EditTimeTickAnchors::createTimeTickAnchor(measure, endTick - measure->tick(), track2staff(track2()));
+            TimeTickAnchor* anchor = EditTimeTickAnchors::createTimeTickAnchor(measure, endTick - measure->tick(), track2staff(track2()));
+            return anchor->segment();
         }
     }
 

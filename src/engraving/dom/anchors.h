@@ -31,9 +31,8 @@ class EditTimeTickAnchors
 {
 public:
     static void updateAnchors(const EngravingItem* item, Fraction absTick, track_idx_t track);
-    static void cleanupAnchors(EngravingItem* editedItem);
 
-    static Segment* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
+    static TimeTickAnchor* createTimeTickAnchor(Measure* measure, Fraction relTick, staff_idx_t staffIdx);
 
 private:
     static void updateAnchors(Measure* measure, staff_idx_t staffIdx);
