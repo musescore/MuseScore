@@ -36,6 +36,11 @@
 #include "log.h"
 #include "runtime.h"
 
+/* How many milliseconds to we allow musescore to be out-of-sync to jack
+ * before we tell musescore to adjust (seek) its position
+ */
+#define FRAMESLIMIT 200
+
 #define JACK_DEFAULT_DEVICE_ID "jack"
 #define JACK_DEFAULT_IDENTIFY_AS "MuseScore"
 extern int g_jackTransportDelay;
@@ -51,8 +56,10 @@ static jack_transport_state_t jack_state;
 static int g_musescore_is_synced; // tells jack-transport if musescore is synced
 static jack_nframes_t g_nframes;
 unsigned int g_samplerate;
+msecs_t g_frameslimit;
 static jack_nframes_t muse_seek_requested;
 
+std::chrono::time_point<std::chrono::steady_clock> musescore_act_time;
 static bool musescore_act;
 static msecs_t musescore_act_seek;
 static bool running_musescore_state;
@@ -73,6 +80,18 @@ void musescore_state_check_musescore()
     }
 }
 
+void musescore_state_do_seek()
+{
+    auto now = std::chrono::steady_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - musescore_act_time);
+    auto ms = static_cast<msecs_t>(diff.count());
+    auto millis = static_cast<msecs_t>((double)musescore_act_seek * 1000 / (double)g_samplerate);
+    millis = max(millis - ms, 0L);
+    LOGE("Jack mst: really do musescore-seek to %lu (%lims) (diff: %li)  mf=%u jf=%u lag: %lims",
+         musescore_act_seek, millis, muse_frame - jack_frame, muse_frame, jack_frame, ms);
+    s_playbackController->remoteSeek(millis);
+}
+
 /*
  * state thread
  */
@@ -80,25 +99,27 @@ void musescore_state()
 {
     LOGE("Jack: start musescore_state thread");
     int is_seeking = 0;
+    int cnt = 0;
     while (running_musescore_state) {
         musescore_state_check_musescore();
-        LOGW("state: mframe=%u jframe=%u (framedrift: %i)  ms=%s  js=%s",
-             muse_frame, jack_frame,
-             muse_frame - jack_frame,
-             (muse_state == JackTransportStopped ? "stop"
-              : (muse_state == JackTransportStarting ? "start"
-                 : (muse_state == JackTransportRolling ? "roll" : "other"))),
-             (jack_state == JackTransportStopped ? "stop"
-              : (jack_state == JackTransportStarting ? "start"
-                 : (jack_state == JackTransportRolling ? "roll" : "other"))));
+        if (cnt > 1000) {
+            cnt = 0;
+            LOGI("state: mframe=%u jframe=%u (framedrift: %i)  ms=%s  js=%s",
+                 muse_frame, jack_frame,
+                 muse_frame - jack_frame,
+                 (muse_state == JackTransportStopped ? "stop"
+                  : (muse_state == JackTransportStarting ? "start"
+                     : (muse_state == JackTransportRolling ? "roll" : "other"))),
+                 (jack_state == JackTransportStopped ? "stop"
+                  : (jack_state == JackTransportStarting ? "start"
+                     : (jack_state == JackTransportRolling ? "roll" : "other"))));
+        }
         if (musescore_act) {
             if (is_seeking) {
                 // already seeking
             } else {
-                if (labs(muse_frame - jack_frame) > (g_samplerate / 10) && (muse_frame - jack_frame) != 0) {
-                    msecs_t millis = static_cast<msecs_t>((double)musescore_act_seek * 1000 / (double)g_samplerate);
-                    LOGE("Jack mst: really do musescore-seek to %lu (%li ms)", musescore_act_seek, millis);
-                    s_playbackController->remoteSeek(millis);
+                if (labs(muse_frame - jack_frame) > g_frameslimit) { // && (muse_frame - jack_frame) != 0) {
+                    musescore_state_do_seek();
                     is_seeking = 1;
                 } else {
                     LOGE("Jack mst: act avoid musescore-seek to %lu (jack: %lu) ", musescore_act_seek, jack_frame);
@@ -125,7 +146,27 @@ bool musescore_seek(unsigned int pos)
     } else {
         musescore_act_seek = pos;
         musescore_act = true;
+        musescore_act_time = std::chrono::steady_clock::now(); // record clock that pos is valid for
     }
+    return true;
+}
+
+void JackDriverState::musescore_changed_play_state()
+{
+    jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
+
+    if (s_playbackController->isPlaying()) {
+        jack_transport_start(client);
+    } else {
+        jack_transport_stop(client);
+    }
+}
+
+void JackDriverState::musescore_changed_position_state()
+{
+    jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
+    jack_nframes_t frames = static_cast<jack_nframes_t>(m_playbackController->playbackPositionInSeconds() * g_samplerate);
+    jack_transport_locate(client, frames);
 }
 
 /*
@@ -211,9 +252,10 @@ mu::Ret sendEvent(const Event& e, void* pb)
     return Ret(true);
 }
 
+// musescore has around 200ms inaccuracy in playbackPositionInSeconds
 bool is_muse_jack_frame_sync(jack_nframes_t mf, jack_nframes_t jf)
 {
-    return labs((long int)jack_frame - (long int)muse_frame + g_jackTransportDelay) < g_nframes * 6; // FIX: 6 periods might be too long time (can't detect seek / out-of-sync)
+    return labs((long int)jack_frame - (long int)muse_frame + g_jackTransportDelay) < g_frameslimit;
 }
 
 bool is_muse_jack_state_sync(jack_transport_state_t ms, jack_transport_state_t js)
@@ -226,12 +268,11 @@ bool is_muse_jack_state_sync(jack_transport_state_t ms, jack_transport_state_t j
     }
 }
 
-void jack_muse_update_verify_sync(JackDriverState* state, jack_client_t* client, unsigned int samplerate)
+void jack_muse_update_verify_sync(JackDriverState* state, jack_client_t* client)
 {
     jack_position_t jpos;
-    jack_transport_state_t ts = jack_transport_query(client, &jpos);
+    jack_state = jack_transport_query(client, &jpos);
     jack_frame = jpos.frame;
-    jack_state = ts;
     if (is_muse_jack_state_sync(muse_state, jack_state)
         && is_muse_jack_frame_sync(muse_frame, jack_frame)) {
         g_musescore_is_synced = 1;
@@ -240,28 +281,33 @@ void jack_muse_update_verify_sync(JackDriverState* state, jack_client_t* client,
     }
 }
 
+static int framecnt = 0;
+
 void check_jack_midi_transport(JackDriverState* state, jack_nframes_t nframes)
 {
     jack_client_t* client = static_cast<jack_client_t*>(state->m_jackDeviceHandle);
-    unsigned int jackSamplerate = jack_get_sample_rate(client);
 
-    jack_muse_update_verify_sync(state, client, jackSamplerate);
+    jack_muse_update_verify_sync(state, client);
 
     if (g_musescore_is_synced) {
         return;
     }
 
-    /*
-    LOGW("jack-transport: mframe=%u jframe=%u  ms=%s  js=%s %i\n",
-         muse_frame, jack_frame,
-         (muse_state == JackTransportStopped ? "stop" :
-          (muse_state == JackTransportStarting ? "start" :
-           (muse_state == JackTransportRolling ? "roll" : "other"))),
-         (jack_state == JackTransportStopped ? "stop" :
-          (jack_state == JackTransportStarting ? "start" :
-           (jack_state == JackTransportRolling ? "roll" : "other"))),
-         g_jackTransportDelay);
-    */
+    framecnt++;
+    if (framecnt > 40) {
+        framecnt = 0;
+        LOGI("jack-transport: mframe=%u jframe=%u d=%i  ms=%s  js=%s  nf=%i d=%i\n",
+             muse_frame, jack_frame,
+             muse_frame - jack_frame,
+             (muse_state == JackTransportStopped ? "stop"
+              : (muse_state == JackTransportStarting ? "start"
+                 : (muse_state == JackTransportRolling ? "roll" : "other"))),
+             (jack_state == JackTransportStopped ? "stop"
+              : (jack_state == JackTransportStarting ? "start"
+                 : (jack_state == JackTransportRolling ? "roll" : "other"))),
+             nframes,
+             g_jackTransportDelay);
+    }
 
     bool state_sync = false;
     if (muse_state == JackTransportStopped
@@ -506,6 +552,8 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     unsigned int jackSamplerate = jack_get_sample_rate(handle);
     m_spec.sampleRate = jackSamplerate;
     g_samplerate = jackSamplerate;
+    // FIX: at samplerate change, this need to be adjusted
+    g_frameslimit = static_cast<msecs_t>((double)g_samplerate * (double)FRAMESLIMIT / 1000.0d);
     if (spec.sampleRate != jackSamplerate) {
         LOGW() << "Musescores samplerate: " << spec.sampleRate << ", is NOT the same as jack's: " << jackSamplerate;
         // FIX: enable this if it is possible for user to adjust samplerate (AUDIO_SAMPLE_RATE_KEY)
@@ -537,6 +585,16 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         LOGE() << "cannot activate client";
         return false;
     }
+
+    // get notification when musescore changes play-position or play/pause
+
+    s_playbackController->isPlayingChanged().onNotify(this, [this]() {
+        musescore_changed_play_state();
+    });
+
+    s_playbackController->playbackPositionChanged().onNotify(this, [this]() {
+        musescore_changed_position_state();
+    });
 
     // midi input
     jack_port_t* midi_input_port = jack_port_register(handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);

@@ -30,7 +30,7 @@
 #include "playback/iplaybackcontroller.h"
 
 namespace mu::audio {
-class JackDriverState : public AudioDriverState
+class JackDriverState : public AudioDriverState, public async::Asyncable
 {
 public:
     JackDriverState(std::shared_ptr<playback::IPlaybackController>);
@@ -58,6 +58,9 @@ public:
 
 private:
     std::string m_deviceName;
+
+    void musescore_changed_play_state();
+    void musescore_changed_position_state();
 };
 }
 
