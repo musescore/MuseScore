@@ -17,14 +17,11 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "libmscore/box.h"
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/style.h"
-#include "libmscore/sym.h"
-#include "libmscore/symbol.h"
 
 #include "importmxml.h"
 #include "importmxmllogger.h"

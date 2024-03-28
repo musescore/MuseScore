@@ -21,7 +21,6 @@
 #define __MUSICXMLSUPPORT_H__
 
 #include "libmscore/fraction.h"
-#include "libmscore/mscore.h"
 #include "libmscore/note.h"
 #include "libmscore/sym.h"
 

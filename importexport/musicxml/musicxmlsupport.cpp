@@ -21,7 +21,6 @@
  MusicXML support.
  */
 
-#include "libmscore/accidental.h"
 #include "libmscore/articulation.h"
 #include "libmscore/chord.h"
 #include "libmscore/sym.h"
