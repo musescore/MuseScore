@@ -31,6 +31,7 @@ static const std::string module_name("iex_musicxml");
 static const Settings::Key MUSICXML_IMPORT_BREAKS_KEY(module_name, "import/musicXML/importBreaks");
 static const Settings::Key MUSICXML_IMPORT_LAYOUT_KEY(module_name, "import/musicXML/importLayout");
 static const Settings::Key MUSICXML_EXPORT_LAYOUT_KEY(module_name, "export/musicXML/exportLayout");
+static const Settings::Key MUSICXML_EXPORT_MU3_COMPAT_KEY(module_name, "export/musicXML/exportMu3Compat");
 static const Settings::Key MUSICXML_EXPORT_BREAKS_TYPE_KEY(module_name, "export/musicXML/exportBreaks");
 static const Settings::Key MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY(module_name, "export/musicXML/exportInvisibleElements");
 static const Settings::Key MIGRATION_APPLY_EDWIN_FOR_XML(module_name, "import/compatibility/apply_edwin_for_xml");
@@ -42,6 +43,7 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_IMPORT_BREAKS_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_IMPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
+    settings()->setDefaultValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(false));
     settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
     settings()->setDefaultValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(false));
@@ -77,6 +79,16 @@ bool MusicXmlConfiguration::musicxmlExportLayout() const
 void MusicXmlConfiguration::setMusicxmlExportLayout(bool value)
 {
     settings()->setSharedValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(value));
+}
+
+bool MusicXmlConfiguration::musicxmlExportMu3Compat() const
+{
+    return settings()->value(MUSICXML_EXPORT_MU3_COMPAT_KEY).toBool();
+}
+
+void MusicXmlConfiguration::setMusicxmlExportMu3Compat(bool value)
+{
+    settings()->setSharedValue(MUSICXML_EXPORT_MU3_COMPAT_KEY, Val(value));
 }
 
 MusicXmlConfiguration::MusicxmlExportBreaksType MusicXmlConfiguration::musicxmlExportBreaksType() const
