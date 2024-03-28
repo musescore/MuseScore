@@ -26,7 +26,9 @@
 #include "internal/languagesconfiguration.h"
 #include "internal/languagesservice.h"
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
 #include "diagnostics/idiagnosticspathsregister.h"
+#endif
 
 using namespace mu::languages;
 using namespace mu::modularity;
@@ -56,9 +58,11 @@ void LanguagesModule::onPreInit(const IApplication::RunMode& mode)
 
     m_languagesService->init();
 
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
         pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
     }
+#endif
 }

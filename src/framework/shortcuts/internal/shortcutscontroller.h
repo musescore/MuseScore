@@ -41,6 +41,8 @@ class ShortcutsController : public IShortcutsController, public async::Asyncable
     INJECT(ui::IUiActionsRegister, aregister)
     INJECT(ui::IInteractiveProvider, interactiveProvider)
     INJECT(ui::IUiContextResolver, uiContextResolver)
+
+    //! NOTE May be missing because it must be implemented outside the framework
     INJECT(IShortcutContextPriority, shortcutContextPriority)
 
 public:

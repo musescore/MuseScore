@@ -24,6 +24,8 @@
 
 #include "inetworkmanager.h"
 
+#include <QIODevice>
+
 class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;

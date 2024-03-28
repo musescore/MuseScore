@@ -24,7 +24,9 @@
 #define MU_IPC_IPC_H
 
 #include <QString>
+#include <QStringList>
 #include <QByteArray>
+
 #include <functional>
 
 class QLocalSocket;

@@ -23,15 +23,17 @@
 
 #include <algorithm>
 #include <limits>
-#include <utility>
 
 #include <QApplication>
 #include <QWindow>
 #include <QTextStream>
 
+#include "global/defer.h"
+
+#ifdef MUE_BUILD_DIAGNOSTICS_MODULE
 #include "diagnostics/diagnosticutils.h"
-#include "async/async.h"
-#include "defer.h"
+#endif
+
 #include "log.h"
 
 // #define NAVIGATION_LOGGING_ENABLED

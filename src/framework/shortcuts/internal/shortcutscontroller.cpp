@@ -21,8 +21,6 @@
  */
 #include "shortcutscontroller.h"
 
-#include "context/shortcutcontext.h"
-
 #include "log.h"
 
 using namespace mu::shortcuts;
@@ -90,6 +88,10 @@ ActionCode ShortcutsController::resolveAction(const std::string& sequence) const
         }
 
         allowedShortcuts.push_back(sc);
+    }
+
+    if (!shortcutContextPriority()) {
+        LOGW() << "Not found implementation of IShortcutContextPriority, will be used default priority";
     }
 
     allowedShortcuts.sort([this](const Shortcut& f, const Shortcut& s) {

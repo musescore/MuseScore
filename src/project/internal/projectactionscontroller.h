@@ -32,6 +32,7 @@
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
 #include "multiinstances/imultiinstancesprovider.h"
+#include "multiinstances/iprojectprovider.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
 #include "cloud/cloudqmltypes.h"
@@ -51,7 +52,8 @@
 #include "iprojectautosaver.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectFilesController, public QObject, public actions::Actionable, public async::Asyncable
+class ProjectActionsController : public IProjectFilesController, public mi::IProjectProvider, public actions::Actionable,
+    public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(INotationReadersRegister, readers)
@@ -80,10 +82,12 @@ public:
     bool isFileSupported(const io::path_t& path) const override;
     Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
-    bool isProjectOpened(const io::path_t& scorePath) const override;
-    bool isAnyProjectOpened() const override;
     bool saveProject(const io::path_t& path = io::path_t()) override;
     bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+
+    // mi::IProjectProvider
+    bool isProjectOpened(const io::path_t& scorePath) const override;
+    bool isAnyProjectOpened() const override;
 
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     async::Notification projectBeingDownloadedChanged() const override;
