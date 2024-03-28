@@ -2561,6 +2561,7 @@ void EditStyle::textStyleChanged(int row)
         case TextStylePropertyType::MusicalSymbolsScale:
             textStyleMusicalSymbolsScale->setValue(styleValue(a.sid).toDouble() * 100);
             resetTextStyleMusicalSymbolsScale->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            row_textStyleMusicalSymbolsScale->setVisible(a.sid != Sid::dummyMusicalSymbolsScale);
             break;
 
         case TextStylePropertyType::FontStyle:
@@ -2635,9 +2636,6 @@ void EditStyle::textStyleChanged(int row)
 
     tupletUseSymbols->setVisible(tid == TextStyleType::TUPLET);
     resetTupletUseSymbols->setVisible(tid == TextStyleType::TUPLET);
-    row_textStyleMusicalSymbolsScale->setVisible(tid == TextStyleType::TUPLET
-                                                 || tid == TextStyleType::OTTAVA || tid == TextStyleType::PEDAL
-                                                 || tid == TextStyleType::HARP_PEDAL_DIAGRAM);
     row_textStyleMusicalSymbolsScale->setEnabled(tid != TextStyleType::TUPLET || tupletUseSymbols->isChecked());
 
     configuration()->setStyleDialogLastSubPageIndex(row);

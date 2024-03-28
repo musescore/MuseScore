@@ -1149,6 +1149,8 @@ enum class Sid {
     repeatLeftFrameFgColor,
     repeatLeftFrameBgColor,
 
+    repeatsMusicalSymbolsScale,
+
     repeatRightFontFace,
     repeatRightFontSize,
     repeatRightLineSpacing,

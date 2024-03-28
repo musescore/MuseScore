@@ -1125,7 +1125,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::rehearsalMarkMinDistance,      "rehearsalMarkMinDistance",     Spatium(0.5) },
 
     { Sid::repeatLeftFontFace,            "repeatLeftFontFace",           "Edwin" },
-    { Sid::repeatLeftFontSize,            "repeatLeftFontSize",           18.0 },
+    { Sid::repeatLeftFontSize,            "repeatLeftFontSize",           11.0 },
     { Sid::repeatLeftLineSpacing,         "repeatLeftLineSpacing",        1.0 },
     { Sid::repeatLeftFontSpatiumDependent, "repeatLeftFontSpatiumDependent", true },
     { Sid::repeatLeftFontStyle,           "repeatLeftFontStyle",          int(FontStyle::Normal) },
@@ -1138,6 +1138,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::repeatLeftFrameRound,          "repeatLeftFrameRound",         0 },
     { Sid::repeatLeftFrameFgColor,        "repeatLeftFrameFgColor",       PropertyValue::fromValue(Color::BLACK) },
     { Sid::repeatLeftFrameBgColor,        "repeatLeftFrameBgColor",       PropertyValue::fromValue(Color::transparent) },
+
+    { Sid::repeatsMusicalSymbolsScale,    "repeatsMusicalSymbolsScale",   1.0 }, // percentage of the standard size
 
     { Sid::repeatRightFontFace,           "repeatRightFontFace",          "Edwin" },
     { Sid::repeatRightFontSize,           "repeatRightFontSize",          11.0 },
