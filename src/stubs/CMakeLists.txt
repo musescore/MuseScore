@@ -70,4 +70,5 @@ endif()
 
 if (NOT MUE_BUILD_WORKSPACE_MODULE)
     add_subdirectory(workspace)
+    add_subdirectory(workspacescene)
 endif()
