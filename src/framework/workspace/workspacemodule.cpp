@@ -25,8 +25,6 @@
 
 #include "modularity/ioc.h"
 
-#include "framework/ui/iinteractiveuriregister.h"
-#include "framework/ui/iuiengine.h"
 #include "framework/ui/iuiactionsregister.h"
 
 #include "internal/workspaceconfiguration.h"
@@ -35,19 +33,10 @@
 #include "internal/workspaceuiactions.h"
 #include "internal/workspacesdataprovider.h"
 
-#include "view/workspacelistmodel.h"
-#include "view/newworkspacemodel.h"
-
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::workspace;
 using namespace mu::modularity;
-using namespace mu::ui;
-
-static void workspace_init_qrc()
-{
-    Q_INIT_RESOURCE(workspace);
-}
 
 std::string WorkspaceModule::moduleName() const
 {
@@ -72,25 +61,6 @@ void WorkspaceModule::resolveImports()
     if (ar) {
         ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController));
     }
-
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerQmlUri(Uri("musescore://workspace/select"), "MuseScore/Workspace/WorkspacesDialog.qml");
-        ir->registerQmlUri(Uri("musescore://workspace/create"), "MuseScore/Workspace/NewWorkspaceDialog.qml");
-    }
-}
-
-void WorkspaceModule::registerResources()
-{
-    workspace_init_qrc();
-}
-
-void WorkspaceModule::registerUiTypes()
-{
-    qmlRegisterType<WorkspaceListModel>("MuseScore.Workspace", 1, 0, "WorkspaceListModel");
-    qmlRegisterType<NewWorkspaceModel>("MuseScore.Workspace", 1, 0, "NewWorkspaceModel");
-
-    ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
 }
 
 void WorkspaceModule::onInit(const IApplication::RunMode& mode)

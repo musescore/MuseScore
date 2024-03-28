@@ -19,36 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
-
-#include <memory>
+#ifndef MU_WORKSPACE_WORKSPACESCENEMODULE_H
+#define MU_WORKSPACE_WORKSPACESCENEMODULE_H
 
 #include "modularity/imodulesetup.h"
 
 namespace mu::workspace {
-class WorkspaceManager;
-class WorkspaceConfiguration;
-class WorkspaceActionController;
-class WorkspacesDataProvider;
-class WorkspaceModule : public modularity::IModuleSetup
+class WorkspaceSceneModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
-    void registerExports() override;
     void resolveImports() override;
     void registerUiTypes() override;
     void registerResources() override;
-    void onInit(const IApplication::RunMode& mode) override;
-    void onDeinit() override;
-
-private:
-
-    std::shared_ptr<WorkspaceManager> m_manager;
-    std::shared_ptr<WorkspaceConfiguration> m_configuration;
-    std::shared_ptr<WorkspaceActionController> m_actionController;
-    std::shared_ptr<WorkspacesDataProvider> m_provider;
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+#endif // MU_WORKSPACE_WORKSPACESCENEMODULE_H

@@ -38,8 +38,8 @@ class NewWorkspaceModel : public QObject
     Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY useUiPreferencesChanged)
     Q_PROPERTY(bool useUiArrangement READ useUiArrangement WRITE setUseUiArrangement NOTIFY useUiArrangementChanged)
     Q_PROPERTY(bool usePalettes READ usePalettes WRITE setUsePalettes NOTIFY usePalettesChanged)
-    Q_PROPERTY(
-        bool useToolbarCustomization READ useToolbarCustomization WRITE setUseToolbarCustomization NOTIFY useToolbarCustomizationChanged)
+    Q_PROPERTY(bool useToolbarCustomization READ useToolbarCustomization
+               WRITE setUseToolbarCustomization NOTIFY useToolbarCustomizationChanged)
 
 public:
     explicit NewWorkspaceModel(QObject* parent = nullptr);
