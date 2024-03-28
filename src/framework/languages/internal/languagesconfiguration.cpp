@@ -33,7 +33,7 @@ using namespace mu::languages;
 
 static const Settings::Key LANGUAGE_KEY("languages", "language");
 
-static const QString LANGUAGES_SERVER_URL("http://extensions.musescore.org/4.2/languages/");
+static const QString LANGUAGES_SERVER_URL(MU_LANGUAGES_SERVER_URL);
 
 void LanguagesConfiguration::init()
 {

@@ -59,6 +59,10 @@ if (MUE_BUILD_MULTIINSTANCES_MODULE)
     add_subdirectory(multiinstances)
 endif()
 
+if (MUE_BUILD_LANGUAGES_MODULE)
+    add_subdirectory(languages)
+endif()
+
 if (MUE_BUILD_EXTENSIONS_MODULE)
     add_subdirectory(extensions)
 endif()
