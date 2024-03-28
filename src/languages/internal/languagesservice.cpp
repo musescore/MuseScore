@@ -204,13 +204,12 @@ void LanguagesService::setCurrentLanguage(const QString& languageCode)
     m_currentLanguageChanged.notify();
 }
 
-QString LanguagesService::effectiveLanguageCode(const QString& languageCode) const
+QString LanguagesService::effectiveLanguageCode(QString languageCode) const
 {
+    languageCode.replace('-', '_');
     // Tries decreasingly specific versions of `code`. For example:
     // "nl_NL" -> not found -> try just "nl" -> found -> returns "nl".
     auto tryCode = [this](QString code) -> QString {
-        code.replace('-', '_');
-
         for (;;) {
             if (m_languagesHash.contains(code)) {
                 return code;
@@ -246,7 +245,15 @@ QString LanguagesService::effectiveLanguageCode(const QString& languageCode) con
 
     if (languageCode.isEmpty() || languageCode == SYSTEM_LANGUAGE_CODE) {
         for (const QString& code : QLocale::system().uiLanguages()) {
-            QString effectiveCode = tryCode(code);
+            LOGI() << "System language code: " << code;
+            QString effectiveCode = code;
+            effectiveCode.replace('-', '_');
+            // Prefer Swedish (Modern) over Swedish (Traditional)
+            // when using system language.
+            if (effectiveCode == "sv_SE") {
+                effectiveCode = "sv";
+            }
+            effectiveCode = tryCode(effectiveCode);
             if (!effectiveCode.isEmpty()) {
                 return effectiveCode;
             }
