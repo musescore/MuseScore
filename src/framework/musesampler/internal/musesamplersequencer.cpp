@@ -80,16 +80,22 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
 
 static const std::unordered_map<mpe::ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = {
     { mpe::ArticulationType::CrossNote, ms_NoteHead_XNote },
+    { mpe::ArticulationType::CrossLargeNote, ms_NoteHead_LargeX },
     { mpe::ArticulationType::CrossOrnateNote, ms_NoteHead_OrnateXNote },
     { mpe::ArticulationType::GhostNote, ms_NoteHead_Ghost },
     { mpe::ArticulationType::CircleNote, ms_NoteHead_Circle },
     { mpe::ArticulationType::CircleCrossNote, ms_NoteHead_CircleXNote },
     { mpe::ArticulationType::CircleDotNote, ms_NoteHead_CircleDot },
-    { mpe::ArticulationType::TriangleNote, ms_NoteHead_Triangle },
+    { mpe::ArticulationType::TriangleLeftNote, ms_NoteHead_Triangle },
+    { mpe::ArticulationType::TriangleRightNote, ms_NoteHead_TriangleRight },
+    { mpe::ArticulationType::TriangleUpNote, ms_NoteHead_TriangleUp },
+    { mpe::ArticulationType::TriangleDownNote, ms_NoteHead_TriangleDown },
     { mpe::ArticulationType::TriangleRoundDownNote, ms_NoteHead_TriangleRoundDown },
     { mpe::ArticulationType::DiamondNote, ms_NoteHead_Diamond },
+    { mpe::ArticulationType::MoonNote, ms_NoteHead_FlatTop },
     { mpe::ArticulationType::PlusNote, ms_NoteHead_Plus },
     { mpe::ArticulationType::SlashNote, ms_NoteHead_Slash },
+    { mpe::ArticulationType::SquareNote, ms_NoteHead_Square },
     { mpe::ArticulationType::SlashedBackwardsNote, ms_NoteHead_SlashRightFilled },
     { mpe::ArticulationType::SlashedForwardsNote, ms_NoteHead_SlashLeftFilled },
 };
