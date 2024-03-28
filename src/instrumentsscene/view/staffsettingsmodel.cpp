@@ -142,6 +142,19 @@ void StaffSettingsModel::setStaffType(int type)
     m_type = type_;
     notationParts()->setStaffType(m_staffId, m_type);
 
+    bool isSmall = m_config.staffType.isSmall();
+    bool isCutaway = m_config.cutaway;
+
+    m_config = notationParts()->staffConfig(m_staffId);
+
+    if (isSmall != isSmallStaff()) {
+        emit isSmallStaffChanged();
+    }
+
+    if (isCutaway != cutawayEnabled()) {
+        emit cutawayEnabledChanged();
+    }
+
     emit staffTypeChanged();
 }
 
