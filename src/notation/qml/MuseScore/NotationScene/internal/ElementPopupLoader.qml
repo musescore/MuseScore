@@ -80,12 +80,19 @@ Item {
     }
 
     function show(elementType, elementRect) {
+        prv.unloadPopup()
         prv.loadPopup()
 
         var popup = loader.createPopup(prv.componentByType(elementType), elementRect)
         popup.open()
 
-        Qt.callLater(container.opened)
+        popup.opened.connect(function() {
+            container.opened()
+        })
+
+        popup.closed.connect(function() {
+            prv.unloadPopup()
+        })
     }
 
     function close() {
@@ -124,36 +131,24 @@ Item {
     Component {
         id: harpPedalComp
         HarpPedalPopup {
-            onClosed: {
-                prv.unloadPopup()
-            }
         }
     }
 
     Component {
         id: capoComp
         CapoPopup {
-            onClosed: {
-                prv.unloadPopup()
-            }
         }
     }
 
     Component {
         id: stringTuningsComp
         StringTuningsPopup {
-            onClosed: {
-                prv.unloadPopup()
-            }
         }
     }
 
     Component {
         id: soundFlagComp
         SoundFlagPopup {
-            onClosed: {
-                prv.unloadPopup()
-            }
         }
     }
 }

@@ -423,10 +423,6 @@ QStringList SoundFlagSettingsModel::selectedPresetCodes() const
         result << presetCode.toQString();
     }
 
-    if (result.empty()) {
-        result << defaultPresetCode();
-    }
-
     return result;
 }
 
@@ -487,10 +483,6 @@ QString SoundFlagSettingsModel::selectedPlayingTechniqueCode() const
     }
 
     QString result = toSoundFlag(m_item)->playingTechnique().toQString();
-
-    if (result.isEmpty()) {
-        result = defaultPlayingTechniqueCode();
-    }
 
     return result;
 }
