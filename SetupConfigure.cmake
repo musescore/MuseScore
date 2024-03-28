@@ -257,6 +257,9 @@ add_definitions(-DMU_APP_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}")
 add_definitions(-DMU_APP_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 add_definitions(-DMU_APP_INSTALL_NAME="${Mscore_INSTALL_NAME}")
 
+# modules config
+add_definitions(-DMU_LANGUAGES_SERVER_URL="http://extensions.musescore.org/4.2/languages/")
+
 if (MUSESCORE_UNSTABLE)
     add_definitions(-DMU_APP_UNSTABLE)
 endif()
