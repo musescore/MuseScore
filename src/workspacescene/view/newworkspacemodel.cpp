@@ -22,9 +22,13 @@
 
 #include "newworkspacemodel.h"
 
+#include "global/translation.h"
+#include "global/io/path.h"
+
+#include "ui/uitypes.h"
+#include "palette/palettetypes.h"
+
 #include "log.h"
-#include "translation.h"
-#include "io/path.h"
 
 using namespace mu::workspace;
 
@@ -152,9 +156,9 @@ QVariant NewWorkspaceModel::createWorkspace() const
 {
     QVariantMap meta;
     meta["name"] = m_workspaceName;
-    meta["ui_settings"] = useUiPreferences();
-    meta["ui_states"] = useUiArrangement();
-    meta["ui_toolconfigs"] = useToolbarCustomization();
-    meta["palettes"] = usePalettes();
+    meta[ui::WS_UiSettings] = useUiPreferences();
+    meta[ui::WS_UiStates] = useUiArrangement();
+    meta[ui::WS_UiToolConfigs] = useToolbarCustomization();
+    meta[palette::WS_Palettes] = usePalettes();
     return meta;
 }

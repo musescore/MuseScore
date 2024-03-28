@@ -34,21 +34,21 @@ using namespace mu::workspace;
 void UiArrangement::load()
 {
     workspacesDataProvider()->workspaceChanged().onNotify(this, [this]() {
-        updateData(DataKey::UiSettings, m_settings, m_valuesNotifications);
-        updateData(DataKey::UiStates, m_states, m_statesNotifications);
-        updateData(DataKey::UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
+        updateData(WS_UiSettings, m_settings, m_valuesNotifications);
+        updateData(WS_UiStates, m_states, m_statesNotifications);
+        updateData(WS_UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
     });
 
-    updateData(DataKey::UiSettings, m_settings, m_valuesNotifications);
-    updateData(DataKey::UiStates, m_states, m_statesNotifications);
-    updateData(DataKey::UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
+    updateData(WS_UiSettings, m_settings, m_valuesNotifications);
+    updateData(WS_UiStates, m_states, m_statesNotifications);
+    updateData(WS_UiToolConfigs, m_toolconfigs, m_toolconfigsNotifications);
 }
 
 void UiArrangement::updateData(DataKey key, QJsonObject& obj, Notifications& notifications) const
 {
     RetVal<QByteArray> data = workspacesDataProvider()->rawData(key);
     if (!data.ret) {
-        LOGD() << "no data: " << key_to_string(key);
+        LOGD() << "no data: " << key;
         obj = QJsonObject();
         return;
     }
@@ -82,7 +82,7 @@ QString UiArrangement::value(const QString& key) const
 void UiArrangement::setValue(const QString& key, const QString& val)
 {
     m_settings[key] = val;
-    saveData(DataKey::UiSettings, m_settings);
+    saveData(WS_UiSettings, m_settings);
     if (m_valuesNotifications.contains(key)) {
         m_valuesNotifications[key].notify();
     }
@@ -103,7 +103,7 @@ QByteArray UiArrangement::state(const QString& key) const
 void UiArrangement::setState(const QString& key, const QByteArray& data)
 {
     m_states[key] = QString::fromLocal8Bit(data);
-    saveData(DataKey::UiStates, m_states);
+    saveData(WS_UiStates, m_states);
     if (m_statesNotifications.contains(key)) {
         m_statesNotifications[key].notify();
     }
@@ -156,7 +156,7 @@ void UiArrangement::setToolConfig(const QString& toolName, const ToolConfig& con
     confObj["items"] = itemsArr;
 
     m_toolconfigs[toolName] = confObj;
-    saveData(DataKey::UiToolConfigs, m_toolconfigs);
+    saveData(WS_UiToolConfigs, m_toolconfigs);
     if (m_toolconfigsNotifications.contains(toolName)) {
         m_toolconfigsNotifications[toolName].notify();
     }

@@ -22,6 +22,9 @@
 
 #include "workspacelistmodel.h"
 
+#include "ui/uitypes.h"
+#include "palette/palettetypes.h"
+
 #include "log.h"
 
 using namespace mu::workspace;
@@ -166,10 +169,10 @@ void WorkspaceListModel::createNewWorkspace()
     }
 
     IWorkspacePtr newWorkspace = workspacesManager()->newWorkspace(name.toStdString());
-    newWorkspace->setIsManaged(DataKey::UiSettings, meta.value("ui_settings").toBool());
-    newWorkspace->setIsManaged(DataKey::UiStates, meta.value("ui_states").toBool());
-    newWorkspace->setIsManaged(DataKey::UiToolConfigs, meta.value("ui_toolconfigs").toBool());
-    newWorkspace->setIsManaged(DataKey::Palettes, meta.value("palettes").toBool());
+    newWorkspace->setIsManaged(ui::WS_UiSettings, meta.value(ui::WS_UiSettings).toBool());
+    newWorkspace->setIsManaged(ui::WS_UiStates, meta.value(ui::WS_UiStates).toBool());
+    newWorkspace->setIsManaged(ui::WS_UiToolConfigs, meta.value(ui::WS_UiToolConfigs).toBool());
+    newWorkspace->setIsManaged(palette::WS_Palettes, meta.value(palette::WS_Palettes).toBool());
 
     int newWorkspaceIndex = m_workspaces.size();
 
