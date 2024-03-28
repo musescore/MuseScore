@@ -21,7 +21,8 @@
  */
 #include "workspaceuiactions.h"
 
-#include "context/uicontext.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
 using namespace mu::workspace;
@@ -29,13 +30,13 @@ using namespace mu::ui;
 
 const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("select-workspace",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Select workspace")
              ),
     UiAction("configure-workspaces",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Configure workspace"),
              TranslatableString("action", "Configure workspace…")
              )

@@ -24,6 +24,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/shortcutsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shortcutsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/shortcutstypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/shortcutcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutsregister.h
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/ishortcutsconfiguration.h

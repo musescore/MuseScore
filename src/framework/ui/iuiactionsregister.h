@@ -22,12 +22,11 @@
 #ifndef MU_UI_IUIACTIONSREGISTER_H
 #define MU_UI_IUIACTIONSREGISTER_H
 
-#include <memory>
-
 #include "modularity/imoduleinterface.h"
+#include "global/async/channel.h"
+
 #include "iuiactionsmodule.h"
-#include "uitypes.h"
-#include "async/channel.h"
+#include "uiaction.h"
 
 namespace mu::ui {
 class IUiActionsRegister : MODULE_EXPORT_INTERFACE

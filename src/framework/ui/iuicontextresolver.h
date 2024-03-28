@@ -25,8 +25,8 @@
 #include <memory>
 
 #include "modularity/imoduleinterface.h"
-#include "uitypes.h"
-#include "async/notification.h"
+#include "global/async/notification.h"
+#include "uiaction.h"
 
 namespace mu::ui {
 class IUiContextResolver : MODULE_EXPORT_INTERFACE

@@ -21,7 +21,8 @@
  */
 #include "diagnosticsactions.h"
 
-#include "context/uicontext.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
 using namespace mu::ui;
@@ -30,38 +31,38 @@ using namespace mu::diagnostics;
 
 const UiActionList DiagnosticsActions::m_actions = {
     UiAction("diagnostic-save-diagnostic-files",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Save diagnostic files")
              ),
     UiAction("diagnostic-show-paths",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Show p&aths…")
              ),
     UiAction("diagnostic-show-profiler",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Show pr&ofiler…")
              ),
     UiAction("diagnostic-show-navigation-tree",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Show &navigation tree…")
              ),
     UiAction("diagnostic-show-accessible-tree",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Show &accessible tree…")
              ),
     UiAction("diagnostic-accessible-tree-dump",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString::untranslatable("Accessible &dump")
              ),
     UiAction("diagnostic-show-engraving-elements",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Engraving &elements")
              )
 };

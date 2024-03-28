@@ -21,7 +21,8 @@
  */
 #include "extensionsuiactions.h"
 
-#include "context/uicontext.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
 #include "global/types/translatablestring.h"
 
 #include "log.h"
@@ -32,8 +33,8 @@ using namespace mu::extensions;
 
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
-    mu::context::UiCtxAny,
-    mu::context::CTX_ANY,
+    mu::ui::UiCtxAny,
+    mu::shortcuts::CTX_ANY,
     mu::TranslatableString("action", "&Manage plugins…"),
     mu::TranslatableString("action", "Manage plugins…")
     );
@@ -46,8 +47,8 @@ const mu::ui::UiActionList& ExtensionsUiActions::actionsList() const
         for (const Action& a : m.actions) {
             UiAction action;
             action.code = makeUriQuery(m.uri, a.code).toString();
-            action.uiCtx = m.requiresScore ? mu::context::UiCtxNotationOpened : mu::context::UiCtxAny;
-            action.scCtx = m.requiresScore ? mu::context::CTX_NOTATION_OPENED : mu::context::CTX_ANY;
+            action.uiCtx = m.requiresProject ? mu::ui::UiCtxProjectOpened : mu::ui::UiCtxAny;
+            action.scCtx = m.requiresProject ? mu::shortcuts::CTX_PROJECT_OPENED : mu::shortcuts::CTX_ANY;
             action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
             action.title = action.description;
 

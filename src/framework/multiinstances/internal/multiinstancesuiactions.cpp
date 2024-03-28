@@ -21,7 +21,8 @@
  */
 #include "multiinstancesuiactions.h"
 
-#include "context/uicontext.h"
+#include "ui/uiaction.h"
+#include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
 using namespace mu::ui;
@@ -30,8 +31,8 @@ using namespace mu::mi;
 
 const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY,
+             mu::ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY,
              TranslatableString("action", "&Multiinstances")
              )
 };

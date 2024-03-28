@@ -26,6 +26,8 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
+#include "uitypes.h"
+
 #include "log.h"
 
 using namespace mu::ui;

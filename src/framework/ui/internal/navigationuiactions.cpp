@@ -21,79 +21,80 @@
  */
 #include "navigationuiactions.h"
 
-#include "context/uicontext.h"
+#include "../uiaction.h"
+#include "shortcuts/shortcutcontext.h"
 
 using namespace mu::ui;
 using namespace mu::actions;
 
 const UiActionList NavigationUiActions::m_actions = {
     UiAction("nav-dev-show-controls",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-next-section",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-prev-section",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-next-panel",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-prev-panel",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-next-tab",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-prev-tab",
-             mu::context::UiCtxAny,
-             mu::context::CTX_ANY
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_ANY
              ),
     UiAction("nav-right",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-left",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-up",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-down",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-escape",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-trigger-control",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-first-control",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-last-control",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-nextrow-control",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              ),
     UiAction("nav-prevrow-control",
-             mu::context::UiCtxAny,
-             mu::context::CTX_NOT_NOTATION_FOCUSED
+             ui::UiCtxAny,
+             mu::shortcuts::CTX_NOT_PROJECT_FOCUSED
              )
 };
 

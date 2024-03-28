@@ -23,6 +23,7 @@
 
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
+#include "context/shortcutcontext.h"
 
 #include "view/dockwindow/idockwindow.h"
 #include "async/notification.h"

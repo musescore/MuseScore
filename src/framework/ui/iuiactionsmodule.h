@@ -24,8 +24,9 @@
 
 #include <memory>
 
-#include "uitypes.h"
-#include "async/channel.h"
+#include "global/async/channel.h"
+
+#include "uiaction.h"
 
 namespace mu::ui {
 class IUiActionsModule

@@ -22,7 +22,7 @@
 #ifndef MU_CONTEXT_UICONTEXT_H
 #define MU_CONTEXT_UICONTEXT_H
 
-#include "ui/uitypes.h"
+#include "ui/uiaction.h"
 
 namespace mu::context {
 //! NOTE Determines where to be, what the user is doing
@@ -31,12 +31,9 @@ namespace mu::context {
 static constexpr ui::UiContext UiCtxUnknown = ui::UiCtxUnknown;
 static constexpr ui::UiContext UiCtxAny = ui::UiCtxAny;
 
-// pages
-static constexpr ui::UiContext UiCtxNotationOpened = "UiCtxNotationOpened";
-static constexpr ui::UiContext UiCtxHomeOpened = "UiCtxHomeOpened";
-
-// notation detail
-static constexpr ui::UiContext UiCtxNotationFocused = "UiCtxNotationFocused";
+static constexpr ui::UiContext UiCtxHomeOpened = ui::UiCtxHomeOpened;
+static constexpr ui::UiContext UiCtxNotationOpened = ui::UiCtxProjectOpened;
+static constexpr ui::UiContext UiCtxNotationFocused = ui::UiCtxProjectFocused;
 }
 
 #endif // MU_CONTEXT_UICONTEXT_H
