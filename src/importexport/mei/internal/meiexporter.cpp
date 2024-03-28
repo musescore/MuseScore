@@ -1419,7 +1419,8 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
     }
     Convert::colorToMEI(lyrics, meiVerse);
     m_currentNode = m_currentNode.append_child();
-    meiVerse.Write(m_currentNode, this->getLayerXmlIdFor(VERSE_L));
+    std::string xmlId = this->getXmlIdFor(lyrics, 'v');
+    meiVerse.Write(m_currentNode, xmlId);
 
     // Split the syllable into line blocks
     Convert::textWithSmufl lineBlocks;
