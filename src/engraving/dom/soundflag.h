@@ -59,6 +59,9 @@ public:
     bool play() const;
     void setPlay(bool play);
 
+    bool applyToAllStaves() const;
+    void setApplyToAllStaves(bool apply);
+
     void clear();
 
     bool shouldHide() const;
@@ -77,6 +80,7 @@ private:
     muse::draw::Font m_iconFont;
 
     bool m_play = true;
+    bool m_applyToAllStaves = true;
 };
 }
 

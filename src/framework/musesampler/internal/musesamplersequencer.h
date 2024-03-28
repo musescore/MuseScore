@@ -83,8 +83,8 @@ private:
     void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
-    void addTextArticulation(const std::string& articulationCode, long long startUs);
-    void addPresets(const std::vector<std::string>& presets, long long startUs);
+    void addTextArticulation(const std::string& articulationCode, long long startUs, ms_Track track);
+    void addPresets(const std::vector<std::string>& presets, long long startUs, ms_Track track);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
     void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track);
 
