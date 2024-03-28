@@ -19,14 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACETYPES_H
-#define MU_WORKSPACE_WORKSPACETYPES_H
+import QtQuick 2.15
 
-namespace mu::workspace {
-static const std::string DEFAULT_WORKSPACE_NAME("Default");
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-using DataKey = const char*;
-inline constexpr DataKey WS_Undefined("");
+QmlDialog {
+    id: root
+
+    height: 600
+    width: 1024
+
+    Rectangle {
+        anchors.fill: parent
+        color: ui.theme.backgroundPrimaryColor
+
+        StyledTextLabel {
+            anchors.centerIn: parent
+            text: "Workspaces Dialog Stub"
+        }
+    }
 }
-
-#endif // MU_WORKSPACE_WORKSPACETYPES_H

@@ -203,6 +203,7 @@
 #include "workspacescene/workspacescenemodule.h"
 #else
 #include "stubs/workspace/workspacestubmodule.h"
+#include "stubs/workspacescene/workspacescenestubmodule.h"
 #endif
 
 #ifdef Q_OS_WASM

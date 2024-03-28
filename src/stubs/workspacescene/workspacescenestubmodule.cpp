@@ -19,25 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "workspacestubmodule.h"
+#include "workspacescenestubmodule.h"
 
 #include "modularity/ioc.h"
 
-#include "workspaceconfigurationstub.h"
-#include "workspacemanagerstub.h"
-#include "workspacesdataproviderstub.h"
+#include "framework/ui/iinteractiveuriregister.h"
 
 using namespace mu::workspace;
 using namespace mu::modularity;
+using namespace mu::ui;
 
-std::string WorkspaceModule::moduleName() const
+static void workspacescene_init_qrc()
 {
-    return "workspace_stub";
+    Q_INIT_RESOURCE(workspacescene);
 }
 
-void WorkspaceModule::registerExports()
+std::string WorkspaceSceneModule::moduleName() const
 {
-    ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), new WorkspaceConfigurationStub());
-    ioc()->registerExport<IWorkspaceManager>(moduleName(), new WorkspaceManagerStub());
-    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), new WorkspacesDataProviderStub());
+    return "workspacescene_stub";
+}
+
+void WorkspaceSceneModule::resolveImports()
+{
+    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    if (ir) {
+        ir->registerUri(Uri("musescore://workspace/select"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/WorkspacesDialog.qml"));
+
+        ir->registerUri(Uri("musescore://workspace/create"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/NewWorkspaceDialog.qml"));
+    }
+}
+
+void WorkspaceSceneModule::registerResources()
+{
+    workspacescene_init_qrc();
 }

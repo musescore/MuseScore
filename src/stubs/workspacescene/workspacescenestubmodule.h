@@ -19,14 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACETYPES_H
-#define MU_WORKSPACE_WORKSPACETYPES_H
+#ifndef MU_WORKSPACE_WORKSPACESCENESTUBMODULE_H
+#define MU_WORKSPACE_WORKSPACESCENESTUBMODULE_H
+
+#include "modularity/imodulesetup.h"
 
 namespace mu::workspace {
-static const std::string DEFAULT_WORKSPACE_NAME("Default");
+class WorkspaceSceneModule : public modularity::IModuleSetup
+{
+public:
+    std::string moduleName() const override;
 
-using DataKey = const char*;
-inline constexpr DataKey WS_Undefined("");
+    void resolveImports() override;
+    void registerResources() override;
+};
 }
 
-#endif // MU_WORKSPACE_WORKSPACETYPES_H
+#endif // MU_WORKSPACE_WORKSPACESCENESTUBMODULE_H
