@@ -2586,8 +2586,18 @@ bool Measure::isFinalMeasureOfSection() const
 
 bool Measure::isAnacrusis() const
       {
-      TimeSigFrac timeSig = score()->sigmap()->timesig(tick().ticks()).nominal();
-      return irregular() && ticks() < Fraction::fromTicks(timeSig.ticksPerMeasure());
+      const MeasureBase* pm = prev();
+      ElementType pt = pm ? pm->type() : ElementType::INVALID;
+
+      if (irregular() || !pm
+          || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
+          || pt == ElementType::VBOX || pt == ElementType::HBOX
+          || pt == ElementType::FBOX || pt == ElementType::TBOX) {
+            if (timesig() - ticks() > Fraction(0, 1)) {
+                  return true;
+                  }
+            }
+      return false;
       }
 
 //---------------------------------------------------------
@@ -3701,6 +3711,17 @@ Fraction Measure::computeTicks()
             s->setTicks(nticks);
             }
       return minTick;
+      }
+
+//---------------------------------------------------------
+//   anacrusisOffset
+//      determine if measure is anacrusis
+//      and return tick offset relative to measure end
+//---------------------------------------------------------
+
+Fraction Measure::anacrusisOffset() const
+      {
+      return isAnacrusis() ? (timesig() - ticks()) : Fraction(0, 1);
       }
 
 //---------------------------------------------------------

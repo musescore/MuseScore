@@ -26,8 +26,8 @@
 #include "palette.h"
 #include "playpanel.h"
 #include "preferences.h"
-#include "scoretab.h"
 #include "scorePreview.h"
+#include "scoretab.h"
 #include "scoreview.h"
 #include "seq.h"
 #include "svggenerator.h"
@@ -59,8 +59,8 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/rest.h"
 #include "libmscore/score.h"
-#include "libmscore/select.h"
 #include "libmscore/segment.h"
+#include "libmscore/select.h"
 #include "libmscore/sig.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafflines.h"
@@ -76,17 +76,17 @@
 #include "libmscore/utils.h"
 #include "libmscore/xml.h"
 
-#include "migration/handlers/edwinstylehandler.h"
-#include "migration/handlers/lelandstylehandler.h"
-#include "migration/handlers/resetallelementspositionshandler.h"
-#include "migration/handlers/styledefaultshandler.h"
-#include "migration/scoremigrator_3_6.h"
-
 #ifdef OMR
 #include "omr/importpdf.h"
 #include "omr/omr.h"
 #include "omr/omrpage.h"
 #endif
+
+#include "migration/scoremigrator_3_6.h"
+#include "migration/handlers/styledefaultshandler.h"
+#include "migration/handlers/lelandstylehandler.h"
+#include "migration/handlers/edwinstylehandler.h"
+#include "migration/handlers/resetallelementspositionshandler.h"
 
 #include "scorecmp/scorecmp.h"
 
@@ -797,7 +797,9 @@ MasterScore* MuseScore::getNewFile()
                         if (measure->timesig() != measure->ticks()) {
                               if (!linkedToPrevious)
                                     puRests.clear();
-                              std::vector<TDuration> dList = toDurationList(measure->ticks(), false);
+                              std::vector<TDuration> dList = toRhythmicDurationList(
+                                                measure->ticks(), true, Fraction(0, 1),
+                                                measure->score()->sigmap()->timesig(measure->tick().ticks()).nominal(), measure, 0);
                               if (!dList.empty()) {
                                     Fraction ltick = tick;
                                     int k = 0;

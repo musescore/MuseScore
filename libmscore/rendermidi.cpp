@@ -17,46 +17,45 @@
 
 #include <set>
 
-#include "rendermidi.h"
-#include "score.h"
-#include "volta.h"
-#include "note.h"
-#include "glissando.h"
-#include "instrument.h"
-#include "part.h"
-#include "chord.h"
-#include "trill.h"
-#include "vibrato.h"
-#include "style.h"
-#include "slur.h"
-#include "tie.h"
-#include "stafftext.h"
-#include "repeat.h"
-#include "articulation.h"
 #include "arpeggio.h"
-#include "durationtype.h"
-#include "measure.h"
-#include "tempo.h"
-#include "repeatlist.h"
-#include "changeMap.h"
-#include "dynamic.h"
-#include "navigate.h"
-#include "pedal.h"
-#include "staff.h"
-#include "hairpin.h"
+#include "articulation.h"
 #include "bend.h"
-#include "tremolo.h"
+#include "changeMap.h"
+#include "chord.h"
+#include "durationtype.h"
+#include "dynamic.h"
+#include "easeInOut.h"
+#include "glissando.h"
+#include "hairpin.h"
+#include "instrument.h"
+#include "measure.h"
+#include "navigate.h"
+#include "note.h"
 #include "noteevent.h"
+#include "part.h"
+#include "rendermidi.h"
+#include "repeat.h"
+#include "repeatlist.h"
+#include "score.h"
 #include "segment.h"
-#include "undo.h"
-#include "utils.h"
+#include "slur.h"
+#include "staff.h"
+#include "stafftextbase.h"
+#include "style.h"
 #include "sym.h"
 #include "synthesizerstate.h"
-#include "easeInOut.h"
+#include "tempo.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "trill.h"
+#include "undo.h"
+#include "utils.h"
+#include "vibrato.h"
+#include "volta.h"
+
 #include "global/log.h"
 
 #include "audio/midi/event.h"
-#include "mscore/preferences.h"
 
 namespace Ms {
 
@@ -1190,19 +1189,7 @@ void MidiRenderer::renderSpanners(const Chunk& chunk, EventMap* events)
 
 void Score::swingAdjustParams(Chord* chord, int& gateTime, int& ontime, int swingUnit, int swingRatio)
       {
-      Fraction tick = chord->rtick();
-      // adjust for anacrusis
-      Measure* cm     = chord->measure();
-      MeasureBase* pm = cm->prev();
-      ElementType pt  = pm ? pm->type() : ElementType::INVALID;
-      if (!pm || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
-         || pt == ElementType::VBOX || pt == ElementType::HBOX
-         || pt == ElementType::FBOX || pt == ElementType::TBOX) {
-            Fraction offset = cm->timesig() - cm->ticks();
-            if (offset > Fraction(0,1)) {
-                  tick += offset;
-                  }
-            }
+      Fraction tick = chord->rtick() + chord->measure()->anacrusisOffset();
 
       int swingBeat           = swingUnit * 2;
       qreal ticksDuration     = (qreal)chord->actualTicks().ticks();
