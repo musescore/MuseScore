@@ -246,13 +246,29 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
     return result;
 }
 
+// FIX-JACK-20240823: change api callers, WAS:
+//      unsigned int LinuxAudioDriver::sampleRate() const
 unsigned int LinuxAudioDriver::outputDeviceSampleRate() const
 {
-    return s_format.sampleRate;
+    return m_current_audioDriverState->m_spec.sampleRate;
 }
 
+// FIX-JACK-20240823: merge this code
 bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
+    LOGE("------ setSamplerate: %u", sampleRate);
+    if (m_spec.sampleRate == (int)sampleRate) {
+        LOGE("------ SAME setSamplerate, doing nothing ------");
+        return true;
+    }
+    m_spec.sampleRate = (int)sampleRate;
+    LOGE("------ CHANGED setSamplerate, doing nothing ------");
+    if (!reopen(m_current_audioDriverState->name(), m_spec)) {
+        return false;
+    }
+    m_sampleRateChanged.notify();
+    return true;
+#if 0
     if (s_format.sampleRate == sampleRate) {
         return true;
     }
@@ -271,6 +287,7 @@ bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
     }
 
     return ok;
+#endif
 }
 
 async::Notification LinuxAudioDriver::outputDeviceSampleRateChanged() const
