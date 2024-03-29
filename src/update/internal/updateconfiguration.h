@@ -22,17 +22,18 @@
 #ifndef MU_UPDATE_UPDATECONFIGURATION_H
 #define MU_UPDATE_UPDATECONFIGURATION_H
 
+#include "../iupdateconfiguration.h"
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
-#include "../iupdateconfiguration.h"
+#include "global/types/config.h"
 
 namespace mu::update {
 class UpdateConfiguration : public IUpdateConfiguration, public async::Asyncable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
@@ -57,6 +58,10 @@ public:
     std::string museScorePrivacyPolicyUrl() const override;
 
     io::path_t updateDataPath() const override;
+
+private:
+
+    Config m_config;
 };
 }
 

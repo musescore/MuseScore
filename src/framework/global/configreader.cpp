@@ -102,9 +102,9 @@ Config ConfigReader::read(const io::path_t& path)
     }
 
     ValMap cv;
-    JsonValue jv;
-    jv = obj;
-    fillMap(cv, "", jv);
+    for (const std::string& k : obj.keys()) {
+        fillMap(cv, k, obj.value(k));
+    }
 
     return Config(cv);
 }
