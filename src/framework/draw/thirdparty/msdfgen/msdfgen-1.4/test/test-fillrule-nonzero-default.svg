@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-	<desc>Another fillrule-nonzero test, but this time using it as a default</desc>
-	<path d="M0 0h512v512H0z" fill="black"/>
-	<path d="
-	M300 100l50,25v-50z
-	M100 300l-50,25v-50z
-	"
-	fill="white"/>
-</svg>
