@@ -207,6 +207,10 @@ TEST_F(Mei_Tests, mei_lyric_03) {
     meiReadTest("lyric-03");
 }
 
+TEST_F(Mei_Tests, mei_lyric_04) {
+    meiReadTest("lyric-04");
+}
+
 TEST_F(Mei_Tests, mei_measure_01) {
     meiReadTest("measure-01");
 }

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title type="true">Ups and downs</title>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2024-03-28T11:47:12" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Ups and downs</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <clef shape="G" line="2" glyph.auth="smufl" glyph.name="gClef8vbParens" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m43y6wc" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="neu8907" dur="4" pname="c" oct="4">
+                              <verse xml:id="vki5ooy" n="1">
+                                 <syl>Do</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="n169s3r8" dur="4" pname="d" oct="4">
+                              <verse xml:id="v1vjpf1u" n="1">
+                                 <syl>re</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="npgdyzg" dur="4" pname="e" oct="4">
+                              <verse xml:id="vda2s5i" n="1">
+                                 <syl>mi</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="netw6x0" dur="4" pname="f" oct="4">
+                              <verse xml:id="vf2khz9" n="1">
+                                 <syl>fa</syl>
+                              </verse>
+                           </note>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m17h0lge" right="end" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="n1f5ekxr" dur="4" pname="g" oct="4">
+                              <verse xml:id="v17lrso6" n="1">
+                                 <syl>sol</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="n6b9cgx" dur="4" pname="a" oct="4">
+                              <verse xml:id="vnzxbf7" n="1">
+                                 <syl>la</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="nbjl8k" dur="4" pname="b" oct="4">
+                              <verse xml:id="v37b63o" n="1">
+                                 <syl>ti</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="nsvdgoc" dur="4" pname="c" oct="5">
+                              <verse xml:id="v1m781wi" n="1">
+                                 <syl>do.</syl>
+                              </verse>
+                           </note>
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
