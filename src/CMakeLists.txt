@@ -37,10 +37,6 @@ if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
 endif()
 
-if (MUE_BUILD_CLOUD_MODULE)
-    add_subdirectory(cloud)
-endif()
-
 add_subdirectory(commonscene)
 add_subdirectory(context)
 
