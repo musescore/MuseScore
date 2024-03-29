@@ -26,10 +26,12 @@
 #include "ilanguagesconfiguration.h"
 #include "iglobalconfiguration.h"
 
+#include "global/types/config.h"
+
 namespace mu::languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    Inject<IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
@@ -48,6 +50,7 @@ public:
     io::path_t userLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
 
 private:
+    Config m_config;
     async::Channel<QString> m_currentLanguageCodeChanged;
 };
 }

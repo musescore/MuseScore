@@ -23,20 +23,21 @@
 
 #include <QUrl>
 
-#include "log.h"
+#include "global/configreader.h"
 #include "settings.h"
 #include "languagestypes.h"
-#include "languageserrors.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::languages;
 
 static const Settings::Key LANGUAGE_KEY("languages", "language");
 
-static const QString LANGUAGES_SERVER_URL(MU_LANGUAGES_SERVER_URL);
-
 void LanguagesConfiguration::init()
 {
+    m_config = ConfigReader::read(":/configs/languages.cfg");
+
     settings()->setDefaultValue(LANGUAGE_KEY, Val(SYSTEM_LANGUAGE_CODE.toStdString()));
     settings()->valueChanged(LANGUAGE_KEY).onReceive(nullptr, [this](const Val& val) {
         m_currentLanguageCodeChanged.send(val.toQString());
@@ -60,13 +61,13 @@ void LanguagesConfiguration::setCurrentLanguageCode(const QString& languageCode)
 
 QUrl LanguagesConfiguration::languagesUpdateUrl() const
 {
-    return QUrl(LANGUAGES_SERVER_URL + "details.json");
+    return QUrl(m_config.value("server_url").toQString() + "details.json");
 }
 
 QUrl LanguagesConfiguration::languageFileServerUrl(const QString& languageCode) const
 {
     TRACEFUNC;
-    return QUrl(LANGUAGES_SERVER_URL + QString("locale_%1.zip").arg(languageCode));
+    return QUrl(m_config.value("server_url").toQString() + QString("locale_%1.zip").arg(languageCode));
 }
 
 io::path_t LanguagesConfiguration::languagesAppDataPath() const
