@@ -50,6 +50,10 @@ public:
     int audioDelayCompensate() const override;
     void setAudioDelayCompensate(const int frames) override;
 
+    unsigned int sampleRate() const override;
+    bool setSampleRate(unsigned int sampleRate) override;
+    async::Notification sampleRateChanged() const override;
+
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
