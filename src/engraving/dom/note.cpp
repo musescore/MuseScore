@@ -876,9 +876,9 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 
     String pitchOffset;
     if (tuning() != 0) {
-        static constexpr size_t bufferSize = 50;
-        char buffer[bufferSize];
-        snprintf(buffer, bufferSize, "%+.3f", tuning());
+        static constexpr size_t maxLen = 50;
+        char buffer[maxLen];
+        snprintf(buffer, maxLen, "%+.3f", tuning());
         pitchOffset = String::fromAscii(buffer);
     }
 
