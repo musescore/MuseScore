@@ -23,7 +23,7 @@
 #include "uiengine.h"
 
 #include <QApplication>
-#include <QQmlEngine>
+#include <QQmlApplicationEngine>
 #include <QStringList>
 #include <QDir>
 #include <QQmlContext>
@@ -32,14 +32,9 @@
 
 using namespace mu::ui;
 
-UiEngine* UiEngine::instance()
-{
-    static UiEngine e;
-    return &e;
-}
-
 UiEngine::UiEngine()
 {
+    m_engine = new QQmlApplicationEngine(this);
     m_translation = new QmlTranslation(this);
     m_interactiveProvider = std::make_shared<InteractiveProvider>();
     m_api = new QmlApi(this);
@@ -56,13 +51,38 @@ UiEngine::~UiEngine()
     delete m_translation;
 }
 
+void UiEngine::init()
+{
+    m_theme->init();
+    m_tooltip->init();
+    m_engine->rootContext()->setContextProperty("ui", this);
+    m_engine->rootContext()->setContextProperty("api", m_api);
+
+    QJSValue translator = m_engine->newQObject(m_translation);
+    QJSValue translateFn = translator.property("translate");
+    m_engine->globalObject().setProperty("qsTrc", translateFn);
+
+#ifdef Q_OS_WIN
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
+    m_engine->addImportPath(dir.absolutePath());
+#endif
+
+    m_engine->addImportPath(":/qml");
+
+#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
+    for (const QString& path : m_sourceImportPaths) {
+        m_engine->addImportPath(path);
+    }
+#endif
+}
+
 void UiEngine::quit()
 {
     if (!m_engine) {
         return;
     }
 
-    m_engine->quit();
+    emit m_engine->quit();
     delete m_engine;
     m_engine = nullptr;
 }
@@ -80,52 +100,6 @@ void UiEngine::setRootItem(QQuickItem* rootItem)
 
     m_rootItem = rootItem;
     emit rootItemChanged(m_rootItem);
-}
-
-QQmlEngine* UiEngine::engine()
-{
-    if (m_engine) {
-        return m_engine;
-    }
-
-    setup(new QQmlEngine(this));
-
-    return m_engine;
-}
-
-void UiEngine::moveQQmlEngine(QQmlEngine* e)
-{
-    setup(e);
-}
-
-void UiEngine::setup(QQmlEngine* engine)
-{
-    IF_ASSERT_FAILED_X(!m_engine, "UiEngine already inited") {
-        return;
-    }
-
-    m_engine = engine;
-    m_theme->init();
-    m_tooltip->init();
-    m_engine->rootContext()->setContextProperty("ui", this);
-    m_engine->rootContext()->setContextProperty("api", m_api);
-
-    QJSValue translator = m_engine->newQObject(m_translation);
-    QJSValue translateFn = translator.property("translate");
-    m_engine->globalObject().setProperty("qsTrc", translateFn);
-
-#ifdef Q_OS_WIN
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../qml"));
-    m_engine->addImportPath(dir.absolutePath());
- #endif
-
-    m_engine->addImportPath(":/qml");
-
-#ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
-    for (const QString& path : m_sourceImportPaths) {
-        m_engine->addImportPath(path);
-    }
-#endif
 }
 
 void UiEngine::addSourceImportPath(const QString& path)
@@ -185,12 +159,17 @@ Qt::LayoutDirection UiEngine::currentLanguageLayoutDirection() const
     return languagesService()->currentLanguage().direction;
 }
 
+QQmlApplicationEngine* UiEngine::qmlAppEngine() const
+{
+    return m_engine;
+}
+
 QQmlEngine* UiEngine::qmlEngine() const
 {
-    return const_cast<UiEngine*>(this)->engine();
+    return qmlAppEngine();
 }
 
 void UiEngine::clearComponentCache()
 {
-    engine()->clearComponentCache();
+    m_engine->clearComponentCache();
 }

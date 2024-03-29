@@ -23,8 +23,6 @@ set(MODULE appshell)
 set(MODULE_QRC appshell.qrc)
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(${CMAKE_CURRENT_LIST_DIR}/view/dockwindow/dockwindow.cmake)
-
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
@@ -106,14 +104,13 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/loadingscreenview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/splashscreen/newinstanceloadingscreenview.h
-    ${DOCKWINDOW_SRC}
     )
 
 
 set(MODULE_LINK
-    uicomponents
     ui
-    ${DOCK_LIBS}
+    uicomponents
+    dockwindow
     )
 
 if (OS_IS_MAC)

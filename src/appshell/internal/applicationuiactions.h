@@ -30,7 +30,7 @@
 #include "ui/imainwindow.h"
 #include "view/preferences/braillepreferencesmodel.h"
 
-#include "view/dockwindow/idockwindowprovider.h"
+#include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
 class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncable

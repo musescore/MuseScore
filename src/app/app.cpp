@@ -31,13 +31,11 @@
 #endif
 
 #include "appshell/view/internal/splashscreen/splashscreen.h"
-#include "appshell/view/dockwindow/docksetup.h"
 
 #include "modularity/ioc.h"
-#include "ui/internal/uiengine.h"
-
 #include "framework/global/globalmodule.h"
 #include "framework/global/internal/application.h"
+#include "framework/ui/iuiengine.h"
 
 #include "log.h"
 
@@ -273,9 +271,7 @@ int App::run(int argc, char** argv)
         // ====================================================
         // Setup Qml Engine
         // ====================================================
-        QQmlApplicationEngine* engine = new QQmlApplicationEngine();
-
-        dock::DockSetup::setup(engine);
+        QQmlApplicationEngine* engine = modularity::ioc()->resolve<ui::IUiEngine>("app")->qmlAppEngine();
 
 #if defined(Q_OS_WIN)
         const QString mainQmlFile = "/platform/win/Main.qml";
@@ -286,8 +282,6 @@ int App::run(int argc, char** argv)
 #elif defined(Q_OS_WASM)
         const QString mainQmlFile = "/Main.wasm.qml";
 #endif
-        //! NOTE Move ownership to UiEngine
-        ui::UiEngine::instance()->moveQQmlEngine(engine);
 
 #ifdef MUE_ENABLE_LOAD_QML_FROM_SOURCE
         const QUrl url(QString(appshell_QML_IMPORT) + mainQmlFile);
@@ -371,7 +365,7 @@ int App::run(int argc, char** argv)
 
 #ifdef MUE_BUILD_APPSHELL_MODULE
     // Engine quit
-    ui::UiEngine::instance()->quit();
+    modularity::ioc()->resolve<ui::IUiEngine>("app")->quit();
 #endif
 
     // Deinit

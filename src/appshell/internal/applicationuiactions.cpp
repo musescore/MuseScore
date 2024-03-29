@@ -25,7 +25,7 @@
 #include "context/uicontext.h"
 #include "context/shortcutcontext.h"
 
-#include "view/dockwindow/idockwindow.h"
+#include "dockwindow/idockwindow.h"
 #include "async/notification.h"
 
 #include "log.h"

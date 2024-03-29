@@ -27,6 +27,7 @@
 #include <QtGlobal>
 
 namespace mu::ui {
+class UiEngine;
 class UiConfiguration;
 class UiActionsRegister;
 class NavigationController;
@@ -58,6 +59,7 @@ public:
     void onDeinit() override;
 
 private:
+    std::shared_ptr<UiEngine> m_uiengine;
     std::shared_ptr<UiConfiguration> m_configuration;
     std::shared_ptr<UiActionsRegister> m_uiactionsRegister;
     std::shared_ptr<NavigationController> m_keyNavigationController;

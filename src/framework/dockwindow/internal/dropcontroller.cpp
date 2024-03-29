@@ -23,20 +23,21 @@
 #include "dropcontroller.h"
 
 #include "../idockwindow.h"
-#include "../dockcentralview.h"
-#include "../dockingholderview.h"
-#include "../dockpageview.h"
-#include "../dockpanelview.h"
-#include "../docktoolbarview.h"
+#include "../view/dockcentralview.h"
+#include "../view/dockingholderview.h"
+#include "../view/dockpageview.h"
+#include "../view/dockpanelview.h"
+#include "../view/docktoolbarview.h"
 
 #include "globaltypes.h"
-#include "log.h"
 
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/MainWindowBase.h"
 #include "thirdparty/KDDockWidgets/src/private/DockRegistry_p.h"
 #include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
 #include "thirdparty/KDDockWidgets/src/private/DropAreaWithCentralFrame_p.h"
+
+#include "log.h"
 
 using KDDropLocation = KDDockWidgets::DropIndicatorOverlayInterface::DropLocation;
 

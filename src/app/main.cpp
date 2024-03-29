@@ -76,6 +76,7 @@
 #endif
 
 #ifdef MUE_BUILD_UI_MODULE
+#include "framework/dockwindow/dockmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
 #endif
@@ -273,6 +274,7 @@ int main(int argc, char** argv)
 #ifdef MUE_BUILD_UI_MODULE
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
+    app.addModule(new mu::dock::DockModule());
 #endif
     app.addModule(new mu::vst::VSTModule());
 

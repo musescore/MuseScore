@@ -1,0 +1,7 @@
+module Muse.Dock
+DockPage 1.0 DockPage.qml
+DockToolBar 1.0 DockToolBar.qml
+DockPanel 1.0 DockPanel.qml
+DockPanelTab 1.0 DockPanelTab.qml
+DockingHolder 1.0 DockingHolder.qml
+DockTitleBar 1.0 DockTitleBar.qml

@@ -22,8 +22,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import Muse.Dock 1.0
 import MuseScore.AppShell 1.0
-import MuseScore.Dock 1.0
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
@@ -31,7 +31,6 @@ import "./HomePage"
 import "./NotationPage"
 import "./PublishPage"
 import "./DevTools"
-import "./dockwindow"
 
 DockWindow {
     id: root

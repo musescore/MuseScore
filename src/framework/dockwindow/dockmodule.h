@@ -19,21 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
 
-import MuseScore.Dock 1.0
+#ifndef MU_DOCK_DOCKMODULE_H
+#define MU_DOCK_DOCKMODULE_H
 
-DockPanelView {
-    id: root
+#include <memory>
 
-    default property alias contentComponent : contentLoader.sourceComponent
+#include "global/modularity/imodulesetup.h"
 
-    contentNavigationPanel: Boolean(contentLoader.item) && Boolean(contentLoader.item.navigationPanel) ?
-                                contentLoader.item.navigationPanel : null
+namespace mu::dock {
+class DockWindowActionsController;
+class DockModule : public modularity::IModuleSetup
+{
+public:
 
-    Loader {
-        id: contentLoader
+    std::string moduleName() const override;
+    void registerExports() override;
+    void registerResources() override;
+    void registerUiTypes() override;
+    void onInit(const IApplication::RunMode& mode) override;
 
-        active: root.visible
-    }
+private:
+
+    std::shared_ptr<DockWindowActionsController> m_actionsController;
+};
 }
+
+#endif // MU_DOCK_DOCKMODULE_H

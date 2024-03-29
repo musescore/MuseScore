@@ -5031,6 +5031,73 @@ articulation markings are present</translation>
     </message>
 </context>
 <context>
+    <name>KDDockWidgets::Debug::DebugWindow</name>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/DebugWindow.cpp" line="123"/>
+        <source>DockWidget unique name</source>
+        <translation type="unfinished">DockWidget unique name</translation>
+    </message>
+</context>
+<context>
+    <name>KDDockWidgets::DockWidgetBase</name>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="608"/>
+        <source>Dock</source>
+        <translation type="unfinished">Dock</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/DockWidgetBase.cpp" line="612"/>
+        <source>Detach</source>
+        <translation type="unfinished">Detach</translation>
+    </message>
+</context>
+<context>
+    <name>KDDockWidgets::TitleBar</name>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
+        <source>Dock window</source>
+        <translation type="unfinished">Dock window</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/TitleBar.cpp" line="469"/>
+        <source>Undock window</source>
+        <translation type="unfinished">Undock window</translation>
+    </message>
+</context>
+<context>
+    <name>KDDockWidgets::TitleBarWidget</name>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="143"/>
+        <source>Minimize</source>
+        <translation type="unfinished">Minimize</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="144"/>
+        <source>Close</source>
+        <translation type="unfinished">Close</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="265"/>
+        <source>Auto-hide</source>
+        <translation type="unfinished">Auto-hide</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="268"/>
+        <source>Disable auto-hide</source>
+        <translation type="unfinished">Disable auto-hide</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
+        <source>Restore</source>
+        <translation type="unfinished">Restore</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/src/private/widgets/TitleBarWidget.cpp" line="285"/>
+        <source>Maximize</source>
+        <translation type="unfinished">Maximize</translation>
+    </message>
+</context>
+<context>
     <name>KeyEdit</name>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="38"/>
@@ -5708,6 +5775,24 @@ articulation markings are present</translation>
         <location filename="../../src/palette/view/widgets/symboldialog.ui" line="92"/>
         <source>Font:</source>
         <translation type="unfinished">Font:</translation>
+    </message>
+</context>
+<context>
+    <name>TestDocks</name>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5868"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5887"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5911"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5929"/>
+        <source>Detach</source>
+        <translation type="unfinished">Detach</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5875"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5904"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/tst_docks.cpp" line="5917"/>
+        <source>Dock</source>
+        <translation type="unfinished">Dock</translation>
     </message>
 </context>
 <context>
@@ -9981,64 +10066,64 @@ articulation markings are present</translation>
         <translation type="unfinished">All</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="118"/>
-        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="56"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="116"/>
+        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="55"/>
         <source>Notation toolbar</source>
         <translation type="unfinished">Notation toolbar</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="144"/>
-        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="82"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="142"/>
+        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="81"/>
         <source>Playback controls</source>
         <translation type="unfinished">Playback controls</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="166"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="164"/>
         <source>Undo/redo</source>
         <translation type="unfinished">Undo/redo</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="188"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="186"/>
         <source>Note input</source>
         <translation type="unfinished">Note input</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="217"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="215"/>
         <source>Palettes</source>
         <translation type="unfinished">Palettes</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="242"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="240"/>
         <source>Instruments</source>
         <translation type="unfinished">Instruments</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="267"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="265"/>
         <source>Properties</source>
         <translation type="unfinished">Properties</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="289"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="287"/>
         <source>Selection filter</source>
         <translation type="unfinished">Selection filter</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="317"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="315"/>
         <source>Mixer</source>
         <translation type="unfinished">Mixer</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="351"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="349"/>
         <source>Piano keyboard</source>
         <translation type="unfinished">Piano keyboard</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="381"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="379"/>
         <source>Timeline</source>
         <translation type="unfinished">Timeline</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="407"/>
+        <location filename="../../src/appshell/qml/NotationPage/NotationPage.qml" line="405"/>
         <source>Drumset tools</source>
         <translation type="unfinished">Drumset tools</translation>
     </message>
@@ -10049,13 +10134,13 @@ articulation markings are present</translation>
         <translation type="unfinished">MuseScore 4</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="100"/>
+        <location filename="../../src/appshell/qml/PublishPage/PublishPage.qml" line="99"/>
         <source>Undo/redo toolbar</source>
         <translation type="unfinished">Undo/redo toolbar</translation>
     </message>
     <message>
         <location filename="../../src/appshell/qml/MainToolBar.qml" line="64"/>
-        <location filename="../../src/appshell/qml/WindowContent.qml" line="64"/>
+        <location filename="../../src/appshell/qml/WindowContent.qml" line="63"/>
         <source>Main toolbar</source>
         <translation type="unfinished">Main toolbar</translation>
     </message>
@@ -10243,17 +10328,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>appshell/dock</name>
     <message>
-        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="63"/>
+        <location filename="../../src/framework/dockwindow/view/dockpanelview.cpp" line="63"/>
         <source>Close</source>
         <translation type="unfinished">Close</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="116"/>
+        <location filename="../../src/framework/dockwindow/view/dockpanelview.cpp" line="116"/>
         <source>Dock</source>
         <translation type="unfinished">Dock</translation>
     </message>
     <message>
-        <location filename="../../src/appshell/view/dockwindow/dockpanelview.cpp" line="116"/>
+        <location filename="../../src/framework/dockwindow/view/dockpanelview.cpp" line="116"/>
         <source>Undock</source>
         <translation type="unfinished">Undock</translation>
     </message>
@@ -21208,6 +21293,249 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <location filename="../../src/learn/learnerrors.h" line="45"/>
         <source>The received playlist is empty.</source>
         <translation type="unfinished">The received playlist is empty.</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="23"/>
+        <source>&amp;File</source>
+        <translation type="unfinished">&amp;File</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="26"/>
+        <source>Save layout</source>
+        <translation type="unfinished">Save layout</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="33"/>
+        <source>Restore layout</source>
+        <translation type="unfinished">Restore layout</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="40"/>
+        <source>Toggle widget #4</source>
+        <translation type="unfinished">Toggle widget #4</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="47"/>
+        <source>Toggle widget #5</source>
+        <translation type="unfinished">Toggle widget #5</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="54"/>
+        <source>Toggle widget #6</source>
+        <translation type="unfinished">Toggle widget #6</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="61"/>
+        <source>Close All</source>
+        <translation type="unfinished">Close All</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.qml" line="68"/>
+        <source>&amp;Quit</source>
+        <translation type="unfinished">&amp;Quit</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="45"/>
+        <source>Shows how to style framework internals via FrameworkWidgetFactory</source>
+        <translation type="unfinished">Shows how to style framework internals via FrameworkWidgetFactory</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="48"/>
+        <source>Support re-ordering tabs with mouse</source>
+        <translation type="unfinished">Support re-ordering tabs with mouse</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="51"/>
+        <source>Hide titlebars when tabs are visible</source>
+        <translation type="unfinished">Hide titlebars when tabs are visible</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="54"/>
+        <source>Don&apos;t hide title bars if floating, even if Flag_HideTitleBarWhenTabsVisible is specified.</source>
+        <translation type="unfinished">Don&apos;t hide title bars if floating, even if Flag_HideTitleBarWhenTabsVisible is specified.</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="57"/>
+        <source>Show tabs even if there&apos;s only one</source>
+        <translation type="unfinished">Show tabs even if there&apos;s only one</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="60"/>
+        <source>Use lazy resize</source>
+        <translation type="unfinished">Use lazy resize</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="63"/>
+        <source>Shows two multiple main windows</source>
+        <translation type="unfinished">Shows two multiple main windows</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="66"/>
+        <source>Only usable with -m. Make the two main windows incompatible with each other. (Illustrates (MainWindowBase::setAffinityName))</source>
+        <translation type="unfinished">Only usable with -m. Make the two main windows incompatible with each other. (Illustrates (MainWindowBase::setAffinityName))</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="69"/>
+        <source>Tabs have a close button</source>
+        <translation type="unfinished">Tabs have a close button</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="72"/>
+        <source>DockWidget #0 will be non-closable</source>
+        <translation type="unfinished">DockWidget #0 will be non-closable</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="75"/>
+        <source>Don&apos;t restore main window geometry, restore dock widgets in relative sizes</source>
+        <translation type="unfinished">Don&apos;t restore main window geometry, restore dock widgets in relative sizes</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="78"/>
+        <source>Double clicking a title bar will maximize a floating window</source>
+        <translation type="unfinished">Double clicking a title bar will maximize a floating window</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="81"/>
+        <source>DockWidget #9 will be non-dockable</source>
+        <translation type="unfinished">DockWidget #9 will be non-dockable</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="84"/>
+        <source>Floating dockWidgets have maximize/restore buttons instead of float/dock button</source>
+        <translation type="unfinished">Floating dockWidgets have maximize/restore buttons instead of float/dock button</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="87"/>
+        <source>Floating dockWidgets have a minimize button. Implies not being an utility window (~Qt::Tool)</source>
+        <translation type="unfinished">Floating dockWidgets have a minimize button. Implies not being an utility window (~Qt::Tool)</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="90"/>
+        <source>Use segmented indicators instead of classical</source>
+        <translation type="unfinished">Use segmented indicators instead of classical</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="93"/>
+        <source>FloatingWindows will be normal windows instead of utility windows</source>
+        <translation type="unfinished">FloatingWindows will be normal windows instead of utility windows</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="96"/>
+        <source>FloatingWindows will have Qt::WindowStaysOnTopHint. Implies not being an utility window (try it with -u too)</source>
+        <translation type="unfinished">FloatingWindows will have Qt::WindowStaysOnTopHint. Implies not being an utility window (try it with -u too)</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="99"/>
+        <source>loads the specified json file at startup</source>
+        <translation type="unfinished">loads the specified json file at startup</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="102"/>
+        <source>Allow main windows to be docked inside other main windows</source>
+        <translation type="unfinished">Allow main windows to be docked inside other main windows</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="106"/>
+        <source>Make dock #8 have a max-size of 200x200.</source>
+        <translation type="unfinished">Make dock #8 have a max-size of 200x200.</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="109"/>
+        <source>Persistent central frame</source>
+        <translation type="unfinished">Persistent central frame</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="111"/>
+        <source>Enables auto-hide/minimization to side-bar support</source>
+        <translation type="unfinished">Enables auto-hide/minimization to side-bar support</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="115"/>
+        <source>The title bar&apos;s close button will only close the current tab instead of all. Illustrates using Config::Flag_CloseOnlyCurrentTab</source>
+        <translation type="unfinished">The title bar&apos;s close button will only close the current tab instead of all. Illustrates using Config::Flag_CloseOnlyCurrentTab</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="119"/>
+        <source>DockWidget #5 won&apos;t be closed before a restore. Illustrates LayoutSaverOption::DontCloseBeforeRestore</source>
+        <translation type="unfinished">DockWidget #5 won&apos;t be closed before a restore. Illustrates LayoutSaverOption::DontCloseBeforeRestore</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="123"/>
+        <source>If we&apos;re not using title bars we&apos;ll still show the close and float button in the tab bar</source>
+        <translation type="unfinished">If we&apos;re not using title bars we&apos;ll still show the close and float button in the tab bar</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="127"/>
+        <source>The main window will have a non-detachable central widget</source>
+        <translation type="unfinished">The main window will have a non-detachable central widget</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="131"/>
+        <source>Allow switching tabs via context menu in tabs area</source>
+        <translation type="unfinished">Allow switching tabs via context menu in tabs area</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="137"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.cpp" line="38"/>
+        <source>(internal) Don&apos;t use Qt::Tool</source>
+        <translation type="unfinished">(internal) Don&apos;t use Qt::Tool</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="138"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.cpp" line="39"/>
+        <source>(internal) FloatingWindows won&apos;t have a parent</source>
+        <translation type="unfinished">(internal) FloatingWindows won&apos;t have a parent</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="139"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.cpp" line="40"/>
+        <source>(internal) FloatingWindows a native title bar</source>
+        <translation type="unfinished">(internal) FloatingWindows a native title bar</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="140"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.cpp" line="41"/>
+        <source>(internal) Don&apos;t use any drop indicators</source>
+        <translation type="unfinished">(internal) Don&apos;t use any drop indicators</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/dockwidgets/main.cpp" line="148"/>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/examples/qtquick/dockwidgets/main.cpp" line="49"/>
+        <source>(internal) Disable AeroSnap</source>
+        <translation type="unfinished">(internal) Disable AeroSnap</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/fuzzer/main.cpp" line="40"/>
+        <source>json file to load</source>
+        <translation type="unfinished">json file to load</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/fuzzer/main.cpp" line="42"/>
+        <source>Slowdown tests. Adds a 1 second delay between operations</source>
+        <translation type="unfinished">Slowdown tests. Adds a 1 second delay between operations</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/fuzzer/main.cpp" line="45"/>
+        <source>Dump json of the test even if we&apos;re already loading a test.</source>
+        <translation type="unfinished">Dump json of the test even if we&apos;re already loading a test.</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/fuzzer/main.cpp" line="48"/>
+        <source>Loops until it crashes</source>
+        <translation type="unfinished">Loops until it crashes</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/fuzzer/main.cpp" line="51"/>
+        <source>Skips the last test (presumably failing)</source>
+        <translation type="unfinished">Skips the last test (presumably failing)</translation>
+    </message>
+    <message>
+        <location filename="../../src/framework/dockwindow/thirdparty/KDDockWidgets/tests/fuzzer/main.cpp" line="54"/>
+        <source>Don&apos;t quit at the end, keep event loop running for debugging</source>
+        <translation type="unfinished">Don&apos;t quit at the end, keep event loop running for debugging</translation>
     </message>
 </context>
 <context>

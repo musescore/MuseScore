@@ -29,13 +29,12 @@
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
-#include "ui/view/navigationsection.h"
 
 #include "internal/dockbase.h"
 #include "docktypes.h"
 
 #ifndef MU_QT5_COMPAT
-Q_MOC_INCLUDE("appshell/view/dockwindow/dockstatusbarview.h")
+Q_MOC_INCLUDE("dockwindow/view/dockstatusbarview.h")
 #endif
 
 namespace mu::ui {

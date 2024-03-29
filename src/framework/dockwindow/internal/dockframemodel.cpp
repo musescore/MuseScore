@@ -26,13 +26,12 @@
 #include <QApplication>
 
 #include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+#include "uicomponents/view/abstractmenumodel.h"
 
 #include "../docktypes.h"
-#include "../dockpanelview.h"
+#include "../view/dockpanelview.h"
 
 #include "log.h"
-
-#include "uicomponents/view/abstractmenumodel.h"
 
 using namespace mu::dock;
 using namespace mu::actions;

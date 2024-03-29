@@ -47,6 +47,7 @@ if (MUE_BUILD_MUSESAMPLER_MODULE)
 endif()
 
 if (MUE_BUILD_UI_MODULE)
+    add_subdirectory(dockwindow)
     add_subdirectory(ui)
     add_subdirectory(uicomponents)
 endif()
