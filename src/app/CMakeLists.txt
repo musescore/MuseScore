@@ -478,7 +478,6 @@ elseif(OS_IS_MAC)
             ${PROJECT_SOURCE_DIR}/fonts/mscore-BC.ttf
             ${PROJECT_SOURCE_DIR}/fonts/mscoreTab.ttf
             ${PROJECT_SOURCE_DIR}/fonts/mscore/MScoreText.ttf
-            ${PROJECT_SOURCE_DIR}/fonts/mscore/MusescoreIcon.ttf
             ${PROJECT_SOURCE_DIR}/fonts/musejazz/MuseJazzText.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaScript.otf
             ${PROJECT_SOURCE_DIR}/fonts/petaluma/PetalumaText.otf
