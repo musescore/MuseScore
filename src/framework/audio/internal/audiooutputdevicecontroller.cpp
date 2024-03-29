@@ -48,6 +48,16 @@ void AudioOutputDeviceController::init()
         }
     });
 
+    configuration()->sampleRateChanged().onNotify(this, [this]() {
+        unsigned int sampleRate = configuration()->sampleRate();
+        bool ok = audioDriver()->setSampleRate(sampleRate);
+        if (ok) {
+            async::Async::call(this, [sampleRate](){
+                AudioEngine::instance()->setSampleRate(sampleRate);
+            }, AudioThread::ID);
+        }
+    });
+
     configuration()->driverBufferSizeChanged().onNotify(this, [this]() {
         unsigned int bufferSize = configuration()->driverBufferSize();
         LOGI() << "Trying to change buffer size: " << bufferSize;

@@ -92,6 +92,21 @@ void AudioDriverStub::setAudioDelayCompensate(const int frames)
 {
 }
 
+unsigned int AudioDriverStub::sampleRate() const
+{
+    return 0;
+}
+
+bool AudioDriverStub::setSampleRate(unsigned int sampleRate)
+{
+    return true;
+}
+
+async::Notification AudioDriverStub::sampleRateChanged() const
+{
+    return async::Notification();
+}
+
 unsigned int AudioDriverStub::outputDeviceBufferSize() const
 {
     return 0;

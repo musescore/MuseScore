@@ -59,9 +59,16 @@ public:
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
 
+    // -------------------------------------------------------------------
+    // FIX-JACK: api-change, WAS:
+    //   unsigned int sampleRate() const override;
+    //   bool setSampleRate(unsigned int sampleRate) override;
+    //   async::Notification sampleRateChanged() const override;
     unsigned int outputDeviceSampleRate() const override;
     bool setOutputDeviceSampleRate(unsigned int sampleRate) override;
     async::Notification outputDeviceSampleRateChanged() const override;
+    // -------------------------------------------------------------------
+
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
     int audioDelayCompensate(void) const override;
@@ -87,6 +94,7 @@ private:
     std::unique_ptr<AudioDevicesListener> m_devicesListener;
 
     async::Notification m_outputDeviceChanged;
+    async::Notification m_sampleRateChanged;
     async::Notification m_availableOutputDevicesChanged;
     async::Notification m_outputDeviceBufferSizeChanged;
     async::Notification m_outputDeviceSampleRateChanged;

@@ -335,6 +335,21 @@ async::Notification OSXAudioDriver::outputDeviceBufferSizeChanged() const
     return m_bufferSizeChanged;
 }
 
+unsigned int OSXAudioDriver::sampleRate() const
+{
+    return 0;
+}
+
+bool OSXAudioDriver::setSampleRate(unsigned int sampleRate)
+{
+    return true;
+}
+
+async::Notification OSXAudioDriver::sampleRateChanged() const
+{
+    return m_sampleRateChanged;
+}
+
 std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceBufferSizes() const
 {
     OSXAudioDeviceID osxDeviceId = this->osxDeviceId();
