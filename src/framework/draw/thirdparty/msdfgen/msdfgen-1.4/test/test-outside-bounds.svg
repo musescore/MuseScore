@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-	<desc>Test a shape that is partially outside the view bounds</desc>
-	<path d="M0 0h512v512H0z" fill="black"/>
-	<path d="
-	M256,-150 L600,350 l-700,250z
-	"
-	fill="white"/>
-</svg>
