@@ -71,6 +71,8 @@
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
+#include "log.h"
+
 using namespace mu::ui;
 using namespace mu::modularity;
 
@@ -192,11 +194,15 @@ void UiModule::onPreInit(const IApplication::RunMode& mode)
 
 void UiModule::onInit(const IApplication::RunMode& mode)
 {
+    //! NOTE Icons
+    //! At the moment they can also be used in console mode, because it is used in engraving
+    if (QFontDatabase::addApplicationFont(":/ui/data/MusescoreIcon.ttf") == -1) {
+        LOGE() << "Unable load icon font: `:/ui/data/MusescoreIcon.ttf`";
+    }
+
     if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
-
-    QFontDatabase::addApplicationFont(":/fonts/mscore/MusescoreIcon.ttf"); // icons
 
     m_keyNavigationController->init();
 }
