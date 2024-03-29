@@ -34,7 +34,7 @@ static const Settings::Key EXPORT_MP3_BITRATE("iex_audioexport", "export/audio/m
 
 void AudioExportConfiguration::init()
 {
-    settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(44100));
+    settings()->setDefaultValue(EXPORT_SAMPLE_RATE_KEY, Val(48000));
     settings()->setDefaultValue(EXPORT_MP3_BITRATE, Val(128));
 }
 
