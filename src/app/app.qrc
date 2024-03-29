@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>configs/update.cfg</file>
+        <file>configs/languages.cfg</file>
     </qresource>
 </RCC>
