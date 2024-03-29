@@ -26,7 +26,11 @@ add_subdirectory(actions)
 
 if (MUE_BUILD_AUDIO_MODULE)
     add_subdirectory(audio)
-endif ()
+endif()
+
+if (MUE_BUILD_CLOUD_MODULE)
+    add_subdirectory(cloud)
+endif()
 
 add_subdirectory(draw)
 
