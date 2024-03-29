@@ -227,10 +227,20 @@ if (CC_IS_EMSCRIPTEN)
 endif()
 
 ###########################################
+# Resources
+###########################################
+if (MUE_COMPILE_QT5_COMPAT)
+    qt5_add_resources(APP_RCC_SOURCES app.qrc)
+else()
+    qt_add_resources(APP_RCC_SOURCES app.qrc)
+endif()
+
+###########################################
 # Executable declaration
 ###########################################
 
 add_executable(${EXECUTABLE_NAME}
+      ${APP_RCC_SOURCES}
       main.cpp
       app.cpp
       app.h

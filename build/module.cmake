@@ -139,6 +139,7 @@ target_include_directories(${MODULE} PUBLIC
     ${PROJECT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${MODULE_ROOT}
+    ${PROJECT_SOURCE_DIR}/src
     ${MUSE_FRAMEWORK_PATH}
     ${MUSE_FRAMEWORK_PATH}/src
     ${MUSE_FRAMEWORK_PATH}/src/framework

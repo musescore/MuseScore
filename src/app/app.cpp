@@ -47,6 +47,11 @@ using namespace mu::appshell;
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::GlobalModule globalModule;
 
+static void app_init_qrc()
+{
+    Q_INIT_RESOURCE(app);
+}
+
 App::App()
 {
 }
@@ -61,6 +66,8 @@ int App::run(int argc, char** argv)
     // ====================================================
     // Setup global Qt application variables
     // ====================================================
+    app_init_qrc();
+
     qputenv("QT_STYLE_OVERRIDE", "Fusion");
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
