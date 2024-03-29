@@ -155,6 +155,7 @@ set(LINK_LIB
 if (MUE_BUILD_UI_MODULE)
     list(APPEND LINK_LIB ui)
     list(APPEND LINK_LIB uicomponents)
+    list(APPEND LINK_LIB dockwindow)
 endif()
 
 if (MUE_BUILD_CONVERTER_MODULE)

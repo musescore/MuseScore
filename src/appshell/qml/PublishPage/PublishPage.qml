@@ -24,12 +24,11 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
-import MuseScore.Dock 1.0
+import Muse.Dock 1.0
 
 import MuseScore.NotationScene 1.0
 import MuseScore.Playback 1.0
 
-import "../dockwindow"
 import "../NotationPage"
 
 DockPage {

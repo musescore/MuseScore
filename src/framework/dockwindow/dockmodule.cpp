@@ -20,7 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "docksetup.h"
+#include "dockmodule.h"
+
+#include <QQmlEngine>
 
 #include "internal/dropcontroller.h"
 #include "internal/dockseparator.h"
@@ -29,14 +31,14 @@
 #include "internal/dockwindowactionscontroller.h"
 #include "internal/dockwindowprovider.h"
 
-#include "dockwindow.h"
-#include "dockpanelview.h"
-#include "docktoolbarview.h"
-#include "dockstatusbarview.h"
-#include "dockingholderview.h"
-#include "dockcentralview.h"
-#include "dockpageview.h"
-#include "docktitlebar.h"
+#include "view/dockwindow.h"
+#include "view/dockpanelview.h"
+#include "view/docktoolbarview.h"
+#include "view/dockstatusbarview.h"
+#include "view/dockingholderview.h"
+#include "view/dockcentralview.h"
+#include "view/dockpageview.h"
+#include "view/docktitlebar.h"
 
 #include "docktypes.h"
 
@@ -45,7 +47,8 @@
 #include "thirdparty/KDDockWidgets/src/FrameworkWidgetFactory.h"
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
-#include <QQmlEngine>
+#include "modularity/ioc.h"
+#include "ui/iuiengine.h"
 
 namespace mu::dock {
 class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
@@ -78,22 +81,22 @@ public:
 
     QUrl titleBarFilename() const override
     {
-        return QUrl("qrc:/qml/dockwindow/DockTitleBar.qml");
+        return QUrl("qrc:/qml/Muse/Dock/DockTitleBar.qml");
     }
 
     QUrl dockwidgetFilename() const override
     {
-        return QUrl("qrc:/qml/dockwindow/DockWidget.qml");
+        return QUrl("qrc:/qml/Muse/Dock/DockWidget.qml");
     }
 
     QUrl frameFilename() const override
     {
-        return QUrl("qrc:/qml/dockwindow/DockFrame.qml");
+        return QUrl("qrc:/qml/Muse/Dock/DockFrame.qml");
     }
 
     QUrl floatingWindowFilename() const override
     {
-        return QUrl("qrc:/qml/dockwindow/DockFloatingWindow.qml");
+        return QUrl("qrc:/qml/Muse/Dock/DockFloatingWindow.qml");
     }
 };
 }
@@ -101,30 +104,57 @@ public:
 using namespace mu::dock;
 using namespace mu::modularity;
 
-static std::shared_ptr<DockWindowActionsController> s_actionsController = std::make_shared<DockWindowActionsController>();
-
-void DockSetup::registerQmlTypes()
+static void dock_init_qrc()
 {
-    qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
-    qmlRegisterType<DockPanelView>("MuseScore.Dock", 1, 0, "DockPanelView");
-    qmlRegisterType<DockStatusBarView>("MuseScore.Dock", 1, 0, "DockStatusBar");
-    qmlRegisterType<DockToolBarView>("MuseScore.Dock", 1, 0, "DockToolBarView");
-    qmlRegisterType<DockingHolderView>("MuseScore.Dock", 1, 0, "DockingHolderView");
-    qmlRegisterType<DockCentralView>("MuseScore.Dock", 1, 0, "DockCentralView");
-    qmlRegisterType<DockPageView>("MuseScore.Dock", 1, 0, "DockPageView");
-    qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
-
-    qmlRegisterUncreatableType<DockToolBarAlignment>("MuseScore.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
-    qmlRegisterUncreatableType<DockLocation>("MuseScore.Dock", 1, 0, "Location", "Not creatable from QML");
+    Q_INIT_RESOURCE(dock);
 }
 
-void DockSetup::registerExports()
+std::string DockModule::moduleName() const
 {
-    ioc()->registerExport<IDockWindowProvider>("dock", new DockWindowProvider());
+    return "dockwindow";
 }
 
-void DockSetup::setup(QQmlEngine* engine)
+void DockModule::registerExports()
 {
+    m_actionsController = std::make_shared<DockWindowActionsController>();
+
+    ioc()->registerExport<IDockWindowProvider>(moduleName(), new DockWindowProvider());
+}
+
+void DockModule::registerResources()
+{
+    dock_init_qrc();
+}
+
+void DockModule::registerUiTypes()
+{
+    qmlRegisterType<DockWindow>("Muse.Dock", 1, 0, "DockWindow");
+    qmlRegisterType<DockPanelView>("Muse.Dock", 1, 0, "DockPanelView");
+    qmlRegisterType<DockStatusBarView>("Muse.Dock", 1, 0, "DockStatusBar");
+    qmlRegisterType<DockToolBarView>("Muse.Dock", 1, 0, "DockToolBarView");
+    qmlRegisterType<DockingHolderView>("Muse.Dock", 1, 0, "DockingHolderView");
+    qmlRegisterType<DockCentralView>("Muse.Dock", 1, 0, "DockCentralView");
+    qmlRegisterType<DockPageView>("Muse.Dock", 1, 0, "DockPageView");
+    qmlRegisterType<DockFrameModel>("Muse.Dock", 1, 0, "DockFrameModel");
+
+    qmlRegisterUncreatableType<DockToolBarAlignment>("Muse.Dock", 1, 0, "DockToolBarAlignment", "Not creatable from QML");
+    qmlRegisterUncreatableType<DockLocation>("Muse.Dock", 1, 0, "Location", "Not creatable from QML");
+}
+
+void DockModule::onInit(const IApplication::RunMode& mode)
+{
+    if (mode != IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_actionsController->init();
+
+    // ===================================
+    // Setup KDDockWidgets
+    // ===================================
+
+    QQmlEngine* engine = ioc()->resolve<ui::IUiEngine>(moduleName())->qmlEngine();
+
     KDDockWidgets::Config::self().setFrameworkWidgetFactory(new DockWidgetFactory());
     KDDockWidgets::Config::self().setQmlEngine(engine);
 
@@ -145,9 +175,4 @@ void DockSetup::setup(QQmlEngine* engine)
 
     KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(QSize(10, 10));
     KDDockWidgets::Config::self().setSeparatorThickness(1);
-}
-
-void DockSetup::onInit()
-{
-    s_actionsController->init();
 }

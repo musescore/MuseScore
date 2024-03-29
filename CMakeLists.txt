@@ -227,19 +227,6 @@ add_subdirectory(share)
 add_subdirectory(src/framework/global) # should be first to work pch
 add_subdirectory(src)
 
-###########################################
-# Setup the KDDockWidgets lib
-###########################################
-if (NOT BUILD_SHARED_LIBS)
-    set(KDDockWidgets_STATIC ON CACHE BOOL "Build static versions of the libraries" FORCE)
-endif(NOT BUILD_SHARED_LIBS)
-
-if (NOT MUE_COMPILE_QT5_COMPAT)
-    set(KDDockWidgets_QT6 ON CACHE BOOL "Build against Qt 6" FORCE)
-endif()
-set(KDDockWidgets_QTQUICK ON CACHE BOOL "Build for QtQuick instead of QtWidgets" FORCE)
-set(KDDockWidgets_EXAMPLES OFF CACHE BOOL "Build the examples" FORCE)
-add_subdirectory(thirdparty/KDDockWidgets)
 
 ###########################################
 # Setup Packaging

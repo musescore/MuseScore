@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import QtQuick 2.15
 
-#ifndef MU_DOCK_DOCKSETUP_H
-#define MU_DOCK_DOCKSETUP_H
+import Muse.Dock 1.0
 
-class QQmlEngine;
+DockPanelView {
+    id: root
 
-namespace mu::dock {
-class DockSetup
-{
-public:
-    static void registerQmlTypes();
-    static void registerExports();
-    static void setup(QQmlEngine* engine);
-    static void onInit();
-};
+    default property alias contentComponent : contentLoader.sourceComponent
+
+    contentNavigationPanel: Boolean(contentLoader.item) && Boolean(contentLoader.item.navigationPanel) ?
+                                contentLoader.item.navigationPanel : null
+
+    Loader {
+        id: contentLoader
+
+        active: root.visible
+    }
 }
-
-#endif // MU_DOCK_DOCKSETUP_H
