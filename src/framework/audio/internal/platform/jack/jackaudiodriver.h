@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -27,11 +27,19 @@
 
 #include "async/asyncable.h"
 #include "iaudiodriver.h"
-#include "audiodeviceslistener.h"
+#include "../lin/audiodeviceslistener.h"
 
 namespace muse::audio {
-int jack_process_callback(jack_nframes_t nframes, void* jackParam);
-void jack_cleanup_callback(void* args);
+struct JackDriverState {
+    float* buffer = nullptr;
+    void* jackDeviceHandle = nullptr;
+    unsigned long samples = 0;
+    int channels = 0;
+    std::vector<jack_port_t*> outputPorts;
+    IAudioDriver::Callback callback;
+    void* userdata = nullptr;
+    IAudioDriver::Spec format;
+};
 
 class JackAudioDriver : public IAudioDriver, public async::Asyncable
 {
@@ -78,10 +86,12 @@ private:
     AudioDevicesListener m_devicesListener;
     async::Notification m_availableOutputDevicesChanged;
 
-    std::string m_deviceId;
+    std::string m_deviceName;
 
     async::Notification m_bufferSizeChanged;
     async::Notification m_sampleRateChanged;
+
+    std::unique_ptr<JackDriverState> m_jackDriverState;
 };
 }
 
