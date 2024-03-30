@@ -210,7 +210,6 @@ public:
 
     static bool warnPitchRange;
     static bool warnGuitarBends;
-    static int pedalEventsMinTicks;
 
     static double nudgeStep;
     static double nudgeStep10;

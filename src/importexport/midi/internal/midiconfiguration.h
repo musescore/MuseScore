@@ -43,6 +43,9 @@ public:
 
     bool isMidiExportRpns() const override;
     void setIsMidiExportRpns(bool exportRpns) override;
+
+    int pedalEventsMinTicks() const override;
+    void setpedalEventsMinTicks(int minTicks) override;
 };
 }
 

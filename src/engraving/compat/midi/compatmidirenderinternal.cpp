@@ -64,6 +64,8 @@
 #include "dom/vibrato.h"
 #include "dom/volta.h"
 
+#include "importexport/midi/imidiconfiguration.h"
+
 #include "log.h"
 
 namespace mu::engraving {
@@ -1099,6 +1101,7 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
 
     if (s->isPedal()) {
         PedalEvent lastEvent;
+        int pedalEventsMinTicks = midiImportExportConfiguration()->pedalEventsMinTicks();
 
         if (!pedalEventList.empty()) {
             lastEvent = pedalEventList.back();
@@ -1110,12 +1113,12 @@ void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner*
 
         if (!lastEvent.on && lastEvent.tick >= (st + 2)) {
             pedalEventList.emplace(pedalEventList.cend() - 1,
-                                   st + (2 - MScore::pedalEventsMinTicks), false, staffIdx);
+                                   st + (2 - pedalEventsMinTicks), false, staffIdx);
         }
         int a = st + 2;
         pedalEventList.emplace_back(a, true, staffIdx);
 
-        int t = s->tick2().ticks() + (2 - MScore::pedalEventsMinTicks);
+        int t = s->tick2().ticks() + (2 - pedalEventsMinTicks);
         const RepeatSegment& lastRepeat = *score->repeatList().back();
         if (t > lastRepeat.utick + lastRepeat.len()) {
             t = lastRepeat.utick + lastRepeat.len();

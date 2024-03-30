@@ -34,12 +34,17 @@ using namespace mu::iex::midi;
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
 static const Settings::Key EXPORTRPNS_KEY("iex_midi", "io/midi/exportRPNs");
 static const Settings::Key EXPAND_REPEATS_KEY("iex_midi", "io/midi/expandRepeats");
+static const Settings::Key PEDAL_EVENTS_MIN_TICKS_KEY("iex_midi", "io/midi/pedalEventsMinTicks");
 
 void MidiConfiguration::init()
 {
     settings()->setDefaultValue(SHORTEST_NOTE_KEY, Val(mu::engraving::Constants::DIVISION / 4));
     settings()->setDefaultValue(EXPAND_REPEATS_KEY, Val(true));
     settings()->setDefaultValue(EXPORTRPNS_KEY, Val(true));
+
+    settings()->setDefaultValue(PEDAL_EVENTS_MIN_TICKS_KEY, Val(1));
+    settings()->setDescription(PEDAL_EVENTS_MIN_TICKS_KEY, muse::trc("iex_midi", "Min. tick value for pedal events"));
+    settings()->setCanBeManuallyEdited(PEDAL_EVENTS_MIN_TICKS_KEY, true);
 }
 
 int MidiConfiguration::midiShortestNote() const
@@ -77,4 +82,14 @@ bool MidiConfiguration::isMidiExportRpns() const
 void MidiConfiguration::setIsMidiExportRpns(bool exportRpns)
 {
     settings()->setSharedValue(EXPORTRPNS_KEY, Val(exportRpns));
+}
+
+int MidiConfiguration::pedalEventsMinTicks() const
+{
+    return settings()->value(PEDAL_EVENTS_MIN_TICKS_KEY).toInt();
+}
+
+void MidiConfiguration::setpedalEventsMinTicks(int minTicks)
+{
+    settings()->setSharedValue(PEDAL_EVENTS_MIN_TICKS_KEY, Val(minTicks));
 }

@@ -33,6 +33,8 @@
 #include "pausemap.h"
 #include "velocitymap.h"
 
+#include "importexport/midi/imidiconfiguration.h"
+
 namespace mu::engraving {
 class EventsHolder;
 class MasterScore;
@@ -120,6 +122,8 @@ static const std::vector<OrnamentExcursion> excursions = {
 
 class CompatMidiRendererInternal
 {
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+
 public:
 
     //! @brief helper structure to find channel

@@ -47,6 +47,9 @@ public:
 
     virtual bool isMidiExportRpns() const = 0;
     virtual void setIsMidiExportRpns(bool exportRpns) = 0;
+
+    virtual int pedalEventsMinTicks() const = 0;
+    virtual void setpedalEventsMinTicks(int minTicks) = 0;
 };
 }
 

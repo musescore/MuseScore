@@ -307,7 +307,6 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
     MScore::defaultPlayDuration = 300;            // ms
     MScore::warnPitchRange      = true;
     MScore::warnGuitarBends     = true;
-    MScore::pedalEventsMinTicks = 1;
 
     Drumset::initDrumset();
     FiguredBass::readConfigFile(String());
