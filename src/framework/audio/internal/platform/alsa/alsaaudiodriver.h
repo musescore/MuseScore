@@ -36,6 +36,8 @@ public:
     bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    std::string deviceName() const;
+    void deviceName(const std::string newDeviceName);
 
     void* m_alsaDeviceHandle = nullptr;
 
@@ -43,6 +45,7 @@ public:
     bool m_audioProcessingDone = false;
     pthread_t m_threadHandle = 0;
 private:
+    std::string m_deviceName = "default";
     void alsaCleanup();
 };
 }

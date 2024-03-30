@@ -25,73 +25,30 @@
 
 #include <jack/jack.h>
 
-#include "async/asyncable.h"
 #include "iaudiodriver.h"
-#include "../lin/audiodeviceslistener.h"
 
 namespace muse::audio {
-struct JackDriverState {
-    float* buffer = nullptr;
-    void* jackDeviceHandle = nullptr;
-    unsigned long samples = 0;
-    int channels = 0;
-    std::vector<jack_port_t*> outputPorts;
-    IAudioDriver::Callback callback;
-    void* userdata = nullptr;
-    IAudioDriver::Spec format;
-};
-
-class JackAudioDriver : public IAudioDriver, public async::Asyncable
+class JackDriverState : public AudioDriverState
 {
 public:
-    JackAudioDriver();
-    ~JackAudioDriver();
-
-    void init() override;
+    JackDriverState();
+    ~JackDriverState();
 
     std::string name() const override;
-    bool open(const Spec& spec, Spec* activeSpec) override;
+    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    std::string deviceName() const;
+    void deviceName(const std::string newDeviceName);
 
-    const Spec& activeSpec() const override;
+    void* m_jackDeviceHandle = nullptr;
 
-    AudioDeviceID outputDevice() const override;
-    bool selectOutputDevice(const AudioDeviceID& deviceId) override;
-    bool resetToDefaultOutputDevice() override;
-    async::Notification outputDeviceChanged() const override;
+    float* m_buffer = nullptr;
 
-    AudioDeviceList availableOutputDevices() const override;
-    async::Notification availableOutputDevicesChanged() const override;
-
-    unsigned int outputDeviceBufferSize() const override;
-    bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
-    async::Notification outputDeviceBufferSizeChanged() const override;
-
-    std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
-
-    unsigned int outputDeviceSampleRate() const override;
-    bool setOutputDeviceSampleRate(unsigned int bufferSize) override;
-    async::Notification outputDeviceSampleRateChanged() const override;
-
-    std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
-
-    void resume() override;
-    void suspend() override;
+    std::vector<jack_port_t*> m_outputPorts;
 
 private:
-    async::Notification m_outputDeviceChanged;
-
-    mutable std::mutex m_devicesMutex;
-    AudioDevicesListener m_devicesListener;
-    async::Notification m_availableOutputDevicesChanged;
-
     std::string m_deviceName;
-
-    async::Notification m_bufferSizeChanged;
-    async::Notification m_sampleRateChanged;
-
-    std::unique_ptr<JackDriverState> m_jackDriverState;
 };
 }
 
