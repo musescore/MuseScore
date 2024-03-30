@@ -69,7 +69,8 @@ public:
     void suspend() override;
 
 private:
-    void alsaCleanup();
+    bool makeDevice(const AudioDeviceID& deviceId);
+    bool reopen(const AudioDeviceID& deviceId, Spec newSpec);
     async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
