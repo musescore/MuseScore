@@ -91,11 +91,18 @@ AudioDeviceID LinuxAudioDriver::outputDevice() const
 
 bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
 {
+#if defined(JACK_AUDIO)
+    if (deviceId == "jack") {
+        m_current_audioDriverState = std::make_unique<JackDriverState>();
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    } else if (deviceId == "alsa") {
+        m_current_audioDriverState = std::make_unique<AlsaDriverState>();
+#endif
+#else
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     if (deviceId == "alsa") {
         m_current_audioDriverState = std::make_unique<AlsaDriverState>();
-#if JACK_AUDIO
-    } else if (deviceId == "jack") {
-        m_current_audioDriverState = std::make_unique<JackDriverState>();
+#endif
 #endif
     } else {
         LOGE() << "Unknown device name: " << deviceId;
@@ -143,7 +150,11 @@ bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
 bool LinuxAudioDriver::resetToDefaultOutputDevice()
 {
+#if defined(JACK_AUDIO)
+    return selectOutputDevice("jack"); // FIX:
+#else
     return selectOutputDevice("alsa"); // FIX:
+#endif
 }
 
 async::Notification LinuxAudioDriver::outputDeviceChanged() const
@@ -154,9 +165,12 @@ async::Notification LinuxAudioDriver::outputDeviceChanged() const
 AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ "alsa", muse::trc("audio", "ALSA") });
+#if defined(JACK_AUDIO)
     devices.push_back({ "jack", muse::trc("audio", "JACK") });
-
+#endif
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    devices.push_back({ "alsa", muse::trc("audio", "ALSA") });
+#endif
     return devices;
 }
 
