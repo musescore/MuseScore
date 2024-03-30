@@ -34,6 +34,8 @@
 #include "log.h"
 #include "runtime.h"
 
+#define ALSA_DEFAULT_DEVICE_ID "default"
+
 using namespace muse::audio;
 
 static void* alsaThread(void* aParam)
@@ -64,6 +66,17 @@ static void* alsaThread(void* aParam)
     return nullptr;
 }
 
+AlsaDriverState::AlsaDriverState()
+{
+    m_deviceId = "alsa";
+    m_deviceName = ALSA_DEFAULT_DEVICE_ID;
+}
+
+AlsaDriverState::~AlsaDriverState()
+{
+    alsaCleanup();
+}
+
 void AlsaDriverState::alsaCleanup()
 {
     m_audioProcessingDone = true;
@@ -76,23 +89,25 @@ void AlsaDriverState::alsaCleanup()
         snd_pcm_close(aDevice);
         m_alsaDeviceHandle = nullptr;
     }
-
-    delete[] m_buffer;
-}
-
-AlsaDriverState::AlsaDriverState()
-{
-    m_deviceId = "alsa";
-}
-
-AlsaDriverState::~AlsaDriverState()
-{
-    alsaCleanup();
+    if (m_buffer) {
+        delete[] m_buffer;
+    }
+    m_buffer = nullptr;
 }
 
 std::string AlsaDriverState::name() const
 {
-    return "MUAUDIO(ALSA)";
+    return "alsa";
+}
+
+std::string AlsaDriverState::deviceName() const
+{
+    return m_deviceName;
+}
+
+void AlsaDriverState::deviceName(const std::string newDeviceName)
+{
+    m_deviceName = newDeviceName;
 }
 
 bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
@@ -103,7 +118,7 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     m_spec.userdata = spec.userdata;
 
     snd_pcm_t* handle;
-    int rc = snd_pcm_open(&handle, outputDevice().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
+    int rc = snd_pcm_open(&handle, m_deviceName.c_str(), SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
         LOGE() << "Unable to open device: " << outputDevice() << ", err code: " << rc;
         return false;
@@ -142,10 +157,12 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
 
     snd_pcm_hw_params_get_rate(params, &val, &dir);
     aSamplerate = val;
+    m_spec.sampleRate = aSamplerate;
 
     if (m_buffer != nullptr) {
         LOGW() << "open before close";
         delete[] m_buffer;
+        m_buffer = nullptr;
     }
 
     m_buffer = new float[m_spec.samples * m_spec.channels];

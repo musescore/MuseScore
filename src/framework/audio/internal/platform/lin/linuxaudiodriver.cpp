@@ -21,6 +21,9 @@
  */
 #include "linuxaudiodriver.h"
 #include "../alsa/alsaaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#if JACK_AUDIO
+#include "../jack/jackaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#endif
 
 #include "translation.h"
 #include "log.h"
@@ -31,7 +34,6 @@ using namespace muse::audio;
 
 LinuxAudioDriver::LinuxAudioDriver()
 {
-    m_current_audioDriverState = std::make_unique<AlsaDriverState>();
 }
 
 LinuxAudioDriver::~LinuxAudioDriver()
@@ -56,7 +58,11 @@ std::string LinuxAudioDriver::name() const
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    return m_current_audioDriverState->open(spec, activeSpec);
+    if (!m_current_audioDriverState->open(spec, activeSpec)) {
+        return false;
+    }
+    m_spec = *activeSpec;
+    return true;
 }
 
 void LinuxAudioDriver::close()
@@ -76,31 +82,64 @@ const LinuxAudioDriver::Spec& LinuxAudioDriver::activeSpec() const
 
 AudioDeviceID LinuxAudioDriver::outputDevice() const
 {
-    return m_current_audioDriverState->name(); // m_deviceId;
+    if (m_current_audioDriverState != nullptr) {
+        return m_current_audioDriverState->m_deviceId;
+    } else {
+        LOGE("device is not opened");
+        return m_deviceId; // FIX: should return optional type
+    }
+}
+
+bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
+{
+    if (deviceId == "alsa") {
+        m_current_audioDriverState = std::make_unique<AlsaDriverState>();
+#if JACK_AUDIO
+    } else if (deviceId == "jack") {
+        m_current_audioDriverState = std::make_unique<JackDriverState>();
+#endif
+    } else {
+        LOGE() << "Unknown device name: " << deviceId;
+        return false;
+    }
+    return true;
+}
+
+// reopens the same device (if m_spec has changed)
+bool LinuxAudioDriver::reopen(const AudioDeviceID& deviceId, Spec newSpec)
+{
+    // close current device if opened
+    if (m_current_audioDriverState->isOpened()) {
+        m_current_audioDriverState->close();
+    }
+    // maybe change device, if needed
+    if (m_current_audioDriverState->name() != deviceId) {
+        // select the new device driver
+        if (!makeDevice(deviceId)) {
+            return false;
+        }
+    }
+    // open the device driver
+    if (!m_current_audioDriverState->open(newSpec, &newSpec)) {
+        return false;
+    }
+    return true;
 }
 
 bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 {
+    // When starting, no previously device has been selected
+    if (m_current_audioDriverState == nullptr) {
+        LOGW() << "no previously opened device";
+        return makeDevice(deviceId);
+    }
+    // If for some reason we select the same device, do nothing
     if (m_current_audioDriverState->name() == deviceId) {
         return true;
     }
-
-    //FIX: no, we need to create the new device conditioned on the deviceId
-    bool reopen = m_current_audioDriverState->isOpened();
-    IAudioDriver::Spec spec(m_current_audioDriverState->m_spec);
-    m_current_audioDriverState->close();
-
-    bool ok = true;
-    if (reopen) {
-        ok = m_current_audioDriverState->open(spec, &spec);
-    }
-    m_current_audioDriverState->m_spec = spec;
-
-    if (ok) {
-        m_outputDeviceChanged.notify();
-    }
-
-    return ok;
+    reopen(deviceId, m_spec);
+    m_outputDeviceChanged.notify();
+    return true;
 }
 
 bool LinuxAudioDriver::resetToDefaultOutputDevice()
@@ -134,26 +173,15 @@ unsigned int LinuxAudioDriver::outputDeviceBufferSize() const
 
 bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (m_current_audioDriverState->m_spec.samples == (int)bufferSize) {
+    if (m_spec.samples == (int)bufferSize) {
         return true;
     }
-
-    bool reopen = isOpened();
-    close();
-    m_current_audioDriverState->m_spec.samples = bufferSize;
-
-    bool ok = true;
-    if (reopen) {
-        // FIX:
-        // FIX:
-        //ok = open(m_current_audioDriverState->m_spec, &m_current_audioDriverState->m_spec);
+    m_spec.samples = (int)bufferSize;
+    if (!reopen(m_current_audioDriverState->name(), m_spec)) {
+        return false;
     }
-
-    if (ok) {
-        m_bufferSizeChanged.notify();
-    }
-
-    return ok;
+    m_bufferSizeChanged.notify();
+    return true;
 }
 
 async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
