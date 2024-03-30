@@ -334,7 +334,7 @@ void BendGridCanvas::setPointList(QVariant points)
 
     m_pointsAccessibleItems.clear();
     for (const CurvePoint& point : m_points) {
-        AccessibleItem* item = new AccessibleItem(this);
+        ui::AccessibleItem* item = new ui::AccessibleItem(this);
         item->setName(pointAccessibleName(point));
         item->setAccessibleParent(m_accessibleParent);
         item->setRole(MUAccessible::Role::Information);
@@ -830,7 +830,7 @@ void BendGridCanvas::updatePointAccessibleName(int index)
         return;
     }
 
-    AccessibleItem* accItem = m_pointsAccessibleItems[index];
+    ui::AccessibleItem* accItem = m_pointsAccessibleItems[index];
     if (accItem) {
         accItem->setName(pointAccessibleName(m_points.at(index)));
         accItem->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
@@ -936,7 +936,7 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
 void BendGridCanvas::setFocusedPointIndex(int index)
 {
     if (m_focusedPointIndex.has_value()) {
-        m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(AccessibleItem::State::Focused, false);
+        m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(ui::AccessibleItem::State::Focused, false);
     }
 
     bool isIndexValid = isPointIndexValid(index);
@@ -949,7 +949,7 @@ void BendGridCanvas::setFocusedPointIndex(int index)
     m_needVoicePointName = true;
     updatePointAccessibleName(index);
 
-    m_pointsAccessibleItems[index]->setState(AccessibleItem::State::Focused, true);
+    m_pointsAccessibleItems[index]->setState(ui::AccessibleItem::State::Focused, true);
 }
 
 mu::ui::AccessibleItem* BendGridCanvas::accessibleParent() const
@@ -965,7 +965,7 @@ void BendGridCanvas::setAccessibleParent(ui::AccessibleItem* parent)
 
     m_accessibleParent = parent;
 
-    for (AccessibleItem* item : m_pointsAccessibleItems) {
+    for (ui::AccessibleItem* item : m_pointsAccessibleItems) {
         item->setAccessibleParent(m_accessibleParent);
     }
 
