@@ -109,8 +109,10 @@
                               <rest xml:id="r13mu556" type="mscore-beam-none" dur="8" />
                               <rest xml:id="r9bkfps" type="mscore-beam-none" dur="8" />
                            </tuplet>
-                           <clef xml:id="cdi1p4m" shape="G" line="2" color="#00F900" />
-                           <note xml:id="n12rdkm" dur="4" pname="e" oct="4" />
+                           <clef xml:id="c14ip5c8" shape="G" line="2" color="#00F900" />
+                           <note xml:id="nyi0wv4" dur="4" pname="e" oct="4">
+                              <accid xml:id="a9iw28ka" accid="f" color="#D783FF" />
+                           </note>
                         </layer>
                      </staff>
                      <slur xml:id="srexdvh" startid="#nl6vufl" color="#00F900" endid="#n12rdkm" />

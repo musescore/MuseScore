@@ -354,8 +354,13 @@
                 </prev>
               </Spanner>
             <Note>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
+              <Accidental>
+                <role>1</role>
+                <subtype>accidentalFlat</subtype>
+                <color r="215" g="131" b="255" a="255"/>
+                </Accidental>
+              <pitch>63</pitch>
+              <tpc>11</tpc>
               </Note>
             </Chord>
           </voice>
