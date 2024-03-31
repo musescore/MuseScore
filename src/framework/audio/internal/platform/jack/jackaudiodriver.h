@@ -27,12 +27,13 @@
 
 #include "framework/midi/miditypes.h"
 #include "iaudiodriver.h"
+#include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
 class JackDriverState : public AudioDriverState
 {
 public:
-    JackDriverState();
+    JackDriverState(std::shared_ptr<mu::playback::IPlaybackController>);
     ~JackDriverState();
 
     std::string name() const override;
@@ -53,6 +54,7 @@ public:
     std::vector<jack_port_t*> m_midiOutputPorts;
     ThreadSafeQueue<muse::midi::Event> m_midiQueue;
     async::Channel<muse::midi::tick_t, muse::midi::Event> m_eventReceived;
+    std::shared_ptr<mu::playback::IPlaybackController> m_playbackController;
 
 private:
     std::string m_deviceName;
