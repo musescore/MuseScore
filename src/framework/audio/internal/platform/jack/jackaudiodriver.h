@@ -30,10 +30,10 @@
 #include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
-class JackDriverState : public AudioDriverState
+class JackDriverState : public AudioDriverState, public async::Asyncable
 {
 public:
-    JackDriverState(std::shared_ptr<mu::playback::IPlaybackController>);
+    JackDriverState(mu::playback::IPlaybackController*);
     ~JackDriverState();
 
     std::string name() const override;
@@ -42,6 +42,7 @@ public:
     bool isOpened() const override;
     bool pushMidiEvent(muse::midi::Event& e) override;
     void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event>) override;
+    void setAudioDelayCompensate(const int frames) override;
 
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
@@ -54,10 +55,13 @@ public:
     std::vector<jack_port_t*> m_midiOutputPorts;
     ThreadSafeQueue<muse::midi::Event> m_midiQueue;
     async::Channel<muse::midi::tick_t, muse::midi::Event> m_eventReceived;
-    std::shared_ptr<mu::playback::IPlaybackController> m_playbackController;
+    mu::playback::IPlaybackController* m_playbackController;
 
 private:
     std::string m_deviceName;
+
+    void musescore_changed_play_state();
+    void musescore_changed_position_state();
 };
 }
 
