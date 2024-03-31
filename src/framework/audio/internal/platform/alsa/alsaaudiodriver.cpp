@@ -110,6 +110,10 @@ void AlsaDriverState::deviceName(const std::string newDeviceName)
     m_deviceName = newDeviceName;
 }
 
+void AlsaDriverState::setAudioDelayCompensate([[maybe_unused]] const int frames)
+{
+}
+
 bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
     m_spec.samples = spec.samples;

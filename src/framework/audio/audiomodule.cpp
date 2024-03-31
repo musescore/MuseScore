@@ -259,7 +259,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
 
     if (mode == IApplication::RunMode::GuiApp) {
         m_audioDriver->init();
-
+        m_audioDriver->setAudioDelayCompensate(m_configuration->audioDelayCompensate());
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
             setupAudioWorker(activeSpec);
