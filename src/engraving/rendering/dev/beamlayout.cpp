@@ -990,8 +990,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
     int level = 0;
     constexpr size_t noLastChord = std::numeric_limits<size_t>::max();
     size_t numCr = chordRests.size();
-    bool shortStems = ctx.conf().styleB(Sid::frenchStyleBeams);
-    std::set<ChordRest*> stemShortenedCrs;
+    bool frenchStyleBeams = ctx.conf().styleB(Sid::frenchStyleBeams);
     do {
         levelHasBeam = false;
         ChordRest* startCr = nullptr;
@@ -1064,11 +1063,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
                                                                    previousBreak32);
                         createBeamletSegment(item, ctx, toChord(startCr), isBeamletBefore, level);
                     } else {
-                        createBeamSegment(item, startCr, endCr, level, shortStems, stemShortenedCrs);
-                        if (shortStems) {
-                            stemShortenedCrs.insert(startCr);
-                            stemShortenedCrs.insert(endCr);
-                        }
+                        createBeamSegment(item, startCr, endCr, level, frenchStyleBeams);
                     }
                 }
                 bool setCr = chordRest && chordRest->isChord() && breakBeam && level < chordRest->beams();
@@ -1089,11 +1084,7 @@ void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const 
                 bool isBefore = !(startCr == chordRests.front());
                 createBeamletSegment(item, ctx, toChord(startCr), isBefore, level);
             } else {
-                createBeamSegment(item, startCr, endCr, level, shortStems, stemShortenedCrs);
-                if (shortStems) {
-                    stemShortenedCrs.insert(startCr);
-                    stemShortenedCrs.insert(endCr);
-                }
+                createBeamSegment(item, startCr, endCr, level, frenchStyleBeams);
             }
         }
         level++;
@@ -1187,8 +1178,25 @@ bool BeamLayout::calcIsBeamletBefore(const Beam* item, Chord* chord, int i, int 
     return false;
 }
 
-void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* endCr, int level, bool shortStems,
-                                   std::set<ChordRest*>& stemShortenedCrs)
+static inline int computeStemLengthAdjustmentSteps(const ChordRest* cr, bool isStartOrEnd, bool isAbove, bool frenchStyleBeams,
+                                                   int level, int beamsAbove, int beamsBelow)
+{
+    if (isAbove == cr->up()) { // beam segment on opposite side
+        if (!frenchStyleBeams || isStartOrEnd) {
+            // lengthen
+            return level - (isAbove ? beamsBelow : beamsAbove);
+        }
+    } else { // beamlet on the note side
+        if (frenchStyleBeams && !isStartOrEnd) {
+            // shorten
+            return (isAbove ? beamsBelow : beamsAbove) - level;
+        }
+    }
+
+    return 0;
+}
+
+void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* endCr, int level, bool frenchStyleBeams)
 {
     const bool isFirstSubgroup = startCr == item->elements().front();
     const bool isLastSubgroup = endCr == item->elements().back();
@@ -1299,53 +1307,29 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             continue;
         }
 
-        double addition = 0.0;
+        if (level == 0) {
+            BeamTremoloLayout::extendStem(item->ldata(), chord, 0.0);
+        } else {
+            int stemLengthAdjustmentSteps = computeStemLengthAdjustmentSteps(cr, cr == startCr || cr == endCr, b->above, frenchStyleBeams,
+                                                                             level, beamsAbove, beamsBelow);
+            if (stemLengthAdjustmentSteps != 0) {
+                double grow = item->growLeft();
+                if (!RealIsEqual(item->growLeft(), item->growRight())) {
+                    double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
+                    double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+                    grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
+                }
 
-        if (level > 0) {
-            double grow = item->growLeft();
-            if (!RealIsEqual(item->growLeft(), item->growRight())) {
-                double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
-                double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
-                grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
+                double stemLengthAdjustment = grow * stemLengthAdjustmentSteps * item->beamDist();
+
+                BeamTremoloLayout::extendStem(item->ldata(), chord, stemLengthAdjustment);
             }
-
-            int extraBeamAdjust = cr->up() ? beamsBelow : beamsAbove;
-            int stemShortenFactor = shortStems ? computeStemShortenAmount(cr, item, b, level, startCr, endCr, stemShortenedCrs) : 0;
-            addition = grow * (level - extraBeamAdjust - stemShortenFactor) * item->beamDist();
         }
 
-        if (level == 0 || !RealIsEqual(addition, 0.0)) {
-            BeamTremoloLayout::extendStem(item->ldata(), chord, addition);
-        }
-
-        if (chord == endCr) {
+        if (cr == endCr) {
             break;
         }
     }
-}
-
-int BeamLayout::computeStemShortenAmount(ChordRest* cr, const Beam* beam, const BeamSegment* beamSegment, int level,
-                                         const ChordRest* startCr, const ChordRest* endCr,
-                                         std::set<ChordRest*>& stemShortenedCrs)
-{
-    if (cr == beam->elements().front() || cr == beam->elements().back()) {
-        // Don't shorten stems at the start or end of the beam.
-        return 0;
-    }
-    if (cr == startCr || cr == endCr) {
-        if (beamSegment->above == cr->up()) {
-            // When the BeamSegment and chord are on opposite sides of the base beam,
-            // draw the stem to the tip of the beam (don't shorten the stem).
-            return 0;
-        }
-        // Stems are progressively shortened as the level of the BeamSegment increases.
-        // Stems at the start or end of a BeamSegment shouldn't further be shortened.
-        if (!mu::contains(stemShortenedCrs, cr)) {
-            return level - 1;
-        }
-        return 0;
-    }
-    return level;
 }
 
 void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, ChordRest* cr, bool isBefore, int level)
