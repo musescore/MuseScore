@@ -131,7 +131,7 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "arm32v7/ubuntu:focal" /bin/bash -c "cd /MuseScore && \
+        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-arm-static:/usr/bin/qemu-arm-static "arm32v7/ubuntu:jammy" /bin/bash -c "cd /MuseScore && \
         bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch armv7l && \
         bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch armv7l && \
         bash ./buildscripts/ci/linux/dumpsyms.sh && \
@@ -251,7 +251,7 @@ jobs:
       if: env.DO_BUILD == 'true'
       run: |
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
-        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "arm64v8/ubuntu:focal" /bin/bash -c "cd /MuseScore && \
+        sudo docker run -i -v "${PWD}:/MuseScore" -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static "arm64v8/ubuntu:jammy" /bin/bash -c "cd /MuseScore && \
         bash /MuseScore/buildscripts/ci/linux/setup-arm.sh --arch aarch64 && \
         bash /MuseScore/buildscripts/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --crash_log_url $C_URL --arch aarch64 && \
         bash ./buildscripts/ci/linux/dumpsyms.sh && \
