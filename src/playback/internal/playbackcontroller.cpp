@@ -150,7 +150,7 @@ void PlaybackController::init()
         }
     });
 
-    m_remoteSeek.onReceive(this, [this](const msecs_t msecs) {
+    m_remoteSeek.onReceive(this, [this](const muse::audio::msecs_t msecs) {
         seek(msecs);
     });
 

@@ -34,6 +34,8 @@ public:
     bool isPlaying() const override;
     muse::async::Notification isPlayingChanged() const override;
 
+    void remoteSeek(const muse::audio::msecs_t msecs) override;
+    void remotePlayOrStop(const bool playOrStop) override;
     void reset() override;
 
     muse::async::Channel<muse::audio::secs_t, muse::midi::tick_t> currentPlaybackPositionChanged() const override;
