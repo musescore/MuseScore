@@ -105,7 +105,7 @@ bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
 {
 #if defined(JACK_AUDIO)
     if (deviceId == "jack") {
-        m_current_audioDriverState = std::make_unique<JackDriverState>();
+        m_current_audioDriverState = std::make_unique<JackDriverState>(playbackController());
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     } else if (deviceId == "alsa") {
         m_current_audioDriverState = std::make_unique<AlsaDriverState>();
