@@ -66,6 +66,9 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
 
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
     bool pushMidiEvent(muse::midi::Event& e) override;
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const override;
