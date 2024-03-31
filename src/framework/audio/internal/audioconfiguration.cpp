@@ -206,6 +206,16 @@ size_t AudioConfiguration::desiredAudioThreadNumber() const
     return settings()->value(AUDIO_DESIRED_THREAD_NUMBER_KEY).toInt();
 }
 
+int AudioConfiguration::audioDelayCompensate() const
+{
+    return m_audioDelayCompensate;
+}
+
+void AudioConfiguration::setAudioDelayCompensate(const int frames)
+{
+    m_audioDelayCompensate = frames;
+}
+
 size_t AudioConfiguration::minTrackCountForMultithreading() const
 {
     // Start mutlithreading-processing only when there are more or equal number of tracks
