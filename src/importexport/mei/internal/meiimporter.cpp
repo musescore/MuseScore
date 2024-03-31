@@ -1895,6 +1895,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
     Accidental* accid = Factory::createAccidental(note);
+    Convert::colorFromMEI(accid, meiAccid);
     m_uids->reg(accid, meiAccid.m_xmlId);
     accid->setAccidentalType(pitchSt.accidType);
     //accid->setBracket(AccidentalBracket::BRACKET); // Not supported in MEI-Basic
