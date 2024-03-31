@@ -208,7 +208,7 @@ void AlsaDriverState::registerMidiInputQueue(async::Channel<muse::midi::tick_t, 
     m_eventReceived = midiInputQueue;
 }
 
-std::vector<muse::midi::MidiDevice> AlsaDriverState::availableMidiDevices(muse::midi::MidiPortDirection direction) const
+std::vector<muse::midi::MidiDevice> AlsaDriverState::availableMidiDevices([[maybe_unused]] muse::midi::MidiPortDirection direction) const
 {
     std::vector<muse::midi::MidiDevice> x;
     return x; // dummy
