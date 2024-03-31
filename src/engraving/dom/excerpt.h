@@ -63,6 +63,7 @@ public:
     // The name used to store this excerpt in the msc file/folder.
     // When reading/writing, the engraving module sets this value, so that other
     // modules can also read/write data about this excerpt using the correct name.
+    bool hasFileName() const;
     const String& fileName() const;
     void setFileName(const String& fileName);
     void updateFileName(size_t index = mu::nidx);

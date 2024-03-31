@@ -48,6 +48,7 @@ public:
     void undoSetName(const QString& name) override;
     async::Notification nameChanged() const override;
 
+    bool hasFileName() const override;
     const String& fileName() const override;
 
     INotationPtr notation() override;
