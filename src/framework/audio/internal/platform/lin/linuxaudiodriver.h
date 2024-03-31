@@ -63,6 +63,10 @@ public:
     async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
     bool pushMidiEvent(muse::midi::Event& e) override;
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const override;
 
@@ -88,6 +92,7 @@ private:
 
     async::Notification m_bufferSizeChanged;
     async::Notification m_sampleRateChanged;
+    int m_audioDelayCompensate;
 
     struct IAudioDriver::Spec m_spec;
     std::unique_ptr<AudioDriverState> m_current_audioDriverState;

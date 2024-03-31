@@ -64,6 +64,10 @@ struct CmdOptions {
     } exportImage;
 
     struct {
+        std::optional<int> audioDelayCompensate;
+    } audio;
+
+    struct {
         std::optional<int> mp3Bitrate;
     } exportAudio;
 

@@ -83,6 +83,15 @@ async::Notification AudioDriverStub::availableOutputDevicesChanged() const
     return async::Notification();
 }
 
+int AudioDriverStub::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void AudioDriverStub::setAudioDelayCompensate(const int frames)
+{
+}
+
 unsigned int AudioDriverStub::outputDeviceBufferSize() const
 {
     return 0;

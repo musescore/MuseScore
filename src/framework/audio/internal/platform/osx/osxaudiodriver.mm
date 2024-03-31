@@ -412,6 +412,15 @@ std::vector<unsigned int> OSXAudioDriver::availableOutputDeviceSampleRates() con
     };
 }
 
+int OSXAudioDriver::audioDelayCompensate() const
+{
+    return 0;
+}
+
+void OSXAudioDriver::setAudioDelayCompensate(const int frames)
+{
+}
+
 bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
 {
     if (deviceId.empty() || deviceId == DEFAULT_DEVICE_ID) {

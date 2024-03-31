@@ -163,6 +163,8 @@ void CommandLineParser::init()
                                           "Check an audio plugin for compatibility with the application and register it", "path"));
     m_parser.addOption(QCommandLineOption("register-failed-audio-plugin", "Register an incompatible audio plugin", "path"));
 
+    m_parser.addOption(QCommandLineOption("audioDelayCompensate", "Compensate for delay in frames caused by MuseScore buffering", "1024"));
+
     // Internal
     m_parser.addOption(internalCommandLineOption("score-display-name-override",
                                                  "Display name to be shown in splash screen for the score that is being opened", "name"));
@@ -273,6 +275,10 @@ void CommandLineParser::parse(int argc, char** argv)
         m_options.audioPluginRegistration.pluginPath = fromUserInputPath(m_parser.value("register-failed-audio-plugin"));
         m_options.audioPluginRegistration.failedPlugin = true;
         m_options.audioPluginRegistration.failCode = !args1.empty() ? args1[0].toInt() : -1;
+    }
+
+    if (m_parser.isSet("audioDelayCompensate")) {
+        m_options.audio.audioDelayCompensate = intValue("audioDelayCompensate");
     }
 
     // Converter mode

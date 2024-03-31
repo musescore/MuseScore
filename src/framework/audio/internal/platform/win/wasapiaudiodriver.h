@@ -64,6 +64,8 @@ public:
     async::Notification outputDeviceSampleRateChanged() const override;
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
+    int audioDelayCompensate(void) const override;
+    void setAudioDelayCompensate(const int frames) override;
     bool pushMidiEvent(muse::midi::Event& e) override;
     std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const override;
 

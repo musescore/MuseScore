@@ -54,6 +54,9 @@ public:
     async::Notification sampleRateChanged() const override;
 
     size_t desiredAudioThreadNumber() const override;
+    int audioDelayCompensate() const override;
+    void setAudioDelayCompensate(const int frames) override;
+
     size_t minTrackCountForMultithreading() const override;
 
     // synthesizers
