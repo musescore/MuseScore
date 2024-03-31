@@ -2109,11 +2109,16 @@ String TextBase::genText(const LayoutData* ldata) const
                 }
             }
 
-            if (format.fontSize() != fmt.fontSize()) {
-                text += String(u"<font size=\"%1\"/>").arg(format.fontSize());
-            }
-            if (format.fontFamily() != "ScoreText" && format.fontFamily() != fmt.fontFamily()) {
-                text += String(u"<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+            if (fmt.fontSize() != format.fontSize()
+                || (fmt.fontFamily() != format.fontFamily() && format.fontFamily() != "ScoreText")) {
+                text += String(u"<font");
+                if (fmt.fontSize() != format.fontSize()) {
+                    text += String(u" size=\"%1\"").arg(format.fontSize());
+                }
+                if (fmt.fontFamily() != format.fontFamily() && format.fontFamily() != "ScoreText") {
+                    text += String(u" face=\"%1\"").arg(TextBase::escape(format.fontFamily()));
+                }
+                text += u"/>"; // TODO: proper nesting and end tag "</font>"
             }
 
             VerticalAlignment va = format.valign();
