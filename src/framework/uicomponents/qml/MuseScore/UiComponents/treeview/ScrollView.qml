@@ -282,7 +282,13 @@ FocusScope {
             property bool verticalRecursionGuard: false
 
             horizontalMinimumValue: 0
-            horizontalMaximumValue: flickableItem ? flickableItem.contentWidth - viewport.width : 0
+            horizontalMaximumValue: {
+                if (!flickableItem || flickableItem.contentWidth < 0) {
+                    return 0
+                }
+
+                return Math.max(flickableItem.contentWidth - viewport.width, 0)
+            }
             onHorizontalMaximumValueChanged: {
                 wheelArea.horizontalRecursionGuard = true
                 //if horizontalMaximumValue changed, horizontalValue may be actually synced with
@@ -291,7 +297,13 @@ FocusScope {
             }
 
             verticalMinimumValue: 0
-            verticalMaximumValue: flickableItem ? flickableItem.contentHeight - viewport.height + __viewTopMargin : 0
+            verticalMaximumValue: {
+                if (!flickableItem || flickableItem.contentHeight < 0) {
+                    return 0
+                }
+
+                return Math.max(flickableItem.contentHeight - viewport.height, 0)
+            }
             onVerticalMaximumValueChanged: {
                 wheelArea.verticalRecursionGuard = true
                 //if verticalMaximumValue changed, verticalValue may be actually synced with
