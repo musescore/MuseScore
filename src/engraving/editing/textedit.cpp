@@ -922,6 +922,9 @@ void TextBase::paste(EditData& ed, const String& txt)
     bool symState = false;
     CharFormat format = *static_cast<TextEditData*>(ed.getData(this).get())->cursor()->format();
 
+    String prevFontFace;
+    double prevFontSize = 0;
+
     score()->startCmd(TranslatableString("undoableAction", "Paste text"));
     for (size_t i = 0; i < txt.size(); i++) {
         Char c = txt.at(i);
@@ -966,7 +969,7 @@ void TextBase::paste(EditData& ed, const String& txt)
                     static_cast<TextEditData*>(ed.getData(this).get())->cursor()->setFormat(format);
                     insertSym(ed, SymNames::symIdByName(sym));
                 } else {
-                    prepareFormat(token, format);
+                    prepareFormat(token, format, prevFontFace, prevFontSize);
                 }
             } else {
                 token += c;
