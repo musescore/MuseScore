@@ -121,6 +121,9 @@ apt_packages_runtime=(
   libxcb-randr0
   libxcb-render-util0
   libxcb-xinerama0
+  libxcb-xkb-dev
+  libxkbcommon-dev
+  libvulkan-dev
   )
 
 apt_packages_ffmpeg=(
@@ -138,10 +141,10 @@ DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-inst
 
 # Add additional ppas (Qt 5.15.2, Cmake, and patchelf)
 # Poor naming of the cmake ppa, this ppa has bionic/focal/jammy dists
-add-apt-repository --yes ppa:theofficialgman/cmake-bionic
-add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-focal-arm
+# add-apt-repository --yes ppa:theofficialgman/cmake-bionic
+# add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-focal-arm
 # minimum patchelf 0.12 needed for proper elf load memory alignment
-add-apt-repository --yes ppa:theofficialgman/patchelf
+# add-apt-repository --yes ppa:theofficialgman/patchelf
 apt-get update
 apt-get upgrade -y
 
@@ -178,28 +181,51 @@ ninja --version
 
 # Get newer Qt (only used cached version if it is the same)
 
-apt_packages_qt=(
-  qt515base
-  qt515declarative
-  qt515quickcontrols
-  qt515quickcontrols2
-  qt515graphicaleffects
-  qt515imageformats
-  qt515networkauth-no-lgpl
-  qt515remoteobjects
-  qt515svg
-  qt515tools
-  qt515translations
-  qt515wayland
-  qt515x11extras
-  qt515xmlpatterns
+# apt_packages_qt=(
+#   qt515base
+#   qt515declarative
+#   qt515quickcontrols
+#   qt515quickcontrols2
+#   qt515graphicaleffects
+#   qt515imageformats
+#   qt515networkauth-no-lgpl
+#   qt515remoteobjects
+#   qt515svg
+#   qt515tools
+#   qt515translations
+#   qt515wayland
+#   qt515x11extras
+#   qt515xmlpatterns
+#   )
+
+apt_packages_qt6=(
+  qt6-base-dev
+  qt6-declarative-dev
+  qt6-base-private-dev
+  libqt6networkauth6-dev
+  libqt6qml6
+  qml6-module-* # installs all qml modules
+  libqt6quick6
+  libqt6quickcontrols2-6
+  libqt6quicktemplates2-6
+  libqt6quickwidgets6
+  libqt6xml6
+  libqt6svg6-dev
+  qt6-tools-dev
+  qt6-tools-dev-tools
+  libqt6printsupport6
+  libqt6opengl6-dev
+  qt6-l10n-tools
+  libqt6core5compat6-dev
+  qt6-scxml-dev
+  qt6-wayland
   )
 
 apt-get install -y \
-  "${apt_packages_qt[@]}"
+  "${apt_packages_qt6[@]}"
 
-qt_version="5152"
-qt_dir="/opt/qt515"
+qt_version="624"
+qt_dir="/usr/lib/aarch64-linux-gnu/qt6"
 
 ##########################################################################
 # Compile and install nlohmann-json
@@ -345,13 +371,15 @@ else
   echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
 fi
 
-echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
-echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
+# echo export PATH="${qt_dir}/bin:\${PATH}" >> ${ENV_FILE}
+# echo export LD_LIBRARY_PATH="${qt_dir}/lib:\${LD_LIBRARY_PATH}" >> ${ENV_FILE}
 echo export QT_PATH="${qt_dir}" >> ${ENV_FILE}
 echo export QT_PLUGIN_PATH="${qt_dir}/plugins" >> ${ENV_FILE}
 echo export QML2_IMPORT_PATH="${qt_dir}/qml" >> ${ENV_FILE}
 echo export CFLAGS="-Wno-psabi" >> ${ENV_FILE}
 echo export CXXFLAGS="-Wno-psabi" >> ${ENV_FILE}
+# explicitly set QMAKE path for linuxdeploy-plugin-qt
+echo export QMAKE="/usr/bin/qmake6" >> ${ENV_FILE}
 
 ##########################################################################
 # POST INSTALL
