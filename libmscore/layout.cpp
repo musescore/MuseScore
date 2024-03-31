@@ -2173,7 +2173,8 @@ void LayoutContext::getNextPage()
       else {
             page = score->pages()[curPage];
             QList<System*>& systems = page->systems();
-            pageOldMeasure = systems.isEmpty() ? nullptr : systems.back()->measures().back();
+            pageOldMeasure = systems.isEmpty() || systems.back()->measures().empty() ?
+                  nullptr : systems.back()->measures().back();
             const int i = systems.indexOf(curSystem);
             if (i > 0 && systems[i-1]->page() == page) {
                   // Current and previous systems are on the current page.
