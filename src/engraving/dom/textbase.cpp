@@ -1813,13 +1813,17 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format, String& pr
     } else if (token.startsWith(u"font ")) {
         String remainder = token.mid(5);
         if (remainder.startsWith(u"size=\"")) {
-            prevFontSize = format.fontSize();
+            if (!token.endsWith(u"/")) {
+                prevFontSize = format.fontSize();
+            }
             format.setFontSize(parseNumProperty(remainder.mid(6)));
             return true;
         } else if (remainder.startsWith(u"face=\"")) {
             String face = parseStringProperty(remainder.mid(6));
             face = unEscape(face);
-            prevFontFace = format.fontFamily();
+            if (!token.endsWith(u"/")) {
+                prevFontFace = format.fontFamily();
+            }
             format.setFontFamily(face);
             return true;
         } else {
