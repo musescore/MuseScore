@@ -158,8 +158,6 @@ signals:
 
     void contentNavigationPanelChanged();
 
-    void reorderNavigationRequested();
-
 protected:
     friend class DockWindow;
     friend class DropController;
