@@ -37,6 +37,8 @@ Item {
         enabled: root.enabled && root.visible
     }
 
+    // TODO: https://github.com/musescore/MuseScore/issues/16722
+    /*
     FlatButton {
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
@@ -49,4 +51,5 @@ Item {
         navigation.panel: navPanel
         navigation.row: 0
     }
+    */
 }
