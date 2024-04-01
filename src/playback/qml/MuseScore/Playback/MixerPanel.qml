@@ -33,14 +33,14 @@ import "internal"
 ColumnLayout {
     id: root
 
+    property NavigationSection navigationSection: null
+    property int contentNavigationPanelOrderStart: 1
+
     property alias contextMenuModel: contextMenuModel
     property Component toolbarComponent: MixerPanelToolbar {
         navigation.section: root.navigationSection
-        navigation.order: 1
+        navigation.order: root.contentNavigationPanelOrderStart
     }
-
-    property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: mixerPanelModel.count > 0 ? mixerPanelModel.get(0).channelItem.panel : null // first panel
 
     signal resizeRequested(var newWidth, var newHeight)
 
@@ -76,6 +76,7 @@ ColumnLayout {
         id: mixerPanelModel
 
         navigationSection: root.navigationSection
+        navigationOrderStart: root.contentNavigationPanelOrderStart + 1 // +1 for toolbar
 
         Component.onCompleted: {
             mixerPanelModel.load()

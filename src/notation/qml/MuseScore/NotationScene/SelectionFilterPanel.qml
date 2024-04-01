@@ -31,12 +31,15 @@ Item {
     enabled: selectionFilterModel.enabled
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: NavigationPanel {
+    property int navigationOrderStart: 1
+
+    NavigationPanel {
+        id: navPanel
         name: "SelectionFilter"
         section: root.navigationSection
         direction: NavigationPanel.Vertical
         enabled: root.enabled && root.visible
-        order: 2
+        order: root.navigationOrderStart
     }
 
     Component.onCompleted: {
@@ -62,7 +65,7 @@ Item {
 
             text: model.title
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: model.index
 
             checked: model.isSelected
