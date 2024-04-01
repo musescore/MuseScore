@@ -228,6 +228,7 @@ DockPage {
 
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
+                navigationOrderStart: palettesPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     palettesPanel.contextMenuModel = contextMenuModel
@@ -253,6 +254,7 @@ DockPage {
 
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
+                navigationOrderStart: instrumentsPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     instrumentsPanel.contextMenuModel = contextMenuModel
@@ -278,6 +280,7 @@ DockPage {
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
+                navigationOrderStart: inspectorPanel.contentNavigationPanelOrderStart
                 notationView: root.notationView
             }
         },
@@ -303,6 +306,7 @@ DockPage {
 
             SelectionFilterPanel {
                 navigationSection: selectionFilterPanel.navigationSection
+                navigationOrderStart: selectionFilterPanel.contentNavigationPanelOrderStart
             }
         },
         
@@ -333,6 +337,7 @@ DockPage {
 
             MixerPanel {
                 navigationSection: mixerPanel.navigationSection
+                contentNavigationPanelOrderStart: mixerPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
@@ -368,6 +373,7 @@ DockPage {
 
             PianoKeyboardPanel {
                 navigationSection: pianoKeyboardPanel.navigationSection
+                contentNavigationPanelOrderStart: pianoKeyboardPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     pianoKeyboardPanel.contextMenuModel = contextMenuModel
@@ -398,6 +404,7 @@ DockPage {
 
             Timeline {
                 navigationSection: timelinePanel.navigationSection
+                contentNavigationPanelOrderStart: timelinePanel.contentNavigationPanelOrderStart
             }
         },
 
@@ -423,6 +430,7 @@ DockPage {
 
             DrumsetPanel {
                 navigationSection: timelinePanel.navigationSection
+                contentNavigationPanelOrderStart: drumsetPanel.contentNavigationPanelOrderStart
             }
         }
     ]
@@ -449,7 +457,7 @@ DockPage {
     statusBar: DockStatusBar {
         objectName: pageModel.statusBarName()
 
-        contentNavigationPanel: content.navigationPanel
+        navigationSection: content.navigationSection
 
         NotationStatusBar {
             id: content
