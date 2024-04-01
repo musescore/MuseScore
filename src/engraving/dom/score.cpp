@@ -4882,40 +4882,38 @@ String Score::extractLyrics()
     String result;
     masterScore()->setExpandRepeats(true);
     SegmentType st = SegmentType::ChordRest;
-    for (size_t track = 0; track < ntracks(); track += VOICES) {
-        bool found = false;
+    for (size_t track = 0; track < ntracks(); track++) {
         size_t maxLyrics = 1;
-        const RepeatList& rlist = repeatList();
         for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             m->setPlaybackCount(0);
         }
         // follow the repeat segments
+        const RepeatList& rlist = repeatList();
         for (const RepeatSegment* rs : rlist) {
             Fraction startTick  = Fraction::fromTicks(rs->tick);
             Fraction endTick    = startTick + Fraction::fromTicks(rs->len());
             for (Measure* m = tick2measure(startTick); m; m = m->nextMeasure()) {
-                int playCount = m->playbackCount();
+                size_t playCount = m->playbackCount();
                 for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                    // consider voice 1 only
-                    ChordRest* cr = toChordRest(seg->element(static_cast<int>(track)));
+                    ChordRest* cr = toChordRest(seg->element(track));
                     if (!cr || cr->lyrics().empty()) {
                         continue;
                     }
                     if (cr->lyrics().size() > maxLyrics) {
                         maxLyrics = cr->lyrics().size();
                     }
-                    if (playCount >= int(cr->lyrics().size())) {
+                    if (playCount > cr->lyrics().size()) {
                         continue;
                     }
-                    Lyrics* l = cr->lyrics(playCount);
+                    Lyrics* l = cr->lyrics(static_cast<int>(playCount));
                     if (!l) {
                         continue;
                     }
-                    found = true;
                     String lyric = l->plainText().trimmed();
-                    if (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END) {
+                    LyricsSyllabic ls = l->syllabic();
+                    if (ls == LyricsSyllabic::SINGLE || ls == LyricsSyllabic::END) {
                         result += lyric + u" ";
-                    } else if (l->syllabic() == LyricsSyllabic::BEGIN || l->syllabic() == LyricsSyllabic::MIDDLE) {
+                    } else if (ls == LyricsSyllabic::BEGIN || ls == LyricsSyllabic::MIDDLE) {
                         result += lyric;
                     }
                 }
@@ -4926,39 +4924,36 @@ String Score::extractLyrics()
             }
         }
         // consider remaining lyrics
-        for (unsigned lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
+        for (size_t lyricsNumber = 0; lyricsNumber < maxLyrics; lyricsNumber++) {
             for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-                unsigned playCount = m->playbackCount();
-                if (lyricsNumber >= playCount) {
-                    for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                        // consider voice 1 only
-                        ChordRest* cr = toChordRest(seg->element(static_cast<int>(track)));
-                        if (!cr || cr->lyrics().empty()) {
-                            continue;
-                        }
-                        if (cr->lyrics().size() > maxLyrics) {
-                            maxLyrics = cr->lyrics().size();
-                        }
-                        if (lyricsNumber >= cr->lyrics().size()) {
-                            continue;
-                        }
-                        Lyrics* l = cr->lyrics(lyricsNumber);
-                        if (!l) {
-                            continue;
-                        }
-                        found = true;
-                        String lyric = l->plainText().trimmed();
-                        if (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END) {
-                            result += lyric + u" ";
-                        } else if (l->syllabic() == LyricsSyllabic::BEGIN || l->syllabic() == LyricsSyllabic::MIDDLE) {
-                            result += lyric;
-                        }
+                size_t playCount = m->playbackCount();
+                if (lyricsNumber < playCount) {
+                    continue;
+                }
+                for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
+                    ChordRest* cr = toChordRest(seg->element(track));
+                    if (!cr || cr->lyrics().empty()) {
+                        continue;
+                    }
+                    if (cr->lyrics().size() > maxLyrics) {
+                        maxLyrics = cr->lyrics().size();
+                    }
+                    if (lyricsNumber > cr->lyrics().size()) {
+                        continue;
+                    }
+                    Lyrics* l = cr->lyrics(static_cast<int>(lyricsNumber));
+                    if (!l) {
+                        continue;
+                    }
+                    String lyric = l->plainText().trimmed();
+                    LyricsSyllabic ls = l->syllabic();
+                    if (ls == LyricsSyllabic::SINGLE || ls == LyricsSyllabic::END) {
+                        result += lyric + u" ";
+                    } else if (ls == LyricsSyllabic::BEGIN || ls == LyricsSyllabic::MIDDLE) {
+                        result += lyric;
                     }
                 }
             }
-        }
-        if (found) {
-            result += u"\n\n";
         }
     }
     return result.trimmed();
