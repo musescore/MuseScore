@@ -355,14 +355,24 @@ void DockBase::setFloating(bool floating)
     m_dockWidget->setFloating(floating);
 }
 
-void DockBase::setContentNavigationPanel(mu::ui::NavigationPanel* panel)
+void DockBase::setNavigationSection(ui::NavigationSection* section)
 {
-    if (m_contentNavigationPanel == panel) {
+    if (m_navigationSection == section) {
         return;
     }
 
-    m_contentNavigationPanel = panel;
-    emit contentNavigationPanelChanged();
+    m_navigationSection = section;
+    emit navigationSectionChanged();
+}
+
+void DockBase::setContentNavigationPanelOrderStart(int order)
+{
+    if (m_contentNavigationPanelOrderStart == order) {
+        return;
+    }
+
+    m_contentNavigationPanelOrderStart = order;
+    emit contentNavigationPanelOrderStartChanged();
 }
 
 void DockBase::init()
@@ -539,9 +549,14 @@ void DockBase::resize(int width, int height)
     applySizeConstraints();
 }
 
-mu::ui::NavigationPanel* DockBase::contentNavigationPanel() const
+mu::ui::NavigationSection* DockBase::navigationSection() const
 {
-    return m_contentNavigationPanel;
+    return m_navigationSection;
+}
+
+int DockBase::contentNavigationPanelOrderStart() const
+{
+    return m_contentNavigationPanelOrderStart;
 }
 
 void DockBase::componentComplete()
@@ -585,10 +600,6 @@ void DockBase::componentComplete()
 
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
-
-    connect(this, &DockBase::visibleChanged, [this](){
-        emit reorderNavigationRequested();
-    });
 
     m_defaultVisibility = isVisible();
 }

@@ -36,14 +36,15 @@ Item {
         id: model
     }
 
-    NavigationSection {
+    property NavigationSection navigationSection: NavigationSection {
         id: navSec
         name: "NotationStatusBar"
         enabled: root.enabled && root.visible
         order: 8
     }
 
-    property NavigationPanel navigationPanel: NavigationPanel {
+    NavigationPanel {
+        id: navPanel
         name: "NotationStatusBar"
         enabled: root.enabled && root.visible
         order: 0
@@ -112,7 +113,7 @@ Item {
             transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 1
 
             onClicked: {
@@ -133,7 +134,7 @@ Item {
             enabled: model.concertPitchItem.enabled
             visible: statusBarRow.remainingSpace > width
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 2
 
             onToggleConcertPitchRequested: {
@@ -151,7 +152,7 @@ Item {
             currentViewMode: model.currentViewMode
             availableViewModeList: model.availableViewModeList
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: 3
 
             onChangeCurrentViewModeRequested: function(newViewMode) {
@@ -170,7 +171,7 @@ Item {
             maxZoomPercentage: model.maxZoomPercentage()
             availableZoomList: model.availableZoomList
 
-            navigationPanel: root.navigationPanel
+            navigationPanel: navPanel
             navigationOrderMin: 4
 
             onChangeZoomPercentageRequested: function(newZoomPercentage) {
@@ -200,7 +201,7 @@ Item {
             visible: !concertPitchControl.visible ||
                      !workspaceControl.visible
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: zoomControl.navigationOrderMax + 1
 
             menuModel: {

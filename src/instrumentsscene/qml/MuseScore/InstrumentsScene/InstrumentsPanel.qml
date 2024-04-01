@@ -34,7 +34,8 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: controlPanel.navigation // first panel
+    property int navigationOrderStart: 1
+
     property alias contextMenuModel: contextMenuModel
 
     onVisibleChanged: {
@@ -92,7 +93,7 @@ Item {
             Layout.rightMargin: contentColumn.sideMargin
 
             navigation.section: root.navigationSection
-            navigation.order: 2
+            navigation.order: root.navigationOrderStart
 
             isMovingUpAvailable: instrumentsTreeModel.isMovingUpAvailable
             isMovingDownAvailable: instrumentsTreeModel.isMovingDownAvailable

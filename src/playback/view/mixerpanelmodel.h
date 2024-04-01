@@ -49,6 +49,7 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 
     Q_PROPERTY(
         mu::ui::NavigationSection * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
+    Q_PROPERTY(int navigationOrderStart READ navigationOrderStart WRITE setNavigationOrderStart NOTIFY navigationOrderStartChanged)
 
     Q_PROPERTY(int count READ rowCount NOTIFY rowCountChanged)
 
@@ -65,8 +66,12 @@ public:
     ui::NavigationSection* navigationSection() const;
     void setNavigationSection(ui::NavigationSection* navigationSection);
 
+    int navigationOrderStart() const;
+    void setNavigationOrderStart(int navigationOrderStart);
+
 signals:
     void navigationSectionChanged();
+    void navigationOrderStartChanged();
     void rowCountChanged();
 
 private:
@@ -107,6 +112,7 @@ private:
     audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
     ui::NavigationSection* m_navigationSection = nullptr;
+    int m_navigationOrderStart = 1;
 };
 }
 
