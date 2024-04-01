@@ -429,7 +429,7 @@ DockPage {
             navigationSection: root.navigationPanelSec(drumsetPanel.location)
 
             DrumsetPanel {
-                navigationSection: timelinePanel.navigationSection
+                navigationSection: drumsetPanel.navigationSection
                 contentNavigationPanelOrderStart: drumsetPanel.contentNavigationPanelOrderStart
             }
         }
