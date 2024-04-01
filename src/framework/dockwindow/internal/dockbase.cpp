@@ -626,10 +626,6 @@ void DockBase::componentComplete()
     connect(this, &DockBase::minimumSizeChanged, this, &DockBase::applySizeConstraints);
     connect(this, &DockBase::maximumSizeChanged, this, &DockBase::applySizeConstraints);
 
-    connect(this, &DockBase::visibleChanged, [this](){
-        emit reorderNavigationRequested();
-    });
-
     m_defaultVisibility = isVisible();
 }
 

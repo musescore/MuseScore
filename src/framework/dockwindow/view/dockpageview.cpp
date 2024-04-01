@@ -60,7 +60,7 @@ void DockPageView::init()
             reorderSections();
         });
 
-        connect(dock, &DockBase::reorderNavigationRequested, [this](){
+        connect(dock, &DockBase::visibleChanged, [this](){
             reorderSections();
         });
     }
