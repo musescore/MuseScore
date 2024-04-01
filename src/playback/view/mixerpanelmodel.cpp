@@ -236,25 +236,8 @@ void MixerPanelModel::updateItemsPanelsOrder()
 {
     TRACEFUNC;
 
-    muse::ui::NavigationPanel* previousPanel = nullptr;
-    for (MixerChannelItem* item : m_mixerChannelList) {
-        disconnect(item->panel(), &muse::ui::NavigationPanel::orderChanged, this, nullptr);
-    }
-
     for (int i = 0; i < m_mixerChannelList.size(); i++) {
-        m_mixerChannelList[i]->setPanelOrder(i);
-
-        if (previousPanel) {
-            disconnect(previousPanel, &muse::ui::NavigationPanel::orderChanged, this, nullptr);
-
-            connect(previousPanel, &muse::ui::NavigationPanel::orderChanged, this, [this, i](int order){
-                if (i < m_mixerChannelList.count()) {
-                    m_mixerChannelList[i]->setPanelOrder(order + 1);
-                }
-            });
-        }
-
-        previousPanel = m_mixerChannelList[i]->panel();
+        m_mixerChannelList[i]->setPanelOrder(m_navigationOrderStart + i);
     }
 }
 
@@ -658,4 +641,21 @@ void MixerPanelModel::setNavigationSection(muse::ui::NavigationSection* navigati
 
     m_navigationSection = navigationSection;
     emit navigationSectionChanged();
+}
+
+int MixerPanelModel::navigationOrderStart() const
+{
+    return m_navigationOrderStart;
+}
+
+void MixerPanelModel::setNavigationOrderStart(int navigationOrderStart)
+{
+    if (m_navigationOrderStart == navigationOrderStart) {
+        return;
+    }
+
+    m_navigationOrderStart = navigationOrderStart;
+    emit navigationOrderStartChanged();
+
+    updateItemsPanelsOrder();
 }

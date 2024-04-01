@@ -212,21 +212,6 @@ void DockPanelView::componentComplete()
     });
 }
 
-QObject* DockPanelView::navigationSection() const
-{
-    return m_navigationSection;
-}
-
-void DockPanelView::setNavigationSection(QObject* newNavigation)
-{
-    if (m_navigationSection == newNavigation) {
-        return;
-    }
-
-    m_navigationSection = newNavigation;
-    emit navigationSectionChanged();
-}
-
 AbstractMenuModel* DockPanelView::contextMenuModel() const
 {
     return m_menuModel->customMenuModel();

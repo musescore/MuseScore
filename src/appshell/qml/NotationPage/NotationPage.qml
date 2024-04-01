@@ -45,7 +45,6 @@ DockPage {
     property NotationPageModel pageModel: NotationPageModel {}
 
     property NavigationSection noteInputKeyNavSec: NavigationSection {
-        id: keynavSec
         name: "NoteInputSection"
         order: 2
     }
@@ -124,8 +123,10 @@ DockPage {
             alignment: DockToolBarAlignment.Center
             contentBottomPadding: 2
 
+            navigationSection: root.topToolbarKeyNavSec
+
             NotationToolBar {
-                navigationPanel.section: root.topToolbarKeyNavSec
+                navigationPanel.section: notationToolBar.navigationSection
                 navigationPanel.order: 2
             }
         },
@@ -146,8 +147,10 @@ DockPage {
                 { "dock": notationToolBar, "dropLocation": Location.Right }
             ]
 
+            navigationSection: root.topToolbarKeyNavSec
+
             PlaybackToolBar {
-                navigationPanelSection: root.topToolbarKeyNavSec
+                navigationPanelSection: playbackToolBar.navigationSection
                 navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
@@ -172,9 +175,13 @@ DockPage {
                 { "dock": playbackToolBar, "dropLocation": Location.Right }
             ]
 
+            navigationSection: root.topToolbarKeyNavSec
+
             ExtensionsToolBar {
                 id: extToolBar
 
+                navigationPanel.section: extDockToolBar.navigationSection
+                navigationPanel.order: 4
 
                 function updateVisible() {
                     if (!extDockToolBar.inited) {
@@ -207,6 +214,8 @@ DockPage {
         },
 
         DockToolBar {
+            id: undoRedoToolBar
+
             objectName: root.pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo")
 
@@ -218,15 +227,16 @@ DockPage {
             alignment: DockToolBarAlignment.Right
             contentBottomPadding: 2
 
+            navigationSection: root.topToolbarKeyNavSec
+
             UndoRedoToolBar {
-                navigationPanel.section: root.topToolbarKeyNavSec
-                navigationPanel.order: 4
+                navigationPanel.section: undoRedoToolBar.navigationSection
+                navigationPanel.order: 5
             }
         }
     ]
 
     toolBars: [
-
         DockToolBar {
             id: noteInputBar
 
@@ -242,6 +252,8 @@ DockPage {
 
             thickness: orientation === Qt.Horizontal ? 40 : 76
 
+            navigationSection: root.noteInputKeyNavSec
+
             NoteInputBar {
                 orientation: noteInputBar.orientation
                 floating: noteInputBar.floating
@@ -249,7 +261,7 @@ DockPage {
                 maximumWidth: noteInputBar.width
                 maximumHeight: noteInputBar.height
 
-                navigationPanel.section: root.noteInputKeyNavSec
+                navigationPanel.section: noteInputBar.navigationSection
                 navigationPanel.order: 1
             }
         }
@@ -274,6 +286,7 @@ DockPage {
 
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
+                navigationOrderStart: palettesPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     palettesPanel.contextMenuModel = contextMenuModel
@@ -299,6 +312,7 @@ DockPage {
 
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
+                navigationOrderStart: instrumentsPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     instrumentsPanel.contextMenuModel = contextMenuModel
@@ -324,6 +338,7 @@ DockPage {
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
+                navigationOrderStart: inspectorPanel.contentNavigationPanelOrderStart
                 notationView: root.notationView
             }
         },
@@ -349,6 +364,7 @@ DockPage {
 
             SelectionFilterPanel {
                 navigationSection: selectionFilterPanel.navigationSection
+                navigationOrderStart: selectionFilterPanel.contentNavigationPanelOrderStart
             }
         },
 
@@ -373,6 +389,7 @@ DockPage {
 
             UndoHistoryPanel {
                 navigationSection: undoHistoryPanel.navigationSection
+                navigationOrderStart: undoHistoryPanel.contentNavigationPanelOrderStart
             }
         },
         
@@ -403,6 +420,7 @@ DockPage {
 
             MixerPanel {
                 navigationSection: mixerPanel.navigationSection
+                contentNavigationPanelOrderStart: mixerPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     mixerPanel.contextMenuModel = contextMenuModel
@@ -438,6 +456,7 @@ DockPage {
 
             PianoKeyboardPanel {
                 navigationSection: pianoKeyboardPanel.navigationSection
+                contentNavigationPanelOrderStart: pianoKeyboardPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     pianoKeyboardPanel.contextMenuModel = contextMenuModel
@@ -468,6 +487,7 @@ DockPage {
 
             Timeline {
                 navigationSection: timelinePanel.navigationSection
+                contentNavigationPanelOrderStart: timelinePanel.contentNavigationPanelOrderStart
             }
         },
 
@@ -492,7 +512,8 @@ DockPage {
             navigationSection: root.navigationPanelSec(drumsetPanel.location)
 
             DrumsetPanel {
-                navigationSection: timelinePanel.navigationSection
+                navigationSection: drumsetPanel.navigationSection
+                contentNavigationPanelOrderStart: drumsetPanel.contentNavigationPanelOrderStart
             }
         },
 
@@ -519,10 +540,10 @@ DockPage {
 
             PercussionPanel {
                 navigationSection: percussionPanel.navigationSection
+                contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
 
                 // TODO: #22050 needed for this
                 /*
-                // contentNavigationPanelOrderStart: percussionPanel.contentNavigationPanelOrderStart
 
                 Component.onCompleted: {
                     percussionPanel.contextMenuModel = contextMenuModel
@@ -560,7 +581,7 @@ DockPage {
     statusBar: DockStatusBar {
         objectName: root.pageModel.statusBarName()
 
-        contentNavigationPanel: content.navigationPanel
+        navigationSection: content.navigationSection
 
         NotationStatusBar {
             id: content

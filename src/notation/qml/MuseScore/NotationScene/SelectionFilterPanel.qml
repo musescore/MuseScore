@@ -30,13 +30,14 @@ Item {
     id: root
     enabled: selectionFilterModel.enabled
 
-    property NavigationSection navigationSection: null
-    property NavigationPanel navigationPanel: NavigationPanel {
+    property alias navigationSection: navPanel.section
+    property alias navigationOrderStart: navPanel.order
+
+    NavigationPanel {
+        id: navPanel
         name: "SelectionFilter"
-        section: root.navigationSection
         direction: NavigationPanel.Vertical
         enabled: root.enabled && root.visible
-        order: 2
     }
 
     Component.onCompleted: {
@@ -62,7 +63,7 @@ Item {
 
             text: model.title
 
-            navigation.panel: root.navigationPanel
+            navigation.panel: navPanel
             navigation.order: model.index
 
             checked: model.isSelected

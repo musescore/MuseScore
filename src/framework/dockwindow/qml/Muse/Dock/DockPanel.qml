@@ -28,8 +28,8 @@ DockPanelView {
 
     default property alias contentComponent : contentLoader.sourceComponent
 
-    contentNavigationPanel: Boolean(contentLoader.item) && Boolean(contentLoader.item.navigationPanel) ?
-                                contentLoader.item.navigationPanel : null
+    navigationSection: Boolean(contentLoader.item) && Boolean(contentLoader.item.navigationSection) ?
+                           contentLoader.item.navigationSection : null
 
     Loader {
         id: contentLoader
