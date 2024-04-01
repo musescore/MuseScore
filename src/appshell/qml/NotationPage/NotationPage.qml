@@ -115,6 +115,8 @@ DockPage {
             objectName: "notationToolBar"
             title: qsTrc("appshell", "Notation toolbar")
 
+            navigationSection: root.topToolKeyNavSec
+
             floatable: false
             closable: false
             resizable: false
@@ -124,7 +126,7 @@ DockPage {
             contentBottomPadding: 2
 
             NotationToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: notationToolBar.navigationSection
                 navigationPanel.order: 2
             }
         },
@@ -134,6 +136,8 @@ DockPage {
 
             objectName: pageModel.playbackToolBarName()
             title: qsTrc("appshell", "Playback controls")
+
+            navigationSection: root.topToolKeyNavSec
 
             separatorsVisible: false
             alignment: DockToolBarAlignment.Right
@@ -146,7 +150,7 @@ DockPage {
             ]
 
             PlaybackToolBar {
-                navigationPanelSection: root.topToolKeyNavSec
+                navigationPanelSection: playbackToolBar.navigationSection
                 navigationPanelOrder: 3
 
                 floating: playbackToolBar.floating
@@ -154,8 +158,11 @@ DockPage {
         },
 
         DockToolBar {
+            id: undoRedoToolBar
             objectName: pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo")
+
+            navigationSection: root.topToolKeyNavSec
 
             floatable: false
             closable: false
@@ -166,7 +173,7 @@ DockPage {
             contentBottomPadding: 2
 
             UndoRedoToolBar {
-                navigationPanel.section: root.topToolKeyNavSec
+                navigationPanel.section: undoRedoToolBar.navigationSection
                 navigationPanel.order: 4
             }
         }
@@ -178,6 +185,8 @@ DockPage {
 
             objectName: pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
+
+            navigationSection: root.noteInputKeyNavSec
 
             dropDestinations: [
                 root.toolBarTopDropDestination,
@@ -195,7 +204,7 @@ DockPage {
                 maximumWidth: noteInputBar.width
                 maximumHeight: noteInputBar.height
 
-                navigationPanel.section: root.noteInputKeyNavSec
+                navigationPanel.section: noteInputBar.navigationSection
                 navigationPanel.order: 1
             }
         }

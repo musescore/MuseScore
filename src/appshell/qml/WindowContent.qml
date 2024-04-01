@@ -65,9 +65,11 @@ DockWindow {
             floatable: false
             closable: false
 
+            navigationSection: root.topToolKeyNavSec
+
             MainToolBar {
                 id: toolBar
-                navigation.section: root.topToolKeyNavSec
+                navigation.section: mainToolBar.navigationSection
                 navigation.order: 1
 
                 currentUri: root.currentPageUri
