@@ -60,3 +60,4 @@ TreeView 1.0 treeview/TreeView.qml
 TableViewColumn 1.0 treeview/TableViewColumn.qml
 TreeViewStyle 1.0 treeview/TreeViewStyle.qml
 StyledGroupBox 1.0 StyledGroupBox.qml
+ItemWithDropShadow 1.0 ItemWithDropShadow.qml

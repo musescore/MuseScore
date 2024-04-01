@@ -130,23 +130,24 @@ Item {
         }
     ]
 
-    StyledIconLabel {
-        id: icon
+
+    ItemWithDropShadow {
         anchors.centerIn: parent
 
-        iconCode: root.isProgress ? IconCode.STOP_FILL : IconCode.CLOUD_FILL
-        font.pixelSize: root.isProgress ? 12 : 14
-        color: "white"
-    }
+        implicitWidth: icon.implicitWidth
+        implicitHeight: icon.implicitHeight
 
-    StyledDropShadow {
-        anchors.fill: icon
+        shadow.horizontalOffset: 0
+        shadow.verticalOffset: 1
+        shadow.radius: 4
 
-        horizontalOffset: 0
-        verticalOffset: 1
-        radius: 4
+        StyledIconLabel {
+            id: icon
 
-        source: icon
+            iconCode: root.isProgress ? IconCode.STOP_FILL : IconCode.CLOUD_FILL
+            font.pixelSize: root.isProgress ? 12 : 14
+            color: "white"
+        }
     }
 
     MouseArea {

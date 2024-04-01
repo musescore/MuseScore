@@ -74,28 +74,25 @@ FocusScope {
             navigationCtrl: navCtrl
         }
 
-        Rectangle {
-            id: handleRect
-
+        ItemWithDropShadow {
             readonly property int margins: 2
 
             anchors.verticalCenter: parent.verticalCenter
             x: root.checked ? parent.width - width - margins : margins
 
-            width: root.height - handleRect.margins * 2
+            width: root.height - margins * 2
             height: width
-            radius: width / 2
 
-            color: "#FFFFFF"
-        }
+            shadow.color: "#33000000"
+            shadow.radius: 4
+            shadow.verticalOffset: 1
 
-        StyledDropShadow {
-            anchors.fill: handleRect
-            source: handleRect
+            Rectangle {
+                anchors.fill: parent
 
-            color: "#33000000"
-            radius: 4
-            verticalOffset: 1
+                radius: width / 2
+                color: "#FFFFFF"
+            }
         }
     }
 

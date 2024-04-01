@@ -92,20 +92,19 @@ FocusScope {
         opacity: root.animationEnabled ? 0.5 : 1.0
         transformOrigin: Item.Center
 
-        StyledDropShadow {
+        ItemWithDropShadow {
             anchors.fill: parent
-            anchors.topMargin: root.padding / 2
-            anchors.bottomMargin: root.padding / 2
-            source: contentBackground
-        }
+            shadow.radius: root.padding
 
-        Rectangle {
-            id: contentBackground
-            anchors.fill: parent
-            color: ui.theme.popupBackgroundColor
-            radius: 4
-            border.width: 1
-            border.color: ui.theme.strokeColor
+            Rectangle {
+                id: contentBackground
+                anchors.fill: parent
+
+                color: ui.theme.popupBackgroundColor
+                radius: 4
+                border.width: 1
+                border.color: ui.theme.strokeColor
+            }
         }
 
         Canvas {
