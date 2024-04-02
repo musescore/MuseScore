@@ -126,6 +126,7 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
             Action a;
             a.code = ao.value("code").toStdString();
             a.type = typeFromString(ao.value("type").toStdString());
+            a.modal = ao.value("modal", DEFAULT_MODAL).toBool();
             a.title = ao.value("title").toString();
             a.main = ao.value("main").toStdString();
             a.apiversion = m.apiversion;
@@ -135,6 +136,7 @@ Manifest ExtensionsLoader::parseManifest(const io::path_t& path) const
         Action a;
         a.code = "main";
         a.type = m.type;
+        a.modal = obj.value("modal", DEFAULT_MODAL).toBool();
         a.title = m.title;
         a.main = obj.value("main").toStdString();
         a.apiversion = m.apiversion;

@@ -36,6 +36,9 @@ namespace mu::extensions {
 //! 2 - extensions
 constexpr int DEFAULT_API_VERSION = 2;
 
+//! NOTE Default extension dialog modality
+constexpr bool DEFAULT_MODAL = false;
+
 enum class Type {
     Undefined = 0,
     Form,       // Have UI, controls, user interaction
@@ -74,6 +77,7 @@ enum Filter {
 struct Action {
     std::string code;
     Type type = Type::Undefined;
+    bool modal = DEFAULT_MODAL;
     String title;
     mu::io::path_t main;
     int apiversion = DEFAULT_API_VERSION;
