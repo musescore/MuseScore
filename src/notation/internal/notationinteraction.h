@@ -92,9 +92,6 @@ public:
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void moveSegmentSelection(MoveDirection d) override;
 
-    // Deselect
-    void deselect(EngravingItem* element) override;
-
     // SelectionFilter
     bool isSelectionTypeFiltered(SelectionFilterType type) const override;
     void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;

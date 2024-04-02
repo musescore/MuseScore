@@ -766,25 +766,6 @@ void NotationInteraction::select(const std::vector<EngravingItem*>& elements, Se
     }
 }
 
-void NotationInteraction::deselect(EngravingItem* element)
-{
-    TRACEFUNC;
-
-    const mu::engraving::Selection& selection = score()->selection();
-    std::vector<EngravingItem*> oldSelectedElements = selection.elements();
-    mu::engraving::SelState oldSelectionState = selection.state();
-
-    if (element->selected()) {
-        score()->deselect(element);
-    }
-
-    if (oldSelectedElements != selection.elements() || oldSelectionState != selection.state()) {
-        notifyAboutSelectionChangedIfNeed();
-    } else {
-        score()->setSelectionChanged(false);
-    }
-}
-
 void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, staff_idx_t staffIndex)
 {
     TRACEFUNC;

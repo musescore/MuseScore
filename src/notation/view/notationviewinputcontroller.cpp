@@ -658,14 +658,13 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
                     }
                 } else if (ll[currTop]->selected()) {
                     found = true;
-                    viewInteraction()->deselect(ll[currTop]);
                     e = nullptr;
                 }
                 currTop = (currTop + 1) % n;
             }
 
             if (e && !e->selected()) {
-                viewInteraction()->select({ e }, selectType, hitStaffIndex);
+                viewInteraction()->select({ e }, SelectType::SINGLE, hitStaffIndex);
             }
         } else {
             viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);

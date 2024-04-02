@@ -83,9 +83,6 @@ public:
     virtual muse::async::Notification selectionChanged() const = 0;
     virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
-    // Deselect
-    virtual void deselect(EngravingItem* element) = 0;
-
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
     virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
