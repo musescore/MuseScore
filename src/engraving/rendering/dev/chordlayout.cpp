@@ -3606,7 +3606,7 @@ Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfigurati
         double x1 = DBL_MAX;
         double x2 = -DBL_MAX;
         for (Lyrics* l : item->lyrics()) {
-            if (!l || !l->addToSkyline()) {
+            if (!l || !l->addToSkyline() || l->xmlText().empty()) {
                 continue;
             }
             double lmargin = conf.styleS(Sid::lyricsMinDistance).val() * item->spatium() * 0.5;
