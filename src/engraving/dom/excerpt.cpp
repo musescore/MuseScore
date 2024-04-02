@@ -697,6 +697,16 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
     }
 
     if (!ns->startElement() || !ns->endElement()) {
+        if (EngravingItem* startElement = ns->startElement()) {
+            if (startElement->isChord()) {
+                toChord(startElement)->removeStartingSpanner(ns);
+            }
+        }
+        if (EngravingItem* endElement = ns->endElement()) {
+            if (endElement->isChord()) {
+                toChord(endElement)->removeEndingSpanner(ns);
+            }
+        }
         delete ns;
         return;
     }
