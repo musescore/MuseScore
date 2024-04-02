@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "framework/audio/midiqueue.h"
-#include "linuxaudiodriver.h"
-#include "../alsa/alsaaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#include "audiomidimanager.h"
+#include "platform/alsa/alsaaudiodriver.h" //FIX: relative path, set path in CMakeLists
 #if JACK_AUDIO
-#include "../jack/jackaudiodriver.h" //FIX: relative path, set path in CMakeLists
+#include "platform/jack/jackaudiodriver.h" //FIX: relative path, set path in CMakeLists
 #endif
 
 #include "translation.h"
@@ -33,15 +33,15 @@
 using namespace muse;
 using namespace muse::audio;
 
-LinuxAudioDriver::LinuxAudioDriver()
+AudioMidiManager::AudioMidiManager()
 {
 }
 
-LinuxAudioDriver::~LinuxAudioDriver()
+AudioMidiManager::~AudioMidiManager()
 {
 }
 
-void LinuxAudioDriver::init()
+void AudioMidiManager::init()
 {
     m_devicesListener.startWithCallback([this]() {
         return availableOutputDevices();
@@ -62,12 +62,12 @@ void LinuxAudioDriver::init()
     });
 }
 
-std::string LinuxAudioDriver::name() const
+std::string AudioMidiManager::name() const
 {
     return m_current_audioDriverState->name();
 }
 
-bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
+bool AudioMidiManager::open(const Spec& spec, Spec* activeSpec)
 {
     /**************************************************************************/
     // a bit lazy registering the midi-input-queue here, but midimodule isn't
@@ -91,22 +91,22 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     return true;
 }
 
-void LinuxAudioDriver::close()
+void AudioMidiManager::close()
 {
     return m_current_audioDriverState->close();
 }
 
-bool LinuxAudioDriver::isOpened() const
+bool AudioMidiManager::isOpened() const
 {
     return m_current_audioDriverState->isOpened();
 }
 
-const LinuxAudioDriver::Spec& LinuxAudioDriver::activeSpec() const
+const AudioMidiManager::Spec& AudioMidiManager::activeSpec() const
 {
     return s_format;
 }
 
-AudioDeviceID LinuxAudioDriver::outputDevice() const
+AudioDeviceID AudioMidiManager::outputDevice() const
 {
     if (m_current_audioDriverState != nullptr) {
         return m_current_audioDriverState->m_deviceId;
@@ -116,7 +116,7 @@ AudioDeviceID LinuxAudioDriver::outputDevice() const
     }
 }
 
-bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
+bool AudioMidiManager::makeDevice(const AudioDeviceID& deviceId)
 {
 #if defined(JACK_AUDIO)
     if (deviceId == "jack") {
@@ -139,7 +139,7 @@ bool LinuxAudioDriver::makeDevice(const AudioDeviceID& deviceId)
 }
 
 // reopens the same device (if m_spec has changed)
-bool LinuxAudioDriver::reopen(const AudioDeviceID& deviceId, Spec newSpec)
+bool AudioMidiManager::reopen(const AudioDeviceID& deviceId, Spec newSpec)
 {
     // close current device if opened
     if (m_current_audioDriverState->isOpened()) {
@@ -163,7 +163,7 @@ bool LinuxAudioDriver::reopen(const AudioDeviceID& deviceId, Spec newSpec)
     return true;
 }
 
-bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
+bool AudioMidiManager::selectOutputDevice(const AudioDeviceID& deviceId)
 {
     // When starting, no previously device has been selected
     if (m_current_audioDriverState == nullptr) {
@@ -179,7 +179,7 @@ bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
     return true;
 }
 
-bool LinuxAudioDriver::resetToDefaultOutputDevice()
+bool AudioMidiManager::resetToDefaultOutputDevice()
 {
 #if defined(JACK_AUDIO)
     return selectOutputDevice("jack"); // FIX:
@@ -188,12 +188,12 @@ bool LinuxAudioDriver::resetToDefaultOutputDevice()
 #endif
 }
 
-async::Notification LinuxAudioDriver::outputDeviceChanged() const
+async::Notification AudioMidiManager::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
 
-AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
+AudioDeviceList AudioMidiManager::availableOutputDevices() const
 {
     AudioDeviceList devices;
 #if defined(JACK_AUDIO)
@@ -205,61 +205,61 @@ AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
     return devices;
 }
 
-async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
+async::Notification AudioMidiManager::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
 
-void LinuxAudioDriver::isPlayingChanged()
+void AudioMidiManager::isPlayingChanged()
 {
     if (m_current_audioDriverState) {
         m_current_audioDriverState->changedPlaying();
     }
 }
 
-void LinuxAudioDriver::positionChanged()
+void AudioMidiManager::positionChanged()
 {
     if (m_current_audioDriverState) {
         m_current_audioDriverState->changedPosition();
     }
 }
 
-bool LinuxAudioDriver::isPlaying() const
+bool AudioMidiManager::isPlaying() const
 {
     return playbackController()->isPlaying();
 }
 
-float LinuxAudioDriver::playbackPositionInSeconds() const
+float AudioMidiManager::playbackPositionInSeconds() const
 {
     return playbackController()->playbackPositionInSeconds();
 }
 
-void LinuxAudioDriver::remotePlayOrStop(bool ps) const
+void AudioMidiManager::remotePlayOrStop(bool ps) const
 {
     playbackController()->remotePlayOrStop(ps);
 }
 
-void LinuxAudioDriver::remoteSeek(msecs_t millis) const
+void AudioMidiManager::remoteSeek(msecs_t millis) const
 {
     playbackController()->remoteSeek(millis);
 }
 
-int LinuxAudioDriver::audioDelayCompensate() const
+int AudioMidiManager::audioDelayCompensate() const
 {
     return m_audioDelayCompensate;
 }
 
-void LinuxAudioDriver::setAudioDelayCompensate(const int frames)
+void AudioMidiManager::setAudioDelayCompensate(const int frames)
 {
     m_audioDelayCompensate = frames;
 }
 
-unsigned int LinuxAudioDriver::outputDeviceBufferSize() const
+unsigned int AudioMidiManager::outputDeviceBufferSize() const
 {
     return m_current_audioDriverState->m_spec.samples;
 }
 
-bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
+bool AudioMidiManager::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
     if (m_spec.samples == (int)bufferSize) {
         return true;
@@ -272,12 +272,12 @@ bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     return true;
 }
 
-async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
+async::Notification AudioMidiManager::outputDeviceBufferSizeChanged() const
 {
     return m_bufferSizeChanged;
 }
 
-std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() const
+std::vector<unsigned int> AudioMidiManager::availableOutputDeviceBufferSizes() const
 {
     std::vector<unsigned int> result;
 
@@ -294,13 +294,13 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceBufferSizes() c
 
 // FIX-JACK-20240823: change api callers, WAS:
 //      unsigned int LinuxAudioDriver::sampleRate() const
-unsigned int LinuxAudioDriver::outputDeviceSampleRate() const
+unsigned int AudioMidiManager::outputDeviceSampleRate() const
 {
     return m_current_audioDriverState->m_spec.sampleRate;
 }
 
 // FIX-JACK-20240823: merge this code
-bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
+bool AudioMidiManager::setOutputDeviceSampleRate(unsigned int sampleRate)
 {
     LOGE("------ setSamplerate: %u", sampleRate);
     if (m_spec.sampleRate == (int)sampleRate) {
@@ -336,12 +336,12 @@ bool LinuxAudioDriver::setOutputDeviceSampleRate(unsigned int sampleRate)
 #endif
 }
 
-async::Notification LinuxAudioDriver::outputDeviceSampleRateChanged() const
+async::Notification AudioMidiManager::outputDeviceSampleRateChanged() const
 {
     return m_sampleRateChanged;
 }
 
-std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceSampleRates() const
+std::vector<unsigned int> AudioMidiManager::availableOutputDeviceSampleRates() const
 {
     // ALSA API is not of any help to get sample rates supported by the driver.
     // (snd_pcm_hw_params_get_rate_[min|max] will return 1 to 384000 Hz)
@@ -353,7 +353,7 @@ std::vector<unsigned int> LinuxAudioDriver::availableOutputDeviceSampleRates() c
         96000,
     };
 
-bool LinuxAudioDriver::pushMidiEvent(muse::midi::Event& e)
+bool AudioMidiManager::pushMidiEvent(muse::midi::Event& e)
 {
     if (m_current_audioDriverState) {
         m_current_audioDriverState->pushMidiEvent(e);
@@ -362,7 +362,7 @@ bool LinuxAudioDriver::pushMidiEvent(muse::midi::Event& e)
     return false;
 }
 
-std::vector<muse::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices(muse::midi::MidiPortDirection direction) const
+std::vector<muse::midi::MidiDevice> AudioMidiManager::availableMidiDevices(muse::midi::MidiPortDirection direction) const
 {
     if (m_current_audioDriverState) {
         return m_current_audioDriverState->availableMidiDevices(direction);
@@ -371,10 +371,10 @@ std::vector<muse::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices(muse:
     return x;
 }
 
-void LinuxAudioDriver::resume()
+void AudioMidiManager::resume()
 {
 }
 
-void LinuxAudioDriver::suspend()
+void AudioMidiManager::suspend()
 {
 }

@@ -56,7 +56,7 @@ using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
-#include "internal/platform/lin/linuxaudiodriver.h"
+#include "internal/audiomidimanager.h"
 #endif
 
 #if defined(Q_OS_WIN) && !defined(MINGW)
@@ -113,7 +113,7 @@ void AudioModule::registerExports()
     m_soundFontRepository = std::make_shared<SoundFontRepository>(iocContext());
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
-    m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
+    m_audioDriver = std::shared_ptr<IAudioDriver>(new AudioMidiManager());
 #endif
 
 #if defined(Q_OS_WIN) && !defined(MINGW)
