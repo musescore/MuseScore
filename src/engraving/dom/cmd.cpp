@@ -2035,7 +2035,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 Note* firstTiedNote = oNote->firstTiedNote();
                 int newLine = firstTiedNote->line() + (up ? -1 : 1);
                 Staff* vStaff = score()->staff(firstTiedNote->chord()->vStaffIdx());
-                Key key = vStaff->key(tick);
+                Key vKey = vStaff->key(tick);
                 Key cKey = vStaff->concertKey(tick);
                 Interval interval = vStaff->part()->instrument(tick)->transpose();
 
@@ -2055,10 +2055,10 @@ void Score::upDown(bool up, UpDownMode mode)
                         newPitch += interval.chromatic;
                     } else {
                         interval.flip();
-                        key = transposeKey(cKey, interval, vStaff->part()->preferSharpFlat());
+                        vKey = transposeKey(cKey, interval, vStaff->part()->preferSharpFlat());
                     }
                     newTpc1 = pitch2tpc(newPitch, cKey, Prefer::NEAREST);
-                    newTpc2 = pitch2tpc(newPitch - firstTiedNote->transposition(), key, Prefer::NEAREST);
+                    newTpc2 = pitch2tpc(newPitch - firstTiedNote->transposition(), vKey, Prefer::NEAREST);
                 }
             }
             break;
