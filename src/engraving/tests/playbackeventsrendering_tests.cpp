@@ -1643,7 +1643,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 /**
  * @brief PlaybackEventsRendererTests_Chord_Arpeggio
  * @details In this case we're gonna render a simple piece of score with a single measure,
- *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio articulation
+ *          which starts with the F4+A4+C4 16th chord marked by the Arpeggio articulation
  */
 TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 {
@@ -1661,7 +1661,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
-    int expectedOffset = 60000;
+    int expectedOffset = SEMI_QUAVER_NOTE_DURATION / 3;
 
     std::vector<timestamp_t> expectedTimestamp = {
         0,
@@ -1670,9 +1670,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
     };
 
     std::vector<duration_t> expectedDurations = {
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION - expectedOffset,
-        QUARTER_NOTE_DURATION - expectedOffset * 2
+        SEMI_QUAVER_NOTE_DURATION,
+        SEMI_QUAVER_NOTE_DURATION - expectedOffset,
+        SEMI_QUAVER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {

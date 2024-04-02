@@ -611,7 +611,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
     notifyAboutPartChanged(part);
 }
 
-void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
+void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable)
 {
     Part* part = partModifiable(instrumentKey.partId);
     if (!part) {
@@ -623,11 +623,13 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
-    startEdit();
-
-    score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset, part));
-
-    apply();
+    if (undoable) {
+        startEdit();
+        score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset, part));
+        apply();
+    } else {
+        instrument->setDrumset(&newDrumset);
+    }
 
     notifyAboutPartChanged(part);
 

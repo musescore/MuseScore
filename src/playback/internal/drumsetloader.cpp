@@ -119,6 +119,6 @@ void DrumsetLoader::replaceDrumset(INotationPtr notation, const InstrumentTrackI
         instrumentKey.partId = trackId.partId;
         instrumentKey.tick = Fraction::fromTicks(it->first);
 
-        notation->parts()->replaceDrumset(instrumentKey, drumset);
+        notation->parts()->replaceDrumset(instrumentKey, drumset, false /*undoable*/);
     }
 }

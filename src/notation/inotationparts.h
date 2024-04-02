@@ -77,7 +77,7 @@ public:
 
     virtual void replacePart(const ID& partId, Part* newPart) = 0;
     virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
-    virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) = 0;
+    virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset, bool undoable = true) = 0;
 
     virtual async::Notification partsChanged() const = 0;
     virtual async::Notification scoreOrderChanged() const = 0;
