@@ -18,30 +18,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (NOT MUE_BUILD_ACCESSIBILITY_MODULE)
+if (NOT MUSE_MODULE_ACCESSIBILITY)
     add_subdirectory(accessibility)
 endif()
 
-if (NOT MUE_BUILD_AUDIO_MODULE)
+if (NOT MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
 endif()
 
-if (NOT MUE_BUILD_MIDI_MODULE)
+if (NOT MUSE_MODULE_MIDI)
     add_subdirectory(midi)
 endif()
 
-if (NOT MUE_BUILD_MPE_MODULE)
+if (NOT MUSE_MODULE_MPE)
     add_subdirectory(mpe)
 endif()
 
-if (NOT MUE_BUILD_NETWORK_MODULE)
+if (NOT MUSE_MODULE_NETWORK)
     add_subdirectory(network)
 endif()
 
-if (NOT MUE_BUILD_SHORTCUTS_MODULE)
+if (NOT MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
 endif()
 
-if (NOT MUE_BUILD_VST_MODULE)
+if (NOT MUSE_MODULE_VST)
     add_subdirectory(vst)
 endif()

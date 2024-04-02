@@ -23,6 +23,8 @@
 
 #include "translation.h"
 
+#include "muse_framework_config.h"
+
 using namespace mu::appshell;
 
 FoldersPreferencesModel::FoldersPreferencesModel(QObject* parent)
@@ -105,7 +107,7 @@ void FoldersPreferencesModel::load()
                 audioConfiguration()->userSoundFontDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
-#ifdef MUE_BUILD_VST_MODULE
+#ifdef MU_MODULE_VST
         {
             FolderType::VST3, qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories

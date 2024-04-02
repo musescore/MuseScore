@@ -27,7 +27,7 @@
 #include <QStandardPaths>
 #include <QDir>
 
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
 #include "multiinstances/resourcelockguard.h"
 #endif
 
@@ -158,7 +158,7 @@ static Val compat_QVariantToVal(const QVariant& var)
 Settings::Items Settings::readItems() const
 {
     Items result;
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     mi::ReadResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
 #endif
     for (const QString& key : m_settings->allKeys()) {
@@ -190,7 +190,7 @@ std::string Settings::description(const Key& key) const
 void Settings::setSharedValue(const Key& key, const Val& value)
 {
     setLocalValue(key, value);
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     if (multiInstancesProvider()) {
         multiInstancesProvider()->settingsSetValue(key.key, value);
     }
@@ -224,7 +224,7 @@ void Settings::setLocalValue(const Key& key, const Val& value)
 
 void Settings::writeValue(const Key& key, const Val& value)
 {
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     mi::WriteResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
 #endif
     // TODO: implement writing/reading first part of key (module name)
@@ -302,7 +302,7 @@ void Settings::beginTransaction(bool notifyToOtherInstances)
     m_isTransactionStarted = true;
 
     UNUSED(notifyToOtherInstances)
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsBeginTransaction();
     }
@@ -331,7 +331,7 @@ void Settings::commitTransaction(bool notifyToOtherInstances)
     m_localSettings.clear();
 
     UNUSED(notifyToOtherInstances)
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsCommitTransaction();
     }
@@ -355,7 +355,7 @@ void Settings::rollbackTransaction(bool notifyToOtherInstances)
     m_localSettings.clear();
 
     UNUSED(notifyToOtherInstances)
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     if (notifyToOtherInstances && multiInstancesProvider()) {
         multiInstancesProvider()->settingsRollbackTransaction();
     }

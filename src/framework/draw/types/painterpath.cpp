@@ -38,7 +38,7 @@ static double angleForArc(double angle);
 void PainterPath::moveTo(const PointF& p)
 {
     if (!hasValidCoords(p)) {
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
         LOGW() << "PainterPath::moveTo: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -59,7 +59,7 @@ void PainterPath::moveTo(const PointF& p)
 void PainterPath::lineTo(const PointF& p)
 {
     if (!hasValidCoords(p)) {
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
         LOGW() << "PainterPath::lineTo: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -80,7 +80,7 @@ void PainterPath::lineTo(const PointF& p)
 void PainterPath::cubicTo(const PointF& ctrlPt1, const PointF& ctrlPt2, const PointF& endPt)
 {
     if (!hasValidCoords(ctrlPt1) || !hasValidCoords(ctrlPt2) || !hasValidCoords(endPt)) {
-   #ifdef MUE_ENABLE_DRAW_TRACE
+   #ifdef MUSE_MODULE_DRAW_TRACE
         static int count = 0;
         LOGW() << "[" << ++count << "] Points with invalid coordinates, ignoring it,"
                << " point1: " << ctrlPt1
@@ -158,7 +158,7 @@ PainterPath::Element PainterPath::elementAt(size_t i) const
 void PainterPath::addRect(const RectF& r)
 {
     if (!hasValidCoords(r)) {
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
         LOGW() << "PainterPath::addRect: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -183,7 +183,7 @@ void PainterPath::addRect(const RectF& r)
 void PainterPath::addEllipse(const RectF& boundingRect)
 {
     if (!hasValidCoords(boundingRect)) {
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
         LOGW() << "PainterPath::addEllipse: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -266,7 +266,7 @@ void PainterPath::arcMoveTo(const RectF& rect, double angle)
 void PainterPath::arcTo(const RectF& rect, double startAngle, double sweepLength)
 {
     if (!hasValidCoords(rect) || !isValidCoord(startAngle) || !isValidCoord(sweepLength)) {
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
         LOGW() << "PainterPath::arcTo: Adding point with invalid coordinates, ignoring call";
 #endif
         return;

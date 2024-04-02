@@ -123,7 +123,7 @@ private:
 
     void mapElement(double& nx, double& ny, TransformationType t) const;
 
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
     static void nanWarning(const std::string& func);
 #endif
 

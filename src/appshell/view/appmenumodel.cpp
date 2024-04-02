@@ -356,7 +356,7 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
         makeMenu(TranslatableString("appshell/menu/diagnostic", "&System"), systemItems, "menu-system")
     };
 
-#ifdef MUE_BUILD_MUSESAMPLER_MODULE
+#ifdef MUSE_MODULE_MUSESAMPLER
     MenuItemList museSamplerItems {
         makeMenuItem("musesampler-check"),
     };

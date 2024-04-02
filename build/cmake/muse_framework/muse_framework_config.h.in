@@ -1,0 +1,78 @@
+
+/* ================================ */
+/* Modules                          */
+/* ================================ */
+
+#cmakedefine MUSE_MODULE_ACCESSIBILITY 1
+#cmakedefine MUSE_MODULE_ACCESSIBILITY_TESTS 1
+#cmakedefine MUSE_MODULE_ACCESSIBILITY_API 1
+
+#cmakedefine MUSE_MODULE_ACTIONS 1
+#cmakedefine MUSE_MODULE_ACTIONS_TESTS 1
+#cmakedefine MUSE_MODULE_ACTIONS_API 1
+
+#cmakedefine MUSE_MODULE_AUDIO 1
+#cmakedefine MUSE_MODULE_AUDIO_TESTS 1
+#cmakedefine MUSE_MODULE_AUDIO_API 1
+#cmakedefine MUSE_MODULE_AUDIO_JACK 1
+#cmakedefine MUSE_MODULE_AUDIO_EXPORT 1
+
+#cmakedefine MUSE_MODULE_CLOUD 1
+#cmakedefine MUSE_MODULE_CLOUD_TESTS 1
+#cmakedefine MUSE_MODULE_CLOUD_API 1
+
+#cmakedefine MUSE_MODULE_DRAW 1
+#cmakedefine MUSE_MODULE_DRAW_TESTS 1
+#cmakedefine MUSE_MODULE_DRAW_API 1
+
+#cmakedefine MUSE_MODULE_EXTENSIONS 1
+#cmakedefine MUSE_MODULE_EXTENSIONS_TESTS 1
+#cmakedefine MUSE_MODULE_EXTENSIONS_API 1
+
+#cmakedefine MUSE_MODULE_GLOBAL 1
+#cmakedefine MUSE_MODULE_GLOBAL_TESTS 1
+#cmakedefine MUSE_MODULE_GLOBAL_API 1
+
+#cmakedefine MUSE_MODULE_LANGUAGES 1
+#cmakedefine MUSE_MODULE_LANGUAGES_TESTS 1
+#cmakedefine MUSE_MODULE_LANGUAGES_API 1
+
+#cmakedefine MUSE_MODULE_MIDI 1
+#cmakedefine MUSE_MODULE_MIDI_TESTS 1
+#cmakedefine MUSE_MODULE_MIDI_API 1
+
+#cmakedefine MUSE_MODULE_MPE 1
+#cmakedefine MUSE_MODULE_MPE_TESTS 1
+#cmakedefine MUSE_MODULE_MPE_API 1
+
+#cmakedefine MUSE_MODULE_MULTIINSTANCES 1
+#cmakedefine MUSE_MODULE_MULTIINSTANCES_TESTS 1
+#cmakedefine MUSE_MODULE_MULTIINSTANCES_API 1
+
+#cmakedefine MUSE_MODULE_MUSESAMPLER 1
+#cmakedefine MUSE_MODULE_MUSESAMPLER_TESTS 1
+#cmakedefine MUSE_MODULE_MUSESAMPLER_API 1
+
+#cmakedefine MUSE_MODULE_NETWORK 1
+#cmakedefine MUSE_MODULE_NETWORK_TESTS 1
+#cmakedefine MUSE_MODULE_NETWORK_API 1
+
+#cmakedefine MUSE_MODULE_SHORTCUTS 1
+#cmakedefine MUSE_MODULE_SHORTCUTS_TESTS 1
+#cmakedefine MUSE_MODULE_SHORTCUTS_API 1
+
+#cmakedefine MUSE_MODULE_UI 1
+#cmakedefine MUSE_MODULE_UI_TESTS 1
+#cmakedefine MUSE_MODULE_UI_API 1
+#cmakedefine MUSE_MODULE_UI_DISABLE_MODALITY 1
+
+#cmakedefine MUSE_MODULE_VST 1
+#cmakedefine MUSE_MODULE_VST_TESTS 1
+#cmakedefine MUSE_MODULE_VST_API 1
+
+#cmakedefine MUSE_MODULE_WORKSPACE 1
+#cmakedefine MUSE_MODULE_WORKSPACE_TESTS 1
+#cmakedefine MUSE_MODULE_WORKSPACE_API 1
+
+#cmakedefine MUSE_BUILD_UNIT_TESTS 1
+

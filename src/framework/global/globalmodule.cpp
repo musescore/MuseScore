@@ -34,7 +34,7 @@
 #include "internal/process.h"
 #include "internal/systeminfo.h"
 
-#ifdef MUE_BUILD_UI_MODULE
+#ifdef MUSE_MODULE_UI
 #include "internal/interactive.h"
 #endif
 
@@ -88,7 +88,7 @@ void GlobalModule::registerExports()
     ioc()->registerExport<IProcess>(moduleName(), new Process());
     ioc()->registerExport<api::IApiRegister>(moduleName(), new api::ApiRegister());
 
-#ifdef MUE_BUILD_UI_MODULE
+#ifdef MUSE_MODULE_UI
     ioc()->registerExport<IInteractive>(moduleName(), new Interactive());
 #endif
 }
@@ -158,7 +158,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     if (m_loggerLevel) {
         logger->setLevel(m_loggerLevel.value());
     } else {
-#ifdef MUE_ENABLE_LOGGER_DEBUGLEVEL
+#ifdef MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL
         logger->setLevel(mu::logger::Level::Debug);
 #else
         logger->setLevel(mu::logger::Level::Normal);

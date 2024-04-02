@@ -86,7 +86,7 @@ if (MUE_BUILD_UPDATE_MODULE)
     add_subdirectory(update)
 endif()
 
-if (MUE_BUILD_WORKSPACE_MODULE)
+if (MUSE_MODULE_WORKSPACE)
     add_subdirectory(workspacescene)
 endif()
 

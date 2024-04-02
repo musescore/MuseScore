@@ -37,7 +37,7 @@
 
 #include "log.h"
 
-#ifdef MUE_ENABLE_ACCESSIBILITY_TRACE
+#ifdef MUSE_MODULE_ACCESSIBILITY_TRACE
 #define MYLOG() LOGI()
 #else
 #define MYLOG() LOGN()
@@ -295,7 +295,7 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
 
 void AccessibilityController::sendEvent(QAccessibleEvent* ev)
 {
-#ifdef MUE_ENABLE_ACCESSIBILITY_TRACE
+#ifdef MUSE_MODULE_ACCESSIBILITY_TRACE
     AccessibleObject* obj = qobject_cast<AccessibleObject*>(ev->object());
     MYLOG() << "object: " << obj->item()->accessibleName() << ", event: " << int(ev->type());
 #endif

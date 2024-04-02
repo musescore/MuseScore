@@ -43,9 +43,4 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/musesampleractioncontroller.h
     )
 
-if (MUSESAMPLER_SRC_PATH)
-    add_subdirectory("ms_src")
-    set(MODULE_LINK ms_src)
-endif()
-
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

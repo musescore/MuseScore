@@ -242,7 +242,7 @@ void PopupView::doOpen()
         }
 
         qWindow->setFlag(Qt::FramelessWindowHint, m_frameless);
-#ifdef MUE_DISABLE_UI_MODALITY
+#ifdef MUSE_MODULE_UI_DISABLE_MODALITY
         qWindow->setModality(Qt::NonModal);
 #endif
         m_window->setResizable(m_resizable);

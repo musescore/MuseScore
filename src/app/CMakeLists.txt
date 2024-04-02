@@ -152,7 +152,7 @@ set(LINK_LIB
     update
     )
 
-if (MUE_BUILD_UI_MODULE)
+if (MUSE_MODULE_UI)
     list(APPEND LINK_LIB ui)
     list(APPEND LINK_LIB uicomponents)
     list(APPEND LINK_LIB dockwindow)
@@ -171,7 +171,7 @@ if (NOT CC_IS_EMSCRIPTEN)
     list(APPEND LINK_LIB languages)
     list(APPEND LINK_LIB multiinstances)
 
-    if (MUE_BUILD_EXTENSIONS_MODULE)
+    if (MUSE_MODULE_EXTENSIONS)
         list(APPEND LINK_LIB extensions)
     endif()
 
@@ -206,9 +206,9 @@ if (MUE_BUILD_AUTOBOT_MODULE)
     list(APPEND LINK_LIB autobot)
 endif()
 
-if (MUE_BUILD_MUSESAMPLER_MODULE)
+if (MUSE_MODULE_MUSESAMPLER)
     list(APPEND LINK_LIB musesampler)
-endif(MUE_BUILD_MUSESAMPLER_MODULE)
+endif()
 
 set (MSCORE_APPEND_SRC)
 

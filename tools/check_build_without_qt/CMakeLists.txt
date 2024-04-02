@@ -39,6 +39,8 @@ add_definitions(
     -DMUSESCORE_INSTALL_NAME=""
 )
 
+configure_file(${MU_ROOT}/build/cmake/muse_framework/muse_framework_config.h.in muse_framework_config.h )
+
 set(GLOBAL_NO_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/framework/global global)
 

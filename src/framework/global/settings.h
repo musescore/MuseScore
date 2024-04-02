@@ -28,7 +28,8 @@
 #include "async/channel.h"
 #include "io/path.h"
 
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#include "muse_framework_config.h"
+#ifdef MUSE_MODULE_MULTIINSTANCES
 #include "modularity/ioc.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #endif
@@ -43,7 +44,7 @@ class QSettings;
 namespace mu {
 class Settings
 {
-#ifdef MU_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
     Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
 #endif
 public:
