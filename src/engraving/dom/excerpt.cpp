@@ -159,6 +159,11 @@ async::Notification Excerpt::nameChanged() const
     return m_nameChanged;
 }
 
+bool Excerpt::hasFileName() const
+{
+    return !m_fileName.empty();
+}
+
 const String& Excerpt::fileName() const
 {
     IF_ASSERT_FAILED(!m_fileName.empty()) {
