@@ -487,7 +487,7 @@ PointF LineSegment::deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg
 ///   Helper function for anchors rebasing when dragging.
 //---------------------------------------------------------
 
-PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg, staff_idx_t staffIndex)
+PointF LineSegment::deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg)
 {
     if (oldSeg == newSeg) {
         return PointF();
