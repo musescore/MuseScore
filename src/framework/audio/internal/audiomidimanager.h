@@ -29,17 +29,17 @@
 #include "framework/midi/midimodule.h"
 #include "iaudiodriver.h"
 
-#include "audiodeviceslistener.h"
+#include "platform/lin/audiodeviceslistener.h"
 #include "playback/iplaybackcontroller.h"
 
 namespace muse::audio {
-class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
+class AudioMidiManager : public IAudioDriver, public async::Asyncable
 {
     Inject<mu::playback::IPlaybackController> playbackController;
     Inject<muse::midi::IMidiInPort> midiInPort;
 public:
-    LinuxAudioDriver();
-    ~LinuxAudioDriver();
+    AudioMidiManager();
+    ~AudioMidiManager();
 
     void init() override;
 

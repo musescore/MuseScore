@@ -46,8 +46,8 @@ elseif(OS_IS_LIN OR OS_IS_FBSD OR MINGW)
            )
     endif(MUSE_MODULE_AUDIO_JACK)
     set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/audiomidimanager.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.cpp
