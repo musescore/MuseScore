@@ -122,12 +122,12 @@ else()
 
 endif()
 
-if (MUE_ENABLE_DRAW_TRACE)
-    set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_DRAW_TRACE)
+if (MUSE_MODULE_DRAW_TRACE)
+    set(MODULE_DEF ${MODULE_DEF} -DMUSE_MODULE_DRAW_TRACE)
 endif()
 
 include(SetupModule)
 
-if (MUE_BUILD_DRAW_TESTS)
+if (MUSE_MODULE_DRAW_TESTS)
     add_subdirectory(tests)
 endif()

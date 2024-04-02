@@ -31,7 +31,9 @@
 
 #include "framework/global/globalmodule.h"
 
-#ifdef MUE_BUILD_ACCESSIBILITY_MODULE
+#include "muse_framework_config.h"
+
+#ifdef MUSE_MODULE_ACCESSIBILITY
 #include "framework/accessibility/accessibilitymodule.h"
 #else
 #include "stubs/framework/accessibility/accessibilitystubmodule.h"
@@ -39,7 +41,7 @@
 
 #include "framework/actions/actionsmodule.h"
 
-#ifdef MUE_BUILD_AUDIO_MODULE
+#ifdef MUSE_MODULE_AUDIO
 #include "framework/audio/audiomodule.h"
 #else
 #include "stubs/framework/audio/audiostubmodule.h"
@@ -47,41 +49,41 @@
 
 #include "framework/draw/drawmodule.h"
 
-#ifdef MUE_BUILD_MIDI_MODULE
+#ifdef MUSE_MODULE_MIDI
 #include "framework/midi/midimodule.h"
 #else
 #include "stubs/framework/midi/midistubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_MPE_MODULE
+#ifdef MUSE_MODULE_MPE
 #include "framework/mpe/mpemodule.h"
 #else
 #include "stubs/framework/mpe/mpestubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_MUSESAMPLER_MODULE
+#ifdef MUSE_MODULE_MUSESAMPLER
 #include "framework/musesampler/musesamplermodule.h"
 #endif
 
-#ifdef MUE_BUILD_NETWORK_MODULE
+#ifdef MUSE_MODULE_NETWORK
 #include "framework/network/networkmodule.h"
 #else
 #include "stubs/framework/network/networkstubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_SHORTCUTS_MODULE
+#ifdef MUSE_MODULE_SHORTCUTS
 #include "framework/shortcuts/shortcutsmodule.h"
 #else
 #include "stubs/framework/shortcuts/shortcutsstubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_UI_MODULE
+#ifdef MUSE_MODULE_UI
 #include "framework/dockwindow/dockmodule.h"
 #include "framework/ui/uimodule.h"
 #include "framework/uicomponents/uicomponentsmodule.h"
 #endif
 
-#ifdef MUE_BUILD_VST_MODULE
+#ifdef MUSE_MODULE_VST
 #include "framework/vst/vstmodule.h"
 #else
 #include "stubs/framework/vst/vststubmodule.h"
@@ -100,7 +102,7 @@
 #include "stubs/braille/braillestubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_CLOUD_MODULE
+#ifdef MUSE_MODULE_CLOUD
 #include "cloud/cloudmodule.h"
 #else
 #include "stubs/cloud/cloudstubmodule.h"
@@ -145,7 +147,7 @@
 #include "stubs/instrumentsscene/instrumentsscenestubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_LANGUAGES_MODULE
+#ifdef MUSE_MODULE_LANGUAGES
 #include "languages/languagesmodule.h"
 #else
 #include "stubs/languages/languagesstubmodule.h"
@@ -157,7 +159,7 @@
 #include "stubs/learn/learnmodule.h"
 #endif
 
-#ifdef MUE_BUILD_MULTIINSTANCES_MODULE
+#ifdef MUSE_MODULE_MULTIINSTANCES
 #include "multiinstances/multiinstancesmodule.h"
 #else
 #include "stubs/multiinstances/multiinstancesstubmodule.h"
@@ -181,7 +183,7 @@
 #include "stubs/playback/playbackstubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_EXTENSIONS_MODULE
+#ifdef MUSE_MODULE_EXTENSIONS
 #include "extensions/extensionsmodule.h"
 #endif
 
@@ -199,7 +201,7 @@
 #include "stubs/update/updatestubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_WORKSPACE_MODULE
+#ifdef MUSE_MODULE_WORKSPACE
 #include "workspace/workspacemodule.h"
 #include "workspacescene/workspacescenemodule.h"
 #else
@@ -217,8 +219,6 @@
 #include <windows.h>
 #include <shellapi.h>
 #endif
-
-#include <iostream>
 
 #ifndef MUE_BUILD_CRASHPAD_CLIENT
 static void crashCallback(int signum)
@@ -266,12 +266,12 @@ int main(int argc, char** argv)
     app.addModule(new mu::draw::DrawModule());
     app.addModule(new mu::midi::MidiModule());
     app.addModule(new mu::mpe::MpeModule());
-#ifdef MUE_BUILD_MUSESAMPLER_MODULE
+#ifdef MUSE_MODULE_MUSESAMPLER
     app.addModule(new mu::musesampler::MuseSamplerModule());
 #endif
     app.addModule(new mu::network::NetworkModule());
     app.addModule(new mu::shortcuts::ShortcutsModule());
-#ifdef MUE_BUILD_UI_MODULE
+#ifdef MUSE_MODULE_UI
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
     app.addModule(new mu::dock::DockModule());
@@ -328,7 +328,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::palette::PaletteModule());
     app.addModule(new mu::playback::PlaybackModule());
-#ifdef MUE_BUILD_EXTENSIONS_MODULE
+#ifdef MUSE_MODULE_EXTENSIONS
     app.addModule(new mu::extensions::ExtensionsModule());
 #endif
     app.addModule(new mu::print::PrintModule());

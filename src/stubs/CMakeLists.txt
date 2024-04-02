@@ -24,7 +24,7 @@ if (NOT MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
 endif()
 
-if (NOT MUE_BUILD_CLOUD_MODULE)
+if (NOT MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()
 
@@ -36,7 +36,7 @@ if (NOT MUE_BUILD_INSTRUMENTSSCENE_MODULE)
     add_subdirectory(instrumentsscene)
 endif()
 
-if (NOT MUE_BUILD_LANGUAGES_MODULE)
+if (NOT MUSE_MODULE_LANGUAGES)
     add_subdirectory(languages)
 endif()
 
@@ -44,7 +44,7 @@ if (NOT MUE_BUILD_LEARN_MODULE)
     add_subdirectory(learn)
 endif()
 
-if (NOT MUE_BUILD_MULTIINSTANCES_MODULE)
+if (NOT MUSE_MODULE_MULTIINSTANCES)
     add_subdirectory(multiinstances)
 endif()
 
@@ -68,7 +68,7 @@ if (NOT MUE_BUILD_UPDATE_MODULE)
     add_subdirectory(update)
 endif()
 
-if (NOT MUE_BUILD_WORKSPACE_MODULE)
+if (NOT MUSE_MODULE_WORKSPACE)
     add_subdirectory(workspace)
     add_subdirectory(workspacescene)
 endif()

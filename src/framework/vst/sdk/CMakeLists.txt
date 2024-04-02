@@ -20,9 +20,11 @@
 
 set(MODULE vst_sdk_3)
 
-if (NOT VST3_SDK_PATH)
+if (NOT MUSE_MODULE_VST_VST3_SDK_PATH)
     message(FATAL_ERROR "VST3_SDK path is not setted")
 endif()
+
+set(VST3_SDK_PATH ${MUSE_MODULE_VST_VST3_SDK_PATH})
 
 include(GetPlatformInfo)
 include(GetCompilerInfo)

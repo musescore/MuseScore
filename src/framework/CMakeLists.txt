@@ -18,65 +18,65 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-if (MUE_BUILD_ACCESSIBILITY_MODULE)
+if (MUSE_MODULE_ACCESSIBILITY)
     add_subdirectory(accessibility)
 endif()
 
 add_subdirectory(actions)
 
-if (MUE_BUILD_AUDIO_MODULE)
+if (MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
 endif()
 
-if (MUE_BUILD_CLOUD_MODULE)
+if (MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()
 
 add_subdirectory(draw)
 
-if (MUE_BUILD_MIDI_MODULE)
+if (MUSE_MODULE_MIDI)
     add_subdirectory(midi)
 endif()
 
-if (MUE_BUILD_MPE_MODULE)
+if (MUSE_MODULE_MPE)
     add_subdirectory(mpe)
 endif()
 
-if (MUE_BUILD_MUSESAMPLER_MODULE)
+if (MUSE_MODULE_MUSESAMPLER)
     add_subdirectory(musesampler)
 endif()
 
-if (MUE_BUILD_UI_MODULE)
-    add_subdirectory(dockwindow)
+if (MUSE_MODULE_UI)
     add_subdirectory(ui)
     add_subdirectory(uicomponents)
+    add_subdirectory(dockwindow)
 endif()
 
-if (MUE_BUILD_NETWORK_MODULE)
+if (MUSE_MODULE_NETWORK)
     add_subdirectory(network)
 endif()
 
-if (MUE_BUILD_SHORTCUTS_MODULE)
+if (MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
 endif()
 
-if (MUE_BUILD_MULTIINSTANCES_MODULE)
+if (MUSE_MODULE_MULTIINSTANCES)
     add_subdirectory(multiinstances)
 endif()
 
-if (MUE_BUILD_LANGUAGES_MODULE)
+if (MUSE_MODULE_LANGUAGES)
     add_subdirectory(languages)
 endif()
 
-if (MUE_BUILD_EXTENSIONS_MODULE)
+if (MUSE_MODULE_EXTENSIONS)
     add_subdirectory(extensions)
 endif()
 
-if (MUE_BUILD_WORKSPACE_MODULE)
+if (MUSE_MODULE_WORKSPACE)
     add_subdirectory(workspace)
 endif()
 
-if (MUE_BUILD_VST_MODULE)
+if (MUSE_MODULE_VST)
     add_subdirectory(vst)
 endif()
 

@@ -86,7 +86,7 @@ void BufferedPaintProvider::beginObject(const std::string& name)
 
     ensureItemInit(ch);
 
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
     //m_drawObjectsLogger->beginObject(name);
 #endif
 }
@@ -107,7 +107,7 @@ void BufferedPaintProvider::endObject()
 
     --m_itemLevel;
 
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
     //m_drawObjectsLogger->endObject();
 #endif
 }

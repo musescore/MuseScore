@@ -20,7 +20,7 @@
 
 set(MODULE_TEST audio_test)
 
-if (NOT MUE_ENABLE_AUDIO_JACK)
+if (NOT MUSE_MODULE_AUDIO_JACK)
 
 if(OS_IS_FBSD)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /usr/local/lib/libasound.so")

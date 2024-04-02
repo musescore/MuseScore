@@ -37,14 +37,14 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
 elseif(OS_IS_LIN OR OS_IS_FBSD)
-    if (MUE_ENABLE_AUDIO_JACK)
+    if (MUSE_MODULE_AUDIO_JACK)
         set(DRIVER_SRC
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.h
         )
-    else (MUE_ENABLE_AUDIO_JACK)
+    else()
         set(DRIVER_SRC
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
@@ -248,7 +248,7 @@ set(MODULE_LINK
     fluidsynth
     )
 
-if (MUE_ENABLE_AUDIO_EXPORT)
+if (MUSE_MODULE_AUDIO_EXPORT)
     set(MODULE_SRC
         ${MODULE_SRC}
 
@@ -289,7 +289,7 @@ else ()
         )
 endif()
 
-if (MUE_ENABLE_AUDIO_JACK)
+if (MUSE_MODULE_AUDIO_JACK)
     find_package(Jack REQUIRED)
     set(MODULE_INCLUDE ${MODULE_INCLUDE} ${JACK_INCLUDE_DIRS} )
     set(MODULE_LINK ${MODULE_LINK} ${JACK_LIBRARIES} pthread )
@@ -314,6 +314,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
-if (MUE_BUILD_AUDIO_TESTS)
+if (MUSE_MODULE_AUDIO_TESTS)
     add_subdirectory(tests)
 endif()

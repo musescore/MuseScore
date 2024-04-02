@@ -294,7 +294,7 @@ private:
 };
 }
 
-#ifdef MUE_ENABLE_DRAW_TRACE
+#ifdef MUSE_MODULE_DRAW_TRACE
     #define TRACE_ITEM_DRAW \
     mu::draw::PainterItemMarker __drawItemMarker(painter, typeName())
 
