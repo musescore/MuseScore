@@ -40,6 +40,7 @@
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
+#include "anchors.h"
 #include "audio.h"
 #include "beam.h"
 #include "box.h"
@@ -655,7 +656,7 @@ Measure* Score::pos2measure(const PointF& p, staff_idx_t* rst, int* pitch, Segme
 ///              \b output: new segment for drag position
 //---------------------------------------------------------
 
-void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, double spacingFactor) const
+void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, double spacingFactor, bool allowTimeAnchor) const
 {
     const System* preferredSystem = (*seg) ? (*seg)->system() : nullptr;
     Measure* m = searchMeasure(p, preferredSystem, spacingFactor);
@@ -676,7 +677,7 @@ void Score::dragPosition(const PointF& p, staff_idx_t* rst, Segment** seg, doubl
     }
     track_idx_t etrack = staff2track(i + 1);
 
-    constexpr SegmentType st = SegmentType::ChordRest;
+    SegmentType st = allowTimeAnchor ? SegmentType::ChordRest | SegmentType::TimeTick : SegmentType::ChordRest;
     Segment* segment = m->searchSegment(pppp.x(), st, strack, etrack, *seg, spacingFactor);
     if (segment) {
         *rst = i;
@@ -744,6 +745,17 @@ void Score::setShowSoundFlags(bool v)
 void Score::setMarkIrregularMeasures(bool v)
 {
     m_markIrregularMeasures = v;
+}
+
+void Score::updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick)
+{
+    m_showAnchors.staffIdx = staffIdx;
+    if (m_showAnchors.startTick == Fraction(-1, 1) || startTick < m_showAnchors.startTick) {
+        m_showAnchors.startTick = startTick;
+    }
+    if (m_showAnchors.endTick == Fraction(-1, 1) || endTick > m_showAnchors.endTick) {
+        m_showAnchors.endTick = endTick;
+    }
 }
 
 //---------------------------------------------------------

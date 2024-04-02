@@ -1925,6 +1925,9 @@ void MeasureLayout::removeSystemTrailer(Measure* m, LayoutContext& ctx)
 {
     bool changed = false;
     for (Segment* seg = m->last(); seg != m->first(); seg = seg->prev()) {
+        if (seg->isTimeTickType()) {
+            continue;
+        }
         if (!seg->trailer()) {
             break;
         }
@@ -2179,6 +2182,42 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     computeWidth(m, ctx, s, x, isSystemHeader, minTicks, maxTicks, stretchCoeff, overrideMinMeasureWidth);
 }
 
+void MeasureLayout::layoutTimeTickAnchors(Measure* m, LayoutContext& ctx)
+{
+    bool darker = false;
+    for (Segment& segment : m->segments()) {
+        if (!segment.isTimeTickType()) {
+            continue;
+        }
+
+        Segment* prevSeg = segment.prev();
+        while (prevSeg && !prevSeg->isChordRestType()) {
+            prevSeg = prevSeg->prev();
+        }
+        if (!prevSeg || prevSeg->ticks().isZero()) {
+            continue;
+        }
+
+        Fraction prevSegDuration = prevSeg->ticks();
+        Fraction thisDuration = segment.ticks();
+        Fraction relativeTick = segment.rtick() - prevSeg->rtick();
+
+        double relativeX = prevSeg->width() * (relativeTick.toDouble() / prevSeg->ticks().toDouble());
+        double relativeWidth = prevSeg->width() * (thisDuration.toDouble() / prevSegDuration.toDouble());
+
+        segment.mutldata()->setPosX(prevSeg->x() + relativeX);
+        segment.setWidth(relativeWidth);
+
+        for (EngravingItem* item : segment.elist()) {
+            if (item) {
+                TLayout::layoutItem(item, ctx);
+                toTimeTickAnchor(item)->mutldata()->setDarker(darker);
+            }
+        }
+        darker = !darker;
+    }
+}
+
 //---------------------------------------------------------
 //   computeWidth
 //   Computes the width of a measure depending on note durations
@@ -2214,7 +2253,8 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
         // skipped in computeMinWidth() -- the only way this would be an issue here is
         // if this method was called specifically with the invisible segment specified
         // which I'm pretty sure doesn't happen at this point. still...
-        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != m->firstEnabled())) {
+        if (!s->enabled() || !s->visible() || s->allElementsInvisible() || (s->isRightAligned() && s != m->firstEnabled())
+            || s->isTimeTickType()) {
             s->setWidth(0);
             s = s->next();
             continue;

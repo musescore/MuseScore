@@ -351,7 +351,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::AVOID_BARLINES,          false, "avoidBarLines",         P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "avoid barlines") },
     { Pid::DYNAMICS_SIZE,           false, "dynamicsSize",          P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "dynamic size") },
     { Pid::CENTER_ON_NOTEHEAD,      false, "centerOnNotehead",      P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "use text alignment") },
-    { Pid::SNAP_TO_DYNAMICS,         false, "snapToDynamics",        P_TYPE::BOOL,              PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "snap expression") },
+    { Pid::SNAP_TO_DYNAMICS,         false, "snapToDynamics",       P_TYPE::BOOL,               PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "snap expression") },
+    { Pid::ANCHOR_TO_END_OF_PREVIOUS, true, "anchorToEndOfPrevious", P_TYPE::BOOL,              PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "anchor to end of previous") },
 
     { Pid::POS_ABOVE,               false, "posAbove",              P_TYPE::MILLIMETRE,         PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "position above") },
 

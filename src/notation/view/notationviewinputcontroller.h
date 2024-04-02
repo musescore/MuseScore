@@ -119,6 +119,7 @@ public:
     void hoverMoveEvent(QHoverEvent* event);
     bool shortcutOverrideEvent(QKeyEvent* event);
     void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
     void inputMethodEvent(QInputMethodEvent* event);
 
     bool canHandleInputMethodQuery(Qt::InputMethodQuery query) const;

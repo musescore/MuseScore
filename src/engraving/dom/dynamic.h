@@ -72,9 +72,16 @@ public:
     double customTextOffset() const;
 
     bool isEditable() const override { return true; }
+    bool isEditAllowed(EditData&) const override;
     void startEdit(EditData&) override;
+    bool edit(EditData&) override;
+    bool editNonTextual(EditData&) override;
+    void editDrag(EditData&) override;
     void endEdit(EditData&) override;
     void reset() override;
+    bool needStartEditingAfterSelecting() const override { return true; }
+
+    bool allowTimeAnchor() const override { return true; }
 
     void setVelocity(int v) { m_velocity = v; }
     int velocity() const;
@@ -116,11 +123,18 @@ public:
 
     static const std::vector<Dyn>& dynamicList() { return DYN_LIST; }
 
+    bool anchorToEndOfPrevious() const { return m_anchorToEndOfPrevious; }
+    void setAnchorToEndOfPrevious(bool v) { m_anchorToEndOfPrevious = v; }
+
 private:
 
     M_PROPERTY(bool, avoidBarLines, setAvoidBarLines)
     M_PROPERTY(double, dynamicsSize, setDynamicsSize)
     M_PROPERTY(bool, centerOnNotehead, setCenterOnNotehead)
+
+    bool changeTimeAnchorType(const EditData& ed);
+    bool moveSegment(const EditData& ed);
+    bool nudge(const EditData& ed);
 
     DynamicType m_dynamicType = DynamicType::OTHER;
     Expression* m_snappedExpression = nullptr;
@@ -133,9 +147,9 @@ private:
     int m_changeInVelocity = 128;
     DynamicSpeed m_velChangeSpeed = DynamicSpeed::NORMAL;
 
-    mu::RectF drag(EditData&) override;
-
     static const std::vector<Dyn> DYN_LIST;
+
+    bool m_anchorToEndOfPrevious = false;
 };
 } // namespace mu::engraving
 

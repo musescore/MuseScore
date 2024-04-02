@@ -242,9 +242,6 @@
             <BeamMode>auto</BeamMode>
             <durationType>half</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           <Spanner type="Ottava">
             <prev>
               <location>
@@ -252,6 +249,9 @@
                 </location>
               </prev>
             </Spanner>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -439,9 +439,6 @@
             <BeamMode>auto</BeamMode>
             <durationType>half</durationType>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           <Spanner type="Ottava">
             <prev>
               <location>
@@ -449,6 +446,9 @@
                 </location>
               </prev>
             </Spanner>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

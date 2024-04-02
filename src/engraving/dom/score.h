@@ -141,6 +141,7 @@ class ShadowNote;
 
 struct Interval;
 struct NoteVal;
+struct ShowAnchors;
 
 enum class BeatType : char;
 enum class Key;
@@ -209,6 +210,19 @@ struct Position {
 enum class PlayMode : char {
     SYNTHESIZER,
     AUDIO
+};
+
+struct ShowAnchors {
+    staff_idx_t staffIdx;
+    Fraction startTick;
+    Fraction endTick;
+
+    void reset()
+    {
+        staffIdx = mu::nidx;
+        startTick = Fraction(-1, 1);
+        endTick = Fraction(-1, 1);
+    }
 };
 
 //---------------------------------------------------------------------------------------
@@ -379,7 +393,7 @@ public:
     bool isSystemObjectStaff(Staff* staff) const;
 
     Measure* pos2measure(const mu::PointF&, staff_idx_t* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
-    void dragPosition(const mu::PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5) const;
+    void dragPosition(const mu::PointF&, staff_idx_t* staffIdx, Segment**, double spacingFactor = 0.5, bool allowTimeAnchor = false) const;
 
     void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true, bool ctrlModifier = false,
                         EngravingItem* elementToRelink = nullptr);
@@ -554,6 +568,10 @@ public:
     void setMarkIrregularMeasures(bool v);
     void setShowInstrumentNames(bool v) { m_showInstrumentNames = v; }
 
+    void hideAnchors() { m_showAnchors.reset(); }
+    void updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick);
+    const ShowAnchors& showAnchors() const { return m_showAnchors; }
+
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     std::set<ChordRest*> getSelectedChordRests() const;
@@ -584,8 +602,8 @@ public:
     Segment* tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const;
     Segment* tick2segmentMM(const Fraction& tick) const;
     Segment* tick2segmentMM(const Fraction& tick, bool first) const;
-    Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false, SegmentType st = SegmentType::ChordRest) const;
-    Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
+    Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false, SegmentType segType = SegmentType::ChordRest) const;
+    Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false, SegmentType segType = SegmentType::ChordRest) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
 
     void setUpTempoMapLater();
@@ -873,6 +891,9 @@ public:
     void addUnmanagedSpanner(Spanner*);
     void removeUnmanagedSpanner(Spanner*);
 
+    void addHairpinToChordRest(Hairpin* hairpin, ChordRest* chordRest);
+    void addHairpinToDynamic(Hairpin* hairpin, Dynamic* dynamic);
+
     Hairpin* addHairpin(HairpinType, const Fraction& tickStart, const Fraction& tickEnd, track_idx_t track);
     Hairpin* addHairpin(HairpinType, ChordRest* cr1, ChordRest* cr2 = nullptr);
 
@@ -1078,6 +1099,8 @@ private:
     bool m_showInstrumentNames = true;
     bool m_printing = false;                // True if we are drawing to a printer
     bool m_savedCapture = false;            // True if we saved an image capture
+
+    ShowAnchors m_showAnchors;
 
     ScoreOrder m_scoreOrder;                 // used for score ordering
     bool m_resetAutoplace = false;

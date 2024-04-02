@@ -45,6 +45,7 @@
 #include "dom/note.h"
 #include "dom/ornament.h"
 #include "dom/part.h"
+#include "dom/pedal.h"
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/slur.h"
@@ -753,6 +754,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         Measure* m = toMeasure(mb);
         MeasureLayout::layoutMeasureNumber(m, ctx);
         MeasureLayout::layoutMMRestRange(m, ctx);
+        MeasureLayout::layoutTimeTickAnchors(m, ctx);
 
         // in continuous view, entire score is one system
         // but we only need to process the range
@@ -1108,6 +1110,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         Spanner* sp = interval.value;
         if (sp->staff() && !sp->staff()->show()) {
             continue;
+        }
+
+        if (sp->tick2() == stick && sp->isPedal() && toPedal(sp)->connect45HookToNext()) {
+            pedal.push_back(sp);
         }
 
         if (sp->tick() < etick && sp->tick2() > stick) {

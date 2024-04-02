@@ -121,9 +121,13 @@ public:
     Segment* next1MM() const;
     Segment* next1MMenabled() const;
     Segment* next1(SegmentType) const;
+    Segment* next1ChordRestOrTimeTick() const;
+    Segment* next1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest);
     Segment* next1MM(SegmentType) const;
 
     Segment* prev1() const;
+    Segment* prev1ChordRestOrTimeTick() const;
+    Segment* prev1WithElemsOnStaff(staff_idx_t staffIdx, SegmentType segType = SegmentType::ChordRest);
     Segment* prev1enabled() const;
     Segment* prev1MM() const;
     Segment* prev1MMenabled() const;
@@ -275,7 +279,10 @@ public:
     bool isEndBarLineType() const { return m_segmentType == SegmentType::EndBarLine; }
     bool isKeySigAnnounceType() const { return m_segmentType == SegmentType::KeySigAnnounce; }
     bool isTimeSigAnnounceType() const { return m_segmentType == SegmentType::TimeSigAnnounce; }
+    bool isTimeTickType() const { return m_segmentType == SegmentType::TimeTick; }
     bool isRightAligned() const { return isClefType() || isBreathType(); }
+
+    bool canWriteSpannerStartEnd(track_idx_t track) const;
 
     Fraction shortestChordRest() const;
     void computeCrossBeamType(Segment* nextSeg);
@@ -292,7 +299,7 @@ public:
 
     void checkEmpty() const;
 
-    static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest;   // segment types which may have non-zero tick length
+    static constexpr SegmentType durationSegmentsMask = SegmentType::ChordRest | SegmentType::TimeTick;   // segment types which may have non-zero tick length
 
 private:
 

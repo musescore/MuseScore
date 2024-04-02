@@ -154,7 +154,8 @@
               </Pedal>
             <next>
               <location>
-                <measures>2</measures>
+                <measures>1</measures>
+                <fractions>1/2</fractions>
                 </location>
               </next>
             </Spanner>
@@ -183,6 +184,14 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -194,20 +203,14 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
               </Pedal>
             <next>
               <location>
-                <measures>2</measures>
+                <measures>1</measures>
+                <fractions>1/2</fractions>
                 </location>
               </next>
             </Spanner>
@@ -236,6 +239,14 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -247,13 +258,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
@@ -261,7 +265,8 @@
               </Pedal>
             <next>
               <location>
-                <measures>2</measures>
+                <measures>1</measures>
+                <fractions>1/2</fractions>
                 </location>
               </next>
             </Spanner>
@@ -290,6 +295,14 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -301,13 +314,6 @@
         </Measure>
       <Measure>
         <voice>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-2</measures>
-                </location>
-              </prev>
-            </Spanner>
           <Spanner type="Pedal">
             <Pedal>
               <lineVisible>0</lineVisible>
@@ -316,7 +322,6 @@
             <next>
               <location>
                 <measures>1</measures>
-                <fractions>1/1</fractions>
                 </location>
               </next>
             </Spanner>
@@ -339,6 +344,13 @@
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>
@@ -357,14 +369,6 @@
           <BarLine>
             <subtype>end</subtype>
             </BarLine>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>-1/1</fractions>
-                </location>
-              </prev>
-            </Spanner>
           </voice>
         </Measure>
       </Staff>

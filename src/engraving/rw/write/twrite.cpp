@@ -1116,6 +1116,7 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
     writeProperty(item, xml, Pid::PLAY);
+    writeProperty(item, xml, Pid::ANCHOR_TO_END_OF_PREVIOUS);
 
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
@@ -2108,6 +2109,7 @@ void TWrite::write(const Location* item, XmlWriter& xml, WriteContext&)
     xml.tagFraction("fractions", item->frac().reduced(), relDefaults.frac());
     xml.tag("grace", item->graceIndex(), relDefaults.graceIndex());
     xml.tag("notes", item->note(), relDefaults.note());
+    xml.tag("timeTick", item->isTimeTick(), false);
     xml.endElement();
 }
 
@@ -3155,6 +3157,7 @@ static bool writeVoiceMove(XmlWriter& xml, WriteContext& ctx, Segment* seg, cons
         dest.setTrack(static_cast<int>(track));
 
         dest.toRelative(curr);
+        dest.setIsTimeTick(seg->isTimeTickType());
         TWrite::write(&dest, xml, ctx);
 
         ctx.setCurTick(seg->tick());
@@ -3285,7 +3288,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
             Measure* m = segment->measure();
             // don't write spanners for multi measure rests
 
-            if ((!(m && m->isMMRest())) && segment->isChordRestType()) {
+            if ((!(m && m->isMMRest())) && segment->canWriteSpannerStartEnd(track)) {
                 for (Spanner* s : spanners) {
                     if (s->track() == track) {
                         bool end = false;
@@ -3371,19 +3374,6 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                 }
                 if (segment->segmentType() == SegmentType::ChordRest) {
                     crWritten = true;
-                }
-            }
-        }
-
-        //write spanner ending after the last segment, on the last tick
-        if (clip || eseg == 0) {
-            for (Spanner* s : spanners) {
-                if ((s->tick2() == endTick)
-                    && !s->isSlur()
-                    && (s->track2() == track || (s->track2() == mu::nidx && s->track() == track))
-                    && (!clip || s->tick() >= sseg->tick())
-                    ) {
-                    writeSpannerEnd(s, xml, ctx, score->lastMeasure(), track, endTick);
                 }
             }
         }

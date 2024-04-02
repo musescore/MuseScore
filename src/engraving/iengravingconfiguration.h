@@ -65,6 +65,9 @@ public:
     virtual draw::Color noteBackgroundColor() const = 0;
     virtual draw::Color fontPrimaryColor() const = 0;
 
+    virtual draw::Color timeTickAnchorColorLighter() const = 0;
+    virtual draw::Color timeTickAnchorColorDarker() const = 0;
+
     virtual double guiScaling() const = 0;
 
     virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;

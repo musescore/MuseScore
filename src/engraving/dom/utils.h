@@ -64,8 +64,8 @@ int diatonicUpDown(Key, int pitch, int steps);
 
 extern Note* nextChordNote(Note* note);
 extern Note* prevChordNote(Note* note);
-extern Segment* nextSeg1(Segment* s, track_idx_t& track);
-extern Segment* prevSeg1(Segment* seg, track_idx_t& track);
+extern Segment* nextSeg1(Segment* s);
+extern Segment* prevSeg1(Segment* seg);
 
 extern Note* searchTieNote(Note* note);
 extern Note* searchTieNote114(Note* note);

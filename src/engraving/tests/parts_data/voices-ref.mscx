@@ -267,6 +267,7 @@
             </Rest>
           <location>
             <fractions>-3/4</fractions>
+            <timeTick>1</timeTick>
             </location>
           <Spanner type="HairPin">
             <prev>
@@ -1289,6 +1290,7 @@
               </Rest>
             <location>
               <fractions>-3/4</fractions>
+              <timeTick>1</timeTick>
               </location>
             <Spanner type="HairPin">
               <prev>

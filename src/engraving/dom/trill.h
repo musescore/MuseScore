@@ -113,6 +113,9 @@ public:
     Ornament* ornament() const { return m_ornament; }
     void setOrnament(Ornament* o) { m_ornament = o; }
 
+protected:
+    void doComputeEndElement() override;
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
