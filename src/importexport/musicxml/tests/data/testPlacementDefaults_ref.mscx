@@ -219,11 +219,23 @@
             <velocity>33</velocity>
             <placement>above</placement>
             </Dynamic>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              <placement>above</placement>
+              </HairPin>
+            <next>
+              <location>
+                <measures>3</measures>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Lyrics>
               <ticks>9600</ticks>
               <ticks_f>20/4</ticks_f>
+              <offset x="0" y="-1.71429"/>
               <text>ahh</text>
               </Lyrics>
             <Note>
@@ -301,6 +313,13 @@
           <StaffText>
             <text><i>increasingly grave in spirit</i></text>
             </StaffText>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-3</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>whole</durationType>
             <Note>

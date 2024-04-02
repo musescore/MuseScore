@@ -40,13 +40,16 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Henry Ives</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="lyricist"></metaTag>
+    <metaTag name="lyricist">Henry Ives</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="source"></metaTag>
+    <metaTag name="source">Op.1 No.43</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
-    <metaTag name="workTitle">Inferred Subtitle</metaTag>
+    <metaTag name="workTitle">Inferred Credits 2
+from MUSESCORE: the musical: a tone poem
+Words &amp; Music by also Henry Ives (and ampersands)
+</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
@@ -113,15 +116,28 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.78222</height>
+        <height>17.7195</height>
         <Text>
           <style>title</style>
-          <offset x="0" y="-0.07525"/>
-          <text><font size="22"/>Inferred Subtitle</text>
+          <text>Inferred Credits 2</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <offset x="0" y="9.8425"/>
+          <text>from MUSESCORE: the musical: a tone poem</text>
           </Text>
         <Text>
           <style>composer</style>
-          <text>Words and Music by Henry Ives</text>
+          <text>Words &amp; Music by also Henry Ives (and ampersands)</text>
+          </Text>
+        <Text>
+          <style>poet</style>
+          <text>Henry Ives</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <offset x="0" y="17.0744"/>
+          <text>Op.1 No.43</text>
           </Text>
         </VBox>
       <Measure>
@@ -135,6 +151,10 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <text>Lyrics to be sung by candlelight
+(and this not to be inferred)</text>
+            </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>34</l1>
@@ -145,6 +165,7 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>ha</text>
               </Lyrics>
             <Note>
@@ -156,6 +177,7 @@
             <durationType>eighth</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>ha</text>
               </Lyrics>
             <Note>
@@ -176,6 +198,7 @@
           <Chord>
             <durationType>quarter</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>nice.</text>
               </Lyrics>
             <StemDirection>up</StemDirection>

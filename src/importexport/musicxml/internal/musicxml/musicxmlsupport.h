@@ -65,6 +65,15 @@ private:
     QList<StartStopList> _staffNoteLists;   ///< The note start/stop times in all staves
 };
 
+struct MusicXmlArpeggioDesc {
+    Arpeggio* arp;
+    int no;
+
+    MusicXmlArpeggioDesc(Arpeggio* arp, int no)
+        : arp(arp), no(no) {}
+};
+typedef std::multimap<int, MusicXmlArpeggioDesc> ArpeggioMap;
+
 //---------------------------------------------------------
 //   VoiceDesc
 //---------------------------------------------------------

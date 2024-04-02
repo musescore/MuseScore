@@ -167,6 +167,7 @@
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>glare</text>
               </Lyrics>
             <Note>
@@ -178,6 +179,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>The</text>
               </Lyrics>
             <Note>
@@ -189,6 +191,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>bombs</text>
               </Lyrics>
             <Note>
@@ -200,6 +203,7 @@
             <durationType>16th</durationType>
             <Lyrics>
               <syllabic>begin</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>burst</text>
               </Lyrics>
             <Note>
@@ -217,6 +221,7 @@
             <durationType>16th</durationType>
             <Lyrics>
               <syllabic>end</syllabic>
+              <offset x="0" y="-1.71429"/>
               <text>ing</text>
               </Lyrics>
             <Note>
@@ -228,6 +233,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>in</text>
               </Lyrics>
             <Note>
@@ -239,6 +245,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>air</text>
               </Lyrics>
             <Note>
@@ -249,6 +256,7 @@
           <Chord>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>gave</text>
               </Lyrics>
             <Note>
@@ -269,6 +277,7 @@
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>proof</text>
               </Lyrics>
             <Note>
@@ -280,6 +289,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>through</text>
               </Lyrics>
             <Note>
@@ -294,6 +304,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>the</text>
               </Lyrics>
             <Note>
@@ -304,6 +315,7 @@
           <Chord>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>night</text>
               </Lyrics>
             <Note>
@@ -326,6 +338,7 @@
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>that</text>
               </Lyrics>
             <Note>
@@ -337,6 +350,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>our</text>
               </Lyrics>
             <Note>
@@ -351,6 +365,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>SWAG</text>
               </Lyrics>
             <Note>
@@ -361,6 +376,7 @@
           <Chord>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>was</text>
               </Lyrics>
             <Note>
@@ -381,6 +397,7 @@
             <BeamMode>begin</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>still</text>
               </Lyrics>
             <Note>
@@ -392,6 +409,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>there</text>
               </Lyrics>
             <Note>
@@ -403,6 +421,7 @@
             <BeamMode>mid</BeamMode>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>oh</text>
               </Lyrics>
             <Note>
@@ -413,6 +432,7 @@
           <Chord>
             <durationType>16th</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>say</text>
               </Lyrics>
             <Note>
@@ -424,6 +444,7 @@
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>does</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -455,6 +476,7 @@
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>that</text>
               </Lyrics>
             <StemDirection>down</StemDirection>
@@ -482,6 +504,7 @@
             <BeamMode>no</BeamMode>
             <durationType>eighth</durationType>
             <Lyrics>
+              <offset x="0" y="-1.71429"/>
               <text>star</text>
               </Lyrics>
             <StemDirection>down</StemDirection>

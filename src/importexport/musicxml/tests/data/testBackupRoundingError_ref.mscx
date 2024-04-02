@@ -1827,6 +1827,15 @@
             <visible>0</visible>
             <durationType>half</durationType>
             </Rest>
+          <location>
+            <fractions>-103/1024</fractions>
+            </location>
+          <Symbol>
+            <name>gClef</name>
+            </Symbol>
+          <location>
+            <fractions>103/1024</fractions>
+            </location>
           <BarLine>
             <visible>0</visible>
             </BarLine>
@@ -1991,6 +2000,15 @@
             <visible>0</visible>
             <durationType>quarter</durationType>
             </Rest>
+          <location>
+            <fractions>-1/12</fractions>
+            </location>
+          <Symbol>
+            <name>fClef</name>
+            </Symbol>
+          <location>
+            <fractions>1/12</fractions>
+            </location>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

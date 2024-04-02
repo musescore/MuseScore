@@ -553,7 +553,7 @@ static void addText(VBox* vbx, Score*, const QString strTxt, const TextStyleType
 {
     if (!strTxt.isEmpty()) {
         Text* text = Factory::createText(vbx, stl);
-        text->setXmlText(strTxt);
+        text->setXmlText(strTxt.trimmed());
         vbx->add(text);
     }
 }
@@ -580,13 +580,13 @@ static void addText2(VBox* vbx, Score*, const QString strTxt, const TextStyleTyp
         // HACK: in some Dolet 8 files the composer is written as a subtitle, which leads to stupid formatting.
         // This overrides the formatting and introduces proper composer text
         Text* text = Factory::createText(vbx, TextStyleType::COMPOSER);
-        text->setXmlText(strTxt);
+        text->setXmlText(strTxt.trimmed());
         text->setOffset(mu::PointF(0.0, yoffs));
         text->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
         vbx->add(text);
     } else if (!strTxt.isEmpty()) {
         Text* text = Factory::createText(vbx, stl);
-        text->setXmlText(strTxt);
+        text->setXmlText(strTxt.trimmed());
         text->setAlign(align);
         text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
         text->setOffset(mu::PointF(0.0, yoffs));
@@ -749,6 +749,68 @@ static bool mustAddWordToVbox(const QString& creditType)
 }
 
 //---------------------------------------------------------
+//   isLikelySubtitleText
+//---------------------------------------------------------
+
+bool isLikelySubtitleText(const QString& text, const bool caseInsensitive = true)
+{
+    QRegularExpression::PatternOption caseOption
+        = caseInsensitive ? QRegularExpression::CaseInsensitiveOption : QRegularExpression::NoPatternOption;
+
+    return text.trimmed().contains(QRegularExpression("^[Ff]rom\\s+(?!$)", caseOption))
+           || text.trimmed().contains(QRegularExpression("^Theme from\\s+(?!$)", caseOption))
+           || text.trimmed().contains(QRegularExpression("(Op\\.?\\s?\\d+)\\s?(No\\.?\\s?\\d+)?", caseOption))
+           || text.trimmed().contains(QRegularExpression("^\\(.*[Ff]rom\\s.*\\)$", caseOption));
+}
+
+//---------------------------------------------------------
+//   isLikelyCreditText
+//---------------------------------------------------------
+
+bool isLikelyCreditText(const QString& text, const bool caseInsensitive = true)
+{
+    QRegularExpression::PatternOption caseOption
+        = caseInsensitive ? QRegularExpression::CaseInsensitiveOption : QRegularExpression::NoPatternOption;
+    return text.trimmed().contains(QRegularExpression("^((Words|Music|Lyrics|Composed),?(\\sand|\\s&amp;|\\s&)?\\s)*[Bb]y\\s+(?!$)",
+                                                      caseOption))
+           || text.trimmed().contains(QRegularExpression("^(Traditional|Trad\\.)", caseOption));
+}
+
+//---------------------------------------------------------
+//   inferSubTitleFromTitle
+//---------------------------------------------------------
+
+// Extracts a likely subtitle from the title string
+// Returns the inferred subtitle
+
+static void inferFromTitle(QString& title, QString& inferredSubtitle, QString& inferredCredits)
+{
+    StringList subtitleLines;
+    StringList creditLines;
+    StringList titleLines = title.split(QRegularExpression("\\n"));
+    for (int i = titleLines.size() - 1; i > 0; --i) {
+        String line = titleLines[i];
+        if (isLikelyCreditText(line, true)) {
+            for (int j = titleLines.size() - 1; j >= i; --j) {
+                creditLines.insert(0, titleLines[j]);
+                titleLines.removeAt(j);
+            }
+            continue;
+        }
+        if (isLikelySubtitleText(line, true)) {
+            for (int j = titleLines.size() - 1; j >= i; --j) {
+                subtitleLines.insert(0, titleLines[j]);
+                titleLines.removeAt(j);
+            }
+            continue;
+        }
+    }
+    title = titleLines.join(u"\n");
+    inferredSubtitle = subtitleLines.join(u"\n");
+    inferredCredits = creditLines.join(u"\n");
+}
+
+//---------------------------------------------------------
 //   addCreditWords
 //---------------------------------------------------------
 
@@ -810,10 +872,12 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
 //   createMeasuresAndVboxes
 //---------------------------------------------------------
 
-static void createDefaultHeader(Score* const score)
+void MusicXMLParserPass1::createDefaultHeader(Score* const score)
 {
     QString strTitle;
     QString strSubTitle;
+    QString inferredStrSubTitle;
+    QString inferredStrComposer;
     QString strComposer;
     QString strLyricist;
     QString strTranslator;
@@ -823,6 +887,7 @@ static void createDefaultHeader(Score* const score)
         if (strTitle.isEmpty()) {
             strTitle = score->metaTag(u"workTitle");
         }
+        inferFromTitle(strTitle, inferredStrSubTitle, inferredStrComposer);
     }
     if (!(score->metaTag(u"movementNumber").isEmpty() && score->metaTag(u"workNumber").isEmpty())) {
         strSubTitle = score->metaTag(u"movementNumber");
@@ -830,11 +895,19 @@ static void createDefaultHeader(Score* const score)
             strSubTitle = score->metaTag(u"workNumber");
         }
     }
+    if (!inferredStrSubTitle.isEmpty()) {
+        strSubTitle = inferredStrSubTitle;
+        _hasInferredHeaderText = true;
+    }
     QString metaComposer = score->metaTag(u"composer");
     QString metaLyricist = score->metaTag(u"lyricist");
     QString metaTranslator = score->metaTag(u"translator");
     if (!metaComposer.isEmpty()) {
         strComposer = metaComposer;
+    }
+    if (!inferredStrComposer.isEmpty()) {
+        strComposer = inferredStrComposer;
+        _hasInferredHeaderText = true;
     }
     if (metaLyricist.isEmpty()) {
         metaLyricist = score->metaTag(u"poet");
@@ -863,12 +936,12 @@ static void createDefaultHeader(Score* const score)
  Create required measures with correct number, start tick and length for Score \a score.
  */
 
-static void createMeasuresAndVboxes(Score* const score,
-                                    const QVector<Fraction>& ml, const QVector<Fraction>& ms,
-                                    const std::set<int>& systemStartMeasureNrs,
-                                    const std::set<int>& pageStartMeasureNrs,
-                                    const CreditWordsList& crWords,
-                                    const QSize pageSize)
+void MusicXMLParserPass1::createMeasuresAndVboxes(Score* const score,
+                                                  const QVector<Fraction>& ml, const QVector<Fraction>& ms,
+                                                  const std::set<int>& systemStartMeasureNrs,
+                                                  const std::set<int>& pageStartMeasureNrs,
+                                                  const CreditWordsList& crWords,
+                                                  const QSize pageSize)
 {
     if (crWords.empty()) {
         createDefaultHeader(score);
@@ -1199,10 +1272,15 @@ void MusicXMLParserPass1::identification()
         } else if (_e.name() == "encoding") {
             // TODO
             while (_e.readNextStartElement()) {
-                if (_e.name() == "supports" && _e.attributes().value("element") == "beam" && _e.attributes().value("type") == "yes") {
+                if (_e.name() == "software") {
+                    _exporterString += _e.readElementText().toLower();
+                } else if (_e.name() == "supports" && _e.attributes().value("element") == "beam"
+                           && _e.attributes().value("type") == "yes") {
                     _hasBeamingInfo = true;
+                    _e.skipCurrentElement();
+                } else {
+                    _e.skipCurrentElement();
                 }
-                _e.skipCurrentElement();
             }
             // _score->setMetaTag("encoding", _e.readElementText()); works with DOM but not with pull parser
             // temporarily fake the encoding tag (compliant with DOM parser) to help the autotester
@@ -1561,6 +1639,33 @@ static void setPageFormat(Score* score, const PageFormat& pf)
     score->style().set(Sid::pageTwosided, pf.twosided);
 }
 
+static void scaleCopyrightText(Score* score)
+{
+    // Scale text to fit within margins
+    String copyright = score->metaTag(u"copyright");
+    if (copyright.empty()) {
+        return;
+    }
+
+    MStyle style = score->style();
+    String fontFace = style.styleV(Sid::footerFontFace).value<String>();
+    draw::Font footerFont(fontFace, draw::Font::Type::Unknown);
+    double footerFontSize = style.styleV(Sid::footerFontSize).value<double>();
+    footerFont.setPointSizeF(footerFontSize);
+    draw::FontMetrics fm(footerFont);
+
+    double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
+    double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
+    double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
+    double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), draw::TextShowMnemonic, copyright).width();
+    double sizeRatio = pagePrintableWidth / textWidth;
+
+    if (sizeRatio < 1) {
+        double newSize = floor(footerFontSize * sizeRatio * 10) / 10;
+        score->style().set(Sid::footerFontSize, newSize);
+    }
+}
+
 //---------------------------------------------------------
 //   defaults
 //---------------------------------------------------------
@@ -1697,6 +1802,7 @@ void MusicXMLParserPass1::defaults()
            qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
     */
     updateStyles(_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
+    scaleCopyrightText(_score);
 }
 
 //---------------------------------------------------------
