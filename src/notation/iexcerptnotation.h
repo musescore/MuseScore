@@ -43,6 +43,7 @@ public:
     virtual void undoSetName(const QString& name) = 0; // undoable
     virtual async::Notification nameChanged() const = 0;
 
+    virtual bool hasFileName() const = 0;
     virtual const String& fileName() const = 0;
 
     virtual INotationPtr notation() = 0;
