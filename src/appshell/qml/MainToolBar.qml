@@ -81,7 +81,14 @@ Item {
             spacing: 0
             leftPadding: 12
 
-            normalStateFont: model.isTitleBold ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
+            FontMetrics {
+                id: fontMetricsSelected
+                font: model.isTitleBold ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
+                text: model.title
+            }
+
+            normalStateFont: fontMetricsSelected.font
+            width: fontMetricsSelected.width
 
             navigation.name: model.title
             navigation.panel: navPanel
