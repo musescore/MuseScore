@@ -307,7 +307,6 @@
       <Measure>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -320,7 +319,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -333,7 +331,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -346,7 +343,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -363,7 +359,6 @@
       <Measure>
         <voice>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -376,7 +371,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -389,7 +383,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
@@ -402,7 +395,6 @@
               </Note>
             </Chord>
           <Chord>
-            <BeamMode>no</BeamMode>
             <durationType>quarter</durationType>
             <noStem>1</noStem>
             <Note>
