@@ -55,6 +55,7 @@ static const std::string MODULE_NAME("iex_musicxml");
 
 static const std::string PREF_EXPORT_MUSICXML_EXPORTBREAKS("export/musicXML/exportBreaks");
 static const std::string PREF_IMPORT_MUSICXML_IMPORTBREAKS("import/musicXML/importBreaks");
+static const std::string PREF_IMPORT_MUSICXML_INFERTEXT("import/musicXML/importInferTextType");
 static const std::string PREF_EXPORT_MUSICXML_EXPORTLAYOUT("export/musicXML/exportLayout");
 static const std::string PREF_EXPORT_MUSICXML_EXPORTINVISIBLE("export/musicXML/exportInvisibleElements");
 
@@ -139,6 +140,7 @@ void Musicxml_Tests::mxmlIoTest(const char* file, bool exportLayout)
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
@@ -162,6 +164,7 @@ void Musicxml_Tests::mxmlIoTestRef(const char* file)
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
@@ -185,6 +188,7 @@ void Musicxml_Tests::mxmlIoTestRefBreaks(const char* file)
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
@@ -218,6 +222,7 @@ void Musicxml_Tests::mxmlMscxExportTestRef(const char* file, bool exportLayout)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
@@ -242,6 +247,7 @@ void Musicxml_Tests::mxmlMscxExportTestRefBreaks(const char* file)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
@@ -269,6 +275,7 @@ void Musicxml_Tests::mxmlMscxExportTestRefInvisibleElements(const char* file)
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mscx");
@@ -299,6 +306,7 @@ void Musicxml_Tests::mxmlReadTestCompr(const char* file)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".mxl");
@@ -323,6 +331,7 @@ void Musicxml_Tests::mxmlReadWriteTestCompr(const char* file)
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
@@ -353,6 +362,7 @@ void Musicxml_Tests::mxmlImportTestRef(const char* file)
     MScore::debugMode = false;
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
+    setValue(PREF_IMPORT_MUSICXML_INFERTEXT, Val(true));
 
     String fileName = String::fromUtf8(file);
     MasterScore* score = readScore(XML_IO_DATA_DIR + fileName + u".xml");
