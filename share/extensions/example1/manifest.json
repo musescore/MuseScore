@@ -1,6 +1,7 @@
 {
     "uri": "musescore://extensions/dev/example_1",
     "type": "form",
+    "modal": true,
     "title": "Example 1 (default)",
 
     "main": "main.qml"
