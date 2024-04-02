@@ -30,7 +30,7 @@ using namespace mu;
 using namespace mu::mpe;
 using namespace mu::mpe::tests;
 
-class Engraving_MultiNoteArticulationsTest : public ::testing::Test
+class MPE_MultiNoteArticulationsTest : public ::testing::Test
 {
 protected:
     void SetUp() override
@@ -94,12 +94,12 @@ protected:
 };
 
 /**
- * @brief MultiNoteArticulationsTest_StandardPattern
+ * @brief MPE_MultiNoteArticulationsTest_StandardPattern
  * @details In this case we're gonna build a very simple note sequence without any articulation applied on the top of them
  *          So the actual PitchCurve of every note would be equal to the data from the "StandardPattern" in Articulation Profile.
  *          However, the actual ExpressionCurve would be adapted by the current dynamic value ("forte")
  */
-TEST_F(Engraving_MultiNoteArticulationsTest, StandardPattern)
+TEST_F(MPE_MultiNoteArticulationsTest, StandardPattern)
 {
     // [GIVEN] No articulations applied on the top of the note
     ArticulationPattern pattern;
@@ -153,11 +153,11 @@ TEST_F(Engraving_MultiNoteArticulationsTest, StandardPattern)
 }
 
 /**
- * @brief MultiNoteArticulationsTest_GlissandoPattern
+ * @brief MPE_MultiNoteArticulationsTest_GlissandoPattern
  * @details In this case we're gonna build a very simple note sequence with glissando articulation applied on the top of the first two notes
  *          So the actual PitchCurve of the first two notes would be equal to the data from the "GlissandoPattern" in Articulation Profile
  */
-TEST_F(Engraving_MultiNoteArticulationsTest, GlissandoPattern)
+TEST_F(MPE_MultiNoteArticulationsTest, GlissandoPattern)
 {
     std::map<size_t, ArticulationMap> appliedArticulations;
 
@@ -252,12 +252,12 @@ TEST_F(Engraving_MultiNoteArticulationsTest, GlissandoPattern)
 }
 
 /**
- * @brief MultiNoteArticulationsTest_CrescendoPattern
+ * @brief MPE_MultiNoteArticulationsTest_CrescendoPattern
  * @details In this case we're gonna build a very simple note sequence with crescendo articulation applied on
  *          the top of these notes (from forte to fortissimo). So the actual ExpressionCurve of the notes would be equal
  *          to the data from the "CrescendoPattern" in Articulation Profile
  */
-TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
+TEST_F(MPE_MultiNoteArticulationsTest, CrescendoPattern)
 {
     std::map<size_t, ArticulationMap> appliedArticulations;
 
@@ -324,5 +324,40 @@ TEST_F(Engraving_MultiNoteArticulationsTest, CrescendoPattern)
                                        / dynamicSegmentsCount;
         EXPECT_EQ(noteEvents.at(i).expressionCtx().expressionCurve.maxAmplitudeLevel(),
                   actualResult);
+    }
+}
+
+TEST_F(MPE_MultiNoteArticulationsTest, IsMultiNoteArticulation)
+{
+    const ArticulationTypeSet MULTI_TYPES = {
+        ArticulationType::Trill,
+        ArticulationType::Crescendo,
+        ArticulationType::Decrescendo,
+        ArticulationType::DiscreteGlissando,
+        ArticulationType::ContinuousGlissando,
+        ArticulationType::Legato,
+        ArticulationType::Pedal,
+        ArticulationType::Multibend,
+        ArticulationType::Arpeggio,
+        ArticulationType::ArpeggioUp,
+        ArticulationType::ArpeggioDown,
+        ArticulationType::ArpeggioStraightUp,
+        ArticulationType::ArpeggioStraightDown,
+    };
+
+    const ArticulationTypeSet RANGED_TYPES {
+        ArticulationType::Legato,
+        ArticulationType::Pedal,
+        ArticulationType::Multibend,
+    };
+
+    for (int i = int(ArticulationType::Standard); i < int(ArticulationType::Last); ++i) {
+        ArticulationType type = ArticulationType(i);
+        bool isMulti = mu::contains(MULTI_TYPES, type);
+        bool isRanged = mu::contains(RANGED_TYPES, type);
+
+        EXPECT_EQ(mpe::isMultiNoteArticulation(type), isMulti);
+        EXPECT_EQ(mpe::isSingleNoteArticulation(type), !isMulti);
+        EXPECT_EQ(mpe::isRangedArticulation(type), isRanged);
     }
 }

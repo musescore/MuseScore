@@ -831,7 +831,7 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
             const Note* startNote = tie->startNote();
             const Note* endNote = tie->endNote();
 
-            IF_ASSERT_FAILED(startNote && endNote) {
+            if (!startNote || !endNote) {
                 continue;
             }
 
