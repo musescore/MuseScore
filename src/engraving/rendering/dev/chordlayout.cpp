@@ -3609,25 +3609,11 @@ Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfigurati
             if (!l || !l->addToSkyline() || l->xmlText().empty()) {
                 continue;
             }
-            double lmargin = conf.styleS(Sid::lyricsMinDistance).val() * item->spatium() * 0.5;
-            double rmargin = lmargin;
-            LyricsSyllabic syl = l->syllabic();
-            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && conf.styleB(Sid::lyricsDashForce)) {
-                rmargin = std::max(rmargin, conf.styleMM(Sid::lyricsDashMinLength).val());
-            }
-            // for horizontal spacing we only need the lyrics width:
-            x1 = std::min(x1, l->ldata()->bbox().x() - lmargin + l->pos().x());
-            x2 = std::max(x2, l->ldata()->bbox().x() + l->ldata()->bbox().width() + rmargin + l->pos().x());
-            if (l->ticks() == Lyrics::TEMP_MELISMA_TICKS) {
-                x2 += item->spatium();
-            }
+            RectF bbox = l->ldata()->bbox().translated(l->ldata()->pos());
+            x1 = std::min(x1, bbox.left());
+            x2 = std::max(x2, bbox.right());
             shape.addHorizontalSpacing(l, x1, x2);
         }
-    }
-
-    if (item->isMelismaEnd()) {
-        double right = item->rightEdge();
-        shape.addHorizontalSpacing(nullptr, right, right);
     }
 
     return shape;
