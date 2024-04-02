@@ -7505,6 +7505,11 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                     xml.endElement();
                 }
             }
+
+            if (st->staffMag(Fraction(0, 1)) != 1.0) {
+                xml.tag("staff-size", st->staffMag(Fraction(0, 1)) * 100);
+            }
+
             xml.endElement();
         }
     }
