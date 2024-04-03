@@ -139,19 +139,26 @@ void SegmentList::insert(Segment* e, Segment* el)
 
 void SegmentList::remove(Segment* e)
 {
+    // TODO: These types are problematic in certain circumstances. findBeforeRemove is a workaround for
+    // crashes #21049, #21098, and #21501 in release builds. It does not address the root cause.
+    bool findBeforeRemove = e->isHeaderClefType() || e->isKeySigType();
 #ifndef NDEBUG
-    check();
-    bool found = false;
-    for (Segment* s = m_first; s; s = s->next()) {
-        if (e == s) {
-            found = true;
-            break;
+    findBeforeRemove = true;
+#endif
+    if (findBeforeRemove) {
+        check();
+        bool found = false;
+        for (Segment* s = m_first; s; s = s->next()) {
+            if (e == s) {
+                found = true;
+                break;
+            }
+        }
+        IF_ASSERT_FAILED(found) {
+            LOGE() << String(u"segment %1 not in list").arg(String::fromAscii(e->subTypeName()));
+            return;
         }
     }
-    if (!found) {
-        ASSERT_X(String(u"segment %1 not in list").arg(String::fromAscii(e->subTypeName())));
-    }
-#endif
     --m_size;
     if (e == m_first) {
         m_first = m_first->next();
