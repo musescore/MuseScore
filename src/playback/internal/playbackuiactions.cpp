@@ -28,7 +28,7 @@
 
 using namespace mu::playback;
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
     UiAction("play",
@@ -188,12 +188,12 @@ bool PlaybackUiActions::actionChecked(const UiAction& act) const
     return m_controller->actionChecked(act.code);
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> PlaybackUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> PlaybackUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> PlaybackUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> PlaybackUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

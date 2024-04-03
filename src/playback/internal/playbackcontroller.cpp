@@ -36,7 +36,7 @@ using namespace mu::midi;
 using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::audio;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::engraving;
 
 static const ActionCode PLAY_CODE("play");
@@ -1579,7 +1579,7 @@ void PlaybackController::setIsExportingAudio(bool exporting)
     updateSoloMuteStates();
 }
 
-bool PlaybackController::canReceiveAction(const actions::ActionCode&) const
+bool PlaybackController::canReceiveAction(const ActionCode&) const
 {
     return m_masterNotation != nullptr && m_masterNotation->hasParts();
 }

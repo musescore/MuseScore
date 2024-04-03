@@ -52,7 +52,7 @@ private:
 
     void resetNotation();
 
-    QString shortcutsTitleByActionCode(const actions::ActionCode& code) const;
+    QString shortcutsTitleByActionCode(const muse::actions::ActionCode& code) const;
 
     void adjustCanvas();
     qreal resolveDefaultScaling() const;

@@ -52,7 +52,7 @@
 #include "iprojectautosaver.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectFilesController, public mi::IProjectProvider, public actions::Actionable,
+class ProjectActionsController : public IProjectFilesController, public mi::IProjectProvider, public muse::actions::Actionable,
     public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
@@ -62,7 +62,7 @@ class ProjectActionsController : public IProjectFilesController, public mi::IPro
     INJECT(IProjectAutoSaver, projectAutoSaver)
     INJECT(IOpenSaveProjectScenario, openSaveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
@@ -76,7 +76,7 @@ class ProjectActionsController : public IProjectFilesController, public mi::IPro
 public:
     void init();
 
-    bool canReceiveAction(const actions::ActionCode& code) const override;
+    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const io::path_t& path) const override;
@@ -103,7 +103,7 @@ private:
 
     void newProject();
 
-    void openProject(const actions::ActionData& args);
+    void openProject(const muse::actions::ActionData& args);
     Ret openProject(const io::path_t& path, const QString& displayNameOverride = QString());
     void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     Ret openMuseScoreUrl(const QUrl& url);

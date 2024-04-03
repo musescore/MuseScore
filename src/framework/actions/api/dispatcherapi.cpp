@@ -24,7 +24,7 @@
 #include "log.h"
 
 using namespace mu::api;
-using namespace mu::actions;
+using namespace muse::actions;
 
 DispatcherApi::DispatcherApi(IApiEngine* e)
     : ApiObject(e)

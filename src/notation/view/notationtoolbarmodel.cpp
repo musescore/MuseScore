@@ -24,6 +24,7 @@
 
 using namespace mu::notation;
 using namespace mu::uicomponents;
+using namespace muse::actions;
 
 void NotationToolBarModel::load()
 {
@@ -41,7 +42,7 @@ void NotationToolBarModel::load()
     AbstractMenuModel::load();
 }
 
-MenuItem* NotationToolBarModel::makeItem(const actions::ActionCode& actionCode)
+MenuItem* NotationToolBarModel::makeItem(const ActionCode& actionCode)
 {
     MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
 

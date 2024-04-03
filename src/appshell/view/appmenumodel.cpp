@@ -30,7 +30,7 @@ using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace mu::project;
 using namespace mu::workspace;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::extensions;
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
@@ -115,7 +115,7 @@ void AppMenuModel::setupConnections()
     });
 }
 
-MenuItem* AppMenuModel::makeMenuItem(const actions::ActionCode& actionCode, MenuItemRole menuRole)
+MenuItem* AppMenuModel::makeMenuItem(const ActionCode& actionCode, MenuItemRole menuRole)
 {
     MenuItem* item = makeMenuItem(actionCode);
     item->setRole(menuRole);

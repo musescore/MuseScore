@@ -35,15 +35,15 @@ public:
     const ui::UiActionList& actionsList() const override;
 
     bool actionEnabled(const ui::UiAction& act) const override;
-    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
+    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
     bool actionChecked(const ui::UiAction& act) const override;
-    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
+    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
     const static ui::UiActionList m_actions;
-    async::Channel<actions::ActionCodeList> m_actionEnabledChanged;
-    async::Channel<actions::ActionCodeList> m_actionCheckedChanged;
+    async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
+    async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
 

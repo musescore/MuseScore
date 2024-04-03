@@ -47,9 +47,9 @@
 #include "../isoundprofilesrepository.h"
 
 namespace mu::playback {
-class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
+class PlaybackController : public IPlaybackController, public muse::actions::Actionable, public async::Asyncable
 {
-    INJECT_STATIC(actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(muse::actions::IActionsDispatcher, dispatcher)
     INJECT_STATIC(context::IGlobalContext, globalContext)
     INJECT_STATIC(IPlaybackConfiguration, configuration)
     INJECT_STATIC(notation::INotationConfiguration, notationConfiguration)
@@ -97,8 +97,8 @@ public:
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
 
-    bool actionChecked(const actions::ActionCode& actionCode) const override;
-    async::Channel<actions::ActionCode> actionCheckedChanged() const override;
+    bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
+    async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
 
     QTime totalPlayTime() const override;
     async::Notification totalPlayTimeChanged() const override;
@@ -119,7 +119,7 @@ public:
     void setNotation(notation::INotationPtr notation) override;
     void setIsExportingAudio(bool exporting) override;
 
-    bool canReceiveAction(const actions::ActionCode& code) const override;
+    bool canReceiveAction(const muse::actions::ActionCode& code) const override;
 
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
@@ -151,7 +151,7 @@ private:
     void addSoundFlagsIfNeed(const std::vector<engraving::EngravingItem*>& selection);
 
     void togglePlay();
-    void rewind(const actions::ActionData& args);
+    void rewind(const muse::actions::ActionData& args);
     void play();
     void pause();
     void stop();
@@ -181,7 +181,7 @@ private:
     void enableLoop();
     void disableLoop();
 
-    void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
+    void notifyActionCheckedChanged(const muse::actions::ActionCode& actionCode);
 
     project::IProjectAudioSettingsPtr audioSettings() const;
 
@@ -221,7 +221,7 @@ private:
     async::Notification m_totalPlayTimeChanged;
     async::Notification m_currentTempoChanged;
     async::Channel<uint32_t> m_tickPlayed;
-    async::Channel<actions::ActionCode> m_actionCheckedChanged;
+    async::Channel<muse::actions::ActionCode> m_actionCheckedChanged;
 
     audio::TrackSequenceId m_currentSequenceId = -1;
     async::Notification m_currentSequenceIdChanged;

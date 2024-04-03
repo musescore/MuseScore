@@ -30,7 +30,7 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 static const ActionCode NOTE_INPUT_ACTION_CODE("note-input");
 
@@ -2472,7 +2472,7 @@ void NotationUiActions::init()
     });
 
     m_controller->currentNotationChanged().onNotify(this, [this]() {
-        actions::ActionCodeList actions;
+        ActionCodeList actions;
         for (const UiAction& action : m_scoreConfigActions) {
             actions.push_back(action.code);
         }
@@ -2500,7 +2500,7 @@ void NotationUiActions::init()
     });
 
     engravingConfiguration()->debuggingOptionsChanged().onNotify(this, [this]() {
-        actions::ActionCodeList actions;
+        ActionCodeList actions;
         for (const UiAction& action : m_engravingDebuggingActions) {
             actions.push_back(action.code);
         }
@@ -2528,7 +2528,7 @@ bool NotationUiActions::actionEnabled(const UiAction& act) const
     return true;
 }
 
-bool NotationUiActions::isScoreConfigAction(const actions::ActionCode& code) const
+bool NotationUiActions::isScoreConfigAction(const ActionCode& code) const
 {
     for (const UiAction& a : m_scoreConfigActions) {
         if (a.code == code) {
@@ -2538,7 +2538,7 @@ bool NotationUiActions::isScoreConfigAction(const actions::ActionCode& code) con
     return false;
 }
 
-bool NotationUiActions::isScoreConfigChecked(const actions::ActionCode& code, const ScoreConfig& cfg) const
+bool NotationUiActions::isScoreConfigChecked(const ActionCode& code, const ScoreConfig& cfg) const
 {
     if (SHOW_INVISIBLE_CODE == code) {
         return cfg.isShowInvisibleElements;
@@ -2593,19 +2593,19 @@ bool NotationUiActions::actionChecked(const UiAction& act) const
     return false;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> NotationUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> NotationUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> NotationUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> NotationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }
 
 DurationType NotationUiActions::actionDurationType(const ActionCode& actionCode)
 {
-    static QMap<actions::ActionCode, DurationType> durations = {
+    static QMap<ActionCode, DurationType> durations = {
         { "note-longa", DurationType::V_LONG },
         { "note-breve", DurationType::V_BREVE },
         { "pad-note-1", DurationType::V_WHOLE },
@@ -2631,7 +2631,7 @@ DurationType NotationUiActions::actionDurationType(const ActionCode& actionCode)
 
 AccidentalType NotationUiActions::actionAccidentalType(const ActionCode& actionCode)
 {
-    static QMap<actions::ActionCode, AccidentalType> accidentals = {
+    static QMap<ActionCode, AccidentalType> accidentals = {
         { "flat2", AccidentalType::FLAT2 },
         { "flat", AccidentalType::FLAT },
         { "nat", AccidentalType::NATURAL },
@@ -2649,7 +2649,7 @@ AccidentalType NotationUiActions::actionAccidentalType(const ActionCode& actionC
 
 int NotationUiActions::actionDotCount(const ActionCode& actionCode)
 {
-    static QMap<actions::ActionCode, int> dots = {
+    static QMap<ActionCode, int> dots = {
         { "pad-dot", 1 },
         { "pad-dot2", 2 },
         { "pad-dot3", 3 },
@@ -2666,7 +2666,7 @@ int NotationUiActions::actionDotCount(const ActionCode& actionCode)
 
 int NotationUiActions::actionVoice(const ActionCode& actionCode)
 {
-    QMap<actions::ActionCode, int> voices {
+    QMap<ActionCode, int> voices {
         { "voice-1", 0 },
         { "voice-2", 1 },
         { "voice-3", 2 },
@@ -2683,7 +2683,7 @@ int NotationUiActions::actionVoice(const ActionCode& actionCode)
 
 SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionCode)
 {
-    static QMap<actions::ActionCode, SymbolId> articulations {
+    static QMap<ActionCode, SymbolId> articulations {
         { "add-marcato", SymbolId::articMarcatoAbove },
         { "add-sforzato", SymbolId::articAccentAbove },
         { "add-tenuto", SymbolId::articTenutoAbove },

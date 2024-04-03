@@ -25,7 +25,7 @@
 #include "shortcuts/shortcutcontext.h"
 
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 const UiActionList NavigationUiActions::m_actions = {
     UiAction("nav-dev-show-controls",

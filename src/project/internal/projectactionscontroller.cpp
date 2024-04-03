@@ -43,7 +43,7 @@
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::actions;
+using namespace muse::actions;
 
 static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
 static const mu::Uri HOME_PAGE_URI("musescore://home");
@@ -162,7 +162,7 @@ bool ProjectActionsController::isFileSupported(const io::path_t& path) const
     return false;
 }
 
-void ProjectActionsController::openProject(const actions::ActionData& args)
+void ProjectActionsController::openProject(const ActionData& args)
 {
     QUrl url = !args.empty() ? args.arg<QUrl>(0) : QUrl();
     QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
@@ -636,7 +636,7 @@ bool ProjectActionsController::closeOpenedProject(bool quitApp)
         if (quitApp) {
             //! NOTE: we need to call `quit` in the next event loop due to controlling the lifecycle of this method
             async::Async::call(this, [this](){
-                dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+                dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
             });
         } else {
             Ret ret = openPageIfNeed(HOME_PAGE_URI);

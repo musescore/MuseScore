@@ -265,7 +265,7 @@ int main(int argc, char** argv)
 
     // framework
     app.addModule(new muse::accessibility::AccessibilityModule());
-    app.addModule(new mu::actions::ActionsModule());
+    app.addModule(new muse::actions::ActionsModule());
     app.addModule(new mu::audio::AudioModule());
     app.addModule(new mu::draw::DrawModule());
     app.addModule(new mu::midi::MidiModule());

@@ -36,10 +36,10 @@ public:
 
     virtual const UiActionList& actionsList() const = 0;
     virtual bool actionEnabled(const UiAction& act) const = 0;
-    virtual async::Channel<actions::ActionCodeList> actionEnabledChanged() const = 0;
+    virtual async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const = 0;
 
     virtual bool actionChecked(const UiAction& act) const = 0;
-    virtual async::Channel<actions::ActionCodeList> actionCheckedChanged() const = 0;
+    virtual async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const = 0;
 };
 using IUiActionsModulePtr = std::shared_ptr<IUiActionsModule>;
 }

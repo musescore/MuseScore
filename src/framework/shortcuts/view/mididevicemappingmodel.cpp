@@ -31,7 +31,7 @@
 using namespace mu::shortcuts;
 using namespace mu::midi;
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");

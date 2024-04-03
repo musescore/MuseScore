@@ -32,12 +32,12 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PaletteRootModel : public QObject, public actions::Actionable, public async::Asyncable
+class PaletteRootModel : public QObject, public muse::actions::Actionable, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(IPaletteProvider, paletteProvider)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(mu::palette::PaletteProvider * paletteProvider READ paletteProvider_property CONSTANT)
 

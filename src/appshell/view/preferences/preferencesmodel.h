@@ -37,7 +37,7 @@ class PreferencesModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(ui::IUiActionsRegister, actionsRegister)
 

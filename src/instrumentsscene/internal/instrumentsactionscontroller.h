@@ -30,16 +30,16 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsActionsController : public actions::Actionable
+class InstrumentsActionsController : public muse::actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(context::IGlobalContext, context)
 
 public:
     virtual ~InstrumentsActionsController() = default;
 
-    bool canReceiveAction(const actions::ActionCode&) const override;
+    bool canReceiveAction(const muse::actions::ActionCode&) const override;
 
     void init();
 

@@ -27,7 +27,7 @@
 
 using namespace mu::notation;
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 //---------------------------------------------------------
 //   TupletDialog

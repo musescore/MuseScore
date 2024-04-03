@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::actions;
+using namespace muse::actions;
 
 static const mu::Uri FIRST_LAUNCH_SETUP_URI("musescore://firstLaunchSetup");
 static const mu::Uri HOME_URI("musescore://home");

@@ -30,18 +30,18 @@
 #include "../idockwindowprovider.h"
 
 namespace mu::dock {
-class DockWindowActionsController : public actions::Actionable
+class DockWindowActionsController : public muse::actions::Actionable
 {
     INJECT(IDockWindowProvider, dockWindowProvider)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     void init();
 
 private:
-    void setDockOpen(const actions::ActionData& args);
-    void toggleOpened(const actions::ActionData& args);
-    void toggleFloating(const actions::ActionData& args);
+    void setDockOpen(const muse::actions::ActionData& args);
+    void toggleOpened(const muse::actions::ActionData& args);
+    void toggleFloating(const muse::actions::ActionData& args);
 
     void restoreDefaultLayout();
 

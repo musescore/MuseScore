@@ -46,13 +46,13 @@ class ItemMultiSelectionModel;
 class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
-class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Asyncable, public actions::Actionable
+class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
     INJECT(notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(IInteractive, interactive)
 

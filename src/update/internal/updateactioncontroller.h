@@ -29,9 +29,9 @@
 #include "../iupdatescenario.h"
 
 namespace mu::update {
-class UpdateActionController : public actions::Actionable
+class UpdateActionController : public muse::actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IUpdateScenario, updateScenario)
 
 public:

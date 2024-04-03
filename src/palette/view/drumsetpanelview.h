@@ -38,7 +38,7 @@ class DrumsetPanelView : public uicomponents::WidgetView, public async::Asyncabl
     Q_OBJECT
 
     INJECT(context::IGlobalContext, globalContext)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 

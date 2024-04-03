@@ -27,7 +27,7 @@
 
 using namespace mu::uicomponents;
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 const int AbstractMenuModel::INVALID_ITEM_INDEX = -1;
 
@@ -224,7 +224,7 @@ MenuItem* AbstractMenuModel::makeSeparator()
     return item;
 }
 
-void AbstractMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
+void AbstractMenuModel::onActionsStateChanges(const muse::actions::ActionCodeList& codes)
 {
     if (codes.empty()) {
         return;

@@ -42,7 +42,7 @@ namespace mu::notation {
 class NotationMidiInput : public INotationMidiInput
 {
     INJECT(playback::IPlaybackController, playbackController)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(INotationConfiguration, configuration)
 
 public:

@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::extensions;
 
 static UiAction MANAGE_ACTION = UiAction(
@@ -70,7 +70,7 @@ bool ExtensionsUiActions::actionEnabled(const UiAction&) const
 
 mu::async::Channel<ActionCodeList> ExtensionsUiActions::actionEnabledChanged() const
 {
-    static async::Channel<actions::ActionCodeList> ch;
+    static async::Channel<muse::actions::ActionCodeList> ch;
     return ch;
 }
 
@@ -81,6 +81,6 @@ bool ExtensionsUiActions::actionChecked(const UiAction&) const
 
 mu::async::Channel<ActionCodeList> ExtensionsUiActions::actionCheckedChanged() const
 {
-    static async::Channel<actions::ActionCodeList> ch;
+    static async::Channel<muse::actions::ActionCodeList> ch;
     return ch;
 }

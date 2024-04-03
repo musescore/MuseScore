@@ -39,10 +39,10 @@ public:
     const ui::UiActionList& actionsList() const override;
 
     bool actionEnabled(const ui::UiAction& action) const override;
-    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
+    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
     bool actionChecked(const ui::UiAction& action) const override;
-    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
+    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
     mutable ui::UiActionList m_actions;

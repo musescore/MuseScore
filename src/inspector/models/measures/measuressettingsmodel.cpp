@@ -25,6 +25,7 @@
 
 using namespace mu::inspector;
 using namespace mu::notation;
+using namespace muse::actions;
 
 MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -41,7 +42,7 @@ bool MeasuresSettingsModel::isEmpty() const
 
 void MeasuresSettingsModel::insertMeasures(int numberOfMeasures, InsertMeasuresTarget target)
 {
-    actions::ActionData actionData = actions::ActionData::make_arg1(numberOfMeasures);
+    ActionData actionData = ActionData::make_arg1(numberOfMeasures);
 
     switch (target) {
     case InsertMeasuresTarget::AfterSelection:

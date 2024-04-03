@@ -48,6 +48,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::engraving;
+using namespace muse::actions;
 
 Palette::Palette(Type t, QObject* parent)
     : QObject(parent), m_type(t)
@@ -125,7 +126,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const Tran
     return insertElement(idx, element, name.str, mag, offset, tag);
 }
 
-PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, actions::ActionCode code, double mag)
+PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, ActionCode code, double mag)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
@@ -160,7 +161,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableStri
     return appendElement(element, name.str, mag, offset, tag);
 }
 
-PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code, double mag)
+PaletteCellPtr Palette::appendActionIcon(ActionIconType type, ActionCode code, double mag)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();

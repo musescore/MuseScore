@@ -24,7 +24,7 @@
 #include "types/val.h"
 
 using namespace mu::workspace;
-using namespace mu::actions;
+using namespace muse::actions;
 
 void WorkspaceActionController::init()
 {

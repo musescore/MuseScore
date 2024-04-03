@@ -80,7 +80,7 @@ private:
     void updateRestState();
     void updateAddState();
 
-    bool isNoteInputModeAction(const actions::ActionCode& actionCode) const;
+    bool isNoteInputModeAction(const muse::actions::ActionCode& actionCode) const;
 
     ui::UiAction currentNoteInputModeAction() const;
 
@@ -88,7 +88,7 @@ private:
                                            const uicomponents::MenuItemList& subitems = {});
     uicomponents::MenuItem* makeAddItem(const QString& section);
 
-    uicomponents::MenuItemList makeSubitems(const actions::ActionCode& actionCode);
+    uicomponents::MenuItemList makeSubitems(const muse::actions::ActionCode& actionCode);
     uicomponents::MenuItemList makeNoteInputMethodItems();
     uicomponents::MenuItemList makeCrossStaffBeamingItems();
     uicomponents::MenuItemList makeTupletItems();
@@ -100,7 +100,7 @@ private:
     uicomponents::MenuItemList makeTextItems();
     uicomponents::MenuItemList makeLinesItems();
 
-    bool isMenuSecondary(const actions::ActionCode& actionCode) const;
+    bool isMenuSecondary(const muse::actions::ActionCode& actionCode) const;
 
     int findNoteInputModeItemIndex() const;
 

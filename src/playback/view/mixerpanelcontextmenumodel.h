@@ -32,11 +32,11 @@
 #include "playback/playbacktypes.h"
 
 namespace mu::playback {
-class MixerPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
+class MixerPanelContextMenuModel : public uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackConfiguration, configuration)
 
     Q_PROPERTY(bool labelsSectionVisible READ labelsSectionVisible NOTIFY labelsSectionVisibleChanged)
@@ -82,9 +82,9 @@ private:
     uicomponents::MenuItem* buildAuxSendVisibleItem(audio::aux_channel_idx_t index);
     uicomponents::MenuItem* buildAuxChannelVisibleItem(audio::aux_channel_idx_t index);
 
-    void toggleMixerSection(const actions::ActionData& args);
-    void toggleAuxSend(const actions::ActionData& args);
-    void toggleAuxChannel(const actions::ActionData& args);
+    void toggleMixerSection(const muse::actions::ActionData& args);
+    void toggleAuxSend(const muse::actions::ActionData& args);
+    void toggleAuxChannel(const muse::actions::ActionData& args);
 
     void emitMixerSectionVisibilityChanged(MixerSectionType sectionType);
 

@@ -64,8 +64,8 @@ public:
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
 
-    bool actionChecked(const actions::ActionCode& actionCode) const override;
-    async::Channel<actions::ActionCode> actionCheckedChanged() const override;
+    bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
+    async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
 
     QTime totalPlayTime() const override;
     async::Notification totalPlayTimeChanged() const override;

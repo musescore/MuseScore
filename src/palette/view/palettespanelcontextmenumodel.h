@@ -30,12 +30,12 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PalettesPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
+class PalettesPanelContextMenuModel : public uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(IPaletteConfiguration, configuration)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit PalettesPanelContextMenuModel(QObject* parent = nullptr);

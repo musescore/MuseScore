@@ -24,6 +24,7 @@
 
 using namespace mu::palette;
 using namespace mu::ui;
+using namespace muse::actions;
 
 static const mu::UriQuery MASTER_PALETTE_URI("musescore://palette/masterpalette?sync=false&modal=false");
 static const mu::UriQuery SPECIAL_CHARACTERS_URI("musescore://palette/specialcharacters?sync=false");
@@ -61,7 +62,7 @@ mu::ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
     return m_masterPaletteOpened;
 }
 
-void PaletteActionsController::toggleMasterPalette(const actions::ActionData& args)
+void PaletteActionsController::toggleMasterPalette(const ActionData& args)
 {
     if (interactive()->isOpened(MASTER_PALETTE_URI.uri()).val) {
         interactive()->close(MASTER_PALETTE_URI.uri());

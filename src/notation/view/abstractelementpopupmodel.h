@@ -26,7 +26,6 @@
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
-#include "actions/actiontypes.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
@@ -34,11 +33,11 @@
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class AbstractElementPopupModel : public QObject, public async::Asyncable, public actions::Actionable
+class AbstractElementPopupModel : public QObject, public async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
 
     Q_PROPERTY(PopupModelType modelType READ modelType CONSTANT)

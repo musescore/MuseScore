@@ -35,9 +35,9 @@
 #include "../inavigationcontroller.h"
 
 namespace mu::ui {
-class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
+class NavigationController : public QObject, public INavigationController, public muse::actions::Actionable, public async::Asyncable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(IMainWindow, mainWindow)
 

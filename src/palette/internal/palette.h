@@ -113,13 +113,13 @@ public:
                                  const QPointF& offset = QPointF(), const QString& tag = "");
     PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr insertActionIcon(size_t idx, engraving::ActionIconType type, actions::ActionCode code, double mag = 1.0);
+    PaletteCellPtr insertActionIcon(size_t idx, engraving::ActionIconType type, muse::actions::ActionCode code, double mag = 1.0);
     // TODO: Remove QString overload
     PaletteCellPtr appendElement(engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
     PaletteCellPtr appendElement(engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr appendActionIcon(engraving::ActionIconType type, actions::ActionCode code, double mag = 1.0);
+    PaletteCellPtr appendActionIcon(engraving::ActionIconType type, muse::actions::ActionCode code, double mag = 1.0);
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);

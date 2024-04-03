@@ -28,7 +28,7 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
-using namespace mu::actions;
+using namespace muse::actions;
 
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent)

@@ -40,7 +40,7 @@ class DrumsetPalette : public PaletteScrollArea
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackController, playback)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
 

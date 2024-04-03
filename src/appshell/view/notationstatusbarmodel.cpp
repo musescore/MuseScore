@@ -28,7 +28,7 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 
@@ -98,7 +98,7 @@ QVariant NotationStatusBarModel::currentWorkspaceItem()
     return QVariant::fromValue(item);
 }
 
-MenuItem* NotationStatusBarModel::makeMenuItem(const actions::ActionCode& actionCode)
+MenuItem* NotationStatusBarModel::makeMenuItem(const ActionCode& actionCode)
 {
     MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
     item->setId(QString::fromStdString(item->action().code));
@@ -393,7 +393,7 @@ INotationAccessibilityPtr NotationStatusBarModel::accessibility() const
     return notation() ? notation()->accessibility() : nullptr;
 }
 
-void NotationStatusBarModel::dispatch(const actions::ActionCode& code, const actions::ActionData& args)
+void NotationStatusBarModel::dispatch(const ActionCode& code, const ActionData& args)
 {
     dispatcher()->dispatch(code, args);
 }

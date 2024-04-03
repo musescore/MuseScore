@@ -27,8 +27,9 @@
 #include "global/api/iapiregister.h"
 #include "api/dispatcherapi.h"
 
-using namespace mu::actions;
-using namespace mu::modularity;
+using namespace muse::actions;
+using namespace muse::actions::api;
+using namespace muse::modularity;
 
 std::string ActionsModule::moduleName() const
 {

@@ -91,7 +91,7 @@ UiAction MenuItem::action() const
     return m_action;
 }
 
-mu::actions::ActionData MenuItem::args() const
+muse::actions::ActionData MenuItem::args() const
 {
     return m_args;
 }
@@ -201,7 +201,7 @@ void MenuItem::setAction(const UiAction& action)
     emit actionChanged();
 }
 
-void MenuItem::setArgs(const mu::actions::ActionData& args)
+void MenuItem::setArgs(const muse::actions::ActionData& args)
 {
     m_args = args;
 }
