@@ -312,6 +312,11 @@ void Tremolo::reset()
     setGenerated(true);
 }
 
+staff_idx_t Tremolo::vStaffIdx() const
+{
+    return chord() ? chord()->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
 //---------------------------------------------------------
 //   pagePos
 //---------------------------------------------------------
@@ -326,7 +331,7 @@ PointF Tremolo::pagePos() const
         return pos();
     }
     System* s = toSystem(e);
-    double yp = y() + s->staff(staffIdx())->y() + s->y();
+    double yp = y() + s->staff(vStaffIdx())->y() + s->y();
     return PointF(pageX(), yp);
 }
 
