@@ -182,19 +182,6 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 ###########################################
 # Add source tree
 ###########################################
-
-if (MUSE_BUILD_UNIT_TESTS)
-    enable_testing()
-    message(STATUS "Enabled testing")
-
-    define_property(TARGET PROPERTY OUTPUT_XML
-        BRIEF_DOCS "List XML files outputted by google test."
-        FULL_DOCS "List XML files outputted by google test."
-    )
-
-    add_subdirectory(thirdparty/googletest)
-endif()
-
 add_subdirectory(share)
 add_subdirectory(src/framework/global) # should be first to work pch
 add_subdirectory(src)
