@@ -91,7 +91,6 @@ option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
-option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 option(MUE_BUILD_ASAN "Enable Address Sanitizer" OFF)
 option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
@@ -126,8 +125,6 @@ option(MUE_ENABLE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
 ###########################################
 # Setup Configure
 ###########################################
-# backwards compatible, will be removed later
-set(MUSE_BUILD_UNIT_TESTS ${MUE_BUILD_UNIT_TESTS})
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)

@@ -247,6 +247,6 @@ endif()
 
 include(SetupModule)
 
-if (MUE_BUILD_GLOBAL_TESTS)
+if (MUSE_MODULE_GLOBAL_TESTS)
     add_subdirectory(tests)
 endif()
