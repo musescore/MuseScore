@@ -29,10 +29,6 @@ if (MUE_BUILD_APPSHELL_MODULE)
     add_subdirectory(appshell)
 endif()
 
-if (MUE_BUILD_AUTOBOT_MODULE)
-    add_subdirectory(autobot)
-endif()
-
 if (MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
 endif()
@@ -58,10 +54,6 @@ endif()
 
 if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)
     add_subdirectory(instrumentsscene)
-endif()
-
-if (MUE_BUILD_LEARN_MODULE)
-    add_subdirectory(learn)
 endif()
 
 if (MUE_BUILD_NOTATION_MODULE)

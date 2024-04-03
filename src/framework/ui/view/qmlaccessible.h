@@ -65,7 +65,7 @@ public:
     Q_ENUM(Role)
 };
 
-class AccessibleItem : public QObject, public QQmlParserStatus, public accessibility::IAccessible
+class AccessibleItem : public QObject, public QQmlParserStatus, public muse::accessibility::IAccessible
 {
     Q_OBJECT
 
@@ -94,7 +94,7 @@ class AccessibleItem : public QObject, public QQmlParserStatus, public accessibi
 
     Q_INTERFACES(QQmlParserStatus)
 
-    INJECT(accessibility::IAccessibilityController, accessibilityController)
+    INJECT(muse::accessibility::IAccessibilityController, accessibilityController)
 
 public:
     STATE_PROPERTY(enabled, State::Enabled)

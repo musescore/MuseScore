@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,23 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessiblenote.h"
+#ifndef MU_ACCESSIBILITY_ACCESSIBILITYSTUBMODULE_H
+#define MU_ACCESSIBILITY_ACCESSIBILITYSTUBMODULE_H
 
-#include "log.h"
+#include "modularity/imodulesetup.h"
 
-using namespace mu::engraving;
-using namespace muse::accessibility;
-
-AccessibleNote::AccessibleNote(EngravingItem* n)
-    : AccessibleItem(n)
+namespace muse::accessibility {
+class AccessibilityModule : public mu::modularity::IModuleSetup
 {
+public:
+    AccessibilityModule() = default;
+
+    std::string moduleName() const override;
+    void registerExports() override;
+};
 }
 
-AccessibleNote::~AccessibleNote()
-{
-}
-
-AccessibleItem* AccessibleNote::clone(EngravingItem* e) const
-{
-    return new AccessibleNote(e);
-}
+#endif // MU_ACCESSIBILITY_ACCESSIBILITYSTUBMODULE_H

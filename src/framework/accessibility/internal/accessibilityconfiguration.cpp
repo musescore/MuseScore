@@ -23,7 +23,7 @@
 
 #include <QAccessible>
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 class AccessibilityActivationObserver : public QAccessible::ActivationObserver
 {

@@ -33,6 +33,7 @@
 
 using namespace mu::inspector;
 using namespace mu::ui;
+using namespace muse::accessibility;
 
 static constexpr int GRIP_RADIUS = 6;
 static constexpr int GRIP_CENTER_RADIUS = GRIP_RADIUS - 2;
@@ -833,7 +834,7 @@ void BendGridCanvas::updatePointAccessibleName(int index)
     ui::AccessibleItem* accItem = m_pointsAccessibleItems[index];
     if (accItem) {
         accItem->setName(pointAccessibleName(m_points.at(index)));
-        accItem->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+        accItem->accessiblePropertyChanged().send(IAccessible::Property::Name, Val());
     }
 
     m_needVoicePointName = false;

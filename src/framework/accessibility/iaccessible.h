@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_IACCESSIBLE_H
-#define MU_ACCESSIBILITY_IACCESSIBLE_H
+#ifndef MUSE_ACCESSIBILITY_IACCESSIBLE_H
+#define MUSE_ACCESSIBILITY_IACCESSIBLE_H
 
 #include <QString>
 #include <QRect>
@@ -32,7 +32,7 @@
 
 class QWindow;
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class IAccessible
 {
 public:
@@ -150,11 +150,11 @@ public:
     // ListView item Interface
     virtual int accessibleRowIndex() const = 0;
 
-    virtual async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const = 0;
+    virtual mu::async::Channel<IAccessible::Property, mu::Val> accessiblePropertyChanged() const = 0;
 
     virtual void setState(State state, bool arg) = 0;
-    virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
+    virtual mu::async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
 };
 }
 
-#endif // MU_ACCESSIBILITY_IACCESSIBLE_H
+#endif // MUSE_ACCESSIBILITY_IACCESSIBLE_H

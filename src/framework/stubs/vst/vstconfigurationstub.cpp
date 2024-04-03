@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,16 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessibilityconfigurationstub.h"
 
-using namespace mu::accessibility;
+#include "vstconfigurationstub.h"
 
-bool AccessibilityConfigurationStub::enabled() const
+using namespace mu::vst;
+
+mu::io::paths_t VstConfigurationStub::userVstDirectories() const
 {
-    return false;
+    return {};
 }
 
-bool AccessibilityConfigurationStub::active() const
+void VstConfigurationStub::setUserVstDirectories(const io::paths_t&)
 {
-    return false;
+}
+
+mu::async::Channel<mu::io::paths_t> VstConfigurationStub::userVstDirectoriesChanged() const
+{
+    static mu::async::Channel<mu::io::paths_t> stub;
+    return stub;
 }

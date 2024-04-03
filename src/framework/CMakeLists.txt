@@ -18,6 +18,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+if (MUSE_BUILD_UNIT_TESTS)
+    enable_testing()
+    message(STATUS "Enabled testing")
+
+    define_property(TARGET PROPERTY OUTPUT_XML
+        BRIEF_DOCS "List XML files outputted by google test."
+        FULL_DOCS "List XML files outputted by google test."
+    )
+
+    add_subdirectory(testing/thirdparty/googletest)
+endif()
+
 if (MUSE_MODULE_ACCESSIBILITY)
     add_subdirectory(accessibility)
 endif()
@@ -26,6 +38,10 @@ add_subdirectory(actions)
 
 if (MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
+endif()
+
+if (MUSE_MODULE_AUTOBOT)
+    add_subdirectory(autobot)
 endif()
 
 if (MUSE_MODULE_CLOUD)
@@ -68,6 +84,10 @@ if (MUSE_MODULE_LANGUAGES)
     add_subdirectory(languages)
 endif()
 
+if (MUSE_MODULE_LEARN)
+    add_subdirectory(learn)
+endif()
+
 if (MUSE_MODULE_EXTENSIONS)
     add_subdirectory(extensions)
 endif()
@@ -79,6 +99,9 @@ endif()
 if (MUSE_MODULE_VST)
     add_subdirectory(vst)
 endif()
+
+# Stubs
+add_subdirectory(stubs)
 
 
 

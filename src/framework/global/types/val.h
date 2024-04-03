@@ -119,4 +119,10 @@ private:
 };
 }
 
+namespace muse {
+using Val = mu::Val;
+using ValList = mu::ValList;
+using ValMap = mu::ValMap;
+}
+
 #endif // MU_GLOBAL_VAL_H

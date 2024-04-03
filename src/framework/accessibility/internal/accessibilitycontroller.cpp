@@ -43,7 +43,8 @@
 #define MYLOG() LOGN()
 #endif
 
-using namespace mu::accessibility;
+using namespace muse;
+using namespace muse::accessibility;
 
 AccessibleObject* s_rootObject = nullptr;
 std::shared_ptr<IQAccessibleInterfaceRegister> accessibleInterfaceRegister = nullptr;
@@ -668,13 +669,13 @@ int AccessibilityController::accessibleRowIndex() const
     return 0;
 }
 
-mu::async::Channel<IAccessible::Property, mu::Val> AccessibilityController::accessiblePropertyChanged() const
+async::Channel<IAccessible::Property, mu::Val> AccessibilityController::accessiblePropertyChanged() const
 {
     static async::Channel<IAccessible::Property, Val> ch;
     return ch;
 }
 
-mu::async::Channel<IAccessible::State, bool> AccessibilityController::accessibleStateChanged() const
+async::Channel<IAccessible::State, bool> AccessibilityController::accessibleStateChanged() const
 {
     static async::Channel<IAccessible::State, bool> ch;
     return ch;

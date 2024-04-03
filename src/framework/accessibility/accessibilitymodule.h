@@ -20,16 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#ifndef MUSE_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#define MUSE_ACCESSIBILITY_ACCESSIBILITYMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class AccessibilityConfiguration;
-class AccessibilityModule : public modularity::IModuleSetup
+class AccessibilityModule : public mu::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -38,11 +38,11 @@ public:
     void resolveImports() override;
     void registerApi() override;
 
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const mu::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<AccessibilityConfiguration> m_configuration;
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
+#endif // MUSE_ACCESSIBILITY_ACCESSIBILITYMODULE_H

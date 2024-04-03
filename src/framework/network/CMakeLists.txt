@@ -35,6 +35,6 @@ set(MODULE_SRC
 
 include(SetupModule)
 
-if (MU_NETWORK_MODULE_TESTS)
+if (MUSE_MODULE_NETWORK_TESTS)
     add_subdirectory(tests)
 endif()

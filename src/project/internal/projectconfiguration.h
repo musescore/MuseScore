@@ -40,7 +40,7 @@ class ProjectConfiguration : public IProjectConfiguration
     INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(cloud::ICloudConfiguration, cloudConfiguration)
-    INJECT(accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
+    INJECT(muse::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(languages::ILanguagesService, languagesService)
 

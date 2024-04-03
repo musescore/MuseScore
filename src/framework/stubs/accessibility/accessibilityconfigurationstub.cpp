@@ -19,20 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYSTUBMODULE_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYSTUBMODULE_H
+#include "accessibilityconfigurationstub.h"
 
-#include "modularity/imodulesetup.h"
+using namespace muse::accessibility;
 
-namespace mu::accessibility {
-class AccessibilityModule : public modularity::IModuleSetup
+bool AccessibilityConfigurationStub::enabled() const
 {
-public:
-    AccessibilityModule() = default;
-
-    std::string moduleName() const override;
-    void registerExports() override;
-};
+    return false;
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYSTUBMODULE_H
+bool AccessibilityConfigurationStub::active() const
+{
+    return false;
+}

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,38 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessibilitycontrollerstub.h"
 
-using namespace mu::accessibility;
+#ifndef MU_VST_VSTCONFIGURATIONSTUB_H
+#define MU_VST_VSTCONFIGURATIONSTUB_H
 
-void AccessibilityControllerStub::reg(IAccessible*)
+#include "vst/ivstconfiguration.h"
+
+namespace mu::vst {
+class VstConfigurationStub : public IVstConfiguration
 {
+public:
+    io::paths_t userVstDirectories() const override;
+    void setUserVstDirectories(const io::paths_t& paths) override;
+    async::Channel<io::paths_t> userVstDirectoriesChanged() const override;
+};
 }
 
-void AccessibilityControllerStub::unreg(IAccessible*)
-{
-}
-
-const IAccessible* AccessibilityControllerStub::accessibleRoot() const
-{
-    return nullptr;
-}
-
-const IAccessible* AccessibilityControllerStub::lastFocused() const
-{
-    return nullptr;
-}
-
-bool AccessibilityControllerStub::needToVoicePanelInfo() const
-{
-    return false;
-}
-
-QString AccessibilityControllerStub::currentPanelAccessibleName() const
-{
-    return QString();
-}
-
-void AccessibilityControllerStub::setIgnoreQtAccessibilityEvents(bool)
-{
-}
+#endif // MU_VST_VSTCONFIGURATIONSTUB_H

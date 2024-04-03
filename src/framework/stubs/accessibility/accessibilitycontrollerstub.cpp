@@ -19,27 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLERSTUB_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLERSTUB_H
+#include "accessibilitycontrollerstub.h"
 
-#include "accessibility/iaccessibilitycontroller.h"
+using namespace muse::accessibility;
 
-namespace mu::accessibility {
-class AccessibilityControllerStub : public IAccessibilityController
+void AccessibilityControllerStub::reg(IAccessible*)
 {
-public:
-    void reg(IAccessible* item) override;
-    void unreg(IAccessible* item) override;
-
-    const IAccessible* accessibleRoot() const override;
-
-    const IAccessible* lastFocused() const override;
-
-    bool needToVoicePanelInfo() const override;
-    QString currentPanelAccessibleName() const override;
-
-    void setIgnoreQtAccessibilityEvents(bool ignore) override;
-};
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLERSTUB_H
+void AccessibilityControllerStub::unreg(IAccessible*)
+{
+}
+
+const IAccessible* AccessibilityControllerStub::accessibleRoot() const
+{
+    return nullptr;
+}
+
+const IAccessible* AccessibilityControllerStub::lastFocused() const
+{
+    return nullptr;
+}
+
+bool AccessibilityControllerStub::needToVoicePanelInfo() const
+{
+    return false;
+}
+
+QString AccessibilityControllerStub::currentPanelAccessibleName() const
+{
+    return QString();
+}
+
+void AccessibilityControllerStub::setIgnoreQtAccessibilityEvents(bool)
+{
+}

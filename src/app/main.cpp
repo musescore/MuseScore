@@ -36,7 +36,7 @@
 #ifdef MUSE_MODULE_ACCESSIBILITY
 #include "framework/accessibility/accessibilitymodule.h"
 #else
-#include "stubs/framework/accessibility/accessibilitystubmodule.h"
+#include "framework/stubs/accessibility/accessibilitystubmodule.h"
 #endif
 
 #include "framework/actions/actionsmodule.h"
@@ -44,21 +44,45 @@
 #ifdef MUSE_MODULE_AUDIO
 #include "framework/audio/audiomodule.h"
 #else
-#include "stubs/framework/audio/audiostubmodule.h"
+#include "framework/stubs/audio/audiostubmodule.h"
+#endif
+
+#ifdef MUSE_MODULE_CLOUD
+#include "framework/cloud/cloudmodule.h"
+#else
+#include "framework/stubs/cloud/cloudstubmodule.h"
 #endif
 
 #include "framework/draw/drawmodule.h"
 
+#ifdef MUSE_MODULE_LANGUAGES
+#include "framework/languages/languagesmodule.h"
+#else
+#include "framework/stubs/languages/languagesstubmodule.h"
+#endif
+
+#ifdef MUSE_MODULE_LEARN
+#include "framework/learn/learnmodule.h"
+#else
+#include "framework/stubs/learn/learnmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_MIDI
 #include "framework/midi/midimodule.h"
 #else
-#include "stubs/framework/midi/midistubmodule.h"
+#include "framework/stubs/midi/midistubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_MPE
 #include "framework/mpe/mpemodule.h"
 #else
-#include "stubs/framework/mpe/mpestubmodule.h"
+#include "framework/stubs/mpe/mpestubmodule.h"
+#endif
+
+#ifdef MUSE_MODULE_MULTIINSTANCES
+#include "framework/multiinstances/multiinstancesmodule.h"
+#else
+#include "framework/stubs/multiinstances/multiinstancesstubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_MUSESAMPLER
@@ -68,13 +92,13 @@
 #ifdef MUSE_MODULE_NETWORK
 #include "framework/network/networkmodule.h"
 #else
-#include "stubs/framework/network/networkstubmodule.h"
+#include "framework/stubs/network/networkstubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_SHORTCUTS
 #include "framework/shortcuts/shortcutsmodule.h"
 #else
-#include "stubs/framework/shortcuts/shortcutsstubmodule.h"
+#include "framework/stubs/shortcuts/shortcutsstubmodule.h"
 #endif
 
 #ifdef MUSE_MODULE_UI
@@ -83,16 +107,28 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #endif
 
+#ifdef MUE_BUILD_UPDATE_MODULE
+#include "update/updatemodule.h"
+#else
+#include "framework/stubs/update/updatestubmodule.h"
+#endif
+
 #ifdef MUSE_MODULE_VST
 #include "framework/vst/vstmodule.h"
 #else
-#include "stubs/framework/vst/vststubmodule.h"
+#include "framework/stubs/vst/vststubmodule.h"
+#endif
+
+#ifdef MUSE_MODULE_WORKSPACE
+#include "framework/workspace/workspacemodule.h"
+#else
+#include "framework/stubs/workspace/workspacestubmodule.h"
 #endif
 
 // Modules
 #include "appshell/appshellmodule.h"
 
-#ifdef MUE_BUILD_AUTOBOT_MODULE
+#ifdef MUSE_MODULE_AUTOBOT
 #include "autobot/autobotmodule.h"
 #endif
 
@@ -100,12 +136,6 @@
 #include "braille/braillemodule.h"
 #else
 #include "stubs/braille/braillestubmodule.h"
-#endif
-
-#ifdef MUSE_MODULE_CLOUD
-#include "cloud/cloudmodule.h"
-#else
-#include "stubs/cloud/cloudstubmodule.h"
 #endif
 
 #include "commonscene/commonscenemodule.h"
@@ -147,24 +177,6 @@
 #include "stubs/instrumentsscene/instrumentsscenestubmodule.h"
 #endif
 
-#ifdef MUSE_MODULE_LANGUAGES
-#include "languages/languagesmodule.h"
-#else
-#include "stubs/languages/languagesstubmodule.h"
-#endif
-
-#ifdef MUE_BUILD_LEARN_MODULE
-#include "learn/learnmodule.h"
-#else
-#include "stubs/learn/learnmodule.h"
-#endif
-
-#ifdef MUSE_MODULE_MULTIINSTANCES
-#include "multiinstances/multiinstancesmodule.h"
-#else
-#include "stubs/multiinstances/multiinstancesstubmodule.h"
-#endif
-
 #ifdef MUE_BUILD_NOTATION_MODULE
 #include "notation/notationmodule.h"
 #else
@@ -195,17 +207,9 @@
 #include "stubs/project/projectstubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_UPDATE_MODULE
-#include "update/updatemodule.h"
-#else
-#include "stubs/update/updatestubmodule.h"
-#endif
-
 #ifdef MUSE_MODULE_WORKSPACE
-#include "workspace/workspacemodule.h"
 #include "workspacescene/workspacescenemodule.h"
 #else
-#include "stubs/workspace/workspacestubmodule.h"
 #include "stubs/workspacescene/workspacescenestubmodule.h"
 #endif
 
@@ -260,7 +264,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::diagnostics::DiagnosticsModule());
 
     // framework
-    app.addModule(new mu::accessibility::AccessibilityModule());
+    app.addModule(new muse::accessibility::AccessibilityModule());
     app.addModule(new mu::actions::ActionsModule());
     app.addModule(new mu::audio::AudioModule());
     app.addModule(new mu::draw::DrawModule());
@@ -283,7 +287,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::appshell::AppShellModule());
 #endif
 
-#ifdef MUE_BUILD_AUTOBOT_MODULE
+#ifdef MUSE_MODULE_AUTOBOT
     app.addModule(new mu::autobot::AutobotModule());
 #endif
 

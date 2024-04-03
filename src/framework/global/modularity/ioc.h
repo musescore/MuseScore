@@ -29,6 +29,11 @@ template<class I>
 using Inject = kors::modularity::Inject<I>;
 }
 
+namespace muse {
+template<class I>
+using Inject = kors::modularity::Inject<I>;
+}
+
 namespace mu::modularity {
 using ModulesIoC = kors::modularity::ModulesIoC;
 

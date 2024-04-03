@@ -18,14 +18,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_subdirectory(framework)
-
 if (NOT MUE_BUILD_BRAILLE_MODULE)
     add_subdirectory(braille)
-endif()
-
-if (NOT MUSE_MODULE_CLOUD)
-    add_subdirectory(cloud)
 endif()
 
 if (NOT MUE_BUILD_INSPECTOR_MODULE)
@@ -34,18 +28,6 @@ endif()
 
 if (NOT MUE_BUILD_INSTRUMENTSSCENE_MODULE)
     add_subdirectory(instrumentsscene)
-endif()
-
-if (NOT MUSE_MODULE_LANGUAGES)
-    add_subdirectory(languages)
-endif()
-
-if (NOT MUE_BUILD_LEARN_MODULE)
-    add_subdirectory(learn)
-endif()
-
-if (NOT MUSE_MODULE_MULTIINSTANCES)
-    add_subdirectory(multiinstances)
 endif()
 
 if (NOT MUE_BUILD_NOTATION_MODULE)
@@ -64,11 +46,6 @@ if (NOT MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
-if (NOT MUE_BUILD_UPDATE_MODULE)
-    add_subdirectory(update)
-endif()
-
 if (NOT MUSE_MODULE_WORKSPACE)
-    add_subdirectory(workspace)
     add_subdirectory(workspacescene)
 endif()

@@ -159,6 +159,6 @@ endif()
 
 include(SetupModule)
 
-if (MU_UI_MODULE_TESTS)
+if (MUSE_MODULE_UI_TESTS)
     add_subdirectory(tests)
 endif()

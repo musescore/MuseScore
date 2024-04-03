@@ -37,6 +37,10 @@
 #cmakedefine MUSE_MODULE_LANGUAGES_TESTS 1
 #cmakedefine MUSE_MODULE_LANGUAGES_API 1
 
+#cmakedefine MUSE_MODULE_LEARN 1
+#cmakedefine MUSE_MODULE_LEARN_TESTS 1
+#cmakedefine MUSE_MODULE_LEARN_API 1
+
 #cmakedefine MUSE_MODULE_MIDI 1
 #cmakedefine MUSE_MODULE_MIDI_TESTS 1
 #cmakedefine MUSE_MODULE_MIDI_API 1

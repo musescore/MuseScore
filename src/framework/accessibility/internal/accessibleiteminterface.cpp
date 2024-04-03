@@ -38,7 +38,8 @@
 #define MYLOG() LOGN()
 #endif
 
-using namespace mu::accessibility;
+using namespace mu;
+using namespace muse::accessibility;
 
 AccessibleItemInterface::AccessibleItemInterface(AccessibleObject* object)
 {

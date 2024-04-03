@@ -73,7 +73,6 @@ option(MUE_BUILD_VIDEOEXPORT_MODULE "Build videoexport module" OFF)
 option(MUE_BUILD_IMAGESEXPORT_MODULE "Build imagesexport module" ON)
 option(MUE_BUILD_INSPECTOR_MODULE "Build inspector module" ON)
 option(MUE_BUILD_INSTRUMENTSSCENE_MODULE "Build instruments scene module" ON)
-option(MUE_BUILD_LEARN_MODULE "Build learn module" ON)
 option(MUE_BUILD_NOTATION_MODULE "Build notation module" ON)
 option(MUE_BUILD_NOTATION_TESTS "Build notation tests" ON)
 option(MUE_BUILD_PALETTE_MODULE "Build palette module" ON)
@@ -92,7 +91,6 @@ option(MUE_RUN_LRELEASE "Generate .qm files" ON)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
-option(MUE_BUILD_UNIT_TESTS "Build unit tests" ON)
 set(MUE_VTEST_MSCORE_REF_BIN "${CMAKE_CURRENT_LIST_DIR}/../MU_ORIGIN/MuseScore/build.debug/install/${INSTALL_SUBDIR}/mscore" CACHE PATH "Path to mscore ref bin")
 option(MUE_BUILD_ASAN "Enable Address Sanitizer" OFF)
 option(MUE_BUILD_CRASHPAD_CLIENT "Build crashpad client" ON)
@@ -127,8 +125,6 @@ option(MUE_ENABLE_STRING_DEBUG_HACK "Enable string debug hack (only clang)" ON)
 ###########################################
 # Setup Configure
 ###########################################
-# backwards compatible, will be removed later
-set(MUSE_BUILD_UNIT_TESTS ${MUE_BUILD_UNIT_TESTS})
 
 if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake")
     include(${CMAKE_CURRENT_LIST_DIR}/SetupConfigure.local.cmake)
@@ -183,19 +179,6 @@ endif(MUE_DOWNLOAD_SOUNDFONT)
 ###########################################
 # Add source tree
 ###########################################
-
-if (MUSE_BUILD_UNIT_TESTS)
-    enable_testing()
-    message(STATUS "Enabled testing")
-
-    define_property(TARGET PROPERTY OUTPUT_XML
-        BRIEF_DOCS "List XML files outputted by google test."
-        FULL_DOCS "List XML files outputted by google test."
-    )
-
-    add_subdirectory(thirdparty/googletest)
-endif()
-
 add_subdirectory(share)
 add_subdirectory(src/framework/global) # should be first to work pch
 add_subdirectory(src)

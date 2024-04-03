@@ -36,7 +36,7 @@ using ::testing::SaveArg;
 using ::testing::DoAll;
 
 using namespace mu;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 class Accessibility_ControllerTests : public ::testing::Test
 {
@@ -56,7 +56,7 @@ public:
         m_controller->configuration.set(m_configuration);
     }
 
-    class AccessibleItem : public accessibility::IAccessible
+    class AccessibleItem : public IAccessible
     {
     public:
         void setParent(AccessibleItem* parent) { m_parent = parent; }

@@ -54,7 +54,7 @@
 using namespace mu::palette;
 using namespace mu::modularity;
 using namespace mu::ui;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 static void palette_init_qrc()
 {

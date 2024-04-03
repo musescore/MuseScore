@@ -28,4 +28,9 @@ template<typename ... T>
 using Channel = kors::async::Channel<T...>;
 }
 
+namespace muse::async {
+template<typename ... T>
+using Channel = kors::async::Channel<T...>;
+}
+
 #endif // MU_ASYNC_CHANNEL_H
