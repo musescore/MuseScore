@@ -3582,10 +3582,10 @@ void ChordLayout::fillShape(const ChordRest* item, Chord::LayoutData* ldata, con
 {
     switch (item->type()) {
     case ElementType::CHORD:
-        fillShape(static_cast<const Chord*>(item), static_cast<Chord::LayoutData*>(ldata), conf);
+        fillShape(static_cast<const Chord*>(item), static_cast<Chord::LayoutData*>(ldata));
         break;
     case ElementType::REST:
-        fillShape(static_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata), conf);
+        fillShape(static_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata));
         break;
     case ElementType::MEASURE_REPEAT:
         fillShape(static_cast<const MeasureRepeat*>(item), static_cast<MeasureRepeat::LayoutData*>(ldata), conf);
@@ -3599,20 +3599,16 @@ void ChordLayout::fillShape(const ChordRest* item, Chord::LayoutData* ldata, con
     }
 }
 
-Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfiguration& conf)
+Shape ChordLayout::chordRestShape(const ChordRest* item)
 {
     Shape shape;
     {
-        double x1 = DBL_MAX;
-        double x2 = -DBL_MAX;
         for (Lyrics* l : item->lyrics()) {
             if (!l || !l->addToSkyline() || l->xmlText().empty()) {
                 continue;
             }
             RectF bbox = l->ldata()->bbox().translated(l->ldata()->pos());
-            x1 = std::min(x1, bbox.left());
-            x2 = std::max(x2, bbox.right());
-            shape.addHorizontalSpacing(l, x1, x2);
+            shape.addHorizontalSpacing(l, bbox.left(), bbox.right());
         }
     }
 
@@ -3641,7 +3637,7 @@ bool ChordLayout::leaveSpaceForTie(const Articulation* item)
     return leaveSpace;
 }
 
-void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
+void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata)
 {
     Shape shape(Shape::Type::Composite);
 
@@ -3705,7 +3701,7 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
         }
     }
 
-    shape.add(chordRestShape(item, conf));      // add lyrics
+    shape.add(chordRestShape(item));      // add lyrics
 
     for (const LedgerLine* l = item->ledgerLines(); l; l = l->next()) {
         shape.add(l->shape().translate(l->pos()));
@@ -3724,12 +3720,12 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
     ldata->setShape(shape);
 }
 
-void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf)
+void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata)
 {
     Shape shape(Shape::Type::Composite);
 
     if (!item->isGap()) {
-        shape.add(chordRestShape(item, conf));
+        shape.add(chordRestShape(item));
         shape.add(item->symBbox(ldata->sym), item);
         for (const NoteDot* dot : item->dotList()) {
             shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);

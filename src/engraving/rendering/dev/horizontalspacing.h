@@ -59,7 +59,7 @@ private:
     static bool isSpecialNotePaddingType(ElementType type);
     static void computeNotePadding(const Note* note, const EngravingItem* item2, double& padding, double scaling);
     static void computeLedgerRestPadding(const Rest* rest2, double& padding);
-    static void computeLyricsPadding(const Lyrics* lyrics1, const Lyrics* lyrics2, double &padding);
+    static void computeLyricsPadding(const Lyrics* lyrics1, const Lyrics* lyrics2, double& padding);
 
     static bool isSameVoiceKerningLimited(const EngravingItem* item);
     static bool isNeverKernable(const EngravingItem* item);
@@ -68,6 +68,7 @@ private:
     static KerningType doComputeKerningType(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeNoteKerningType(const Note* note, const EngravingItem* item2);
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
+    static KerningType computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2);
 };
 } // namespace mu::engraving::layout
 #endif // MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H

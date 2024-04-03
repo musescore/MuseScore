@@ -534,7 +534,7 @@ KerningType HorizontalSpacing::doComputeKerningType(const EngravingItem* item1, 
     case ElementType::HARMONY:
         return item2->isHarmony() ? KerningType::NON_KERNING : KerningType::KERNING;
     case ElementType::LYRICS:
-        return (item2->isLyrics() || item2->isBarLine()) ? KerningType::NON_KERNING : KerningType::KERNING;
+        return computeLyricsKerningType(toLyrics(item1), item2);
     case ElementType::NOTE:
         return computeNoteKerningType(toNote(item1), item2);
     case ElementType::STEM_SLASH:
@@ -595,4 +595,20 @@ KerningType HorizontalSpacing::computeStemSlashKerningType(const StemSlash* stem
     }
 
     return KerningType::KERNING;
+}
+
+KerningType HorizontalSpacing::computeLyricsKerningType(const Lyrics* lyrics1, const EngravingItem* item2)
+{
+    if (item2->isBarLine()) {
+        return KerningType::NON_KERNING;
+    }
+
+    if (item2->isLyrics()) {
+        const Lyrics* lyrics2 = toLyrics(item2);
+        if (lyrics1->no() == lyrics2->no()) {
+            return KerningType::NON_KERNING;
+        }
+    }
+
+    return KerningType::ALLOW_COLLISION;
 }
