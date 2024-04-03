@@ -28,7 +28,7 @@
 #include "../iaudioconfiguration.h"
 #include "../iaudiodriver.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioOutputDeviceController : public async::Asyncable
 {
     Inject<IAudioConfiguration> configuration;

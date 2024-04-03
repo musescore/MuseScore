@@ -79,8 +79,8 @@ private:
     bool isSectionVisible(MixerSectionType sectionType) const;
 
     uicomponents::MenuItem* buildSectionVisibleItem(MixerSectionType sectionType);
-    uicomponents::MenuItem* buildAuxSendVisibleItem(audio::aux_channel_idx_t index);
-    uicomponents::MenuItem* buildAuxChannelVisibleItem(audio::aux_channel_idx_t index);
+    uicomponents::MenuItem* buildAuxSendVisibleItem(muse::audio::aux_channel_idx_t index);
+    uicomponents::MenuItem* buildAuxChannelVisibleItem(muse::audio::aux_channel_idx_t index);
 
     void toggleMixerSection(const muse::actions::ActionData& args);
     void toggleAuxSend(const muse::actions::ActionData& args);

@@ -54,10 +54,11 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::modularity;
-using namespace mu::audio;
-using namespace mu::audio::synth;
-using namespace mu::audio::fx;
+using namespace muse::audio;
+using namespace muse::audio::synth;
+using namespace muse::audio::fx;
 
 #ifdef JACK_AUDIO
 #include "internal/platform/jack/jackaudiodriver.h"

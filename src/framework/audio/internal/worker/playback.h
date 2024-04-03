@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SEQUENCER_H
-#define MU_AUDIO_SEQUENCER_H
+#ifndef MUSE_AUDIO_SEQUENCER_H
+#define MUSE_AUDIO_SEQUENCER_H
 
 #include <map>
 
@@ -32,7 +32,7 @@
 #include "igettracksequence.h"
 #include "iplayback.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class Playback : public IPlayback, public IGetTrackSequence, public async::Asyncable
 {
 public:
@@ -68,4 +68,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SEQUENCER_H
+#endif // MUSE_AUDIO_SEQUENCER_H

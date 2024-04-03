@@ -25,8 +25,8 @@
 
 #include "log.h"
 
-using namespace mu::audio;
-using namespace mu::audio::dsp;
+using namespace muse::audio;
+using namespace muse::audio::dsp;
 
 static constexpr float RATIO = 4.f;
 

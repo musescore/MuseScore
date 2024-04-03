@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_OSXAUDIODRIVER_H
-#define MU_AUDIO_OSXAUDIODRIVER_H
+#ifndef MUSE_AUDIO_OSXAUDIODRIVER_H
+#define MUSE_AUDIO_OSXAUDIODRIVER_H
 
 #include <map>
 #include <memory>
@@ -37,7 +37,7 @@ struct AudioTimeStamp;
 struct AudioQueueBuffer;
 struct OpaqueAudioQueue;
 
-namespace mu::audio {
+namespace muse::audio {
 class OSXAudioDriver : public IAudioDriver
 {
     INJECT(IAudioConfiguration, configuration)
@@ -93,4 +93,4 @@ private:
     async::Notification m_sampleRateChanged;
 };
 }
-#endif // MU_AUDIO_OSXAUDIODRIVER_H
+#endif // MUSE_AUDIO_OSXAUDIODRIVER_H

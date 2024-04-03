@@ -24,7 +24,7 @@
 
 using namespace mu;
 using namespace mu::vst;
-using namespace mu::audio;
+using namespace muse::audio;
 
 VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr, const AudioFxParams& params)
     : m_pluginPtr(pluginPtr),

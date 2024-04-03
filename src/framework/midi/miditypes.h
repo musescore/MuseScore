@@ -24,12 +24,9 @@
 #define MU_MIDI_MIDITYPES_H
 
 #include <string>
-#include <sstream>
 #include <cstdint>
 #include <vector>
 #include <map>
-#include <functional>
-#include <set>
 
 #include "async/channel.h"
 #include "types/retval.h"
@@ -163,6 +160,16 @@ inline std::vector<int> splitDeviceId(const MidiDeviceID& deviceId)
 
     return result;
 }
+}
+
+namespace muse::midi {
+using Event = mu::midi::Event;
+using Program = mu::midi::Program;
+using Programs = mu::midi::Programs;
+using channel_t = mu::midi::channel_t;
+using note_idx_t = mu::midi::note_idx_t;
+using tuning_t = mu::midi::tuning_t;
+using velocity_t = mu::midi::velocity_t;
 }
 
 #endif // MU_MIDI_MIDITYPES_H

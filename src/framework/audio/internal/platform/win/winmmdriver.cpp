@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 namespace  {
 static const int BUFFER_COUNT = 4;

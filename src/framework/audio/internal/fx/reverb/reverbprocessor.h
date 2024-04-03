@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_REVERBPROCESSOR_H
-#define MU_AUDIO_REVERBPROCESSOR_H
+#ifndef MUSE_AUDIO_REVERBPROCESSOR_H
+#define MUSE_AUDIO_REVERBPROCESSOR_H
 
 #include <cstdint>
 #include <string>
@@ -30,7 +30,7 @@
 
 #include "ifxprocessor.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class ReverbProcessor : public IFxProcessor
 {
 public:
@@ -147,4 +147,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_REVERBPROCESSOR_H
+#endif // MUSE_AUDIO_REVERBPROCESSOR_H

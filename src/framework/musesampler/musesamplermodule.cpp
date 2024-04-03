@@ -34,6 +34,7 @@
 #include "internal/musesampleractioncontroller.h"
 
 using namespace mu;
+using namespace muse::audio;
 using namespace mu::modularity;
 using namespace mu::musesampler;
 
@@ -54,10 +55,10 @@ void MuseSamplerModule::registerExports()
 
 void MuseSamplerModule::resolveImports()
 {
-    auto synthResolver = ioc()->resolve<audio::synth::ISynthResolver>(moduleName());
+    auto synthResolver = ioc()->resolve<synth::ISynthResolver>(moduleName());
 
     if (synthResolver) {
-        synthResolver->registerResolver(audio::AudioSourceType::MuseSampler, m_resolver);
+        synthResolver->registerResolver(AudioSourceType::MuseSampler, m_resolver);
     }
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());

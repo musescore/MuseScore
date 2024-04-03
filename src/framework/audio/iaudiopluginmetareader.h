@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IAUDIOPLUGINMETAREADER_H
-#define MU_AUDIO_IAUDIOPLUGINMETAREADER_H
+#ifndef MUSE_AUDIO_IAUDIOPLUGINMETAREADER_H
+#define MUSE_AUDIO_IAUDIOPLUGINMETAREADER_H
 
 #include "global/types/retval.h"
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioPluginMetaReader
 {
 public:
@@ -39,4 +39,4 @@ public:
 using IAudioPluginMetaReaderPtr = std::shared_ptr<IAudioPluginMetaReader>;
 }
 
-#endif // MU_AUDIO_IAUDIOPLUGINMETAREADER_H
+#endif // MUSE_AUDIO_IAUDIOPLUGINMETAREADER_H

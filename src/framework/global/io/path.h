@@ -118,4 +118,11 @@ paths_t pathsFromString(const std::string& str, const std::string& delim = ";");
 std::string pathsToString(const paths_t& ps, const std::string& delim = ";");
 }
 
+namespace muse::io {
+using path_t = mu::io::path_t;
+using paths_t = mu::io::paths_t;
+
+inline std::string suffix(const path_t& path) { return mu::io::suffix(path); }
+}
+
 #endif // MU_IO_PATH_H

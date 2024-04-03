@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_LINUXAUDIODRIVER_H
-#define MU_AUDIO_LINUXAUDIODRIVER_H
+#ifndef MUSE_AUDIO_LINUXAUDIODRIVER_H
+#define MUSE_AUDIO_LINUXAUDIODRIVER_H
 
 #include <jack/jack.h>
 
@@ -29,7 +29,7 @@
 #include "iaudiodriver.h"
 #include "audiodeviceslistener.h"
 
-namespace mu::audio {
+namespace muse::audio {
 int jack_process_callback(jack_nframes_t nframes, void* jackParam);
 void jack_cleanup_callback(void* args);
 
@@ -77,4 +77,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_LINUXAUDIODRIVER_H
+#endif // MUSE_AUDIO_LINUXAUDIODRIVER_H

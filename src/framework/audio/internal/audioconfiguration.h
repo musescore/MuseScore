@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIOCONFIGURATION_H
-#define MU_AUDIO_AUDIOCONFIGURATION_H
+#ifndef MUSE_AUDIO_AUDIOCONFIGURATION_H
+#define MUSE_AUDIO_AUDIOCONFIGURATION_H
 
 #include "global/modularity/ioc.h"
 #include "global/io/ifilesystem.h"
@@ -28,10 +28,10 @@
 
 #include "../iaudioconfiguration.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioConfiguration : public IAudioConfiguration
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<mu::IGlobalConfiguration> globalConfiguration;
     Inject<io::IFileSystem> fileSystem;
 
 public:
@@ -80,4 +80,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOCONFIGURATION_H
+#endif // MUSE_AUDIO_AUDIOCONFIGURATION_H

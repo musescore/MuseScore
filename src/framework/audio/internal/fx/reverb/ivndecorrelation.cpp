@@ -22,7 +22,7 @@
 
 #include "ivndecorrelation.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 const float ivn15_ms[64][15] = {
     { 0.f, 1.00002f, 2.98952f, 5.04659f, 6.20219f, 9.14794f, 10.2062f, 12.5143f, 14.8911f, 16.2289f, 18.7191f, 20.5436f,
       22.4762f, 24.7153f, 26.6872f },
@@ -284,4 +284,4 @@ const float ivn15_gn[64][15] = {
     { 0.519573f, 0.707109f, 0.391646f, 0.109504f, -0.216993f, -0.0898085f, 0.092334f, -0.0139642f, -0.00921733f,
       0.0217991f, 0.0144964f, -0.00241457f, -0.0012854f, -0.00342594f, -0.000542503f },
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx

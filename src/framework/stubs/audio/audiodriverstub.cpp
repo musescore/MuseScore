@@ -21,7 +21,7 @@
  */
 #include "audiodriverstub.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 void AudioDriverStub::init()
 {

@@ -28,9 +28,10 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace mu;
+using namespace muse::audio;
 
-namespace mu::audio {
+namespace muse::audio {
 static const std::map<AudioResourceType, std::string> RESOURCE_TYPE_TO_STRING_MAP {
     { AudioResourceType::VstPlugin, "VstPlugin" },
 };
@@ -110,7 +111,7 @@ mu::Ret KnownAudioPluginsRegister::load()
     io::path_t knownAudioPluginsPath = configuration()->knownAudioPluginsFilePath();
     if (!fileSystem()->exists(knownAudioPluginsPath)) {
         m_loaded = true;
-        return make_ok();
+        return mu::make_ok();
     }
 
     RetVal<ByteArray> file = fileSystem()->readFile(knownAudioPluginsPath);
@@ -131,7 +132,7 @@ mu::Ret KnownAudioPluginsRegister::load()
 
         AudioPluginInfo info;
         info.meta = metaFromJson(object.value("meta").toObject());
-        info.meta.attributes.emplace(audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING);
+        info.meta.attributes.emplace(audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mu::mpe::GENERIC_SETUP_DATA_STRING);
         info.type = audioPluginTypeFromCategoriesString(info.meta.attributeVal(audio::CATEGORIES_ATTRIBUTE));
         info.path = object.value("path").toString();
         info.enabled = object.value("enabled").toBool();
@@ -210,7 +211,7 @@ mu::Ret KnownAudioPluginsRegister::unregisterPlugin(const AudioResourceId& resou
     }
 
     if (!exists(resourceId)) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     for (const auto& pair : m_pluginInfoMap) {

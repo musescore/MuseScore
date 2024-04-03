@@ -24,13 +24,14 @@
 
 #include "log.h"
 
+using namespace muse::audio;
 using namespace mu::iex::audioexport;
 
 mu::Ret Mp3Writer::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
-    const audio::SoundTrackFormat format {
-        audio::SoundTrackType::MP3,
-        static_cast<audio::sample_rate_t>(configuration()->exportSampleRate()),
+    const SoundTrackFormat format {
+        SoundTrackType::MP3,
+        static_cast<sample_rate_t>(configuration()->exportSampleRate()),
         2 /* audioChannelsNumber */,
         configuration()->exportMp3Bitrate()
     };

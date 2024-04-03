@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIOENGINE_H
-#define MU_AUDIO_AUDIOENGINE_H
+#ifndef MUSE_AUDIO_AUDIOENGINE_H
+#define MUSE_AUDIO_AUDIOENGINE_H
 
 #include <memory>
 
@@ -30,7 +30,7 @@
 
 #include "internal/worker/mixer.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioBuffer;
 class AudioEngine : public async::Asyncable
 {
@@ -69,4 +69,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOENGINE_H
+#endif // MUSE_AUDIO_AUDIOENGINE_H

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
-#define MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
+#ifndef MUSE_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
+#define MUSE_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
 
 #include "global/modularity/ioc.h"
 #include "global/iprocess.h"
@@ -34,15 +34,15 @@
 #include "iaudiopluginsscannerregister.h"
 #include "iaudiopluginmetareaderregister.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class RegisterAudioPluginsScenario : public IRegisterAudioPluginsScenario, public async::Asyncable
 {
     INJECT(IKnownAudioPluginsRegister, knownPluginsRegister)
     INJECT(IAudioPluginsScannerRegister, scannerRegister)
     INJECT(IAudioPluginMetaReaderRegister, metaReaderRegister)
-    INJECT(IGlobalConfiguration, globalConfiguration)
-    INJECT(IInteractive, interactive)
-    INJECT(IProcess, process)
+    INJECT(mu::IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::IInteractive, interactive)
+    INJECT(mu::IProcess, process)
 
 public:
     void init();
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H
+#endif // MUSE_AUDIO_REGISTERAUDIOPLUGINSSCENARIO_H

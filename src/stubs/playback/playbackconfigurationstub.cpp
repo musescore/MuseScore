@@ -22,7 +22,7 @@
 #include "playbackconfigurationstub.h"
 
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 
 bool PlaybackConfigurationStub::playNotesWhenEditing() const
 {
@@ -70,30 +70,30 @@ mu::async::Channel<MixerSectionType, bool> PlaybackConfigurationStub::isMixerSec
     return {};
 }
 
-bool PlaybackConfigurationStub::isAuxSendVisible(audio::aux_channel_idx_t) const
+bool PlaybackConfigurationStub::isAuxSendVisible(aux_channel_idx_t) const
 {
     return false;
 }
 
-void PlaybackConfigurationStub::setAuxSendVisible(audio::aux_channel_idx_t, bool)
+void PlaybackConfigurationStub::setAuxSendVisible(aux_channel_idx_t, bool)
 {
 }
 
-mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxSendVisibleChanged() const
+mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxSendVisibleChanged() const
 {
     return {};
 }
 
-bool PlaybackConfigurationStub::isAuxChannelVisible(audio::aux_channel_idx_t) const
+bool PlaybackConfigurationStub::isAuxChannelVisible(aux_channel_idx_t) const
 {
     return false;
 }
 
-void PlaybackConfigurationStub::setAuxChannelVisible(audio::aux_channel_idx_t, bool) const
+void PlaybackConfigurationStub::setAuxChannelVisible(aux_channel_idx_t, bool) const
 {
 }
 
-mu::async::Channel<mu::audio::aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxChannelVisibleChanged() const
+mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxChannelVisibleChanged() const
 {
     return {};
 }

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
-#define MU_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
+#ifndef MUSE_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
+#define MUSE_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
 
 #include <cassert>
 
@@ -31,7 +31,7 @@
  Improved Velvet Noise Decorrelation using pre-optimized impulse sequences.
 */
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 extern const float ivn15_gn[64][15];
 extern const float ivn15_ms[64][15];
 
@@ -68,6 +68,6 @@ public:
 private:
     SparseFirFilter m_filter;
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H
+#endif // MUSE_AUDIO_IMPROVEDVELVETNOISEDECORRELATION_H

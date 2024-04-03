@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ISYNTHRESOLVER_H
-#define MU_AUDIO_ISYNTHRESOLVER_H
+#ifndef MUSE_AUDIO_ISYNTHRESOLVER_H
+#define MUSE_AUDIO_ISYNTHRESOLVER_H
 
 #include <memory>
 
@@ -30,7 +30,7 @@
 #include "isynthesizer.h"
 #include "audiotypes.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class ISynthResolver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ISynthResolver)
@@ -67,4 +67,4 @@ public:
 using ISynthResolverPtr = std::shared_ptr<ISynthResolver>;
 }
 
-#endif // MU_AUDIO_ISYNTHRESOLVER_H
+#endif // MUSE_AUDIO_ISYNTHRESOLVER_H

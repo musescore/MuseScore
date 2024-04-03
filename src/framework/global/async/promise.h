@@ -29,4 +29,9 @@ template<typename ... T>
 using Promise = kors::async::Promise<T...>;
 }
 
+namespace muse::async {
+template<typename ... T>
+using Promise = kors::async::Promise<T...>;
+}
+
 #endif // MU_ASYNC_PROMISE_H

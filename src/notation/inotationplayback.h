@@ -51,8 +51,8 @@ public:
     virtual async::Channel<engraving::InstrumentTrackId> trackAdded() const = 0;
     virtual async::Channel<engraving::InstrumentTrackId> trackRemoved() const = 0;
 
-    virtual audio::msecs_t totalPlayTime() const = 0;
-    virtual async::Channel<audio::msecs_t> totalPlayTimeChanged() const = 0;
+    virtual muse::audio::msecs_t totalPlayTime() const = 0;
+    virtual async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const = 0;
 
     virtual float playedTickToSec(midi::tick_t tick) const = 0;
     virtual midi::tick_t secToPlayedTick(float sec) const = 0;

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ISEQUENCEIO_H
-#define MU_AUDIO_ISEQUENCEIO_H
+#ifndef MUSE_AUDIO_ISEQUENCEIO_H
+#define MUSE_AUDIO_ISEQUENCEIO_H
 
 #include <memory>
 
@@ -29,7 +29,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class ISequenceIO
 {
 public:
@@ -52,4 +52,4 @@ public:
 using ISequenceIOPtr = std::shared_ptr<ISequenceIO>;
 }
 
-#endif // MU_AUDIO_ISEQUENCEIO_H
+#endif // MUSE_AUDIO_ISEQUENCEIO_H

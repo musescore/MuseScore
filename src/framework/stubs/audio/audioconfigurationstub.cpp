@@ -21,7 +21,7 @@
  */
 #include "audioconfigurationstub.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu;
 
 std::vector<std::string> AudioConfigurationStub::availableAudioApiList() const

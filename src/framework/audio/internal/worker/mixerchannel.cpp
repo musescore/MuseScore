@@ -29,7 +29,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::async;
 
 MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)

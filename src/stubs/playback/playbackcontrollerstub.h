@@ -35,26 +35,27 @@ public:
     async::Notification isPlayingChanged() const override;
 
     void seek(const midi::tick_t tick) override;
-    void seek(const audio::msecs_t msecs) override;
+    void seek(const muse::audio::msecs_t msecs) override;
     void reset() override;
 
     async::Notification playbackPositionChanged() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
     float playbackPositionInSeconds() const override;
 
-    audio::TrackSequenceId currentTrackSequenceId() const override;
+    muse::audio::TrackSequenceId currentTrackSequenceId() const override;
     async::Notification currentTrackSequenceIdChanged() const override;
 
     const InstrumentTrackIdMap& instrumentTrackIdMap() const override;
     const AuxTrackIdMap& auxTrackIdMap() const override;
 
-    async::Channel<audio::TrackId> trackAdded() const override;
-    async::Channel<audio::TrackId> trackRemoved() const override;
+    async::Channel<muse::audio::TrackId> trackAdded() const override;
+    async::Channel<muse::audio::TrackId> trackRemoved() const override;
 
-    std::string auxChannelName(audio::aux_channel_idx_t index) const override;
-    async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
+    std::string auxChannelName(muse::audio::aux_channel_idx_t index) const override;
+    async::Channel<muse::audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const override;
 
-    async::Promise<audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const override;
+    async::Promise<muse::audio::SoundPresetList> availableSoundPresets(
+        const engraving::InstrumentTrackId& instrumentTrackId) const override;
 
     notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
     void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
@@ -74,7 +75,7 @@ public:
     async::Notification currentTempoChanged() const override;
 
     notation::MeasureBeat currentBeat() const override;
-    audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
+    muse::audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;

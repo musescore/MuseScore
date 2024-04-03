@@ -23,8 +23,8 @@
 
 #include "audiomathutils.h"
 
-using namespace mu::audio;
-using namespace mu::audio::dsp;
+using namespace muse::audio;
+using namespace muse::audio::dsp;
 
 static constexpr volume_db_t THRESHOLD = 0.f;
 

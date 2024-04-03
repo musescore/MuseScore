@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SAMPLERATECONVERTOR_H
-#define MU_AUDIO_SAMPLERATECONVERTOR_H
+#ifndef MUSE_AUDIO_SAMPLERATECONVERTOR_H
+#define MUSE_AUDIO_SAMPLERATECONVERTOR_H
 
 #include <vector>
 #include <deque>
 
-namespace mu::audio {
+namespace muse::audio {
 class SampleRateConvertor
 {
 public:
@@ -77,4 +77,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SAMPLERATECONVERTOR_H
+#endif // MUSE_AUDIO_SAMPLERATECONVERTOR_H

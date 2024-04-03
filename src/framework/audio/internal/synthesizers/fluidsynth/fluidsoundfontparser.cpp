@@ -28,7 +28,7 @@
 
 #include "defer.h"
 
-using namespace mu::audio::synth;
+using namespace muse::audio::synth;
 
 mu::RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& path)
 {

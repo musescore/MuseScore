@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
-#define MU_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
+#ifndef MUSE_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
+#define MUSE_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "iaudiopluginmetareader.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioPluginMetaReaderRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioPluginMetaReaderRegister)
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H
+#endif // MUSE_AUDIO_IAUDIOPLUGINMETAREADERREGISTER_H

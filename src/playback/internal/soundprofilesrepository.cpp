@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 
 void SoundProfilesRepository::init()
 {

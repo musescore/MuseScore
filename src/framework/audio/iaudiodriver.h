@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIODRIVER_H
-#define MU_AUDIO_IAUDIODRIVER_H
+#ifndef MUSE_AUDIO_IAUDIODRIVER_H
+#define MUSE_AUDIO_IAUDIODRIVER_H
 
 #include <cstdint>
 #include <string>
@@ -33,7 +33,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioDriver : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioDriver)
@@ -85,4 +85,4 @@ public:
 using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
 }
 
-#endif // MU_AUDIO_IAUDIODRIVER_H
+#endif // MUSE_AUDIO_IAUDIODRIVER_H

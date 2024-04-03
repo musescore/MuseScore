@@ -7,7 +7,7 @@
 #include "stringutils.h"
 
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static const QString& NO_FX_MENU_ITEM_ID()
 {

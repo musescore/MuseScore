@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_FLUIDSOUNDFONTPARSER_H
-#define MU_AUDIO_FLUIDSOUNDFONTPARSER_H
+#ifndef MUSE_AUDIO_FLUIDSOUNDFONTPARSER_H
+#define MUSE_AUDIO_FLUIDSOUNDFONTPARSER_H
 
 #include "global/types/retval.h"
 
 #include "soundfonttypes.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class FluidSoundFontParser
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_FLUIDSOUNDFONTPARSER_H
+#endif // MUSE_AUDIO_FLUIDSOUNDFONTPARSER_H

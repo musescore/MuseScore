@@ -26,7 +26,7 @@
 
 #include "audio/iknownaudiopluginsregister.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class KnownAudioPluginsRegisterMock : public IKnownAudioPluginsRegister
 {
 public:

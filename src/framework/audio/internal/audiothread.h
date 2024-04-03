@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOTHREAD_H
-#define MU_AUDIO_AUDIOTHREAD_H
+#ifndef MUSE_AUDIO_AUDIOTHREAD_H
+#define MUSE_AUDIO_AUDIOTHREAD_H
 
 #include <memory>
 #include <thread>
 #include <atomic>
 #include <functional>
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioThread
 {
 public:
@@ -56,4 +56,4 @@ private:
 using AudioThreadPtr = std::shared_ptr<AudioThread>;
 }
 
-#endif // MU_AUDIO_AUDIOTHREAD_H
+#endif // MUSE_AUDIO_AUDIOTHREAD_H

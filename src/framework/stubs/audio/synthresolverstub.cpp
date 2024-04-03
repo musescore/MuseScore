@@ -23,8 +23,8 @@
 
 #include "synthesizerstub.h"
 
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 
 void SynthResolverStub::init(const AudioInputParams& defaultInputParams)
 {

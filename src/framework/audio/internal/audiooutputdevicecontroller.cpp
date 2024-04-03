@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 void AudioOutputDeviceController::init()
 {

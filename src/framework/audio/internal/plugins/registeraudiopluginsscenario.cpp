@@ -31,7 +31,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 void RegisterAudioPluginsScenario::init()
 {
@@ -94,7 +94,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         const io::path_t& pluginPath = pluginPaths[i];
         std::string pluginPathStr = pluginPath.toStdString();
 
-        m_progress.progressChanged.send(i, pluginCount, io::filename(pluginPath).toStdString());
+        m_progress.progressChanged.send(i, pluginCount, mu::io::filename(pluginPath).toStdString());
         qApp->processEvents();
 
         int code = process()->execute(appPath, { "--register-audio-plugin", pluginPathStr });
@@ -154,7 +154,7 @@ mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& plu
     }
 
     AudioPluginInfo info;
-    info.meta.id = io::completeBasename(pluginPath).toStdString();
+    info.meta.id = mu::io::completeBasename(pluginPath).toStdString();
 
     std::string ext = io::suffix(pluginPath);
     if (ext.find("vst") != std::string::npos) {

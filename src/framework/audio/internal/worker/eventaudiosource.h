@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_EVENTAUDIOSOURCE_H
-#define MU_AUDIO_EVENTAUDIOSOURCE_H
+#ifndef MUSE_AUDIO_EVENTAUDIOSOURCE_H
+#define MUSE_AUDIO_EVENTAUDIOSOURCE_H
 
 #include "global/async/asyncable.h"
 #include "global/modularity/ioc.h"
@@ -31,7 +31,7 @@
 #include "isynthresolver.h"
 #include "track.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class EventAudioSource : public ITrackAudioInput, public async::Asyncable
 {
     Inject<synth::ISynthResolver> synthResolver;

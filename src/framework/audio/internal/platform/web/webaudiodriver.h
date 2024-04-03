@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_WEBAUDIODRIVER_H
-#define MU_AUDIO_WEBAUDIODRIVER_H
+#ifndef MUSE_AUDIO_WEBAUDIODRIVER_H
+#define MUSE_AUDIO_WEBAUDIODRIVER_H
 
 #include "../../../iaudiodriver.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class WebAudioDriver : public IAudioDriver
 {
 public:
@@ -47,4 +47,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_WEBAUDIODRIVER_H
+#endif // MUSE_AUDIO_WEBAUDIODRIVER_H

@@ -31,6 +31,7 @@
 
 #include "log.h"
 
+using namespace muse::audio;
 using namespace mu::iex::audioexport;
 using namespace mu::project;
 using namespace mu::notation;
@@ -86,7 +87,9 @@ mu::Progress* AbstractAudioWriter::progress()
     return &m_progress;
 }
 
-mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation, io::IODevice& destinationDevice, const audio::SoundTrackFormat& format)
+mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
+                                            io::IODevice& destinationDevice,
+                                            const SoundTrackFormat& format)
 {
     //!Note Temporary workaround, since QIODevice is the alias for QIODevice, which falls with SIGSEGV
     //!     on any call from background thread. Once we have our own implementation of QIODevice
@@ -109,10 +112,10 @@ mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation, io::IODevice&
     });
 
     playback()->sequenceIdList()
-    .onResolve(this, [this, path, &format](const audio::TrackSequenceIdList& sequenceIdList) {
+    .onResolve(this, [this, path, &format](const TrackSequenceIdList& sequenceIdList) {
         m_progress.started.notify();
 
-        for (const audio::TrackSequenceId sequenceId : sequenceIdList) {
+        for (const TrackSequenceId sequenceId : sequenceIdList) {
             playback()->audioOutput()->saveSoundTrackProgress(sequenceId).progressChanged
             .onReceive(this, [this](int64_t current, int64_t total, std::string title) {
                 m_progress.progressChanged.send(current, total, title);

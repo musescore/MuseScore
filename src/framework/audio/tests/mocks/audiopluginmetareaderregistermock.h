@@ -26,7 +26,7 @@
 
 #include "audio/iaudiopluginmetareaderregister.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioPluginMetaReaderRegisterMock : public IAudioPluginMetaReaderRegister
 {
 public:

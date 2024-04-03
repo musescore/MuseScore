@@ -22,7 +22,7 @@
 
 #include "audiopluginsscannerregister.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 const std::vector<IAudioPluginsScannerPtr>& AudioPluginsScannerRegister::scanners() const
 {

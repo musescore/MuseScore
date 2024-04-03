@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 void Equaliser::setSampleRate(unsigned int sampleRate)
 {
@@ -76,19 +76,19 @@ void Equaliser::calculate()
     m_a[2] = 1 - alpha / a;
 }
 
-void mu::audio::Equaliser::setFrequency(float value)
+void Equaliser::setFrequency(float value)
 {
     m_frequency = value;
     calculate();
 }
 
-void mu::audio::Equaliser::setGain(float value)
+void Equaliser::setGain(float value)
 {
     m_gain = value;
     calculate();
 }
 
-void mu::audio::Equaliser::setQ(float value)
+void Equaliser::setQ(float value)
 {
     m_q = value;
     calculate();

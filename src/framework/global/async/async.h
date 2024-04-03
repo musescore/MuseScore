@@ -27,4 +27,8 @@ namespace mu::async {
 using Async = kors::async::Async;
 }
 
+namespace muse::async {
+using Async = kors::async::Async;
+}
+
 #endif // MU_ASYNC_ASYNC_H

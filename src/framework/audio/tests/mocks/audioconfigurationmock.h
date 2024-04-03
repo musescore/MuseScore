@@ -26,7 +26,7 @@
 
 #include "framework/audio/iaudioconfiguration.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioConfigurationMock : public IAudioConfiguration
 {
 public:

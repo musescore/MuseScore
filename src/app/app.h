@@ -55,7 +55,7 @@ class App
     INJECT(converter::IConverterController, converter)
     INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
     INJECT(autobot::IAutobot, autobot)
-    INJECT(audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
+    INJECT(muse::audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell::IAppShellConfiguration, appshellConfiguration)

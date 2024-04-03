@@ -61,7 +61,7 @@ struct std::less<MuseSamplerEvent>
 };
 
 namespace mu::musesampler {
-class MuseSamplerSequencer : public audio::AbstractEventSequencer<mu::mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
+class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mu::mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
 {
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks, std::string&& defaultPresetCode);

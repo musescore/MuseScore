@@ -27,7 +27,7 @@
 
 #include "vsttypes.h"
 
-typedef typename std::variant<Steinberg::Vst::Event, Steinberg::Vst::ParameterInfo, mu::audio::gain_t> VstSequencerEvent;
+typedef typename std::variant<Steinberg::Vst::Event, Steinberg::Vst::ParameterInfo, muse::audio::gain_t> VstSequencerEvent;
 
 template<>
 struct std::less<VstSequencerEvent>
@@ -49,12 +49,12 @@ struct std::less<VstSequencerEvent>
                                                                std::get<Steinberg::Vst::ParameterInfo>(second));
         }
 
-        return std::get<mu::audio::gain_t>(first) < std::get<mu::audio::gain_t>(second);
+        return std::get<muse::audio::gain_t>(first) < std::get<muse::audio::gain_t>(second);
     }
 };
 
 namespace mu::vst {
-class VstSequencer : public audio::AbstractEventSequencer<VstEvent, PluginParamInfo, audio::gain_t>
+class VstSequencer : public muse::audio::AbstractEventSequencer<VstEvent, PluginParamInfo, muse::audio::gain_t>
 {
 public:
     void init(ParamsMapping&& mapping);
@@ -63,7 +63,7 @@ public:
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
                                 const mpe::PlaybackParamMap& params) override;
 
-    audio::gain_t currentGain() const;
+    muse::audio::gain_t currentGain() const;
 
 private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events);

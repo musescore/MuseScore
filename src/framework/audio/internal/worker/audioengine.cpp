@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 AudioEngine* AudioEngine::instance()
 {

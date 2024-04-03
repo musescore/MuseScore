@@ -24,7 +24,7 @@
 
 #include "audiosanitizer.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 bool AudioThreadSecurer::isMainThread() const
 {

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SEQUENCEIO_H
-#define MU_AUDIO_SEQUENCEIO_H
+#ifndef MUSE_AUDIO_SEQUENCEIO_H
+#define MUSE_AUDIO_SEQUENCEIO_H
 
 #include "global/async/asyncable.h"
 
@@ -29,7 +29,7 @@
 #include "igettracks.h"
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class SequenceIO : public ISequenceIO, public async::Asyncable
 {
 public:
@@ -56,4 +56,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SEQUENCEIO_H
+#endif // MUSE_AUDIO_SEQUENCEIO_H

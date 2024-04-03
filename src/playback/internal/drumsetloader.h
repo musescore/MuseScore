@@ -42,7 +42,7 @@ class DrumsetLoader : public async::Asyncable
 
 public:
     void loadDrumset(notation::INotationPtr notation, const mu::engraving::InstrumentTrackId& trackId,
-                     const audio::AudioResourceMeta& resourceMeta);
+                     const muse::audio::AudioResourceMeta& resourceMeta);
 
 private:
     void replaceDrumset(notation::INotationPtr notation, const mu::engraving::InstrumentTrackId& trackId,

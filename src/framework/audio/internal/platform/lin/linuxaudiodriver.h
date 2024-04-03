@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_LINUXAUDIODRIVER_H
-#define MU_AUDIO_LINUXAUDIODRIVER_H
+#ifndef MUSE_AUDIO_LINUXAUDIODRIVER_H
+#define MUSE_AUDIO_LINUXAUDIODRIVER_H
 
 #include "async/asyncable.h"
 
@@ -29,7 +29,7 @@
 
 #include "audiodeviceslistener.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
@@ -74,4 +74,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_LINUXAUDIODRIVER_H
+#endif // MUSE_AUDIO_LINUXAUDIODRIVER_H

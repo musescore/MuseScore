@@ -21,8 +21,8 @@
  */
 #include "fxresolverstub.h"
 
-using namespace mu::audio;
-using namespace mu::audio::fx;
+using namespace muse::audio;
+using namespace muse::audio::fx;
 
 std::vector<IFxProcessorPtr> FxResolverStub::resolveMasterFxList(const AudioFxChain&)
 {

@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_PLAYERSHANDLER_H
-#define MU_AUDIO_PLAYERSHANDLER_H
+#ifndef MUSE_AUDIO_PLAYERSHANDLER_H
+#define MUSE_AUDIO_PLAYERSHANDLER_H
 
 #include "global/async/asyncable.h"
 
 #include "iplayer.h"
 #include "igettracksequence.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class PlayerHandler : public IPlayer, public async::Asyncable
 {
 public:
@@ -59,4 +59,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_PLAYERSHANDLER_H
+#endif // MUSE_AUDIO_PLAYERSHANDLER_H

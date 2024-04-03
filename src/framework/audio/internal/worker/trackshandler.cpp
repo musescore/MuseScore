@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::async;
 
 TracksHandler::TracksHandler(IGetTrackSequence* getSequence)

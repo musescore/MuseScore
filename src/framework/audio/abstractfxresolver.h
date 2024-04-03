@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ABSTRACTFXRESOLVER_H
-#define MU_AUDIO_ABSTRACTFXRESOLVER_H
+#ifndef MUSE_AUDIO_ABSTRACTFXRESOLVER_H
+#define MUSE_AUDIO_ABSTRACTFXRESOLVER_H
 
 #include <map>
 #include <unordered_map>
@@ -29,7 +29,7 @@
 #include "ifxresolver.h"
 #include "ifxprocessor.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class AbstractFxResolver : public IFxResolver::IResolver
 {
 public:
@@ -59,4 +59,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_ABSTRACTFXRESOLVER_H
+#endif // MUSE_AUDIO_ABSTRACTFXRESOLVER_H

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ALLPASSMODULATEDDELAY_H
-#define MU_AUDIO_ALLPASSMODULATEDDELAY_H
+#ifndef MUSE_AUDIO_ALLPASSMODULATEDDELAY_H
+#define MUSE_AUDIO_ALLPASSMODULATEDDELAY_H
 
 #include "circularsamplebuffer.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class AllPassModulatedDelay
 {
 public:
@@ -98,6 +98,6 @@ private:
     CircularSampleBuffer<float> m_buffer;
     float m_y1 = 0.f;
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_ALLPASSMODULATEDDELAY_H
+#endif // MUSE_AUDIO_ALLPASSMODULATEDDELAY_H

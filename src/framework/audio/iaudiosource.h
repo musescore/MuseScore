@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ISOURCE_H
-#define MU_AUDIO_ISOURCE_H
+#ifndef MUSE_AUDIO_ISOURCE_H
+#define MUSE_AUDIO_ISOURCE_H
 
 #include <memory>
 #include <vector>
@@ -30,7 +30,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioSource
 {
 public:
@@ -54,4 +54,4 @@ public:
 using IAudioSourcePtr = std::shared_ptr<IAudioSource>;
 }
 
-#endif // MU_AUDIO_ISOURCE_H
+#endif // MUSE_AUDIO_ISOURCE_H

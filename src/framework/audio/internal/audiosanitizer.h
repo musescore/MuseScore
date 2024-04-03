@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIOSANITIZER_H
-#define MU_AUDIO_AUDIOSANITIZER_H
+#ifndef MUSE_AUDIO_AUDIOSANITIZER_H
+#define MUSE_AUDIO_AUDIOSANITIZER_H
 
 //! NOTE This is dev tools
 
 #include <cassert>
 #include <thread>
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioSanitizer
 {
 public:
@@ -42,8 +42,9 @@ public:
 };
 }
 
-#define ONLY_AUDIO_WORKER_THREAD assert(mu::audio::AudioSanitizer::isWorkerThread())
-#define ONLY_AUDIO_MAIN_THREAD assert(mu::audio::AudioSanitizer::isMainThread())
-#define ONLY_AUDIO_MAIN_OR_WORKER_THREAD assert((mu::audio::AudioSanitizer::isWorkerThread() || mu::audio::AudioSanitizer::isMainThread()))
+#define ONLY_AUDIO_WORKER_THREAD assert(muse::audio::AudioSanitizer::isWorkerThread())
+#define ONLY_AUDIO_MAIN_THREAD assert(muse::audio::AudioSanitizer::isMainThread())
+#define ONLY_AUDIO_MAIN_OR_WORKER_THREAD assert((muse::audio::AudioSanitizer::isWorkerThread() \
+                                                 || muse::audio::AudioSanitizer::isMainThread()))
 
-#endif // MU_AUDIO_AUDIOSANITIZER_H
+#endif // MUSE_AUDIO_AUDIOSANITIZER_H

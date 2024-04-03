@@ -26,7 +26,7 @@
 
 #include "audio/iaudiopluginsscannerregister.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioPluginsScannerRegisterMock : public IAudioPluginsScannerRegister
 {
 public:

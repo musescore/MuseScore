@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SIMDTYPES_H
-#define MU_AUDIO_SIMDTYPES_H
+#ifndef MUSE_AUDIO_SIMDTYPES_H
+#define MUSE_AUDIO_SIMDTYPES_H
 
 #include <cassert>
 #include <cstdlib>
@@ -47,7 +47,7 @@
   Aligned memory allocation for simd vectors.
  */
 
-namespace mu::audio::fx::simd {
+namespace muse::audio::fx::simd {
 /// reserve aligned memory. Needs to be freed with aligned_free()
 inline void* aligned_malloc(size_t required_bytes, size_t alignment)
 {
@@ -88,6 +88,6 @@ inline void aligned_delete(cls* obj)
         aligned_free((void*)obj);
     }
 }
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SIMDTYPES_H
+#endif // MUSE_AUDIO_SIMDTYPES_H

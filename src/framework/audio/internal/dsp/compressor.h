@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_COMPRESSOR_H
-#define MU_AUDIO_COMPRESSOR_H
+#ifndef MUSE_AUDIO_COMPRESSOR_H
+#define MUSE_AUDIO_COMPRESSOR_H
 
 #include <memory>
 
 #include "envelopefilterconfig.h"
 
-namespace mu::audio::dsp {
+namespace muse::audio::dsp {
 class Compressor
 {
 public:
@@ -59,4 +59,4 @@ private:
 using CompressorPtr = std::unique_ptr<Compressor>;
 }
 
-#endif // MU_AUDIO_COMPRESSOR_H
+#endif // MUSE_AUDIO_COMPRESSOR_H

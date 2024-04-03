@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIOSTREAM_H
-#define MU_AUDIO_IAUDIOSTREAM_H
+#ifndef MUSE_AUDIO_IAUDIOSTREAM_H
+#define MUSE_AUDIO_IAUDIOSTREAM_H
 
 #include "global/io/path.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioStream
 {
 public:
@@ -46,4 +46,4 @@ public:
     virtual unsigned int copySamplesToBuffer(float* buffer, unsigned int from, unsigned int sampleCount, unsigned int sampleRate) = 0;
 };
 }
-#endif // MU_AUDIO_IAUDIOSTREAM_H
+#endif // MUSE_AUDIO_IAUDIOSTREAM_H

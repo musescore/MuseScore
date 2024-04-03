@@ -32,7 +32,7 @@ using namespace muse::actions;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace mu::notation;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static const ActionCode PLAY_ACTION_CODE("play");
 

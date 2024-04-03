@@ -30,8 +30,9 @@
 #include "fxresolverstub.h"
 #include "soundfontrepositorystub.h"
 
+using namespace mu;
 using namespace mu::modularity;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static void audio_init_qrc()
 {

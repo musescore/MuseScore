@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SPARSEFIRFILTER_H
-#define MU_AUDIO_SPARSEFIRFILTER_H
+#ifndef MUSE_AUDIO_SPARSEFIRFILTER_H
+#define MUSE_AUDIO_SPARSEFIRFILTER_H
 
 #include <cassert>
 #include <vector>
 
 #include "circularsamplebuffer.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class SparseFirFilter
 {
 public:
@@ -102,6 +102,6 @@ private:
     int m_maxAllowedOffset = 0;
     CircularSampleBuffer<float> m_buffer;
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SPARSEFIRFILTER_H
+#endif // MUSE_AUDIO_SPARSEFIRFILTER_H

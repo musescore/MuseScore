@@ -24,7 +24,7 @@
 #include "audiosanitizer.h"
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 static constexpr size_t DEFAULT_SIZE_PER_CHANNEL = 1024 * 8;
 static constexpr size_t DEFAULT_SIZE = DEFAULT_SIZE_PER_CHANNEL * 2;

@@ -25,7 +25,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::midi;
 
 PlaybackPreferencesModel::PlaybackPreferencesModel(QObject* parent)

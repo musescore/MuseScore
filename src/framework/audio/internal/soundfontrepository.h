@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SOUNDFONTREPOSITORY_H
-#define MU_AUDIO_SOUNDFONTREPOSITORY_H
+#ifndef MUSE_AUDIO_SOUNDFONTREPOSITORY_H
+#define MUSE_AUDIO_SOUNDFONTREPOSITORY_H
 
 #include "global/modularity/ioc.h"
 #include "global/iinteractive.h"
@@ -30,10 +30,10 @@
 #include "isoundfontrepository.h"
 #include "iaudioconfiguration.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
     Inject<IAudioConfiguration> configuration;
     Inject<io::IFileSystem> fileSystem;
 
@@ -58,4 +58,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SOUNDFONTREPOSITORY_H
+#endif // MUSE_AUDIO_SOUNDFONTREPOSITORY_H

@@ -24,7 +24,7 @@
 
 #include "audio/isoundfontrepository.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class SoundFontRepositoryStub : public ISoundFontRepository
 {
 public:

@@ -172,7 +172,7 @@ void NotationPlayback::updateTotalPlayTime()
     qreal secs = score->utick2utime(lastTick);
     secs += PLAYBACK_TAIL_SECS;
 
-    audio::msecs_t newPlayTime = secs * 1000.f;
+    muse::audio::msecs_t newPlayTime = secs * 1000.f;
 
     if (m_totalPlayTime == newPlayTime) {
         return;
@@ -182,12 +182,12 @@ void NotationPlayback::updateTotalPlayTime()
     m_totalPlayTimeChanged.send(m_totalPlayTime);
 }
 
-audio::msecs_t NotationPlayback::totalPlayTime() const
+muse::audio::msecs_t NotationPlayback::totalPlayTime() const
 {
     return m_totalPlayTime;
 }
 
-async::Channel<audio::msecs_t> NotationPlayback::totalPlayTimeChanged() const
+async::Channel<muse::audio::msecs_t> NotationPlayback::totalPlayTimeChanged() const
 {
     return m_totalPlayTimeChanged;
 }

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SIMDTYPES_NEON_H
-#define MU_AUDIO_SIMDTYPES_NEON_H
+#ifndef MUSE_AUDIO_SIMDTYPES_NEON_H
+#define MUSE_AUDIO_SIMDTYPES_NEON_H
 
 #if _MSC_VER
 #include <arm64_neon.h>
@@ -37,7 +37,7 @@
   Neon version of SIMD types.
  */
 
-namespace mu::audio::fx::simd {
+namespace muse::audio::fx::simd {
 struct float_x4
 {
     float32x4_t s;
@@ -139,6 +139,6 @@ __finl float_x4 __vecc operator*(float_x4 a, float_x4 b)
 {
     return vmulq_f32(a.s, b.s);
 }
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SIMDTYPES_NEON_H
+#endif // MUSE_AUDIO_SIMDTYPES_NEON_H

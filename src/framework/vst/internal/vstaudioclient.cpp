@@ -26,7 +26,7 @@
 using namespace mu;
 using namespace mu::vst;
 using namespace mu::mpe;
-using namespace mu::audio;
+using namespace muse::audio;
 
 VstAudioClient::~VstAudioClient()
 {

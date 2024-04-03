@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SYNTHRESOLVER_H
-#define MU_AUDIO_SYNTHRESOLVER_H
+#ifndef MUSE_AUDIO_SYNTHRESOLVER_H
+#define MUSE_AUDIO_SYNTHRESOLVER_H
 
 #include <map>
 #include <mutex>
 
 #include "isynthresolver.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class SynthResolver : public ISynthResolver
 {
 public:
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SYNTHRESOLVER_H
+#endif // MUSE_AUDIO_SYNTHRESOLVER_H

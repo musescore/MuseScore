@@ -42,7 +42,7 @@
 #pragma warning(pop)
 #endif
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 AudioStream::AudioStream()
     : m_src(m_data, 0, 1, 1)

@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_ISYNTHESIZERR_H
-#define MU_AUDIO_ISYNTHESIZERR_H
+#ifndef MUSE_AUDIO_ISYNTHESIZERR_H
+#define MUSE_AUDIO_ISYNTHESIZERR_H
 
 #include <memory>
 
 #include "iaudiosource.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class ISynthesizer : public IAudioSource
 {
 public:
@@ -51,4 +51,4 @@ public:
 using ISynthesizerPtr = std::shared_ptr<ISynthesizer>;
 }
 
-#endif // MU_AUDIO_ISYNTHESIZERR_H
+#endif // MUSE_AUDIO_ISYNTHESIZERR_H

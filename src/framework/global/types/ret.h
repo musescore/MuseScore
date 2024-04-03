@@ -168,4 +168,8 @@ inline bool check_ret(const Ret& r, Ret::Code c)
 }
 }
 
+namespace muse {
+using Ret = mu::Ret;
+}
+
 #endif // MU_GLOBAL_RET_H

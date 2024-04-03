@@ -34,7 +34,7 @@
 namespace mu::iex::audioexport {
 class AbstractAudioWriter : public project::INotationWriter, public async::Asyncable
 {
-    INJECT(audio::IPlayback, playback)
+    INJECT(muse::audio::IPlayback, playback)
     INJECT(IAudioExportConfiguration, configuration)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(playback::IPlaybackController, playbackController)
@@ -50,7 +50,7 @@ public:
     void abort() override;
 
 protected:
-    Ret doWriteAndWait(notation::INotationPtr notation, io::IODevice& dstDevice, const audio::SoundTrackFormat& format);
+    Ret doWriteAndWait(notation::INotationPtr notation, io::IODevice& dstDevice, const muse::audio::SoundTrackFormat& format);
 
 private:
     UnitType unitTypeFromOptions(const Options& options) const;

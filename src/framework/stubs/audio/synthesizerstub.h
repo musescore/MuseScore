@@ -24,7 +24,7 @@
 
 #include "audio/isynthesizer.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class SynthesizerStub : public ISynthesizer
 {
 public:

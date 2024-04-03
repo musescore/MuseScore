@@ -42,7 +42,7 @@ class InputResourceItem : public AbstractAudioResourceItem, public async::Asynca
 {
     Q_OBJECT
 
-    INJECT(audio::IPlayback, playback)
+    INJECT(muse::audio::IPlayback, playback)
 
 public:
     explicit InputResourceItem(QObject* parent);
@@ -50,9 +50,9 @@ public:
     void requestAvailableResources() override;
     void handleMenuItem(const QString& menuItemId) override;
 
-    const audio::AudioInputParams& params() const;
-    void setParams(const audio::AudioInputParams& newParams);
-    void setParamsRecourceMeta(const audio::AudioResourceMeta& newMeta);
+    const muse::audio::AudioInputParams& params() const;
+    void setParams(const muse::audio::AudioInputParams& newParams);
+    void setParamsRecourceMeta(const muse::audio::AudioResourceMeta& newMeta);
 
     QString title() const override;
     bool isBlank() const override;
@@ -61,23 +61,23 @@ public:
 
 signals:
     void inputParamsChanged();
-    void inputParamsChangeRequested(const audio::AudioResourceMeta& newMeta);
+    void inputParamsChangeRequested(const muse::audio::AudioResourceMeta& newMeta);
 
 private:
-    using ResourceByVendorMap = std::map<audio::AudioResourceVendor, audio::AudioResourceMetaList>;
+    using ResourceByVendorMap = std::map<muse::audio::AudioResourceVendor, muse::audio::AudioResourceMetaList>;
 
     QVariantMap buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildVstMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
-    QVariantMap buildMsBasicMenuItem(const audio::AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
+    QVariantMap buildMsBasicMenuItem(const muse::audio::AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
                                      const std::optional<midi::Program>& currentPreset) const;
-    QVariantMap buildSoundFontMenuItem(const String& soundFont, const audio::AudioResourceMetaList& availableResources,
+    QVariantMap buildSoundFontMenuItem(const String& soundFont, const muse::audio::AudioResourceMetaList& availableResources,
                                        bool isCurrentSoundFont, const std::optional<midi::Program>& currentPreset) const;
 
-    void updateAvailableResources(const audio::AudioResourceMetaList& availableResources);
+    void updateAvailableResources(const muse::audio::AudioResourceMetaList& availableResources);
 
-    std::map<audio::AudioResourceType, ResourceByVendorMap > m_availableResourceMap;
-    audio::AudioInputParams m_currentInputParams;
+    std::map<muse::audio::AudioResourceType, ResourceByVendorMap > m_availableResourceMap;
+    muse::audio::AudioInputParams m_currentInputParams;
 };
 }
 

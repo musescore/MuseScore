@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_VECTOROPS_H
-#define MU_AUDIO_VECTOROPS_H
+#ifndef MUSE_AUDIO_VECTOROPS_H
+#define MUSE_AUDIO_VECTOROPS_H
 
 #include <stdlib.h>
 
@@ -35,7 +35,7 @@
 // inside add().
 //
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 namespace vo {
 inline void* allocate(int32_t bytes)
 {
@@ -93,4 +93,4 @@ void setToZero(T* dst, int32_t n)
 } // namespace vo
 }
 
-#endif // MU_AUDIO_VECTOROPS_H
+#endif // MUSE_AUDIO_VECTOROPS_H

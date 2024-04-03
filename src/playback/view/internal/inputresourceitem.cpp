@@ -38,8 +38,8 @@
 
 using namespace mu;
 using namespace mu::playback;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 
 static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = mu::qtrc("playback", "SoundFonts");

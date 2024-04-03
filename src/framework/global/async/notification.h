@@ -27,4 +27,8 @@ namespace mu::async {
 using Notification = kors::async::Notification;
 }
 
+namespace muse::async {
+using Notification = kors::async::Notification;
+}
+
 #endif // MU_ASYNC_NOTIFY_H

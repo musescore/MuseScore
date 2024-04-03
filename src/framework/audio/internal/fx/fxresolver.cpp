@@ -27,8 +27,8 @@
 #include "log.h"
 
 using namespace mu::async;
-using namespace mu::audio;
-using namespace mu::audio::fx;
+using namespace muse::audio;
+using namespace muse::audio::fx;
 
 std::vector<IFxProcessorPtr> FxResolver::resolveMasterFxList(const AudioFxChain& fxChain)
 {

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ISYNTHESIZER_H
-#define MU_AUDIO_ISYNTHESIZER_H
+#ifndef MUSE_AUDIO_ISYNTHESIZER_H
+#define MUSE_AUDIO_ISYNTHESIZER_H
 
 #include "global/async/channel.h"
 #include "global/async/asyncable.h"
@@ -32,7 +32,7 @@
 #include "../isynthesizer.h"
 #include "../iaudioconfiguration.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class AbstractSynthesizer : public ISynthesizer, public async::Asyncable
 {
 public:
@@ -68,4 +68,4 @@ protected:
 };
 }
 
-#endif // MU_AUDIO_ISYNTHESIZER_H
+#endif // MUSE_AUDIO_ISYNTHESIZER_H

@@ -422,4 +422,24 @@ struct PlaybackData {
 };
 }
 
+namespace muse::mpe {
+using PlaybackData = mu::mpe::PlaybackData;
+using PlaybackSetupData = mu::mpe::PlaybackSetupData;
+using PlaybackEventsMap = mu::mpe::PlaybackEventsMap;
+using PlaybackParamMap = mu::mpe::PlaybackParamMap;
+using DynamicLevelMap = mu::mpe::DynamicLevelMap;
+using MainStreamChanges = mu::mpe::MainStreamChanges;
+using OffStreamChanges = mu::mpe::OffStreamChanges;
+using SoundId = mu::mpe::SoundId;
+using SoundCategory = mu::mpe::SoundCategory;
+using SoundSubCategory = mu::mpe::SoundSubCategory;
+using SoundSubCategories = mu::mpe::SoundSubCategories;
+using ArticulationType = mu::mpe::ArticulationType;
+using ArticulationTypeSet = mu::mpe::ArticulationTypeSet;
+using NoteEvent = mu::mpe::NoteEvent;
+using voice_layer_idx_t = mu::mpe::voice_layer_idx_t;
+using pitch_level_t = mu::mpe::pitch_level_t;
+using dynamic_level_t = mu::mpe::dynamic_level_t;
+}
+
 #endif // MU_MPE_EVENTS_H

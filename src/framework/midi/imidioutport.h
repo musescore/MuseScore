@@ -53,4 +53,8 @@ public:
 };
 }
 
+namespace muse::midi {
+using IMidiOutPort = mu::midi::IMidiOutPort;
+}
+
 #endif // MU_MIDI_IMIDIPORT_H

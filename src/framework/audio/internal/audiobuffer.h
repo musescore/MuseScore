@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_BUFFER_H
-#define MU_AUDIO_BUFFER_H
+#ifndef MUSE_AUDIO_BUFFER_H
+#define MUSE_AUDIO_BUFFER_H
 
 #include <vector>
 #include <memory>
@@ -42,7 +42,7 @@ constexpr size_t cache_line_size = 64;
 #pragma warning(disable: 4324)
 #endif
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioBuffer
 {
 public:
@@ -79,4 +79,4 @@ private:
 using AudioBufferPtr = std::shared_ptr<AudioBuffer>;
 }
 
-#endif // MU_AUDIO_BUFFER_H
+#endif // MUSE_AUDIO_BUFFER_H

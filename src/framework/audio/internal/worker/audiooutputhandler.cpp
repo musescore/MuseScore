@@ -37,11 +37,11 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::async;
 
 #ifdef MUSE_MODULE_AUDIO_EXPORT
-using namespace mu::audio::soundtrack;
+using namespace muse::audio::soundtrack;
 #endif
 
 AudioOutputHandler::AudioOutputHandler(IGetTrackSequence* getSequence)

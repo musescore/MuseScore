@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ICLOCK_H
-#define MU_AUDIO_ICLOCK_H
+#ifndef MUSE_AUDIO_ICLOCK_H
+#define MUSE_AUDIO_ICLOCK_H
 
 #include <memory>
 
@@ -31,7 +31,7 @@
 
 #include "../../audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IClock
 {
 public:
@@ -63,4 +63,4 @@ public:
 using IClockPtr = std::shared_ptr<IClock>;
 }
 
-#endif // MU_AUDIO_ICLOCK_H
+#endif // MUSE_AUDIO_ICLOCK_H

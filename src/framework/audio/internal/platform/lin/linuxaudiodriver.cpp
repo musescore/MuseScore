@@ -36,7 +36,7 @@
 
 static constexpr char DEFAULT_DEVICE_ID[] = "default";
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 namespace {
 struct ALSAData

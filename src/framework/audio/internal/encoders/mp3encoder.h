@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_MP3ENCODER_H
-#define MU_AUDIO_MP3ENCODER_H
+#ifndef MUSE_AUDIO_MP3ENCODER_H
+#define MUSE_AUDIO_MP3ENCODER_H
 
 #include "abstractaudioencoder.h"
 
 struct LameHandler;
 
-namespace mu::audio::encode {
+namespace muse::audio::encode {
 class Mp3Encoder : public AbstractAudioEncoder
 {
 public:
@@ -44,4 +44,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_MP3ENCODER_H
+#endif // MUSE_AUDIO_MP3ENCODER_H

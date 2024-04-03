@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ITRACKSHANDLER_H
-#define MU_AUDIO_ITRACKSHANDLER_H
+#ifndef MUSE_AUDIO_ITRACKSHANDLER_H
+#define MUSE_AUDIO_ITRACKSHANDLER_H
 
 #include <memory>
 
@@ -32,7 +32,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class ITracks
 {
 public:
@@ -68,4 +68,4 @@ public:
 using ITracksPtr = std::shared_ptr<ITracks>;
 }
 
-#endif // MU_AUDIO_ITRACKSHANDLER_H
+#endif // MUSE_AUDIO_ITRACKSHANDLER_H

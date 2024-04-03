@@ -21,7 +21,7 @@
  */
 #include "abstractaudiosource.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 void AbstractAudioSource::setSampleRate(unsigned int sampleRate)
 {

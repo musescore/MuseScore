@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_MUSEFXRESOLVER_H
-#define MU_AUDIO_MUSEFXRESOLVER_H
+#ifndef MUSE_AUDIO_MUSEFXRESOLVER_H
+#define MUSE_AUDIO_MUSEFXRESOLVER_H
 
 #include "abstractfxresolver.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class MuseFxResolver : public AbstractFxResolver
 {
 public:
@@ -37,4 +37,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_MUSEFXRESOLVER_H
+#endif // MUSE_AUDIO_MUSEFXRESOLVER_H

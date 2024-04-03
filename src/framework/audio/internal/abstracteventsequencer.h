@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ABSTRACTEVENTSEQUENCER_H
-#define MU_AUDIO_ABSTRACTEVENTSEQUENCER_H
+#ifndef MUSE_AUDIO_ABSTRACTEVENTSEQUENCER_H
+#define MUSE_AUDIO_ABSTRACTEVENTSEQUENCER_H
 
 #include <map>
 #include <set>
@@ -32,7 +32,7 @@
 #include "audiosanitizer.h"
 #include "../audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 template<class ... Types>
 class AbstractEventSequencer : public async::Asyncable
 {
@@ -115,10 +115,10 @@ public:
         m_onMainStreamFlushed = flushed;
     }
 
-    mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
+    mu::mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
     {
         if (m_dynamicLevelMap.empty()) {
-            return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+            return mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::Natural);
         }
 
         if (m_dynamicLevelMap.size() == 1) {
@@ -242,4 +242,4 @@ protected:
 };
 }
 
-#endif // MU_AUDIO_ABSTRACTEVENTSEQUENCER_H
+#endif // MUSE_AUDIO_ABSTRACTEVENTSEQUENCER_H

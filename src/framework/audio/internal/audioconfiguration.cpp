@@ -31,8 +31,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 
 static const audioch_t AUDIO_CHANNELS = 2;
 
@@ -188,12 +188,12 @@ SoundFontPaths AudioConfiguration::soundFontDirectories() const
 io::paths_t AudioConfiguration::userSoundFontDirectories() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATHS).toString();
-    return io::pathsFromString(pathsStr);
+    return mu::io::pathsFromString(pathsStr);
 }
 
 void AudioConfiguration::setUserSoundFontDirectories(const io::paths_t& paths)
 {
-    settings()->setSharedValue(USER_SOUNDFONTS_PATHS, Val(io::pathsToString(paths)));
+    settings()->setSharedValue(USER_SOUNDFONTS_PATHS, Val(mu::io::pathsToString(paths)));
 }
 
 async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() const
