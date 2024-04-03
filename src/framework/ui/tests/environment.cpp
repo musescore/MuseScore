@@ -27,7 +27,7 @@
 
 static mu::testing::SuiteEnvironment ui_senv(
 {
-    new mu::actions::ActionsModule()
+    new muse::actions::ActionsModule()
 },
     nullptr,
     []() {
