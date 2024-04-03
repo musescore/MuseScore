@@ -115,6 +115,7 @@ public:
     void spatiumChanged(double oldValue, double newValue) override;
     void localSpatiumChanged(double oldValue, double newValue) override;
     void styleChanged() override;
+    staff_idx_t vStaffIdx() const override;
     PointF pagePos() const override;      ///< position in page coordinates
     String accessibleInfo() const override;
     void triggerLayout() const override;
