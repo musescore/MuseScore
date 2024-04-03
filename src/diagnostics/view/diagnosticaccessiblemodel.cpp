@@ -30,7 +30,7 @@
 #include "log.h"
 
 using namespace mu::diagnostics;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 DiagnosticAccessibleModel::DiagnosticAccessibleModel(QObject* parent)
     : QAbstractItemModel(parent)

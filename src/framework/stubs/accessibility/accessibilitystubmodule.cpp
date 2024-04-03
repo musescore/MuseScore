@@ -26,7 +26,7 @@
 #include "accessibilityconfigurationstub.h"
 #include "accessibilitycontrollerstub.h"
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 using namespace mu::modularity;
 
 std::string AccessibilityModule::moduleName() const

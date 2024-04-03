@@ -24,8 +24,8 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::accessibility {
-class AccessibilityModule : public modularity::IModuleSetup
+namespace muse::accessibility {
+class AccessibilityModule : public mu::modularity::IModuleSetup
 {
 public:
     AccessibilityModule() = default;

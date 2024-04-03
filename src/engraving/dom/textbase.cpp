@@ -2990,8 +2990,9 @@ AccessibleItemPtr TextBase::createAccessible()
 void TextBase::notifyAboutTextCursorChanged()
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
+    using namespace muse::accessibility;
     if (accessible()) {
-        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextCursor, Val());
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextCursor, Val());
     }
 #endif
 }
@@ -2999,9 +3000,10 @@ void TextBase::notifyAboutTextCursorChanged()
 void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const String& text)
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
+    using namespace muse::accessibility;
     if (accessible()) {
-        auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextInsert, Val::fromQVariant(range.toMap()));
+        auto range = IAccessible::TextRange(startPosition, endPosition, text);
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextInsert, Val::fromQVariant(range.toMap()));
     }
 #else
     UNUSED(startPosition);
@@ -3013,9 +3015,10 @@ void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const
 void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const String& text)
 {
 #ifndef ENGRAVING_NO_ACCESSIBILITY
+    using namespace muse::accessibility;
     if (accessible()) {
-        auto range = accessibility::IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(accessibility::IAccessible::Property::TextRemove, Val::fromQVariant(range.toMap()));
+        auto range = IAccessible::TextRange(startPosition, endPosition, text);
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextRemove, Val::fromQVariant(range.toMap()));
     }
 #else
     UNUSED(startPosition);

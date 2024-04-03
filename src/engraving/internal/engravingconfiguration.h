@@ -37,7 +37,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public async::Asy
 {
     INJECT(mu::IGlobalConfiguration, globalConfiguration)
     INJECT(mu::ui::IUiConfiguration, uiConfiguration)
-    INJECT(mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
+    INJECT(muse::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
 
 public:

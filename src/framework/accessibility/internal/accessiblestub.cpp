@@ -23,7 +23,7 @@
 
 #include <QQuickItem>
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 AccessibleStub::AccessibleStub(QObject* object)
     : m_object(object)

@@ -26,7 +26,7 @@
 
 #include <QAccessibleInterface>
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class IQAccessibleInterfaceRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IQAccessibleInterfaceRegister)

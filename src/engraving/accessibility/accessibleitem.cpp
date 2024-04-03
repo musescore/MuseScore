@@ -30,7 +30,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 using namespace mu::engraving;
 
 bool AccessibleItem::enabled = true;

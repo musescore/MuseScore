@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu::ui;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 AbstractNavigation::AbstractNavigation(QObject* parent)
     : QObject(parent)

@@ -22,7 +22,7 @@
 #include "accessibilityapi.h"
 
 using namespace mu::api;
-using namespace mu::accessibility;
+using namespace muse::accessibility::api;
 
 AccessibilityApi::AccessibilityApi(IApiEngine* e)
     : ApiObject(e)

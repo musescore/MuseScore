@@ -21,7 +21,7 @@
  */
 #include "accessibilityconfigurationstub.h"
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 bool AccessibilityConfigurationStub::enabled() const
 {

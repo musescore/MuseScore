@@ -24,7 +24,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 AccessibleNote::AccessibleNote(EngravingItem* n)
     : AccessibleItem(n)

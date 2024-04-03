@@ -21,7 +21,7 @@
  */
 #include "accessibilitycontrollerstub.h"
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 void AccessibilityControllerStub::reg(IAccessible*)
 {

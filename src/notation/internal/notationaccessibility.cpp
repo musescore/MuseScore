@@ -40,7 +40,7 @@
 using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::engraving;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 NotationAccessibility::NotationAccessibility(const Notation* notation)
     : m_getScore(notation)

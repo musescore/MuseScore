@@ -27,15 +27,15 @@
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
 
-namespace mu::api {
-class AccessibilityApi : public ApiObject
+namespace muse::accessibility::api {
+class AccessibilityApi : public mu::api::ApiObject
 {
     Q_OBJECT
 
-    INJECT(accessibility::IAccessibilityController, accessibilityController)
+    INJECT(IAccessibilityController, accessibilityController)
 
 public:
-    explicit AccessibilityApi(IApiEngine* e);
+    explicit AccessibilityApi(mu::api::IApiEngine* e);
 
     Q_INVOKABLE QString currentName() const;
 };
