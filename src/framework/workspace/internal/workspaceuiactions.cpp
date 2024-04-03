@@ -27,6 +27,7 @@
 
 using namespace mu::workspace;
 using namespace mu::ui;
+using namespace muse::actions;
 
 const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("select-workspace",
@@ -66,12 +67,12 @@ bool WorkspaceUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> WorkspaceUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> WorkspaceUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> WorkspaceUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> WorkspaceUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

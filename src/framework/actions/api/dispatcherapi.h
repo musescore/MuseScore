@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACTIONS_DISPATCHERAPI_H
-#define MU_ACTIONS_DISPATCHERAPI_H
+#ifndef MUSE_ACTIONS_DISPATCHERAPI_H
+#define MUSE_ACTIONS_DISPATCHERAPI_H
 
 #include <QVariant>
 
@@ -29,18 +29,18 @@
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace mu::api {
-class DispatcherApi : public ApiObject
+namespace muse::actions::api {
+class DispatcherApi : public mu::api::ApiObject
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    Inject<IActionsDispatcher> dispatcher;
 
 public:
-    explicit DispatcherApi(IApiEngine* e);
+    explicit DispatcherApi(mu::api::IApiEngine* e);
 
     Q_INVOKABLE void dispatch(const QString& action, const QVariantList& args = QVariantList());
 };
 }
 
-#endif // MU_ACTIONS_DISPATCHERAPI_H
+#endif // MUSE_ACTIONS_DISPATCHERAPI_H

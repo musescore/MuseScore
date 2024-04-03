@@ -26,7 +26,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::mi;
 
 const UiActionList MultiInstancesUiActions::m_actions = {

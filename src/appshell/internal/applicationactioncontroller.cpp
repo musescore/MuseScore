@@ -35,7 +35,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::actions;
+using namespace muse::actions;
 
 void ApplicationActionController::preInit()
 {

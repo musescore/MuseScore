@@ -34,12 +34,12 @@ class TranslatableString;
 }
 
 namespace mu::notation {
-class PianoKeyboardPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
+class PianoKeyboardPanelContextMenuModel : public uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(INotationConfiguration, configuration)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setKeyWidthScaling NOTIFY keyWidthScalingChanged)

@@ -88,9 +88,9 @@ private:
     void setupConnections();
 
     void updateActions();
-    void onActionsStateChanges(const actions::ActionCodeList& codes) override;
+    void onActionsStateChanges(const muse::actions::ActionCodeList& codes) override;
 
-    bool isAdditionalAction(const actions::ActionCode& actionCode) const;
+    bool isAdditionalAction(const muse::actions::ActionCode& actionCode) const;
 
     QTime totalPlayTime() const;
     notation::MeasureBeat measureBeat() const;

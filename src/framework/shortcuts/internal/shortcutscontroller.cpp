@@ -24,7 +24,7 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::actions;
+using namespace muse::actions;
 
 void ShortcutsController::init()
 {

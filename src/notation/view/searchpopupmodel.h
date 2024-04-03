@@ -30,11 +30,11 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class SearchPopupModel : public QObject, public actions::Actionable
+class SearchPopupModel : public QObject, public muse::actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
 
 public:

@@ -38,9 +38,9 @@
 #include "../iprojectprovider.h"
 
 namespace mu::mi {
-class MultiInstancesProvider : public IMultiInstancesProvider, public actions::Actionable, public async::Asyncable
+class MultiInstancesProvider : public IMultiInstancesProvider, public muse::actions::Actionable, public async::Asyncable
 {
-    Inject<actions::IActionsDispatcher> dispatcher;
+    Inject<muse::actions::IActionsDispatcher> dispatcher;
     Inject<IInteractive> interactive;
     Inject<ui::IMainWindow> mainWindow;
 

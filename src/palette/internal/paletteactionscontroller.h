@@ -32,9 +32,9 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::palette {
-class PaletteActionsController : public actions::Actionable, public async::Asyncable
+class PaletteActionsController : public muse::actions::Actionable, public async::Asyncable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
 
@@ -44,13 +44,13 @@ public:
     ValCh<bool> isMasterPaletteOpened() const;
 
 private:
-    void toggleMasterPalette(const actions::ActionData& args);
+    void toggleMasterPalette(const muse::actions::ActionData& args);
     void toggleSpecialCharactersDialog();
     void openTimeSignaturePropertiesDialog();
     void openEditDrumsetDialog();
 
     ValCh<bool> m_masterPaletteOpened;
-    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
+    async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

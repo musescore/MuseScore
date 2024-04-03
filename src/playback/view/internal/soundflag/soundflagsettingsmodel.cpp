@@ -229,7 +229,7 @@ uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& act
     item->setId(actionCode);
 
     ui::UiAction action;
-    action.code = actions::codeFromQString(actionCode);
+    action.code = muse::actions::codeFromQString(actionCode);
     action.title = title;
     item->setAction(action);
 

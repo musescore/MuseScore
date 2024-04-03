@@ -34,7 +34,7 @@
 #include "log.h"
 
 using namespace mu::dock;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::uicomponents;
 
 DockFrameModel::DockFrameModel(QObject* parent)

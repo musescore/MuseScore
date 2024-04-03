@@ -83,10 +83,10 @@ public:
     virtual QQuickItem* asItem() = 0;
 };
 
-class NotationViewInputController : public actions::Actionable, public async::Asyncable
+class NotationViewInputController : public muse::actions::Actionable, public async::Asyncable
 {
     INJECT(INotationConfiguration, configuration)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(IGlobalConfiguration, globalConfiguration)

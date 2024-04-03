@@ -34,7 +34,7 @@ using namespace mu::notation;
 using namespace mu::workspace;
 using namespace mu::ui;
 using namespace mu::uicomponents;
-using namespace mu::actions;
+using namespace muse::actions;
 
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 

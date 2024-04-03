@@ -92,7 +92,7 @@ public:
 
     ui::UiAction action() const;
     ui::UiActionState state() const;
-    actions::ActionData args() const;
+    muse::actions::ActionData args() const;
 
     bool isValid() const;
 
@@ -109,7 +109,7 @@ public slots:
     void setRole(mu::uicomponents::MenuItemRole role);
     void setSubitems(const QList<mu::uicomponents::MenuItem*>& subitems);
     void setAction(const mu::ui::UiAction& action);
-    void setArgs(const actions::ActionData& args);
+    void setArgs(const muse::actions::ActionData& args);
 
 signals:
     void idChanged(QString id);
@@ -145,7 +145,7 @@ private:
     bool m_selectable = false;
     bool m_selected = false;
     MenuItemRole m_role = MenuItemRole::NoRole;
-    actions::ActionData m_args;
+    muse::actions::ActionData m_args;
     QList<MenuItem*> m_subitems;
 
     ui::UiAction m_action;

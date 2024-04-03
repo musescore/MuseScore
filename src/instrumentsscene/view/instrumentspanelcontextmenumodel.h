@@ -31,13 +31,13 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsPanelContextMenuModel : public uicomponents::AbstractMenuModel, public actions::Actionable
+class InstrumentsPanelContextMenuModel : public uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(context::IGlobalContext, globalContext)
     INJECT(notation::IInstrumentsRepository, instrumentsRepository)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit InstrumentsPanelContextMenuModel(QObject* parent = nullptr);
@@ -51,7 +51,7 @@ private:
     void updateMenu();
     void loadInstrumentOrders();
     void buildMenu(bool includeInstrumentsOrdering);
-    void setInstrumentsOrder(const actions::ActionData& args);
+    void setInstrumentsOrder(const muse::actions::ActionData& args);
     void updateOrderingMenu(const QString& newOrderId);
 
     uicomponents::MenuItem* createInstrumentsOrderingItem();

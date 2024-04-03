@@ -32,6 +32,7 @@
 
 using namespace mu::mi;
 using namespace mu::ipc;
+using namespace muse::actions;
 
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
@@ -149,12 +150,12 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         val.setType(static_cast<Val::Type>(msg.args.at(2).toInt()));
         settings()->setLocalValue(key, val);
     } else if (msg.method == METHOD_QUIT) {
-        dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
+        dispatcher()->dispatch("quit", ActionData::make_arg1<bool>(false));
     } else if (msg.method == METHOD_QUIT_WITH_RESTART_LAST_INSTANCE) {
         dispatcher()->dispatch("restart");
     } else if (msg.method == METHOD_QUIT_WITH_RUNING_INSTALLATION) {
         CHECK_ARGS_COUNT(1);
-        dispatcher()->dispatch("quit", actions::ActionData::make_arg2<bool, std::string>(false, msg.args.at(0).toStdString()));
+        dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, msg.args.at(0).toStdString()));
     } else if (msg.method == METHOD_QUITED) {
         m_ipcChannel->response(METHOD_QUITED, { }, msg.srcID);
     } else if (msg.method == METHOD_RESOURCE_CHANGED) {

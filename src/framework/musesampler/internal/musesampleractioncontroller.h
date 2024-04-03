@@ -31,9 +31,9 @@
 #include "imusesamplerinfo.h"
 
 namespace mu::musesampler {
-class MuseSamplerActionController : public actions::Actionable, public async::Asyncable
+class MuseSamplerActionController : public muse::actions::Actionable, public async::Asyncable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(IMuseSamplerInfo, museSamplerInfo)
 

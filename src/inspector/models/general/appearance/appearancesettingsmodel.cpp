@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu::inspector;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::engraving;
 
 static constexpr int REARRANGE_ORDER_STEP = 50;

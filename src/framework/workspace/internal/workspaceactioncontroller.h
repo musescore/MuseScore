@@ -29,9 +29,9 @@
 #include "iinteractive.h"
 
 namespace mu::workspace {
-class WorkspaceActionController : public actions::Actionable
+class WorkspaceActionController : public muse::actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IWorkspaceConfiguration, configuration)
     INJECT(IInteractive, interactive)
 
@@ -39,7 +39,7 @@ public:
     void init();
 
 private:
-    void selectWorkspace(const actions::ActionData& args);
+    void selectWorkspace(const muse::actions::ActionData& args);
     void openConfigureWorkspacesDialog();
 
     void setCurrentWorkspaceName(const std::string& workspaceName);

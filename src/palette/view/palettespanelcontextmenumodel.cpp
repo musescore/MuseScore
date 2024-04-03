@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu::palette;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 

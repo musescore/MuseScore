@@ -33,10 +33,10 @@
 
 namespace mu::extensions {
 class ExtensionsUiActions;
-class ExtensionsActionController : public actions::Actionable, public async::Asyncable
+class ExtensionsActionController : public muse::actions::Actionable, public async::Asyncable
 {
     Inject<IInteractive> interactive;
-    Inject<actions::IActionsDispatcher> dispatcher;
+    Inject<muse::actions::IActionsDispatcher> dispatcher;
     Inject<extensions::IExtensionsProvider> provider;
     Inject<ui::IUiActionsRegister> uiActionsRegister;
 

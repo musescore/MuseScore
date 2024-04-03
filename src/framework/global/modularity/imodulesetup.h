@@ -54,4 +54,8 @@ public:
 };
 }
 
+namespace muse::modularity {
+using IModuleSetup = mu::modularity::IModuleSetup;
+}
+
 #endif // MU_MODULARITY_IMODULESETUP_H

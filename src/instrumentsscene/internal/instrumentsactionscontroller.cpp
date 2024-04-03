@@ -26,6 +26,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse::actions;
 
 void InstrumentsActionsController::init()
 {
@@ -33,7 +34,7 @@ void InstrumentsActionsController::init()
     dispatcher()->reg(this, "change-instrument", this, &InstrumentsActionsController::changeInstrument);
 }
 
-bool InstrumentsActionsController::canReceiveAction(const actions::ActionCode&) const
+bool InstrumentsActionsController::canReceiveAction(const ActionCode&) const
 {
     return context()->currentMasterNotation() != nullptr;
 }

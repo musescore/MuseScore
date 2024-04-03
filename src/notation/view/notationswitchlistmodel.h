@@ -37,7 +37,7 @@ class NotationSwitchListModel : public QAbstractListModel, public async::Asyncab
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit NotationSwitchListModel(QObject* parent = nullptr);

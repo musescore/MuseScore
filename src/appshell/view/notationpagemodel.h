@@ -34,11 +34,11 @@
 #include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
-class NotationPageModel : public QObject, public async::Asyncable, public actions::Actionable
+class NotationPageModel : public QObject, public async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)

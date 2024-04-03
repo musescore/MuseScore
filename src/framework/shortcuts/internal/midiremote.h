@@ -43,7 +43,7 @@ class MidiRemote : public IMidiRemote, public async::Asyncable
 {
     INJECT(io::IFileSystem, fileSystem)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IShortcutsConfiguration, configuration)
 
 public:

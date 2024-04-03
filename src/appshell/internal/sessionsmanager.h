@@ -38,7 +38,7 @@
 namespace mu::appshell {
 class SessionsManager : public ISessionsManager, public async::Asyncable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(project::IProjectConfiguration, projectConfiguration)

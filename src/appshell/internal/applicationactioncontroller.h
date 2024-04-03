@@ -42,9 +42,10 @@
 #include "iapplication.h"
 
 namespace mu::appshell {
-class ApplicationActionController : public QObject, public IApplicationActionController, public actions::Actionable, public async::Asyncable
+class ApplicationActionController : public QObject, public IApplicationActionController, public muse::actions::Actionable,
+    public async::Asyncable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(ui::IUiActionsRegister, actionsRegister)
     INJECT(ui::IMainWindow, mainWindow)
     INJECT(languages::ILanguagesService, languagesService)
@@ -87,7 +88,7 @@ private:
 
     bool m_quiting = false;
 
-    async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
+    async::Channel<muse::actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }
 

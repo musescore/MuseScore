@@ -42,10 +42,10 @@ public:
     void init();
 
     void reg(const IUiActionsModulePtr& actions) override;
-    const UiAction& action(const actions::ActionCode& code) const override;
+    const UiAction& action(const muse::actions::ActionCode& code) const override;
     const std::vector<UiAction> getActions() const override;
-    UiActionState actionState(const actions::ActionCode& code) const override;
-    async::Channel<actions::ActionCodeList> actionStateChanged() const override;
+    UiActionState actionState(const muse::actions::ActionCode& code) const override;
+    async::Channel<muse::actions::ActionCodeList> actionStateChanged() const override;
 
 private:
 
@@ -61,22 +61,22 @@ private:
         }
     };
 
-    Info& info(const actions::ActionCode& code);
-    const Info& info(const actions::ActionCode& code) const;
+    Info& info(const muse::actions::ActionCode& code);
+    const Info& info(const muse::actions::ActionCode& code) const;
 
-    void updateShortcuts(const actions::ActionCodeList& codes);
+    void updateShortcuts(const muse::actions::ActionCodeList& codes);
     void updateShortcutsAll();
 
-    void updateEnabled(const actions::ActionCodeList& codes);
+    void updateEnabled(const muse::actions::ActionCodeList& codes);
     void updateEnabledAll();
     void doUpdateEnabled(Info& inf, const IUiContextResolverPtr& ctxResolver, const UiContext& currentCtx,
-                         actions::ActionCodeList& changedList);
+                         muse::actions::ActionCodeList& changedList);
 
     void updateCheckedAll();
-    void updateChecked(const actions::ActionCodeList& codes);
+    void updateChecked(const muse::actions::ActionCodeList& codes);
 
-    std::unordered_map<actions::ActionCode, Info> m_actions;
-    async::Channel<actions::ActionCodeList> m_actionStateChanged;
+    std::unordered_map<muse::actions::ActionCode, Info> m_actions;
+    async::Channel<muse::actions::ActionCodeList> m_actionStateChanged;
 };
 }
 

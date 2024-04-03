@@ -36,6 +36,7 @@ static constexpr int AUTO_CHECK_UPDATE_INTERVAL = 1000;
 
 using namespace mu;
 using namespace mu::update;
+using namespace muse::actions;
 
 static ValList releasesNotesToValList(const PrevReleasesNotesList& list)
 {
@@ -252,5 +253,5 @@ void UpdateScenario::closeAppAndStartInstallation(const io::path_t& installerPat
         multiInstancesProvider()->quitAllAndRunInstallation(installerPath);
     }
 
-    dispatcher()->dispatch("quit", actions::ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
+    dispatcher()->dispatch("quit", ActionData::make_arg2<bool, std::string>(false, installerPath.toStdString()));
 }

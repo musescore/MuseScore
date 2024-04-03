@@ -42,7 +42,7 @@ class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(ui::IUiActionsRegister, uiActionsRegister)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(int length READ rowCount NOTIFY itemsChanged)
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
@@ -73,7 +73,7 @@ protected:
         UserRole
     };
 
-    virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
+    virtual void onActionsStateChanges(const muse::actions::ActionCodeList& codes);
 
     void setItem(int index, MenuItem* item);
     void setItems(const MenuItemList& items);
@@ -85,20 +85,20 @@ protected:
     MenuItem& item(int index);
 
     MenuItem& findItem(const QString& itemId);
-    MenuItem& findItem(const actions::ActionCode& actionCode);
+    MenuItem& findItem(const muse::actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
     MenuItem* makeMenu(const TranslatableString& title, const MenuItemList& items, const QString& menuId = "", bool enabled = true);
 
-    MenuItem* makeMenuItem(const actions::ActionCode& actionCode, const TranslatableString& title = {});
+    MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode, const TranslatableString& title = {});
     MenuItem* makeSeparator();
 
     bool isIndexValid(int index) const;
-    void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
+    void dispatch(const muse::actions::ActionCode& actionCode, const muse::actions::ActionData& args = muse::actions::ActionData());
 
 private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
-    MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
+    MenuItem& item(MenuItemList& items, const muse::actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
 
     MenuItemList m_items;

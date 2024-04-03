@@ -37,7 +37,7 @@ namespace mu::shortcuts {
 class ShortcutsController : public IShortcutsController, public async::Asyncable
 {
     INJECT(IShortcutsRegister, shortcutsRegister)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(ui::IUiActionsRegister, aregister)
     INJECT(ui::IInteractiveProvider, interactiveProvider)
     INJECT(ui::IUiContextResolver, uiContextResolver)
@@ -54,7 +54,7 @@ public:
     bool isRegistered(const std::string& sequence) const override;
 
 private:
-    actions::ActionCode resolveAction(const std::string& sequence) const;
+    muse::actions::ActionCode resolveAction(const std::string& sequence) const;
 };
 }
 

@@ -38,7 +38,7 @@ namespace mu::update {
 class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
     INJECT(IInteractive, interactive)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(IUpdateConfiguration, configuration)
     INJECT(IUpdateService, updateService)

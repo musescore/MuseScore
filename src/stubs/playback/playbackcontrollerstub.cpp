@@ -22,6 +22,7 @@
 #include "playbackcontrollerstub.h"
 
 using namespace mu::playback;
+using namespace muse::actions;
 
 bool PlaybackControllerStub::isPlayAllowed() const
 {
@@ -141,12 +142,12 @@ void PlaybackControllerStub::seekElement(const notation::EngravingItem*)
 {
 }
 
-bool PlaybackControllerStub::actionChecked(const actions::ActionCode&) const
+bool PlaybackControllerStub::actionChecked(const ActionCode&) const
 {
     return false;
 }
 
-mu::async::Channel<mu::actions::ActionCode> PlaybackControllerStub::actionCheckedChanged() const
+mu::async::Channel<ActionCode> PlaybackControllerStub::actionCheckedChanged() const
 {
     return {};
 }

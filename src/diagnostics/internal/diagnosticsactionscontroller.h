@@ -30,9 +30,9 @@
 #include "isavediagnosticfilesscenario.h"
 
 namespace mu::diagnostics {
-class DiagnosticsActionsController : public actions::Actionable
+class DiagnosticsActionsController : public muse::actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(diagnostics::ISaveDiagnosticFilesScenario, saveDiagnosticsScenario)
 

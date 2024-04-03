@@ -46,4 +46,16 @@ inline ModulesIoC* ioc()
 }
 }
 
+namespace muse::modularity {
+using ModulesIoC = kors::modularity::ModulesIoC;
+
+template<class T>
+using Creator = kors::modularity::Creator<T>;
+
+inline ModulesIoC* ioc()
+{
+    return kors::modularity::ModulesIoC::instance();
+}
+}
+
 #endif // MU_MODULARITY_IOC_H

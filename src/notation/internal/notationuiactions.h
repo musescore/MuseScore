@@ -46,16 +46,16 @@ public:
     const ui::UiActionList& actionsList() const override;
 
     bool actionEnabled(const ui::UiAction& act) const override;
-    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
+    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
     bool actionChecked(const ui::UiAction& act) const override;
-    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
+    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
-    static DurationType actionDurationType(const actions::ActionCode& actionCode);
-    static AccidentalType actionAccidentalType(const actions::ActionCode& actionCode);
-    static int actionDotCount(const actions::ActionCode& actionCode);
-    static int actionVoice(const actions::ActionCode& actionCode);
-    static SymbolId actionArticulationSymbolId(const actions::ActionCode& actionCode);
+    static DurationType actionDurationType(const muse::actions::ActionCode& actionCode);
+    static AccidentalType actionAccidentalType(const muse::actions::ActionCode& actionCode);
+    static int actionDotCount(const muse::actions::ActionCode& actionCode);
+    static int actionVoice(const muse::actions::ActionCode& actionCode);
+    static SymbolId actionArticulationSymbolId(const muse::actions::ActionCode& actionCode);
 
     static const ui::ToolConfig& defaultNoteInputBarConfig();
 
@@ -64,12 +64,12 @@ private:
     static const ui::UiActionList m_scoreConfigActions;
     static const ui::UiActionList m_engravingDebuggingActions;
 
-    bool isScoreConfigAction(const actions::ActionCode& code) const;
-    bool isScoreConfigChecked(const actions::ActionCode& code, const ScoreConfig& cfg) const;
+    bool isScoreConfigAction(const muse::actions::ActionCode& code) const;
+    bool isScoreConfigChecked(const muse::actions::ActionCode& code, const ScoreConfig& cfg) const;
 
     std::shared_ptr<NotationActionController> m_controller;
-    async::Channel<actions::ActionCodeList> m_actionEnabledChanged;
-    async::Channel<actions::ActionCodeList> m_actionCheckedChanged;
+    async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
+    async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
 

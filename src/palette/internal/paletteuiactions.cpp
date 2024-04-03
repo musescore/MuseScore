@@ -28,8 +28,9 @@
 
 using namespace mu::palette;
 using namespace mu::ui;
+using namespace muse::actions;
 
-static const mu::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
+static const muse::actions::ActionCode MASTERPALETTE_CODE("masterpalette");
 
 const UiActionList PaletteUiActions::m_actions = {
     UiAction(MASTERPALETTE_CODE,
@@ -106,12 +107,12 @@ bool PaletteUiActions::actionChecked(const UiAction& act) const
     return false;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> PaletteUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> PaletteUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> PaletteUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> PaletteUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

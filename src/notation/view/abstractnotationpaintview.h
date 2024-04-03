@@ -49,14 +49,14 @@
 
 namespace mu::notation {
 class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,
-    public actions::Actionable
+    public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(INotationConfiguration, configuration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(ui::IUiConfiguration, uiConfiguration)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(ui::IUiContextResolver, uiContextResolver)
@@ -196,7 +196,7 @@ private:
     void initBackground();
     void initNavigatorOrientation();
 
-    bool canReceiveAction(const actions::ActionCode& actionCode) const override;
+    bool canReceiveAction(const muse::actions::ActionCode& actionCode) const override;
     void onCurrentNotationChanged();
     bool isInited() const;
 

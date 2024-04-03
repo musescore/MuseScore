@@ -31,6 +31,7 @@ using namespace mu;
 using namespace mu::ui;
 using namespace mu::draw;
 using namespace mu::notation;
+using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
@@ -196,7 +197,7 @@ void AbstractNotationPaintView::selectOnNavigationActive()
     interaction->selectFirstElement(false);
 }
 
-bool AbstractNotationPaintView::canReceiveAction(const actions::ActionCode& actionCode) const
+bool AbstractNotationPaintView::canReceiveAction(const ActionCode& actionCode) const
 {
     if (actionCode == "diagnostic-notationview-redraw") {
         return true;

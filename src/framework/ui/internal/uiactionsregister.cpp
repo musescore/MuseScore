@@ -24,7 +24,7 @@
 #include "log.h"
 
 using namespace mu::ui;
-using namespace mu::actions;
+using namespace muse::actions;
 
 void UiActionsRegister::init()
 {
@@ -72,7 +72,7 @@ void UiActionsRegister::reg(const IUiActionsModulePtr& module)
     });
 }
 
-UiActionsRegister::Info& UiActionsRegister::info(const actions::ActionCode& code)
+UiActionsRegister::Info& UiActionsRegister::info(const ActionCode& code)
 {
     auto it = m_actions.find(code);
     if (it != m_actions.end()) {
@@ -83,7 +83,7 @@ UiActionsRegister::Info& UiActionsRegister::info(const actions::ActionCode& code
     return null;
 }
 
-const UiActionsRegister::Info& UiActionsRegister::info(const actions::ActionCode& code) const
+const UiActionsRegister::Info& UiActionsRegister::info(const ActionCode& code) const
 {
     auto it = m_actions.find(code);
     if (it != m_actions.end()) {
@@ -124,7 +124,7 @@ UiActionState UiActionsRegister::actionState(const ActionCode& code) const
 void UiActionsRegister::updateShortcuts(const ActionCodeList& codes)
 {
     auto screg = shortcutsRegister();
-    for (const actions::ActionCode& code : codes) {
+    for (const ActionCode& code : codes) {
         Info& inf = info(code);
         if (!inf.isValid()) {
             continue;
@@ -162,14 +162,14 @@ void UiActionsRegister::doUpdateEnabled(Info& inf,
     }
 }
 
-void UiActionsRegister::updateEnabled(const actions::ActionCodeList& codes)
+void UiActionsRegister::updateEnabled(const ActionCodeList& codes)
 {
     TRACEFUNC;
 
     ActionCodeList changedList;
     auto ctxResolver = uicontextResolver();
     ui::UiContext currentCtx = ctxResolver->currentUiContext();
-    for (const actions::ActionCode& code : codes) {
+    for (const ActionCode& code : codes) {
         Info& inf = info(code);
         if (!inf.isValid()) {
             continue;
@@ -222,12 +222,12 @@ void UiActionsRegister::updateCheckedAll()
     }
 }
 
-void UiActionsRegister::updateChecked(const actions::ActionCodeList& codes)
+void UiActionsRegister::updateChecked(const ActionCodeList& codes)
 {
     TRACEFUNC;
 
     ActionCodeList changedList;
-    for (const actions::ActionCode& code : codes) {
+    for (const ActionCode& code : codes) {
         Info& inf = info(code);
         if (!inf.isValid()) {
             continue;

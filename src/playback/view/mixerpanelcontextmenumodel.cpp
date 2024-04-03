@@ -28,7 +28,7 @@ using namespace mu;
 using namespace mu::playback;
 using namespace mu::ui;
 using namespace mu::uicomponents;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::audio;
 
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
@@ -264,7 +264,7 @@ void MixerPanelContextMenuModel::toggleAuxSend(const ActionData& args)
     configuration()->setAuxSendVisible(auxSendIndex, newVisibilityValue);
 }
 
-void MixerPanelContextMenuModel::toggleAuxChannel(const actions::ActionData& args)
+void MixerPanelContextMenuModel::toggleAuxChannel(const ActionData& args)
 {
     if (args.empty()) {
         return;

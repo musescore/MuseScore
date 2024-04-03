@@ -39,7 +39,7 @@ using namespace mu::uicomponents;
 
 using ItemType = InstrumentsTreeItemType::ItemType;
 
-static const mu::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
+static const muse::actions::ActionCode ADD_INSTRUMENTS_ACTIONCODE("instruments");
 
 namespace mu::instrumentsscene {
 static QString notationToKey(const INotationPtr notation)

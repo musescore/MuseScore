@@ -81,8 +81,8 @@ public:
     virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
 
-    virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
-    virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;
+    virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
+    virtual async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;
 
     virtual QTime totalPlayTime() const = 0;
     virtual async::Notification totalPlayTimeChanged() const = 0;

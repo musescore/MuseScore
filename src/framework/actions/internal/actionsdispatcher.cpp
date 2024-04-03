@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::actions;
+using namespace muse::actions;
 
 ActionsDispatcher::~ActionsDispatcher()
 {

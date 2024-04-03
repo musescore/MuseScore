@@ -32,7 +32,7 @@ class InstrumentNameSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit InstrumentNameSettingsModel(QObject* parent, IElementRepositoryService* repository);

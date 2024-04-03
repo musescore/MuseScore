@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACTIONS_IACTIONSDISPATCHER_H
-#define MU_ACTIONS_IACTIONSDISPATCHER_H
+#ifndef MUSE_ACTIONS_IACTIONSDISPATCHER_H
+#define MUSE_ACTIONS_IACTIONSDISPATCHER_H
 
 #include <functional>
 
 #include "modularity/imoduleinterface.h"
 #include "actiontypes.h"
 
-namespace mu::actions {
+namespace muse::actions {
 class Actionable;
 class IActionsDispatcher : MODULE_EXPORT_INTERFACE
 {
@@ -88,4 +88,4 @@ public:
 };
 }
 
-#endif // MU_ACTIONS_IACTIONSDISPATCHER_H
+#endif // MUSE_ACTIONS_IACTIONSDISPATCHER_H

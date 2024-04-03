@@ -29,7 +29,7 @@
 #include "types/projecttypes.h"
 
 using namespace mu::project;
-using namespace mu::actions;
+using namespace muse::actions;
 
 ScoresPageModel::ScoresPageModel(QObject* parent)
     : QObject(parent)

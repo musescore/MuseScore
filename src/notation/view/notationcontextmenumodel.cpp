@@ -29,6 +29,7 @@
 
 using namespace mu::notation;
 using namespace mu::uicomponents;
+using namespace muse::actions;
 
 void NotationContextMenuModel::loadItems(int elementType)
 {
@@ -213,9 +214,9 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         if (!pageCode.isEmpty()) {
             QString subPageCode = EditStyle::subPageCodeForElement(hitElement);
             if (!subPageCode.isEmpty()) {
-                item->setArgs(mu::actions::ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
+                item->setArgs(ActionData::make_arg2<QString, QString>(pageCode, subPageCode));
             } else {
-                item->setArgs(mu::actions::ActionData::make_arg1<QString>(pageCode));
+                item->setArgs(ActionData::make_arg1<QString>(pageCode));
             }
         }
     }

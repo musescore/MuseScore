@@ -34,7 +34,7 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::notation;
-using namespace mu::actions;
+using namespace muse::actions;
 using namespace mu::context;
 
 static constexpr qreal STRETCH_STEP = 0.1;
@@ -509,7 +509,7 @@ void NotationActionController::init()
     }
 }
 
-bool NotationActionController::canReceiveAction(const actions::ActionCode& code) const
+bool NotationActionController::canReceiveAction(const ActionCode& code) const
 {
     TRACEFUNC;
 
@@ -734,7 +734,7 @@ void NotationActionController::padNote(const Pad& pad)
     }
 }
 
-void NotationActionController::putNote(const actions::ActionData& args)
+void NotationActionController::putNote(const ActionData& args)
 {
     TRACEFUNC;
 
@@ -757,7 +757,7 @@ void NotationActionController::putNote(const actions::ActionData& args)
     }
 }
 
-void NotationActionController::removeNote(const actions::ActionData& args)
+void NotationActionController::removeNote(const ActionData& args)
 {
     TRACEFUNC;
 
@@ -1454,7 +1454,7 @@ void NotationActionController::startEditSelectedText(const ActionData& args)
     }
 }
 
-void NotationActionController::addMeasures(const actions::ActionData& actionData, AddBoxesTarget target)
+void NotationActionController::addMeasures(const ActionData& actionData, AddBoxesTarget target)
 {
     TRACEFUNC;
     int count = 1;
@@ -2059,30 +2059,30 @@ bool NotationActionController::isToggleVisibleAllowed() const
     return false;
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+void NotationActionController::registerAction(const ActionCode& code,
                                               std::function<void()> handler, bool (NotationActionController::* isEnabled)() const)
 {
     m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, handler);
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
-                                              std::function<void(const actions::ActionData&)> handler,
+void NotationActionController::registerAction(const ActionCode& code,
+                                              std::function<void(const ActionData&)> handler,
                                               bool (NotationActionController::* isEnabled)() const)
 {
     m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, handler);
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
-                                              void (NotationActionController::* handler)(const actions::ActionData& data),
+void NotationActionController::registerAction(const ActionCode& code,
+                                              void (NotationActionController::* handler)(const ActionData& data),
                                               bool (NotationActionController::* isEnabled)() const)
 {
     m_isEnabledMap[code] = std::bind(isEnabled, this);
     dispatcher()->reg(this, code, this, handler);
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+void NotationActionController::registerAction(const ActionCode& code,
                                               void (NotationActionController::* handler)(),
                                               bool (NotationActionController::* isEnabled)() const)
 {
@@ -2090,17 +2090,17 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
     dispatcher()->reg(this, code, this, handler);
 }
 
-void NotationActionController::registerNoteInputAction(const mu::actions::ActionCode& code, NoteInputMethod inputMethod)
+void NotationActionController::registerNoteInputAction(const ActionCode& code, NoteInputMethod inputMethod)
 {
     registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &NotationActionController::isNotEditingElement);
 }
 
-void NotationActionController::registerNoteAction(const mu::actions::ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
+void NotationActionController::registerNoteAction(const ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
 {
     registerAction(code, [this, noteName, addingMode]() { addNote(noteName, addingMode); }, &NotationActionController::isStandardStaff);
 }
 
-void NotationActionController::registerPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
+void NotationActionController::registerPadNoteAction(const ActionCode& code, Pad padding)
 {
     registerAction(code, [this, padding, code]()
     {
@@ -2109,7 +2109,7 @@ void NotationActionController::registerPadNoteAction(const mu::actions::ActionCo
     });
 }
 
-void NotationActionController::registerTabPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
+void NotationActionController::registerTabPadNoteAction(const ActionCode& code, Pad padding)
 {
     registerAction(code, [this, padding, code]()
     {
@@ -2118,7 +2118,7 @@ void NotationActionController::registerTabPadNoteAction(const mu::actions::Actio
     }, &NotationActionController::isTablatureStaff);
 }
 
-void NotationActionController::registerMoveSelectionAction(const mu::actions::ActionCode& code, MoveSelectionType type,
+void NotationActionController::registerMoveSelectionAction(const ActionCode& code, MoveSelectionType type,
                                                            MoveDirection direction, PlayMode playMode)
 {
     auto moveSelectionFunc = [this, type, direction, playMode]() {
@@ -2137,7 +2137,7 @@ void NotationActionController::registerMoveSelectionAction(const mu::actions::Ac
     dispatcher()->reg(this, code, moveSelectionFunc);
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+void NotationActionController::registerAction(const ActionCode& code,
                                               void (INotationInteraction::* handler)(), PlayMode playMode,
                                               bool (NotationActionController::* enabler)() const)
 {
@@ -2153,7 +2153,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
     }, enabler);
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+void NotationActionController::registerAction(const ActionCode& code,
                                               void (NotationActionController::* handler)(MoveDirection,
                                                                                          bool), MoveDirection direction, bool quickly,
                                               bool (NotationActionController::* enabler)() const)
@@ -2161,14 +2161,14 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
     registerAction(code, [this, handler, direction, quickly]() { (this->*handler)(direction, quickly); }, enabler);
 }
 
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+void NotationActionController::registerAction(const ActionCode& code,
                                               void (INotationInteraction::* handler)(), bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, handler, PlayMode::NoPlay, enabler);
 }
 
 template<class P1>
-void NotationActionController::registerAction(const mu::actions::ActionCode& code, void (INotationInteraction::* handler)(P1),
+void NotationActionController::registerAction(const ActionCode& code, void (INotationInteraction::* handler)(P1),
                                               P1 param1, PlayMode playMode, bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, param1, playMode]()
@@ -2184,7 +2184,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
 }
 
 template<class P1>
-void NotationActionController::registerAction(const mu::actions::ActionCode& code,
+void NotationActionController::registerAction(const ActionCode& code,
                                               void (INotationInteraction::* handler)(
                                                   P1), P1 param1, bool (NotationActionController::* enabler)() const)
 {
@@ -2192,7 +2192,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
 }
 
 template<typename P1, typename P2>
-void NotationActionController::registerAction(const mu::actions::ActionCode& code, void (INotationInteraction::* handler)(P1, P2),
+void NotationActionController::registerAction(const ActionCode& code, void (INotationInteraction::* handler)(P1, P2),
                                               P1 param1, P2 param2, PlayMode playMode, bool (NotationActionController::* enabler)() const)
 {
     registerAction(code, [this, handler, param1, param2, playMode]()
@@ -2207,7 +2207,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
     }, enabler);
 }
 
-void NotationActionController::notifyAccessibilityAboutActionTriggered(const actions::ActionCode& ActionCode)
+void NotationActionController::notifyAccessibilityAboutActionTriggered(const ActionCode& ActionCode)
 {
     const ui::UiAction action = actionRegister()->action(ActionCode);
     std::string titleStr  = action.title.qTranslatedWithoutMnemonic().toStdString();

@@ -38,7 +38,7 @@ class ScoresPageModel : public QObject
     Q_OBJECT
 
     INJECT(IProjectConfiguration, configuration)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
 

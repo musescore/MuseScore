@@ -35,7 +35,7 @@ class NavigationApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(ui::INavigationController, navigation)
 
 public:

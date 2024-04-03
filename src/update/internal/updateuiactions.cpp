@@ -27,6 +27,7 @@
 
 using namespace mu::update;
 using namespace mu::ui;
+using namespace muse::actions;
 
 const UiActionList UpdateUiActions::m_actions = {
     UiAction("check-update",
@@ -60,12 +61,12 @@ bool UpdateUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> UpdateUiActions::actionEnabledChanged() const
+mu::async::Channel<ActionCodeList> UpdateUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> UpdateUiActions::actionCheckedChanged() const
+mu::async::Channel<ActionCodeList> UpdateUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

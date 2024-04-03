@@ -32,7 +32,7 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::ui;
 using namespace mu::uicomponents;
-using namespace mu::actions;
+using namespace muse::actions;
 
 static const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
 static const ActionCode EXPAND_ALL_CODE("expand-all-instruments");
@@ -115,7 +115,7 @@ void InstrumentsPanelContextMenuModel::buildMenu(bool includeInstrumentsOrdering
     setItems(items);
 }
 
-void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::ActionData& args)
+void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const ActionData& args)
 {
     if (args.empty()) {
         return;

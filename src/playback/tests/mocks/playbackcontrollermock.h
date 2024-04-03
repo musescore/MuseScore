@@ -68,8 +68,8 @@ public:
     MOCK_METHOD(void, playMetronome, (int), (override));
     MOCK_METHOD(void, seekElement, (const notation::EngravingItem*), (override));
 
-    MOCK_METHOD(bool, actionChecked, (const actions::ActionCode&), (const, override));
-    MOCK_METHOD(async::Channel<actions::ActionCode>, actionCheckedChanged, (), (const, override));
+    MOCK_METHOD(bool, actionChecked, (const muse::actions::ActionCode&), (const, override));
+    MOCK_METHOD(async::Channel<muse::actions::ActionCode>, actionCheckedChanged, (), (const, override));
 
     MOCK_METHOD(QTime, totalPlayTime, (), (const, override));
     MOCK_METHOD(async::Notification, totalPlayTimeChanged, (), (const, override));

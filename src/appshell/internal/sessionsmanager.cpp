@@ -23,6 +23,7 @@
 #include "sessionsmanager.h"
 
 using namespace mu::appshell;
+using namespace muse::actions;
 
 void SessionsManager::init()
 {
@@ -64,7 +65,7 @@ void SessionsManager::restore()
     }
 
     for (const io::path_t& path : projects) {
-        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(path.toQUrl()));
+        dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(path.toQUrl()));
     }
 }
 

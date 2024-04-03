@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACTIONS_ACTIONSDISPATCHER_H
-#define MU_ACTIONS_ACTIONSDISPATCHER_H
+#ifndef MUSE_ACTIONS_ACTIONSDISPATCHER_H
+#define MUSE_ACTIONS_ACTIONSDISPATCHER_H
 
 #include <map>
 
 #include "../iactionsdispatcher.h"
 
-namespace mu::actions {
+namespace muse::actions {
 class ActionsDispatcher : public IActionsDispatcher
 {
 public:
@@ -48,4 +48,4 @@ private:
 };
 }
 
-#endif // MU_ACTIONS_ACTIONSDISPATCHER_H
+#endif // MUSE_ACTIONS_ACTIONSDISPATCHER_H

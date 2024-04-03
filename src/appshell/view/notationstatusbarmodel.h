@@ -41,12 +41,12 @@
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public async::Asyncable, public actions::Actionable
+class NotationStatusBarModel : public QObject, public async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(ui::IUiActionsRegister, actionsRegister)
     INJECT(workspace::IWorkspaceConfiguration, workspaceConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
@@ -104,9 +104,9 @@ private:
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
-    uicomponents::MenuItem* makeMenuItem(const actions::ActionCode& actionCode);
+    uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
 
-    void dispatch(const actions::ActionCode& code, const actions::ActionData& args = actions::ActionData());
+    void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
 
     void onCurrentNotationChanged();
 

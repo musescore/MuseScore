@@ -77,7 +77,7 @@ class PluginAPI : public QQuickItem, public extensions::apiv1::IPluginApiV1
 {
     Q_OBJECT
 
-    INJECT(mu::actions::IActionsDispatcher, actionsDispatcher)
+    INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
     INJECT(mu::context::IGlobalContext, context)
     INJECT(mu::IApplication, application)
 
