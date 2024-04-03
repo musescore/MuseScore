@@ -1998,8 +1998,10 @@ void MusicXMLParserPass2::part()
         }
     }
 
-    for (Hairpin* hp : _inferredHairpins) {
-        hp->score()->addElement(hp);
+    if (configuration()->inferTextType()) {
+        for (Hairpin* hp : _inferredHairpins) {
+            hp->score()->addElement(hp);
+        }
     }
 
     const auto incompleteSpanners =  findIncompleteSpannersAtPartEnd();
@@ -3122,11 +3124,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
         }
 
         // Check staff and end any cresc lines which are waiting
-        InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
-        for (Hairpin* h : hairpins) {
-            if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
-                h->setTrack2(track);
-                h->setTick2(tick + _offset);
+        if (configuration()->inferTextType()) {
+            InferredHairpinsStack hairpins = _pass2.getInferredHairpins();
+            for (Hairpin* h : hairpins) {
+                if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
+                    h->setTrack2(track);
+                    h->setTick2(tick + _offset);
+                }
             }
         }
 
@@ -3737,6 +3741,9 @@ MusicXMLDelayedDirectionElement* MusicXMLInferredFingering::toDelayedDirection()
  */
 void MusicXMLParserDirection::textToDynamic(String& text)
 {
+    if (!configuration()->inferTextType()) {
+        return;
+    }
     String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
     // try to find a dynamic - xml representation or
     // if found add to dynamics list and set text to blank string
@@ -3752,6 +3759,9 @@ void MusicXMLParserDirection::textToDynamic(String& text)
 
 void MusicXMLParserDirection::textToCrescLine(String& text)
 {
+    if (!configuration()->inferTextType()) {
+        return;
+    }
     String simplifiedText = MScoreTextToMXML::toPlainText(text).simplified();
     bool cresc = simplifiedText.contains(u"cresc");
     bool dim = simplifiedText.contains(u"dim");
@@ -3771,6 +3781,9 @@ void MusicXMLParserDirection::textToCrescLine(String& text)
 
 void MusicXMLParserDirection::addInferredCrescLine(const track_idx_t track, const Fraction& tick, const bool isVocalStaff)
 {
+    if (!configuration()->inferTextType()) {
+        return;
+    }
     if (!_inferredHairpinStart) {
         return;
     }
