@@ -332,7 +332,7 @@ Measure::~Measure()
         delete s;
         s = ns;
     }
-    muse::DeleteAll(m_mstaves);
+    DeleteAll(m_mstaves);
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -1056,7 +1056,7 @@ void Measure::removeStaves(staff_idx_t sStaff, staff_idx_t eStaff)
         }
     }
     for (EngravingItem* e : el()) {
-        if (e->track() == muse::nidx) {
+        if (e->track() == mu::nidx) {
             continue;
         }
         voice_idx_t voice = e->voice();
@@ -1075,7 +1075,7 @@ void Measure::removeStaves(staff_idx_t sStaff, staff_idx_t eStaff)
 void Measure::insertStaves(staff_idx_t sStaff, staff_idx_t eStaff)
 {
     for (EngravingItem* e : el()) {
-        if (e->track() == muse::nidx) {
+        if (e->track() == mu::nidx) {
             continue;
         }
         staff_idx_t staffIdx = e->staffIdx();
@@ -1121,7 +1121,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
     }
 
     for (EngravingItem* e : el()) {
-        if (e->track() == muse::nidx) {
+        if (e->track() == mu::nidx) {
             continue;
         }
 
@@ -1398,11 +1398,11 @@ bool Measure::acceptDrop(EditData& data) const
 EngravingItem* Measure::drop(EditData& data)
 {
     EngravingItem* e = data.dropElement;
-    staff_idx_t staffIdx = muse::nidx;
+    staff_idx_t staffIdx = mu::nidx;
     Segment* seg = nullptr;
     score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
 
-    if (staffIdx == muse::nidx) {
+    if (staffIdx == mu::nidx) {
         return nullptr;
     }
     Staff* staff = score()->staff(staffIdx);
@@ -1556,7 +1556,7 @@ EngravingItem* Measure::drop(EditData& data)
             break;
         }
         if (b) {
-            b->setTrack(muse::nidx);                   // these are system elements
+            b->setTrack(mu::nidx);                   // these are system elements
             b->setParent(measure);
             score()->undoAddElement(b);
         }
@@ -1573,7 +1573,7 @@ EngravingItem* Measure::drop(EditData& data)
             double gap = spatium() * 10;
             System* s = system();
             const staff_idx_t nextVisStaffIdx = s->nextVisibleStaff(staffIdx);
-            const bool systemEnd = (nextVisStaffIdx == muse::nidx);
+            const bool systemEnd = (nextVisStaffIdx == mu::nidx);
             if (systemEnd) {
                 System* ns = 0;
                 for (System* ts : score()->systems()) {
@@ -1798,7 +1798,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
-                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch, true, tick().ticks(),
+                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch, true, tick(),
                                                                         score()->sigmap()->timesig(tick().ticks()).nominal(), this, 0);
 
                 // set the existing rest to the first value of the duration list
@@ -1938,8 +1938,18 @@ bool Measure::isFinalMeasureOfSection() const
 
 bool Measure::isAnacrusis() const
 {
-    TimeSigFrac timeSig = score()->sigmap()->timesig(tick().ticks()).nominal();
-    return irregular() && ticks() < Fraction::fromTicks(timeSig.ticksPerMeasure());
+    const MeasureBase* pm = prev();
+    ElementType pt = pm ? pm->type() : ElementType::INVALID;
+
+    if (irregular() || !pm
+        || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
+        || pt == ElementType::VBOX || pt == ElementType::HBOX
+        || pt == ElementType::FBOX || pt == ElementType::TBOX) {
+        if (timesig() - ticks() > Fraction(0, 1)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 //---------------------------------------------------------
@@ -2101,12 +2111,12 @@ void Measure::sortStaves(std::vector<staff_idx_t>& dst)
     }
 
     for (EngravingItem* e : el()) {
-        if (e->track() == muse::nidx || e->isTopSystemObject()) {
+        if (e->track() == mu::nidx || e->isTopSystemObject()) {
             continue;
         }
         voice_idx_t voice    = e->voice();
         staff_idx_t staffIdx = e->staffIdx();
-        staff_idx_t idx = muse::indexOf(dst, staffIdx);
+        staff_idx_t idx = mu::indexOf(dst, staffIdx);
         e->setTrack(idx * VOICES + voice);
     }
 }
@@ -2260,7 +2270,7 @@ bool Measure::isEmpty(staff_idx_t staffIdx) const
     }
     track_idx_t strack = 0;
     track_idx_t etrack = 0;
-    if (staffIdx == muse::nidx) {
+    if (staffIdx == mu::nidx) {
         strack = 0;
         etrack = score()->nstaves() * VOICES;
     } else {
@@ -2294,7 +2304,7 @@ bool Measure::isEmpty(staff_idx_t staffIdx) const
             }
         }
         for (EngravingItem* a : s->annotations()) {
-            if (a && staffIdx == muse::nidx) {
+            if (a && staffIdx == mu::nidx) {
                 return false;
             }
             if (!a || a->systemFlag() || !a->visible() || a->isFermata()) {
@@ -2326,7 +2336,7 @@ bool Measure::isCutawayClef(staff_idx_t staffIdx) const
     }
     track_idx_t strack;
     track_idx_t etrack;
-    if (staffIdx == muse::nidx) {
+    if (staffIdx == mu::nidx) {
         strack = 0;
         etrack = score()->nstaves() * VOICES;
     } else {
@@ -3141,19 +3151,7 @@ Fraction Measure::computeTicks()
 
 Fraction Measure::anacrusisOffset() const
 {
-    Fraction offset = Fraction(0, 1);
-    const MeasureBase* pm = prev();
-    ElementType pt = pm ? pm->type() : ElementType::INVALID;
-
-    if (irregular() || !pm
-        || pm->lineBreak() || pm->pageBreak() || pm->sectionBreak()
-        || pt == ElementType::VBOX || pt == ElementType::HBOX
-        || pt == ElementType::FBOX || pt == ElementType::TBOX) {
-        if (timesig() - ticks() > Fraction(0, 1)) {
-            offset = timesig() - ticks();
-        }
-    }
-    return offset;
+    return isAnacrusis() ? (timesig() - ticks()) : Fraction(0, 1);
 }
 
 //---------------------------------------------------------
@@ -3221,7 +3219,7 @@ void Measure::triggerLayout() const
 //     Useful for import filters.
 //---------------------------------------------------------
 
-void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible, Color color)
+void Measure::setEndBarLineType(BarLineType val, track_idx_t track, bool visible, mu::draw::Color color)
 {
     Segment* seg = undoGetSegment(SegmentType::EndBarLine, endTick());
     // get existing bar line for this staff, if any
