@@ -138,7 +138,8 @@ EngravingItem* DummyElement::clone() const
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 AccessibleItemPtr DummyElement::createAccessible()
 {
-    return std::make_shared<AccessibleItem>(this, accessibility::IAccessible::Group);
+    using namespace muse::accessibility;
+    return std::make_shared<AccessibleItem>(this, IAccessible::Group);
 }
 
 #endif

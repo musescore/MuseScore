@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
+#ifndef MUSE_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
+#define MUSE_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
 
 #include "../iaccessibilityconfiguration.h"
 
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class AccessibilityConfiguration : public IAccessibilityConfiguration
 {
-    Inject<ui::INavigationController> navigationController;
+    Inject<mu::ui::INavigationController> navigationController;
 
 public:
     AccessibilityConfiguration() = default;
@@ -46,4 +46,4 @@ private:
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H
+#endif // MUSE_ACCESSIBILITY_ACCESSIBILITYCONFIGURATION_H

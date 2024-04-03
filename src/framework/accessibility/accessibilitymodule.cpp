@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 using namespace mu::modularity;
 
 std::string AccessibilityModule::moduleName() const
@@ -58,7 +58,7 @@ void AccessibilityModule::resolveImports()
 #ifdef Q_OS_MAC
         accr->registerInterfaceGetter("QQuickWindow", AccessibilityController::accessibleInterface);
 #endif
-        accr->registerInterfaceGetter("mu::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
+        accr->registerInterfaceGetter("muse::accessibility::AccessibleObject", AccessibleObject::accessibleInterface);
     }
 }
 
@@ -68,13 +68,13 @@ void AccessibilityModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.accessibility", new ApiCreator<AccessibilityApi>());
+        api->regApiCreator(moduleName(), "api.accessibility", new ApiCreator<api::AccessibilityApi>());
     }
 }
 
-void AccessibilityModule::onInit(const IApplication::RunMode& mode)
+void AccessibilityModule::onInit(const mu::IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
+    if (mode != mu::IApplication::RunMode::GuiApp) {
         return;
     }
 

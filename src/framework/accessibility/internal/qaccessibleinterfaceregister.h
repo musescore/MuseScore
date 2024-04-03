@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
-#define MU_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
+#ifndef MUSE_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
+#define MUSE_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
 
 #include "iqaccessibleinterfaceregister.h"
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class QAccessibleInterfaceRegister : public IQAccessibleInterfaceRegister
 {
 public:
@@ -36,4 +36,4 @@ private:
 };
 }
 
-#endif // MU_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H
+#endif // MUSE_ACCESSIBILITY_QACCESSIBLEINTERFACEREGISTER_H

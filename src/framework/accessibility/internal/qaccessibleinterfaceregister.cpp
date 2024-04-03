@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 void QAccessibleInterfaceRegister::registerInterfaceGetter(const QString& className, const InterfaceGetter& interfaceGetter)
 {

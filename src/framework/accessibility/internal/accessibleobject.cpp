@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 AccessibleObject::AccessibleObject(IAccessible* item)
     : QObject()

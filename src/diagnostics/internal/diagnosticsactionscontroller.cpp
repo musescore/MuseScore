@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu::diagnostics;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 static const mu::UriQuery SYSTEM_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false&floating=true");
 static const mu::UriQuery PROFILER_URI("musescore://diagnostics/system/profiler?sync=false&modal=false&floating=true");

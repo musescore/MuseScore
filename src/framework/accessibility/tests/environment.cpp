@@ -29,7 +29,7 @@
 
 static mu::testing::SuiteEnvironment accessibility_senv(
 {
-    new mu::accessibility::AccessibilityModule()
+    new muse::accessibility::AccessibilityModule()
 },
     nullptr,
     []() {

@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
+#ifndef MUSE_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
+#define MUSE_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "framework/accessibility/iaccessibilityconfiguration.h"
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class AccessibilityConfigurationMock : public IAccessibilityConfiguration
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H
+#endif // MUSE_ACCESSIBILITY_ACCESSIBILITYCONFIGURATIONMOCK_H

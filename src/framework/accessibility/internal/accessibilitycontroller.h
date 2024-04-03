@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
-#define MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
+#ifndef MUSE_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
+#define MUSE_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
 
 #include <memory>
 #include <QObject>
@@ -28,6 +28,7 @@
 #include <QHash>
 
 #include "global/async/asyncable.h"
+#include "global/async/channel.h"
 #include "global/iapplication.h"
 
 #include "modularity/ioc.h"
@@ -45,14 +46,14 @@ namespace mu::diagnostics {
 class DiagnosticAccessibleModel;
 }
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class AccessibilityController : public IAccessibilityController, public IAccessible, public async::Asyncable,
     public std::enable_shared_from_this<AccessibilityController>
 {
 public:
-    Inject<IApplication> application;
-    Inject<ui::IMainWindow> mainWindow;
-    Inject<ui::IInteractiveProvider> interactiveProvider;
+    Inject<mu::IApplication> application;
+    Inject<mu::ui::IMainWindow> mainWindow;
+    Inject<mu::ui::IInteractiveProvider> interactiveProvider;
     Inject<IAccessibilityConfiguration> configuration;
 
 public:
@@ -171,4 +172,4 @@ private:
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H
+#endif // MUSE_ACCESSIBILITY_ACCESSIBILITYCONTROLLER_H

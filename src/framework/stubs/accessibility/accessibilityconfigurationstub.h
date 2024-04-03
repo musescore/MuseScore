@@ -24,7 +24,7 @@
 
 #include "accessibility/iaccessibilityconfiguration.h"
 
-namespace mu::accessibility {
+namespace muse::accessibility {
 class AccessibilityConfigurationStub : public IAccessibilityConfiguration
 {
 public:

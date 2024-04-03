@@ -30,7 +30,7 @@
 #include "translation.h"
 
 using namespace mu::engraving;
-using namespace mu::accessibility;
+using namespace muse::accessibility;
 
 AccessibleRoot::AccessibleRoot(RootItem* e, Role role)
     : AccessibleItem(e, role)
@@ -72,7 +72,7 @@ void AccessibleRoot::notifyAboutFocusedElementNameChanged()
     m_staffInfo = "";
 
     if (auto focusedElement = m_focusedElement.lock()) {
-        focusedElement->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+        focusedElement->accessiblePropertyChanged().send(IAccessible::Property::Name, Val());
     }
 }
 

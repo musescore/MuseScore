@@ -43,8 +43,8 @@ public:
     void setMapToScreenFunc(const AccessibleMapToScreenFunc& func);
     RectF toScreenRect(const RectF& rect, bool* ok = nullptr) const;
 
-    const accessibility::IAccessible* accessibleParent() const override;
-    accessibility::IAccessible::Role accessibleRole() const override;
+    const muse::accessibility::IAccessible* accessibleParent() const override;
+    muse::accessibility::IAccessible::Role accessibleRole() const override;
     QString accessibleName() const override;
 
     bool enabled() const;
