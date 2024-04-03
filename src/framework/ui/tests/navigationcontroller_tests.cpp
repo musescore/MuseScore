@@ -46,6 +46,7 @@ using ::testing::SaveArgPointee;
 using ::testing::DoAll;
 
 using namespace mu;
+using namespace muse;
 using namespace mu::ui;
 
 class Ui_NavigationControllerTests : public ::testing::Test
