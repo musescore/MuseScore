@@ -73,6 +73,15 @@ Item {
         width: contentItem.childrenRect.width
         height: contentItem.childrenRect.height
 
+        TextMetrics {
+            id: boldTextMetrics
+            font.bold: true
+            text: model.title
+            onWidthChanged: {
+                radioButtonDelegate.width = width
+            }
+        }
+
         delegate: PageTabButton {
             id: radioButtonDelegate
 
@@ -81,14 +90,11 @@ Item {
             spacing: 0
             leftPadding: 12
 
-            FontMetrics {
-                id: fontMetricsSelected
-                font: model.isTitleBold ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
-                text: model.title
-            }
+            normalStateFont: model.isTitleBold ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
 
-            normalStateFont: fontMetricsSelected.font
-            width: fontMetricsSelected.width
+            width: boldTextMetrics.width
+
+            horizontalAlignment: Text.AlignHCenter
 
             navigation.name: model.title
             navigation.panel: navPanel
