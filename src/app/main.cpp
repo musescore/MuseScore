@@ -153,7 +153,7 @@
 #include "stubs/languages/languagesstubmodule.h"
 #endif
 
-#ifdef MUE_BUILD_LEARN_MODULE
+#ifdef MUSE_MODULE_LEARN
 #include "learn/learnmodule.h"
 #else
 #include "stubs/learn/learnmodule.h"
