@@ -28,6 +28,10 @@ if (MUSE_MODULE_AUDIO)
     add_subdirectory(audio)
 endif()
 
+if (MUSE_MODULE_AUTOBOT)
+    add_subdirectory(autobot)
+endif()
+
 if (MUSE_MODULE_CLOUD)
     add_subdirectory(cloud)
 endif()
