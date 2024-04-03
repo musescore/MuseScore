@@ -131,6 +131,11 @@ RadioDelegate {
         implicitWidth: root.leftPadding + contentRow.implicitWidth + root.rightPadding
         implicitHeight: contentRow.implicitHeight
 
+        FontMetrics {
+            id: fontMetricsSelected
+            font: root.selectedStateFont
+        }
+
         Row {
             id: contentRow
             anchors.fill: parent
@@ -145,10 +150,12 @@ RadioDelegate {
             StyledTextLabel {
                 id: textLabel
                 anchors.verticalCenter: parent.verticalCenter
-
-                horizontalAlignment: Text.AlignLeft
+ 
+                horizontalAlignment: root.isVertical ? Text.AlignHCenter : Text.AlignLeft
                 font: root.normalStateFont
                 text: root.title
+                elide: Text.ElideNone
+                width: fontMetricsSelected.boundingRect(text).width
 
                 visible: !root.iconOnly
             }
