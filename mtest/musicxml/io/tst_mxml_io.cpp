@@ -241,6 +241,7 @@ private slots:
       void sound2() { mxmlIoTestRef("testSound2"); }
       // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); } // TODO
       void staffEmptiness() { mxmlImportTestRef("testStaffEmptiness"); }
+      void staffSize() { mxmlIoTest("testStaffSize"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringData()      { mxmlIoTest("testStringData"); }
       void stringVoiceName() { mxmlIoTestRef("testStringVoiceName"); }

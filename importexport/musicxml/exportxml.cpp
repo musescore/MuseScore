@@ -6760,7 +6760,8 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
       //       currently exported as a two staff part ...
       for (int i = 0; i < staves; i++) {
             Staff* st = part->staff(i);
-            if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1)) || !st->show()) {
+            const qreal staffMag = st->mag(Fraction(0, 1));
+            if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1)) || !qFuzzyCompare(staffMag, 1.0) || !st->show()) {
                   QString details = "staff-details";
                   if (staves > 1)
                         details += QString(" number=\"%1\"").arg(i+1);
@@ -6784,6 +6785,10 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                               xml.etag();
                               }
                         }
+
+                  if (!qFuzzyCompare(staffMag, 1.0))
+                        xml.tag("staff-size", staffMag * 100);
+
                   xml.etag();
                   }
             }
