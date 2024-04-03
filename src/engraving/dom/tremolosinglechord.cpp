@@ -149,6 +149,11 @@ void TremoloSingleChord::styleChanged()
     computeShape();
 }
 
+staff_idx_t TremoloSingleChord::vStaffIdx() const
+{
+    return chord() ? chord()->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
 //---------------------------------------------------------
 //   basePath
 //---------------------------------------------------------
@@ -219,7 +224,7 @@ PointF TremoloSingleChord::pagePos() const
         return pos();
     }
     System* s = toSystem(e);
-    double yp = y() + s->staff(staffIdx())->y() + s->y();
+    double yp = y() + s->staff(vStaffIdx())->y() + s->y();
     return PointF(pageX(), yp);
 }
 
