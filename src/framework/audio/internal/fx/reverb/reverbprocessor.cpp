@@ -36,7 +36,7 @@
 #include "sampledelay.h"
 #include "simdtypes.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 float fromDecibel(float dB)
 {
     return std::pow(10.f, dB / 20.f);

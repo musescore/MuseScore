@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_WAVENCODER_H
-#define MU_AUDIO_WAVENCODER_H
+#ifndef MUSE_AUDIO_WAVENCODER_H
+#define MUSE_AUDIO_WAVENCODER_H
 
 #include <fstream>
 
 #include "abstractaudioencoder.h"
 
-namespace mu::audio::encode {
+namespace muse::audio::encode {
 class WavEncoder : public AbstractAudioEncoder
 {
 public:
@@ -44,4 +44,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_WAVENCODER_H
+#endif // MUSE_AUDIO_WAVENCODER_H

@@ -37,7 +37,7 @@ class PlaybackPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(audio::IAudioConfiguration, audioConfiguration)
+    INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
     INJECT(midi::IMidiConfiguration, midiConfiguration)
     INJECT(midi::IMidiOutPort, midiOutPort)
     INJECT(midi::IMidiInPort, midiInPort)

@@ -27,8 +27,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 using namespace mu::mpe;
 
 EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData,

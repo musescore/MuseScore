@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SAMPLEDELAY_H
-#define MU_AUDIO_SAMPLEDELAY_H
+#ifndef MUSE_AUDIO_SAMPLEDELAY_H
+#define MUSE_AUDIO_SAMPLEDELAY_H
 
 #include <cassert>
 
 #include "circularsamplebuffer.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 template<typename SampleT, int maxNumChannels>
 class SampleDelay
 {
@@ -103,6 +103,6 @@ private:
     CircularSampleBuffer<SampleT> m_buffer[maxNumChannels];
     int m_delaySamples = 0;
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SAMPLEDELAY_H
+#endif // MUSE_AUDIO_SAMPLEDELAY_H

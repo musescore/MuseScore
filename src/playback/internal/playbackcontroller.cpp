@@ -31,11 +31,12 @@
 #include "defer.h"
 #include "log.h"
 
+using namespace muse;
 using namespace mu::playback;
 using namespace mu::midi;
 using namespace mu::notation;
 using namespace mu::async;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace muse::actions;
 using namespace mu::engraving;
 

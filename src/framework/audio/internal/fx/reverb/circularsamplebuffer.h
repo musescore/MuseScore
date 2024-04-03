@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_CIRCULARSAMPLEBUFFER_H
-#define MU_AUDIO_CIRCULARSAMPLEBUFFER_H
+#ifndef MUSE_AUDIO_CIRCULARSAMPLEBUFFER_H
+#define MUSE_AUDIO_CIRCULARSAMPLEBUFFER_H
 
 #include <cassert>
 
@@ -33,7 +33,7 @@
  * It can read and write to past and future samples, but does not check for overlaps
  */
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 template<typename SampleT>
 class CircularSampleBuffer
 {
@@ -151,6 +151,6 @@ private:
     int m_allocatedSize = 0; // 2^n buffer size
     int m_bufferSizeMask = 0; // 2^n-1 buffer mask
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_CIRCULARSAMPLEBUFFER_H
+#endif // MUSE_AUDIO_CIRCULARSAMPLEBUFFER_H

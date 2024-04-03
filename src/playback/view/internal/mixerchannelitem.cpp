@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = 0.f; // 100%
 static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%

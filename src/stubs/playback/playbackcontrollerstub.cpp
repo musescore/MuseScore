@@ -48,7 +48,7 @@ void PlaybackControllerStub::seek(const midi::tick_t)
 {
 }
 
-void PlaybackControllerStub::seek(const audio::msecs_t)
+void PlaybackControllerStub::seek(const muse::audio::msecs_t)
 {
 }
 
@@ -71,7 +71,7 @@ float PlaybackControllerStub::playbackPositionInSeconds() const
     return 0.f;
 }
 
-mu::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const
+muse::audio::TrackSequenceId PlaybackControllerStub::currentTrackSequenceId() const
 {
     return 0;
 }
@@ -93,29 +93,29 @@ const IPlaybackController::AuxTrackIdMap& PlaybackControllerStub::auxTrackIdMap(
     return m;
 }
 
-mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackAdded() const
+mu::async::Channel<muse::audio::TrackId> PlaybackControllerStub::trackAdded() const
 {
     return {};
 }
 
-mu::async::Channel<mu::audio::TrackId> PlaybackControllerStub::trackRemoved() const
+mu::async::Channel<muse::audio::TrackId> PlaybackControllerStub::trackRemoved() const
 {
     return {};
 }
 
-std::string PlaybackControllerStub::auxChannelName(audio::aux_channel_idx_t) const
+std::string PlaybackControllerStub::auxChannelName(muse::audio::aux_channel_idx_t) const
 {
     return "";
 }
 
-mu::async::Channel<mu::audio::aux_channel_idx_t, std::string> PlaybackControllerStub::auxChannelNameChanged() const
+mu::async::Channel<muse::audio::aux_channel_idx_t, std::string> PlaybackControllerStub::auxChannelNameChanged() const
 {
     return {};
 }
 
-mu::async::Promise<mu::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
+mu::async::Promise<muse::audio::SoundPresetList> PlaybackControllerStub::availableSoundPresets(const engraving::InstrumentTrackId&) const
 {
-    return async::Promise<mu::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
+    return async::Promise<muse::audio::SoundPresetList>([](auto /*resolve*/, auto reject) {
         return reject(int(Ret::Code::UnknownError), "stub");
     });
 }
@@ -177,7 +177,7 @@ mu::notation::MeasureBeat PlaybackControllerStub::currentBeat() const
     return {};
 }
 
-mu::audio::msecs_t PlaybackControllerStub::beatToMilliseconds(int, int) const
+muse::audio::msecs_t PlaybackControllerStub::beatToMilliseconds(int, int) const
 {
     return 0;
 }

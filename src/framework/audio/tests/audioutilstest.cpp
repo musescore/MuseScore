@@ -24,9 +24,9 @@
 
 #include "audio/audioutils.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
-namespace mu::audio {
+namespace muse::audio {
 class Audio_AudioUtilsTest : public ::testing::Test
 {
 public:

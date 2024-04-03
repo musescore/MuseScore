@@ -100,4 +100,8 @@ private:
 };
 }
 
+namespace muse::io {
+using IODevice = mu::io::IODevice;
+}
+
 #endif // MU_IO_IODEVICE_H

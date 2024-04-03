@@ -22,7 +22,7 @@
 
 #include "audiopluginmetareaderregister.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 const std::vector<IAudioPluginMetaReaderPtr>& AudioPluginMetaReaderRegister::readers() const
 {

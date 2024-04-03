@@ -28,7 +28,7 @@
 #include "translation.h"
 
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
@@ -211,7 +211,7 @@ void MixerPanelModel::addItem(MixerChannelItem* item, int index)
     emit rowCountChanged();
 }
 
-void MixerPanelModel::removeItem(const audio::TrackId trackId)
+void MixerPanelModel::removeItem(const TrackId trackId)
 {
     TRACEFUNC;
 
@@ -399,7 +399,7 @@ int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newI
     return INVALID_INDEX;
 }
 
-int MixerPanelModel::indexOf(const audio::TrackId trackId) const
+int MixerPanelModel::indexOf(const TrackId trackId) const
 {
     for (int i = 0; i < m_mixerChannelList.size(); ++i) {
         if (trackId == m_mixerChannelList[i]->trackId()) {
@@ -410,7 +410,7 @@ int MixerPanelModel::indexOf(const audio::TrackId trackId) const
     return INVALID_INDEX;
 }
 
-MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const audio::TrackId trackId,
+MixerChannelItem* MixerPanelModel::buildInstrumentChannelItem(const TrackId trackId,
                                                               const engraving::InstrumentTrackId& instrumentTrackId,
                                                               bool isPrimary)
 {
@@ -585,7 +585,7 @@ int MixerPanelModel::masterChannelIndex() const
     return m_mixerChannelList.size() - 1;
 }
 
-MixerChannelItem* MixerPanelModel::findChannelItem(const audio::TrackId& trackId) const
+MixerChannelItem* MixerPanelModel::findChannelItem(const TrackId& trackId) const
 {
     for (MixerChannelItem* item : m_mixerChannelList) {
         if (item->trackId() == trackId) {

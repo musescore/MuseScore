@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOTHREADSECURER_H
-#define MU_AUDIO_AUDIOTHREADSECURER_H
+#ifndef MUSE_AUDIO_AUDIOTHREADSECURER_H
+#define MUSE_AUDIO_AUDIOTHREADSECURER_H
 
 #include "iaudiothreadsecurer.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioThreadSecurer : public IAudioThreadSecurer
 {
 public:
@@ -36,4 +36,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_AUDIOTHREADSECURER_H
+#endif // MUSE_AUDIO_AUDIOTHREADSECURER_H

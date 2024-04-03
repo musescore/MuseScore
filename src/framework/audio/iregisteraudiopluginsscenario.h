@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
-#define MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
+#ifndef MUSE_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
+#define MUSE_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "global/types/ret.h"
 #include "global/io/path.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IRegisterAudioPluginsScenario : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IRegisterAudioPluginsScenario)
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H
+#endif // MUSE_AUDIO_IREGISTERAUDIOPLUGINSSCENARIO_H

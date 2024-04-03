@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOIOHANDLER_H
-#define MU_AUDIO_AUDIOIOHANDLER_H
+#ifndef MUSE_AUDIO_AUDIOIOHANDLER_H
+#define MUSE_AUDIO_AUDIOIOHANDLER_H
 
 #include "global/modularity/ioc.h"
 #include "global/async/asyncable.h"
@@ -30,7 +30,7 @@
 #include "iaudiooutput.h"
 #include "igettracksequence.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class Mixer;
 
 namespace soundtrack {
@@ -83,4 +83,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOIOHANDLER_H
+#endif // MUSE_AUDIO_AUDIOIOHANDLER_H

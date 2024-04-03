@@ -51,16 +51,16 @@ public:
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
     async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const override;
 
-    bool isAuxSendVisible(audio::aux_channel_idx_t index) const override;
-    void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) override;
-    async::Channel<audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
+    bool isAuxSendVisible(muse::audio::aux_channel_idx_t index) const override;
+    void setAuxSendVisible(muse::audio::aux_channel_idx_t index, bool visible) override;
+    async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
 
-    bool isAuxChannelVisible(audio::aux_channel_idx_t index) const override;
-    void setAuxChannelVisible(audio::aux_channel_idx_t index, bool visible) const override;
-    async::Channel<audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const override;
+    bool isAuxChannelVisible(muse::audio::aux_channel_idx_t index) const override;
+    void setAuxChannelVisible(muse::audio::aux_channel_idx_t index, bool visible) const override;
+    async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const override;
 
-    audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
-                                      const String& instrumentSoundId) const override;
+    muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
+                                            const String& instrumentSoundId) const override;
 
     bool muteHiddenInstruments() const override;
     void setMuteHiddenInstruments(bool mute) override;
@@ -80,8 +80,8 @@ public:
 private:
     const SoundProfileName& fallbackSoundProfileStr() const;
 
-    async::Channel<audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
-    async::Channel<audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
+    async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxSendVisibleChanged;
+    async::Channel<muse::audio::aux_channel_idx_t, bool> m_isAuxChannelVisibleChanged;
     async::Channel<MixerSectionType, bool> m_isMixerSectionVisibleChanged;
 
     async::Channel<bool> m_muteHiddenInstrumentsChanged;

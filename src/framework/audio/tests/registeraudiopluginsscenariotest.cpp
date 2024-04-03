@@ -39,10 +39,11 @@ using ::testing::_;
 using ::testing::Return;
 using ::testing::ReturnRef;
 
-using namespace mu::audio;
+using namespace mu;
+using namespace muse::audio;
 using namespace mu::io;
 
-namespace mu::audio {
+namespace muse::audio {
 class Audio_RegisterAudioPluginsScenarioTest : public ::testing::Test
 {
 protected:
@@ -242,12 +243,12 @@ TEST_F(Audio_RegisterAudioPluginsScenarioTest, RegisterPlugin)
 
     AudioResourceMeta pluginMeta1;
     pluginMeta1.id = "Mono plugin";
-    pluginMeta1.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx|Mono" });
+    pluginMeta1.attributes.insert({ muse::audio::CATEGORIES_ATTRIBUTE, u"Fx|Mono" });
     metaList.push_back(pluginMeta1);
 
     AudioResourceMeta pluginMeta2;
     pluginMeta2.id = "Stereo plugin";
-    pluginMeta2.attributes.insert({ mu::audio::CATEGORIES_ATTRIBUTE, u"Fx|Stereo" });
+    pluginMeta2.attributes.insert({ muse::audio::CATEGORIES_ATTRIBUTE, u"Fx|Stereo" });
     metaList.push_back(pluginMeta2);
 
     ASSERT_FALSE(m_metaReaders.empty());

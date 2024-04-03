@@ -35,8 +35,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
-using namespace mu::audio::soundtrack;
+using namespace muse::audio;
+using namespace muse::audio::soundtrack;
 
 static constexpr int PREPARE_STEP = 0;
 static constexpr int ENCODE_STEP = 1;

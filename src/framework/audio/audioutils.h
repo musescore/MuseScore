@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOUTILS_H
-#define MU_AUDIO_AUDIOUTILS_H
+#ifndef MUSE_AUDIO_AUDIOUTILS_H
+#define MUSE_AUDIO_AUDIOUTILS_H
 
 #include "audiotypes.h"
 #include "soundfonttypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 inline AudioResourceMeta makeReverbMeta()
 {
     AudioResourceMeta meta;
@@ -56,7 +56,7 @@ inline AudioPluginType audioPluginTypeFromCategoriesString(const String& categor
 
 inline String audioSourceName(const AudioInputParams& params)
 {
-    if (params.type() == mu::audio::AudioSourceType::MuseSampler) {
+    if (params.type() == AudioSourceType::MuseSampler) {
         return params.resourceMeta.attributeVal(u"museName");
     }
 
@@ -77,7 +77,7 @@ inline String audioSourceName(const AudioInputParams& params)
 
 inline String audioSourceCategoryName(const AudioInputParams& params)
 {
-    if (params.type() == mu::audio::AudioSourceType::MuseSampler) {
+    if (params.type() == AudioSourceType::MuseSampler) {
         return params.resourceMeta.attributeVal(u"museCategory");
     }
 
@@ -89,4 +89,4 @@ inline String audioSourceCategoryName(const AudioInputParams& params)
 }
 }
 
-#endif // MU_AUDIO_AUDIOUTILS_H
+#endif // MUSE_AUDIO_AUDIOUTILS_H

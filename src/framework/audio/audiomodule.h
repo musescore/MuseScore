@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIOMODULE_H
-#define MU_AUDIO_AUDIOMODULE_H
+#ifndef MUSE_AUDIO_AUDIOMODULE_H
+#define MUSE_AUDIO_AUDIOMODULE_H
 
 #include <memory>
 
@@ -29,15 +29,15 @@
 
 #include "iaudiodriver.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class FxResolver;
 }
 
-namespace mu::audio::synth  {
+namespace muse::audio::synth  {
 class SynthResolver;
 }
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioConfiguration;
 class AudioThread;
 class AudioBuffer;
@@ -104,4 +104,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOMODULE_H
+#endif // MUSE_AUDIO_AUDIOMODULE_H

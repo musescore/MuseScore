@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SFCACHEDLOADER_H
-#define MU_AUDIO_SFCACHEDLOADER_H
+#ifndef MUSE_AUDIO_SFCACHEDLOADER_H
+#define MUSE_AUDIO_SFCACHEDLOADER_H
 
 #include <cstdio>
 
 #include <sfloader/fluid_sfont.h>
 #include <sfloader/fluid_defsfont.h>
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 struct SoundFontData
 {
     fluid_sfont_t* soundFontPtr = nullptr;
@@ -164,4 +164,4 @@ fluid_sfont_t* loadSoundFont(fluid_sfloader_t* loader, const char* filename)
 }
 }
 
-#endif // MU_AUDIO_SFCACHEDLOADER_H
+#endif // MUSE_AUDIO_SFCACHEDLOADER_H

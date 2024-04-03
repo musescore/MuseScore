@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_FXRESOLVER_H
-#define MU_AUDIO_FXRESOLVER_H
+#ifndef MUSE_AUDIO_FXRESOLVER_H
+#define MUSE_AUDIO_FXRESOLVER_H
 
 #include <map>
 #include <mutex>
 
 #include "ifxresolver.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class FxResolver : public IFxResolver
 {
 public:
@@ -44,4 +44,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_FXRESOLVER_H
+#endif // MUSE_AUDIO_FXRESOLVER_H

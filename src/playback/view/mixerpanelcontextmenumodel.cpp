@@ -29,7 +29,7 @@ using namespace mu::playback;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace muse::actions;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
 static const ActionCode TOGGLE_AUX_SEND_ACTION("toggle-aux-send");

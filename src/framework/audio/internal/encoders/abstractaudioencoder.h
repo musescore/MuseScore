@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ABSTRACTAUDIOENCODER_H
-#define MU_AUDIO_ABSTRACTAUDIOENCODER_H
+#ifndef MUSE_AUDIO_ABSTRACTAUDIOENCODER_H
+#define MUSE_AUDIO_ABSTRACTAUDIOENCODER_H
 
 #include <cstdio>
 #include <vector>
@@ -32,7 +32,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio::encode {
+namespace muse::audio::encode {
 class AbstractAudioEncoder
 {
 public:
@@ -131,4 +131,4 @@ protected:
 using AbstractAudioEncoderPtr = std::unique_ptr<AbstractAudioEncoder>;
 }
 
-#endif // MU_AUDIO_ABSTRACTAUDIOENCODER_H
+#endif // MUSE_AUDIO_ABSTRACTAUDIOENCODER_H

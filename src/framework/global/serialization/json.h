@@ -207,4 +207,11 @@ private:
 };
 }
 
+namespace muse {
+using JsonArray = mu::JsonArray;
+using JsonObject = mu::JsonObject;
+using JsonValue = mu::JsonValue;
+using JsonDocument = mu::JsonDocument;
+}
+
 #endif // MU_GLOBAL_JSON_H

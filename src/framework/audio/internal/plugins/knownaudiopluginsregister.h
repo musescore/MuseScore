@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
-#define MU_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
+#ifndef MUSE_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
+#define MUSE_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
 
 #include "global/modularity/ioc.h"
 #include "global/io/ifilesystem.h"
@@ -29,7 +29,7 @@
 #include "iknownaudiopluginsregister.h"
 #include "iaudioconfiguration.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class KnownAudioPluginsRegister : public IKnownAudioPluginsRegister
 {
 public:
@@ -57,4 +57,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H
+#endif // MUSE_AUDIO_KNOWNAUDIOPLUGINSREGISTER_H

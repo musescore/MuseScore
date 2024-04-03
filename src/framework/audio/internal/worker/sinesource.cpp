@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 SineSource::SineSource()
 {

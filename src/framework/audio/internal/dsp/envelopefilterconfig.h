@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
-#define MU_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
+#ifndef MUSE_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
+#define MUSE_AUDIO_DSP_ENVELOPEFILTERCONFIG_H
 
 #include "audiotypes.h"
 #include "audiomathutils.h"
 
-namespace mu::audio::dsp {
+namespace muse::audio::dsp {
 struct EnvelopeFilterConfig
 {
     explicit EnvelopeFilterConfig(const unsigned int sampleRate,
@@ -134,4 +134,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_DSP_ABSTRACTENVELOPEFILTER_H
+#endif // MUSE_AUDIO_DSP_ABSTRACTENVELOPEFILTER_H

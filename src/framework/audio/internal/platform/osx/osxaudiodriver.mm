@@ -33,7 +33,7 @@
 
 typedef AudioDeviceID OSXAudioDeviceID;
 
-using namespace mu::audio;
+using namespace muse::audio;
 static constexpr char DEFAULT_DEVICE_ID[] = "Systems default";
 
 struct OSXAudioDriver::Data {
@@ -189,7 +189,7 @@ AudioDeviceList OSXAudioDriver::availableOutputDevices() const
     std::lock_guard lock(m_devicesMutex);
 
     AudioDeviceList deviceList;
-    deviceList.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
+    deviceList.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
 
     for (auto& device : m_outputDevices) {
         AudioDevice deviceInfo;
@@ -207,7 +207,7 @@ mu::async::Notification OSXAudioDriver::availableOutputDevicesChanged() const
     return m_availableOutputDevicesChanged;
 }
 
-mu::audio::AudioDeviceID OSXAudioDriver::outputDevice() const
+muse::audio::AudioDeviceID OSXAudioDriver::outputDevice() const
 {
     return m_deviceId;
 }
@@ -403,7 +403,7 @@ bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
     return true;
 }
 
-mu::audio::AudioDeviceID OSXAudioDriver::defaultDeviceId() const
+muse::audio::AudioDeviceID OSXAudioDriver::defaultDeviceId() const
 {
     OSXAudioDeviceID osxDeviceId = kAudioObjectUnknown;
     UInt32 deviceIdSize = sizeof(osxDeviceId);

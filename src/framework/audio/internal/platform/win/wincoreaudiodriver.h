@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_COREAUDIODRIVER_H
-#define MU_AUDIO_COREAUDIODRIVER_H
+#ifndef MUSE_AUDIO_COREAUDIODRIVER_H
+#define MUSE_AUDIO_COREAUDIODRIVER_H
 
 #include <thread>
 #include <atomic>
@@ -32,7 +32,7 @@
 
 #include "audioclient.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class CoreAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
@@ -85,4 +85,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_COREAUDIODRIVER_H
+#endif // MUSE_AUDIO_COREAUDIODRIVER_H

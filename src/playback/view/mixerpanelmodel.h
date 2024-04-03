@@ -42,7 +42,7 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(audio::IPlayback, playback)
+    INJECT(muse::audio::IPlayback, playback)
     INJECT(IPlaybackController, controller)
     INJECT(context::IGlobalContext, context)
     INJECT(IPlaybackConfiguration, configuration)
@@ -75,26 +75,26 @@ private:
     };
 
     void loadItems();
-    void onTrackAdded(const audio::TrackId& trackId);
+    void onTrackAdded(const muse::audio::TrackId& trackId);
     void addItem(MixerChannelItem* item, int index);
-    void removeItem(const audio::TrackId trackId);
+    void removeItem(const muse::audio::TrackId trackId);
     void updateItemsPanelsOrder();
     void clear();
     void setupConnections();
 
     int resolveInsertIndex(const engraving::InstrumentTrackId& instrumentTrackId) const;
-    int indexOf(const audio::TrackId trackId) const;
+    int indexOf(const muse::audio::TrackId trackId) const;
 
-    MixerChannelItem* buildInstrumentChannelItem(const audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
+    MixerChannelItem* buildInstrumentChannelItem(const muse::audio::TrackId trackId, const engraving::InstrumentTrackId& instrumentTrackId,
                                                  bool isPrimary = true);
-    MixerChannelItem* buildAuxChannelItem(audio::aux_channel_idx_t index, const audio::TrackId trackId);
+    MixerChannelItem* buildAuxChannelItem(muse::audio::aux_channel_idx_t index, const muse::audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
 
     int masterChannelIndex() const;
 
-    MixerChannelItem* findChannelItem(const audio::TrackId& trackId) const;
+    MixerChannelItem* findChannelItem(const muse::audio::TrackId& trackId) const;
 
-    void loadOutputParams(MixerChannelItem* item, audio::AudioOutputParams&& params);
+    void loadOutputParams(MixerChannelItem* item, muse::audio::AudioOutputParams&& params);
     void updateOutputResourceItemCount();
 
     project::INotationProjectPtr currentProject() const;
@@ -104,7 +104,7 @@ private:
 
     QList<MixerChannelItem*> m_mixerChannelList;
     MixerChannelItem* m_masterChannelItem = nullptr;
-    audio::TrackSequenceId m_currentTrackSequenceId = -1;
+    muse::audio::TrackSequenceId m_currentTrackSequenceId = -1;
 
     ui::NavigationSection* m_navigationSection = nullptr;
 };

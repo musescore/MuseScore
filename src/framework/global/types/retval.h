@@ -85,4 +85,12 @@ struct ValNt {
 };
 }
 
+namespace muse {
+template<typename T>
+using RetVal = mu::RetVal<T>;
+template<typename T1, typename T2>
+using RetVal2 = mu::RetVal2<T1, T2>;
+template<typename T>
+using ValCh = mu::ValCh<T>;
+}
 #endif // MU_GLOBAL_RETVAL_H

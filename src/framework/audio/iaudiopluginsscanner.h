@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIOPLUGINSSCANNER_H
-#define MU_AUDIO_IAUDIOPLUGINSSCANNER_H
+#ifndef MUSE_AUDIO_IAUDIOPLUGINSSCANNER_H
+#define MUSE_AUDIO_IAUDIOPLUGINSSCANNER_H
 
 #include <memory>
 
 #include "global/io/path.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioPluginsScanner
 {
 public:
@@ -38,4 +38,4 @@ public:
 using IAudioPluginsScannerPtr = std::shared_ptr<IAudioPluginsScanner>;
 }
 
-#endif // MU_AUDIO_IAUDIOPLUGINSSCANNER_H
+#endif // MUSE_AUDIO_IAUDIOPLUGINSSCANNER_H

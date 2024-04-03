@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SMOOTHLINEARVALUE_H
-#define MU_AUDIO_SMOOTHLINEARVALUE_H
+#ifndef MUSE_AUDIO_SMOOTHLINEARVALUE_H
+#define MUSE_AUDIO_SMOOTHLINEARVALUE_H
 
 #include "vectorops.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 template<typename ValueT, int _initialSteps = 1024, typename StepT = double>
 class SmoothLinearValue
 {
@@ -197,6 +197,6 @@ inline void apply_smooth_gain(SmoothLinearValue<float>& smooth_value, float** s_
         }
     }
 }
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SMOOTHLINEARVALUE_H
+#endif // MUSE_AUDIO_SMOOTHLINEARVALUE_H

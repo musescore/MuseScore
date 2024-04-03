@@ -71,7 +71,7 @@ protected:
 
     QVariantMap buildSeparator() const;
 
-    void sortResourcesList(audio::AudioResourceMetaList& list);
+    void sortResourcesList(muse::audio::AudioResourceMetaList& list);
 
     void updateNativeEditorView();
 

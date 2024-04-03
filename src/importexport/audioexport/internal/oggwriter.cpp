@@ -24,14 +24,15 @@
 
 #include "log.h"
 
+using namespace muse::audio;
 using namespace mu::iex::audioexport;
 using namespace mu::io;
 
 mu::Ret OggWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
-    const audio::SoundTrackFormat format {
-        audio::SoundTrackType::OGG,
-        static_cast<audio::sample_rate_t>(configuration()->exportSampleRate()),
+    const SoundTrackFormat format {
+        SoundTrackType::OGG,
+        static_cast<sample_rate_t>(configuration()->exportSampleRate()),
         2 /* audioChannelsNumber */,
         128 /* bitRate */
     };

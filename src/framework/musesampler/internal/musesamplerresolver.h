@@ -31,17 +31,18 @@
 #include "imusesamplerinfo.h"
 
 namespace mu::musesampler {
-class MuseSamplerResolver : public audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
+class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
 {
     INJECT(IMuseSamplerConfiguration, configuration)
 
 public:
     void init();
 
-    audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
-    bool hasCompatibleResources(const audio::PlaybackSetupData& setup) const override;
-    audio::AudioResourceMetaList resolveResources() const override;
-    audio::SoundPresetList resolveSoundPresets(const audio::AudioResourceMeta& resourceMeta) const override;
+    muse::audio::synth::ISynthesizerPtr resolveSynth(const muse::audio::TrackId trackId,
+                                                     const muse::audio::AudioInputParams& params) const override;
+    bool hasCompatibleResources(const muse::audio::PlaybackSetupData& setup) const override;
+    muse::audio::AudioResourceMetaList resolveResources() const override;
+    muse::audio::SoundPresetList resolveSoundPresets(const muse::audio::AudioResourceMeta& resourceMeta) const override;
     void refresh() override;
     void clearSources() override;
 
@@ -55,7 +56,7 @@ private:
     bool checkLibrary() const;
     bool isVersionSupported() const;
 
-    void loadSoundPresetAttributes(audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;
+    void loadSoundPresetAttributes(muse::audio::SoundPresetAttributes& attributes, int instrumentId, const char* presetCode) const;
 
     String buildMuseInstrumentId(const String& category, const String& name, int uniqueId) const;
 

@@ -21,7 +21,7 @@
  */
 #include "soundfontrepositorystub.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 const synth::SoundFontPaths& SoundFontRepositoryStub::soundFontPaths() const
 {

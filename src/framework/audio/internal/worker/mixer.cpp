@@ -30,7 +30,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::async;
 
 static constexpr size_t DEFAULT_AUX_BUFFER_SIZE = 1024;

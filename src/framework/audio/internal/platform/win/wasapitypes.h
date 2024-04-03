@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_WASAPITYPES_H
-#define MU_AUDIO_WASAPITYPES_H
+#ifndef MUSE_AUDIO_WASAPITYPES_H
+#define MUSE_AUDIO_WASAPITYPES_H
 
 #include <windows.h>
 #include <hstring.h>
@@ -133,4 +133,4 @@ struct EmbeddedMFAsyncCallback : ::IMFAsyncCallback
 typedef std::function<void (void* userdata, uint8_t* stream, int len)> SampleRequestCallback;
 }
 
-#endif // MU_AUDIO_WASAPITYPES_H
+#endif // MUSE_AUDIO_WASAPITYPES_H

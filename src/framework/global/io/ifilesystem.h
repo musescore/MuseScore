@@ -74,4 +74,8 @@ public:
 };
 }
 
+namespace muse::io {
+using IFileSystem = mu::io::IFileSystem;
+}
+
 #endif // MU_IO_IFILESYSTEM_H

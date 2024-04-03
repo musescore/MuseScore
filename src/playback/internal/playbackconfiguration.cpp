@@ -30,7 +30,7 @@
 
 using namespace mu;
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static const std::string moduleName("playback");
 

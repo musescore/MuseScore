@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 std::thread::id AudioThread::ID;
 

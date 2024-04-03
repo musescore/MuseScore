@@ -24,14 +24,15 @@
 
 #include "log.h"
 
+using namespace muse::audio;
 using namespace mu::iex::audioexport;
 using namespace mu::io;
 
 mu::Ret FlacWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
-    const audio::SoundTrackFormat format {
-        audio::SoundTrackType::FLAC,
-        static_cast<audio::sample_rate_t>(configuration()->exportSampleRate()),
+    const SoundTrackFormat format {
+        SoundTrackType::FLAC,
+        static_cast<sample_rate_t>(configuration()->exportSampleRate()),
         2 /* audioChannelsNumber */,
         128 /* bitRate */
     };

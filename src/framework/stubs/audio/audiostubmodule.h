@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 #include "async/asyncable.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioModule : public modularity::IModuleSetup, public async::Asyncable
 {
 public:

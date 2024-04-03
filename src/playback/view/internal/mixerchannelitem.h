@@ -80,13 +80,13 @@ public:
     Q_ENUM(Type)
 
     MixerChannelItem() = default;
-    MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, audio::TrackId trackId = -1);
+    MixerChannelItem(QObject* parent, Type type, bool outputOnly = false, muse::audio::TrackId trackId = -1);
 
     ~MixerChannelItem() override;
 
     Type type() const;
 
-    audio::TrackId trackId() const;
+    muse::audio::TrackId trackId() const;
 
     const engraving::InstrumentTrackId& instrumentTrackId() const;
     void setInstrumentTrackId(const engraving::InstrumentTrackId& instrumentTrackId);
@@ -108,22 +108,22 @@ public:
 
     void setOutputResourceItemCount(size_t count);
 
-    void loadInputParams(const audio::AudioInputParams& newParams);
-    void loadOutputParams(const audio::AudioOutputParams& newParams);
+    void loadInputParams(const muse::audio::AudioInputParams& newParams);
+    void loadOutputParams(const muse::audio::AudioOutputParams& newParams);
     void loadSoloMuteState(const notation::INotationSoloMuteState::SoloMuteState& newState);
 
-    void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
+    void subscribeOnAudioSignalChanges(muse::audio::AudioSignalChanges&& audioSignalChanges);
 
     bool outputOnly() const;
 
-    const audio::AudioInputParams& inputParams() const;
-    const audio::AudioOutputParams& outputParams() const;
+    const muse::audio::AudioInputParams& inputParams() const;
+    const muse::audio::AudioOutputParams& outputParams() const;
 
     InputResourceItem* inputResourceItem() const;
     QList<OutputResourceItem*> outputResourceItemList() const;
     QList<AuxSendItem*> auxSendItemList() const;
 
-    const QMap<audio::aux_channel_idx_t, AuxSendItem*>& auxSendItems() const;
+    const QMap<muse::audio::aux_channel_idx_t, AuxSendItem*>& auxSendItems() const;
 
 public slots:
     void setTitle(QString title);
@@ -150,8 +150,8 @@ signals:
 
     void panelChanged(ui::NavigationPanel* panel);
 
-    void inputParamsChanged(const audio::AudioInputParams& params);
-    void outputParamsChanged(const audio::AudioOutputParams& params);
+    void inputParamsChanged(const muse::audio::AudioInputParams& params);
+    void outputParamsChanged(const muse::audio::AudioOutputParams& params);
     void soloMuteStateChanged(const notation::INotationSoloMuteState::SoloMuteState& state);
 
     void inputResourceItemChanged();
@@ -161,22 +161,22 @@ signals:
 protected:
     notation::INotationPlaybackPtr notationPlayback() const;
 
-    void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
+    void setAudioChannelVolumePressure(const muse::audio::audioch_t chNum, const float newValue);
     void resetAudioChannelsVolumePressure();
 
     void applyMuteToOutputParams(const bool isMuted);
 
-    void loadOutputResourceItems(const audio::AudioFxChain& fxChain);
-    void loadAuxSendItems(const audio::AuxSendsParams& auxSends);
+    void loadOutputResourceItems(const muse::audio::AudioFxChain& fxChain);
+    void loadAuxSendItems(const muse::audio::AuxSendsParams& auxSends);
 
     InputResourceItem* buildInputResourceItem();
-    OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
-    AuxSendItem* buildAuxSendItem(audio::aux_channel_idx_t index, const audio::AuxSendParams& params);
+    OutputResourceItem* buildOutputResourceItem(const muse::audio::AudioFxParams& fxParams);
+    AuxSendItem* buildAuxSendItem(muse::audio::aux_channel_idx_t index, const muse::audio::AuxSendParams& params);
 
     void addBlankSlots(size_t count);
     void removeBlankSlotsFromEnd(size_t count);
 
-    audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
+    muse::audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
     void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
     void closeEditor(AbstractAudioResourceItem* item);
@@ -185,17 +185,17 @@ protected:
 
     Type m_type = Type::Unknown;
 
-    audio::TrackId m_trackId = -1;
+    muse::audio::TrackId m_trackId = -1;
     engraving::InstrumentTrackId m_instrumentTrackId;
 
-    audio::AudioInputParams m_inputParams;
-    audio::AudioOutputParams m_outParams;
+    muse::audio::AudioInputParams m_inputParams;
+    muse::audio::AudioOutputParams m_outParams;
 
     InputResourceItem* m_inputResourceItem = nullptr;
-    QMap<audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
-    QMap<audio::aux_channel_idx_t, AuxSendItem*> m_auxSendItems;
+    QMap<muse::audio::AudioFxChainOrder, OutputResourceItem*> m_outputResourceItems;
+    QMap<muse::audio::aux_channel_idx_t, AuxSendItem*> m_auxSendItems;
 
-    audio::AudioSignalChanges m_audioSignalChanges;
+    muse::audio::AudioSignalChanges m_audioSignalChanges;
 
     QString m_title;
     bool m_outputOnly = false;

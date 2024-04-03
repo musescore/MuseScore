@@ -27,8 +27,8 @@
 
 using namespace mu;
 using namespace mu::mpe;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 
 AbstractSynthesizer::AbstractSynthesizer(const AudioInputParams& params)
     : m_params(params)
@@ -81,16 +81,12 @@ RenderMode AbstractSynthesizer::currentRenderMode() const
     return AudioEngine::instance()->mode();
 }
 
-audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const
+muse::audio::msecs_t AbstractSynthesizer::samplesToMsecs(const samples_t samplesPerChannel, const samples_t sampleRate) const
 {
-    ONLY_AUDIO_WORKER_THREAD;
-
     return samplesPerChannel * 1000000 / sampleRate;
 }
 
 samples_t AbstractSynthesizer::microSecsToSamples(const msecs_t msec, const samples_t sampleRate) const
 {
-    ONLY_AUDIO_WORKER_THREAD;
-
     return (msec / 1000000.f) * sampleRate;
 }

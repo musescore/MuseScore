@@ -49,29 +49,30 @@ public:
     virtual async::Notification isPlayingChanged() const = 0;
 
     virtual void seek(const midi::tick_t tick) = 0;
-    virtual void seek(const audio::msecs_t msecs) = 0;
+    virtual void seek(const muse::audio::msecs_t msecs) = 0;
     virtual void reset() = 0;
 
     virtual async::Notification playbackPositionChanged() const = 0;
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
     virtual float playbackPositionInSeconds() const = 0;
 
-    virtual audio::TrackSequenceId currentTrackSequenceId() const = 0;
+    virtual muse::audio::TrackSequenceId currentTrackSequenceId() const = 0;
     virtual async::Notification currentTrackSequenceIdChanged() const = 0;
 
-    using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, audio::TrackId>;
+    using InstrumentTrackIdMap = std::unordered_map<engraving::InstrumentTrackId, muse::audio::TrackId>;
     virtual const InstrumentTrackIdMap& instrumentTrackIdMap() const = 0;
 
-    using AuxTrackIdMap = std::map<audio::aux_channel_idx_t, audio::TrackId>;
+    using AuxTrackIdMap = std::map<muse::audio::aux_channel_idx_t, muse::audio::TrackId>;
     virtual const AuxTrackIdMap& auxTrackIdMap() const = 0;
 
-    virtual async::Channel<audio::TrackId> trackAdded() const = 0;
-    virtual async::Channel<audio::TrackId> trackRemoved() const = 0;
+    virtual async::Channel<muse::audio::TrackId> trackAdded() const = 0;
+    virtual async::Channel<muse::audio::TrackId> trackRemoved() const = 0;
 
-    virtual std::string auxChannelName(audio::aux_channel_idx_t index) const = 0;
-    virtual async::Channel<audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
+    virtual std::string auxChannelName(muse::audio::aux_channel_idx_t index) const = 0;
+    virtual async::Channel<muse::audio::aux_channel_idx_t, std::string> auxChannelNameChanged() const = 0;
 
-    virtual async::Promise<audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const = 0;
+    virtual async::Promise<muse::audio::SoundPresetList> availableSoundPresets(const engraving::InstrumentTrackId& instrumentTrackId) const
+    = 0;
 
     virtual notation::INotationSoloMuteState::SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId,
@@ -91,7 +92,7 @@ public:
     virtual async::Notification currentTempoChanged() const = 0;
 
     virtual notation::MeasureBeat currentBeat() const = 0;
-    virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
+    virtual muse::audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_REVERBMATRICES_H
-#define MU_AUDIO_REVERBMATRICES_H
+#ifndef MUSE_AUDIO_REVERBMATRICES_H
+#define MUSE_AUDIO_REVERBMATRICES_H
 
 #include "log.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 namespace reverb_matrices {
 template<int n>
 inline void Hadamard(const float i[n], float o[n])
@@ -173,6 +173,6 @@ inline void Hadamard<24>(const float i[24], float o[24])
     o[23] = fact * (-c[0] - d[3] - e[4] - f[4] - g[3] + h[0]);
 }
 } // namespace reverb_matrices
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_REVERBMATRICES_H
+#endif // MUSE_AUDIO_REVERBMATRICES_H

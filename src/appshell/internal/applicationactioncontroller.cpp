@@ -78,7 +78,7 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     if (urls.count() > 0) {
         const QUrl& url = urls.front();
         if (projectFilesController()->isUrlSupported(url)
-            || (url.isLocalFile() && audio::synth::isSoundFont(io::path_t(url)))) {
+            || (url.isLocalFile() && muse::audio::synth::isSoundFont(io::path_t(url)))) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
         }
@@ -106,7 +106,7 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
         } else if (url.isLocalFile()) {
             io::path_t filePath { url };
 
-            if (audio::synth::isSoundFont(filePath)) {
+            if (muse::audio::synth::isSoundFont(filePath)) {
                 async::Async::call(this, [this, filePath]() {
                     Ret ret = soundFontRepository()->addSoundFont(filePath);
                     if (!ret) {

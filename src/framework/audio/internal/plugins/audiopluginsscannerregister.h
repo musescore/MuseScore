@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOPLUGINSSCANNERREGISTER_H
-#define MU_AUDIO_AUDIOPLUGINSSCANNERREGISTER_H
+#ifndef MUSE_AUDIO_AUDIOPLUGINSSCANNERREGISTER_H
+#define MUSE_AUDIO_AUDIOPLUGINSSCANNERREGISTER_H
 
 #include "iaudiopluginsscannerregister.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioPluginsScannerRegister : public IAudioPluginsScannerRegister
 {
 public:
@@ -37,4 +37,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOPLUGINSSCANNERREGISTER_H
+#endif // MUSE_AUDIO_AUDIOPLUGINSSCANNERREGISTER_H

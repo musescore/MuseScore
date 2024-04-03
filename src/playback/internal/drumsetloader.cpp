@@ -29,7 +29,7 @@
 #include "global/types/bytearray.h"
 
 using namespace mu::playback;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::notation;
 using namespace mu::engraving;
 

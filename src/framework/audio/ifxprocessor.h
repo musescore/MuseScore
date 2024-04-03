@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIOPROCESSOR_H
-#define MU_AUDIO_IAUDIOPROCESSOR_H
+#ifndef MUSE_AUDIO_IAUDIOPROCESSOR_H
+#define MUSE_AUDIO_IAUDIOPROCESSOR_H
 
 #include <memory>
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IFxProcessor
 {
 public:
@@ -46,4 +46,4 @@ public:
 using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;
 }
 
-#endif // MU_AUDIO_IAUDIOPROCESSOR_H
+#endif // MUSE_AUDIO_IAUDIOPROCESSOR_H

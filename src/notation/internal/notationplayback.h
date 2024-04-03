@@ -59,8 +59,8 @@ public:
     async::Channel<engraving::InstrumentTrackId> trackAdded() const override;
     async::Channel<engraving::InstrumentTrackId> trackRemoved() const override;
 
-    audio::msecs_t totalPlayTime() const override;
-    async::Channel<audio::msecs_t> totalPlayTimeChanged() const override;
+    muse::audio::msecs_t totalPlayTime() const override;
+    async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const override;
 
     float playedTickToSec(midi::tick_t tick) const override;
     midi::tick_t secToPlayedTick(float sec) const override;
@@ -107,8 +107,8 @@ private:
     LoopBoundaries m_loopBoundaries;
     async::Notification m_loopBoundariesChanged;
 
-    audio::msecs_t m_totalPlayTime = 0;
-    async::Channel<audio::msecs_t> m_totalPlayTimeChanged;
+    muse::audio::msecs_t m_totalPlayTime = 0;
+    async::Channel<muse::audio::msecs_t> m_totalPlayTimeChanged;
 
     mutable Tempo m_currentTempo;
 

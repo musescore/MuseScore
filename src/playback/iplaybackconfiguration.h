@@ -49,16 +49,16 @@ public:
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
     virtual async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const = 0;
 
-    virtual bool isAuxSendVisible(audio::aux_channel_idx_t index) const = 0;
-    virtual void setAuxSendVisible(audio::aux_channel_idx_t index, bool visible) = 0;
-    virtual async::Channel<audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const = 0;
+    virtual bool isAuxSendVisible(muse::audio::aux_channel_idx_t index) const = 0;
+    virtual void setAuxSendVisible(muse::audio::aux_channel_idx_t index, bool visible) = 0;
+    virtual async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const = 0;
 
-    virtual bool isAuxChannelVisible(audio::aux_channel_idx_t index) const = 0;
-    virtual void setAuxChannelVisible(audio::aux_channel_idx_t index, bool visible) const = 0;
-    virtual async::Channel<audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const = 0;
+    virtual bool isAuxChannelVisible(muse::audio::aux_channel_idx_t index) const = 0;
+    virtual void setAuxChannelVisible(muse::audio::aux_channel_idx_t index, bool visible) const = 0;
+    virtual async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const = 0;
 
-    virtual audio::gain_t defaultAuxSendValue(audio::aux_channel_idx_t index, audio::AudioSourceType sourceType,
-                                              const String& instrumentSoundId) const = 0;
+    virtual muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
+                                                    const String& instrumentSoundId) const = 0;
 
     virtual bool muteHiddenInstruments() const = 0;
     virtual void setMuteHiddenInstruments(bool mute) = 0;

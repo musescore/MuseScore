@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_REVERBFILTERS_H
-#define MU_AUDIO_REVERBFILTERS_H
+#ifndef MUSE_AUDIO_REVERBFILTERS_H
+#define MUSE_AUDIO_REVERBFILTERS_H
 
-namespace mu::audio::fx::reverbfilters {
+namespace muse::audio::fx::reverbfilters {
 template<typename T>
 struct OneZeroCoeffs
 {
@@ -126,6 +126,6 @@ public:
 private:
     T m_y1 = T(0), _x1 = T(0);
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_REVERBFILTERS_H
+#endif // MUSE_AUDIO_REVERBFILTERS_H

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SOUNDTRACKWRITER_H
-#define MU_AUDIO_SOUNDTRACKWRITER_H
+#ifndef MUSE_AUDIO_SOUNDTRACKWRITER_H
+#define MUSE_AUDIO_SOUNDTRACKWRITER_H
 
 #include <vector>
 
@@ -33,7 +33,7 @@
 #include "iaudiosource.h"
 #include "internal/encoders/abstractaudioencoder.h"
 
-namespace mu::audio::soundtrack {
+namespace muse::audio::soundtrack {
 class SoundTrackWriter : public async::Asyncable
 {
     INJECT_STATIC(IAudioConfiguration, config)
@@ -63,4 +63,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SOUNDTRACKWRITER_H
+#endif // MUSE_AUDIO_SOUNDTRACKWRITER_H

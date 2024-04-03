@@ -27,8 +27,8 @@
 
 #include "log.h"
 
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 using namespace mu::async;
 
 void SoundFontRepository::init()
@@ -102,7 +102,7 @@ Notification SoundFontRepository::soundFontsChanged() const
 mu::Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
 {
     std::string title = qtrc("audio", "Do you want to add the SoundFont: %1?")
-                        .arg(io::filename(path).toQString()).toStdString();
+                        .arg(mu::io::filename(path).toQString()).toStdString();
 
     IInteractive::Button btn = interactive()->question(title, "", {
         IInteractive::Button::No,
@@ -154,7 +154,7 @@ mu::RetVal<SoundFontPath> SoundFontRepository::resolveInstallationPath(const Sou
 
     for (const io::path_t& dir : dirs) {
         if (fileSystem()->isWritable(dir)) {
-            SoundFontPath newPath = dir + "/" + io::filename(path);
+            SoundFontPath newPath = dir + "/" + mu::io::filename(path);
             return RetVal<SoundFontPath>::make_ok(newPath);
         }
     }

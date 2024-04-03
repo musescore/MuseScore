@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IKNOWNAUDIOPLUGINSREGISTER_H
-#define MU_AUDIO_IKNOWNAUDIOPLUGINSREGISTER_H
+#ifndef MUSE_AUDIO_IKNOWNAUDIOPLUGINSREGISTER_H
+#define MUSE_AUDIO_IKNOWNAUDIOPLUGINSREGISTER_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -29,7 +29,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IKnownAudioPluginsRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IKnownAudioPluginsRegister)
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_IKNOWNAUDIOPLUGINSREGISTER_H
+#endif // MUSE_AUDIO_IKNOWNAUDIOPLUGINSREGISTER_H

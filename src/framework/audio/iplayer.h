@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IPLAYER_H
-#define MU_AUDIO_IPLAYER_H
+#ifndef MUSE_AUDIO_IPLAYER_H
+#define MUSE_AUDIO_IPLAYER_H
 
 #include <memory>
 
@@ -30,7 +30,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IPlayer
 {
 public:
@@ -53,4 +53,4 @@ public:
 using IPlayerPtr = std::shared_ptr<IPlayer>;
 }
 
-#endif // MU_AUDIO_IPLAYER_H
+#endif // MUSE_AUDIO_IPLAYER_H

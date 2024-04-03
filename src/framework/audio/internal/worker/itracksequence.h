@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ITRACKSEQUENCE_H
-#define MU_AUDIO_ITRACKSEQUENCE_H
+#ifndef MUSE_AUDIO_ITRACKSEQUENCE_H
+#define MUSE_AUDIO_ITRACKSEQUENCE_H
 
 #include "global/async/channel.h"
 #include "global/types/retval.h"
@@ -31,7 +31,7 @@
 #include "isequenceio.h"
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class ITrackSequence
 {
 public:
@@ -63,4 +63,4 @@ public:
 using ITrackSequencePtr = std::shared_ptr<ITrackSequence>;
 }
 
-#endif // MU_AUDIO_ITRACKSEQUENCE_H
+#endif // MUSE_AUDIO_ITRACKSEQUENCE_H

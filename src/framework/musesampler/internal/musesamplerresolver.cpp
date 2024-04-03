@@ -30,11 +30,11 @@
 
 using namespace mu;
 using namespace mu::async;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 using namespace mu::musesampler;
 
-InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const audio::AudioResourceMeta& resourceMeta)
+InstrumentInfo findInstrument(MuseSamplerLibHandlerPtr libHandler, const AudioResourceMeta& resourceMeta)
 {
     if (!libHandler) {
         return InstrumentInfo();
@@ -75,7 +75,7 @@ void MuseSamplerResolver::init()
     }
 }
 
-ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId*/, const audio::AudioInputParams& params) const
+ISynthesizerPtr MuseSamplerResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
 {
     InstrumentInfo instrument = findInstrument(m_libHandler, params.resourceMeta);
     if (instrument.isValid()) {
@@ -85,7 +85,7 @@ ISynthesizerPtr MuseSamplerResolver::resolveSynth(const audio::TrackId /*trackId
     return nullptr;
 }
 
-bool MuseSamplerResolver::hasCompatibleResources(const audio::PlaybackSetupData& setup) const
+bool MuseSamplerResolver::hasCompatibleResources(const PlaybackSetupData& setup) const
 {
     UNUSED(setup);
 
@@ -141,7 +141,7 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
     return result;
 }
 
-SoundPresetList MuseSamplerResolver::resolveSoundPresets(const audio::AudioResourceMeta& resourceMeta) const
+SoundPresetList MuseSamplerResolver::resolveSoundPresets(const AudioResourceMeta& resourceMeta) const
 {
     InstrumentInfo instrument = findInstrument(m_libHandler, resourceMeta);
     if (!instrument.msInstrument) {

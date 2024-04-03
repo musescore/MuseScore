@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IGETTRACKS_H
-#define MU_AUDIO_IGETTRACKS_H
+#ifndef MUSE_AUDIO_IGETTRACKS_H
+#define MUSE_AUDIO_IGETTRACKS_H
 
 #include "global/async/channel.h"
 
 #include "track.h"
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IGetTracks
 {
 public:
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_IGETTRACKS_H
+#endif // MUSE_AUDIO_IGETTRACKS_H

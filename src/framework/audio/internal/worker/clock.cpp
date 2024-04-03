@@ -24,7 +24,7 @@
 #include "../../audioerrors.h"
 
 using namespace mu;
-using namespace mu::audio;
+using namespace muse::audio;
 
 Clock::Clock()
 {

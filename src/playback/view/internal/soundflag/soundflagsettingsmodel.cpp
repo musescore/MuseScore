@@ -36,7 +36,7 @@
 using namespace mu;
 using namespace mu::playback;
 using namespace mu::engraving;
-using namespace mu::audio;
+using namespace muse::audio;
 
 static const QString RESET_MENU_ID = "reset";
 static const QString MULTI_SELECTION_MENU_ID = "multi-selection";
@@ -128,10 +128,10 @@ void SoundFlagSettingsModel::load()
 
 void SoundFlagSettingsModel::initTitle()
 {
-    const audio::AudioInputParams& params = currentAudioInputParams();
+    const AudioInputParams& params = currentAudioInputParams();
 
-    QString name = audio::audioSourceName(params).toQString();
-    QString category = audio::audioSourceCategoryName(params).toQString();
+    QString name = muse::audio::audioSourceName(params).toQString();
+    QString category = muse::audio::audioSourceCategoryName(params).toQString();
     QString title = category + ": " + name;
 
     setTitle(title);

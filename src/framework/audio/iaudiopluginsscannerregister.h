@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
-#define MU_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
+#ifndef MUSE_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
+#define MUSE_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "iaudiopluginsscanner.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioPluginsScannerRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioPluginsScannerRegister)
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H
+#endif // MUSE_AUDIO_IAUDIOPLUGINSSCANNERREGISTER_H

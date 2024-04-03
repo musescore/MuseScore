@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IGETTRACKSEQUENCE_H
-#define MU_AUDIO_IGETTRACKSEQUENCE_H
+#ifndef MUSE_AUDIO_IGETTRACKSEQUENCE_H
+#define MUSE_AUDIO_IGETTRACKSEQUENCE_H
 
 #include "itracksequence.h"
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IGetTrackSequence
 {
 public:
@@ -36,4 +36,4 @@ public:
 using IGetTrackSequencePtr = std::shared_ptr<IGetTrackSequence>;
 }
 
-#endif // MU_AUDIO_IGETTRACKSEQUENCE_H
+#endif // MUSE_AUDIO_IGETTRACKSEQUENCE_H

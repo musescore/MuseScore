@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_EQUALISER_H
-#define MU_AUDIO_EQUALISER_H
+#ifndef MUSE_AUDIO_EQUALISER_H
+#define MUSE_AUDIO_EQUALISER_H
 
 #include "ifxprocessor.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class Equaliser : public IFxProcessor
 {
 public:
@@ -55,4 +55,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_EQUALISER_H
+#endif // MUSE_AUDIO_EQUALISER_H

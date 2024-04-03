@@ -26,8 +26,8 @@
 
 #include "log.h"
 
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 
 static const AudioResourceVendor FLUID_VENDOR_NAME = "Fluid";
 
@@ -97,7 +97,7 @@ void FluidResolver::refresh()
     for (const auto& pair : soundFontRepository()->soundFonts()) {
         const SoundFontMeta& soundFont = pair.second;
 
-        std::string name = io::completeBasename(soundFont.path).toStdString();
+        std::string name = mu::io::completeBasename(soundFont.path).toStdString();
 
         {
             AudioResourceId id = name;
@@ -107,7 +107,7 @@ void FluidResolver::refresh()
             chooseAutomaticMeta.type = AudioResourceType::FluidSoundfont;
             chooseAutomaticMeta.vendor = FLUID_VENDOR_NAME;
             chooseAutomaticMeta.attributes = {
-                { PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING },
+                { PLAYBACK_SETUP_DATA_ATTRIBUTE, mu::mpe::GENERIC_SETUP_DATA_STRING },
                 { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(name) }
             };
             chooseAutomaticMeta.hasNativeEditorSupport = false;
@@ -123,7 +123,7 @@ void FluidResolver::refresh()
             meta.type = AudioResourceType::FluidSoundfont;
             meta.vendor = FLUID_VENDOR_NAME;
             meta.attributes = {
-                { PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING },
+                { PLAYBACK_SETUP_DATA_ATTRIBUTE, mu::mpe::GENERIC_SETUP_DATA_STRING },
                 { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(name) },
                 { PRESET_NAME_ATTRIBUTE, String::fromStdString(preset.name) },
                 { PRESET_BANK_ATTRIBUTE, String::number(preset.program.bank) },

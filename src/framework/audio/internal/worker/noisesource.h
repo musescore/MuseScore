@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_NOISESOURCE_H
-#define MU_AUDIO_NOISESOURCE_H
+#ifndef MUSE_AUDIO_NOISESOURCE_H
+#define MUSE_AUDIO_NOISESOURCE_H
 
 #include "abstractaudiosource.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class NoiseSource : public AbstractAudioSource
 {
 public:
@@ -48,4 +48,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_NOISESOURCE_H
+#endif // MUSE_AUDIO_NOISESOURCE_H

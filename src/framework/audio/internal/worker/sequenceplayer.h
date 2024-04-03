@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SEQUENCEPLAYER_H
-#define MU_AUDIO_SEQUENCEPLAYER_H
+#ifndef MUSE_AUDIO_SEQUENCEPLAYER_H
+#define MUSE_AUDIO_SEQUENCEPLAYER_H
 
 #include "global/async/asyncable.h"
 
@@ -29,7 +29,7 @@
 #include "igettracks.h"
 #include "iclock.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class SequencePlayer : public ISequencePlayer, public async::Asyncable
 {
 public:
@@ -58,4 +58,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SEQUENCEPLAYER_H
+#endif // MUSE_AUDIO_SEQUENCEPLAYER_H

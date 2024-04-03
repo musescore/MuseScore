@@ -24,7 +24,7 @@
 
 #include "audio/iaudioconfiguration.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioConfigurationStub : public IAudioConfiguration
 {
 public:

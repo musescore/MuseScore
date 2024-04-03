@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ISEQUENCEPLAYER_H
-#define MU_AUDIO_ISEQUENCEPLAYER_H
+#ifndef MUSE_AUDIO_ISEQUENCEPLAYER_H
+#define MUSE_AUDIO_ISEQUENCEPLAYER_H
 
 #include "global/types/ret.h"
 #include "global/async/channel.h"
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class ISequencePlayer
 {
 public:
@@ -51,4 +51,4 @@ public:
 using ISequencePlayerPtr = std::shared_ptr<ISequencePlayer>;
 }
 
-#endif // MU_AUDIO_ISEQUENCEPLAYER_H
+#endif // MUSE_AUDIO_ISEQUENCEPLAYER_H

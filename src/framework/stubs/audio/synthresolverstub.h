@@ -24,7 +24,7 @@
 
 #include "audio/isynthresolver.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 class SynthResolverStub : public ISynthResolver
 {
 public:

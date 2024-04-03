@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_WASAPIAUDIOCLIENT_H
-#define MU_AUDIO_WASAPIAUDIOCLIENT_H
+#ifndef MUSE_AUDIO_WASAPIAUDIOCLIENT_H
+#define MUSE_AUDIO_WASAPIAUDIOCLIENT_H
 
 #include "wasapitypes.h"
 
@@ -106,4 +106,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_WASAPIAUDIOCLIENT_H
+#endif // MUSE_AUDIO_WASAPIAUDIOCLIENT_H

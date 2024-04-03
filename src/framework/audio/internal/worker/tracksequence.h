@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_TRACKSEQUENCE_H
-#define MU_AUDIO_TRACKSEQUENCE_H
+#ifndef MUSE_AUDIO_TRACKSEQUENCE_H
+#define MUSE_AUDIO_TRACKSEQUENCE_H
 
 #include "global/async/asyncable.h"
 
@@ -31,7 +31,7 @@
 #include "track.h"
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class Mixer;
 class TrackSequence : public ITrackSequence, public IGetTracks, public async::Asyncable
 {
@@ -91,4 +91,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_TRACKSEQUENCE_H
+#endif // MUSE_AUDIO_TRACKSEQUENCE_H

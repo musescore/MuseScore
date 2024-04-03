@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_FLUIDSYNTH_H
-#define MU_AUDIO_FLUIDSYNTH_H
+#ifndef MUSE_AUDIO_FLUIDSYNTH_H
+#define MUSE_AUDIO_FLUIDSYNTH_H
 
 #include <memory>
 #include <optional>
@@ -33,7 +33,7 @@
 #include "../../abstractsynthesizer.h"
 #include "fluidsequencer.h"
 
-namespace mu::audio::synth {
+namespace muse::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
@@ -118,4 +118,4 @@ private:
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;
 }
 
-#endif //MU_AUDIO_FLUIDSYNTH_H
+#endif //MUSE_AUDIO_FLUIDSYNTH_H

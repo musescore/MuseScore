@@ -24,7 +24,7 @@
 
 #include "audio/ifxresolver.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class FxResolverStub : public IFxResolver
 {
 public:

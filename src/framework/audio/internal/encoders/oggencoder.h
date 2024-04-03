@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_OGGENCODER_H
-#define MU_AUDIO_OGGENCODER_H
+#ifndef MUSE_AUDIO_OGGENCODER_H
+#define MUSE_AUDIO_OGGENCODER_H
 
 #include "abstractaudioencoder.h"
 
 struct OggOpusEnc;
 
-namespace mu::audio::encode {
+namespace muse::audio::encode {
 class OggEncoder : public AbstractAudioEncoder
 {
 public:

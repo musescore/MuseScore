@@ -38,7 +38,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::async;
 
 void Playback::init()

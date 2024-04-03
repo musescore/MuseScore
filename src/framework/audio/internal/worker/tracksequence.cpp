@@ -34,7 +34,7 @@
 
 using namespace mu;
 using namespace mu::async;
-using namespace mu::audio;
+using namespace muse::audio;
 
 TrackSequence::TrackSequence(const TrackSequenceId id)
     : m_id(id)

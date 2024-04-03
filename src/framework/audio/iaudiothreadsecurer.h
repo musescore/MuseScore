@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_IAUDIOTHREADSECURER_H
-#define MU_AUDIO_IAUDIOTHREADSECURER_H
+#ifndef MUSE_AUDIO_IAUDIOTHREADSECURER_H
+#define MUSE_AUDIO_IAUDIOTHREADSECURER_H
 
 #include <cassert>
 #include <thread>
 
 #include "global/modularity/ioc.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioThreadSecurer : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioThreadSecurer)
@@ -45,4 +45,4 @@ public:
 #define ONLY_MAIN_THREAD(securer) assert(securer()->isMainThread())
 #define ONLY_AUDIO_OR_MAIN_THREAD(securer) assert(securer()->isMainThread() || securer()->isAudioWorkerThread())
 
-#endif // MU_AUDIO_IAUDIOTHREADSECURER_H
+#endif // MUSE_AUDIO_IAUDIOTHREADSECURER_H

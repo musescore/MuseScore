@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOMATHUTILS_H
-#define MU_AUDIO_AUDIOMATHUTILS_H
+#ifndef MUSE_AUDIO_AUDIOMATHUTILS_H
+#define MUSE_AUDIO_AUDIOMATHUTILS_H
 
 #include <cstdlib>
 #include <limits>
 
 #include "audiotypes.h"
 
-namespace mu::audio::dsp {
+namespace muse::audio::dsp {
 inline float balanceGain(const balance_t balance, const int audioChannelNumber)
 {
     return (audioChannelNumber * 2 - 1) * balance + 1.f;
@@ -77,4 +77,4 @@ constexpr T convertFloatSamples(float value)
 }
 }
 
-#endif // MU_AUDIO_AUDIOMATHUTILS_H
+#endif // MUSE_AUDIO_AUDIOMATHUTILS_H

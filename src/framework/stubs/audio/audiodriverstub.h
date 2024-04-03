@@ -24,7 +24,7 @@
 
 #include "audio/iaudiodriver.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioDriverStub : public IAudioDriver
 {
 public:

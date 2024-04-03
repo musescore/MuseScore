@@ -22,8 +22,8 @@
 #include "synthesizerstub.h"
 
 using namespace mu;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 
 SynthesizerStub::SynthesizerStub(const AudioSourceParams& params)
     : m_params(params)
@@ -63,14 +63,14 @@ void SynthesizerStub::setup(const mpe::PlaybackData&)
 {
 }
 
-const audio::AudioInputParams& SynthesizerStub::params() const
+const AudioInputParams& SynthesizerStub::params() const
 {
     return m_params;
 }
 
-async::Channel<audio::AudioInputParams> SynthesizerStub::paramsChanged() const
+async::Channel<AudioInputParams> SynthesizerStub::paramsChanged() const
 {
-    static async::Channel<audio::AudioInputParams> ch;
+    static async::Channel<AudioInputParams> ch;
     return ch;
 }
 

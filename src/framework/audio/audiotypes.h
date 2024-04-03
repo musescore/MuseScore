@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOTYPES_H
-#define MU_AUDIO_AUDIOTYPES_H
+#ifndef MUSE_AUDIO_AUDIOTYPES_H
+#define MUSE_AUDIO_AUDIOTYPES_H
 
 #include <variant>
 #include <set>
@@ -35,7 +35,7 @@
 
 #include "mpe/events.h"
 
-namespace mu::audio {
+namespace muse::audio {
 using msecs_t = int64_t;
 using secs_t = int64_t;
 using samples_t = uint64_t;
@@ -55,7 +55,7 @@ using TrackName = std::string;
 
 using aux_channel_idx_t = uint8_t;
 
-using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
+using PlaybackData = std::variant<mpe::PlaybackData, mu::io::IODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
 static constexpr TrackId INVALID_TRACK_ID = -1;
@@ -257,7 +257,7 @@ struct AuxSendParams {
 
     bool operator ==(const AuxSendParams& other) const
     {
-        return RealIsEqual(signalAmount, other.signalAmount) && active == other.active;
+        return mu::RealIsEqual(signalAmount, other.signalAmount) && active == other.active;
     }
 };
 
@@ -275,8 +275,8 @@ struct AudioOutputParams {
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxChain == other.fxChain
-               && RealIsEqual(volume, other.volume)
-               && RealIsEqual(balance, other.balance)
+               && mu::RealIsEqual(volume, other.volume)
+               && mu::RealIsEqual(balance, other.balance)
                && auxSends == other.auxSends
                && solo == other.solo
                && muted == other.muted
@@ -348,7 +348,7 @@ struct AudioSignalsNotifier {
 
         volume_dbfs_t validatedPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
 
-        if (RealIsEqual(signalVal.pressure, validatedPressure)) {
+        if (mu::RealIsEqual(signalVal.pressure, validatedPressure)) {
             return;
         }
 
@@ -421,4 +421,4 @@ enum class RenderMode {
 };
 }
 
-#endif // MU_AUDIO_AUDIOTYPES_H
+#endif // MUSE_AUDIO_AUDIOTYPES_H

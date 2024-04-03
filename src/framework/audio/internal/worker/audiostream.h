@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIOSTREAM_H
-#define MU_AUDIO_AUDIOSTREAM_H
+#ifndef MUSE_AUDIO_AUDIOSTREAM_H
+#define MUSE_AUDIO_AUDIOSTREAM_H
 
 #include <vector>
 
 #include "iaudiostream.h"
 #include "samplerateconvertor.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioStream : public IAudioStream
 {
 public:
@@ -61,4 +61,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOSTREAM_H
+#endif // MUSE_AUDIO_AUDIOSTREAM_H

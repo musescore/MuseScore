@@ -27,8 +27,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::audio;
-using namespace mu::audio::encode;
+using namespace muse::audio;
+using namespace muse::audio::encode;
 
 struct LameHandler
 {

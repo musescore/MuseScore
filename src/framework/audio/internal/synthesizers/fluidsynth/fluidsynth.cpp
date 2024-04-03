@@ -32,8 +32,8 @@
 
 using namespace mu;
 using namespace mu::midi;
-using namespace mu::audio;
-using namespace mu::audio::synth;
+using namespace muse::audio;
+using namespace muse::audio::synth;
 using namespace mu::mpe;
 
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
@@ -46,7 +46,7 @@ static constexpr msecs_t MIN_NOTE_LENGTH = 10;
 static constexpr unsigned int FLUID_AUDIO_CHANNELS_PAIR = 1;
 static constexpr unsigned int FLUID_AUDIO_CHANNELS_COUNT = FLUID_AUDIO_CHANNELS_PAIR * 2;
 
-struct mu::audio::synth::Fluid {
+struct muse::audio::synth::Fluid {
     fluid_settings_t* settings = nullptr;
     fluid_synth_t* synth = nullptr;
 
@@ -160,7 +160,7 @@ bool FluidSynth::handleEvent(const midi::Event& event)
         m_tuning.add(event.note(), event.pitchTuningCents());
     } break;
     case Event::Opcode::ControlChange: {
-        if (event.index() == midi::EXPRESSION_CONTROLLER) {
+        if (event.index() == mu::midi::EXPRESSION_CONTROLLER) {
             ret = setExpressionLevel(event.data());
         } else {
             ret = setControllerValue(event);
@@ -377,7 +377,7 @@ int FluidSynth::setExpressionLevel(int level)
     midi::channel_t lastChannelIdx = m_sequencer.channels().lastIndex();
 
     for (midi::channel_t i = 0; i < lastChannelIdx; ++i) {
-        fluid_synth_cc(m_fluid->synth, i, midi::EXPRESSION_CONTROLLER, level);
+        fluid_synth_cc(m_fluid->synth, i, mu::midi::EXPRESSION_CONTROLLER, level);
     }
 
     return FLUID_OK;

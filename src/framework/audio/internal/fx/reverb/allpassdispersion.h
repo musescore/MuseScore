@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_ALLPASSDISPERSION_H
-#define MU_AUDIO_ALLPASSDISPERSION_H
+#ifndef MUSE_AUDIO_ALLPASSDISPERSION_H
+#define MUSE_AUDIO_ALLPASSDISPERSION_H
 
 #include "iirbiquadfilter.h"
 
-namespace mu::audio::fx {
+namespace muse::audio::fx {
 class AllPassDispersion
 {
 public:
@@ -68,6 +68,6 @@ public:
 private:
     std::array<IirBiquadFilter::DF1Processor<double>, 2> m_processor;
 };
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_ALLPASSDISPERSION_H
+#endif // MUSE_AUDIO_ALLPASSDISPERSION_H

@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SOUNDMAPPING_H
-#define MU_AUDIO_SOUNDMAPPING_H
+#ifndef MUSE_AUDIO_SOUNDMAPPING_H
+#define MUSE_AUDIO_SOUNDMAPPING_H
 
 #include "global/async/channel.h"
 #include "mpe/events.h"
 #include "midi/miditypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 struct SoundMappingKey {
     mpe::SoundId id = mpe::SoundId::Undefined;
     mpe::SoundSubCategories subCategories;
@@ -1119,4 +1119,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_SOUNDMAPPING_H
+#endif // MUSE_AUDIO_SOUNDMAPPING_H

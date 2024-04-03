@@ -27,8 +27,8 @@
 
 using namespace mu;
 using namespace mu::vst;
-using namespace mu::audio::synth;
-using namespace mu::audio;
+using namespace muse::audio::synth;
+using namespace muse::audio;
 
 static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,

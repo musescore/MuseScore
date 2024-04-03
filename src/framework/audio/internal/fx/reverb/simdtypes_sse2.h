@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SIMDTYPES_SSE2_H
-#define MU_AUDIO_SIMDTYPES_SSE2_H
+#ifndef MUSE_AUDIO_SIMDTYPES_SSE2_H
+#define MUSE_AUDIO_SIMDTYPES_SSE2_H
 
 #if _MSC_VER
 #define __finl __forceinline
@@ -37,7 +37,7 @@
 SSE2 simd types
 */
 
-namespace mu::audio::fx::simd {
+namespace muse::audio::fx::simd {
 // this is jumping through some hoops to get the same level of support
 // for clang and msvc. With clang, the sse2 types are built-in and have
 // some arithmetic operators defined.
@@ -134,6 +134,6 @@ __finl float_x4 __vecc operator*(float_x4 a, float_x4 b)
 {
     return _mm_mul_ps(a.s, b.s);
 }
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SIMDTYPES_SSE2_H
+#endif // MUSE_AUDIO_SIMDTYPES_SSE2_H

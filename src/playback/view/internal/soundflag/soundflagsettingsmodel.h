@@ -97,13 +97,13 @@ private:
     void load();
 
     project::IProjectAudioSettingsPtr audioSettings() const;
-    const audio::AudioInputParams& currentAudioInputParams() const;
+    const muse::audio::AudioInputParams& currentAudioInputParams() const;
 
     void initTitle();
     void initAvailablePresets();
     void initAvailablePlayingTechniques();
 
-    void setAvailableSoundPresets(const audio::SoundPresetList& presets);
+    void setAvailableSoundPresets(const muse::audio::SoundPresetList& presets);
     void loadAvailablePlayingTechniques();
 
     uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title, bool enabled = true);
@@ -115,7 +115,7 @@ private:
 
     QString m_title;
 
-    audio::SoundPresetList m_availablePresets;
+    muse::audio::SoundPresetList m_availablePresets;
 
     QVariantList m_availablePresetsModel;
     QVariantList m_availablePlayingTechniquesModel;

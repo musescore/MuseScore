@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_SIMDTYPES_SCALAR_H
-#define MU_AUDIO_SIMDTYPES_SCALAR_H
+#ifndef MUSE_AUDIO_SIMDTYPES_SCALAR_H
+#define MUSE_AUDIO_SIMDTYPES_SCALAR_H
 
 #include <algorithm>
 #include <cmath>
@@ -34,7 +34,7 @@
 #define __vecc
 #endif
 
-namespace mu::audio::fx::simd {
+namespace muse::audio::fx::simd {
 struct float_x4
 {
     float v[4];
@@ -83,6 +83,6 @@ __finl float_x4 __vecc operator*(float_x4 a, float_x4 b)
 {
     return { a[0] * b[0], a[1] * b[1], a[2] * b[2], a[3] * b[3] };
 }
-} // namespace mu::audio::fx
+} // namespace muse::audio::fx
 
-#endif // MU_AUDIO_SIMDTYPES_SCALAR_H
+#endif // MUSE_AUDIO_SIMDTYPES_SCALAR_H

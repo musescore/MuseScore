@@ -23,7 +23,7 @@
 
 #include <random>
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 NoiseSource::NoiseSource()
 {

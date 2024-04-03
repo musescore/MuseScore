@@ -26,8 +26,8 @@
 
 #include "log.h"
 
-using namespace mu::audio;
-using namespace mu::audio::encode;
+using namespace muse::audio;
+using namespace muse::audio::encode;
 
 size_t OggEncoder::encode(samples_t samplesPerChannel, const float* input)
 {

@@ -34,20 +34,20 @@
 #include "imusesamplertracks.h"
 
 namespace mu::musesampler {
-class MuseSamplerWrapper : public audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
+class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
     public std::enable_shared_from_this<MuseSamplerWrapper>
 {
 public:
-    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const audio::AudioSourceParams& params);
+    MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument, const muse::audio::AudioSourceParams& params);
     ~MuseSamplerWrapper() override;
 
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
+    muse::audio::samples_t process(float* buffer, muse::audio::samples_t samplesPerChannel) override;
 
     std::string name() const override;
-    audio::AudioSourceType type() const override;
+    muse::audio::AudioSourceType type() const override;
     void flushSound() override;
     bool isValid() const override;
 
@@ -56,14 +56,14 @@ public:
 private:
     void setupSound(const mpe::PlaybackSetupData& setupData) override;
     void setupEvents(const mpe::PlaybackData& playbackData) override;
-    void updateRenderingMode(const audio::RenderMode mode) override;
+    void updateRenderingMode(const muse::audio::RenderMode mode) override;
 
     // IMuseSamplerTracks
     const TrackList& allTracks() const override;
     ms_Track addTrack() override;
 
-    audio::msecs_t playbackPosition() const override;
-    void setPlaybackPosition(const audio::msecs_t newPosition) override;
+    muse::audio::msecs_t playbackPosition() const override;
+    void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
@@ -71,8 +71,8 @@ private:
     std::string resolveDefaultPresetCode(const InstrumentInfo& instrument) const;
 
     void handleAuditionEvents(const MuseSamplerSequencer::EventType& event);
-    void setCurrentPosition(const audio::samples_t samples);
-    void extractOutputSamples(audio::samples_t samples, float* output);
+    void setCurrentPosition(const muse::audio::samples_t samples);
+    void extractOutputSamples(muse::audio::samples_t samples, float* output);
 
     async::Channel<unsigned int> m_audioChannelsCountChanged;
 
@@ -82,7 +82,7 @@ private:
     TrackList m_tracks;
     ms_OutputBuffer m_bus;
 
-    audio::samples_t m_currentPosition = 0;
+    muse::audio::samples_t m_currentPosition = 0;
 
     std::vector<float> m_leftChannel;
     std::vector<float> m_rightChannel;

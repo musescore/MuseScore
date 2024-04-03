@@ -35,7 +35,7 @@
 
 static constexpr char DEFAULT_DEVICE_ID[] = "default";
 
-using namespace mu::audio;
+using namespace muse::audio;
 
 //namespace {
 struct JackData
@@ -52,7 +52,7 @@ struct JackData
 static JackData* s_jackData{ nullptr };
 IAudioDriver::Spec s_format;
 
-int mu::audio::jack_process_callback(jack_nframes_t nframes, void*)
+int muse::audio::jack_process_callback(jack_nframes_t nframes, void*)
 {
     JackData* data = s_jackData;
 
@@ -69,7 +69,7 @@ int mu::audio::jack_process_callback(jack_nframes_t nframes, void*)
     return 0;
 }
 
-void mu::audio::jack_cleanup_callback(void*)
+void muse::audio::jack_cleanup_callback(void*)
 {
 }
 

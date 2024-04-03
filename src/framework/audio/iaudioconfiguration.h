@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_IAUDIOCONFIGURATION_H
-#define MU_AUDIO_IAUDIOCONFIGURATION_H
+#ifndef MUSE_AUDIO_IAUDIOCONFIGURATION_H
+#define MUSE_AUDIO_IAUDIOCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -30,7 +30,7 @@
 
 #include "audiotypes.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class IAudioConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAudioConfiguration)
@@ -71,4 +71,4 @@ public:
 };
 }
 
-#endif // MU_AUDIO_IAUDIOCONFIGURATION_H
+#endif // MUSE_AUDIO_IAUDIOCONFIGURATION_H

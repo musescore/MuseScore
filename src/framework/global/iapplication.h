@@ -68,4 +68,8 @@ public:
 };
 }
 
+namespace muse {
+using IApplication = mu::IApplication;
+}
+
 #endif // MU_GLOBAL_IAPPLICATION_H

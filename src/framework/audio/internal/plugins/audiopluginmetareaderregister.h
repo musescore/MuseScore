@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOPLUGINMETAREADERREGISTER_H
-#define MU_AUDIO_AUDIOPLUGINMETAREADERREGISTER_H
+#ifndef MUSE_AUDIO_AUDIOPLUGINMETAREADERREGISTER_H
+#define MUSE_AUDIO_AUDIOPLUGINMETAREADERREGISTER_H
 
 #include "iaudiopluginmetareaderregister.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class AudioPluginMetaReaderRegister : public IAudioPluginMetaReaderRegister
 {
 public:
@@ -37,4 +37,4 @@ private:
 };
 }
 
-#endif // MU_AUDIO_AUDIOPLUGINMETAREADERREGISTER_H
+#endif // MUSE_AUDIO_AUDIOPLUGINMETAREADERREGISTER_H

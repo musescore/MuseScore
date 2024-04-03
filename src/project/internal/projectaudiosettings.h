@@ -38,23 +38,23 @@ class ProjectAudioSettings : public IProjectAudioSettings
 {
     INJECT_STATIC(playback::IPlaybackConfiguration, playbackConfig)
 public:
-    const audio::AudioOutputParams& masterAudioOutputParams() const override;
-    void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
+    const muse::audio::AudioOutputParams& masterAudioOutputParams() const override;
+    void setMasterAudioOutputParams(const muse::audio::AudioOutputParams& params) override;
 
-    bool containsAuxOutputParams(audio::aux_channel_idx_t index) const override;
-    const audio::AudioOutputParams& auxOutputParams(audio::aux_channel_idx_t index) const override;
-    void setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) override;
+    bool containsAuxOutputParams(muse::audio::aux_channel_idx_t index) const override;
+    const muse::audio::AudioOutputParams& auxOutputParams(muse::audio::aux_channel_idx_t index) const override;
+    void setAuxOutputParams(muse::audio::aux_channel_idx_t index, const muse::audio::AudioOutputParams& params) override;
 
-    const audio::AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& partId) const override;
-    void setTrackInputParams(const engraving::InstrumentTrackId& partId, const audio::AudioInputParams& params) override;
+    const muse::audio::AudioInputParams& trackInputParams(const engraving::InstrumentTrackId& partId) const override;
+    void setTrackInputParams(const engraving::InstrumentTrackId& partId, const muse::audio::AudioInputParams& params) override;
     void clearTrackInputParams() override;
 
-    const audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
-    void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
+    const muse::audio::AudioOutputParams& trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
+    void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const muse::audio::AudioOutputParams& params) override;
 
-    const SoloMuteState& auxSoloMuteState(audio::aux_channel_idx_t index) const override;
-    void setAuxSoloMuteState(audio::aux_channel_idx_t index, const SoloMuteState& state) override;
-    async::Channel<audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const override;
+    const SoloMuteState& auxSoloMuteState(muse::audio::aux_channel_idx_t index) const override;
+    void setAuxSoloMuteState(muse::audio::aux_channel_idx_t index, const SoloMuteState& state) override;
+    async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const override;
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
@@ -73,45 +73,45 @@ private:
     friend class NotationProject;
     ProjectAudioSettings() = default;
 
-    audio::AudioInputParams inputParamsFromJson(const QJsonObject& object) const;
-    audio::AudioOutputParams outputParamsFromJson(const QJsonObject& object) const;
+    muse::audio::AudioInputParams inputParamsFromJson(const QJsonObject& object) const;
+    muse::audio::AudioOutputParams outputParamsFromJson(const QJsonObject& object) const;
     SoloMuteState soloMuteStateFromJson(const QJsonObject& object) const;
-    audio::AudioFxChain fxChainFromJson(const QJsonObject& fxChainObject) const;
-    audio::AudioFxParams fxParamsFromJson(const QJsonObject& object) const;
-    audio::AuxSendsParams auxSendsFromJson(const QJsonArray& objectList) const;
-    audio::AuxSendParams auxSendParamsFromJson(const QJsonObject& object) const;
-    audio::AudioResourceMeta resourceMetaFromJson(const QJsonObject& object) const;
-    audio::AudioUnitConfig unitConfigFromJson(const QJsonObject& object) const;
-    audio::AudioResourceAttributes attributesFromJson(const QJsonObject& object) const;
+    muse::audio::AudioFxChain fxChainFromJson(const QJsonObject& fxChainObject) const;
+    muse::audio::AudioFxParams fxParamsFromJson(const QJsonObject& object) const;
+    muse::audio::AuxSendsParams auxSendsFromJson(const QJsonArray& objectList) const;
+    muse::audio::AuxSendParams auxSendParamsFromJson(const QJsonObject& object) const;
+    muse::audio::AudioResourceMeta resourceMetaFromJson(const QJsonObject& object) const;
+    muse::audio::AudioUnitConfig unitConfigFromJson(const QJsonObject& object) const;
+    muse::audio::AudioResourceAttributes attributesFromJson(const QJsonObject& object) const;
 
-    QJsonObject inputParamsToJson(const audio::AudioInputParams& params) const;
-    QJsonObject outputParamsToJson(const audio::AudioOutputParams& params) const;
+    QJsonObject inputParamsToJson(const muse::audio::AudioInputParams& params) const;
+    QJsonObject outputParamsToJson(const muse::audio::AudioOutputParams& params) const;
     QJsonObject soloMuteStateToJson(const SoloMuteState& state) const;
-    QJsonObject fxChainToJson(const audio::AudioFxChain& fxChain) const;
-    QJsonObject fxParamsToJson(const audio::AudioFxParams& fxParams) const;
-    QJsonArray auxSendsToJson(const audio::AuxSendsParams& auxSends) const;
-    QJsonObject auxSendParamsToJson(const audio::AuxSendParams& auxParams) const;
-    QJsonObject resourceMetaToJson(const audio::AudioResourceMeta& meta) const;
-    QJsonObject unitConfigToJson(const audio::AudioUnitConfig& config) const;
-    QJsonObject attributesToJson(const audio::AudioResourceAttributes& attributes) const;
+    QJsonObject fxChainToJson(const muse::audio::AudioFxChain& fxChain) const;
+    QJsonObject fxParamsToJson(const muse::audio::AudioFxParams& fxParams) const;
+    QJsonArray auxSendsToJson(const muse::audio::AuxSendsParams& auxSends) const;
+    QJsonObject auxSendParamsToJson(const muse::audio::AuxSendParams& auxParams) const;
+    QJsonObject resourceMetaToJson(const muse::audio::AudioResourceMeta& meta) const;
+    QJsonObject unitConfigToJson(const muse::audio::AudioUnitConfig& config) const;
+    QJsonObject attributesToJson(const muse::audio::AudioResourceAttributes& attributes) const;
 
-    audio::AudioSourceType sourceTypeFromString(const QString& string) const;
-    audio::AudioResourceType resourceTypeFromString(const QString& string) const;
+    muse::audio::AudioSourceType sourceTypeFromString(const QString& string) const;
+    muse::audio::AudioResourceType resourceTypeFromString(const QString& string) const;
 
-    QString sourceTypeToString(const audio::AudioSourceType& type) const;
-    QString resourceTypeToString(const audio::AudioResourceType& type) const;
+    QString sourceTypeToString(const muse::audio::AudioSourceType& type) const;
+    QString resourceTypeToString(const muse::audio::AudioResourceType& type) const;
 
-    QJsonObject buildAuxObject(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) const;
+    QJsonObject buildAuxObject(muse::audio::aux_channel_idx_t index, const muse::audio::AudioOutputParams& params) const;
     QJsonObject buildTrackObject(notation::INotationSoloMuteStatePtr masterSoloMuteStatePtr, const engraving::InstrumentTrackId& id) const;
 
-    audio::AudioOutputParams m_masterOutputParams;
+    muse::audio::AudioOutputParams m_masterOutputParams;
 
-    std::map<audio::aux_channel_idx_t, audio::AudioOutputParams> m_auxOutputParams;
-    std::unordered_map<audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStatesMap;
-    async::Channel<audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStateChanged;
+    std::map<muse::audio::aux_channel_idx_t, muse::audio::AudioOutputParams> m_auxOutputParams;
+    std::unordered_map<muse::audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStatesMap;
+    async::Channel<muse::audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStateChanged;
 
-    std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
-    std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
+    std::unordered_map<engraving::InstrumentTrackId, muse::audio::AudioInputParams> m_trackInputParamsMap;
+    std::unordered_map<engraving::InstrumentTrackId, muse::audio::AudioOutputParams> m_trackOutputParamsMap;
 
     async::Notification m_settingsChanged;
 

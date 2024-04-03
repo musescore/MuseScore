@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_MIXER_H
-#define MU_AUDIO_MIXER_H
+#ifndef MUSE_AUDIO_MIXER_H
+#define MUSE_AUDIO_MIXER_H
 
 #include <memory>
 #include <map>
@@ -36,7 +36,7 @@
 #include "iaudioconfiguration.h"
 #include "iclock.h"
 
-namespace mu::audio {
+namespace muse::audio {
 class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
     Inject<fx::IFxResolver> fxResolver;
@@ -121,4 +121,4 @@ private:
 using MixerPtr = std::shared_ptr<Mixer>;
 }
 
-#endif // MU_AUDIO_MIXER_H
+#endif // MUSE_AUDIO_MIXER_H

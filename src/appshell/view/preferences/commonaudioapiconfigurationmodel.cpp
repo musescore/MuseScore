@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::audio;
+using namespace muse::audio;
 
 CommonAudioApiConfigurationModel::CommonAudioApiConfigurationModel(QObject* parent)
     : QObject(parent)

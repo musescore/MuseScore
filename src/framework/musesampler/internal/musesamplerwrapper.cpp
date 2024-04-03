@@ -27,13 +27,14 @@
 #include "realfn.h"
 
 using namespace mu;
-using namespace mu::audio;
+using namespace muse::audio;
 using namespace mu::musesampler;
 
 static constexpr int AUDIO_CHANNELS_COUNT = 2;
 
-MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, const InstrumentInfo& instrument,
-                                       const audio::AudioSourceParams& params)
+MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib,
+                                       const InstrumentInfo& instrument,
+                                       const AudioSourceParams& params)
     : AbstractSynthesizer(params), m_samplerLib(samplerLib), m_instrument(instrument)
 {
     if (!m_samplerLib || !m_samplerLib->isValid()) {
@@ -83,7 +84,7 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
         m_bus._channels = m_internalBuffer.data();
     }
 
-    if (currentRenderMode() == audio::RenderMode::OfflineMode) {
+    if (currentRenderMode() == RenderMode::OfflineMode) {
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
         m_offlineModeStarted = true;
     }
@@ -99,7 +100,7 @@ async::Channel<unsigned int> MuseSamplerWrapper::audioChannelsCountChanged() con
     return m_audioChannelsCountChanged;
 }
 
-samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPerChannel)
+samples_t MuseSamplerWrapper::process(float* buffer, samples_t samplesPerChannel)
 {
     if (!m_samplerLib || !m_sampler) {
         return 0;
@@ -116,7 +117,7 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
         }
     }
 
-    if (currentRenderMode() == audio::RenderMode::OfflineMode) {
+    if (currentRenderMode() == RenderMode::OfflineMode) {
         if (m_samplerLib->processOffline(m_sampler, m_bus) != ms_Result_OK) {
             return 0;
         }
@@ -187,7 +188,7 @@ void MuseSamplerWrapper::setupEvents(const mpe::PlaybackData& playbackData)
     m_sequencer.load(playbackData);
 }
 
-void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
+void MuseSamplerWrapper::updateRenderingMode(const RenderMode mode)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -195,7 +196,7 @@ void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
         return;
     }
 
-    if (mode != audio::RenderMode::OfflineMode && m_offlineModeStarted) {
+    if (mode != RenderMode::OfflineMode && m_offlineModeStarted) {
         m_samplerLib->stopOfflineMode(m_sampler);
         m_offlineModeStarted = false;
     }
@@ -231,7 +232,7 @@ msecs_t MuseSamplerWrapper::playbackPosition() const
     return samplesToMsecs(m_currentPosition, m_sampleRate);
 }
 
-void MuseSamplerWrapper::setPlaybackPosition(const audio::msecs_t newPosition)
+void MuseSamplerWrapper::setPlaybackPosition(const msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
 
@@ -346,7 +347,7 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
     }
 }
 
-void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
+void MuseSamplerWrapper::setCurrentPosition(const samples_t samples)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
@@ -362,12 +363,12 @@ void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
     LOGD() << "Seek a new playback position, newPosition: " << m_currentPosition;
 }
 
-void MuseSamplerWrapper::extractOutputSamples(audio::samples_t samples, float* output)
+void MuseSamplerWrapper::extractOutputSamples(samples_t samples, float* output)
 {
-    for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
+    for (samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
         size_t offset = sampleIndex * m_bus._num_channels;
 
-        for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < m_bus._num_channels; ++audioChannelIndex) {
+        for (audioch_t audioChannelIndex = 0; audioChannelIndex < m_bus._num_channels; ++audioChannelIndex) {
             float sample = m_bus._channels[audioChannelIndex][sampleIndex];
             output[offset + audioChannelIndex] += sample;
         }
