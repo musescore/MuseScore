@@ -1798,7 +1798,8 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
-                std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
+                std::vector<TDuration> durList = toRhythmicDurationList(nf * stretch, true, tick().ticks(),
+                                                                        score()->sigmap()->timesig(tick().ticks()).nominal(), this, 0);
 
                 // set the existing rest to the first value of the duration list
                 rest->undoChangeProperty(Pid::DURATION, durList[0].fraction());

@@ -259,7 +259,9 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                     if (!linkedToPrevious) {
                         puRests.clear();
                     }
-                    std::vector<mu::engraving::TDuration> dList = mu::engraving::toDurationList(measure->ticks(), false);
+                    std::vector<mu::engraving::TDuration> dList = mu::engraving::toRhythmicDurationList(
+                        measure->ticks(), true, mu::engraving::Fraction(0, 1),
+                        measure->score()->sigmap()->timesig(measure->tick().ticks()).nominal(), measure, 0);
                     if (!dList.empty()) {
                         mu::engraving::Fraction ltick = tick;
                         int k = 0;
