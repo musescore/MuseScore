@@ -60,10 +60,6 @@ if (MUE_BUILD_INSTRUMENTSSCENE_MODULE)
     add_subdirectory(instrumentsscene)
 endif()
 
-if (MUE_BUILD_LEARN_MODULE)
-    add_subdirectory(learn)
-endif()
-
 if (MUE_BUILD_NOTATION_MODULE)
     add_subdirectory(notation)
 endif()

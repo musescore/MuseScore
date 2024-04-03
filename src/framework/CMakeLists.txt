@@ -68,6 +68,10 @@ if (MUSE_MODULE_LANGUAGES)
     add_subdirectory(languages)
 endif()
 
+if (MUSE_MODULE_LEARN)
+    add_subdirectory(learn)
+endif()
+
 if (MUSE_MODULE_EXTENSIONS)
     add_subdirectory(extensions)
 endif()

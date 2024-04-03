@@ -40,7 +40,7 @@ if (NOT MUSE_MODULE_LANGUAGES)
     add_subdirectory(languages)
 endif()
 
-if (NOT MUE_BUILD_LEARN_MODULE)
+if (NOT MUSE_MODULE_LEARN)
     add_subdirectory(learn)
 endif()
 
