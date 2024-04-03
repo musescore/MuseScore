@@ -73,10 +73,10 @@ Item {
         width: contentItem.childrenRect.width
         height: contentItem.childrenRect.height
 
-        TextMetrics {
-            id: boldTextMetrics
+        FontMetrics {
+            id: boldFontMetrics
             font.bold: true
-            text: model.title
+            text: toolBarModel.title
             onWidthChanged: {
                 radioButtonDelegate.width = width
             }
@@ -92,7 +92,7 @@ Item {
 
             normalStateFont: model.isTitleBold ? ui.theme.largeBodyBoldFont : ui.theme.largeBodyFont
 
-            width: boldTextMetrics.width
+            width: boldFontMetrics.width
 
             horizontalAlignment: Text.AlignHCenter
 
