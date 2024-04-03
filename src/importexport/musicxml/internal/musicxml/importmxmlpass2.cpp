@@ -1989,10 +1989,6 @@ void MusicXMLParserPass2::part()
         auto sp = i->first;
         Fraction tick1 = Fraction::fromTicks(i->second.first);
         Fraction tick2 = Fraction::fromTicks(i->second.second);
-        if (sp->isPedal() && toPedal(sp)->endHookType() == HookType::HOOK_45) {
-            // Handle pedal change end tick (slightly hacky)
-            tick2 += m_score->findCR(tick2, sp->track())->ticks();
-        }
         //LOGD("spanner %p tp %d isHairpin %d tick1 %s tick2 %s track1 %d track2 %d start %p end %p",
         //       sp, sp->type(), sp->isHairpin(), muPrintable(tick1.toString()), muPrintable(tick2.toString()),
         //       sp->track(), sp->track2(), sp->startElement(), sp->endElement());
