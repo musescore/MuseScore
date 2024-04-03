@@ -92,7 +92,7 @@
 // Modules
 #include "appshell/appshellmodule.h"
 
-#ifdef MUE_BUILD_AUTOBOT_MODULE
+#ifdef MUSE_MODULE_AUTOBOT
 #include "autobot/autobotmodule.h"
 #endif
 
@@ -283,7 +283,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::appshell::AppShellModule());
 #endif
 
-#ifdef MUE_BUILD_AUTOBOT_MODULE
+#ifdef MUSE_MODULE_AUTOBOT
     app.addModule(new mu::autobot::AutobotModule());
 #endif
 

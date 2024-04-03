@@ -202,7 +202,7 @@ if (NOT CC_IS_EMSCRIPTEN)
 endif()
 
 
-if (MUE_BUILD_AUTOBOT_MODULE) 
+if (MUSE_MODULE_AUTOBOT)
     list(APPEND LINK_LIB autobot)
 endif()
 
