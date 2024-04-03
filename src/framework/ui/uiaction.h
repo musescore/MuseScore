@@ -1,6 +1,8 @@
 #ifndef MU_UI_UIACTION_H
 #define MU_UI_UIACTION_H
 
+#include <optional>
+
 #include "actions/actiontypes.h"
 #include "global/types/mnemonicstring.h"
 
