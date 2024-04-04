@@ -2983,6 +2983,16 @@ void MusicXMLParserDirection::direction(const String& partId,
     } else if (isLikelyLegallyDownloaded(tick)) {
         // Ignore (TBD: print to footer?)
         return;
+    } else if (isLikelyTempoText()) {
+        TempoText* tt = Factory::createTempoText(m_score->dummy()->segment());
+        tt->setXmlText(m_wordsText + m_metroText);
+        if (m_tpoSound > 0 && canAddTempoText(m_score->tempomap(), tick.ticks())) {
+            double tpo = m_tpoSound / 60;
+            tt->setTempo(tpo);
+            tt->setFollowText(true);
+        }
+
+        addElemOffset(tt, track, placement(), measure, tick + m_offset);
     } else if (m_wordsText != "" || m_rehearsalText != "" || m_metroText != "") {
         TextBase* t = 0;
         if (m_tpoSound > 0.1) {
@@ -3224,6 +3234,27 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
            && m_metroText.empty()
            && m_tpoSound < 0.1
            && m_wordsText.contains(std::wregex(L"This music has been legally downloaded\\.\\sDo not photocopy\\."));
+}
+
+bool MusicXMLParserDirection::isLikelyTempoText() const
+{
+    if (!configuration()->inferTextType() || !m_wordsText.contains(u"<b>") || m_placement == u"below") {
+        return false;
+    }
+
+    const String plainText = MScoreTextToMXML::toPlainText(m_wordsText.simplified());
+    static const std::array<String,
+                            25> tempoStrs
+        = { u"a tempo", u"adag", u"alleg", u"andant", u"ballad", u"brisk", u"determination", u"dolce", u"expressive",
+            u"fast", u"free", u"grave", u"larg", u"lento", u"maestoso", u"moderat", u"mosso", u"prest", u"rubato", u"slow", u"straight",
+            u"tempo i", u"tenderly", u"triumphant", u"vivace" };
+
+    for (const String& str : tempoStrs) {
+        if (plainText.contains(str, CaseSensitivity::CaseInsensitive)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 Text* MusicXMLParserDirection::addTextToHeader(const TextStyleType textStyleType)
