@@ -1763,6 +1763,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 mmr->setParent(segment);
                 mmr->setTrack(ctx.track());
                 read400::TRead::read(mmr, e, ctx);
+                mmr->setTicks(m->ticks());
                 segment->add(mmr);
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
