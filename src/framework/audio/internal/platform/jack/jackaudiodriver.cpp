@@ -233,7 +233,7 @@ mu::async::Notification JackAudioDriver::outputDeviceChanged() const
 AudioDeviceList JackAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
+    devices.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
 
     return devices;
 }
