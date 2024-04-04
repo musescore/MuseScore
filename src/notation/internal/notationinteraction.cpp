@@ -2130,6 +2130,7 @@ bool NotationInteraction::notesHaveActiculation(const std::vector<Note*>& notes,
     return true;
 }
 
+
 //! NOTE Copied from ScoreView::dragLeaveEvent
 void NotationInteraction::endDrop()
 {
@@ -3041,13 +3042,13 @@ void NotationInteraction::endEditText()
 
     doEndEditElement();
 
+    if (changeTextToDynamic(element)) {
+        score()->removeElement(element);
+    }
+
     notifyAboutTextEditingEnded(toTextBase(element));
     notifyAboutTextEditingChanged();
     notifyAboutSelectionChangedIfNeed();
-
-    /*if (changeTextToDynamic()) {
-        score()->removeElement(element);
-    }*/
 }
 
 void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
@@ -3851,8 +3852,7 @@ void NotationInteraction::addDynamicToSelection(DynamicType type)
     apply();
 }
 
-bool NotationInteraction::changeTextToDynamic() {
-    EngravingItem* element = m_editData.element;
+bool NotationInteraction::changeTextToDynamic(EngravingItem* element) {
     
     if (toTextBase(element)->xmlText() == "pp" || toTextBase(element)->xmlText() == "PP") {
         addDynamicToSelection(DynamicType::PP);
