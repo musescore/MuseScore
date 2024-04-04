@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 mu::Ret ExtensionRunner::run(const Action& action)
 {

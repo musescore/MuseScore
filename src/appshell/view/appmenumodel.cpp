@@ -31,7 +31,7 @@ using namespace mu::uicomponents;
 using namespace mu::project;
 using namespace mu::workspace;
 using namespace muse::actions;
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 static QString makeId(const ActionCode& actionCode, int itemIndex)
 {
@@ -644,11 +644,11 @@ MenuItemList AppMenuModel::makePluginsItems()
 
     auto addMenuItems = [this](MenuItemList& items, const Manifest& m) {
         if (m.actions.size() == 1) {
-            const extensions::Action& a = m.actions.at(0);
+            const muse::extensions::Action& a = m.actions.at(0);
             items << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
         } else {
             MenuItemList sub;
-            for (const extensions::Action& a : m.actions) {
+            for (const muse::extensions::Action& a : m.actions) {
                 sub << makeMenuItem(makeUriQuery(m.uri, a.code).toString(), TranslatableString::untranslatable(a.title));
             }
             items << makeMenu(TranslatableString::untranslatable(m.title), sub);

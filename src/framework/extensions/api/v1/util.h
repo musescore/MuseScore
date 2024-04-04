@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_EXTENSIONS_APIV1_UTIL_H
-#define MU_EXTENSIONS_APIV1_UTIL_H
+#ifndef MUSE_EXTENSIONS_APIV1_UTIL_H
+#define MUSE_EXTENSIONS_APIV1_UTIL_H
 
 #include <QDir>
 #include <QProcess>
 
-namespace mu::extensions::apiv1 {
+namespace muse::extensions::apiv1 {
 //---------------------------------------------------------
 ///   \class FileIO
 ///   Provides a simple API to perform file reading and

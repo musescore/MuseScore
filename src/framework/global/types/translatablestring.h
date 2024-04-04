@@ -254,4 +254,8 @@ TranslatableString TranslatableString::arg(const Args& ... args) const
 }
 }
 
+namespace muse {
+using TranslatableString = mu::TranslatableString;
+}
+
 #endif // MU_GLOBAL_TRANSLATABLESTRING_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_APIV1_EXTAPIV1_H
-#define MU_EXTENSIONS_APIV1_EXTAPIV1_H
+#ifndef MUSE_EXTENSIONS_APIV1_EXTAPIV1_H
+#define MUSE_EXTENSIONS_APIV1_EXTAPIV1_H
 
 #include <QObject>
 #include <QMap>
@@ -29,7 +29,7 @@
 #include "api/iapiregister.h"
 #include "api/iapiengine.h"
 
-namespace mu::extensions::apiv1 {
+namespace muse::extensions::apiv1 {
 class ExtApiV1 : public QObject
 {
     Q_OBJECT
@@ -64,4 +64,4 @@ private:
     mutable QMap<std::string, Api> m_apis;
 };
 }
-#endif // MU_EXTENSIONS_APIV1_EXTAPIV1_H
+#endif // MUSE_EXTENSIONS_APIV1_EXTAPIV1_H

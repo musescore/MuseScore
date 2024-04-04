@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSERRORS_H
-#define MU_EXTENSIONS_EXTENSIONSERRORS_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSERRORS_H
+#define MUSE_EXTENSIONS_EXTENSIONSERRORS_H
 
 #include "global/types/ret.h"
 #include "global/translation.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -44,13 +44,13 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::ExtNotFound: return Ret(retCode, trc("extensions", "Plugin not found"));
-    case Err::ExtLoadError: return Ret(retCode, trc("extensions", "Could not load plugin"));
-    case Err::ExtBadFormat: return Ret(retCode, trc("extensions", "Plugin is not in the correct format"));
+    case Err::ExtNotFound: return Ret(retCode, mu::trc("extensions", "Plugin not found"));
+    case Err::ExtLoadError: return Ret(retCode, mu::trc("extensions", "Could not load plugin"));
+    case Err::ExtBadFormat: return Ret(retCode, mu::trc("extensions", "Plugin is not in the correct format"));
     }
 
     return Ret(static_cast<int>(e));
 }
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSERRORS_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSERRORS_H

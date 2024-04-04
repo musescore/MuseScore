@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_SCRIPTENGINE_H
-#define MU_EXTENSIONS_SCRIPTENGINE_H
+#ifndef MUSE_EXTENSIONS_SCRIPTENGINE_H
+#define MUSE_EXTENSIONS_SCRIPTENGINE_H
 
 #include <QString>
 #include <QJSValue>
@@ -34,7 +34,7 @@
 
 #include "global/api/iapiengine.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class JsModuleLoader;
 class ScriptEngine : public mu::api::IApiEngine
 {
@@ -98,4 +98,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_SCRIPTENGINE_H
+#endif // MUSE_EXTENSIONS_SCRIPTENGINE_H

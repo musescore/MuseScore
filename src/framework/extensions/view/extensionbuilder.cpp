@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 ExtensionBuilder::ExtensionBuilder(QObject* parent)
     : QObject(parent)

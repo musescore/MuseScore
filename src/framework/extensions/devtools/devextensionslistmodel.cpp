@@ -21,7 +21,7 @@
  */
 #include "devextensionslistmodel.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 DevExtensionsListModel::DevExtensionsListModel(QObject* parent)
     : QObject(parent)

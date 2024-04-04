@@ -29,7 +29,7 @@
 
 using namespace mu::ui;
 using namespace muse::actions;
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",

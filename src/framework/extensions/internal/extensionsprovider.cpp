@@ -33,7 +33,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 KnownCategories ExtensionsProvider::knownCategories() const
 {

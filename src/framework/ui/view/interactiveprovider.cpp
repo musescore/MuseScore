@@ -203,7 +203,7 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
         break;
     case ContainerType::Undefined: {
         //! NOTE Not found default, try extension
-        extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
+        muse::extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
         if (ext.isValid()) {
             openedRet = openExtensionDialog(q);
         } else {

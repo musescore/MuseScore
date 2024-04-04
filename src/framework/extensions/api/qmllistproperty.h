@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_EXTENSIONS_API_QMLLISTPROPERTY_H
-#define MU_EXTENSIONS_API_QMLLISTPROPERTY_H
+#ifndef MUSE_EXTENSIONS_API_QMLLISTPROPERTY_H
+#define MUSE_EXTENSIONS_API_QMLLISTPROPERTY_H
 
 #include <QQmlListProperty>
 
-namespace mu::extensions::api {
+namespace muse::extensions::api {
 template<typename T>
 class QmlListProperty : public QQmlListProperty<T>
 {
@@ -74,4 +74,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_API_QMLLISTPROPERTY_H
+#endif // MUSE_EXTENSIONS_API_QMLLISTPROPERTY_H

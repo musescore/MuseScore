@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
-#define MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
+#ifndef MUSE_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
+#define MUSE_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -30,7 +30,7 @@
 
 #include "extensionstypes.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class IExtensionsConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IExtensionsConfiguration);
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_IEXTENSIONSCONFIGURATION_H
+#endif // MUSE_EXTENSIONS_IEXTENSIONSCONFIGURATION_H

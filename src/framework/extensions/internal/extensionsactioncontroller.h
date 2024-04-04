@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
-#define MU_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
+#define MUSE_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
@@ -31,14 +31,14 @@
 #include "extensions/iextensionsprovider.h"
 #include "ui/iuiactionsregister.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsUiActions;
 class ExtensionsActionController : public muse::actions::Actionable, public async::Asyncable
 {
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
     Inject<muse::actions::IActionsDispatcher> dispatcher;
     Inject<extensions::IExtensionsProvider> provider;
-    Inject<ui::IUiActionsRegister> uiActionsRegister;
+    Inject<mu::ui::IUiActionsRegister> uiActionsRegister;
 
 public:
     void init();
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSACTIONCONTROLLER_H

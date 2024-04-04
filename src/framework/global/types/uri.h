@@ -97,4 +97,9 @@ private:
 };
 }
 
+namespace muse {
+using Uri = mu::Uri;
+using UriQuery = mu::UriQuery;
+}
+
 #endif // MU_GLOBAL_URI_H

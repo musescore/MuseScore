@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSCONFIGURATION_H
-#define MU_EXTENSIONS_EXTENSIONSCONFIGURATION_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSCONFIGURATION_H
+#define MUSE_EXTENSIONS_EXTENSIONSCONFIGURATION_H
 
 #include "../iextensionsconfiguration.h"
 
@@ -30,11 +30,11 @@
 
 #include "global/async/asyncable.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration, public mu::async::Asyncable
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<mu::IGlobalConfiguration> globalConfiguration;
+    Inject<mu::mi::IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     ExtensionsConfiguration() = default;
@@ -59,4 +59,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSCONFIGURATION_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSCONFIGURATION_H

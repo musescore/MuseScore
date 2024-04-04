@@ -57,4 +57,8 @@ private:
 };
 }
 
+namespace muse::io {
+using Dir = mu::io::Dir;
+}
+
 #endif // MU_IO_DIR_H

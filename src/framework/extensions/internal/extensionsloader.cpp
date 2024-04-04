@@ -33,7 +33,7 @@
 const std::string MANIFEST("manifest.json");
 const std::string DEV_EXTENSIONS("extensions/dev/");
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 ManifestList ExtensionsLoader::loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const
 {

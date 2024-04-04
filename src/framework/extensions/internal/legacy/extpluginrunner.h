@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTPLUGINRUNNER_H
-#define MU_EXTENSIONS_EXTPLUGINRUNNER_H
+#ifndef MUSE_EXTENSIONS_EXTPLUGINRUNNER_H
+#define MUSE_EXTENSIONS_EXTPLUGINRUNNER_H
 
 #include "global/types/ret.h"
 
@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "../../iextensionsuiengine.h"
 
-namespace mu::extensions::legacy {
+namespace muse::extensions::legacy {
 //! NOTE Run old plugins without UI
 //! But they are still qml files, so they are run as qml
 class ExtPluginRunner
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTPLUGINRUNNER_H
+#endif // MUSE_EXTENSIONS_EXTPLUGINRUNNER_H

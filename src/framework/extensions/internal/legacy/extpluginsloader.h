@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTPLUGINSLOADER_H
-#define MU_EXTENSIONS_EXTPLUGINSLOADER_H
+#ifndef MUSE_EXTENSIONS_EXTPLUGINSLOADER_H
+#define MUSE_EXTENSIONS_EXTPLUGINSLOADER_H
 
 #include "../../extensionstypes.h"
 
-namespace mu::extensions::legacy {
+namespace muse::extensions::legacy {
 //! NOTE Searches and parses qml files of old plugins
 class ExtPluginsLoader
 {
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTPLUGINSLOADER_H
+#endif // MUSE_EXTENSIONS_EXTPLUGINSLOADER_H

@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSMODULE_H
-#define MU_EXTENSIONS_EXTENSIONSMODULE_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSMODULE_H
+#define MUSE_EXTENSIONS_EXTENSIONSMODULE_H
 
 #include <memory>
 #include <string>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsProvider;
 class ExtensionsActionController;
 class ExtensionsConfiguration;
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSMODULE_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSMODULE_H

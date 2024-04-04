@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSMODEL_H
-#define MU_EXTENSIONS_EXTENSIONSMODEL_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSMODEL_H
+#define MUSE_EXTENSIONS_EXTENSIONSMODEL_H
 
 #include <QAbstractListModel>
 #include <QList>
@@ -32,12 +32,12 @@
 #include "extensions/iextensionsconfiguration.h"
 #include "extensions/iextensionsprovider.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
     Inject<IExtensionsProvider> provider;
     Inject<IExtensionsConfiguration> configuration;
 
@@ -78,4 +78,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSMODEL_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSMODEL_H

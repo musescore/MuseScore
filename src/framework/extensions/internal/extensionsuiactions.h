@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSUIACTIONS_H
-#define MU_EXTENSIONS_EXTENSIONSUIACTIONS_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSUIACTIONS_H
+#define MUSE_EXTENSIONS_EXTENSIONSUIACTIONS_H
 
 #include "async/asyncable.h"
 #include "ui/iuiactionsmodule.h"
@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "extensions/iextensionsprovider.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
     Inject<extensions::IExtensionsProvider> provider;
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSUIACTIONS_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSUIACTIONS_H

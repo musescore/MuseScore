@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 static const mu::Settings::Key USER_PLUGINS_PATH("plugins", "application/paths/myPlugins");
 

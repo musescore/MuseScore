@@ -31,7 +31,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions::apiv1;
+using namespace muse::extensions::apiv1;
 
 void ExtApiV1::registerQmlTypes()
 {

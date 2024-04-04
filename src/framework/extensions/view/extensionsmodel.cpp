@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 using namespace mu::async;
 
 static constexpr int INVALID_INDEX = -1;

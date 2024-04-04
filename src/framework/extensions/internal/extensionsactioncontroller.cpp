@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
+using namespace muse::extensions;
 
 void ExtensionsActionController::init()
 {

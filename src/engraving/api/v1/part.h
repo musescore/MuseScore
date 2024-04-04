@@ -39,7 +39,7 @@ class Part;
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
-class InstrumentListProperty : public mu::extensions::api::QmlListProperty<Instrument>
+class InstrumentListProperty : public muse::extensions::api::QmlListProperty<Instrument>
 {
 public:
     InstrumentListProperty(Part* p);
