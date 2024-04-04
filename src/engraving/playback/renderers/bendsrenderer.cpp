@@ -202,7 +202,7 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
     int chordPosTicks = chord->tick().ticks();
     int chordDurationTicks = chord->actualTicks().ticks();
 
-    auto tnd = timestampAndDurationFromStartAndDurationTicks(score, chordPosTicks + initialCtx.positionTickOffset, chordDurationTicks);
+    auto tnd = timestampAndDurationFromStartAndDurationTicks(score, chordPosTicks, chordDurationTicks, initialCtx.positionTickOffset);
 
     BeatsPerSecond bps = score->tempomap()->tempo(chordPosTicks);
 
