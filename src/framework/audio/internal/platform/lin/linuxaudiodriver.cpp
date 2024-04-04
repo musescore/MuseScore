@@ -246,7 +246,7 @@ mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
 AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
+    devices.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
 
     return devices;
 }
