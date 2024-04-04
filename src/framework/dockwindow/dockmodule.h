@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKMODULE_H
-#define MU_DOCK_DOCKMODULE_H
+#ifndef MUSE_DOCK_DOCKMODULE_H
+#define MUSE_DOCK_DOCKMODULE_H
 
 #include <memory>
 
 #include "global/modularity/imodulesetup.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockWindowActionsController;
 class DockModule : public modularity::IModuleSetup
 {
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKMODULE_H
+#endif // MUSE_DOCK_DOCKMODULE_H

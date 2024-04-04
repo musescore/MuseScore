@@ -22,7 +22,7 @@
 
 #include "docktabbar.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DockTabBar::DockTabBar(KDDockWidgets::TabWidget* parent)
     : KDDockWidgets::TabBarQuick(parent)

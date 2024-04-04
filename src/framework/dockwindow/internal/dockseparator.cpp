@@ -31,9 +31,9 @@
 
 #include <QTimer>
 
-using namespace mu::dock;
+using namespace muse::dock;
 
-namespace mu::dock {
+namespace muse::dock {
 static const KDDockWidgets::DockWidgetBase* findNearestDock(const DockSeparator* separator)
 {
     const Layouting::ItemBoxContainer* container = separator->parentContainer();

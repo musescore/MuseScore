@@ -39,10 +39,10 @@
 #include "async/async.h"
 #include "log.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 using namespace mu::async;
 
-namespace mu::dock {
+namespace muse::dock {
 static const QList<Location> POSSIBLE_LOCATIONS {
     Location::Left,
     Location::Right,
@@ -176,12 +176,12 @@ QString DockWindow::currentPageUri() const
     return m_currentPage ? m_currentPage->uri() : QString();
 }
 
-QQmlListProperty<mu::dock::DockToolBarView> DockWindow::toolBarsProperty()
+QQmlListProperty<muse::dock::DockToolBarView> DockWindow::toolBarsProperty()
 {
     return m_toolBars.property();
 }
 
-QQmlListProperty<mu::dock::DockPageView> DockWindow::pagesProperty()
+QQmlListProperty<muse::dock::DockPageView> DockWindow::pagesProperty()
 {
     return m_pages.property();
 }

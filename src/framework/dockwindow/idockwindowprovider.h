@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DOCK_IDOCKWINDOWPROVIDER_H
-#define MU_DOCK_IDOCKWINDOWPROVIDER_H
+#ifndef MUSE_DOCK_IDOCKWINDOWPROVIDER_H
+#define MUSE_DOCK_IDOCKWINDOWPROVIDER_H
 
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class IDockWindow;
 class IDockWindowProvider : MODULE_EXPORT_INTERFACE
 {
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_DOCK_IDOCKWINDOWPROVIDER_H
+#endif // MUSE_DOCK_IDOCKWINDOWPROVIDER_H

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKWINDOW_H
-#define MU_DOCK_DOCKWINDOW_H
+#ifndef MUSE_DOCK_DOCKWINDOW_H
+#define MUSE_DOCK_DOCKWINDOW_H
 
 #include <QQuickItem>
 
@@ -47,7 +47,7 @@ class MainWindowBase;
 class LayoutSaver;
 }
 
-namespace mu::dock {
+namespace muse::dock {
 class DockToolBarView;
 class DockingHolderView;
 class DockPageView;
@@ -57,13 +57,13 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
     Q_PROPERTY(QString currentPageUri READ currentPageUri NOTIFY currentPageUriChanged)
 
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockPageView> pages READ pagesProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockPageView> pages READ pagesProperty)
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
-    INJECT(workspace::IWorkspaceManager, workspaceManager)
+    INJECT(mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(mu::workspace::IWorkspaceManager, workspaceManager)
     INJECT(IDockWindowProvider, dockWindowProvider)
 
 public:
@@ -72,8 +72,8 @@ public:
 
     QString currentPageUri() const;
 
-    QQmlListProperty<mu::dock::DockToolBarView> toolBarsProperty();
-    QQmlListProperty<mu::dock::DockPageView> pagesProperty();
+    QQmlListProperty<muse::dock::DockToolBarView> toolBarsProperty();
+    QQmlListProperty<muse::dock::DockPageView> pagesProperty();
 
     QQuickWindow* windowProperty() const;
 
@@ -143,8 +143,8 @@ private:
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     DockPageView* m_currentPage = nullptr;
-    uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
-    uicomponents::QmlListProperty<DockPageView> m_pages;
+    mu::uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
+    mu::uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;
 
     bool m_hasGeometryBeenRestored = false;
@@ -152,4 +152,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKWINDOW_H
+#endif // MUSE_DOCK_DOCKWINDOW_H

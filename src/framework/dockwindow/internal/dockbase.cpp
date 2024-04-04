@@ -32,7 +32,7 @@
 #include "thirdparty/KDDockWidgets/src/private/quick/FrameQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/private/FloatingWindow_p.h"
 
-namespace mu::dock {
+namespace muse::dock {
 static QSize adjustSizeByConstraints(const QSize& size, const QSize& min, const QSize& max)
 {
     return size.expandedTo(min).boundedTo(max);
@@ -67,7 +67,7 @@ public:
 };
 }
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DockBase::DockBase(DockType type, QQuickItem* parent)
     : QQuickItem(parent)

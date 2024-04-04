@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DOCK_DOCKCENTRALVIEW_H
-#define MU_DOCK_DOCKCENTRALVIEW_H
+#ifndef MUSE_DOCK_DOCKCENTRALVIEW_H
+#define MUSE_DOCK_DOCKCENTRALVIEW_H
 
 #include "internal/dockbase.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockCentralView : public DockBase
 {
     Q_OBJECT
@@ -34,4 +34,4 @@ public:
 };
 }
 
-#endif // MU_DOCK_DOCKCENTRALVIEW_H
+#endif // MUSE_DOCK_DOCKCENTRALVIEW_H

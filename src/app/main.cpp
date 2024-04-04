@@ -278,7 +278,7 @@ int main(int argc, char** argv)
 #ifdef MUSE_MODULE_UI
     app.addModule(new mu::ui::UiModule());
     app.addModule(new mu::uicomponents::UiComponentsModule());
-    app.addModule(new mu::dock::DockModule());
+    app.addModule(new muse::dock::DockModule());
 #endif
     app.addModule(new mu::vst::VSTModule());
 

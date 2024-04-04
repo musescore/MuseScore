@@ -21,7 +21,7 @@
  */
 #include "dockstatusbarview.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DockStatusBarView::DockStatusBarView(QQuickItem* parent)
     : DockBase(DockType::StatusBar, parent)

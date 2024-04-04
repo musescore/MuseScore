@@ -36,7 +36,7 @@ namespace mu::appshell {
 class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
     INJECT(ui::IMainWindow, mainWindow)
-    INJECT(dock::IDockWindowProvider, dockWindowProvider)
+    INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)
 
@@ -56,7 +56,7 @@ public:
     static const QMap<muse::actions::ActionCode, DockName>& toggleDockActions();
 
 private:
-    void listenOpenedDocksChanged(dock::IDockWindow* window);
+    void listenOpenedDocksChanged(muse::dock::IDockWindow* window);
 
     static const ui::UiActionList m_actions;
 

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKINGHOLDERVIEW_H
-#define MU_DOCK_DOCKINGHOLDERVIEW_H
+#ifndef MUSE_DOCK_DOCKINGHOLDERVIEW_H
+#define MUSE_DOCK_DOCKINGHOLDERVIEW_H
 
 #include "internal/dockbase.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockingHolderView : public DockBase
 {
     Q_OBJECT
@@ -38,4 +38,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKINGHOLDERVIEW_H
+#endif // MUSE_DOCK_DOCKINGHOLDERVIEW_H

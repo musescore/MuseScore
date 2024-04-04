@@ -50,7 +50,7 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockWidgetFactory : public KDDockWidgets::DefaultWidgetFactory
 {
 public:
@@ -101,7 +101,7 @@ public:
 };
 }
 
-using namespace mu::dock;
+using namespace muse::dock;
 using namespace mu::modularity;
 
 static void dock_init_qrc()
@@ -153,7 +153,7 @@ void DockModule::onInit(const IApplication::RunMode& mode)
     // Setup KDDockWidgets
     // ===================================
 
-    QQmlEngine* engine = ioc()->resolve<ui::IUiEngine>(moduleName())->qmlEngine();
+    QQmlEngine* engine = ioc()->resolve<mu::ui::IUiEngine>(moduleName())->qmlEngine();
 
     KDDockWidgets::Config::self().setFrameworkWidgetFactory(new DockWidgetFactory());
     KDDockWidgets::Config::self().setQmlEngine(engine);

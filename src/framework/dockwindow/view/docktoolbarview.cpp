@@ -29,7 +29,7 @@
 #include "log.h"
 #include "docktypes.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 class DockToolBarView::DraggableArea : public KDDockWidgets::QWidgetAdapter, public KDDockWidgets::Draggable
 {

@@ -23,7 +23,7 @@
 #include "docktitlebar.h"
 #include "docktypes.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DockTitleBar::DockTitleBar(KDDockWidgets::Frame* parent)
     : KDDockWidgets::TitleBarQuick(parent)

@@ -165,7 +165,7 @@ void NotationPageModel::updateDrumsetPanelVisibility()
 {
     TRACEFUNC;
 
-    const dock::IDockWindow* window = dockWindowProvider()->window();
+    const muse::dock::IDockWindow* window = dockWindowProvider()->window();
     if (!window) {
         return;
     }

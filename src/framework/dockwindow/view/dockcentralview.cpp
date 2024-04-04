@@ -21,7 +21,7 @@
  */
 #include "dockcentralview.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DockCentralView::DockCentralView(QQuickItem* parent)
     : DockBase(DockType::Central, parent)

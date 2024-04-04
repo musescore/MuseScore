@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKTOOLBARVIEW_H
-#define MU_DOCK_DOCKTOOLBARVIEW_H
+#ifndef MUSE_DOCK_DOCKTOOLBARVIEW_H
+#define MUSE_DOCK_DOCKTOOLBARVIEW_H
 
 #include "internal/dockbase.h"
 
 #include <QtGlobal>
 
-namespace mu::dock {
+namespace muse::dock {
 class DockToolBarAlignment
 {
     Q_GADGET
@@ -81,4 +81,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKTOOLBARVIEW_H
+#endif // MUSE_DOCK_DOCKTOOLBARVIEW_H

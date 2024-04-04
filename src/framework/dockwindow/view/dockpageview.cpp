@@ -34,7 +34,8 @@
 
 #include "log.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
+using namespace mu::ui;
 
 DockPageView::DockPageView(QQuickItem* parent)
     : QQuickItem(parent),
@@ -285,14 +286,14 @@ void DockPageView::reorderDocksNavigationSections(QList<DockBase*>& docks)
     });
 
     int i = 0;
-    QHash<ui::INavigationSection*, QList<DockBase*> > orderedSections;
+    QHash<INavigationSection*, QList<DockBase*> > orderedSections;
     for (DockBase* dock: docks) {
-        ui::NavigationPanel* panel = dock->contentNavigationPanel();
+        NavigationPanel* panel = dock->contentNavigationPanel();
         if (!panel) {
             continue;
         }
 
-        ui::INavigationSection* section = panel->section();
+        INavigationSection* section = panel->section();
         if (section && !orderedSections.contains(section)) {
             auto index = section->index();
             index.setOrder(i++);
@@ -442,6 +443,6 @@ QList<DockBase*> DockPageView::allDocks() const
 
 void DockPageView::setDefaultNavigationControl(mu::ui::NavigationControl* control)
 {
-    ui::INavigationControl* _control = dynamic_cast<ui::INavigationControl*>(control);
+    INavigationControl* _control = dynamic_cast<INavigationControl*>(control);
     navigationController()->setDefaultNavigationControl(_control);
 }

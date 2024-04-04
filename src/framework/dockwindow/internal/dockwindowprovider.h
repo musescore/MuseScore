@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DOCK_DOCKWINDOWPROVIDER_H
-#define MU_DOCK_DOCKWINDOWPROVIDER_H
+#ifndef MUSE_DOCK_DOCKWINDOWPROVIDER_H
+#define MUSE_DOCK_DOCKWINDOWPROVIDER_H
 
 #include "../idockwindowprovider.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockWindowProvider : public IDockWindowProvider
 {
 public:
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKWINDOWPROVIDER_H
+#endif // MUSE_DOCK_DOCKWINDOWPROVIDER_H
