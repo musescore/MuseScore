@@ -7478,7 +7478,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
     for (size_t i = 0; i < staves; i++) {
         Staff* st = part->staff(i);
         const double mag = st->staffMag(Fraction(0, 1));
-        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || mag != 1.0 || !st->show()) {
+        if (st->lines(Fraction(0, 1)) != 5 || st->isTabStaff(Fraction(0, 1)) || !RealIsEqual(mag, 1.0) || !st->show()) {
             XmlWriter::Attributes attributes;
             if (staves > 1) {
                 attributes.push_back({ "number", i + 1 });
@@ -7507,7 +7507,7 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
                 }
             }
 
-            if (mag != 1.0) {
+            if (!RealIsEqual(mag, 1.0)) {
                 xml.tag("staff-size", mag * 100);
             }
 
