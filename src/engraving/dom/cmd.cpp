@@ -2806,6 +2806,17 @@ void Score::cmdResetNoteAndRestGroupings()
     }
 }
 
+static void resetBeamOffSet(void*, EngravingItem* e)
+{
+    // Reset completely cross staff beams from MU1&2
+    if (e->isBeam() && toBeam(e)->fullCross()) {
+        e->reset();
+    }
+}
+
+//---------------------------------------------------------
+//   cmdResetAllPositions
+//---------------------------------------------------------
 void Score::cmdResetAllPositions(bool undoable)
 {
     TRACEFUNC;
@@ -2824,6 +2835,13 @@ void Score::resetAutoplace()
     TRACEFUNC;
 
     scanElements(nullptr, resetElementPosition);
+}
+
+void Score::resetCrossBeams()
+{
+    TRACEFUNC;
+
+    scanElements(nullptr, resetBeamOffSet);
 }
 
 //---------------------------------------------------------
