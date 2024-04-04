@@ -28,9 +28,9 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
-using namespace mu::extensions::legacy;
-using namespace mu::extensions::apiv1;
+using namespace muse::extensions;
+using namespace muse::extensions::legacy;
+using namespace muse::extensions::apiv1;
 
 mu::Ret ExtPluginRunner::run(const Action& action)
 {

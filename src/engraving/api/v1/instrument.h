@@ -210,7 +210,7 @@ public:
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
 
-class ChannelListProperty : public mu::extensions::api::QmlListProperty<Channel>
+class ChannelListProperty : public muse::extensions::api::QmlListProperty<Channel>
 {
 public:
     ChannelListProperty(Instrument* i);

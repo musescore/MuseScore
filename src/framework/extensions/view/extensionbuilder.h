@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONBUILDER_H
-#define MU_EXTENSIONS_EXTENSIONBUILDER_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONBUILDER_H
+#define MUSE_EXTENSIONS_EXTENSIONBUILDER_H
 
 #include <QObject>
 #include <QQmlComponent>
@@ -32,7 +32,7 @@
 
 #include "global/async/asyncable.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionBuilder : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -66,4 +66,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONBUILDER_H
+#endif // MUSE_EXTENSIONS_EXTENSIONBUILDER_H

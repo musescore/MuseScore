@@ -27,8 +27,8 @@
 
 #include "log.h"
 
-using namespace mu::extensions;
-using namespace mu::extensions::legacy;
+using namespace muse::extensions;
+using namespace muse::extensions::legacy;
 
 ManifestList ExtPluginsLoader::loadManifesList(const io::path_t& defPath, const io::path_t& extPath) const
 {

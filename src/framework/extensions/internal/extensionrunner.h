@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONRUNNER_H
-#define MU_EXTENSIONS_EXTENSIONRUNNER_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONRUNNER_H
+#define MUSE_EXTENSIONS_EXTENSIONRUNNER_H
 
 #include "global/types/ret.h"
 #include "../extensionstypes.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionRunner
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONRUNNER_H
+#endif // MUSE_EXTENSIONS_EXTENSIONRUNNER_H

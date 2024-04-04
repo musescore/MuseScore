@@ -100,11 +100,11 @@ extern Excerpt* excerptWrap(mu::engraving::Excerpt* e);
 //---------------------------------------------------------
 
 template<typename T, class Container>
-class QmlExcerptsListAccess : public mu::extensions::api::QmlListProperty<T>
+class QmlExcerptsListAccess : public muse::extensions::api::QmlListProperty<T>
 {
 public:
     QmlExcerptsListAccess(QObject* obj, Container& container)
-        : mu::extensions::api::QmlListProperty<T>(obj, &container, &count, &at) {}
+        : muse::extensions::api::QmlListProperty<T>(obj, &container, &count, &at) {}
 
     static qsizetype count(QQmlListProperty<T>* l)
     {

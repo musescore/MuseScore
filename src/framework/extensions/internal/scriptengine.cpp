@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::extensions;
+using namespace muse::extensions;
 using namespace mu::api;
 
 ScriptEngine::ScriptEngine(int apiverion)

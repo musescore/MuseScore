@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_IEXTENSIONSPROVIDER_H
-#define MU_EXTENSIONS_IEXTENSIONSPROVIDER_H
+#ifndef MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
+#define MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -30,10 +30,10 @@
 
 #include "extensionstypes.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class IExtensionsProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IExtensionsProvider);
+    INTERFACE_ID(IExtensionsProvider)
 public:
 
     virtual ~IExtensionsProvider() = default;
@@ -56,4 +56,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_IEXTENSIONSPROVIDER_H
+#endif // MUSE_EXTENSIONS_IEXTENSIONSPROVIDER_H

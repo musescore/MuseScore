@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSPROVIDER_H
-#define MU_EXTENSIONS_EXTENSIONSPROVIDER_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H
+#define MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H
 
 #include "modularity/ioc.h"
 #include "../iextensionsconfiguration.h"
 #include "../iextensionsprovider.h"
 #include "global/iinteractive.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsProvider : public IExtensionsProvider
 {
     Inject<IExtensionsConfiguration> configuration;
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
 
 public:
     ExtensionsProvider() = default;
@@ -62,4 +62,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSPROVIDER_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSPROVIDER_H

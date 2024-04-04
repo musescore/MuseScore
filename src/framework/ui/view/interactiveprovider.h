@@ -56,7 +56,7 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 
     Inject<IInteractiveUriRegister> uriRegister;
     Inject<IMainWindow> mainWindow;
-    Inject<extensions::IExtensionsProvider> extensionsProvider;
+    Inject<muse::extensions::IExtensionsProvider> extensionsProvider;
 
 public:
     explicit InteractiveProvider();

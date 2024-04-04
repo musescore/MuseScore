@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_JSMODULELOADER_H
-#define MU_EXTENSIONS_JSMODULELOADER_H
+#ifndef MUSE_EXTENSIONS_JSMODULELOADER_H
+#define MUSE_EXTENSIONS_JSMODULELOADER_H
 
 #include <QObject>
 #include <QJSValue>
@@ -30,7 +30,7 @@
 #include "../iextensionsconfiguration.h"
 #include "global/io/ifilesystem.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ScriptEngine;
 class JsModuleLoader : public QObject
 {
@@ -66,4 +66,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_JSMODULELOADER_H
+#endif // MUSE_EXTENSIONS_JSMODULELOADER_H

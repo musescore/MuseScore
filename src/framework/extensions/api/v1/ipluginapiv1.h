@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
-#define MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
+#ifndef MUSE_EXTENSIONS_APIV1_IPLUGINAPIV1_H
+#define MUSE_EXTENSIONS_APIV1_IPLUGINAPIV1_H
 
 #include "global/async/notification.h"
 
 class QQmlEngine;
-namespace mu::extensions::apiv1 {
+namespace muse::extensions::apiv1 {
 class IPluginApiV1
 {
 public:
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_APIV1_IPLUGINAPIV1_H
+#endif // MUSE_EXTENSIONS_APIV1_IPLUGINAPIV1_H

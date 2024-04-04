@@ -73,7 +73,7 @@ class Score;
 //   @P scores               array[mu::engraving::Score]  all currently open scores (read only)
 //---------------------------------------------------------
 
-class PluginAPI : public QQuickItem, public extensions::apiv1::IPluginApiV1
+class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV1
 {
     Q_OBJECT
 

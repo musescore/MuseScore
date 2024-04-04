@@ -21,7 +21,7 @@
  */
 #include "messagedialog.h"
 
-using namespace mu::extensions::apiv1;
+using namespace muse::extensions::apiv1;
 
 MessageDialog::MessageDialog(QObject* parent)
     : QObject(parent) {}
@@ -31,9 +31,9 @@ void MessageDialog::doOpen(const QString& title, const QString& text, const QStr
     //! NOTE Minimum compatibility for the current ones to work.
     //! It would be nice to change a lot of things.
 
-    IInteractive::Buttons btns;
+    mu::IInteractive::Buttons btns;
     for (const QVariant& b : buttons) {
-        btns.push_back(static_cast<IInteractive::Button>(b.toInt()));
+        btns.push_back(static_cast<mu::IInteractive::Button>(b.toInt()));
     }
 
     // info
@@ -49,9 +49,9 @@ void MessageDialog::doOpen(const QString& title, const QString& text, const QStr
             txt += detailed.toStdString();
         }
 
-        IInteractive::Result res = interactive()->question(title.toStdString(), txt, btns);
+        mu::IInteractive::Result res = interactive()->question(title.toStdString(), txt, btns);
 
-        if (res.standardButton() == IInteractive::Button::Ok) {
+        if (res.standardButton() == mu::IInteractive::Button::Ok) {
             emit accepted();
         } else {
             emit rejected();

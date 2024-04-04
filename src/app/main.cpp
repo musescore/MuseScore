@@ -333,7 +333,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::palette::PaletteModule());
     app.addModule(new mu::playback::PlaybackModule());
 #ifdef MUSE_MODULE_EXTENSIONS
-    app.addModule(new mu::extensions::ExtensionsModule());
+    app.addModule(new muse::extensions::ExtensionsModule());
 #endif
     app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::project::ProjectModule());

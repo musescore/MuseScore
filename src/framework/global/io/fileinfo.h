@@ -68,4 +68,8 @@ private:
 };
 }
 
+namespace muse::io {
+using FileInfo = mu::io::FileInfo;
+}
+
 #endif // MU_IO_FILEINFO_H

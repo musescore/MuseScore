@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
-#define MU_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
+#ifndef MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
+#define MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
 
 #include <QObject>
 
@@ -28,13 +28,13 @@
 #include "../iextensionsprovider.h"
 #include "global/iinteractive.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class DevExtensionsListModel : public QObject
 {
     Q_OBJECT
 
     Inject<IExtensionsProvider> provider;
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
 
 public:
     DevExtensionsListModel(QObject* parent = nullptr);
@@ -44,4 +44,4 @@ public:
 };
 }
 
-#endif // MU_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H
+#endif // MUSE_EXTENSIONS_DEVEXTENSIONSLISTMODEL_H

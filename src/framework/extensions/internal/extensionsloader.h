@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_EXTENSIONS_EXTENSIONSLOADER_H
-#define MU_EXTENSIONS_EXTENSIONSLOADER_H
+#ifndef MUSE_EXTENSIONS_EXTENSIONSLOADER_H
+#define MUSE_EXTENSIONS_EXTENSIONSLOADER_H
 
 #include "global/io/path.h"
 
 #include "../extensionstypes.h"
 
-namespace mu::extensions {
+namespace muse::extensions {
 class ExtensionsLoader
 {
 public:
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_EXTENSIONS_EXTENSIONSLOADER_H
+#endif // MUSE_EXTENSIONS_EXTENSIONSLOADER_H

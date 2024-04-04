@@ -56,7 +56,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(IAppShellConfiguration, configuration)
     INJECT(project::IRecentFilesController, recentFilesController)
     INJECT(IAppMenuModelHook, appMenuModelHook)
-    INJECT(extensions::IExtensionsProvider, extensionsProvider)
+    INJECT(muse::extensions::IExtensionsProvider, extensionsProvider)
     INJECT(update::IUpdateConfiguration, updateConfiguration)
     INJECT(IGlobalConfiguration, globalConfiguration)
 
