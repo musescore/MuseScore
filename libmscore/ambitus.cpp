@@ -430,7 +430,7 @@ void Ambitus::layout()
             _bottomPos.x() + headWdt*0.5, _bottomPos.y());
       // shorten line on each side by offsets
       qreal yDelta = _bottomPos.y() - _topPos.y();
-      if (yDelta != 0.0) {
+      if (!qFuzzyIsNull(yDelta)) {
             qreal off = _spatium * LINEOFFSET_DEFAULT;
             QPointF p1 = fullLine.pointAt(off / yDelta);
             QPointF p2 = fullLine.pointAt(1 - (off / yDelta));

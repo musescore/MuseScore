@@ -1065,7 +1065,7 @@ MuseScore::MuseScore()
       setTabPosition(Qt::AllDockWidgetAreas, QTabWidget::North);
 
       QScreen* screen = QGuiApplication::primaryScreen();
-      if (userDPI == 0.0) {
+      if (qFuzzyIsNull(userDPI)) {
 #if defined(Q_OS_WIN)
       if (QOperatingSystemVersion::current() <= QOperatingSystemVersion(QOperatingSystemVersion::Windows, 7))
             _physicalDotsPerInch = screen->logicalDotsPerInch() * screen->devicePixelRatio();
@@ -1078,7 +1078,7 @@ MuseScore::MuseScore()
       else {
             _physicalDotsPerInch = userDPI;
             }
-      if (guiScaling == 0.0) {
+      if (qFuzzyIsNull(guiScaling)) {
             // set scale for icons, palette elements, window sizes, etc
             // the default values are hard coded in pixel sizes and assume ~96 DPI
             if (qAbs(_physicalDotsPerInch - DPI_DISPLAY) > 6.0)
@@ -7362,7 +7362,7 @@ bool MuseScore::saveMp3(Score* score, QIODevice* device, bool& wasCanceled)
                   }
             if (progress.wasCanceled())
                   break;
-            if (pass == 0 && peak == 0.0) {
+            if (pass == 0 && qFuzzyIsNull(peak)) {
                   qDebug("song is empty");
                   break;
                   }

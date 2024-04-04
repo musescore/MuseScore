@@ -1484,7 +1484,7 @@ void SpannerSegment::autoplaceSpannerSegment()
                   if (d > -md)
                         yd = d + md;
                   }
-            if (yd != 0.0) {
+            if (!qFuzzyIsNull(yd)) {
                   if (offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset

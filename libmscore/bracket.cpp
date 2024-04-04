@@ -147,7 +147,7 @@ void Bracket::setStaffSpan(int a, int b)
 void Bracket::layout()
       {
       path = QPainterPath();
-      if (h2 == 0.0)
+      if (qFuzzyIsNull(h2 ))
             return;
 
       _shape.clear();
@@ -242,7 +242,7 @@ void Bracket::layout()
 
 void Bracket::draw(QPainter* painter) const
       {
-      if (h2 == 0.0)
+      if (qFuzzyIsNull(h2 ))
             return;
       switch (bracketType()) {
             case BracketType::BRACE: {

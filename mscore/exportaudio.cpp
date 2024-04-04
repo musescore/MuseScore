@@ -201,7 +201,7 @@ bool MuseScore::saveAudio(Score* score, QIODevice *device, std::function<bool(fl
                   }
             if (cancelled)
                   break;
-            if (pass == 0 && peak == 0.0) {
+            if (pass == 0 && qFuzzyIsNull(peak)) {
                   qDebug("song is empty");
                   break;
                   }

@@ -76,7 +76,7 @@ void InspectorImage::updateAspectRatio()
       qreal widthVal = image->size().width();
       qreal heightVal = image->size().height();
 
-      _aspectRatio = heightVal != 0.0 ? widthVal / heightVal : 1.0;
+      _aspectRatio = !qFuzzyIsNull(heightVal) ? widthVal / heightVal : 1.0;
       }
 
 //---------------------------------------------------------
@@ -96,7 +96,7 @@ void InspectorImage::lockAspectRatioClicked(bool checked)
 void InspectorImage::widthChanged(qreal val)
       {
       Image* image = toImage(inspector->element());
-      if (image->lockAspectRatio() && val != 0.0) // to avoid stack overflow
+      if (image->lockAspectRatio() && !qFuzzyIsNull(val)) // to avoid stack overflow
             b.size->yVal->setValue(val / _aspectRatio);
       }
 
@@ -107,7 +107,7 @@ void InspectorImage::widthChanged(qreal val)
 void InspectorImage::heightChanged(qreal val)
       {
       Image* image = toImage(inspector->element());
-      if (image->lockAspectRatio() && val != 0.0) // to avoid stack overflow
+      if (image->lockAspectRatio() && !qFuzzyIsNull(val)) // to avoid stack overflow
             b.size->xVal->setValue(val * _aspectRatio);
       }
 

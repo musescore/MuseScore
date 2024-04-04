@@ -2762,9 +2762,9 @@ static void readStyle(MStyle* style, XmlReader& e)
       qreal spMM = _spatium / DPMM;
       for (int i = 0; i < n; ++i) {
             TextStyle* s = &style->textStyle(StyledPropertyListIdx(i));
-            if (s->frameWidthMM() != 0.0)
+            if (!qFuzzyIsNull(s->frameWidthMM()))
                   s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
-            if (s->paddingWidthMM() != 0.0)
+            if (!qFuzzyIsNull(s->paddingWidthMM()))
                   s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
             }
 #endif
@@ -2858,9 +2858,9 @@ Score::FileError MasterScore::read114(XmlReader& e)
                   s.read(e);
 
                   qreal spMM = spatium() / DPMM;
-                  if (s.frameWidthMM() != 0.0)
+                  if (!qFuzzyIsNull(s.frameWidthMM()))
                         s.setFrameWidth(Spatium(s.frameWidthMM() / spMM));
-                  if (s.paddingWidthMM() != 0.0)
+                  if (!qFuzzyIsNull(s.paddingWidthMM()))
                         s.setPaddingWidth(Spatium(s.paddingWidthMM() / spMM));
 
                   // convert 1.2 text styles

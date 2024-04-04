@@ -232,7 +232,7 @@ void PaletteCell::write(XmlWriter& xml) const
             xml.tag("yoffset", yoffset);
       if (!tag.isEmpty())
             xml.tag("tag", tag);
-      if (mag != 1.0)
+      if (!qFuzzyCompare(mag, 1.0))
             xml.tag("mag", mag);
 
       if (untranslatedElement)
@@ -453,7 +453,7 @@ void PalettePanel::write(XmlWriter& xml) const
             xml.tag("grid", _drawGrid);
 
       xml.tag("moreElements", _moreElements);
-      if (_yOffset != 0.0)
+      if (!qFuzzyIsNull(_yOffset))
             xml.tag("yoffset", _yOffset);
 
       xml.tag("visible", _visible, true);

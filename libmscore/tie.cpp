@@ -205,7 +205,7 @@ void TieSegment::computeBezier(QPointF shoulderOffset)
       QPointF tieEnd = ups(Grip::END).p   + ups(Grip::END).off;
 
       QPointF tieEndNormalized = tieEnd - tieStart; // normalize to zero
-      if (tieEndNormalized.x() == 0.0) {
+      if (qFuzzyIsNull(tieEndNormalized.x())) {
             qDebug("zero tie");
             return;
             }

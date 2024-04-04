@@ -97,7 +97,7 @@ qreal EaseInOut::tFromY(const qreal y) const {
 void EaseInOut::timeList(const int nbNotes, const int duration, QList<int>* times) const {
       qreal nNotes = qreal(nbNotes);
       qreal space = qreal(duration);
-      if (_easeIn == 0.0 && _easeOut == 0.0) {
+      if (qFuzzyIsNull(_easeIn) && qFuzzyIsNull(_easeOut)) {
             for (int n = 0; n <= nbNotes; n++) {
                   times->push_back(static_cast<int>(std::lround((static_cast<qreal>(n) / nNotes) * space)));
                   }

@@ -488,7 +488,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                         if (e && e->isBreath())
                               length = qMax(length, toBreath(e)->pause());
                         }
-                  if (length != 0.0)
+                  if (!qFuzzyIsNull(length))
                         setPause(startTick, length);
                   }
             }
@@ -507,7 +507,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                               length = qMax(length, b->pause());
                               }
                         }
-                  if (length != 0.0)
+                  if (!qFuzzyIsNull(length))
                         setPause(tick, length);
                   }
             else if (segment.isTimeSigType()) {
@@ -531,7 +531,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                               setTempo(tt->segment(), tt->tempo());
                               }
                         }
-                  if (stretch != 0.0 && stretch != 1.0) {
+                  if (!qFuzzyIsNull(stretch) && !qFuzzyCompare(stretch, 1.0)) {
                         qreal otempo = tempomap()->tempo(segment.tick().ticks());
                         qreal ntempo = otempo / stretch;
                         setTempo(segment.tick(), ntempo);

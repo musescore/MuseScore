@@ -1493,7 +1493,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
             else
                   bm.l += graceStemLengthCorrection;
             }
-      if (dx == 0.0)
+      if (qFuzzyIsNull(dx))
             slope = 0.0;
       else
             slope   = (bm.s * _spatium4) / dx;
@@ -2246,9 +2246,9 @@ void Beam::reset()
       {
       if (distribute())
             undoChangeProperty(Pid::DISTRIBUTE, false);
-      if (growLeft() != 1.0)
+      if (!qFuzzyCompare(growLeft(), 1.0))
             undoChangeProperty(Pid::GROW_LEFT, 1.0);
-      if (growRight() != 1.0)
+      if (!qFuzzyCompare(growRight(), 1.0))
             undoChangeProperty(Pid::GROW_RIGHT, 1.0);
       if (userModified()) {
             undoChangeProperty(Pid::BEAM_POS, QVariant(beamPos()));

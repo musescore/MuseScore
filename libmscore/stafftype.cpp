@@ -204,11 +204,11 @@ void StaffType::write(XmlWriter& xml) const
             xml.tag("name", _xmlName);
       if (_lines != 5)
             xml.tag("lines", _lines);
-      if (_lineDistance.val() != 1.0)
+      if (!qFuzzyCompare(_lineDistance.val(), 1.0))
             xml.tag("lineDistance", _lineDistance.val());
-      if (_yoffset.val() != 0.0)
+      if (!qFuzzyIsNull(_yoffset.val()))
             xml.tag("yoffset", _yoffset.val());
-      if (_userMag != 1.0)
+      if (!qFuzzyCompare(_userMag, 1.0))
             xml.tag("mag", _userMag);
       if (_small)
             xml.tag("small", _small);

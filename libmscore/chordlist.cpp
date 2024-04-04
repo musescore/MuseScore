@@ -349,7 +349,7 @@ static void writeRenderList(XmlWriter& xml, const QList<RenderAction>* al, const
                         s += a.text;
                         break;
                   case RenderAction::RenderActionType::MOVE:
-                        if (a.movex != 0.0 || a.movey != 0.0)
+                        if (!qFuzzyIsNull(a.movex) || !qFuzzyIsNull(a.movey))
                               s += QString("m:%1:%2").arg(a.movex).arg(a.movey);
                         break;
                   case RenderAction::RenderActionType::PUSH:
@@ -1463,10 +1463,10 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
             // check for adjustments
             // stop adjusting when first non-adjusted modifier found
             qreal p = adjust ? cl->position(tok.names, ctc) : 0.0;
-            if (tok.tokenClass == ChordTokenClass::MODIFIER && p == 0.0)
+            if (tok.tokenClass == ChordTokenClass::MODIFIER && qFuzzyIsNull(p))
                   adjust = false;
             // build render list
-            if (p != 0.0) {
+            if (!qFuzzyIsNull(p)) {
                   RenderAction m1 = RenderAction(RenderAction::RenderActionType::MOVE);
                   m1.movex = 0.0;
                   m1.movey = p;
@@ -1481,7 +1481,7 @@ const QList<RenderAction>& ParsedChord::renderList(const ChordList* cl)
                   a.text = tok.names.first();
                   _renderList.append(a);
                   }
-            if (p != 0.0) {
+            if (!qFuzzyIsNull(p)) {
                   RenderAction m2 = RenderAction(RenderAction::RenderActionType::MOVE);
                   m2.movex = 0.0;
                   m2.movey = -p;

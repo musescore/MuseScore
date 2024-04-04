@@ -271,7 +271,7 @@ static void playNote(EventMap* events, const Note* note, int channel, int pitch,
                         Note* nextNote = toNote(spanner->endElement());
                         double pitchDelta = (static_cast<double>(nextNote->ppitch()) - pitch) * 50.0;
                         double timeDelta = static_cast<double>(offTime - onTime);
-                        if (pitchDelta != 0.0 && timeDelta != 0.0) {
+                        if (!qFuzzyIsNull(pitchDelta) && !qFuzzyIsNull(timeDelta)) {
                               double timeStep = std::abs(timeDelta / pitchDelta * 20.0);
                               double t = 0.0;
                               QList<int> onTimes;
@@ -1006,7 +1006,7 @@ void Score::updateVelo()
                                           }
                                     }
 
-                              if (veloMultiplier == 1.0)
+                              if (qFuzzyCompare(veloMultiplier, 1.0))
                                     continue;
 
                               // TODO this should be a (configurable?) constant somewhere

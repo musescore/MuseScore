@@ -1026,7 +1026,7 @@ void Chord::write(XmlWriter& xml) const
 
       if (_noStem)
             xml.tag("noStem", _noStem);
-      else if (_stem && (_stem->isUserModified() || (_stem->userLen() != 0.0)))
+      else if (_stem && (_stem->isUserModified() || !qFuzzyIsNull(_stem->userLen())))
             _stem->write(xml);
       if (_hook && _hook->isUserModified())
             _hook->write(xml);
@@ -1351,7 +1351,7 @@ qreal Chord::defaultStemLength() const
                         }
                   }
             }
-      else if (lineDistance != 1.0) {
+      else if (!qFuzzyCompare(lineDistance, 1.0)) {
             // convert to actual distance from top of staff in sp
             // ul *= lineDistance;
             // dl *= lineDistance;
@@ -1974,7 +1974,7 @@ void Chord::layoutPitched()
                               //    use available space
                               // for negative x offset:
                               //    space is allocated elsewhere, so don't re-allocate here
-                              if (note->ipos().x() != 0.0)
+                              if (!qFuzzyIsNull(note->ipos().x()))
                                     overlap += qAbs(note->ipos().x());
                               else
                                     overlap -= note->headWidth() * 0.12;
@@ -2238,7 +2238,7 @@ void Chord::layoutTablature()
                               //    use available space
                               // for negative x offset:
                               //    space is allocated elsewhere, so don't re-allocate here
-                              if (note->ipos().x() != 0.0)              // this probably does not work for TAB, as
+                              if (!qFuzzyIsNull(note->ipos().x()))              // this probably does not work for TAB, as
                                     overlap += qAbs(note->ipos().x());  // _pos is used to centre the fret on the stem
                               else
                                     overlap -= fretWidth * 0.125;
@@ -3475,7 +3475,7 @@ Shape Chord::shape() const
                   shape.add(chord->shape().translated(chord->pos()));
             for (LedgerLine* l = _ledgerLines; l; l = l->next())
                   shape.add(l->shape().translated(l->pos()));
-            if (_spaceLw != 0.0 || _spaceRw != 0.0)
+            if (!qFuzzyIsNull(_spaceLw) || !qFuzzyIsNull(_spaceRw))
                   shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
             }
       return shape;

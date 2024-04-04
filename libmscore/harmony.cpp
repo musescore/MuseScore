@@ -1476,7 +1476,7 @@ void Harmony::draw(QPainter* painter) const
             return;
             }
       if (hasFrame()) {
-            if (frameWidth().val() != 0.0) {
+            if (!qFuzzyIsNull(frameWidth().val())) {
                   QColor color = frameColor();
                   QPen pen(color, frameWidth().val() * spatium(), Qt::SolidLine,
                      Qt::SquareCap, Qt::MiterJoin);

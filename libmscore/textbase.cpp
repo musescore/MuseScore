@@ -3106,7 +3106,7 @@ void TextBase::draw(QPainter* p) const
       {
       if (hasFrame()) {
             qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
-            if (frameWidth().val() != 0.0) {
+            if (!qFuzzyIsNull(frameWidth().val())) {
                   QColor fColor = curColor(visible(), frameColor());
                   qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 

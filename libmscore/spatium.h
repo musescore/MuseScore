@@ -33,9 +33,9 @@ class Spatium {
 
       bool operator>(const Spatium& a) const  { return _val > a._val; }
       bool operator<(const Spatium& a) const  { return _val < a._val; }
-      bool operator==(const Spatium& a) const { return _val == a._val; }
-      bool operator!=(const Spatium& a) const { return _val != a._val; }
-      bool isZero() const                     { return _val == 0.0; }
+      bool operator==(const Spatium& a) const { return qFuzzyCompare(_val, a._val); }
+      bool operator!=(const Spatium& a) const { return !qFuzzyCompare(_val, a._val); }
+      bool isZero() const                     { return qFuzzyIsNull(_val); }
 
       Spatium& operator+=(const Spatium& a) {
             _val += a._val;

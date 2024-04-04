@@ -1407,7 +1407,7 @@ void Palette::write(XmlWriter& xml) const
             xml.tag("grid", _drawGrid);
 
       xml.tag("moreElements", _moreElements);
-      if (_yOffset != 0.0)
+      if (!qFuzzyIsNull(_yOffset))
             xml.tag("yoffset", _yOffset);
 
       int n = cells.size();
@@ -1430,7 +1430,7 @@ void Palette::write(XmlWriter& xml) const
                   xml.tag("yoffset", cells[i]->yoffset);
             if (!cells[i]->tag.isEmpty())
                   xml.tag("tag", cells[i]->tag);
-            if (cells[i]->mag != 1.0)
+            if (!qFuzzyCompare(cells[i]->mag, 1.0))
                   xml.tag("mag", cells[i]->mag);
             cells[i]->element->write(xml);
             xml.etag();

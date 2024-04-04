@@ -72,9 +72,9 @@ void Arpeggio::write(XmlWriter& xml) const
       xml.stag(this);
       Element::writeProperties(xml);
       writeProperty(xml, Pid::ARPEGGIO_TYPE);
-      if (_userLen1 != 0.0)
+      if (!qFuzzyIsNull(_userLen1))
             xml.tag("userLen1", _userLen1 / spatium());
-      if (_userLen2 != 0.0)
+      if (!qFuzzyIsNull(_userLen2))
             xml.tag("userLen2", _userLen2 / spatium());
       if (_span != 1)
             xml.tag("span", _span);
@@ -630,7 +630,7 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
 
       if (collidesWithTop || collidesWithBottom) {
             // optical adjustment for one edge
-            if (accidentalCutOutX == 0.0 || cutoutCollidesWithTop || cutoutCollidesWithBottom)
+            if (qFuzzyIsNull(accidentalCutOutX) || cutoutCollidesWithTop || cutoutCollidesWithBottom)
                   return accidentalCutOutX + maximumInset;
             return accidentalCutOutX;
             }

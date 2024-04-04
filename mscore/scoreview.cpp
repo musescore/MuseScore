@@ -1849,7 +1849,7 @@ qreal ScoreView::calculatePhysicalZoomLevel(const ZoomIndex index, const qreal l
 
             case ZoomIndex::ZOOM_FREE:
                   // If the zoom type is free zoom, the caller is required to pass the logical free-zoom level.
-                  Q_ASSERT(logicalFreeZoomLevel != 0.0);
+                  Q_ASSERT(!qFuzzyIsNull(logicalFreeZoomLevel));
                   result = logicalFreeZoomLevel * l2p;
                   break;
 

@@ -243,7 +243,7 @@ Score::FileError importPdf(MasterScore* score, const QString& path)
 
       score->setOmr(omr);
       qreal sp = omr->spatiumMM();
-      if (sp == 0.0)
+      if (qFuzzyIsNull(sp))
             sp = 1.5;
       score->setSpatium(sp * DPMM);
       score->style().set(Sid::lastSystemFillLimit,  0.0);

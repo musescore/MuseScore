@@ -598,7 +598,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                   if (e && e->isChord()) {
                         Chord* chord = toChord(e);
                         if (chord->up()) {
-                              if (upOffset != 0.0) {
+                              if (!qFuzzyIsNull(upOffset)) {
                                     chord->rxpos() += upOffset + centerAdjustUp + oversizeUp;
                                     if (downDots && !upDots)
                                           chord->rxpos() += dotAdjust;
@@ -607,7 +607,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                                     chord->rxpos() += centerUp;
                               }
                         else {
-                              if (downOffset != 0.0) {
+                              if (!qFuzzyIsNull(downOffset)) {
                                     chord->rxpos() += downOffset + centerAdjustDown;
                                     if (upDots && !downDots)
                                           chord->rxpos() += dotAdjust;
@@ -888,7 +888,7 @@ static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, 
             conflictBelow = resolveAccidentals(me, below, lx, pd, sp);
       if (conflictAbove || conflictBelow)
             me->x = lx - acc->width() - acc->bbox().x();
-      else if (colOffset != 0.0)
+      else if (!qFuzzyIsNull(colOffset))
             me->x = lx - pd - acc->width() - acc->bbox().x();
       else
             me->x = lx - pnd - acc->width() - acc->bbox().x();
@@ -2077,7 +2077,7 @@ static qreal sff2(qreal width, qreal xMin, const SpringMap& springs)
             return 0.0;
       auto i = springs.begin();
       qreal c  = i->second.stretch;
-      if (c == 0.0)           //DEBUG
+      if (qFuzzyIsNull(c))           //DEBUG
             c = 1.1;
       qreal f = 0.0;
       for (; i != springs.end();) {

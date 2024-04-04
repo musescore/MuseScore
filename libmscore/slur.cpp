@@ -248,7 +248,7 @@ void SlurSegment::computeBezier(QPointF p6o)
       QPointF pp2 = ups(Grip::END).p   + ups(Grip::END).off;
 
       QPointF p2 = pp2 - pp1;
-      if ((p2.x() == 0.0) && (p2.y() == 0.0)) {
+      if (qFuzzyIsNull(p2.x()) && qFuzzyIsNull(p2.y())) {
             Measure* m1 = slur()->startCR()->segment()->measure();
             Measure* m2 = slur()->endCR()->segment()->measure();
             qDebug("zero slur at tick %d(%d) track %d in measure %d-%d  tick %d ticks %d",

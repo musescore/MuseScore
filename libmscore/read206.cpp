@@ -2500,7 +2500,7 @@ Element* readArticulation(Element* parent, XmlReader& e)
       if (!el)
             el = new Fermata(sym, score);
       if (el->isFermata()) {
-            if (timeStretch != 0.0)
+            if (!qFuzzyIsNull(timeStretch))
                   el->setProperty(Pid::TIME_STRETCH, timeStretch);
             if (useDefaultPlacement)
                   el->setPlacement(track & 1 ? Placement::BELOW : Placement::ABOVE);

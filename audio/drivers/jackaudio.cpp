@@ -714,7 +714,7 @@ void JackAudio::checkTransportSeek(int cur_frame, int nframes, bool inCountIn)
             if (int(pos.beats_per_minute) != int(60 * seq->curTempo() * seq->score()->tempomap()->relTempo())) {
                   if (MScore::debugMode)
                         qDebug()<<"JACK Transport tempo changed! JACK bpm: "<<(int)pos.beats_per_minute<<", current bpm: "<<int(60 * seq->curTempo() * seq->score()->tempomap()->relTempo());
-                  if (60 * seq->curTempo() == 0.0)
+                  if (qFuzzyIsNull(60 * seq->curTempo()))
                         return;
                   qreal newRelTempo = pos.beats_per_minute / (60* seq->curTempo());
                   seq->setRelTempo(newRelTempo);

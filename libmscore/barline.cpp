@@ -1207,7 +1207,7 @@ void BarLine::endEditDrag(EditData& ed)
 #if 0       // TODO
       if (shiftDrag) {                    // if precision dragging
             newSpanFrom = _spanFrom;
-            if (yoff1 != 0.0) {
+            if (!qFuzzyIsNull(yoff1)) {
                   // round bar line top coord to nearest line of 1st staff (in half line dist units)
                   newSpanFrom = ((int)floor(y1 / (staff()->lineDistance(tick()) * spatium()) + 0.5 )) * 2;
                   // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
@@ -1220,7 +1220,7 @@ void BarLine::endEditDrag(EditData& ed)
                   }
 
             newSpanTo = _spanTo;
-            if (yoff2 != 0.0) {
+            if (!qFuzzyIsNull(yoff2)) {
                   // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
                   qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
                   newSpanTo = ((int)floor( (ay2 - staff2TopY) / (staff2->lineDistance(tick()) * spatium()) + 0.5 )) * 2;
@@ -1508,7 +1508,7 @@ Shape BarLine::shape() const
 void BarLine::scanElements(void* data, void (*func)(void*, Element*), bool all)
       {
       // if no width (staff has bar lines turned off) and not all requested, do nothing
-      if (width() == 0.0 && !all)
+      if (qFuzzyIsNull(width()) && !all)
             return;
       func(data, this);
       for (Element* e : _el)

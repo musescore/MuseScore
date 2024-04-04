@@ -88,8 +88,8 @@ qreal Shape::minHorizontalDistance(const Shape& a) const
                   qreal ay1 = r1.top();
                   qreal ay2 = r1.bottom();
                   if (Ms::intersects(ay1, ay2, by1, by2)
-                     || ((r1.height() == 0.0) && (r2.height() == 0.0) && (ay1 == by1))
-                     || ((r1.width() == 0.0) || (r2.width() == 0.0)))
+                     || (qFuzzyIsNull(r1.height()) && qFuzzyIsNull(r2.height()) && (ay1 == by1))
+                     || (qFuzzyIsNull(r1.width()) || qFuzzyIsNull(r2.width())))
                         dist = qMax(dist, r1.right() - r2.left());
                   }
             }
@@ -131,7 +131,7 @@ qreal Shape::left() const
       {
       qreal dist = 0.0;
       for (const QRectF& r : *this) {
-            if (r.height() != 0.0 && r.left() < dist)
+            if (!qFuzzyIsNull(r.height()) && r.left() < dist)
             // if (r.left() < dist)
                   dist = r.left();
             }
@@ -331,7 +331,7 @@ void testShapes()
       a.add(QRectF(-10, -10, 20, 20));
       qreal d = a.minHorizontalDistance(b);           // b is empty
       printf("      minHDistance (0.0): %f", d);
-      if (d != 0.0)
+      if (!qFuzzyIsNull(d))
             printf("   =====error");
       printf("\n");
 

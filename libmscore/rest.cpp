@@ -430,7 +430,7 @@ void Rest::layout()
       const Staff* stf = staff();
       const StaffType*  st = stf ? stf->staffTypeForElement(this) : 0;
       qreal lineDist = st ? st->lineDistance().val() : 1.0;
-      int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
+      int userLine   = qFuzzyIsNull(yOff) ? 0 : lrint(yOff / (lineDist * _spatium));
       int lines      = st ? st->lines() : 5;
       int lineOffset = computeLineOffset(lines);
 
