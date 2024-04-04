@@ -52,7 +52,7 @@ struct ALSAData
 };
 
 static ALSAData* s_alsaData{ nullptr };
-muse::audio::IAudioDriver::Spec s_format;
+static muse::audio::IAudioDriver::Spec s_format;
 
 static void* alsaThread(void* aParam)
 {

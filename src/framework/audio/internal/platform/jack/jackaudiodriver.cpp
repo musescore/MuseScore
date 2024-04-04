@@ -37,7 +37,6 @@ static constexpr char JACK_DEFAULT_DEVICE_ID[] = "default";
 
 using namespace muse::audio;
 
-//namespace {
 struct JackData
 {
     float* buffer = nullptr;
@@ -50,7 +49,7 @@ struct JackData
 };
 
 static JackData* s_jackData{ nullptr };
-muse::audio::IAudioDriver::Spec s_format;
+static muse::audio::IAudioDriver::Spec s_format2;
 
 int muse::audio::jack_process_callback(jack_nframes_t nframes, void*)
 {
@@ -169,7 +168,7 @@ bool JackAudioDriver::open(const Spec& spec, Spec* activeSpec)
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
         activeSpec->sampleRate = jackSamplerate;
-        s_format = *activeSpec;
+        s_format2 = *activeSpec;
     }
 
     jack_on_shutdown(handle, jack_cleanup_callback, 0);
@@ -210,7 +209,7 @@ bool JackAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
     bool ok = true;
     if (reopen) {
-        ok = open(s_format, &s_format);
+        ok = open(s_format2, &s_format2);
     }
 
     if (ok) {
@@ -245,22 +244,22 @@ mu::async::Notification JackAudioDriver::availableOutputDevicesChanged() const
 
 unsigned int JackAudioDriver::outputDeviceBufferSize() const
 {
-    return s_format.samples;
+    return s_format2.samples;
 }
 
 bool JackAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (s_format.samples == bufferSize) {
+    if (s_format2.samples == bufferSize) {
         return true;
     }
 
     bool reopen = isOpened();
     close();
-    s_format.samples = bufferSize;
+    s_format2.samples = bufferSize;
 
     bool ok = true;
     if (reopen) {
-        ok = open(s_format, &s_format);
+        ok = open(s_format2, &s_format2);
     }
 
     if (ok) {
