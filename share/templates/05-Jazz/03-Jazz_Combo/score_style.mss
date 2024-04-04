@@ -47,7 +47,7 @@
     <lyricsMelismaPad>0.1</lyricsMelismaPad>
     <lyricsDashPad>0.05</lyricsDashPad>
     <lyricsDashLineThickness>0.1</lyricsDashLineThickness>
-    <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
+    <lyricsDashYposRatio>0.5</lyricsDashYposRatio>
     <lyricsOddFontFace>MuseJazz Text</lyricsOddFontFace>
     <lyricsOddFontSize>10</lyricsOddFontSize>
     <lyricsOddLineSpacing>1</lyricsOddLineSpacing>
