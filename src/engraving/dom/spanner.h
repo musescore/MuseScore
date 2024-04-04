@@ -260,7 +260,7 @@ public:
 
     bool isUserModified() const override;
 
-    virtual bool allowTimeAnchor() const { return false; }
+    virtual bool allowTimeAnchor() const override { return false; }
 
 protected:
 
