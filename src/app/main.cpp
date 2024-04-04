@@ -326,7 +326,7 @@ int main(int argc, char** argv)
 
     app.addModule(new mu::inspector::InspectorModule());
     app.addModule(new mu::instrumentsscene::InstrumentsSceneModule());
-    app.addModule(new mu::languages::LanguagesModule());
+    app.addModule(new muse::languages::LanguagesModule());
     app.addModule(new mu::learn::LearnModule());
     app.addModule(new mu::mi::MultiInstancesModule());
     app.addModule(new mu::notation::NotationModule());

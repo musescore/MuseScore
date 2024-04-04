@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LANGUAGES_LANGUAGESMODULE_H
-#define MU_LANGUAGES_LANGUAGESMODULE_H
+#ifndef MUSE_LANGUAGES_LANGUAGESMODULE_H
+#define MUSE_LANGUAGES_LANGUAGESMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::languages {
+namespace muse::languages {
 class LanguagesConfiguration;
 class LanguagesService;
 class LanguagesModule : public modularity::IModuleSetup
@@ -43,4 +43,4 @@ private:
 };
 }
 
-#endif // MU_LANGUAGES_LANGUAGESMODULE_H
+#endif // MUSE_LANGUAGES_LANGUAGESMODULE_H

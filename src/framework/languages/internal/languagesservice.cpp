@@ -43,7 +43,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::languages;
+using namespace muse::languages;
 using namespace mu::network;
 
 static const QStringList LANGUAGE_RESOURCE_NAMES = {
@@ -286,7 +286,7 @@ Ret LanguagesService::loadLanguage(Language& lang)
     }
 
     for (const io::path_t& appFilePath : appFilePaths.val) {
-        io::path_t filename = io::filename(appFilePath);
+        io::path_t filename = mu::io::filename(appFilePath);
         io::path_t userFilePath = languagesUserAppDataPath.appendingComponent(filename);
 
         QFileInfo appFileInfo(appFilePath.toQString());
@@ -433,7 +433,7 @@ Ret LanguagesService::downloadLanguage(const QString& languageCode, Progress pro
     progress.progressChanged.send(0, 0, trc("languages", "Unpacking…"));
 
     ByteArray ba = ByteArray::fromQByteArrayNoCopy(qbuff.data());
-    io::Buffer buff(&ba);
+    mu::io::Buffer buff(&ba);
     ZipReader zipReader(&buff);
 
     {

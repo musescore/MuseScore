@@ -24,7 +24,7 @@
 
 #include "languages/ilanguagesservice.h"
 
-namespace mu::languages {
+namespace muse::languages {
 class LanguagesServiceStub : public ILanguagesService
 {
 public:

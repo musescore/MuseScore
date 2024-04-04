@@ -30,7 +30,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::languages;
+using namespace muse::languages;
 
 static const Settings::Key LANGUAGE_KEY("languages", "language");
 

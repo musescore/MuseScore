@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LANGUAGES_LANGUAGESCONFIGURATION_H
-#define MU_LANGUAGES_LANGUAGESCONFIGURATION_H
+#ifndef MUSE_LANGUAGES_LANGUAGESCONFIGURATION_H
+#define MUSE_LANGUAGES_LANGUAGESCONFIGURATION_H
 
 #include "modularity/ioc.h"
 #include "ilanguagesconfiguration.h"
@@ -28,10 +28,10 @@
 
 #include "global/types/config.h"
 
-namespace mu::languages {
+namespace muse::languages {
 class LanguagesConfiguration : public ILanguagesConfiguration
 {
-    Inject<IGlobalConfiguration> globalConfiguration;
+    Inject<mu::IGlobalConfiguration> globalConfiguration;
 
 public:
     void init();
@@ -50,9 +50,9 @@ public:
     io::path_t userLanguageFilePath(const QString& resourceName, const QString& languageCode) const override;
 
 private:
-    Config m_config;
+    mu::Config m_config;
     async::Channel<QString> m_currentLanguageCodeChanged;
 };
 }
 
-#endif // MU_LANGUAGES_LANGUAGESCONFIGURATION_H
+#endif // MUSE_LANGUAGES_LANGUAGESCONFIGURATION_H

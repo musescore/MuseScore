@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
-#define MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
+#ifndef MUSE_LANGUAGES_ILANGUAGESCONFIGURATION_H
+#define MUSE_LANGUAGES_ILANGUAGESCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 #include "types/retval.h"
 #include "io/path.h"
 
-namespace mu::languages {
+namespace muse::languages {
 class ILanguagesConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILanguagesConfiguration)
@@ -49,4 +49,4 @@ public:
 };
 }
 
-#endif // MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
+#endif // MUSE_LANGUAGES_ILANGUAGESCONFIGURATION_H

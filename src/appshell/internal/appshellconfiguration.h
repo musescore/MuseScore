@@ -48,7 +48,7 @@ class AppShellConfiguration : public IAppShellConfiguration, public async::Async
     INJECT(project::IProjectConfiguration, projectConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
-    INJECT(languages::ILanguagesConfiguration, languagesConfiguration)
+    INJECT(muse::languages::ILanguagesConfiguration, languagesConfiguration)
 
 public:
     void init();

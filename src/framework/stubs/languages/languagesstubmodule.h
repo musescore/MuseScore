@@ -24,7 +24,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::languages {
+namespace muse::languages {
 class LanguagesModule : public modularity::IModuleSetup
 {
 public:

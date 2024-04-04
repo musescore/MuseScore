@@ -21,7 +21,7 @@
  */
 #include "languagesservicestub.h"
 
-using namespace mu::languages;
+using namespace muse::languages;
 using namespace mu;
 
 const LanguagesHash& LanguagesServiceStub::languages() const

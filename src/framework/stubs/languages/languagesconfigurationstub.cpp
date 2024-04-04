@@ -21,7 +21,7 @@
  */
 #include "languagesconfigurationstub.h"
 
-using namespace mu::languages;
+using namespace muse::languages;
 using namespace mu;
 
 ValCh<QString> LanguagesConfigurationStub::currentLanguageCode() const

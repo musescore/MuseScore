@@ -24,7 +24,7 @@
 
 #include "languages/ilanguagesconfiguration.h"
 
-namespace mu::languages {
+namespace muse::languages {
 class LanguagesConfigurationStub : public ILanguagesConfiguration
 {
 public:
