@@ -42,7 +42,6 @@ void StaffSettingsModel::load(const QString& staffId)
 
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
-    m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
     for (const bool& voice : staff->visibilityVoices()) {
@@ -128,19 +127,25 @@ bool StaffSettingsModel::isMainScore() const
 
 int StaffSettingsModel::staffType() const
 {
-    return static_cast<int>(m_type);
+    return static_cast<int>(m_config.staffType.type());
 }
 
 void StaffSettingsModel::setStaffType(int type)
 {
     auto type_ = static_cast<StaffTypeId>(type);
 
-    if (m_type == type_ || !notationParts()) {
+    if (m_config.staffType.type() == type_ || !notationParts()) {
         return;
     }
 
-    m_type = type_;
-    notationParts()->setStaffType(m_staffId, m_type);
+    bool wasSmall = m_config.staffType.isSmall();
+
+    notationParts()->setStaffType(m_staffId, type_);
+    m_config = notationParts()->staffConfig(m_staffId);
+
+    if (wasSmall != m_config.staffType.isSmall()) {
+        emit isSmallStaffChanged();
+    }
 
     emit staffTypeChanged();
 }
