@@ -72,12 +72,12 @@ void ExtensionsActionController::onPluginTriggered(const UriQuery& q)
         return;
     }
 
-    IInteractive::Result result = interactive()->warning(
-        qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
-        trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
-        { IInteractive::Button::No, IInteractive::Button::Yes });
+    mu::IInteractive::Result result = interactive()->warning(
+        mu::qtrc("extensions", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(m.title).toStdString(),
+        mu::trc("extensions", "Alternatively, you can enable it at any time from Home > Plugins."),
+        { mu::IInteractive::Button::No, mu::IInteractive::Button::Yes });
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
+    if (result.standardButton() == mu::IInteractive::Button::Yes) {
         provider()->setEnable(q.uri(), true);
         provider()->perform(q);
     }

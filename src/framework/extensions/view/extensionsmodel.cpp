@@ -96,11 +96,11 @@ QVariant ExtensionsListModel::data(const QModelIndex& index, int role) const
         return plugin.version.toQString();
     case rShortcuts:
         if (!plugin.config.shortcuts.empty()) {
-            return shortcuts::sequencesToNativeText(shortcuts::Shortcut::sequencesFromString(plugin.config.shortcuts));
+            return mu::shortcuts::sequencesToNativeText(mu::shortcuts::Shortcut::sequencesFromString(plugin.config.shortcuts));
         }
 
         //: No keyboard shortcut is assigned to this plugin.
-        return qtrc("extensions", "Not defined");
+        return mu::qtrc("extensions", "Not defined");
     }
 
     return QVariant();
