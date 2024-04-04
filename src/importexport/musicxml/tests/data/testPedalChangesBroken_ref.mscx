@@ -293,7 +293,7 @@
               </Pedal>
             <next>
               <location>
-                <fractions>3/4</fractions>
+                <fractions>1/2</fractions>
                 </location>
               </next>
             </Spanner>
@@ -314,6 +314,13 @@
               </Note>
             </Chord>
           <Spanner type="Pedal">
+            <prev>
+              <location>
+                <fractions>-1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Pedal">
             <Pedal>
               <endHookType>2</endHookType>
               <beginHookType>2</beginHookType>
@@ -321,7 +328,7 @@
             <next>
               <location>
                 <measures>1</measures>
-                <fractions>-1/4</fractions>
+                <fractions>-1/2</fractions>
                 </location>
               </next>
             </Spanner>
@@ -333,13 +340,6 @@
               <tpc>17</tpc>
               </Note>
             </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <fractions>-3/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
@@ -352,6 +352,14 @@
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>1/2</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
@@ -360,14 +368,6 @@
               <tpc>13</tpc>
               </Note>
             </Chord>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <measures>-1</measures>
-                <fractions>1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <StemDirection>down</StemDirection>
