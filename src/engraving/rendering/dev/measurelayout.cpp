@@ -1797,11 +1797,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                         }
                     }
                 }
-                // Get next measure, factoring in MMRs
-                searchMeasure = searchMeasure->nextMeasure();
-                if (searchMeasure && searchMeasure->hasMMRest()) {
-                    searchMeasure = searchMeasure->mmRest();
-                }
+                searchMeasure = searchMeasure->nextMeasureMM();
             }
         }
 
