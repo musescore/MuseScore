@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_BRUSH_H
-#define MU_DRAW_BRUSH_H
+#ifndef MUSE_DRAW_BRUSH_H
+#define MUSE_DRAW_BRUSH_H
 
 #include "color.h"
 #include "drawtypes.h"
@@ -29,7 +29,7 @@
 #include <QBrush>
 #endif
 
-namespace mu::draw {
+namespace muse::draw {
 class Brush
 {
 public:
@@ -71,6 +71,6 @@ private:
     Color m_color = Color::BLACK;
     BrushStyle m_style = BrushStyle::SolidPattern;
 };
-} // namespace mu::draw
+} // namespace muse::draw
 
-#endif // MU_DRAW_BRUSH_H
+#endif // MUSE_DRAW_BRUSH_H

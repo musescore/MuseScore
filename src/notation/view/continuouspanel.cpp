@@ -45,6 +45,7 @@
 
 #include "log.h"
 
+using namespace muse::draw;
 using namespace mu::notation;
 using namespace mu::engraving::rendering::dev;
 
@@ -56,7 +57,7 @@ void ContinuousPanel::setNotation(INotationPtr notation)
 }
 
 //! NOTE: Copied from MU3
-void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContext& ctx)
+void ContinuousPanel::paint(Painter& painter, const NotationViewContext& ctx)
 {
     TRACEFUNC;
 
@@ -300,9 +301,9 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     PointF pos(offsetPanel, 0);
 
     painter.translate(pos);
-    mu::draw::Pen pen;
+    Pen pen;
     pen.setWidthF(0.0);
-    pen.setStyle(mu::draw::PenStyle::NoPen);
+    pen.setStyle(PenStyle::NoPen);
     painter.setPen(pen);
     painter.setBrush(notationConfiguration()->foregroundColor());
 
@@ -317,7 +318,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
         painter.drawTiledPixmap(bg, wallpaper, bg.topLeft() - PointF(lrint(ctx.xOffset), lrint(ctx.yOffset)));
     }
 
-    mu::draw::Color color = engravingConfiguration()->formattingMarksColor();
+    Color color = engravingConfiguration()->formattingMarksColor();
 
     // Draw measure text number
     // TODO: simplify (no Text element)

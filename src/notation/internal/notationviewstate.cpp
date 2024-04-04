@@ -27,7 +27,7 @@
 #include "notation.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::notation;
 
 static ViewMode viewModeFromString(const QString& str)

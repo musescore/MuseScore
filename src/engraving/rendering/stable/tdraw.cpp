@@ -157,9 +157,9 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::stable;
-using namespace mu::draw;
+using namespace muse::draw;
 
-void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
+void TDraw::drawItem(const EngravingItem* item, Painter* painter)
 {
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
@@ -392,7 +392,7 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const Accidental* item, draw::Painter* painter)
+void TDraw::draw(const Accidental* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     IF_ASSERT_FAILED(item->ldata()) {
@@ -405,15 +405,15 @@ void TDraw::draw(const Accidental* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const ActionIcon* item, draw::Painter* painter)
+void TDraw::draw(const ActionIcon* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     const ActionIcon::LayoutData* ldata = item->ldata();
     painter->setFont(item->iconFont());
-    painter->drawText(ldata->bbox(), draw::AlignCenter, Char(item->icon()));
+    painter->drawText(ldata->bbox(), muse::draw::AlignCenter, Char(item->icon()));
 }
 
-void TDraw::draw(const Ambitus* item, draw::Painter* painter)
+void TDraw::draw(const Ambitus* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -462,7 +462,7 @@ void TDraw::draw(const Ambitus* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
+void TDraw::draw(const Arpeggio* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -523,7 +523,7 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
     painter->restore();
 }
 
-void TDraw::draw(const Articulation* item, draw::Painter* painter)
+void TDraw::draw(const Articulation* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -534,19 +534,19 @@ void TDraw::draw(const Articulation* item, draw::Painter* painter)
     if (item->textType() == ArticulationTextType::NO_TEXT) {
         item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
     } else {
-        mu::draw::Font scaledFont(item->font());
+        Font scaledFont(item->font());
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
         painter->drawText(ldata->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
     }
 }
 
-void TDraw::draw(const Ornament* item, draw::Painter* painter)
+void TDraw::draw(const Ornament* item, Painter* painter)
 {
     draw(static_cast<const Articulation*>(item), painter);
 }
 
-void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
+void TDraw::draw(const BagpipeEmbellishment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -587,7 +587,7 @@ void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
         Pen beamPen(item->curColor(), dataBeam.width, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(beamPen);
         // draw the beams
-        auto drawBeams = [](mu::draw::Painter* painter, const double spatium,
+        auto drawBeams = [](Painter* painter, const double spatium,
                             const double x1, const double x2, double y)
         {
             // draw the beams
@@ -819,13 +819,13 @@ void TDraw::draw(const BarLine* item, Painter* painter)
         Measure* m = s->measure();
         if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(EngravingItem::engravingConfiguration()->formattingMarksColor());
-            draw::Font f(u"Edwin", Font::Type::Text);
+            Font f(u"Edwin", Font::Type::Text);
             f.setPointSizeF(12 * item->spatium() / SPATIUM20);
             f.setBold(true);
             Char ch = m->ticks() > m->timesig() ? u'+' : u'-';
             RectF r = FontMetrics(f).boundingRect(ch);
 
-            mu::draw::Font scaledFont(f);
+            Font scaledFont(f);
             scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
             painter->setFont(scaledFont);
 
@@ -840,7 +840,7 @@ void TDraw::draw(const Beam* item, Painter* painter)
     if (item->beamSegments().empty()) {
         return;
     }
-    painter->setBrush(mu::draw::Brush(item->curColor()));
+    painter->setBrush(Brush(item->curColor()));
     painter->setNoPen();
 
     // make beam thickness independent of slant
@@ -861,7 +861,7 @@ void TDraw::draw(const Beam* item, Painter* painter)
             PointF(bs1->line.x2(), bs1->line.y2() + ww),
             PointF(bs1->line.x1(), bs1->line.y1() + ww),
         }),
-            draw::FillRule::OddEvenFill);
+            FillRule::OddEvenFill);
     }
 }
 
@@ -881,7 +881,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     painter->setPen(pen);
     painter->setBrush(Brush(item->curColor()));
 
-    mu::draw::Font f = item->font(spatium * MScore::pixelRatio);
+    Font f = item->font(spatium * MScore::pixelRatio);
     painter->setFont(f);
 
     double x  = data->noteWidth + spatium * .2;
@@ -908,7 +908,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
             int idx = (pitch + 12) / 25;
             const char* l = item->label[idx];
             painter->drawText(RectF(x2, y2, .0, .0),
-                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
                               String::fromAscii(l));
 
             y = y2;
@@ -940,7 +940,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
             const char* l = item->label[idx];
             double ty = y2;       // - _spatium;
             painter->drawText(RectF(x2, ty, .0, .0),
-                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                              muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip,
                               String::fromAscii(l));
         } else {
             // down
@@ -993,22 +993,22 @@ void TDraw::draw(const Box* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const HBox* item, draw::Painter* painter)
+void TDraw::draw(const HBox* item, Painter* painter)
 {
     draw(static_cast<const Box*>(item), painter);
 }
 
-void TDraw::draw(const VBox* item, draw::Painter* painter)
+void TDraw::draw(const VBox* item, Painter* painter)
 {
     draw(static_cast<const Box*>(item), painter);
 }
 
-void TDraw::draw(const FBox* item, draw::Painter* painter)
+void TDraw::draw(const FBox* item, Painter* painter)
 {
     draw(static_cast<const Box*>(item), painter);
 }
 
-void TDraw::draw(const TBox* item, draw::Painter* painter)
+void TDraw::draw(const TBox* item, Painter* painter)
 {
     draw(static_cast<const Box*>(item), painter);
 }
@@ -1134,7 +1134,7 @@ void TDraw::draw(const DeadSlapped* item, Painter* painter)
         return;
     }
 
-    painter->setPen(draw::PenStyle::NoPen);
+    painter->setPen(PenStyle::NoPen);
     painter->setBrush(item->curColor());
     painter->drawPath(ldata->path1);
     painter->drawPath(ldata->path2);
@@ -1190,7 +1190,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
     int font = 0;
     double _spatium = item->spatium();
     // set font from general style
-    mu::draw::Font f(FiguredBass::FBFonts().at(font).family, draw::Font::Type::Tablature);
+    Font f(FiguredBass::FBFonts().at(font).family, Font::Type::Tablature);
 
     // (use the same font selection as used in layout() above)
     double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
@@ -1200,7 +1200,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Pen pen(item->figuredBass()->curColor(), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, ldata->displayText);
+    painter->drawText(ldata->bbox(), muse::draw::TextDontClip | muse::draw::AlignLeft | muse::draw::AlignTop, ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1243,7 +1243,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
     // closing cont.line parenthesis
     if (item->parenth5() != FiguredBassItem::Parenthesis::NONE) {
         int x = lineEndX > 0.0 ? lineEndX : ldata->textWidth;
-        painter->drawText(RectF(x, 0, ldata->bbox().width(), ldata->bbox().height()), draw::AlignLeft | draw::AlignTop,
+        painter->drawText(RectF(x, 0, ldata->bbox().width(), ldata->bbox().height()), muse::draw::AlignLeft | muse::draw::AlignTop,
                           Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
 }
@@ -1385,7 +1385,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     // Draw fret offset number
     if (item->fretOffset() > 0) {
         double fretNumMag = item->style().styleD(Sid::fretNumMag);
-        mu::draw::Font scaledFont(item->font());
+        Font scaledFont(item->font());
         scaledFont.setPointSizeF(item->font().pointSizeF()
                                  * item->userMag()
                                  * (item->spatium() / SPATIUM20)
@@ -1397,10 +1397,10 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
                 painter->drawText(RectF(-ldata->stringDist * .4, .0, .0, ldata->fretDist),
-                                  draw::AlignVCenter | draw::AlignRight | draw::TextDontClip, text);
+                                  muse::draw::AlignVCenter | muse::draw::AlignRight | muse::draw::TextDontClip, text);
             } else {
                 painter->drawText(RectF(x2 + (ldata->stringDist * .4), .0, .0, ldata->fretDist),
-                                  draw::AlignVCenter | draw::AlignLeft | draw::TextDontClip,
+                                  muse::draw::AlignVCenter | muse::draw::AlignLeft | muse::draw::TextDontClip,
                                   String::number(item->fretOffset() + 1));
             }
         } else if (item->orientation() == Orientation::HORIZONTAL) {
@@ -1409,9 +1409,11 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             painter->rotate(90);
             if (item->numPos() == 0) {
                 painter->drawText(RectF(.0, ldata->stringDist * (item->strings() - 1), .0, .0),
-                                  draw::AlignLeft | draw::TextDontClip, text);
+                                  muse::draw::AlignLeft | muse::draw::TextDontClip, text);
             } else {
-                painter->drawText(RectF(.0, .0, .0, .0), draw::AlignBottom | draw::AlignLeft | draw::TextDontClip, text);
+                painter->drawText(RectF(.0, .0, .0, .0),
+                                  muse::draw::AlignBottom | muse::draw::AlignLeft | muse::draw::TextDontClip,
+                                  text);
             }
             painter->restore();
         }
@@ -1430,8 +1432,8 @@ void TDraw::draw(const FretCircle* item, Painter* painter)
     TRACE_DRAW_ITEM;
     const FretCircle::LayoutData* ldata = item->ldata();
     painter->save();
-    painter->setPen(mu::draw::Pen(item->curColor(), item->spatium() * FretCircle::CIRCLE_WIDTH));
-    painter->setBrush(mu::draw::BrushStyle::NoBrush);
+    painter->setPen(Pen(item->curColor(), item->spatium() * FretCircle::CIRCLE_WIDTH));
+    painter->setBrush(BrushStyle::NoBrush);
     painter->drawEllipse(ldata->rect);
     painter->restore();
 }
@@ -1476,13 +1478,13 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
     }
 
     if (glissando->showText()) {
-        mu::draw::Font f(glissando->fontFace(), draw::Font::Type::Unknown);
+        Font f(glissando->fontFace(), Font::Type::Unknown);
         f.setPointSizeF(glissando->fontSize() * _spatium / SPATIUM20);
         f.setBold(glissando->fontStyle() & FontStyle::Bold);
         f.setItalic(glissando->fontStyle() & FontStyle::Italic);
         f.setUnderline(glissando->fontStyle() & FontStyle::Underline);
         f.setStrike(glissando->fontStyle() & FontStyle::Strike);
-        mu::draw::FontMetrics fm(f);
+        FontMetrics fm(f);
         RectF r = fm.boundingRect(glissando->text());
 
         // if text longer than available space, skip it
@@ -1491,7 +1493,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
             // raise text slightly above line and slightly more with WAVY than with STRAIGHT
             yOffset += _spatium * (glissando->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
 
-            mu::draw::Font scaledFont(f);
+            Font scaledFont(f);
             scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
             painter->setFont(scaledFont);
 
@@ -1528,7 +1530,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const GuitarBendHoldSegment* item, draw::Painter* painter)
+void TDraw::draw(const GuitarBendHoldSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -1548,13 +1550,13 @@ void TDraw::draw(const StretchedBend* item, Painter* painter)
     TRACE_DRAW_ITEM;
 
     double sp = item->spatium();
-    const mu::draw::Color& color = item->curColor();
+    const Color& color = item->curColor();
     const int textFlags = item->textFlags();
 
     Pen pen(color, item->lineWidth(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Brush(color));
-    mu::draw::Font f = item->font(sp * MScore::pixelRatio);
+    Font f = item->font(sp * MScore::pixelRatio);
     painter->setFont(f);
 
     bool isTextDrawn = false;
@@ -1859,7 +1861,7 @@ void TDraw::draw(const Harmony* item, Painter* painter)
     Color color = item->textColor();
     painter->setPen(color);
     for (const TextSegment* ts : item->textList()) {
-        mu::draw::Font f(ts->m_font);
+        Font f(ts->m_font);
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
         TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
@@ -1928,14 +1930,14 @@ void TDraw::draw(const Image* item, Painter* painter)
     }
 
     if (emptyImage) {
-        painter->setBrush(mu::draw::BrushStyle::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         painter->setPen(item->engravingConfiguration()->defaultColor());
         painter->drawRect(ldata->bbox());
         painter->drawLine(0.0, 0.0, ldata->bbox().width(), ldata->bbox().height());
         painter->drawLine(ldata->bbox().width(), 0.0, 0.0, ldata->bbox().height());
     }
     if (item->selected() && !(item->score() && item->score()->printing())) {
-        painter->setBrush(mu::draw::BrushStyle::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         painter->setPen(item->engravingConfiguration()->selectionColor());
         painter->drawRect(ldata->bbox());
     }
@@ -2161,8 +2163,8 @@ void TDraw::draw(const MMRest* item, Painter* painter)
         }
     } else {
         double mag = item->staff()->staffMag(item->tick());
-        mu::draw::Pen pen(painter->pen());
-        pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
+        Pen pen(painter->pen());
+        pen.setCapStyle(PenCapStyle::FlatCap);
 
         // draw horizontal line
         double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness) * mag;
@@ -2258,7 +2260,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                 painter->restore();
             }
         }
-        mu::draw::Font f(tab->fretFont());
+        Font f(tab->fretFont());
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
@@ -2348,7 +2350,7 @@ void TDraw::draw(const Page* item, Painter* painter)
     page_idx_t n = item->no() + 1 + item->score()->pageNumberOffset();
     painter->setPen(item->curColor());
 
-    auto drawHeaderFooter = [item](mu::draw::Painter* p, int area, const String& ss)
+    auto drawHeaderFooter = [item](Painter* p, int area, const String& ss)
     {
         Text* text = item->layoutHeaderFooter(area, ss);
         if (!text) {
@@ -2761,7 +2763,7 @@ void TDraw::draw(const Sticking* item, Painter* painter)
     drawTextBase(item, painter);
 }
 
-void TDraw::draw(const StringTunings* item, draw::Painter* painter)
+void TDraw::draw(const StringTunings* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -2775,7 +2777,7 @@ void TDraw::draw(const StringTunings* item, draw::Painter* painter)
         painter->setPen(pen);
         painter->setBrush(Brush(item->curColor()));
 
-        mu::draw::Font f(item->font());
+        Font f(item->font());
         painter->setFont(f);
 
         RectF rect = data->bbox();
@@ -2819,7 +2821,7 @@ void TDraw::draw(const FSymbol* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    mu::draw::Font f(item->font());
+    Font f(item->font());
     f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
     painter->setFont(f);
     painter->setPen(item->curColor());
@@ -2863,7 +2865,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
     painter->scale(mag, mag);
     if (ldata->beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
-        mu::draw::Font f(item->tab()->durationFont());
+        Font f(item->tab()->durationFont());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
         painter->setFont(f);
         painter->drawText(PointF(0.0, 0.0), item->text());
@@ -2982,7 +2984,7 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const TremoloSingleChord* item, draw::Painter* painter)
+void TDraw::draw(const TremoloSingleChord* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -2996,7 +2998,7 @@ void TDraw::draw(const TremoloSingleChord* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
+void TDraw::draw(const TremoloTwoChord* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -3023,7 +3025,7 @@ void TDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
                 PointF(bs1->line.x2(), bs1->line.y2() + ww),
                 PointF(bs1->line.x1(), bs1->line.y1() + ww),
             }),
-                draw::FillRule::OddEvenFill);
+                FillRule::OddEvenFill);
         }
     }
 }
@@ -3102,28 +3104,28 @@ void TDraw::draw(const WhammyBarSegment* item, Painter* painter)
 }
 
 // dev
-void TDraw::draw(const System* item, draw::Painter* painter)
+void TDraw::draw(const System* item, Painter* painter)
 {
     UNUSED(item);
     UNUSED(painter);
     //painter->drawRect(item->ldata()->bbox());
 }
 
-void TDraw::draw(const Measure* item, draw::Painter* painter)
+void TDraw::draw(const Measure* item, Painter* painter)
 {
     UNUSED(item);
     UNUSED(painter);
     //painter->drawRect(item->ldata()->bbox());
 }
 
-void TDraw::draw(const Segment* item, draw::Painter* painter)
+void TDraw::draw(const Segment* item, Painter* painter)
 {
     UNUSED(item);
     UNUSED(painter);
     //painter->drawRect(item->ldata()->bbox());
 }
 
-void TDraw::draw(const Chord* item, draw::Painter* painter)
+void TDraw::draw(const Chord* item, Painter* painter)
 {
     UNUSED(item);
     UNUSED(painter);

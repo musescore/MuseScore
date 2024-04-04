@@ -32,7 +32,7 @@ class MasterScore;
 class Score;
 class MscSaver
 {
-    INJECT(draw::IImageProvider, imageProvider)
+    INJECT(muse::draw::IImageProvider, imageProvider)
 public:
     MscSaver() = default;
 

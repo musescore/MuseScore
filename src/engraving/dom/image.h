@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Pixmap;
 class SvgRenderer;
 }
@@ -49,7 +49,7 @@ class Image final : public BSymbol
     OBJECT_ALLOCATOR(engraving, Image)
     DECLARE_CLASSOF(ElementType::IMAGE)
 
-    INJECT(mu::draw::IImageProvider, imageProvider)
+    INJECT(muse::draw::IImageProvider, imageProvider)
 
 public:
     Image(EngravingItem* parent = 0);
@@ -96,8 +96,8 @@ public:
     ImageType imageType() const { return m_imageType; }
     bool isValid() const { return m_rasterDoc || m_svgDoc; }
 
-    mu::draw::SvgRenderer* svgRenderer() const { return m_svgDoc; }
-    const std::shared_ptr<mu::draw::Pixmap>& rasterImage() const { return m_rasterDoc; }
+    muse::draw::SvgRenderer* svgRenderer() const { return m_svgDoc; }
+    const std::shared_ptr<muse::draw::Pixmap>& rasterImage() const { return m_rasterDoc; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
@@ -108,8 +108,8 @@ public:
     mu::SizeF pixel2size(const mu::SizeF& s) const;
     mu::SizeF size2pixel(const mu::SizeF& s) const;
 
-    const mu::draw::Pixmap& buffer() const { return m_buffer; }
-    void setBuffer(const mu::draw::Pixmap& p) const { m_buffer = p; }
+    const muse::draw::Pixmap& buffer() const { return m_buffer; }
+    void setBuffer(const muse::draw::Pixmap& p) const { m_buffer = p; }
     bool dirty() const { return m_dirty; }
     void setDirty(bool val) const { m_dirty = val; }
 
@@ -124,15 +124,15 @@ private:
     String m_storePath;                 // the path of the img in the ImageStore
     String m_linkPath;                  // the path of an external linked img
     bool m_linkIsValid = false;         // whether _linkPath file exists or not
-    mutable mu::draw::Pixmap m_buffer;  // cached rendering
+    mutable muse::draw::Pixmap m_buffer;  // cached rendering
     mu::SizeF m_size;                   // in mm or spatium units
     bool m_lockAspectRatio = false;
     bool m_autoScale = false;           // fill parent frame
     bool m_sizeIsSpatium = false;
     mutable bool m_dirty = false;
 
-    std::shared_ptr<mu::draw::Pixmap> m_rasterDoc;
-    mu::draw::SvgRenderer* m_svgDoc = nullptr;
+    std::shared_ptr<muse::draw::Pixmap> m_rasterDoc;
+    muse::draw::SvgRenderer* m_svgDoc = nullptr;
 
     ImageType m_imageType = ImageType::NONE;
 };

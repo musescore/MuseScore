@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWDATARW_H
-#define MU_DRAW_DRAWDATARW_H
+#ifndef MUSE_DRAW_DRAWDATARW_H
+#define MUSE_DRAW_DRAWDATARW_H
 
 #include "global/io/path.h"
 #include "global/types/retval.h"
 
 #include "../types/drawdata.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class DrawDataRW
 {
 public:
@@ -41,4 +41,4 @@ public:
 };
 }
 
-#endif // MU_DRAW_DRAWDATARW_H
+#endif // MUSE_DRAW_DRAWDATARW_H

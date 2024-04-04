@@ -7,7 +7,7 @@
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 static const char FILE_FORMAT[] = "PNG";
 

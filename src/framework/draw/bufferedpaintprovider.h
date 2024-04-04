@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_BUFFEREDPAINTPROVIDER_H
-#define MU_DRAW_BUFFEREDPAINTPROVIDER_H
+#ifndef MUSE_DRAW_BUFFEREDPAINTPROVIDER_H
+#define MUSE_DRAW_BUFFEREDPAINTPROVIDER_H
 
 #include "ipaintprovider.h"
 #include "types/drawdata.h"
 #include "types/pen.h"
 #include "types/brush.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class DrawObjectsLogger;
 class BufferedPaintProvider : public IPaintProvider
 {
@@ -114,4 +114,4 @@ private:
 };
 }
 
-#endif // MU_DRAW_BUFFEREDPAINTPROVIDER_H
+#endif // MUSE_DRAW_BUFFEREDPAINTPROVIDER_H

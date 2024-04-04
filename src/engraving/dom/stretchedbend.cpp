@@ -35,7 +35,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -61,7 +61,7 @@ static const ElementStyle stretchedBendStyle {
 //   forward declarations of static functions
 //---------------------------------------------------------
 
-static RectF textBoundingRect(const mu::draw::FontMetrics& fm, const PointF& pos, const String& text);
+static RectF textBoundingRect(const FontMetrics& fm, const PointF& pos, const String& text);
 static int bendTone(int notePitch);
 static std::pair<Note*, Note*> getLowestAndHighestNote(const std::vector<Note*>& notes);
 
@@ -85,9 +85,9 @@ StretchedBend::StretchedBend(Chord* parent)
 //   font
 //---------------------------------------------------------
 
-mu::draw::Font StretchedBend::font(double sp) const
+Font StretchedBend::font(double sp) const
 {
-    mu::draw::Font f(_fontFace, Font::Type::Unknown);
+    Font f(_fontFace, Font::Type::Unknown);
     f.setBold(_fontStyle & FontStyle::Bold);
     f.setItalic(_fontStyle & FontStyle::Italic);
     f.setUnderline(_fontStyle & FontStyle::Underline);
@@ -101,7 +101,7 @@ mu::draw::Font StretchedBend::font(double sp) const
 
 int StretchedBend::textFlags()
 {
-    return draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip;
+    return muse::draw::AlignHCenter | muse::draw::AlignBottom | muse::draw::TextDontClip;
 }
 
 String StretchedBend::toneToLabel(int tone)
@@ -499,7 +499,7 @@ mu::RectF StretchedBend::calculateBoundingRect() const
             bRect.unite(RectF(src.x(), src.y(), dest.x() - src.x(), dest.y() - src.y()));
             bRect.unite(m_arrows.up.translated(dest).boundingRect());
 
-            mu::draw::FontMetrics fm(font(sp));
+            FontMetrics fm(font(sp));
             bRect.unite(textBoundingRect(fm, dest, text));
             /// TODO: remove after fixing bRect
             bRect.setHeight(bRect.height() + sp);
@@ -520,7 +520,7 @@ mu::RectF StretchedBend::calculateBoundingRect() const
             bRect.unite(arrowPath.translated(dest).boundingRect());
 
             if (bendUp && !isTextDrawn) {
-                mu::draw::FontMetrics fm(font(sp));
+                FontMetrics fm(font(sp));
                 bRect.unite(textBoundingRect(fm, dest - PointF(sp, 0), text));
                 /// TODO: remove after fixing bRect
                 bRect.setHeight(bRect.height() + sp);
@@ -572,7 +572,7 @@ void StretchedBend::fillArrows(double width)
 //   textBoundingRect
 //---------------------------------------------------------
 
-RectF textBoundingRect(const mu::draw::FontMetrics& fm, const PointF& pos, const String& text)
+RectF textBoundingRect(const FontMetrics& fm, const PointF& pos, const String& text)
 {
     return fm.boundingRect(RectF(pos.x(), pos.y(), 0, 0), StretchedBend::textFlags(), text);
 }

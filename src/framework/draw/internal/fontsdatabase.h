@@ -19,28 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_FONTSDATABASE_H
-#define MU_DRAW_FONTSDATABASE_H
+#ifndef MUSE_DRAW_FONTSDATABASE_H
+#define MUSE_DRAW_FONTSDATABASE_H
 
 #include <vector>
 #include <map>
 
 #include "ifontsdatabase.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class FontsDatabase : public IFontsDatabase
 {
 public:
     FontsDatabase() = default;
 
-    void setDefaultFont(mu::draw::Font::Type type, const FontDataKey& key) override;
+    void setDefaultFont(Font::Type type, const FontDataKey& key) override;
 
     int addFont(const FontDataKey& key, const mu::io::path_t& path) override;
 
-    FontDataKey actualFont(const FontDataKey& requireKey, mu::draw::Font::Type type) const override;
-    std::vector<FontDataKey> substitutionFonts(mu::draw::Font::Type type) const override;
-    FontData fontData(const FontDataKey& requireKey, mu::draw::Font::Type type) const override;
-    mu::io::path_t fontPath(const FontDataKey& requireKey, mu::draw::Font::Type type) const override;
+    FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
+    std::vector<FontDataKey> substitutionFonts(Font::Type type) const override;
+    FontData fontData(const FontDataKey& requireKey, Font::Type type) const override;
+    mu::io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const override;
 
     void addAdditionalFonts(const mu::io::path_t& path) override;
 
@@ -54,12 +54,12 @@ private:
         bool valid() const { return id > -1; }
     };
 
-    const FontDataKey& defaultFont(mu::draw::Font::Type type) const;
+    const FontDataKey& defaultFont(Font::Type type) const;
     const FontInfo& fontInfo(const FontDataKey& key) const;
 
-    std::map<mu::draw::Font::Type, FontDataKey> m_defaults;
-    std::map<mu::draw::Font::Type, std::vector<FontDataKey> > m_substitutions;
+    std::map<Font::Type, FontDataKey> m_defaults;
+    std::map<Font::Type, std::vector<FontDataKey> > m_substitutions;
     std::vector<FontInfo> m_fonts;
 };
 }
-#endif // MU_DRAW_FONTSDATABASE_H
+#endif // MUSE_DRAW_FONTSDATABASE_H

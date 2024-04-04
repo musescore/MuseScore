@@ -36,7 +36,7 @@
 #include "../draw/types/transform.h"
 
 using namespace mu::engraving;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving::rendering::dev;
 
 void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx)

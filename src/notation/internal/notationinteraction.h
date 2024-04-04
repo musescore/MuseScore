@@ -58,7 +58,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
 
-    void paint(draw::Painter* painter);
+    void paint(muse::draw::Painter* painter);
 
     // Put notes
     INotationNoteInputPtr noteInput() const override;
@@ -347,11 +347,11 @@ private:
     void updateAnchorLines();
     void setAnchorLines(const std::vector<LineF>& anchorList);
     void resetAnchorLines();
-    double currentScaling(draw::Painter* painter) const;
-    void drawAnchorLines(draw::Painter* painter);
-    void drawTextEditMode(mu::draw::Painter* painter);
-    void drawSelectionRange(mu::draw::Painter* painter);
-    void drawGripPoints(mu::draw::Painter* painter);
+    double currentScaling(muse::draw::Painter* painter) const;
+    void drawAnchorLines(muse::draw::Painter* painter);
+    void drawTextEditMode(muse::draw::Painter* painter);
+    void drawSelectionRange(muse::draw::Painter* painter);
+    void drawGripPoints(muse::draw::Painter* painter);
     void moveElementSelection(MoveDirection d);
     void moveStringSelection(MoveDirection d);
 

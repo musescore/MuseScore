@@ -163,9 +163,9 @@ public:
     bool handleEvent(QEvent* event);
 
     struct PaintOptions {
-        mu::draw::Color backgroundColor;
-        mu::draw::Color selectionColor;
-        mu::draw::Color linesColor;
+        muse::draw::Color backgroundColor;
+        muse::draw::Color selectionColor;
+        muse::draw::Color linesColor;
         bool useElementColors = false;
         bool colorsInverionsEnabled = false;
     };

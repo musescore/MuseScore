@@ -39,6 +39,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -67,7 +68,7 @@ static const ElementStyle fretStyle {
 FretDiagram::FretDiagram(Segment* parent)
     : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    m_font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
+    m_font.setFamily(u"FreeSans", Font::Type::Tablature);
     m_font.setPointSizeF(4.0 * mag());
     initElementStyle(&fretStyle);
 }

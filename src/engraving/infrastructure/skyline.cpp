@@ -34,7 +34,7 @@
 #include "shape.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 namespace mu::engraving {
 static const double MAXIMUM_Y = 1000000.0;

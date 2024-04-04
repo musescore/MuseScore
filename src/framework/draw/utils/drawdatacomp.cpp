@@ -29,9 +29,9 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
-namespace mu::draw::comp {
+namespace muse::draw::comp {
 static const int DEFAULT_PREC(3);
 
 struct Polygon;
@@ -660,7 +660,7 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
         dd->item.chilren.push_back(dobj);
     }
 }
-} // mu::draw::comp
+} // muse::draw::comp
 
 Diff DrawDataComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, Tolerance tolerance)
 {

@@ -97,7 +97,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
     printer.setSize(QSize(width, height));
     printer.setViewBox(QRectF(0, 0, width, height));
 
-    mu::draw::Painter painter(&printer, "svgwriter");
+    muse::draw::Painter painter(&printer, "svgwriter");
     painter.setAntialiasing(true);
     if (TRIM_MARGIN_SIZE >= 0) {
         painter.translate(-pageRect.topLeft());
@@ -108,7 +108,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
     const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
                                                   Val(configuration()->exportSvgWithTransparentBackground())).toBool();
     if (!TRANSPARENT_BACKGROUND) {
-        painter.fillRect(pageRect, mu::draw::Color::WHITE);
+        painter.fillRect(pageRect, muse::draw::Color::WHITE);
     }
 
     // 1st pass: StaffLines

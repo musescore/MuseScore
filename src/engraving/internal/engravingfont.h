@@ -42,7 +42,7 @@ namespace mu {
 class JsonObject;
 }
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter;
 }
 
@@ -51,7 +51,7 @@ class Shape;
 
 class EngravingFont : public IEngravingFont
 {
-    INJECT_STATIC(mu::draw::IFontProvider, fontProvider)
+    INJECT_STATIC(muse::draw::IFontProvider, fontProvider)
     INJECT_STATIC(IEngravingFontsProvider, engravingFonts)
 public:
     EngravingFont(const std::string& name, const std::string& family, const io::path_t& filePath);
@@ -86,11 +86,11 @@ public:
     PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const override;
 
     // Draw
-    void draw(SymId id, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
-    void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
+    void draw(SymId id, muse::draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
+    void draw(SymId id, muse::draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
 
-    void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
-    void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
+    void draw(const SymIdList& ids, muse::draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const override;
+    void draw(const SymIdList& ids, muse::draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const override;
 
     void ensureLoad();
 
@@ -133,7 +133,7 @@ private:
 
     bool m_loaded = false;
     std::vector<Sym> m_symbols;
-    mutable draw::Font m_font;
+    mutable muse::draw::Font m_font;
 
     std::string m_name;
     std::string m_family;

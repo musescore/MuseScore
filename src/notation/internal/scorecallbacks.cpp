@@ -42,7 +42,7 @@ void ScoreCallbacks::updateAll()
     NOT_IMPLEMENTED;
 }
 
-void ScoreCallbacks::drawBackground(draw::Painter*, const mu::RectF&) const
+void ScoreCallbacks::drawBackground(muse::draw::Painter*, const mu::RectF&) const
 {
     NOT_IMPLEMENTED;
 }

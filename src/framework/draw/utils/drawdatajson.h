@@ -19,18 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWDATAJSON_H
-#define MU_DRAW_DRAWDATAJSON_H
+#ifndef MUSE_DRAW_DRAWDATAJSON_H
+#define MUSE_DRAW_DRAWDATAJSON_H
 
 #include "global/types/retval.h"
+#include "global/serialization/json.h"
 
 #include "../types/drawdata.h"
 
-namespace mu {
-class JsonObject;
-}
-
-namespace mu::draw {
+namespace muse::draw {
 class DrawDataJson
 {
 public:
@@ -46,4 +43,4 @@ private:
     static void fromJson(const JsonObject& root, DrawDataPtr& data);
 };
 }
-#endif // MU_DRAW_DRAWDATAJSON_H
+#endif // MUSE_DRAW_DRAWDATAJSON_H

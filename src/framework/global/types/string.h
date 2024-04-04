@@ -507,6 +507,7 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStri
 #endif
 
 namespace muse {
+using Char = mu::Char;
 using String = mu::String;
 }
 

@@ -541,7 +541,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid&
         return strList.join(",");
     }
     case P_TYPE::COLOR:
-        return value.value<mu::draw::Color>().toQColor();
+        return value.value<muse::draw::Color>().toQColor();
     default:
         return value.toQVariant();
     }

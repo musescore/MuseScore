@@ -27,7 +27,7 @@
 #include "score.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {

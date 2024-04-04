@@ -32,7 +32,7 @@
 #include "internal/fontsdatabase.h"
 #endif
 
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::modularity;
 
 std::string DrawModule::moduleName() const

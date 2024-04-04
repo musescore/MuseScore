@@ -122,7 +122,7 @@ struct SymbolIcon {
         QIcon icon;
         QPixmap image(w, h);
         image.fill(Qt::transparent);
-        mu::draw::Painter painter(&image, "generateicon");
+        muse::draw::Painter painter(&image, "generateicon");
         const mu::RectF& bbox = EditDrumsetDialog::engravingFonts()->fallbackFont()->bbox(id, 1);
         const qreal actualSymbolScale = std::min(w / bbox.width(), h / bbox.height());
         qreal mag = std::min(defaultScale, actualSymbolScale);

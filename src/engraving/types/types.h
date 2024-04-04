@@ -224,12 +224,12 @@ using ElementTypeSet = std::unordered_set<ElementType>;
 // --- Geometry ---
 using PointF = mu::PointF;              // P_TYPE::POINT
 using SizeF = mu::SizeF;                // P_TYPE::SIZE
-using PainterPath = mu::draw::PainterPath; // P_TYPE::PATH
+using PainterPath = muse::draw::PainterPath; // P_TYPE::PATH
 using ScaleF = mu::ScaleF;              // P_TYPE::SCALE
 using PairF = mu::PairF;                // P_TYPE::PAIR_REAL
 
 // --- Draw ---
-using Color = draw::Color;              // P_TYPE::COLOR
+using Color = muse::draw::Color;        // P_TYPE::COLOR
 
 enum class OrnamentStyle : char {
     DEFAULT, BAROQUE

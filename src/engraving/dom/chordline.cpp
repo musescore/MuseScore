@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -90,7 +90,7 @@ void ChordLine::startEditDrag(EditData& ed)
 
 void ChordLine::editDrag(EditData& ed)
 {
-    const draw::PainterPath& path = mutldata()->path;
+    const PainterPath& path = mutldata()->path;
 
     auto n = path.elementCount();
     PainterPath p;
@@ -182,7 +182,7 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         return {};
     }
 
-    const draw::PainterPath& path = ldata()->path;
+    const PainterPath& path = ldata()->path;
 
     size_t n = path.elementCount();
     PointF cp(pagePos());

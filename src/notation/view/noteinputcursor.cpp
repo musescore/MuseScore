@@ -24,7 +24,7 @@
 using namespace mu::notation;
 using namespace mu::engraving;
 
-void NoteInputCursor::paint(mu::draw::Painter* painter)
+void NoteInputCursor::paint(muse::draw::Painter* painter)
 {
     INotationNoteInputPtr noteInput = currentNoteInput();
     if (!noteInput || !noteInput->isNoteInputMode()) {

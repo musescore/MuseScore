@@ -63,7 +63,7 @@ public:
     void setGap(Millimetre sp);
     Millimetre gap() const { return m_gap; }
 
-    const draw::PainterPath& path() const { return m_path; }
+    const muse::draw::PainterPath& path() const { return m_path; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }
@@ -85,7 +85,7 @@ private:
 
     SpacerType m_spacerType = SpacerType::UP;
     Millimetre m_gap;
-    mu::draw::PainterPath m_path;
+    muse::draw::PainterPath m_path;
 };
 } // namespace mu::engraving
 #endif

@@ -33,6 +33,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -276,9 +277,9 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const PropertyValue& val, Prope
 //   drawEditMode
 //---------------------------------------------------------
 
-void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed, double /*currentViewScaling*/)
+void SlurTieSegment::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
-    using namespace mu::draw;
+    using namespace muse::draw;
     PolygonF polygon(7);
     polygon[0] = PointF(ed.grip[int(Grip::START)].center());
     polygon[1] = PointF(ed.grip[int(Grip::BEZIER1)].center());

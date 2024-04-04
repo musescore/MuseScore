@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_GEOMETRY_H
-#define MU_DRAW_GEOMETRY_H
+#ifndef MUSE_DRAW_GEOMETRY_H
+#define MUSE_DRAW_GEOMETRY_H
 
 #include <vector>
 #include <cmath>
@@ -775,4 +775,13 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::PointX<T>
     return s;
 }
 
-#endif // MU_DRAW_GEOMETRY_H
+namespace muse {
+using RectF = mu::RectF;
+using Size = mu::Size;
+using SizeF = mu::SizeF;
+using PointF = mu::PointF;
+using LineF = mu::LineF;
+using PolygonF = mu::PolygonF;
+}
+
+#endif // MUSE_DRAW_GEOMETRY_H

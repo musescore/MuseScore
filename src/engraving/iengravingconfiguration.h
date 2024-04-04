@@ -29,7 +29,7 @@
 #include "async/notification.h"
 #include "engraving/types/types.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Color;
 }
 
@@ -52,33 +52,34 @@ public:
 
     virtual String iconsFontFamily() const = 0;
 
-    virtual draw::Color defaultColor() const = 0;
-    virtual draw::Color scoreInversionColor() const = 0;
-    virtual draw::Color invisibleColor() const = 0;
-    virtual draw::Color lassoColor() const = 0;
-    virtual draw::Color warningColor() const = 0;
-    virtual draw::Color warningSelectedColor() const = 0;
-    virtual draw::Color criticalColor() const = 0;
-    virtual draw::Color criticalSelectedColor() const = 0;
-    virtual draw::Color formattingMarksColor() const = 0;
-    virtual draw::Color thumbnailBackgroundColor() const = 0;
-    virtual draw::Color noteBackgroundColor() const = 0;
-    virtual draw::Color fontPrimaryColor() const = 0;
+    virtual muse::draw::Color defaultColor() const = 0;
+    virtual muse::draw::Color scoreInversionColor() const = 0;
+    virtual muse::draw::Color invisibleColor() const = 0;
+    virtual muse::draw::Color lassoColor() const = 0;
+    virtual muse::draw::Color warningColor() const = 0;
+    virtual muse::draw::Color warningSelectedColor() const = 0;
+    virtual muse::draw::Color criticalColor() const = 0;
+    virtual muse::draw::Color criticalSelectedColor() const = 0;
+    virtual muse::draw::Color formattingMarksColor() const = 0;
+    virtual muse::draw::Color thumbnailBackgroundColor() const = 0;
+    virtual muse::draw::Color noteBackgroundColor() const = 0;
+    virtual muse::draw::Color fontPrimaryColor() const = 0;
 
-    virtual draw::Color timeTickAnchorColorLighter() const = 0;
-    virtual draw::Color timeTickAnchorColorDarker() const = 0;
+    virtual muse::draw::Color timeTickAnchorColorLighter() const = 0;
+    virtual muse::draw::Color timeTickAnchorColorDarker() const = 0;
 
     virtual double guiScaling() const = 0;
 
-    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
-    virtual void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) = 0;
-    virtual async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const = 0;
+    virtual muse::draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true,
+                                             bool itemIsUnlinkedFromScore = false) const = 0;
+    virtual void setSelectionColor(voice_idx_t voiceIndex, muse::draw::Color color) = 0;
+    virtual async::Channel<voice_idx_t, muse::draw::Color> selectionColorChanged() const = 0;
 
     virtual bool scoreInversionEnabled() const = 0;
     virtual void setScoreInversionEnabled(bool value) = 0;
     virtual async::Notification scoreInversionChanged() const = 0;
 
-    virtual draw::Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
+    virtual muse::draw::Color highlightSelectionColor(voice_idx_t voiceIndex = 0) const = 0;
 
     struct DebuggingOptions {
         bool showElementBoundingRects = false;

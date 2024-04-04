@@ -36,7 +36,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");

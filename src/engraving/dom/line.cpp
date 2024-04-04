@@ -960,7 +960,7 @@ bool SLine::setProperty(Pid id, const PropertyValue& v)
         m_diagonal = v.toBool();
         break;
     case Pid::COLOR:
-        m_lineColor = v.value<mu::draw::Color>();
+        m_lineColor = v.value<Color>();
         break;
     case Pid::LINE_WIDTH:
         if (v.type() == P_TYPE::MILLIMETRE) {

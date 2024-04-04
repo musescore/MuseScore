@@ -33,6 +33,7 @@
 #include "stafftype.h"
 
 using namespace mu;
+using namespace muse::draw;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -131,7 +132,7 @@ bool ShadowNote::computeUp() const
     }
 }
 
-void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
+void ShadowNote::drawArticulations(Painter* painter) const
 {
     double noteheadWidth = symWidth(m_noteheadSymbol);
     double ms = spatium();
@@ -154,7 +155,7 @@ void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
     }
 }
 
-void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& artic, RectF& boundRect) const
+void ShadowNote::drawMarcato(Painter* painter, const SymId& artic, RectF& boundRect) const
 {
     PointF coord;
     double spacing = spatium();
@@ -169,7 +170,7 @@ void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& artic, Rec
     drawSymbol(artic, painter, coord);
 }
 
-void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic, RectF& boundRect) const
+void ShadowNote::drawArticulation(Painter* painter, const SymId& artic, RectF& boundRect) const
 {
     PointF coord;
     double spacing = spatium();

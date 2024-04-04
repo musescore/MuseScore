@@ -94,7 +94,7 @@ RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2,
 bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 {
     if (id == Pid::COLOR) {
-        mu::draw::Color color = v.value<mu::draw::Color>();
+        Color color = v.value<Color>();
 
         if (m_text) {
             m_text->setColor(color);

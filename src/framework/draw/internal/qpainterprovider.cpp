@@ -36,7 +36,7 @@
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 QPainterProvider::QPainterProvider(QPainter* painter, bool ownsPainter)
     : m_painter(painter), m_ownsPainter(ownsPainter), m_drawObjectsLogger(new DrawObjectsLogger())

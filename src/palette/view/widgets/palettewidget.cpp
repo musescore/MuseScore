@@ -68,7 +68,7 @@ using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
 using namespace mu::engraving;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace muse::actions;
 
 PaletteWidget::PaletteWidget(QWidget* parent)
@@ -608,7 +608,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     QPixmap pm(w, h);
     pm.fill(configuration()->elementsBackgroundColor());
 
-    mu::draw::Painter painter(&pm, "palette");
+    muse::draw::Painter painter(&pm, "palette");
     painter.setAntialiasing(true);
 
     painter.scale(cellMag, cellMag);
@@ -964,7 +964,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
     qreal mag      = magS / _spatium;
     gpaletteScore->style().setSpatium(SPATIUM20);
 
-    mu::draw::Painter painter(this, "palette");
+    muse::draw::Painter painter(this, "palette");
     painter.setAntialiasing(true);
 
     if (m_paintOptions.backgroundColor.isValid()) {
@@ -1051,7 +1051,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
         }
 
-        draw::Pen pen(linesColor);
+        muse::draw::Pen pen(linesColor);
         pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * magS);
         painter.setPen(pen);
 

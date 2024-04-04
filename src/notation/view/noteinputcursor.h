@@ -37,7 +37,7 @@ class NoteInputCursor
     INJECT(INotationConfiguration, configuration)
 
 public:
-    void paint(draw::Painter* painter);
+    void paint(muse::draw::Painter* painter);
 
 private:
     INotationNoteInputPtr currentNoteInput() const;

@@ -138,9 +138,9 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
     return RectF(x, y, width, height);
 }
 
-void LoopMarker::paint(mu::draw::Painter* painter)
+void LoopMarker::paint(muse::draw::Painter* painter)
 {
-    using namespace mu::draw;
+    using namespace muse::draw;
 
     if (!m_visible || !m_notation) {
         return;

@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-namespace mu::draw {
+namespace muse::draw {
 QImagePainterProvider::QImagePainterProvider(std::shared_ptr<Pixmap> px)
     : QPainterProvider(new QPainter()), m_px(px)
 {

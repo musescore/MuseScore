@@ -55,18 +55,18 @@ public:
     SizeF pageSizeInch() const override;
     SizeF pageSizeInch(const Options& opt) const override;
 
-    void paintView(draw::Painter* painter, const RectF& frameRect, bool isPrinting) override;
-    void paintPdf(draw::Painter* painter, const Options& opt) override;
-    void paintPrint(draw::Painter* painter, const Options& opt) override;
-    void paintPng(draw::Painter* painter, const Options& opt) override;
+    void paintView(muse::draw::Painter* painter, const RectF& frameRect, bool isPrinting) override;
+    void paintPdf(muse::draw::Painter* painter, const Options& opt) override;
+    void paintPrint(muse::draw::Painter* painter, const Options& opt) override;
+    void paintPng(muse::draw::Painter* painter, const Options& opt) override;
 
 private:
     mu::engraving::Score* score() const;
 
     bool isPaintPageBorder() const;
-    void doPaint(draw::Painter* painter, const Options& opt);
-    void paintPageBorder(draw::Painter* painter, const mu::engraving::Page* page) const;
-    void paintPageSheet(mu::draw::Painter* painter, const engraving::Page* page, const RectF& pageRect, bool printPageBackground) const;
+    void doPaint(muse::draw::Painter* painter, const Options& opt);
+    void paintPageBorder(muse::draw::Painter* painter, const mu::engraving::Page* page) const;
+    void paintPageSheet(muse::draw::Painter* painter, const engraving::Page* page, const RectF& pageRect, bool printPageBackground) const;
 
     Notation* m_notation = nullptr;
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DRAW_IFONTPROVIDER_H
-#define MU_DRAW_IFONTPROVIDER_H
+#ifndef MUSE_DRAW_IFONTPROVIDER_H
+#define MUSE_DRAW_IFONTPROVIDER_H
 
 #include "global/modularity/imoduleinterface.h"
 #include "global/io/path.h"
@@ -30,10 +30,10 @@
 #include "types/font.h"
 #include "types/geometry.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class IFontProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::draw::IFontProvider)
+    INTERFACE_ID(muse::draw::IFontProvider)
 
 public:
     virtual ~IFontProvider() = default;
@@ -66,4 +66,4 @@ public:
 };
 }
 
-#endif // MU_DRAW_IFONTPROVIDER_H
+#endif // MUSE_DRAW_IFONTPROVIDER_H

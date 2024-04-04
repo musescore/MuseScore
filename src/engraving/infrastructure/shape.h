@@ -30,7 +30,7 @@
 
 #include "engraving/types/types.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter;
 }
 
@@ -162,7 +162,7 @@ public:
     bool intersects(const Shape&) const;
     bool clearsVertically(const Shape& a) const;
 
-    void paint(mu::draw::Painter& painter) const;
+    void paint(muse::draw::Painter& painter) const;
 
 private:
 

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_FONTPROVIDER_H
-#define MU_DRAW_FONTPROVIDER_H
+#ifndef MUSE_DRAW_FONTPROVIDER_H
+#define MUSE_DRAW_FONTPROVIDER_H
 
 #include "ifontprovider.h"
 
@@ -28,8 +28,8 @@
 #include "ifontsdatabase.h"
 #include "ifontsengine.h"
 
-namespace mu::draw {
-class FontProvider : public mu::draw::IFontProvider
+namespace muse::draw {
+class FontProvider : public IFontProvider
 {
     Inject<IFontsDatabase> fontsDatabase;
     Inject<IFontsEngine> fontsEngine;
@@ -41,28 +41,28 @@ public:
     int addTextFont(const mu::io::path_t& path) override;
     void insertSubstitution(const mu::String& familyName, const mu::String& to) override;
 
-    double lineSpacing(const mu::draw::Font& f) const override;
-    double xHeight(const mu::draw::Font& f) const override;
-    double height(const mu::draw::Font& f) const override;
-    double ascent(const mu::draw::Font& f) const override;
-    double descent(const mu::draw::Font& f) const override;
+    double lineSpacing(const Font& f) const override;
+    double xHeight(const Font& f) const override;
+    double height(const Font& f) const override;
+    double ascent(const Font& f) const override;
+    double descent(const Font& f) const override;
 
-    bool inFont(const mu::draw::Font& f, mu::Char ch) const override;
-    bool inFontUcs4(const mu::draw::Font& f, char32_t ucs4) const override;
+    bool inFont(const Font& f, mu::Char ch) const override;
+    bool inFontUcs4(const Font& f, char32_t ucs4) const override;
 
     // Text
-    double horizontalAdvance(const mu::draw::Font& f, const mu::String& string) const override;
-    double horizontalAdvance(const mu::draw::Font& f, const mu::Char& ch) const override;
+    double horizontalAdvance(const Font& f, const mu::String& string) const override;
+    double horizontalAdvance(const Font& f, const mu::Char& ch) const override;
 
-    mu::RectF boundingRect(const mu::draw::Font& f, const mu::String& string) const override;
-    mu::RectF boundingRect(const mu::draw::Font& f, const mu::Char& ch) const override;
-    mu::RectF boundingRect(const mu::draw::Font& f, const mu::RectF& r, int flags, const mu::String& string) const override;
-    mu::RectF tightBoundingRect(const mu::draw::Font& f, const mu::String& string) const override;
+    mu::RectF boundingRect(const Font& f, const mu::String& string) const override;
+    mu::RectF boundingRect(const Font& f, const mu::Char& ch) const override;
+    mu::RectF boundingRect(const Font& f, const mu::RectF& r, int flags, const mu::String& string) const override;
+    mu::RectF tightBoundingRect(const Font& f, const mu::String& string) const override;
 
     // Score symbols
-    mu::RectF symBBox(const mu::draw::Font& f, char32_t ucs4, double DPI_F) const override;
-    double symAdvance(const mu::draw::Font& f, char32_t ucs4, double DPI_F) const override;
+    mu::RectF symBBox(const Font& f, char32_t ucs4, double DPI_F) const override;
+    double symAdvance(const Font& f, char32_t ucs4, double DPI_F) const override;
 };
 }
 
-#endif // MU_DRAW_FONTPROVIDER_H
+#endif // MUSE_DRAW_FONTPROVIDER_H

@@ -36,10 +36,10 @@ public:
     Ret drawDataToPng(const io::path_t& dataFile, const io::path_t& outFile);
     Ret drawDiffToPng(const io::path_t& diffFile, const io::path_t& refFile, const io::path_t& outFile);
 
-    Ret saveAsPng(const draw::DrawDataPtr& data, const io::path_t& path);
+    Ret saveAsPng(const muse::draw::DrawDataPtr& data, const io::path_t& path);
 
-    draw::Pixmap drawDataToPixmap(const draw::DrawDataPtr& data);
-    void drawOnPixmap(draw::Pixmap& px, const draw::DrawDataPtr& data, const draw::Color& overlay = draw::Color());
+    muse::draw::Pixmap drawDataToPixmap(const muse::draw::DrawDataPtr& data);
+    void drawOnPixmap(muse::draw::Pixmap& px, const muse::draw::DrawDataPtr& data, const muse::draw::Color& overlay = muse::draw::Color());
 };
 }
 

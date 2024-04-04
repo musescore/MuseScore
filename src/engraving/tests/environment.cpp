@@ -37,7 +37,7 @@
 
 static mu::testing::SuiteEnvironment engraving_se(
 {
-    new mu::draw::DrawModule(),
+    new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()
 },
     nullptr,
@@ -54,7 +54,7 @@ static mu::testing::SuiteEnvironment engraving_se(
     std::shared_ptr<::testing::NiceMock<mu::engraving::EngravingConfigurationMock> > configurator
         = std::make_shared<::testing::NiceMock<mu::engraving::EngravingConfigurationMock> >();
     ON_CALL(*configurator, isAccessibleEnabled()).WillByDefault(::testing::Return(false));
-    ON_CALL(*configurator, defaultColor()).WillByDefault(::testing::Return(mu::draw::Color::BLACK));
+    ON_CALL(*configurator, defaultColor()).WillByDefault(::testing::Return(muse::draw::Color::BLACK));
     mu::engraving::EngravingItem::setengravingConfiguration(configurator);
 }
     );

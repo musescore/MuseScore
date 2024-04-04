@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_IIMAGEPROVIDER_H
-#define MU_DRAW_IIMAGEPROVIDER_H
+#ifndef MUSE_DRAW_IIMAGEPROVIDER_H
+#define MUSE_DRAW_IIMAGEPROVIDER_H
 
 #include "global/modularity/ioc.h"
 #include "global/io/iodevice.h"
@@ -30,7 +30,7 @@
 #include "types/color.h"
 #include "ipaintprovider.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class IImageProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IImageProvider)
@@ -49,4 +49,4 @@ public:
 };
 }
 
-#endif // MU_DRAW_IIMAGEPROVIDER_H
+#endif // MUSE_DRAW_IIMAGEPROVIDER_H

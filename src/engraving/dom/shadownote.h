@@ -62,9 +62,9 @@ public:
     void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY,
                   AccidentalType accidentalType = AccidentalType::NONE, const std::set<SymId>& articulationIds = {});
 
-    void drawArticulations(mu::draw::Painter* painter) const;
-    void drawMarcato(mu::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
-    void drawArticulation(mu::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
+    void drawArticulations(muse::draw::Painter* painter) const;
+    void drawMarcato(muse::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
+    void drawArticulation(muse::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
 
     bool computeUp() const;
     SymId noteheadSymbol() const { return m_noteheadSymbol; }

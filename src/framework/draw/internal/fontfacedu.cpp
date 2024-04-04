@@ -21,7 +21,7 @@
  */
 #include "fontfacedu.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 struct DummyGlyph {
     FBBox textBbox;

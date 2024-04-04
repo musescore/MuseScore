@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 //! NOTE Perhaps in the future we need to add something like ISvgRenderer
 

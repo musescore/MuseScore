@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DRAW_TRANSFORM_H
-#define MU_DRAW_TRANSFORM_H
+#ifndef MUSE_DRAW_TRANSFORM_H
+#define MUSE_DRAW_TRANSFORM_H
 
 #include "global/realfn.h"
 
 #include "matrix.h"
 #include "geometry.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class PainterPath;
 
 class Transform
@@ -56,9 +56,9 @@ public:
     bool operator ==(const Transform& other) const
     {
         return m_affine == other.m_affine
-               && RealIsEqual(m_13, other.m_13)
-               && RealIsEqual(m_23, other.m_23)
-               && RealIsEqual(m_33, other.m_33);
+               && mu::RealIsEqual(m_13, other.m_13)
+               && mu::RealIsEqual(m_23, other.m_23)
+               && mu::RealIsEqual(m_33, other.m_33);
     }
 
     bool operator !=(const Transform& other) const { return !this->operator==(other); }
@@ -138,7 +138,7 @@ private:
 
 inline Transform& Transform::operator*=(double num)
 {
-    if (RealIsEqual(num, 1.)) {
+    if (mu::RealIsEqual(num, 1.)) {
         return *this;
     }
     m_affine.m_11 *= num;
@@ -158,7 +158,7 @@ inline Transform& Transform::operator*=(double num)
 
 inline Transform& Transform::operator/=(double div)
 {
-    if (RealIsNull(div)) {
+    if (mu::RealIsNull(div)) {
         return *this;
     }
     div = 1.0 / div;
@@ -178,4 +178,4 @@ inline Transform operator/(const Transform& a, double n)
 }
 }
 
-#endif // MU_DRAW_TRANSFORM_H
+#endif // MUSE_DRAW_TRANSFORM_H

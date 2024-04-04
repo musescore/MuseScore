@@ -103,13 +103,13 @@ public:
 
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
-    const mu::draw::Font& font() const { return m_font; }
+    const muse::draw::Font& font() const { return m_font; }
     char32_t code() const { return m_code; }
-    void setFont(const mu::draw::Font& f);
+    void setFont(const muse::draw::Font& f);
     void setCode(char32_t val) { m_code = val; }
 
 private:
-    mu::draw::Font m_font;
+    muse::draw::Font m_font;
     char32_t m_code = 0; // character code point (Unicode)
 };
 } // namespace mu::engraving

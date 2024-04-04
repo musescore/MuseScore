@@ -106,10 +106,10 @@ public:
     void setDiagonal(bool v) { m_diagonal = v; }
 
     Millimetre lineWidth() const { return m_lineWidth; }
-    mu::draw::Color lineColor() const { return m_lineColor; }
+    muse::draw::Color lineColor() const { return m_lineColor; }
     LineType lineStyle() const { return m_lineStyle; }
     void setLineWidth(const Millimetre& v) { m_lineWidth = v; }
-    void setLineColor(const mu::draw::Color& v) { m_lineColor = v; }
+    void setLineColor(const muse::draw::Color& v) { m_lineColor = v; }
     void setLineStyle(LineType v) { m_lineStyle = v; }
 
     double dashLineLen() const { return m_dashLineLen; }
@@ -136,7 +136,7 @@ private:
     friend class LineSegment;
 
     Millimetre m_lineWidth;
-    mu::draw::Color m_lineColor { engravingConfiguration()->defaultColor() };
+    muse::draw::Color m_lineColor { engravingConfiguration()->defaultColor() };
     LineType m_lineStyle = LineType::SOLID;
     double m_dashLineLen = 5.0;
     double m_dashGapLen = 5.0;

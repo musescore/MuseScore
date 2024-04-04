@@ -81,7 +81,7 @@ public:
 
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
-    mu::draw::Font font(double sp) const;
+    muse::draw::Font font(double sp) const;
 
     void fillArrows(double width);
     void fillSegments();    // converting points from file to bend segments

@@ -256,7 +256,7 @@ class Score : public EngravingObject
     OBJECT_ALLOCATOR(engraving, Score)
     DECLARE_CLASSOF(ElementType::SCORE)
 
-    Inject<draw::IImageProvider> imageProvider;
+    Inject<muse::draw::IImageProvider> imageProvider;
     Inject<IEngravingConfiguration> configuration;
     Inject<IEngravingFontsProvider> engravingFonts;
     Inject<IApplication> application;
@@ -574,7 +574,7 @@ public:
     void updateShowAnchors(staff_idx_t staffIdx, const Fraction& startTick, const Fraction& endTick);
     const ShowAnchors& showAnchors() const { return m_showAnchors; }
 
-    void print(mu::draw::Painter* printer, int page);
+    void print(muse::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     std::set<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
@@ -945,7 +945,7 @@ public:
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
-    std::shared_ptr<mu::draw::Pixmap> createThumbnail();
+    std::shared_ptr<muse::draw::Pixmap> createThumbnail();
     String createRehearsalMarkText(RehearsalMark* current) const;
     String nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 

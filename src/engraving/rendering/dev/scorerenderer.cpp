@@ -40,6 +40,7 @@
 
 #include "log.h"
 
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -58,12 +59,12 @@ SizeF ScoreRenderer::pageSizeInch(const Score* score, const PaintOptions& opt) c
     return Paint::pageSizeInch(score, opt);
 }
 
-void ScoreRenderer::paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const
+void ScoreRenderer::paintScore(Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const
 {
     Paint::paintScore(painter, score, opt);
 }
 
-void ScoreRenderer::paintItem(draw::Painter& painter, const EngravingItem* item) const
+void ScoreRenderer::paintItem(Painter& painter, const EngravingItem* item) const
 {
     Paint::paintItem(painter, item);
 }
@@ -74,7 +75,7 @@ void ScoreRenderer::doLayoutItem(EngravingItem* item)
     TLayout::layoutItem(item, ctx);
 }
 
-void ScoreRenderer::doDrawItem(const EngravingItem* item, draw::Painter* p)
+void ScoreRenderer::doDrawItem(const EngravingItem* item, Painter* p)
 {
     TDraw::drawItem(item, p);
 }

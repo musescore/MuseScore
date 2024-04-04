@@ -125,7 +125,7 @@ public:
 
     bool layoutCloseToNote() const;
 
-    const draw::Font& font() const { return m_font; }
+    const muse::draw::Font& font() const { return m_font; }
     bool isHiddenOnTabStaff() const;
 
     std::vector<mu::LineF> dragAnchorLines() const override;
@@ -218,7 +218,7 @@ private:
     String m_channelName;
 
     ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
-    draw::Font m_font; // used for drawing text type articulations
+    muse::draw::Font m_font; // used for drawing text type articulations
 
     ArticulationAnchor m_anchor = ArticulationAnchor::AUTO;
 

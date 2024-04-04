@@ -34,7 +34,7 @@
 #include "log.h"
 
 using namespace mu::palette;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag)

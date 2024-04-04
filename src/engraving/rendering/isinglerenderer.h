@@ -43,7 +43,7 @@ public:
         doLayoutItem(item);
     }
 
-    void drawItem(const EngravingItem* item, draw::Painter* p)
+    void drawItem(const EngravingItem* item, muse::draw::Painter* p)
     {
         doDrawItem(item, p);
     }
@@ -51,7 +51,7 @@ public:
 protected:
 
     virtual void doLayoutItem(EngravingItem* item) = 0;
-    virtual void doDrawItem(const EngravingItem* item, draw::Painter* p) = 0;
+    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) = 0;
 };
 }
 

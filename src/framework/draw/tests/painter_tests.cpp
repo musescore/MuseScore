@@ -29,7 +29,7 @@
 #include "draw/internal/qpainterprovider.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 class Draw_PainterTests : public ::testing::Test
 {

@@ -66,7 +66,7 @@ mu::Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
                                                   Val(configuration()->exportPngWithTransparentBackground())).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
-    mu::draw::Painter painter(&image, "pngwriter");
+    muse::draw::Painter painter(&image, "pngwriter");
 
     notation->painting()->paintPng(&painter, opt);
 

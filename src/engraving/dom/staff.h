@@ -224,9 +224,9 @@ public:
 
     using EngravingItem::color;
     using EngravingItem::setColor;
-    mu::draw::Color color(const Fraction&) const;
-    void setColor(const Fraction&, const mu::draw::Color& val);
-    void undoSetColor(const mu::draw::Color& val);
+    muse::draw::Color color(const Fraction&) const;
+    void setColor(const Fraction&, const muse::draw::Color& val);
+    void undoSetColor(const muse::draw::Color& val);
     void insertTime(const Fraction&, const Fraction& len);
 
     PropertyValue getProperty(Pid) const override;
@@ -295,7 +295,7 @@ private:
     bool m_mergeMatchingRests = false;      // merge matching rests in multiple voices
     HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
 
-    mu::draw::Color m_color   { engravingConfiguration()->defaultColor() };
+    muse::draw::Color m_color   { engravingConfiguration()->defaultColor() };
     Millimetre m_userDist     { Millimetre(0.0) };           ///< user edited extra distance
 
     StaffTypeList m_staffTypeList;

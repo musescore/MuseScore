@@ -2041,7 +2041,7 @@ EngravingItem* Chord::drop(EditData& data)
     return 0;
 }
 
-void Chord::setColor(const mu::draw::Color& color)
+void Chord::setColor(const Color& color)
 {
     ChordRest::setColor(color);
 

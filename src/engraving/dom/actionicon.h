@@ -86,7 +86,7 @@ public:
 
     char16_t icon() const { return m_icon; }
 
-    const mu::draw::Font& iconFont() const { return m_iconFont; }
+    const muse::draw::Font& iconFont() const { return m_iconFont; }
     double fontSize() const;
     void setFontSize(double size);
 
@@ -97,7 +97,7 @@ private:
     ActionIconType m_actionType = ActionIconType::UNDEFINED;
     std::string m_actionCode;
     char16_t m_icon = 0;
-    mu::draw::Font m_iconFont;
+    muse::draw::Font m_iconFont;
 };
 }
 

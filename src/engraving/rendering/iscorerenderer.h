@@ -29,7 +29,7 @@
 
 #include "../types/fraction.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter;
 }
 
@@ -112,14 +112,14 @@ public:
         int trimMarginPixelSize = -1;
         int deviceDpi = -1;
 
-        std::function<void(draw::Painter* painter, const Page* page, const RectF& pageRect)> onPaintPageSheet;
+        std::function<void(muse::draw::Painter* painter, const Page* page, const RectF& pageRect)> onPaintPageSheet;
         std::function<void()> onNewPage;
     };
 
     virtual SizeF pageSizeInch(const Score* score) const = 0;
     virtual SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const = 0;
-    virtual void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const = 0;
-    virtual void paintItem(draw::Painter& painter, const EngravingItem* item) const = 0;
+    virtual void paintScore(muse::draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const = 0;
+    virtual void paintItem(muse::draw::Painter& painter, const EngravingItem* item) const = 0;
 
     // Temporary compatibility interface
     using Supported = std::variant<std::monostate,
@@ -181,7 +181,7 @@ public:
     // Layout Text 1
     virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
-    void drawItem(const EngravingItem* item, draw::Painter* p)
+    void drawItem(const EngravingItem* item, muse::draw::Painter* p)
     {
         doDrawItem(item, p);
     }
@@ -193,7 +193,7 @@ private:
     // Layout Single Item
     virtual void doLayoutItem(EngravingItem* item) = 0;
 
-    virtual void doDrawItem(const EngravingItem* item, draw::Painter* p) = 0;
+    virtual void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) = 0;
 };
 }
 

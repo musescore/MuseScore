@@ -85,7 +85,7 @@ Notation::Notation(mu::engraving::Score* score)
         notifyAboutNotationChanged();
     });
 
-    engravingConfiguration()->selectionColorChanged().onReceive(this, [this](int, const mu::draw::Color&) {
+    engravingConfiguration()->selectionColorChanged().onReceive(this, [this](int, const muse::draw::Color&) {
         notifyAboutNotationChanged();
     });
 

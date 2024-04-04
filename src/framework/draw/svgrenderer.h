@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_SVGRENDERER_H
-#define MU_DRAW_SVGRENDERER_H
+#ifndef MUSE_DRAW_SVGRENDERER_H
+#define MUSE_DRAW_SVGRENDERER_H
 
 #include "global/types/bytearray.h"
 
@@ -29,7 +29,7 @@
 
 class QSvgRenderer;
 
-namespace mu::draw {
+namespace muse::draw {
 class SvgRenderer
 {
 public:
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_DRAW_SVGRENDERER_H
+#endif // MUSE_DRAW_SVGRENDERER_H

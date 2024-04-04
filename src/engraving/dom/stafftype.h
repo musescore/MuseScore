@@ -206,10 +206,10 @@ public:
     StaffType();
 
     StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
-              bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const mu::draw::Color& color);
+              bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible, const muse::draw::Color& color);
 
     StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist, bool genClef, bool showBarLines,
-              bool stemless, bool genTimesig, bool invisible, const mu::draw::Color& color, const String& durFontName, double durFontSize,
+              bool stemless, bool genTimesig, bool invisible, const muse::draw::Color& color, const String& durFontName, double durFontSize,
               double durFontUserY, double genDur, const String& fretFontName, double fretFontSize, double fretFontUserY,
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
               bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
@@ -242,11 +242,11 @@ public:
     double userMag() const { return m_userMag; }
     bool isSmall() const { return m_small; }
     bool invisible() const { return m_invisible; }
-    const mu::draw::Color& color() const { return m_color; }
+    const muse::draw::Color& color() const { return m_color; }
     void setUserMag(double val) { m_userMag = val; }
     void setSmall(bool val) { m_small = val; }
     void setInvisible(bool val) { m_invisible = val; }
-    void setColor(const mu::draw::Color& val) { m_color = val; }
+    void setColor(const muse::draw::Color& val) { m_color = val; }
     Spatium yoffset() const { return m_yoffset; }
     void setYoffset(Spatium val) { m_yoffset = val; }
     double spatium(const MStyle& style) const;
@@ -278,14 +278,14 @@ public:
     int     visualStringToPhys(int line) const;                   // return the string in physical order from visual string
     double   physStringToYOffset(int strg) const;                  // return the string Y offset (in sp, chord-relative)
     String tabBassStringPrefix(int strg, bool* hasFret) const;   // return a string with the prefix, if any, identifying a bass string
-    void    drawInputStringMarks(mu::draw::Painter* p, int string, voice_idx_t voice, const RectF& rect) const;
+    void    drawInputStringMarks(muse::draw::Painter* p, int string, voice_idx_t voice, const RectF& rect) const;
     int     numOfTabLedgerLines(int string) const;
 
     // properties getters (some getters require updated metrics)
     double durationBoxH() const;
     double durationBoxY() const;
 
-    const mu::draw::Font& durationFont() const { return m_durationFont; }
+    const muse::draw::Font& durationFont() const { return m_durationFont; }
     const TablatureDurationFont& tabDurationFont() const { return m_durationFonts[m_durationFontIdx]; }
     const String& durationFontName() const { return m_durationFonts[m_durationFontIdx].displayName; }
     double durationFontSize() const { return m_durationFontSize; }
@@ -303,7 +303,7 @@ public:
     double fretMaskH() const { return m_lineDistance.val() * SPATIUM20; }
     double fretMaskY() const { return (m_onLines ? -0.5 : -1.0) * m_lineDistance.val() * SPATIUM20; }
 
-    const mu::draw::Font& fretFont() const { return m_fretFont; }
+    const muse::draw::Font& fretFont() const { return m_fretFont; }
     const String fretFontName() const { return m_fretFonts[m_fretFontIdx].displayName; }
     double fretFontSize() const { return m_fretFontSize; }
     double fretFontUserY() const { return m_fretFontUserY; }
@@ -381,7 +381,7 @@ private:
     Spatium m_yoffset;
     bool m_small = false;
     bool m_invisible = false;
-    mu::draw::Color m_color = engravingConfiguration()->defaultColor();
+    muse::draw::Color m_color = engravingConfiguration()->defaultColor();
 
     int m_lines = 5;
     int m_stepOffset = 0;
@@ -425,7 +425,7 @@ private:
     double mutable m_durationBoxY = 0.0;            // the height and the y rect.coord. (relative to staff top line)
     // of a box bounding all duration symbols (raster units) internally computed:
     // depends upon _onString and the metrics of the duration font
-    mu::draw::Font m_durationFont;                  // font used to draw dur. symbols; cached for efficiency
+    muse::draw::Font m_durationFont;                  // font used to draw dur. symbols; cached for efficiency
     size_t m_durationFontIdx = 0;             // the index of current dur. font in dur. font array
     mutable double m_durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
     // string lines (raster units); internally computed: depends upon _onString and duration font
@@ -438,7 +438,7 @@ private:
     mutable double m_deadFretBoxY = 0.0;
     // of a box bounding all fret characters (raster units) internally computed:
     // depends upon _onString, _useNumbers and the metrics of the fret font
-    mu::draw::Font m_fretFont;                      // font used to draw fret marks; cached for efficiency
+    muse::draw::Font m_fretFont;                      // font used to draw fret marks; cached for efficiency
     size_t m_fretFontIdx = 0;                 // the index of current fret font in fret font array
     mutable double m_fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
     mutable double m_deadFretYOffset = 0.0;

@@ -20,8 +20,8 @@
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   */
 
-#ifndef MU_DRAW_COLOR_H
-#define MU_DRAW_COLOR_H
+#ifndef MUSE_DRAW_COLOR_H
+#define MUSE_DRAW_COLOR_H
 
 #include <string>
 
@@ -33,7 +33,7 @@
 #include <QColor>
 #endif
 
-namespace mu::draw {
+namespace muse::draw {
 class Color
 {
 public:
@@ -108,4 +108,4 @@ inline const Color Color::GREEN { 0, 255, 0 };
 inline const Color Color::BLUE { 0, 0, 255 };
 }
 
-#endif // MU_DRAW_COLOR_H
+#endif // MUSE_DRAW_COLOR_H

@@ -28,7 +28,7 @@
 
 using namespace mu;
 using namespace mu::print;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::notation;
 
 Ret PrintProvider::printNotation(INotationPtr notation)

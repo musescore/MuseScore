@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_FONTSTYPES_H
-#define MU_DRAW_FONTSTYPES_H
+#ifndef MUSE_DRAW_FONTSTYPES_H
+#define MUSE_DRAW_FONTSTYPES_H
 
 #include <string>
 
@@ -29,7 +29,7 @@
 #include "font.h"
 #include "geometry.h"
 
-namespace mu::draw {
+namespace muse::draw {
 using glyph_idx_t = uint32_t;
 
 static constexpr double DPI_F = 5.0;
@@ -77,7 +77,7 @@ private:
     bool m_italic = false;
 };
 
-inline FontDataKey dataKeyForFont(const mu::draw::Font& f)
+inline FontDataKey dataKeyForFont(const Font& f)
 {
     return FontDataKey(f.family().toStdString(), f.bold(), f.italic());
 }
@@ -91,7 +91,7 @@ struct FontData {
 
 struct FaceKey {
     FontDataKey dataKey;
-    mu::draw::Font::Type type = mu::draw::Font::Type::Undefined;
+    Font::Type type = Font::Type::Undefined;
     int pixelSize = 0;
 
     FaceKey() = default;
@@ -114,7 +114,7 @@ struct FaceKey {
     }
 };
 
-inline int pixelSizeForFont(const mu::draw::Font& f)
+inline int pixelSizeForFont(const Font& f)
 {
     if (f.pixelSize() > 0) {
         return f.pixelSize();
@@ -123,7 +123,7 @@ inline int pixelSizeForFont(const mu::draw::Font& f)
     }
 }
 
-inline FaceKey faceKeyForFont(const mu::draw::Font& f)
+inline FaceKey faceKeyForFont(const Font& f)
 {
     return FaceKey{ dataKeyForFont(f), f.type(), pixelSizeForFont(f) };
 }
@@ -145,11 +145,11 @@ struct GlyphImage {
 
 struct FontParams {
     std::string name;
-    mu::draw::Font::Type type = mu::draw::Font::Type::Undefined;
+    Font::Type type = Font::Type::Undefined;
     bool bold = false;
     bool italic = false;
     float pointSize = 0.0f;
 };
 }
 
-#endif // MU_DRAW_FONTSTYPES_H
+#endif // MUSE_DRAW_FONTSTYPES_H

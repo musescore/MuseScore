@@ -96,9 +96,9 @@ public:
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
-    mu::draw::PainterPath basePath(double stretch = 0) const;
-    const mu::draw::PainterPath& path() const { return m_path; }
-    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
+    muse::draw::PainterPath basePath(double stretch = 0) const;
+    const muse::draw::PainterPath& path() const { return m_path; }
+    void setPath(const muse::draw::PainterPath& p) { m_path = p; }
 
     void computeShape();
 
@@ -110,7 +110,7 @@ private:
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;
     TDuration m_durationType;
-    mu::draw::PainterPath m_path;
+    muse::draw::PainterPath m_path;
     bool m_playTremolo = true;
 
     int m_lines = 0;         // derived from _subtype

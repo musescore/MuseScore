@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 static int rtoi(double v)
 {

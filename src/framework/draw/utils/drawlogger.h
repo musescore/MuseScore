@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_DRAWLOGGER_H
-#define MU_DRAW_DRAWLOGGER_H
+#ifndef MUSE_DRAW_DRAWLOGGER_H
+#define MUSE_DRAW_DRAWLOGGER_H
 
 #include <stack>
 #include <string>
 
-namespace mu::draw {
+namespace muse::draw {
 class DrawObjectsLogger
 {
 public:
@@ -40,4 +40,4 @@ private:
 };
 }
 
-#endif // MU_DRAW_DRAWLOGGER_H
+#endif // MUSE_DRAW_DRAWLOGGER_H

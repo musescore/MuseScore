@@ -57,29 +57,30 @@ public:
 
     String iconsFontFamily() const override;
 
-    draw::Color defaultColor() const override;
-    draw::Color scoreInversionColor() const override;
-    draw::Color invisibleColor() const override;
-    draw::Color lassoColor() const override;
-    draw::Color warningColor() const override;
-    draw::Color warningSelectedColor() const override;
-    draw::Color criticalColor() const override;
-    draw::Color criticalSelectedColor() const override;
-    draw::Color formattingMarksColor() const override;
-    draw::Color thumbnailBackgroundColor() const override;
-    draw::Color noteBackgroundColor() const override;
-    draw::Color fontPrimaryColor() const override;
+    muse::draw::Color defaultColor() const override;
+    muse::draw::Color scoreInversionColor() const override;
+    muse::draw::Color invisibleColor() const override;
+    muse::draw::Color lassoColor() const override;
+    muse::draw::Color warningColor() const override;
+    muse::draw::Color warningSelectedColor() const override;
+    muse::draw::Color criticalColor() const override;
+    muse::draw::Color criticalSelectedColor() const override;
+    muse::draw::Color formattingMarksColor() const override;
+    muse::draw::Color thumbnailBackgroundColor() const override;
+    muse::draw::Color noteBackgroundColor() const override;
+    muse::draw::Color fontPrimaryColor() const override;
 
-    draw::Color timeTickAnchorColorLighter() const override;
-    draw::Color timeTickAnchorColorDarker() const override;
+    muse::draw::Color timeTickAnchorColorLighter() const override;
+    muse::draw::Color timeTickAnchorColorDarker() const override;
 
     double guiScaling() const override;
 
-    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
-    void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) override;
-    async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const override;
+    muse::draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true,
+                                     bool itemIsUnlinkedFromScore = false) const override;
+    void setSelectionColor(voice_idx_t voiceIndex, muse::draw::Color color) override;
+    async::Channel<voice_idx_t, muse::draw::Color> selectionColorChanged() const override;
 
-    draw::Color highlightSelectionColor(voice_idx_t voice = 0) const override;
+    muse::draw::Color highlightSelectionColor(voice_idx_t voice = 0) const override;
 
     bool scoreInversionEnabled() const override;
     void setScoreInversionEnabled(bool value) override;
@@ -102,7 +103,7 @@ public:
     bool specificSlursLayoutWorkaround() const override;
 
 private:
-    async::Channel<voice_idx_t, draw::Color> m_voiceColorChanged;
+    async::Channel<voice_idx_t, muse::draw::Color> m_voiceColorChanged;
     async::Notification m_scoreInversionChanged;
 
     ValNt<DebuggingOptions> m_debuggingOptions;

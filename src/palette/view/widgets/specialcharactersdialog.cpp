@@ -724,7 +724,7 @@ void SpecialCharactersDialog::populateUnicode()
     }
 }
 
-void SpecialCharactersDialog::setFont(const mu::draw::Font& font)
+void SpecialCharactersDialog::setFont(const muse::draw::Font& font)
 {
     m_font = font;
     m_font.setPointSizeF(20);

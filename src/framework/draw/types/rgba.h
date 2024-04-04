@@ -20,12 +20,12 @@
   * along with this program.  If not, see <https://www.gnu.org/licenses/>.
   */
 
-#ifndef MU_DRAW_RGBA_H
-#define MU_DRAW_RGBA_H
+#ifndef MUSE_DRAW_RGBA_H
+#define MUSE_DRAW_RGBA_H
 
 #include <cstdint>
 
-namespace mu::draw {
+namespace muse::draw {
 using Rgba = uint32_t;
 
 // masks RGB values
@@ -68,4 +68,4 @@ inline constexpr int getAlpha(Rgba rgba)
 }
 }
 
-#endif // MU_DRAW_RGBA_H
+#endif // MUSE_DRAW_RGBA_H

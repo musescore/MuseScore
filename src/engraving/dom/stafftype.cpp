@@ -38,6 +38,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::io;
 using namespace mu::engraving;
 
@@ -67,7 +68,7 @@ StaffType::StaffType()
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
                      bool genClef, bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLines, bool invisible,
-                     const mu::draw::Color& color)
+                     const Color& color)
     : m_group(sg), m_xmlName(xml), m_name(name),
     m_invisible(invisible),
     m_color(color),
@@ -85,7 +86,7 @@ StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int l
 
 StaffType::StaffType(StaffGroup sg, const String& xml, const String& name, int lines, int stpOff, double lineDist,
                      bool genClef,
-                     bool showBarLines, bool stemless, bool genTimesig, bool invisible, const mu::draw::Color& color,
+                     bool showBarLines, bool stemless, bool genTimesig, bool invisible, const Color& color,
                      const String& durFontName, double durFontSize, double durFontUserY, double genDur,
                      const String& fretFontName, double fretFontSize, double fretFontUserY,
                      TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines,
@@ -337,16 +338,16 @@ void StaffType::setDurationMetrics() const
 
 // FontMetrics returns results unreliably rounded to integral pixels;
 // use a scaled up font and then scale computed values down
-    mu::draw::Font font(durationFont());
+    Font font(durationFont());
     font.setPointSizeF(m_durationFontSize);
-    mu::draw::FontMetrics fm(font);
+    FontMetrics fm(font);
     String txt(m_durationFonts[m_durationFontIdx].displayValue, int(TabVal::NUM_OF));
     RectF bb(fm.tightBoundingRect(txt));
     // raise symbols by a default margin and, if marks are above lines, by half the line distance
     // (converted from spatium units to raster units)
     m_durationGridYOffset = (TAB_DEFAULT_DUR_YOFFS - (m_onLines ? 0.0 : lineDistance().val() * 0.5)) * SPATIUM20;
     // this is the bottomest point of any duration sign
-    m_durationYOffset        = m_durationGridYOffset;
+    m_durationYOffset = m_durationGridYOffset;
     // move symbols so that the lowest margin 'sits' on the base line:
     // move down by the whole part above (negative) the base line
     // ( -bb.y() ) then up by the whole height ( -bb.height() )
@@ -364,7 +365,7 @@ void StaffType::setFretMetrics(const MStyle& style) const
         return;
     }
 
-    mu::draw::FontMetrics fm(fretFont());
+    FontMetrics fm(fretFont());
     RectF bb;
     // compute vertical displacement
     if (m_useNumbers) {
@@ -427,7 +428,7 @@ void StaffType::setDurationFontName(const String& name)
     if (idx >= m_durationFonts.size()) {
         idx = 0;              // if name not found, use first font
     }
-    m_durationFont.setFamily(m_durationFonts[idx].family, draw::Font::Type::Tablature);
+    m_durationFont.setFamily(m_durationFonts[idx].family, Font::Type::Tablature);
     m_durationFontIdx = idx;
     m_durationMetricsValid = false;
 }
@@ -448,7 +449,7 @@ void StaffType::setFretFontName(const String& name)
     if (idx >= m_fretFonts.size()) {
         idx = 0;              // if name not found, use first font
     }
-    m_fretFont.setFamily(m_fretFonts[idx].family, draw::Font::Type::Tablature);
+    m_fretFont.setFamily(m_fretFonts[idx].family, Font::Type::Tablature);
     m_fretFontIdx = idx;
     m_fretMetricsValid = false;
 }
@@ -685,7 +686,7 @@ String StaffType::tabBassStringPrefix(int strg, bool* hasFret) const
 //    rect    the rect of the 'blue rectangle' showing the input position
 //---------------------------------------------------------
 
-void StaffType::drawInputStringMarks(mu::draw::Painter* p, int string, voice_idx_t voice, const RectF& rect) const
+void StaffType::drawInputStringMarks(Painter* p, int string, voice_idx_t voice, const RectF& rect) const
 {
     if (m_group != StaffGroup::TAB) {
         return;
@@ -700,7 +701,7 @@ void StaffType::drawInputStringMarks(mu::draw::Painter* p, int string, voice_idx
     bool hasFret = false;
     String text = tabBassStringPrefix(string, &hasFret);
     double lw = LEDGER_LINE_THICKNESS * spatium; // use a fixed width
-    mu::draw::Pen pen(engravingConfiguration()->selectionColor(voice), lw);
+    Pen pen(engravingConfiguration()->selectionColor(voice), lw);
     p->setPen(pen);
     // draw conventional 'ledger lines', if required
     int numOfLedgerLines  = numOfTabLedgerLines(string);
@@ -716,7 +717,7 @@ void StaffType::drawInputStringMarks(mu::draw::Painter* p, int string, voice_idx
     }
     // draw the text, if any
     if (!text.isEmpty()) {
-        mu::draw::Font f = fretFont();
+        Font f = fretFont();
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
         p->setFont(f);
         p->drawText(PointF(rect.left(), rect.top() + lineDist), text);

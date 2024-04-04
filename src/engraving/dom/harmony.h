@@ -41,7 +41,7 @@ class ParsedChord;
 //---------------------------------------------------------
 
 struct TextSegment {
-    mu::draw::Font m_font;
+    muse::draw::Font m_font;
     String text;
     double x, y = 0;         // Position of segments relative to each other.
     mu::PointF offset;       // Offset for placing within the TextBase.
@@ -53,10 +53,10 @@ struct TextSegment {
     mu::PointF pos() const { return mu::PointF(x, y) + offset; }
 
     TextSegment() { select = false; x = y = 0.0; }
-    TextSegment(const mu::draw::Font& f, double _x, double _y)
+    TextSegment(const muse::draw::Font& f, double _x, double _y)
         : m_font(f), x(_x), y(_y), select(false) {}
-    TextSegment(const String&, const mu::draw::Font&, double x, double y);
-    void set(const String&, const mu::draw::Font&, double x, double y, mu::PointF offset);
+    TextSegment(const String&, const muse::draw::Font&, double x, double y);
+    void set(const String&, const muse::draw::Font&, double x, double y, mu::PointF offset);
     void setText(const String& t) { text = t; }
 };
 
@@ -207,7 +207,7 @@ private:
 
     void determineRootBaseSpelling();
 
-    void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
     void render(const String&, double&, double&);
     void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
                 NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
@@ -231,7 +231,7 @@ private:
     mutable RealizedHarmony m_realizedHarmony; // the realized harmony used for playback
 
     std::vector<HDegree> m_degreeList;
-    std::vector<mu::draw::Font> m_fontList; // temp values used in render()
+    std::vector<muse::draw::Font> m_fontList; // temp values used in render()
     std::vector<TextSegment*> m_textList;   // rendered chord
 
     bool m_leftParen = false;

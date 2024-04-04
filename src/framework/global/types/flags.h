@@ -104,10 +104,14 @@ private:
 };
 
 #define DECLARE_FLAGS(Name, Enum) \
-    using Name = Flags<Enum>;
+    using Name = mu::Flags<Enum>;
 
 #define DECLARE_OPERATORS_FOR_FLAGS(Name) \
-    constexpr inline Flags<Name::enum_type> operator|(Name::enum_type f1, Name::enum_type f2) { return Flags<Name::enum_type>(f1) | f2; }
+    constexpr inline mu::Flags<Name::enum_type> operator|(Name::enum_type f1, \
+                                                          Name::enum_type f2) \
+    { \
+        return mu::Flags<Name::enum_type>(f1) | f2; \
+    }
 }
 
 #endif // MU_GLOBAL_FLAGS_H

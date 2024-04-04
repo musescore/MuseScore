@@ -33,7 +33,7 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace mu::draw;
+using namespace muse::draw;
 
 NotationPainting::NotationPainting(Notation* notation)
     : m_notation(notation)
@@ -110,7 +110,7 @@ bool NotationPainting::isPaintPageBorder() const
     return false;
 }
 
-void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
+void NotationPainting::doPaint(Painter* painter, const Options& opt)
 {
     TRACEFUNC;
     if (!score()) {
@@ -119,7 +119,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
 
     Options myopt = opt;
     bool printPageBackground = myopt.printPageBackground;
-    myopt.onPaintPageSheet = [this, printPageBackground](draw::Painter* painter, const Page* page, const RectF& pageRect) {
+    myopt.onPaintPageSheet = [this, printPageBackground](Painter* painter, const Page* page, const RectF& pageRect) {
         paintPageSheet(painter, page, pageRect, printPageBackground);
     };
 
@@ -189,7 +189,7 @@ void NotationPainting::paintView(Painter* painter, const RectF& frameRect, bool 
     doPaint(painter, opt);
 }
 
-void NotationPainting::paintPdf(draw::Painter* painter, const Options& opt)
+void NotationPainting::paintPdf(Painter* painter, const Options& opt)
 {
     Q_ASSERT(opt.deviceDpi > 0);
     Options myopt = opt;
@@ -199,7 +199,7 @@ void NotationPainting::paintPdf(draw::Painter* painter, const Options& opt)
     doPaint(painter, myopt);
 }
 
-void NotationPainting::paintPrint(draw::Painter* painter, const Options& opt)
+void NotationPainting::paintPrint(Painter* painter, const Options& opt)
 {
     Q_ASSERT(opt.deviceDpi > 0);
     Options myopt = opt;

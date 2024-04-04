@@ -25,6 +25,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 
 namespace mu::engraving {
 XmlReader::~XmlReader()
@@ -54,10 +55,10 @@ PointF XmlReader::readPoint()
 //   readColor
 //---------------------------------------------------------
 
-mu::draw::Color XmlReader::readColor()
+Color XmlReader::readColor()
 {
     assert(tokenType() == XmlStreamReader::StartElement);
-    draw::Color c;
+    Color c;
     c.setRed(intAttribute("r"));
     c.setGreen(intAttribute("g"));
     c.setBlue(intAttribute("b"));

@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 IPaintProviderPtr Painter::extended;
 bool PainterItemMarker::enabled = true;
@@ -456,7 +456,7 @@ void Painter::fillRect(const RectF& rect, const Brush& brush)
 {
     Pen oldPen = this->pen();
     Brush oldBrush = this->brush();
-    setPen(Pen(mu::draw::PenStyle::NoPen));
+    setPen(Pen(PenStyle::NoPen));
     setBrush(brush);
 
     drawRect(rect);

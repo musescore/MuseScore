@@ -74,7 +74,7 @@ public:
 
     double lineWidth() const { return m_lw; }
     const RectF& iconBorderRect() const { return m_iconBorderRect; }
-    const draw::PainterPath& iconPath() const { return m_iconPath; }
+    const muse::draw::PainterPath& iconPath() const { return m_iconPath; }
 
 protected:
     void added() override;
@@ -90,7 +90,7 @@ private:
 
     double m_lw = 0.0;
     mu::RectF m_iconBorderRect;
-    mu::draw::PainterPath m_iconPath;
+    muse::draw::PainterPath m_iconPath;
     double m_pause = 0.0;
     bool m_startWithLongNames = false;
     bool m_startWithMeasureOne = false;

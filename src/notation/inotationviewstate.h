@@ -47,9 +47,9 @@ public:
     virtual bool isMatrixInited() const = 0;
     virtual void setMatrixInited(bool inited) = 0;
 
-    virtual draw::Transform matrix() const = 0;
-    virtual async::Channel<draw::Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
-    virtual void setMatrix(const draw::Transform& matrix, NotationPaintView* sender) = 0;
+    virtual muse::draw::Transform matrix() const = 0;
+    virtual async::Channel<muse::draw::Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
+    virtual void setMatrix(const muse::draw::Transform& matrix, NotationPaintView* sender) = 0;
 
     virtual ValCh<int> zoomPercentage() const = 0;
 

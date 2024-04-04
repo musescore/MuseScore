@@ -118,11 +118,11 @@ public:
     Grip defaultGrip() const override { return Grip::DRAG; }
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
+    virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
     struct LayoutData : public SpannerSegment::LayoutData
     {
-        ld_field<mu::draw::PainterPath> path = "path";
+        ld_field<muse::draw::PainterPath> path = "path";
         ld_field<double> midThickness = "midThickness";
     };
     DECLARE_LAYOUTDATA_METHODS(SlurTieSegment)

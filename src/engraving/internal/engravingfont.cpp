@@ -35,7 +35,7 @@
 
 using namespace mu;
 using namespace mu::io;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 // =============================================
@@ -98,11 +98,11 @@ void EngravingFont::ensureLoad()
         return;
     }
 
-    m_font.setWeight(mu::draw::Font::Normal);
+    m_font.setWeight(Font::Normal);
     m_font.setItalic(false);
     m_font.setFamily(String::fromStdString(m_family), Font::Type::MusicSymbol);
     m_font.setNoFontMerging(true);
-    m_font.setHinting(mu::draw::Font::Hinting::PreferVerticalHinting);
+    m_font.setHinting(Font::Hinting::PreferVerticalHinting);
 
     for (size_t id = 0; id < m_symbols.size(); ++id) {
         Smufl::Code code = Smufl::code(static_cast<SymId>(id));

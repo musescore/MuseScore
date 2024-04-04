@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
 

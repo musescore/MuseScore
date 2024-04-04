@@ -177,135 +177,135 @@ class TDraw
 {
 public:
 
-    static void drawItem(const EngravingItem* item, draw::Painter* painter);      // factory
+    static void drawItem(const EngravingItem* item, muse::draw::Painter* painter);      // factory
 
 private:
-    static void draw(const Accidental* item, draw::Painter* painter);
-    static void draw(const ActionIcon* item, draw::Painter* painter);
-    static void draw(const Ambitus* item, draw::Painter* painter);
-    static void draw(const Arpeggio* item, draw::Painter* painter);
-    static void draw(const Articulation* item, draw::Painter* painter);
+    static void draw(const Accidental* item, muse::draw::Painter* painter);
+    static void draw(const ActionIcon* item, muse::draw::Painter* painter);
+    static void draw(const Ambitus* item, muse::draw::Painter* painter);
+    static void draw(const Arpeggio* item, muse::draw::Painter* painter);
+    static void draw(const Articulation* item, muse::draw::Painter* painter);
 
-    static void draw(const BagpipeEmbellishment* item, draw::Painter* painter);
-    static void draw(const BarLine* item, draw::Painter* painter);
-    static void draw(const Beam* item, draw::Painter* painter);
-    static void draw(const Bend* item, draw::Painter* painter);
-    static void draw(const Box* item, draw::Painter* painter);
-    static void draw(const HBox* item, draw::Painter* painter);
-    static void draw(const VBox* item, draw::Painter* painter);
-    static void draw(const FBox* item, draw::Painter* painter);
-    static void draw(const TBox* item, draw::Painter* painter);
-    static void draw(const Bracket* item, draw::Painter* painter);
-    static void draw(const Breath* item, draw::Painter* painter);
+    static void draw(const BagpipeEmbellishment* item, muse::draw::Painter* painter);
+    static void draw(const BarLine* item, muse::draw::Painter* painter);
+    static void draw(const Beam* item, muse::draw::Painter* painter);
+    static void draw(const Bend* item, muse::draw::Painter* painter);
+    static void draw(const Box* item, muse::draw::Painter* painter);
+    static void draw(const HBox* item, muse::draw::Painter* painter);
+    static void draw(const VBox* item, muse::draw::Painter* painter);
+    static void draw(const FBox* item, muse::draw::Painter* painter);
+    static void draw(const TBox* item, muse::draw::Painter* painter);
+    static void draw(const Bracket* item, muse::draw::Painter* painter);
+    static void draw(const Breath* item, muse::draw::Painter* painter);
 
-    static void draw(const ChordLine* item, draw::Painter* painter);
-    static void draw(const Clef* item, draw::Painter* painter);
-    static void draw(const Capo* item, draw::Painter* painter);
+    static void draw(const ChordLine* item, muse::draw::Painter* painter);
+    static void draw(const Clef* item, muse::draw::Painter* painter);
+    static void draw(const Capo* item, muse::draw::Painter* painter);
 
-    static void draw(const DeadSlapped* item, draw::Painter* painter);
-    static void draw(const Dynamic* item, draw::Painter* painter);
+    static void draw(const DeadSlapped* item, muse::draw::Painter* painter);
+    static void draw(const Dynamic* item, muse::draw::Painter* painter);
 
-    static void draw(const Expression* item, draw::Painter* painter);
+    static void draw(const Expression* item, muse::draw::Painter* painter);
 
-    static void draw(const Fermata* item, draw::Painter* painter);
-    static void draw(const FiguredBass* item, draw::Painter* painter);
-    static void draw(const FiguredBassItem* item, draw::Painter* painter);
-    static void draw(const Fingering* item, draw::Painter* painter);
-    static void draw(const FretDiagram* item, draw::Painter* painter);
-    static void draw(const FretCircle* item, draw::Painter* painter);
+    static void draw(const Fermata* item, muse::draw::Painter* painter);
+    static void draw(const FiguredBass* item, muse::draw::Painter* painter);
+    static void draw(const FiguredBassItem* item, muse::draw::Painter* painter);
+    static void draw(const Fingering* item, muse::draw::Painter* painter);
+    static void draw(const FretDiagram* item, muse::draw::Painter* painter);
+    static void draw(const FretCircle* item, muse::draw::Painter* painter);
 
-    static void draw(const GlissandoSegment* item, draw::Painter* painter);
-    static void draw(const GradualTempoChangeSegment* item, draw::Painter* painter);
-    static void draw(const GuitarBendSegment* item, draw::Painter* painter);
-    static void draw(const GuitarBendHoldSegment* item, draw::Painter* painter);
+    static void draw(const GlissandoSegment* item, muse::draw::Painter* painter);
+    static void draw(const GradualTempoChangeSegment* item, muse::draw::Painter* painter);
+    static void draw(const GuitarBendSegment* item, muse::draw::Painter* painter);
+    static void draw(const GuitarBendHoldSegment* item, muse::draw::Painter* painter);
 
-    static void draw(const HairpinSegment* item, draw::Painter* painter);
-    static void draw(const HarpPedalDiagram* item, draw::Painter* painter);
-    static void draw(const HarmonicMarkSegment* item, draw::Painter* painter);
-    static void draw(const Harmony* item, draw::Painter* painter);
-    static void draw(const Hook* item, draw::Painter* painter);
+    static void draw(const HairpinSegment* item, muse::draw::Painter* painter);
+    static void draw(const HarpPedalDiagram* item, muse::draw::Painter* painter);
+    static void draw(const HarmonicMarkSegment* item, muse::draw::Painter* painter);
+    static void draw(const Harmony* item, muse::draw::Painter* painter);
+    static void draw(const Hook* item, muse::draw::Painter* painter);
 
-    static void draw(const Image* item, draw::Painter* painter);
-    static void draw(const InstrumentChange* item, draw::Painter* painter);
-    static void draw(const InstrumentName* item, draw::Painter* painter);
+    static void draw(const Image* item, muse::draw::Painter* painter);
+    static void draw(const InstrumentChange* item, muse::draw::Painter* painter);
+    static void draw(const InstrumentName* item, muse::draw::Painter* painter);
 
-    static void draw(const Jump* item, draw::Painter* painter);
+    static void draw(const Jump* item, muse::draw::Painter* painter);
 
-    static void draw(const KeySig* item, draw::Painter* painter);
+    static void draw(const KeySig* item, muse::draw::Painter* painter);
 
-    static void draw(const Lasso* item, draw::Painter* painter);
-    static void draw(const LayoutBreak* item, draw::Painter* painter);
-    static void draw(const LedgerLine* item, draw::Painter* painter);
-    static void draw(const LetRingSegment* item, draw::Painter* painter);
-    static void draw(const Lyrics* item, draw::Painter* painter);
-    static void draw(const LyricsLineSegment* item, draw::Painter* painter);
+    static void draw(const Lasso* item, muse::draw::Painter* painter);
+    static void draw(const LayoutBreak* item, muse::draw::Painter* painter);
+    static void draw(const LedgerLine* item, muse::draw::Painter* painter);
+    static void draw(const LetRingSegment* item, muse::draw::Painter* painter);
+    static void draw(const Lyrics* item, muse::draw::Painter* painter);
+    static void draw(const LyricsLineSegment* item, muse::draw::Painter* painter);
 
-    static void draw(const Marker* item, draw::Painter* painter);
-    static void draw(const MeasureNumber* item, draw::Painter* painter);
-    static void draw(const MeasureRepeat* item, draw::Painter* painter);
-    static void draw(const MMRest* item, draw::Painter* painter);
-    static void draw(const MMRestRange* item, draw::Painter* painter);
+    static void draw(const Marker* item, muse::draw::Painter* painter);
+    static void draw(const MeasureNumber* item, muse::draw::Painter* painter);
+    static void draw(const MeasureRepeat* item, muse::draw::Painter* painter);
+    static void draw(const MMRest* item, muse::draw::Painter* painter);
+    static void draw(const MMRestRange* item, muse::draw::Painter* painter);
 
-    static void draw(const Note* item, draw::Painter* painter);
-    static void draw(const NoteDot* item, draw::Painter* painter);
-    static void draw(const NoteHead* item, draw::Painter* painter);
+    static void draw(const Note* item, muse::draw::Painter* painter);
+    static void draw(const NoteDot* item, muse::draw::Painter* painter);
+    static void draw(const NoteHead* item, muse::draw::Painter* painter);
 
-    static void draw(const Ornament* item, draw::Painter* painter);
-    static void draw(const OttavaSegment* item, draw::Painter* painter);
+    static void draw(const Ornament* item, muse::draw::Painter* painter);
+    static void draw(const OttavaSegment* item, muse::draw::Painter* painter);
 
-    static void draw(const Page* item, draw::Painter* painter);
-    static void draw(const PalmMuteSegment* item, draw::Painter* painter);
-    static void draw(const PedalSegment* item, draw::Painter* painter);
-    static void draw(const PickScrapeSegment* item, draw::Painter* painter);
-    static void draw(const PlayTechAnnotation* item, draw::Painter* painter);
+    static void draw(const Page* item, muse::draw::Painter* painter);
+    static void draw(const PalmMuteSegment* item, muse::draw::Painter* painter);
+    static void draw(const PedalSegment* item, muse::draw::Painter* painter);
+    static void draw(const PickScrapeSegment* item, muse::draw::Painter* painter);
+    static void draw(const PlayTechAnnotation* item, muse::draw::Painter* painter);
 
-    static void draw(const RasgueadoSegment* item, draw::Painter* painter);
-    static void draw(const RehearsalMark* item, draw::Painter* painter);
-    static void draw(const Rest* item, draw::Painter* painter);
+    static void draw(const RasgueadoSegment* item, muse::draw::Painter* painter);
+    static void draw(const RehearsalMark* item, muse::draw::Painter* painter);
+    static void draw(const Rest* item, muse::draw::Painter* painter);
 
-    static void draw(const ShadowNote* item, draw::Painter* painter);
-    static void draw(const SlurSegment* item, draw::Painter* painter);
-    static void draw(const Spacer* item, draw::Painter* painter);
-    static void draw(const StaffLines* item, draw::Painter* painter);
-    static void draw(const StaffState* item, draw::Painter* painter);
-    static void draw(const StaffText* item, draw::Painter* painter);
-    static void draw(const StaffTypeChange* item, draw::Painter* painter);
-    static void draw(const Stem* item, draw::Painter* painter);
-    static void draw(const StemSlash* item, draw::Painter* painter);
-    static void draw(const Sticking* item, draw::Painter* painter);
-    static void draw(const StringTunings* item, draw::Painter* painter);
-    static void draw(const StretchedBend* item, draw::Painter* painter);
-    static void draw(const Symbol* item, draw::Painter* painter);
-    static void draw(const FSymbol* item, draw::Painter* painter);
-    static void draw(const SystemDivider* item, draw::Painter* painter);
-    static void draw(const SystemText* item, draw::Painter* painter);
+    static void draw(const ShadowNote* item, muse::draw::Painter* painter);
+    static void draw(const SlurSegment* item, muse::draw::Painter* painter);
+    static void draw(const Spacer* item, muse::draw::Painter* painter);
+    static void draw(const StaffLines* item, muse::draw::Painter* painter);
+    static void draw(const StaffState* item, muse::draw::Painter* painter);
+    static void draw(const StaffText* item, muse::draw::Painter* painter);
+    static void draw(const StaffTypeChange* item, muse::draw::Painter* painter);
+    static void draw(const Stem* item, muse::draw::Painter* painter);
+    static void draw(const StemSlash* item, muse::draw::Painter* painter);
+    static void draw(const Sticking* item, muse::draw::Painter* painter);
+    static void draw(const StringTunings* item, muse::draw::Painter* painter);
+    static void draw(const StretchedBend* item, muse::draw::Painter* painter);
+    static void draw(const Symbol* item, muse::draw::Painter* painter);
+    static void draw(const FSymbol* item, muse::draw::Painter* painter);
+    static void draw(const SystemDivider* item, muse::draw::Painter* painter);
+    static void draw(const SystemText* item, muse::draw::Painter* painter);
 
-    static void draw(const TabDurationSymbol* item, draw::Painter* painter);
-    static void draw(const TempoText* item, draw::Painter* painter);
-    static void draw(const Text* item, draw::Painter* painter);
-    static void draw(const TextLineSegment* item, draw::Painter* painter);
-    static void draw(const TieSegment* item, draw::Painter* painter);
-    static void draw(const TimeSig* item, draw::Painter* painter);
-    static void draw(const TremoloSingleChord* item, draw::Painter* painter);
-    static void draw(const TremoloTwoChord* item, draw::Painter* painter);
-    static void draw(const TremoloBar* item, draw::Painter* painter);
-    static void draw(const TrillSegment* item, draw::Painter* painter);
-    static void draw(const TripletFeel* item, draw::Painter* painter);
-    static void draw(const Tuplet* item, draw::Painter* painter);
+    static void draw(const TabDurationSymbol* item, muse::draw::Painter* painter);
+    static void draw(const TempoText* item, muse::draw::Painter* painter);
+    static void draw(const Text* item, muse::draw::Painter* painter);
+    static void draw(const TextLineSegment* item, muse::draw::Painter* painter);
+    static void draw(const TieSegment* item, muse::draw::Painter* painter);
+    static void draw(const TimeSig* item, muse::draw::Painter* painter);
+    static void draw(const TremoloSingleChord* item, muse::draw::Painter* painter);
+    static void draw(const TremoloTwoChord* item, muse::draw::Painter* painter);
+    static void draw(const TremoloBar* item, muse::draw::Painter* painter);
+    static void draw(const TrillSegment* item, muse::draw::Painter* painter);
+    static void draw(const TripletFeel* item, muse::draw::Painter* painter);
+    static void draw(const Tuplet* item, muse::draw::Painter* painter);
 
-    static void draw(const VibratoSegment* item, draw::Painter* painter);
-    static void draw(const VoltaSegment* item, draw::Painter* painter);
+    static void draw(const VibratoSegment* item, muse::draw::Painter* painter);
+    static void draw(const VoltaSegment* item, muse::draw::Painter* painter);
 
-    static void draw(const WhammyBarSegment* item, draw::Painter* painter);
+    static void draw(const WhammyBarSegment* item, muse::draw::Painter* painter);
 
-    static void drawTextBase(const TextBase* item, draw::Painter* painter);
-    static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
+    static void drawTextBase(const TextBase* item, muse::draw::Painter* painter);
+    static void drawTextLineBaseSegment(const TextLineBaseSegment* item, muse::draw::Painter* painter);
 
     // dev
-    static void draw(const System* item, draw::Painter* painter);
-    static void draw(const Measure* item, draw::Painter* painter);
-    static void draw(const Segment* item, draw::Painter* painter);
-    static void draw(const Chord* item, draw::Painter* painter);
+    static void draw(const System* item, muse::draw::Painter* painter);
+    static void draw(const Measure* item, muse::draw::Painter* painter);
+    static void draw(const Segment* item, muse::draw::Painter* painter);
+    static void draw(const Chord* item, muse::draw::Painter* painter);
 };
 }
 

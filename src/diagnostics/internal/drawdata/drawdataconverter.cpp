@@ -32,7 +32,7 @@
 
 using namespace mu;
 using namespace mu::diagnostics;
-using namespace mu::draw;
+using namespace muse::draw;
 
 static const Color REF_COLOR("#999999");
 static const Color ADDED_COLOR("#ff0000");
@@ -103,7 +103,7 @@ Pixmap DrawDataConverter::drawDataToPixmap(const DrawDataPtr& data)
     return png;
 }
 
-void DrawDataConverter::drawOnPixmap(Pixmap& px, const draw::DrawDataPtr& data, const Color& overlay)
+void DrawDataConverter::drawOnPixmap(Pixmap& px, const DrawDataPtr& data, const Color& overlay)
 {
     QImage qim = Pixmap::toQImage(px);
     qim.setDotsPerMeterX(std::lrint((DrawData::CANVAS_DPI * 1000) / mu::engraving::INCH));

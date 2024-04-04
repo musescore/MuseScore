@@ -31,7 +31,7 @@ void SingleRenderer::doLayoutItem(EngravingItem* item)
     SingleLayout::layoutItem(item);
 }
 
-void SingleRenderer::doDrawItem(const EngravingItem* item, draw::Painter* p)
+void SingleRenderer::doDrawItem(const EngravingItem* item, muse::draw::Painter* p)
 {
     SingleDraw::drawItem(item, p);
 }

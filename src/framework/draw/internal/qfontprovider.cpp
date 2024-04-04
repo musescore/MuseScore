@@ -30,7 +30,7 @@
 #include "fontengineft.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 class FontPaintDevice : public QPaintDevice
 {

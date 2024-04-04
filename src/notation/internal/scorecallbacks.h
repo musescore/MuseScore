@@ -39,7 +39,7 @@ public:
 
     void dataChanged(const mu::RectF&) override;
     void updateAll() override;
-    void drawBackground(mu::draw::Painter*, const RectF&) const override;
+    void drawBackground(muse::draw::Painter*, const RectF&) const override;
     const mu::Rect geometry() const override;
     qreal selectionProximity() const override;
     void setDropTarget(const mu::engraving::EngravingItem* dropTarget) override;

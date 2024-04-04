@@ -43,7 +43,7 @@ public:
 
     void move(midi::tick_t tick);
 
-    void paint(draw::Painter* painter);
+    void paint(muse::draw::Painter* painter);
 
 private:
     RectF resolveMarkerRectByTick(midi::tick_t tick) const;

@@ -73,6 +73,7 @@
 
 using namespace mu;
 using namespace mu::io;
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -583,12 +584,12 @@ Part* EngravingItem::part() const
     return s ? s->part() : 0;
 }
 
-void EngravingItem::setColor(const mu::draw::Color& c)
+void EngravingItem::setColor(const Color& c)
 {
     m_color = c;
 }
 
-draw::Color EngravingItem::color() const
+Color EngravingItem::color() const
 {
     return m_color;
 }
@@ -597,7 +598,7 @@ draw::Color EngravingItem::color() const
 //   curColor
 //---------------------------------------------------------
 
-mu::draw::Color EngravingItem::curColor() const
+Color EngravingItem::curColor() const
 {
     return curColor(visible());
 }
@@ -606,12 +607,12 @@ mu::draw::Color EngravingItem::curColor() const
 //   curColor
 //---------------------------------------------------------
 
-mu::draw::Color EngravingItem::curColor(bool isVisible) const
+Color EngravingItem::curColor(bool isVisible) const
 {
     return curColor(isVisible, color());
 }
 
-mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
+Color EngravingItem::curColor(bool isVisible, Color normalColor) const
 {
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
@@ -867,7 +868,7 @@ Compound::Compound(const Compound& c)
 //   draw
 //---------------------------------------------------------
 
-void Compound::draw(mu::draw::Painter* painter) const
+void Compound::draw(Painter* painter) const
 {
     for (EngravingItem* e : m_elements) {
         PointF pt(e->pos());
@@ -1170,7 +1171,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setGenerated(v.toBool());
         break;
     case Pid::COLOR:
-        setColor(v.value<mu::draw::Color>());
+        setColor(v.value<Color>());
         break;
     case Pid::VISIBLE:
         setVisible(v.toBool());
@@ -1554,7 +1555,7 @@ const MeasureBase* EngravingItem::findMeasureBase() const
 //   undoSetColor
 //---------------------------------------------------------
 
-void EngravingItem::undoSetColor(const mu::draw::Color& c)
+void EngravingItem::undoSetColor(const Color& c)
 {
     undoChangeProperty(Pid::COLOR, PropertyValue::fromValue(c));
 }
@@ -1577,17 +1578,17 @@ void EngravingItem::undoAddElement(EngravingItem* element, bool addToLinkedStave
 //   drawSymbol
 //---------------------------------------------------------
 
-void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, double scale) const
+void EngravingItem::drawSymbol(SymId id, Painter* p, const mu::PointF& o, double scale) const
 {
     score()->engravingFont()->draw(id, p, magS() * scale, o);
 }
 
-void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, double scale) const
+void EngravingItem::drawSymbols(const SymIdList& symbols, Painter* p, const PointF& o, double scale) const
 {
     score()->engravingFont()->draw(symbols, p, magS() * scale, o);
 }
 
-void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
+void EngravingItem::drawSymbols(const SymIdList& symbols, Painter* p, const PointF& o, const SizeF& scale) const
 {
     score()->engravingFont()->draw(symbols, p, SizeF(magS() * scale), o);
 }
@@ -1959,9 +1960,9 @@ void EditData::addData(std::shared_ptr<ElementEditData> ed)
 //   drawEditMode
 //---------------------------------------------------------
 
-void EngravingItem::drawEditMode(draw::Painter* p, EditData& ed, double /*currentViewScaling*/)
+void EngravingItem::drawEditMode(Painter* p, EditData& ed, double /*currentViewScaling*/)
 {
-    using namespace mu::draw;
+    using namespace muse::draw;
     Pen pen(engravingConfiguration()->defaultColor(), 0.0);
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
