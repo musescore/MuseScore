@@ -39,17 +39,17 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::cloud;
+using namespace muse::cloud;
 using namespace mu::network;
 
-const QString mu::cloud::ACCESS_TOKEN_KEY("access_token");
-const QString mu::cloud::REFRESH_TOKEN_KEY("refresh_token");
+const QString muse::cloud::ACCESS_TOKEN_KEY("access_token");
+const QString muse::cloud::REFRESH_TOKEN_KEY("refresh_token");
 
 static const std::string CLOUD_ACCESS_TOKEN_RESOURCE_NAME("CLOUD_ACCESS_TOKEN");
 
 static const std::string STATUS_KEY("status");
 
-QString mu::cloud::userAgent()
+QString muse::cloud::userAgent()
 {
     static const QStringList systemInfo {
         QSysInfo::kernelType(),
@@ -66,7 +66,7 @@ QString mu::cloud::userAgent()
            .arg(systemInfo.join(' ')).toLatin1();
 }
 
-int mu::cloud::generateFileNameNumber()
+int muse::cloud::generateFileNameNumber()
 {
     return QRandomGenerator::global()->generate() % 100000;
 }

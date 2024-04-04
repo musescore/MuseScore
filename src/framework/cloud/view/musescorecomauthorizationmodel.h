@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
-#define MU_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
+#ifndef MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
+#define MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
 
 #include <QObject>
 
@@ -29,7 +29,7 @@
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class MuseScoreComAuthorizationModel : public QObject, async::Asyncable
 {
     Q_OBJECT
@@ -54,4 +54,4 @@ signals:
 };
 }
 
-#endif // MU_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H
+#endif // MUSE_CLOUD_MUSESCORECOMAUTHORIZATIONMODEL_H

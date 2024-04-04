@@ -35,7 +35,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::cloud;
+using namespace muse::cloud;
 using namespace mu::network;
 
 static const QString MUSESCORECOM_CLOUD_TITLE("MuseScore.com");

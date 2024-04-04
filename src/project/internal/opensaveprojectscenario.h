@@ -40,8 +40,8 @@ class OpenSaveProjectScenario : public IOpenSaveProjectScenario
     INJECT(IProjectConfiguration, configuration)
     INJECT(IProjectFilesController, projectFilesController)
     INJECT(IInteractive, interactive)
-    INJECT(cloud::IMuseScoreComService, museScoreComService)
-    INJECT(cloud::IAudioComService, audioComService)
+    INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
+    INJECT(muse::cloud::IAudioComService, audioComService)
 
 public:
     OpenSaveProjectScenario() = default;
@@ -69,7 +69,7 @@ private:
     ///     true -> this is part of a "Publish" action
     RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const;
 
-    bool warnBeforePublishing(bool isPublishShare, cloud::Visibility visibility) const;
+    bool warnBeforePublishing(bool isPublishShare, muse::cloud::Visibility visibility) const;
 
     Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
     Ret warnCloudNotAvailableForSharingAudio() const;

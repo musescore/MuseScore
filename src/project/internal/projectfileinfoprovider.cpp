@@ -24,7 +24,7 @@
 
 #include "notationproject.h"
 
-using namespace mu;
+using namespace muse;
 using namespace mu::project;
 
 ProjectFileInfoProvider::ProjectFileInfoProvider(NotationProject* project)
@@ -33,17 +33,17 @@ ProjectFileInfoProvider::ProjectFileInfoProvider(NotationProject* project)
 }
 
 //! TODO: maybe implement this class further for Cloud Projects
-io::path_t ProjectFileInfoProvider::path() const
+muse::io::path_t ProjectFileInfoProvider::path() const
 {
     return m_project->path();
 }
 
-io::path_t ProjectFileInfoProvider::fileName(bool includingExtension) const
+muse::io::path_t ProjectFileInfoProvider::fileName(bool includingExtension) const
 {
     return io::filename(path(), includingExtension);
 }
 
-io::path_t ProjectFileInfoProvider::absoluteDirPath() const
+muse::io::path_t ProjectFileInfoProvider::absoluteDirPath() const
 {
     return io::absoluteDirpath(path());
 }
@@ -53,12 +53,12 @@ String ProjectFileInfoProvider::displayName() const
     return m_project->displayName();
 }
 
-DateTime ProjectFileInfoProvider::birthTime() const
+mu::DateTime ProjectFileInfoProvider::birthTime() const
 {
     return filesystem()->birthTime(path());
 }
 
-DateTime ProjectFileInfoProvider::lastModified() const
+mu::DateTime ProjectFileInfoProvider::lastModified() const
 {
     return filesystem()->lastModified(path());
 }

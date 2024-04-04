@@ -22,7 +22,7 @@
 
 #include "musescorecomauthorizationmodel.h"
 
-using namespace mu::cloud;
+using namespace muse::cloud;
 
 MuseScoreComAuthorizationModel::MuseScoreComAuthorizationModel(QObject* parent)
     : QObject(parent)

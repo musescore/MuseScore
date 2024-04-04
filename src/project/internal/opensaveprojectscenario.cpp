@@ -26,7 +26,7 @@
 #include "engraving/infrastructure/mscio.h"
 #include "projecterrors.h"
 
-using namespace mu;
+using namespace muse;
 using namespace mu::project;
 
 static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
@@ -89,7 +89,7 @@ RetVal<SaveLocation> OpenSaveProjectScenario::askSaveLocation(INotationProjectPt
 
 RetVal<io::path_t> OpenSaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
-    QString dialogTitle = qtrc("project/save", "Save score");
+    QString dialogTitle = mu::qtrc("project/save", "Save score");
     std::string filenameAddition;
 
     if (saveMode == SaveMode::SaveCopy) {
@@ -424,47 +424,47 @@ static std::string cloudStatusCodeErrorMessage(const Ret& ret, bool withHelp = f
     case int(cloud::Err::Status400_InvalidRequest):
         //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
         //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+        message = mu::qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
                   .arg("400 Invalid request").toStdString();
         break;
     case int(cloud::Err::Status401_AuthorizationRequired):
         //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
         //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+        message = mu::qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
                   .arg("401 Authorization required").toStdString();
         break;
     case int(cloud::Err::Status422_ValidationFailed):
         //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
         //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+        message = mu::qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
                   .arg("422 Validation failed").toStdString();
         break;
     case int(cloud::Err::Status429_RateLimitExceeded):
         //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
         //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+        message = mu::qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
                   .arg("429 Rate limit exceeded").toStdString();
         break;
     case int(cloud::Err::Status500_InternalServerError):
         //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
         //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+        message = mu::qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
                   .arg("500 Internal server error").toStdString();
         break;
     case int(cloud::Err::UnknownStatusCode): {
         std::any status = ret.data("status");
         if (status.has_value()) {
             //: %1 will be replaced with the error code that MuseScore.com returned, which is a number.
-            message = qtrc("project/cloud", "MuseScore.com returned an unknown error code: %1.")
+            message = mu::qtrc("project/cloud", "MuseScore.com returned an unknown error code: %1.")
                       .arg(std::any_cast<int>(status)).toStdString();
         } else {
-            message = trc("project/cloud", "MuseScore.com returned an unknown error code.");
+            message = mu::trc("project/cloud", "MuseScore.com returned an unknown error code.");
         }
     } break;
     }
 
     if (withHelp) {
-        message += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
+        message += "\n\n" + mu::trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
     }
 
     return message;
@@ -472,26 +472,26 @@ static std::string cloudStatusCodeErrorMessage(const Ret& ret, bool withHelp = f
 
 void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
 {
-    std::string title = trc("project", "Your score could not be opened");
+    std::string title = mu::trc("project", "Your score could not be opened");
     std::string message;
 
     switch (ret.code()) {
     case int(Err::InvalidCloudScoreId):
-        message = trc("project", "This score is invalid.");
+        message = mu::trc("project", "This score is invalid.");
         break;
     case int(Err::FileOpenError):
-        message = trc("project/cloud", "The file could not be downloaded to your disk.");
+        message = mu::trc("project/cloud", "The file could not be downloaded to your disk.");
         break;
     case int(cloud::Err::Status403_AccountNotActivated):
-        message = trc("project/cloud", "Your musescore.com account needs to be verified first. "
-                                       "Please activate your account via the link in the activation email.");
+        message = mu::trc("project/cloud", "Your musescore.com account needs to be verified first. "
+                                           "Please activate your account via the link in the activation email.");
         break;
     case int(cloud::Err::Status403_NotOwner):
-        message = trc("project/cloud", "This score does not belong to this account. To access this score, make sure you are logged in "
-                                       "to the desktop app with the account to which this score belongs.");
+        message = mu::trc("project/cloud", "This score does not belong to this account. To access this score, make sure you are logged in "
+                                           "to the desktop app with the account to which this score belongs.");
         break;
     case int(cloud::Err::Status404_NotFound):
-        message = trc("project/cloud", "The score could not be found, or cannot be accessed by your account.");
+        message = mu::trc("project/cloud", "The score could not be found, or cannot be accessed by your account.");
         break;
 
     case int(cloud::Err::Status400_InvalidRequest):
@@ -504,11 +504,11 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
         break;
 
     case int(cloud::Err::NetworkError):
-        message = trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
-                                       "Please check your internet connection or try again later.");
+        message = mu::trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+                                           "Please check your internet connection or try again later.");
         break;
     default:
-        message = trc("project/cloud", "Please try again later.");
+        message = mu::trc("project/cloud", "Please try again later.");
         break;
     }
 
@@ -556,8 +556,8 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
     case int(cloud::Err::Status409_Conflict):
         title = trc("project/save", "There are conflicting changes in the online score");
         if (isPublishShare) {
-            msg = qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or publish this as a new score "
-                                       "to avoid losing changes in the current online version.")
+            msg = mu::qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or publish this as a new score "
+                                           "to avoid losing changes in the current online version.")
                   .arg(info.sourceUrl.toString())
                   .toStdString();
             buttons = {
@@ -567,8 +567,8 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
             };
             defaultButtonCode = replaceBtnCode;
         } else {
-            msg = qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or save this as a new file "
-                                       "to avoid losing changes in the current online version.")
+            msg = mu::qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or save this as a new file "
+                                           "to avoid losing changes in the current online version.")
                   .arg(info.sourceUrl.toString())
                   .toStdString();
             buttons = {
@@ -633,7 +633,7 @@ Ret OpenSaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
         std::any status = ret.data("status");
         if (status.has_value()) {
             //: %1 will be replaced with the error code that audio.com returned, which is a number.
-            msg = qtrc("project/share", "Audio.com returned an unknown error code: %1.")
+            msg = mu::qtrc("project/share", "Audio.com returned an unknown error code: %1.")
                   .arg(std::any_cast<int>(status)).toStdString();
         } else {
             msg = trc("project/share", "Audio.com returned an unknown error code.");

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_ABSTRACTCLOUDSERVICE_H
-#define MU_CLOUD_ABSTRACTCLOUDSERVICE_H
+#ifndef MUSE_CLOUD_ABSTRACTCLOUDSERVICE_H
+#define MUSE_CLOUD_ABSTRACTCLOUDSERVICE_H
 
 #include <QObject>
 #include <QBuffer>
@@ -39,7 +39,7 @@ class QOAuth2AuthorizationCodeFlow;
 
 #include "iauthorizationservice.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 extern const QString ACCESS_TOKEN_KEY;
 extern const QString REFRESH_TOKEN_KEY;
 
@@ -58,11 +58,11 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     Q_OBJECT
 
     INJECT(ICloudConfiguration, configuration)
-    INJECT(ui::IUiConfiguration, uiConfig)
+    INJECT(mu::ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(IInteractive, interactive)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mu::network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(mu::IInteractive, interactive)
+    INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     explicit AbstractCloudService(QObject* parent = nullptr);
@@ -99,7 +99,7 @@ protected:
         QUrl refreshApiUrl;
         QUrl logoutApiUrl;
 
-        network::RequestHeaders headers;
+        mu::network::RequestHeaders headers;
         QVariantMap authorizationParameters;
         QVariantMap refreshParameters;
     };
@@ -108,7 +108,7 @@ protected:
 
     virtual Ret downloadAccountInfo() = 0;
 
-    virtual QString logoColorForTheme(const ui::ThemeInfo& theme) const;
+    virtual QString logoColorForTheme(const mu::ui::ThemeInfo& theme) const;
 
     void setAccountInfo(const AccountInfo& info);
 
@@ -141,7 +141,7 @@ private:
 
     void openUrl(const QUrl& url);
 
-    network::RequestHeaders headers() const;
+    mu::network::RequestHeaders headers() const;
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;
@@ -156,4 +156,4 @@ private:
 };
 }
 
-#endif // MU_CLOUD_ABSTRACTCLOUDSERVICE_H
+#endif // MUSE_CLOUD_ABSTRACTCLOUDSERVICE_H

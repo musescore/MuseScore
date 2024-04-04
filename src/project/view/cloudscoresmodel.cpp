@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::project;
 
 static const int BATCH_SIZE = 20;

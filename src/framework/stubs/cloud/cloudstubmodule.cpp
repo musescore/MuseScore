@@ -26,7 +26,8 @@
 
 #include "authorizationservicestub.h"
 
-using namespace mu::cloud;
+using namespace mu;
+using namespace muse::cloud;
 using namespace mu::modularity;
 
 static void cloud_init_qrc()

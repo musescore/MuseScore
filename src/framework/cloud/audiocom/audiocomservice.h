@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_AUDIOCOMSERVICE_H
-#define MU_CLOUD_AUDIOCOMSERVICE_H
+#ifndef MUSE_CLOUD_AUDIOCOMSERVICE_H
+#define MUSE_CLOUD_AUDIOCOMSERVICE_H
 
 #include <memory>
 
@@ -35,11 +35,11 @@
 
 #include "audiocom/iaudiocomservice.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class AudioComService : public IAudioComService, public AbstractCloudService, public std::enable_shared_from_this<AudioComService>
 {
     INJECT(ICloudConfiguration, configuration)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(mu::network::INetworkManagerCreator, networkManagerCreator)
 
 public:
     explicit AudioComService(QObject* parent = nullptr);
@@ -58,13 +58,13 @@ private:
 
     bool doUpdateTokens() override;
 
-    network::RequestHeaders headers(const QString& token = QString()) const;
+    mu::network::RequestHeaders headers(const QString& token = QString()) const;
 
-    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
-    Ret doCreateAudio(network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
+    Ret doUploadAudio(mu::network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
+    Ret doCreateAudio(mu::network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
                       const QUrl& existingUrl, Visibility visibility, bool replaceExisting);
 
-    Ret doUpdateVisibility(network::INetworkManagerPtr manager, const QUrl& url, Visibility visibility);
+    Ret doUpdateVisibility(mu::network::INetworkManagerPtr manager, const QUrl& url, Visibility visibility);
 
     void notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token);
     void notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token);
@@ -75,4 +75,4 @@ private:
 };
 }
 
-#endif // MU_CLOUD_AUDIOCOMSERVICE_H
+#endif // MUSE_CLOUD_AUDIOCOMSERVICE_H

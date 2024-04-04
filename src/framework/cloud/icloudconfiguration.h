@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_ICLOUDCONFIGURATION_H
-#define MU_CLOUD_ICLOUDCONFIGURATION_H
+#ifndef MUSE_CLOUD_ICLOUDCONFIGURATION_H
+#define MUSE_CLOUD_ICLOUDCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "network/networktypes.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class ICloudConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ICloudConfiguration)
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_CLOUD_ICLOUDCONFIGURATION_H
+#endif // MUSE_CLOUD_ICLOUDCONFIGURATION_H

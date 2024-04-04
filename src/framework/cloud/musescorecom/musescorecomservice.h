@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_MUSESCORECOMSERVICE_H
-#define MU_CLOUD_MUSESCORECOMSERVICE_H
+#ifndef MUSE_CLOUD_MUSESCORECOMSERVICE_H
+#define MUSE_CLOUD_MUSESCORECOMSERVICE_H
 
 #include <memory>
 
@@ -33,12 +33,12 @@
 
 #include "musescorecom/imusescorecomservice.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class MuseScoreComService : public IMuseScoreComService, public AbstractCloudService,
     public std::enable_shared_from_this<MuseScoreComService>
 {
     Inject<ICloudConfiguration> configuration;
-    Inject<network::INetworkManagerCreator> networkManagerCreator;
+    Inject<mu::network::INetworkManagerCreator> networkManagerCreator;
     Inject<IApplication> application;
 
 public:
@@ -69,17 +69,19 @@ private:
 
     bool doUpdateTokens() override;
 
-    QString logoColorForTheme(const ui::ThemeInfo& theme) const override;
+    QString logoColorForTheme(const mu::ui::ThemeInfo& theme) const override;
 
-    network::RequestHeaders headers() const;
+    mu::network::RequestHeaders headers() const;
 
-    Ret doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+    Ret doDownloadScore(mu::network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
                         const QString& hash = QString(), const QString& secret = QString());
 
-    mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+    mu::RetVal<mu::ValMap> doUploadScore(mu::network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
                                          Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
-    Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
+
+    Ret doUploadAudio(mu::network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat,
+                      const QUrl& sourceUrl);
 };
 }
 
-#endif // MU_CLOUD_MUSESCORECOMSERVICE_H
+#endif // MUSE_CLOUD_MUSESCORECOMSERVICE_H

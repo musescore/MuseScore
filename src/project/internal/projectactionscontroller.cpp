@@ -377,7 +377,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     CloudProjectInfo info;
 
     if (isOwner) {
-        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+        RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
         if (!scoreInfo.ret) {
             LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
             openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
@@ -461,7 +461,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     }
 
     // Check if user is owner
-    RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+    RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
     if (!scoreInfo.ret) {
         LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
         openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
@@ -889,7 +889,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
             return false;
         }
 
-        using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
+        using Response = muse::cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
         bool saveLocally = static_cast<Response>(retVal.val.toInt()) == Response::SaveLocallyInstead;
         if (saveLocally && project) {
             RetVal<io::path_t> rv = openSaveProjectScenario()->askLocalPath(project, saveMode);
@@ -909,16 +909,16 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         return false;
     }
 
-    bool isPublic = info.visibility == cloud::Visibility::Public;
+    bool isPublic = info.visibility == muse::cloud::Visibility::Public;
     bool generateAudio = false;
 
     if (saveMode == SaveMode::Save && isCloudAvailable) {
         // Get up-to-date visibility information
-        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
+        RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
         if (scoreInfo.ret) {
             info.name = scoreInfo.val.title;
             info.visibility = scoreInfo.val.visibility;
-            isPublic = info.visibility == cloud::Visibility::Public;
+            isPublic = info.visibility == muse::cloud::Visibility::Public;
         } else {
             LOGE() << "Failed to download up-to-date score info for " << info.sourceUrl
                    << "; falling back to last known name and visibility setting, namely "
@@ -953,7 +953,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     }
 
     if (savingPath.empty()) {
-        ID scoreId = cloud::idFromCloudUrl(info.sourceUrl);
+        ID scoreId = muse::cloud::idFromCloudUrl(info.sourceUrl);
 
         savingPath = configuration()->cloudProjectSavingPath(scoreId.toUint64());
     }
@@ -1184,7 +1184,7 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
             }
 
             if (project->isCloudProject()) {
-                moveProject(project, configuration()->cloudProjectPath(cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()), true);
+                moveProject(project, configuration()->cloudProjectPath(muse::cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()), true);
             }
         }
 
@@ -1293,7 +1293,7 @@ Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudP
         return uploadProject(newInfo, audio, openEditUrl, publishMode);
     }
     case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
-        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
+        RetVal<muse::cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
         if (!scoreInfo.ret) {
             LOGE() << scoreInfo.ret.toString();
             openSaveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
