@@ -24,7 +24,7 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class CloudModule : public modularity::IModuleSetup
 {
 public:

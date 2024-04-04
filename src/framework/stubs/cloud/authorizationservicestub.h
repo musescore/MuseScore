@@ -24,7 +24,7 @@
 
 #include "cloud/iauthorizationservice.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class AuthorizationServiceStub : public IAuthorizationService
 {
 public:

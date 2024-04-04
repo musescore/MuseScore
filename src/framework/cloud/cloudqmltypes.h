@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDQMLTYPES_H
-#define MU_CLOUD_CLOUDQMLTYPES_H
+#ifndef MUSE_CLOUD_CLOUDQMLTYPES_H
+#define MUSE_CLOUD_CLOUDQMLTYPES_H
 
 #include "cloudtypes.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class QMLCloudVisibility
 {
     Q_GADGET
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_CLOUD_CLOUDQMLTYPES_H
+#endif // MUSE_CLOUD_CLOUDQMLTYPES_H

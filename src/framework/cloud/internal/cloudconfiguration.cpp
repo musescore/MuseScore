@@ -26,7 +26,7 @@
 #include "settings.h"
 
 using namespace mu;
-using namespace mu::cloud;
+using namespace muse::cloud;
 using namespace mu::network;
 
 static const std::string module_name("cloud");

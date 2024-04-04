@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_CLOUD_CLOUDERRORS_H
-#define MU_CLOUD_CLOUDERRORS_H
+#ifndef MUSE_CLOUD_CLOUDERRORS_H
+#define MUSE_CLOUD_CLOUDERRORS_H
 
 #include "types/ret.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 static const std::string CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY("userDescription");
 
 enum class Err {
@@ -76,4 +76,4 @@ inline Ret make_ret(Err e)
 }
 }
 
-#endif // MU_CLOUD_CLOUDERRORS_H
+#endif // MUSE_CLOUD_CLOUDERRORS_H

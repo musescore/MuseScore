@@ -293,7 +293,7 @@ int main(int argc, char** argv)
 
     app.addModule(new mu::braille::BrailleModule());
 
-    app.addModule(new mu::cloud::CloudModule());
+    app.addModule(new muse::cloud::CloudModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
     app.addModule(new mu::context::ContextModule());
 

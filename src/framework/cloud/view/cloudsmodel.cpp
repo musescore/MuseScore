@@ -25,7 +25,7 @@
 #include "translation.h"
 #include "log.h"
 
-using namespace mu::cloud;
+using namespace muse::cloud;
 
 static constexpr int INVALID_INDEX = -1;
 

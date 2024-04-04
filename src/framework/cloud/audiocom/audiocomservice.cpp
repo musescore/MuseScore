@@ -35,7 +35,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::cloud;
+using namespace muse::cloud;
 using namespace mu::network;
 
 static const QString AUDIOCOM_CLOUD_TITLE("Audio.com");
@@ -66,7 +66,7 @@ IAuthorizationServicePtr AudioComService::authorization()
     return shared_from_this();
 }
 
-cloud::CloudInfo AudioComService::cloudInfo() const
+CloudInfo AudioComService::cloudInfo() const
 {
     return {
         AUDIO_COM_CLOUD_CODE,
@@ -77,7 +77,7 @@ cloud::CloudInfo AudioComService::cloudInfo() const
     };
 }
 
-cloud::AbstractCloudService::ServerConfig AudioComService::serverConfig() const
+AbstractCloudService::ServerConfig AudioComService::serverConfig() const
 {
     ServerConfig serverConfig;
     serverConfig.serverCode = AUDIO_COM_CLOUD_CODE;

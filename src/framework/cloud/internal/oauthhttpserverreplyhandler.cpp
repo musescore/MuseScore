@@ -40,7 +40,7 @@
 
 #include "log.h"
 
-using namespace mu::cloud;
+using namespace muse::cloud;
 
 class OAuthHttpServerReplyHandler::Impl
 {

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDSMODEL_H
-#define MU_CLOUD_CLOUDSMODEL_H
+#ifndef MUSE_CLOUD_CLOUDSMODEL_H
+#define MUSE_CLOUD_CLOUDSMODEL_H
 
 #include <QAbstractListModel>
 #include <QVariant>
@@ -31,7 +31,7 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class CloudsModel : public QAbstractListModel, async::Asyncable
 {
     Q_OBJECT
@@ -81,4 +81,4 @@ private:
 };
 }
 
-#endif // MU_CLOUD_CLOUDSMODEL_H
+#endif // MUSE_CLOUD_CLOUDSMODEL_H

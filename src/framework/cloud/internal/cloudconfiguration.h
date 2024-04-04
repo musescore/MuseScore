@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDCONFIGURATION_H
-#define MU_CLOUD_CLOUDCONFIGURATION_H
+#ifndef MUSE_CLOUD_CLOUDCONFIGURATION_H
+#define MUSE_CLOUD_CLOUDCONFIGURATION_H
 
 #include "icloudconfiguration.h"
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 class CloudConfiguration : public ICloudConfiguration
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_CLOUD_CLOUDCONFIGURATION_H
+#endif // MUSE_CLOUD_CLOUDCONFIGURATION_H

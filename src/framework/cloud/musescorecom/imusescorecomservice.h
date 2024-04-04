@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_IMUSESCORECOMSERVICE_H
-#define MU_CLOUD_IMUSESCORECOMSERVICE_H
+#ifndef MUSE_CLOUD_IMUSESCORECOMSERVICE_H
+#define MUSE_CLOUD_IMUSESCORECOMSERVICE_H
 
 #include <QUrl>
 
@@ -34,7 +34,7 @@
 class QIODevice;
 class QString;
 
-namespace mu::cloud {
+namespace muse::cloud {
 class IMuseScoreComService : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMuseScoreComService)
@@ -65,4 +65,4 @@ public:
 };
 }
 
-#endif // MU_CLOUD_IMUSESCORECOMSERVICE_H
+#endif // MUSE_CLOUD_IMUSESCORECOMSERVICE_H

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H
-#define MU_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H
+#ifndef MUSE_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H
+#define MUSE_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H
 
 #include <QOAuthOobReplyHandler>
 
@@ -29,7 +29,7 @@
 
 class QUrlQuery;
 
-namespace mu::cloud {
+namespace muse::cloud {
 class OAuthHttpServerReplyHandler : public QOAuthOobReplyHandler
 {
     Q_OBJECT
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H
+#endif // MUSE_CLOUD_OAUTHHTTPSERVERREPLYHANDLER_H

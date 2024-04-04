@@ -86,7 +86,7 @@ struct CloudProjectInfo {
     int revisionId = 0;
     QString name;
 
-    cloud::Visibility visibility = cloud::Visibility::Private;
+    muse::cloud::Visibility visibility = muse::cloud::Visibility::Private;
 
     bool isValid() const
     {
@@ -97,7 +97,7 @@ struct CloudProjectInfo {
 struct CloudAudioInfo {
     QString name;
     QUrl url;
-    cloud::Visibility visibility = cloud::Visibility::Private;
+    muse::cloud::Visibility visibility = muse::cloud::Visibility::Private;
     bool replaceExisting = false;
 
     bool isValid() const

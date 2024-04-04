@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_CLOUD_CLOUDTYPES_H
-#define MU_CLOUD_CLOUDTYPES_H
+#ifndef MUSE_CLOUD_CLOUDTYPES_H
+#define MUSE_CLOUD_CLOUDTYPES_H
 
 #include <vector>
 
@@ -30,7 +30,7 @@
 
 #include "types/id.h"
 
-namespace mu::cloud {
+namespace muse::cloud {
 static const QString MUSESCORE_COM_CLOUD_CODE = "musescorecom";
 static const QString AUDIO_COM_CLOUD_CODE = "audiocom";
 
@@ -148,17 +148,17 @@ struct ScoresList {
     } meta;
 };
 
-constexpr ID INVALID_ID = 0;
+constexpr mu::ID INVALID_ID = 0;
 
-inline ID idFromCloudUrl(const QUrl& sourceUrl)
+inline mu::ID idFromCloudUrl(const QUrl& sourceUrl)
 {
     QStringList parts = sourceUrl.toString().split("/");
     if (parts.isEmpty()) {
         return INVALID_ID;
     }
 
-    return ID(parts.last());
+    return mu::ID(parts.last());
 }
 }
 
-#endif // MU_CLOUD_ACCOUNTTYPES_H
+#endif // MUSE_CLOUD_ACCOUNTTYPES_H
