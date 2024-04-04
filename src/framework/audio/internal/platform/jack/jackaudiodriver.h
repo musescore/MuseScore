@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSE_AUDIO_LINUXAUDIODRIVER_H
-#define MUSE_AUDIO_LINUXAUDIODRIVER_H
+#ifndef MUSE_AUDIO_JACKAUDIODRIVER_H
+#define MUSE_AUDIO_JACKAUDIODRIVER_H
 
 #include <jack/jack.h>
 
@@ -77,4 +77,4 @@ private:
 };
 }
 
-#endif // MUSE_AUDIO_LINUXAUDIODRIVER_H
+#endif // MUSE_AUDIO_JACKAUDIODRIVER_H
