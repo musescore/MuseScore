@@ -22,7 +22,7 @@
 
 #include "dockingholderview.h"
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DockingHolderView::DockingHolderView(QQuickItem* parent)
     : DockBase(DockType::DockingHolder, parent)

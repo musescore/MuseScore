@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DOCK_DOCKBASE_H
-#define MU_DOCK_DOCKBASE_H
+#ifndef MUSE_DOCK_DOCKBASE_H
+#define MUSE_DOCK_DOCKBASE_H
 
 #include <QQuickItem>
 
@@ -34,7 +34,7 @@ namespace KDDockWidgets {
 class DockWidgetQuick;
 }
 
-namespace mu::dock {
+namespace muse::dock {
 struct DropDestination;
 class DockBase : public QQuickItem
 {
@@ -113,7 +113,7 @@ public:
 
     Q_INVOKABLE void resize(int width, int height);
 
-    ui::NavigationPanel* contentNavigationPanel() const;
+    mu::ui::NavigationPanel* contentNavigationPanel() const;
 
 public slots:
     void setTitle(const QString& title);
@@ -218,4 +218,4 @@ struct DropDestination
 };
 }
 
-#endif // MU_DOCK_DOCKBASE_H
+#endif // MUSE_DOCK_DOCKBASE_H

@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKTYPES_H
-#define MU_DOCK_DOCKTYPES_H
+#ifndef MUSE_DOCK_DOCKTYPES_H
+#define MUSE_DOCK_DOCKTYPES_H
 
 #include <QObject>
 #include <QVariant>
 
-namespace mu::dock {
+namespace muse::dock {
 inline const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");
 inline const char* DOCK_PANEL_PROPERTY("dockPanel");
 
@@ -119,4 +119,4 @@ inline DockProperties readPropertiesFromObject(const QObject* obj)
 }
 }
 
-#endif // MU_DOCK_DOCKTYPES_H
+#endif // MUSE_DOCK_DOCKTYPES_H

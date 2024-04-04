@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DROPCONTROLLER_H
-#define MU_DOCK_DROPCONTROLLER_H
+#ifndef MUSE_DOCK_DROPCONTROLLER_H
+#define MUSE_DOCK_DROPCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "../idockwindowprovider.h"
@@ -30,7 +30,7 @@
 
 #include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockPanelView;
 class DockingHolderView;
 class DockToolBarView;
@@ -68,4 +68,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DROPCONTROLLER_H
+#endif // MUSE_DOCK_DROPCONTROLLER_H

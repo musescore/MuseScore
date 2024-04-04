@@ -41,7 +41,7 @@
 
 using KDDropLocation = KDDockWidgets::DropIndicatorOverlayInterface::DropLocation;
 
-namespace mu::dock {
+namespace muse::dock {
 static constexpr double MAX_DISTANCE_TO_HOLDER = 50;
 
 static KDDropLocation dropLocationToKDDockLocation(Location location)
@@ -86,7 +86,7 @@ static bool isPointAllowedForDrop(const QPoint& point, const DropDestination& dr
 }
 }
 
-using namespace mu::dock;
+using namespace muse::dock;
 
 DropController::DropController(KDDockWidgets::DropArea* dropArea)
     : KDDockWidgets::DropIndicatorOverlayInterface(dropArea)

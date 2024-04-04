@@ -42,7 +42,7 @@ class NotationPageModel : public QObject, public async::Asyncable, public muse::
     INJECT(context::IGlobalContext, globalContext)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)
-    INJECT(dock::IDockWindowProvider, dockWindowProvider)
+    INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
     Q_PROPERTY(bool isBraillePanelVisible READ isBraillePanelVisible NOTIFY isBraillePanelVisibleChanged)

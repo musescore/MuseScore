@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
-#define MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#ifndef MUSE_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#define MUSE_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
 
 #include "actions/actionable.h"
 
@@ -29,7 +29,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "../idockwindowprovider.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockWindowActionsController : public muse::actions::Actionable
 {
     INJECT(IDockWindowProvider, dockWindowProvider)
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#endif // MUSE_DOCK_DOCKWINDOWACTIONSCONTROLLER_H

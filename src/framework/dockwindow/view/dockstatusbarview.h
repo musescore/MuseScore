@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKSTATUSBARVIEW_H
-#define MU_DOCK_DOCKSTATUSBARVIEW_H
+#ifndef MUSE_DOCK_DOCKSTATUSBARVIEW_H
+#define MUSE_DOCK_DOCKSTATUSBARVIEW_H
 
 #include "internal/dockbase.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockStatusBarView : public DockBase
 {
     Q_OBJECT
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_DOCK_DOCKSTATUSBARVIEW_H
+#endif // MUSE_DOCK_DOCKSTATUSBARVIEW_H

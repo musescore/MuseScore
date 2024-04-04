@@ -73,7 +73,7 @@
 using namespace mu::appshell;
 using namespace mu::modularity;
 using namespace mu::ui;
-using namespace mu::dock;
+using namespace muse::dock;
 
 static void appshell_init_qrc()
 {

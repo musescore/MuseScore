@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKPANELVIEW_H
-#define MU_DOCK_DOCKPANELVIEW_H
+#ifndef MUSE_DOCK_DOCKPANELVIEW_H
+#define MUSE_DOCK_DOCKPANELVIEW_H
 
 #include "internal/dockbase.h"
 
@@ -33,7 +33,7 @@ namespace mu::uicomponents {
 class AbstractMenuModel;
 }
 
-namespace mu::dock {
+namespace muse::dock {
 class DockPanelView : public DockBase
 {
     Q_OBJECT
@@ -50,7 +50,7 @@ public:
 
     QString groupName() const;
     QObject* navigationSection() const;
-    uicomponents::AbstractMenuModel* contextMenuModel() const;
+    mu::uicomponents::AbstractMenuModel* contextMenuModel() const;
 
     bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
@@ -59,7 +59,7 @@ public:
 public slots:
     void setGroupName(const QString& name);
     void setNavigationSection(QObject* newNavigation);
-    void setContextMenuModel(uicomponents::AbstractMenuModel* model);
+    void setContextMenuModel(mu::uicomponents::AbstractMenuModel* model);
 
 signals:
     void groupNameChanged();
@@ -77,4 +77,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKPANELVIEW_H
+#endif // MUSE_DOCK_DOCKPANELVIEW_H

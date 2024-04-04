@@ -33,7 +33,7 @@
 using namespace mu::appshell;
 using namespace mu::ui;
 using namespace muse::actions;
-using namespace mu::dock;
+using namespace muse::dock;
 
 static const ActionCode FULL_SCREEN_CODE("fullscreen");
 static const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");

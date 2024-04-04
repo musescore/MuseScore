@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DOCK_IDOCKWINDOW_H
-#define MU_DOCK_IDOCKWINDOW_H
+#ifndef MUSE_DOCK_IDOCKWINDOW_H
+#define MUSE_DOCK_IDOCKWINDOW_H
 
 #include "internal/dockbase.h"
 #include "async/channel.h"
@@ -29,7 +29,7 @@
 
 class QPoint;
 
-namespace mu::dock {
+namespace muse::dock {
 class DockPageView;
 class IDockWindow
 {
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_DOCK_IDOCKWINDOW_H
+#endif // MUSE_DOCK_IDOCKWINDOW_H

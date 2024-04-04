@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKFRAMEMODEL_H
-#define MU_DOCK_DOCKFRAMEMODEL_H
+#ifndef MUSE_DOCK_DOCKFRAMEMODEL_H
+#define MUSE_DOCK_DOCKFRAMEMODEL_H
 
 #include <QQuickItem>
 
@@ -33,7 +33,7 @@ class Frame;
 class DockWidgetBase;
 }
 
-namespace mu::dock {
+namespace muse::dock {
 class DockFrameModel : public QObject
 {
     Q_OBJECT
@@ -101,4 +101,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKFRAMEMODEL_H
+#endif // MUSE_DOCK_DOCKFRAMEMODEL_H

@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKTABBAR_H
-#define MU_DOCK_DOCKTABBAR_H
+#ifndef MUSE_DOCK_DOCKTABBAR_H
+#define MUSE_DOCK_DOCKTABBAR_H
 
 #include <QQuickItem>
 
 #include "thirdparty/KDDockWidgets/src/private/quick/TabBarQuick_p.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockTabBar : public KDDockWidgets::TabBarQuick
 {
     Q_OBJECT
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKTABBAR_H
+#endif // MUSE_DOCK_DOCKTABBAR_H

@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKSEPARATOR_H
-#define MU_DOCK_DOCKSEPARATOR_H
+#ifndef MUSE_DOCK_DOCKSEPARATOR_H
+#define MUSE_DOCK_DOCKSEPARATOR_H
 
 #include <QQuickItem>
 
 #include "thirdparty/KDDockWidgets/src/private/multisplitter/Separator_p.h"
 #include "thirdparty/KDDockWidgets/src/private/multisplitter/Widget_quick.h"
 
-namespace mu::dock {
+namespace muse::dock {
 class DockSeparator : public QQuickItem, public Layouting::Separator, public Layouting::Widget_quick
 {
     Q_OBJECT
@@ -64,4 +64,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_DOCKSEPARATOR_H
+#endif // MUSE_DOCK_DOCKSEPARATOR_H

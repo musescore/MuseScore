@@ -92,5 +92,7 @@ template<typename T1, typename T2>
 using RetVal2 = mu::RetVal2<T1, T2>;
 template<typename T>
 using ValCh = mu::ValCh<T>;
+template<typename T>
+using ValNt = mu::ValNt<T>;
 }
 #endif // MU_GLOBAL_RETVAL_H

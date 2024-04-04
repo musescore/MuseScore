@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKPAGEVIEW_H
-#define MU_DOCK_DOCKPAGEVIEW_H
+#ifndef MUSE_DOCK_DOCKPAGEVIEW_H
+#define MUSE_DOCK_DOCKPAGEVIEW_H
 
 #include "framework/uicomponents/view/qmllistproperty.h"
 
@@ -41,7 +41,7 @@ namespace mu::ui {
 class NavigationControl;
 }
 
-namespace mu::dock {
+namespace muse::dock {
 class DockToolBarView;
 class DockPanelView;
 class DockCentralView;
@@ -51,16 +51,16 @@ class DockPageView : public QQuickItem
 {
     Q_OBJECT
 
-    INJECT(ui::INavigationController, navigationController)
+    INJECT(mu::ui::INavigationController, navigationController)
 
     Q_PROPERTY(QString uri READ uri WRITE setUri NOTIFY uriChanged)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarView> toolBars READ toolBarsProperty)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockPanelView> panels READ panelsProperty)
-    Q_PROPERTY(QQmlListProperty<mu::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
-    Q_PROPERTY(mu::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
-    Q_PROPERTY(mu::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> mainToolBars READ mainToolBarsProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockToolBarView> toolBars READ toolBarsProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> toolBarsDockingHolders READ toolBarsDockingHoldersProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockPanelView> panels READ panelsProperty)
+    Q_PROPERTY(QQmlListProperty<muse::dock::DockingHolderView> panelsDockingHolders READ panelsDockingHoldersProperty)
+    Q_PROPERTY(muse::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
+    Q_PROPERTY(muse::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);
@@ -123,14 +123,14 @@ private:
     void reorderNavigationSectionPanels(QList<DockBase*>& sectionDocks);
 
     QString m_uri;
-    uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
-    uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
-    uicomponents::QmlListProperty<DockingHolderView> m_toolBarsDockingHolders;
-    uicomponents::QmlListProperty<DockPanelView> m_panels;
-    uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
+    mu::uicomponents::QmlListProperty<DockToolBarView> m_mainToolBars;
+    mu::uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
+    mu::uicomponents::QmlListProperty<DockingHolderView> m_toolBarsDockingHolders;
+    mu::uicomponents::QmlListProperty<DockPanelView> m_panels;
+    mu::uicomponents::QmlListProperty<DockingHolderView> m_panelsDockingHolders;
     DockCentralView* m_central = nullptr;
     DockStatusBarView* m_statusBar = nullptr;
 };
 }
 
-#endif // MU_DOCK_DOCKPAGEVIEW_H
+#endif // MUSE_DOCK_DOCKPAGEVIEW_H
