@@ -59,5 +59,5 @@ mu::Ret ExtPluginRunner::run(const Action& action)
 
     plugin->runPlugin();
 
-    return make_ok();
+    return mu::make_ok();
 }
