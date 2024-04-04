@@ -133,7 +133,7 @@ public:
     bool allowTimeAnchor() const override { return false; }
 
 protected:
-    void doComputeEndElement();
+    void doComputeEndElement() override;
 
 private:
 
