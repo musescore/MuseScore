@@ -33,7 +33,7 @@
 #include "log.h"
 #include "runtime.h"
 
-static constexpr char DEFAULT_DEVICE_ID[] = "default";
+static constexpr char JACK_DEFAULT_DEVICE_ID[] = "default";
 
 using namespace muse::audio;
 
@@ -50,7 +50,7 @@ struct JackData
 };
 
 static JackData* s_jackData{ nullptr };
-IAudioDriver::Spec s_format;
+muse::audio::IAudioDriver::Spec s_format;
 
 int muse::audio::jack_process_callback(jack_nframes_t nframes, void*)
 {
@@ -89,7 +89,7 @@ void jackCleanup()
 
 JackAudioDriver::JackAudioDriver()
 {
-    m_deviceId = DEFAULT_DEVICE_ID;
+    m_deviceId = JACK_DEFAULT_DEVICE_ID;
 }
 
 JackAudioDriver::~JackAudioDriver()
@@ -222,7 +222,7 @@ bool JackAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
 bool JackAudioDriver::resetToDefaultOutputDevice()
 {
-    return selectOutputDevice(DEFAULT_DEVICE_ID);
+    return selectOutputDevice(JACK_DEFAULT_DEVICE_ID);
 }
 
 mu::async::Notification JackAudioDriver::outputDeviceChanged() const
@@ -233,7 +233,7 @@ mu::async::Notification JackAudioDriver::outputDeviceChanged() const
 AudioDeviceList JackAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
+    devices.push_back({ JACK_DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
 
     return devices;
 }
