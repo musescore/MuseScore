@@ -64,7 +64,7 @@ mu::Ret RegisterAudioPluginsScenario::registerNewPlugins()
     }
 
     if (newPluginPaths.empty()) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     processPluginsRegistration(newPluginPaths);
@@ -107,7 +107,7 @@ void RegisterAudioPluginsScenario::processPluginsRegistration(const io::paths_t&
         }
     }
 
-    m_progress.finished.send(make_ok());
+    m_progress.finished.send(mu::make_ok());
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPath)
@@ -142,7 +142,7 @@ mu::Ret RegisterAudioPluginsScenario::registerPlugin(const io::path_t& pluginPat
         }
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 mu::Ret RegisterAudioPluginsScenario::registerFailedPlugin(const io::path_t& pluginPath, int failCode)
