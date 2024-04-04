@@ -452,7 +452,11 @@ void SoundFlagSettingsModel::loadAvailablePlayingTechniques()
     std::set<String> availablePlayingTechniqueCodes;
 
     for (const SoundPreset& preset : m_availablePresets) {
-        if (!selectedPresetCodes.contains(preset.code)) {
+        if (selectedPresetCodes.empty()) {
+            if (!preset.isDefault) {
+                continue;
+            }
+        } else if (!selectedPresetCodes.contains(preset.code)) {
             continue;
         }
 
