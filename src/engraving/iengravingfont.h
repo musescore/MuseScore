@@ -9,7 +9,7 @@
 #include "types/symid.h"
 #include "style/styledef.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter;
 }
 
@@ -52,10 +52,10 @@ public:
     virtual PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, double mag) const = 0;
 
     // Draw
-    virtual void draw(SymId id, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const = 0;
-    virtual void draw(SymId id, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const = 0;
-    virtual void draw(const SymIdList& ids, draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const = 0;
-    virtual void draw(const SymIdList& ids, draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(SymId id, muse::draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(SymId id, muse::draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(const SymIdList& ids, muse::draw::Painter* p, double mag, const PointF& pos, const double angle = 0) const = 0;
+    virtual void draw(const SymIdList& ids, muse::draw::Painter* p, const SizeF& mag, const PointF& pos, const double angle = 0) const = 0;
 };
 
 using IEngravingFontPtr = std::shared_ptr<IEngravingFont>;

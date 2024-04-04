@@ -43,7 +43,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::draw;
+using namespace muse::draw;
 
 namespace mu::engraving {
 SlurSegment::SlurSegment(System* parent)

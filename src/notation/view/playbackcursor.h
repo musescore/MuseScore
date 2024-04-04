@@ -38,7 +38,7 @@ class PlaybackCursor
 public:
     PlaybackCursor() = default;
 
-    void paint(draw::Painter* painter);
+    void paint(muse::draw::Painter* painter);
 
     void setNotation(INotationPtr notation);
     void move(midi::tick_t tick);

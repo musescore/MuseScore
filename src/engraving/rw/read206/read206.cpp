@@ -137,14 +137,14 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
     FrameType frameType = FrameType::NO_FRAME;
     Spatium paddingWidth(0.0);
     Spatium frameWidth(0.0);
-    mu::draw::Color foregroundColor = mu::draw::Color::BLACK;
-    mu::draw::Color backgroundColor = mu::draw::Color::transparent;
+    Color foregroundColor = Color::BLACK;
+    Color backgroundColor = Color::transparent;
 
     PlacementV placement = PlacementV::ABOVE;
     bool placementValid = false;
 
     String name = e.attribute("name");
-    mu::draw::Color frameColor = mu::draw::Color::BLACK;
+    Color frameColor = Color::BLACK;
 
     bool systemFlag = false;
     double lineWidth = -1.0;

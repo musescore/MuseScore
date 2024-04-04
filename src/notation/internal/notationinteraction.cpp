@@ -92,7 +92,7 @@
 using namespace mu::io;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace mu::draw;
+using namespace muse::draw;
 
 static mu::engraving::KeyboardModifier keyboardModifier(Qt::KeyboardModifiers km)
 {
@@ -302,7 +302,7 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
     m_noteInput->stateChanged().notify();
 }
 
-void NotationInteraction::paint(mu::draw::Painter* painter)
+void NotationInteraction::paint(Painter* painter)
 {
     EngravingItem::renderer()->drawItem(score()->shadowNote(), painter);
 
@@ -2370,20 +2370,20 @@ void NotationInteraction::resetAnchorLines()
     m_anchorLines.clear();
 }
 
-double NotationInteraction::currentScaling(mu::draw::Painter* painter) const
+double NotationInteraction::currentScaling(Painter* painter) const
 {
     qreal guiScaling = configuration()->guiScaling();
     return painter->worldTransform().m11() / guiScaling;
 }
 
-void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
+void NotationInteraction::drawAnchorLines(Painter* painter)
 {
     if (m_anchorLines.empty()) {
         return;
     }
 
     const auto dropAnchorColor = configuration()->anchorLineColor();
-    mu::draw::Pen pen(dropAnchorColor, 2.0 / currentScaling(painter), mu::draw::PenStyle::DotLine);
+    Pen pen(dropAnchorColor, 2.0 / currentScaling(painter), PenStyle::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
@@ -2392,7 +2392,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
         qreal d = 4.0 / currentScaling(painter);
         RectF rect(-d, -d, 2 * d, 2 * d);
 
-        painter->setBrush(mu::draw::Brush(dropAnchorColor));
+        painter->setBrush(Brush(dropAnchorColor));
         painter->setNoPen();
         rect.moveCenter(anchor.p1());
         painter->drawEllipse(rect);
@@ -2401,7 +2401,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     }
 }
 
-void NotationInteraction::drawTextEditMode(draw::Painter* painter)
+void NotationInteraction::drawTextEditMode(muse::draw::Painter* painter)
 {
     if (!isTextEditingStarted()) {
         return;
@@ -2410,9 +2410,9 @@ void NotationInteraction::drawTextEditMode(draw::Painter* painter)
     m_editData.element->drawEditMode(painter, m_editData, currentScaling(painter));
 }
 
-void NotationInteraction::drawSelectionRange(draw::Painter* painter)
+void NotationInteraction::drawSelectionRange(muse::draw::Painter* painter)
 {
-    using namespace draw;
+    using namespace muse::draw;
     if (!m_selection->isRange()) {
         return;
     }
@@ -2440,7 +2440,7 @@ void NotationInteraction::drawSelectionRange(draw::Painter* painter)
     }
 }
 
-void NotationInteraction::drawGripPoints(draw::Painter* painter)
+void NotationInteraction::drawGripPoints(muse::draw::Painter* painter)
 {
     if (isDragStarted() && !isGripEditStarted()) {
         return;

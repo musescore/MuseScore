@@ -60,7 +60,7 @@
 
 using namespace mu::engraving;
 using namespace mu::modularity;
-using namespace mu::draw;
+using namespace muse::draw;
 
 static void engraving_init_qrc()
 {
@@ -217,7 +217,7 @@ void EngravingModule::onInit(const IApplication::RunMode& mode)
     }
 #else // MUE_COMPILE_USE_QTFONTMETRICS
     {
-        using namespace mu::draw;
+        using namespace muse::draw;
 
         std::shared_ptr<IFontsDatabase> fdb = ioc()->resolve<IFontsDatabase>(moduleName());
 

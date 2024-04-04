@@ -38,7 +38,7 @@ public:
     ByteArray data(const std::string& mimeType) const override;
 
     bool hasImage() const override;
-    std::shared_ptr<draw::Pixmap> imageData() const override;
+    std::shared_ptr<muse::draw::Pixmap> imageData() const override;
 
 private:
     const QMimeData* m_data = nullptr;

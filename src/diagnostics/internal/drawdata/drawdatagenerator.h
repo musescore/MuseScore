@@ -44,8 +44,8 @@ public:
     Ret processDir(const io::path_t& scoreDir, const io::path_t& outDir, const GenOpt& opt = GenOpt());
     Ret processFile(const io::path_t& scoreFile, const io::path_t& outFile, const GenOpt& opt = GenOpt());
 
-    draw::DrawDataPtr genDrawData(const io::path_t& scorePath, const GenOpt& opt = GenOpt()) const;
-    draw::Pixmap genImage(const io::path_t& scorePath) const;
+    muse::draw::DrawDataPtr genDrawData(const io::path_t& scorePath, const GenOpt& opt = GenOpt()) const;
+    muse::draw::Pixmap genImage(const io::path_t& scorePath) const;
 
 private:
     bool loadScore(engraving::MasterScore* score, const io::path_t& path) const;

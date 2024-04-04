@@ -27,12 +27,13 @@
 #include "undo.h"
 #include "linkedobjects.h"
 
+using namespace muse::draw;
 using namespace mu::engraving;
 
 SoundFlag::SoundFlag(EngravingItem* parent)
     : EngravingItem(ElementType::SOUND_FLAG, parent)
 {
-    m_iconFont = draw::Font(engravingConfiguration()->iconsFontFamily(), draw::Font::Type::Icon);
+    m_iconFont = Font(engravingConfiguration()->iconsFontFamily(), Font::Type::Icon);
 
     //! draw on top of all elements
     setZ(INT_MAX);
@@ -199,7 +200,7 @@ char16_t SoundFlag::iconCode() const
     return 0xEF4E;
 }
 
-draw::Font SoundFlag::iconFont() const
+Font SoundFlag::iconFont() const
 {
     return m_iconFont;
 }

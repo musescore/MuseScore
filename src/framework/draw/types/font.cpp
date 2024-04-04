@@ -23,7 +23,7 @@
 #include "global/realfn.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 bool Font::g_disableFontMerging = false;
 
@@ -183,7 +183,7 @@ QFont Font::toQFont() const
 
 Font Font::fromQFont(const QFont& qf, Font::Type type)
 {
-    mu::draw::Font f(qf.family(), type);
+    Font f(qf.family(), type);
     if (qf.pointSizeF() > 0) {
         f.setPointSizeF(qf.pointSizeF());
     } else if (qf.pixelSize() > 0) {

@@ -191,7 +191,7 @@ void ScoreView::setScore(mu::engraving::Score* s)
 
 void ScoreView::paint(QPainter* qp)
 {
-    mu::draw::Painter p(qp, "plugins_scoreview");
+    muse::draw::Painter p(qp, "plugins_scoreview");
     p.setAntialiasing(true);
     p.fillRect(mu::RectF(0.0, 0.0, width(), height()), _color);
     if (!score) {

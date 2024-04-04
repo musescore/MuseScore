@@ -117,7 +117,7 @@ public:
 
     EngravingItem* drop(EditData&) override;
 
-    void setColor(const mu::draw::Color& c) override;
+    void setColor(const muse::draw::Color& c) override;
     void setStemDirection(DirectionV d);
     DirectionV stemDirection() const { return m_stemDirection; }
 

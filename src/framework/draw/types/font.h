@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_FONT_H
-#define MU_DRAW_FONT_H
+#ifndef MUSE_DRAW_FONT_H
+#define MUSE_DRAW_FONT_H
 
 #include "global/types/string.h"
 #include "global/types/flags.h"
@@ -29,7 +29,7 @@
 #include <QFont>
 #endif
 
-namespace mu::draw {
+namespace muse::draw {
 class Font
 {
 public:
@@ -120,10 +120,10 @@ private:
     double m_pointSizeF = -1.0;
     int m_pixelSize = -1;
     Weight m_weight = Weight::Normal;
-    Flags<Style> m_style{ Style::Normal };
+    mu::Flags<Style> m_style{ Style::Normal };
     bool m_noFontMerging = false;
     Hinting m_hinting = Hinting::PreferDefaultHinting;
 };
 }
 
-#endif // MU_DRAW_FONT_H
+#endif // MUSE_DRAW_FONT_H

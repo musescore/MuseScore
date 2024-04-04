@@ -41,7 +41,7 @@ public:
     virtual ByteArray data(const std::string& mimeType) const = 0;
 
     virtual bool hasImage() const = 0;
-    virtual std::shared_ptr<draw::Pixmap> imageData() const = 0;
+    virtual std::shared_ptr<muse::draw::Pixmap> imageData() const = 0;
 };
 }
 

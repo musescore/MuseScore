@@ -92,7 +92,7 @@ public:
 
     double lineWidth() const;
 
-    mu::draw::Color uiColor() const;
+    muse::draw::Color uiColor() const;
 
     static void adaptBendsFromTabToStandardStaff(const Staff* staff);
 
@@ -158,7 +158,7 @@ public:
 
     bool isUserModified() const override;
 
-    mu::draw::Color uiColor() const { return guitarBend()->uiColor(); }
+    muse::draw::Color uiColor() const { return guitarBend()->uiColor(); }
 
     struct LayoutData : public LineSegment::LayoutData
     {

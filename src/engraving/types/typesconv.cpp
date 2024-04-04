@@ -30,6 +30,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 template<typename T>
@@ -995,18 +996,18 @@ LineType TConv::fromXml(const AsciiStringView& tag, LineType def)
     // Pre-4.0 files
     bool ok = false;
     if (int v = tag.toInt(&ok); ok) {
-        draw::PenStyle penStyle = static_cast<draw::PenStyle>(v);
+        PenStyle penStyle = static_cast<PenStyle>(v);
         switch (penStyle) {
-        case draw::PenStyle::NoPen:
+        case PenStyle::NoPen:
             return def;
-        case draw::PenStyle::SolidLine:
+        case PenStyle::SolidLine:
             return LineType::SOLID;
-        case draw::PenStyle::DashLine:
-        case draw::PenStyle::DashDotLine:
-        case draw::PenStyle::CustomDashLine:
+        case PenStyle::DashLine:
+        case PenStyle::DashDotLine:
+        case PenStyle::CustomDashLine:
             return LineType::DASHED;
-        case draw::PenStyle::DotLine:
-        case draw::PenStyle::DashDotDotLine:
+        case PenStyle::DotLine:
+        case PenStyle::DashDotDotLine:
             return LineType::DOTTED;
         }
     }

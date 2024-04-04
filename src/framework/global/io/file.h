@@ -66,4 +66,8 @@ private:
 };
 }
 
+namespace muse::io {
+using File = mu::io::File;
+}
+
 #endif // MU_IO_FILE_H

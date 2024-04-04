@@ -112,7 +112,7 @@ QVariant PropertyValue::toQVariant() const
 
     // Draw
     case P_TYPE::SYMID:       return static_cast<int>(value<SymId>());
-    case P_TYPE::COLOR:       return value<draw::Color>().toQColor();
+    case P_TYPE::COLOR:       return value<Color>().toQColor();
     case P_TYPE::ORNAMENT_STYLE: return static_cast<int>(value<OrnamentStyle>());
     case P_TYPE::ORNAMENT_INTERVAL: {
         OrnamentInterval interval = value<OrnamentInterval>();

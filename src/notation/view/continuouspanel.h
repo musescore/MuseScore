@@ -35,7 +35,7 @@ namespace mu::engraving {
 class Score;
 }
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter;
 }
 
@@ -56,7 +56,7 @@ public:
         std::function<PointF(const PointF&)> fromLogical;
     };
 
-    void paint(draw::Painter& painter, const NotationViewContext& ctx);
+    void paint(muse::draw::Painter& painter, const NotationViewContext& ctx);
 
 private:
     qreal styleMM(const mu::engraving::Sid styleId) const;

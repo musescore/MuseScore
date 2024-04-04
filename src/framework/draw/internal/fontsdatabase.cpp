@@ -29,23 +29,23 @@
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 static int s_fontID = -1;
 
-void FontsDatabase::setDefaultFont(mu::draw::Font::Type type, const FontDataKey& key)
+void FontsDatabase::setDefaultFont(Font::Type type, const FontDataKey& key)
 {
     m_defaults[type] = key;
 }
 
-const FontDataKey& FontsDatabase::defaultFont(mu::draw::Font::Type type) const
+const FontDataKey& FontsDatabase::defaultFont(Font::Type type) const
 {
     auto it = m_defaults.find(type);
     if (it != m_defaults.end()) {
         return it->second;
     }
 
-    it = m_defaults.find(mu::draw::Font::Type::Unknown);
+    it = m_defaults.find(Font::Type::Unknown);
     IF_ASSERT_FAILED(it != m_defaults.end()) {
         static FontDataKey null;
         return null;
@@ -63,7 +63,7 @@ int FontsDatabase::addFont(const FontDataKey& key, const mu::io::path_t& path)
     return s_fontID;
 }
 
-FontDataKey FontsDatabase::actualFont(const FontDataKey& requireKey, mu::draw::Font::Type type) const
+FontDataKey FontsDatabase::actualFont(const FontDataKey& requireKey, Font::Type type) const
 {
     mu::io::path_t path = fontInfo(requireKey).path;
     if (!path.empty() && mu::io::File::exists(path)) {
@@ -73,7 +73,7 @@ FontDataKey FontsDatabase::actualFont(const FontDataKey& requireKey, mu::draw::F
     return defaultFont(type);
 }
 
-std::vector<FontDataKey> FontsDatabase::substitutionFonts(mu::draw::Font::Type type) const
+std::vector<FontDataKey> FontsDatabase::substitutionFonts(Font::Type type) const
 {
     auto it = m_substitutions.find(type);
     if (it != m_substitutions.end()) {
@@ -84,7 +84,7 @@ std::vector<FontDataKey> FontsDatabase::substitutionFonts(mu::draw::Font::Type t
     return null;
 }
 
-FontData FontsDatabase::fontData(const FontDataKey& requireKey, mu::draw::Font::Type type) const
+FontData FontsDatabase::fontData(const FontDataKey& requireKey, Font::Type type) const
 {
     FontDataKey key = actualFont(requireKey, type);
     mu::io::path_t path = fontInfo(key).path;
@@ -104,7 +104,7 @@ FontData FontsDatabase::fontData(const FontDataKey& requireKey, mu::draw::Font::
     return fd;
 }
 
-mu::io::path_t FontsDatabase::fontPath(const FontDataKey& requireKey, mu::draw::Font::Type type) const
+mu::io::path_t FontsDatabase::fontPath(const FontDataKey& requireKey, Font::Type type) const
 {
     FontDataKey key = actualFont(requireKey, type);
     mu::io::path_t path = fontInfo(key).path;
@@ -163,6 +163,6 @@ void FontsDatabase::addAdditionalFonts(const mu::io::path_t& path)
 
         FontDataKey fontDataKey(family, bold, italic);
         addFont(fontDataKey, absolutePath + file);
-        m_substitutions[mu::draw::Font::Type::Text].push_back(fontDataKey);
+        m_substitutions[Font::Type::Text].push_back(fontDataKey);
     }
 }

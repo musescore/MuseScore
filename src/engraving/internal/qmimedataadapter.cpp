@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 QMimeDataAdapter::QMimeDataAdapter(const QMimeData* d)
@@ -58,9 +59,9 @@ bool QMimeDataAdapter::hasImage() const
     return m_data->hasImage();
 }
 
-static std::shared_ptr<draw::Pixmap> pixmapFromQVariant(const QVariant& val)
+static std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val)
 {
-    using namespace mu::draw;
+    using namespace muse::draw;
     IF_ASSERT_FAILED(val.canConvert<Pixmap>() || val.canConvert<QImage>()) {
     }
 
@@ -72,7 +73,7 @@ static std::shared_ptr<draw::Pixmap> pixmapFromQVariant(const QVariant& val)
     return nullptr;
 }
 
-std::shared_ptr<draw::Pixmap> QMimeDataAdapter::imageData() const
+std::shared_ptr<Pixmap> QMimeDataAdapter::imageData() const
 {
     return pixmapFromQVariant(m_data->imageData());
 }

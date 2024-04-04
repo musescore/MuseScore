@@ -38,9 +38,9 @@ class Paint
 {
 public:
 
-    static void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt);
-    static void paintItem(draw::Painter& painter, const EngravingItem* item);
-    static void paintItems(draw::Painter& painter, const std::vector<EngravingItem*>& items);
+    static void paintScore(muse::draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt);
+    static void paintItem(muse::draw::Painter& painter, const EngravingItem* item);
+    static void paintItems(muse::draw::Painter& painter, const std::vector<EngravingItem*>& items);
 
     static SizeF pageSizeInch(const Score* score);
     static SizeF pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions& opt);

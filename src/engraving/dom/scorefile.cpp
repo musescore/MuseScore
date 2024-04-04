@@ -37,6 +37,7 @@
 
 using namespace mu;
 using namespace mu::io;
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
@@ -68,7 +69,7 @@ void Score::linkMeasures(Score* score)
 //   createThumbnail
 //---------------------------------------------------------
 
-std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
+std::shared_ptr<Pixmap> Score::createThumbnail()
 {
     TRACEFUNC;
 
@@ -89,7 +90,7 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
     MScore::pixelRatio = 1.0;
 
     auto painterProvider = imageProvider()->painterForImage(pixmap);
-    mu::draw::Painter p(painterProvider, "thumbnail");
+    Painter p(painterProvider, "thumbnail");
 
     p.setAntialiasing(true);
     p.scale(mag, mag);
@@ -159,7 +160,7 @@ bool Score::saveStyle(const String& name)
 //   print
 //---------------------------------------------------------
 
-void Score::print(mu::draw::Painter* painter, int pageNo)
+void Score::print(Painter* painter, int pageNo)
 {
     m_printing  = true;
     MScore::pdfPrinting = true;

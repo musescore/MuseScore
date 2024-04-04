@@ -43,9 +43,9 @@ public:
     bool isMatrixInited() const override;
     void setMatrixInited(bool inited) override;
 
-    draw::Transform matrix() const override;
-    async::Channel<draw::Transform, NotationPaintView*> matrixChanged() const override;
-    void setMatrix(const draw::Transform& matrix, NotationPaintView* sender) override;
+    muse::draw::Transform matrix() const override;
+    async::Channel<muse::draw::Transform, NotationPaintView*> matrixChanged() const override;
+    void setMatrix(const muse::draw::Transform& matrix, NotationPaintView* sender) override;
 
     ValCh<int> zoomPercentage() const override;
 
@@ -61,8 +61,8 @@ public:
 
 private:
     bool m_isMatrixInited = false;
-    draw::Transform m_matrix;
-    async::Channel<draw::Transform, NotationPaintView*> m_matrixChanged;
+    muse::draw::Transform m_matrix;
+    async::Channel<muse::draw::Transform, NotationPaintView*> m_matrixChanged;
     ValCh<int> m_zoomPercentage;
     ValCh<ZoomType> m_zoomType;
 

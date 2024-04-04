@@ -5427,7 +5427,7 @@ int ExportMusicXml::findBracket(const TextLineBase* tl) const
 
 void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick)
 {
-    using namespace mu::draw;
+    using namespace muse::draw;
 
     if (!tl->lineVisible() && ((tl->beginText().isEmpty() && tl->tick() == tick)
                                || (tl->endText().isEmpty() && tl->tick() != tick))) {

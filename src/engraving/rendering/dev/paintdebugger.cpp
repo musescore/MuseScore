@@ -22,7 +22,7 @@
 #include "paintdebugger.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -31,12 +31,12 @@ PaintDebugger::PaintDebugger(IPaintProviderPtr real)
 {
 }
 
-draw::IPaintProviderPtr PaintDebugger::realProvider() const
+IPaintProviderPtr PaintDebugger::realProvider() const
 {
     return m_real;
 }
 
-void PaintDebugger::setDebugPenColor(const draw::Color& c)
+void PaintDebugger::setDebugPenColor(const Color& c)
 {
     m_debugPenColor = c;
     const Pen& originalPen = pen();
@@ -51,7 +51,7 @@ void PaintDebugger::restorePenColor()
     Pen p = pen();
     p.setColor(m_originalPenColor);
     setPen(p);
-    m_debugPenColor = draw::Color();
+    m_debugPenColor = Color();
 }
 
 void PaintDebugger::beginTarget(const std::string& name)

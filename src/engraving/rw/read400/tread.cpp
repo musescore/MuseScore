@@ -141,6 +141,7 @@
 
 #include "log.h"
 
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::read400;
 
@@ -2323,11 +2324,11 @@ void TRead::read(Symbol* sym, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(FSymbol* sym, XmlReader& e, ReadContext& ctx)
 {
-    mu::draw::Font font = sym->font();
+    Font font = sym->font();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "font") {
-            font.setFamily(e.readText(), draw::Font::Type::Unknown);
+            font.setFamily(e.readText(), Font::Type::Unknown);
         } else if (tag == "fontsize") {
             font.setPointSizeF(e.readDouble());
         } else if (tag == "code") {

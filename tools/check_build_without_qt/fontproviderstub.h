@@ -3,7 +3,7 @@
 
 #include "draw/ifontprovider.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class FontProviderStub : public IFontProvider
 {
 public:

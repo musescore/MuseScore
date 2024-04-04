@@ -41,6 +41,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace muse::draw;
 
 //---------------------------------------------------------
 //   articulationStyle
@@ -65,7 +66,7 @@ Articulation::Articulation(ChordRest* parent, ElementType type)
     m_ornamentStyle = OrnamentStyle::DEFAULT;
     m_playArticulation = true;
 
-    m_font.setFamily(u"FreeSans", draw::Font::Type::Tablature);
+    m_font.setFamily(u"FreeSans", Font::Type::Tablature);
     m_font.setPointSizeF(7.0);
 
     initElementStyle(&articulationStyle);

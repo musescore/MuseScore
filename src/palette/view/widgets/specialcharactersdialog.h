@@ -58,10 +58,10 @@ private slots:
 private:
     void hideEvent(QHideEvent*) override;
 
-    void setFont(const mu::draw::Font& font);
+    void setFont(const muse::draw::Font& font);
     void populateCommon();
 
-    mu::draw::Font m_font;
+    muse::draw::Font m_font;
     PaletteWidget* m_pCommon = nullptr;
     PaletteWidget* m_pSmufl = nullptr;
     PaletteWidget* m_pUnicode = nullptr;

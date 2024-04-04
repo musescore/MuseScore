@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DRAW_MATRIX_H
-#define MU_DRAW_MATRIX_H
+#ifndef MUSE_DRAW_MATRIX_H
+#define MUSE_DRAW_MATRIX_H
 
 #include "global/realfn.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Matrix
 {
 public:
@@ -72,12 +72,12 @@ public:
 
     bool operator ==(const Matrix& other) const
     {
-        return RealIsEqual(m_11, other.m_11)
-               && RealIsEqual(m_12, other.m_12)
-               && RealIsEqual(m_21, other.m_21)
-               && RealIsEqual(m_22, other.m_22)
-               && RealIsEqual(m_dx, other.m_dx)
-               && RealIsEqual(m_dy, other.m_dy);
+        return mu::RealIsEqual(m_11, other.m_11)
+               && mu::RealIsEqual(m_12, other.m_12)
+               && mu::RealIsEqual(m_21, other.m_21)
+               && mu::RealIsEqual(m_22, other.m_22)
+               && mu::RealIsEqual(m_dx, other.m_dx)
+               && mu::RealIsEqual(m_dy, other.m_dy);
     }
 
 private:
@@ -93,4 +93,4 @@ private:
 };
 }
 
-#endif // MU_DRAW_MATRIX_H
+#endif // MUSE_DRAW_MATRIX_H

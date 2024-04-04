@@ -49,6 +49,7 @@
 
 #include "draw/types/transform.h"
 
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -1023,7 +1024,7 @@ void SlurTieLayout::adjustEndPoints(SlurSegment* slurSeg)
 }
 
 void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
-                                    mu::draw::Transform& toSystemCoordinates, double& slurAngle)
+                                    Transform& toSystemCoordinates, double& slurAngle)
 {
     TRACEFUNC;
     Slur* slur = slurSeg->slur();
@@ -2163,7 +2164,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     }
 
     const double tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
-    mu::draw::Transform t;
+    Transform t;
     t.rotateRadians(-tieAngle);  // rotate so that we are working with horizontal ties regardless of endpoint height difference
     tieEndNormalized = t.map(tieEndNormalized);  // apply that rotation
     shoulderOffset = t.map(shoulderOffset);  // also apply to shoulderOffset
@@ -2211,7 +2212,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     const PointF tieShoulder = 0.5 * (bezier1Final + bezier2Final);
     //-----------------------------------
 
-    mu::draw::PainterPath path = PainterPath();
+    PainterPath path = PainterPath();
     path.moveTo(PointF());
     path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
     if (tieSeg->tie()->styleType() == SlurStyleType::Solid) {
@@ -2277,12 +2278,12 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     // CAUTION: transform operations are applies in reverse order to how
     // they are added to the transformation.
     double slurAngle = atan((pp2.y() - pp1.y()) / (pp2.x() - pp1.x()));
-    mu::draw::Transform rotate;
+    Transform rotate;
     rotate.rotateRadians(-slurAngle);
-    mu::draw::Transform toSlurCoordinates;
+    Transform toSlurCoordinates;
     toSlurCoordinates.rotateRadians(-slurAngle);
     toSlurCoordinates.translate(-pp1.x(), -pp1.y());
-    mu::draw::Transform toSystemCoordinates = toSlurCoordinates.inverted();
+    Transform toSystemCoordinates = toSlurCoordinates.inverted();
     // Transform p2 and shoulder offset
     PointF p2 = toSlurCoordinates.map(pp2);
     shoulderOffset = rotate.map(shoulderOffset);

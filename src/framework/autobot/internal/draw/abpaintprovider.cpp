@@ -65,7 +65,7 @@ void AbPaintProvider::beforeEndTargetHook(draw::Painter* painter)
 
 void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::DrawDataPtr& data, const QColor& overcolor)
 {
-    using namespace mu::draw;
+    using namespace muse::draw;
 
     const DrawData::Item& obj = data->item;
 
@@ -122,7 +122,7 @@ bool AbPaintProvider::endTarget(bool endDraw)
     return ok;
 }
 
-const mu::draw::DrawDataPtr& AbPaintProvider::notationViewDrawData() const
+const muse::draw::DrawDataPtr& AbPaintProvider::notationViewDrawData() const
 {
     return m_notationViewDrawData;
 }

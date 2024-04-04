@@ -50,7 +50,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::palette;
 
@@ -110,7 +110,7 @@ void KeyCanvas::clear()
 
 void KeyCanvas::paintEvent(QPaintEvent*)
 {
-    mu::draw::Painter painter(this, "keycanvas");
+    muse::draw::Painter painter(this, "keycanvas");
     painter.setAntialiasing(true);
     qreal wh = double(height());
     qreal ww = double(width());
@@ -128,9 +128,9 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     QRectF r = imatrix.mapRect(QRectF(x, y, w, wh));
 
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
-    painter.fillRect(background, mu::draw::Color::WHITE);
+    painter.fillRect(background, muse::draw::Color::WHITE);
 
-    draw::Pen pen(engravingConfiguration()->defaultColor());
+    muse::draw::Pen pen(engravingConfiguration()->defaultColor());
     pen.setWidthF(engraving::DefaultStyle::defaultStyle().styleS(Sid::staffLineWidth).val() * gpaletteScore->style().spatium());
     painter.setPen(pen);
 

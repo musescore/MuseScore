@@ -62,7 +62,7 @@ public:
     SizeF readSize();
     ScaleF readScale();
     RectF readRect();
-    draw::Color readColor();
+    muse::draw::Color readColor();
     Fraction readFraction();
     String readXml();
 

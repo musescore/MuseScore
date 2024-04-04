@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_PAINTER_H
-#define MU_DRAW_PAINTER_H
+#ifndef MUSE_DRAW_PAINTER_H
+#define MUSE_DRAW_PAINTER_H
 
 #include <stack>
 
@@ -41,7 +41,7 @@ class QPaintDevice;
 class QPainter;
 #endif
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter
 {
 public:
@@ -296,17 +296,17 @@ private:
 
 #ifdef MUSE_MODULE_DRAW_TRACE
     #define TRACE_ITEM_DRAW \
-    mu::draw::PainterItemMarker __drawItemMarker(painter, typeName())
+    muse::draw::PainterItemMarker __drawItemMarker(painter, typeName())
 
     #define TRACE_DRAW_ITEM \
-    mu::draw::PainterItemMarker __drawItemMarker(painter, item->typeName())
+    muse::draw::PainterItemMarker __drawItemMarker(painter, item->typeName())
 
     #define TRACE_ITEM_DRAW_C(painter, itemName) \
-    mu::draw::PainterItemMarker __drawItemMarker(painter, itemName)
+    muse::draw::PainterItemMarker __drawItemMarker(painter, itemName)
 #else
     #define TRACE_ITEM_DRAW
     #define TRACE_DRAW_ITEM
     #define TRACE_ITEM_DRAW_C(painter, objName)
 #endif
 
-#endif // MU_DRAW_PAINTER_H
+#endif // MUSE_DRAW_PAINTER_H

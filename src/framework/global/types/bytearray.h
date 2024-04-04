@@ -108,4 +108,8 @@ private:
 };
 }
 
+namespace muse {
+using ByteArray = mu::ByteArray;
+}
+
 #endif // MU_GLOBAL_BYTEARRAY_H

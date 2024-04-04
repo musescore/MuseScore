@@ -32,7 +32,7 @@
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
-    new mu::draw::DrawModule(),
+    new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()
 },
     nullptr,

@@ -1229,7 +1229,7 @@ bool Staff::showLedgerLines(const Fraction& tick) const
 //   color
 //---------------------------------------------------------
 
-mu::draw::Color Staff::color(const Fraction& tick) const
+Color Staff::color(const Fraction& tick) const
 {
     return staffType(tick)->color();
 }
@@ -1238,7 +1238,7 @@ mu::draw::Color Staff::color(const Fraction& tick) const
 //   setColor
 //---------------------------------------------------------
 
-void Staff::setColor(const Fraction& tick, const mu::draw::Color& val)
+void Staff::setColor(const Fraction& tick, const Color& val)
 {
     staffType(tick)->setColor(val);
 }
@@ -1265,7 +1265,7 @@ void Staff::updateOttava()
 //   undoSetColor
 //---------------------------------------------------------
 
-void Staff::undoSetColor(const mu::draw::Color& /*val*/)
+void Staff::undoSetColor(const Color& /*val*/)
 {
 //      undoChangeProperty(Pid::COLOR, val);
 }
@@ -1451,7 +1451,7 @@ bool Staff::setProperty(Pid id, const PropertyValue& v)
     }
     break;
     case Pid::STAFF_COLOR:
-        setColor(Fraction(0, 1), v.value<mu::draw::Color>());
+        setColor(Fraction(0, 1), v.value<Color>());
         break;
     case Pid::PLAYBACK_VOICE1:
         setPlaybackVoice(0, v.toBool());

@@ -66,7 +66,7 @@ public:
     void undoChangeSoundFlag(const PresetCodes& presets, const PlayingTechniqueCode& technique);
 
     char16_t iconCode() const;
-    draw::Font iconFont() const;
+    muse::draw::Font iconFont() const;
     void setIconFontSize(double size);
     Color iconBackgroundColor() const;
 
@@ -74,7 +74,7 @@ private:
     PresetCodes m_soundPresets;
     PlayingTechniqueCode m_playingTechnique;
 
-    draw::Font m_iconFont;
+    muse::draw::Font m_iconFont;
 
     bool m_play = true;
 };

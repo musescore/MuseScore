@@ -77,6 +77,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -1129,9 +1130,9 @@ double Note::tabHeadWidth(const StaffType* tab) const
 {
     double val;
     if (tab && tab->isTabStaff() && m_fret != INVALID_FRET_INDEX && m_string != INVALID_STRING_INDEX) {
-        mu::draw::Font f    = tab->fretFont();
+        Font f = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
-        val  = mu::draw::FontMetrics::width(f, m_fretString) * magS();
+        val = FontMetrics::width(f, m_fretString) * magS();
     } else {
         val = headWidth();
     }

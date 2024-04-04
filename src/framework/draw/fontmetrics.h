@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_FONTMETRICS_H
-#define MU_DRAW_FONTMETRICS_H
+#ifndef MUSE_DRAW_FONTMETRICS_H
+#define MUSE_DRAW_FONTMETRICS_H
 
 #include "global/types/string.h"
 #include "global/modularity/ioc.h"
@@ -30,7 +30,7 @@
 
 #include "ifontprovider.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class FontMetrics
 {
     Inject<IFontProvider> fontProvider;
@@ -69,4 +69,4 @@ private:
 };
 }
 
-#endif // MU_DRAW_FONTMETRICS_H
+#endif // MUSE_DRAW_FONTMETRICS_H

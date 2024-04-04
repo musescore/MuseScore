@@ -28,7 +28,7 @@
 #include "draw/types/geometry.h"
 #include "shape.h"
 
-namespace mu::draw {
+namespace muse::draw {
 class Painter;
 }
 
@@ -73,7 +73,7 @@ public:
     void add(const RectF& r) { add(ShapeElement(r)); }
 
     void clear() { seg.clear(); }
-    void paint(mu::draw::Painter& painter) const;
+    void paint(muse::draw::Painter& painter) const;
     void dump() const;
     double minDistance(const SkylineLine&) const;
     double max() const;
@@ -112,7 +112,7 @@ public:
     const SkylineLine& north() const { return _north; }
     const SkylineLine& south() const { return _south; }
 
-    void paint(mu::draw::Painter& painter, double lineWidth) const;
+    void paint(muse::draw::Painter& painter, double lineWidth) const;
     void dump(const char*, bool north = false) const;
 };
 } // namespace mu::engraving

@@ -35,6 +35,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -201,7 +202,7 @@ String FSymbol::accessibleInfo() const
 //   setFont
 //---------------------------------------------------------
 
-void FSymbol::setFont(const mu::draw::Font& f)
+void FSymbol::setFont(const Font& f)
 {
     m_font = f;
     m_font.setNoFontMerging(true);

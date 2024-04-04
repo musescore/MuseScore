@@ -65,7 +65,7 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData {
         double lw = 0.0;
-        mu::draw::PainterPath path;
+        muse::draw::PainterPath path;
     };
     DECLARE_LAYOUTDATA_METHODS(StaffState)
 

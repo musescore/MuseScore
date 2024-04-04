@@ -37,7 +37,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::diagnostics;
 
 const io::path_t DATA_ROOT(diagnostics_tests_DATA_ROOT);

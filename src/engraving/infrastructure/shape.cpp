@@ -30,7 +30,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 Shape::Shape(const std::vector<RectF>& rects, const EngravingItem* p)

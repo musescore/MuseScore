@@ -40,7 +40,7 @@
 
 using namespace mu;
 using namespace mu::diagnostics;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 //! TODO

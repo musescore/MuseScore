@@ -268,7 +268,7 @@ public:
 
     virtual int subtype() const { return -1; }                    // for select gui
 
-    void drawAt(mu::draw::Painter* p, const PointF& pt) const
+    void drawAt(muse::draw::Painter* p, const PointF& pt) const
     {
         p->translate(pt);
         renderer()->drawItem(this, p);
@@ -358,13 +358,13 @@ public:
     virtual TranslatableString subtypeUserName() const;
     virtual String translatedSubtypeUserName() const;
 
-    virtual void setColor(const mu::draw::Color& c);
-    virtual mu::draw::Color color() const;
-    mu::draw::Color curColor() const;
-    mu::draw::Color curColor(bool isVisible) const;
-    mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;
+    virtual void setColor(const muse::draw::Color& c);
+    virtual muse::draw::Color color() const;
+    muse::draw::Color curColor() const;
+    muse::draw::Color curColor(bool isVisible) const;
+    muse::draw::Color curColor(bool isVisible, muse::draw::Color normalColor) const;
 
-    void undoSetColor(const mu::draw::Color& c);
+    void undoSetColor(const muse::draw::Color& c);
     void undoSetVisible(bool v);
     void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true);
 
@@ -447,9 +447,9 @@ public:
     bool custom(Pid) const;
     virtual bool isUserModified() const;
 
-    void drawSymbol(SymId id, mu::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
-    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
-    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const;
+    void drawSymbol(SymId id, muse::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
+    void drawSymbols(const SymIdList&, muse::draw::Painter* p, const PointF& o = PointF(), double scale = 1.0) const;
+    void drawSymbols(const SymIdList&, muse::draw::Painter* p, const PointF& o, const SizeF& scale) const;
     double symHeight(SymId id) const;
     double symWidth(SymId id) const;
     double symWidth(const SymIdList&) const;
@@ -487,7 +487,7 @@ public:
     virtual void triggerLayout() const;
     virtual void triggerLayoutAll() const;
     virtual void triggerLayoutToEnd() const;
-    virtual void drawEditMode(draw::Painter* painter, EditData& editData, double currentViewScaling);
+    virtual void drawEditMode(muse::draw::Painter* painter, EditData& editData, double currentViewScaling);
 
     double styleP(Sid idx) const;
 
@@ -666,7 +666,7 @@ protected:
     virtual LayoutData* mutldataInternal();
 
     mutable int m_z = 0;
-    mu::draw::Color m_color;                // element color attribute
+    muse::draw::Color m_color;                // element color attribute
 
     track_idx_t m_track = mu::nidx;         // staffIdx * VOICES + voice
 
@@ -758,7 +758,7 @@ public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
 
-    virtual void draw(mu::draw::Painter*) const;
+    virtual void draw(muse::draw::Painter*) const;
     virtual void addElement(EngravingItem*, double x, double y);
     void clear();
     virtual void setSelected(bool f);

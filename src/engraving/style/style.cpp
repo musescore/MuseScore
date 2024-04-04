@@ -158,7 +158,7 @@ bool MStyle::readProperties(XmlReader& e)
                 e.readText();
             } break;
             case P_TYPE::COLOR: {
-                mu::draw::Color c;
+                Color c;
                 c.setRed(e.intAttribute("r"));
                 c.setGreen(e.intAttribute("g"));
                 c.setBlue(e.intAttribute("b"));

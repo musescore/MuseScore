@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 //---------------------------------------------------------
@@ -87,9 +87,9 @@ Bend::Bend(Note* parent)
 //   font
 //---------------------------------------------------------
 
-mu::draw::Font Bend::font(double sp) const
+Font Bend::font(double sp) const
 {
-    mu::draw::Font f(m_fontFace, Font::Type::Unknown);
+    Font f(m_fontFace, Font::Type::Unknown);
     f.setBold(m_fontStyle & FontStyle::Bold);
     f.setItalic(m_fontStyle & FontStyle::Italic);
     f.setUnderline(m_fontStyle & FontStyle::Underline);

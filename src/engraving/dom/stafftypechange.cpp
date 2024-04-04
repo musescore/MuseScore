@@ -182,7 +182,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
         m_staffType->setInvisible(v.toBool());
         break;
     case Pid::STAFF_COLOR:
-        m_staffType->setColor(v.value<mu::draw::Color>());
+        m_staffType->setColor(v.value<Color>());
         break;
     case Pid::STAFF_YOFFSET:
         m_staffType->setYoffset(v.value<Spatium>());

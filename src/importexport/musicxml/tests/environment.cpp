@@ -38,7 +38,7 @@ using namespace mu::engraving;
 
 static mu::testing::SuiteEnvironment musicxml_se(
 {
-    new mu::draw::DrawModule(),
+    new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },

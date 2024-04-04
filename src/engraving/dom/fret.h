@@ -201,7 +201,7 @@ public:
     const DotMap& dots() const { return m_dots; }
     const MarkerMap& markers() const { return m_markers; }
 
-    const mu::draw::Font& font() const { return m_font; }
+    const muse::draw::Font& font() const { return m_font; }
 
     void init(StringData*, Chord*);
     void add(EngravingItem*) override;
@@ -261,7 +261,7 @@ private:
 
     Harmony* m_harmony = nullptr;
 
-    mu::draw::Font m_font;
+    muse::draw::Font m_font;
     double m_userMag = 1.0;                 // allowed 0.1 - 10.0
     int m_numPos = 0;
 };

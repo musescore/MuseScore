@@ -37,7 +37,7 @@ using namespace mu::iex::mei;
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
-    new mu::draw::DrawModule(),         // needs for engraving
+    new muse::draw::DrawModule(),         // needs for engraving
     new mu::engraving::EngravingModule(),
     new mu::iex::mei::MeiModule()
 },

@@ -103,7 +103,7 @@ public:
 
     void setSelected(bool f) override;
     void setVisible(bool f) override;
-    void setColor(const mu::draw::Color& col) override;
+    void setColor(const muse::draw::Color& col) override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
@@ -243,7 +243,7 @@ public:
     virtual void setSelected(bool f) override;
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;
-    virtual void setColor(const mu::draw::Color& col) override;
+    virtual void setColor(const muse::draw::Color& col) override;
     Spanner* nextSpanner(EngravingItem* e, staff_idx_t activeStaff);
     Spanner* prevSpanner(EngravingItem* e, staff_idx_t activeStaff);
     virtual EngravingItem* nextSegmentElement() override;

@@ -79,7 +79,7 @@ public:
     Millimetre lineWidth() const { return m_lineWidth; }
     void setLineWidth(Millimetre w) { m_lineWidth = w; }
 
-    mu::draw::Font font(double) const;
+    muse::draw::Font font(double) const;
 
     // property methods
     PropertyValue getProperty(Pid propertyId) const override;

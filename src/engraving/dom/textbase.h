@@ -226,8 +226,8 @@ public:
     TextFragment(const String& s);
     TextFragment(TextCursor*, const String&);
     TextFragment split(int column);
-    void draw(mu::draw::Painter*, const TextBase*) const;
-    mu::draw::Font font(const TextBase*) const;
+    void draw(muse::draw::Painter*, const TextBase*) const;
+    muse::draw::Font font(const TextBase*) const;
     int columns() const;
     void changeFormat(FormatId id, const FormatValue& data);
 };
@@ -243,7 +243,7 @@ public:
     TextBlock() {}
     bool operator ==(const TextBlock& x) const { return m_fragments == x.m_fragments; }
     bool operator !=(const TextBlock& x) const { return m_fragments != x.m_fragments; }
-    void draw(mu::draw::Painter*, const TextBase*) const;
+    void draw(muse::draw::Painter*, const TextBase*) const;
     void layout(const TextBase*);
     const std::list<TextFragment>& fragments() const { return m_fragments; }
     std::list<TextFragment>& fragments() { return m_fragments; }
@@ -300,8 +300,8 @@ public:
 
     Text& operator=(const Text&) = delete;
 
-    virtual void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    static void drawTextWorkaround(mu::draw::Painter* p, mu::draw::Font& f, const mu::PointF& pos, const String& text);
+    virtual void drawEditMode(muse::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    static void drawTextWorkaround(muse::draw::Painter* p, muse::draw::Font& f, const mu::PointF& pos, const String& text);
 
     Align align() const { return m_align; }
     void setAlign(Align a) { m_align = a; }
@@ -380,8 +380,8 @@ public:
     bool inHexState() const { return m_hexState >= 0; }
     void endHexState(EditData&);
 
-    mu::draw::Font font() const;
-    mu::draw::FontMetrics fontMetrics() const;
+    muse::draw::Font font() const;
+    muse::draw::FontMetrics fontMetrics() const;
 
     bool isPropertyLinkedToMaster(Pid id) const override;
     bool isUnlinkedFromMaster() const override;
@@ -434,15 +434,15 @@ public:
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
 
-    mu::draw::Color textColor() const;
+    muse::draw::Color textColor() const;
     FrameType frameType() const { return m_frameType; }
     void setFrameType(FrameType val) { m_frameType = val; }
     double textLineSpacing() const { return m_textLineSpacing; }
     void setTextLineSpacing(double val) { m_textLineSpacing = val; }
-    mu::draw::Color bgColor() const { return m_bgColor; }
-    void setBgColor(const mu::draw::Color& val) { m_bgColor = val; }
-    mu::draw::Color frameColor() const { return m_frameColor; }
-    void setFrameColor(const mu::draw::Color& val) { m_frameColor = val; }
+    muse::draw::Color bgColor() const { return m_bgColor; }
+    void setBgColor(const muse::draw::Color& val) { m_bgColor = val; }
+    muse::draw::Color frameColor() const { return m_frameColor; }
+    void setFrameColor(const muse::draw::Color& val) { m_frameColor = val; }
     Spatium frameWidth() const { return m_frameWidth; }
     void setFrameWidth(Spatium val) { m_frameWidth = val; }
     Spatium paddingWidth() const { return m_paddingWidth; }
@@ -487,7 +487,7 @@ protected:
 
 private:
 
-    void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
+    void drawSelection(muse::draw::Painter*, const mu::RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     String genText(const LayoutData* ldata) const;
     void genText();
@@ -510,8 +510,8 @@ private:
 
     FrameType m_frameType = FrameType::NO_FRAME;
     double m_textLineSpacing = 1.0;
-    mu::draw::Color m_bgColor;
-    mu::draw::Color m_frameColor;
+    muse::draw::Color m_bgColor;
+    muse::draw::Color m_frameColor;
     Spatium m_frameWidth;
     Spatium m_paddingWidth;
     int m_frameRound = 0;

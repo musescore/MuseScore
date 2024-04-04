@@ -49,6 +49,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
@@ -1615,15 +1616,15 @@ static void scaleCopyrightText(Score* score)
 
     MStyle style = score->style();
     String fontFace = style.styleV(Sid::footerFontFace).value<String>();
-    draw::Font footerFont(fontFace, draw::Font::Type::Unknown);
+    Font footerFont(fontFace, Font::Type::Unknown);
     double footerFontSize = style.styleV(Sid::footerFontSize).value<double>();
     footerFont.setPointSizeF(footerFontSize);
-    draw::FontMetrics fm(footerFont);
+    FontMetrics fm(footerFont);
 
     double pagePrintableWidth = style.styleV(Sid::pagePrintableWidth).value<double>() * DPI;
     double pageWidth = style.styleV(Sid::pageWidth).value<double>() * DPI;
     double pageHeight = style.styleV(Sid::pageHeight).value<double>() * DPI;
-    double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), draw::TextShowMnemonic, copyright).width();
+    double textWidth = fm.boundingRect(RectF(0, 0, pageWidth, pageHeight), TextShowMnemonic, copyright).width();
     double sizeRatio = pagePrintableWidth / textWidth;
 
     if (sizeRatio < 1) {

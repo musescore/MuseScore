@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DRAW_PAINTERPATH_H
-#define MU_DRAW_PAINTERPATH_H
+#ifndef MUSE_DRAW_PAINTERPATH_H
+#define MUSE_DRAW_PAINTERPATH_H
 
 #include <cmath>
 
@@ -34,7 +34,7 @@
 #include <QPainterPath>
 #endif
 
-namespace mu::draw {
+namespace muse::draw {
 class PainterPath
 {
 public:
@@ -68,7 +68,7 @@ public:
         }
         bool operator==(const Element& e) const
         {
-            return RealIsEqual(x, e.x) && RealIsEqual(y, e.y) && type == e.type;
+            return mu::RealIsEqual(x, e.x) && mu::RealIsEqual(y, e.y) && type == e.type;
         }
 
         inline bool operator!=(const Element& e) const { return !operator==(e); }
@@ -194,12 +194,12 @@ inline void dump(const PainterPath& p, std::stringstream& ss)
 inline std::string dump(const PainterPath& p)
 {
     std::stringstream ss;
-    mu::draw::dump(p, ss);
+    muse::draw::dump(p, ss);
     return ss.str();
 }
 }
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::draw::PainterPath)
+Q_DECLARE_METATYPE(muse::draw::PainterPath)
 #endif
 
-#endif // MU_DRAW_PAINTERPATH_H
+#endif // MUSE_DRAW_PAINTERPATH_H

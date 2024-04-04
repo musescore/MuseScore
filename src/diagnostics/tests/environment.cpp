@@ -32,7 +32,7 @@
 
 static mu::testing::SuiteEnvironment diagnostics_se(
 {
-    new mu::draw::DrawModule(),
+    new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()
 },
     nullptr,

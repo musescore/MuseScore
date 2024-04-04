@@ -45,10 +45,10 @@ public:
     virtual SizeF pageSizeInch() const = 0;
     virtual SizeF pageSizeInch(const Options& opt) const = 0;
 
-    virtual void paintView(draw::Painter* painter, const RectF& frameRect, bool isPrinting) = 0;
-    virtual void paintPdf(draw::Painter* painter, const Options& opt) = 0;
-    virtual void paintPrint(draw::Painter* painter, const Options& opt) = 0;
-    virtual void paintPng(draw::Painter* painter, const Options& opt) = 0;
+    virtual void paintView(muse::draw::Painter* painter, const RectF& frameRect, bool isPrinting) = 0;
+    virtual void paintPdf(muse::draw::Painter* painter, const Options& opt) = 0;
+    virtual void paintPrint(muse::draw::Painter* painter, const Options& opt) = 0;
+    virtual void paintPng(muse::draw::Painter* painter, const Options& opt) = 0;
 };
 
 using INotationPaintingPtr = std::shared_ptr<INotationPainting>;

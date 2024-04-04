@@ -25,7 +25,7 @@
 
 using namespace mu::notation;
 
-void PlaybackCursor::paint(mu::draw::Painter* painter)
+void PlaybackCursor::paint(muse::draw::Painter* painter)
 {
     if (!m_visible) {
         return;

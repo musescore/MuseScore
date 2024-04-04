@@ -32,7 +32,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::notation;
 using namespace mu::engraving;
 
@@ -141,7 +141,7 @@ void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
 {
 }
 
-void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
+void ExampleView::drawBackground(Painter* p, const RectF& r) const
 {
     if (m_backgroundPixmap == 0 || m_backgroundPixmap->isNull()) {
         p->fillRect(r, m_backgroundColor);
@@ -150,7 +150,7 @@ void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
     }
 }
 
-void ExampleView::drawElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& el)
+void ExampleView::drawElements(Painter& painter, const std::vector<EngravingItem*>& el)
 {
     for (EngravingItem* e : el) {
         e->itemDiscovered = 0;
@@ -169,7 +169,7 @@ void ExampleView::paintEvent(QPaintEvent* event)
         return;
     }
 
-    mu::draw::Painter painter(this, "exampleview");
+    Painter painter(this, "exampleview");
     painter.setAntialiasing(true);
     const RectF rect = RectF::fromQRectF(event->rect());
 

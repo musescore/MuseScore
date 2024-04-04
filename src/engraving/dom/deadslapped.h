@@ -43,8 +43,8 @@ public:
     DeadSlapped* clone() const override { return new DeadSlapped(*this); }
 
     struct LayoutData : public EngravingItem::LayoutData {
-        mu::draw::PainterPath path1;
-        mu::draw::PainterPath path2;
+        muse::draw::PainterPath path1;
+        muse::draw::PainterPath path2;
     };
     DECLARE_LAYOUTDATA_METHODS(DeadSlapped)
 

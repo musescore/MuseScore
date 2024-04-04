@@ -64,7 +64,7 @@ public:
     void changeEditElement(engraving::EngravingItem*) override;
     void setDropRectangle(const mu::RectF&) override;
     void cmdAddSlur(engraving::Note* firstNote, Note* lastNote);
-    void drawBackground(draw::Painter*, const RectF&) const override;
+    void drawBackground(muse::draw::Painter*, const RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
     const Rect geometry() const override { return Rect(QFrame::geometry()); }
 
@@ -74,13 +74,13 @@ protected:
     PointF toLogical(const QPointF& point);
 
 private:
-    void drawElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& el);
+    void drawElements(muse::draw::Painter& painter, const std::vector<EngravingItem*>& el);
     void paintEvent(QPaintEvent*) override;
     void wheelEvent(QWheelEvent*) override;
     void constraintCanvas(int* dxx);
     QSize sizeHint() const override;
 
-    mu::draw::Transform m_matrix;
+    muse::draw::Transform m_matrix;
     QColor m_backgroundColor;
     QPixmap* m_backgroundPixmap;
 

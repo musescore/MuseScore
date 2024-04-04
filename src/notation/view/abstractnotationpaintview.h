@@ -166,7 +166,7 @@ protected:
     INotationPtr notation() const;
     void setNotation(INotationPtr notation);
     void setReadonly(bool readonly);
-    void setMatrix(const draw::Transform& matrix);
+    void setMatrix(const muse::draw::Transform& matrix);
 
     void moveCanvasToCenter();
     bool moveCanvasToPosition(const PointF& logicPos);
@@ -181,7 +181,7 @@ protected:
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
 
-    virtual void onMatrixChanged(const draw::Transform& oldMatrix, const draw::Transform& newMatrix, bool overrideZoomType);
+    virtual void onMatrixChanged(const muse::draw::Transform& oldMatrix, const muse::draw::Transform& newMatrix, bool overrideZoomType);
 
 protected slots:
     virtual void onViewSizeChanged();
@@ -246,13 +246,13 @@ private:
     const Page* pageByPoint(const PointF& point) const;
     PointF alignToCurrentPageBorder(const RectF& showRect, const PointF& pos) const;
 
-    void paintBackground(const RectF& rect, draw::Painter* painter);
+    void paintBackground(const RectF& rect, muse::draw::Painter* painter);
 
     PointF canvasCenter() const;
     std::pair<qreal, qreal> constraintCanvas(qreal dx, qreal dy) const;
 
     INotationPtr m_notation;
-    draw::Transform m_matrix;
+    muse::draw::Transform m_matrix;
 
     std::unique_ptr<NotationViewInputController> m_inputController;
     std::unique_ptr<PlaybackCursor> m_playbackCursor;

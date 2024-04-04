@@ -33,7 +33,7 @@
 
 #include "log.h"
 
-using namespace mu::draw;
+using namespace muse::draw;
 
 static const double DEFAULT_PIXEL_SIZE = 100.0;
 static const double SYMBOLS_PIXEL_SIZE = 200.0;
@@ -96,7 +96,7 @@ void FontsEngine::init()
     //m_renderCache.init();
 }
 
-double FontsEngine::lineSpacing(const mu::draw::Font& f) const
+double FontsEngine::lineSpacing(const Font& f) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -106,7 +106,7 @@ double FontsEngine::lineSpacing(const mu::draw::Font& f) const
     return from_f26d6(rf->face->leading() + rf->face->ascent() + rf->face->descent()) * rf->pixelScale();
 }
 
-double FontsEngine::xHeight(const mu::draw::Font& f) const
+double FontsEngine::xHeight(const Font& f) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -116,7 +116,7 @@ double FontsEngine::xHeight(const mu::draw::Font& f) const
     return from_f26d6(rf->face->xHeight()) * rf->pixelScale();
 }
 
-double FontsEngine::height(const mu::draw::Font& f) const
+double FontsEngine::height(const Font& f) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -126,7 +126,7 @@ double FontsEngine::height(const mu::draw::Font& f) const
     return from_f26d6(rf->face->ascent() + rf->face->descent()) * rf->pixelScale();
 }
 
-double FontsEngine::ascent(const mu::draw::Font& f) const
+double FontsEngine::ascent(const Font& f) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -136,7 +136,7 @@ double FontsEngine::ascent(const mu::draw::Font& f) const
     return from_f26d6(rf->face->ascent()) * rf->pixelScale();
 }
 
-double FontsEngine::descent(const mu::draw::Font& f) const
+double FontsEngine::descent(const Font& f) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -146,7 +146,7 @@ double FontsEngine::descent(const mu::draw::Font& f) const
     return from_f26d6(rf->face->descent()) * rf->pixelScale();
 }
 
-bool FontsEngine::inFontUcs4(const mu::draw::Font& f, char32_t ucs4) const
+bool FontsEngine::inFontUcs4(const Font& f, char32_t ucs4) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -156,7 +156,7 @@ bool FontsEngine::inFontUcs4(const mu::draw::Font& f, char32_t ucs4) const
     return rf->face->glyphIndex(ucs4) != 0;
 }
 
-double FontsEngine::horizontalAdvance(const mu::draw::Font& f, const char32_t& ch) const
+double FontsEngine::horizontalAdvance(const Font& f, const char32_t& ch) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -167,7 +167,7 @@ double FontsEngine::horizontalAdvance(const mu::draw::Font& f, const char32_t& c
     return from_f26d6(rf->face->glyphAdvance(glyphIdx)) * rf->pixelScale();
 }
 
-double FontsEngine::horizontalAdvance(const mu::draw::Font& f, const std::u32string& text) const
+double FontsEngine::horizontalAdvance(const Font& f, const std::u32string& text) const
 {
     if (text.empty()) {
         return 0.0;
@@ -187,7 +187,7 @@ double FontsEngine::horizontalAdvance(const mu::draw::Font& f, const std::u32str
     return from_f26d6(advance) * rf->pixelScale();
 }
 
-mu::RectF FontsEngine::boundingRect(const mu::draw::Font& f, const char32_t& ch) const
+mu::RectF FontsEngine::boundingRect(const Font& f, const char32_t& ch) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -198,7 +198,7 @@ mu::RectF FontsEngine::boundingRect(const mu::draw::Font& f, const char32_t& ch)
     return fromFBBox(rf->face->glyphBbox(glyphIdx), rf->pixelScale());
 }
 
-mu::RectF FontsEngine::boundingRect(const mu::draw::Font& f, const std::u32string& text) const
+mu::RectF FontsEngine::boundingRect(const Font& f, const std::u32string& text) const
 {
     if (text.empty()) {
         return mu::RectF();
@@ -259,7 +259,7 @@ mu::RectF FontsEngine::boundingRect(const mu::draw::Font& f, const std::u32strin
     return fromFBBox(rect, rf->pixelScale());
 }
 
-mu::RectF FontsEngine::tightBoundingRect(const mu::draw::Font& f, const std::u32string& text) const
+mu::RectF FontsEngine::tightBoundingRect(const Font& f, const std::u32string& text) const
 {
     if (text.empty()) {
         return mu::RectF();
@@ -328,7 +328,7 @@ mu::RectF FontsEngine::tightBoundingRect(const mu::draw::Font& f, const std::u32
     return fromFBBox(rect, rf->pixelScale());
 }
 
-mu::RectF FontsEngine::symBBox(const mu::draw::Font& f, char32_t ucs4) const
+mu::RectF FontsEngine::symBBox(const Font& f, char32_t ucs4) const
 {
     RequireFace* rf = fontFace(f, true);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -340,7 +340,7 @@ mu::RectF FontsEngine::symBBox(const mu::draw::Font& f, char32_t ucs4) const
     return fromFBBox(bb, rf->pixelScale());
 }
 
-double FontsEngine::symAdvance(const mu::draw::Font& f, char32_t ucs4) const
+double FontsEngine::symAdvance(const Font& f, char32_t ucs4) const
 {
     RequireFace* rf = fontFace(f, true);
     IF_ASSERT_FAILED(rf && rf->face) {
@@ -417,7 +417,7 @@ static void generateSdf(GlyphImage& out, glyph_idx_t glyphIdx, const IFontFace* 
     out.rect.setHeight(height);
 }
 
-std::vector<GlyphImage> FontsEngine::render(const mu::draw::Font& f, const std::u32string& text) const
+std::vector<GlyphImage> FontsEngine::render(const Font& f, const std::u32string& text) const
 {
     //! NOTE for rendering, all fonts, including symbols fonts, are processed as text
     RequireFace* rf = fontFace(f);
@@ -498,7 +498,7 @@ IFontFace* FontsEngine::createFontFace(const mu::io::path_t& path) const
     return new FontFaceDU(origin);
 }
 
-FontsEngine::RequireFace* FontsEngine::fontFace(const mu::draw::Font& f, bool isSymbolMode) const
+FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode) const
 {
     //! NOTE This font is required
     FaceKey requireKey = faceKeyForFont(f);
@@ -516,8 +516,8 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const mu::draw::Font& f, bool is
 
     //! NOTE At the moment, in some cases, the type may not be specified,
     //! so set as Text
-    if (requireKey.type == mu::draw::Font::Type::Undefined || requireKey.type == mu::draw::Font::Type::Unknown) {
-        requireKey.type = mu::draw::Font::Type::Text;
+    if (requireKey.type == Font::Type::Undefined || requireKey.type == Font::Type::Unknown) {
+        requireKey.type = Font::Type::Text;
     }
 
     //! NOTE We are looking for the require font we need among the previously loaded ones

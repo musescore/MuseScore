@@ -32,7 +32,7 @@ public:
 
 protected:
     void doLayoutItem(EngravingItem* item) override;
-    void doDrawItem(const EngravingItem* item, draw::Painter* p) override;
+    void doDrawItem(const EngravingItem* item, muse::draw::Painter* p) override;
 };
 }
 

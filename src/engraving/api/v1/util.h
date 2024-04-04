@@ -185,7 +185,7 @@ class ScoreView : public uicomponents::QuickPaintedView, public engraving::MuseS
     virtual void paint(QPainter*) override;
 
     virtual QRectF boundingRect() const override { return _boundingRect; }
-    virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const override {}
+    virtual void drawBackground(muse::draw::Painter*, const mu::RectF&) const override {}
 
 public slots:
     //@ --

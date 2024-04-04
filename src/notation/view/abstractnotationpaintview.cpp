@@ -29,7 +29,7 @@
 
 using namespace mu;
 using namespace mu::ui;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::notation;
 using namespace muse::actions;
 
@@ -566,8 +566,8 @@ void AbstractNotationPaintView::paint(QPainter* qp)
     RectF rect = RectF::fromQRectF(qp->clipBoundingRect());
     rect = correctDrawRect(rect);
 
-    mu::draw::Painter mup(qp, objectName().toStdString());
-    mu::draw::Painter* painter = &mup;
+    muse::draw::Painter mup(qp, objectName().toStdString());
+    muse::draw::Painter* painter = &mup;
 
     paintBackground(rect, painter);
 
@@ -630,7 +630,7 @@ void AbstractNotationPaintView::onNotationSetup()
     });
 }
 
-void AbstractNotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)
+void AbstractNotationPaintView::paintBackground(const RectF& rect, muse::draw::Painter* painter)
 {
     TRACEFUNC;
 

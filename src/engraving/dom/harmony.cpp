@@ -46,6 +46,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -1267,11 +1268,11 @@ const ChordDescription* Harmony::generateDescription()
 //   drawEditMode
 //---------------------------------------------------------
 
-void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling)
+void Harmony::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
 {
     TextBase::drawEditMode(p, ed, currentViewScaling);
 
-    mu::draw::Color originalColor = color();
+    Color originalColor = color();
     if (m_isMisspelled) {
         setColor(engravingConfiguration()->criticalColor());
         setSelected(false);
@@ -1292,7 +1293,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVie
 //   TextSegment
 //---------------------------------------------------------
 
-TextSegment::TextSegment(const String& s, const mu::draw::Font& f, double x, double y)
+TextSegment::TextSegment(const String& s, const Font& f, double x, double y)
 {
     set(s, f, x, y, PointF());
     select = false;
@@ -1304,7 +1305,7 @@ TextSegment::TextSegment(const String& s, const mu::draw::Font& f, double x, dou
 
 double TextSegment::width() const
 {
-    return mu::draw::FontMetrics::width(m_font, text);
+    return FontMetrics::width(m_font, text);
 }
 
 //---------------------------------------------------------
@@ -1313,7 +1314,7 @@ double TextSegment::width() const
 
 RectF TextSegment::boundingRect() const
 {
-    return mu::draw::FontMetrics::boundingRect(m_font, text);
+    return FontMetrics::boundingRect(m_font, text);
 }
 
 //---------------------------------------------------------
@@ -1322,14 +1323,14 @@ RectF TextSegment::boundingRect() const
 
 RectF TextSegment::tightBoundingRect() const
 {
-    return mu::draw::FontMetrics::tightBoundingRect(m_font, text);
+    return FontMetrics::tightBoundingRect(m_font, text);
 }
 
 //---------------------------------------------------------
 //   set
 //---------------------------------------------------------
 
-void TextSegment::set(const String& s, const mu::draw::Font& f, double _x, double _y, PointF _offset)
+void TextSegment::set(const String& s, const Font& f, double _x, double _y, PointF _offset)
 {
     m_font   = f;
     x      = _x;
@@ -1346,7 +1347,7 @@ void Harmony::render(const String& s, double& x, double& y)
 {
     int fontIdx = 0;
     if (!s.isEmpty()) {
-        mu::draw::Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList[fontIdx] : font();
+        Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList[fontIdx] : font();
         TextSegment* ts = new TextSegment(s, f, x, y);
         m_textList.push_back(ts);
         x += ts->width();
@@ -1469,10 +1470,10 @@ void Harmony::render()
 
     m_fontList.clear();
     for (const ChordFont& cf : chordList->fonts) {
-        mu::draw::Font ff(font());
+        Font ff(font());
         ff.setPointSizeF(ff.pointSizeF() * cf.mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
-            ff.setFamily(cf.family, draw::Font::Type::Harmony);
+            ff.setFamily(cf.family, Font::Type::Harmony);
         }
         m_fontList.push_back(ff);
     }

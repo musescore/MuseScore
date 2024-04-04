@@ -25,55 +25,55 @@
 #include "draw/ipaintprovider.h"
 
 namespace mu::engraving::rendering::dev {
-class PaintDebugger : public draw::IPaintProvider
+class PaintDebugger : public muse::draw::IPaintProvider
 {
 public:
-    PaintDebugger(draw::IPaintProviderPtr real);
+    PaintDebugger(muse::draw::IPaintProviderPtr real);
 
-    draw::IPaintProviderPtr realProvider() const;
-    void setDebugPenColor(const draw::Color& c);
+    muse::draw::IPaintProviderPtr realProvider() const;
+    void setDebugPenColor(const muse::draw::Color& c);
     void restorePenColor();
 
     bool isActive() const override;
     void beginTarget(const std::string& name) override;
-    void beforeEndTargetHook(draw::Painter* painter) override;
+    void beforeEndTargetHook(muse::draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
     void beginObject(const std::string& name) override;
     void endObject() override;
 
     void setAntialiasing(bool arg) override;
-    void setCompositionMode(draw::CompositionMode mode) override;
+    void setCompositionMode(muse::draw::CompositionMode mode) override;
     void setWindow(const RectF& window) override;
     void setViewport(const RectF& viewport) override;
 
-    void setFont(const draw::Font& font) override;
-    const draw::Font& font() const override;
+    void setFont(const muse::draw::Font& font) override;
+    const muse::draw::Font& font() const override;
 
-    void setPen(const draw::Pen& pen) override;
+    void setPen(const muse::draw::Pen& pen) override;
     void setNoPen() override;
-    const draw::Pen& pen() const override;
+    const muse::draw::Pen& pen() const override;
 
-    void setBrush(const draw::Brush& brush) override;
-    const draw::Brush& brush() const override;
+    void setBrush(const muse::draw::Brush& brush) override;
+    const muse::draw::Brush& brush() const override;
 
     void save() override;
     void restore() override;
 
-    void setTransform(const draw::Transform& transform) override;
-    const draw::Transform& transform() const override;
+    void setTransform(const muse::draw::Transform& transform) override;
+    const muse::draw::Transform& transform() const override;
 
-    void drawPath(const draw::PainterPath& path) override;
-    void drawPolygon(const PointF* points, size_t pointCount, draw::PolygonMode mode) override;
+    void drawPath(const muse::draw::PainterPath& path) override;
+    void drawPolygon(const PointF* points, size_t pointCount, muse::draw::PolygonMode mode) override;
 
     void drawText(const PointF& point, const String& text) override;
     void drawText(const RectF& rect, int flags, const String& text) override;
-    void drawTextWorkaround(const draw::Font& f, const PointF& pos, const String& text) override;
+    void drawTextWorkaround(const muse::draw::Font& f, const PointF& pos, const String& text) override;
 
     void drawSymbol(const PointF& point, char32_t ucs4Code) override;
 
-    void drawPixmap(const PointF& p, const draw::Pixmap& pm) override;
-    void drawTiledPixmap(const RectF& rect, const draw::Pixmap& pm, const PointF& offset = PointF()) override;
+    void drawPixmap(const PointF& p, const muse::draw::Pixmap& pm) override;
+    void drawTiledPixmap(const RectF& rect, const muse::draw::Pixmap& pm, const PointF& offset = PointF()) override;
 
 #ifndef NO_QT_SUPPORT
     void drawPixmap(const PointF& point, const QPixmap& pm) override;
@@ -86,10 +86,10 @@ public:
     void setClipping(bool enable) override;
 
 private:
-    draw::IPaintProviderPtr m_real = nullptr;
+    muse::draw::IPaintProviderPtr m_real = nullptr;
 
-    draw::Color m_originalPenColor;
-    draw::Color m_debugPenColor;
+    muse::draw::Color m_originalPenColor;
+    muse::draw::Color m_debugPenColor;
 };
 }
 

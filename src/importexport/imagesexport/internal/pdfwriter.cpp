@@ -33,7 +33,7 @@ using namespace mu::iex::imagesexport;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
-using namespace mu::draw;
+using namespace muse::draw;
 using namespace mu::engraving;
 
 std::vector<INotationWriter::UnitType> PdfWriter::supportedUnitTypes() const

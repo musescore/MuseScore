@@ -24,7 +24,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::draw;
+using namespace muse::draw;
 
 static void drawItem(IPaintProviderPtr& provider, const DrawData::Item& item, const std::map<int, DrawData::State>& states,
                      const Color& overlay)

@@ -267,7 +267,7 @@ int main(int argc, char** argv)
     app.addModule(new muse::accessibility::AccessibilityModule());
     app.addModule(new muse::actions::ActionsModule());
     app.addModule(new muse::audio::AudioModule());
-    app.addModule(new mu::draw::DrawModule());
+    app.addModule(new muse::draw::DrawModule());
     app.addModule(new mu::midi::MidiModule());
     app.addModule(new mu::mpe::MpeModule());
 #ifdef MUSE_MODULE_MUSESAMPLER
