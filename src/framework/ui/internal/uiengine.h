@@ -40,7 +40,7 @@ class UiEngine : public QObject, public IUiEngine
 {
     Q_OBJECT
 
-    INJECT(languages::ILanguagesService, languagesService)
+    INJECT(muse::languages::ILanguagesService, languagesService)
 
     Q_PROPERTY(api::ThemeApi * theme READ theme NOTIFY themeChanged)
     Q_PROPERTY(QmlToolTip * tooltip READ tooltip CONSTANT)

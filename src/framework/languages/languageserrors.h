@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LANGUAGES_LANGUAGESERRORS_H
-#define MU_LANGUAGES_LANGUAGESERRORS_H
+#ifndef MUSE_LANGUAGES_LANGUAGESERRORS_H
+#define MUSE_LANGUAGES_LANGUAGESERRORS_H
 
 #include "types/ret.h"
 #include "translation.h"
 
-namespace mu::languages {
+namespace muse::languages {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -62,4 +62,4 @@ inline Ret make_ret(Err e)
 }
 }
 
-#endif // MU_LANGUAGES_LANGUAGESERRORS_H
+#endif // MUSE_LANGUAGES_LANGUAGESERRORS_H

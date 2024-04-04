@@ -27,7 +27,7 @@
 #include "translation.h"
 
 using namespace mu::appshell;
-using namespace mu::languages;
+using namespace muse::languages;
 
 GeneralPreferencesModel::GeneralPreferencesModel(QObject* parent)
     : QObject(parent)

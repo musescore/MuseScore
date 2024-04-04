@@ -48,7 +48,7 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(ui::IUiActionsRegister, actionsRegister)
     INJECT(ui::IMainWindow, mainWindow)
-    INJECT(languages::ILanguagesService, languagesService)
+    INJECT(muse::languages::ILanguagesService, languagesService)
     INJECT(IInteractive, interactive)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)

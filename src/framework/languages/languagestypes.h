@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LANGUAGES_LANGUAGESTYPES_H
-#define MU_LANGUAGES_LANGUAGESTYPES_H
+#ifndef MUSE_LANGUAGES_LANGUAGESTYPES_H
+#define MUSE_LANGUAGES_LANGUAGESTYPES_H
 
 #include <QHash>
 #include <QMap>
@@ -28,7 +28,7 @@
 
 #include "io/path.h"
 
-namespace mu::languages {
+namespace muse::languages {
 const QString SYSTEM_LANGUAGE_CODE = "system";
 const QString PLACEHOLDER_LANGUAGE_CODE = "en@placeholder";
 
@@ -51,4 +51,4 @@ struct Language
 using LanguagesHash = QHash<QString /*code*/, Language>;
 }
 
-#endif // MU_LANGUAGES_LANGUAGESTYPES_H
+#endif // MUSE_LANGUAGES_LANGUAGESTYPES_H

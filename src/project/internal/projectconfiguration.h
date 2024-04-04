@@ -42,7 +42,7 @@ class ProjectConfiguration : public IProjectConfiguration
     INJECT(muse::cloud::ICloudConfiguration, cloudConfiguration)
     INJECT(muse::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(languages::ILanguagesService, languagesService)
+    INJECT(muse::languages::ILanguagesService, languagesService)
 
 public:
     void init();

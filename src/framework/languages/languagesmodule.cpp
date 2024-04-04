@@ -30,7 +30,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
-using namespace mu::languages;
+using namespace muse::languages;
 using namespace mu::modularity;
 
 std::string LanguagesModule::moduleName() const
@@ -59,7 +59,7 @@ void LanguagesModule::onPreInit(const IApplication::RunMode& mode)
     m_languagesService->init();
 
 #ifdef MUE_BUILD_DIAGNOSTICS_MODULE
-    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = modularity::ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
         pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
