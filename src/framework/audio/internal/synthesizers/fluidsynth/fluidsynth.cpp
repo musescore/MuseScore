@@ -200,7 +200,10 @@ void FluidSynth::setSampleRate(unsigned int sampleRate)
 
     createFluidInstance();
     addSoundFonts(std::vector<io::path_t>(m_sfontPaths.cbegin(), m_sfontPaths.cend()));
-    setupSound(m_setupData);
+
+    if (m_setupData.isValid()) {
+        setupSound(m_setupData);
+    }
 }
 
 Ret FluidSynth::addSoundFonts(const std::vector<io::path_t>& sfonts)
