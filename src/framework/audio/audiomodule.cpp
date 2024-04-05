@@ -60,7 +60,7 @@ using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 
-#ifdef JACK_AUDIO
+#ifdef MUSE_MODULE_AUDIO_JACK
 #include "internal/platform/jack/jackaudiodriver.h"
 #endif
 
@@ -112,7 +112,7 @@ void AudioModule::registerExports()
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
-#if defined(JACK_AUDIO)
+#if defined(MUSE_MODULE_AUDIO_JACK)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
 #else
 
@@ -134,7 +134,7 @@ void AudioModule::registerExports()
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
 
-#endif // JACK_AUDIO
+#endif // MUSE_MODULE_AUDIO_JACK
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());
