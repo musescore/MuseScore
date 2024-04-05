@@ -144,10 +144,10 @@ void XmlReader::unknown()
         LOGD("%s ", muPrintable(errorString()));
     }
     if (!m_docName.isEmpty()) {
-        LOGD("tag in <%s> line %lld col %lld: %s", muPrintable(m_docName), lineNumber() + m_offsetLines,
-             columnNumber(), name().ascii());
+        LOGD() << "tag in <" << m_docName << "> line " << lineNumber() + m_offsetLines << " col "
+               << columnNumber() << ": " << name();
     } else {
-        LOGD("line %lld col %lld: %s", lineNumber() + m_offsetLines, columnNumber(), name().ascii());
+        LOGD() << "line " << lineNumber() + m_offsetLines << " col " << columnNumber() << ": " << name();
     }
     skipCurrentElement();
 }
