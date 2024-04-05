@@ -43,7 +43,6 @@ struct OSXAudioDriver::Data {
 };
 
 OSXAudioDriver::OSXAudioDriver()
-    : m_data(nullptr)
 {
     m_data = std::make_shared<Data>();
     m_data->audioQueue = nullptr;
