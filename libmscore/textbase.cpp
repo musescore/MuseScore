@@ -504,8 +504,6 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
       QPointF pt  = p - _text->canvasPos();
       if (!_text->bbox().contains(pt))
             return false;
-      int oldRow    = _row;
-      int oldColumn = _column;
 
 //      if (_text->_layout.empty())
 //            _text->_layout.append(TextBlock());
@@ -519,13 +517,11 @@ bool TextCursor::set(const QPointF& p, QTextCursor::MoveMode mode)
             }
       _column = curLine().column(pt.x(), _text);
 
-      if (oldRow != _row || oldColumn != _column) {
-            _text->score()->setUpdateAll();
-            if (mode == QTextCursor::MoveAnchor)
-                  clearSelection();
-            if (hasSelection())
-                  QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
-            }
+      _text->score()->setUpdateAll();
+      if (mode == QTextCursor::MoveAnchor)
+            clearSelection();
+      if (hasSelection())
+            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
       updateCursorFormat();
       return true;
       }
