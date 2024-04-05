@@ -128,7 +128,7 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
         }
 
         auto noteTnD = timestampAndDurationFromStartAndDurationTicks(
-            chord->score(), startTick + context.positionTickOffset, stepDurationTicks);
+            chord->score(), startTick, stepDurationTicks, context.positionTickOffset);
 
         NominalNoteCtx noteCtx(note, context);
         noteCtx.duration = noteTnD.duration;
