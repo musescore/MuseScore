@@ -37,6 +37,8 @@
 #include "framework/global/internal/application.h"
 #include "framework/ui/iuiengine.h"
 
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace mu::app;
@@ -136,7 +138,10 @@ int App::run(int argc, char** argv)
 
 #if !defined(Q_OS_WIN) && !defined(Q_OS_DARWIN) && !defined(Q_OS_WASM)
     // Any OS that uses Freedesktop.org Desktop Entry Specification (e.g. Linux, BSD)
-    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MU_APP_INSTALL_SUFFIX ".desktop");
+#ifndef MUSE_APP_INSTALL_SUFFIX
+#define MUSE_APP_INSTALL_SUFFIX ""
+#endif
+    QGuiApplication::setDesktopFileName("org.musescore.MuseScore" MUSE_APP_INSTALL_SUFFIX ".desktop");
 #endif
 
     commandLineParser.processBuiltinArgs(*qapp);
