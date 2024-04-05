@@ -38,7 +38,7 @@ VstAudioClient::~VstAudioClient()
     m_pluginComponent->terminate();
 }
 
-void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
+void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, muse::audio::audioch_t&& audioChannelsCount)
 {
     IF_ASSERT_FAILED(plugin && type != AudioPluginType::Undefined) {
         return;
@@ -72,12 +72,12 @@ bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
     return true;
 }
 
-void VstAudioClient::setVolumeGain(const audio::gain_t newVolumeGain)
+void VstAudioClient::setVolumeGain(const muse::audio::gain_t newVolumeGain)
 {
     m_volumeGain = newVolumeGain;
 }
 
-audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel)
+muse::audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {

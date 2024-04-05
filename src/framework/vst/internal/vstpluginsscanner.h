@@ -29,7 +29,7 @@
 #include "io/ifilesystem.h"
 
 namespace mu::vst {
-class VstPluginsScanner : public audio::IAudioPluginsScanner
+class VstPluginsScanner : public muse::audio::IAudioPluginsScanner
 {
     INJECT(IVstConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)

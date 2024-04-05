@@ -82,9 +82,9 @@ private:
     VstPluginPtr m_pluginPtr = nullptr;
     PluginViewPtr m_view = nullptr;
 
-    audio::TrackId m_trackId = -1;
+    muse::audio::TrackId m_trackId = -1;
     QString m_resourceId;
-    audio::AudioFxChainOrder m_chainOrder = -1;
+    muse::audio::AudioFxChainOrder m_chainOrder = -1;
 };
 }
 

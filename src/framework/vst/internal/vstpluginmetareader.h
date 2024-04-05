@@ -26,11 +26,11 @@
 #include "audio/iaudiopluginmetareader.h"
 
 namespace mu::vst {
-class VstPluginMetaReader : public audio::IAudioPluginMetaReader
+class VstPluginMetaReader : public muse::audio::IAudioPluginMetaReader
 {
 public:
     bool canReadMeta(const io::path_t& pluginPath) const override;
-    RetVal<audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
+    RetVal<muse::audio::AudioResourceMetaList> readMeta(const io::path_t& pluginPath) const override;
 };
 }
 

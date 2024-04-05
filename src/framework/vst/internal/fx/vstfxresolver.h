@@ -30,22 +30,24 @@
 #include "ivstmodulesrepository.h"
 
 namespace mu::vst {
-class VstFxResolver : public audio::fx::AbstractFxResolver
+class VstFxResolver : public muse::audio::fx::AbstractFxResolver
 {
     INJECT(IVstModulesRepository, pluginModulesRepo)
     INJECT(IVstPluginsRegister, pluginsRegister)
 public:
     // IFxResolver::IResolver interface
-    audio::AudioResourceMetaList resolveResources() const override;
+    muse::audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
     void clearAllFx() override;
 
 private:
-    audio::IFxProcessorPtr createMasterFx(const audio::AudioFxParams& fxParams) const override;
-    audio::IFxProcessorPtr createTrackFx(const audio::TrackId trackId, const audio::AudioFxParams& fxParams) const override;
+    muse::audio::IFxProcessorPtr createMasterFx(const muse::audio::AudioFxParams& fxParams) const override;
+    muse::audio::IFxProcessorPtr createTrackFx(const muse::audio::TrackId trackId,
+                                               const muse::audio::AudioFxParams& fxParams) const override;
 
-    void removeMasterFx(const audio::AudioResourceId& resoureId, audio::AudioFxChainOrder order) override;
-    void removeTrackFx(const audio::TrackId trackId, const audio::AudioResourceId& resoureId, audio::AudioFxChainOrder order) override;
+    void removeMasterFx(const muse::audio::AudioResourceId& resoureId, muse::audio::AudioFxChainOrder order) override;
+    void removeTrackFx(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resoureId,
+                       muse::audio::AudioFxChainOrder order) override;
 };
 }
 

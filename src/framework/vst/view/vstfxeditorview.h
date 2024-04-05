@@ -45,7 +45,7 @@ private:
     bool isAbleToWrapPlugin() const override;
     VstPluginPtr getPluginPtr() const override;
 
-    audio::AudioFxChainOrder m_chainOrder = -1;
+    muse::audio::AudioFxChainOrder m_chainOrder = -1;
 };
 }
 

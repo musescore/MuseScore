@@ -41,7 +41,7 @@ void VstModulesRepository::deInit()
     PluginContextFactory::instance().setPluginContext(nullptr);
 }
 
-bool VstModulesRepository::exists(const audio::AudioResourceId& resourceId) const
+bool VstModulesRepository::exists(const muse::audio::AudioResourceId& resourceId) const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -50,7 +50,7 @@ bool VstModulesRepository::exists(const audio::AudioResourceId& resourceId) cons
     return knownPlugins()->exists(resourceId);
 }
 
-PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId& resourceId) const
+PluginModulePtr VstModulesRepository::pluginModule(const muse::audio::AudioResourceId& resourceId) const
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
@@ -65,7 +65,7 @@ PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId&
     return nullptr;
 }
 
-void VstModulesRepository::addPluginModule(const audio::AudioResourceId& resourceId)
+void VstModulesRepository::addPluginModule(const muse::audio::AudioResourceId& resourceId)
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
@@ -84,7 +84,7 @@ void VstModulesRepository::addPluginModule(const audio::AudioResourceId& resourc
     m_modules.emplace(resourceId, std::move(module));
 }
 
-void VstModulesRepository::removePluginModule(const audio::AudioResourceId& resourceId)
+void VstModulesRepository::removePluginModule(const muse::audio::AudioResourceId& resourceId)
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
@@ -98,38 +98,38 @@ void VstModulesRepository::removePluginModule(const audio::AudioResourceId& reso
     m_modules.erase(search);
 }
 
-audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta() const
+muse::audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
-    return modulesMetaList(audio::AudioPluginType::Instrument);
+    return modulesMetaList(muse::audio::AudioPluginType::Instrument);
 }
 
-audio::AudioResourceMetaList VstModulesRepository::fxModulesMeta() const
+muse::audio::AudioResourceMetaList VstModulesRepository::fxModulesMeta() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
-    return modulesMetaList(audio::AudioPluginType::Fx);
+    return modulesMetaList(muse::audio::AudioPluginType::Fx);
 }
 
 void VstModulesRepository::refresh()
 {
 }
 
-audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const audio::AudioPluginType& type) const
+muse::audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const muse::audio::AudioPluginType& type) const
 {
-    auto infoAccepted = [type](const audio::AudioPluginInfo& info) {
-        return info.type == type && info.meta.type == audio::AudioResourceType::VstPlugin && info.enabled;
+    auto infoAccepted = [type](const muse::audio::AudioPluginInfo& info) {
+        return info.type == type && info.meta.type == muse::audio::AudioResourceType::VstPlugin && info.enabled;
     };
 
-    std::vector<audio::AudioPluginInfo> infoList = knownPlugins()->pluginInfoList(infoAccepted);
-    audio::AudioResourceMetaList result;
+    std::vector<muse::audio::AudioPluginInfo> infoList = knownPlugins()->pluginInfoList(infoAccepted);
+    muse::audio::AudioResourceMetaList result;
 
-    for (const audio::AudioPluginInfo& info : infoList) {
+    for (const muse::audio::AudioPluginInfo& info : infoList) {
         result.push_back(info.meta);
     }
 

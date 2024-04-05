@@ -29,7 +29,7 @@
 using namespace mu::vst;
 using namespace muse::audio;
 
-void VstPluginsRegister::registerInstrPlugin(const audio::TrackId trackId, VstPluginPtr pluginPtr)
+void VstPluginsRegister::registerInstrPlugin(const muse::audio::TrackId trackId, VstPluginPtr pluginPtr)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -38,7 +38,7 @@ void VstPluginsRegister::registerInstrPlugin(const audio::TrackId trackId, VstPl
     m_vstiPluginsMap.insert_or_assign(trackId, pluginPtr);
 }
 
-void VstPluginsRegister::registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
+void VstPluginsRegister::registerFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
                                           const AudioFxChainOrder chainOrder, VstPluginPtr pluginPtr)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
@@ -49,7 +49,7 @@ void VstPluginsRegister::registerFxPlugin(const audio::TrackId trackId, const au
     instancesMap.insert_or_assign(std::make_pair(resourceId, chainOrder), pluginPtr);
 }
 
-void VstPluginsRegister::registerMasterFxPlugin(const audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder,
+void VstPluginsRegister::registerMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder,
                                                 VstPluginPtr pluginPtr)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
@@ -59,7 +59,7 @@ void VstPluginsRegister::registerMasterFxPlugin(const audio::AudioResourceId& re
     m_masterPluginsMap.insert_or_assign(std::make_pair(resourceId, chainOrder), pluginPtr);
 }
 
-VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const
+VstPluginPtr VstPluginsRegister::instrumentPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId) const
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
@@ -77,7 +77,7 @@ VstPluginPtr VstPluginsRegister::instrumentPlugin(const audio::TrackId trackId, 
     return nullptr;
 }
 
-VstPluginPtr VstPluginsRegister::fxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
+VstPluginPtr VstPluginsRegister::fxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
                                           const AudioFxChainOrder chainOrder) const
 {
     ONLY_MAIN_THREAD(threadSecurer);
@@ -105,7 +105,7 @@ VstPluginPtr VstPluginsRegister::fxPlugin(const audio::TrackId trackId, const au
     return pluginSearch->second;
 }
 
-VstPluginPtr VstPluginsRegister::masterFxPlugin(const audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder) const
+VstPluginPtr VstPluginsRegister::masterFxPlugin(const muse::audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder) const
 {
     ONLY_MAIN_THREAD(threadSecurer);
 
@@ -121,7 +121,7 @@ VstPluginPtr VstPluginsRegister::masterFxPlugin(const audio::AudioResourceId& re
     return pluginSearch->second;
 }
 
-void VstPluginsRegister::unregisterInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId)
+void VstPluginsRegister::unregisterInstrPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -139,7 +139,7 @@ void VstPluginsRegister::unregisterInstrPlugin(const audio::TrackId trackId, con
     return;
 }
 
-void VstPluginsRegister::unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
+void VstPluginsRegister::unregisterFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
                                             const AudioFxChainOrder chainOrder)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
@@ -157,7 +157,7 @@ void VstPluginsRegister::unregisterFxPlugin(const audio::TrackId trackId, const 
     instancesMap.erase({ resourceId, chainOrder });
 }
 
-void VstPluginsRegister::unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder)
+void VstPluginsRegister::unregisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const AudioFxChainOrder chainOrder)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 

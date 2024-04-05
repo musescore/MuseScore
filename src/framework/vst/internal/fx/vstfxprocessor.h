@@ -11,16 +11,16 @@
 #include "vsttypes.h"
 
 namespace mu::vst {
-class VstFxProcessor : public audio::IFxProcessor, public async::Asyncable
+class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
 public:
-    explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const audio::AudioFxParams& params);
+    explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const muse::audio::AudioFxParams& params);
 
     void init();
 
-    audio::AudioFxType type() const override;
-    const audio::AudioFxParams& params() const override;
-    async::Channel<audio::AudioFxParams> paramsChanged() const override;
+    muse::audio::AudioFxType type() const override;
+    const muse::audio::AudioFxParams& params() const override;
+    async::Channel<muse::audio::AudioFxParams> paramsChanged() const override;
     void setSampleRate(unsigned int sampleRate) override;
     bool active() const override;
     void setActive(bool active) override;
@@ -32,8 +32,8 @@ private:
     VstPluginPtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
-    audio::AudioFxParams m_params;
-    async::Channel<audio::AudioFxParams> m_paramsChanges;
+    muse::audio::AudioFxParams m_params;
+    async::Channel<muse::audio::AudioFxParams> m_paramsChanges;
 };
 
 using VstFxPtr = std::shared_ptr<VstFxProcessor>;

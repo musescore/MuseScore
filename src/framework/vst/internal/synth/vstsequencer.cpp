@@ -89,7 +89,7 @@ void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, 
     updateDynamicChangesIterator();
 }
 
-audio::gain_t VstSequencer::currentGain() const
+muse::audio::gain_t VstSequencer::currentGain() const
 {
     mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
     return expressionLevel(currentDynamicLevel);
