@@ -85,8 +85,9 @@ ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const 
         return mpe::ArticulationType::CircleCrossNote;
 
     case NoteHeadGroup::HEAD_TRIANGLE_DOWN:
+        return mpe::ArticulationType::TriangleDownNote;
     case NoteHeadGroup::HEAD_TRIANGLE_UP:
-        return mpe::ArticulationType::TriangleNote;
+        return mpe::ArticulationType::TriangleUpNote;
 
     case NoteHeadGroup::HEAD_DIAMOND:
     case NoteHeadGroup::HEAD_DIAMOND_OLD:
@@ -103,6 +104,18 @@ ArticulationType NoteArticulationsParser::articulationTypeByNoteheadGroup(const 
 
     case NoteHeadGroup::HEAD_SLASHED2:
         return mpe::ArticulationType::SlashedBackwardsNote;
+
+    case NoteHeadGroup::HEAD_DO:
+        return mpe::ArticulationType::TriangleUpNote;
+
+    case NoteHeadGroup::HEAD_RE:
+        return mpe::ArticulationType::MoonNote;
+
+    case NoteHeadGroup::HEAD_FA:
+        return mpe::ArticulationType::TriangleRightNote;
+
+    case NoteHeadGroup::HEAD_LA:
+        return mpe::ArticulationType::SquareNote;
 
     case NoteHeadGroup::HEAD_TI:
         return mpe::ArticulationType::TriangleRoundDownNote;
@@ -134,7 +147,7 @@ void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, m
 
 void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    if (!note->ghost()) {
+    if (!note->ghost() && !note->headHasParentheses()) {
         return;
     }
 

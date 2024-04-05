@@ -92,7 +92,7 @@ private:
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
 
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
-    ms_NoteArticulation noteArticulationTypes(const mpe::NoteEvent& noteEvent) const;
+    void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
 
     void parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
 
