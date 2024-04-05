@@ -30,7 +30,7 @@
 
 #include "view/learnpagemodel.h"
 
-using namespace mu::learn;
+using namespace muse::learn;
 using namespace mu::modularity;
 
 static void learn_init_qrc()

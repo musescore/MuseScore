@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNMODULE_H
-#define MU_LEARN_LEARNMODULE_H
+#ifndef MUSE_LEARN_LEARNMODULE_H
+#define MUSE_LEARN_LEARNMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::learn {
+namespace muse::learn {
 class LearnModule : public modularity::IModuleSetup
 {
 public:
@@ -33,4 +33,4 @@ public:
 };
 }
 
-#endif // MU_LEARN_LEARNMODULE_H
+#endif // MUSE_LEARN_LEARNMODULE_H

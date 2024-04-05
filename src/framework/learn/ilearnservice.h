@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_ILEARNSERVICE_H
-#define MU_LEARN_ILEARNSERVICE_H
+#ifndef MUSE_LEARN_ILEARNSERVICE_H
+#define MUSE_LEARN_ILEARNSERVICE_H
 
 #include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "learntypes.h"
 
-namespace mu::learn {
+namespace muse::learn {
 class ILearnService : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(ILearnService)
@@ -44,4 +44,4 @@ public:
 };
 }
 
-#endif // MU_LEARN_ILEARNSERVICE_H
+#endif // MUSE_LEARN_ILEARNSERVICE_H

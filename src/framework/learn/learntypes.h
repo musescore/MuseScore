@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNTYPES_H
-#define MU_LEARN_LEARNTYPES_H
+#ifndef MUSE_LEARN_LEARNTYPES_H
+#define MUSE_LEARN_LEARNTYPES_H
 
 #include <QString>
 #include <QList>
 
-namespace mu::learn {
+namespace muse::learn {
 struct PlaylistItem {
     QString title;
     QString author;
@@ -42,4 +42,4 @@ struct PlaylistItem {
 using Playlist = QList<PlaylistItem>;
 }
 
-#endif // MU_LEARN_LEARNTYPES_H
+#endif // MUSE_LEARN_LEARNTYPES_H

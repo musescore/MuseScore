@@ -26,7 +26,7 @@
 
 #include "translation.h"
 
-using namespace mu::learn;
+using namespace muse::learn;
 
 LearnPageModel::LearnPageModel(QObject* parent)
     : QObject(parent)

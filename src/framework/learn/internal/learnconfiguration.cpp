@@ -24,7 +24,7 @@
 #include "settings.h"
 
 using namespace mu;
-using namespace mu::learn;
+using namespace muse::learn;
 using namespace mu::network;
 
 static const std::string module_name("learn");

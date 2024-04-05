@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNCONFIGURATION_H
-#define MU_LEARN_LEARNCONFIGURATION_H
+#ifndef MUSE_LEARN_LEARNCONFIGURATION_H
+#define MUSE_LEARN_LEARNCONFIGURATION_H
 
 #include "ilearnconfiguration.h"
 
-namespace mu::learn {
+namespace muse::learn {
 class LearnConfiguration : public ILearnConfiguration
 {
 public:
     void init();
 
-    network::RequestHeaders headers() const override;
+    mu::network::RequestHeaders headers() const override;
 
     QUrl startedPlaylistUrl() const override;
     QUrl advancedPlaylistUrl() const override;
@@ -40,4 +40,4 @@ private:
 };
 }
 
-#endif // MU_LEARN_LEARNCONFIGURATION_H
+#endif // MUSE_LEARN_LEARNCONFIGURATION_H
