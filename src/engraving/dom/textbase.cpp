@@ -617,8 +617,6 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
     if (!m_text->ldata()->bbox().contains(pt)) {
         return false;
     }
-    size_t oldRow    = m_row;
-    size_t oldColumn = m_column;
 
 //      if (_text->_layout.empty())
 //            _text->_layout.append(TextBlock());
@@ -638,13 +636,12 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
     }
     m_column = curLine().column(pt.x(), m_text);
 
-    if (oldRow != m_row || oldColumn != m_column) {
-        m_text->score()->setUpdateAll();
-        if (mode == TextCursor::MoveMode::MoveAnchor) {
-            clearSelection();
-        }
-        updateCursorFormat();
+    m_text->score()->setUpdateAll();
+    if (mode == TextCursor::MoveMode::MoveAnchor) {
+        clearSelection();
     }
+    updateCursorFormat();
+
     return true;
 }
 
