@@ -239,25 +239,24 @@ endif()
 ###########################################
 # Configure framework
 ###########################################
+set(MUSE_APP_NAME ${MUSESCORE_NAME})
+set(MUSE_APP_UNSTABLE ${MUSESCORE_UNSTABLE})
+set(MUSE_APP_REVISION ${MUSESCORE_REVISION})
+set(MUSE_APP_BUILD_NUMBER ${CMAKE_BUILD_NUMBER})
+set(MUSE_APP_VERSION ${MUSESCORE_VERSION})
+set(MUSE_APP_VERSION_LABEL ${MUSESCORE_VERSION_LABEL})
+set(MUSE_APP_INSTALL_SUFFIX ${MUSESCORE_INSTALL_SUFFIX})
+set(MUSE_APP_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+set(MUSE_APP_INSTALL_NAME ${Mscore_INSTALL_NAME})
+
 include(muse_framework/SetupConfigure)
 
 ###########################################
 # Global definitions
 ###########################################
-add_definitions(-DMU_APP_NAME="${MUSESCORE_NAME}")
-add_definitions(-DMU_APP_REVISION="${MUSESCORE_REVISION}")
-add_definitions(-DMU_APP_BUILD_NUMBER="${CMAKE_BUILD_NUMBER}")
-add_definitions(-DMU_APP_VERSION="${MUSESCORE_VERSION}")
-add_definitions(-DMU_APP_VERSION_LABEL="${MUSESCORE_VERSION_LABEL}")
-add_definitions(-DMU_APP_INSTALL_SUFFIX="${MUSESCORE_INSTALL_SUFFIX}")
-add_definitions(-DMU_APP_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
-add_definitions(-DMU_APP_INSTALL_NAME="${Mscore_INSTALL_NAME}")
+
 
 # modules config
-
-if (MUSESCORE_UNSTABLE)
-    add_definitions(-DMU_APP_UNSTABLE)
-endif()
 
 if (MUSESCORE_ALLOW_UPDATE_ON_PRERELEASE)
     add_definitions(-DMUSESCORE_ALLOW_UPDATE_ON_PRERELEASE)
@@ -268,8 +267,6 @@ function(def_opt name val)
         add_definitions(-D${name})
     endif()
 endfunction()
-
-# framework
 
 # modules
 def_opt(MUE_BUILD_APPSHELL_MODULE ${MUE_BUILD_APPSHELL_MODULE})

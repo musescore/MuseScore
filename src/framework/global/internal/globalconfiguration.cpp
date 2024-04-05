@@ -27,6 +27,9 @@
 #include <QCoreApplication>
 
 #include "settings.h"
+
+#include "muse_framework_config.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -62,8 +65,16 @@ io::path_t GlobalConfiguration::appDataPath() const
 
 QString GlobalConfiguration::resolveAppDataPath() const
 {
+#ifndef MUSE_APP_INSTALL_PREFIX
+#define MUSE_APP_INSTALL_PREFIX "/"
+#endif
+
+#ifndef MUSE_APP_INSTALL_NAME
+#define MUSE_APP_INSTALL_NAME "App"
+#endif
+
 #ifdef Q_OS_WIN
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" MU_APP_INSTALL_NAME));
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" MUSE_APP_INSTALL_NAME));
     return dir.absolutePath() + "/";
 #elif defined(Q_OS_MAC)
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
@@ -72,12 +83,12 @@ QString GlobalConfiguration::resolveAppDataPath() const
     return "/files/share";
 #else
     // Try relative path (needed for portable AppImage and non-standard installations)
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" MU_APP_INSTALL_NAME));
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../share/" MUSE_APP_INSTALL_NAME));
     if (dir.exists()) {
         return dir.absolutePath() + "/";
     }
     // Otherwise fall back to default location (e.g. if binary has moved relative to share)
-    return QString(MU_APP_INSTALL_PREFIX "/share/" MU_APP_INSTALL_NAME);
+    return QString(MUSE_APP_INSTALL_PREFIX "/share/" MUSE_APP_INSTALL_NAME);
 #endif
 }
 
