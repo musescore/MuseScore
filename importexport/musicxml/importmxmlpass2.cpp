@@ -20,8 +20,10 @@
 #include <memory>
 #include <utility>
 
-#include "libmscore/arpeggio.h"
 #include "libmscore/accidental.h"
+#include "libmscore/arpeggio.h"
+#include "libmscore/articulation.h"
+#include "libmscore/barline.h"
 #include "libmscore/box.h"
 #include "libmscore/breath.h"
 #include "libmscore/chord.h"
@@ -30,6 +32,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/fermata.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
@@ -47,9 +50,11 @@
 #include "libmscore/measure.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
+#include "libmscore/ottava.h"
 #include "libmscore/page.h"
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
+#include "libmscore/rehearsalmark.h"
 #include "libmscore/rest.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
@@ -59,25 +64,19 @@
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
+#include "libmscore/textline.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
 #include "libmscore/utils.h"
-#include "libmscore/box.h"
 #include "libmscore/volta.h"
-#include "libmscore/textline.h"
-#include "libmscore/barline.h"
-#include "libmscore/articulation.h"
-#include "libmscore/ottava.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/fermata.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
 #include "importmxmlnotepitch.h"
-#include "importmxmlpass2.h"
 #include "importmxmlpass1.h"
+#include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
 
@@ -1655,6 +1654,12 @@ static void reformatHeaderVBox(MeasureBase* mb)
                   }
             }
 
+      // 1mm of
+      static const double VBOX_BOTTOM_PADDING = 1;
+      totalHeight += VBOX_BOTTOM_PADDING;
+      headerVBox->setBottomMargin(VBOX_BOTTOM_PADDING);
+      headerVBox->setPropertyFlags(Pid::BOTTOM_MARGIN, PropertyFlags::UNSTYLED);
+
       headerVBox->setBoxHeight(Spatium(totalHeight / score->spatium()));
       headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
       }
@@ -2130,8 +2135,6 @@ void MusicXMLParserPass2::scorePartwise()
       _score->connectArpeggios();
       _score->fixupLaissezVibrer();
       cleanFretDiagrams(_score->firstMeasure());
-      if (_pass1.hasInferredHeaderText())
-            reformatHeaderVBox(_score->measures()->first());
 
       bool copyrightFirstPageOnly = true; // TODO: expose as import setting
       if (copyrightFirstPageOnly)
@@ -2141,6 +2144,11 @@ void MusicXMLParserPass2::scorePartwise()
       cleanUpLayoutBreaks(_score, _logger);
 
       addError(checkAtEndElement(_e, "score-partwise"));
+
+      // This method relies heavily on text metrics which differ from system to system and can be very volatile
+      // To avoid having to update the majority of musicxml tests on every change to engraving, don't run this during testing
+      if (!MScore::testMode)
+            reformatHeaderVBox(_score->measures()->first());
       }
 
 //---------------------------------------------------------

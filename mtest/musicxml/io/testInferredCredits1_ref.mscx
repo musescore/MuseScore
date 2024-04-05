@@ -118,9 +118,10 @@ the video game: a tone poem</metaTag>
       </Part>
     <Staff id="1">
       <VBox>
-        <height>14.7723</height>
+        <height>12.3698</height>
         <Text>
           <style>Title</style>
+          <offset x="0" y="-0.1505"/>
           <text><font size="22"/>Inferred Credits 1</text>
           </Text>
         <Text>
@@ -129,7 +130,6 @@ the video game: a tone poem</metaTag>
           </Text>
         <Text>
           <style>Subtitle</style>
-          <offset x="0" y="8.46667"/>
           <text>from MUSESCORE: the musical: the graphic novel:
 the video game: a tone poem</text>
           </Text>
