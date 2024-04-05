@@ -624,7 +624,6 @@
         <voice>
           <Tempo>
             <tempo>2</tempo>
-            <followText>1</followText>
             <text><b>rit.</b></text>
             </Tempo>
           <Chord>
@@ -1186,7 +1185,6 @@
           <endTuplet/>
           <Tempo>
             <tempo>2</tempo>
-            <followText>1</followText>
             <text><b>rit.</b></text>
             </Tempo>
           <Spanner type="HairPin">

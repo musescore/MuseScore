@@ -3291,7 +3291,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         else {
                               ((TempoText*) t)->setTempo(_score->tempo(tick)); // Maintain tempo (somewhat hacky)
                               }
-                        ((TempoText*) t)->setFollowText(true);
+                        if (t->plainText().contains("="))
+                              ((TempoText*)t)->setFollowText(true);
                         }
                   }
             else if (!_wordsText.isEmpty() || !_metroText.isEmpty()) {

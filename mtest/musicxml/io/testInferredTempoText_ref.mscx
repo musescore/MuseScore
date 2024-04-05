@@ -147,7 +147,6 @@
             </TimeSig>
           <Tempo>
             <tempo>2</tempo>
-            <followText>1</followText>
             <text><b>However ya feel</b></text>
             </Tempo>
           <Chord>
@@ -585,7 +584,6 @@
             </Chord>
           <Tempo>
             <tempo>3</tempo>
-            <followText>1</followText>
             <text><b>rit.</b></text>
             </Tempo>
           <Chord>
