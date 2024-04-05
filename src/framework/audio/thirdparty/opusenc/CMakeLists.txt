@@ -8,7 +8,7 @@ set(OPUSENC_VERSION 0.2.1)
 set(OPUSENC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libopusenc-${OPUSENC_VERSION})
 
 # libopusenc dependent on libopus
-set(OPUS_LIB_DIR ${PROJECT_SOURCE_DIR}/thirdparty/opus)
+set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus)
 add_subdirectory(${OPUS_LIB_DIR} opus)
 
 aux_source_directory(${OPUSENC_DIR}/src SOURCE_LIB)

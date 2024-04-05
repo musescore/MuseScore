@@ -227,7 +227,7 @@ set(MODULE_SRC
     )
 
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
-set(FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
+set(FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth/fluidsynth-2.3.3)
 set (FLUIDSYNTH_INC
     ${FLUIDSYNTH_DIR}/include
     ${FLUIDSYNTH_DIR}/src
