@@ -2981,7 +2981,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
                 t->setXmlText(_wordsText + sep + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
-                ((TempoText*)t)->setFollowText(true);
+                if (t->plainText().contains('=')) {
+                    ((TempoText*)t)->setFollowText(true);
+                }
                 _score->setTempo(tick, _tpoSound);
             }
         } else {
