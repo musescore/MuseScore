@@ -23,7 +23,7 @@
 
 #include <QQmlEngine>
 
-using namespace mu::learn;
+using namespace muse::learn;
 
 static void learn_init_qrc()
 {

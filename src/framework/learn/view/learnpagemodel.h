@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LEARN_LEARNPAGEMODEL_H
-#define MU_LEARN_LEARNPAGEMODEL_H
+#ifndef MUSE_LEARN_LEARNPAGEMODEL_H
+#define MUSE_LEARN_LEARNPAGEMODEL_H
 
 #include <QObject>
 #include <QVariant>
@@ -30,7 +30,7 @@
 #include "modularity/ioc.h"
 #include "ilearnservice.h"
 
-namespace mu::learn {
+namespace muse::learn {
 class LearnPageModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -70,4 +70,4 @@ private:
 };
 }
 
-#endif // MU_LEARN_LEARNPAGEMODEL_H
+#endif // MUSE_LEARN_LEARNPAGEMODEL_H
