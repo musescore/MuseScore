@@ -22,7 +22,7 @@
 
 #include "vstieditorview.h"
 
-using namespace mu::vst;
+using namespace muse::vst;
 
 VstiEditorView::VstiEditorView(QWidget* parent)
     : AbstractVstEditorView(parent)

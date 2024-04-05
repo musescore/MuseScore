@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTIRESOLVER_H
-#define MU_VST_VSTIRESOLVER_H
+#ifndef MUSE_VST_VSTIRESOLVER_H
+#define MUSE_VST_VSTIRESOLVER_H
 
 #include <map>
 
@@ -32,7 +32,7 @@
 #include "ivstmodulesrepository.h"
 #include "vstsynthesiser.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstiResolver : public muse::audio::synth::ISynthResolver::IResolver
 {
     INJECT(IVstModulesRepository, pluginModulesRepo)
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTIRESOLVER_H
+#endif // MUSE_VST_VSTIRESOLVER_H

@@ -28,7 +28,7 @@
 #include "async/async.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace mu::async;
 
 static const std::string_view COMPONENT_STATE_KEY = "componentState";

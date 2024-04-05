@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_ABSTRACTVSTEDITORVIEW_H
-#define MU_VST_ABSTRACTVSTEDITORVIEW_H
+#ifndef MUSE_VST_ABSTRACTVSTEDITORVIEW_H
+#define MUSE_VST_ABSTRACTVSTEDITORVIEW_H
 
 #include "uicomponents/view/topleveldialog.h"
 #include "async/asyncable.h"
@@ -31,8 +31,8 @@
 
 class QWidget;
 
-namespace mu::vst {
-class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
+namespace muse::vst {
+class AbstractVstEditorView : public mu::uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
 {
     Q_OBJECT
 
@@ -88,4 +88,4 @@ private:
 };
 }
 
-#endif // MU_VST_ABSTRACTVSTEDITORVIEW_H
+#endif // MUSE_VST_ABSTRACTVSTEDITORVIEW_H

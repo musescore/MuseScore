@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTPLUGIN_H
-#define MU_VST_VSTPLUGIN_H
+#ifndef MUSE_VST_VSTPLUGIN_H
+#define MUSE_VST_VSTPLUGIN_H
 
 #include <mutex>
 #include <atomic>
@@ -37,7 +37,7 @@
 #include "vsttypes.h"
 #include "vstcomponenthandler.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstPluginProvider;
 class VstPlugin : public async::Asyncable
 {
@@ -94,4 +94,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTPLUGIN_H
+#endif // MUSE_VST_VSTPLUGIN_H

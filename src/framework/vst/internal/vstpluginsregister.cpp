@@ -26,7 +26,7 @@
 
 #include "vstplugin.h"
 
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace muse::audio;
 
 void VstPluginsRegister::registerInstrPlugin(const muse::audio::TrackId trackId, VstPluginPtr pluginPtr)

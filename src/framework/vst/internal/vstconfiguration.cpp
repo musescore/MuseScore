@@ -25,7 +25,7 @@
 #include "settings.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 
 static const std::string module_name("vst");
 
@@ -42,12 +42,12 @@ void VstConfiguration::init()
 mu::io::paths_t VstConfiguration::userVstDirectories() const
 {
     std::string pathsStr = settings()->value(USER_VST_PATHS).toString();
-    return io::pathsFromString(pathsStr);
+    return mu::io::pathsFromString(pathsStr);
 }
 
 void VstConfiguration::setUserVstDirectories(const io::paths_t& paths)
 {
-    settings()->setSharedValue(USER_VST_PATHS, Val(io::pathsToString(paths)));
+    settings()->setSharedValue(USER_VST_PATHS, Val(mu::io::pathsToString(paths)));
 }
 
 mu::async::Channel<mu::io::paths_t> VstConfiguration::userVstDirectoriesChanged() const

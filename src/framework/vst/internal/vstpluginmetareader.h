@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTPLUGINMETAREADER_H
-#define MU_VST_VSTPLUGINMETAREADER_H
+#ifndef MUSE_VST_VSTPLUGINMETAREADER_H
+#define MUSE_VST_VSTPLUGINMETAREADER_H
 
 #include "audio/iaudiopluginmetareader.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstPluginMetaReader : public muse::audio::IAudioPluginMetaReader
 {
 public:
@@ -34,4 +34,4 @@ public:
 };
 }
 
-#endif // MU_VST_VSTPLUGINMETAREADER_H
+#endif // MUSE_VST_VSTPLUGINMETAREADER_H

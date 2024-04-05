@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 

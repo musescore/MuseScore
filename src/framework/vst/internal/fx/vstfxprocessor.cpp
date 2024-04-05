@@ -22,8 +22,7 @@
 
 #include "vstfxprocessor.h"
 
-using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace muse::audio;
 
 VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr, const AudioFxParams& params)
@@ -67,7 +66,7 @@ const AudioFxParams& VstFxProcessor::params() const
     return m_params;
 }
 
-async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
+mu::async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
 {
     return m_paramsChanges;
 }

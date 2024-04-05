@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTPLUGINSREGISTER_H
-#define MU_VST_VSTPLUGINSREGISTER_H
+#ifndef MUSE_VST_VSTPLUGINSREGISTER_H
+#define MUSE_VST_VSTPLUGINSREGISTER_H
 
 #include <map>
 #include <mutex>
@@ -32,7 +32,7 @@
 #include "ivstpluginsregister.h"
 #include "async/asyncable.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstPluginsRegister : public IVstPluginsRegister, public async::Asyncable
 {
     INJECT_STATIC(muse::audio::IAudioThreadSecurer, threadSecurer)
@@ -69,4 +69,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTPLUGINSREGISTER_H
+#endif // MUSE_VST_VSTPLUGINSREGISTER_H

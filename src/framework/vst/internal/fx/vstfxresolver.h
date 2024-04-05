@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTFXRESOLVER_H
-#define MU_VST_VSTFXRESOLVER_H
+#ifndef MUSE_VST_VSTFXRESOLVER_H
+#define MUSE_VST_VSTFXRESOLVER_H
 
 #include "audio/abstractfxresolver.h"
 
@@ -29,7 +29,7 @@
 #include "ivstpluginsregister.h"
 #include "ivstmodulesrepository.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstFxResolver : public muse::audio::fx::AbstractFxResolver
 {
     INJECT(IVstModulesRepository, pluginModulesRepo)
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTFXRESOLVER_H
+#endif // MUSE_VST_VSTFXRESOLVER_H

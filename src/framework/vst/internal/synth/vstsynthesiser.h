@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTSYNTHESISER_H
-#define MU_VST_VSTSYNTHESISER_H
+#ifndef MUSE_VST_VSTSYNTHESISER_H
+#define MUSE_VST_VSTSYNTHESISER_H
 
 #include <memory>
 
@@ -36,7 +36,7 @@
 #include "vstsequencer.h"
 #include "vsttypes.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstSynthesiser : public muse::audio::synth::AbstractSynthesizer
 {
     INJECT(IVstPluginsRegister, pluginsRegister)
@@ -89,4 +89,4 @@ private:
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
 }
 
-#endif // MU_VST_VSTSYNTHESISER_H
+#endif // MUSE_VST_VSTSYNTHESISER_H

@@ -25,7 +25,7 @@
 #include "global/interpolation.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 
 static constexpr ControllIdx SUSTAIN_IDX = static_cast<ControllIdx>(Steinberg::Vst::kCtrlSustainOnOff);
 static constexpr ControllIdx PITCH_BEND_IDX = static_cast<ControllIdx>(Steinberg::Vst::kPitchBend);
@@ -98,15 +98,15 @@ muse::audio::gain_t VstSequencer::currentGain() const
 void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events)
 {
     for (const auto& pair : events) {
-        for (const mpe::PlaybackEvent& event : pair.second) {
+        for (const mu::mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
             }
 
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            const mu::mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
 
-            mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-            mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+            mu::mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+            mu::mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
 
             int32_t noteId = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
             float velocityFraction = noteVelocityFraction(noteEvent);
@@ -146,8 +146,8 @@ void VstSequencer::appendControlSwitch(EventSequenceMap& destination, const mpe:
     }
 
     if (currentType != mpe::ArticulationType::Undefined) {
-        const mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
-        const mpe::ArticulationMeta& articulationMeta = articulationData.meta;
+        const mu::mpe::ArticulationAppliedData& articulationData = noteEvent.expressionCtx().articulations.at(currentType);
+        const mu::mpe::ArticulationMeta& articulationMeta = articulationData.meta;
 
         destination[noteEvent.arrangementCtx().actualTimestamp].emplace(buildParamInfo(controlIt->second, 1 /*on*/));
         destination[articulationMeta.timestamp + articulationMeta.overallDuration].emplace(buildParamInfo(controlIt->second, 0 /*off*/));
@@ -173,7 +173,7 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         }
     }
 
-    mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+    mu::mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
 
     PluginParamInfo event;
     event.id = pitchBendIt->second;
@@ -184,20 +184,20 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         return;
     }
 
-    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    mu::mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
     auto endIt = noteEvent.pitchCtx().pitchCurve.cend();
 
     if (nextIt == endIt) {
-        mpe::timestamp_t time = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
+        mu::mpe::timestamp_t time = timestampFrom + duration * mu::mpe::percentageToFactor(currIt->first);
         event.defaultNormalizedValue = pitchBendLevel(currIt->second);
         destination[time].insert(std::move(event));
         return;
     }
 
-    auto makePoint = [](mpe::timestamp_t time, float value) {
+    auto makePoint = [](mu::mpe::timestamp_t time, float value) {
         return mu::Interpolation::Point { static_cast<double>(time), value };
     };
 
@@ -205,22 +205,22 @@ void VstSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::Not
         float currBendValue = pitchBendLevel(currIt->second);
         float nextBendValue = pitchBendLevel(nextIt->second);
 
-        mpe::timestamp_t currTime = timestampFrom + duration * mpe::percentageToFactor(currIt->first);
-        mpe::timestamp_t nextTime = timestampFrom + duration * mpe::percentageToFactor(nextIt->first);
+        mu::mpe::timestamp_t currTime = timestampFrom + duration * mu::mpe::percentageToFactor(currIt->first);
+        mu::mpe::timestamp_t nextTime = timestampFrom + duration * mu::mpe::percentageToFactor(nextIt->first);
 
         mu::Interpolation::Point p0 = makePoint(currTime, currBendValue);
         mu::Interpolation::Point p1 = makePoint(nextTime, currBendValue);
         mu::Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
 
         //! NOTE: Increasing this number results in fewer points being interpolated
-        constexpr mpe::pitch_level_t POINT_WEIGHT = mpe::PITCH_LEVEL_STEP / 5;
+        constexpr mpe::pitch_level_t POINT_WEIGHT = mu::mpe::PITCH_LEVEL_STEP / 5;
         size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
         pointCount = std::max(pointCount, size_t(1));
 
         std::vector<mu::Interpolation::Point> points = mu::Interpolation::quadraticBezierCurve(p0, p1, p2, pointCount);
 
         for (const mu::Interpolation::Point& point : points) {
-            mpe::timestamp_t time = static_cast<mpe::timestamp_t>(std::round(point.x));
+            mu::mpe::timestamp_t time = static_cast<mu::mpe::timestamp_t>(std::round(point.x));
             float bendValue = static_cast<float>(point.y);
             event.defaultNormalizedValue = bendValue;
             destination[time].insert(event);
@@ -275,7 +275,7 @@ int32_t VstSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
         return MAX_SUPPORTED_NOTE;
     }
 
-    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    float stepCount = MIN_SUPPORTED_NOTE + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP));
 
     return stepCount;
 }
@@ -284,24 +284,24 @@ float VstSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int noteId
 {
     int semitonesCount = noteIdx - MIN_SUPPORTED_NOTE;
 
-    mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel - (semitonesCount * mpe::PITCH_LEVEL_STEP);
+    mu::mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel - (semitonesCount * mu::mpe::PITCH_LEVEL_STEP);
 
-    return (tuningPitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP)) * 100.f;
+    return (tuningPitchLevel / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP)) * 100.f;
 }
 
-float VstSequencer::noteVelocityFraction(const mpe::NoteEvent& noteEvent) const
+float VstSequencer::noteVelocityFraction(const mu::mpe::NoteEvent& noteEvent) const
 {
     return std::clamp(noteEvent.expressionCtx().expressionCurve.velocityFraction(), 0.f, 1.f);
 }
 
-float VstSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
+float VstSequencer::expressionLevel(const mu::mpe::dynamic_level_t dynamicLevel) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::ppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::fff);
-    static constexpr mpe::dynamic_level_t AVAILABLE_RANGE = MAX_SUPPORTED_DYNAMIC_LEVEL - MIN_SUPPORTED_DYNAMIC_LEVEL;
+    static constexpr mu::mpe::dynamic_level_t MIN_SUPPORTED_DYNAMIC_LEVEL = mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::ppp);
+    static constexpr mu::mpe::dynamic_level_t MAX_SUPPORTED_DYNAMIC_LEVEL = mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::fff);
+    static constexpr mu::mpe::dynamic_level_t AVAILABLE_RANGE = MAX_SUPPORTED_DYNAMIC_LEVEL - MIN_SUPPORTED_DYNAMIC_LEVEL;
 
     if (dynamicLevel <= MIN_SUPPORTED_DYNAMIC_LEVEL) {
-        return (0.5f * mpe::ONE_PERCENT) / AVAILABLE_RANGE;
+        return (0.5f * mu::mpe::ONE_PERCENT) / AVAILABLE_RANGE;
     }
 
     if (dynamicLevel >= MAX_SUPPORTED_DYNAMIC_LEVEL) {
@@ -316,7 +316,7 @@ float VstSequencer::pitchBendLevel(const mpe::pitch_level_t pitchLevel) const
     static constexpr float SEMITONE_RANGE = 2.f;
     static constexpr float PITCH_BEND_SEMITONE_STEP = 0.5f / SEMITONE_RANGE;
 
-    float pitchLevelSteps = pitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
+    float pitchLevelSteps = pitchLevel / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP);
     float offset = pitchLevelSteps * PITCH_BEND_SEMITONE_STEP;
 
     return std::clamp(0.5f + offset, 0.f, 1.f);

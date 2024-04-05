@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_VST_VSTAUDIOCLIENT_H
-#define MU_VST_VSTAUDIOCLIENT_H
+#ifndef MUSE_VST_VSTAUDIOCLIENT_H
+#define MUSE_VST_VSTAUDIOCLIENT_H
 
 #include "audio/audiotypes.h"
 
 #include "vstplugin.h"
 #include "vsttypes.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstAudioClient
 {
 public:
@@ -100,4 +100,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTAUDIOCLIENT_H
+#endif // MUSE_VST_VSTAUDIOCLIENT_H

@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-using namespace mu::vst;
+using namespace muse::vst;
 
 class VstPluginProvider::Impl : public Steinberg::Vst::PlugProvider
 {

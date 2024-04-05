@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTMODULESREPOSITORY_H
-#define MU_VST_VSTMODULESREPOSITORY_H
+#ifndef MUSE_VST_VSTMODULESREPOSITORY_H
+#define MUSE_VST_VSTMODULESREPOSITORY_H
 
 #include <unordered_map>
 #include <mutex>
@@ -35,7 +35,7 @@
 #include "audio/audiotypes.h"
 #include "vsttypes.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstModulesRepository : public IVstModulesRepository
 {
     INJECT(muse::audio::IKnownAudioPluginsRegister, knownPlugins)
@@ -66,4 +66,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTMODULESREPOSITORY_H
+#endif // MUSE_VST_VSTMODULESREPOSITORY_H

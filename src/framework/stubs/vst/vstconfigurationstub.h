@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTCONFIGURATIONSTUB_H
-#define MU_VST_VSTCONFIGURATIONSTUB_H
+#ifndef MUSE_VST_VSTCONFIGURATIONSTUB_H
+#define MUSE_VST_VSTCONFIGURATIONSTUB_H
 
 #include "vst/ivstconfiguration.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstConfigurationStub : public IVstConfiguration
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_VST_VSTCONFIGURATIONSTUB_H
+#endif // MUSE_VST_VSTCONFIGURATIONSTUB_H

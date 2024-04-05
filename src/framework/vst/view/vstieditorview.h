@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTIEDITORVIEW_H
-#define MU_VST_VSTIEDITORVIEW_H
+#ifndef MUSE_VST_VSTIEDITORVIEW_H
+#define MUSE_VST_VSTIEDITORVIEW_H
 
 #include "abstractvsteditorview.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstiEditorView : public AbstractVstEditorView
 {
     Q_OBJECT
@@ -39,6 +39,6 @@ private:
 };
 }
 
-Q_DECLARE_METATYPE(mu::vst::VstiEditorView)
+Q_DECLARE_METATYPE(muse::vst::VstiEditorView)
 
-#endif // MU_VST_VSTIEDITORVIEW_H
+#endif // MUSE_VST_VSTIEDITORVIEW_H

@@ -26,7 +26,7 @@
 #include "internal/vstplugin.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace muse::audio::synth;
 using namespace muse::audio;
 

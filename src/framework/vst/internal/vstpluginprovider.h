@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTPLUGINPROVIDER_H
-#define MU_VST_VSTPLUGINPROVIDER_H
+#ifndef MUSE_VST_VSTPLUGINPROVIDER_H
+#define MUSE_VST_VSTPLUGINPROVIDER_H
 
 #include "vst/vsttypes.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstPluginProvider
 {
 public:
@@ -44,4 +44,4 @@ private:
 };
 }
 
-#endif // VstPluginProvider
+#endif // MUSE_VST_VSTPLUGINPROVIDER_H

@@ -23,7 +23,7 @@
 #include "vstmodulesrepository.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 
 void VstModulesRepository::init()
 {
