@@ -3112,9 +3112,13 @@ void MusicXMLParserDirection::direction(const String& partId,
 
         // Check staff and end any cresc lines which are waiting
         if (configuration()->inferTextType()) {
+            // To avoid extending lines which aren't intended to be terminated by dynamics,
+            // only extend lines to dynamics within 24 quarter notes
+            static const Fraction MAX_INFERRED_LINE_LEN = Fraction(24, 4);
             InferredHairpinsStack hairpins = m_pass2.getInferredHairpins();
             for (Hairpin* h : hairpins) {
-                if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1)) {
+                Fraction diff = tick + m_offset - h->tick();
+                if (h && h->staffIdx() == track2staff(track) && h->ticks() == Fraction(0, 1) && diff <= MAX_INFERRED_LINE_LEN) {
                     h->setTrack2(track);
                     h->setTick2(tick + m_offset);
                 }
