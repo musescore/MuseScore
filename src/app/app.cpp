@@ -276,7 +276,7 @@ int App::run(int argc, char** argv)
         // ====================================================
         // Setup Qml Engine
         // ====================================================
-        QQmlApplicationEngine* engine = modularity::ioc()->resolve<ui::IUiEngine>("app")->qmlAppEngine();
+        QQmlApplicationEngine* engine = modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->qmlAppEngine();
 
 #if defined(Q_OS_WIN)
         const QString mainQmlFile = "/platform/win/Main.qml";
@@ -370,7 +370,7 @@ int App::run(int argc, char** argv)
 
 #ifdef MUE_BUILD_APPSHELL_MODULE
     // Engine quit
-    modularity::ioc()->resolve<ui::IUiEngine>("app")->quit();
+    modularity::ioc()->resolve<muse::ui::IUiEngine>("app")->quit();
 #endif
 
     // Deinit

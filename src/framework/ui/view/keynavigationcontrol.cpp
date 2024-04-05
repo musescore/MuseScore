@@ -21,7 +21,7 @@
  */
 #include "keynavigationcontrol.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 KeyNavigationControl::KeyNavigationControl(QObject* parent)
     : AbstractKeyNavigation(parent)

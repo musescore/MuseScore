@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_FILTERVALUE_H
-#define MU_UICOMPONENTS_FILTERVALUE_H
+#ifndef MUSE_UICOMPONENTS_FILTERVALUE_H
+#define MUSE_UICOMPONENTS_FILTERVALUE_H
 
 #include <QObject>
 #include <QVariant>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class CompareType
 {
     Q_GADGET
@@ -45,7 +45,7 @@ class FilterValue : public QObject
 
     Q_PROPERTY(QString roleName READ roleName WRITE setRoleName NOTIFY dataChanged)
     Q_PROPERTY(QVariant roleValue READ roleValue WRITE setRoleValue NOTIFY dataChanged)
-    Q_PROPERTY(mu::uicomponents::CompareType::Type compareType READ compareType WRITE setCompareType NOTIFY dataChanged)
+    Q_PROPERTY(muse::uicomponents::CompareType::Type compareType READ compareType WRITE setCompareType NOTIFY dataChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY dataChanged)
 
     /// Determines whether the SortFilterProxyModel should react asynchronously to the `dataChanged` signal.
@@ -65,7 +65,7 @@ public:
 public slots:
     void setRoleName(QString roleName);
     void setRoleValue(QVariant roleValue);
-    void setCompareType(mu::uicomponents::CompareType::Type compareType);
+    void setCompareType(muse::uicomponents::CompareType::Type compareType);
     void setEnabled(bool enabled);
 
 signals:
@@ -80,4 +80,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_FILTERVALUE_H
+#endif // MUSE_UICOMPONENTS_FILTERVALUE_H

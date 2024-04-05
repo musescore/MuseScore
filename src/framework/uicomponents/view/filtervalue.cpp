@@ -21,7 +21,7 @@
  */
 #include "filtervalue.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 FilterValue::FilterValue(QObject* parent)
     : QObject(parent)

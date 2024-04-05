@@ -35,7 +35,7 @@
 
 using namespace muse::dock;
 using namespace muse::actions;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 DockFrameModel::DockFrameModel(QObject* parent)
     : QObject(parent)

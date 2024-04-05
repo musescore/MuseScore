@@ -24,7 +24,7 @@
 
 #include <Windows.h>
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 WinPopupViewCloseController::WinPopupViewCloseController(QObject* parent)
     : PopupViewCloseController(parent)

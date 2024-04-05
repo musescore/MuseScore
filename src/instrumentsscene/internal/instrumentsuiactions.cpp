@@ -27,7 +27,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::instrumentsscene;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const UiActionList InstrumentsUiActions::m_actions = {
@@ -45,7 +45,7 @@ const UiActionList InstrumentsUiActions::m_actions = {
              )
 };
 
-const mu::ui::UiActionList& InstrumentsUiActions::actionsList() const
+const muse::ui::UiActionList& InstrumentsUiActions::actionsList() const
 {
     return m_actions;
 }

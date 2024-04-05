@@ -25,7 +25,7 @@
 #include "progress.h"
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 ProgressDialogModel::ProgressDialogModel(QObject* parent)
     : QObject(parent)
@@ -69,7 +69,7 @@ void ProgressDialogModel::load(const QVariant& progressObj)
         setStatusMessage(QString::fromStdString(status));
     });
 
-    m_progress->finished.onReceive(this, [this](const ProgressResult& res) {
+    m_progress->finished.onReceive(this, [this](const mu::ProgressResult& res) {
         if (!res.ret) {
             LOGE() << res.ret.toString();
         }

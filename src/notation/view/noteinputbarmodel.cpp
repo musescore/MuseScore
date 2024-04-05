@@ -32,8 +32,8 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace muse::actions;
-using namespace mu::ui;
-using namespace mu::uicomponents;
+using namespace muse::ui;
+using namespace muse::uicomponents;
 
 static const QString TOOLBAR_NAME("noteInput");
 
@@ -551,7 +551,8 @@ UiAction NoteInputBarModel::currentNoteInputModeAction() const
     return action;
 }
 
-MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section, const uicomponents::MenuItemList& subitems)
+MenuItem* NoteInputBarModel::makeActionItem(const UiAction& action, const QString& section,
+                                            const muse::uicomponents::MenuItemList& subitems)
 {
     MenuItem* item = new MenuItem(action, this);
     item->setSection(section);

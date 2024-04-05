@@ -23,10 +23,10 @@
 
 #include "ui/view/qmltooltip.h"
 
-using namespace mu;
-using namespace mu::ui;
+using namespace muse;
+using namespace muse::ui;
 
-namespace mu::ui {
+namespace muse::ui {
 class QmlToolTipTests : public ::testing::Test, public QObject
 {
 public:

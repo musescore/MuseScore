@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const QString ERROR_TEXT_KEY("errorText");
 static const QString ERROR_PLAIN_TEXT_KEY("errorPlainText");

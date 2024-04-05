@@ -236,18 +236,18 @@ void MixerPanelModel::updateItemsPanelsOrder()
 {
     TRACEFUNC;
 
-    ui::NavigationPanel* previousPanel = nullptr;
+    muse::ui::NavigationPanel* previousPanel = nullptr;
     for (MixerChannelItem* item : m_mixerChannelList) {
-        disconnect(item->panel(), &ui::NavigationPanel::orderChanged, this, nullptr);
+        disconnect(item->panel(), &muse::ui::NavigationPanel::orderChanged, this, nullptr);
     }
 
     for (int i = 0; i < m_mixerChannelList.size(); i++) {
         m_mixerChannelList[i]->setPanelOrder(i);
 
         if (previousPanel) {
-            disconnect(previousPanel, &ui::NavigationPanel::orderChanged, this, nullptr);
+            disconnect(previousPanel, &muse::ui::NavigationPanel::orderChanged, this, nullptr);
 
-            connect(previousPanel, &ui::NavigationPanel::orderChanged, this, [this, i](int order){
+            connect(previousPanel, &muse::ui::NavigationPanel::orderChanged, this, [this, i](int order){
                 if (i < m_mixerChannelList.count()) {
                     m_mixerChannelList[i]->setPanelOrder(order + 1);
                 }
@@ -645,12 +645,12 @@ INotationPartsPtr MixerPanelModel::masterNotationParts() const
     return currentProject() ? currentProject()->masterNotation()->parts() : nullptr;
 }
 
-mu::ui::NavigationSection* MixerPanelModel::navigationSection() const
+muse::ui::NavigationSection* MixerPanelModel::navigationSection() const
 {
     return m_navigationSection;
 }
 
-void MixerPanelModel::setNavigationSection(ui::NavigationSection* navigationSection)
+void MixerPanelModel::setNavigationSection(muse::ui::NavigationSection* navigationSection)
 {
     if (m_navigationSection == navigationSection) {
         return;

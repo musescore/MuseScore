@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_ABSTRACTNAVIGATION_H
-#define MU_UI_ABSTRACTNAVIGATION_H
+#ifndef MUSE_UI_ABSTRACTNAVIGATION_H
+#define MUSE_UI_ABSTRACTNAVIGATION_H
 
 #include <QObject>
 #include <QQmlParserStatus>
@@ -33,7 +33,7 @@
 #include "modularity/ioc.h"
 #include "../inavigationcontroller.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class AbstractNavigation : public QObject, public QQmlParserStatus, public async::Asyncable
 {
     Q_OBJECT
@@ -126,4 +126,4 @@ protected:
 };
 }
 
-#endif // MU_UI_ABSTRACTNAVIGATION_H
+#endif // MUSE_UI_ABSTRACTNAVIGATION_H

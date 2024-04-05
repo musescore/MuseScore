@@ -70,11 +70,11 @@ class PaletteWidget : public QWidget
     Q_OBJECT
 
     INJECT_STATIC(IPaletteConfiguration, configuration)
-    INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(context::IGlobalContext, globalContext)
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
     INJECT(IInteractive, interactive)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
 public:
     PaletteWidget(QWidget* parent = nullptr);

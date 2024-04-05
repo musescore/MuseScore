@@ -22,7 +22,7 @@
 #include "keynavdevcontrol.h"
 
 using namespace mu::diagnostics;
-using namespace mu::ui;
+using namespace muse::ui;
 
 KeyNavDevControl::KeyNavDevControl(INavigationControl* control)
     : AbstractKeyNavDevItem(control), m_control(control)

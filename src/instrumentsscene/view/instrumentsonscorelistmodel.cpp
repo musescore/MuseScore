@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu::instrumentsscene;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 using namespace mu::async;
 using namespace mu::notation;
 

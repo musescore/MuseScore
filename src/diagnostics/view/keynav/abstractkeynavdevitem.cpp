@@ -22,7 +22,7 @@
 #include "abstractkeynavdevitem.h"
 
 using namespace mu::diagnostics;
-using namespace mu::ui;
+using namespace muse::ui;
 
 AbstractKeyNavDevItem::AbstractKeyNavDevItem(INavigation* keynav)
     : m_keynav(keynav)

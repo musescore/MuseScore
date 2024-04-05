@@ -60,7 +60,7 @@ class NotationNavigator : public AbstractNotationPaintView
 
     INJECT(context::IGlobalContext, globalContext)
     INJECT(INotationConfiguration, configuration)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)

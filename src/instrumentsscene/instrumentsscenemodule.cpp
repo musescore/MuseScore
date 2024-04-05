@@ -43,7 +43,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static void instrumentsscene_init_qrc()
 {

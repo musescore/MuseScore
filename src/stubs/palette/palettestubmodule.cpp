@@ -29,7 +29,7 @@
 
 using namespace mu::palette;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static void palette_init_qrc()
 {
@@ -65,7 +65,7 @@ void PaletteModule::registerResources()
 
 void PaletteModule::registerUiTypes()
 {
-    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    std::shared_ptr<muse::ui::IUiEngine> ui = ioc()->resolve<muse::ui::IUiEngine>(moduleName());
     if (ui) {
         ui->addSourceImportPath(palette_QML_IMPORT);
     }

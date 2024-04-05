@@ -38,7 +38,7 @@ class ExtensionsActionController : public muse::actions::Actionable, public asyn
     Inject<mu::IInteractive> interactive;
     Inject<muse::actions::IActionsDispatcher> dispatcher;
     Inject<extensions::IExtensionsProvider> provider;
-    Inject<mu::ui::IUiActionsRegister> uiActionsRegister;
+    Inject<ui::IUiActionsRegister> uiActionsRegister;
 
 public:
     void init();

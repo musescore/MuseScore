@@ -36,7 +36,7 @@ class NewInstanceLoadingScreenView : public QWidget
 {
     Q_OBJECT
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::languages::ILanguagesService, languagesService)
 
 public:

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_API_THEMEAPI_H
-#define MU_API_THEMEAPI_H
+#ifndef MUSE_API_THEMEAPI_H
+#define MUSE_API_THEMEAPI_H
 
 #include <QFont>
 #include <QPainter>
@@ -32,9 +32,9 @@
 #include "ui/iuiconfiguration.h"
 #include "async/asyncable.h"
 
-namespace mu::api {
+namespace muse::api {
 class ProxyStyle;
-class ThemeApi : public ApiObject, public async::Asyncable
+class ThemeApi : public mu::api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
@@ -249,4 +249,4 @@ private:
 };
 }
 
-#endif // MU_API_THEMEAPI_H
+#endif // MUSE_API_THEMEAPI_H

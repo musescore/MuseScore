@@ -42,7 +42,7 @@ namespace mu::notation {
 class NotationActionController : public muse::actions::Actionable, public async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(ui::IUiActionsRegister, actionRegister)
+    INJECT(muse::ui::IUiActionsRegister, actionRegister)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(context::IUiContextResolver, uiContextResolver)
     INJECT(IInteractive, interactive)

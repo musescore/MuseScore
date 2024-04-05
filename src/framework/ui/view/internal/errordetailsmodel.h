@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_ERRORDETAILSMODEL_H
-#define MU_UI_ERRORDETAILSMODEL_H
+#ifndef MUSE_UI_ERRORDETAILSMODEL_H
+#define MUSE_UI_ERRORDETAILSMODEL_H
 
 #include <QAbstractListModel>
 
-namespace mu::ui {
+namespace muse::ui {
 class ErrorDetailsModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif //MU_UI_ERRORDETAILSMODEL_H
+#endif //MUSE_UI_ERRORDETAILSMODEL_H

@@ -52,8 +52,8 @@ class AccessibilityController : public IAccessibilityController, public IAccessi
 {
 public:
     Inject<mu::IApplication> application;
-    Inject<mu::ui::IMainWindow> mainWindow;
-    Inject<mu::ui::IInteractiveProvider> interactiveProvider;
+    Inject<ui::IMainWindow> mainWindow;
+    Inject<ui::IInteractiveProvider> interactiveProvider;
     Inject<IAccessibilityConfiguration> configuration;
 
 public:

@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_PROGRESSDIALOGMODEL_H
-#define MU_UI_PROGRESSDIALOGMODEL_H
+#ifndef MUSE_UI_PROGRESSDIALOGMODEL_H
+#define MUSE_UI_PROGRESSDIALOGMODEL_H
 
 #include <QObject>
 
 #include "async/asyncable.h"
 #include "progress.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class ProgressDialogModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -69,4 +69,4 @@ private:
 };
 }
 
-#endif //MU_UI_PROGRESSDIALOGMODEL_H
+#endif //MUSE_UI_PROGRESSDIALOGMODEL_H

@@ -26,7 +26,7 @@
 using namespace mu::notation;
 
 namespace mu::palette {
-class DrumsetPaletteAdapter : public uicomponents::IDisplayableWidget
+class DrumsetPaletteAdapter : public muse::uicomponents::IDisplayableWidget
 {
 public:
     DrumsetPaletteAdapter()

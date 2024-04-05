@@ -29,7 +29,7 @@
 #include "notation/notationtypes.h"
 
 namespace mu::notation {
-class NotationContextMenuModel : public uicomponents::AbstractMenuModel
+class NotationContextMenuModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -39,22 +39,22 @@ public:
     Q_INVOKABLE void loadItems(int elementType);
 
 private:
-    uicomponents::MenuItemList makeItemsByElementType(ElementType type);
+    muse::uicomponents::MenuItemList makeItemsByElementType(ElementType type);
 
-    uicomponents::MenuItemList makePageItems();
-    uicomponents::MenuItemList makeDefaultCopyPasteItems();
-    uicomponents::MenuItemList makeMeasureItems();
-    uicomponents::MenuItemList makeStaffTextItems();
-    uicomponents::MenuItemList makeSystemTextItems();
-    uicomponents::MenuItemList makeTimeSignatureItems();
-    uicomponents::MenuItemList makeInstrumentNameItems();
-    uicomponents::MenuItemList makeHarmonyItems();
-    uicomponents::MenuItemList makeSelectItems();
-    uicomponents::MenuItemList makeElementItems();
-    uicomponents::MenuItemList makeInsertMeasuresItems();
-    uicomponents::MenuItemList makeChangeInstrumentItems();
-    uicomponents::MenuItemList makeVerticalBoxItems();
-    uicomponents::MenuItemList makeHorizontalBoxItems();
+    muse::uicomponents::MenuItemList makePageItems();
+    muse::uicomponents::MenuItemList makeDefaultCopyPasteItems();
+    muse::uicomponents::MenuItemList makeMeasureItems();
+    muse::uicomponents::MenuItemList makeStaffTextItems();
+    muse::uicomponents::MenuItemList makeSystemTextItems();
+    muse::uicomponents::MenuItemList makeTimeSignatureItems();
+    muse::uicomponents::MenuItemList makeInstrumentNameItems();
+    muse::uicomponents::MenuItemList makeHarmonyItems();
+    muse::uicomponents::MenuItemList makeSelectItems();
+    muse::uicomponents::MenuItemList makeElementItems();
+    muse::uicomponents::MenuItemList makeInsertMeasuresItems();
+    muse::uicomponents::MenuItemList makeChangeInstrumentItems();
+    muse::uicomponents::MenuItemList makeVerticalBoxItems();
+    muse::uicomponents::MenuItemList makeHorizontalBoxItems();
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;

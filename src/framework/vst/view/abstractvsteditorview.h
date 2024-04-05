@@ -32,7 +32,7 @@
 class QWidget;
 
 namespace muse::vst {
-class AbstractVstEditorView : public mu::uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
+class AbstractVstEditorView : public uicomponents::TopLevelDialog, public Steinberg::IPlugFrame, public async::Asyncable
 {
     Q_OBJECT
 

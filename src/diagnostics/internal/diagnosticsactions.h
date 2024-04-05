@@ -25,20 +25,20 @@
 #include "ui/iuiactionsmodule.h"
 
 namespace mu::diagnostics {
-class DiagnosticsActions : public ui::IUiActionsModule
+class DiagnosticsActions : public muse::ui::IUiActionsModule
 {
 public:
     DiagnosticsActions() = default;
 
-    const ui::UiActionList& actionsList() const override;
-    bool actionEnabled(const ui::UiAction& act) const override;
+    const muse::ui::UiActionList& actionsList() const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& act) const override;
+    bool actionChecked(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    static const ui::UiActionList m_actions;
+    static const muse::ui::UiActionList m_actions;
 };
 }
 

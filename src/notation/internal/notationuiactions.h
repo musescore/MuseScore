@@ -32,7 +32,7 @@
 #include "ui/uitypes.h"
 
 namespace mu::notation {
-class NotationUiActions : public ui::IUiActionsModule, public async::Asyncable
+class NotationUiActions : public muse::ui::IUiActionsModule, public async::Asyncable
 {
     INJECT(context::IUiContextResolver, uicontextResolver)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
@@ -43,12 +43,12 @@ public:
 
     void init();
 
-    const ui::UiActionList& actionsList() const override;
+    const muse::ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const ui::UiAction& act) const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& act) const override;
+    bool actionChecked(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
     static DurationType actionDurationType(const muse::actions::ActionCode& actionCode);
@@ -57,12 +57,12 @@ public:
     static int actionVoice(const muse::actions::ActionCode& actionCode);
     static SymbolId actionArticulationSymbolId(const muse::actions::ActionCode& actionCode);
 
-    static const ui::ToolConfig& defaultNoteInputBarConfig();
+    static const muse::ui::ToolConfig& defaultNoteInputBarConfig();
 
 private:
-    static const ui::UiActionList m_actions;
-    static const ui::UiActionList m_scoreConfigActions;
-    static const ui::UiActionList m_engravingDebuggingActions;
+    static const muse::ui::UiActionList m_actions;
+    static const muse::ui::UiActionList m_scoreConfigActions;
+    static const muse::ui::UiActionList m_engravingDebuggingActions;
 
     bool isScoreConfigAction(const muse::actions::ActionCode& code) const;
     bool isScoreConfigChecked(const muse::actions::ActionCode& code, const ScoreConfig& cfg) const;

@@ -128,7 +128,7 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const Tran
 
 PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, ActionCode code, double mag)
 {
-    const ui::UiAction& action = actionsRegister()->action(code);
+    const muse::ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
     icon->setActionType(type);
@@ -163,7 +163,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableStri
 
 PaletteCellPtr Palette::appendActionIcon(ActionIconType type, ActionCode code, double mag)
 {
-    const ui::UiAction& action = actionsRegister()->action(code);
+    const muse::ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
     auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
     icon->setActionType(type);

@@ -26,8 +26,8 @@
 #include "types/translatablestring.h"
 #include "shortcuts/shortcutstypes.h"
 
-using namespace mu::uicomponents;
-using namespace mu::ui;
+using namespace muse::uicomponents;
+using namespace muse::ui;
 
 MenuItem::MenuItem(QObject* parent)
     : QObject(parent)
@@ -206,7 +206,7 @@ void MenuItem::setArgs(const muse::actions::ActionData& args)
     m_args = args;
 }
 
-QString mu::uicomponents::MenuItem::code_property() const
+QString muse::uicomponents::MenuItem::code_property() const
 {
     return QString::fromStdString(m_action.code);
 }

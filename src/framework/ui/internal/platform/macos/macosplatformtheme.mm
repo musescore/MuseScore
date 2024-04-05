@@ -28,7 +28,7 @@
 #include <QPalette>
 #include <QWindow>
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::async;
 
 id<NSObject> darkModeObserverToken = nil;

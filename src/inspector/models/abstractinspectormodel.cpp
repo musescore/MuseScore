@@ -329,7 +329,7 @@ void AbstractInspectorModel::setTitle(QString title)
     emit titleChanged();
 }
 
-void AbstractInspectorModel::setIcon(mu::ui::IconCode::Code icon)
+void AbstractInspectorModel::setIcon(muse::ui::IconCode::Code icon)
 {
     m_icon = icon;
 }

@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu::context;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const mu::Uri HOME_PAGE_URI("musescore://home");
 static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
@@ -118,7 +118,7 @@ UiContext UiContextResolver::currentUiContext() const
     return context::UiCtxUnknown;
 }
 
-bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const
+bool UiContextResolver::match(const muse::ui::UiContext& currentCtx, const muse::ui::UiContext& actCtx) const
 {
     if (actCtx == context::UiCtxAny) {
         return true;
@@ -134,7 +134,7 @@ bool UiContextResolver::match(const ui::UiContext& currentCtx, const ui::UiConte
 
 bool UiContextResolver::matchWithCurrent(const UiContext& ctx) const
 {
-    if (ctx == ui::UiCtxAny) {
+    if (ctx == muse::ui::UiCtxAny) {
         return true;
     }
 

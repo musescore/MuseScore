@@ -46,8 +46,8 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     public async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(ui::IUiActionsRegister, actionsRegister)
-    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
+    INJECT(muse::ui::IMainWindow, mainWindow)
     INJECT(muse::languages::ILanguagesService, languagesService)
     INJECT(IInteractive, interactive)
     INJECT(IAppShellConfiguration, configuration)

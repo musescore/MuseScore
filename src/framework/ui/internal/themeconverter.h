@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_THEMECONVERTER_H
-#define MU_UI_THEMECONVERTER_H
+#ifndef MUSE_UI_THEMECONVERTER_H
+#define MUSE_UI_THEMECONVERTER_H
 
 #include "ui/uitypes.h"
 
 #include <QVariantMap>
 
-namespace mu::ui {
+namespace muse::ui {
 class ThemeConverter
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_UI_THEMECONVERTER_H
+#endif // MUSE_UI_THEMECONVERTER_H

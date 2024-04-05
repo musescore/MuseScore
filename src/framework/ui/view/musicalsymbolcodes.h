@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_MUSICALSYMBOLCODE_H
-#define MU_UI_MUSICALSYMBOLCODE_H
+#ifndef MUSE_UI_MUSICALSYMBOLCODE_H
+#define MUSE_UI_MUSICALSYMBOLCODE_H
 
 #include <QObject>
 
-namespace mu::ui {
+namespace muse::ui {
 /**
  * @brief The MusicalSymbolCodes class simplifies access to the icons from the musical font
  *
@@ -119,4 +119,4 @@ inline QString musicalSymbolToString(MusicalSymbolCodes::Code symbolCode, bool w
 }
 }
 
-#endif // MU_UI_MUSICALSYMBOLCODE_H
+#endif // MUSE_UI_MUSICALSYMBOLCODE_H

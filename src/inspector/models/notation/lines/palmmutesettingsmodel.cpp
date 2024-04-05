@@ -28,7 +28,7 @@ PalmMuteSettingsModel::PalmMuteSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_PALM_MUTE);
     setTitle(mu::qtrc("inspector", "Palm mute"));
-    setIcon(ui::IconCode::Code::PALM_MUTE);
+    setIcon(muse::ui::IconCode::Code::PALM_MUTE);
 
     setPossibleStartHookTypes({});
     setPossibleEndHookTypes({});

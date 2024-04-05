@@ -30,7 +30,7 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static std::vector<std::string> shortcutsFileFilter()
 {

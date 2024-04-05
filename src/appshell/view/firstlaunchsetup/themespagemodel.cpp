@@ -24,7 +24,7 @@
 #include "ui/internal/themeconverter.h"
 
 using namespace mu::appshell;
-using namespace mu::ui;
+using namespace muse::ui;
 
 ThemesPageModel::ThemesPageModel(QObject* parent)
     : QObject(parent)

@@ -29,8 +29,8 @@
 
 using namespace mu::palette;
 using namespace muse::actions;
-using namespace mu::ui;
-using namespace mu::uicomponents;
+using namespace muse::ui;
+using namespace muse::uicomponents;
 
 static const ActionCode TOGGLE_SINGLE_CLICK_CODE("toggle-single-click-to-open-palette");
 static const ActionCode TOGGLE_SINGLE_PALETTE_CODE("toggle-single-palette");

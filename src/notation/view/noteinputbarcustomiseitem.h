@@ -28,7 +28,7 @@
 #include "uicomponents/view/selectableitemlistmodel.h"
 
 namespace mu::notation {
-class NoteInputBarCustomiseItem : public uicomponents::SelectableItemListModel::Item
+class NoteInputBarCustomiseItem : public muse::uicomponents::SelectableItemListModel::Item
 {
     Q_OBJECT
 
@@ -57,7 +57,7 @@ public:
 
 public slots:
     void setTitle(QString title);
-    void setIcon(ui::IconCode::Code icon);
+    void setIcon(muse::ui::IconCode::Code icon);
     void setChecked(bool checked);
 
 signals:
@@ -70,7 +70,7 @@ private:
     QString m_id;
     ItemType m_type = ItemType::UNDEFINED;
     QString m_title;
-    ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
+    muse::ui::IconCode::Code m_icon = muse::ui::IconCode::Code::NONE;
     bool m_checked = false;
 };
 }

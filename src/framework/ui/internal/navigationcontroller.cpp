@@ -44,7 +44,7 @@
 #define MYLOG() LOGN()
 #endif
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const mu::UriQuery DEV_SHOW_CONTROLS_URI("musescore://devtools/keynav/controls?sync=false&modal=false");
 
@@ -362,7 +362,7 @@ void NavigationController::resetIfNeed(QObject* watched)
     }
 
 #ifdef MUE_BUILD_DIAGNOSTICS_MODULE
-    if (diagnostics::isDiagnosticHierarchy(watched)) {
+    if (mu::diagnostics::isDiagnosticHierarchy(watched)) {
         return;
     }
 #endif

@@ -33,7 +33,7 @@ VerticalFrameSettingsModel::VerticalFrameSettingsModel(QObject* parent, IElement
 {
     setModelType(InspectorModelType::TYPE_VERTICAL_FRAME);
     setTitle(mu::qtrc("inspector", "Vertical frame"));
-    setIcon(ui::IconCode::Code::VERTICAL_FRAME);
+    setIcon(muse::ui::IconCode::Code::VERTICAL_FRAME);
     createProperties();
 }
 

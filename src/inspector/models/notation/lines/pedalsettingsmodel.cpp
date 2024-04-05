@@ -28,7 +28,7 @@
 
 using namespace mu::inspector;
 
-using IconCode = mu::ui::IconCode::Code;
+using IconCode = muse::ui::IconCode::Code;
 
 static constexpr int HOOK_STAR = static_cast<int>(mu::engraving::HookType::HOOK_90T) + 1;
 
@@ -37,7 +37,7 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(mu::qtrc("inspector", "Pedal"));
-    setIcon(ui::IconCode::Code::PEDAL_MARKING);
+    setIcon(muse::ui::IconCode::Code::PEDAL_MARKING);
 
     static const QList<HookTypeInfo> endHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },

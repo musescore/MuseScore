@@ -24,7 +24,7 @@
 
 #include <QPainter>
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 IconView::IconView(QQuickItem* parent)
     : QuickPaintedView(parent)

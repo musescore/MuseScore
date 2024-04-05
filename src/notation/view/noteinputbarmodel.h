@@ -30,13 +30,13 @@
 #include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
-class NoteInputBarModel : public uicomponents::AbstractMenuModel
+class NoteInputBarModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
     INJECT(context::IGlobalContext, context)
     INJECT(playback::IPlaybackController, playbackController)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(bool isInputAllowed READ isInputAllowed NOTIFY isInputAllowedChanged)
 
@@ -65,7 +65,7 @@ private:
 
     void onNotationChanged();
 
-    void updateItemStateChecked(uicomponents::MenuItem* item, bool checked);
+    void updateItemStateChecked(muse::uicomponents::MenuItem* item, bool checked);
 
     void updateState();
     void updateNoteInputState();
@@ -82,23 +82,23 @@ private:
 
     bool isNoteInputModeAction(const muse::actions::ActionCode& actionCode) const;
 
-    ui::UiAction currentNoteInputModeAction() const;
+    muse::ui::UiAction currentNoteInputModeAction() const;
 
-    uicomponents::MenuItem* makeActionItem(const ui::UiAction& action, const QString& section,
-                                           const uicomponents::MenuItemList& subitems = {});
-    uicomponents::MenuItem* makeAddItem(const QString& section);
+    muse::uicomponents::MenuItem* makeActionItem(const muse::ui::UiAction& action, const QString& section,
+                                                 const muse::uicomponents::MenuItemList& subitems = {});
+    muse::uicomponents::MenuItem* makeAddItem(const QString& section);
 
-    uicomponents::MenuItemList makeSubitems(const muse::actions::ActionCode& actionCode);
-    uicomponents::MenuItemList makeNoteInputMethodItems();
-    uicomponents::MenuItemList makeCrossStaffBeamingItems();
-    uicomponents::MenuItemList makeTupletItems();
-    uicomponents::MenuItemList makeAddItems();
-    uicomponents::MenuItemList makeNotesItems();
-    uicomponents::MenuItemList makeIntervalsItems();
-    uicomponents::MenuItemList makeMeasuresItems();
-    uicomponents::MenuItemList makeFramesItems();
-    uicomponents::MenuItemList makeTextItems();
-    uicomponents::MenuItemList makeLinesItems();
+    muse::uicomponents::MenuItemList makeSubitems(const muse::actions::ActionCode& actionCode);
+    muse::uicomponents::MenuItemList makeNoteInputMethodItems();
+    muse::uicomponents::MenuItemList makeCrossStaffBeamingItems();
+    muse::uicomponents::MenuItemList makeTupletItems();
+    muse::uicomponents::MenuItemList makeAddItems();
+    muse::uicomponents::MenuItemList makeNotesItems();
+    muse::uicomponents::MenuItemList makeIntervalsItems();
+    muse::uicomponents::MenuItemList makeMeasuresItems();
+    muse::uicomponents::MenuItemList makeFramesItems();
+    muse::uicomponents::MenuItemList makeTextItems();
+    muse::uicomponents::MenuItemList makeLinesItems();
 
     bool isMenuSecondary(const muse::actions::ActionCode& actionCode) const;
 

@@ -62,7 +62,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool forceMute READ forceMute NOTIFY forceMuteChanged)
 
-    Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
+    Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
     INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, context)
@@ -102,9 +102,9 @@ public:
     bool muted() const;
     bool forceMute() const;
 
-    ui::NavigationPanel* panel() const;
+    muse::ui::NavigationPanel* panel() const;
     void setPanelOrder(int panelOrder);
-    void setPanelSection(ui::INavigationSection* section);
+    void setPanelSection(muse::ui::INavigationSection* section);
 
     void setOutputResourceItemCount(size_t count);
 
@@ -148,7 +148,7 @@ signals:
     void mutedChanged();
     void forceMuteChanged();
 
-    void panelChanged(ui::NavigationPanel* panel);
+    void panelChanged(muse::ui::NavigationPanel* panel);
 
     void inputParamsChanged(const muse::audio::AudioInputParams& params);
     void outputParamsChanged(const muse::audio::AudioOutputParams& params);
@@ -203,7 +203,7 @@ protected:
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
 
-    ui::NavigationPanel* m_panel = nullptr;
+    muse::ui::NavigationPanel* m_panel = nullptr;
 
     bool m_outputResourceItemsLoading = false;
 };

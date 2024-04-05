@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 NavigationEvent::NavigationEvent(INavigation::EventPtr event)
     : m_event(event)

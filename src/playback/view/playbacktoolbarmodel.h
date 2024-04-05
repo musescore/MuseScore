@@ -28,7 +28,7 @@
 #include "iplaybackcontroller.h"
 
 namespace mu::playback {
-class PlaybackToolBarModel : public uicomponents::AbstractMenuModel
+class PlaybackToolBarModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
@@ -95,7 +95,7 @@ private:
     QTime totalPlayTime() const;
     notation::MeasureBeat measureBeat() const;
 
-    ui::UiAction playAction() const;
+    muse::ui::UiAction playAction() const;
 
     void updatePlayPosition();
     void doSetPlayTime(const QTime& time);

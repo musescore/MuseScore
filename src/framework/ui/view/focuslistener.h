@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_FOCUSLISTENER_H
-#define MU_UI_FOCUSLISTENER_H
+#ifndef MUSE_UI_FOCUSLISTENER_H
+#define MUSE_UI_FOCUSLISTENER_H
 
 #include <QQuickItem>
 
-namespace mu::ui {
+namespace muse::ui {
 class FocusListener : public QObject
 {
     Q_OBJECT
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_UI_FOCUSLISTENER_H
+#endif // MUSE_UI_FOCUSLISTENER_H

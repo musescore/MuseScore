@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class TimelineView : public uicomponents::WidgetView, public async::Asyncable
+class TimelineView : public muse::uicomponents::WidgetView, public async::Asyncable
 {
     Q_OBJECT
 

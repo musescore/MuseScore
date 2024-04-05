@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_SAMPLEOBJECT_H
-#define MU_UICOMPONENTS_SAMPLEOBJECT_H
+#ifndef MUSE_UICOMPONENTS_SAMPLEOBJECT_H
+#define MUSE_UICOMPONENTS_SAMPLEOBJECT_H
 
 #include <QObject>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class SampleObject : public QObject
 {
     Q_OBJECT
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_SAMPLEOBJECT_H
+#endif // MUSE_UICOMPONENTS_SAMPLEOBJECT_H

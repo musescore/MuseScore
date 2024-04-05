@@ -21,7 +21,7 @@
  */
 #include "qmlapi.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 QmlApi::QmlApi(QObject* parent)
     : QObject(parent)

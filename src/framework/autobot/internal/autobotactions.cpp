@@ -25,18 +25,18 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::autobot;
 
 const UiActionList AutobotActions::m_actions = {
     UiAction("autobot-show-batchtests",
-             mu::ui::UiCtxAny,
+             muse::ui::UiCtxAny,
              mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Show batch tests…")
              ),
     UiAction("autobot-show-scripts",
-             mu::ui::UiCtxAny,
+             muse::ui::UiCtxAny,
              mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Show &scripts…")
              ),

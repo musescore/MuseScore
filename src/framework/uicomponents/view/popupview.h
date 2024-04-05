@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_POPUPVIEW_H
-#define MU_UICOMPONENTS_POPUPVIEW_H
+#ifndef MUSE_UICOMPONENTS_POPUPVIEW_H
+#define MUSE_UICOMPONENTS_POPUPVIEW_H
 
 #include <QQuickItem>
 #include <QQmlParserStatus>
@@ -44,7 +44,7 @@ Q_MOC_INCLUDE(< QWindow >)
 
 class QQuickCloseEvent;
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
 {
     Q_OBJECT
@@ -171,8 +171,8 @@ public slots:
     void setContentHeight(int contentHeight);
     void setLocalX(qreal x);
     void setLocalY(qreal y);
-    void setOpenPolicies(mu::uicomponents::PopupView::OpenPolicies openPolicies);
-    void setClosePolicies(mu::uicomponents::PopupView::ClosePolicies closePolicies);
+    void setOpenPolicies(muse::uicomponents::PopupView::OpenPolicies openPolicies);
+    void setClosePolicies(muse::uicomponents::PopupView::ClosePolicies closePolicies);
     void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
@@ -198,8 +198,8 @@ signals:
     void windowChanged();
     void xChanged(qreal x);
     void yChanged(qreal y);
-    void openPoliciesChanged(mu::uicomponents::PopupView::OpenPolicies openPolicies);
-    void closePoliciesChanged(mu::uicomponents::PopupView::ClosePolicies closePolicies);
+    void openPoliciesChanged(muse::uicomponents::PopupView::OpenPolicies openPolicies);
+    void closePoliciesChanged(muse::uicomponents::PopupView::ClosePolicies closePolicies);
     void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
@@ -297,4 +297,4 @@ protected:
 };
 }
 
-#endif // MU_UICOMPONENTS_POPUPVIEW_H
+#endif // MUSE_UICOMPONENTS_POPUPVIEW_H

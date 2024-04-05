@@ -24,7 +24,7 @@
 
 #include <QApplication>
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 FocusListener::FocusListener(QObject* parent)
     : QObject(parent)

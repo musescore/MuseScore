@@ -29,8 +29,8 @@
 using namespace mu::appshell;
 using namespace mu::notation;
 using namespace muse::actions;
-using namespace mu::ui;
-using namespace mu::uicomponents;
+using namespace muse::ui;
+using namespace muse::uicomponents;
 
 static const QString TITLE_KEY("title");
 static const QString ICON_KEY("icon");

@@ -38,12 +38,12 @@ class QItemSelectionModel;
 
 namespace mu::notation {
 class NoteInputBarCustomiseItem;
-class NoteInputBarCustomiseModel : public uicomponents::SelectableItemListModel, public async::Asyncable
+class NoteInputBarCustomiseModel : public muse::uicomponents::SelectableItemListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
-    INJECT(ui::IUiActionsRegister, actionsRegister)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
     Q_PROPERTY(bool isAddSeparatorAvailable READ isAddSeparatorAvailable NOTIFY isAddSeparatorAvailableChanged)
@@ -78,7 +78,7 @@ private:
     void updateAddSeparatorAvailability();
     void setIsAddSeparatorAvailable(bool isAddSeparatorAvailable);
 
-    NoteInputBarCustomiseItem* makeItem(const ui::UiAction& action, bool checked);
+    NoteInputBarCustomiseItem* makeItem(const muse::ui::UiAction& action, bool checked);
     NoteInputBarCustomiseItem* makeSeparatorItem();
 
     void saveActions();

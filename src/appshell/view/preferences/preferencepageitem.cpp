@@ -136,7 +136,7 @@ void PreferencePageItem::setTitle(QString title)
     emit titleChanged(m_title);
 }
 
-void PreferencePageItem::setIcon(ui::IconCode::Code icon)
+void PreferencePageItem::setIcon(muse::ui::IconCode::Code icon)
 {
     if (m_icon == icon) {
         return;

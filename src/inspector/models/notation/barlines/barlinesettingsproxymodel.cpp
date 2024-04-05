@@ -33,7 +33,7 @@ BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRe
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(mu::qtrc("inspector", "Barline"));
-    setIcon(ui::IconCode::Code::SECTION_BREAK);
+    setIcon(muse::ui::IconCode::Code::SECTION_BREAK);
 
     QList<AbstractInspectorModel*> models {
         new BarlineSettingsModel(this, repository),

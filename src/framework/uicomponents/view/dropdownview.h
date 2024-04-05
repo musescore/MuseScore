@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_DROPDOWNVIEW_H
-#define MU_UICOMPONENTS_DROPDOWNVIEW_H
+#ifndef MUSE_UICOMPONENTS_DROPDOWNVIEW_H
+#define MUSE_UICOMPONENTS_DROPDOWNVIEW_H
 
 #include "popupview.h"
 
 class QQuickCloseEvent;
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class DropdownView : public PopupView
 {
     Q_OBJECT
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_DROPDOWNVIEW_H
+#endif // MUSE_UICOMPONENTS_DROPDOWNVIEW_H

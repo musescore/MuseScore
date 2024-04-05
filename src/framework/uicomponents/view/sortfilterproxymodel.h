@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_SORTFILTERPROXYMODEL_H
-#define MU_UICOMPONENTS_SORTFILTERPROXYMODEL_H
+#ifndef MUSE_UICOMPONENTS_SORTFILTERPROXYMODEL_H
+#define MUSE_UICOMPONENTS_SORTFILTERPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
@@ -28,15 +28,15 @@
 #include "sortervalue.h"
 #include "qmllistproperty.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class SortFilterProxyModel : public QSortFilterProxyModel
 {
     Q_OBJECT
 
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
 
-    Q_PROPERTY(QQmlListProperty<mu::uicomponents::FilterValue> filters READ filters CONSTANT)
-    Q_PROPERTY(QQmlListProperty<mu::uicomponents::SorterValue> sorters READ sorters CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::uicomponents::FilterValue> filters READ filters CONSTANT)
+    Q_PROPERTY(QQmlListProperty<muse::uicomponents::SorterValue> sorters READ sorters CONSTANT)
     Q_PROPERTY(QList<int> alwaysIncludeIndices READ alwaysIncludeIndices WRITE setAlwaysIncludeIndices NOTIFY alwaysIncludeIndicesChanged)
     Q_PROPERTY(QList<int> alwaysExcludeIndices READ alwaysExcludeIndices WRITE setAlwaysExcludeIndices NOTIFY alwaysExcludeIndicesChanged)
 
@@ -61,7 +61,7 @@ public:
 signals:
     void rowCountChanged();
 
-    void filtersChanged(QQmlListProperty<mu::uicomponents::FilterValue> filters);
+    void filtersChanged(QQmlListProperty<muse::uicomponents::FilterValue> filters);
 
     void alwaysIncludeIndicesChanged();
     void alwaysExcludeIndicesChanged();
@@ -91,4 +91,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_SORTFILTERPROXYMODEL_H
+#endif // MUSE_UICOMPONENTS_SORTFILTERPROXYMODEL_H

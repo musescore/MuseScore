@@ -22,7 +22,7 @@
 
 #include "qmllistproperty.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 QmlListPropertyNotifier::QmlListPropertyNotifier()
     : QObject()

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_NAVIGATIONCONTROLLER_H
-#define MU_UI_NAVIGATIONCONTROLLER_H
+#ifndef MUSE_UI_NAVIGATIONCONTROLLER_H
+#define MUSE_UI_NAVIGATIONCONTROLLER_H
 
 #include <QObject>
 #include <QList>
@@ -34,11 +34,11 @@
 
 #include "../inavigationcontroller.h"
 
-namespace mu::ui {
-class NavigationController : public QObject, public INavigationController, public muse::actions::Actionable, public async::Asyncable
+namespace muse::ui {
+class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(mu::IInteractive, interactive)
     INJECT(IMainWindow, mainWindow)
 
 public:
@@ -148,4 +148,4 @@ private:
 };
 }
 
-#endif // MU_UI_NAVIGATIONCONTROLLER_H
+#endif // MUSE_UI_NAVIGATIONCONTROLLER_H

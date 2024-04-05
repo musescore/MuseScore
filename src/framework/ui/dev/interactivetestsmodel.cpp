@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 InteractiveTestsModel::InteractiveTestsModel(QObject* parent)
     : QObject(parent)
@@ -95,13 +95,13 @@ QString InteractiveTestsModel::currentUri() const
 
 void InteractiveTestsModel::question()
 {
-    IInteractive::Result result = interactive()->question(
+    mu::IInteractive::Result result = interactive()->question(
         "Do you really want to delete the 'xxx' workspace?", "",
-        { interactive()->buttonData(IInteractive::Button::No),
-          interactive()->buttonData(IInteractive::Button::Yes) }, 0,
-        IInteractive::Option::WithIcon);
+        { interactive()->buttonData(mu::IInteractive::Button::No),
+          interactive()->buttonData(mu::IInteractive::Button::Yes) }, 0,
+        mu::IInteractive::Option::WithIcon);
 
-    if (result.standardButton() == IInteractive::Button::Yes) {
+    if (result.standardButton() == mu::IInteractive::Button::Yes) {
         LOGI() << "Yes!!";
     } else {
         LOGI() << "No!!";
@@ -110,10 +110,10 @@ void InteractiveTestsModel::question()
 
 void InteractiveTestsModel::customQuestion()
 {
-    int maybeBtn = int(IInteractive::Button::CustomButton) + 1;
-    IInteractive::Result result = interactive()->question("Test", "It works?", {
-        IInteractive::ButtonData(maybeBtn, "Maybe"),
-        interactive()->buttonData(IInteractive::Button::No)
+    int maybeBtn = int(mu::IInteractive::Button::CustomButton) + 1;
+    mu::IInteractive::Result result = interactive()->question("Test", "It works?", {
+        mu::IInteractive::ButtonData(maybeBtn, "Maybe"),
+        interactive()->buttonData(mu::IInteractive::Button::No)
     });
 
     if (result.button() == maybeBtn) {
@@ -125,22 +125,24 @@ void InteractiveTestsModel::customQuestion()
 
 void InteractiveTestsModel::information()
 {
-    IInteractive::Result result = interactive()->info("Tuplet cannot cross barlines", std::string(), {}, 0,
-                                                      IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
+    mu::IInteractive::Result result = interactive()->info("Tuplet cannot cross barlines",
+                                                          std::string(), {}, 0,
+                                                          mu::IInteractive::Option::WithIcon
+                                                          | mu::IInteractive::Option::WithDontShowAgainCheckBox);
     LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 
 void InteractiveTestsModel::warning()
 {
-    IInteractive::Result result = interactive()->warning("Do you want to save changes to the score “Untitled” before closing?",
-                                                         "Your changes will be lost if you don’t save them.",
-                                                         { interactive()->buttonData(IInteractive::Button::DontSave),
-                                                           interactive()->buttonData(IInteractive::Button::Save),
-                                                           interactive()->buttonData(IInteractive::Button::Cancel) });
+    mu::IInteractive::Result result = interactive()->warning("Do you want to save changes to the score “Untitled” before closing?",
+                                                             "Your changes will be lost if you don’t save them.",
+                                                             { interactive()->buttonData(mu::IInteractive::Button::DontSave),
+                                                               interactive()->buttonData(mu::IInteractive::Button::Save),
+                                                               interactive()->buttonData(mu::IInteractive::Button::Cancel) });
 
-    if (result.standardButton() == IInteractive::Button::DontSave) {
+    if (result.standardButton() == mu::IInteractive::Button::DontSave) {
         LOGI() << "Don’t save!!";
-    } else if (result.standardButton() == IInteractive::Button::Save) {
+    } else if (result.standardButton() == mu::IInteractive::Button::Save) {
         LOGE() << "Save!!";
     } else {
         LOGE() << "Cancel!!";
@@ -149,16 +151,16 @@ void InteractiveTestsModel::warning()
 
 void InteractiveTestsModel::critical()
 {
-    IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
-                                                       std::string("An error has occurred when trying to open this file"));
+    mu::IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
+                                                           std::string("An error has occurred when trying to open this file"));
     LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 
 void InteractiveTestsModel::criticalWithDetailedText()
 {
-    IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
-                                                       std::string("An error has occurred when trying to open this file"),
-                                                       std::string("Permission denied"));
+    mu::IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
+                                                           std::string("An error has occurred when trying to open this file"),
+                                                           std::string("Permission denied"));
     LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 

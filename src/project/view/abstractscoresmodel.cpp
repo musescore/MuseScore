@@ -41,7 +41,7 @@ const QString AbstractScoresModel::CLOUD_VIEW_COUNT_KEY("cloudViewCount");
 AbstractScoresModel::AbstractScoresModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    uicomponents::ModelUtils::connectRowCountChangedSignal(this, &AbstractScoresModel::rowCountChanged);
+    muse::uicomponents::ModelUtils::connectRowCountChangedSignal(this, &AbstractScoresModel::rowCountChanged);
 }
 
 QVariant AbstractScoresModel::data(const QModelIndex& index, int role) const

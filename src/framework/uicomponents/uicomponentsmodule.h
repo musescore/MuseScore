@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_UICOMPONENTSMODULE_H
-#define MU_UICOMPONENTS_UICOMPONENTSMODULE_H
+#ifndef MUSE_UICOMPONENTS_UICOMPONENTSMODULE_H
+#define MUSE_UICOMPONENTS_UICOMPONENTSMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class UiComponentsModule : public modularity::IModuleSetup
 {
 public:
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_UICOMPONENTS_UICOMPONENTSMODULE_H
+#endif // MUSE_UICOMPONENTS_UICOMPONENTSMODULE_H

@@ -32,7 +32,7 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::async;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const std::string module_name("notation");
 

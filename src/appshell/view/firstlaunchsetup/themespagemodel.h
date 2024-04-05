@@ -45,7 +45,7 @@ class ThemesPageModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit ThemesPageModel(QObject* parent = nullptr);
@@ -75,8 +75,8 @@ signals:
     void themesChanged();
 
 private:
-    ui::ThemeInfo currentTheme() const;
-    ui::ThemeList allThemes() const;
+    muse::ui::ThemeInfo currentTheme() const;
+    muse::ui::ThemeList allThemes() const;
 };
 }
 

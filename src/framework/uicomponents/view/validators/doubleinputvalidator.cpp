@@ -21,7 +21,7 @@
  */
 #include "doubleinputvalidator.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 DoubleInputValidator::DoubleInputValidator(QObject* parent)
     : QValidator(parent)

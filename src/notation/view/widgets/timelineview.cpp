@@ -30,7 +30,7 @@
 #include "log.h"
 
 namespace mu::notation {
-class TimelineAdapter : public QSplitter, public uicomponents::IDisplayableWidget
+class TimelineAdapter : public QSplitter, public muse::uicomponents::IDisplayableWidget
 {
 public:
     TimelineAdapter()

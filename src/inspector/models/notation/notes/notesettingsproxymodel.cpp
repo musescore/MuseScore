@@ -43,7 +43,7 @@ NoteSettingsProxyModel::NoteSettingsProxyModel(QObject* parent, IElementReposito
 {
     setModelType(InspectorModelType::TYPE_NOTE);
     setTitle(mu::qtrc("inspector", "Note"));
-    setIcon(ui::IconCode::Code::MUSIC_NOTES);
+    setIcon(muse::ui::IconCode::Code::MUSIC_NOTES);
 
     QList<AbstractInspectorModel*> models;
     for (InspectorModelType modelType : NOTE_PART_TYPES) {

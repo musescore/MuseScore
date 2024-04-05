@@ -156,9 +156,9 @@ QVariant NewWorkspaceModel::createWorkspace() const
 {
     QVariantMap meta;
     meta["name"] = m_workspaceName;
-    meta[ui::WS_UiSettings] = useUiPreferences();
-    meta[ui::WS_UiStates] = useUiArrangement();
-    meta[ui::WS_UiToolConfigs] = useToolbarCustomization();
+    meta[muse::ui::WS_UiSettings] = useUiPreferences();
+    meta[muse::ui::WS_UiStates] = useUiArrangement();
+    meta[muse::ui::WS_UiToolConfigs] = useToolbarCustomization();
     meta[palette::WS_Palettes] = usePalettes();
     return meta;
 }

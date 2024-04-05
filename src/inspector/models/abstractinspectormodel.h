@@ -166,7 +166,7 @@ public:
 
 public slots:
     void setTitle(QString title);
-    void setIcon(ui::IconCode::Code icon);
+    void setIcon(muse::ui::IconCode::Code icon);
     void setSectionType(InspectorSectionType sectionType);
     void setModelType(InspectorModelType modelType);
 
@@ -236,7 +236,7 @@ private:
     mu::engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const mu::engraving::StyleIdSet& styleIdSet) const;
 
     QString m_title;
-    ui::IconCode::Code m_icon = ui::IconCode::Code::NONE;
+    muse::ui::IconCode::Code m_icon = muse::ui::IconCode::Code::NONE;
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     mu::engraving::ElementType m_elementType = mu::engraving::ElementType::INVALID;

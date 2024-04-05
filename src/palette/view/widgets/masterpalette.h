@@ -34,7 +34,7 @@ class TimeDialog;
 class KeyEditor;
 class SymbolDialog;
 
-class MasterPalette : public uicomponents::TopLevelDialog, Ui::MasterPalette
+class MasterPalette : public muse::uicomponents::TopLevelDialog, Ui::MasterPalette
 {
     Q_OBJECT
 

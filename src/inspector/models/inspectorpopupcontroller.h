@@ -35,7 +35,7 @@ Q_MOC_INCLUDE("uicomponents/view/popupview.h")
 
 class QQuickItem;
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class PopupView;
 }
 
@@ -45,11 +45,11 @@ class InspectorPopupController : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QQuickItem * visualControl READ visualControl WRITE setVisualControl NOTIFY visualControlChanged)
-    Q_PROPERTY(mu::uicomponents::PopupView * popup READ popup WRITE setPopup NOTIFY popupChanged)
+    Q_PROPERTY(muse::uicomponents::PopupView * popup READ popup WRITE setPopup NOTIFY popupChanged)
 
     Q_PROPERTY(QQuickItem * notationView READ notationView WRITE setNotationView NOTIFY notationViewChanged)
 
-    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(muse::ui::IMainWindow, mainWindow)
 
 public:
     explicit InspectorPopupController(QObject* parent = nullptr);
@@ -58,13 +58,13 @@ public:
     Q_INVOKABLE void load();
 
     QQuickItem* visualControl() const;
-    uicomponents::PopupView* popup() const;
+    muse::uicomponents::PopupView* popup() const;
 
     QQuickItem* notationView() const;
 
 public slots:
     void setVisualControl(QQuickItem* control);
-    void setPopup(uicomponents::PopupView* popup);
+    void setPopup(muse::uicomponents::PopupView* popup);
     void setNotationView(QQuickItem* notationView);
 
 signals:
@@ -82,7 +82,7 @@ private:
     void closePopupIfNeed(const QPoint& mouseGlobalPos);
 
     QQuickItem* m_visualControl = nullptr;
-    uicomponents::PopupView* m_popup = nullptr;
+    muse::uicomponents::PopupView* m_popup = nullptr;
     QQuickItem* m_notationView = nullptr;
 };
 }

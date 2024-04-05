@@ -30,7 +30,7 @@
 #include "engraving/dom/utils.h"
 
 using namespace mu::notation;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 namespace mu::notation {
 static StringList collectExcerptLowerNames(const QList<IExcerptNotationPtr>& allExcerpts)

@@ -72,7 +72,7 @@
 
 using namespace mu::appshell;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::dock;
 
 static void appshell_init_qrc()
@@ -114,7 +114,7 @@ void AppShellModule::registerExports()
 
 void AppShellModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_applicationUiActions);
     }

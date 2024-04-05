@@ -59,7 +59,7 @@ void WorkspaceModule::registerExports()
 
 void WorkspaceModule::resolveImports()
 {
-    auto ar = ioc()->resolve<mu::ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController));
     }

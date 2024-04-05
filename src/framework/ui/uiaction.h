@@ -1,5 +1,5 @@
-#ifndef MU_UI_UIACTION_H
-#define MU_UI_UIACTION_H
+#ifndef MUSE_UI_UIACTION_H
+#define MUSE_UI_UIACTION_H
 
 #include <optional>
 
@@ -8,7 +8,7 @@
 
 #include "view/iconcodes.h"
 
-namespace mu::ui {
+namespace muse::ui {
 struct UiContext
 {
     UiContext() = default;
@@ -48,32 +48,32 @@ enum class Checkable {
 
 struct UiAction
 {
-    muse::actions::ActionCode code;
+    actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
     std::string scCtx = "any";
-    MnemonicString title;
+    mu::MnemonicString title;
     TranslatableString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
     std::vector<std::string> shortcuts;
 
     UiAction() = default;
-    UiAction(const muse::actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
-    UiAction(const muse::actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
 
-    UiAction(const muse::actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title,
              const TranslatableString& desc, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
 
-    UiAction(const muse::actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title,
              const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
-    UiAction(const muse::actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 
@@ -104,7 +104,7 @@ public:
     UiActionList(std::vector<UiAction>::iterator b, std::vector<UiAction>::iterator e)
         : std::vector<UiAction>(b, e) {}
 
-    bool contains(const muse::actions::ActionCode& code) const
+    bool contains(const actions::ActionCode& code) const
     {
         auto it = std::find_if(cbegin(), cend(), [code](const UiAction& a) {
             return a.code == code;
@@ -112,7 +112,7 @@ public:
         return it != cend();
     }
 
-    std::optional<size_t> indexOf(const muse::actions::ActionCode& code) const
+    std::optional<size_t> indexOf(const actions::ActionCode& code) const
     {
         for (size_t i = 0; i < size(); ++i) {
             if (at(i).code == code) {
@@ -162,11 +162,11 @@ struct ToolConfig
 {
     struct Item
     {
-        muse::actions::ActionCode action;
+        actions::ActionCode action;
         bool show = true;
 
         Item() = default;
-        Item(const muse::actions::ActionCode& a, bool sh)
+        Item(const actions::ActionCode& a, bool sh)
             : action(a), show(sh) {}
 
         bool isSeparator() const
@@ -187,4 +187,4 @@ struct ToolConfig
 };
 }
 
-#endif // MU_UI_UIACTION_H
+#endif // MUSE_UI_UIACTION_H

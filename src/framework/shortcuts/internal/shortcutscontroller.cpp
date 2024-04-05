@@ -82,7 +82,7 @@ ActionCode ShortcutsController::resolveAction(const std::string& sequence) const
         }
 
         //! NOTE Check if the action is allowed
-        ui::UiActionState st = aregister()->actionState(sc.action);
+        muse::ui::UiActionState st = aregister()->actionState(sc.action);
         if (!st.enabled) {
             continue;
         }

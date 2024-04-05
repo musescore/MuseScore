@@ -42,7 +42,7 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 PopupView::PopupView(QQuickItem* parent)
     : QObject(parent)
@@ -331,7 +331,7 @@ bool PopupView::activateParentOnClose() const
     return m_activateParentOnClose;
 }
 
-mu::ui::INavigationControl* PopupView::navigationParentControl() const
+muse::ui::INavigationControl* PopupView::navigationParentControl() const
 {
     return m_navigationParentControl;
 }

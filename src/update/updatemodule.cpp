@@ -41,7 +41,7 @@
 
 using namespace mu::update;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static void update_init_qrc()
 {
@@ -67,7 +67,7 @@ void UpdateModule::registerExports()
 
 void UpdateModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<UpdateUiActions>(m_actionController));
     }

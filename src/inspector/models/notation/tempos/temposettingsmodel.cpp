@@ -51,7 +51,7 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
         break;
     }
 
-    setIcon(ui::IconCode::Code::METRONOME);
+    setIcon(muse::ui::IconCode::Code::METRONOME);
     createProperties();
 }
 

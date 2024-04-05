@@ -39,7 +39,7 @@ class PreferencesModel : public QAbstractItemModel
 
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IAppShellConfiguration, configuration)
-    INJECT(ui::IUiActionsRegister, actionsRegister)
+    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QString currentPageId READ currentPageId WRITE setCurrentPageId NOTIFY currentPageIdChanged)
 
@@ -76,7 +76,7 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
-    PreferencePageItem* makeItem(const QString& id, const QString& title, ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE,
+    PreferencePageItem* makeItem(const QString& id, const QString& title, muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE,
                                  const QString& path = "", const QList<PreferencePageItem*>& children = {}) const;
 
     PreferencePageItem* modelIndexToItem(const QModelIndex& index) const;

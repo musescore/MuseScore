@@ -45,7 +45,7 @@ class AutobotApi : public mu::api::ApiObject, public async::Asyncable
     INJECT(mu::project::IProjectFilesController, projectFilesController)
     INJECT(mu::IInteractive, interactive)
     INJECT(mu::io::IFileSystem, fileSystem)
-    INJECT(mu::ui::IMainWindow, mainWindow)
+    INJECT(muse::ui::IMainWindow, mainWindow)
 
 public:
     explicit AutobotApi(mu::api::IApiEngine* e);

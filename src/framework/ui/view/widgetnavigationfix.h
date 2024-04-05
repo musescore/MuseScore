@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_WIDGETNAVIGATIONFIX_H
-#define MU_UI_WIDGETNAVIGATIONFIX_H
+#ifndef MUSE_UI_WIDGETNAVIGATIONFIX_H
+#define MUSE_UI_WIDGETNAVIGATIONFIX_H
 
 class QWidget;
 
-namespace mu::ui {
+namespace muse::ui {
 class WidgetNavigationFix
 {
 public:
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_UI_WIDGETNAVIGATIONFIX_H
+#endif // MUSE_UI_WIDGETNAVIGATIONFIX_H

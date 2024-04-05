@@ -46,7 +46,7 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::engraving;
 
 static const QChar GO_UP_ICON = iconCodeToChar(IconCode::Code::ARROW_UP);

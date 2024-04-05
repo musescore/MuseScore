@@ -38,7 +38,7 @@ class ExtensionsUiEngine : public QObject, public IExtensionsUiEngine
 {
     Q_OBJECT
 
-    Inject<mu::ui::IUiEngine> uiEngine;
+    Inject<ui::IUiEngine> uiEngine;
 
 public:
     ExtensionsUiEngine() = default;

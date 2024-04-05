@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef INTINPUTVALIDATOR_H
-#define INTINPUTVALIDATOR_H
+#ifndef MUSE_UICOMPONENTS_INTINPUTVALIDATOR_H
+#define MUSE_UICOMPONENTS_INTINPUTVALIDATOR_H
 
 #include <QString>
 #include <QValidator>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class IntInputValidator : public QValidator
 {
     Q_OBJECT
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // INTINPUTVALIDATOR_H
+#endif // MUSE_UICOMPONENTS_INTINPUTVALIDATOR_H

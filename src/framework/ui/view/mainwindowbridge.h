@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_MAINWINDOWBRIDGE_H
-#define MU_DOCK_MAINWINDOWBRIDGE_H
+#ifndef MUSE_DOCK_MAINWINDOWBRIDGE_H
+#define MUSE_DOCK_MAINWINDOWBRIDGE_H
 
 #include <QObject>
 #include <QWindow>
@@ -31,7 +31,7 @@
 #include "framework/ui/imainwindow.h"
 #include "async/notification.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class MainWindowBridge : public QObject
 {
     Q_OBJECT
@@ -87,4 +87,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_MAINWINDOWBRIDGE_H
+#endif // MUSE_DOCK_MAINWINDOWBRIDGE_H

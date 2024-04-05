@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_NAVIGATIONPOPUPPANEL_H
-#define MU_UI_NAVIGATIONPOPUPPANEL_H
+#ifndef MUSE_UI_NAVIGATIONPOPUPPANEL_H
+#define MUSE_UI_NAVIGATIONPOPUPPANEL_H
 
 #include <QObject>
 
 #include "navigationpanel.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class NavigationPopupPanel : public NavigationPanel
 {
     Q_OBJECT
@@ -50,4 +50,4 @@ private:
     INavigationControl* m_parentControl = nullptr;
 };
 }
-#endif // MU_UI_NAVIGATIONPOPUPPANEL_H
+#endif // MUSE_UI_NAVIGATIONPOPUPPANEL_H

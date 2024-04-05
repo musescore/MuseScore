@@ -87,9 +87,9 @@
 
 using namespace mu::notation;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 static void notationscene_init_qrc()
 {

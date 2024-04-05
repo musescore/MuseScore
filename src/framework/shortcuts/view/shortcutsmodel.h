@@ -42,7 +42,7 @@ class ShortcutsModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(IShortcutsRegister, shortcutsRegister)
-    INJECT(ui::IUiActionsRegister, uiactionsRegister)
+    INJECT(muse::ui::IUiActionsRegister, uiactionsRegister)
     INJECT(IInteractive, interactive)
     INJECT(IShortcutsConfiguration, configuration)
     INJECT(IGlobalConfiguration, globalConfiguration)
@@ -81,7 +81,7 @@ signals:
     void selectionChanged();
 
 private:
-    const ui::UiAction& action(const std::string& actionCode) const;
+    const muse::ui::UiAction& action(const std::string& actionCode) const;
     QString actionText(const std::string& actionCode) const;
 
     QModelIndex currentShortcutIndex() const;

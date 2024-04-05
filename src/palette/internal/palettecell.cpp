@@ -230,7 +230,7 @@ bool PaletteCell::read(XmlReader& e, bool pasteMode)
 
                 if (element->type() == ElementType::ACTION_ICON) {
                     ActionIcon* icon = toActionIcon(element.get());
-                    const mu::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
+                    const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
                     if (action.isValid()) {
                         icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
                     } else {
@@ -319,7 +319,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 
     if (element->isActionIcon()) {
         ActionIcon* icon = toActionIcon(element.get());
-        const mu::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
+        const muse::ui::UiAction& action = actionsRegister()->action(icon->actionCode());
         if (action.isValid()) {
             icon->setAction(icon->actionCode(), static_cast<char16_t>(action.iconCode));
         }

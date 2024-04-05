@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_NAVIGATIONEVENT_H
-#define MU_UI_NAVIGATIONEVENT_H
+#ifndef MUSE_UI_NAVIGATIONEVENT_H
+#define MUSE_UI_NAVIGATIONEVENT_H
 
 #include <QObject>
 
 #include "ui/inavigation.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class NavigationEvent
 {
     Q_GADGET
@@ -62,6 +62,6 @@ private:
     INavigation::EventPtr m_event;
 };
 }
-Q_DECLARE_METATYPE(mu::ui::NavigationEvent)
+Q_DECLARE_METATYPE(muse::ui::NavigationEvent)
 
-#endif // MU_UI_NAVIGATIONEVENT_H
+#endif // MUSE_UI_NAVIGATIONEVENT_H

@@ -21,7 +21,7 @@
  */
 #include "intinputvalidator.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 IntInputValidator::IntInputValidator(QObject* parent)
     : QValidator(parent)

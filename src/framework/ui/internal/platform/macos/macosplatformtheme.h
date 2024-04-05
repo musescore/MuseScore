@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_MACOSPLATFORMTHEME_H
-#define MU_UI_MACOSPLATFORMTHEME_H
+#ifndef MUSE_UI_MACOSPLATFORMTHEME_H
+#define MUSE_UI_MACOSPLATFORMTHEME_H
 
 #include "internal/iplatformtheme.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class MacOSPlatformTheme : public IPlatformTheme
 {
 public:
@@ -47,4 +47,4 @@ private:
 };
 }
 
-#endif // MU_UI_MACOSPLATFORMTHEME_H
+#endif // MUSE_UI_MACOSPLATFORMTHEME_H

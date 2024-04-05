@@ -46,7 +46,7 @@ public:
     {
         m_controller = std::make_shared<AccessibilityController>();
 
-        m_mainWindow = std::make_shared<ui::MainWindowMock>();
+        m_mainWindow = std::make_shared<muse::ui::MainWindowMock>();
         m_controller->mainWindow.set(m_mainWindow);
 
         m_application = std::make_shared<ApplicationMock>();
@@ -151,7 +151,7 @@ public:
 #endif
 
     std::shared_ptr<AccessibilityController> m_controller;
-    std::shared_ptr<ui::MainWindowMock> m_mainWindow;
+    std::shared_ptr<muse::ui::MainWindowMock> m_mainWindow;
     std::shared_ptr<AccessibilityConfigurationMock> m_configuration;
     std::shared_ptr<ApplicationMock> m_application;
 };

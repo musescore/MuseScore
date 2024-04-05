@@ -38,7 +38,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");

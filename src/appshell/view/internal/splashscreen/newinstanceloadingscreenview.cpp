@@ -70,17 +70,17 @@ void NewInstanceLoadingScreenView::draw(QPainter* painter)
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
     // Draw background
-    QString bgColorStr = uiConfiguration()->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
+    QString bgColorStr = uiConfiguration()->currentTheme().values.value(muse::ui::BACKGROUND_PRIMARY_COLOR).toString();
     painter->fillRect(0, 0, width(), height(), QColor(bgColorStr));
 
     // Draw message
     QFont font(QString::fromStdString(uiConfiguration()->fontFamily()));
-    font.setPixelSize(uiConfiguration()->fontSize(ui::FontSizeType::BODY_LARGE));
+    font.setPixelSize(uiConfiguration()->fontSize(muse::ui::FontSizeType::BODY_LARGE));
     font.setBold(true);
 
     painter->setFont(font);
 
-    QString messageColorStr = uiConfiguration()->currentTheme().values.value(ui::FONT_PRIMARY_COLOR).toString();
+    QString messageColorStr = uiConfiguration()->currentTheme().values.value(muse::ui::FONT_PRIMARY_COLOR).toString();
     QPen pen(messageColorStr);
     painter->setPen(pen);
 

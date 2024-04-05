@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_QUICKPAINTEDVIEW_H
-#define MU_UICOMPONENTS_QUICKPAINTEDVIEW_H
+#ifndef MUSE_UICOMPONENTS_QUICKPAINTEDVIEW_H
+#define MUSE_UICOMPONENTS_QUICKPAINTEDVIEW_H
 
 #include <QQuickPaintedItem>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class QuickPaintedView : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -36,4 +36,4 @@ protected:
 };
 }
 
-#endif // MU_UICOMPONENTS_QUICKPAINTEDVIEW_H
+#endif // MUSE_UICOMPONENTS_QUICKPAINTEDVIEW_H

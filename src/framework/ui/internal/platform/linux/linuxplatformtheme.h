@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_LINUXPLATFORMTHEME_H
-#define MU_UI_LINUXPLATFORMTHEME_H
+#ifndef MUSE_UI_LINUXPLATFORMTHEME_H
+#define MUSE_UI_LINUXPLATFORMTHEME_H
 
 #include <QtDBus/QDBusReply>
 
@@ -29,7 +29,7 @@
 
 class QDBusVariant;
 
-namespace mu::ui {
+namespace muse::ui {
 class LinuxPlatformTheme : public QObject, public IPlatformTheme
 {
     Q_OBJECT
@@ -62,4 +62,4 @@ private:
 };
 }
 
-#endif // MU_UI_LINUXPLATFORMTHEME_H
+#endif // MUSE_UI_LINUXPLATFORMTHEME_H

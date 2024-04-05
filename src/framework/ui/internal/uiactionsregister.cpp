@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 void UiActionsRegister::init()

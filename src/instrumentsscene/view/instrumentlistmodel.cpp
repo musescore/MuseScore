@@ -26,7 +26,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 static const QString ALL_INSTRUMENTS_GENRE_ID("ALL_INSTRUMENTS");
 static const QString NONE_GROUP_ID("");

@@ -33,7 +33,7 @@ ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryServic
 {
     setModelType(InspectorModelType::TYPE_IMAGE);
     setTitle(mu::qtrc("inspector", "Image"));
-    setIcon(ui::IconCode::Code::IMAGE_MOUNTAINS);
+    setIcon(muse::ui::IconCode::Code::IMAGE_MOUNTAINS);
     createProperties();
 }
 

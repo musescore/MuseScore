@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::accessibility;
 
 NavigationControl::NavigationControl(QObject* parent)

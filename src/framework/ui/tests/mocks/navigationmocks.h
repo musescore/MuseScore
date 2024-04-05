@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_NAVIGATIONSECTIONMOCK_H
-#define MU_UI_NAVIGATIONSECTIONMOCK_H
+#ifndef MUSE_UI_NAVIGATIONSECTIONMOCK_H
+#define MUSE_UI_NAVIGATIONSECTIONMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "framework/ui/inavigation.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class NavigationSectionMock : public INavigationSection
 {
 public:
@@ -110,4 +110,4 @@ public:
 };
 }
 
-#endif // MU_UI_NAVIGATIONSECTIONMOCK_H
+#endif // MUSE_UI_NAVIGATIONSECTIONMOCK_H

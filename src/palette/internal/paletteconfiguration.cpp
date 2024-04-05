@@ -29,7 +29,7 @@
 
 using namespace mu;
 using namespace mu::palette;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const std::string MODULE_NAME("palette");
 static const Settings::Key PALETTE_SCALE(MODULE_NAME, "application/paletteScale");

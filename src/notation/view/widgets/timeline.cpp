@@ -3194,7 +3194,7 @@ QString Timeline::cursorIsOn(const QPoint& cursorPos)
 
 const TimelineTheme& Timeline::activeTheme() const
 {
-    if (uiConfiguration()->currentTheme().codeKey == ui::DARK_THEME_CODE) {
+    if (uiConfiguration()->currentTheme().codeKey == muse::ui::DARK_THEME_CODE) {
         return _darkTheme;
     }
 

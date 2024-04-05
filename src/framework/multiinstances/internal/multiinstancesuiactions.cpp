@@ -25,13 +25,13 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 using namespace mu::mi;
 
 const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",
-             mu::ui::UiCtxAny,
+             muse::ui::UiCtxAny,
              mu::shortcuts::CTX_ANY,
              TranslatableString("action", "&Multiinstances")
              )

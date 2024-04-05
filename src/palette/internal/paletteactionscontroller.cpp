@@ -23,7 +23,7 @@
 #include "paletteactionscontroller.h"
 
 using namespace mu::palette;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 static const mu::UriQuery MASTER_PALETTE_URI("musescore://palette/masterpalette?sync=false&modal=false");

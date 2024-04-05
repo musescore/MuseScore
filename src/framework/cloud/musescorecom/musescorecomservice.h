@@ -69,7 +69,7 @@ private:
 
     bool doUpdateTokens() override;
 
-    QString logoColorForTheme(const mu::ui::ThemeInfo& theme) const override;
+    QString logoColorForTheme(const ui::ThemeInfo& theme) const override;
 
     mu::network::RequestHeaders headers() const;
 

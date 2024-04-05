@@ -20,20 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_COLORPICKER_H
-#define MU_UICOMPONENTS_COLORPICKER_H
+#ifndef MUSE_UICOMPONENTS_COLORPICKER_H
+#define MUSE_UICOMPONENTS_COLORPICKER_H
 
 #include <QObject>
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class ColorPickerModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(IInteractive, interactive)
+    INJECT(mu::IInteractive, interactive)
 
 public:
     explicit ColorPickerModel(QObject* parent = nullptr);
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_UICOMPONENTS_COLORPICKER_H
+#endif // MUSE_UICOMPONENTS_COLORPICKER_H

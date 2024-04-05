@@ -1,28 +1,31 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
-//
-//  Copyright (C) 2021 MuseScore BVBA and others
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 #include "selectmultipledirectoriesmodel.h"
 
 #include "translation.h"
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 SelectMultipleDirectoriesModel::SelectMultipleDirectoriesModel(QObject* parent)
     : QAbstractListModel(parent), m_selectionModel(new ItemMultiSelectionModel(this))
@@ -84,7 +87,7 @@ QItemSelectionModel* SelectMultipleDirectoriesModel::selection() const
 void SelectMultipleDirectoriesModel::load(const QString& startDir, const QString& directoriesStr)
 {
     beginResetModel();
-    m_directories = io::pathsFromString(directoriesStr.toStdString());
+    m_directories = mu::io::pathsFromString(directoriesStr.toStdString());
     m_dir = startDir.toStdString();
     endResetModel();
 }
@@ -121,7 +124,7 @@ void SelectMultipleDirectoriesModel::removeSelectedDirectories()
 
 void SelectMultipleDirectoriesModel::addDirectory()
 {
-    io::path_t path = interactive()->selectDirectory(mu::qtrc("ui", "Choose directory"), m_dir.toStdString());
+    mu::io::path_t path = interactive()->selectDirectory(mu::qtrc("ui", "Choose directory"), m_dir.toStdString());
     if (path.empty()) {
         return;
     }
@@ -142,7 +145,7 @@ void SelectMultipleDirectoriesModel::addDirectory()
 
 QString SelectMultipleDirectoriesModel::directories() const
 {
-    return QString::fromStdString(io::pathsToString(m_directories));
+    return QString::fromStdString(mu::io::pathsToString(m_directories));
 }
 
 bool SelectMultipleDirectoriesModel::isRemovingAvailable() const

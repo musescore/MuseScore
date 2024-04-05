@@ -26,7 +26,7 @@
 #include "ui/view/widgetstatestore.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 //---------------------------------------------------------

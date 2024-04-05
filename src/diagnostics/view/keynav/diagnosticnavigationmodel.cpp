@@ -28,7 +28,7 @@
 #include "keynavdevcontrol.h"
 
 using namespace mu::diagnostics;
-using namespace mu::ui;
+using namespace muse::ui;
 
 template<class T>
 static QList<T*> toQList(std::set<T*> set)

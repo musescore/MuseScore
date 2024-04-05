@@ -37,7 +37,7 @@ class AbstractKeyNavDevItem : public QObject, public async::Asyncable
     Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    explicit AbstractKeyNavDevItem(ui::INavigation* keynav);
+    explicit AbstractKeyNavDevItem(muse::ui::INavigation* keynav);
 
     QString name() const;
     QVariant index() const;
@@ -51,7 +51,7 @@ signals:
 
 private:
 
-    ui::INavigation* m_keynav = nullptr;
+    muse::ui::INavigation* m_keynav = nullptr;
 };
 }
 

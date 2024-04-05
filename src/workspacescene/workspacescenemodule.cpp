@@ -43,7 +43,7 @@ std::string WorkspaceSceneModule::moduleName() const
 
 void WorkspaceSceneModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://workspace/select"), "MuseScore/Workspace/WorkspacesDialog.qml");
         ir->registerQmlUri(Uri("musescore://workspace/create"), "MuseScore/Workspace/NewWorkspaceDialog.qml");

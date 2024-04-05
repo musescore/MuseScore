@@ -25,8 +25,8 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
-using namespace mu::ui;
+using namespace muse::uicomponents;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const int AbstractMenuModel::INVALID_ITEM_INDEX = -1;

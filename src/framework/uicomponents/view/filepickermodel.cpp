@@ -22,7 +22,7 @@
 
 #include "filepickermodel.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 FilePickerModel::FilePickerModel(QObject* parent)
     : QObject(parent)
@@ -54,7 +54,7 @@ QString FilePickerModel::selectFile()
     io::path_t file = interactive()->selectOpeningFile(m_title, m_dir, filter);
 
     if (!file.empty()) {
-        m_dir = io::dirpath(file).toQString();
+        m_dir = mu::io::dirpath(file).toQString();
     }
 
     return file.toQString();
@@ -73,7 +73,7 @@ QString FilePickerModel::selectDirectory()
 
 QString FilePickerModel::selectMultipleDirectories(const QString& selectedDirectoriesStr)
 {
-    io::paths_t selectedDirectories = io::pathsFromString(selectedDirectoriesStr.toStdString());
+    io::paths_t selectedDirectories = mu::io::pathsFromString(selectedDirectoriesStr.toStdString());
     io::paths_t directories = interactive()->selectMultipleDirectories(m_title, m_dir, selectedDirectories);
 
     QStringList result;

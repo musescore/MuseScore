@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_UIERRORS_H
-#define MU_UI_UIERRORS_H
+#ifndef MUSE_UI_UIERRORS_H
+#define MUSE_UI_UIERRORS_H
 
 #include "types/ret.h"
 
-namespace mu::ui {
+namespace muse::ui {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -39,4 +39,4 @@ inline mu::Ret make_ret(Err e)
 }
 }
 
-#endif // MU_UI_UIERRORS_H
+#endif // MUSE_UI_UIERRORS_H

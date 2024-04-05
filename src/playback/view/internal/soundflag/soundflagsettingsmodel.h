@@ -106,7 +106,7 @@ private:
     void setAvailableSoundPresets(const muse::audio::SoundPresetList& presets);
     void loadAvailablePlayingTechniques();
 
-    uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title, bool enabled = true);
+    muse::uicomponents::MenuItem* buildMenuItem(const QString& actionCode, const TranslatableString& title, bool enabled = true);
 
     QString defaultPresetCode() const;
     QString defaultPlayingTechniqueCode() const;

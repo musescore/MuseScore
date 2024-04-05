@@ -25,7 +25,7 @@
 
 static constexpr int INTERVAL = 500;
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 QmlToolTip::QmlToolTip(QObject* parent)
     : QObject(parent)

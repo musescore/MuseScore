@@ -45,9 +45,8 @@ using ::testing::_;
 using ::testing::SaveArgPointee;
 using ::testing::DoAll;
 
-using namespace mu;
 using namespace muse;
-using namespace mu::ui;
+using namespace muse::ui;
 
 class Ui_NavigationControllerTests : public ::testing::Test
 {
@@ -63,7 +62,7 @@ public:
         ON_CALL(*m_mainWindow, qWindow()).WillByDefault(Return(&m_window));
         m_controller->setmainWindow(m_mainWindow);
 
-        m_applicationMock = std::make_shared<ApplicationMock>();
+        m_applicationMock = std::make_shared<mu::ApplicationMock>();
         ON_CALL(*m_applicationMock, focusWindow()).WillByDefault(Return(&m_window));
 
         m_controller->init();
@@ -230,7 +229,7 @@ public:
     std::shared_ptr<NavigationController> m_controller;
     std::shared_ptr<actions::IActionsDispatcher> m_dispatcher;
     std::shared_ptr<MainWindowMock> m_mainWindow;
-    std::shared_ptr<ApplicationMock> m_applicationMock;
+    std::shared_ptr<mu::ApplicationMock> m_applicationMock;
 
     QQuickWindow m_window;
 

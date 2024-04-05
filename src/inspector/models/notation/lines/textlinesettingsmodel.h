@@ -99,15 +99,15 @@ protected:
 
     struct HookTypeInfo {
         int type = 0;
-        ui::IconCode::Code icon = ui::IconCode::Code::NONE;
+        muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE;
         QString title;
 
-        HookTypeInfo(mu::engraving::HookType type, ui::IconCode::Code icon, const QString& title)
+        HookTypeInfo(mu::engraving::HookType type, muse::ui::IconCode::Code icon, const QString& title)
             : type(static_cast<int>(type)), icon(icon), title(title)
         {
         }
 
-        HookTypeInfo(int type, ui::IconCode::Code icon, const QString& title)
+        HookTypeInfo(int type, muse::ui::IconCode::Code icon, const QString& title)
             : type(type), icon(icon), title(title)
         {
         }

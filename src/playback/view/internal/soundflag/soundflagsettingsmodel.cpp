@@ -223,17 +223,18 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     emit contextMenuModelChanged();
 }
 
-uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title, bool enabled)
+muse::uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title,
+                                                                    bool enabled)
 {
-    uicomponents::MenuItem* item = new uicomponents::MenuItem(this);
+    muse::uicomponents::MenuItem* item = new muse::uicomponents::MenuItem(this);
     item->setId(actionCode);
 
-    ui::UiAction action;
+    muse::ui::UiAction action;
     action.code = muse::actions::codeFromQString(actionCode);
     action.title = title;
     item->setAction(action);
 
-    ui::UiActionState state;
+    muse::ui::UiActionState state;
     state.enabled = enabled;
     item->setState(state);
 
@@ -254,7 +255,7 @@ QString SoundFlagSettingsModel::defaultPlayingTechniqueCode() const
 
 QVariantList SoundFlagSettingsModel::contextMenuModel()
 {
-    uicomponents::MenuItemList items;
+    muse::uicomponents::MenuItemList items;
 
     SoundFlag* soundFlag = toSoundFlag(m_item);
     if (!soundFlag) {
@@ -278,29 +279,29 @@ QVariantList SoundFlagSettingsModel::contextMenuModel()
         return enabled;
     };
 
-    uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset to default sound"),
-                                                      isResetEnabled());
+    muse::uicomponents::MenuItem* resetItem = buildMenuItem(RESET_MENU_ID, TranslatableString("playback", "Reset to default sound"),
+                                                            isResetEnabled());
 
-    ui::UiAction resetAction = resetItem->action();
-    resetAction.iconCode = ui::IconCode::Code::UNDO;
+    muse::ui::UiAction resetAction = resetItem->action();
+    resetAction.iconCode = muse::ui::IconCode::Code::UNDO;
     resetItem->setAction(resetAction);
 
     items << resetItem;
 
-    uicomponents::MenuItem* multiSelectionItem
+    muse::uicomponents::MenuItem* multiSelectionItem
         = buildMenuItem(MULTI_SELECTION_MENU_ID, TranslatableString("playback", "Allow multiple selection"));
 
-    ui::UiAction multiSelectionAction = multiSelectionItem->action();
-    multiSelectionAction.checkable = ui::Checkable::Yes;
+    muse::ui::UiAction multiSelectionAction = multiSelectionItem->action();
+    multiSelectionAction.checkable = muse::ui::Checkable::Yes;
     multiSelectionItem->setAction(multiSelectionAction);
 
-    ui::UiActionState multiSelectionActionState = multiSelectionItem->state();
+    muse::ui::UiActionState multiSelectionActionState = multiSelectionItem->state();
     multiSelectionActionState.checked = playbackConfiguration()->soundPresetsMultiSelectionEnabled();
     multiSelectionItem->setState(multiSelectionActionState);
 
     items << multiSelectionItem;
 
-    return uicomponents::menuItemListToVariantList(items);
+    return muse::uicomponents::menuItemListToVariantList(items);
 }
 
 void SoundFlagSettingsModel::handleContextMenuItem(const QString& menuId)

@@ -25,7 +25,7 @@
 #include "context/shortcutcontext.h"
 
 using namespace mu::project;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const UiActionList ProjectUiActions::m_actions = {

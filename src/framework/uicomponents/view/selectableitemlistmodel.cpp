@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 SelectableItemListModel::Item::Item(QObject* parent)
     : QObject(parent)

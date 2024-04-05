@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_SELECTABLEITEMLISTMODEL_H
-#define MU_UICOMPONENTS_SELECTABLEITEMLISTMODEL_H
+#ifndef MUSE_UICOMPONENTS_SELECTABLEITEMLISTMODEL_H
+#define MUSE_UICOMPONENTS_SELECTABLEITEMLISTMODEL_H
 
 #include <QAbstractListModel>
 
 #include "itemmultiselectionmodel.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class SelectableItemListModel : public QAbstractListModel
 {
     Q_OBJECT
@@ -113,4 +113,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_SELECTABLEITEMLISTMODEL_H
+#endif // MUSE_UICOMPONENTS_SELECTABLEITEMLISTMODEL_H

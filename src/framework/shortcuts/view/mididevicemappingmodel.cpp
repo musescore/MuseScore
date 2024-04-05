@@ -30,7 +30,7 @@
 
 using namespace mu::shortcuts;
 using namespace muse::midi;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 static const QString TITLE_KEY("title");

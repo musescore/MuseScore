@@ -47,7 +47,7 @@ class NotationStatusBarModel : public QObject, public async::Asyncable, public m
 
     INJECT(context::IGlobalContext, context)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(ui::IUiActionsRegister, actionsRegister)
+    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT(muse::workspace::IWorkspaceConfiguration, workspaceConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(IGlobalConfiguration, globalConfiguration)
@@ -70,8 +70,8 @@ public:
     QVariant currentViewMode();
     bool zoomEnabled() const;
     int currentZoomPercentage() const;
-    uicomponents::MenuItemList makeAvailableViewModeList();
-    uicomponents::MenuItemList makeAvailableZoomList();
+    muse::uicomponents::MenuItemList makeAvailableViewModeList();
+    muse::uicomponents::MenuItemList makeAvailableZoomList();
 
     Q_INVOKABLE void load();
 
@@ -104,7 +104,7 @@ private:
     notation::INotationPtr notation() const;
     notation::INotationAccessibilityPtr accessibility() const;
 
-    uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
+    muse::uicomponents::MenuItem* makeMenuItem(const muse::actions::ActionCode& actionCode);
 
     void dispatch(const muse::actions::ActionCode& code, const muse::actions::ActionData& args = muse::actions::ActionData());
 
@@ -119,7 +119,7 @@ private:
     QVariantList availableViewModeList_property();
     QVariantList availableZoomList_property();
 
-    QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& list) const;
+    QVariantList menuItemListToVariantList(const muse::uicomponents::MenuItemList& list) const;
 };
 }
 

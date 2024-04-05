@@ -34,14 +34,14 @@
 
 using namespace mu;
 using namespace muse::dock;
-using namespace mu::ui;
-using namespace mu::uicomponents;
+using namespace muse::ui;
+using namespace muse::uicomponents;
 using namespace muse::actions;
 
 static const QString SET_DOCK_OPEN_ACTION_CODE = "dock-set-open";
 static const QString TOGGLE_FLOATING_ACTION_CODE = "dock-toggle-floating";
 
-class DockPanelView::DockPanelMenuModel : public mu::uicomponents::AbstractMenuModel
+class DockPanelView::DockPanelMenuModel : public muse::uicomponents::AbstractMenuModel
 {
 public:
     DockPanelMenuModel(DockPanelView* panel)
@@ -95,7 +95,7 @@ public:
     }
 
 private:
-    MenuItem* makeMenuItem(const QString& actionCode, const TranslatableString& title)
+    uicomponents::MenuItem* makeMenuItem(const QString& actionCode, const TranslatableString& title)
     {
         MenuItem* item = new MenuItem(this);
         item->setId(actionCode);

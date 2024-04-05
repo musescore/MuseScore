@@ -27,7 +27,7 @@
 
 namespace mu::context {
 //! NOTE only for convenience
-using IUiContextResolver = ui::IUiContextResolver;
+using IUiContextResolver = muse::ui::IUiContextResolver;
 }
 
 #endif // MU_CONTEXT_IUICONTEXTRESOLVER_H

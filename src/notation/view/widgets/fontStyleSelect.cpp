@@ -25,7 +25,7 @@
 #include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 FontStyleSelect::FontStyleSelect(QWidget* parent)
     : QWidget(parent)

@@ -111,12 +111,12 @@ void ProjectModule::registerExports()
 
 void ProjectModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<ProjectUiActions>(m_actionsController));
     }
 
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");

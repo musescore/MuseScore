@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 static const QString MENU_VIEW_CONTENT_OBJECT_NAME("_MenuViewContent");
 

@@ -110,7 +110,7 @@ class Timeline : public QGraphicsView, public mu::async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
 
 public:

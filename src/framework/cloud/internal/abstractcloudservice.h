@@ -58,7 +58,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     Q_OBJECT
 
     INJECT(ICloudConfiguration, configuration)
-    INJECT(mu::ui::IUiConfiguration, uiConfig)
+    INJECT(ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(mu::network::INetworkManagerCreator, networkManagerCreator)
     INJECT(mu::IInteractive, interactive)
@@ -108,7 +108,7 @@ protected:
 
     virtual Ret downloadAccountInfo() = 0;
 
-    virtual QString logoColorForTheme(const mu::ui::ThemeInfo& theme) const;
+    virtual QString logoColorForTheme(const ui::ThemeInfo& theme) const;
 
     void setAccountInfo(const AccountInfo& info);
 

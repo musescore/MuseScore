@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_UICONFIGURATION_H
-#define MU_UI_UICONFIGURATION_H
+#ifndef MUSE_UI_UICONFIGURATION_H
+#define MUSE_UI_UICONFIGURATION_H
 
 #include "iuiconfiguration.h"
 
@@ -33,7 +33,7 @@
 #include "uiarrangement.h"
 #include "async/asyncable.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
     INJECT(IMainWindow, mainWindow)
@@ -146,4 +146,4 @@ private:
 };
 }
 
-#endif // MU_UI_UICONFIGURATION_H
+#endif // MUSE_UI_UICONFIGURATION_H

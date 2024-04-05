@@ -25,7 +25,7 @@
 #include <QApplication>
 #include <QWindow>
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 PopupViewCloseController::PopupViewCloseController(QObject* parent)
     : QObject(parent)

@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 PopupWindow_QQuickView::PopupWindow_QQuickView(QObject* parent)
     : IPopupWindow(parent)

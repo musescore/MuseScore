@@ -30,7 +30,7 @@ LyricsSettingsModel::LyricsSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setModelType(InspectorModelType::TYPE_LYRICS);
     setTitle(mu::qtrc("inspector", "Lyrics"));
-    setIcon(ui::IconCode::Code::LYRICS);
+    setIcon(muse::ui::IconCode::Code::LYRICS);
     createProperties();
 }
 

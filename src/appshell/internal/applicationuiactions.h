@@ -33,9 +33,9 @@
 #include "dockwindow/idockwindowprovider.h"
 
 namespace mu::appshell {
-class ApplicationUiActions : public ui::IUiActionsModule, public async::Asyncable
+class ApplicationUiActions : public muse::ui::IUiActionsModule, public async::Asyncable
 {
-    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(muse::ui::IMainWindow, mainWindow)
     INJECT(muse::dock::IDockWindowProvider, dockWindowProvider)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(braille::IBrailleConfiguration, brailleConfiguration)
@@ -45,12 +45,12 @@ public:
 
     void init();
 
-    const ui::UiActionList& actionsList() const override;
+    const muse::ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const ui::UiAction& act) const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& act) const override;
+    bool actionChecked(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
     static const QMap<muse::actions::ActionCode, DockName>& toggleDockActions();
@@ -58,7 +58,7 @@ public:
 private:
     void listenOpenedDocksChanged(muse::dock::IDockWindow* window);
 
-    static const ui::UiActionList m_actions;
+    static const muse::ui::UiActionList m_actions;
 
     std::shared_ptr<ApplicationActionController> m_controller;
     async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;

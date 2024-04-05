@@ -53,7 +53,7 @@
 
 using namespace mu::palette;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::accessibility;
 
 static void palette_init_qrc()
@@ -80,7 +80,7 @@ void PaletteModule::registerExports()
 
 void PaletteModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(m_paletteUiActions);
     }
@@ -130,7 +130,7 @@ void PaletteModule::registerUiTypes()
     qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
     qRegisterMetaType<EditDrumsetDialog>("EditDrumsetDialog");
 
-    ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
+    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
 void PaletteModule::onInit(const IApplication::RunMode& mode)

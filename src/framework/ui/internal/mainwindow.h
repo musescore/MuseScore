@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_MAINWINDOW_H
-#define MU_DOCK_MAINWINDOW_H
+#ifndef MUSE_DOCK_MAINWINDOW_H
+#define MUSE_DOCK_MAINWINDOW_H
 
 #include <QObject>
 #include <QWindow>
@@ -31,7 +31,7 @@
 #include "async/asyncable.h"
 #include "async/notification.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class MainWindow : public IMainWindow, public async::Asyncable
 {
 public:
@@ -58,4 +58,4 @@ private:
 };
 }
 
-#endif // MU_DOCK_MAINWINDOW_H
+#endif // MUSE_DOCK_MAINWINDOW_H

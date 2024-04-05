@@ -54,12 +54,12 @@ void MultiInstancesModule::registerExports()
 
 void MultiInstancesModule::resolveImports()
 {
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://devtools/multiinstances/info"), "MuseScore/MultiInstances/MultiInstancesDevDialog.qml");
     }
 
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<MultiInstancesUiActions>());
     }

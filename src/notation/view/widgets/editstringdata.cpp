@@ -40,7 +40,7 @@ static const int OPEN_ACCESSIBLE_TITLE_ROLE = Qt::UserRole + 1;
 
 using namespace mu::engraving;
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 //---------------------------------------------------------
 //   EditStringData

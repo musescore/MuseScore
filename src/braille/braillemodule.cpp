@@ -81,7 +81,7 @@ void BrailleModule::registerUiTypes()
 
     qmlRegisterType<BrailleModel>("MuseScore.Braille", 1, 0, "BrailleModel");
 
-    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
+    modularity::ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
 }
 
 void BrailleModule::onInit(const IApplication::RunMode& mode)

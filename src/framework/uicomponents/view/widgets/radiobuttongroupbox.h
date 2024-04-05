@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_RADIOBUTTONGROUPBOX_H
-#define MU_NOTATION_RADIOBUTTONGROUPBOX_H
+#ifndef MUSE_UICOMPONENTS_RADIOBUTTONGROUPBOX_H
+#define MUSE_UICOMPONENTS_RADIOBUTTONGROUPBOX_H
 
 #include <QGroupBox>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class RadioButtonGroupBox : public QGroupBox
 {
     Q_OBJECT
@@ -39,4 +39,4 @@ private:
 };
 }
 
-#endif
+#endif // MUSE_UICOMPONENTS_RADIOBUTTONGROUPBOX_H

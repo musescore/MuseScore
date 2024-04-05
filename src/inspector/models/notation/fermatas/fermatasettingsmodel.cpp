@@ -30,7 +30,7 @@ FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_FERMATA);
     setTitle(mu::qtrc("inspector", "Fermata"));
-    setIcon(ui::IconCode::Code::FERMATA);
+    setIcon(muse::ui::IconCode::Code::FERMATA);
     createProperties();
 }
 

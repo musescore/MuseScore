@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_WINDOWSPLATFORMTHEME_H
-#define MU_UI_WINDOWSPLATFORMTHEME_H
+#ifndef MUSE_UI_WINDOWSPLATFORMTHEME_H
+#define MUSE_UI_WINDOWSPLATFORMTHEME_H
 
 #include "internal/iplatformtheme.h"
 
 #include "types/retval.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class WindowsPlatformTheme : public IPlatformTheme
 {
 public:
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_UI_WINDOWSPLATFORMTHEME_H
+#endif // MUSE_UI_WINDOWSPLATFORMTHEME_H

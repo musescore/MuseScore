@@ -25,7 +25,7 @@
 
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 using PreferredScoreCreationMode = IProjectConfiguration::PreferredScoreCreationMode;
 
