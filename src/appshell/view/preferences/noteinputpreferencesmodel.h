@@ -34,7 +34,7 @@ class NoteInputPreferencesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
+    INJECT(muse::shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
 

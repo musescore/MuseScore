@@ -28,7 +28,7 @@
 
 using namespace mu::context;
 using namespace mu::modularity;
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 std::string ContextModule::moduleName() const
 {

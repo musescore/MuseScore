@@ -103,12 +103,12 @@ bool MenuItem::isValid() const
 
 QString MenuItem::shortcutsTitle() const
 {
-    return mu::shortcuts::sequencesToNativeText(m_action.shortcuts);
+    return shortcuts::sequencesToNativeText(m_action.shortcuts);
 }
 
 QString MenuItem::portableShortcuts() const
 {
-    return QString::fromStdString(mu::shortcuts::Shortcut::sequencesToString(m_action.shortcuts));
+    return QString::fromStdString(shortcuts::Shortcut::sequencesToString(m_action.shortcuts));
 }
 
 void MenuItem::setId(const QString& id)

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_MIDIREMOTE_H
-#define MU_SHORTCUTS_MIDIREMOTE_H
+#ifndef MUSE_SHORTCUTS_MIDIREMOTE_H
+#define MUSE_SHORTCUTS_MIDIREMOTE_H
 
 #include "async/asyncable.h"
 
@@ -38,11 +38,11 @@ class XmlReader;
 class XmlWriter;
 }
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class MidiRemote : public IMidiRemote, public async::Asyncable
 {
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IShortcutsConfiguration, configuration)
 
@@ -67,10 +67,10 @@ public:
 
 private:
     void readMidiMappings();
-    MidiControlsMapping readMidiMapping(deprecated::XmlReader& reader) const;
+    MidiControlsMapping readMidiMapping(mu::deprecated::XmlReader& reader) const;
 
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
-    void writeMidiMapping(deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
+    void writeMidiMapping(mu::deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
 
     bool needIgnoreEvent(const muse::midi::Event& event) const;
 
@@ -83,4 +83,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_MIDIREMOTE_H
+#endif // MUSE_SHORTCUTS_MIDIREMOTE_H

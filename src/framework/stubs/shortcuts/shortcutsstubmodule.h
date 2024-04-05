@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSSTUBMODULE_H
-#define MU_SHORTCUTS_SHORTCUTSSTUBMODULE_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSSTUBMODULE_H
+#define MUSE_SHORTCUTS_SHORTCUTSSTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsModule : public modularity::IModuleSetup
 {
 public:
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSSTUBMODULE_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSSTUBMODULE_H

@@ -30,10 +30,10 @@
 
 namespace mu::context {
 // common shortcuts (re declared for convenience)
-static const std::string CTX_ANY = shortcuts::CTX_ANY;
-static const std::string CTX_NOTATION_OPENED = shortcuts::CTX_PROJECT_OPENED;
-static const std::string CTX_NOTATION_FOCUSED = shortcuts::CTX_PROJECT_FOCUSED;
-static const std::string CTX_NOT_NOTATION_FOCUSED = shortcuts::CTX_NOT_PROJECT_FOCUSED;
+static const std::string CTX_ANY = muse::shortcuts::CTX_ANY;
+static const std::string CTX_NOTATION_OPENED = muse::shortcuts::CTX_PROJECT_OPENED;
+static const std::string CTX_NOTATION_FOCUSED = muse::shortcuts::CTX_PROJECT_FOCUSED;
+static const std::string CTX_NOT_NOTATION_FOCUSED = muse::shortcuts::CTX_NOT_PROJECT_FOCUSED;
 
 /// We're not [in note input on a TAB staff] (i.e. either not in note input mode, or in note input mode but not on a TAB staff)
 static const std::string CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB("notation-not-note-input-staff-tab");
@@ -42,7 +42,7 @@ static const std::string CTX_NOTATION_NOTE_INPUT_STAFF_TAB("notation-note-input-
 
 static const std::string CTX_NOTATION_TEXT_EDITING("notation-text-editing");
 
-class ShortcutContextPriority : public shortcuts::IShortcutContextPriority
+class ShortcutContextPriority : public muse::shortcuts::IShortcutContextPriority
 {
 public:
 

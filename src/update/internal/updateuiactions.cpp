@@ -32,7 +32,7 @@ using namespace muse::actions;
 const UiActionList UpdateUiActions::m_actions = {
     UiAction("check-update",
              UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Check for &update")
              )
 };

@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 using namespace mu::async;
 
 static constexpr std::string_view SHORTCUTS_TAG("Shortcuts");
@@ -80,7 +80,7 @@ void ShortcutsRegister::reload(bool onlyDef)
 
         if (!onlyDef) {
             //! NOTE The user shortcut file may change, so we need to lock it
-            mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+            mu::mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
             ok = readFromFile(m_shortcuts, userPath);
         } else {
             ok = false;
@@ -242,7 +242,7 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& 
 {
     TRACEFUNC;
 
-    deprecated::XmlReader reader(path);
+    mu::deprecated::XmlReader reader(path);
 
     reader.readNextStartElement();
     if (reader.tagName() != SHORTCUTS_TAG) {
@@ -268,7 +268,7 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path_t& 
     return reader.success();
 }
 
-Shortcut ShortcutsRegister::readShortcut(deprecated::XmlReader& reader) const
+Shortcut ShortcutsRegister::readShortcut(mu::deprecated::XmlReader& reader) const
 {
     Shortcut shortcut;
 
@@ -320,7 +320,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 
 void ShortcutsRegister::resetShortcuts()
 {
-    mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    mu::mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
     fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
 
     reload();
@@ -330,9 +330,9 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 {
     TRACEFUNC;
 
-    mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    mu::mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
-    deprecated::XmlWriter writer(path);
+    mu::deprecated::XmlWriter writer(path);
 
     writer.writeStartDocument();
     writer.writeStartElement(SHORTCUTS_TAG);
@@ -347,7 +347,7 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
     return writer.success();
 }
 
-void ShortcutsRegister::writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const
+void ShortcutsRegister::writeShortcut(mu::deprecated::XmlWriter& writer, const Shortcut& shortcut) const
 {
     writer.writeStartElement(SHORTCUT_TAG);
     writer.writeTextElement(ACTION_CODE_TAG, shortcut.action);
@@ -413,7 +413,7 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
 
 mu::Ret ShortcutsRegister::importFromFile(const io::path_t& filePath)
 {
-    mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    mu::mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
     Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
     if (!ret) {

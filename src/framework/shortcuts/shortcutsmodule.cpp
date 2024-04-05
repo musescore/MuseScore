@@ -52,7 +52,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 using namespace mu::modularity;
 using namespace muse::ui;
 
@@ -85,7 +85,7 @@ void ShortcutsModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.shortcuts", new ApiCreator<ShortcutsApi>());
+        api->regApiCreator(moduleName(), "api.shortcuts", new ApiCreator<api::ShortcutsApi>());
     }
 }
 
@@ -122,7 +122,7 @@ void ShortcutsModule::onInit(const IApplication::RunMode& mode)
     m_midiRemote->init();
 
 #ifdef MUE_BUILD_DIAGNOSTICS_MODULE
-    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("shortcutsUserAppDataPath", m_configuration->shortcutsUserAppDataPath());
         pr->reg("shortcutsAppDataPath", m_configuration->shortcutsAppDataPath());

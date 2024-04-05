@@ -21,7 +21,7 @@
  */
 #include "shortcutsregisterstub.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 const ShortcutList& ShortcutsRegisterStub::shortcuts() const
 {

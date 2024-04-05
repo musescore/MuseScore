@@ -21,7 +21,7 @@
  */
 #include "midiremotestub.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 const MidiMappingList& MidiRemoteStub::midiMappings() const
 {

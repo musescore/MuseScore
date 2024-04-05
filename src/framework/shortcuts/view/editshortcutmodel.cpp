@@ -28,7 +28,7 @@
 #include "shortcutstypes.h"
 #include "log.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 EditShortcutModel::EditShortcutModel(QObject* parent)
     : QObject(parent)

@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSCONTROLLERSTUB_H
-#define MU_SHORTCUTS_SHORTCUTSCONTROLLERSTUB_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSCONTROLLERSTUB_H
+#define MUSE_SHORTCUTS_SHORTCUTSCONTROLLERSTUB_H
 
 #include "shortcuts/ishortcutscontroller.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsControllerStub : public IShortcutsController
 {
 public:
@@ -33,4 +33,4 @@ public:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSCONTROLLERSTUB_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSCONTROLLERSTUB_H

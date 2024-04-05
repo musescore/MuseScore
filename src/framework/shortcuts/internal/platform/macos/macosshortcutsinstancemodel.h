@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
-#define MU_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
+#ifndef MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
+#define MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
 
 #include <QObject>
 
 #include "../../shortcutsinstancemodel.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class MacOSShortcutsInstanceModel : public ShortcutsInstanceModel
 {
     Q_OBJECT
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H
+#endif // MUSE_SHORTCUTS_MACOSSHORTCUTSINSTANCEMODEL_H

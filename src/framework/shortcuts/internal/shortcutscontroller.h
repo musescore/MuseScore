@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
-#define MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H
+#define MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H
 
 #include "../ishortcutscontroller.h"
 
@@ -33,7 +33,7 @@
 #include "ishortcutsregister.h"
 #include "shortcutcontext.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsController : public IShortcutsController, public async::Asyncable
 {
     INJECT(IShortcutsRegister, shortcutsRegister)
@@ -58,4 +58,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H

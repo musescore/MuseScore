@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
-#define MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
+#ifndef MUSE_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
+#define MUSE_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
 #include "types/retval.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class IShortcutsConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutsConfiguration)
@@ -47,4 +47,4 @@ public:
 };
 }
 
-#endif // MU_SHORTCUTS_ISHORTCUTSCONFIGURATION_H
+#endif // MUSE_SHORTCUTS_ISHORTCUTSCONFIGURATION_H

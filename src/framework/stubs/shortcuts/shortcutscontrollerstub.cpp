@@ -21,7 +21,7 @@
  */
 #include "shortcutscontrollerstub.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 void ShortcutsControllerStub::activate(const std::string&)
 {

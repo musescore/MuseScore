@@ -32,37 +32,37 @@ using namespace mu::diagnostics;
 const UiActionList DiagnosticsActions::m_actions = {
     UiAction("diagnostic-save-diagnostic-files",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Save diagnostic files")
              ),
     UiAction("diagnostic-show-paths",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show p&aths…")
              ),
     UiAction("diagnostic-show-profiler",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show pr&ofiler…")
              ),
     UiAction("diagnostic-show-navigation-tree",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show &navigation tree…")
              ),
     UiAction("diagnostic-show-accessible-tree",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Show &accessible tree…")
              ),
     UiAction("diagnostic-accessible-tree-dump",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString::untranslatable("Accessible &dump")
              ),
     UiAction("diagnostic-show-engraving-elements",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Engraving &elements")
              )
 };

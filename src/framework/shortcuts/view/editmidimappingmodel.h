@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
-#define MU_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
+#ifndef MUSE_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
+#define MUSE_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
 
 #include <QObject>
 
@@ -30,7 +30,7 @@
 #include "midi/imidiinport.h"
 #include "imidiremote.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class EditMidiMappingModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -59,4 +59,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_EDITMIDIMAPPINGMODEL_H
+#endif // MUSE_SHORTCUTS_EDITMIDIMAPPINGMODEL_H

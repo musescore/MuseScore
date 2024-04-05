@@ -35,7 +35,7 @@ class TextInputFieldModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(mu::shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
@@ -47,9 +47,9 @@ public:
 
 private:
     void loadShortcuts();
-    mu::shortcuts::Shortcut shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const;
+    shortcuts::Shortcut shortcut(Qt::Key key, Qt::KeyboardModifiers modifiers) const;
 
-    mu::shortcuts::ShortcutList m_notAllowedForOverrideShortcuts;
+    shortcuts::ShortcutList m_notAllowedForOverrideShortcuts;
 };
 }
 

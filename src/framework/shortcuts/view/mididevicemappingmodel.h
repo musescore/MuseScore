@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
-#define MU_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
+#ifndef MUSE_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
+#define MUSE_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
 
 #include <QAbstractListModel>
 #include <QItemSelection>
@@ -37,7 +37,7 @@
 #include "ui/iuiactionsregister.h"
 #include "ui/uitypes.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
@@ -98,4 +98,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H
+#endif // MUSE_SHORTCUTS_MIDIDEVICEMAPPINGMODEL_H

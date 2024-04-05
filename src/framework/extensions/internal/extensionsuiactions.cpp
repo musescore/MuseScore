@@ -34,7 +34,7 @@ using namespace muse::extensions;
 static UiAction MANAGE_ACTION = UiAction(
     "manage-plugins",
     muse::ui::UiCtxAny,
-    mu::shortcuts::CTX_ANY,
+    muse::shortcuts::CTX_ANY,
     mu::TranslatableString("action", "&Manage plugins…"),
     mu::TranslatableString("action", "Manage plugins…")
     );
@@ -47,8 +47,8 @@ const muse::ui::UiActionList& ExtensionsUiActions::actionsList() const
         for (const Action& a : m.actions) {
             UiAction action;
             action.code = makeUriQuery(m.uri, a.code).toString();
-            action.uiCtx = m.requiresProject ? muse::ui::UiCtxProjectOpened : muse::ui::UiCtxAny;
-            action.scCtx = m.requiresProject ? mu::shortcuts::CTX_PROJECT_OPENED : mu::shortcuts::CTX_ANY;
+            action.uiCtx = m.requiresProject ? ui::UiCtxProjectOpened : ui::UiCtxAny;
+            action.scCtx = m.requiresProject ? shortcuts::CTX_PROJECT_OPENED : shortcuts::CTX_ANY;
             action.description = TranslatableString("extensions", "Run plugin %1 (%2)").arg(m.title, a.title);
             action.title = action.description;
 
