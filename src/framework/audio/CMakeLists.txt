@@ -73,8 +73,6 @@ elseif(OS_IS_WASM)
     )
 endif()
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth fluidsynth)
-
 set(MODULE_SRC
 
     # Common public
@@ -228,7 +226,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthresolver.h
     )
 
-set(FLUIDSYNTH_DIR ${PROJECT_SOURCE_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth fluidsynth)
+set(FLUIDSYNTH_DIR ${CMAKE_CURRENT_LIST_DIR}/thirdparty/fluidsynth/fluidsynth-2.1.4)
 set (FLUIDSYNTH_INC
     ${FLUIDSYNTH_DIR}/include
     ${FLUIDSYNTH_DIR}/src
@@ -317,7 +316,7 @@ set(MODULE_QRC audio.qrc)
 set(MODULE_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 if (MUSE_MODULE_AUDIO_TESTS)
     add_subdirectory(tests)
