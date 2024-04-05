@@ -32,6 +32,7 @@
 #include "measure.h"
 #include "navigate.h"
 #include "note.h"
+#include "ottava.h"
 #include "page.h"
 #include "part.h"
 #include "range.h"
@@ -50,7 +51,6 @@
 #include "timesig.h"
 #include "tuplet.h"
 #include "tupletmap.h"
-#include "ottava.h"
 #include "undo.h"
 #include "utils.h"
 
@@ -3091,6 +3091,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                   //
                   // remove clef, time and key signatures
                   //
+                  bool headerKeySig = false;
                   if (moveSignaturesClef && mi) {
                         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                               Measure* pm = mi->prevMeasure();
@@ -3117,6 +3118,8 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                           KeySig* ks = toKeySig(e);
                                           ksl.push_back(ks);
                                           ee = e;
+                                          if (s->header())
+                                                headerKeySig = true;
                                           }
                                     else if (e->isTimeSig()) {
                                           TimeSig* ts = toTimeSig(e);
@@ -3130,8 +3133,9 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                                           }
                                     if (ee) {
                                           undo(new RemoveElement(ee));
-                                          if (s->empty())
+                                          if (s->empty() && s->isTimeSigType()) {
                                                 undoRemoveElement(s);
+                                                }
                                           }
                                     }
                               }
@@ -3150,12 +3154,15 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                   for (KeySig* ks : ksl) {
                         KeySig* nks = new KeySig(*ks);
                         Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, Fraction(0,1));
+                        if (headerKeySig || m->tick().isZero())
+                              s->setHeader(true);
                         nks->setParent(s);
                         undoAddElement(nks);
                         }
                   for (Clef* clef : cl) {
                         Clef* nClef = new Clef(*clef);
                         Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0,1));
+                        s->setHeader(true);
                         nClef->setParent(s);
                         undoAddElement(nClef);
                         }
