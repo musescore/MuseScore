@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
-#define MU_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
+#ifndef MUSE_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
+#define MUSE_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
 
 #include <QAbstractListModel>
 #include <QList>
@@ -31,7 +31,7 @@
 #include "../iautobot.h"
 #include "async/asyncable.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class AutobotScriptsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
@@ -96,4 +96,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_AUTOBOTSCRIPTSMODEL_H
+#endif // MUSE_AUTOBOT_AUTOBOTSCRIPTSMODEL_H

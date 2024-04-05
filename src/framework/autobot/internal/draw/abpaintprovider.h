@@ -19,22 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABPAINTPROVIDER_H
-#define MU_AUTOBOT_ABPAINTPROVIDER_H
+#ifndef MUSE_AUTOBOT_ABPAINTPROVIDER_H
+#define MUSE_AUTOBOT_ABPAINTPROVIDER_H
 
 #include <memory>
 
 #include "draw/bufferedpaintprovider.h"
 
-namespace mu::autobot {
-class AbPaintProvider : public muse::draw::BufferedPaintProvider
+namespace muse::autobot {
+class AbPaintProvider : public draw::BufferedPaintProvider
 {
 public:
 
     static const std::shared_ptr<AbPaintProvider>& instance();
 
     void beginTarget(const std::string& name) override;
-    void beforeEndTargetHook(muse::draw::Painter* painter) override;
+    void beforeEndTargetHook(draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
     const muse::draw::DrawDataPtr& notationViewDrawData() const;
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_ABPAINTPROVIDER_H
+#endif // MUSE_AUTOBOT_ABPAINTPROVIDER_H

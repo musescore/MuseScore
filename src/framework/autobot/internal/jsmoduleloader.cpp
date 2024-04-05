@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 JsModuleLoader::JsModuleLoader(QObject* parent)
     : QObject(parent)

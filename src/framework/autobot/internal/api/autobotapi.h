@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_AUTOBOTAPI_H
-#define MU_API_AUTOBOTAPI_H
+#ifndef MUSE_AUTOBOT_API_AUTOBOTAPI_H
+#define MUSE_AUTOBOT_API_AUTOBOTAPI_H
 
 #include <QJSValue>
 
@@ -35,20 +35,20 @@
 #include "io/ifilesystem.h"
 #include "ui/imainwindow.h"
 
-namespace mu::api {
-class AutobotApi : public ApiObject, public async::Asyncable
+namespace muse::autobot::api {
+class AutobotApi : public mu::api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(autobot::IAutobot, autobot)
     INJECT(autobot::IAutobotConfiguration, autobotConfiguration)
-    INJECT(project::IProjectFilesController, projectFilesController)
-    INJECT(IInteractive, interactive)
-    INJECT(io::IFileSystem, fileSystem)
-    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(mu::project::IProjectFilesController, projectFilesController)
+    INJECT(mu::IInteractive, interactive)
+    INJECT(mu::io::IFileSystem, fileSystem)
+    INJECT(mu::ui::IMainWindow, mainWindow)
 
 public:
-    explicit AutobotApi(IApiEngine* e);
+    explicit AutobotApi(mu::api::IApiEngine* e);
 
     Q_INVOKABLE void setInterval(int msec);
     Q_INVOKABLE void runTestCase(const QJSValue& testCase);
@@ -77,4 +77,4 @@ public:
 };
 }
 
-#endif // MU_API_AUTOBOTAPI_H
+#endif // MUSE_AUTOBOT_API_AUTOBOTAPI_H

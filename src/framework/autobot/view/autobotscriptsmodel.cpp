@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 static QString typeToString(ScriptType t)
 {

@@ -32,10 +32,10 @@
 
 #include "log.h"
 
-using namespace mu::api;
-using namespace mu::autobot;
+using namespace muse::autobot::api;
+using namespace muse::autobot;
 
-AutobotApi::AutobotApi(IApiEngine* e)
+AutobotApi::AutobotApi(mu::api::IApiEngine* e)
     : ApiObject(e)
 {
 }

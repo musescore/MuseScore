@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_SCRIPTENGINE_H
-#define MU_AUTOBOT_SCRIPTENGINE_H
+#ifndef MUSE_AUTOBOT_SCRIPTENGINE_H
+#define MUSE_AUTOBOT_SCRIPTENGINE_H
 
 #include <QString>
 #include <QJSValue>
@@ -35,9 +35,9 @@
 #include "api/iapiengine.h"
 #include "api/scriptapi.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class JsModuleLoader;
-class ScriptEngine : public api::IApiEngine
+class ScriptEngine : public mu::api::IApiEngine
 {
     INJECT(io::IFileSystem, fileSystem)
 public:
@@ -97,4 +97,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_SCRIPTENGINE_H
+#endif // MUSE_AUTOBOT_SCRIPTENGINE_H

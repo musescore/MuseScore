@@ -44,7 +44,7 @@
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 using namespace mu::api;
 
 std::string AutobotModule::moduleName() const
@@ -67,21 +67,21 @@ void AutobotModule::registerExports()
 
 void AutobotModule::resolveImports()
 {
-    auto ir = modularity::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = modularity::ioc()->resolve<mu::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "MuseScore/Autobot/BatchTestsDialog.qml");
         ir->registerQmlUri(Uri("musescore://autobot/scripts"), "MuseScore/Autobot/ScriptsDialog.qml");
         ir->registerQmlUri(Uri("musescore://autobot/selectfile"), "MuseScore/Autobot/AutobotSelectFileDialog.qml");
     }
 
-    auto ar = modularity::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = modularity::ioc()->resolve<mu::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<AutobotActions>());
     }
 
     auto api = modularity::ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator("autobot", "api.autobot", new ApiCreator<AutobotApi>());
+        api->regApiCreator("autobot", "api.autobot", new ApiCreator<api::AutobotApi>());
         api->regApiCreator("autobot", "api.context", new ApiCreator<ContextApi>());
         api->regApiCreator("diagnostics", "api.diagnostics", new ApiCreator<DiagnosticsApi>());
     }
@@ -103,7 +103,7 @@ void AutobotModule::onInit(const IApplication::RunMode& mode)
     m_actionsController->init();
 
     //! --- Diagnostics ---
-    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = modularity::ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         for (const io::path_t& p : m_configuration->scriptsDirPaths()) {
             pr->reg("autobotScriptsPath", p);

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_DIAGNOSTICSAPI_H
-#define MU_API_DIAGNOSTICSAPI_H
+#ifndef MUSE_AUTOBOT_API_DIAGNOSTICSAPI_H
+#define MUSE_AUTOBOT_API_DIAGNOSTICSAPI_H
 
 #include <QString>
 
@@ -47,4 +47,4 @@ public:
 };
 }
 
-#endif // MU_API_DIAGNOSTICSAPI_H
+#endif // MUSE_AUTOBOT_API_DIAGNOSTICSAPI_H

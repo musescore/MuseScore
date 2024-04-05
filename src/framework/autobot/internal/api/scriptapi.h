@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_SCRIPTAPI_H
-#define MU_API_SCRIPTAPI_H
+#ifndef MUSE_AUTOBOT_API_SCRIPTAPI_H
+#define MUSE_AUTOBOT_API_SCRIPTAPI_H
 
 #include <QObject>
 #include <QMap>
@@ -29,7 +29,7 @@
 #include "api/iapiregister.h"
 #include "api/iapiengine.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class ScriptApi : public QObject
 {
     Q_OBJECT
@@ -46,10 +46,10 @@ class ScriptApi : public QObject
     Q_PROPERTY(QJSValue process READ process CONSTANT)
     Q_PROPERTY(QJSValue filesystem READ filesystem CONSTANT)
 
-    INJECT(api::IApiRegister, apiRegister)
+    INJECT(mu::api::IApiRegister, apiRegister)
 
 public:
-    ScriptApi(api::IApiEngine* engine, QObject* parent);
+    ScriptApi(mu::api::IApiEngine* engine, QObject* parent);
 
     QJSValue log() const { return api("api.log"); }
     QJSValue autobot() const { return api("api.autobot"); }
@@ -70,13 +70,13 @@ private:
 
     struct Api
     {
-        api::ApiObject* obj = nullptr;
+        mu::api::ApiObject* obj = nullptr;
         QJSValue jsval;
     };
 
-    api::IApiEngine* m_engine = nullptr;
+    mu::api::IApiEngine* m_engine = nullptr;
     mutable QMap<std::string, Api> m_apis;
 };
 }
 
-#endif // MU_API_SCRIPTAPI_H
+#endif // MUSE_AUTOBOT_API_SCRIPTAPI_H

@@ -26,7 +26,7 @@
 #include "io/path.h"
 #include "log.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 inline QTextStream& operator<<(QTextStream& s, const std::string& v)
 {

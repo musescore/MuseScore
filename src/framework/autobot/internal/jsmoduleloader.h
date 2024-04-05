@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_JSMODULELOADER_H
-#define MU_AUTOBOT_JSMODULELOADER_H
+#ifndef MUSE_AUTOBOT_JSMODULELOADER_H
+#define MUSE_AUTOBOT_JSMODULELOADER_H
 
 #include <QObject>
 #include <QJSValue>
@@ -30,7 +30,7 @@
 #include "../iautobotconfiguration.h"
 #include "io/ifilesystem.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class ScriptEngine;
 class JsModuleLoader : public QObject
 {
@@ -65,4 +65,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_JSMODULELOADER_H
+#endif // MUSE_AUTOBOT_JSMODULELOADER_H

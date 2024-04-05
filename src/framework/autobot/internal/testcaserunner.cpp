@@ -28,7 +28,7 @@
 #include "scriptengine.h"
 
 using namespace mu;
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 SpeedMode TestCaseRunner::speedMode() const
 {

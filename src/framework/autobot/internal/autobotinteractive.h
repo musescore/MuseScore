@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_AUTOBOTINTERACTIVE_H
-#define MU_AUTOBOT_AUTOBOTINTERACTIVE_H
+#ifndef MUSE_AUTOBOT_AUTOBOTINTERACTIVE_H
+#define MUSE_AUTOBOT_AUTOBOTINTERACTIVE_H
 
 #include <memory>
 
 #include "iinteractive.h"
 
-namespace mu::autobot {
-class AutobotInteractive : public IInteractive
+namespace muse::autobot {
+class AutobotInteractive : public mu::IInteractive
 {
 public:
     AutobotInteractive() = default;
 
-    void setRealInteractive(std::shared_ptr<IInteractive> real);
-    std::shared_ptr<IInteractive> realInteractive() const;
+    void setRealInteractive(std::shared_ptr<mu::IInteractive> real);
+    std::shared_ptr<mu::IInteractive> realInteractive() const;
 
     Result question(const std::string& title, const std::string& text, const Buttons& buttons, const Button& def = Button::NoButton,
                     const Options& options = {}) const override;
@@ -122,4 +122,4 @@ private:
 using AutobotInteractivePtr = std::shared_ptr<AutobotInteractive>;
 }
 
-#endif // MU_AUTOBOT_AUTOBOTINTERACTIVE_H
+#endif // MUSE_AUTOBOT_AUTOBOTINTERACTIVE_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_IAUTOBOT_H
-#define MU_AUTOBOT_IAUTOBOT_H
+#ifndef MUSE_AUTOBOT_IAUTOBOT_H
+#define MUSE_AUTOBOT_IAUTOBOT_H
 
 #include <vector>
 #include <QJSValue>
@@ -32,7 +32,7 @@
 #include "itestcasecontext.h"
 #include "internal/autobotinteractive.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class IAutobot : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAutobot)
@@ -93,4 +93,4 @@ public:
 };
 }
 
-#endif // MU_AUTOBOT_IAUTOBOT_H
+#endif // MUSE_AUTOBOT_IAUTOBOT_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ITESTCASECONTEXT_H
-#define MU_AUTOBOT_ITESTCASECONTEXT_H
+#ifndef MUSE_AUTOBOT_ITESTCASECONTEXT_H
+#define MUSE_AUTOBOT_ITESTCASECONTEXT_H
 
 #include <memory>
 #include <vector>
@@ -28,7 +28,7 @@
 #include <QJSValue>
 #include <QString>
 
-namespace mu::autobot {
+namespace muse::autobot {
 class ITestCaseContext
 {
 public:
@@ -61,4 +61,4 @@ public:
 using ITestCaseContextPtr = std::shared_ptr<ITestCaseContext>;
 }
 
-#endif // MU_AUTOBOT_ITESTCASECONTEXT_H
+#endif // MUSE_AUTOBOT_ITESTCASECONTEXT_H

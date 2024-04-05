@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_AUTOBOT_H
-#define MU_AUTOBOT_AUTOBOT_H
+#ifndef MUSE_AUTOBOT_AUTOBOT_H
+#define MUSE_AUTOBOT_AUTOBOT_H
 
 #include <QEventLoop>
 
@@ -41,16 +41,16 @@
 #include "testcasereport.h"
 #include "autobotinteractive.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
     INJECT(IApplication, application)
     INJECT(IAutobotConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(ui::INavigationController, navigation)
-    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(IInteractive, interactive)
-    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(mu::ui::INavigationController, navigation)
+    INJECT(mu::shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(mu::IInteractive, interactive)
+    INJECT(mu::ui::IMainWindow, mainWindow)
 
 public:
     Autobot() = default;
@@ -108,4 +108,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_AUTOBOT_H
+#endif // MUSE_AUTOBOT_AUTOBOT_H

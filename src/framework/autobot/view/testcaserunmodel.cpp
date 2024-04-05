@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 TestCaseRunModel::TestCaseRunModel(QObject* parent)
     : QObject(parent)
