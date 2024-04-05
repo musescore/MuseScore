@@ -23,7 +23,7 @@
 
 #include "types/val.h"
 
-using namespace mu::workspace;
+using namespace muse::workspace;
 using namespace muse::actions;
 
 void WorkspaceActionController::init()

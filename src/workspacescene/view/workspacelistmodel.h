@@ -31,12 +31,12 @@
 
 #include "global/async/asyncable.h"
 
-namespace mu::workspace {
+namespace mu::workspacescene {
 class WorkspaceListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    Inject<IWorkspaceManager> workspacesManager;
+    Inject<muse::workspace::IWorkspaceManager> workspacesManager;
     Inject<IInteractive> interactive;
 
     Q_PROPERTY(QVariant selectedWorkspace READ selectedWorkspace NOTIFY selectedWorkspaceChanged)
@@ -60,9 +60,9 @@ signals:
     void selectedWorkspaceChanged(QVariant selectedWorkspace);
 
 private:
-    void setSelectedWorkspace(IWorkspacePtr workspace);
+    void setSelectedWorkspace(muse::workspace::IWorkspacePtr workspace);
 
-    QVariantMap workspaceToObject(IWorkspacePtr workspace) const;
+    QVariantMap workspaceToObject(muse::workspace::IWorkspacePtr workspace) const;
     bool isIndexValid(int index) const;
 
     enum Roles {
@@ -71,8 +71,8 @@ private:
         RoleIsRemovable
     };
 
-    QList<IWorkspacePtr> m_workspaces;
-    IWorkspacePtr m_selectedWorkspace;
+    QList<muse::workspace::IWorkspacePtr> m_workspaces;
+    muse::workspace::IWorkspacePtr m_selectedWorkspace;
 };
 }
 

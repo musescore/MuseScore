@@ -63,7 +63,7 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
     INJECT(mu::ui::IUiConfiguration, uiConfiguration)
-    INJECT(mu::workspace::IWorkspaceManager, workspaceManager)
+    INJECT(muse::workspace::IWorkspaceManager, workspaceManager)
     INJECT(IDockWindowProvider, dockWindowProvider)
 
 public:

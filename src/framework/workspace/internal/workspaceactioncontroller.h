@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
-#define MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
+#ifndef MUSE_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
+#define MUSE_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
@@ -28,12 +28,12 @@
 #include "iworkspaceconfiguration.h"
 #include "iinteractive.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspaceActionController : public muse::actions::Actionable
 {
-    INJECT(muse::actions::IActionsDispatcher, dispatcher)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(mu::IInteractive, interactive)
     INJECT(IWorkspaceConfiguration, configuration)
-    INJECT(IInteractive, interactive)
 
 public:
     void init();
@@ -46,4 +46,4 @@ private:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACEACTIONCONTROLLER_H
+#endif // MUSE_WORKSPACE_WORKSPACEACTIONCONTROLLER_H

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACESDATAPROVIDER_H
-#define MU_WORKSPACE_WORKSPACESDATAPROVIDER_H
+#ifndef MUSE_WORKSPACE_WORKSPACESDATAPROVIDER_H
+#define MUSE_WORKSPACE_WORKSPACESDATAPROVIDER_H
 
 #include <map>
 
@@ -30,7 +30,7 @@
 #include "iworkspacemanager.h"
 #include "async/asyncable.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspacesDataProvider : public IWorkspacesDataProvider, public async::Asyncable
 {
     INJECT(IWorkspaceManager, manager)
@@ -52,4 +52,4 @@ private:
     async::Notification m_workspaceChanged;
 };
 }
-#endif // MU_WORKSPACE_WORKSPACEPROVIDER_H
+#endif // MUSE_WORKSPACE_WORKSPACEPROVIDER_H

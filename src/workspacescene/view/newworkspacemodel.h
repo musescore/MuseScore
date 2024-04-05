@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_WORKSPACE_NEWWORKSPACEMODEL_H
-#define MU_WORKSPACE_NEWWORKSPACEMODEL_H
+#ifndef MU_WORKSPACESCENE_NEWWORKSPACEMODEL_H
+#define MU_WORKSPACESCENE_NEWWORKSPACEMODEL_H
 
 #include <QObject>
 #include <QVariant>
 
-namespace mu::workspace {
+namespace mu::workspacescene {
 class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
@@ -85,4 +85,4 @@ private:
 };
 }
 
-#endif // MU_WORKSPACE_NEWWORKSPACEMODEL_H
+#endif // MU_WORKSPACESCENE_NEWWORKSPACEMODEL_H

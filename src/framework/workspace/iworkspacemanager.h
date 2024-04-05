@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_IWORKSPACEMANAGER_H
-#define MU_WORKSPACE_IWORKSPACEMANAGER_H
+#ifndef MUSE_WORKSPACE_IWORKSPACEMANAGER_H
+#define MUSE_WORKSPACE_IWORKSPACEMANAGER_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -28,7 +28,7 @@
 #include "types/retval.h"
 #include "async/notification.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class IWorkspaceManager : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceManager)
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACEMANAGER_H
+#endif // MUSE_WORKSPACE_IWORKSPACEMANAGER_H

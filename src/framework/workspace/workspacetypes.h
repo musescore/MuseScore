@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACETYPES_H
-#define MU_WORKSPACE_WORKSPACETYPES_H
+#ifndef MUSE_WORKSPACE_WORKSPACETYPES_H
+#define MUSE_WORKSPACE_WORKSPACETYPES_H
 
-namespace mu::workspace {
+namespace muse::workspace {
 static const std::string DEFAULT_WORKSPACE_NAME("Default");
 
 using DataKey = const char*;
 inline constexpr DataKey WS_Undefined("");
 }
 
-#endif // MU_WORKSPACE_WORKSPACETYPES_H
+#endif // MUSE_WORKSPACE_WORKSPACETYPES_H

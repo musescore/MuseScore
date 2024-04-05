@@ -338,8 +338,8 @@ int main(int argc, char** argv)
     app.addModule(new mu::print::PrintModule());
     app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::update::UpdateModule());
-    app.addModule(new mu::workspace::WorkspaceModule());
-    app.addModule(new mu::workspace::WorkspaceSceneModule());
+    app.addModule(new muse::workspace::WorkspaceModule());
+    app.addModule(new mu::workspacescene::WorkspaceSceneModule());
 
 #ifdef Q_OS_WASM
     app.addModule(new mu::wasmtest::WasmTestModule());

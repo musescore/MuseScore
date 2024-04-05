@@ -25,7 +25,7 @@
 #include "workspace/workspacetypes.h"
 
 namespace mu::palette {
-inline const workspace::DataKey WS_Palettes("palettes");
+inline const muse::workspace::DataKey WS_Palettes("palettes");
 }
 
 #endif // MU_PALETTE_PALETTETYPES_H

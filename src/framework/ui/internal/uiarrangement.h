@@ -37,7 +37,7 @@
 namespace mu::ui {
 class UiArrangement : public async::Asyncable
 {
-    INJECT(workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(muse::workspace::IWorkspacesDataProvider, workspacesDataProvider)
 public:
     UiArrangement() = default;
 
@@ -59,8 +59,8 @@ private:
 
     using Notifications = QMap<QString, async::Notification>;
 
-    void updateData(workspace::DataKey key, QJsonObject& obj, Notifications& notifications) const;
-    void saveData(workspace::DataKey key, const QJsonObject& obj);
+    void updateData(muse::workspace::DataKey key, QJsonObject& obj, Notifications& notifications) const;
+    void saveData(muse::workspace::DataKey key, const QJsonObject& obj);
 
     QJsonObject m_settings;
     mutable Notifications m_valuesNotifications;

@@ -21,7 +21,7 @@
  */
 #include "workspacestub.h"
 
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 std::string WorkspaceStub::name() const
 {

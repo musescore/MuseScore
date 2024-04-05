@@ -27,7 +27,8 @@
 
 #include "log.h"
 
-using namespace mu::workspace;
+using namespace mu::workspacescene;
+using namespace muse::workspace;
 
 static const QString NAME_KEY("name");
 static const QString IS_SELECTED_KEY("isSelected");

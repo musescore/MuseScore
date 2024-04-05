@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_IWORKSPACESDATAPROVIDER_H
-#define MU_WORKSPACE_IWORKSPACESDATAPROVIDER_H
+#ifndef MUSE_WORKSPACE_IWORKSPACESDATAPROVIDER_H
+#define MUSE_WORKSPACE_IWORKSPACESDATAPROVIDER_H
 
 #include <QByteArray>
 
@@ -29,7 +29,7 @@
 #include "types/retval.h"
 #include "async/notification.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class IWorkspacesDataProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspacesDataProvider)
@@ -44,4 +44,4 @@ public:
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACESDATAPROVIDER_H
+#endif // MUSE_WORKSPACE_IWORKSPACESDATAPROVIDER_H

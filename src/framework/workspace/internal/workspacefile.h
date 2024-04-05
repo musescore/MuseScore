@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEFILE_H
-#define MU_WORKSPACE_WORKSPACEFILE_H
+#ifndef MUSE_WORKSPACE_WORKSPACEFILE_H
+#define MUSE_WORKSPACE_WORKSPACEFILE_H
 
 #include <string>
 #include <map>
@@ -33,7 +33,7 @@
 class MQZipReader;
 class MQZipWriter;
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspaceFile
 {
     INJECT(io::IFileSystem, fileSystem)
@@ -72,4 +72,4 @@ private:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACEFILE_H
+#endif // MUSE_WORKSPACE_WORKSPACEFILE_H

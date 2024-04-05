@@ -35,7 +35,7 @@
 
 #include "log.h"
 
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 WorkspaceFile::WorkspaceFile(const io::path_t& filePath)
     : m_filePath(filePath)

@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::workspace;
+using namespace mu::workspacescene;
 
 NewWorkspaceModel::NewWorkspaceModel(QObject* parent)
     : QObject(parent)

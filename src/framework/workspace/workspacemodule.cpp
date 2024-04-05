@@ -37,7 +37,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 #endif
 
-using namespace mu::workspace;
+using namespace muse::workspace;
 using namespace mu::modularity;
 
 std::string WorkspaceModule::moduleName() const
@@ -59,7 +59,7 @@ void WorkspaceModule::registerExports()
 
 void WorkspaceModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<mu::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<WorkspaceUiActions>(m_actionController));
     }
@@ -77,7 +77,7 @@ void WorkspaceModule::onInit(const IApplication::RunMode& mode)
     m_actionController->init();
 
 #ifdef MUE_BUILD_DIAGNOSTICS_MODULE
-    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         io::paths_t paths = m_configuration->workspacePaths();
         for (const io::path_t& p : paths) {

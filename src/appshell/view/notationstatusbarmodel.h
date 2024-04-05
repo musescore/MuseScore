@@ -48,7 +48,7 @@ class NotationStatusBarModel : public QObject, public async::Asyncable, public m
     INJECT(context::IGlobalContext, context)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(ui::IUiActionsRegister, actionsRegister)
-    INJECT(workspace::IWorkspaceConfiguration, workspaceConfiguration)
+    INJECT(muse::workspace::IWorkspaceConfiguration, workspaceConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(IGlobalConfiguration, globalConfiguration)
 

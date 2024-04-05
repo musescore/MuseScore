@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEMODULE_H
-#define MU_WORKSPACE_WORKSPACEMODULE_H
+#ifndef MUSE_WORKSPACE_WORKSPACEMODULE_H
+#define MUSE_WORKSPACE_WORKSPACEMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspaceManager;
 class WorkspaceConfiguration;
 class WorkspaceActionController;
@@ -49,4 +49,4 @@ private:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACEMODULE_H
+#endif // MUSE_WORKSPACE_WORKSPACEMODULE_H

@@ -29,7 +29,7 @@ using namespace mu::appshell;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace mu::project;
-using namespace mu::workspace;
+using namespace muse::workspace;
 using namespace muse::actions;
 using namespace muse::extensions;
 
