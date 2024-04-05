@@ -87,8 +87,8 @@ void Autobot::affectOnServices()
         modularity::ioc()->registerExport<IInteractive>("autobot", m_autobotInteractive);
     }
 
-    m_affectedServiceState.fontDisabledMerging = draw::Font::g_disableFontMerging;
-    draw::Font::g_disableFontMerging = true;
+    m_affectedServiceState.fontDisabledMerging = muse::draw::Font::g_disableFontMerging;
+    muse::draw::Font::g_disableFontMerging = true;
 }
 
 void Autobot::restoreAffectOnServices()
@@ -103,7 +103,7 @@ void Autobot::restoreAffectOnServices()
         modularity::ioc()->registerExport<IInteractive>("autobot", realInteractive);
     }
 
-    draw::Font::g_disableFontMerging = m_affectedServiceState.fontDisabledMerging;
+    muse::draw::Font::g_disableFontMerging = m_affectedServiceState.fontDisabledMerging;
 }
 
 void Autobot::loadContext(ITestCaseContextPtr ctx, const io::path_t& context, const std::string& contextVal, ScriptEngine* e)

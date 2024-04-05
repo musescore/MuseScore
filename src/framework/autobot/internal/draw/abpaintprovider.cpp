@@ -42,7 +42,7 @@ void AbPaintProvider::beginTarget(const std::string& name)
     BufferedPaintProvider::beginTarget(name);
 }
 
-void AbPaintProvider::beforeEndTargetHook(draw::Painter* painter)
+void AbPaintProvider::beforeEndTargetHook(muse::draw::Painter* painter)
 {
     IF_ASSERT_FAILED(painter) {
         return;
@@ -52,7 +52,7 @@ void AbPaintProvider::beforeEndTargetHook(draw::Painter* painter)
         return;
     }
 
-    draw::IPaintProviderPtr provider = painter->provider();
+    muse::draw::IPaintProviderPtr provider = painter->provider();
 
     if (m_diff.dataRemoved && !m_diff.dataRemoved->empty()) {
         paintData(provider, m_diff.dataRemoved, REMOVED_COLOR);
@@ -63,7 +63,7 @@ void AbPaintProvider::beforeEndTargetHook(draw::Painter* painter)
     }
 }
 
-void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::DrawDataPtr& data, const QColor& overcolor)
+void AbPaintProvider::paintData(muse::draw::IPaintProviderPtr provider, const muse::draw::DrawDataPtr& data, const QColor& overcolor)
 {
     using namespace muse::draw;
 
@@ -127,7 +127,7 @@ const muse::draw::DrawDataPtr& AbPaintProvider::notationViewDrawData() const
     return m_notationViewDrawData;
 }
 
-void AbPaintProvider::setDiff(const draw::Diff& diff)
+void AbPaintProvider::setDiff(const muse::draw::Diff& diff)
 {
     m_diff = diff;
 }

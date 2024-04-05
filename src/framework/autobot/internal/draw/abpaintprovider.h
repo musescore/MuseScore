@@ -27,29 +27,29 @@
 #include "draw/bufferedpaintprovider.h"
 
 namespace mu::autobot {
-class AbPaintProvider : public draw::BufferedPaintProvider
+class AbPaintProvider : public muse::draw::BufferedPaintProvider
 {
 public:
 
     static const std::shared_ptr<AbPaintProvider>& instance();
 
     void beginTarget(const std::string& name) override;
-    void beforeEndTargetHook(draw::Painter* painter) override;
+    void beforeEndTargetHook(muse::draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
-    const draw::DrawDataPtr& notationViewDrawData() const;
+    const muse::draw::DrawDataPtr& notationViewDrawData() const;
 
-    void setDiff(const draw::Diff& diff);
+    void setDiff(const muse::draw::Diff& diff);
     void setIsDiffDrawEnabled(bool arg);
 
 private:
     AbPaintProvider() = default;
 
-    void paintData(draw::IPaintProviderPtr provider, const draw::DrawDataPtr& data, const QColor& overcolor);
+    void paintData(muse::draw::IPaintProviderPtr provider, const muse::draw::DrawDataPtr& data, const QColor& overcolor);
 
-    draw::DrawDataPtr m_notationViewDrawData;
+    muse::draw::DrawDataPtr m_notationViewDrawData;
 
-    draw::Diff m_diff;
+    muse::draw::Diff m_diff;
     bool m_isDiffDrawEnabled = false;
 };
 }

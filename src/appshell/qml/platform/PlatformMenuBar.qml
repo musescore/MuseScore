@@ -112,6 +112,10 @@ Item {
 
                 for (var i in subitems) {
                     var item = subitems[i]
+                    if (!Boolean(item)) {
+                        continue
+                    }
+
                     var isMenu = Boolean(item.subitems) && item.subitems.length > 0
 
                     if (isMenu) {

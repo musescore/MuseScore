@@ -28,9 +28,9 @@
 #include "iinteractive.h"
 
 namespace mu::autobot {
-class AutobotActionsController : public actions::Actionable
+class AutobotActionsController : public muse::actions::Actionable
 {
-    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
 
 public:
