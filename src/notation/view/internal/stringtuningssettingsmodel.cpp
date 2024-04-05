@@ -32,7 +32,7 @@ using namespace mu::notation;
 
 const QString customPreset()
 {
-    return qtrc("notation", "Custom");
+    return mu::qtrc("notation", "Custom");
 }
 
 StringTuningsSettingsModel::StringTuningsSettingsModel(QObject* parent)
@@ -261,7 +261,7 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
         int number = static_cast<int>(stringTuning.number);
 
         QVariantMap stringNumberMap;
-        stringNumberMap.insert("text", qtrc("notation", "%n string(s)", nullptr, number));
+        stringNumberMap.insert("text", mu::qtrc("notation", "%n string(s)", nullptr, number));
         stringNumberMap.insert("value", number);
         numbersList << stringNumberMap;
     }

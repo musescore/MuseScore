@@ -38,7 +38,7 @@ class EditMidiMappingModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString mappingTitle READ mappingTitle NOTIFY mappingTitleChanged)
 
     INJECT(IMidiRemote, midiRemote)
-    INJECT(midi::IMidiInPort, midiInPort)
+    INJECT(muse::midi::IMidiInPort, midiInPort)
 
 public:
     explicit EditMidiMappingModel(QObject* parent = nullptr);
@@ -53,7 +53,7 @@ signals:
     void mappingTitleChanged(const QString& title);
 
 private:
-    QString deviceName(const midi::MidiDeviceID& deviceId) const;
+    QString deviceName(const muse::midi::MidiDeviceID& deviceId) const;
 
     RemoteEvent m_event;
 };

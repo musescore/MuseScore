@@ -65,7 +65,7 @@ mu::Ret NotationSelection::canCopy() const
         return make_ret(Err::SelectCompleteTupletOrTremolo);
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 QMimeData* NotationSelection::mimeData() const

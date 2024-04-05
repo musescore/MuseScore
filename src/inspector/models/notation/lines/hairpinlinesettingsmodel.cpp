@@ -37,11 +37,11 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
 {
     if (lineType == Diminuendo) {
         setModelType(InspectorModelType::TYPE_DIMINUENDO);
-        setTitle(qtrc("inspector", "Diminuendo"));
+        setTitle(mu::qtrc("inspector", "Diminuendo"));
         setIcon(ui::IconCode::Code::DIMINUENDO);
     } else {
         setModelType(InspectorModelType::TYPE_CRESCENDO);
-        setTitle(qtrc("inspector", "Crescendo"));
+        setTitle(mu::qtrc("inspector", "Crescendo"));
         setIcon(ui::IconCode::Code::CRESCENDO);
     }
 

@@ -58,7 +58,7 @@ MixerChannelItem::MixerChannelItem(QObject* parent, Type type, bool outputOnly, 
     m_panel = new ui::NavigationPanel(this);
     m_panel->setDirection(ui::NavigationPanel::Vertical);
     m_panel->setName("MixerChannelPanel " + QString::number(m_trackId));
-    m_panel->accessible()->setName(qtrc("playback", "Mixer channel panel %1").arg(m_trackId));
+    m_panel->accessible()->setName(mu::qtrc("playback", "Mixer channel panel %1").arg(m_trackId));
     m_panel->componentComplete();
 
     connect(this, &MixerChannelItem::mutedChanged, this, [this]() {
@@ -666,12 +666,12 @@ bool MixerChannelItem::askAboutChangingSound()
     IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
     IInteractive::ButtonDatas buttons = {
         interactive()->buttonData(IInteractive::Button::Cancel),
-        IInteractive::ButtonData(changeBtn, trc("playback", "Change sound"), true /*accent*/)
+        IInteractive::ButtonData(changeBtn, mu::trc("playback", "Change sound"), true /*accent*/)
     };
 
-    IInteractive::Result result = interactive()->warning(trc("playback", "Are you sure you want to change this sound?"),
-                                                         trc("playback",
-                                                             "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
+    IInteractive::Result result = interactive()->warning(mu::trc("playback", "Are you sure you want to change this sound?"),
+                                                         mu::trc("playback",
+                                                                 "Sound flags on this instrument may be reset, but staff text will remain. This action can’t be undone."),
                                                          buttons, changeBtn, options);
 
     if (result.button() == changeBtn) {

@@ -66,7 +66,7 @@ std::string mu::pitchToString(int pitch, bool addoctave, bool useFlats /* = fals
     int i = pitch % 12;
     if (addoctave) {
         int octave = (pitch / 12) - 1;
-        return trc("global", source[i]) + std::to_string(octave);
+        return mu::trc("global", source[i]) + std::to_string(octave);
     }
-    return trc("global", source[i]);
+    return mu::trc("global", source[i]);
 }

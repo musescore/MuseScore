@@ -156,7 +156,7 @@ mu::Ret AudioComService::downloadAccountInfo()
         setAccountInfo(AccountInfo());
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 bool AudioComService::doUpdateTokens()

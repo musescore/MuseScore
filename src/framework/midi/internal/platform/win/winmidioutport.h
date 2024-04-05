@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_WINMIDIOUTPORT_H
-#define MU_MIDI_WINMIDIOUTPORT_H
+#ifndef MUSE_MIDI_WINMIDIOUTPORT_H
+#define MUSE_MIDI_WINMIDIOUTPORT_H
 
 #include <memory>
 
@@ -28,7 +28,7 @@
 #include "midi/imidioutport.h"
 #include "internal/midideviceslistener.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class WinMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
 public:
@@ -65,4 +65,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_WINMIDIOUTPORT_H
+#endif // MUSE_MIDI_WINMIDIOUTPORT_H

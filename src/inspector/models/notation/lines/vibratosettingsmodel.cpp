@@ -31,7 +31,7 @@ VibratoSettingsModel::VibratoSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::VIBRATO)
 {
     setModelType(InspectorModelType::TYPE_VIBRATO);
-    setTitle(qtrc("inspector", "Vibrato"));
+    setTitle(mu::qtrc("inspector", "Vibrato"));
     setIcon(ui::IconCode::Code::VIBRATO);
 
     createProperties();

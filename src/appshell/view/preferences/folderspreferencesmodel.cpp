@@ -87,29 +87,29 @@ void FoldersPreferencesModel::load()
 
     m_folders = {
         {
-            FolderType::Scores, qtrc("appshell/preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
+            FolderType::Scores, mu::qtrc("appshell/preferences", "Scores"), projectConfiguration()->userProjectsPath().toQString(),
             projectConfiguration()->userProjectsPath().toQString()
         },
         {
-            FolderType::Styles, qtrc("appshell/preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
+            FolderType::Styles, mu::qtrc("appshell/preferences", "Styles"), notationConfiguration()->userStylesPath().toQString(),
             notationConfiguration()->userStylesPath().toQString()
         },
         {
-            FolderType::Templates, qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
+            FolderType::Templates, mu::qtrc("appshell/preferences", "Templates"), projectConfiguration()->userTemplatesPath().toQString(),
             projectConfiguration()->userTemplatesPath().toQString()
         },
         {
-            FolderType::Plugins, qtrc("appshell/preferences", "Plugins"), extensionsConfiguration()->pluginsUserPath().toQString(),
+            FolderType::Plugins, mu::qtrc("appshell/preferences", "Plugins"), extensionsConfiguration()->pluginsUserPath().toQString(),
             extensionsConfiguration()->pluginsUserPath().toQString()
         },
         {
-            FolderType::SoundFonts, qtrc("appshell/preferences", "SoundFonts"), pathsToString(
+            FolderType::SoundFonts, mu::qtrc("appshell/preferences", "SoundFonts"), pathsToString(
                 audioConfiguration()->userSoundFontDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         },
 #ifdef MU_MODULE_VST
         {
-            FolderType::VST3, qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
+            FolderType::VST3, mu::qtrc("appshell/preferences", "VST3"), pathsToString(vstConfiguration()->userVstDirectories()),
             configuration()->userDataPath().toQString(), FolderValueType::MultiDirectories
         }
 #endif

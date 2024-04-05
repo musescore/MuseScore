@@ -859,12 +859,12 @@ void NotationBraille::toggleMode()
     case BrailleMode::Navigation:
         setMode(BrailleMode::BrailleInput);
         interaction()->noteInput()->startNoteInput();
-        stateTitle = trc("notation", "Note input mode");
+        stateTitle = mu::trc("notation", "Note input mode");
         break;
     case BrailleMode::BrailleInput:
         setMode(BrailleMode::Navigation);
         interaction()->noteInput()->endNoteInput();
-        stateTitle = trc("notation", "Normal mode");
+        stateTitle = mu::trc("notation", "Normal mode");
         break;
     }
 

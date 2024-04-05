@@ -238,7 +238,7 @@ private:
     void onShowItemRequested(const INotationInteraction::ShowItemRequest& request);
 
     void onPlayingChanged();
-    void movePlaybackCursor(midi::tick_t tick);
+    void movePlaybackCursor(muse::midi::tick_t tick);
     bool needAdjustCanvasVerticallyWhilePlayback(const RectF& cursorRect);
 
     void updateLoopMarkers();

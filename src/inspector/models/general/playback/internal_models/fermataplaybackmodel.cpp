@@ -30,7 +30,7 @@ using namespace mu::inspector;
 FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(qtrc("inspector", "Fermatas"));
+    setTitle(mu::qtrc("inspector", "Fermatas"));
     setModelType(InspectorModelType::TYPE_FERMATA);
 
     createProperties();

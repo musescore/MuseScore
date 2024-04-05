@@ -189,10 +189,10 @@ QVariantList GeneralPreferencesModel::startupModes() const
 GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes() const
 {
     static const QMap<StartupModeType, QString> modeTitles {
-        { StartupModeType::StartEmpty,  qtrc("appshell/preferences", "Start empty") },
-        { StartupModeType::ContinueLastSession, qtrc("appshell/preferences", "Continue last session") },
-        { StartupModeType::StartWithNewScore, qtrc("appshell/preferences", "Start with new score") },
-        { StartupModeType::StartWithScore, qtrc("appshell/preferences", "Start with score:") }
+        { StartupModeType::StartEmpty,  mu::qtrc("appshell/preferences", "Start empty") },
+        { StartupModeType::ContinueLastSession, mu::qtrc("appshell/preferences", "Continue last session") },
+        { StartupModeType::StartWithNewScore, mu::qtrc("appshell/preferences", "Start with new score") },
+        { StartupModeType::StartWithScore, mu::qtrc("appshell/preferences", "Start with score:") }
     };
 
     StartModeList modes;
@@ -215,8 +215,8 @@ GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes(
 
 QStringList GeneralPreferencesModel::scorePathFilter() const
 {
-    return { qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
-             qtrc("appshell/preferences", "All") + " (*)" };
+    return { mu::qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
+             mu::qtrc("appshell/preferences", "All") + " (*)" };
 }
 
 void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)

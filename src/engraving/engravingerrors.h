@@ -56,7 +56,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
 
     switch (err) {
     case Err::NoError:
-        return make_ok();
+        return mu::make_ok();
     case Err::FileUnknownError:
         text = mtrc("engraving", "Unknown error");
         break;

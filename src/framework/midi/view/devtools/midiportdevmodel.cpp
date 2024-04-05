@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 MidiPortDevModel::MidiPortDevModel(QObject* parent)
     : QObject(parent)

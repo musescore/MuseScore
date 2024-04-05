@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_MIDIERRORS_H
-#define MU_MIDI_MIDIERRORS_H
+#ifndef MUSE_MIDI_MIDIERRORS_H
+#define MUSE_MIDI_MIDIERRORS_H
 
 #include "types/ret.h"
 
-namespace mu::midi {
+namespace muse::midi {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -49,4 +49,4 @@ inline Ret make_ret(Err e, const std::string& text)
 }
 }
 
-#endif // MU_MIDI_MIDIERRORS_H
+#endif // MUSE_MIDI_MIDIERRORS_H

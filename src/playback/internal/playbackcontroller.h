@@ -68,7 +68,7 @@ public:
 
     void reset() override;
 
-    void seek(const midi::tick_t tick) override;
+    void seek(const muse::midi::tick_t tick) override;
     void seek(const muse::audio::msecs_t msecs) override;
 
     async::Notification playbackPositionChanged() const override;
@@ -228,7 +228,7 @@ private:
     async::Notification m_currentSequenceIdChanged;
     muse::audio::PlaybackStatus m_currentPlaybackStatus = muse::audio::PlaybackStatus::Stopped;
     muse::audio::msecs_t m_currentPlaybackTimeMsecs = 0;
-    midi::tick_t m_currentTick = 0;
+    muse::midi::tick_t m_currentTick = 0;
     notation::Tempo m_currentTempo;
 
     async::Channel<muse::audio::TrackId> m_trackAdded;

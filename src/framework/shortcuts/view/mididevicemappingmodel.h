@@ -45,7 +45,7 @@ class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncabl
     INJECT(ui::IUiActionsRegister, uiActionsRegister)
     INJECT(shortcuts::IMidiRemote, midiRemote)
     INJECT(IShortcutsConfiguration, configuration)
-    INJECT(midi::IMidiConfiguration, midiConfiguration)
+    INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
 
     Q_PROPERTY(bool useRemoteControl READ useRemoteControl WRITE setUseRemoteControl NOTIFY useRemoteControlChanged)
 

@@ -34,7 +34,7 @@ BracketSettingsModel::BracketSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::BRACKET)
 {
     setModelType(InspectorModelType::TYPE_BRACKET);
-    setTitle(qtrc("inspector", "Bracket"));
+    setTitle(mu::qtrc("inspector", "Bracket"));
     setIcon(ui::IconCode::Code::BRACKET);
     createProperties();
 

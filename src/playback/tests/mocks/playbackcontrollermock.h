@@ -36,7 +36,7 @@ public:
     MOCK_METHOD(bool, isPlaying, (), (const, override));
     MOCK_METHOD(async::Notification, isPlayingChanged, (), (const, override));
 
-    MOCK_METHOD(void, seek, (const midi::tick_t), (override));
+    MOCK_METHOD(void, seek, (const muse::midi::tick_t), (override));
     MOCK_METHOD(void, seek, (const muse::audio::msecs_t), (override));
     MOCK_METHOD(void, reset, (), (override));
 

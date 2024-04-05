@@ -43,10 +43,10 @@ public:
     virtual void setIsSettingMode(bool arg) = 0;
     virtual bool isSettingMode() const = 0;
 
-    virtual void setCurrentActionEvent(const midi::Event& ev) = 0;
+    virtual void setCurrentActionEvent(const muse::midi::Event& ev) = 0;
 
     // Process
-    virtual Ret process(const midi::Event& ev) = 0;
+    virtual Ret process(const muse::midi::Event& ev) = 0;
 };
 }
 

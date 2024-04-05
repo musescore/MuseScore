@@ -198,9 +198,9 @@ QString AccessibleItem::accessibleName() const
                    .arg(!commandInfo.isEmpty() ? (commandInfo + "; ") : "")
                    .arg(!staffInfo.isEmpty() ? (staffInfo + "; ") : "")
                    .arg(m_element->screenReaderInfo().toQString())
-                   .arg(m_element->visible() ? "" : " " + qtrc("engraving", "invisible"))
+                   .arg(m_element->visible() ? "" : " " + mu::qtrc("engraving", "invisible"))
                    .arg(!barsAndBeats.isEmpty() ? ("; " + barsAndBeats) : "")
-                   .arg(root->isRangeSelection() ? ("; " + qtrc("engraving", "selected")) : "");
+                   .arg(root->isRangeSelection() ? ("; " + mu::qtrc("engraving", "selected")) : "");
 
     return readable(name);
 }

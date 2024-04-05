@@ -22,7 +22,7 @@
 #include "midiconfigurationstub.h"
 
 using namespace mu;
-using namespace mu::midi;
+using namespace muse::midi;
 
 bool MidiConfigurationStub::midiPortIsAvalaible() const
 {

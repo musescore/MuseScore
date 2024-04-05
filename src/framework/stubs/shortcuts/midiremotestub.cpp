@@ -31,7 +31,7 @@ const MidiMappingList& MidiRemoteStub::midiMappings() const
 
 mu::Ret MidiRemoteStub::setMidiMappings(const MidiMappingList&)
 {
-    return make_ret(Ret::Code::NotImplemented);
+    return mu::make_ret(Ret::Code::NotImplemented);
 }
 
 void MidiRemoteStub::resetMidiMappings()
@@ -52,11 +52,11 @@ bool MidiRemoteStub::isSettingMode() const
     return false;
 }
 
-void MidiRemoteStub::setCurrentActionEvent(const mu::midi::Event&)
+void MidiRemoteStub::setCurrentActionEvent(const muse::midi::Event&)
 {
 }
 
-mu::Ret MidiRemoteStub::process(const mu::midi::Event&)
+mu::Ret MidiRemoteStub::process(const muse::midi::Event&)
 {
-    return make_ret(Ret::Code::NotImplemented);
+    return mu::make_ret(Ret::Code::NotImplemented);
 }

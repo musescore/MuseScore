@@ -89,7 +89,7 @@ Ret DrawDataGenerator::processDir(const io::path_t& scoreDir, const io::path_t& 
 
     //PROFILER_PRINT;
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 Ret DrawDataGenerator::processFile(const io::path_t& scoreFile, const io::path_t& outFile, const GenOpt& opt)
@@ -97,7 +97,7 @@ Ret DrawDataGenerator::processFile(const io::path_t& scoreFile, const io::path_t
     DrawDataPtr drawData = genDrawData(scoreFile, opt);
     DrawDataRW::writeData(outFile, drawData);
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const GenOpt& opt) const

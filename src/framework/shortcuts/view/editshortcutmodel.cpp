@@ -181,7 +181,7 @@ QString EditShortcutModel::conflictWarning() const
         return QString();
     }
 
-    return qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
+    return mu::qtrc("shortcuts", "This shortcut is already assigned to: <b>%1</b>").arg(title);
 }
 
 void EditShortcutModel::applyNewSequence()

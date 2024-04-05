@@ -34,7 +34,7 @@ public:
     bool isPlaying() const override;
     async::Notification isPlayingChanged() const override;
 
-    void seek(const midi::tick_t tick) override;
+    void seek(const muse::midi::tick_t tick) override;
     void seek(const muse::audio::msecs_t msecs) override;
     void reset() override;
 

@@ -59,7 +59,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEND);
-    setTitle(qtrc("inspector", "Bend"));
+    setTitle(mu::qtrc("inspector", "Bend"));
     setIcon(ui::IconCode::Code::GUITAR_BEND);
 
     createProperties();
@@ -165,8 +165,8 @@ void BendSettingsModel::loadBendCurve()
     m_releaseBend = bend->isReleaseBend();
     bool isSlightBend = bend->type() == GuitarBendType::SLIGHT_BEND;
 
-    QString startPointName = qtrc("inspector", "Start point");
-    QString endPointName = qtrc("inspector", "End point");
+    QString startPointName = mu::qtrc("inspector", "Start point");
+    QString endPointName = mu::qtrc("inspector", "End point");
 
     if (bend->type() == GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),

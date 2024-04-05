@@ -127,7 +127,7 @@ Ret MasterScore::sanityCheck()
     }
 
     if (accumulatedErrors.empty()) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     return Ret(static_cast<int>(Err::FileCorrupted), accumulatedErrors);
@@ -224,7 +224,7 @@ Ret Score::sanityCheckLocal()
     }
 
     if (errors.empty()) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     return Ret(static_cast<int>(Err::FileCorrupted), errors.join(u"\n").toStdString());

@@ -183,14 +183,14 @@ void UpdateScenario::processUpdateResult(int errorCode)
 
 void UpdateScenario::showNoUpdateMsg()
 {
-    QString str = qtrc("update", "You already have the latest version of MuseScore. "
-                                 "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
+    QString str = mu::qtrc("update", "You already have the latest version of MuseScore. "
+                                     "Please visit <a href=\"%1\">musescore.org</a> for news on what’s coming next.")
                   .arg(QString::fromStdString(configuration()->museScoreUrl()));
 
     IInteractive::Text text(str.toStdString(), IInteractive::TextFormat::RichText);
     IInteractive::ButtonData okBtn = interactive()->buttonData(IInteractive::Button::Ok);
 
-    interactive()->info(trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
+    interactive()->info(mu::trc("update", "You’re up to date!"), text, { okBtn }, okBtn.btn,
                         IInteractive::Option::WithIcon);
 }
 
@@ -219,8 +219,8 @@ void UpdateScenario::showReleaseInfo(const ReleaseInfo& info)
 
 void UpdateScenario::showServerErrorMsg()
 {
-    interactive()->error(trc("update", "Cannot connect to server"),
-                         trc("update", "Sorry - please try again later"));
+    interactive()->error(mu::trc("update", "Cannot connect to server"),
+                         mu::trc("update", "Sorry - please try again later"));
 }
 
 void UpdateScenario::downloadRelease()
@@ -236,13 +236,13 @@ void UpdateScenario::downloadRelease()
 
 void UpdateScenario::closeAppAndStartInstallation(const io::path_t& installerPath)
 {
-    std::string info = trc("update", "MuseScore needs to close to complete the installation. "
-                                     "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
+    std::string info = mu::trc("update", "MuseScore needs to close to complete the installation. "
+                                         "If you have any unsaved changes, you will be prompted to save them before MuseScore closes.");
 
     int closeBtn = int(IInteractive::Button::CustomButton) + 1;
     IInteractive::Result result = interactive()->info("", info,
                                                       { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                        IInteractive::ButtonData(closeBtn, trc("update", "Close"), true) },
+                                                        IInteractive::ButtonData(closeBtn, mu::trc("update", "Close"), true) },
                                                       closeBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {

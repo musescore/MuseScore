@@ -33,7 +33,7 @@ RestSettingsProxyModel::RestSettingsProxyModel(QObject* parent, IElementReposito
     : AbstractInspectorProxyModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_REST);
-    setTitle(qtrc("inspector", "Rest"));
+    setTitle(mu::qtrc("inspector", "Rest"));
     setIcon(ui::IconCode::Code::REST_8TH);
 
     QList<AbstractInspectorModel*> models;

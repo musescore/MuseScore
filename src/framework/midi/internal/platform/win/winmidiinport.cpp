@@ -34,12 +34,12 @@
 #include "defer.h"
 #include "log.h"
 
-struct mu::midi::WinMidiInPort::Win {
+struct muse::midi::WinMidiInPort::Win {
     HMIDIIN midiIn;
     int deviceID = -1;
 };
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 namespace wmidi_prv {
 static std::string errorString(MMRESULT ret)
@@ -93,7 +93,7 @@ MidiDeviceList WinMidiInPort::availableDevices() const
     std::lock_guard lock(m_devicesMutex);
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
 
     unsigned int numDevs = midiInGetNumDevs();
     if (numDevs == 0) {
@@ -157,7 +157,7 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
         disconnect();
     }
 
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
         std::vector<int> deviceParams = splitDeviceId(deviceID);

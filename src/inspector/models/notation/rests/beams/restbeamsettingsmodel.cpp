@@ -30,7 +30,7 @@ RestBeamSettingsModel::RestBeamSettingsModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEAM);
-    setTitle(qtrc("inspector", "Beam"));
+    setTitle(mu::qtrc("inspector", "Beam"));
 
     m_beamModesModel = new BeamModesModel(this, repository);
     m_beamModesModel->init();

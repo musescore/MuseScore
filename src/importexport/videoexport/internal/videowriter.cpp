@@ -251,5 +251,5 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
 
     encoder.close();
 
-    return make_ok();
+    return mu::make_ok();
 }

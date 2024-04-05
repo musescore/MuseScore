@@ -255,7 +255,7 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
         if (m_object->controller().lock()->needToVoicePanelInfo()) {
             QString panelName = m_object->controller().lock()->currentPanelAccessibleName();
             if (!panelName.isEmpty()) {
-                name.prepend(panelName + " " + qtrc("accessibility", "Panel") + ", ");
+                name.prepend(panelName + " " + mu::qtrc("accessibility", "Panel") + ", ");
             }
         }
         return name;

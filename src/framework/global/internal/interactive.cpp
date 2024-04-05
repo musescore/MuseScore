@@ -94,25 +94,25 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
 
     switch (b) {
     case IInteractive::Button::NoButton:    return ButtonData(int(b), "");
-    case IInteractive::Button::Ok:          return ButtonData(int(b), trc("global", "OK"), accent);
-    case IInteractive::Button::Save:        return ButtonData(int(b), trc("global", "Save"), accent);
-    case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("global", "Save all"));
-    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("global", "Don’t save"));
-    case IInteractive::Button::Open:        return ButtonData(int(b), trc("global", "Open"));
-    case IInteractive::Button::Yes:         return ButtonData(int(b), trc("global", "Yes"), accent);
-    case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("global", "Yes to all"), accent);
-    case IInteractive::Button::No:          return ButtonData(int(b), trc("global", "No"));
-    case IInteractive::Button::NoToAll:     return ButtonData(int(b), trc("global", "No to all"));
-    case IInteractive::Button::Abort:       return ButtonData(int(b), trc("global", "Abort"));
-    case IInteractive::Button::Retry:       return ButtonData(int(b), trc("global", "Retry"));
-    case IInteractive::Button::Ignore:      return ButtonData(int(b), trc("global", "Ignore"));
-    case IInteractive::Button::Close:       return ButtonData(int(b), trc("global", "Close"));
-    case IInteractive::Button::Cancel:      return ButtonData(int(b), trc("global", "Cancel"));
-    case IInteractive::Button::Discard:     return ButtonData(int(b), trc("global", "Discard"));
-    case IInteractive::Button::Help:        return ButtonData(int(b), trc("global", "Help"));
-    case IInteractive::Button::Apply:       return ButtonData(int(b), trc("global", "Apply"));
-    case IInteractive::Button::Reset:       return ButtonData(int(b), trc("global", "Reset"));
-    case IInteractive::Button::Continue:    return ButtonData(int(b), trc("global", "Continue"));
+    case IInteractive::Button::Ok:          return ButtonData(int(b), mu::trc("global", "OK"), accent);
+    case IInteractive::Button::Save:        return ButtonData(int(b), mu::trc("global", "Save"), accent);
+    case IInteractive::Button::SaveAll:     return ButtonData(int(b), mu::trc("global", "Save all"));
+    case IInteractive::Button::DontSave:    return ButtonData(int(b), mu::trc("global", "Don’t save"));
+    case IInteractive::Button::Open:        return ButtonData(int(b), mu::trc("global", "Open"));
+    case IInteractive::Button::Yes:         return ButtonData(int(b), mu::trc("global", "Yes"), accent);
+    case IInteractive::Button::YesToAll:    return ButtonData(int(b), mu::trc("global", "Yes to all"), accent);
+    case IInteractive::Button::No:          return ButtonData(int(b), mu::trc("global", "No"));
+    case IInteractive::Button::NoToAll:     return ButtonData(int(b), mu::trc("global", "No to all"));
+    case IInteractive::Button::Abort:       return ButtonData(int(b), mu::trc("global", "Abort"));
+    case IInteractive::Button::Retry:       return ButtonData(int(b), mu::trc("global", "Retry"));
+    case IInteractive::Button::Ignore:      return ButtonData(int(b), mu::trc("global", "Ignore"));
+    case IInteractive::Button::Close:       return ButtonData(int(b), mu::trc("global", "Close"));
+    case IInteractive::Button::Cancel:      return ButtonData(int(b), mu::trc("global", "Cancel"));
+    case IInteractive::Button::Discard:     return ButtonData(int(b), mu::trc("global", "Discard"));
+    case IInteractive::Button::Help:        return ButtonData(int(b), mu::trc("global", "Help"));
+    case IInteractive::Button::Apply:       return ButtonData(int(b), mu::trc("global", "Apply"));
+    case IInteractive::Button::Reset:       return ButtonData(int(b), mu::trc("global", "Reset"));
+    case IInteractive::Button::Continue:    return ButtonData(int(b), mu::trc("global", "Continue"));
     case IInteractive::Button::Next:
     case IInteractive::Button::Back:
     case IInteractive::Button::Select:

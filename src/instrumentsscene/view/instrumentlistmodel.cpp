@@ -198,7 +198,7 @@ void InstrumentListModel::loadGenres()
 
     static InstrumentGenre allInstrumentsGenre;
     allInstrumentsGenre.id = ALL_INSTRUMENTS_GENRE_ID;
-    allInstrumentsGenre.name = qtrc("instruments", "All instruments");
+    allInstrumentsGenre.name = mu::qtrc("instruments", "All instruments");
 
     m_genres << &allInstrumentsGenre;
 

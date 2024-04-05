@@ -30,7 +30,7 @@ StringTuningsSettingsModel::StringTuningsSettingsModel(QObject* parent, IElement
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STRING_TUNINGS);
-    setTitle(qtrc("inspector", "Fretted instruments"));
+    setTitle(mu::qtrc("inspector", "Fretted instruments"));
 }
 
 bool StringTuningsSettingsModel::isEmpty() const

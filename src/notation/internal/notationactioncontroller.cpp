@@ -670,7 +670,7 @@ void NotationActionController::toggleNoteInput()
     }
 
     ui::UiActionState state = actionRegister()->actionState("note-input");
-    std::string stateTitle = state.checked ? trc("notation", "Note input mode") : trc("notation", "Normal mode");
+    std::string stateTitle = state.checked ? mu::trc("notation", "Note input mode") : mu::trc("notation", "Normal mode");
     notifyAccessibilityAboutVoiceInfo(stateTitle);
 }
 
@@ -844,7 +844,7 @@ void NotationActionController::putTuplet(const TupletOptions& options)
     }
 
     if (!interaction->canAddTupletToSelectedChordRests()) {
-        interactive()->error(trc("notation", "Cannot create tuplet"), trc("notation", "Note value is too short"));
+        interactive()->error(mu::trc("notation", "Cannot create tuplet"), mu::trc("notation", "Note value is too short"));
         return;
     }
 
@@ -1240,15 +1240,15 @@ void NotationActionController::addImage()
         return;
     }
 
-    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
-                                        trc("notation", "Scalable Vector Graphics") + " (*.svg)",
-                                        trc("notation", "JPEG") + " (*.jpg *.jpeg)",
-                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)",
-                                        trc("notation", "Bitmap") + " (*.bmp)",
-                                        trc("notation", "TIFF") + " (*.tif *.tiff)",
-                                        trc("notation", "All") + " (*)" };
+    std::vector<std::string> filter = { mu::trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
+                                        mu::trc("notation", "Scalable Vector Graphics") + " (*.svg)",
+                                        mu::trc("notation", "JPEG") + " (*.jpg *.jpeg)",
+                                        mu::trc("notation", "PNG Bitmap Graphic") + " (*.png)",
+                                        mu::trc("notation", "Bitmap") + " (*.bmp)",
+                                        mu::trc("notation", "TIFF") + " (*.tif *.tiff)",
+                                        mu::trc("notation", "All") + " (*)" };
 
-    io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Insert Image"), "", filter);
+    io::path_t path = interactive()->selectOpeningFile(mu::qtrc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
 }
 
@@ -1598,12 +1598,12 @@ mu::io::path_t NotationActionController::selectStyleFile(bool forLoad)
 {
     mu::io::path_t dir = configuration()->userStylesPath();
     std::string filterName = forLoad
-                             ? trc("notation", "MuseScore style files")
-                             : trc("notation", "MuseScore style file");
+                             ? mu::trc("notation", "MuseScore style files")
+                             : mu::trc("notation", "MuseScore style file");
     std::vector<std::string> filter = { filterName + " (*.mss)" };
     return forLoad
-           ? interactive()->selectOpeningFile(qtrc("notation", "Load style"), dir, filter)
-           : interactive()->selectSavingFile(qtrc("notation", "Save style"), dir, filter);
+           ? interactive()->selectOpeningFile(mu::qtrc("notation", "Load style"), dir, filter)
+           : interactive()->selectSavingFile(mu::qtrc("notation", "Save style"), dir, filter);
 }
 
 void NotationActionController::loadStyle()
@@ -1613,14 +1613,14 @@ void NotationActionController::loadStyle()
     if (!path.empty()) {
         File f(path.toQString());
         if (!f.open(IODevice::ReadOnly) || !mu::engraving::MStyle::isValid(&f)) {
-            interactive()->error(trc("notation", "The style file could not be loaded."),
+            interactive()->error(mu::trc("notation", "The style file could not be loaded."),
                                  f.errorString());
             return;
         }
         if (!currentNotationStyle()->loadStyle(path.toQString(), false) && interactive()->warning(
-                trc("notation",
-                    "Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly."),
-                trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
+                mu::trc("notation",
+                        "Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly."),
+                mu::trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
                 IInteractive::Button::Ok).standardButton()
             == IInteractive::Button::Ok) {
             currentNotationStyle()->loadStyle(path.toQString(), true);
@@ -1634,8 +1634,8 @@ void NotationActionController::saveStyle()
     auto path = selectStyleFile(false);
     if (!path.empty()) {
         if (!currentNotationStyle()->saveStyle(path)) {
-            interactive()->error(trc("notation", "The style file could not be saved."),
-                                 trc("notation", "An error occurred."));
+            interactive()->error(mu::trc("notation", "The style file could not be saved."),
+                                 mu::trc("notation", "An error occurred."));
         }
     }
 }

@@ -284,7 +284,7 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
         return make_ret(Err::NetworkError);
     }
 
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     if (reply->error() != QNetworkReply::NoError) {
         ret.setCode(static_cast<int>(Err::NetworkError));

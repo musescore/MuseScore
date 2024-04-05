@@ -102,7 +102,7 @@ IAccessible::Role AccessibleRoot::accessibleRole() const
 
 QString AccessibleRoot::accessibleName() const
 {
-    return qtrc("engraving", "Score") + " " + element()->score()->name();
+    return mu::qtrc("engraving", "Score") + " " + element()->score()->name();
 }
 
 bool AccessibleRoot::enabled() const
@@ -138,7 +138,7 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleIt
 
         if (newStaffIdx != oldStaffIdx) {
             auto element = newItem->element();
-            QString staff = qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
+            QString staff = mu::qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
             QString staffName = element->staff()->part()->longName(element->tick());
             if (staffName.isEmpty()) {
@@ -208,16 +208,16 @@ QString AccessibleRoot::rangeSelectionInfo()
         Staff* staff1 = score->staff(startStaff);
         Staff* staff2 = score->staff(endStaff);
         if (staff1 && staff2) {
-            staffInstrument1 = qtrc("engraving", "Staff %1 (%2)")
+            staffInstrument1 = mu::qtrc("engraving", "Staff %1 (%2)")
                                .arg(QString::number(startStaff + 1))
                                .arg(staff1 ? staff1->partName().toQString() : "");
-            staffInstrument2 = qtrc("engraving", "Staff %1 (%2)")
+            staffInstrument2 = mu::qtrc("engraving", "Staff %1 (%2)")
                                .arg(QString::number(endStaff + 1))
                                .arg(staff2 ? staff2->partName().toQString() : "");
         }
     }
 
-    return qtrc("engraving", "Range selection starts %1%2 ends %3%4")
+    return mu::qtrc("engraving", "Range selection starts %1%2 ends %3%4")
            .arg(startBarBeat)
            .arg(!staffInstrument1.isEmpty() ? (" " + staffInstrument1) : "")
            .arg(endBarBeat)

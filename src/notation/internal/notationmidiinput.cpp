@@ -52,7 +52,7 @@ NotationMidiInput::NotationMidiInput(IGetScore* getScore, INotationInteractionPt
     QObject::connect(&m_extendNoteTimer, &QTimer::timeout, [this]() { doExtendCurrentNote(); });
 }
 
-void NotationMidiInput::onMidiEventReceived(const midi::Event& event)
+void NotationMidiInput::onMidiEventReceived(const muse::midi::Event& event)
 {
     if (event.isChannelVoice20()) {
         auto events = event.toMIDI10();
@@ -63,7 +63,7 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& event)
         return;
     }
 
-    if (event.opcode() == midi::Event::Opcode::NoteOn || event.opcode() == midi::Event::Opcode::NoteOff) {
+    if (event.opcode() == muse::midi::Event::Opcode::NoteOn || event.opcode() == muse::midi::Event::Opcode::NoteOff) {
         m_eventsQueue.push_back(event);
 
         if (!m_processTimer.isActive()) {
@@ -118,14 +118,14 @@ void NotationMidiInput::doProcessEvents()
     std::vector<const Note*> notes;
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
-        const midi::Event& event = m_eventsQueue.at(i);
+        const muse::midi::Event& event = m_eventsQueue.at(i);
         Note* note = isNoteInputMode() ? addNoteToScore(event) : makeNote(event);
         if (note) {
             notes.push_back(note);
         }
 
         bool chord = i != 0;
-        bool noteOn = event.opcode() == midi::Event::Opcode::NoteOn;
+        bool noteOn = event.opcode() == muse::midi::Event::Opcode::NoteOn;
         if (!chord && noteOn && !m_realtimeTimer.isActive() && isRealtimeAuto()) {
             m_extendNoteTimer.start(configuration()->delayBetweenNotesInRealTimeModeMilliseconds());
             enableMetronome();
@@ -147,7 +147,7 @@ void NotationMidiInput::doProcessEvents()
     m_processTimer.stop();
 }
 
-Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
+Note* NotationMidiInput::addNoteToScore(const muse::midi::Event& e)
 {
     mu::engraving::Score* sc = score();
     if (!sc) {
@@ -173,7 +173,7 @@ Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
 
     m_undoStack->prepareChanges();
 
-    if (e.opcode() == midi::Event::Opcode::NoteOff) {
+    if (e.opcode() == muse::midi::Event::Opcode::NoteOff) {
         if (isRealtime()) {
             const Chord* chord = is.cr()->isChord() ? engraving::toChord(is.cr()) : nullptr;
             if (chord) {
@@ -211,9 +211,9 @@ Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
     return note;
 }
 
-Note* NotationMidiInput::makeNote(const midi::Event& e)
+Note* NotationMidiInput::makeNote(const muse::midi::Event& e)
 {
-    if (e.opcode() == midi::Event::Opcode::NoteOff || e.velocity() == 0) {
+    if (e.opcode() == muse::midi::Event::Opcode::NoteOff || e.velocity() == 0) {
         return nullptr;
     }
 

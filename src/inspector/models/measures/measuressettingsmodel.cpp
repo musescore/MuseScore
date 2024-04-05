@@ -31,7 +31,7 @@ MeasuresSettingsModel::MeasuresSettingsModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_MEASURES);
-    setTitle(qtrc("inspector", "Measure"));
+    setTitle(mu::qtrc("inspector", "Measure"));
 }
 
 bool MeasuresSettingsModel::isEmpty() const

@@ -31,13 +31,13 @@
 #include "defer.h"
 #include "log.h"
 
-struct mu::midi::AlsaMidiInPort::Alsa {
+struct muse::midi::AlsaMidiInPort::Alsa {
     snd_seq_t* midiIn = nullptr;
     int client = -1;
     int port = -1;
 };
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 void AlsaMidiInPort::init()
 {
@@ -81,7 +81,7 @@ MidiDeviceList AlsaMidiInPort::availableDevices() const
 
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
 
     snd_seq_client_info_t* cinfo;
     snd_seq_port_info_t* pinfo;
@@ -152,7 +152,7 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
         m_deviceChanged.notify();
     };
 
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
         std::vector<int> deviceParams = splitDeviceId(deviceID);

@@ -32,7 +32,7 @@ SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SPACER);
-    setTitle(qtrc("inspector", "Spacer"));
+    setTitle(mu::qtrc("inspector", "Spacer"));
     setIcon(ui::IconCode::Code::SPACER);
     createProperties();
 }

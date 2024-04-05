@@ -70,7 +70,7 @@ mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPat
         }
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 mu::RetVal<mu::io::paths_t> DiagnosticFilesWriter::scanDir(const std::string& dirName)
@@ -93,5 +93,5 @@ mu::Ret DiagnosticFilesWriter::addFileToZip(const path_t& filePath, ZipWriter& z
 
     zip.addFile(filePathInZip, data.val);
 
-    return make_ok();
+    return mu::make_ok();
 }

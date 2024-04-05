@@ -32,7 +32,7 @@ TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementReposi
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TREMOLOBAR);
-    setTitle(qtrc("inspector", "Tremolo bar"));
+    setTitle(mu::qtrc("inspector", "Tremolo bar"));
     setIcon(ui::IconCode::Code::GUITAR_TREMOLO_BAR);
     createProperties();
 }

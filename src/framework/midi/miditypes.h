@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MIDI_MIDITYPES_H
-#define MU_MIDI_MIDITYPES_H
+#ifndef MUSE_MIDI_MIDITYPES_H
+#define MUSE_MIDI_MIDITYPES_H
 
 #include <string>
 #include <cstdint>
@@ -32,7 +32,7 @@
 #include "types/retval.h"
 #include "midievent.h"
 
-namespace mu::midi {
+namespace muse::midi {
 using track_t = int32_t;
 using program_t = int32_t;
 using bank_t = int32_t;
@@ -162,14 +162,4 @@ inline std::vector<int> splitDeviceId(const MidiDeviceID& deviceId)
 }
 }
 
-namespace muse::midi {
-using Event = mu::midi::Event;
-using Program = mu::midi::Program;
-using Programs = mu::midi::Programs;
-using channel_t = mu::midi::channel_t;
-using note_idx_t = mu::midi::note_idx_t;
-using tuning_t = mu::midi::tuning_t;
-using velocity_t = mu::midi::velocity_t;
-}
-
-#endif // MU_MIDI_MIDITYPES_H
+#endif // MUSE_MIDI_MIDITYPES_H

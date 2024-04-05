@@ -33,10 +33,10 @@ mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
 {
     if (configuration()->shouldWarnBeforeSavingDiagnosticFiles()) {
         IInteractive::Result result = interactive()->warning(
-            trc("diagnostics", "Save diagnostic files?"),
-            trc("diagnostics", "This will create a .zip file with information about your MuseScore setup "
-                               "to help developers diagnose any problems you are having. "
-                               "You can inspect the contents of this file before sending it to anyone."),
+            mu::trc("diagnostics", "Save diagnostic files?"),
+            mu::trc("diagnostics", "This will create a .zip file with information about your MuseScore setup "
+                                   "to help developers diagnose any problems you are having. "
+                                   "You can inspect the contents of this file before sending it to anyone."),
             { IInteractive::Button::Cancel, IInteractive::Button::Save }, IInteractive::Button::Save,
             IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
@@ -48,7 +48,7 @@ mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
     }
 
     io::path_t path = interactive()->selectSavingFile(
-        qtrc("diagnostics", "Save diagnostic files"),
+        mu::qtrc("diagnostics", "Save diagnostic files"),
         configuration()->diagnosticFilesDefaultSavingPath(),
         { "(*.zip)" });
 
@@ -69,5 +69,5 @@ mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
 
     interactive()->revealInFileBrowser(path);
 
-    return make_ok();
+    return mu::make_ok();
 }

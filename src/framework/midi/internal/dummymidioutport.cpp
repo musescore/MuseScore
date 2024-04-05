@@ -24,7 +24,7 @@
 #include "log.h"
 #include "midierrors.h"
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 void DummyMidiOutPort::init()
 {

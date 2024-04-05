@@ -41,12 +41,12 @@ public:
     void setNotation(INotationPtr notation);
     void setVisible(bool visible);
 
-    void move(midi::tick_t tick);
+    void move(muse::midi::tick_t tick);
 
     void paint(muse::draw::Painter* painter);
 
 private:
-    RectF resolveMarkerRectByTick(midi::tick_t tick) const;
+    RectF resolveMarkerRectByTick(muse::midi::tick_t tick) const;
 
     LoopBoundaryType m_type = LoopBoundaryType::Unknown;
     RectF m_rect;

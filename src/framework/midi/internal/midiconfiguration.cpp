@@ -26,7 +26,7 @@
 #include "settings.h"
 
 using namespace mu;
-using namespace mu::midi;
+using namespace muse::midi;
 
 static const std::string module_name("midi");
 

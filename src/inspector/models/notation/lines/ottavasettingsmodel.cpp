@@ -33,16 +33,16 @@ using IconCode = mu::ui::IconCode::Code;
 OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::OTTAVA)
 {
-    setTitle(qtrc("inspector", "Ottava"));
+    setTitle(mu::qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);
     setIcon(ui::IconCode::Code::OTTAVA);
 
     setPossibleStartHookTypes({});
 
     static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90°") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45°") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, mu::qtrc("inspector", "Hooked 90°") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, mu::qtrc("inspector", "Hooked 45°") }
     };
 
     setPossibleEndHookTypes(endHookTypes);

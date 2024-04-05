@@ -33,7 +33,7 @@
 
 using namespace muse;
 using namespace mu::playback;
-using namespace mu::midi;
+using namespace muse::midi;
 using namespace mu::notation;
 using namespace mu::async;
 using namespace muse::audio;
@@ -877,7 +877,7 @@ void PlaybackController::setCurrentPlaybackTime(msecs_t msecs)
 void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, const TrackAddFinished& onFinished)
 {
     if (notationPlayback()->metronomeTrackId() == instrumentTrackId) {
-        doAddTrack(instrumentTrackId, trc("playback", "Metronome"), onFinished);
+        doAddTrack(instrumentTrackId, mu::trc("playback", "Metronome"), onFinished);
         return;
     }
 
@@ -887,7 +887,7 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     }
 
     if (notationPlayback()->isChordSymbolsTrack(instrumentTrackId)) {
-        const std::string trackName = trc("playback", "Chords") + "." + part->partName().toStdString();
+        const std::string trackName = mu::trc("playback", "Chords") + "." + part->partName().toStdString();
         doAddTrack(instrumentTrackId, trackName, onFinished);
         return;
     }
@@ -1207,7 +1207,7 @@ void PlaybackController::setupSequenceTracks()
 
     InstrumentTrackIdSet trackIdSet = notationPlayback()->existingTrackIdSet();
     size_t trackCount = trackIdSet.size() + AUX_CHANNEL_NUM;
-    std::string title = trc("playback", "Loading audio samples");
+    std::string title = mu::trc("playback", "Loading audio samples");
 
     auto onAddFinished = [this, trackCount, title]() {
         m_loadingTrackCount--;
@@ -1216,7 +1216,7 @@ void PlaybackController::setupSequenceTracks()
         m_loadingProgress.progressChanged.send(current, trackCount, title);
 
         if (m_loadingTrackCount == 0) {
-            m_loadingProgress.finished.send(make_ok());
+            m_loadingProgress.finished.send(mu::make_ok());
             m_isPlayAllowedChanged.notify();
         }
     };

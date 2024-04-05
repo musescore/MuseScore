@@ -245,15 +245,15 @@ void ApplicationActionController::openPreferencesDialog()
 
 void ApplicationActionController::revertToFactorySettings()
 {
-    std::string title = trc("appshell", "Are you sure you want to revert to factory settings?");
-    std::string question = trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
-                                           "The list of recent scores will also be cleared.\n\n"
-                                           "This action will not delete any of your scores.");
+    std::string title = mu::trc("appshell", "Are you sure you want to revert to factory settings?");
+    std::string question = mu::trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
+                                               "The list of recent scores will also be cleared.\n\n"
+                                               "This action will not delete any of your scores.");
 
     int revertBtn = int(IInteractive::Button::Apply);
     IInteractive::Result result = interactive()->warning(title, question,
                                                          { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                           IInteractive::ButtonData(revertBtn, trc("appshell", "Revert"), true) },
+                                                           IInteractive::ButtonData(revertBtn, mu::trc("appshell", "Revert"), true) },
                                                          revertBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {
@@ -264,13 +264,13 @@ void ApplicationActionController::revertToFactorySettings()
     static constexpr bool NOTIFY_ABOUT_CHANGES = false;
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
 
-    title = trc("appshell", "Would you like to restart MuseScore now?");
-    question = trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
+    title = mu::trc("appshell", "Would you like to restart MuseScore now?");
+    question = mu::trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
 
     int restartBtn = int(IInteractive::Button::Apply);
     result = interactive()->question(title, question,
                                      { interactive()->buttonData(IInteractive::Button::Cancel),
-                                       IInteractive::ButtonData(restartBtn, trc("appshell", "Restart"), true) },
+                                       IInteractive::ButtonData(restartBtn, mu::trc("appshell", "Restart"), true) },
                                      restartBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {

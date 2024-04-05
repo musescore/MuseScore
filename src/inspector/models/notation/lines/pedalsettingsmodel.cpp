@@ -36,15 +36,15 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::PEDAL)
 {
     setModelType(InspectorModelType::TYPE_PEDAL);
-    setTitle(qtrc("inspector", "Pedal"));
+    setTitle(mu::qtrc("inspector", "Pedal"));
     setIcon(ui::IconCode::Code::PEDAL_MARKING);
 
     static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90°") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45°") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90° T-style") },
-        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, qtrc("inspector", "Asterisk") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, mu::qtrc("inspector", "Hooked 90°") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, mu::qtrc("inspector", "Hooked 45°") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, mu::qtrc("inspector", "Hooked 90° T-style") },
+        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, mu::qtrc("inspector", "Asterisk") }
     };
 
     setPossibleEndHookTypes(endHookTypes);

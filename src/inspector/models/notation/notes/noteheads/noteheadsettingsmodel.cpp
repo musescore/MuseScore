@@ -31,7 +31,7 @@ using namespace mu::engraving;
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(qtrc("inspector", "Head"));
+    setTitle(mu::qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
 
     createProperties();

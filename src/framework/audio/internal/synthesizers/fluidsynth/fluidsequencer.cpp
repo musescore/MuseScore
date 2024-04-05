@@ -26,7 +26,7 @@
 
 using namespace mu;
 using namespace muse::audio;
-using namespace mu::midi;
+using namespace muse::midi;
 using namespace mu::mpe;
 
 static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
@@ -127,8 +127,8 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelMap& changes)
 {
     for (const auto& pair : changes) {
-        midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
-        event.setIndex(mu::midi::EXPRESSION_CONTROLLER);
+        muse::midi::Event event(muse::midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
+        event.setIndex(muse::midi::EXPRESSION_CONTROLLER);
         event.setData(expressionLevel(pair.second));
 
         destination[pair.first].emplace(std::move(event));

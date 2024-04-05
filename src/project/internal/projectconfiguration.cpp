@@ -329,7 +329,7 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
     }
 
     if (filename.empty()) {
-        filename = qtrc("project", "Untitled");
+        filename = mu::qtrc("project", "Untitled");
     }
 
     if (theSuffix.empty()) {

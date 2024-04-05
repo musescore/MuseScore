@@ -106,7 +106,7 @@ void ColorLabel::colorButtonClicked(bool)
         return;
     }
     QColor c = QColorDialog::getColor(_color, this,
-                                      qtrc("notation", "Select color"),
+                                      mu::qtrc("notation", "Select color"),
                                       QColorDialog::ShowAlphaChannel
                                       );
     if (c.isValid()) {

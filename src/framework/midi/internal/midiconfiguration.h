@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_MIDICONFIGURATION_H
-#define MU_MIDI_MIDICONFIGURATION_H
+#ifndef MUSE_MIDI_MIDICONFIGURATION_H
+#define MUSE_MIDI_MIDICONFIGURATION_H
 
 #include "../imidiconfiguration.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class MidiConfiguration : public IMidiConfiguration
 {
 public:
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_MIDICONFIGURATION_H
+#endif // MUSE_MIDI_MIDICONFIGURATION_H

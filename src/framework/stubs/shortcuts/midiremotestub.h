@@ -37,10 +37,10 @@ public:
     void setIsSettingMode(bool arg) override;
     bool isSettingMode() const override;
 
-    void setCurrentActionEvent(const midi::Event& ev) override;
+    void setCurrentActionEvent(const muse::midi::Event& ev) override;
 
     // Process
-    Ret process(const midi::Event& ev) override;
+    Ret process(const muse::midi::Event& ev) override;
 };
 }
 

@@ -29,7 +29,7 @@ HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HOOK);
-    setTitle(qtrc("inspector", "Flag")); // internally called "Hook", but "Flag" in SMuFL, so here externally too
+    setTitle(mu::qtrc("inspector", "Flag")); // internally called "Hook", but "Flag" in SMuFL, so here externally too
 
     createProperties();
 }

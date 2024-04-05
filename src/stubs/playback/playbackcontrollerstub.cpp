@@ -44,7 +44,7 @@ mu::async::Notification PlaybackControllerStub::isPlayingChanged() const
     return mu::async::Notification();
 }
 
-void PlaybackControllerStub::seek(const midi::tick_t)
+void PlaybackControllerStub::seek(const muse::midi::tick_t)
 {
 }
 

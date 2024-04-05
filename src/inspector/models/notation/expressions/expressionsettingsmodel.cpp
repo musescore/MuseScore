@@ -8,7 +8,7 @@ ExpressionSettingsModel::ExpressionSettingsModel(QObject* parent, IElementReposi
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_EXPRESSION);
-    setTitle(qtrc("inspector ", "Expression"));
+    setTitle(mu::qtrc("inspector ", "Expression"));
     setIcon(ui::IconCode::Code::EXPRESSION);
     createProperties();
 }

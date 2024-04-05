@@ -104,7 +104,7 @@ Ret SoundTrackWriter::write()
         return make_ret(Err::ErrorEncode);
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void SoundTrackWriter::abort()
@@ -164,7 +164,7 @@ Ret SoundTrackWriter::generateAudioData()
         return make_ret(Err::NoAudioToExport);
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void SoundTrackWriter::sendStepProgress(int step, int64_t current, int64_t total)

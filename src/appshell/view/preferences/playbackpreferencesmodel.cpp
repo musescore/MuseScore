@@ -26,7 +26,7 @@
 
 using namespace mu::appshell;
 using namespace muse::audio;
-using namespace mu::midi;
+using namespace muse::midi;
 
 PlaybackPreferencesModel::PlaybackPreferencesModel(QObject* parent)
     : QObject(parent)

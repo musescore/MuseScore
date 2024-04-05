@@ -32,7 +32,7 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
-    setTitle(qtrc("inspector", "Barline"));
+    setTitle(mu::qtrc("inspector", "Barline"));
     setIcon(ui::IconCode::Code::SECTION_BREAK);
     createProperties();
 }

@@ -42,12 +42,12 @@ void LoopMarker::setVisible(bool visible)
     m_visible = visible;
 }
 
-void LoopMarker::move(midi::tick_t tick)
+void LoopMarker::move(muse::midi::tick_t tick)
 {
     m_rect = resolveMarkerRectByTick(tick);
 }
 
-RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
+RectF LoopMarker::resolveMarkerRectByTick(muse::midi::tick_t _tick) const
 {
     if (!m_notation) {
         return RectF();

@@ -44,5 +44,5 @@ mu::Ret MuseDataReader::read(MasterScore* score, const io::path_t& path, const O
     }
 
     md.convert();
-    return make_ok();
+    return mu::make_ok();
 }

@@ -304,7 +304,7 @@ void AbstractCloudService::signOut()
 mu::RetVal<Val> AbstractCloudService::ensureAuthorization(bool publishingScore, const std::string& text)
 {
     if (m_userAuthorized.val) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     UriQuery query("musescore://cloud/requireauthorization");
@@ -351,7 +351,7 @@ Ret AbstractCloudService::executeRequest(const RequestCallback& requestCallback)
 {
     Ret ret = requestCallback();
     if (ret) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     if (statusCode(ret) == USER_UNAUTHORIZED_STATUS_CODE) {

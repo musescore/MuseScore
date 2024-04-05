@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_IMIDICONFIGURATION_H
-#define MU_MIDI_IMIDICONFIGURATION_H
+#ifndef MUSE_MIDI_IMIDICONFIGURATION_H
+#define MUSE_MIDI_IMIDICONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 #include "miditypes.h"
@@ -29,7 +29,7 @@
 //! but we will keep the interface, maybe something will appear,
 //! for example, midi port settings
 
-namespace mu::midi {
+namespace muse::midi {
 class IMidiConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMidiConfiguration)
@@ -55,4 +55,4 @@ public:
 };
 }
 
-#endif // MU_MIDI_IMIDICONFIGURATION_H
+#endif // MUSE_MIDI_IMIDICONFIGURATION_H

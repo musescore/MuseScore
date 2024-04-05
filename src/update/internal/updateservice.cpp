@@ -83,7 +83,7 @@ mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
     ReleaseInfo releaseInfo = releaseInfoRetVal.val;
     releaseInfo.previousReleasesNotes = previousReleasesNotes(update);
 
-    result.ret = make_ok();
+    result.ret = mu::make_ok();
     result.val = std::move(releaseInfo);
 
     m_lastCheckResult = result.val;
@@ -107,7 +107,7 @@ mu::RetVal<mu::io::path_t> UpdateService::downloadRelease()
 
             //: Means that the download is currently in progress.
             //: %1 will be replaced by the version number of the version that is being downloaded.
-            qtrc("update", "Downloading MuseScore %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
+            mu::qtrc("update", "Downloading MuseScore %1").arg(QString::fromStdString(m_lastCheckResult.version)).toStdString());
     });
 
     Ret ret = m_networkManager->get(fileUrl, &buff);
@@ -161,7 +161,7 @@ mu::RetVal<ReleaseInfo> UpdateService::parseRelease(const QByteArray& json) cons
         return result;
     }
 
-    result.ret = make_ok();
+    result.ret = mu::make_ok();
 
     result.val.fileName = assetObj.value("name").toString().toStdString();
     result.val.fileUrl = assetObj.value("browser_download_url").toString().toStdString();

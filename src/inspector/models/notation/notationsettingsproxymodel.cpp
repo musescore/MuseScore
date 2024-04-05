@@ -35,7 +35,7 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
         if (models.size() == 1) {
             setTitle(models.first()->title());
         } else {
-            setTitle(qtrc("inspector", "Notation"));
+            setTitle(mu::qtrc("inspector", "Notation"));
         }
     });
 

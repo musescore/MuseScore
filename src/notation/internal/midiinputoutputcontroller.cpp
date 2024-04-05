@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace mu::midi;
+using namespace muse::midi;
 
 void MidiInputOutputController::init()
 {
@@ -61,7 +61,7 @@ void MidiInputOutputController::init()
         }
     });
 
-    midiInPort()->eventReceived().onReceive(this, [this](const midi::tick_t tick, const midi::Event& event) {
+    midiInPort()->eventReceived().onReceive(this, [this](const muse::midi::tick_t tick, const muse::midi::Event& event) {
         if (!configuration()->isMidiInputEnabled()) {
             return;
         }
@@ -75,7 +75,7 @@ void MidiInputOutputController::checkInputConnection()
     checkConnection(midiConfiguration()->midiInputDeviceId(),
                     midiInPort()->deviceID(),
                     midiInPort()->availableDevices(),
-                    [this](const midi::MidiDeviceID& deviceId) {
+                    [this](const muse::midi::MidiDeviceID& deviceId) {
         return midiInPort()->connect(deviceId);
     });
 }
@@ -85,14 +85,15 @@ void MidiInputOutputController::checkOutputConnection()
     checkConnection(midiConfiguration()->midiOutputDeviceId(),
                     midiOutPort()->deviceID(),
                     midiOutPort()->availableDevices(),
-                    [this](const midi::MidiDeviceID& deviceId) {
+                    [this](const muse::midi::MidiDeviceID& deviceId) {
         return midiOutPort()->connect(deviceId);
     });
 }
 
-void MidiInputOutputController::checkConnection(const midi::MidiDeviceID& preferredDeviceId, const midi::MidiDeviceID& currentDeviceId,
-                                                const midi::MidiDeviceList& availableDevices,
-                                                const std::function<Ret(const midi::MidiDeviceID&)>& connectCallback)
+void MidiInputOutputController::checkConnection(const muse::midi::MidiDeviceID& preferredDeviceId,
+                                                const muse::midi::MidiDeviceID& currentDeviceId,
+                                                const muse::midi::MidiDeviceList& availableDevices,
+                                                const std::function<Ret(const muse::midi::MidiDeviceID&)>& connectCallback)
 {
     auto containsDevice = [](const MidiDeviceList& devices, const MidiDeviceID& deviceId) {
         for (const MidiDevice& device : devices) {
@@ -128,7 +129,7 @@ void MidiInputOutputController::checkConnection(const midi::MidiDeviceID& prefer
     }
 }
 
-void MidiInputOutputController::onMidiEventReceived(const midi::tick_t tick, const midi::Event& event)
+void MidiInputOutputController::onMidiEventReceived(const muse::midi::tick_t tick, const muse::midi::Event& event)
 {
     UNUSED(tick)
 
@@ -150,15 +151,15 @@ void MidiInputOutputController::onMidiEventReceived(const midi::tick_t tick, con
     }
 }
 
-mu::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const midi::MidiDeviceList& devices) const
+muse::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const muse::midi::MidiDeviceList& devices) const
 {
-    for (const midi::MidiDevice& device : devices) {
-        if (device.id == midi::NONE_DEVICE_ID) {
+    for (const muse::midi::MidiDevice& device : devices) {
+        if (device.id == muse::midi::NONE_DEVICE_ID) {
             continue;
         }
 
         return device.id;
     }
 
-    return midi::MidiDeviceID();
+    return muse::midi::MidiDeviceID();
 }

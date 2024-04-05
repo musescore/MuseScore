@@ -1316,14 +1316,14 @@ void AbstractNotationPaintView::onPlayingChanged()
 
     if (isPlaying) {
         float playPosSec = playbackController()->playbackPositionInSeconds();
-        midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
+        muse::midi::tick_t tick = notationPlayback()->secToTick(playPosSec);
         movePlaybackCursor(tick);
     } else {
         scheduleRedraw();
     }
 }
 
-void AbstractNotationPaintView::movePlaybackCursor(midi::tick_t tick)
+void AbstractNotationPaintView::movePlaybackCursor(muse::midi::tick_t tick)
 {
     TRACEFUNC;
 
