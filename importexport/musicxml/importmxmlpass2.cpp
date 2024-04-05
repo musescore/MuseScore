@@ -2584,6 +2584,15 @@ static bool hasTempoTextAtTick(const TempoMap* const tempoMap, const int tick)
       return tempoMap->count(tick) > 0;
       }
 
+static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
+{
+    if (tempoMap->count(tick) > 0) {
+        return true;
+    }
+
+    return tempoMap->tempo(tick) == Score::defaultTempo();
+}
+
 //---------------------------------------------------------
 //   measure
 //---------------------------------------------------------
@@ -3238,6 +3247,17 @@ void MusicXMLParserDirection::direction(const QString& partId,
             // Ignore (TBD: print to footer?)
             return;
             }
+      else if (isLikelyTempoText()) {
+            TempoText* tt = new TempoText(_score);
+            tt->setXmlText(_wordsText + _metroText);
+            if (_tpoSound > 0 && canAddTempoText(_score->tempomap(), tick.ticks())) {
+                  double tpo = _tpoSound / 60;
+                  tt->setTempo(tpo);
+                  tt->setFollowText(true);
+                  }
+
+            addElemOffset(tt, track, placement(), measure, tick + _offset);
+            }
       else if (!_wordsText.isEmpty() || !_rehearsalText.isEmpty() || !_metroText.isEmpty()) {
             TextBase* t = 0;
             if (_tpoSound > 0.1 || attemptTempoTextCoercion(tick)) {
@@ -3832,6 +3852,25 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
             && _metroText.isEmpty()
             && _tpoSound < 0.1
             && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.\\sDo not photocopy\\."));
+      }
+
+bool MusicXMLParserDirection::isLikelyTempoText() const
+      {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE) || !_wordsText.contains("<b>") || _placement == "below") {
+            return false;
+            }
+
+      const QString plainText = MScoreTextToMXML::toPlainText(_wordsText.simplified());
+      static const std::array<QString,
+                  25> tempoStrs
+                  = { "a tempo", "adag", "alleg", "andant", "ballad", "brisk", "determination", "dolce", "expressive",
+                      "fast", "free", "grave", "larg", "lento", "maestoso", "moderat", "mosso", "prest", "rubato", "slow", "straight",
+                      "tempo i", "tenderly", "triumphant", "vivace" };
+      for (const QString& str : tempoStrs) {
+            if (plainText.contains(str, Qt::CaseInsensitive))
+                  return true;
+            }
+      return false;
       }
 
 //---------------------------------------------------------

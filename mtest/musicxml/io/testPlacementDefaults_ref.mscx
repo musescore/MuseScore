@@ -212,16 +212,16 @@
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Dynamic>
-            <subtype>pp</subtype>
-            <velocity>33</velocity>
-            <placement>above</placement>
-            </Dynamic>
           <Tempo>
             <tempo>0.58333333333333337</tempo>
             <followText>1</followText>
             <text><font size="12"/><b>Grave</b></text>
             </Tempo>
+          <Dynamic>
+            <subtype>pp</subtype>
+            <velocity>33</velocity>
+            <placement>above</placement>
+            </Dynamic>
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>

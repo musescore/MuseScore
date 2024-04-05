@@ -148,17 +148,16 @@
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Tempo>
+            <tempo>2</tempo>
+            <text><font size="12"/><b>Straight</b></text>
+            </Tempo>
           <StaffText>
             <text>3rd time senza <i>Invisalign</i></text>
             </StaffText>
           <StaffText>
             <text>2nd time ad lib.</text>
             </StaffText>
-          <Tempo>
-            <tempo>2</tempo>
-            <followText>1</followText>
-            <text><font size="12"/><b>Straight</b></text>
-            </Tempo>
           <StaffText>
             <placement>below</placement>
             <text><i>Cantabile</i></text>
