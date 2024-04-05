@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTERRORS_H
-#define MU_VST_VSTERRORS_H
+#ifndef MUSE_VST_VSTERRORS_H
+#define MUSE_VST_VSTERRORS_H
 
 #include "types/ret.h"
 #include "translation.h"
 
-namespace mu::vst {
+namespace muse::vst {
 enum class Err {
     Undefined       = static_cast<int>(Ret::Code::Undefined),
     UnknownError    = static_cast<int>(Ret::Code::VstFirst),
@@ -58,4 +58,4 @@ inline Ret make_ret(Err e)
 }
 }
 
-#endif // MU_VST_VSTERRORS_H
+#endif // MUSE_VST_VSTERRORS_H

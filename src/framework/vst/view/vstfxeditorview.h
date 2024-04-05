@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTFXEDITORVIEW_H
-#define MU_VST_VSTFXEDITORVIEW_H
+#ifndef MUSE_VST_VSTFXEDITORVIEW_H
+#define MUSE_VST_VSTFXEDITORVIEW_H
 
 #include "abstractvsteditorview.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstFxEditorView : public AbstractVstEditorView
 {
     Q_OBJECT
@@ -45,10 +45,10 @@ private:
     bool isAbleToWrapPlugin() const override;
     VstPluginPtr getPluginPtr() const override;
 
-    audio::AudioFxChainOrder m_chainOrder = -1;
+    muse::audio::AudioFxChainOrder m_chainOrder = -1;
 };
 }
 
-Q_DECLARE_METATYPE(mu::vst::VstFxEditorView)
+Q_DECLARE_METATYPE(muse::vst::VstFxEditorView)
 
-#endif // MU_VST_VSTFXEDITORVIEW_H
+#endif // MUSE_VST_VSTFXEDITORVIEW_H

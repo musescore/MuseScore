@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTPLUGINSREGISTER_H
-#define MU_VST_VSTPLUGINSREGISTER_H
+#ifndef MUSE_VST_VSTPLUGINSREGISTER_H
+#define MUSE_VST_VSTPLUGINSREGISTER_H
 
 #include <map>
 #include <mutex>
@@ -32,26 +32,27 @@
 #include "ivstpluginsregister.h"
 #include "async/asyncable.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstPluginsRegister : public IVstPluginsRegister, public async::Asyncable
 {
-    INJECT_STATIC(audio::IAudioThreadSecurer, threadSecurer)
+    INJECT_STATIC(muse::audio::IAudioThreadSecurer, threadSecurer)
 public:
-    void registerInstrPlugin(const audio::TrackId trackId, VstPluginPtr pluginPtr) override;
-    void registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,
-                          VstPluginPtr pluginPtr) override;
-    void registerMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,
+    void registerInstrPlugin(const muse::audio::TrackId trackId, VstPluginPtr pluginPtr) override;
+    void registerFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
+                          const muse::audio::AudioFxChainOrder chainOrder, VstPluginPtr pluginPtr) override;
+    void registerMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::AudioFxChainOrder chainOrder,
                                 VstPluginPtr pluginPtr) override;
 
-    VstPluginPtr instrumentPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
-    VstPluginPtr fxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
-                          const audio::AudioFxChainOrder chainOrder) const override;
-    VstPluginPtr masterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) const override;
+    VstPluginPtr instrumentPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId) const override;
+    VstPluginPtr fxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
+                          const muse::audio::AudioFxChainOrder chainOrder) const override;
+    VstPluginPtr masterFxPlugin(const muse::audio::AudioResourceId& resourceId,
+                                const muse::audio::AudioFxChainOrder chainOrder) const override;
 
-    void unregisterInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) override;
-    void unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
-                            const audio::AudioFxChainOrder chainOrder) override;
-    void unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) override;
+    void unregisterInstrPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId) override;
+    void unregisterFxPlugin(const muse::audio::TrackId trackId, const muse::audio::AudioResourceId& resourceId,
+                            const muse::audio::AudioFxChainOrder chainOrder) override;
+    void unregisterMasterFxPlugin(const muse::audio::AudioResourceId& resourceId, const muse::audio::AudioFxChainOrder chainOrder) override;
 
     void unregisterAllInstrPlugin() override;
     void unregisterAllFx() override;
@@ -59,13 +60,13 @@ public:
 private:
     mutable std::mutex m_mutex;
 
-    using FxPluginKey = std::pair<audio::AudioResourceId, audio::AudioFxChainOrder>;
+    using FxPluginKey = std::pair<muse::audio::AudioResourceId, muse::audio::AudioFxChainOrder>;
     using VstFxInstancesMap = std::map<FxPluginKey, VstPluginPtr>;
 
-    std::map<audio::TrackId, VstPluginPtr> m_vstiPluginsMap;
-    std::map<audio::TrackId, VstFxInstancesMap> m_vstFxPluginsMap;
+    std::map<muse::audio::TrackId, VstPluginPtr> m_vstiPluginsMap;
+    std::map<muse::audio::TrackId, VstFxInstancesMap> m_vstFxPluginsMap;
     VstFxInstancesMap m_masterPluginsMap;
 };
 }
 
-#endif // MU_VST_VSTPLUGINSREGISTER_H
+#endif // MUSE_VST_VSTPLUGINSREGISTER_H

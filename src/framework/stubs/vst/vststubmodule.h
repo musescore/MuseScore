@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_VST_VSTSTUBMODULE_H
-#define MU_VST_VSTSTUBMODULE_H
+#ifndef MUSE_VST_VSTSTUBMODULE_H
+#define MUSE_VST_VSTSTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VSTModule : public modularity::IModuleSetup
 {
 public:
@@ -34,4 +34,4 @@ public:
 };
 }
 
-#endif // MU_VST_VSTSTUBMODULE_H
+#endif // MUSE_VST_VSTSTUBMODULE_H

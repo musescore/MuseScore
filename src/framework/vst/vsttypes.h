@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_VST_VSTTYPES_H
-#define MU_VST_VSTTYPES_H
+#ifndef MUSE_VST_VSTTYPES_H
+#define MUSE_VST_VSTTYPES_H
 
 #include <memory>
 #include <unordered_map>
@@ -43,7 +43,7 @@
 #include "io/path.h"
 #include "log.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class VstPlugin;
 using VstPluginPtr = std::shared_ptr<VstPlugin>;
 using ClassInfo = VST3::Hosting::ClassInfo;
@@ -132,10 +132,10 @@ inline PluginModulePtr createModule(const io::path_t& path)
 }
 
 template<>
-struct std::less<mu::vst::PluginParamInfo>
+struct std::less<muse::vst::PluginParamInfo>
 {
-    bool operator()(const mu::vst::PluginParamInfo& first,
-                    const mu::vst::PluginParamInfo& second) const
+    bool operator()(const muse::vst::PluginParamInfo& first,
+                    const muse::vst::PluginParamInfo& second) const
     {
         return first.id < second.id
                && first.defaultNormalizedValue < second.defaultNormalizedValue;
@@ -172,10 +172,10 @@ struct std::less<Steinberg::Vst::NoteOffEvent>
 };
 
 template<>
-struct std::less<mu::vst::VstEvent>
+struct std::less<muse::vst::VstEvent>
 {
-    bool operator()(const mu::vst::VstEvent& first,
-                    const mu::vst::VstEvent& second) const
+    bool operator()(const muse::vst::VstEvent& first,
+                    const muse::vst::VstEvent& second) const
     {
         if (first.type < second.type || first.busIndex < second.busIndex) {
             return true;
@@ -193,4 +193,4 @@ struct std::less<mu::vst::VstEvent>
     }
 };
 
-#endif // MU_VST_VSTTYPES_H
+#endif // MUSE_VST_VSTTYPES_H

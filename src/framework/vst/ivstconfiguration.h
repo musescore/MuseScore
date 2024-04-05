@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_IVSTCONFIGURATION_H
-#define MU_VST_IVSTCONFIGURATION_H
+#ifndef MUSE_VST_IVSTCONFIGURATION_H
+#define MUSE_VST_IVSTCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
 #include "async/channel.h"
 
-namespace mu::vst {
+namespace muse::vst {
 class IVstConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IVstConfiguration)
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // IVSTCONFIGURATION_H
+#endif // MUSE_VST_IVSTCONFIGURATION_H

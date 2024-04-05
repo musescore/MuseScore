@@ -26,7 +26,7 @@
 #include "internal/vstplugin.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace muse::audio::synth;
 using namespace muse::audio;
 
@@ -37,7 +37,7 @@ static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kPitchBend,
 };
 
-VstSynthesiser::VstSynthesiser(const TrackId trackId, const audio::AudioInputParams& params)
+VstSynthesiser::VstSynthesiser(const TrackId trackId, const muse::audio::AudioInputParams& params)
     : AbstractSynthesizer(params),
     m_pluginPtr(std::make_shared<VstPlugin>(params.resourceMeta.id)),
     m_vstAudioClient(std::make_unique<VstAudioClient>()),
@@ -71,7 +71,7 @@ void VstSynthesiser::init()
         m_pluginPtr->loadingCompleted().onNotify(this, onPluginLoaded);
     }
 
-    m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const audio::AudioUnitConfig& newConfig) {
+    m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const muse::audio::AudioUnitConfig& newConfig) {
         if (m_params.configuration == newConfig) {
             return;
         }
@@ -87,7 +87,7 @@ void VstSynthesiser::init()
 
 void VstSynthesiser::toggleVolumeGain(const bool isActive)
 {
-    static constexpr audio::gain_t NON_ACTIVE_GAIN = 0.5f;
+    static constexpr muse::audio::gain_t NON_ACTIVE_GAIN = 0.5f;
 
     if (isActive) {
         m_vstAudioClient->setVolumeGain(m_sequencer.currentGain());
@@ -105,7 +105,7 @@ bool VstSynthesiser::isValid() const
     return m_pluginPtr->isValid();
 }
 
-audio::AudioSourceType VstSynthesiser::type() const
+muse::audio::AudioSourceType VstSynthesiser::type() const
 {
     return m_params.type();
 }
@@ -153,12 +153,12 @@ void VstSynthesiser::setIsActive(const bool isActive)
     toggleVolumeGain(isActive);
 }
 
-audio::msecs_t VstSynthesiser::playbackPosition() const
+muse::audio::msecs_t VstSynthesiser::playbackPosition() const
 {
     return m_sequencer.playbackPosition();
 }
 
-void VstSynthesiser::setPlaybackPosition(const audio::msecs_t newPosition)
+void VstSynthesiser::setPlaybackPosition(const muse::audio::msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
 
@@ -183,13 +183,13 @@ async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samplesPerChannel)
+muse::audio::samples_t VstSynthesiser::process(float* buffer, muse::audio::samples_t samplesPerChannel)
 {
     if (!buffer) {
         return 0;
     }
 
-    audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
+    muse::audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
     VstSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMsecs);
 
     for (const VstSequencer::EventType& event : sequence) {
@@ -198,7 +198,7 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
         } else if (std::holds_alternative<PluginParamInfo>(event)) {
             m_vstAudioClient->handleParamChange(std::get<PluginParamInfo>(event));
         } else {
-            audio::gain_t newGain = std::get<audio::gain_t>(event);
+            muse::audio::gain_t newGain = std::get<muse::audio::gain_t>(event);
             m_vstAudioClient->setVolumeGain(newGain);
         }
     }

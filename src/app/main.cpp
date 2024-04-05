@@ -280,7 +280,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::uicomponents::UiComponentsModule());
     app.addModule(new muse::dock::DockModule());
 #endif
-    app.addModule(new mu::vst::VSTModule());
+    app.addModule(new muse::vst::VSTModule());
 
     // modules
 #ifdef MUE_BUILD_APPSHELL_MODULE

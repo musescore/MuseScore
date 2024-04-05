@@ -22,7 +22,7 @@
 
 #include "vstconfigurationstub.h"
 
-using namespace mu::vst;
+using namespace muse::vst;
 
 mu::io::paths_t VstConfigurationStub::userVstDirectories() const
 {

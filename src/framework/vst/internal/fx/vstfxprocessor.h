@@ -1,5 +1,26 @@
-#ifndef MU_VST_VSTFXPROCESSOR_H
-#define MU_VST_VSTFXPROCESSOR_H
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MUSE_VST_VSTFXPROCESSOR_H
+#define MUSE_VST_VSTFXPROCESSOR_H
 
 #include <memory>
 
@@ -10,17 +31,17 @@
 #include "internal/vstplugin.h"
 #include "vsttypes.h"
 
-namespace mu::vst {
-class VstFxProcessor : public audio::IFxProcessor, public async::Asyncable
+namespace muse::vst {
+class VstFxProcessor : public muse::audio::IFxProcessor, public async::Asyncable
 {
 public:
-    explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const audio::AudioFxParams& params);
+    explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const muse::audio::AudioFxParams& params);
 
     void init();
 
-    audio::AudioFxType type() const override;
-    const audio::AudioFxParams& params() const override;
-    async::Channel<audio::AudioFxParams> paramsChanged() const override;
+    muse::audio::AudioFxType type() const override;
+    const muse::audio::AudioFxParams& params() const override;
+    async::Channel<muse::audio::AudioFxParams> paramsChanged() const override;
     void setSampleRate(unsigned int sampleRate) override;
     bool active() const override;
     void setActive(bool active) override;
@@ -32,11 +53,11 @@ private:
     VstPluginPtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
-    audio::AudioFxParams m_params;
-    async::Channel<audio::AudioFxParams> m_paramsChanges;
+    muse::audio::AudioFxParams m_params;
+    async::Channel<muse::audio::AudioFxParams> m_paramsChanges;
 };
 
 using VstFxPtr = std::shared_ptr<VstFxProcessor>;
 }
 
-#endif // MU_VST_VSTFXPROCESSOR_H
+#endif // MUSE_VST_VSTFXPROCESSOR_H

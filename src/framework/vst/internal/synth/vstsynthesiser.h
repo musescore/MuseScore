@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTSYNTHESISER_H
-#define MU_VST_VSTSYNTHESISER_H
+#ifndef MUSE_VST_VSTSYNTHESISER_H
+#define MUSE_VST_VSTSYNTHESISER_H
 
 #include <memory>
 
@@ -36,21 +36,21 @@
 #include "vstsequencer.h"
 #include "vsttypes.h"
 
-namespace mu::vst {
-class VstSynthesiser : public audio::synth::AbstractSynthesizer
+namespace muse::vst {
+class VstSynthesiser : public muse::audio::synth::AbstractSynthesizer
 {
     INJECT(IVstPluginsRegister, pluginsRegister)
-    INJECT(audio::IAudioConfiguration, config)
+    INJECT(muse::audio::IAudioConfiguration, config)
 
 public:
-    explicit VstSynthesiser(const audio::TrackId trackId, const audio::AudioInputParams& params);
+    explicit VstSynthesiser(const muse::audio::TrackId trackId, const muse::audio::AudioInputParams& params);
     ~VstSynthesiser() override;
 
     void init();
 
     bool isValid() const override;
 
-    audio::AudioSourceType type() const override;
+    muse::audio::AudioSourceType type() const override;
     std::string name() const override;
 
     void revokePlayingNotes() override;
@@ -62,14 +62,14 @@ public:
     bool isActive() const override;
     void setIsActive(const bool isActive) override;
 
-    audio::msecs_t playbackPosition() const override;
-    void setPlaybackPosition(const audio::msecs_t newPosition) override;
+    muse::audio::msecs_t playbackPosition() const override;
+    void setPlaybackPosition(const muse::audio::msecs_t newPosition) override;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
+    muse::audio::samples_t process(float* buffer, muse::audio::samples_t samplesPerChannel) override;
 
 private:
     void toggleVolumeGain(const bool isActive);
@@ -79,14 +79,14 @@ private:
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     async::Channel<unsigned int> m_streamsCountChanged;
-    audio::samples_t m_samplesPerChannel = 0;
+    muse::audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
 
-    audio::TrackId m_trackId = audio::INVALID_TRACK_ID;
+    muse::audio::TrackId m_trackId = muse::audio::INVALID_TRACK_ID;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
 }
 
-#endif // MU_VST_VSTSYNTHESISER_H
+#endif // MUSE_VST_VSTSYNTHESISER_H

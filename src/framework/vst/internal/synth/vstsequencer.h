@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_VST_VSTSEQUENCER_H
-#define MU_VST_VSTSEQUENCER_H
+#ifndef MUSE_VST_VSTSEQUENCER_H
+#define MUSE_VST_VSTSEQUENCER_H
 
 #include "audio/internal/abstracteventsequencer.h"
 
@@ -53,7 +53,7 @@ struct std::less<VstSequencerEvent>
     }
 };
 
-namespace mu::vst {
+namespace muse::vst {
 class VstSequencer : public muse::audio::AbstractEventSequencer<VstEvent, PluginParamInfo, muse::audio::gain_t>
 {
 public:
@@ -89,4 +89,4 @@ private:
 };
 }
 
-#endif // MU_VST_VSTSEQUENCER_H
+#endif // MUSE_VST_VSTSEQUENCER_H

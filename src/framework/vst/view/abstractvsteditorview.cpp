@@ -33,7 +33,7 @@
 #include "async/async.h"
 #include "log.h"
 
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace Steinberg;
 
 ::Steinberg::uint32 PLUGIN_API AbstractVstEditorView::addRef()

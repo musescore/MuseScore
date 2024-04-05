@@ -28,13 +28,13 @@
 #include "async/async.h"
 
 using namespace mu;
-using namespace mu::vst;
+using namespace muse::vst;
 using namespace mu::async;
 
 static const std::string_view COMPONENT_STATE_KEY = "componentState";
 static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
 
-VstPlugin::VstPlugin(const audio::AudioResourceId& resourceId)
+VstPlugin::VstPlugin(const muse::audio::AudioResourceId& resourceId)
     : m_resourceId(resourceId), m_componentHandlerPtr(new VstComponentHandler())
 {
     ONLY_AUDIO_THREAD(threadSecurer);
@@ -46,7 +46,7 @@ VstPlugin::VstPlugin(const audio::AudioResourceId& resourceId)
 
 VstPlugin::~VstPlugin()
 {
-    audio::AudioResourceId resourceId = m_resourceId;
+    muse::audio::AudioResourceId resourceId = m_resourceId;
     std::shared_ptr<VstPluginProvider> provider = std::move(m_pluginProvider);
     PluginModulePtr module = std::move(m_module);
 
@@ -61,7 +61,7 @@ VstPlugin::~VstPlugin()
     }, threadSecurer()->mainThreadId());
 }
 
-const audio::AudioResourceId& VstPlugin::resourceId() const
+const muse::audio::AudioResourceId& VstPlugin::resourceId() const
 {
     ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
 
@@ -159,7 +159,7 @@ void VstPlugin::rescanParams()
     m_componentStateBuffer.setSize(0);
     m_controllerStateBuffer.setSize(0);
 
-    audio::AudioUnitConfig updatedConfig;
+    muse::audio::AudioUnitConfig updatedConfig;
 
     component->getState(&m_componentStateBuffer);
     updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(m_componentStateBuffer.getData(), m_componentStateBuffer.getSize()));
@@ -254,7 +254,7 @@ bool VstPlugin::isAbleForInput() const
     return search != m_classInfo.subCategories().cend();
 }
 
-void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
+void VstPlugin::updatePluginConfig(const muse::audio::AudioUnitConfig& config)
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
@@ -334,7 +334,7 @@ Notification VstPlugin::loadingCompleted() const
     return m_loadingCompleted;
 }
 
-async::Channel<audio::AudioUnitConfig> VstPlugin::pluginSettingsChanged() const
+async::Channel<muse::audio::AudioUnitConfig> VstPlugin::pluginSettingsChanged() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
