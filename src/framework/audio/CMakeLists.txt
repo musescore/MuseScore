@@ -269,9 +269,9 @@ if (MUSE_MODULE_AUDIO_EXPORT)
         ${CMAKE_CURRENT_LIST_DIR}/internal/soundtracks/soundtrackwriter.h
         )
 
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opusenc opusenc)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/lame lame)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/opusenc opusenc)
+    add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/thirdparty/flac flac)
 
     set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
 endif()
