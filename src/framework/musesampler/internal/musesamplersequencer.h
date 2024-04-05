@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
-#define MU_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
+#ifndef MUSE_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
+#define MUSE_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
 
 #include "audio/internal/abstracteventsequencer.h"
 #include "imusesamplertracks.h"
@@ -29,8 +29,8 @@
 #include "internal/apitypes.h"
 #include "internal/libhandler.h"
 
-typedef typename std::variant<mu::mpe::NoteEvent, mu::musesampler::AuditionStartNoteEvent,
-                              mu::musesampler::AuditionStopNoteEvent> MuseSamplerEvent;
+typedef typename std::variant<mu::mpe::NoteEvent, muse::musesampler::AuditionStartNoteEvent,
+                              muse::musesampler::AuditionStopNoteEvent> MuseSamplerEvent;
 
 template<>
 struct std::less<MuseSamplerEvent>
@@ -42,25 +42,25 @@ struct std::less<MuseSamplerEvent>
             return first.index() < second.index();
         }
 
-        if (std::holds_alternative<mu::musesampler::AuditionStartNoteEvent>(first)) {
-            auto& e1 = std::get<mu::musesampler::AuditionStartNoteEvent>(first);
-            auto& e2 = std::get<mu::musesampler::AuditionStartNoteEvent>(second);
+        if (std::holds_alternative<muse::musesampler::AuditionStartNoteEvent>(first)) {
+            auto& e1 = std::get<muse::musesampler::AuditionStartNoteEvent>(first);
+            auto& e2 = std::get<muse::musesampler::AuditionStartNoteEvent>(second);
             if (e1.msEvent._pitch == e2.msEvent._pitch) {
                 return e1.msEvent._offset_cents < e2.msEvent._offset_cents;
             }
             return e1.msEvent._pitch < e2.msEvent._pitch;
         }
 
-        if (std::holds_alternative<mu::musesampler::AuditionStopNoteEvent>(first)) {
-            return std::get<mu::musesampler::AuditionStopNoteEvent>(first).msEvent._pitch
-                   < std::get<mu::musesampler::AuditionStopNoteEvent>(second).msEvent._pitch;
+        if (std::holds_alternative<muse::musesampler::AuditionStopNoteEvent>(first)) {
+            return std::get<muse::musesampler::AuditionStopNoteEvent>(first).msEvent._pitch
+                   < std::get<muse::musesampler::AuditionStopNoteEvent>(second).msEvent._pitch;
         }
 
         return false;
     }
 };
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mu::mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
 {
 public:
@@ -74,7 +74,7 @@ private:
     void clearAllTracks();
     void finalizeAllTracks();
 
-    ms_Track resolveTrack(mpe::staff_layer_idx_t staffLayerIdx);
+    ms_Track resolveTrack(mu::mpe::staff_layer_idx_t staffLayerIdx);
     const TrackList& allTracks() const;
 
     void loadParams(const mpe::PlaybackParamMap& changes);
@@ -92,9 +92,10 @@ private:
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
 
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
-    void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
+    void parseArticulations(const mu::mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag,
+                            ms_NoteHead& notehead) const;
 
-    void parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
+    void parseOffStreamParams(const mu::mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
     ms_MuseSampler m_sampler = nullptr;
@@ -118,4 +119,4 @@ private:
 };
 }
 
-#endif // MU_MUSESAMPLER_MUSESAMPLERSEQUENCER_H
+#endif // MUSE_MUSESAMPLER_MUSESAMPLERSEQUENCER_H

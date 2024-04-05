@@ -38,7 +38,7 @@ namespace mu::playback {
 class DrumsetLoader : public async::Asyncable
 {
     Inject<notation::IInstrumentsRepository> instrumentsRepository;
-    Inject<musesampler::IMuseSamplerInfo> museSampler;
+    Inject<muse::musesampler::IMuseSamplerInfo> museSampler;
 
 public:
     void loadDrumset(notation::INotationPtr notation, const mu::engraving::InstrumentTrackId& trackId,

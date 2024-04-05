@@ -20,18 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
-#define MU_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
+#ifndef MUSE_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
+#define MUSE_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
 #include "imusesamplerconfiguration.h"
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class MuseSamplerConfiguration : public IMuseSamplerConfiguration
 {
-    INJECT(IGlobalConfiguration, globalConfig)
+    INJECT(mu::IGlobalConfiguration, globalConfig)
 
 public:
     void init();
@@ -47,4 +47,4 @@ private:
 };
 }
 
-#endif // MU_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H
+#endif // MUSE_MUSESAMPLER_MUSESAMPLERCONFIGURATION_H

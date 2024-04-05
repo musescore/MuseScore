@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_IMUSESAMPLERINFO_H
-#define MU_MUSESAMPLER_IMUSESAMPLERINFO_H
+#ifndef MUSE_MUSESAMPLER_IMUSESAMPLERINFO_H
+#define MUSE_MUSESAMPLER_IMUSESAMPLERINFO_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -29,7 +29,7 @@ namespace mu {
 class String;
 }
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class IMuseSamplerInfo : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMuseSamplerInfo)
@@ -45,4 +45,4 @@ public:
 };
 }
 
-#endif // MU_MUSESAMPLER_IMUSESAMPLERINFO_H
+#endif // MUSE_MUSESAMPLER_IMUSESAMPLERINFO_H

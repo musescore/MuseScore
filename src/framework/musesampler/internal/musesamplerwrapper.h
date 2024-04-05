@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_MUSESAMPLERWRAPPER_H
-#define MU_MUSESAMPLER_MUSESAMPLERWRAPPER_H
+#ifndef MUSE_MUSESAMPLER_MUSESAMPLERWRAPPER_H
+#define MUSE_MUSESAMPLER_MUSESAMPLERWRAPPER_H
 
 #include <memory>
 
@@ -33,7 +33,7 @@
 
 #include "imusesamplertracks.h"
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class MuseSamplerWrapper : public muse::audio::synth::AbstractSynthesizer, public IMuseSamplerTracks,
     public std::enable_shared_from_this<MuseSamplerWrapper>
 {
@@ -97,4 +97,4 @@ private:
 using MuseSamplerWrapperPtr = std::shared_ptr<MuseSamplerWrapper>;
 }
 
-#endif // MU_MUSESAMPLER_MUSESAMPLERWRAPPER_H
+#endif // MUSE_MUSESAMPLER_MUSESAMPLERWRAPPER_H

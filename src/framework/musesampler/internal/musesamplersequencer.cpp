@@ -23,81 +23,81 @@
 #include "musesamplersequencer.h"
 
 using namespace mu;
-using namespace mu::musesampler;
+using namespace muse::musesampler;
 
-static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES = {
-    { mpe::ArticulationType::Standard, ms_NoteArticulation_None },
-    { mpe::ArticulationType::Staccato, ms_NoteArticulation_Staccato },
-    { mpe::ArticulationType::Staccatissimo, ms_NoteArticulation_Staccatissimo },
-    { mpe::ArticulationType::Accent, ms_NoteArticulation_Accent },
-    { mpe::ArticulationType::Tenuto, ms_NoteArticulation_Tenuto },
-    { mpe::ArticulationType::Marcato, ms_NoteArticulation_Marcato },
-    { mpe::ArticulationType::Harmonic, ms_NoteArticulation_Harmonics },
-    { mpe::ArticulationType::PalmMute, ms_NoteArticulation_PalmMute },
-    { mpe::ArticulationType::Mute, ms_NoteArticulation_Mute },
-    { mpe::ArticulationType::Legato, ms_NoteArticulation_Slur },
-    { mpe::ArticulationType::Trill, ms_NoteArticulation_Trill },
-    { mpe::ArticulationType::TrillBaroque, ms_NoteArticulation_Trill },
+static const std::unordered_map<mu::mpe::ArticulationType, ms_NoteArticulation> ARTICULATION_TYPES = {
+    { mu::mpe::ArticulationType::Standard, ms_NoteArticulation_None },
+    { mu::mpe::ArticulationType::Staccato, ms_NoteArticulation_Staccato },
+    { mu::mpe::ArticulationType::Staccatissimo, ms_NoteArticulation_Staccatissimo },
+    { mu::mpe::ArticulationType::Accent, ms_NoteArticulation_Accent },
+    { mu::mpe::ArticulationType::Tenuto, ms_NoteArticulation_Tenuto },
+    { mu::mpe::ArticulationType::Marcato, ms_NoteArticulation_Marcato },
+    { mu::mpe::ArticulationType::Harmonic, ms_NoteArticulation_Harmonics },
+    { mu::mpe::ArticulationType::PalmMute, ms_NoteArticulation_PalmMute },
+    { mu::mpe::ArticulationType::Mute, ms_NoteArticulation_Mute },
+    { mu::mpe::ArticulationType::Legato, ms_NoteArticulation_Slur },
+    { mu::mpe::ArticulationType::Trill, ms_NoteArticulation_Trill },
+    { mu::mpe::ArticulationType::TrillBaroque, ms_NoteArticulation_Trill },
 
-    { mpe::ArticulationType::Arpeggio, ms_NoteArticulation_ArpeggioUp },
-    { mpe::ArticulationType::ArpeggioUp, ms_NoteArticulation_ArpeggioUp },
-    { mpe::ArticulationType::ArpeggioDown, ms_NoteArticulation_ArpeggioDown },
+    { mu::mpe::ArticulationType::Arpeggio, ms_NoteArticulation_ArpeggioUp },
+    { mu::mpe::ArticulationType::ArpeggioUp, ms_NoteArticulation_ArpeggioUp },
+    { mu::mpe::ArticulationType::ArpeggioDown, ms_NoteArticulation_ArpeggioDown },
 
-    { mpe::ArticulationType::Tremolo8th, ms_NoteArticulation_Tremolo1 },
-    { mpe::ArticulationType::Tremolo16th, ms_NoteArticulation_Tremolo2 },
-    { mpe::ArticulationType::Tremolo32nd, ms_NoteArticulation_Tremolo3 },
-    { mpe::ArticulationType::Tremolo64th, ms_NoteArticulation_Tremolo3 },
-    { mpe::ArticulationType::TremoloBuzz, ms_NoteArticulation_BuzzTremolo },
+    { mu::mpe::ArticulationType::Tremolo8th, ms_NoteArticulation_Tremolo1 },
+    { mu::mpe::ArticulationType::Tremolo16th, ms_NoteArticulation_Tremolo2 },
+    { mu::mpe::ArticulationType::Tremolo32nd, ms_NoteArticulation_Tremolo3 },
+    { mu::mpe::ArticulationType::Tremolo64th, ms_NoteArticulation_Tremolo3 },
+    { mu::mpe::ArticulationType::TremoloBuzz, ms_NoteArticulation_BuzzTremolo },
 
-    { mpe::ArticulationType::DiscreteGlissando, ms_NoteArticulation_Glissando },
-    { mpe::ArticulationType::ContinuousGlissando, ms_NoteArticulation_Portamento },
-    { mpe::ArticulationType::Slide, ms_NoteArticulation_Portamento },
+    { mu::mpe::ArticulationType::DiscreteGlissando, ms_NoteArticulation_Glissando },
+    { mu::mpe::ArticulationType::ContinuousGlissando, ms_NoteArticulation_Portamento },
+    { mu::mpe::ArticulationType::Slide, ms_NoteArticulation_Portamento },
 
-    { mpe::ArticulationType::Scoop, ms_NoteArticulation_Scoop },
-    { mpe::ArticulationType::Plop, ms_NoteArticulation_Plop },
-    { mpe::ArticulationType::Doit, ms_NoteArticulation_Doit },
-    { mpe::ArticulationType::Fall, ms_NoteArticulation_Fall },
-    { mpe::ArticulationType::PreAppoggiatura, ms_NoteArticulation_Appoggiatura },
-    { mpe::ArticulationType::PostAppoggiatura, ms_NoteArticulation_Appoggiatura },
-    { mpe::ArticulationType::Acciaccatura, ms_NoteArticulation_Acciaccatura },
+    { mu::mpe::ArticulationType::Scoop, ms_NoteArticulation_Scoop },
+    { mu::mpe::ArticulationType::Plop, ms_NoteArticulation_Plop },
+    { mu::mpe::ArticulationType::Doit, ms_NoteArticulation_Doit },
+    { mu::mpe::ArticulationType::Fall, ms_NoteArticulation_Fall },
+    { mu::mpe::ArticulationType::PreAppoggiatura, ms_NoteArticulation_Appoggiatura },
+    { mu::mpe::ArticulationType::PostAppoggiatura, ms_NoteArticulation_Appoggiatura },
+    { mu::mpe::ArticulationType::Acciaccatura, ms_NoteArticulation_Acciaccatura },
 
-    { mpe::ArticulationType::Open, ms_NoteArticulation_Open },
+    { mu::mpe::ArticulationType::Open, ms_NoteArticulation_Open },
 
-    { mpe::ArticulationType::Pizzicato, ms_NoteArticulation_Pizzicato },
-    { mpe::ArticulationType::SnapPizzicato, ms_NoteArticulation_SnapPizzicato },
+    { mu::mpe::ArticulationType::Pizzicato, ms_NoteArticulation_Pizzicato },
+    { mu::mpe::ArticulationType::SnapPizzicato, ms_NoteArticulation_SnapPizzicato },
 
-    { mpe::ArticulationType::UpperMordent, ms_NoteArticulation_MordentWhole },
-    { mpe::ArticulationType::UpMordent, ms_NoteArticulation_MordentWhole },
-    { mpe::ArticulationType::LowerMordent, ms_NoteArticulation_MordentInvertedWhole },
-    { mpe::ArticulationType::DownMordent, ms_NoteArticulation_MordentInvertedWhole },
-    { mpe::ArticulationType::Turn, ms_NoteArticulation_TurnWholeWhole },
-    { mpe::ArticulationType::InvertedTurn, ms_NoteArticulation_TurnInvertedWholeWhole },
+    { mu::mpe::ArticulationType::UpperMordent, ms_NoteArticulation_MordentWhole },
+    { mu::mpe::ArticulationType::UpMordent, ms_NoteArticulation_MordentWhole },
+    { mu::mpe::ArticulationType::LowerMordent, ms_NoteArticulation_MordentInvertedWhole },
+    { mu::mpe::ArticulationType::DownMordent, ms_NoteArticulation_MordentInvertedWhole },
+    { mu::mpe::ArticulationType::Turn, ms_NoteArticulation_TurnWholeWhole },
+    { mu::mpe::ArticulationType::InvertedTurn, ms_NoteArticulation_TurnInvertedWholeWhole },
 
-    { mpe::ArticulationType::ColLegno, ms_NoteArticulation_ColLegno },
-    { mpe::ArticulationType::SulTasto, ms_NoteArticulation_SulTasto },
-    { mpe::ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
+    { mu::mpe::ArticulationType::ColLegno, ms_NoteArticulation_ColLegno },
+    { mu::mpe::ArticulationType::SulTasto, ms_NoteArticulation_SulTasto },
+    { mu::mpe::ArticulationType::SulPont, ms_NoteArticulation_SulPonticello },
 };
 
-static const std::unordered_map<mpe::ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = {
-    { mpe::ArticulationType::CrossNote, ms_NoteHead_XNote },
-    { mpe::ArticulationType::CrossLargeNote, ms_NoteHead_LargeX },
-    { mpe::ArticulationType::CrossOrnateNote, ms_NoteHead_OrnateXNote },
-    { mpe::ArticulationType::GhostNote, ms_NoteHead_Ghost },
-    { mpe::ArticulationType::CircleNote, ms_NoteHead_Circle },
-    { mpe::ArticulationType::CircleCrossNote, ms_NoteHead_CircleXNote },
-    { mpe::ArticulationType::CircleDotNote, ms_NoteHead_CircleDot },
-    { mpe::ArticulationType::TriangleLeftNote, ms_NoteHead_Triangle },
-    { mpe::ArticulationType::TriangleRightNote, ms_NoteHead_TriangleRight },
-    { mpe::ArticulationType::TriangleUpNote, ms_NoteHead_TriangleUp },
-    { mpe::ArticulationType::TriangleDownNote, ms_NoteHead_TriangleDown },
-    { mpe::ArticulationType::TriangleRoundDownNote, ms_NoteHead_TriangleRoundDown },
-    { mpe::ArticulationType::DiamondNote, ms_NoteHead_Diamond },
-    { mpe::ArticulationType::MoonNote, ms_NoteHead_FlatTop },
-    { mpe::ArticulationType::PlusNote, ms_NoteHead_Plus },
-    { mpe::ArticulationType::SlashNote, ms_NoteHead_Slash },
-    { mpe::ArticulationType::SquareNote, ms_NoteHead_Square },
-    { mpe::ArticulationType::SlashedBackwardsNote, ms_NoteHead_SlashRightFilled },
-    { mpe::ArticulationType::SlashedForwardsNote, ms_NoteHead_SlashLeftFilled },
+static const std::unordered_map<mu::mpe::ArticulationType, ms_NoteHead> NOTEHEAD_TYPES = {
+    { mu::mpe::ArticulationType::CrossNote, ms_NoteHead_XNote },
+    { mu::mpe::ArticulationType::CrossLargeNote, ms_NoteHead_LargeX },
+    { mu::mpe::ArticulationType::CrossOrnateNote, ms_NoteHead_OrnateXNote },
+    { mu::mpe::ArticulationType::GhostNote, ms_NoteHead_Ghost },
+    { mu::mpe::ArticulationType::CircleNote, ms_NoteHead_Circle },
+    { mu::mpe::ArticulationType::CircleCrossNote, ms_NoteHead_CircleXNote },
+    { mu::mpe::ArticulationType::CircleDotNote, ms_NoteHead_CircleDot },
+    { mu::mpe::ArticulationType::TriangleLeftNote, ms_NoteHead_Triangle },
+    { mu::mpe::ArticulationType::TriangleRightNote, ms_NoteHead_TriangleRight },
+    { mu::mpe::ArticulationType::TriangleUpNote, ms_NoteHead_TriangleUp },
+    { mu::mpe::ArticulationType::TriangleDownNote, ms_NoteHead_TriangleDown },
+    { mu::mpe::ArticulationType::TriangleRoundDownNote, ms_NoteHead_TriangleRoundDown },
+    { mu::mpe::ArticulationType::DiamondNote, ms_NoteHead_Diamond },
+    { mu::mpe::ArticulationType::MoonNote, ms_NoteHead_FlatTop },
+    { mu::mpe::ArticulationType::PlusNote, ms_NoteHead_Plus },
+    { mu::mpe::ArticulationType::SlashNote, ms_NoteHead_Slash },
+    { mu::mpe::ArticulationType::SquareNote, ms_NoteHead_Square },
+    { mu::mpe::ArticulationType::SlashedBackwardsNote, ms_NoteHead_SlashRightFilled },
+    { mu::mpe::ArticulationType::SlashedForwardsNote, ms_NoteHead_SlashLeftFilled },
 };
 
 void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks,
@@ -109,7 +109,7 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
     m_defaultPresetCode = std::move(defaultPresetCode);
 }
 
-void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::PlaybackParamMap& params)
+void MuseSamplerSequencer::updateOffStreamEvents(const mu::mpe::PlaybackEventsMap& events, const mu::mpe::PlaybackParamMap& params)
 {
     m_offStreamEvents.clear();
 
@@ -125,19 +125,19 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
 
     for (const auto& pair : events) {
         for (const auto& event : pair.second) {
-            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+            if (!std::holds_alternative<mu::mpe::NoteEvent>(event)) {
                 continue;
             }
 
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(event);
 
             ms_Track track = resolveTrack(noteEvent.arrangementCtx().staffLayerIndex);
             IF_ASSERT_FAILED(track) {
                 continue;
             }
 
-            mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
-            mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+            mu::mpe::timestamp_t timestampFrom = noteEvent.arrangementCtx().actualTimestamp;
+            mu::mpe::timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
 
             int pitch{};
             int centsOffset{};
@@ -162,8 +162,8 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& e
     updateOffSequenceIterator();
 }
 
-void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelMap& dynamics,
-                                                  const mpe::PlaybackParamMap& params)
+void MuseSamplerSequencer::updateMainStreamEvents(const mu::mpe::PlaybackEventsMap& events, const mu::mpe::DynamicLevelMap& dynamics,
+                                                  const mu::mpe::PlaybackParamMap& params)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
@@ -194,7 +194,7 @@ void MuseSamplerSequencer::finalizeAllTracks()
     }
 }
 
-ms_Track MuseSamplerSequencer::resolveTrack(mpe::staff_layer_idx_t staffLayerIdx)
+ms_Track MuseSamplerSequencer::resolveTrack(mu::mpe::staff_layer_idx_t staffLayerIdx)
 {
     const TrackList& tracks = m_tracks->allTracks();
 
@@ -250,7 +250,7 @@ const TrackList& MuseSamplerSequencer::allTracks() const
     return m_tracks->allTracks();
 }
 
-void MuseSamplerSequencer::loadParams(const mpe::PlaybackParamMap& params)
+void MuseSamplerSequencer::loadParams(const mu::mpe::PlaybackParamMap& params)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
@@ -259,10 +259,10 @@ void MuseSamplerSequencer::loadParams(const mpe::PlaybackParamMap& params)
     for (const auto& pair : params) {
         std::vector<std::string> soundPresets;
 
-        for (const mpe::PlaybackParam& param : pair.second) {
-            if (param.code == mpe::SOUND_PRESET_PARAM_CODE) {
+        for (const mu::mpe::PlaybackParam& param : pair.second) {
+            if (param.code == mu::mpe::SOUND_PRESET_PARAM_CODE) {
                 soundPresets.emplace_back(param.val.toString());
-            } else if (param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
+            } else if (param.code == mu::mpe::PLAY_TECHNIQUE_PARAM_CODE) {
                 addTextArticulation(param.val.toString(), pair.first);
             }
         }
@@ -271,7 +271,7 @@ void MuseSamplerSequencer::loadParams(const mpe::PlaybackParamMap& params)
     }
 }
 
-void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
+void MuseSamplerSequencer::loadNoteEvents(const mu::mpe::PlaybackEventsMap& changes)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler) {
         return;
@@ -279,18 +279,18 @@ void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
 
     for (const auto& pair : changes) {
         for (const auto& event : pair.second) {
-            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+            if (!std::holds_alternative<mu::mpe::NoteEvent>(event)) {
                 continue;
             }
 
-            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(event);
 
             addNoteEvent(noteEvent);
         }
     }
 }
 
-void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes)
+void MuseSamplerSequencer::loadDynamicEvents(const mu::mpe::DynamicLevelMap& changes)
 {
     for (ms_Track track : allTracks()) {
         for (const auto& pair : changes) {
@@ -299,7 +299,7 @@ void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes
     }
 }
 
-void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
+void MuseSamplerSequencer::addNoteEvent(const mu::mpe::NoteEvent& noteEvent)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_tracks) {
         return;
@@ -310,12 +310,12 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         return;
     }
 
-    mpe::voice_layer_idx_t voiceIdx = noteEvent.arrangementCtx().voiceLayerIndex;
+    mu::mpe::voice_layer_idx_t voiceIdx = noteEvent.arrangementCtx().voiceLayerIndex;
 
     for (const auto& art : noteEvent.expressionCtx().articulations) {
         auto ms_art = convertArticulationType(art.first);
 
-        if (art.first == mpe::ArticulationType::Pedal) {
+        if (art.first == mu::mpe::ArticulationType::Pedal) {
             // Pedal on:
             m_samplerLib->addPedalEvent(m_sampler, track, art.second.meta.timestamp, 1.0);
             // Pedal off:
@@ -324,7 +324,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
 
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this starts an articulation range, indicate the start
-            if (art.second.occupiedFrom == 0 && art.second.occupiedTo != mpe::HUNDRED_PERCENT) {
+            if (art.second.occupiedFrom == 0 && art.second.occupiedTo != mu::mpe::HUNDRED_PERCENT) {
                 if (m_samplerLib->addTrackEventRangeStart(m_sampler, track, voiceIdx, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range start";
                 }
@@ -353,7 +353,7 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         auto ms_art = convertArticulationType(art.first);
         if (m_samplerLib->isRangedArticulation(ms_art)) {
             // If this ends an articulation range, indicate the end
-            if (art.second.occupiedFrom != 0 && art.second.occupiedTo == mpe::HUNDRED_PERCENT) {
+            if (art.second.occupiedFrom != 0 && art.second.occupiedTo == mu::mpe::HUNDRED_PERCENT) {
                 if (m_samplerLib->addTrackEventRangeEnd(m_sampler, track, voiceIdx, ms_art) != ms_Result_OK) {
                     LOGE() << "Unable to add ranged articulation range end";
                 }
@@ -361,11 +361,11 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
         }
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Multibend)) {
+    if (noteEvent.expressionCtx().articulations.contains(mu::mpe::ArticulationType::Multibend)) {
         addPitchBends(noteEvent, noteEventId, track);
     }
 
-    if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Vibrato)) {
+    if (noteEvent.expressionCtx().articulations.contains(mu::mpe::ArticulationType::Vibrato)) {
         addVibrato(noteEvent, noteEventId, track);
     }
 }
@@ -375,7 +375,7 @@ void MuseSamplerSequencer::addTextArticulation(const std::string& articulationCo
     ms_TextArticulationEvent evt;
     evt._start_us = startUs;
 
-    if (articulationCode != mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
+    if (articulationCode != mu::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
         evt._articulation = articulationCode.c_str();
     } else {
         evt._articulation = ""; // resets the active articulation
@@ -401,14 +401,14 @@ void MuseSamplerSequencer::addPresets(const std::vector<std::string>& presets, l
     }
 }
 
-void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
+void MuseSamplerSequencer::addPitchBends(const mu::mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
     if (!m_samplerLib->addPitchBend) { // added in 0.5
         return;
     }
 
-    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
-    const mpe::PitchCurve& pitchCurve = noteEvent.pitchCtx().pitchCurve;
+    mu::mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    const mu::mpe::PitchCurve& pitchCurve = noteEvent.pitchCtx().pitchCurve;
 
     for (auto it = pitchCurve.begin(); it != pitchCurve.end(); ++it) {
         auto nextIt = std::next(it);
@@ -420,8 +420,8 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
             continue;
         }
 
-        long long currOffsetStart = duration * mpe::percentageToFactor(it->first);
-        long long nextOffsetStart = duration * mpe::percentageToFactor(nextIt->first);
+        long long currOffsetStart = duration * mu::mpe::percentageToFactor(it->first);
+        long long nextOffsetStart = duration * mu::mpe::percentageToFactor(nextIt->first);
 
         ms_PitchBendInfo pitchBend;
         pitchBend.event_id = noteEventId;
@@ -434,13 +434,13 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
     }
 }
 
-void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
+void MuseSamplerSequencer::addVibrato(const mu::mpe::NoteEvent& noteEvent, long long noteEventId, ms_Track track)
 {
     if (!m_samplerLib->addVibrato) { // added in 0.5
         return;
     }
 
-    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    mu::mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
     // stand-in data before actual mpe support
     constexpr auto MAX_VIBRATO_STARTOFFSET_US = (int64_t)0.1 * 1000000;
     // stand-in data before actual mpe support
@@ -455,11 +455,11 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
     m_samplerLib->addVibrato(m_sampler, track, vibrato);
 }
 
-void MuseSamplerSequencer::pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const
+void MuseSamplerSequencer::pitchAndTuning(const mu::mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const
 {
-    static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 0);
+    static constexpr mu::mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mu::mpe::pitchLevel(mu::mpe::PitchClass::C, 0);
     static constexpr int MIN_SUPPORTED_NOTE = 12; // equivalent for C0
-    static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(mpe::PitchClass::C, 8);
+    static constexpr mu::mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mu::mpe::pitchLevel(mu::mpe::PitchClass::C, 8);
     static constexpr int MAX_SUPPORTED_NOTE = 108; // equivalent for C8
 
     if (nominalPitch <= MIN_SUPPORTED_PITCH_LEVEL) {
@@ -475,40 +475,40 @@ void MuseSamplerSequencer::pitchAndTuning(const mpe::pitch_level_t nominalPitch,
     }
 
     // Get midi pitch
-    float stepCount = MIN_SUPPORTED_NOTE + ((nominalPitch - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    float stepCount = MIN_SUPPORTED_NOTE + ((nominalPitch - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP));
     pitch = RealRound(stepCount, 0);
 
     // Get tuning offset
     int semitonesCount = pitch - MIN_SUPPORTED_NOTE;
-    mpe::pitch_level_t tuningPitchLevel = nominalPitch - (semitonesCount * mpe::PITCH_LEVEL_STEP);
+    mu::mpe::pitch_level_t tuningPitchLevel = nominalPitch - (semitonesCount * mu::mpe::PITCH_LEVEL_STEP);
     centsOffset = pitchLevelToCents(tuningPitchLevel);
 }
 
-int MuseSamplerSequencer::pitchLevelToCents(const mpe::pitch_level_t pitchLevel) const
+int MuseSamplerSequencer::pitchLevelToCents(const mu::mpe::pitch_level_t pitchLevel) const
 {
-    static constexpr float CONVERT_TO_CENTS = (100.f / static_cast<float>(mpe::PITCH_LEVEL_STEP));
+    static constexpr float CONVERT_TO_CENTS = (100.f / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP));
 
     return pitchLevel * CONVERT_TO_CENTS;
 }
 
-double MuseSamplerSequencer::dynamicLevelRatio(const mpe::dynamic_level_t level) const
+double MuseSamplerSequencer::dynamicLevelRatio(const mu::mpe::dynamic_level_t level) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::ppppppppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMIC_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::fffffffff);
+    static constexpr mu::mpe::dynamic_level_t MIN_SUPPORTED_DYNAMIC_LEVEL = mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::ppppppppp);
+    static constexpr mu::mpe::dynamic_level_t MAX_SUPPORTED_DYNAMIC_LEVEL = mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::fffffffff);
 
     // Piecewise linear simple scaling to expected MuseSampler values:
-    static const std::list<std::pair<mpe::dynamic_level_t, double> > conversionMap = {
+    static const std::list<std::pair<mu::mpe::dynamic_level_t, double> > conversionMap = {
         { MIN_SUPPORTED_DYNAMIC_LEVEL, 0.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::ppppp), 1.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::pppp), 2.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::ppp), 4.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::pp), 8.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::p), 16.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::mp), 32.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::mf), 64.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::f), 96.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::ff), 120.0 / 127.0 },
-        { mpe::dynamicLevelFromType(mpe::DynamicType::fff), 127.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::ppppp), 1.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::pppp), 2.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::ppp), 4.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::pp), 8.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::p), 16.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::mp), 32.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::mf), 64.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::f), 96.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::ff), 120.0 / 127.0 },
+        { mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::fff), 127.0 / 127.0 },
         { MAX_SUPPORTED_DYNAMIC_LEVEL, 127.0 / 127.0 }
     };
 
@@ -527,7 +527,7 @@ double MuseSamplerSequencer::dynamicLevelRatio(const mpe::dynamic_level_t level)
     return 48.0 / 127.0;
 }
 
-ms_NoteArticulation MuseSamplerSequencer::convertArticulationType(mpe::ArticulationType articulation) const
+ms_NoteArticulation MuseSamplerSequencer::convertArticulationType(mu::mpe::ArticulationType articulation) const
 {
     if (auto search = ARTICULATION_TYPES.find(articulation); search != ARTICULATION_TYPES.cend()) {
         return static_cast<ms_NoteArticulation>(search->second);
@@ -535,7 +535,7 @@ ms_NoteArticulation MuseSamplerSequencer::convertArticulationType(mpe::Articulat
     return static_cast<ms_NoteArticulation>(0);
 }
 
-void MuseSamplerSequencer::parseArticulations(const mpe::ArticulationMap& articulations,
+void MuseSamplerSequencer::parseArticulations(const mu::mpe::ArticulationMap& articulations,
                                               ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const
 {
     uint64_t artFlag = 0;
@@ -556,7 +556,7 @@ void MuseSamplerSequencer::parseArticulations(const mpe::ArticulationMap& articu
     articulationFlag = static_cast<ms_NoteArticulation>(artFlag);
 }
 
-void MuseSamplerSequencer::parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets,
+void MuseSamplerSequencer::parseOffStreamParams(const mu::mpe::PlaybackParamMap& params, std::string& presets,
                                                 std::string& textArticulation) const
 {
     if (params.empty()) {
@@ -566,10 +566,10 @@ void MuseSamplerSequencer::parseOffStreamParams(const mpe::PlaybackParamMap& par
     StringList presetList;
 
     for (const auto& pair : params) {
-        for (const mpe::PlaybackParam& param : pair.second) {
-            if (param.code == mpe::SOUND_PRESET_PARAM_CODE) {
+        for (const mu::mpe::PlaybackParam& param : pair.second) {
+            if (param.code == mu::mpe::SOUND_PRESET_PARAM_CODE) {
                 presetList.emplace_back(String::fromStdString(param.val.toString()));
-            } else if (param.code == mpe::PLAY_TECHNIQUE_PARAM_CODE) {
+            } else if (param.code == mu::mpe::PLAY_TECHNIQUE_PARAM_CODE) {
                 textArticulation = param.val.toString();
             }
         }

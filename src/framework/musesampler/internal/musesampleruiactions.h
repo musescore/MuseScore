@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MUSESAMPLER_MUSESAMLERUIACTIONS_H
-#define MU_MUSESAMPLER_MUSESAMLERUIACTIONS_H
+#ifndef MUSE_MUSESAMPLER_MUSESAMLERUIACTIONS_H
+#define MUSE_MUSESAMPLER_MUSESAMLERUIACTIONS_H
 
 #include "ui/iuiactionsmodule.h"
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class MuseSamplerUiActions : public muse::ui::IUiActionsModule
 {
 public:
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_MUSESAMPLER_MUSESAMLERUIACTIONS_H
+#endif // MUSE_MUSESAMPLER_MUSESAMLERUIACTIONS_H
