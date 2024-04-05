@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_APITYPES_H
-#define MU_MUSESAMPLER_APITYPES_H
+#ifndef MUSE_MUSESAMPLER_APITYPES_H
+#define MUSE_MUSESAMPLER_APITYPES_H
 
 #include <stdint.h>
 #include <memory>
@@ -387,7 +387,7 @@ typedef ms_Result (* ms_MuseSampler_add_track_text_articulation_event)(ms_MuseSa
 typedef const char*(* ms_get_drum_mapping)(int instrument_id);
 // ------------------------------------------------------------
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 using track_idx_t = size_t;
 using TrackList = std::vector<ms_Track>;
 
@@ -414,4 +414,4 @@ struct AuditionStopNoteEvent {
 using NoteEvent = ms_NoteEvent_4;
 }
 
-#endif // MU_MUSESAMPLER_APITYPES_H
+#endif // MUSE_MUSESAMPLER_APITYPES_H

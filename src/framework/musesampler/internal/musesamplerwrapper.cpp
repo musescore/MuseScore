@@ -28,7 +28,7 @@
 
 using namespace mu;
 using namespace muse::audio;
-using namespace mu::musesampler;
+using namespace muse::musesampler;
 
 static constexpr int AUDIO_CHANNELS_COUNT = 2;
 

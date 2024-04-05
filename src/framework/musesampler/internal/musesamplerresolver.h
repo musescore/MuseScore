@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_MUSESAMPLERRESOLVER_H
-#define MU_MUSESAMPLER_MUSESAMPLERRESOLVER_H
+#ifndef MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H
+#define MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H
 
 #include "audio/isynthresolver.h"
 #include "modularity/ioc.h"
@@ -30,7 +30,7 @@
 #include "imusesamplerconfiguration.h"
 #include "imusesamplerinfo.h"
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class MuseSamplerResolver : public muse::audio::synth::ISynthResolver::IResolver, public IMuseSamplerInfo
 {
     INJECT(IMuseSamplerConfiguration, configuration)
@@ -64,4 +64,4 @@ private:
 };
 }
 
-#endif // MU_MUSESAMPLER_MUSESAMPLERRESOLVER_H
+#endif // MUSE_MUSESAMPLER_MUSESAMPLERRESOLVER_H

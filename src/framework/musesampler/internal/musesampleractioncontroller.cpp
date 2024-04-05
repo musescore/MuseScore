@@ -23,7 +23,7 @@
 
 #include "translation.h"
 
-using namespace mu::musesampler;
+using namespace muse::musesampler;
 
 void MuseSamplerActionController::init()
 {

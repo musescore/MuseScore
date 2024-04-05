@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
-#define MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
+#ifndef MUSE_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
+#define MUSE_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "io/path.h"
 
-namespace mu::musesampler {
+namespace muse::musesampler {
 class IMuseSamplerConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMuseSamplerConfiguration)
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H
+#endif // MUSE_MUSESAMPLER_IMUSESAMPLERCONFIGURATION_H

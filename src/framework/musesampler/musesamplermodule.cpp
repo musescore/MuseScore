@@ -36,7 +36,7 @@
 using namespace mu;
 using namespace muse::audio;
 using namespace mu::modularity;
-using namespace mu::musesampler;
+using namespace muse::musesampler;
 
 std::string MuseSamplerModule::moduleName() const
 {
