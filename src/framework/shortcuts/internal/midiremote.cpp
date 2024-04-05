@@ -28,7 +28,7 @@
 
 #include "log.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 using namespace muse::midi;
 
 constexpr std::string_view MIDIMAPPING_TAG("MidiMapping");

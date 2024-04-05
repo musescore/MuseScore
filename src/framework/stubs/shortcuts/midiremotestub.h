@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_MIDIREMOTESTUB_H
-#define MU_SHORTCUTS_MIDIREMOTESTUB_H
+#ifndef MUSE_SHORTCUTS_MIDIREMOTESTUB_H
+#define MUSE_SHORTCUTS_MIDIREMOTESTUB_H
 
 #include "shortcuts/imidiremote.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class MidiRemoteStub : public IMidiRemote
 {
 public:
@@ -44,4 +44,4 @@ public:
 };
 }
 
-#endif // MU_SHORTCUTS_MIDIREMOTESTUB_H
+#endif // MUSE_SHORTCUTS_MIDIREMOTESTUB_H

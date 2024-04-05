@@ -30,7 +30,7 @@
 
 #include "ui/iuiengine.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 using namespace mu::modularity;
 
 static void shortcuts_init_qrc()

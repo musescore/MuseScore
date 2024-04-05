@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSMODULE_H
-#define MU_SHORTCUTS_SHORTCUTSMODULE_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSMODULE_H
+#define MUSE_SHORTCUTS_SHORTCUTSMODULE_H
 
 #include <memory>
 #include <string>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsController;
 class ShortcutsRegister;
 class ShortcutsConfiguration;
@@ -52,4 +52,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSMODULE_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSMODULE_H

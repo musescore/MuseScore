@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 ShortcutsInstanceModel::ShortcutsInstanceModel(QObject* parent)
     : QObject(parent)

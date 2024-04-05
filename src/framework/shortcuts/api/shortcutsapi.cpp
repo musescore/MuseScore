@@ -23,10 +23,10 @@
 
 #include "log.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
-ShortcutsApi::ShortcutsApi(IApiEngine* e)
-    : ApiObject(e)
+ShortcutsApi::ShortcutsApi(mu::api::IApiEngine* e)
+    : mu::api::ApiObject(e)
 {
 }
 

@@ -32,7 +32,7 @@ using namespace mu::mi;
 const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "&Multiinstances")
              )
 };

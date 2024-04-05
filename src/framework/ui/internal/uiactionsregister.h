@@ -35,7 +35,7 @@ namespace muse::ui {
 class UiActionsRegister : public IUiActionsRegister, public async::Asyncable
 {
     INJECT(IUiContextResolver, uicontextResolver)
-    INJECT(mu::shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
 public:
     UiActionsRegister() = default;
 

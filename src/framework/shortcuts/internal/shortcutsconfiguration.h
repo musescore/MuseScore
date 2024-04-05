@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSCONFIGURATION_H
-#define MU_SHORTCUTS_SHORTCUTSCONFIGURATION_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSCONFIGURATION_H
+#define MUSE_SHORTCUTS_SHORTCUTSCONFIGURATION_H
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "ishortcutsconfiguration.h"
 #include "async/asyncable.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asyncable
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();
@@ -48,4 +48,4 @@ public:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSCONTROLLER_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSCONTROLLER_H

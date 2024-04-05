@@ -21,7 +21,7 @@
  */
 #include "shortcutsconfigurationstub.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 QString ShortcutsConfigurationStub::currentKeyboardLayout() const
 {

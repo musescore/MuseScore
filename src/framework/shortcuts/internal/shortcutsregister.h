@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSREGISTER_H
+#define MUSE_SHORTCUTS_SHORTCUTSREGISTER_H
 
 #include <unordered_map>
 
@@ -37,12 +37,12 @@ class XmlReader;
 class XmlWriter;
 }
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
 {
     INJECT(IShortcutsConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(muse::ui::IUiActionsRegister, uiactionsRegister)
 
 public:
@@ -75,10 +75,10 @@ public:
 private:
 
     bool readFromFile(ShortcutList& shortcuts, const io::path_t& path) const;
-    Shortcut readShortcut(deprecated::XmlReader& reader) const;
+    Shortcut readShortcut(mu::deprecated::XmlReader& reader) const;
 
     bool writeToFile(const ShortcutList& shortcuts, const io::path_t& path) const;
-    void writeShortcut(deprecated::XmlWriter& writer, const Shortcut& shortcut) const;
+    void writeShortcut(mu::deprecated::XmlWriter& writer, const Shortcut& shortcut) const;
 
     void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
     void mergeAdditionalShortcuts(ShortcutList& shortcuts);
@@ -98,4 +98,4 @@ private:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSREGISTER_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSREGISTER_H

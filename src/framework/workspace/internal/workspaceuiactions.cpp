@@ -32,12 +32,12 @@ using namespace muse::actions;
 const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("select-workspace",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Select workspace")
              ),
     UiAction("configure-workspaces",
              muse::ui::UiCtxAny,
-             mu::shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Configure workspace"),
              TranslatableString("action", "Configure workspace…")
              )

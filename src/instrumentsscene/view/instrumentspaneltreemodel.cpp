@@ -658,13 +658,13 @@ bool InstrumentsPanelTreeModel::isInstrumentSelected() const
 
 QString InstrumentsPanelTreeModel::addInstrumentsKeyboardShortcut() const
 {
-    const shortcuts::Shortcut& shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
+    const muse::shortcuts::Shortcut& shortcut = shortcutsRegister()->shortcut(ADD_INSTRUMENTS_ACTIONCODE);
 
     if (shortcut.sequences.empty()) {
         return {};
     }
 
-    return shortcuts::sequencesToNativeText({ shortcut.sequences[0] });
+    return muse::shortcuts::sequencesToNativeText({ shortcut.sequences[0] });
 }
 
 void InstrumentsPanelTreeModel::setIsRemovingAvailable(bool isRemovingAvailable)

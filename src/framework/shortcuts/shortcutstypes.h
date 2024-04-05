@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSTYPES_H
-#define MU_SHORTCUTS_SHORTCUTSTYPES_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSTYPES_H
+#define MUSE_SHORTCUTS_SHORTCUTSTYPES_H
 
 #include <string>
 #include <list>
@@ -32,7 +32,7 @@
 
 #include "translation.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 struct Shortcut
 {
     std::string action;
@@ -58,13 +58,13 @@ struct Shortcut
 
     static std::string sequencesToString(const std::vector<std::string>& seqs)
     {
-        return strings::join(seqs, ", ");
+        return mu::strings::join(seqs, ", ");
     }
 
     static std::vector<std::string> sequencesFromString(const std::string& str)
     {
         std::vector<std::string> seqs;
-        strings::split(str, seqs, ", ");
+        mu::strings::split(str, seqs, ", ");
         return seqs;
     }
 
@@ -100,14 +100,14 @@ struct RemoteEvent {
     {
         if (this->type == RemoteEventType::Note) {
             //: A MIDI remote event, namely a note event
-            return mtrc("shortcuts", "Note %1").arg(String::fromStdString(pitchToString(this->value)));
+            return mu::mtrc("shortcuts", "Note %1").arg(String::fromStdString(mu::pitchToString(this->value)));
         } else if (this->type == RemoteEventType::Controller) {
             //: A MIDI remote event, namely a MIDI controller event
-            return mtrc("shortcuts", "CC %1").arg(String::number(this->value));
+            return mu::mtrc("shortcuts", "CC %1").arg(String::number(this->value));
         }
 
         //: No MIDI remote event
-        return mtrc("shortcuts", "None");
+        return mu::mtrc("shortcuts", "None");
     }
 
     bool operator ==(const RemoteEvent& other) const
@@ -216,4 +216,4 @@ inline bool areContextPrioritiesEqual(const std::string& shortcutCtx1, const std
 }
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSTYPES_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSTYPES_H

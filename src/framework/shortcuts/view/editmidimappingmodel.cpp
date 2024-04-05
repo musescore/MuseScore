@@ -26,7 +26,7 @@
 #include "utils.h"
 #include "log.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 using namespace muse::midi;
 
 EditMidiMappingModel::EditMidiMappingModel(QObject* parent)

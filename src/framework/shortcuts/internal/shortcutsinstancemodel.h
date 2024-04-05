@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
-#define MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
+#ifndef MUSE_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
+#define MUSE_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
 
 #include <QObject>
 #include <QString>
@@ -32,7 +32,7 @@
 #include "ishortcutsregister.h"
 #include "ishortcutscontroller.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class ShortcutsInstanceModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -64,4 +64,4 @@ protected:
 };
 }
 
-#endif // MU_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H
+#endif // MUSE_SHORTCUTS_SHORTCUTSINSTANCEMODEL_H

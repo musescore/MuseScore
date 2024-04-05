@@ -27,7 +27,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 
 #if defined(Q_OS_MACOS)
 static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts-Mac.xml");

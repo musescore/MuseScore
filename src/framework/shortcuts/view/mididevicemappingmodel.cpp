@@ -28,7 +28,7 @@
 #include "log.h"
 #include "translation.h"
 
-using namespace mu::shortcuts;
+using namespace muse::shortcuts;
 using namespace muse::midi;
 using namespace muse::ui;
 using namespace muse::actions;

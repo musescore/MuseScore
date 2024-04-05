@@ -48,7 +48,7 @@ class Autobot : public IAutobot, public async::Asyncable
     INJECT(IAutobotConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(muse::ui::INavigationController, navigation)
-    INJECT(mu::shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(mu::IInteractive, interactive)
     INJECT(muse::ui::IMainWindow, mainWindow)
 

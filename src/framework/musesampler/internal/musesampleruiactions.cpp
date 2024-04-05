@@ -32,7 +32,7 @@ using namespace muse::musesampler;
 const UiActionList MuseSamplerUiActions::m_actions = {
     UiAction("musesampler-check",
              muse::ui::UiCtxAny,
-             shortcuts::CTX_ANY,
+             muse::shortcuts::CTX_ANY,
              TranslatableString("action", "Check Muse Sampler")
              )
 };

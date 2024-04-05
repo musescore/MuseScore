@@ -39,7 +39,7 @@ class MidiInputOutputController : public async::Asyncable
     INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(INotationConfiguration, configuration)
-    INJECT(shortcuts::IMidiRemote, midiRemote)
+    INJECT(muse::shortcuts::IMidiRemote, midiRemote)
 
 public:
     void init();

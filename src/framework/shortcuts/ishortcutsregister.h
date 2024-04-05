@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SHORTCUTS_ISHORTCUTSREGISTER_H
-#define MU_SHORTCUTS_ISHORTCUTSREGISTER_H
+#ifndef MUSE_SHORTCUTS_ISHORTCUTSREGISTER_H
+#define MUSE_SHORTCUTS_ISHORTCUTSREGISTER_H
 
 #include <list>
 
@@ -30,7 +30,7 @@
 #include "types/ret.h"
 #include "io/path.h"
 
-namespace mu::shortcuts {
+namespace muse::shortcuts {
 class IShortcutsRegister : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IShortcutsRegister)
@@ -62,4 +62,4 @@ public:
 };
 }
 
-#endif // MU_SHORTCUTS_ISHORTCUTSREGISTER_H
+#endif // MUSE_SHORTCUTS_ISHORTCUTSREGISTER_H
