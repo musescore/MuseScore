@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_TESTCASECONTEXT_H
-#define MU_AUTOBOT_TESTCASECONTEXT_H
+#ifndef MUSE_AUTOBOT_TESTCASECONTEXT_H
+#define MUSE_AUTOBOT_TESTCASECONTEXT_H
 
 #include "../itestcasecontext.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 struct TestCaseContext : public ITestCaseContext
 {
 public:
@@ -48,4 +48,4 @@ private:
     std::vector<StepContext> m_steps;
 };
 }
-#endif // MU_AUTOBOT_TESTCASECONTEXT_H
+#endif // MUSE_AUTOBOT_TESTCASECONTEXT_H

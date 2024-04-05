@@ -29,7 +29,7 @@ static const QColor ADDED_COLOR("#009900");
 
 static const std::string NOTATION_DEFAULT_OBJ("notationview_default");
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 const std::shared_ptr<AbPaintProvider>& AbPaintProvider::instance()
 {

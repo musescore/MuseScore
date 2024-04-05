@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 void TestCaseContext::setGlobalVal(const Key& key, const Val& val)
 {

@@ -592,7 +592,7 @@ int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegi
 
 void App::processAutobot(const CommandLineParser::Autobot& task)
 {
-    using namespace mu::autobot;
+    using namespace muse::autobot;
     async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
     stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret){
         if (!ret) {

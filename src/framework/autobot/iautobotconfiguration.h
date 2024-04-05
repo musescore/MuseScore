@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
-#define MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
+#ifndef MUSE_AUTOBOT_IAUTOBOTCONFIGURATION_H
+#define MUSE_AUTOBOT_IAUTOBOTCONFIGURATION_H
 
 #include "modularity/imoduleinterface.h"
 #include "io/path.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class IAutobotConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IAutobotConfiguration)
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_AUTOBOT_IAUTOBOTCONFIGURATION_H
+#endif // MUSE_AUTOBOT_IAUTOBOTCONFIGURATION_H

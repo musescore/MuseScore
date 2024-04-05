@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_TESTCASEREPORT_H
-#define MU_AUTOBOT_TESTCASEREPORT_H
+#ifndef MUSE_AUTOBOT_TESTCASEREPORT_H
+#define MUSE_AUTOBOT_TESTCASEREPORT_H
 
 #include <QFile>
 #include <QTextStream>
@@ -32,7 +32,7 @@
 #include "../autobottypes.h"
 #include "../itestcasecontext.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class TestCaseReport
 {
     INJECT(IAutobotConfiguration, configuration)
@@ -54,4 +54,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_TESTCASEREPORT_H
+#endif // MUSE_AUTOBOT_TESTCASEREPORT_H

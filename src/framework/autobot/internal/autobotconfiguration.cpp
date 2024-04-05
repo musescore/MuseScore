@@ -24,11 +24,11 @@
 #include <cstdlib>
 #include <QDir>
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 mu::io::paths_t AutobotConfiguration::scriptsDirPaths() const
 {
-    io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_SCRIPTS_PATH"));
+    io::path_t p = io::path_t(std::getenv("MUSE_AUTOBOT_SCRIPTS_PATH"));
     if (!p.empty()) {
         return { p };
     }
@@ -42,7 +42,7 @@ mu::io::paths_t AutobotConfiguration::scriptsDirPaths() const
 
 mu::io::paths_t AutobotConfiguration::testingFilesDirPaths() const
 {
-    io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_FILES_PATH"));
+    io::path_t p = io::path_t(std::getenv("MUSE_AUTOBOT_FILES_PATH"));
     if (!p.empty()) {
         return { p };
     }
@@ -56,7 +56,7 @@ mu::io::paths_t AutobotConfiguration::testingFilesDirPaths() const
 
 mu::io::path_t AutobotConfiguration::dataPath() const
 {
-    io::path_t p = io::path_t(std::getenv("MU_AUTOBOT_DATA_PATH"));
+    io::path_t p = io::path_t(std::getenv("MUSE_AUTOBOT_DATA_PATH"));
     if (!p.empty()) {
         return p;
     }
@@ -82,5 +82,5 @@ mu::io::path_t AutobotConfiguration::drawDataPath() const
 
 mu::io::path_t AutobotConfiguration::fileDrawDataPath(const io::path_t& filePath) const
 {
-    return drawDataPath() + "/" + io::completeBasename(filePath) + ".json";
+    return drawDataPath() + "/" + mu::io::completeBasename(filePath) + ".json";
 }

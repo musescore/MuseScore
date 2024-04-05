@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_AUTOBOTCONFIGURATION_H
-#define MU_AUTOBOT_AUTOBOTCONFIGURATION_H
+#ifndef MUSE_AUTOBOT_AUTOBOTCONFIGURATION_H
+#define MUSE_AUTOBOT_AUTOBOTCONFIGURATION_H
 
 #include "../iautobotconfiguration.h"
 
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class AutobotConfiguration : public IAutobotConfiguration
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::IGlobalConfiguration, globalConfiguration)
 
 public:
     AutobotConfiguration() = default;
@@ -46,4 +46,4 @@ public:
 };
 }
 
-#endif // MU_AUTOBOT_AUTOBOTCONFIGURATION_H
+#endif // MUSE_AUTOBOT_AUTOBOTCONFIGURATION_H

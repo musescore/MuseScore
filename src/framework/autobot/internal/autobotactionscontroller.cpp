@@ -23,7 +23,7 @@
 
 #include "types/uri.h"
 
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 static const mu::UriQuery SHOW_BATCHTESTS_URI("musescore://autobot/batchtests?sync=false&modal=false&floating=true");
 static const mu::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=false&modal=false&floating=true");

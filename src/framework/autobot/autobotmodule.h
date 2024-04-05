@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_AUTOBOTMODULE_H
-#define MU_AUTOBOT_AUTOBOTMODULE_H
+#ifndef MUSE_AUTOBOT_AUTOBOTMODULE_H
+#define MUSE_AUTOBOT_AUTOBOTMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class AutobotConfiguration;
 class Autobot;
 class AutobotActionsController;
@@ -48,4 +48,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_AUTOBOTMODULE_H
+#endif // MUSE_AUTOBOT_AUTOBOTMODULE_H

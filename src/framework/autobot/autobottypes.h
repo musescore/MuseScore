@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABTYPES_H
-#define MU_AUTOBOT_ABTYPES_H
+#ifndef MUSE_AUTOBOT_ABTYPES_H
+#define MUSE_AUTOBOT_ABTYPES_H
 
 #include <string>
 #include <vector>
@@ -30,7 +30,7 @@
 #include "types/ret.h"
 #include "autobotutils.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 struct File {
     io::path_t path;
     Ret completeRet; // if undefined - means not tested
@@ -163,4 +163,4 @@ inline SpeedMode speedModeFromString(const QString& str)
 }
 }
 
-#endif // MU_AUTOBOT_AUTOBOTTYPES_H
+#endif // MUSE_AUTOBOT_AUTOBOTTYPES_H

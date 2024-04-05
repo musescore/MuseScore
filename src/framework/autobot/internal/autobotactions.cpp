@@ -27,7 +27,7 @@
 
 using namespace mu::ui;
 using namespace muse::actions;
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 const UiActionList AutobotActions::m_actions = {
     UiAction("autobot-show-batchtests",

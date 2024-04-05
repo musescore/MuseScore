@@ -288,7 +288,7 @@ int main(int argc, char** argv)
 #endif
 
 #ifdef MUSE_MODULE_AUTOBOT
-    app.addModule(new mu::autobot::AutobotModule());
+    app.addModule(new muse::autobot::AutobotModule());
 #endif
 
     app.addModule(new mu::braille::BrailleModule());

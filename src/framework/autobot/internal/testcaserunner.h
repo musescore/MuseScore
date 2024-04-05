@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_TESTCASERUNNER_H
-#define MU_AUTOBOT_TESTCASERUNNER_H
+#ifndef MUSE_AUTOBOT_TESTCASERUNNER_H
+#define MUSE_AUTOBOT_TESTCASERUNNER_H
 
 #include <vector>
 #include <memory>
@@ -34,7 +34,7 @@
 
 #include "../autobottypes.h"
 
-namespace mu::autobot {
+namespace muse::autobot {
 class TestCaseRunner : public async::Asyncable
 {
 public:
@@ -101,4 +101,4 @@ private:
 };
 }
 
-#endif // MU_AUTOBOT_TESTCASERUNNER_H
+#endif // MUSE_AUTOBOT_TESTCASERUNNER_H

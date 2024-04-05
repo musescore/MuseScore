@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_CONTEXTAPI_H
-#define MU_API_CONTEXTAPI_H
+#ifndef MUSE_AUTOBOT_API_CONTEXTAPI_H
+#define MUSE_AUTOBOT_API_CONTEXTAPI_H
 
 #include <QJSValue>
 #include <QHash>
@@ -35,7 +35,7 @@ class ContextApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(autobot::IAutobot, autobot)
+    INJECT(muse::autobot::IAutobot, autobot)
 public:
     explicit ContextApi(IApiEngine* e);
 
@@ -50,4 +50,4 @@ public:
 };
 }
 
-#endif // MU_API_CONTEXTAPI_H
+#endif // MUSE_AUTOBOT_API_CONTEXTAPI_H

@@ -24,7 +24,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::autobot;
+using namespace muse::autobot;
 
 void AutobotInteractive::setRealInteractive(std::shared_ptr<IInteractive> real)
 {
