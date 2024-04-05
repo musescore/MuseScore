@@ -39,13 +39,13 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
 
     switch (modelType) {
     case InspectorModelType::TYPE_TEMPO:
-        setTitle(qtrc("inspector", "Tempo"));
+        setTitle(mu::qtrc("inspector", "Tempo"));
         break;
     case InspectorModelType::TYPE_A_TEMPO:
-        setTitle(qtrc("inspector", "A tempo"));
+        setTitle(mu::qtrc("inspector", "A tempo"));
         break;
     case InspectorModelType::TYPE_TEMPO_PRIMO:
-        setTitle(qtrc("inspector", "Tempo primo"));
+        setTitle(mu::qtrc("inspector", "Tempo primo"));
         break;
     default:
         break;

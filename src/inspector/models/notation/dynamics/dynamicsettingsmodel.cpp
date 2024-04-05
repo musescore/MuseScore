@@ -31,7 +31,7 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_DYNAMIC);
-    setTitle(qtrc("inspector ", "Dynamics"));
+    setTitle(mu::qtrc("inspector ", "Dynamics"));
     setIcon(ui::IconCode::Code::DYNAMIC_FORTE);
     createProperties();
 }

@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 MidiDevicesListener::~MidiDevicesListener()
 {

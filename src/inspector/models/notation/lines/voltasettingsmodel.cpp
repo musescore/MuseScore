@@ -34,14 +34,14 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
-    setTitle(qtrc("inspector", "Volta"));
+    setTitle(mu::qtrc("inspector", "Volta"));
     setIcon(ui::IconCode::Code::VOLTA);
 
     setPossibleStartHookTypes({});
 
     static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, qtrc("inspector", "Hooked 90°") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, mu::qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, mu::qtrc("inspector", "Hooked 90°") }
     };
 
     setPossibleEndHookTypes(endHookTypes);

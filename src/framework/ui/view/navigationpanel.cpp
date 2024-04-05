@@ -131,9 +131,9 @@ NavigationPanel::QmlDirection NavigationPanel::direction_property() const
 QString NavigationPanel::directionInfo() const
 {
     switch (m_direction) {
-    case Horizontal: return qtrc("ui", "direction is horizontal");
-    case Vertical: return qtrc("ui", "direction is vertical");
-    case Both: return qtrc("ui", "direction is both");
+    case Horizontal: return mu::qtrc("ui", "direction is horizontal");
+    case Vertical: return mu::qtrc("ui", "direction is vertical");
+    case Both: return mu::qtrc("ui", "direction is both");
     }
     return QString();
 }

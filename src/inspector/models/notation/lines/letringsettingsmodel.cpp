@@ -28,7 +28,7 @@ LetRingSettingsModel::LetRingSettingsModel(QObject* parent, IElementRepositorySe
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::LET_RING)
 {
     setModelType(InspectorModelType::TYPE_LET_RING);
-    setTitle(qtrc("inspector", "Let ring"));
+    setTitle(mu::qtrc("inspector", "Let ring"));
     setIcon(ui::IconCode::Code::LET_RING);
 
     setPossibleStartHookTypes({});

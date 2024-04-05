@@ -238,7 +238,7 @@ mu::Ret PartListModel::doValidatePartTitle(int partIndex, const QString& title) 
         }
 
         if (m_excerpts[i]->name().toLower() == titleLower) {
-            return make_ret(Ret::Code::UnknownError, trc("notation", "Name already exists"));
+            return make_ret(Ret::Code::UnknownError, mu::trc("notation", "Name already exists"));
         }
     }
 

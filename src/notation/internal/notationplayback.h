@@ -62,21 +62,21 @@ public:
     muse::audio::msecs_t totalPlayTime() const override;
     async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const override;
 
-    float playedTickToSec(midi::tick_t tick) const override;
-    midi::tick_t secToPlayedTick(float sec) const override;
-    midi::tick_t secToTick(float sec) const override;
+    float playedTickToSec(muse::midi::tick_t tick) const override;
+    muse::midi::tick_t secToPlayedTick(float sec) const override;
+    muse::midi::tick_t secToTick(float sec) const override;
 
-    RetVal<midi::tick_t> playPositionTickByRawTick(midi::tick_t tick) const override;
-    RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
+    RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const override;
+    RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
-    void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
+    void addLoopBoundary(LoopBoundaryType boundaryType, muse::midi::tick_t tick) override;
     void setLoopBoundariesEnabled(bool enabled) override;
     const LoopBoundaries& loopBoundaries() const override;
     async::Notification loopBoundariesChanged() const override;
 
-    const Tempo& tempo(midi::tick_t tick) const override;
-    MeasureBeat beat(midi::tick_t tick) const override;
-    midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
+    const Tempo& tempo(muse::midi::tick_t tick) const override;
+    MeasureBeat beat(muse::midi::tick_t tick) const override;
+    muse::midi::tick_t beatToTick(int measureIndex, int beatIndex) const override;
 
     double tempoMultiplier() const override;
     void setTempoMultiplier(double multiplier) override;

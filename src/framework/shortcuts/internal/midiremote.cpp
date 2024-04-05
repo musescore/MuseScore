@@ -29,7 +29,7 @@
 #include "log.h"
 
 using namespace mu::shortcuts;
-using namespace mu::midi;
+using namespace muse::midi;
 
 constexpr std::string_view MIDIMAPPING_TAG("MidiMapping");
 constexpr std::string_view EVENT_TAG("Event");

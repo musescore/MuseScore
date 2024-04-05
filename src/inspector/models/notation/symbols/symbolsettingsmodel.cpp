@@ -31,7 +31,7 @@ SymbolSettingsModel::SymbolSettingsModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SYMBOL);
-    setTitle(qtrc("inspector", "Symbol"));
+    setTitle(mu::qtrc("inspector", "Symbol"));
     setIcon(ui::IconCode::Code::TRIANGLE_SYMBOL);
     createProperties();
 }

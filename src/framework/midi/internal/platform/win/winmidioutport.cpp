@@ -31,12 +31,12 @@
 #include "defer.h"
 #include "log.h"
 
-struct mu::midi::WinMidiOutPort::Win {
+struct muse::midi::WinMidiOutPort::Win {
     HMIDIOUT midiOut;
     int deviceID;
 };
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 static std::string errorString(MMRESULT ret)
 {
@@ -88,7 +88,7 @@ MidiDeviceList WinMidiOutPort::availableDevices() const
     std::lock_guard lock(m_devicesMutex);
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
 
     int numDevs = midiOutGetNumDevs();
     if (numDevs == 0) {
@@ -148,7 +148,7 @@ mu::Ret WinMidiOutPort::connect(const MidiDeviceID& deviceID)
 
     LOGD() << "Connected to " << m_deviceID;
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void WinMidiOutPort::disconnect()

@@ -142,8 +142,10 @@ struct MidiControlsMapping {
 
 using MidiMappingList = std::list<MidiControlsMapping>;
 
-inline RemoteEvent remoteEventFromMidiEvent(const midi::Event& midiEvent)
+inline RemoteEvent remoteEventFromMidiEvent(const muse::midi::Event& midiEvent)
 {
+    using namespace muse;
+
     RemoteEvent event;
     bool isNote = midiEvent.isOpcodeIn({ midi::Event::Opcode::NoteOff, midi::Event::Opcode::NoteOn });
     bool isController = midiEvent.isOpcodeIn({ midi::Event::Opcode::ControlChange });

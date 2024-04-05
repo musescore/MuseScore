@@ -93,15 +93,15 @@ void ValidatorMessageHandler::handleMessage(QtMsgType type, const QString& descr
 
     QString typeStr;
     switch (type) {
-    case 0:  typeStr = qtrc("iex_musicxml", "Debug message:");
+    case 0:  typeStr = mu::qtrc("iex_musicxml", "Debug message:");
         break;
-    case 1:  typeStr = qtrc("iex_musicxml", "Warning:");
+    case 1:  typeStr = mu::qtrc("iex_musicxml", "Warning:");
         break;
-    case 2:  typeStr = qtrc("iex_musicxml", "Critical error:");
+    case 2:  typeStr = mu::qtrc("iex_musicxml", "Critical error:");
         break;
-    case 3:  typeStr = qtrc("iex_musicxml", "Fatal error:");
+    case 3:  typeStr = mu::qtrc("iex_musicxml", "Fatal error:");
         break;
-    default: typeStr = qtrc("iex_musicxml", "Unknown error:");
+    default: typeStr = mu::qtrc("iex_musicxml", "Unknown error:");
         break;
     }
 
@@ -167,7 +167,7 @@ static int musicXMLValidationErrorDialog(QString text, QString detailedText)
     QMessageBox errorDialog;
     errorDialog.setIcon(QMessageBox::Question);
     errorDialog.setText(text);
-    errorDialog.setInformativeText(qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
+    errorDialog.setInformativeText(mu::qtrc("iex_musicxml", "Do you want to try to load this file anyway?"));
     errorDialog.setDetailedText(detailedText);
     errorDialog.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     errorDialog.setDefaultButton(QMessageBox::No);
@@ -194,7 +194,7 @@ Err MusicxmlValidation::validate(const String& name, const ByteArray& data)
 
     if (!valid) {
         LOGD("importMusicXml() file '%s' is not a valid MusicXML file", muPrintable(name));
-        QString strErr = qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
+        QString strErr = mu::qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
             return Err::NoError;         // might as well try anyhow in converter mode
         }

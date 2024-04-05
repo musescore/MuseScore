@@ -99,7 +99,7 @@ public:
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
-            return make_ok();
+            return mu::make_ok();
         }));
     }
 
@@ -126,7 +126,7 @@ public:
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
-            return make_ok();
+            return mu::make_ok();
         }));
     }
 

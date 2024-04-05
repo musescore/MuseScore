@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::midi;
+using namespace muse::midi;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace mu::mpe;
@@ -160,7 +160,7 @@ bool FluidSynth::handleEvent(const midi::Event& event)
         m_tuning.add(event.note(), event.pitchTuningCents());
     } break;
     case Event::Opcode::ControlChange: {
-        if (event.index() == mu::midi::EXPRESSION_CONTROLLER) {
+        if (event.index() == muse::midi::EXPRESSION_CONTROLLER) {
             ret = setExpressionLevel(event.data());
         } else {
             ret = setControllerValue(event);
@@ -377,7 +377,7 @@ int FluidSynth::setExpressionLevel(int level)
     midi::channel_t lastChannelIdx = m_sequencer.channels().lastIndex();
 
     for (midi::channel_t i = 0; i < lastChannelIdx; ++i) {
-        fluid_synth_cc(m_fluid->synth, i, mu::midi::EXPRESSION_CONTROLLER, level);
+        fluid_synth_cc(m_fluid->synth, i, muse::midi::EXPRESSION_CONTROLLER, level);
     }
 
     return FLUID_OK;

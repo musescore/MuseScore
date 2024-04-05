@@ -38,9 +38,9 @@ class PlaybackPreferencesModel : public QObject, public async::Asyncable
     Q_OBJECT
 
     INJECT(muse::audio::IAudioConfiguration, audioConfiguration)
-    INJECT(midi::IMidiConfiguration, midiConfiguration)
-    INJECT(midi::IMidiOutPort, midiOutPort)
-    INJECT(midi::IMidiInPort, midiInPort)
+    INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
+    INJECT(muse::midi::IMidiOutPort, midiOutPort)
+    INJECT(muse::midi::IMidiInPort, midiInPort)
     INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
@@ -101,10 +101,10 @@ signals:
     void muteHiddenInstrumentsChanged(bool mute);
 
 private:
-    midi::MidiDeviceID midiInputDeviceId(int index) const;
-    midi::MidiDeviceID midiOutputDeviceId(int index) const;
+    muse::midi::MidiDeviceID midiInputDeviceId(int index) const;
+    muse::midi::MidiDeviceID midiOutputDeviceId(int index) const;
 
-    void showMidiError(const midi::MidiDeviceID& deviceId, const std::string& text) const;
+    void showMidiError(const muse::midi::MidiDeviceID& deviceId, const std::string& text) const;
 };
 }
 

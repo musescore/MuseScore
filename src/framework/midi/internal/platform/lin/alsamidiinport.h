@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_ALSAMIDIINPORT_H
-#define MU_MIDI_ALSAMIDIINPORT_H
+#ifndef MUSE_MIDI_ALSAMIDIINPORT_H
+#define MUSE_MIDI_ALSAMIDIINPORT_H
 
 #include <memory>
 #include <thread>
@@ -30,7 +30,7 @@
 #include "imidiinport.h"
 #include "internal/midideviceslistener.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class AlsaMidiInPort : public IMidiInPort, public async::Asyncable
 {
 public:
@@ -76,4 +76,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_ALSAMIDIINPORT_H
+#endif // MUSE_MIDI_ALSAMIDIINPORT_H

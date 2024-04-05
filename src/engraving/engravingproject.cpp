@@ -131,7 +131,7 @@ Ret EngravingProject::doSetupMasterScore(bool forceMode)
     Ret ret = checkCorrupted();
     m_isCorruptedUponLoading = !ret;
 
-    return forceMode ? make_ok() : ret;
+    return forceMode ? mu::make_ok() : ret;
 }
 
 MasterScore* EngravingProject::masterScore() const

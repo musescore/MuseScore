@@ -143,7 +143,7 @@ mu::Ret KnownAudioPluginsRegister::load()
     }
 
     m_loaded = true;
-    return make_ok();
+    return mu::make_ok();
 }
 
 std::vector<AudioPluginInfo> KnownAudioPluginsRegister::pluginInfoList(PluginInfoAccepted accepted) const

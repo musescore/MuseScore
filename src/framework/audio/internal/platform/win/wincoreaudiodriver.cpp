@@ -454,7 +454,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
     CoInitialize(NULL);
 
     AudioDeviceList result;
-    result.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
+    result.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
 
     HRESULT hr;
     IMMDeviceCollection* devices;

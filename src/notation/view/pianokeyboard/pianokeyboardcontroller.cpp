@@ -25,7 +25,7 @@
 #include "log.h"
 
 using namespace mu::notation;
-using namespace mu::midi;
+using namespace muse::midi;
 
 void PianoKeyboardController::init()
 {
@@ -146,9 +146,9 @@ void PianoKeyboardController::sendNoteOn(piano_key_t key)
         return;
     }
 
-    mu::midi::Event ev;
-    ev.setMessageType(mu::midi::Event::MessageType::ChannelVoice10);
-    ev.setOpcode(mu::midi::Event::Opcode::NoteOn);
+    muse::midi::Event ev;
+    ev.setMessageType(muse::midi::Event::MessageType::ChannelVoice10);
+    ev.setOpcode(muse::midi::Event::Opcode::NoteOn);
     ev.setNote(key);
     ev.setVelocity(80);
 
@@ -162,9 +162,9 @@ void PianoKeyboardController::sendNoteOff(piano_key_t key)
         return;
     }
 
-    mu::midi::Event ev;
-    ev.setMessageType(mu::midi::Event::MessageType::ChannelVoice10);
-    ev.setOpcode(mu::midi::Event::Opcode::NoteOff);
+    muse::midi::Event ev;
+    ev.setMessageType(muse::midi::Event::MessageType::ChannelVoice10);
+    ev.setOpcode(muse::midi::Event::Opcode::NoteOff);
     ev.setNote(key);
 
     notation->midiInput()->onMidiEventReceived(ev);

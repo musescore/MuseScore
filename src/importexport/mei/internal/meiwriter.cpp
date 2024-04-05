@@ -61,7 +61,7 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinat
     if (exporter.write(meiData)) {
         ByteArray data = ByteArray::fromRawData(meiData.c_str(), meiData.size());
         destinationDevice.write(data);
-        return make_ok();
+        return mu::make_ok();
     } else {
         return make_ret(Ret::Code::UnknownError);
     }

@@ -80,7 +80,7 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
 
 static QString scoreDefaultTitle()
 {
-    return qtrc("project", "Untitled score");
+    return mu::qtrc("project", "Untitled score");
 }
 
 NotationProject::~NotationProject()
@@ -626,7 +626,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, engraving::MscIoMode ioM
                 return filesToBeMoved.ret;
             }
 
-            Ret ret = make_ok();
+            Ret ret = mu::make_ok();
 
             for (const io::path_t& fileToBeMoved : filesToBeMoved.val) {
                 io::path_t destinationFile

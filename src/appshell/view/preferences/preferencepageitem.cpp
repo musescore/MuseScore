@@ -44,7 +44,7 @@ QString PreferencePageItem::id() const
 
 QString PreferencePageItem::title() const
 {
-    return qtrc("appshell/preferences", m_title.toUtf8());
+    return mu::qtrc("appshell/preferences", m_title.toUtf8());
 }
 
 int PreferencePageItem::icon() const

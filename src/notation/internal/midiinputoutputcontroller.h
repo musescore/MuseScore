@@ -34,9 +34,9 @@
 namespace mu::notation {
 class MidiInputOutputController : public async::Asyncable
 {
-    INJECT(midi::IMidiInPort, midiInPort)
-    INJECT(midi::IMidiOutPort, midiOutPort)
-    INJECT(midi::IMidiConfiguration, midiConfiguration)
+    INJECT(muse::midi::IMidiInPort, midiInPort)
+    INJECT(muse::midi::IMidiOutPort, midiOutPort)
+    INJECT(muse::midi::IMidiConfiguration, midiConfiguration)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(INotationConfiguration, configuration)
     INJECT(shortcuts::IMidiRemote, midiRemote)
@@ -48,13 +48,13 @@ private:
     void checkInputConnection();
     void checkOutputConnection();
 
-    void checkConnection(const midi::MidiDeviceID& preferredDeviceId, const midi::MidiDeviceID& currentDeviceId,
-                         const midi::MidiDeviceList& availableDevices, const std::function<Ret(
-                                                                                               const midi::MidiDeviceID&)>& connectCallback);
+    void checkConnection(const muse::midi::MidiDeviceID& preferredDeviceId, const muse::midi::MidiDeviceID& currentDeviceId,
+                         const muse::midi::MidiDeviceList& availableDevices, const std::function<Ret(
+                                                                                                     const muse::midi::MidiDeviceID&)>& connectCallback);
 
-    void onMidiEventReceived(const midi::tick_t tick, const midi::Event& event);
+    void onMidiEventReceived(const muse::midi::tick_t tick, const muse::midi::Event& event);
 
-    midi::MidiDeviceID firstAvailableDeviceId(const midi::MidiDeviceList& devices) const;
+    muse::midi::MidiDeviceID firstAvailableDeviceId(const muse::midi::MidiDeviceList& devices) const;
 };
 }
 

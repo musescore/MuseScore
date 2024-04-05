@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_MIDIMODULE_H
-#define MU_MIDI_MIDIMODULE_H
+#ifndef MUSE_MIDI_MIDIMODULE_H
+#define MUSE_MIDI_MIDIMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class MidiConfiguration;
 #if defined(Q_OS_LINUX)
 class AlsaMidiOutPort;
@@ -76,4 +76,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_MIDIMODULE_H
+#endif // MUSE_MIDI_MIDIMODULE_H

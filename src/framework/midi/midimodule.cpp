@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-using namespace mu::midi;
+using namespace muse::midi;
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
 #include "internal/platform/lin/alsamidioutport.h"

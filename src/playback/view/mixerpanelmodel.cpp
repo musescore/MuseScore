@@ -549,7 +549,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 {
     MixerChannelItem* item = new MixerChannelItem(this, MixerChannelItem::Type::Master, true /*outputOnly*/);
     item->setPanelSection(m_navigationSection);
-    item->setTitle(qtrc("playback", "Master"));
+    item->setTitle(mu::qtrc("playback", "Master"));
 
     playback()->audioOutput()->masterOutputParams()
     .onResolve(this, [this, item](AudioOutputParams outParams) {

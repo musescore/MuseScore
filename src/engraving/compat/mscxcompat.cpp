@@ -52,7 +52,7 @@ mu::Ret mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray*
     writer.open();
     writer.writeScoreFile(mscxData);
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 mu::Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)

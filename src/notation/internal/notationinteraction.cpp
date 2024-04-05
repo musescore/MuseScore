@@ -3477,7 +3477,7 @@ void NotationInteraction::joinSelectedMeasures()
 mu::Ret NotationInteraction::canAddBoxes() const
 {
     if (selection()->isRange()) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     static const ElementTypeSet BOX_TYPES {
@@ -3486,11 +3486,11 @@ mu::Ret NotationInteraction::canAddBoxes() const
 
     for (const EngravingItem* element: selection()->elements()) {
         if (mu::engraving::toMeasure(element->findMeasure())) {
-            return make_ok();
+            return mu::make_ok();
         }
 
         if (mu::contains(BOX_TYPES, element->type())) {
-            return make_ok();
+            return mu::make_ok();
         }
     }
 
@@ -3653,7 +3653,7 @@ mu::Ret NotationInteraction::repeatSelection()
             }
             apply();
         }
-        return make_ok();
+        return mu::make_ok();
     }
 
     if (!selection.isRange()) {
@@ -4197,7 +4197,7 @@ mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const Engravin
     }
 
     if (type == TextStyleType::FRAME) {
-        return item && item->isBox() ? make_ok() : make_ret(Err::EmptySelection);
+        return item && item->isBox() ? mu::make_ok() : make_ret(Err::EmptySelection);
     }
 
     static const std::set<TextStyleType> needSelectNoteOrRestTypes {
@@ -4228,10 +4228,10 @@ mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const Engravin
         };
 
         bool isNoteOrRestSelected = item && mu::contains(requiredElementTypes, item->type());
-        return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
+        return isNoteOrRestSelected ? mu::make_ok() : make_ret(Err::NoteOrRestIsNotSelected);
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void NotationInteraction::addTextToItem(TextStyleType type, EngravingItem* item)
@@ -4323,7 +4323,7 @@ mu::Ret NotationInteraction::canAddFiguredBass() const
     };
 
     bool isNoteOrRestSelected = elementsSelected(requiredTypes);
-    return isNoteOrRestSelected ? make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
+    return isNoteOrRestSelected ? mu::make_ok() : make_ret(Err::NoteOrFiguredBassIsNotSelected);
 }
 
 void NotationInteraction::addFiguredBass()
@@ -5572,7 +5572,7 @@ mu::Ret NotationInteraction::canAddGuitarBend() const
     Score* score = this->score();
     bool canAdd = score && score->selection().noteList().size() > 0;
 
-    return canAdd ? make_ok() : make_ret(Err::NoteIsNotSelected);
+    return canAdd ? mu::make_ok() : make_ret(Err::NoteIsNotSelected);
 }
 
 void NotationInteraction::addGuitarBend(GuitarBendType bendType)

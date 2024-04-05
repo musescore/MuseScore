@@ -30,7 +30,7 @@ using namespace mu::engraving;
 GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(qtrc("inspector", "Glissando"));
+    setTitle(mu::qtrc("inspector", "Glissando"));
     setModelType(InspectorModelType::TYPE_GLISSANDO);
 
     createProperties();

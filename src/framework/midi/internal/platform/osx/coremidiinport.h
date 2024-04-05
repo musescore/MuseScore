@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_COREMIDIINPORT_H
-#define MU_MIDI_COREMIDIINPORT_H
+#ifndef MUSE_MIDI_COREMIDIINPORT_H
+#define MUSE_MIDI_COREMIDIINPORT_H
 
 #include <memory>
 
 #include "imidiinport.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class CoreMidiInPort : public IMidiInPort
 {
 public:
@@ -65,4 +65,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_COREMIDIINPORT_H
+#endif // MUSE_MIDI_COREMIDIINPORT_H

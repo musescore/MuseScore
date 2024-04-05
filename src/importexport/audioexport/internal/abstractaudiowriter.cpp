@@ -124,9 +124,9 @@ mu::Ret AbstractAudioWriter::doWriteAndWait(INotationPtr notation,
             playback()->audioOutput()->saveSoundTrack(sequenceId, io::path_t(path), std::move(format))
             .onResolve(this, [this, path](const bool /*result*/) {
                 LOGD() << "Successfully saved sound track by path: " << path;
-                m_writeRet = make_ok();
+                m_writeRet = mu::make_ok();
                 m_isCompleted = true;
-                m_progress.finished.send(make_ok());
+                m_progress.finished.send(mu::make_ok());
             })
             .onReject(this, [this](int errorCode, const std::string& msg) {
                 m_writeRet = Ret(errorCode, msg);

@@ -78,13 +78,13 @@ void TestCaseRunner::run(const TestCase& testCase)
 void TestCaseRunner::pause()
 {
     m_paused = true;
-    m_stepStatusChanged.send(StepInfo(m_testCase.lastStepName, StepStatus::Paused), make_ok());
+    m_stepStatusChanged.send(StepInfo(m_testCase.lastStepName, StepStatus::Paused), mu::make_ok());
 }
 
 void TestCaseRunner::unpause(bool isNextStep)
 {
     m_paused = false;
-    m_stepStatusChanged.send(StepInfo(m_testCase.lastStepName, StepStatus::Started), make_ok());
+    m_stepStatusChanged.send(StepInfo(m_testCase.lastStepName, StepStatus::Started), mu::make_ok());
     if (isNextStep) {
         nextStep(false);
     }
@@ -147,10 +147,10 @@ void TestCaseRunner::nextStep(bool byInterval)
 
         if (step.skip()) {
             LOGD() << "step: " << name << " Skipped";
-            m_stepStatusChanged.send(StepInfo(name, StepStatus::Skipped), make_ok());
+            m_stepStatusChanged.send(StepInfo(name, StepStatus::Skipped), mu::make_ok());
         } else {
             LOGD() << "step: " << name << " Started";
-            m_stepStatusChanged.send(StepInfo(name, StepStatus::Started), make_ok());
+            m_stepStatusChanged.send(StepInfo(name, StepStatus::Started), mu::make_ok());
             m_elapsed.restart();
 
             Ret ret = step.exec();
@@ -163,7 +163,7 @@ void TestCaseRunner::nextStep(bool byInterval)
             }
 
             LOGD() << "step: " << name << " Finished";
-            m_stepStatusChanged.send(StepInfo(step.name(), StepStatus::Finished, m_elapsed.elapsed()), make_ok());
+            m_stepStatusChanged.send(StepInfo(step.name(), StepStatus::Finished, m_elapsed.elapsed()), mu::make_ok());
         }
 
         bool withInterval = step.skip() ? false : true;

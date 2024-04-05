@@ -29,7 +29,7 @@ LyricsSettingsModel::LyricsSettingsModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_LYRICS);
-    setTitle(qtrc("inspector", "Lyrics"));
+    setTitle(mu::qtrc("inspector", "Lyrics"));
     setIcon(ui::IconCode::Code::LYRICS);
     createProperties();
 }

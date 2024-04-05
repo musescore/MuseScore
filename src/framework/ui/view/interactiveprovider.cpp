@@ -161,7 +161,7 @@ Ret InteractiveProvider::showProgress(const std::string& title, mu::Progress* pr
         }
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,

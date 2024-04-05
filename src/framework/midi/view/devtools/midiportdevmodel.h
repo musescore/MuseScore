@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_MIDIPORTDEVMODEL_H
-#define MU_MIDI_MIDIPORTDEVMODEL_H
+#ifndef MUSE_MIDI_MIDIPORTDEVMODEL_H
+#define MUSE_MIDI_MIDIPORTDEVMODEL_H
 
 #include <QObject>
 #include <QVariantList>
@@ -30,7 +30,7 @@
 #include "midi/imidiinport.h"
 #include "async/asyncable.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class MidiPortDevModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -65,4 +65,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_MIDIPORTDEVMODEL_H
+#endif // MUSE_MIDI_MIDIPORTDEVMODEL_H

@@ -31,7 +31,7 @@ StaffTypeSettingsModel::StaffTypeSettingsModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STAFF_TYPE_CHANGES);
-    setTitle(qtrc("inspector", "Staff type changes"));
+    setTitle(mu::qtrc("inspector", "Staff type changes"));
     setIcon(ui::IconCode::Code::STAFF_TYPE_CHANGE);
     createProperties();
 }

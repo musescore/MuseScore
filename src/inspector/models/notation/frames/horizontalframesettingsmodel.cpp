@@ -31,7 +31,7 @@ HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IEle
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_HORIZONTAL_FRAME);
-    setTitle(qtrc("inspector", "Horizontal frame"));
+    setTitle(mu::qtrc("inspector", "Horizontal frame"));
     setIcon(ui::IconCode::Code::HORIZONTAL_FRAME);
     createProperties();
 }

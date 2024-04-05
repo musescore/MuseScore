@@ -29,7 +29,7 @@ FermataSettingsModel::FermataSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_FERMATA);
-    setTitle(qtrc("inspector", "Fermata"));
+    setTitle(mu::qtrc("inspector", "Fermata"));
     setIcon(ui::IconCode::Code::FERMATA);
     createProperties();
 }

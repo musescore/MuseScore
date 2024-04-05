@@ -70,7 +70,7 @@ static QVariantList buildAvailablePlayingTechniquesModel(const std::set<String>&
 
     QVariantMap ordinaryItem;
     ordinaryItem["code"] = QString::fromStdString(mu::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
-    ordinaryItem["name"] = qtrc("playback", "Ord. (default)");
+    ordinaryItem["name"] = mu::qtrc("playback", "Ord. (default)");
     model << ordinaryItem;
 
     for (const String& playingTechniqueCode : availableTechniqueCodes) {

@@ -33,7 +33,7 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_STEM);
-    setTitle(qtrc("inspector", "Stem"));
+    setTitle(mu::qtrc("inspector", "Stem"));
 
     createProperties();
 }

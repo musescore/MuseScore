@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_MIDIEVENT_H
-#define MU_MIDI_MIDIEVENT_H
+#ifndef MUSE_MIDI_MIDIEVENT_H
+#define MUSE_MIDI_MIDIEVENT_H
 
 #include <cstdint>
 #include <array>
@@ -30,7 +30,7 @@
 #define UNUSED(x) (void)x;
 #endif
 
-namespace mu::midi {
+namespace muse::midi {
 using channel_t = uint8_t;
 using tuning_t = float;
 
@@ -1021,4 +1021,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_MIDIEVENT_H
+#endif // MUSE_MIDI_MIDIEVENT_H

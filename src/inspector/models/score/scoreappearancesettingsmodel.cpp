@@ -30,7 +30,7 @@ ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IEle
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
-    setTitle(qtrc("inspector", "Score appearance"));
+    setTitle(mu::qtrc("inspector", "Score appearance"));
 }
 
 bool ScoreAppearanceSettingsModel::hideEmptyStaves() const

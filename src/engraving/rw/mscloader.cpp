@@ -115,7 +115,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
     ReadInOutData masterReadOutData;
 
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     // Read score
     {

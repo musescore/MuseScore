@@ -60,7 +60,7 @@ void StaffTreeItem::init(const Staff* masterStaff)
     QString staffName = staff->staffName();
 
     //: Prefix for the display name for a linked staff. Preferably, keep this short.
-    QString title = masterStaff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+    QString title = masterStaff->isLinked() ? mu::qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
 
     setId(staff->id());
     setTitle(title);

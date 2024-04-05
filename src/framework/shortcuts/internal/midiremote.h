@@ -60,10 +60,10 @@ public:
     void setIsSettingMode(bool arg) override;
     bool isSettingMode() const override;
 
-    void setCurrentActionEvent(const midi::Event& ev) override;
+    void setCurrentActionEvent(const muse::midi::Event& ev) override;
 
     // Process
-    Ret process(const midi::Event& ev) override;
+    Ret process(const muse::midi::Event& ev) override;
 
 private:
     void readMidiMappings();
@@ -72,7 +72,7 @@ private:
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
     void writeMidiMapping(deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
 
-    bool needIgnoreEvent(const midi::Event& event) const;
+    bool needIgnoreEvent(const muse::midi::Event& event) const;
 
     RemoteEvent remoteEvent(const std::string& action) const;
 

@@ -37,7 +37,7 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 {
     createProperties();
 
-    setTitle(qtrc("inspector", "Appearance"));
+    setTitle(mu::qtrc("inspector", "Appearance"));
 }
 
 void AppearanceSettingsModel::createProperties()

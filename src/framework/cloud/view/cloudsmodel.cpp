@@ -159,18 +159,18 @@ QVariantList CloudsModel::visibilityModel(const QString& cloudCode) const
 
     QVariantMap publicVisibility;
     publicVisibility.insert("value", int(Visibility::Public));
-    publicVisibility.insert("text", qtrc("project/save", "Public"));
+    publicVisibility.insert("text", mu::qtrc("project/save", "Public"));
     visibilityTypes.append(publicVisibility);
 
     QVariantMap unlistedVisibility;
     unlistedVisibility.insert("value", int(Visibility::Unlisted));
-    unlistedVisibility.insert("text", qtrc("project/save", "Unlisted"));
+    unlistedVisibility.insert("text", mu::qtrc("project/save", "Unlisted"));
     visibilityTypes.append(unlistedVisibility);
 
     if (cloudCode == cloud::MUSESCORE_COM_CLOUD_CODE) {
         QVariantMap privateVisibility;
         privateVisibility.insert("value", int(Visibility::Private));
-        privateVisibility.insert("text", qtrc("project/save", "Private"));
+        privateVisibility.insert("text", mu::qtrc("project/save", "Private"));
         visibilityTypes.append(privateVisibility);
     }
 
@@ -182,25 +182,25 @@ QVariant CloudsModel::dialogText(const QString& cloudCode, const QString& existi
     QVariantMap dialogTextMap;
 
     if (cloudCode == cloud::MUSESCORE_COM_CLOUD_CODE) {
-        dialogTextMap[prv::DIALOG_TITLE_TEXT] = qtrc("project/save", "Publish to MuseScore.com");
+        dialogTextMap[prv::DIALOG_TITLE_TEXT] = mu::qtrc("project/save", "Publish to MuseScore.com");
 
         //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
-        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = qtrc("project/save", "Replace the existing <a href=\"%1\">online score</a>")
+        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = mu::qtrc("project/save", "Replace the existing <a href=\"%1\">online score</a>")
                                                   .arg(existingScoreOrAudioUrl);
 
-        dialogTextMap[prv::NEW_BUTTON_TEXT] = qtrc("project/save", "Publish as new online score");
-        dialogTextMap[prv::SAVE_BUTTON_TEXT] = qtrc("project/save", "Publish");
+        dialogTextMap[prv::NEW_BUTTON_TEXT] = mu::qtrc("project/save", "Publish as new online score");
+        dialogTextMap[prv::SAVE_BUTTON_TEXT] = mu::qtrc("project/save", "Publish");
 
         return dialogTextMap;
     } else if (cloudCode == cloud::AUDIO_COM_CLOUD_CODE) {
-        dialogTextMap[prv::DIALOG_TITLE_TEXT] = qtrc("project/save", "Share on Audio.com");
+        dialogTextMap[prv::DIALOG_TITLE_TEXT] = mu::qtrc("project/save", "Share on Audio.com");
 
         //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online audio in question
-        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = qtrc("project/save", "Replace the <a href=\"%1\">existing audio</a>")
+        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = mu::qtrc("project/save", "Replace the <a href=\"%1\">existing audio</a>")
                                                   .arg(existingScoreOrAudioUrl);
 
-        dialogTextMap[prv::NEW_BUTTON_TEXT] = qtrc("project/save", "Upload as new audio file");
-        dialogTextMap[prv::SAVE_BUTTON_TEXT] = qtrc("project/save", "Share");
+        dialogTextMap[prv::NEW_BUTTON_TEXT] = mu::qtrc("project/save", "Upload as new audio file");
+        dialogTextMap[prv::SAVE_BUTTON_TEXT] = mu::qtrc("project/save", "Share");
 
         return dialogTextMap;
     }

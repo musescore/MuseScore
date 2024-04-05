@@ -67,10 +67,10 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
 
         if (containsMaster) {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + trc("project/export", "Score_and_Parts");
+            filenameAddition = "-" + mu::trc("project/export", "Score_and_Parts");
         } else {
             //: Used in export filename suggestion. Please use only characters that are valid for filenames.
-            filenameAddition = "-" + trc("project/export", "Parts");
+            filenameAddition = "-" + mu::trc("project/export", "Parts");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
@@ -88,7 +88,7 @@ mu::RetVal<mu::io::path_t> ExportProjectScenario::askExportPath(const INotationP
     }
 
     RetVal<io::path_t> exportPath;
-    exportPath.val = interactive()->selectSavingFile(qtrc("project/export", "Export"), defaultPath,
+    exportPath.val = interactive()->selectSavingFile(mu::qtrc("project/export", "Export"), defaultPath,
                                                      exportType.filter(), isCreatingOnlyOneFile);
     exportPath.ret = !exportPath.val.empty();
 
@@ -164,7 +164,7 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
         setViewModes(notations, viewModes);
 
         if (writerProgress) {
-            m_exportProgress.finished.send(make_ok());
+            m_exportProgress.finished.send(mu::make_ok());
             writerProgress->progressChanged.resetOnReceive(this);
             m_exportProgress.finished.resetOnReceive(this);
         }
@@ -358,13 +358,13 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
         constexpr int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
         IInteractive::Result result = interactive()->question(
-            trc("project/export", "File already exists"),
-            qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
+            mu::trc("project/export", "File already exists"),
+            mu::qtrc("project/export", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, trc("project/export", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, trc("project/export", "Replace all")),
-                IInteractive::ButtonData(Skip, trc("project/export", "Skip")),
-                IInteractive::ButtonData(SkipAll, trc("project/export", "Skip all"))
+                IInteractive::ButtonData(Replace, mu::trc("project/export", "Replace")),
+                IInteractive::ButtonData(ReplaceAll, mu::trc("project/export", "Replace all")),
+                IInteractive::ButtonData(Skip, mu::trc("project/export", "Skip")),
+                IInteractive::ButtonData(SkipAll, mu::trc("project/export", "Skip all"))
             });
 
         switch (result.button()) {
@@ -387,8 +387,8 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
-        trc("project/export", "Error"),
-        qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
+        mu::trc("project/export", "Error"),
+        mu::qtrc("project/export", "An error occurred while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
     return result.standardButton() == IInteractive::Button::Retry;
@@ -435,12 +435,12 @@ mu::Ret ExportProjectScenario::doExportLoop(const io::path_t& scorePath, std::fu
         break;
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void ExportProjectScenario::showExportProgress(bool isAudioExport) const
 {
-    std::string title = isAudioExport ? trc("project/export", "Exporting audio…") : trc("project/export", "Exporting…");
+    std::string title = isAudioExport ? mu::trc("project/export", "Exporting audio…") : mu::trc("project/export", "Exporting…");
 
     Ret ret = interactive()->showProgress(title, &m_exportProgress);
     if (!ret) {

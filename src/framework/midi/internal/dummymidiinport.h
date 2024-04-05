@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MIDI_DUMMYMIDIINPORT_H
-#define MU_MIDI_DUMMYMIDIINPORT_H
+#ifndef MUSE_MIDI_DUMMYMIDIINPORT_H
+#define MUSE_MIDI_DUMMYMIDIINPORT_H
 
 #include "imidiinport.h"
 
-namespace mu::midi {
+namespace muse::midi {
 class DummyMidiInPort : public IMidiInPort
 {
 public:
@@ -46,4 +46,4 @@ private:
 };
 }
 
-#endif // MU_MIDI_DUMMYMIDIINPORT_H
+#endif // MUSE_MIDI_DUMMYMIDIINPORT_H

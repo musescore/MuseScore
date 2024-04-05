@@ -76,7 +76,7 @@ QString Palette::id() const
 
 QString Palette::translatedName() const
 {
-    return qtrc("palette", m_name.toUtf8());
+    return mu::qtrc("palette", m_name.toUtf8());
 }
 
 void Palette::retranslate()
@@ -541,8 +541,8 @@ bool Palette::writeToFile(const QString& p) const
 
 void Palette::showWritingPaletteError(const QString& path) const
 {
-    std::string title = trc("palette", "Writing palette file");
-    std::string message = qtrc("palette", "Writing palette file\n%1\nfailed.").arg(path).toStdString();
+    std::string title = mu::trc("palette", "Writing palette file");
+    std::string message = mu::qtrc("palette", "Writing palette file\n%1\nfailed.").arg(path).toStdString();
     interactive()->error(title, message);
 }
 

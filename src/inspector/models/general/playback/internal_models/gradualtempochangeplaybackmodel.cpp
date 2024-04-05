@@ -30,7 +30,7 @@ using namespace mu::engraving;
 GradualTempoChangePlaybackModel::GradualTempoChangePlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {
-    setTitle(qtrc("inspector", "Tempo change"));
+    setTitle(mu::qtrc("inspector", "Tempo change"));
     setModelType(InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE);
 
     createProperties();
@@ -49,9 +49,9 @@ PropertyItem* GradualTempoChangePlaybackModel::tempoEasingMethod() const
 QVariantList GradualTempoChangePlaybackModel::possibleEasingMethods() const
 {
     QVariantList methods {
-        object(ChangeMethod::NORMAL, qtrc("inspector", "Normal")),
-        object(ChangeMethod::EASE_IN, qtrc("inspector", "Ease in")),
-        object(ChangeMethod::EASE_OUT, qtrc("inspector", "Ease out"))
+        object(ChangeMethod::NORMAL, mu::qtrc("inspector", "Normal")),
+        object(ChangeMethod::EASE_IN, mu::qtrc("inspector", "Ease in")),
+        object(ChangeMethod::EASE_OUT, mu::qtrc("inspector", "Ease out"))
     };
 
     return methods;

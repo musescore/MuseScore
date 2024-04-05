@@ -79,7 +79,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     //: "quarter note" and "quarter" (for example), or if the translations for the
     //: durations as separate strings are not suitable to be used as adjectives here,
     //: translate this string with "%1", so that just the duration will be shown.
-    durationType->setText(qtrc("notation", "%1 note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
+    durationType->setText(mu::qtrc("notation", "%1 note").arg(TConv::translatedUserName(m_note->chord()->durationType().type())));
     sameDurationType->setAccessibleName(sameDurationType->text() + durationType->text());
 
     durationTicks->setText(m_note->chord()->durationUserName());

@@ -54,7 +54,7 @@ Ret DrawDataComparator::compare(const io::path_t& ref, const io::path_t& test, c
     Diff diff = DrawDataComp::compare(refData.val, testData.val);
 
     if (diff.empty()) {
-        return make_ok();
+        return mu::make_ok();
     }
 
     io::FileInfo(outdiff).dir().mkpath();

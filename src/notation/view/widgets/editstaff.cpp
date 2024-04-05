@@ -217,7 +217,7 @@ void EditStaff::updateInstrument()
     if (templ) {
         instrumentName->setText(formatInstrumentTitle(templ->trackName, templ->trait));
     } else {
-        instrumentName->setText(qtrc("notation/editstaff", "Unknown"));
+        instrumentName->setText(mu::qtrc("notation/editstaff", "Unknown"));
     }
 
     m_minPitchA = m_instrument.minPitchA();
@@ -531,8 +531,8 @@ void EditStaff::applyPartProperties()
     String _sn = shortName->toPlainText();
     String _ln = longName->toPlainText();
     if (!mu::engraving::Text::validateText(_sn) || !mu::engraving::Text::validateText(_ln)) {
-        interactive()->warning(trc("notation/staffpartproperties", "Invalid instrument name"),
-                               trc("notation/staffpartproperties", "The instrument name is invalid."));
+        interactive()->warning(mu::trc("notation/staffpartproperties", "Invalid instrument name"),
+                               mu::trc("notation/staffpartproperties", "The instrument name is invalid."));
         return;
     }
     QString sn = _sn;

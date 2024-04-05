@@ -29,7 +29,7 @@ JumpSettingsModel::JumpSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_JUMP);
-    setTitle(qtrc("inspector", "Jump"));
+    setTitle(mu::qtrc("inspector", "Jump"));
     setIcon(ui::IconCode::Code::JUMP);
     createProperties();
 }

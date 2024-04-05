@@ -40,12 +40,12 @@ SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, IElementReposi
     if (elementType == ElementType::Slur) {
         setModelType(InspectorModelType::TYPE_SLUR);
         setElementType(mu::engraving::ElementType::SLUR);
-        setTitle(qtrc("inspector", "Slur"));
+        setTitle(mu::qtrc("inspector", "Slur"));
         setIcon(IconCode::NOTE_SLUR);
     } else {
         setModelType(InspectorModelType::TYPE_TIE);
         setElementType(mu::engraving::ElementType::TIE);
-        setTitle(qtrc("inspector", "Tie"));
+        setTitle(mu::qtrc("inspector", "Tie"));
         setIcon(IconCode::NOTE_TIE);
     }
 
@@ -75,10 +75,10 @@ bool SlurAndTieSettingsModel::isTiePlacementAvailable() const
 QVariantList SlurAndTieSettingsModel::possibleLineStyles() const
 {
     QVariantList result {
-        object(SlurStyleType::Solid, qtrc("inspector", "Normal"), IconCode::LINE_NORMAL),
-        object(SlurStyleType::WideDashed, qtrc("inspector", "Wide dashed"), IconCode::LINE_WIDE_DASHED),
-        object(SlurStyleType::Dashed, qtrc("inspector", "Dashed"), IconCode::LINE_DASHED),
-        object(SlurStyleType::Dotted, qtrc("inspector", "Dotted"), IconCode::LINE_DOTTED)
+        object(SlurStyleType::Solid, mu::qtrc("inspector", "Normal"), IconCode::LINE_NORMAL),
+        object(SlurStyleType::WideDashed, mu::qtrc("inspector", "Wide dashed"), IconCode::LINE_WIDE_DASHED),
+        object(SlurStyleType::Dashed, mu::qtrc("inspector", "Dashed"), IconCode::LINE_DASHED),
+        object(SlurStyleType::Dotted, mu::qtrc("inspector", "Dotted"), IconCode::LINE_DOTTED)
     };
 
     return result;

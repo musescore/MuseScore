@@ -54,27 +54,27 @@ public:
     virtual muse::audio::msecs_t totalPlayTime() const = 0;
     virtual async::Channel<muse::audio::msecs_t> totalPlayTimeChanged() const = 0;
 
-    virtual float playedTickToSec(midi::tick_t tick) const = 0;
-    virtual midi::tick_t secToPlayedTick(float sec) const = 0;
-    virtual midi::tick_t secToTick(float sec) const = 0;
+    virtual float playedTickToSec(muse::midi::tick_t tick) const = 0;
+    virtual muse::midi::tick_t secToPlayedTick(float sec) const = 0;
+    virtual muse::midi::tick_t secToTick(float sec) const = 0;
 
-    virtual RetVal<midi::tick_t> playPositionTickByRawTick(midi::tick_t tick) const = 0;
-    virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
+    virtual RetVal<muse::midi::tick_t> playPositionTickByRawTick(muse::midi::tick_t tick) const = 0;
+    virtual RetVal<muse::midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 
-    enum BoundaryTick : midi :: tick_t {
+    enum BoundaryTick {
         FirstScoreTick = 0,
         SelectedNoteTick,
         LastScoreTick
     };
 
-    virtual void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) = 0;
+    virtual void addLoopBoundary(LoopBoundaryType boundaryType, muse::midi::tick_t tick) = 0;
     virtual void setLoopBoundariesEnabled(bool enabled) = 0;
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual async::Notification loopBoundariesChanged() const = 0;
 
-    virtual const Tempo& tempo(midi::tick_t tick) const = 0;
-    virtual MeasureBeat beat(midi::tick_t tick) const = 0;
-    virtual midi::tick_t beatToTick(int measureIndex, int beatIndex) const = 0;
+    virtual const Tempo& tempo(muse::midi::tick_t tick) const = 0;
+    virtual MeasureBeat beat(muse::midi::tick_t tick) const = 0;
+    virtual muse::midi::tick_t beatToTick(int measureIndex, int beatIndex) const = 0;
 
     virtual double tempoMultiplier() const = 0;
     virtual void setTempoMultiplier(double multiplier) = 0;

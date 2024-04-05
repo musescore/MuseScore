@@ -31,7 +31,7 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 {
     createProperties();
 
-    setTitle(qtrc("inspector", "General"));
+    setTitle(mu::qtrc("inspector", "General"));
     setSectionType(InspectorSectionType::SECTION_GENERAL);
 
     m_playbackProxyModel = new PlaybackProxyModel(this, repository);

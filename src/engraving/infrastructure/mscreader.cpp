@@ -358,7 +358,7 @@ Ret MscReader::DirReader::open(IODevice* device, const path_t& filePath)
 
     m_rootPath = containerPath(filePath);
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void MscReader::DirReader::close()
@@ -433,7 +433,7 @@ Ret MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
         }
     }
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 void MscReader::XmlFileReader::close()

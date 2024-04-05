@@ -176,7 +176,7 @@ RetVal<ByteArray> FileSystem::readFile(const io::path_t& filePath) const
 
 Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
 {
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
@@ -200,7 +200,7 @@ Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
 
 Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
 {
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
@@ -399,7 +399,7 @@ DateTime FileSystem::lastModified(const io::path_t& filePath) const
 
 Ret FileSystem::isWritable(const io::path_t& filePath) const
 {
-    Ret ret = make_ok();
+    Ret ret = mu::make_ok();
 
     QFileInfo fileInfo(filePath.toQString());
 

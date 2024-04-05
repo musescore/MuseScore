@@ -32,9 +32,9 @@
 #include "defer.h"
 #include "log.h"
 
-using namespace mu::midi;
+using namespace muse::midi;
 
-struct mu::midi::CoreMidiOutPort::Core {
+struct muse::midi::CoreMidiOutPort::Core {
     MIDIClientRef client = 0;
     MIDIPortRef outputPort = 0;
     MIDIEndpointRef destinationId = 0;
@@ -168,7 +168,7 @@ MidiDeviceList CoreMidiOutPort::availableDevices() const
 {
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     ItemCount destinations = MIDIGetNumberOfDestinations();

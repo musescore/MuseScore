@@ -58,7 +58,7 @@ Templates TemplatesRepository::readTemplates(const io::path_t& dirPath) const
             return Templates();
         }
 
-        return readTemplates(files.val, qtrc("project", "My templates"), true /*isCustom*/);
+        return readTemplates(files.val, mu::qtrc("project", "My templates"), true /*isCustom*/);
     }
 
     RetVal<ByteArray> categoriesJson = fileSystem()->readFile(categoriesJsonPath);
@@ -74,7 +74,7 @@ Templates TemplatesRepository::readTemplates(const io::path_t& dirPath) const
 
     for (const QVariant& obj : categoryObjList) {
         QVariantMap map = obj.toMap();
-        QString categoryTitle = qtrc("project", map["title"].toString().toUtf8().data());
+        QString categoryTitle = mu::qtrc("project", map["title"].toString().toUtf8().data());
         QStringList files = map["files"].toStringList();
 
         io::paths_t paths;

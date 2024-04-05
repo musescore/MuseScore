@@ -54,7 +54,7 @@ static IInteractive::Button musicXMLImportErrorDialog(const String& text, const 
 
     std::string msg = text.toStdString();
     msg += '\n';
-    msg += trc("iex_musicxml", "Do you want to try to load this file anyway?");
+    msg += mu::trc("iex_musicxml", "Do you want to try to load this file anyway?");
     msg += '\n';
     msg += '\n';
     msg += detailedText.toStdString();

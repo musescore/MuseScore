@@ -375,7 +375,7 @@ mu::Ret ShortcutsRegister::setAdditionalShortcuts(const std::string& context, co
     mergeShortcuts(m_shortcuts, m_additionalShortcutsMap[context]);
     m_shortcutsChanged.notify();
 
-    return make_ok();
+    return mu::make_ok();
 }
 
 const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const
