@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu::ui;
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 void UiArrangement::load()
 {
@@ -68,7 +68,7 @@ void UiArrangement::updateData(DataKey key, QJsonObject& obj, Notifications& not
     }
 }
 
-void UiArrangement::saveData(workspace::DataKey key, const QJsonObject& obj)
+void UiArrangement::saveData(DataKey key, const QJsonObject& obj)
 {
     QByteArray data = QJsonDocument(obj).toJson();
 

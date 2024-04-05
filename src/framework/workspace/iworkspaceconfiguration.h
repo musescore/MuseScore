@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_IWORKSPACECONFIGURATION_H
-#define MU_WORKSPACE_IWORKSPACECONFIGURATION_H
+#ifndef MUSE_WORKSPACE_IWORKSPACECONFIGURATION_H
+#define MUSE_WORKSPACE_IWORKSPACECONFIGURATION_H
 
 #include <vector>
 
@@ -28,7 +28,7 @@
 #include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IWorkspaceConfiguration)
@@ -46,4 +46,4 @@ public:
 };
 }
 
-#endif // MU_WORKSPACE_IWORKSPACECONFIGURATION_H
+#endif // MUSE_WORKSPACE_IWORKSPACECONFIGURATION_H

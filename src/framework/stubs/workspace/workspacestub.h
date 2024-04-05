@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACESTUB_H
-#define MU_WORKSPACE_WORKSPACESTUB_H
+#ifndef MUSE_WORKSPACE_WORKSPACESTUB_H
+#define MUSE_WORKSPACE_WORKSPACESTUB_H
 
 #include "workspace/iworkspace.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspaceStub : public IWorkspace
 {
 public:
@@ -41,4 +41,4 @@ public:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACESTUB_H
+#endif // MUSE_WORKSPACE_WORKSPACESTUB_H

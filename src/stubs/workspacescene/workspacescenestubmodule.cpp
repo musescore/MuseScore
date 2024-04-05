@@ -25,7 +25,7 @@
 
 #include "framework/ui/iinteractiveuriregister.h"
 
-using namespace mu::workspace;
+using namespace mu::workspacescene;
 using namespace mu::modularity;
 using namespace mu::ui;
 

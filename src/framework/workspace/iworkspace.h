@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_IWORKSPACE_H
-#define MU_WORKSPACE_IWORKSPACE_H
+#ifndef MUSE_WORKSPACE_IWORKSPACE_H
+#define MUSE_WORKSPACE_IWORKSPACE_H
 
 #include <memory>
 #include <QByteArray>
@@ -29,7 +29,7 @@
 #include "workspacetypes.h"
 #include "async/channel.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class IWorkspace
 {
 public:
@@ -51,4 +51,4 @@ using IWorkspacePtr = std::shared_ptr<IWorkspace>;
 using IWorkspacePtrList = std::vector<IWorkspacePtr>;
 }
 
-#endif // MU_WORKSPACE_IWORKSPACE_H
+#endif // MUSE_WORKSPACE_IWORKSPACE_H

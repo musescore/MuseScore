@@ -22,7 +22,7 @@
 #include "workspacesdataproviderstub.h"
 
 using namespace mu;
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 RetVal<QByteArray> WorkspacesDataProviderStub::rawData(DataKey) const
 {

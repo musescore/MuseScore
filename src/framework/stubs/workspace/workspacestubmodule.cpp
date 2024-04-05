@@ -27,7 +27,7 @@
 #include "workspacemanagerstub.h"
 #include "workspacesdataproviderstub.h"
 
-using namespace mu::workspace;
+using namespace muse::workspace;
 using namespace mu::modularity;
 
 std::string WorkspaceModule::moduleName() const

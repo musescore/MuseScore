@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEMANAGERSTUB_H
-#define MU_WORKSPACE_WORKSPACEMANAGERSTUB_H
+#ifndef MUSE_WORKSPACE_WORKSPACEMANAGERSTUB_H
+#define MUSE_WORKSPACE_WORKSPACEMANAGERSTUB_H
 
 #include "workspace/iworkspacemanager.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspaceManagerStub : public IWorkspaceManager
 {
 public:

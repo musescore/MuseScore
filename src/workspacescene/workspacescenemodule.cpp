@@ -28,7 +28,7 @@
 #include "view/workspacelistmodel.h"
 #include "view/newworkspacemodel.h"
 
-using namespace mu::workspace;
+using namespace mu::workspacescene;
 using namespace mu::modularity;
 
 static void workspacescene_init_qrc()

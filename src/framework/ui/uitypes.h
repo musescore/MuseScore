@@ -148,9 +148,9 @@ struct ContainerMeta
 };
 
 // workspaces
-inline const workspace::DataKey WS_UiSettings("ui_settings");
-inline const workspace::DataKey WS_UiStates("ui_states");
-inline const workspace::DataKey WS_UiToolConfigs("ui_toolconfigs");
+inline const muse::workspace::DataKey WS_UiSettings("ui_settings");
+inline const muse::workspace::DataKey WS_UiStates("ui_states");
+inline const muse::workspace::DataKey WS_UiToolConfigs("ui_toolconfigs");
 }
 
 #endif // MU_UI_UITYPES_H

@@ -34,7 +34,7 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::palette;
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 static const AsciiStringView PALETTE_XML_TAG("PaletteBox");
 

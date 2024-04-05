@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 void WorkspacesDataProvider::init()
 {

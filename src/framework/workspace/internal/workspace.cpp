@@ -29,7 +29,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::workspace;
+using namespace muse::workspace;
 
 Workspace::Workspace(const io::path_t& filePath)
     : m_file(filePath)
@@ -43,7 +43,7 @@ Workspace::Workspace(const io::path_t& filePath)
 
 std::string Workspace::name() const
 {
-    return io::completeBasename(m_file.filePath()).toStdString();
+    return mu::io::completeBasename(m_file.filePath()).toStdString();
 }
 
 std::string Workspace::title() const

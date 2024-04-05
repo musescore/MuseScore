@@ -25,20 +25,19 @@
 
 #include "workspacetypes.h"
 
-using namespace mu;
-using namespace mu::workspace;
+using namespace muse::workspace;
 
-static const Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
+static const mu::Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
 
 void WorkspaceConfiguration::init()
 {
-    settings()->setDefaultValue(CURRENT_WORKSPACE, Val(std::string(DEFAULT_WORKSPACE_NAME)));
-    settings()->valueChanged(CURRENT_WORKSPACE).onReceive(this, [this](const Val& name) {
+    mu::settings()->setDefaultValue(CURRENT_WORKSPACE, Val(std::string(DEFAULT_WORKSPACE_NAME)));
+    mu::settings()->valueChanged(CURRENT_WORKSPACE).onReceive(this, [this](const Val& name) {
         m_currentWorkspaceNameChanged.send(name.toString());
     });
 }
 
-io::paths_t WorkspaceConfiguration::workspacePaths() const
+mu::io::paths_t WorkspaceConfiguration::workspacePaths() const
 {
     io::paths_t paths;
     paths.push_back(userWorkspacesPath());
@@ -46,23 +45,23 @@ io::paths_t WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-io::path_t WorkspaceConfiguration::userWorkspacesPath() const
+mu::io::path_t WorkspaceConfiguration::userWorkspacesPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/workspaces";
 }
 
 std::string WorkspaceConfiguration::currentWorkspaceName() const
 {
-    return settings()->value(CURRENT_WORKSPACE).toString();
+    return mu::settings()->value(CURRENT_WORKSPACE).toString();
 }
 
 void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& workspaceName)
 {
     //! NOTE Workspace selection does not need to be synchronized between instances
-    settings()->setLocalValue(CURRENT_WORKSPACE, Val(workspaceName));
+    mu::settings()->setLocalValue(CURRENT_WORKSPACE, Val(workspaceName));
 }
 
-async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
+mu::async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
 {
     return m_currentWorkspaceNameChanged;
 }

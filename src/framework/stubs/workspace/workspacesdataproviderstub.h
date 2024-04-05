@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
-#define MU_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
+#ifndef MUSE_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
+#define MUSE_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
 
 #include "workspace/iworkspacesdataprovider.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspacesDataProviderStub : public IWorkspacesDataProvider
 {
 public:
@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H
+#endif // MUSE_WORKSPACE_WORKSPACESDATAPROVIDERSTUB_H

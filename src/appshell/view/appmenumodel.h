@@ -52,7 +52,7 @@ class AppMenuModel : public uicomponents::AbstractMenuModel
     INJECT(ui::INavigationController, navigationController)
     INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(workspace::IWorkspaceManager, workspacesManager)
+    INJECT(muse::workspace::IWorkspaceManager, workspacesManager)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(project::IRecentFilesController, recentFilesController)
     INJECT(IAppMenuModelHook, appMenuModelHook)

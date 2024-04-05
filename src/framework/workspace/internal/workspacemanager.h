@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEMANAGER_H
-#define MU_WORKSPACE_WORKSPACEMANAGER_H
+#ifndef MUSE_WORKSPACE_WORKSPACEMANAGER_H
+#define MUSE_WORKSPACE_WORKSPACEMANAGER_H
 
 #include "iworkspacemanager.h"
 
@@ -30,7 +30,7 @@
 #include "io/ifilesystem.h"
 #include "workspace.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 class WorkspaceManager : public IWorkspaceManager, public async::Asyncable
 {
     INJECT(IWorkspaceConfiguration, configuration)
@@ -90,4 +90,4 @@ private:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACEMANAGER_H
+#endif // MUSE_WORKSPACE_WORKSPACEMANAGER_H

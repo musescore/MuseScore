@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACEERRORS_H
-#define MU_WORKSPACE_WORKSPACEERRORS_H
+#ifndef MUSE_WORKSPACE_WORKSPACEERRORS_H
+#define MUSE_WORKSPACE_WORKSPACEERRORS_H
 
 #include "types/ret.h"
 
-namespace mu::workspace {
+namespace muse::workspace {
 enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::WorkspaceFirst),
+    Undefined       = int(mu::Ret::Code::Undefined),
+    NoError         = int(mu::Ret::Code::Ok),
+    UnknownError    = int(mu::Ret::Code::WorkspaceFirst),
 
     NotLoaded       = 1502,
 
@@ -42,4 +42,4 @@ inline mu::Ret make_ret(Err e)
 }
 }
 
-#endif // MU_WORKSPACE_WORKSPACEERRORS_H
+#endif // MUSE_WORKSPACE_WORKSPACEERRORS_H

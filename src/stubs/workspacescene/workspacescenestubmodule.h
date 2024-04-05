@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_WORKSPACE_WORKSPACESCENESTUBMODULE_H
-#define MU_WORKSPACE_WORKSPACESCENESTUBMODULE_H
+#ifndef MU_WORKSPACESCENE_WORKSPACESCENESTUBMODULE_H
+#define MU_WORKSPACESCENE_WORKSPACESCENESTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::workspace {
+namespace mu::workspacescene {
 class WorkspaceSceneModule : public modularity::IModuleSetup
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_WORKSPACE_WORKSPACESCENESTUBMODULE_H
+#endif // MU_WORKSPACESCENE_WORKSPACESCENESTUBMODULE_H
