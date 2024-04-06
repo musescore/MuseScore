@@ -24,7 +24,7 @@
 using namespace mu::project;
 
 PixmapScoreThumbnailView::PixmapScoreThumbnailView(QQuickItem* parent)
-    : uicomponents::QuickPaintedView(parent)
+    : muse::uicomponents::QuickPaintedView(parent)
 {
 }
 
