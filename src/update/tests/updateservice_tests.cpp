@@ -54,10 +54,10 @@ public:
         m_configuration = std::make_shared<UpdateConfigurationMock>();
         m_service->setconfiguration(m_configuration);
 
-        m_networkManagerCreator = std::make_shared<network::NetworkManagerCreatorMock>();
+        m_networkManagerCreator = std::make_shared<muse::network::NetworkManagerCreatorMock>();
         m_service->setnetworkManagerCreator(m_networkManagerCreator);
 
-        m_networkManager = std::make_shared<network::NetworkManagerMock>();
+        m_networkManager = std::make_shared<muse::network::NetworkManagerMock>();
         ON_CALL(*m_networkManagerCreator, makeNetworkManager())
         .WillByDefault(Return(m_networkManager));
 
@@ -94,8 +94,8 @@ public:
 
         EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(checkForUpdateUrl)), _, _))
         .WillOnce(testing::Invoke(
-                      [releasesNotes](const QUrl&, network::IncomingDevice* buf, const network::RequestHeaders&) {
-            buf->open(network::IncomingDevice::WriteOnly);
+                      [releasesNotes](const QUrl&, muse::network::IncomingDevice* buf, const muse::network::RequestHeaders&) {
+            buf->open(muse::network::IncomingDevice::WriteOnly);
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
@@ -121,8 +121,8 @@ public:
 
         EXPECT_CALL(*m_networkManager, get(QUrl(QString::fromStdString(previousReleasesNotesUrl)), _, _))
         .WillOnce(testing::Invoke(
-                      [releasesNotes](const QUrl&, network::IncomingDevice* buf, const network::RequestHeaders&) {
-            buf->open(network::IncomingDevice::WriteOnly);
+                      [releasesNotes](const QUrl&, muse::network::IncomingDevice* buf, const muse::network::RequestHeaders&) {
+            buf->open(muse::network::IncomingDevice::WriteOnly);
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
@@ -133,8 +133,8 @@ public:
     UpdateService* m_service = nullptr;
     std::shared_ptr<UpdateConfigurationMock> m_configuration;
 
-    std::shared_ptr<network::NetworkManagerCreatorMock> m_networkManagerCreator;
-    std::shared_ptr<network::NetworkManagerMock> m_networkManager;
+    std::shared_ptr<muse::network::NetworkManagerCreatorMock> m_networkManagerCreator;
+    std::shared_ptr<muse::network::NetworkManagerMock> m_networkManager;
     std::shared_ptr<SystemInfoMock> m_systemInfoMock;
 };
 

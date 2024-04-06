@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NETWORK_NETWORKERRORS_H
-#define MU_NETWORK_NETWORKERRORS_H
+#ifndef MUSE_NETWORK_NETWORKERRORS_H
+#define MUSE_NETWORK_NETWORKERRORS_H
 
 #include "types/ret.h"
 #include "translation.h"
 
-namespace mu::network {
+namespace muse::network {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -57,4 +57,4 @@ inline Ret make_ret(Err e)
 }
 }
 
-#endif // MU_NETWORK_NETWORKERRORS_H
+#endif // MUSE_NETWORK_NETWORKERRORS_H

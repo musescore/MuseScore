@@ -21,7 +21,7 @@
  */
 #include "networkmanagerstub.h"
 
-using namespace mu::network;
+using namespace muse::network;
 
 mu::Ret NetworkManagerStub::get(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
@@ -55,7 +55,7 @@ mu::Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeade
 
 mu::Progress NetworkManagerStub::progress() const
 {
-    return Progress();
+    return mu::Progress();
 }
 
 void NetworkManagerStub::abort()

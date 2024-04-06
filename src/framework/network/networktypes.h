@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NETWORK_NETWORKTYPES_H
-#define MU_NETWORK_NETWORKTYPES_H
+#ifndef MUSE_NETWORK_NETWORKTYPES_H
+#define MUSE_NETWORK_NETWORKTYPES_H
 
 #include <QVariantMap>
 #include <QNetworkRequest>
@@ -28,7 +28,7 @@
 class QHttpMultiPart;
 class QIODevice;
 
-namespace mu::network {
+namespace muse::network {
 struct RequestHeaders
 {
     QMap<QNetworkRequest::KnownHeaders, QVariant> knownHeaders;
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_NETWORK_NETWORKTYPES_H
+#endif // MUSE_NETWORK_NETWORKTYPES_H

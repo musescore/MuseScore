@@ -27,7 +27,7 @@
 
 using namespace mu;
 using namespace muse::cloud;
-using namespace mu::network;
+using namespace muse::network;
 
 static const std::string module_name("cloud");
 static const Settings::Key CLIENT_ID_KEY(module_name, "cloud/clientId");

@@ -23,7 +23,7 @@
 
 #include "networkmanagerstub.h"
 
-using namespace mu::network;
+using namespace muse::network;
 
 INetworkManagerPtr NetworkManagerCreatorStub::makeNetworkManager() const
 {

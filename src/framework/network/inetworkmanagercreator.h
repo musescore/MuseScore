@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NETWORK_INETWORKMANAGERCREATOR_H
-#define MU_NETWORK_INETWORKMANAGERCREATOR_H
+#ifndef MUSE_NETWORK_INETWORKMANAGERCREATOR_H
+#define MUSE_NETWORK_INETWORKMANAGERCREATOR_H
 
 #include "modularity/imoduleinterface.h"
 #include "inetworkmanager.h"
 
-namespace mu::network {
+namespace muse::network {
 class INetworkManagerCreator : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(INetworkManagerCreator)
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // MU_NETWORK_INETWORKMANAGERCREATOR_H
+#endif // MUSE_NETWORK_INETWORKMANAGERCREATOR_H

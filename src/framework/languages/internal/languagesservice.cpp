@@ -44,7 +44,7 @@
 
 using namespace mu;
 using namespace muse::languages;
-using namespace mu::network;
+using namespace muse::network;
 
 static const QStringList LANGUAGE_RESOURCE_NAMES = {
     "musescore",

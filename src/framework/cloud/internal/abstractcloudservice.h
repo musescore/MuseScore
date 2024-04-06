@@ -60,7 +60,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     INJECT(ICloudConfiguration, configuration)
     INJECT(ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mu::network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
     INJECT(mu::IInteractive, interactive)
     INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
 
@@ -99,7 +99,7 @@ protected:
         QUrl refreshApiUrl;
         QUrl logoutApiUrl;
 
-        mu::network::RequestHeaders headers;
+        network::RequestHeaders headers;
         QVariantMap authorizationParameters;
         QVariantMap refreshParameters;
     };
@@ -141,7 +141,7 @@ private:
 
     void openUrl(const QUrl& url);
 
-    mu::network::RequestHeaders headers() const;
+    network::RequestHeaders headers() const;
 
     QOAuth2AuthorizationCodeFlow* m_oauth2 = nullptr;
     OAuthHttpServerReplyHandler* m_replyHandler = nullptr;

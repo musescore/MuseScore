@@ -42,7 +42,7 @@ public:
     std::string checkForUpdateUrl() const override;
     std::string previousReleasesNotesUrl() const override;
 
-    network::RequestHeaders updateHeaders() const override;
+    muse::network::RequestHeaders updateHeaders() const override;
 
     std::string museScoreUrl() const override;
     std::string museScorePrivacyPolicyUrl() const override;

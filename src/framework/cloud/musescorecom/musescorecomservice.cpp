@@ -36,7 +36,7 @@
 
 using namespace mu;
 using namespace muse::cloud;
-using namespace mu::network;
+using namespace muse::network;
 
 static const QString MUSESCORECOM_CLOUD_TITLE("MuseScore.com");
 static const QString MUSESCORECOM_CLOUD_URL("https://musescore.com");

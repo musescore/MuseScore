@@ -30,7 +30,7 @@ class LearnConfiguration : public ILearnConfiguration
 public:
     void init();
 
-    mu::network::RequestHeaders headers() const override;
+    network::RequestHeaders headers() const override;
 
     QUrl startedPlaylistUrl() const override;
     QUrl advancedPlaylistUrl() const override;

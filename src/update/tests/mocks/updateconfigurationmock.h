@@ -44,7 +44,7 @@ public:
     MOCK_METHOD(std::string, checkForUpdateUrl, (), (const, override));
     MOCK_METHOD(std::string, previousReleasesNotesUrl, (), (const, override));
 
-    MOCK_METHOD(network::RequestHeaders, updateHeaders, (), (const, override));
+    MOCK_METHOD(muse::network::RequestHeaders, updateHeaders, (), (const, override));
 
     MOCK_METHOD(std::string, museScoreUrl, (), (const, override));
     MOCK_METHOD(std::string, museScorePrivacyPolicyUrl, (), (const, override));

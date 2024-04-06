@@ -31,7 +31,7 @@
 #include "networkerrors.h"
 
 using namespace mu;
-using namespace mu::network;
+using namespace muse::network;
 
 static constexpr int NET_TIMEOUT_MS = 60000;
 

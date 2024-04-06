@@ -25,7 +25,7 @@
 
 using namespace mu;
 using namespace muse::learn;
-using namespace mu::network;
+using namespace muse::network;
 
 static const std::string module_name("learn");
 static const Settings::Key GET_PLAYLISTS_TESTING_MODE_KEY(module_name, "learn/getPlaylistsTestingMode");

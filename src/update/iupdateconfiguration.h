@@ -49,7 +49,7 @@ public:
     virtual std::string checkForUpdateUrl() const = 0;
     virtual std::string previousReleasesNotesUrl() const = 0;
 
-    virtual network::RequestHeaders updateHeaders() const = 0;
+    virtual muse::network::RequestHeaders updateHeaders() const = 0;
 
     virtual std::string museScoreUrl() const = 0;
     virtual std::string museScorePrivacyPolicyUrl() const = 0;
