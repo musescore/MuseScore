@@ -36,7 +36,7 @@
 #include "log.h"
 
 using namespace mu::update;
-using namespace mu::network;
+using namespace muse::network;
 
 mu::RetVal<ReleaseInfo> UpdateService::checkForUpdate()
 {

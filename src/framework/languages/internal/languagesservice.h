@@ -37,7 +37,7 @@ namespace muse::languages {
 class LanguagesService : public ILanguagesService, public async::Asyncable
 {
     INJECT(ILanguagesConfiguration, configuration)
-    INJECT(mu::network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(network::INetworkManagerCreator, networkManagerCreator)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
 

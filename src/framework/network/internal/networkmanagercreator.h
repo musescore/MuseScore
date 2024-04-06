@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NETWORK_NETWORKMANAGERCREATOR_H
-#define MU_NETWORK_NETWORKMANAGERCREATOR_H
+#ifndef MUSE_NETWORK_NETWORKMANAGERCREATOR_H
+#define MUSE_NETWORK_NETWORKMANAGERCREATOR_H
 
 #include "inetworkmanagercreator.h"
 
-namespace mu::network {
+namespace muse::network {
 class NetworkManagerCreator : public INetworkManagerCreator
 {
 public:
@@ -32,4 +32,4 @@ public:
 };
 }
 
-#endif // MU_NETWORK_NETWORKMANAGERCREATOR_H
+#endif // MUSE_NETWORK_NETWORKMANAGERCREATOR_H

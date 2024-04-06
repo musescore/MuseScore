@@ -65,9 +65,9 @@ std::string UpdateConfigurationStub::checkForUpdateUrl() const
     return "";
 }
 
-mu::network::RequestHeaders UpdateConfigurationStub::updateHeaders() const
+muse::network::RequestHeaders UpdateConfigurationStub::updateHeaders() const
 {
-    return network::RequestHeaders();
+    return muse::network::RequestHeaders();
 }
 
 std::string UpdateConfigurationStub::museScoreUrl() const

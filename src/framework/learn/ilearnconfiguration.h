@@ -33,7 +33,7 @@ class ILearnConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ILearnConfiguration() = default;
 
-    virtual mu::network::RequestHeaders headers() const = 0;
+    virtual network::RequestHeaders headers() const = 0;
 
     virtual QUrl startedPlaylistUrl() const = 0;
     virtual QUrl advancedPlaylistUrl() const = 0;

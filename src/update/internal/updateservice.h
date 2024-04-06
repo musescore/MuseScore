@@ -40,7 +40,7 @@ namespace mu::update {
 class UpdateService : public IUpdateService, public async::Asyncable
 {
     INJECT(IInteractive, interactive)
-    INJECT(network::INetworkManagerCreator, networkManagerCreator)
+    INJECT(muse::network::INetworkManagerCreator, networkManagerCreator)
     INJECT(IUpdateConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(ISystemInfo, systemInfo)
@@ -68,7 +68,7 @@ private:
     ReleaseInfo m_lastCheckResult;
     io::path_t m_installatorPath;
 
-    network::INetworkManagerPtr m_networkManager;
+    muse::network::INetworkManagerPtr m_networkManager;
     mu::Progress m_updateProgress;
 };
 }

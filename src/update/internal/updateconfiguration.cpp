@@ -122,9 +122,9 @@ std::string UpdateConfiguration::previousReleasesNotesUrl() const
            : m_config.value("all.test").toString();
 }
 
-mu::network::RequestHeaders UpdateConfiguration::updateHeaders() const
+muse::network::RequestHeaders UpdateConfiguration::updateHeaders() const
 {
-    network::RequestHeaders headers;
+    muse::network::RequestHeaders headers;
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
 
     return headers;

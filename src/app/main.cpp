@@ -273,7 +273,7 @@ int main(int argc, char** argv)
 #ifdef MUSE_MODULE_MUSESAMPLER
     app.addModule(new mu::musesampler::MuseSamplerModule());
 #endif
-    app.addModule(new mu::network::NetworkModule());
+    app.addModule(new muse::network::NetworkModule());
     app.addModule(new mu::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
     app.addModule(new muse::ui::UiModule());

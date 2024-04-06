@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NETWORK_NETWORKSTUBMODULE_H
-#define MU_NETWORK_NETWORKSTUBMODULE_H
+#ifndef MUSE_NETWORK_NETWORKSTUBMODULE_H
+#define MUSE_NETWORK_NETWORKSTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::network {
+namespace muse::network {
 class NetworkModule : public modularity::IModuleSetup
 {
 public:
@@ -33,4 +33,4 @@ public:
 };
 }
 
-#endif // MU_NETWORK_NETWORKSTUBMODULE_H
+#endif // MUSE_NETWORK_NETWORKSTUBMODULE_H

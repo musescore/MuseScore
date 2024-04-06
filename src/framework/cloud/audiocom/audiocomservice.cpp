@@ -36,7 +36,7 @@
 
 using namespace mu;
 using namespace muse::cloud;
-using namespace mu::network;
+using namespace muse::network;
 
 static const QString AUDIOCOM_CLOUD_TITLE("Audio.com");
 static const QString AUDIOCOM_CLOUD_URL("https://audio.com");

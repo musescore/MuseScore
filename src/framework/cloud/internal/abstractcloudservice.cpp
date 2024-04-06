@@ -40,7 +40,7 @@
 
 using namespace mu;
 using namespace muse::cloud;
-using namespace mu::network;
+using namespace muse::network;
 
 const QString muse::cloud::ACCESS_TOKEN_KEY("access_token");
 const QString muse::cloud::REFRESH_TOKEN_KEY("refresh_token");

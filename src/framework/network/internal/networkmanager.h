@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NETWORK_NETWORKMANAGER_H
-#define MU_NETWORK_NETWORKMANAGER_H
+#ifndef MUSE_NETWORK_NETWORKMANAGER_H
+#define MUSE_NETWORK_NETWORKMANAGER_H
 
 #include "inetworkmanager.h"
 
@@ -30,7 +30,7 @@ class QNetworkAccessManager;
 class QNetworkRequest;
 class QNetworkReply;
 
-namespace mu::network {
+namespace muse::network {
 class NetworkManager : public QObject, public INetworkManager
 {
     Q_OBJECT
@@ -89,4 +89,4 @@ private:
 };
 }
 
-#endif // MU_NETWORK_NETWORKMANAGER_H
+#endif // MUSE_NETWORK_NETWORKMANAGER_H

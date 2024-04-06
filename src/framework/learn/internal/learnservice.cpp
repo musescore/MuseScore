@@ -33,7 +33,7 @@
 #include "log.h"
 
 using namespace muse::learn;
-using namespace mu::network;
+using namespace muse::network;
 
 static const QString DEFAULT_PLAYLIST_TAG("default");
 
