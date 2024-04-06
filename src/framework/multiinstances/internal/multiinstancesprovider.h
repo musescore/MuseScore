@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_MULTIINSTANCESPROVIDER_H
-#define MU_MI_MULTIINSTANCESPROVIDER_H
+#ifndef MUSE_MI_MULTIINSTANCESPROVIDER_H
+#define MUSE_MI_MULTIINSTANCESPROVIDER_H
 
 #include <map>
 
@@ -37,11 +37,11 @@
 #include "ui/imainwindow.h"
 #include "../iprojectprovider.h"
 
-namespace mu::mi {
+namespace muse::mi {
 class MultiInstancesProvider : public IMultiInstancesProvider, public muse::actions::Actionable, public async::Asyncable
 {
     Inject<muse::actions::IActionsDispatcher> dispatcher;
-    Inject<IInteractive> interactive;
+    Inject<mu::IInteractive> interactive;
     Inject<muse::ui::IMainWindow> mainWindow;
 
     //! NOTE May be missing because it must be implemented outside the framework
@@ -91,18 +91,18 @@ private:
 
     bool isInited() const;
 
-    void onMsg(const ipc::Msg& msg);
+    void onMsg(const mu::ipc::Msg& msg);
 
-    ipc::IpcLock* lock(const std::string& name);
+    mu::ipc::IpcLock* lock(const std::string& name);
 
-    ipc::IpcChannel* m_ipcChannel = nullptr;
+    mu::ipc::IpcChannel* m_ipcChannel = nullptr;
     std::string m_selfID;
 
     async::Notification m_instancesChanged;
     async::Channel<std::string> m_resourceChanged;
 
-    std::map<std::string, ipc::IpcLock*> m_locks;
+    std::map<std::string, mu::ipc::IpcLock*> m_locks;
 };
 }
 
-#endif // MU_MI_MULTIINSTANCESPROVIDER_H
+#endif // MUSE_MI_MULTIINSTANCESPROVIDER_H

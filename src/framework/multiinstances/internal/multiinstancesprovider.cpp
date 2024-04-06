@@ -30,7 +30,8 @@
 #include "settings.h"
 #include "log.h"
 
-using namespace mu::mi;
+using namespace mu;
+using namespace muse::mi;
 using namespace mu::ipc;
 using namespace muse::actions;
 

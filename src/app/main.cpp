@@ -328,7 +328,7 @@ int main(int argc, char** argv)
     app.addModule(new mu::instrumentsscene::InstrumentsSceneModule());
     app.addModule(new muse::languages::LanguagesModule());
     app.addModule(new muse::learn::LearnModule());
-    app.addModule(new mu::mi::MultiInstancesModule());
+    app.addModule(new muse::mi::MultiInstancesModule());
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::palette::PaletteModule());
     app.addModule(new mu::playback::PlaybackModule());

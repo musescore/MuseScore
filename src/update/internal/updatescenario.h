@@ -39,7 +39,7 @@ class UpdateScenario : public IUpdateScenario, public async::Asyncable
 {
     INJECT(IInteractive, interactive)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(IUpdateConfiguration, configuration)
     INJECT(IUpdateService, updateService)
 

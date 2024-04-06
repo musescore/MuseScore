@@ -75,7 +75,7 @@ mu::Ret MidiRemote::setMidiMappings(const MidiMappingList& midiMappings)
 
 void MidiRemote::resetMidiMappings()
 {
-    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+    muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
     fileSystem()->remove(configuration()->midiMappingUserAppDataPath());
 
     m_midiMappings = {};
@@ -123,7 +123,7 @@ mu::Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
-    mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+    muse::mi::ReadResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
     io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     deprecated::XmlReader reader(midiMappingsPath);
@@ -175,7 +175,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
 
-    mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
+    muse::mi::WriteResourceLockGuard resource_guard(multiInstancesProvider(), MIDI_MAPPING_RESOURCE_NAME);
 
     io::path_t midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     deprecated::XmlWriter writer(midiMappingsPath);

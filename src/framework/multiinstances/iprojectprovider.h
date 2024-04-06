@@ -1,14 +1,14 @@
-#ifndef MU_MI_IPROJECTPROVIDER_H
-#define MU_MI_IPROJECTPROVIDER_H
+#ifndef MUSE_MI_IPROJECTPROVIDER_H
+#define MUSE_MI_IPROJECTPROVIDER_H
 
 #include "modularity/imoduleinterface.h"
 
 #include "global/io/path.h"
 
-namespace mu::mi {
+namespace muse::mi {
 class IProjectProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::mi::IProjectProvider);
+    INTERFACE_ID(muse::mi::IProjectProvider);
 
 public:
 
@@ -19,4 +19,4 @@ public:
 };
 }
 
-#endif // MU_MI_IPROJECTPROVIDER_H
+#endif // MUSE_MI_IPROJECTPROVIDER_H

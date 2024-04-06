@@ -42,7 +42,7 @@ namespace muse::shortcuts {
 class MidiRemote : public IMidiRemote, public async::Asyncable
 {
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IShortcutsConfiguration, configuration)
 

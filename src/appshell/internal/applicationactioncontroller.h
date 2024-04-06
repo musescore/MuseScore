@@ -51,7 +51,7 @@ class ApplicationActionController : public QObject, public IApplicationActionCon
     INJECT(muse::languages::ILanguagesService, languagesService)
     INJECT(IInteractive, interactive)
     INJECT(IAppShellConfiguration, configuration)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(project::IProjectFilesController, projectFilesController)
     INJECT(muse::audio::ISoundFontRepository, soundFontRepository)
     INJECT(IStartupScenario, startupScenario)

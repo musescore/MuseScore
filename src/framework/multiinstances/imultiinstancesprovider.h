@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_IMULTIINSTANCESPROVIDER_H
-#define MU_MI_IMULTIINSTANCESPROVIDER_H
+#ifndef MUSE_MI_IMULTIINSTANCESPROVIDER_H
+#define MUSE_MI_IMULTIINSTANCESPROVIDER_H
 
 #include <string>
 #include <vector>
@@ -32,7 +32,7 @@
 #include "async/channel.h"
 #include "types/val.h"
 
-namespace mu::mi {
+namespace muse::mi {
 class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IMultiInstancesProvider)
@@ -75,4 +75,4 @@ public:
 };
 }
 
-#endif // MU_MI_IMULTIINSTANCESPROVIDER_H
+#endif // MUSE_MI_IMULTIINSTANCESPROVIDER_H

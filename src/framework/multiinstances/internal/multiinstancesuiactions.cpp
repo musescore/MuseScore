@@ -27,7 +27,7 @@
 
 using namespace muse::ui;
 using namespace muse::actions;
-using namespace mu::mi;
+using namespace muse::mi;
 
 const UiActionList MultiInstancesUiActions::m_actions = {
     UiAction("multiinstances-dev-show-info",

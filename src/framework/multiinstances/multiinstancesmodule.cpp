@@ -32,7 +32,7 @@
 
 #include "dev/multiinstancesdevmodel.h"
 
-using namespace mu::mi;
+using namespace muse::mi;
 using namespace mu::modularity;
 
 static void multiinstances_init_qrc()
