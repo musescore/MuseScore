@@ -276,6 +276,10 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::OSSIA:
     case ElementType::GRACE_NOTES_GROUP:
     case ElementType::ROOT_ITEM:
+    case ElementType::FIGURED_BASS_ITEM:
+    case ElementType::GUITAR_BEND_HOLD:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::GUITAR_BEND_TEXT:
     case ElementType::DUMMY:
         break;
     }
