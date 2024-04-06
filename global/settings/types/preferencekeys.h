@@ -64,6 +64,7 @@
 #define PREF_EXPORT_MP3_BITRATE                             "export/mp3/bitRate"
 #define PREF_EXPORT_MUSICXML_EXPORTBREAKS                   "export/musicXML/exportBreaks"
 #define PREF_EXPORT_MUSICXML_EXPORTLAYOUT                   "export/musicXML/exportLayout"
+#define PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS        "export/musicXML/exportInvisibleElements"
 #define PREF_EXPORT_PDF_DPI                                 "export/pdf/dpi"
 #define PREF_EXPORT_PNG_RESOLUTION                          "export/png/resolution"
 #define PREF_EXPORT_PNG_USETRANSPARENCY                     "export/png/useTransparency"

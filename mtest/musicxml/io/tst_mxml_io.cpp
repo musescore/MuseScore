@@ -353,6 +353,7 @@ void TestMxmlIO::mxmlIoTest(const char* file, bool exportLayout)
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
@@ -374,6 +375,7 @@ void TestMxmlIO::mxmlIoTestRef(const char* file)
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
@@ -396,6 +398,7 @@ void TestMxmlIO::mxmlIoTestRefBreaks(const char* file)
       MScore::debugMode = true;
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
@@ -423,6 +426,7 @@ void TestMxmlIO::mxmlMscxExportTestRef(const char* file, bool exportLayout)
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
@@ -445,6 +449,7 @@ void TestMxmlIO::mxmlMscxExportTestRefBreaks(const char* file)
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
@@ -472,6 +477,7 @@ void TestMxmlIO::mxmlReadTestCompr(const char* file)
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".mxl");
       QVERIFY(score);
@@ -494,6 +500,7 @@ void TestMxmlIO::mxmlReadWriteTestCompr(const char* file)
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS, true);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, true);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
