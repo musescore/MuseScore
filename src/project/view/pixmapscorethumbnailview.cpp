@@ -21,6 +21,7 @@
  */
 #include "pixmapscorethumbnailview.h"
 
+using namespace muse;
 using namespace mu::project;
 
 PixmapScoreThumbnailView::PixmapScoreThumbnailView(QQuickItem* parent)
