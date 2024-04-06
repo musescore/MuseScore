@@ -52,7 +52,7 @@
 #include "iprojectautosaver.h"
 
 namespace mu::project {
-class ProjectActionsController : public IProjectFilesController, public mi::IProjectProvider, public muse::actions::Actionable,
+class ProjectActionsController : public IProjectFilesController, public muse::mi::IProjectProvider, public muse::actions::Actionable,
     public async::Asyncable
 {
     INJECT(IProjectConfiguration, configuration)
@@ -65,7 +65,7 @@ class ProjectActionsController : public IProjectFilesController, public mi::IPro
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(IInteractive, interactive)
     INJECT(context::IGlobalContext, globalContext)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
     INJECT(muse::cloud::IAudioComService, audioComService)
     INJECT(notation::INotationConfiguration, notationConfiguration)

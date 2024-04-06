@@ -39,7 +39,7 @@ class StartupScenario : public IStartupScenario, public async::Asyncable
 {
     INJECT(IInteractive, interactive)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(IAppShellConfiguration, configuration)
     INJECT(ISessionsManager, sessionsManager)
     INJECT(project::IProjectAutoSaver, projectAutoSaver)

@@ -42,7 +42,7 @@ class RecentFilesController : public IRecentFilesController, public async::Async
     INJECT(IProjectConfiguration, configuration)
     INJECT(IMscMetaReader, mscMetaReader)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();

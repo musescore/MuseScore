@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_MITYPES_H
-#define MU_MI_MITYPES_H
+#ifndef MUSE_MI_MITYPES_H
+#define MUSE_MI_MITYPES_H
 
 #include <string>
 
-namespace mu::mi {
+namespace muse::mi {
 struct InstanceMeta
 {
     std::string id;
@@ -32,4 +32,4 @@ struct InstanceMeta
 };
 }
 
-#endif // MU_MI_MITYPES_H
+#endif // MUSE_MI_MITYPES_H

@@ -21,7 +21,7 @@
  */
 #include "multiinstancesstubprovider.h"
 
-using namespace mu::mi;
+using namespace muse::mi;
 
 // Project opening
 

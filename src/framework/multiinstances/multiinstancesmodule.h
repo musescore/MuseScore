@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MI_MULTIINSTANCESMODULE_H
-#define MU_MI_MULTIINSTANCESMODULE_H
+#ifndef MUSE_MI_MULTIINSTANCESMODULE_H
+#define MUSE_MI_MULTIINSTANCESMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::mi {
+namespace muse::mi {
 class MultiInstancesProvider;
 class MultiInstancesModule : public modularity::IModuleSetup
 {
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_MI_MULTIINSTANCESMODULE_H
+#endif // MUSE_MI_MULTIINSTANCESMODULE_H

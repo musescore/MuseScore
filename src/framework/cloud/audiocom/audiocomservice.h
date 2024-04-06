@@ -29,7 +29,6 @@
 #include "modularity/ioc.h"
 #include "icloudconfiguration.h"
 #include "network/inetworkmanagercreator.h"
-#include "multiinstances/imultiinstancesprovider.h"
 
 #include "internal/abstractcloudservice.h"
 

@@ -34,7 +34,7 @@ namespace muse::extensions {
 class ExtensionsConfiguration : public IExtensionsConfiguration, public mu::async::Asyncable
 {
     Inject<mu::IGlobalConfiguration> globalConfiguration;
-    Inject<mu::mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
 
 public:
     ExtensionsConfiguration() = default;

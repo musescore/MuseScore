@@ -21,7 +21,7 @@
  */
 #include "multiinstancesdevmodel.h"
 
-using namespace mu::mi;
+using namespace muse::mi;
 
 MultiInstancesDevModel::MultiInstancesDevModel(QObject* parent)
     : QObject(parent)

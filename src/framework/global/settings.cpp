@@ -159,7 +159,7 @@ Settings::Items Settings::readItems() const
 {
     Items result;
 #ifdef MUSE_MODULE_MULTIINSTANCES
-    mi::ReadResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
+    muse::mi::ReadResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
 #endif
     for (const QString& key : m_settings->allKeys()) {
         Item item;
@@ -225,7 +225,7 @@ void Settings::setLocalValue(const Key& key, const Val& value)
 void Settings::writeValue(const Key& key, const Val& value)
 {
 #ifdef MUSE_MODULE_MULTIINSTANCES
-    mi::WriteResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
+    muse::mi::WriteResourceLockGuard resource_lock(multiInstancesProvider.get(), SETTINGS_RESOURCE_NAME);
 #endif
     // TODO: implement writing/reading first part of key (module name)
     m_settings->setValue(QString::fromStdString(key.key), value.toQVariant());

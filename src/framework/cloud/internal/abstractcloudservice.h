@@ -62,7 +62,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     INJECT(io::IFileSystem, fileSystem)
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
     INJECT(mu::IInteractive, interactive)
-    INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     explicit AbstractCloudService(QObject* parent = nullptr);

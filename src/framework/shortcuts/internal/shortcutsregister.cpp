@@ -80,7 +80,7 @@ void ShortcutsRegister::reload(bool onlyDef)
 
         if (!onlyDef) {
             //! NOTE The user shortcut file may change, so we need to lock it
-            mu::mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+            mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
             ok = readFromFile(m_shortcuts, userPath);
         } else {
             ok = false;
@@ -320,7 +320,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 
 void ShortcutsRegister::resetShortcuts()
 {
-    mu::mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
     fileSystem()->remove(configuration()->shortcutsUserAppDataPath());
 
     reload();
@@ -330,7 +330,7 @@ bool ShortcutsRegister::writeToFile(const ShortcutList& shortcuts, const io::pat
 {
     TRACEFUNC;
 
-    mu::mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    mi::WriteResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
     mu::deprecated::XmlWriter writer(path);
 
@@ -413,7 +413,7 @@ ShortcutList ShortcutsRegister::shortcutsForSequence(const std::string& sequence
 
 mu::Ret ShortcutsRegister::importFromFile(const io::path_t& filePath)
 {
-    mu::mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
+    mi::ReadResourceLockGuard(multiInstancesProvider(), SHORTCUTS_RESOURCE_NAME);
 
     Ret ret = fileSystem()->copy(filePath, configuration()->shortcutsUserAppDataPath(), true);
     if (!ret) {

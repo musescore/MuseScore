@@ -39,7 +39,7 @@ class LanguagesService : public ILanguagesService, public async::Asyncable
     INJECT(ILanguagesConfiguration, configuration)
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mu::mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     void init();

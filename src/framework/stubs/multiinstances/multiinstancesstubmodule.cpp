@@ -24,7 +24,7 @@
 #include "modularity/ioc.h"
 #include "multiinstancesstubprovider.h"
 
-using namespace mu::mi;
+using namespace muse::mi;
 using namespace mu::modularity;
 
 std::string MultiInstancesModule::moduleName() const

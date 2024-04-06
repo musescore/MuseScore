@@ -45,7 +45,7 @@ namespace mu {
 class Settings
 {
 #ifdef MUSE_MODULE_MULTIINSTANCES
-    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<muse::mi::IMultiInstancesProvider> multiInstancesProvider;
 #endif
 public:
     static Settings* instance();

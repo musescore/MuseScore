@@ -43,7 +43,7 @@ class AppShellConfiguration : public IAppShellConfiguration, public async::Async
     INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(IApplication, application)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(project::IProjectConfiguration, projectConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)

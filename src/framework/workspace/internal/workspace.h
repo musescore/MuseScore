@@ -34,7 +34,7 @@
 namespace muse::workspace {
 class Workspace : public IWorkspace, public async::Asyncable
 {
-    Inject<mu::mi::IMultiInstancesProvider> multiInstancesProvider;
+    Inject<mi::IMultiInstancesProvider> multiInstancesProvider;
     Inject<IApplication> application;
 
 public:

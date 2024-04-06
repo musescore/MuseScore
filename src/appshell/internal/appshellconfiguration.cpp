@@ -256,13 +256,13 @@ mu::io::path_t AppShellConfiguration::sessionFilePath() const
 
 mu::RetVal<mu::ByteArray> AppShellConfiguration::readSessionState() const
 {
-    mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
+    muse::mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->readFile(sessionFilePath());
 }
 
 mu::Ret AppShellConfiguration::writeSessionState(const QByteArray& data)
 {
-    mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
+    muse::mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->writeFile(sessionFilePath(), ByteArray::fromQByteArrayNoCopy(data));
 }
 
