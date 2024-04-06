@@ -30,7 +30,7 @@
 #include "log.h"
 
 using namespace mu::inspector;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 InspectorPopupController::InspectorPopupController(QObject* parent)
     : QObject(parent)

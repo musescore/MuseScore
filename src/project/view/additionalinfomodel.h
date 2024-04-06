@@ -117,19 +117,19 @@ private:
     struct KeySignature {
         QString titleMajor;
         QString titleMinor;
-        ui::IconCode::Code icon = ui::IconCode::Code::NONE;
+        muse::ui::IconCode::Code icon = muse::ui::IconCode::Code::NONE;
         notation::Key key = notation::Key::C;
 
         KeySignature() = default;
         KeySignature(const QVariantMap& map);
-        KeySignature(const QString& titleMajor, const QString& titleMinor, ui::IconCode::Code icon, notation::Key key);
+        KeySignature(const QString& titleMajor, const QString& titleMinor, muse::ui::IconCode::Code icon, notation::Key key);
 
         QVariantMap toMap() const;
     };
 
     struct Tempo {
         int value = 0;
-        ui::MusicalSymbolCodes::Code noteIcon = ui::MusicalSymbolCodes::Code::NONE;
+        muse::ui::MusicalSymbolCodes::Code noteIcon = muse::ui::MusicalSymbolCodes::Code::NONE;
         bool withDot = false;
 
         Tempo() = default;

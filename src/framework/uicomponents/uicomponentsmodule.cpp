@@ -50,8 +50,8 @@
 #include "ui/uitypes.h"
 #include "ui/iinteractiveuriregister.h"
 
-using namespace mu::uicomponents;
-using namespace mu::ui;
+using namespace muse::uicomponents;
+using namespace muse::ui;
 using namespace mu::modularity;
 
 static void uicomponents_init_qrc()

@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 NavigationSection::NavigationSection(QObject* parent)
     : AbstractNavigation(parent)

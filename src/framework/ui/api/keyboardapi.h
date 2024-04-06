@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_KEYBOARDAPI_H
-#define MU_API_KEYBOARDAPI_H
+#ifndef MUSE_API_KEYBOARDAPI_H
+#define MUSE_API_KEYBOARDAPI_H
 
 #include "api/apiobject.h"
 
@@ -28,16 +28,16 @@
 #include "shortcuts/ishortcutscontroller.h"
 #include "ui/imainwindow.h"
 
-namespace mu::api {
-class KeyboardApi : public ApiObject
+namespace muse::api {
+class KeyboardApi : public mu::api::ApiObject
 {
     Q_OBJECT
 
-    INJECT(shortcuts::IShortcutsController, shortcutsController)
+    INJECT(mu::shortcuts::IShortcutsController, shortcutsController)
     INJECT(ui::IMainWindow, mainWindow)
 
 public:
-    explicit KeyboardApi(IApiEngine* e);
+    explicit KeyboardApi(mu::api::IApiEngine* e);
 
     Q_INVOKABLE void key(const QString& key);
     Q_INVOKABLE void repeatKey(const QString& key, int count);
@@ -45,4 +45,4 @@ public:
 };
 }
 
-#endif // MU_API_KEYBOARDAPI_H
+#endif // MUSE_API_KEYBOARDAPI_H

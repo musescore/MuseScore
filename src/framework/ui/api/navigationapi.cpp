@@ -23,11 +23,11 @@
 
 #include "log.h"
 
-using namespace mu::api;
-using namespace mu::ui;
+using namespace muse::api;
+using namespace muse::ui;
 
-NavigationApi::NavigationApi(IApiEngine* e)
-    : ApiObject(e)
+NavigationApi::NavigationApi(mu::api::IApiEngine* e)
+    : mu::api::ApiObject(e)
 {
 }
 

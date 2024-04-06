@@ -27,21 +27,21 @@
 #include "context/iuicontextresolver.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsUiActions : public ui::IUiActionsModule
+class InstrumentsUiActions : public muse::ui::IUiActionsModule
 {
     INJECT(context::IUiContextResolver, uicontextResolver)
 public:
 
-    const ui::UiActionList& actionsList() const override;
+    const muse::ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const ui::UiAction& act) const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& act) const override;
+    bool actionChecked(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    const static ui::UiActionList m_actions;
+    const static muse::ui::UiActionList m_actions;
     async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
     async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
 };

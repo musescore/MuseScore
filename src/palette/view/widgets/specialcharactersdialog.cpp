@@ -41,7 +41,7 @@ static const QString SPECIAL_CHARACTERS_DIALOG_NAME("SpecialCharactersDialog");
 using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::palette;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static constexpr SymId commonScoreSymbols[] = {
     SymId::accidentalFlat,

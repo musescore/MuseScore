@@ -25,7 +25,7 @@
 #include <QWidget>
 #include <QTableWidget>
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 bool WidgetNavigationFix::fixNavigationForTableWidget(const WidgetNavigationFix::NavigationChain& chain, int key)
 {

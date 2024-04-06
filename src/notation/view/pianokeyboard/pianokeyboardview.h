@@ -33,12 +33,12 @@
 
 namespace mu::notation {
 class PianoKeyboardController;
-class PianoKeyboardView : public uicomponents::QuickPaintedView, public async::Asyncable
+class PianoKeyboardView : public muse::uicomponents::QuickPaintedView, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(INotationConfiguration, configuration)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
     Q_PROPERTY(int numberOfKeys READ numberOfKeys WRITE setNumberOfKeys NOTIFY numberOfKeysChanged)
     Q_PROPERTY(qreal keyWidthScaling READ keyWidthScaling WRITE setScaling NOTIFY keyWidthScalingChanged)

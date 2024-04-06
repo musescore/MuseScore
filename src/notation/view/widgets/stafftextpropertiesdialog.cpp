@@ -84,7 +84,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     connect(this, &QDialog::accepted, this, &StaffTextPropertiesDialog::saveValues);
 
-    ui::WidgetStateStore::restoreGeometry(this);
+    muse::ui::WidgetStateStore::restoreGeometry(this);
 }
 
 #ifdef MU_QT5_COMPAT
@@ -102,7 +102,7 @@ StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 
 void StaffTextPropertiesDialog::hideEvent(QHideEvent* event)
 {
-    ui::WidgetStateStore::saveGeometry(this);
+    muse::ui::WidgetStateStore::saveGeometry(this);
     QDialog::hideEvent(event);
 }
 

@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 UiEngine::UiEngine()
 {
@@ -129,7 +129,7 @@ QmlApi* UiEngine::api() const
     return m_api;
 }
 
-mu::api::ThemeApi* UiEngine::theme() const
+muse::api::ThemeApi* UiEngine::theme() const
 {
     return m_theme;
 }

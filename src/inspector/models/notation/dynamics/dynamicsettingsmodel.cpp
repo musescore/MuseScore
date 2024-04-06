@@ -32,7 +32,7 @@ DynamicsSettingsModel::DynamicsSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_DYNAMIC);
     setTitle(mu::qtrc("inspector ", "Dynamics"));
-    setIcon(ui::IconCode::Code::DYNAMIC_FORTE);
+    setIcon(muse::ui::IconCode::Code::DYNAMIC_FORTE);
     createProperties();
 }
 

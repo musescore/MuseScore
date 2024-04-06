@@ -73,7 +73,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::modularity;
 
 static void ui_init_qrc()
@@ -134,8 +134,8 @@ void UiModule::registerApi()
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
-        api->regApiCreator(moduleName(), "api.navigation", new ApiCreator<NavigationApi>());
-        api->regApiCreator(moduleName(), "api.keyboard", new ApiCreator<KeyboardApi>());
+        api->regApiCreator(moduleName(), "api.navigation", new ApiCreator<muse::api::NavigationApi>());
+        api->regApiCreator(moduleName(), "api.keyboard", new ApiCreator<muse::api::KeyboardApi>());
         api->regApiSingltone(moduleName(), "api.theme", m_uiengine->theme());
     }
 }

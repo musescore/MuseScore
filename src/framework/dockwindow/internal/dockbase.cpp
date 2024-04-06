@@ -355,7 +355,7 @@ void DockBase::setFloating(bool floating)
     m_dockWidget->setFloating(floating);
 }
 
-void DockBase::setContentNavigationPanel(mu::ui::NavigationPanel* panel)
+void DockBase::setContentNavigationPanel(ui::NavigationPanel* panel)
 {
     if (m_contentNavigationPanel == panel) {
         return;
@@ -539,7 +539,7 @@ void DockBase::resize(int width, int height)
     applySizeConstraints();
 }
 
-mu::ui::NavigationPanel* DockBase::contentNavigationPanel() const
+muse::ui::NavigationPanel* DockBase::contentNavigationPanel() const
 {
     return m_contentNavigationPanel;
 }

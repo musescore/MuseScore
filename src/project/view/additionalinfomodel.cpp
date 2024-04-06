@@ -26,7 +26,7 @@
 
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const mu::notation::Fraction FOUR_FOUR_TIME_SIGNATURE(4, 4);
 static const mu::notation::Fraction ALLA_BREVE_TIME_SIGNATURE(2, 2);

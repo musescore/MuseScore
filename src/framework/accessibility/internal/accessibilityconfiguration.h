@@ -30,7 +30,7 @@
 namespace muse::accessibility {
 class AccessibilityConfiguration : public IAccessibilityConfiguration
 {
-    Inject<mu::ui::INavigationController> navigationController;
+    Inject<ui::INavigationController> navigationController;
 
 public:
     AccessibilityConfiguration() = default;

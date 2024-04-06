@@ -22,7 +22,7 @@
 #include "testdialog.h"
 #include "ui_testdialog.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 #ifdef MU_QT5_COMPAT
 TestDialog::TestDialog(const TestDialog& dialog)

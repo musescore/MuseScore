@@ -28,7 +28,7 @@
 #include "view/widgets/editstyle.h"
 
 using namespace mu::notation;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 using namespace muse::actions;
 
 void NotationContextMenuModel::loadItems(int elementType)

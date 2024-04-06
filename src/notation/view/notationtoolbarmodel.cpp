@@ -23,7 +23,7 @@
 #include "notationtoolbarmodel.h"
 
 using namespace mu::notation;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 using namespace muse::actions;
 
 void NotationToolBarModel::load()
@@ -46,7 +46,7 @@ MenuItem* NotationToolBarModel::makeItem(const ActionCode& actionCode)
 {
     MenuItem* item = new MenuItem(actionsRegister()->action(actionCode), this);
 
-    ui::UiActionState state;
+    muse::ui::UiActionState state;
     state.enabled = context()->currentNotation() != nullptr;
     item->setState(state);
 

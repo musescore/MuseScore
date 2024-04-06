@@ -28,14 +28,14 @@
 
 using namespace mu::inspector;
 
-using IconCode = mu::ui::IconCode::Code;
+using IconCode = muse::ui::IconCode::Code;
 
 OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::OTTAVA)
 {
     setTitle(mu::qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);
-    setIcon(ui::IconCode::Code::OTTAVA);
+    setIcon(muse::ui::IconCode::Code::OTTAVA);
 
     setPossibleStartHookTypes({});
 

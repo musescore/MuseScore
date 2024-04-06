@@ -27,7 +27,7 @@
 
 using namespace mu::workspacescene;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static void workspacescene_init_qrc()
 {

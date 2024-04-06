@@ -43,7 +43,7 @@
 
 using namespace mu::playback;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 static void playback_init_qrc()

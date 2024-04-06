@@ -29,7 +29,7 @@
 #include "notation/iinstrumentsrepository.h"
 
 namespace mu::instrumentsscene {
-class InstrumentsOnScoreListModel : public uicomponents::SelectableItemListModel
+class InstrumentsOnScoreListModel : public muse::uicomponents::SelectableItemListModel
 {
     Q_OBJECT
 

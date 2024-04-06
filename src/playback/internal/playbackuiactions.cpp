@@ -27,7 +27,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::playback;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const UiActionList PlaybackUiActions::m_mainActions = {
@@ -208,7 +208,7 @@ const UiActionList& PlaybackUiActions::loopBoundaryActions()
     return m_loopBoundaryActions;
 }
 
-const mu::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
+const muse::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
 {
     static ToolConfig config;
     if (!config.isValid()) {

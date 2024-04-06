@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_MENUITEM_H
-#define MU_UICOMPONENTS_MENUITEM_H
+#ifndef MUSE_UICOMPONENTS_MENUITEM_H
+#define MUSE_UICOMPONENTS_MENUITEM_H
 
 #include <QObject>
 #include <QString>
@@ -29,11 +29,7 @@
 
 #include "ui/uiaction.h"
 
-namespace mu {
-class TranslatableString;
-}
-
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 // This must be in sync with QAction::MenuRole
 enum class MenuItemRole {
     NoRole = 0,
@@ -103,12 +99,12 @@ public slots:
     void setId(const QString& id);
     void setTitle(const TranslatableString& title);
     void setSection(const QString& section);
-    void setState(const mu::ui::UiActionState& state);
+    void setState(const ui::UiActionState& state);
     void setSelectable(bool selectable);
     void setSelected(bool selected);
-    void setRole(mu::uicomponents::MenuItemRole role);
-    void setSubitems(const QList<mu::uicomponents::MenuItem*>& subitems);
-    void setAction(const mu::ui::UiAction& action);
+    void setRole(muse::uicomponents::MenuItemRole role);
+    void setSubitems(const QList<uicomponents::MenuItem*>& subitems);
+    void setAction(const ui::UiAction& action);
     void setArgs(const muse::actions::ActionData& args);
 
 signals:
@@ -119,7 +115,7 @@ signals:
     void selectableChanged(bool selectable);
     void selectedChanged(bool selected);
     void roleChanged(int role);
-    void subitemsChanged(QList<mu::uicomponents::MenuItem*> subitems, const QString& menuId);
+    void subitemsChanged(QList<uicomponents::MenuItem*> subitems, const QString& menuId);
     void actionChanged();
 
 private:
@@ -163,4 +159,4 @@ inline QVariantList menuItemListToVariantList(const uicomponents::MenuItemList& 
 }
 }
 
-#endif // MU_UICOMPONENTS_MENUITEM_H
+#endif // MUSE_UICOMPONENTS_MENUITEM_H

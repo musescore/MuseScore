@@ -31,14 +31,14 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-using IconCode = mu::ui::IconCode::Code;
+using IconCode = muse::ui::IconCode::Code;
 
 TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository, mu::engraving::ElementType elementType)
     : AbstractInspectorModel(parent, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
     setTitle(mu::qtrc("inspector", "Text line"));
-    setIcon(ui::IconCode::Code::TEXT_BELOW_STAFF);
+    setIcon(muse::ui::IconCode::Code::TEXT_BELOW_STAFF);
 
     static const QList<HookTypeInfo> startHookTypes {
         { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },

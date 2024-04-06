@@ -30,7 +30,7 @@
 
 using namespace mu::inspector;
 
-using IconCode = mu::ui::IconCode::Code;
+using IconCode = muse::ui::IconCode::Code;
 
 HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType)
     : TextLineSettingsModel(parent, repository)
@@ -38,11 +38,11 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
     if (lineType == Diminuendo) {
         setModelType(InspectorModelType::TYPE_DIMINUENDO);
         setTitle(mu::qtrc("inspector", "Diminuendo"));
-        setIcon(ui::IconCode::Code::DIMINUENDO);
+        setIcon(muse::ui::IconCode::Code::DIMINUENDO);
     } else {
         setModelType(InspectorModelType::TYPE_CRESCENDO);
         setTitle(mu::qtrc("inspector", "Crescendo"));
-        setIcon(ui::IconCode::Code::CRESCENDO);
+        setIcon(muse::ui::IconCode::Code::CRESCENDO);
     }
 
     m_hairpinType = lineType == Crescendo ? engraving::HairpinType::CRESC_LINE : engraving::HairpinType::DECRESC_LINE;

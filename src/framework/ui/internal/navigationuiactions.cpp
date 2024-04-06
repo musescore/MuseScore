@@ -24,7 +24,7 @@
 #include "../uiaction.h"
 #include "shortcuts/shortcutcontext.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const UiActionList NavigationUiActions::m_actions = {

@@ -26,12 +26,12 @@
 #include "types/translatablestring.h"
 
 using namespace mu::update;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const UiActionList UpdateUiActions::m_actions = {
     UiAction("check-update",
-             mu::ui::UiCtxAny,
+             UiCtxAny,
              mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Check for &update")
              )

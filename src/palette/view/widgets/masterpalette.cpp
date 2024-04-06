@@ -37,7 +37,7 @@
 #include "log.h"
 
 using namespace mu::palette;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::engraving;
 
 void MasterPalette::setSelectedPaletteName(const QString& name)

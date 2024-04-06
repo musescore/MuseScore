@@ -276,8 +276,8 @@ int main(int argc, char** argv)
     app.addModule(new mu::network::NetworkModule());
     app.addModule(new mu::shortcuts::ShortcutsModule());
 #ifdef MUSE_MODULE_UI
-    app.addModule(new mu::ui::UiModule());
-    app.addModule(new mu::uicomponents::UiComponentsModule());
+    app.addModule(new muse::ui::UiModule());
+    app.addModule(new muse::uicomponents::UiComponentsModule());
     app.addModule(new muse::dock::DockModule());
 #endif
     app.addModule(new muse::vst::VSTModule());

@@ -43,7 +43,7 @@ class ShortcutsRegister : public IShortcutsRegister, public async::Asyncable
     INJECT(IShortcutsConfiguration, configuration)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(ui::IUiActionsRegister, uiactionsRegister)
+    INJECT(muse::ui::IUiActionsRegister, uiactionsRegister)
 
 public:
     ShortcutsRegister() = default;

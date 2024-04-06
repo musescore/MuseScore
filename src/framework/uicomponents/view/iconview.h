@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_ICONVIEW_H
-#define MU_UICOMPONENTS_ICONVIEW_H
+#ifndef MUSE_UICOMPONENTS_ICONVIEW_H
+#define MUSE_UICOMPONENTS_ICONVIEW_H
 
 #include <QIcon>
 #include <QColor>
 
 #include "quickpaintedview.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class IconView : public QuickPaintedView
 {
     Q_OBJECT
@@ -59,4 +59,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_ICONVIEW_H
+#endif // MUSE_UICOMPONENTS_ICONVIEW_H

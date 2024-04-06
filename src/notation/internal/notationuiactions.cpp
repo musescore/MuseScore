@@ -29,7 +29,7 @@
 
 using namespace mu;
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 static const ActionCode NOTE_INPUT_ACTION_CODE("note-input");
@@ -2698,7 +2698,7 @@ SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionC
     return symbolId;
 }
 
-const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
+const muse::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
 {
     static ToolConfig config;
     if (!config.isValid()) {

@@ -31,7 +31,7 @@ TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementReposito
 {
     setModelType(InspectorModelType::TYPE_TEXT_FRAME);
     setTitle(mu::qtrc("inspector", "Text frame"));
-    setIcon(ui::IconCode::Code::TEXT_FRAME);
+    setIcon(muse::ui::IconCode::Code::TEXT_FRAME);
     createProperties();
 }
 

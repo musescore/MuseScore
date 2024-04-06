@@ -26,17 +26,17 @@
 #include "types/translatablestring.h"
 
 using namespace muse::workspace;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 const UiActionList WorkspaceUiActions::m_actions = {
     UiAction("select-workspace",
-             mu::ui::UiCtxAny,
+             muse::ui::UiCtxAny,
              mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Select workspace")
              ),
     UiAction("configure-workspaces",
-             mu::ui::UiCtxAny,
+             muse::ui::UiCtxAny,
              mu::shortcuts::CTX_ANY,
              TranslatableString("action", "Configure workspace"),
              TranslatableString("action", "Configure workspace…")

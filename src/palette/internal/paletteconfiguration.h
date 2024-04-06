@@ -32,7 +32,7 @@
 namespace mu::palette {
 class PaletteConfiguration : public IPaletteConfiguration, public async::Asyncable
 {
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
@@ -68,7 +68,7 @@ public:
     void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) override;
 
 private:
-    QColor themeColor(ui::ThemeStyleKey key) const;
+    QColor themeColor(muse::ui::ThemeStyleKey key) const;
 
     ValCh<bool> m_isSinglePalette;
     ValCh<bool> m_isSingleClickToOpenPalette;

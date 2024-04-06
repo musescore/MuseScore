@@ -57,7 +57,7 @@ class App
     INJECT(muse::autobot::IAutobot, autobot)
     INJECT(muse::audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell::IAppShellConfiguration, appshellConfiguration)
     INJECT(appshell::IStartupScenario, startupScenario)
     INJECT(notation::INotationConfiguration, notationConfiguration)

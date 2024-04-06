@@ -67,14 +67,14 @@ void AutobotModule::registerExports()
 
 void AutobotModule::resolveImports()
 {
-    auto ir = modularity::ioc()->resolve<mu::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = modularity::ioc()->resolve<muse::ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "MuseScore/Autobot/BatchTestsDialog.qml");
         ir->registerQmlUri(Uri("musescore://autobot/scripts"), "MuseScore/Autobot/ScriptsDialog.qml");
         ir->registerQmlUri(Uri("musescore://autobot/selectfile"), "MuseScore/Autobot/AutobotSelectFileDialog.qml");
     }
 
-    auto ar = modularity::ioc()->resolve<mu::ui::IUiActionsRegister>(moduleName());
+    auto ar = modularity::ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<AutobotActions>());
     }

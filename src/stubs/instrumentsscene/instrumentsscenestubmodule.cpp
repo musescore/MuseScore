@@ -30,7 +30,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static void instrumentsscene_init_qrc()
 {
@@ -63,7 +63,7 @@ void InstrumentsSceneModule::registerResources()
 
 void InstrumentsSceneModule::registerUiTypes()
 {
-    std::shared_ptr<ui::IUiEngine> ui = ioc()->resolve<ui::IUiEngine>(moduleName());
+    std::shared_ptr<muse::ui::IUiEngine> ui = ioc()->resolve<muse::ui::IUiEngine>(moduleName());
     if (ui) {
         ui->addSourceImportPath(instrumentsscene_QML_IMPORT);
     }

@@ -32,7 +32,7 @@ SymbolSettingsModel::SymbolSettingsModel(QObject* parent, IElementRepositoryServ
 {
     setModelType(InspectorModelType::TYPE_SYMBOL);
     setTitle(mu::qtrc("inspector", "Symbol"));
-    setIcon(ui::IconCode::Code::TRIANGLE_SYMBOL);
+    setIcon(muse::ui::IconCode::Code::TRIANGLE_SYMBOL);
     createProperties();
 }
 

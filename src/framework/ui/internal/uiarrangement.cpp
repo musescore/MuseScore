@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::workspace;
 
 void UiArrangement::load()

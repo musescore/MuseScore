@@ -21,7 +21,7 @@
  */
 #include "sampleobject.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 SampleObject::SampleObject(QObject* parent)
     : QObject(parent)

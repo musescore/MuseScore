@@ -38,7 +38,7 @@ class NotationConfiguration : public INotationConfiguration, public async::Async
 {
     INJECT(IGlobalConfiguration, globalConfiguration)
     INJECT(io::IFileSystem, fileSystem)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(context::IGlobalContext, context)
 

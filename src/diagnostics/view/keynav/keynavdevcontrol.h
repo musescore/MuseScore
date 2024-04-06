@@ -32,7 +32,7 @@ class KeyNavDevControl : public AbstractKeyNavDevItem
     Q_OBJECT
 
 public:
-    KeyNavDevControl(ui::INavigationControl* control);
+    KeyNavDevControl(muse::ui::INavigationControl* control);
 
     Q_INVOKABLE void requestActive();
     Q_INVOKABLE void trigger();
@@ -40,7 +40,7 @@ public:
 signals:
 
 private:
-    ui::INavigationControl* m_control = nullptr;
+    muse::ui::INavigationControl* m_control = nullptr;
 };
 }
 

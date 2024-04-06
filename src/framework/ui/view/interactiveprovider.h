@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_INTERACTIVEPROVIDER_H
-#define MU_UI_INTERACTIVEPROVIDER_H
+#ifndef MUSE_UI_INTERACTIVEPROVIDER_H
+#define MUSE_UI_INTERACTIVEPROVIDER_H
 
 #include <QObject>
 #include <QVariant>
@@ -35,7 +35,7 @@
 #include "extensions/iextensionsprovider.h"
 #include "types/retval.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class QmlLaunchData : public QObject
 {
     Q_OBJECT
@@ -61,19 +61,19 @@ class InteractiveProvider : public QObject, public IInteractiveProvider
 public:
     explicit InteractiveProvider();
 
-    RetVal<Val> question(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                         int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;
+    RetVal<Val> question(const std::string& title, const mu::IInteractive::Text& text, const mu::IInteractive::ButtonDatas& buttons,
+                         int defBtn = int(mu::IInteractive::Button::NoButton), const mu::IInteractive::Options& options = {}) override;
 
-    RetVal<Val> info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
-                     int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {}) override;
+    RetVal<Val> info(const std::string& title, const mu::IInteractive::Text& text, const mu::IInteractive::ButtonDatas& buttons,
+                     int defBtn = int(mu::IInteractive::Button::NoButton), const mu::IInteractive::Options& options = {}) override;
 
-    RetVal<Val> warning(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
-                        const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                        const IInteractive::Options& options = {}) override;
+    RetVal<Val> warning(const std::string& title, const mu::IInteractive::Text& text, const std::string& detailedText = {},
+                        const mu::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(mu::IInteractive::Button::NoButton),
+                        const mu::IInteractive::Options& options = {}) override;
 
-    RetVal<Val> error(const std::string& title, const IInteractive::Text& text, const std::string& detailedText = {},
-                      const IInteractive::ButtonDatas& buttons = {}, int defBtn = int(IInteractive::Button::NoButton),
-                      const IInteractive::Options& options = {}) override;
+    RetVal<Val> error(const std::string& title, const mu::IInteractive::Text& text, const std::string& detailedText = {},
+                      const mu::IInteractive::ButtonDatas& buttons = {}, int defBtn = int(mu::IInteractive::Button::NoButton),
+                      const mu::IInteractive::Options& options = {}) override;
 
     Ret showProgress(const std::string& title, mu::Progress* progress) override;
 
@@ -106,13 +106,13 @@ public:
     Q_INVOKABLE void onClose(const QString& objectId, const QVariant& rv);
 
 signals:
-    void fireOpen(mu::ui::QmlLaunchData* data);
+    void fireOpen(muse::ui::QmlLaunchData* data);
     void fireClose(QVariant data);
     void fireRaise(QVariant data);
 
-    void fireOpenStandardDialog(mu::ui::QmlLaunchData* data);
-    void fireOpenFileDialog(mu::ui::QmlLaunchData* data);
-    void fireOpenProgressDialog(mu::ui::QmlLaunchData* data);
+    void fireOpenStandardDialog(muse::ui::QmlLaunchData* data);
+    void fireOpenFileDialog(muse::ui::QmlLaunchData* data);
+    void fireOpenProgressDialog(muse::ui::QmlLaunchData* data);
 
 private:
     struct OpenData
@@ -139,9 +139,9 @@ private:
     void fillExtData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QmlLaunchData* data, const UriQuery& q) const;
     void fillData(QObject* object, const UriQuery& q) const;
-    void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title, const IInteractive::Text& text,
-                                const std::string& detailedText, const IInteractive::ButtonDatas& buttons, int defBtn,
-                                const IInteractive::Options& options) const;
+    void fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title, const mu::IInteractive::Text& text,
+                                const std::string& detailedText, const mu::IInteractive::ButtonDatas& buttons, int defBtn,
+                                const mu::IInteractive::Options& options) const;
     void fillFileDialogData(QmlLaunchData* data, FileDialogType type, const std::string& title, const io::path_t& path,
                             const std::vector<std::string>& filter = {}, bool confirmOverwrite = true) const;
 
@@ -151,9 +151,9 @@ private:
     RetVal<OpenData> openExtensionDialog(const UriQuery& q);
     RetVal<OpenData> openWidgetDialog(const UriQuery& q);
     RetVal<OpenData> openQml(const UriQuery& q);
-    RetVal<Val> openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
-                                   const std::string& detailedText = {}, const IInteractive::ButtonDatas& buttons = {},
-                                   int defBtn = int(IInteractive::Button::NoButton), const IInteractive::Options& options = {});
+    RetVal<Val> openStandardDialog(const QString& type, const std::string& title, const mu::IInteractive::Text& text,
+                                   const std::string& detailedText = {}, const mu::IInteractive::ButtonDatas& buttons = {},
+                                   int defBtn = int(mu::IInteractive::Button::NoButton), const mu::IInteractive::Options& options = {});
 
     RetVal<io::path_t> openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
                                       const std::vector<std::string>& filter = {}, bool confirmOverwrite = true);
@@ -182,4 +182,4 @@ private:
 };
 }
 
-#endif // MU_UI_INTERACTIVEPROVIDER_H
+#endif // MUSE_UI_INTERACTIVEPROVIDER_H

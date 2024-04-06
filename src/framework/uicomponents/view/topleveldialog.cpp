@@ -26,7 +26,7 @@
 #include <QKeyEvent>
 #include <QWindow>
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 TopLevelDialog::TopLevelDialog(QWidget* parent)
     : QDialog(parent)

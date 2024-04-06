@@ -38,8 +38,8 @@
 
 #include "log.h"
 
-using namespace mu::ui;
-using namespace mu::api;
+using namespace muse::ui;
+using namespace muse::api;
 
 static const QPen NO_BORDER(Qt::transparent, 0);
 static const QBrush NO_FILL(Qt::transparent);
@@ -91,7 +91,7 @@ struct FontConfig
 };
 
 ThemeApi::ThemeApi()
-    : ApiObject(nullptr)
+    : mu::api::ApiObject(nullptr)
 {
     setObjectName("UiTheme");
 }
@@ -699,7 +699,7 @@ QRect ProxyStyle::subControlRect(QStyle::ComplexControl control, const QStyleOpt
 
             if (checkable) {
                 const bool isRadioButtonGroupBox
-                    =widget && strcmp(widget->metaObject()->className(), "mu::uicomponents::RadioButtonGroupBox") == 0;
+                    =widget && strcmp(widget->metaObject()->className(), "muse::uicomponents::RadioButtonGroupBox") == 0;
 
                 indicatorWidth = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorWidth : PM_IndicatorWidth, option, widget);
                 indicatorHeight = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
@@ -799,7 +799,7 @@ QSize ProxyStyle::sizeFromContents(QStyle::ContentsType type, const QStyleOption
 
         if (checkable) {
             const bool isRadioButtonGroupBox
-                =widget && strcmp(widget->metaObject()->className(), "mu::uicomponents::RadioButtonGroupBox") == 0;
+                =widget && strcmp(widget->metaObject()->className(), "muse::uicomponents::RadioButtonGroupBox") == 0;
 
             int pm = pixelMetric(isRadioButtonGroupBox ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight, option, widget);
             return commonStyleSize + QSize(0, std::max(pm, option->fontMetrics.height()));

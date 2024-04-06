@@ -37,7 +37,7 @@ class LoadingScreenView : public QWidget
 {
     Q_OBJECT
 
-    Inject<ui::IUiConfiguration> uiConfiguration;
+    Inject<muse::ui::IUiConfiguration> uiConfiguration;
     Inject<muse::languages::ILanguagesService> languagesService;
     Inject<IApplication> application;
 

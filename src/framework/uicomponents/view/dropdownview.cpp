@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 DropdownView::DropdownView(QQuickItem* parent)
     : PopupView(parent)

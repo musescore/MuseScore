@@ -25,13 +25,13 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 using namespace mu::musesampler;
 
 const UiActionList MuseSamplerUiActions::m_actions = {
     UiAction("musesampler-check",
-             ui::UiCtxAny,
+             muse::ui::UiCtxAny,
              shortcuts::CTX_ANY,
              TranslatableString("action", "Check Muse Sampler")
              )

@@ -27,7 +27,7 @@
 
 #include "keynavigationsubsection.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 KeyNavigationSection::KeyNavigationSection(QObject* parent)
     : AbstractKeyNavigation(parent)

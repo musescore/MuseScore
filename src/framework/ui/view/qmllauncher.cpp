@@ -21,7 +21,7 @@
  */
 #include "qmllauncher.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 QmlLauncher::QmlLauncher(QObject* parent)
     : QObject(parent)

@@ -32,7 +32,7 @@ HorizontalFrameSettingsModel::HorizontalFrameSettingsModel(QObject* parent, IEle
 {
     setModelType(InspectorModelType::TYPE_HORIZONTAL_FRAME);
     setTitle(mu::qtrc("inspector", "Horizontal frame"));
-    setIcon(ui::IconCode::Code::HORIZONTAL_FRAME);
+    setIcon(muse::ui::IconCode::Code::HORIZONTAL_FRAME);
     createProperties();
 }
 

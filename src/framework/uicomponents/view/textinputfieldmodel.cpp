@@ -26,7 +26,7 @@
 
 #include "shortcuts/shortcutstypes.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 using namespace mu::shortcuts;
 
 TextInputFieldModel::TextInputFieldModel(QObject* parent)

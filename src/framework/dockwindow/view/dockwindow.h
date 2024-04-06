@@ -62,7 +62,7 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
     Q_PROPERTY(QQuickWindow * window READ windowProperty NOTIFY windowPropertyChanged)
 
-    INJECT(mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::workspace::IWorkspaceManager, workspaceManager)
     INJECT(IDockWindowProvider, dockWindowProvider)
 
@@ -143,8 +143,8 @@ private:
 
     KDDockWidgets::MainWindowBase* m_mainWindow = nullptr;
     DockPageView* m_currentPage = nullptr;
-    mu::uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
-    mu::uicomponents::QmlListProperty<DockPageView> m_pages;
+    uicomponents::QmlListProperty<DockToolBarView> m_toolBars;
+    uicomponents::QmlListProperty<DockPageView> m_pages;
     async::Channel<QStringList> m_docksOpenStatusChanged;
 
     bool m_hasGeometryBeenRestored = false;

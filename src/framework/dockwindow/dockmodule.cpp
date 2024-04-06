@@ -153,7 +153,7 @@ void DockModule::onInit(const IApplication::RunMode& mode)
     // Setup KDDockWidgets
     // ===================================
 
-    QQmlEngine* engine = ioc()->resolve<mu::ui::IUiEngine>(moduleName())->qmlEngine();
+    QQmlEngine* engine = ioc()->resolve<ui::IUiEngine>(moduleName())->qmlEngine();
 
     KDDockWidgets::Config::self().setFrameworkWidgetFactory(new DockWidgetFactory());
     KDDockWidgets::Config::self().setQmlEngine(engine);

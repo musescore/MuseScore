@@ -34,7 +34,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
@@ -137,8 +137,8 @@ signals:
     void invertScoreColorChanged();
 
 private:
-    ui::ThemeInfo currentTheme() const;
-    ui::ThemeList allThemes() const;
+    muse::ui::ThemeInfo currentTheme() const;
+    muse::ui::ThemeList allThemes() const;
 };
 }
 

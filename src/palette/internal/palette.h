@@ -51,7 +51,7 @@ class Palette : public QObject
     Q_GADGET
 
     INJECT_STATIC(IPaletteConfiguration, configuration)
-    INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
     INJECT(IInteractive, interactive)
 

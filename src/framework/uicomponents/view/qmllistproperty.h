@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_QMLLISTPROPERTY_H
-#define MU_UICOMPONENTS_QMLLISTPROPERTY_H
+#ifndef MUSE_UICOMPONENTS_QMLLISTPROPERTY_H
+#define MUSE_UICOMPONENTS_QMLLISTPROPERTY_H
 
 #include <QObject>
 #include <QQmlListProperty>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class QmlListPropertyNotifier : public QObject
 {
     Q_OBJECT
@@ -145,4 +145,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_QMLLISTPROPERTY_H
+#endif // MUSE_UICOMPONENTS_QMLLISTPROPERTY_H

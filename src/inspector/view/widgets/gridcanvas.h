@@ -31,11 +31,11 @@
 #include "engraving/types/pitchvalue.h"
 
 namespace mu::inspector {
-class GridCanvas : public uicomponents::QuickPaintedView
+class GridCanvas : public muse::uicomponents::QuickPaintedView
 {
     Q_OBJECT
 
-    INJECT(mu::ui::IUiConfiguration, uiConfig)
+    INJECT(muse::ui::IUiConfiguration, uiConfig)
 
     Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 

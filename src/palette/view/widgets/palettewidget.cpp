@@ -904,7 +904,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
 
                 if (element->isActionIcon()) {
                     ActionIcon* icon = toActionIcon(element.get());
-                    const mu::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
+                    const muse::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
                     if (actionItem.isValid()) {
                         icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     }
@@ -1021,10 +1021,10 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         }
 
         if (currentCell->focused) {
-            painter.setPen(QColor(uiConfiguration()->currentTheme().values[ui::FONT_PRIMARY_COLOR].toString()));
+            painter.setPen(QColor(uiConfiguration()->currentTheme().values[muse::ui::FONT_PRIMARY_COLOR].toString()));
             painter.setBrush(QColor(Qt::transparent));
 
-            int borderWidth = uiConfiguration()->currentTheme().values[ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
+            int borderWidth = uiConfiguration()->currentTheme().values[muse::ui::NAVIGATION_CONTROL_BORDER_WIDTH].toInt();
             qreal border = borderWidth / 2;
 
             painter.drawRoundedRect(r.adjusted(border, border, -border, -border), borderWidth, borderWidth);
@@ -1046,7 +1046,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         if (!tag.isEmpty()) {
             painter.setPen(QColor(Qt::darkGray));
             Font font(painter.font());
-            font.setPixelSize(uiConfiguration()->fontSize(ui::FontSizeType::BODY));
+            font.setPixelSize(uiConfiguration()->fontSize(muse::ui::FontSizeType::BODY));
             painter.setFont(font);
             painter.drawText(rShift, Qt::AlignLeft | Qt::AlignTop, tag);
         }

@@ -29,7 +29,7 @@
 #include "async/asyncable.h"
 
 namespace mu::palette {
-class PaletteUiActions : public ui::IUiActionsModule, public async::Asyncable
+class PaletteUiActions : public muse::ui::IUiActionsModule, public async::Asyncable
 {
     INJECT(context::IUiContextResolver, uicontextResolver)
 public:
@@ -37,16 +37,16 @@ public:
 
     void init();
 
-    const ui::UiActionList& actionsList() const override;
+    const muse::ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const ui::UiAction& act) const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& act) const override;
+    bool actionChecked(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    const static ui::UiActionList m_actions;
+    const static muse::ui::UiActionList m_actions;
     std::shared_ptr<PaletteActionsController> m_controller;
     async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
     async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;

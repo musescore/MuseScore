@@ -30,7 +30,7 @@ MeasureRepeatSettingsModel::MeasureRepeatSettingsModel(QObject* parent, IElement
 {
     setModelType(InspectorModelType::TYPE_MEASURE_REPEAT);
     setTitle(mu::qtrc("inspector", "Measure repeat"));
-    setIcon(ui::IconCode::Code::MEASURE_REPEAT);
+    setIcon(muse::ui::IconCode::Code::MEASURE_REPEAT);
     createProperties();
 }
 

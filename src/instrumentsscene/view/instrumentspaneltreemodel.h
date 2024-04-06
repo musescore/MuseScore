@@ -39,7 +39,7 @@
 Q_MOC_INCLUDE("uicomponents/view/itemmultiselectionmodel.h")
 #endif
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class ItemMultiSelectionModel;
 }
 
@@ -164,7 +164,7 @@ private:
     bool m_notationChangedWhileLoadingWasBlocked = false;
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
-    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
+    muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
     mu::notation::INotationPtr m_notation = nullptr;
     std::shared_ptr<async::Asyncable> m_partsNotifyReceiver = nullptr;

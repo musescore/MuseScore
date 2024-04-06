@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_IPOPUPWINDOW_H
-#define MU_UICOMPONENTS_IPOPUPWINDOW_H
+#ifndef MUSE_UICOMPONENTS_IPOPUPWINDOW_H
+#define MUSE_UICOMPONENTS_IPOPUPWINDOW_H
 
 #include <memory>
 
@@ -31,7 +31,7 @@
 
 class QQuickCloseEvent;
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class IPopupWindow : public QObject
 {
     Q_OBJECT
@@ -69,4 +69,4 @@ signals:
     void aboutToClose(QQuickCloseEvent* event);
 };
 }
-#endif // MU_UICOMPONENTS_IPOPUPWINDOW_H
+#endif // MUSE_UICOMPONENTS_IPOPUPWINDOW_H

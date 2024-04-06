@@ -25,7 +25,7 @@
 
 #include "linuxplatformtheme.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::async;
 
 static const QLatin1String service("org.freedesktop.portal.Desktop");

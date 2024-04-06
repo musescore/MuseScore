@@ -25,20 +25,20 @@
 #include "ui/iuiactionsmodule.h"
 
 namespace muse::autobot {
-class AutobotActions : public mu::ui::IUiActionsModule
+class AutobotActions : public ui::IUiActionsModule
 {
 public:
     AutobotActions() = default;
 
-    const mu::ui::UiActionList& actionsList() const override;
-    bool actionEnabled(const mu::ui::UiAction& act) const override;
+    const ui::UiActionList& actionsList() const override;
+    bool actionEnabled(const ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const mu::ui::UiAction& act) const override;
+    bool actionChecked(const ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    static const mu::ui::UiActionList m_actions;
+    static const ui::UiActionList m_actions;
 };
 }
 

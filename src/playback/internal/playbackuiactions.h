@@ -30,7 +30,7 @@
 #include "ui/uitypes.h"
 
 namespace mu::playback {
-class PlaybackUiActions : public ui::IUiActionsModule, public async::Asyncable
+class PlaybackUiActions : public muse::ui::IUiActionsModule, public async::Asyncable
 {
     INJECT(context::IUiContextResolver, uicontextResolver)
 
@@ -39,23 +39,23 @@ public:
 
     void init();
 
-    const ui::UiActionList& actionsList() const override;
+    const muse::ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const ui::UiAction& act) const override;
+    bool actionEnabled(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const ui::UiAction& act) const override;
+    bool actionChecked(const muse::ui::UiAction& act) const override;
     async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
 
-    static const ui::UiActionList& settingsActions();
-    static const ui::UiActionList& loopBoundaryActions();
+    static const muse::ui::UiActionList& settingsActions();
+    static const muse::ui::UiActionList& loopBoundaryActions();
 
-    static const ui::ToolConfig& defaultPlaybackToolConfig();
+    static const muse::ui::ToolConfig& defaultPlaybackToolConfig();
 
 private:
-    static const ui::UiActionList m_mainActions;
-    static const ui::UiActionList m_settingsActions;
-    static const ui::UiActionList m_loopBoundaryActions;
+    static const muse::ui::UiActionList m_mainActions;
+    static const muse::ui::UiActionList m_settingsActions;
+    static const muse::ui::UiActionList m_loopBoundaryActions;
 
     std::shared_ptr<PlaybackController> m_controller;
     async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;

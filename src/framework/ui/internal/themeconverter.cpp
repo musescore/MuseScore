@@ -26,8 +26,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::ui;
+using namespace muse;
+using namespace muse::ui;
 
 static const QString CODEKEY_KEY("codeKey");
 static const QString TITLE_KEY("title");

@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& meta)
 {

@@ -22,7 +22,7 @@
 
 #include "colorpickermodel.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 ColorPickerModel::ColorPickerModel(QObject* parent)
     : QObject(parent)

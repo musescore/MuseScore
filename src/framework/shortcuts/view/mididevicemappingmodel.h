@@ -42,7 +42,7 @@ class MidiDeviceMappingModel : public QAbstractListModel, public async::Asyncabl
 {
     Q_OBJECT
 
-    INJECT(ui::IUiActionsRegister, uiActionsRegister)
+    INJECT(muse::ui::IUiActionsRegister, uiActionsRegister)
     INJECT(shortcuts::IMidiRemote, midiRemote)
     INJECT(IShortcutsConfiguration, configuration)
     INJECT(muse::midi::IMidiConfiguration, midiConfiguration)

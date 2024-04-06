@@ -22,7 +22,7 @@
 #include "noteinputbarcustomiseitem.h"
 
 using namespace mu::notation;
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 NoteInputBarCustomiseItem::NoteInputBarCustomiseItem(const ItemType& type, QObject* parent)
     : Item(parent), m_type(type)
@@ -69,7 +69,7 @@ bool NoteInputBarCustomiseItem::checked() const
     return m_checked;
 }
 
-void NoteInputBarCustomiseItem::setIcon(ui::IconCode::Code icon)
+void NoteInputBarCustomiseItem::setIcon(muse::ui::IconCode::Code icon)
 {
     if (m_icon == icon) {
         return;

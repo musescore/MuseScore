@@ -43,7 +43,7 @@ class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperti
     Q_OBJECT
 
     INJECT(mu::context::IGlobalContext, globalContext)
-    INJECT(mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
 
 public:
     TimeSignaturePropertiesDialog(QWidget* parent = nullptr);

@@ -54,7 +54,7 @@
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static const QStringList ALL_PAGE_CODES {
     "score",

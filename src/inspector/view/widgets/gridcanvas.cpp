@@ -31,11 +31,11 @@
 #include "log.h"
 
 using namespace mu::inspector;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace mu::engraving;
 
 GridCanvas::GridCanvas(QQuickItem* parent)
-    : uicomponents::QuickPaintedView(parent)
+    : muse::uicomponents::QuickPaintedView(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 }

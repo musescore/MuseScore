@@ -79,7 +79,7 @@ inline double formatDoubleFunc(const QVariant& elementPropertyValue)
 }
 
 template<typename T>
-inline QVariant object(T type, QString title, ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)
+inline QVariant object(T type, QString title, muse::ui::IconCode::Code iconCode = muse::ui::IconCode::Code::NONE)
 {
     QVariantMap obj;
     obj["value"] = static_cast<int>(type);

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_IPLATFORMTHEME_H
-#define MU_UI_IPLATFORMTHEME_H
+#ifndef MUSE_UI_IPLATFORMTHEME_H
+#define MUSE_UI_IPLATFORMTHEME_H
 
 #include "modularity/imoduleinterface.h"
 #include "async/notification.h"
@@ -29,7 +29,7 @@
 
 class QWindow;
 
-namespace mu::ui {
+namespace muse::ui {
 class IPlatformTheme : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IPlatformTheme)
@@ -52,4 +52,4 @@ public:
 };
 }
 
-#endif // MU_UI_IPLATFORMTHEME_H
+#endif // MUSE_UI_IPLATFORMTHEME_H

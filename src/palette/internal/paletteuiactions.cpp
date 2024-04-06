@@ -27,7 +27,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::palette;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 
 static const muse::actions::ActionCode MASTERPALETTE_CODE("masterpalette");

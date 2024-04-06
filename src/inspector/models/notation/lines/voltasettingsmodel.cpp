@@ -28,14 +28,14 @@
 
 using namespace mu::inspector;
 
-using IconCode = mu::ui::IconCode::Code;
+using IconCode = muse::ui::IconCode::Code;
 
 VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : TextLineSettingsModel(parent, repository, mu::engraving::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
     setTitle(mu::qtrc("inspector", "Volta"));
-    setIcon(ui::IconCode::Code::VOLTA);
+    setIcon(muse::ui::IconCode::Code::VOLTA);
 
     setPossibleStartHookTypes({});
 

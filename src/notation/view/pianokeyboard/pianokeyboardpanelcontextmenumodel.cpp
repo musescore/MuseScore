@@ -29,8 +29,8 @@
 
 using namespace mu::notation;
 using namespace muse::actions;
-using namespace mu::ui;
-using namespace mu::uicomponents;
+using namespace muse::ui;
+using namespace muse::uicomponents;
 
 static const ActionCode SET_KEY_WIDTH_SCALING_CODE("piano-keyboard-set-key-width-scaling");
 static const ActionCode SET_NUMBER_OF_KEYS_CODE("piano-keyboard-set-number-of-keys");

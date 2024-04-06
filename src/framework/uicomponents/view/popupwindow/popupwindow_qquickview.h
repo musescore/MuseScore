@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_POPUPWINDOW_QQUICKVIEW_H
-#define MU_UICOMPONENTS_POPUPWINDOW_QQUICKVIEW_H
+#ifndef MUSE_UICOMPONENTS_POPUPWINDOW_QQUICKVIEW_H
+#define MUSE_UICOMPONENTS_POPUPWINDOW_QQUICKVIEW_H
 
 #include <QObject>
 #include <QQuickView>
@@ -34,7 +34,7 @@
 
 #include "ipopupwindow.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class PopupWindow_QQuickView : public IPopupWindow, public async::Asyncable
 {
     Q_OBJECT
@@ -85,4 +85,4 @@ private:
     QWindow* m_parentWindow = nullptr;
 };
 }
-#endif // POPUPWINDOW_QQUICKVIEW_H
+#endif // MUSE_UICOMPONENTS_POPUPWINDOW_QQUICKVIEW_H

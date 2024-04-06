@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_WIDGETSTATESTORE_H
-#define MU_UI_WIDGETSTATESTORE_H
+#ifndef MUSE_UI_WIDGETSTATESTORE_H
+#define MUSE_UI_WIDGETSTATESTORE_H
 
 class QWidget;
 
-namespace mu::ui {
+namespace muse::ui {
 class WidgetStateStore
 {
 public:
@@ -33,4 +33,4 @@ public:
 };
 }
 
-#endif // MU_UI_WIDGETSTATESTORE_H
+#endif // MUSE_UI_WIDGETSTATESTORE_H

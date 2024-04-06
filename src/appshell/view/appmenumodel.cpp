@@ -26,8 +26,8 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::ui;
-using namespace mu::uicomponents;
+using namespace muse::ui;
+using namespace muse::uicomponents;
 using namespace mu::project;
 using namespace muse::workspace;
 using namespace muse::actions;
@@ -425,7 +425,7 @@ MenuItemList AppMenuModel::makeRecentScoresItems()
     return items;
 }
 
-MenuItemList AppMenuModel::appendClearRecentSection(const uicomponents::MenuItemList& recentScores)
+MenuItemList AppMenuModel::appendClearRecentSection(const muse::uicomponents::MenuItemList& recentScores)
 {
     MenuItemList result = recentScores;
     result << makeSeparator()

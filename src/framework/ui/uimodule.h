@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_UIMODULE_H
-#define MU_UI_UIMODULE_H
+#ifndef MUSE_UI_UIMODULE_H
+#define MUSE_UI_UIMODULE_H
 
 #include "modularity/imodulesetup.h"
 #include <QtGlobal>
 
-namespace mu::ui {
+namespace muse::ui {
 class UiEngine;
 class UiConfiguration;
 class UiActionsRegister;
@@ -77,4 +77,4 @@ private:
 };
 }
 
-#endif // MU_UI_UIMODULE_H
+#endif // MUSE_UI_UIMODULE_H

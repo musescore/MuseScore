@@ -26,7 +26,7 @@
 #include "uicomponents/view/abstractmenumodel.h"
 
 namespace mu::appshell {
-class PublishToolBarModel : public uicomponents::AbstractMenuModel
+class PublishToolBarModel : public muse::uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 

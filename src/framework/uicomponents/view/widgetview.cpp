@@ -24,7 +24,7 @@
 
 #include <QWidget>
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 WidgetView::WidgetView(QQuickItem* parent)
     : QuickPaintedView(parent)

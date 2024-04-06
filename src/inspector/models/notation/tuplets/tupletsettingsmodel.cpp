@@ -28,14 +28,14 @@
 
 using namespace mu::inspector;
 
-using Icon = mu::ui::IconCode::Code;
+using Icon = muse::ui::IconCode::Code;
 
 TupletSettingsModel::TupletSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository, mu::engraving::ElementType::TUPLET)
 {
     setModelType(InspectorModelType::TYPE_TUPLET);
     setTitle(mu::qtrc("inspector", "Tuplet"));
-    setIcon(ui::IconCode::Code::TUPLET_NUMBER_WITH_BRACKETS);
+    setIcon(muse::ui::IconCode::Code::TUPLET_NUMBER_WITH_BRACKETS);
     createProperties();
 }
 

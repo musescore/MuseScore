@@ -32,7 +32,7 @@
 using namespace mu::inspector;
 using namespace mu::engraving;
 
-using IconCode = mu::ui::IconCode::Code;
+using IconCode = muse::ui::IconCode::Code;
 
 SlurAndTieSettingsModel::SlurAndTieSettingsModel(QObject* parent, IElementRepositoryService* repository, ElementType elementType)
     : AbstractInspectorModel(parent, repository)

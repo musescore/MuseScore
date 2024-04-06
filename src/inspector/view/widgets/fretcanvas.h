@@ -31,7 +31,7 @@
 #include "engraving/dom/fret.h"
 
 namespace mu::inspector {
-class FretCanvas : public uicomponents::QuickPaintedView
+class FretCanvas : public muse::uicomponents::QuickPaintedView
 {
     INJECT(context::IGlobalContext, globalContext)
 

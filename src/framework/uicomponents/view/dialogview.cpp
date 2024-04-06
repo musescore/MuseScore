@@ -29,7 +29,7 @@
 
 #include "log.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 static const int DIALOG_WINDOW_FRAME_HEIGHT(20);
 

@@ -39,7 +39,7 @@ class TextBase;
 namespace mu::palette {
 class PaletteWidget;
 
-class SpecialCharactersDialog : public mu::uicomponents::TopLevelDialog, public Ui::SpecialCharactersDialog
+class SpecialCharactersDialog : public muse::uicomponents::TopLevelDialog, public Ui::SpecialCharactersDialog
 {
     Q_OBJECT
 

@@ -53,7 +53,7 @@ static QColor mixedColors(QColor background, QColor foreground, qreal opacity)
 }
 
 PianoKeyboardView::PianoKeyboardView(QQuickItem* parent)
-    : uicomponents::QuickPaintedView(parent), m_controller(new PianoKeyboardController())
+    : muse::uicomponents::QuickPaintedView(parent), m_controller(new PianoKeyboardController())
 {
     calculateKeyRects();
 
@@ -160,7 +160,7 @@ void PianoKeyboardView::updateKeyStateColors()
 {
     auto themeValues = uiConfiguration()->currentTheme().values;
 
-    QColor accentColor = themeValues[ui::ACCENT_COLOR].toString();
+    QColor accentColor = themeValues[muse::ui::ACCENT_COLOR].toString();
     bool isKeysFromMidiInput = m_controller->isFromMidi();
 
     m_whiteKeyStateColors[KeyState::None] = Qt::white;

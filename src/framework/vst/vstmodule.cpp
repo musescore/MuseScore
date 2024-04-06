@@ -50,7 +50,7 @@ using namespace mu::modularity;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
 using namespace muse::audio;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static std::shared_ptr<VstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
 static std::shared_ptr<VstModulesRepository> s_pluginModulesRepo = std::make_shared<VstModulesRepository>();
@@ -112,7 +112,7 @@ void VSTModule::registerResources()
 
 void VSTModule::registerUiTypes()
 {
-    ioc()->resolve<mu::ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
+    ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
 }
 
 void VSTModule::onInit(const mu::IApplication::RunMode&)

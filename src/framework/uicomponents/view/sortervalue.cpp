@@ -21,7 +21,7 @@
  */
 #include "sortervalue.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 SorterValue::SorterValue(QObject* parent)
     : QObject(parent)

@@ -27,7 +27,7 @@
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class ItemMultiSelectionModel;
 }
 
@@ -89,7 +89,7 @@ private:
         RoleIsCustom
     };
 
-    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
+    muse::uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
     QList<IExcerptNotationPtr> m_excerpts;
     INotationPtr m_currentNotation;
 };

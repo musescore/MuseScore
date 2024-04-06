@@ -29,23 +29,23 @@
 #include "extensions/iextensionsprovider.h"
 
 namespace muse::extensions {
-class ExtensionsUiActions : public mu::ui::IUiActionsModule, public async::Asyncable
+class ExtensionsUiActions : public ui::IUiActionsModule, public async::Asyncable
 {
     Inject<extensions::IExtensionsProvider> provider;
 
 public:
     ExtensionsUiActions() = default;
 
-    const mu::ui::UiActionList& actionsList() const override;
+    const ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const mu::ui::UiAction& action) const override;
-    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
+    bool actionEnabled(const ui::UiAction& action) const override;
+    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const mu::ui::UiAction& action) const override;
-    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
+    bool actionChecked(const ui::UiAction& action) const override;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    mutable mu::ui::UiActionList m_actions;
+    mutable ui::UiActionList m_actions;
 };
 }
 

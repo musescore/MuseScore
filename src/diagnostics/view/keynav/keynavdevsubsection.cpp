@@ -22,7 +22,7 @@
 #include "keynavdevsubsection.h"
 
 using namespace mu::diagnostics;
-using namespace mu::ui;
+using namespace muse::ui;
 
 KeyNavDevSubSection::KeyNavDevSubSection(INavigationPanel* subsection)
     : AbstractKeyNavDevItem(subsection), m_subsection(subsection)

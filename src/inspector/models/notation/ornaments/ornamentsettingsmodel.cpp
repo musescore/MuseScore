@@ -42,7 +42,7 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
 {
     setModelType(InspectorModelType::TYPE_ORNAMENT);
     setTitle(mu::qtrc("inspector", "Ornament"));
-    setIcon(ui::IconCode::Code::ORNAMENT);
+    setIcon(muse::ui::IconCode::Code::ORNAMENT);
     createProperties();
 }
 

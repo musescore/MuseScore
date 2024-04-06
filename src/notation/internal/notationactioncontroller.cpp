@@ -669,7 +669,7 @@ void NotationActionController::toggleNoteInput()
         noteInput->startNoteInput();
     }
 
-    ui::UiActionState state = actionRegister()->actionState("note-input");
+    muse::ui::UiActionState state = actionRegister()->actionState("note-input");
     std::string stateTitle = state.checked ? mu::trc("notation", "Note input mode") : mu::trc("notation", "Normal mode");
     notifyAccessibilityAboutVoiceInfo(stateTitle);
 }
@@ -2209,7 +2209,7 @@ void NotationActionController::registerAction(const ActionCode& code, void (INot
 
 void NotationActionController::notifyAccessibilityAboutActionTriggered(const ActionCode& ActionCode)
 {
-    const ui::UiAction action = actionRegister()->action(ActionCode);
+    const muse::ui::UiAction action = actionRegister()->action(ActionCode);
     std::string titleStr  = action.title.qTranslatedWithoutMnemonic().toStdString();
 
     notifyAccessibilityAboutVoiceInfo(titleStr);

@@ -32,7 +32,7 @@ TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElement
 {
     setModelType(InspectorModelType::TYPE_TIME_SIGNATURE);
     setTitle(mu::qtrc("inspector", "Time signature"));
-    setIcon(ui::IconCode::Code::TIME_SIGNATURE);
+    setIcon(muse::ui::IconCode::Code::TIME_SIGNATURE);
     createProperties();
 }
 

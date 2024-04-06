@@ -28,10 +28,10 @@
 
 #include "log.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
-KeyboardApi::KeyboardApi(IApiEngine* e)
-    : ApiObject(e)
+KeyboardApi::KeyboardApi(mu::api::IApiEngine* e)
+    : mu::api::ApiObject(e)
 {
 }
 

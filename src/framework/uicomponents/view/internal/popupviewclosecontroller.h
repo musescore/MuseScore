@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
-#define MU_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
+#ifndef MUSE_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
+#define MUSE_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
 
 #include <QObject>
 #include <QQuickItem>
@@ -33,7 +33,7 @@
 #include "ui/imainwindow.h"
 #include "ui/iinteractiveprovider.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class PopupViewCloseController : public QObject, public async::Asyncable
 {
     Q_OBJECT
@@ -89,4 +89,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H
+#endif // MUSE_UICOMPONENTS_POPUPVIEWCLOSECONTROLLER_H

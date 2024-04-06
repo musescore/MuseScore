@@ -133,7 +133,7 @@ bool MixerChannelItem::forceMute() const
     return m_outParams.forceMute;
 }
 
-mu::ui::NavigationPanel* MixerChannelItem::panel() const
+muse::ui::NavigationPanel* MixerChannelItem::panel() const
 {
     return m_panel;
 }
@@ -143,7 +143,7 @@ void MixerChannelItem::setPanelOrder(int panelOrder)
     m_panel->setOrder(panelOrder);
 }
 
-void MixerChannelItem::setPanelSection(mu::ui::INavigationSection* section)
+void MixerChannelItem::setPanelSection(muse::ui::INavigationSection* section)
 {
     m_panel->setSection(section);
 }

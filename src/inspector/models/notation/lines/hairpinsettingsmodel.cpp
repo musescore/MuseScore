@@ -36,7 +36,7 @@ HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositorySe
 {
     setModelType(InspectorModelType::TYPE_HAIRPIN);
     setTitle(mu::qtrc("inspector", "Hairpin"));
-    setIcon(ui::IconCode::Code::HAIRPIN);
+    setIcon(muse::ui::IconCode::Code::HAIRPIN);
 
     createProperties();
 }

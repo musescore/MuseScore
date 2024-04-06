@@ -37,7 +37,7 @@ class DiagnosticNavigationModel : public QObject, public async::Asyncable
 
     Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
 
-    INJECT(ui::INavigationController, navigationController)
+    INJECT(muse::ui::INavigationController, navigationController)
 public:
     explicit DiagnosticNavigationModel(QObject* parent = nullptr);
 
@@ -52,9 +52,9 @@ signals:
 
 private:
 
-    QVariant toWrap(ui::INavigationSection* s);
-    QVariant toWrap(ui::INavigationPanel* sub);
-    QVariant toWrap(ui::INavigationControl* ctrl);
+    QVariant toWrap(muse::ui::INavigationSection* s);
+    QVariant toWrap(muse::ui::INavigationPanel* sub);
+    QVariant toWrap(muse::ui::INavigationControl* ctrl);
 
     QVariantList m_sections;
     mutable QList<AbstractKeyNavDevItem*> m_memstore;

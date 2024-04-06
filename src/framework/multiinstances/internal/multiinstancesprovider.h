@@ -42,7 +42,7 @@ class MultiInstancesProvider : public IMultiInstancesProvider, public muse::acti
 {
     Inject<muse::actions::IActionsDispatcher> dispatcher;
     Inject<IInteractive> interactive;
-    Inject<ui::IMainWindow> mainWindow;
+    Inject<muse::ui::IMainWindow> mainWindow;
 
     //! NOTE May be missing because it must be implemented outside the framework
     Inject<IProjectProvider> projectProvider;

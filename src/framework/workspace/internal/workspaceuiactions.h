@@ -28,26 +28,26 @@
 #include "ui/iuicontextresolver.h"
 
 namespace muse::workspace {
-class WorkspaceUiActions : public mu::ui::IUiActionsModule
+class WorkspaceUiActions : public ui::IUiActionsModule
 {
-    Inject<mu::ui::IUiContextResolver> uicontextResolver;
+    Inject<ui::IUiContextResolver> uicontextResolver;
 
 public:
     WorkspaceUiActions(std::shared_ptr<WorkspaceActionController> controller);
 
-    const mu::ui::UiActionList& actionsList() const override;
+    const ui::UiActionList& actionsList() const override;
 
-    bool actionEnabled(const mu::ui::UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
+    bool actionEnabled(const ui::UiAction& act) const override;
+    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
 
-    bool actionChecked(const mu::ui::UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
+    bool actionChecked(const ui::UiAction& act) const override;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
-    static const mu::ui::UiActionList m_actions;
+    static const ui::UiActionList m_actions;
     std::shared_ptr<WorkspaceActionController> m_controller;
-    async::Channel<muse::actions::ActionCodeList> m_actionEnabledChanged;
-    async::Channel<muse::actions::ActionCodeList> m_actionCheckedChanged;
+    async::Channel<actions::ActionCodeList> m_actionEnabledChanged;
+    async::Channel<actions::ActionCodeList> m_actionCheckedChanged;
 };
 }
 

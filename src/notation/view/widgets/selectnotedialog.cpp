@@ -44,7 +44,7 @@
 
 using namespace mu::notation;
 using namespace mu::engraving;
-using namespace mu::ui;
+using namespace muse::ui;
 
 //---------------------------------------------------------
 //   SelectDialog

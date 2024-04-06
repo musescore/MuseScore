@@ -29,7 +29,7 @@
 #include "ui/view/widgetnavigationfix.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 //---------------------------------------------------------
 //   EditPitch

@@ -34,7 +34,7 @@ class TranslatableString;
 }
 
 namespace mu::notation {
-class PianoKeyboardPanelContextMenuModel : public uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class PianoKeyboardPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -60,14 +60,14 @@ signals:
     void numberOfKeysChanged();
 
 private:
-    uicomponents::MenuItem* makeViewMenu();
+    muse::uicomponents::MenuItem* makeViewMenu();
 
-    uicomponents::MenuItem* makeKeyWidthScalingItem(const TranslatableString& title, qreal scaling);
-    uicomponents::MenuItem* makeNumberOfKeysItem(const TranslatableString& title, int numberOfKeys);
+    muse::uicomponents::MenuItem* makeKeyWidthScalingItem(const TranslatableString& title, qreal scaling);
+    muse::uicomponents::MenuItem* makeNumberOfKeysItem(const TranslatableString& title, int numberOfKeys);
 
     void updateKeyWidthScalingItems();
 
-    uicomponents::MenuItemList m_keyWidthScalingItems;
+    muse::uicomponents::MenuItemList m_keyWidthScalingItems;
 
     qreal m_currentKeyWidthScaling = 0.0;
 };

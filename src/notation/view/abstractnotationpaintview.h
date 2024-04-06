@@ -48,20 +48,20 @@
 #include "abstractelementpopupmodel.h"
 
 namespace mu::notation {
-class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,
+class AbstractNotationPaintView : public muse::uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,
     public muse::actions::Actionable
 {
     Q_OBJECT
 
     INJECT(INotationConfiguration, configuration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(muse::ui::IUiConfiguration, uiConfiguration)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
     INJECT(playback::IPlaybackController, playbackController)
-    INJECT(ui::IUiContextResolver, uiContextResolver)
-    INJECT(ui::IMainWindow, mainWindow)
-    INJECT(ui::IUiActionsRegister, actionsRegister)
+    INJECT(muse::ui::IUiContextResolver, uiContextResolver)
+    INJECT(muse::ui::IMainWindow, mainWindow)
+    INJECT(muse::ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)

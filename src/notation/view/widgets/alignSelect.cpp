@@ -27,7 +27,7 @@
 #include "ui/view/widgetutils.h"
 
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 AlignSelect::AlignSelect(QWidget* parent)
     : QWidget(parent)

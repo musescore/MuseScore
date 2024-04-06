@@ -30,7 +30,7 @@
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {
-class PalettesPanelContextMenuModel : public uicomponents::AbstractMenuModel, public muse::actions::Actionable
+class PalettesPanelContextMenuModel : public muse::uicomponents::AbstractMenuModel, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -46,9 +46,9 @@ signals:
     void expandCollapseAllRequested(bool expand);
 
 private:
-    uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
-    uicomponents::MenuItem* createIsSinglePaletteItem();
-    uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
+    muse::uicomponents::MenuItem* createIsSingleClickToOpenPaletteItem();
+    muse::uicomponents::MenuItem* createIsSinglePaletteItem();
+    muse::uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
 };
 }
 

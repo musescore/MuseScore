@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_INAVIGATION_H
-#define MU_UI_INAVIGATION_H
+#ifndef MUSE_UI_INAVIGATION_H
+#define MUSE_UI_INAVIGATION_H
 
 #include <tuple>
 #include <memory>
@@ -34,7 +34,7 @@
 
 class QWindow;
 
-namespace mu::ui {
+namespace muse::ui {
 class INavigationSection;
 class INavigationPanel;
 class INavigationControl;
@@ -166,4 +166,4 @@ public:
 };
 }
 
-#endif // MU_UI_INAVIGATION_H
+#endif // MUSE_UI_INAVIGATION_H

@@ -31,8 +31,8 @@
 #include "containers.h"
 #include "log.h"
 
-using namespace mu;
-using namespace mu::ui;
+using namespace muse;
+using namespace muse::ui;
 
 class WidgetDialogEventFilter : public QObject
 {
@@ -98,34 +98,35 @@ void InteractiveProvider::raiseWindowInStack(QObject* newActiveWindow)
     }
 }
 
-RetVal<Val> InteractiveProvider::question(const std::string& title, const IInteractive::Text& text,
-                                          const IInteractive::ButtonDatas& buttons, int defBtn,
-                                          const IInteractive::Options& options)
+RetVal<Val> InteractiveProvider::question(const std::string& title, const mu::IInteractive::Text& text,
+                                          const mu::IInteractive::ButtonDatas& buttons, int defBtn,
+                                          const mu::IInteractive::Options& options)
 {
     return openStandardDialog("QUESTION", title, text, {}, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::info(const std::string& title, const IInteractive::Text& text, const IInteractive::ButtonDatas& buttons,
+RetVal<Val> InteractiveProvider::info(const std::string& title, const mu::IInteractive::Text& text,
+                                      const mu::IInteractive::ButtonDatas& buttons,
                                       int defBtn,
-                                      const IInteractive::Options& options)
+                                      const mu::IInteractive::Options& options)
 {
     return openStandardDialog("INFO", title, text, {}, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::warning(const std::string& title, const IInteractive::Text& text,
+RetVal<Val> InteractiveProvider::warning(const std::string& title, const mu::IInteractive::Text& text,
                                          const std::string& detailedText,
-                                         const IInteractive::ButtonDatas& buttons,
+                                         const mu::IInteractive::ButtonDatas& buttons,
                                          int defBtn,
-                                         const IInteractive::Options& options)
+                                         const mu::IInteractive::Options& options)
 {
     return openStandardDialog("WARNING", title, text, detailedText, buttons, defBtn, options);
 }
 
-RetVal<Val> InteractiveProvider::error(const std::string& title, const IInteractive::Text& text,
+RetVal<Val> InteractiveProvider::error(const std::string& title, const mu::IInteractive::Text& text,
                                        const std::string& detailedText,
-                                       const IInteractive::ButtonDatas& buttons,
+                                       const mu::IInteractive::ButtonDatas& buttons,
                                        int defBtn,
-                                       const IInteractive::Options& options)
+                                       const mu::IInteractive::Options& options)
 {
     return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
 }
@@ -203,7 +204,7 @@ RetVal<Val> InteractiveProvider::open(const UriQuery& q)
         break;
     case ContainerType::Undefined: {
         //! NOTE Not found default, try extension
-        muse::extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
+        extensions::Manifest ext = extensionsProvider()->manifest(q.uri());
         if (ext.isValid()) {
             openedRet = openExtensionDialog(q);
         } else {
@@ -386,15 +387,15 @@ void InteractiveProvider::fillData(QObject* object, const UriQuery& q) const
 }
 
 void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QString& type, const std::string& title,
-                                                 const IInteractive::Text& text, const std::string& detailedText,
-                                                 const IInteractive::ButtonDatas& buttons, int defBtn,
-                                                 const IInteractive::Options& options) const
+                                                 const mu::IInteractive::Text& text, const std::string& detailedText,
+                                                 const mu::IInteractive::ButtonDatas& buttons, int defBtn,
+                                                 const mu::IInteractive::Options& options) const
 {
-    auto format = [](IInteractive::TextFormat f) {
+    auto format = [](mu::IInteractive::TextFormat f) {
         switch (f) {
-        case IInteractive::TextFormat::Auto:      return Qt::AutoText;
-        case IInteractive::TextFormat::PlainText: return Qt::PlainText;
-        case IInteractive::TextFormat::RichText:  return Qt::RichText;
+        case mu::IInteractive::TextFormat::Auto:      return Qt::AutoText;
+        case mu::IInteractive::TextFormat::PlainText: return Qt::PlainText;
+        case mu::IInteractive::TextFormat::RichText:  return Qt::RichText;
         }
         return Qt::PlainText;
     };
@@ -410,9 +411,9 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     QVariantList buttonsList;
     QVariantList customButtonsList;
     if (buttons.empty()) {
-        buttonsList << static_cast<int>(IInteractive::Button::Ok);
+        buttonsList << static_cast<int>(mu::IInteractive::Button::Ok);
     } else {
-        for (const IInteractive::ButtonData& buttonData: buttons) {
+        for (const mu::IInteractive::ButtonData& buttonData: buttons) {
             QVariantMap customButton;
             customButton["text"] = QString::fromStdString(buttonData.text);
             customButton["buttonId"] = buttonData.btn;
@@ -426,11 +427,11 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     params["buttons"] = buttonsList;
     params["customButtons"] = customButtonsList;
 
-    if (options.testFlag(IInteractive::Option::WithIcon)) {
+    if (options.testFlag(mu::IInteractive::Option::WithIcon)) {
         params["withIcon"] = true;
     }
 
-    if (options.testFlag(IInteractive::Option::WithDontShowAgainCheckBox)) {
+    if (options.testFlag(mu::IInteractive::Option::WithDontShowAgainCheckBox)) {
         params["withDontShowAgainCheckBox"] = true;
     }
 
@@ -679,10 +680,10 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuer
     return result;
 }
 
-RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const std::string& title, const IInteractive::Text& text,
+RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const std::string& title, const mu::IInteractive::Text& text,
                                                     const std::string& detailedText,
-                                                    const IInteractive::ButtonDatas& buttons, int defBtn,
-                                                    const IInteractive::Options& options)
+                                                    const mu::IInteractive::ButtonDatas& buttons, int defBtn,
+                                                    const mu::IInteractive::Options& options)
 {
     notifyAboutCurrentUriWillBeChanged();
 

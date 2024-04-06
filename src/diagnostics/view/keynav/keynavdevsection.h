@@ -33,7 +33,7 @@ class KeyNavDevSection : public AbstractKeyNavDevItem
     Q_PROPERTY(int controlsCount READ controlsCount NOTIFY controlsCountChanged)
 
 public:
-    explicit KeyNavDevSection(ui::INavigationSection* section);
+    explicit KeyNavDevSection(muse::ui::INavigationSection* section);
 
     QVariantList subsections() const;
     int panelsCount() const;
@@ -48,7 +48,7 @@ signals:
     void controlsCountChanged();
 
 private:
-    ui::INavigationSection* m_section = nullptr;
+    muse::ui::INavigationSection* m_section = nullptr;
     QVariantList m_subsections;
 };
 }

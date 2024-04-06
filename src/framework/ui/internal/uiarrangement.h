@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_UIARRANGEMENT_H
-#define MU_UI_UIARRANGEMENT_H
+#ifndef MUSE_UI_UIARRANGEMENT_H
+#define MUSE_UI_UIARRANGEMENT_H
 
 #include <QString>
 #include <QByteArray>
@@ -34,10 +34,10 @@
 #include "workspace/iworkspacesdataprovider.h"
 #include "uiaction.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class UiArrangement : public async::Asyncable
 {
-    INJECT(muse::workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(workspace::IWorkspacesDataProvider, workspacesDataProvider)
 public:
     UiArrangement() = default;
 
@@ -59,8 +59,8 @@ private:
 
     using Notifications = QMap<QString, async::Notification>;
 
-    void updateData(muse::workspace::DataKey key, QJsonObject& obj, Notifications& notifications) const;
-    void saveData(muse::workspace::DataKey key, const QJsonObject& obj);
+    void updateData(workspace::DataKey key, QJsonObject& obj, Notifications& notifications) const;
+    void saveData(workspace::DataKey key, const QJsonObject& obj);
 
     QJsonObject m_settings;
     mutable Notifications m_valuesNotifications;
@@ -73,4 +73,4 @@ private:
 };
 }
 
-#endif // MU_UI_UIARRANGEMENT_H
+#endif // MUSE_UI_UIARRANGEMENT_H

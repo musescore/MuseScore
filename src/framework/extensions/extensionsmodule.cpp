@@ -79,7 +79,7 @@ void ExtensionsModule::registerUiTypes()
 
 void ExtensionsModule::resolveImports()
 {
-    auto ir = ioc()->resolve<mu::ui::IInteractiveUriRegister>(moduleName());
+    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://extensions/viewer"), "Muse/Extensions/ExtensionViewerDialog.qml");
     }

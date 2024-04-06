@@ -24,7 +24,7 @@
 #include <QWidget>
 #include <QSettings>
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 void WidgetStateStore::saveGeometry(const QWidget* qw)
 {

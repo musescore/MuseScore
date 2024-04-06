@@ -25,7 +25,7 @@
 #include <AppKit/NSEvent.h>
 #include <QQuickWindow>
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 id<NSObject> minimizeObserverToken = nil;
 

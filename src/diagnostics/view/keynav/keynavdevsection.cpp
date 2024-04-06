@@ -22,7 +22,7 @@
 #include "keynavdevsection.h"
 
 using namespace mu::diagnostics;
-using namespace mu::ui;
+using namespace muse::ui;
 
 KeyNavDevSection::KeyNavDevSection(INavigationSection* section)
     : AbstractKeyNavDevItem(section), m_section(section)

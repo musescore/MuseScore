@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UICOMPONENTS_MODELUTILS_H
-#define MU_UICOMPONENTS_MODELUTILS_H
+#ifndef MUSE_UICOMPONENTS_MODELUTILS_H
+#define MUSE_UICOMPONENTS_MODELUTILS_H
 
 #include <QAbstractItemModel>
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class ModelUtils
 {
 public:
@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif // MU_UICOMPONENTS_MODELUTILS_H
+#endif // MUSE_UICOMPONENTS_MODELUTILS_H

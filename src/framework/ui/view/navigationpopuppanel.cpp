@@ -21,7 +21,7 @@
  */
 #include "navigationpopuppanel.h"
 
-using namespace mu::ui;
+using namespace muse::ui;
 
 NavigationPopupPanel::NavigationPopupPanel(QObject* parent)
     : NavigationPanel(parent)

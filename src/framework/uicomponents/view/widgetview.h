@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_WIDGETVIEW_H
-#define MU_UI_WIDGETVIEW_H
+#ifndef MUSE_UI_WIDGETVIEW_H
+#define MUSE_UI_WIDGETVIEW_H
 
 #include "quickpaintedview.h"
 
 class QWidget;
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class IDisplayableWidget
 {
 public:
@@ -64,4 +64,4 @@ private:
 };
 }
 
-#endif // MU_UI_WIDGETVIEW_H
+#endif // MUSE_UI_WIDGETVIEW_H

@@ -61,7 +61,7 @@ class DockBase : public QQuickItem
 
     Q_PROPERTY(bool inited READ inited NOTIFY initedChanged)
 
-    Q_PROPERTY(mu::ui::NavigationPanel * contentNavigationPanel READ contentNavigationPanel
+    Q_PROPERTY(muse::ui::NavigationPanel * contentNavigationPanel READ contentNavigationPanel
                WRITE setContentNavigationPanel NOTIFY contentNavigationPanelChanged)
 
 public:
@@ -113,7 +113,7 @@ public:
 
     Q_INVOKABLE void resize(int width, int height);
 
-    mu::ui::NavigationPanel* contentNavigationPanel() const;
+    ui::NavigationPanel* contentNavigationPanel() const;
 
 public slots:
     void setTitle(const QString& title);
@@ -135,7 +135,7 @@ public slots:
 
     void setFloating(bool floating);
 
-    void setContentNavigationPanel(mu::ui::NavigationPanel* panel);
+    void setContentNavigationPanel(ui::NavigationPanel* panel);
 
 signals:
     void titleChanged();
@@ -202,7 +202,7 @@ private:
 
     bool m_inited = false;
     KDDockWidgets::DockWidgetQuick* m_dockWidget = nullptr;
-    mu::ui::NavigationPanel* m_contentNavigationPanel = nullptr;
+    ui::NavigationPanel* m_contentNavigationPanel = nullptr;
 };
 
 struct DropDestination

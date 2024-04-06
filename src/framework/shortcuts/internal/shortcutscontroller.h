@@ -38,9 +38,9 @@ class ShortcutsController : public IShortcutsController, public async::Asyncable
 {
     INJECT(IShortcutsRegister, shortcutsRegister)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(ui::IUiActionsRegister, aregister)
-    INJECT(ui::IInteractiveProvider, interactiveProvider)
-    INJECT(ui::IUiContextResolver, uiContextResolver)
+    INJECT(muse::ui::IUiActionsRegister, aregister)
+    INJECT(muse::ui::IInteractiveProvider, interactiveProvider)
+    INJECT(muse::ui::IUiContextResolver, uiContextResolver)
 
     //! NOTE May be missing because it must be implemented outside the framework
     INJECT(IShortcutContextPriority, shortcutContextPriority)

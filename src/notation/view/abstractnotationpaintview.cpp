@@ -28,7 +28,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::draw;
 using namespace mu::notation;
 using namespace muse::actions;
@@ -41,7 +41,7 @@ static void compensateFloatPart(RectF& rect)
 }
 
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
-    : uicomponents::QuickPaintedView(parent)
+    : muse::uicomponents::QuickPaintedView(parent)
 {
     setFlag(ItemHasContents, true);
     setFlag(ItemAcceptsDrops, true);

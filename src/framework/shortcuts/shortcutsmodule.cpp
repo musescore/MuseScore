@@ -54,7 +54,7 @@
 
 using namespace mu::shortcuts;
 using namespace mu::modularity;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static void shortcuts_init_qrc()
 {

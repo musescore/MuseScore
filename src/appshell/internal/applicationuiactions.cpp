@@ -31,7 +31,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
-using namespace mu::ui;
+using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::dock;
 
@@ -257,7 +257,7 @@ void ApplicationUiActions::listenOpenedDocksChanged(IDockWindow* window)
     });
 }
 
-const mu::ui::UiActionList& ApplicationUiActions::actionsList() const
+const muse::ui::UiActionList& ApplicationUiActions::actionsList() const
 {
     return m_actions;
 }

@@ -36,18 +36,18 @@ class UiContextResolver : public IUiContextResolver, public async::Asyncable
     INJECT(IInteractive, interactive)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(IGlobalContext, globalContext)
-    INJECT(ui::INavigationController, navigationController)
+    INJECT(muse::ui::INavigationController, navigationController)
 
 public:
     UiContextResolver() = default;
 
     void init();
 
-    ui::UiContext currentUiContext() const override;
+    muse::ui::UiContext currentUiContext() const override;
     async::Notification currentUiContextChanged() const override;
 
-    bool match(const ui::UiContext& currentCtx, const ui::UiContext& actCtx) const override;
-    bool matchWithCurrent(const ui::UiContext& ctx) const override;
+    bool match(const muse::ui::UiContext& currentCtx, const muse::ui::UiContext& actCtx) const override;
+    bool matchWithCurrent(const muse::ui::UiContext& ctx) const override;
 
     bool isShortcutContextAllowed(const std::string& scContext) const override;
 

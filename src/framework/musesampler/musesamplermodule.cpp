@@ -61,7 +61,7 @@ void MuseSamplerModule::resolveImports()
         synthResolver->registerResolver(AudioSourceType::MuseSampler, m_resolver);
     }
 
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    auto ar = ioc()->resolve<muse::ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<MuseSamplerUiActions>());
     }

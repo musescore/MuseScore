@@ -29,7 +29,7 @@
 
 #include "uicomponents/view/abstractmenumodel.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class AbstractMenuModel;
 }
 
@@ -41,7 +41,7 @@ class DockPanelView : public DockBase
     Q_PROPERTY(QString groupName READ groupName WRITE setGroupName NOTIFY groupNameChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
     Q_PROPERTY(
-        mu::uicomponents::AbstractMenuModel
+        muse::uicomponents::AbstractMenuModel
         * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
 
 public:
@@ -50,7 +50,7 @@ public:
 
     QString groupName() const;
     QObject* navigationSection() const;
-    mu::uicomponents::AbstractMenuModel* contextMenuModel() const;
+    uicomponents::AbstractMenuModel* contextMenuModel() const;
 
     bool isTabAllowed(const DockPanelView* tab) const;
     void addPanelAsTab(DockPanelView* tab);
@@ -59,7 +59,7 @@ public:
 public slots:
     void setGroupName(const QString& name);
     void setNavigationSection(QObject* newNavigation);
-    void setContextMenuModel(mu::uicomponents::AbstractMenuModel* model);
+    void setContextMenuModel(uicomponents::AbstractMenuModel* model);
 
 signals:
     void groupNameChanged();

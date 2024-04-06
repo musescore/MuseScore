@@ -42,5 +42,5 @@ void BrailleModule::registerExports()
 
 void BrailleModule::registerUiTypes()
 {
-    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
+    modularity::ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(braille_QML_IMPORT);
 }

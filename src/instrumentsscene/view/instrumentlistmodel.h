@@ -137,7 +137,7 @@ private:
     QString m_searchText;
 
     Instruments m_instruments;
-    uicomponents::ItemMultiSelectionModel* m_selection = nullptr;
+    muse::uicomponents::ItemMultiSelectionModel* m_selection = nullptr;
 
     notation::InstrumentGenreList m_genres;
     notation::InstrumentGroupList m_groups;

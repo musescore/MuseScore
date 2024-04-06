@@ -28,7 +28,7 @@
 #include "ui/view/iconcodes.h"
 
 using namespace mu::appshell;
-using namespace mu::ui;
+using namespace muse::ui;
 
 PreferencesModel::PreferencesModel(QObject* parent)
     : QAbstractItemModel(parent)
@@ -277,7 +277,7 @@ void PreferencesModel::setCurrentPageId(QString currentPageId)
     emit currentPageIdChanged(m_currentPageId);
 }
 
-PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, mu::ui::IconCode::Code icon,
+PreferencePageItem* PreferencesModel::makeItem(const QString& id, const QString& title, muse::ui::IconCode::Code icon,
                                                const QString& path,
                                                const QList<PreferencePageItem*>& children) const
 {

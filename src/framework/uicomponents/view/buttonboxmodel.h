@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UICOMPONENTS_BUTTONBOXMODEL_H
-#define MU_UICOMPONENTS_BUTTONBOXMODEL_H
+#ifndef MUSE_UICOMPONENTS_BUTTONBOXMODEL_H
+#define MUSE_UICOMPONENTS_BUTTONBOXMODEL_H
 
 #include <QObject>
 #include <QQuickItem>
@@ -29,7 +29,7 @@
 #include "translation.h"
 #include "qmllistproperty.h"
 
-namespace mu::uicomponents {
+namespace muse::uicomponents {
 class ButtonBoxModel : public QObject
 {
     Q_OBJECT
@@ -178,4 +178,4 @@ private:
 };
 }
 
-#endif // MU_UICOMPONENTS_BUTTONBOXMODEL_H
+#endif // MUSE_UICOMPONENTS_BUTTONBOXMODEL_H

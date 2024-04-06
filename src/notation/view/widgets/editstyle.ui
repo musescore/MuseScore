@@ -873,7 +873,7 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
                <item row="3" column="0" colspan="9">
-                <widget class="mu::uicomponents::RadioButtonGroupBox" name="disableVerticalSpread">
+                <widget class="muse::uicomponents::RadioButtonGroupBox" name="disableVerticalSpread">
                  <property name="title">
                   <string>Disable vertical justification of staves</string>
                  </property>
@@ -1423,7 +1423,7 @@
                 </spacer>
                </item>
                <item row="2" column="0" colspan="9">
-                <widget class="mu::uicomponents::RadioButtonGroupBox" name="enableVerticalSpread">
+                <widget class="muse::uicomponents::RadioButtonGroupBox" name="enableVerticalSpread">
                  <property name="title">
                   <string>Enable vertical justification of staves</string>
                  </property>
@@ -14478,7 +14478,7 @@ articulation markings are present</string>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>mu::uicomponents::RadioButtonGroupBox</class>
+   <class>muse::uicomponents::RadioButtonGroupBox</class>
    <extends>QGroupBox</extends>
    <header>uicomponents/view/widgets/radiobuttongroupbox.h</header>
    <container>1</container>

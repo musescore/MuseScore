@@ -38,11 +38,11 @@
 #include "ui/view/qmlaccessible.h"
 
 namespace mu::inspector {
-class BendGridCanvas : public uicomponents::QuickPaintedView, public async::Asyncable
+class BendGridCanvas : public muse::uicomponents::QuickPaintedView, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(mu::ui::IUiConfiguration, uiConfig)
+    INJECT(muse::ui::IUiConfiguration, uiConfig)
 
     Q_PROPERTY(QVariant pointList READ pointList WRITE setPointList NOTIFY pointListChanged)
 
@@ -52,7 +52,7 @@ class BendGridCanvas : public uicomponents::QuickPaintedView, public async::Asyn
     Q_PROPERTY(int columnSpacing READ columnSpacing WRITE setColumnSpacing NOTIFY columnSpacingChanged)
     Q_PROPERTY(bool shouldShowNegativeRows READ shouldShowNegativeRows WRITE setShouldShowNegativeRows NOTIFY shouldShowNegativeRowsChanged)
 
-    Q_PROPERTY(mu::ui::AccessibleItem
+    Q_PROPERTY(muse::ui::AccessibleItem
                * accessibleParent READ accessibleParent WRITE setAccessibleParent NOTIFY accessibleParentChanged)
 
 public:
@@ -76,8 +76,8 @@ public:
     Q_INVOKABLE bool moveFocusedPointToUp();
     Q_INVOKABLE bool moveFocusedPointToDown();
 
-    ui::AccessibleItem* accessibleParent() const;
-    void setAccessibleParent(ui::AccessibleItem* parent);
+    muse::ui::AccessibleItem* accessibleParent() const;
+    void setAccessibleParent(muse::ui::AccessibleItem* parent);
 
 public slots:
     void setPointList(QVariant pointList);
@@ -140,8 +140,8 @@ private:
     void setFocusedPointIndex(int index);
 
     CurvePoints m_points;
-    QList<ui::AccessibleItem*> m_pointsAccessibleItems;
-    ui::AccessibleItem* m_accessibleParent = nullptr;
+    QList<muse::ui::AccessibleItem*> m_pointsAccessibleItems;
+    muse::ui::AccessibleItem* m_accessibleParent = nullptr;
     bool m_needVoicePointName = false;
 
     /// The number of rows and columns.

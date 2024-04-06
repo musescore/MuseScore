@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_NAVIGATIONUIACTIONS_H
-#define MU_UI_NAVIGATIONUIACTIONS_H
+#ifndef MUSE_UI_NAVIGATIONUIACTIONS_H
+#define MUSE_UI_NAVIGATIONUIACTIONS_H
 
 #include "../iuiactionsmodule.h"
 
-namespace mu::ui {
+namespace muse::ui {
 class NavigationUiActions : public IUiActionsModule
 {
 public:
@@ -32,14 +32,14 @@ public:
 
     const UiActionList& actionsList() const override;
     bool actionEnabled(const UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionEnabledChanged() const override;
+    async::Channel<actions::ActionCodeList> actionEnabledChanged() const override;
 
     bool actionChecked(const UiAction& act) const override;
-    async::Channel<muse::actions::ActionCodeList> actionCheckedChanged() const override;
+    async::Channel<actions::ActionCodeList> actionCheckedChanged() const override;
 
 private:
     static const UiActionList m_actions;
 };
 }
 
-#endif // MU_UI_NAVIGATIONUIACTIONS_H
+#endif // MUSE_UI_NAVIGATIONUIACTIONS_H

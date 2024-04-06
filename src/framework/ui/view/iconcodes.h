@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_UI_ICONCODE_H
-#define MU_UI_ICONCODE_H
+#ifndef MUSE_UI_ICONCODE_H
+#define MUSE_UI_ICONCODE_H
 
 #include <QObject>
 
@@ -42,7 +42,7 @@
 #undef FILE_OPEN
 #endif
 
-namespace mu::ui {
+namespace muse::ui {
 /**
  * @brief The IconCode class simplifies access to the icons from the icon font
  *
@@ -423,4 +423,4 @@ static inline QChar iconCodeToChar(IconCode::Code code)
 }
 }
 
-#endif // MU_UI_ICONCODE_H
+#endif // MUSE_UI_ICONCODE_H

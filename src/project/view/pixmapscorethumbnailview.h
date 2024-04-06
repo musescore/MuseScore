@@ -27,7 +27,7 @@
 #include "uicomponents/view/quickpaintedview.h"
 
 namespace mu::project {
-class PixmapScoreThumbnailView : public uicomponents::QuickPaintedView
+class PixmapScoreThumbnailView : public muse::uicomponents::QuickPaintedView
 {
     Q_OBJECT
 

@@ -21,7 +21,7 @@
  */
 #include "quickpaintedview.h"
 
-using namespace mu::uicomponents;
+using namespace muse::uicomponents;
 
 QuickPaintedView::QuickPaintedView(QQuickItem* parent)
     : QQuickPaintedItem(parent)

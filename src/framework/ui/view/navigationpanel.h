@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_NAVIGATIONPANEL_H
-#define MU_UI_NAVIGATIONPANEL_H
+#ifndef MUSE_UI_NAVIGATIONPANEL_H
+#define MUSE_UI_NAVIGATIONPANEL_H
 
 #include <QObject>
 #include <QList>
@@ -32,12 +32,12 @@
 Q_MOC_INCLUDE("ui/view/navigationsection.h")
 #endif
 
-namespace mu::ui {
+namespace muse::ui {
 class NavigationSection;
 class NavigationPanel : public AbstractNavigation, public INavigationPanel
 {
     Q_OBJECT
-    Q_PROPERTY(mu::ui::NavigationSection * section READ section_property WRITE setSection_property NOTIFY sectionChanged)
+    Q_PROPERTY(muse::ui::NavigationSection * section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
     Q_PROPERTY(QString directionInfo READ directionInfo NOTIFY directionChanged)
 
@@ -107,4 +107,4 @@ private:
 };
 }
 
-#endif // MU_UI_NAVIGATIONPANEL_H
+#endif // MUSE_UI_NAVIGATIONPANEL_H

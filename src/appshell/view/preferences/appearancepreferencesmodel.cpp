@@ -29,7 +29,7 @@
 
 using namespace mu::appshell;
 using namespace mu::notation;
-using namespace mu::ui;
+using namespace muse::ui;
 
 static constexpr int INVALID_INDEX = -1;
 
