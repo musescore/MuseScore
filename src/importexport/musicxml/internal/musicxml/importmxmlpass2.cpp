@@ -5530,7 +5530,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     QString voice;
     DirectionV stemDir = DirectionV::AUTO;
     bool noStem = false;
-    bool hasHead = true;
     NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
     const QColor noteColor { _e.attributes().value("color").toString() };
     QColor noteheadColor = QColor::Invalid;
@@ -5581,9 +5580,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             noteheadParentheses = _e.attributes().value("parentheses") == "yes";
             noteheadFilled = _e.attributes().value("filled").toString();
             auto noteheadValue = _e.readElementText();
-            if (noteheadValue == "none") {
-                hasHead = false;
-            } else {
+            if (noteheadValue != "none") {
                 headGroup = convertNotehead(noteheadValue);
             }
         } else if (_e.name() == "rest") {

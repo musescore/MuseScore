@@ -1643,7 +1643,6 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata, const Layout
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
         const Fraction tick = clefSeg->tick();
-        const Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
         bool show = st->genClef();            // check staff type allows clef display
         StaffGroup staffGroup = st->group();
