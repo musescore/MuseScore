@@ -43,8 +43,6 @@ void PaletteConfiguration::init()
     settings()->setCanBeManuallyEdited(PALETTE_SCALE, true, Val(0.5), Val(5.0));
 
     settings()->setDefaultValue(PALETTE_USE_SINGLE, Val(false));
-    settings()->setDescription(PALETTE_USE_SINGLE, mu::qtrc("palette", "Open only one palette at a time").toStdString());
-    settings()->setCanBeManuallyEdited(PALETTE_USE_SINGLE, true);
 
     m_isSinglePalette.val = settings()->value(PALETTE_USE_SINGLE).toBool();
     settings()->valueChanged(PALETTE_USE_SINGLE).onReceive(this, [this](const Val& newValue) {
@@ -52,8 +50,6 @@ void PaletteConfiguration::init()
     });
 
     settings()->setDefaultValue(IS_SINGLE_CLICK_TO_OPEN_PALETTE, Val(true));
-    settings()->setDescription(IS_SINGLE_CLICK_TO_OPEN_PALETTE, mu::qtrc("palette", "Single-click to open a palette").toStdString());
-    settings()->setCanBeManuallyEdited(IS_SINGLE_CLICK_TO_OPEN_PALETTE, true);
 
     m_isSingleClickToOpenPalette.val = settings()->value(IS_SINGLE_CLICK_TO_OPEN_PALETTE).toBool();
     settings()->valueChanged(IS_SINGLE_CLICK_TO_OPEN_PALETTE).onReceive(this, [this](const Val& newValue) {
