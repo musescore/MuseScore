@@ -175,7 +175,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_IMPORT_GUITARPRO_CHARSET,                        new StringPreference("UTF-8", false)},
             {PREF_IMPORT_MUSICXML_IMPORTBREAKS,                    new BoolPreference(true, false)},
             {PREF_IMPORT_MUSICXML_IMPORTLAYOUT,                    new BoolPreference(true, false)},
-            {PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE,             new BoolPreference(false)},
+            {PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE,             new BoolPreference(false, false)},
             {PREF_IMPORT_MUSICXML_REMOVEINSTRUMENTNAMES,           new BoolPreference(true, false)}, // TODO: add to preferences menu
             {PREF_IMPORT_OVERTURE_CHARSET,                         new StringPreference("GBK", false)},
             {PREF_IMPORT_STYLE_STYLEFILE,                          new StringPreference("", false)},
