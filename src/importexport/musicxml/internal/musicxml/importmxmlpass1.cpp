@@ -3452,7 +3452,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             IF_ASSERT_FAILED(part) {
                 continue;
             }
-            if (!ok || staff < 0 || staff >= part->nstaves()) {
+            if (!ok || staff < 0 || staff >= int(part->nstaves())) {
                 _logger->logError(QString("illegal or hidden staff '%1'").arg(strStaff), &_e);
             }
         } else if (_e.name() == "stem") {

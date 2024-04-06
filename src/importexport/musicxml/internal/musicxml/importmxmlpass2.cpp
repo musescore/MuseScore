@@ -2679,7 +2679,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId, Measure* measure)
     int n = 0;  // default
     if (strNumber != "") {
         n = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
-        if (n < 0 || n >= staves) {
+        if (n < 0 || n >= int(staves)) {
             _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(strNumber), &_e);
             n = 0;
         }
@@ -6416,7 +6416,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             size_t nstaves = _pass1.getPart(partId)->nstaves();
             QString strStaff = _e.readElementText();
             int staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-            if (staff >= 0 && staff < nstaves) {
+            if (staff >= 0 && staff < int(nstaves)) {
                 track += staff * VOICES;
             } else {
                 _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
