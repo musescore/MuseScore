@@ -8,8 +8,7 @@ set(OPUSENC_VERSION 0.2.1)
 set(OPUSENC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libopusenc-${OPUSENC_VERSION})
 
 # libopusenc dependent on libopus
-set(OPUS_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../opus)
-add_subdirectory(${OPUS_LIB_DIR} opus)
+include(cmake/SetupOpusLibrary.cmake)
 
 aux_source_directory(${OPUSENC_DIR}/src SOURCE_LIB)
 
@@ -23,14 +22,14 @@ set(MODULE_INCLUDE
     ${OPUSENC_DIR}/include
     ${OPUSENC_DIR}/src
     ${OPUSENC_DIR}
-    ${OPUS_LIB_DIR}/include
+    ${OPUS_INCLUDE_DIRS}
     )
 
 set(MODULE_SRC
     ${SOURCE_LIB}
     )
 
-set(MODULE_LINK opus)
+set(MODULE_LINK ${OPUS_LIBRARIES})
 
 set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
