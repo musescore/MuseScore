@@ -834,6 +834,7 @@ EngravingItem* Score::nextElement()
         }
         case ElementType::LAYOUT_BREAK: {
             staffId = 0;             // otherwise it will equal -1, which breaks the navigation
+            break;
         }
         case ElementType::SOUND_FLAG:
             if (EngravingItem* parent = toSoundFlag(e)->parentItem()) {

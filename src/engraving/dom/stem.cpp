@@ -172,6 +172,7 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
             chord()->relinkPropertyToMaster(Pid::STEM_DIRECTION);
             break;
         }
+    // fall through
     default:
         return EngravingItem::setProperty(propertyId, v);
     }

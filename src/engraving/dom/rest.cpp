@@ -784,6 +784,8 @@ void Rest::add(EngravingItem* e)
         break;
     case ElementType::DEAD_SLAPPED:
         m_deadSlapped = toDeadSlapped(e);
+        e->added();
+        break;
     default:
         ChordRest::add(e);
         break;
