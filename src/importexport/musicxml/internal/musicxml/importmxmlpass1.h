@@ -187,7 +187,7 @@ public:
                                  const CreditWordsList& crWords, const QSize pageSize);
     void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
     bool hasInferredHeaderText() const { return _hasInferredHeaderText; }
-    const int maxDiff() { return _maxDiff; }
+    int maxDiff() const { return _maxDiff; }
     void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert(key, value); }
     QMap<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }
     void insertSeenDenominator(int val) { _seenDenominators.emplace(val); }
