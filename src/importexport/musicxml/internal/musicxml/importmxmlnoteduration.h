@@ -62,8 +62,8 @@ private:
     Fraction _dura;
     TDuration _normalType;
     Fraction _timeMod { 1, 1 };                       // default to no time modification
-    MusicXMLParserPass1* _pass1;
     MxmlLogger* _logger;                              ///< Error logger
+    MusicXMLParserPass1* _pass1;
 };
 } // namespace Ms
 
