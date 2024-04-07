@@ -563,7 +563,7 @@ bool Dynamic::changeTimeAnchorType(const EditData& ed)
 
 bool Dynamic::moveSegment(const EditData& ed)
 {
-    if (!ed.modifiers & AltModifier && anchorToEndOfPrevious()) {
+    if (!(ed.modifiers & AltModifier) && anchorToEndOfPrevious()) {
         undoResetProperty(Pid::ANCHOR_TO_END_OF_PREVIOUS);
         return true;
     }

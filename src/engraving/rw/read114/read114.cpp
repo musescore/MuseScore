@@ -3017,7 +3017,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     }
 
     if (e.error() != XmlStreamReader::NoError) {
-        LOGD("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), muPrintable(e.errorString()));
+        LOGD() << e.lineNumber() << " " << e.columnNumber() << ": " << e.errorString();
         return Err::FileBadFormat;
     }
 
