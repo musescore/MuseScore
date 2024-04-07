@@ -40,7 +40,7 @@ public:
     void init();
     void deinit();
 
-    MidiDeviceList availableDevices() const override;
+    std::vector<MidiDevice> availableDevices() const override;
     async::Notification availableDevicesChanged() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;
