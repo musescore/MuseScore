@@ -1804,10 +1804,12 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format, String& pr
         format.setStrike(false);
     } else if (token == "sub") {
         format.setValign(VerticalAlignment::AlignSubScript);
+        return true;
     } else if (token == "/sub") {
         format.setValign(VerticalAlignment::AlignNormal);
     } else if (token == "sup") {
         format.setValign(VerticalAlignment::AlignSuperScript);
+        return true;
     } else if (token == "/sup") {
         format.setValign(VerticalAlignment::AlignNormal);
     } else if (token.startsWith(u"font ")) {
@@ -1853,9 +1855,19 @@ bool TextBase::prepareFormat(const String& token, CharFormat& format, String& pr
 //---------------------------------------------------------
 void TextBase::prepareFormat(const String& token, TextCursor& cursor, String& prevFontFace, double& prevFontSize)
 {
-    if (prepareFormat(token, *cursor.format(), prevFontFace, prevFontSize)
-        && cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
-        setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+    if (prepareFormat(token, *cursor.format(), prevFontFace, prevFontSize)) {
+        if (cursor.format()->fontFamily() != propertyDefault(Pid::FONT_FACE).value<String>()) {
+            setPropertyFlags(Pid::FONT_FACE, PropertyFlags::UNSTYLED);
+        }
+        if (cursor.format()->fontSize() != propertyDefault(Pid::FONT_SIZE).value<double>()) {
+            setPropertyFlags(Pid::FONT_SIZE, PropertyFlags::UNSTYLED);
+        }
+        if (cursor.format()->style() != propertyDefault(Pid::FONT_STYLE).value<FontStyle>()) {
+            setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
+        }
+        if (cursor.format()->valign() != propertyDefault(Pid::TEXT_SCRIPT_ALIGN).value<VerticalAlignment>()) {
+            setPropertyFlags(Pid::TEXT_SCRIPT_ALIGN, PropertyFlags::UNSTYLED);
+        }
     }
 }
 
