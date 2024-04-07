@@ -115,10 +115,10 @@ public:
         m_onMainStreamFlushed = flushed;
     }
 
-    mu::mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
+    muse::mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
     {
         if (m_dynamicLevelMap.empty()) {
-            return mu::mpe::dynamicLevelFromType(mu::mpe::DynamicType::Natural);
+            return muse::mpe::dynamicLevelFromType(muse::mpe::DynamicType::Natural);
         }
 
         if (m_dynamicLevelMap.size() == 1) {

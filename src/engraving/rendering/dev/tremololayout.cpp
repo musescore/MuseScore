@@ -341,7 +341,7 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, const LayoutContex
     if (defaultStyle || item->tremoloStyle() == TremoloStyle::TRADITIONAL_ALTERNATE) {
         // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
         double widthSp = (endAnchor.x() - startAnchor.x()) / item->spatium() - (stemGapSp * 2);
-        if (!RealIsEqualOrMore(widthSp, 0.6)) {
+        if (!mu::RealIsEqualOrMore(widthSp, 0.6)) {
             // tremolo beam is too short; we can eat into the gap spacing a little
             gapSp = std::max(stemGapSp - ((0.6 - widthSp) * 0.5), 0.4);
         }

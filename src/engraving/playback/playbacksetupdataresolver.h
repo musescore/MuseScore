@@ -31,9 +31,9 @@ class Instrument;
 class PlaybackSetupDataResolver
 {
 public:
-    void resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const;
-    void resolveChordSymbolsSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const;
-    void resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const;
+    void resolveSetupData(const Instrument* instrument, muse::mpe::PlaybackSetupData& result) const;
+    void resolveChordSymbolsSetupData(const Instrument* instrument, muse::mpe::PlaybackSetupData& result) const;
+    void resolveMetronomeSetupData(muse::mpe::PlaybackSetupData& result) const;
 };
 }
 

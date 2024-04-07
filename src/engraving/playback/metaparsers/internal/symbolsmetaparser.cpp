@@ -25,8 +25,9 @@
 #include "dom/articulation.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
-mu::mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, OrnamentStyle ornamentStyle)
+mpe::ArticulationTypeSet SymbolsMetaParser::symbolToArticulations(SymId symId, OrnamentStyle ornamentStyle)
 {
     mpe::ArticulationTypeSet types;
 

@@ -34,8 +34,8 @@ public:
 protected:
     friend MetaParserBase;
 
-    static void doParse(const EngravingItem* item, const RenderingContext& spannerCtx, mpe::ArticulationMap& result);
-    static mpe::duration_t spannerDuration(const Score* score, const int positionTick, const int durationTicks);
+    static void doParse(const EngravingItem* item, const RenderingContext& spannerCtx, muse::mpe::ArticulationMap& result);
+    static muse::mpe::duration_t spannerDuration(const Score* score, const int positionTick, const int durationTicks);
 };
 }
 

@@ -308,7 +308,7 @@ float VstSequencer::expressionLevel(const mu::mpe::dynamic_level_t dynamicLevel)
         return 1.f;
     }
 
-    return RealRound((dynamicLevel - MIN_SUPPORTED_DYNAMIC_LEVEL) / static_cast<float>(AVAILABLE_RANGE), 2);
+    return mu::RealRound((dynamicLevel - MIN_SUPPORTED_DYNAMIC_LEVEL) / static_cast<float>(AVAILABLE_RANGE), 2);
 }
 
 float VstSequencer::pitchBendLevel(const mpe::pitch_level_t pitchLevel) const

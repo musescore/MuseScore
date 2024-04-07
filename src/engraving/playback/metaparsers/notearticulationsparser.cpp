@@ -30,7 +30,8 @@
 #include "internal/symbolsmetaparser.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 void NoteArticulationsParser::buildNoteArticulationMap(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {

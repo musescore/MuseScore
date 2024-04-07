@@ -26,7 +26,7 @@
 
 #include "internal/articulationstringutils.h"
 
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 static const QString SINGLE_NOTE_MENU_ID = "0";
 static const QString MULTI_NOTE_MENU_ID = "1";

@@ -41,7 +41,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse::mpe;
 using namespace mu::async;
 
 static const String METRONOME_INSTRUMENT_ID(u"metronome");
@@ -235,7 +235,7 @@ void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*
     const RepeatList& repeats = repeatList();
 
     constexpr timestamp_t actualTimestamp = 0;
-    constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(mpe::DynamicType::Natural);
+    constexpr dynamic_level_t actualDynamicLevel = dynamicLevelFromType(muse::mpe::DynamicType::Natural);
     duration_t actualDuration = MScore::defaultPlayDuration * 1000;
 
     const PlaybackContext& ctx = m_playbackCtxMap[trackId];
@@ -744,8 +744,8 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
     }
 }
 
-void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const mpe::timestamp_t timestampFrom,
-                                      const mpe::timestamp_t timestampTo)
+void PlaybackModel::removeTrackEvents(const InstrumentTrackId& trackId, const muse::mpe::timestamp_t timestampFrom,
+                                      const muse::mpe::timestamp_t timestampTo)
 {
     auto search = m_playbackDataMap.find(trackId);
 
@@ -907,7 +907,7 @@ InstrumentTrackId PlaybackModel::idKey(const ID& partId, const String& instrumen
     return { partId, instrumentId };
 }
 
-mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const
+muse::mpe::ArticulationsProfilePtr PlaybackModel::defaultActiculationProfile(const InstrumentTrackId& trackId) const
 {
     auto it = m_playbackDataMap.find(trackId);
     if (it == m_playbackDataMap.cend()) {

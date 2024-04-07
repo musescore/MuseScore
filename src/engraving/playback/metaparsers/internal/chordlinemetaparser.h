@@ -31,9 +31,9 @@ class ChordLineMetaParser : public MetaParserBase<ChordLineMetaParser>
 protected:
     friend MetaParserBase;
 
-    static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void doParse(const EngravingItem* item, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
-    static mpe::ArticulationType chordLineArticulationType(const ChordLineType chordLineType);
+    static muse::mpe::ArticulationType chordLineArticulationType(const ChordLineType chordLineType);
 };
 }
 

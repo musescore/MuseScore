@@ -25,7 +25,8 @@
 #include "dom/chordline.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 void ChordLineMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {

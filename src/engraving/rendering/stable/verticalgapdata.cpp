@@ -176,7 +176,7 @@ double VerticalGapData::addSpacing(double step)
 
 bool VerticalGapData::isFixedHeight() const
 {
-    return m_fixedHeight || RealIsNull(m_normalisedSpacing - m_maxActualSpacing);
+    return m_fixedHeight || mu::RealIsNull(m_normalisedSpacing - m_maxActualSpacing);
 }
 
 //---------------------------------------------------------

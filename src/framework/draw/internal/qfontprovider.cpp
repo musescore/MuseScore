@@ -178,7 +178,7 @@ double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) con
     }
 
     double symAdvance = engine->advance(ucs4, dpi_f);
-    if (RealIsNull(symAdvance)) {
+    if (mu::RealIsNull(symAdvance)) {
         for (const auto& fontName : QFont::substitutes(f.family())) {
             Font subFont(f);
             subFont.setFamily(fontName, f.type());
@@ -188,7 +188,7 @@ double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) con
             }
 
             symAdvance = engine->advance(ucs4, dpi_f);
-            if (!RealIsNull(symAdvance)) {
+            if (!mu::RealIsNull(symAdvance)) {
                 break;
             }
         }

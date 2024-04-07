@@ -22,7 +22,7 @@
 #include "articulationprofilesrepositorystub.h"
 
 using namespace mu;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 ArticulationsProfilePtr ArticulationProfilesRepositoryStub::createNew() const
 {

@@ -32,9 +32,9 @@
 #include "arpeggiorenderer.h"
 #include "glissandosrenderer.h"
 
-using namespace mu;
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 const mpe::ArticulationTypeSet& ChordArticulationsRenderer::supportedTypes()
 {

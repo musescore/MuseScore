@@ -1559,33 +1559,33 @@ int GuitarPro::harmonicOvertone(Note* note, float harmonicValue, int harmonicTyp
 {
     int result{ 0 };
 
-    if (RealIsEqual(harmonicValue, 12.0f)) {
+    if (mu::RealIsEqual(harmonicValue, 12.0f)) {
         result = 12;
-    } else if (RealIsEqual(harmonicValue, 7.0f) || RealIsEqual(harmonicValue, 19.0f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 7.0f) || mu::RealIsEqual(harmonicValue, 19.0f)) {
         result = 19;
-    } else if (RealIsEqual(harmonicValue, 5.0f) || RealIsEqual(harmonicValue, 24.0f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 5.0f) || mu::RealIsEqual(harmonicValue, 24.0f)) {
         result = 24;
-    } else if (RealIsEqual(harmonicValue, 3.9f)
-               || RealIsEqual(harmonicValue, 4.0f)
-               || RealIsEqual(harmonicValue, 9.0f)
-               || RealIsEqual(harmonicValue, 16.0f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 3.9f)
+               || mu::RealIsEqual(harmonicValue, 4.0f)
+               || mu::RealIsEqual(harmonicValue, 9.0f)
+               || mu::RealIsEqual(harmonicValue, 16.0f)) {
         result = 28;
-    } else if (RealIsEqual(harmonicValue, 3.2f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 3.2f)) {
         result = 31;
-    } else if (RealIsEqual(harmonicValue, 2.7f)
-               || RealIsEqual(harmonicValue, 5.8f)
-               || RealIsEqual(harmonicValue, 9.6f)
-               || RealIsEqual(harmonicValue, 14.7f)
-               || RealIsEqual(harmonicValue, 21.7f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 2.7f)
+               || mu::RealIsEqual(harmonicValue, 5.8f)
+               || mu::RealIsEqual(harmonicValue, 9.6f)
+               || mu::RealIsEqual(harmonicValue, 14.7f)
+               || mu::RealIsEqual(harmonicValue, 21.7f)) {
         result = 34;
-    } else if (RealIsEqual(harmonicValue, 2.3f)
-               || RealIsEqual(harmonicValue, 2.4f)
-               || RealIsEqual(harmonicValue, 8.2f)
-               || RealIsEqual(harmonicValue, 17.0f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 2.3f)
+               || mu::RealIsEqual(harmonicValue, 2.4f)
+               || mu::RealIsEqual(harmonicValue, 8.2f)
+               || mu::RealIsEqual(harmonicValue, 17.0f)) {
         result = 36;
-    } else if (RealIsEqual(harmonicValue, 2.0f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 2.0f)) {
         result = 38;
-    } else if (RealIsEqual(harmonicValue, 1.8f)) {
+    } else if (mu::RealIsEqual(harmonicValue, 1.8f)) {
         result = 40;
     }
 

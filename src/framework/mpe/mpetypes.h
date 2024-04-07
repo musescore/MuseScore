@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_MPETYPES_H
-#define MU_MPE_MPETYPES_H
+#ifndef MUSE_MPE_MPETYPES_H
+#define MUSE_MPE_MPETYPES_H
 
 #include <stdint.h>
 #include <math.h>
@@ -42,7 +42,7 @@
 #undef C
 #endif
 
-namespace mu::mpe {
+namespace muse::mpe {
 // common
 using usecs_t = int64_t; // microseconds
 using percentage_t = int_fast16_t;
@@ -123,13 +123,13 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
 
     void amplifyVelocity(const float requiredVelocityFraction)
     {
-        if (RealIsEqual(requiredVelocityFraction, 0.f)) {
+        if (mu::RealIsEqual(requiredVelocityFraction, 0.f)) {
             return;
         }
 
         ValuesCurve result;
 
-        if (RealIsEqualOrMore(requiredVelocityFraction, 0.5f)) {
+        if (mu::RealIsEqualOrMore(requiredVelocityFraction, 0.5f)) {
             accelerate(requiredVelocityFraction, result);
         } else {
             decelerate(requiredVelocityFraction, result);
@@ -150,7 +150,8 @@ private:
             }
 
             float newPointPositionCoef = (pair.second / static_cast<float>(pair.first)) * positionAmplifyFactor;
-            duration_percentage_t newPointPosition = static_cast<duration_percentage_t>(RealRound(pair.second / newPointPositionCoef, 0));
+            duration_percentage_t newPointPosition
+                = static_cast<duration_percentage_t>(mu::RealRound(pair.second / newPointPositionCoef, 0));
 
             result.insert({ newPointPosition, pair.second });
         }
@@ -935,4 +936,4 @@ private:
 };
 }
 
-#endif // MU_MPE_MPETYPES_H
+#endif // MUSE_MPE_MPETYPES_H

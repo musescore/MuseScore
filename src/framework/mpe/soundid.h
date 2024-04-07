@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_SOUNDID_H
-#define MU_MPE_SOUNDID_H
+#ifndef MUSE_MPE_SOUNDID_H
+#define MUSE_MPE_SOUNDID_H
 
 #include <set>
 #include <unordered_map>
 
 #include "types/string.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 enum class SoundId
 {
     Undefined = -1,
@@ -849,4 +849,4 @@ struct SoundSubCategories : public std::set<SoundSubCategory>
 };
 }
 
-#endif // MU_MPE_SOUNDID_H
+#endif // MUSE_MPE_SOUNDID_H

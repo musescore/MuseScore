@@ -41,8 +41,8 @@ using ::testing::Return;
 using ::testing::_;
 
 using namespace mu::engraving;
-using namespace mu::mpe;
-using namespace mu;
+using namespace muse::mpe;
+using namespace muse;
 
 static const String PLAYBACK_MODEL_TEST_FILES_DIR("playbackmodel_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
@@ -59,7 +59,7 @@ protected:
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
-        m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mu::mpe::DynamicType::Natural));
+        m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mpe::DynamicType::Natural));
         m_dummyPattern.emplace(0, m_dummyPatternSegment);
 
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
@@ -235,7 +235,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
         for (const PlaybackEvent& event : pair.second) {
             if (std::holds_alternative<mpe::NoteEvent>(event)) {
                 // Check actual timestamp
-                const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(event);
+                const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
                 EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, pair.first + notes * (2 * QUARTER_NOTE_DURATION / 16));
 
                 ++notes;
@@ -283,7 +283,7 @@ TEST_F(Engraving_PlaybackModelTests, Repeat_Tempo_Changes_And_Tie)
     for (const auto& pair : result) {
         for (const PlaybackEvent& event : pair.second) {
             if (std::holds_alternative<mpe::NoteEvent>(event)) {
-                const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(event);
+                const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
                 EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, 8 * QUARTER_NOTE_DURATION);
 
                 ++noteEventCount;
@@ -498,7 +498,7 @@ TEST_F(Engraving_PlaybackModelTests, Spanners)
     };
 
     for (size_t i=0; i < expectedNumberOfEvents; ++i) {
-        const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(result.at(i * QUARTER_NOTE_DURATION).at(0));
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(result.at(i * QUARTER_NOTE_DURATION).at(0));
 
         EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
 
@@ -636,23 +636,23 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     EXPECT_EQ(result.size(), expectedSize);
 
     // [THEN] The first note has Pizzicato and Staccatissimo articulations applied
-    const mu::mpe::NoteEvent& firstNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(0).at(0));
+    const mpe::NoteEvent& firstNoteEvent = std::get<mpe::NoteEvent>(result.at(0).at(0));
     EXPECT_EQ(firstNoteEvent.expressionCtx().articulations.size(), 2);
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
     EXPECT_TRUE(firstNoteEvent.expressionCtx().articulations.contains(ArticulationType::Staccatissimo));
 
     // [THEN] The second note has only Pizzicato articulation applied
-    const mu::mpe::NoteEvent& secondNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(500000).at(0));
+    const mpe::NoteEvent& secondNoteEvent = std::get<mpe::NoteEvent>(result.at(500000).at(0));
     EXPECT_EQ(secondNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(secondNoteEvent.expressionCtx().articulations.contains(ArticulationType::Pizzicato));
 
     // [THEN] The third note has only Standard articulation applied
-    const mu::mpe::NoteEvent& thirdNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1000000).at(0));
+    const mpe::NoteEvent& thirdNoteEvent = std::get<mpe::NoteEvent>(result.at(1000000).at(0));
     EXPECT_EQ(thirdNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(thirdNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 
     // [THEN] The fourth note has only Standard articulation applied
-    const mu::mpe::NoteEvent& fourthNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1500000).at(0));
+    const mpe::NoteEvent& fourthNoteEvent = std::get<mpe::NoteEvent>(result.at(1500000).at(0));
     EXPECT_EQ(fourthNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(fourthNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
 }
@@ -1093,7 +1093,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId());
 
     // [GIVEN] Expected note event
-    const mu::mpe::NoteEvent& expectedEvent = std::get<mu::mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
+    const mpe::NoteEvent& expectedEvent = std::get<mpe::NoteEvent>(result.originEvents.at(firstNoteTimestamp).front());
 
     // [THEN] Triggered events map will match our expectations
     result.offStream.onReceive(this, [firstNoteTimestamp, expectedEvent](const PlaybackEventsMap& triggeredEvents,
@@ -1104,7 +1104,7 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Note)
 
         EXPECT_EQ(eventList.size(), 1);
 
-        const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(eventList.front());
+        const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(eventList.front());
 
         EXPECT_TRUE(noteEvent.arrangementCtx().actualTimestamp == expectedEvent.arrangementCtx().actualTimestamp);
         EXPECT_FALSE(noteEvent.expressionCtx() == expectedEvent.expressionCtx());
@@ -1168,8 +1168,8 @@ TEST_F(Engraving_PlaybackModelTests, Note_Entry_Playback_Chord)
         EXPECT_EQ(actualEvents.size(), expectedEvents.size());
 
         for (size_t i = 0; i < expectedEvents.size(); ++i) {
-            const mu::mpe::NoteEvent expectedNoteEvent = std::get<mu::mpe::NoteEvent>(expectedEvents.at(i));
-            const mu::mpe::NoteEvent actualNoteEvent = std::get<mu::mpe::NoteEvent>(actualEvents.at(i));
+            const mpe::NoteEvent expectedNoteEvent = std::get<mpe::NoteEvent>(expectedEvents.at(i));
+            const mpe::NoteEvent actualNoteEvent = std::get<mpe::NoteEvent>(actualEvents.at(i));
 
             EXPECT_TRUE(actualNoteEvent.arrangementCtx().actualTimestamp == 0);
             EXPECT_FALSE(actualNoteEvent.expressionCtx() == expectedNoteEvent.expressionCtx());

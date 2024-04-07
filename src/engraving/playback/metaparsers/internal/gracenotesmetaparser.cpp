@@ -25,6 +25,7 @@
 #include "dom/chord.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
 void GraceNotesMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {

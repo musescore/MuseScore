@@ -25,6 +25,7 @@
 #include "dom/arpeggio.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
 void ArpeggioMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {

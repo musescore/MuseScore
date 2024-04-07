@@ -128,7 +128,7 @@ void BeamTremoloLayout::offsetBeamToRemoveCollisions(const BeamBase* item, const
             while (true) {
                 double desiredY = proportionAlongX * (endY - startY) + startY;
                 bool beamClearsAnchor = (ldata->up && RealIsEqualOrLess(desiredY, anchor.y() + reduction))
-                                        || (!ldata->up && RealIsEqualOrMore(desiredY, anchor.y() - reduction));
+                                        || (!ldata->up && mu::RealIsEqualOrMore(desiredY, anchor.y() - reduction));
                 if (beamClearsAnchor) {
                     break;
                 }
@@ -858,7 +858,7 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamBase::LayoutData* ldata, con
                                           ChordRest* startChord, ChordRest* endChord,
                                           int staffLines)
 {
-    bool isFullSize = RealIsEqual(ldata->mag(), 1.0) && !ldata->isGrace;
+    bool isFullSize = mu::RealIsEqual(ldata->mag(), 1.0) && !ldata->isGrace;
     bool useWideBeams = conf.styleB(Sid::useWideBeams);
     int startBeams = strokeCount(ldata, startChord);
     int endBeams = strokeCount(ldata, endChord);

@@ -54,7 +54,7 @@ void Bezier::coefficients(double t, double& a, double& b, double& c, double& d)
 
 Bezier Bezier::bezierOnInterval(double t0, double t1) const
 {
-    if (RealIsNull(t0) && RealIsEqual(t1, 1)) {
+    if (mu::RealIsNull(t0) && mu::RealIsEqual(t1, 1)) {
         return *this;
     }
     Bezier bezier = *this;

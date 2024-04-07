@@ -39,7 +39,8 @@
 #include "types/typesconv.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const int nominalPositionTick) const
 {
@@ -63,7 +64,7 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
 
 PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int nominalPositionTick) const
 {
-    mu::mpe::PlaybackParamMap result;
+    mpe::PlaybackParamMap result;
 
     auto it = mu::findLessOrEqual(m_playbackParamMap, nominalPositionTick);
     if (it == m_playbackParamMap.end()) {
@@ -81,7 +82,7 @@ PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int
 
 PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score) const
 {
-    mu::mpe::PlaybackParamMap result;
+    mpe::PlaybackParamMap result;
 
     for (const auto& pair : m_playbackParamMap) {
         result.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);

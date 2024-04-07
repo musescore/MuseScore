@@ -232,12 +232,12 @@ void MixerChannelItem::loadInputParams(const AudioInputParams& newParams)
 
 void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
 {
-    if (!RealIsEqual(m_outParams.volume, newParams.volume)) {
+    if (!mu::RealIsEqual(m_outParams.volume, newParams.volume)) {
         m_outParams.volume = newParams.volume;
         emit volumeLevelChanged(newParams.volume);
     }
 
-    if (!RealIsEqual(m_outParams.balance, newParams.balance)) {
+    if (!mu::RealIsEqual(m_outParams.balance, newParams.balance)) {
         m_outParams.balance = newParams.balance;
         emit balanceChanged(newParams.balance);
     }
@@ -525,7 +525,7 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
 
             auto it = m_auxSendItems.find(idx);
             if (it == m_auxSendItems.end()) {
-                if (!RealIsEqual(m_outParams.auxSends.at(idx).signalAmount, newAudioSignalAmount)) {
+                if (!mu::RealIsEqual(m_outParams.auxSends.at(idx).signalAmount, newAudioSignalAmount)) {
                     m_outParams.auxSends.at(idx).signalAmount = newAudioSignalAmount;
                     auxParamsChanged = true;
                 }

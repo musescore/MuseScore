@@ -2254,9 +2254,9 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             double spacing = s->spacing();
             double widthWithoutSpacing = s->width() - spacing;
             double segmentStretch = s->stretch();
-            x += spacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            x += spacing * (mu::RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s->mutldata()->setPosX(x);
-            x += widthWithoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
+            x += widthWithoutSpacing * (mu::RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s = s->nextEnabled();
         }
     }

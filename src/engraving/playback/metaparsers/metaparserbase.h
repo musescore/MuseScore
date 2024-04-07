@@ -35,7 +35,7 @@ template<class T>
 class MetaParserBase
 {
 public:
-    static void parse(const EngravingItem* item, const RenderingContext& context, mpe::ArticulationMap& result)
+    static void parse(const EngravingItem* item, const RenderingContext& context, muse::mpe::ArticulationMap& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
@@ -45,9 +45,10 @@ public:
     }
 
 protected:
-    static void appendArticulationData(mpe::ArticulationMeta&& meta, mpe::ArticulationMap& result)
+    static void appendArticulationData(muse::mpe::ArticulationMeta&& meta, muse::mpe::ArticulationMap& result)
     {
-        result.emplace(meta.type, mpe::ArticulationAppliedData(std::forward<mpe::ArticulationMeta>(meta), 0, mpe::HUNDRED_PERCENT));
+        result.emplace(meta.type,
+                       muse::mpe::ArticulationAppliedData(std::forward<muse::mpe::ArticulationMeta>(meta), 0, muse::mpe::HUNDRED_PERCENT));
     }
 };
 }

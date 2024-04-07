@@ -1245,7 +1245,7 @@ static float easingFactor(const float x, const ChangeMethod method)
             return (std::sqrt(1.f - std::pow(-2 * x + 2, 2)) + 1) / 2;
         }
     case ChangeMethod::EXPONENTIAL:
-        if (RealIsEqual(x, 1.f)) {
+        if (mu::RealIsEqual(x, 1.f)) {
             return x;
         } else {
             return 1.f - std::pow(2, -10 * x);

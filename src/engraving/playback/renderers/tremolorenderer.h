@@ -29,15 +29,15 @@ namespace mu::engraving {
 class TremoloRenderer : public RenderBase<TremoloRenderer>
 {
 public:
-    static const mpe::ArticulationTypeSet& supportedTypes();
+    static const muse::mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
-                         mpe::PlaybackEventList& result);
+    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+                         muse::mpe::PlaybackEventList& result);
 
 private:
     static int stepDurationTicks(const Chord* chord, int tremoloLines);
-    static void buildAndAppendEvents(const Chord* chord, const mpe::ArticulationType type, const int stepDurationTicks, const int startTick,
-                                     const RenderingContext& context, mpe::PlaybackEventList& result);
+    static void buildAndAppendEvents(const Chord* chord, const muse::mpe::ArticulationType type, const int stepDurationTicks,
+                                     const int startTick, const RenderingContext& context, muse::mpe::PlaybackEventList& result);
 };
 }
 

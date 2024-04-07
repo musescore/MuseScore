@@ -42,7 +42,8 @@
 #include "filters/chordfilter.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
 {
@@ -54,7 +55,7 @@ static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr
                           0);
 
     ArticulationMap articulations;
-    articulations.emplace(ArticulationType::Standard, mu::mpe::ArticulationAppliedData(std::move(meta), 0, mu::mpe::HUNDRED_PERCENT));
+    articulations.emplace(ArticulationType::Standard, mpe::ArticulationAppliedData(std::move(meta), 0, mpe::HUNDRED_PERCENT));
     articulations.preCalculateAverageData();
 
     return articulations;

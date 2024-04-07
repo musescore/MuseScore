@@ -688,11 +688,11 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     // Try to make the gaps equal, taking the spread factors and maximum spacing into account.
     static const int maxPasses { 20 };     // Saveguard to prevent endless loops.
     int pass { 0 };
-    while (!RealIsNull(spaceRemaining) && (ngaps > 0) && (++pass < maxPasses)) {
+    while (!mu::RealIsNull(spaceRemaining) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         double smallest     { vgdl.smallest() };
         double nextSmallest { vgdl.smallest(smallest) };
-        if (RealIsNull(smallest) || RealIsNull(nextSmallest)) {
+        if (mu::RealIsNull(smallest) || mu::RealIsNull(nextSmallest)) {
             break;
         }
 
@@ -703,7 +703,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
         double addedSpace { 0.0 };
         VerticalGapDataList modified;
         for (VerticalGapData* vgd : vgdl) {
-            if (!RealIsNull(vgd->spacing() - smallest)) {
+            if (!mu::RealIsNull(vgd->spacing() - smallest)) {
                 continue;
             }
             double step { nextSmallest - vgd->spacing() };
@@ -711,7 +711,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
                 continue;
             }
             step = vgd->addSpacing(step);
-            if (!RealIsNull(step)) {
+            if (!mu::RealIsNull(step)) {
                 addedSpace += step * vgd->factor();
                 modified.push_back(vgd);
                 ++ngaps;
@@ -736,13 +736,13 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
     spaceRemaining = std::min(maxPageFill * static_cast<double>(vgdl.size()), spaceRemaining);
     pass = 0;
     ngaps = 1;
-    while (!RealIsNull(spaceRemaining) && !RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
+    while (!mu::RealIsNull(spaceRemaining) && !mu::RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         double addedSpace { 0.0 };
         double step { spaceRemaining / vgdl.sumStretchFactor() };
         for (VerticalGapData* vgd : vgdl) {
             double res { vgd->addFillSpacing(step, maxPageFill) };
-            if (!RealIsNull(res)) {
+            if (!mu::RealIsNull(res)) {
                 addedSpace += res * vgd->factor();
                 ++ngaps;
             }

@@ -200,12 +200,12 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
         double chordX = -chordShape.left();
         double diff = chordX - arpX;
 
-        if (!RealIsNull(diff)) {
+        if (!mu::RealIsNull(diff)) {
             double inset = insetDistance(item, ctx, item->mag(), chord);
             largestOverlap = std::min(largestOverlap, diff + inset);
         }
     }
-    if (!RealIsNull(largestOverlap)) {
+    if (!mu::RealIsNull(largestOverlap)) {
         item->mutldata()->moveX(largestOverlap);
     }
 }

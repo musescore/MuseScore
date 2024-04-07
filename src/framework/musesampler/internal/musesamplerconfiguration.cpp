@@ -37,28 +37,28 @@ void MuseSamplerConfiguration::init()
 }
 
 #if defined(Q_OS_LINUX)
-static const io::path_t LIB_NAME("libMuseSamplerCoreLib.so");
-static const io::path_t FALLBACK_PATH = LIB_NAME;
+static const muse::io::path_t LIB_NAME("libMuseSamplerCoreLib.so");
+static const muse::io::path_t FALLBACK_PATH = LIB_NAME;
 
-io::path_t MuseSamplerConfiguration::defaultPath() const
+muse::io::path_t MuseSamplerConfiguration::defaultPath() const
 {
     return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + LIB_NAME;
 }
 
 #elif defined(Q_OS_MAC)
-static const io::path_t LIB_NAME("libMuseSamplerCoreLib.dylib");
-static const io::path_t FALLBACK_PATH = "/usr/local/lib/" + LIB_NAME;
+static const muse::io::path_t LIB_NAME("libMuseSamplerCoreLib.dylib");
+static const muse::io::path_t FALLBACK_PATH = "/usr/local/lib/" + LIB_NAME;
 
-io::path_t MuseSamplerConfiguration::defaultPath() const
+muse::io::path_t MuseSamplerConfiguration::defaultPath() const
 {
     return globalConfig()->genericDataPath() + "/MuseSampler/lib/" + LIB_NAME;
 }
 
 #else
-static const io::path_t LIB_NAME("MuseSamplerCoreLib.dll");
-static const io::path_t FALLBACK_PATH = LIB_NAME;
+static const muse::io::path_t LIB_NAME("MuseSamplerCoreLib.dll");
+static const muse::io::path_t FALLBACK_PATH = LIB_NAME;
 
-io::path_t MuseSamplerConfiguration::defaultPath() const
+muse::io::path_t MuseSamplerConfiguration::defaultPath() const
 {
     return globalConfig()->genericDataPath() + "\\MuseSampler\\lib\\" + LIB_NAME;
 }
@@ -66,7 +66,7 @@ io::path_t MuseSamplerConfiguration::defaultPath() const
 #endif
 
 // Preferred location
-io::path_t MuseSamplerConfiguration::userLibraryPath() const
+muse::io::path_t MuseSamplerConfiguration::userLibraryPath() const
 {
     // Override for testing/dev:
     if (const char* path = std::getenv("MUSESAMPLER_PATH")) {
@@ -82,7 +82,7 @@ io::path_t MuseSamplerConfiguration::userLibraryPath() const
 }
 
 // If installed on the system instead of user dir...do this as a backup
-io::path_t MuseSamplerConfiguration::fallbackLibraryPath() const
+muse::io::path_t MuseSamplerConfiguration::fallbackLibraryPath() const
 {
     return FALLBACK_PATH;
 }

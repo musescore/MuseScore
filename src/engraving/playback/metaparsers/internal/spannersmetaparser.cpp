@@ -33,6 +33,7 @@
 #include "playback/filters/spannerfilter.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
 bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
 {
@@ -164,7 +165,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     appendArticulationData(std::move(articulationMeta), result);
 }
 
-mu::mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, const int positionTick, const int durationTicks)
+mpe::duration_t SpannersMetaParser::spannerDuration(const Score* score, const int positionTick, const int durationTicks)
 {
     if (!score) {
         return 0;

@@ -30,21 +30,21 @@ struct DisclosurePattern;
 class OrnamentsRenderer : public RenderBase<OrnamentsRenderer>
 {
 public:
-    static const mpe::ArticulationTypeSet& supportedTypes();
+    static const muse::mpe::ArticulationTypeSet& supportedTypes();
 
-    static void doRender(const EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
-                         mpe::PlaybackEventList& result);
+    static void doRender(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+                         muse::mpe::PlaybackEventList& result);
 
 private:
-    static void convert(const mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
-                        mpe::PlaybackEventList& result);
+    static void convert(const muse::mpe::ArticulationType type, const DisclosurePattern& pattern, NominalNoteCtx&& noteCtx,
+                        muse::mpe::PlaybackEventList& result);
 
     static int alterationsNumberByTempo(const double beatsPerSeconds, const int principalNoteDurationTicks,
                                         const DisclosurePattern& pattern);
 
-    static void createEvents(const mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
+    static void createEvents(const muse::mpe::ArticulationType type, NominalNoteCtx& noteCtx, const int alterationsCount,
                              const int availableDurationTicks, const int overallDurationTicks,
-                             const std::vector<mpe::pitch_level_t>& pitchOffsets, mpe::PlaybackEventList& result);
+                             const std::vector<muse::mpe::pitch_level_t>& pitchOffsets, muse::mpe::PlaybackEventList& result);
 };
 }
 

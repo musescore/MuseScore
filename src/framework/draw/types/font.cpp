@@ -40,7 +40,7 @@ bool Font::operator ==(const Font& other) const
     // && m_type == other.m_type
 
     return m_family == other.m_family
-           && RealIsEqual(m_pointSizeF, other.m_pointSizeF)
+           && mu::RealIsEqual(m_pointSizeF, other.m_pointSizeF)
            && m_weight == other.m_weight
            && m_style == other.m_style
            && m_noFontMerging == other.m_noFontMerging

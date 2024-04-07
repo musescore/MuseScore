@@ -46,7 +46,7 @@ static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySo
 
 static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
 static const AudioResourceAttributes DEFAULT_AUDIO_RESOURCE_ATTRIBUTES = {
-    { PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING },
+    { PLAYBACK_SETUP_DATA_ATTRIBUTE, muse::mpe::GENERIC_SETUP_DATA_STRING },
     { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(DEFAULT_SOUND_FONT_NAME) } };
 
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META

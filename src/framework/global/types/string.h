@@ -509,6 +509,7 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::AsciiStri
 namespace muse {
 using Char = mu::Char;
 using String = mu::String;
+using StringList = mu::StringList;
 }
 
 #endif // MU_GLOBAL_STRING_H

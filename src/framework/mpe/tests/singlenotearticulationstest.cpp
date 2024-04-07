@@ -26,8 +26,8 @@
 #include "mpe/tests/utils/articulationutils.h"
 
 using namespace mu;
-using namespace mu::mpe;
-using namespace mu::mpe::tests;
+using namespace muse::mpe;
+using namespace muse::mpe::tests;
 
 class MPE_SingleNoteArticulationsTest : public ::testing::Test
 {

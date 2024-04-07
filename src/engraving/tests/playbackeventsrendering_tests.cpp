@@ -34,9 +34,9 @@
 #include "utils/scorerw.h"
 #include "playback/playbackeventsrenderer.h"
 
-using namespace mu;
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 static const String PLAYBACK_EVENTS_RENDERING_DIR("playbackeventsrenderer_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
@@ -54,7 +54,7 @@ protected:
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
-        m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mu::mpe::DynamicType::Natural));
+        m_dummyPatternSegment.expressionPattern = tests::createSimpleExpressionPattern(dynamicLevelFromType(mpe::DynamicType::Natural));
         m_dummyPattern.emplace(0, m_dummyPatternSegment);
 
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
@@ -118,13 +118,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_TenutoAccent)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
 
-    mu::mpe::NoteEvent event = std::get<mu::mpe::NoteEvent>(result.begin()->second.front());
+    mpe::NoteEvent event = std::get<mpe::NoteEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the note event will match time expectations of the very first quarter note with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -134,7 +134,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_TenutoAccent)
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
 
     // [THEN] We expect that the note event will match expression expectations of our note
-    EXPECT_EQ(event.expressionCtx().nominalDynamicLevel, dynamicLevelFromType(mu::mpe::DynamicType::Natural));
+    EXPECT_EQ(event.expressionCtx().nominalDynamicLevel, dynamicLevelFromType(mpe::DynamicType::Natural));
     EXPECT_EQ(event.expressionCtx().articulations.size(), 2);
     EXPECT_TRUE(event.expressionCtx().articulations.contains(ArticulationType::Tenuto));
     EXPECT_TRUE(event.expressionCtx().articulations.contains(ArticulationType::Accent));
@@ -164,13 +164,13 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_NoArticulations)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that a single note event will be rendered from the chord
     EXPECT_EQ(result.size(), 1);
 
-    mu::mpe::NoteEvent event = std::get<mu::mpe::NoteEvent>(result.begin()->second.front());
+    mpe::NoteEvent event = std::get<mpe::NoteEvent>(result.begin()->second.front());
 
     // [THEN] We expect that the note event will match time expectations of the very first quarter note with 120BPM tempo
     EXPECT_EQ(event.arrangementCtx().nominalTimestamp, 0);
@@ -180,7 +180,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_NoArticulations)
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, pitchLevel(PitchClass::F, 4));
 
     // [THEN] We expect that the note event will match expression expectations of our note
-    EXPECT_EQ(event.expressionCtx().nominalDynamicLevel, dynamicLevelFromType(mu::mpe::DynamicType::Natural));
+    EXPECT_EQ(event.expressionCtx().nominalDynamicLevel, dynamicLevelFromType(mpe::DynamicType::Natural));
     EXPECT_EQ(event.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(event.expressionCtx().articulations.contains(ArticulationType::Standard));
 }
@@ -206,7 +206,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Rest)
 
     // [WHEN] Request to render the rest
     PlaybackEventsMap result;
-    m_renderer.render(rest, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(rest, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that a single rest event will be rendered
@@ -247,7 +247,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Modern)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -255,7 +255,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Modern)
         EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Trill
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -305,7 +305,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Unexpandable_Trill)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that the only one note event will be rendered,
@@ -341,7 +341,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -349,7 +349,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Trill_Baroque)
         EXPECT_EQ(pair.second.size(), expectedTrillSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - TrillBaroque
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -428,7 +428,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -436,7 +436,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Regular)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Turn
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -500,7 +500,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -508,7 +508,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -573,7 +573,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -581,7 +581,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Turn_Inverted_Slash_Var
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - InvertedTurn
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -646,7 +646,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -654,7 +654,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Upper_Mordent)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Upper Mordent
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -719,7 +719,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -727,7 +727,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Lower_Mordent)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Lower Mordent
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -780,7 +780,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -788,7 +788,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Glissando)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -841,7 +841,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -849,7 +849,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Continuous_Glissando)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Continuous Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -903,7 +903,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -911,7 +911,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Glissando_NoPlay)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Standard articulation
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -974,7 +974,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
 
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -982,7 +982,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1014,7 +1014,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
 
     PlaybackEventsMap result2;
-    m_renderer.render(secondChord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(secondChord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result2);
 
     for (const auto& pair : result2) {
@@ -1022,7 +1022,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1075,7 +1075,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
 
     // [WHEN] Request to render a chord with the A4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1083,7 +1083,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Discrete Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1119,7 +1119,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
 
     // [WHEN] Request to render a chord with the A4 note on it
     result.clear();
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1127,7 +1127,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Glissando_on_tied_notes)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Continuous Glissando
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1186,7 +1186,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1194,7 +1194,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1262,7 +1262,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1270,7 +1270,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1332,7 +1332,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1340,7 +1340,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1400,7 +1400,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
 
     // [WHEN] Request to render a chord with the F4 note on it
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] The events map is not empty
@@ -1411,7 +1411,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied - PreAppoggiatura
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1470,7 +1470,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1478,7 +1478,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1546,7 +1546,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AppoggiaturaChord_Post)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1554,7 +1554,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AppoggiaturaChord_Post)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1616,7 +1616,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1624,7 +1624,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1686,7 +1686,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1694,7 +1694,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1756,7 +1756,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1764,7 +1764,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1824,7 +1824,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up_TiedNotes)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1832,7 +1832,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up_TiedNotes)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1895,7 +1895,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1903,7 +1903,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -1966,7 +1966,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -1974,7 +1974,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -2037,7 +2037,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -2045,7 +2045,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -2101,7 +2101,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -2109,7 +2109,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Bracket)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -2165,7 +2165,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     for (const auto& pair : result) {
@@ -2173,7 +2173,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Note_Tremolo)
         EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
 
         for (size_t i = 0; i < pair.second.size(); ++i) {
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -2229,7 +2229,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that rendered note events number will match expectations
@@ -2239,7 +2239,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Single_Chord_Tremolo)
         for (int noteIdx = 0; noteIdx < expectedSubNotesCount; ++noteIdx) {
             int eventIdx = (chordIdx * expectedSubNotesCount) + noteIdx;
 
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(result.begin()->second.at(eventIdx));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -2296,7 +2296,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
 
     // [WHEN] Request to render a chord
     PlaybackEventsMap result;
-    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+    m_renderer.render(chord, dynamicLevelFromType(mpe::DynamicType::Natural),
                       ArticulationType::Standard, m_defaultProfile, result);
 
     // [THEN] We expect that rendered note events number will match expectations
@@ -2306,7 +2306,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Two_Chords_Tremolo)
         for (int noteIdx = 0; noteIdx < chordNotesCount; ++noteIdx) {
             int eventIdx = (chordIdx * chordNotesCount) + noteIdx;
 
-            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(result.begin()->second.at(eventIdx));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(result.begin()->second.at(eventIdx));
 
             // [THEN] We expect that each note event has only one articulation applied
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
@@ -2352,7 +2352,7 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Pauses)
                     continue;
                 }
 
-                m_renderer.render(toChord(el), tickPositionOffset, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                m_renderer.render(toChord(el), tickPositionOffset, dynamicLevelFromType(mpe::DynamicType::Natural),
                                   ArticulationType::Standard, m_defaultProfile, result);
             }
         }

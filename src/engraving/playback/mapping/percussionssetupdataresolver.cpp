@@ -23,7 +23,8 @@
 #include "percussionssetupdataresolver.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 PlaybackSetupData PercussionsSetupDataResolver::doResolve(const Instrument* instrument)
 {

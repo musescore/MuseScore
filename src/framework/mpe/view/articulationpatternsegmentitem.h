@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
-#define MU_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
+#ifndef MUSE_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
+#define MUSE_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
 
 #include <QObject>
 #include <QList>
@@ -29,7 +29,7 @@
 
 #include "mpetypes.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 class ArticulationPatternSegmentItem : public QObject
 {
     Q_OBJECT
@@ -119,4 +119,4 @@ private:
 };
 }
 
-#endif // MU_MPE_ARTICULATIONPATTERNSEGMENTITEM_H
+#endif // MUSE_MPE_ARTICULATIONPATTERNSEGMENTITEM_H

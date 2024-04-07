@@ -1460,7 +1460,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     {
         double oldSpatium = static_cast<EngravingItem*>(oldElement)->spatium();
         double newSpatium = newElement->spatium();
-        if (!RealIsEqual(oldSpatium, newSpatium)) {
+        if (!mu::RealIsEqual(oldSpatium, newSpatium)) {
             newElement->spatiumChanged(oldSpatium, newSpatium);
         }
     };

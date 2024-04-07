@@ -29,7 +29,7 @@
 #include "internal/apitypes.h"
 #include "internal/libhandler.h"
 
-typedef typename std::variant<mu::mpe::NoteEvent, muse::musesampler::AuditionStartNoteEvent,
+typedef typename std::variant<muse::mpe::NoteEvent, muse::musesampler::AuditionStartNoteEvent,
                               muse::musesampler::AuditionStopNoteEvent> MuseSamplerEvent;
 
 template<>
@@ -61,7 +61,7 @@ struct std::less<MuseSamplerEvent>
 };
 
 namespace muse::musesampler {
-class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mu::mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
+class MuseSamplerSequencer : public muse::audio::AbstractEventSequencer<mpe::NoteEvent, AuditionStartNoteEvent, AuditionStopNoteEvent>
 {
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, IMuseSamplerTracksPtr tracks, std::string&& defaultPresetCode);
@@ -74,7 +74,8 @@ private:
     void clearAllTracks();
     void finalizeAllTracks();
 
-    ms_Track resolveTrack(mu::mpe::staff_layer_idx_t staffLayerIdx);
+    ms_Track resolveTrack(mpe::staff_layer_idx_t staffLayerIdx);
+
     const TrackList& allTracks() const;
 
     void loadParams(const mpe::PlaybackParamMap& changes);
@@ -92,10 +93,9 @@ private:
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
 
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;
-    void parseArticulations(const mu::mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag,
-                            ms_NoteHead& notehead) const;
+    void parseArticulations(const mpe::ArticulationMap& articulations, ms_NoteArticulation& articulationFlag, ms_NoteHead& notehead) const;
 
-    void parseOffStreamParams(const mu::mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
+    void parseOffStreamParams(const mpe::PlaybackParamMap& params, std::string& presets, std::string& textArticulation) const;
 
     MuseSamplerLibHandlerPtr m_samplerLib = nullptr;
     ms_MuseSampler m_sampler = nullptr;

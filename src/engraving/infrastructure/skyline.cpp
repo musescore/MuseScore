@@ -343,11 +343,11 @@ void SkylineLine::paint(Painter& painter) const
     for (const SkylineSegment& s : *this) {
         x2 = x1 + s.w;
         if (valid(s)) {
-            if (pvalid && !RealIsEqual(y, s.y)) {
+            if (pvalid && !mu::RealIsEqual(y, s.y)) {
                 painter.drawLine(LineF(x1, y, x1, s.y));
             }
             y = s.y;
-            if (!RealIsEqual(x1, x2)) {
+            if (!mu::RealIsEqual(x1, x2)) {
                 painter.drawLine(LineF(x1, y, x2, y));
             }
             pvalid = true;

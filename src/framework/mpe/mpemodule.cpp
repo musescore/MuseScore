@@ -32,7 +32,7 @@
 
 using namespace mu;
 using namespace mu::modularity;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 static void mpe_init_qrc()
 {

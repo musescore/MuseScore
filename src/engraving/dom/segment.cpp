@@ -1276,7 +1276,7 @@ bool Segment::allElementsInvisible() const
         track_idx_t endTrack = staffIdx * VOICES + VOICES;
         for (track_idx_t track = staffIdx * VOICES; track < endTrack; ++track) {
             EngravingItem* e = m_elist[track];
-            if (e && e->visible() && !RealIsEqual(e->width(), 0.0)) {
+            if (e && e->visible() && !mu::RealIsEqual(e->width(), 0.0)) {
                 return false;
             }
         }
@@ -2787,7 +2787,7 @@ double Segment::computeDurationStretch(const Segment* prevSeg, Fraction minTicks
         double dMinTicks = minTicks.toDouble();
         double dMaxTicks = maxTicks.toDouble();
         double maxSysRatio = dMaxTicks / dMinTicks;
-        if (RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
+        if (mu::RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
             /* HACK: we trick the system to ignore the shortest note and use the "next"
              * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
             dMinTicks *= 2.0;

@@ -29,7 +29,8 @@
 #include "playback/metaparsers/notearticulationsparser.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 static constexpr bool FILTER_UNPLAYABLE = true;
 
@@ -112,7 +113,7 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
     timestamp_t timestamp = graceCtx.graceNotesTimestampFrom;
 
     for (const Chord* graceChord : graceChords) {
-        duration_t duration = RealRound(
+        duration_t duration = mu::RealRound(
             graceCtx.durationFactor * durationFromTempoAndTicks(ctx.beatsPerSecond.val, graceChord->durationTypeTicks().ticks()), 0);
 
         for (const Note* graceNote : graceChord->notes()) {

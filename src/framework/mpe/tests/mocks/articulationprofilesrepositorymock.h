@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_ARTICULATIONPROFILESREPOSITORYMOCK_H
-#define MU_MPE_ARTICULATIONPROFILESREPOSITORYMOCK_H
+#ifndef MUSE_MPE_ARTICULATIONPROFILESREPOSITORYMOCK_H
+#define MUSE_MPE_ARTICULATIONPROFILESREPOSITORYMOCK_H
 
 #include <gmock/gmock.h>
 
 #include "mpe/iarticulationprofilesrepository.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 class ArticulationProfilesRepositoryMock : public IArticulationProfilesRepository
 {
 public:
@@ -39,4 +39,4 @@ public:
 };
 }
 
-#endif // MU_MPE_ARTICULATIONPROFILESREPOSITORYMOCK_H
+#endif // MUSE_MPE_ARTICULATIONPROFILESREPOSITORYMOCK_H

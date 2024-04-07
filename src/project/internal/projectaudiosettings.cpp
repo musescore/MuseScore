@@ -140,8 +140,8 @@ void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId,
     bool paramsChanged = it == m_trackOutputParamsMap.cend();
 
     if (!paramsChanged) {
-        paramsChanged |= !RealIsEqual(it->second.volume, params.volume);
-        paramsChanged |= !RealIsEqual(it->second.balance, params.balance);
+        paramsChanged |= !mu::RealIsEqual(it->second.volume, params.volume);
+        paramsChanged |= !mu::RealIsEqual(it->second.balance, params.balance);
         paramsChanged |= (it->second.fxChain != params.fxChain);
         paramsChanged |= (it->second.auxSends != params.auxSends);
     }

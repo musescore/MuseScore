@@ -22,7 +22,7 @@
 
 #include "articulationpatternsegmentitem.h"
 
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 ArticulationPatternSegmentItem::ArticulationPatternSegmentItem(QObject* parent, const ArticulationPatternSegment& segment,
                                                                const int scopePositionFrom, const int scopePositionTo)

@@ -25,11 +25,11 @@
 #include <unordered_set>
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 PlaybackSetupData KeyboardsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, muse::mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "celesta", { SoundId::Celesta, SoundCategory::Keyboards, {}, {} } },
         { "clavichord", { SoundId::Clavichord, SoundCategory::Keyboards, { SoundSubCategory::Baroque }, {} } },
         { "clavinet", { SoundId::Clavichord, SoundCategory::Keyboards, { SoundSubCategory::Electric }, {} } },

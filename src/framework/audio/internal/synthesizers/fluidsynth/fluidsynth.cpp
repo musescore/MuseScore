@@ -34,7 +34,7 @@ using namespace mu;
 using namespace muse::midi;
 using namespace muse::audio;
 using namespace muse::audio::synth;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 static constexpr double FLUID_GLOBAL_VOLUME_GAIN = 4.8;
 static constexpr int DEFAULT_MIDI_VOLUME = 100;

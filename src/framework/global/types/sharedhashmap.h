@@ -227,4 +227,9 @@ protected:
 };
 }
 
+namespace muse {
+template<typename KeyType, typename ValType>
+using SharedHashMap = mu::SharedHashMap<KeyType, ValType>;
+}
+
 #endif // MU_GLOBAL_SHAREDHASHMAP_H

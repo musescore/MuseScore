@@ -32,8 +32,9 @@
 #include "dom/tempo.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
-static bool skipNote(const Note* note, const mu::mpe::ArticulationMap& articulationMap)
+static bool skipNote(const Note* note, const mpe::ArticulationMap& articulationMap)
 {
     if (!isNotePlayable(note, articulationMap)) {
         return true;
@@ -52,7 +53,7 @@ static bool skipNote(const Note* note, const mu::mpe::ArticulationMap& articulat
     return false;
 }
 
-const mu::mpe::ArticulationTypeSet& BendsRenderer::supportedTypes()
+const mpe::ArticulationTypeSet& BendsRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::Multibend,
@@ -225,7 +226,7 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
     return ctx;
 }
 
-mu::mpe::NoteEvent BendsRenderer::buildSlightNoteEvent(const Note* note, const RenderingContext& ctx)
+mpe::NoteEvent BendsRenderer::buildSlightNoteEvent(const Note* note, const RenderingContext& ctx)
 {
     NominalNoteCtx slightNoteCtx(note, ctx);
     mpe::timestamp_t timeOffset = slightNoteCtx.duration / 2;
@@ -237,8 +238,8 @@ mu::mpe::NoteEvent BendsRenderer::buildSlightNoteEvent(const Note* note, const R
     return buildNoteEvent(std::move(slightNoteCtx));
 }
 
-mu::mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
-                                                 const mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap)
+mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
+                                             const mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap)
 {
     NominalNoteCtx noteCtx(startNote, startNoteCtx);
 
@@ -269,8 +270,8 @@ mu::mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Re
     return result;
 }
 
-mu::mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t bendStartTime, mpe::duration_t totalBendDuration,
-                                                   const PitchOffsets& pitchOffsets, const BendTimeFactorMap& timeFactorMap)
+mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t bendStartTime, mpe::duration_t totalBendDuration,
+                                               const PitchOffsets& pitchOffsets, const BendTimeFactorMap& timeFactorMap)
 {
     auto findFactorsAtTime = [&timeFactorMap](mpe::timestamp_t time) -> const BendTimeFactors& {
         auto it = mu::findLessOrEqual(timeFactorMap, time);
