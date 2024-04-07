@@ -4810,6 +4810,17 @@ void NotationInteraction::navigateToNextSyllable()
     mu::engraving::Segment* nextSegment = segment;
     while ((nextSegment = nextSegment->next1(mu::engraving::SegmentType::ChordRest))) {
         EngravingItem* el = nextSegment->element(track);
+        if (!el || !el->isChord()) {
+            const track_idx_t strack = track2staff(track) * VOICES;
+            const track_idx_t etrack = strack + VOICES;
+            for (track_idx_t t = strack; t < etrack; ++t) {
+                el = nextSegment->element(t);
+                if (el && el->isChord()) {
+                    break;
+                }
+            }
+        }
+
         if (el && el->isChord()) {
             break;
         }
@@ -4839,6 +4850,28 @@ void NotationInteraction::navigateToNextSyllable()
     score()->startCmd();
     ChordRest* cr = toChordRest(nextSegment->element(track));
     mu::engraving::Lyrics* toLyrics = cr->lyrics(verse, placement);
+
+    // If no lyrics in current track, check others
+    if (!toLyrics) {
+        const track_idx_t strack = track2staff(track) * VOICES;
+        const track_idx_t etrack = strack + VOICES;
+        for (track_idx_t t = strack; t < etrack; ++t) {
+            if (t == track) {
+                continue;
+            }
+            cr = toChordRest(nextSegment->element(t));
+            if (cr) {
+                toLyrics = cr->lyrics(verse, placement);
+                if (toLyrics) {
+                    break;
+                }
+            }
+        }
+    }
+
+    // Make sure we end up with either the cr of toLyrics or cr on correct track
+    cr = !toLyrics ? toChordRest(nextSegment->element(track)) : cr;
+
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics) {
         toLyrics = Factory::createLyrics(cr);

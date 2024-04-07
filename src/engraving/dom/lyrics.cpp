@@ -133,14 +133,29 @@ bool Lyrics::isMelisma() const
     // hyphenated?
     // if so, it is a melisma only if there is no lyric in same verse on next CR
     if (m_separator && (m_syllabic == LyricsSyllabic::BEGIN || m_syllabic == LyricsSyllabic::MIDDLE)) {
-        // find next CR on same track and check for existence of lyric in same verse
-        ChordRest* cr = chordRest();
+        // find next CR and check for existence of lyric in same verse and placement (in any voice)
+        const ChordRest* cr = chordRest();
         if (cr) {
-            Segment* s = cr->segment()->next1();
-            ChordRest* ncr = s ? s->nextChordRest(cr->track()) : 0;
-            if (ncr && !ncr->lyrics(m_no, placement())) {
-                return true;
+            const Segment* s = cr->segment()->next1();
+            const track_idx_t strack = staffIdx() * VOICES;
+            const track_idx_t etrack = strack + VOICES;
+            const track_idx_t lyrTrack = track();
+            const ChordRest* lyrVoiceNextCR = s ? s->nextChordRest(lyrTrack) : nullptr;
+            for (track_idx_t track = strack; track < etrack; ++track) {
+                const ChordRest* trackNextCR = s ? s->nextChordRest(track) : nullptr;
+                if (trackNextCR) {
+                    if (lyrTrack != track && lyrVoiceNextCR
+                        && !lyrVoiceNextCR->lyrics(m_no, placement()) && lyrVoiceNextCR->tick() < trackNextCR->tick()) {
+                        // There is an intermediary note in a different voice, this is a melisma
+                        return true;
+                    }
+                    if (trackNextCR->lyrics(m_no, placement())) {
+                        // Next note has lyrics, not a melisma just a dash
+                        return false;
+                    }
+                }
             }
+            return true;
         }
     }
 
@@ -406,6 +421,9 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
 
     switch (propertyId) {
     case Pid::PLACEMENT:
+        if (Lyrics* l = prevLyrics(this)) {
+            l->setNeedRemoveInvalidSegments();
+        }
         setPlacement(v.value<PlacementV>());
         break;
     case Pid::SYLLABIC:
@@ -433,6 +451,9 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     case Pid::VERSE:
+        if (Lyrics* l = prevLyrics(this)) {
+            l->setNeedRemoveInvalidSegments();
+        }
         m_no = v.toInt();
         break;
     default:
