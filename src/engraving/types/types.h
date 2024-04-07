@@ -151,7 +151,6 @@ enum class ElementType {
     STAFF_STATE,
     NOTEHEAD,
     NOTEDOT,
-    TREMOLO, // deprecated
     IMAGE,
     MEASURE,
     SELECTION,

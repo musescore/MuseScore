@@ -364,7 +364,6 @@ public:
     CONVERT(Ottava,        OTTAVA)
     CONVERT(LayoutBreak,   LAYOUT_BREAK)
     CONVERT(Segment,       SEGMENT)
-    CONVERT(Tremolo,       TREMOLO)
     CONVERT(System,        SYSTEM)
     CONVERT(Lyrics,        LYRICS)
     CONVERT(Stem,          STEM)
