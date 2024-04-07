@@ -42,6 +42,7 @@
 #include "accessibility/accessibleitem.h"
 #endif
 
+#include "barline.h"
 #include "box.h"
 #include "instrumentname.h"
 #include "measure.h"
@@ -1000,8 +1001,10 @@ void TextBlock::layout(const TextBase* t)
         }
         break;
         case ElementType::MEASURE: {
+            // ignore courtesy keysig, timesig, but fall back if needed
             Measure* m = toMeasure(e);
-            layoutWidth = m->ldata()->bbox().width();
+            const BarLine* bl = m->endBarLine();
+            layoutWidth = bl ? bl->segment()->x() + bl->ldata()->bbox().width() : m->width();
         }
         break;
         default:
