@@ -2381,7 +2381,7 @@ String EngravingItem::formatBarsAndBeats() const
     if (barbeat.first != 0) {
         result = mtrc("engraving", "Measure: %1").arg(barbeat.first);
 
-        if (!RealIsNull(barbeat.second)) {
+        if (!mu::RealIsNull(barbeat.second)) {
             result += u"; " + mtrc("engraving", "Beat: %1").arg(barbeat.second);
         }
     }

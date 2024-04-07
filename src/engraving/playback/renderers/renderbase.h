@@ -32,15 +32,15 @@ template<class T>
 class RenderBase
 {
 public:
-    static bool isAbleToRender(const mpe::ArticulationType& type)
+    static bool isAbleToRender(const muse::mpe::ArticulationType& type)
     {
-        const mpe::ArticulationTypeSet& supportedTypes = T::supportedTypes();
+        const muse::mpe::ArticulationTypeSet& supportedTypes = T::supportedTypes();
 
         return supportedTypes.find(type) != supportedTypes.cend();
     }
 
-    static void render(const EngravingItem* item, const mpe::ArticulationType preferredType, const RenderingContext& context,
-                       mpe::PlaybackEventList& result)
+    static void render(const EngravingItem* item, const muse::mpe::ArticulationType preferredType, const RenderingContext& context,
+                       muse::mpe::PlaybackEventList& result)
     {
         IF_ASSERT_FAILED(item) {
             return;
@@ -50,24 +50,24 @@ public:
     }
 
 protected:
-    static void updateArticulationBoundaries(const mpe::ArticulationType type, const mpe::timestamp_t nominalTimestamp,
-                                             const mpe::duration_t nominalDuration,
-                                             mpe::ArticulationMap& noteArticulationMap)
+    static void updateArticulationBoundaries(const muse::mpe::ArticulationType type, const muse::mpe::timestamp_t nominalTimestamp,
+                                             const muse::mpe::duration_t nominalDuration,
+                                             muse::mpe::ArticulationMap& noteArticulationMap)
     {
         if (noteArticulationMap.empty()) {
             return;
         }
 
-        const mpe::ArticulationAppliedData& articulationData = noteArticulationMap.at(type);
+        const muse::mpe::ArticulationAppliedData& articulationData = noteArticulationMap.at(type);
 
-        mpe::timestamp_t articulationOccupiedFrom = nominalTimestamp - articulationData.meta.timestamp;
-        mpe::timestamp_t articulationOccupiedTo = nominalTimestamp + nominalDuration - articulationData.meta.timestamp;
+        muse::mpe::timestamp_t articulationOccupiedFrom = nominalTimestamp - articulationData.meta.timestamp;
+        muse::mpe::timestamp_t articulationOccupiedTo = nominalTimestamp + nominalDuration - articulationData.meta.timestamp;
 
         noteArticulationMap.updateOccupiedRange(type,
-                                                mpe::occupiedPercentage(articulationOccupiedFrom,
-                                                                        articulationData.meta.overallDuration),
-                                                mpe::occupiedPercentage(articulationOccupiedTo,
-                                                                        articulationData.meta.overallDuration));
+                                                muse::mpe::occupiedPercentage(articulationOccupiedFrom,
+                                                                              articulationData.meta.overallDuration),
+                                                muse::mpe::occupiedPercentage(articulationOccupiedTo,
+                                                                              articulationData.meta.overallDuration));
     }
 };
 }

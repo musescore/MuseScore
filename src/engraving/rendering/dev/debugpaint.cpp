@@ -73,7 +73,7 @@ void DebugPaint::paintElementDebug(Painter& painter, const EngravingItem* item)
     RectF bbox = item->ldata()->bbox();
 
     if (item->isType(ElementType::SEGMENT)) {
-        if (RealIsNull(bbox.height())) {
+        if (mu::RealIsNull(bbox.height())) {
             bbox.setHeight(10.0);
             LOGD() << "Segment bbox height is null";
         }

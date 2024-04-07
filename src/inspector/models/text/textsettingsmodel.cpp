@@ -115,7 +115,7 @@ void TextSettingsModel::loadProperties()
     m_fontStyle->setIsEnabled(true);
 
     loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
+        return mu::RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
                ? QVariant() : elementPropertyValue.toDouble();
     });
 

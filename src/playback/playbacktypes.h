@@ -100,7 +100,7 @@ enum class SoundProfileType {
 };
 
 using SoundProfileName = String;
-using SoundProfileData = std::map<mpe::PlaybackSetupData, muse::audio::AudioResourceMeta>;
+using SoundProfileData = std::map<muse::mpe::PlaybackSetupData, muse::audio::AudioResourceMeta>;
 
 struct SoundProfile {
     SoundProfileType type = SoundProfileType::Undefined;
@@ -108,7 +108,7 @@ struct SoundProfile {
 
     SoundProfileData data;
 
-    const muse::audio::AudioResourceMeta& findResource(const mpe::PlaybackSetupData& key) const
+    const muse::audio::AudioResourceMeta& findResource(const muse::mpe::PlaybackSetupData& key) const
     {
         auto search = data.find(key);
         if (search != data.cend()) {

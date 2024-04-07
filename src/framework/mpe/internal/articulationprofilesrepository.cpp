@@ -32,7 +32,7 @@
 #include "internal/articulationstringutils.h"
 
 using namespace mu;
-using namespace mu::mpe;
+using namespace muse::mpe;
 using namespace mu::async;
 
 static const std::map<ArticulationFamily, io::path_t> DEFAULT_ARTICULATION_PROFILES =

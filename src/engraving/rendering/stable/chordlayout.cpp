@@ -204,7 +204,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
             double gapSize = arpeggioNoteDistance;
 
-            if (leftNote && RealIsNull(leftNote->x())) {
+            if (leftNote && mu::RealIsNull(leftNote->x())) {
                 if (downnote->line() > firstLedgerBelow || upnote->line() < firstLedgerAbove) {
                     gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
                 }
@@ -865,7 +865,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
                 int staffBottom = (staffType->lines() - 2) * 2;
-                if ((headSide && item->downLine() < staffBottom) || (!headSide && !RealIsEqualOrMore(y, (staffBottom + 1) * _lineDist))) {
+                if ((headSide && item->downLine() < staffBottom)
+                    || (!headSide && !mu::RealIsEqualOrMore(y, (staffBottom + 1) * _lineDist))) {
                     y += _spatium;
                 } else {
                     y += prevArticulation->height() + minDist;
@@ -1058,7 +1059,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             stacc = a;
         } else if (stacc && a->isAccent() && stacc->up() == a->up()
                    && (RealIsEqualOrLess(stacc->ldata()->pos().y(), 0.0)
-                       || RealIsEqualOrMore(stacc->ldata()->pos().y(), item->staff()->staffHeight()))) {
+                       || mu::RealIsEqualOrMore(stacc->ldata()->pos().y(), item->staff()->staffHeight()))) {
             // obviously, the accent doesn't have a cutout, so this value just artificially moves the stacc
             // and accent closer to each other to simulate some kind of kerning. Looks great using all musescore fonts,
             // though there is a possibility that a different font which has vertically-asymmetrical accents
@@ -1952,7 +1953,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 Chord* chord = toChord(e);
                 Chord::LayoutData* chordLdata = chord->mutldata();
                 if (chord->up()) {
-                    if (!RealIsNull(upOffset)) {
+                    if (!mu::RealIsNull(upOffset)) {
                         chordLdata->moveX(upOffset + centerAdjustUp + oversizeUp);
                         if (downDots && !upDots) {
                             chordLdata->moveX(dotAdjust);
@@ -1961,7 +1962,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         chordLdata->moveX(centerUp);
                     }
                 } else {
-                    if (!RealIsNull(downOffset)) {
+                    if (!mu::RealIsNull(downOffset)) {
                         chordLdata->moveX(downOffset + centerAdjustDown);
                         if (upDots && !downDots) {
                             chordLdata->moveX(dotAdjust);

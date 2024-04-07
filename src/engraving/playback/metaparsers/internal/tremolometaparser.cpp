@@ -30,29 +30,30 @@
 #include "../../renderingcontext.h"
 
 using namespace mu::engraving;
+using namespace muse;
 
-static mu::mpe::ArticulationType toArticulationType(TremoloType type)
+static mpe::ArticulationType toArticulationType(TremoloType type)
 {
     switch (type) {
     case TremoloType::R8:
     case TremoloType::C8:
-        return mu::mpe::ArticulationType::Tremolo8th;
+        return mpe::ArticulationType::Tremolo8th;
     case TremoloType::R16:
     case TremoloType::C16:
-        return mu::mpe::ArticulationType::Tremolo16th;
+        return mpe::ArticulationType::Tremolo16th;
     case TremoloType::R32:
     case TremoloType::C32:
-        return mu::mpe::ArticulationType::Tremolo32nd;
+        return mpe::ArticulationType::Tremolo32nd;
     case TremoloType::R64:
     case TremoloType::C64:
-        return mu::mpe::ArticulationType::Tremolo64th;
+        return mpe::ArticulationType::Tremolo64th;
     case TremoloType::BUZZ_ROLL:
-        return mu::mpe::ArticulationType::TremoloBuzz;
+        return mpe::ArticulationType::TremoloBuzz;
     case TremoloType::INVALID_TREMOLO:
         break;
     }
 
-    return mu::mpe::ArticulationType::Undefined;
+    return mpe::ArticulationType::Undefined;
 }
 
 void TremoloSingleMetaParser::doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result)

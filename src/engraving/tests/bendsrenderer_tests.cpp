@@ -32,7 +32,8 @@
 #include "playback/renderers/bendsrenderer.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 class Engraving_BendsRendererTests : public ::testing::Test
 {
@@ -145,9 +146,9 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
 
     // [THEN] Render the multibend as a single NoteEvent
     ASSERT_EQ(events.size(), 1);
-    ASSERT_TRUE(std::holds_alternative<mu::mpe::NoteEvent>(events.front()));
+    ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
-    const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(events.front());
+    const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.front());
 
     EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend));
     EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Distortion)); // persistent articulation applied
@@ -209,23 +210,23 @@ TEST_F(Engraving_BendsRendererTests, MultipleBendsOnOneChord)
 
     // [THEN] 3 events: 2 bends + 1 note
     ASSERT_EQ(events.size(), 3);
-    for (const mu::mpe::PlaybackEvent& event: events) {
-        ASSERT_TRUE(std::holds_alternative<mu::mpe::NoteEvent>(event));
+    for (const mpe::PlaybackEvent& event: events) {
+        ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
     }
 
     PitchCurve expectedBendCurve;
     expectedBendCurve.emplace(0, 0);
     expectedBendCurve.emplace(5000, 100);
 
-    const mu::mpe::NoteEvent& bendEvent1 = std::get<mu::mpe::NoteEvent>(events.at(0));
+    const mpe::NoteEvent& bendEvent1 = std::get<mpe::NoteEvent>(events.at(0));
     EXPECT_EQ(bendEvent1.pitchCtx().nominalPitchLevel, 1900);
     EXPECT_EQ(bendEvent1.pitchCtx().pitchCurve, expectedBendCurve);
 
-    const mu::mpe::NoteEvent& bendEvent2 = std::get<mu::mpe::NoteEvent>(events.at(1));
+    const mpe::NoteEvent& bendEvent2 = std::get<mpe::NoteEvent>(events.at(1));
     EXPECT_EQ(bendEvent2.pitchCtx().pitchCurve, expectedBendCurve);
     EXPECT_EQ(bendEvent2.pitchCtx().nominalPitchLevel, 2150);
 
-    const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(events.at(2));
+    const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(events.at(2));
     EXPECT_NE(noteEvent.pitchCtx().pitchCurve, expectedBendCurve);
     EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, 2400);
 }
@@ -253,13 +254,13 @@ TEST_F(Engraving_BendsRendererTests, PreBend)
 
     // [THEN] Chord successfully rendered
     ASSERT_EQ(events.size(), 1);
-    ASSERT_TRUE(std::holds_alternative<mu::mpe::NoteEvent>(events.front()));
+    ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // A3
     expectedPitchCurve.emplace(6600, -100); // Release down to G3
 
-    const mu::mpe::NoteEvent& event = std::get<mu::mpe::NoteEvent>(events.front());
+    const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, 2250); // A3
     EXPECT_EQ(event.arrangementCtx().actualDuration, 1500000); // quarters: A3 + A3 + G3
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
@@ -286,13 +287,13 @@ TEST_F(Engraving_BendsRendererTests, SlightBend)
 
     // [THEN] Chord successfully rendered
     ASSERT_EQ(events.size(), 1);
-    ASSERT_TRUE(std::holds_alternative<mu::mpe::NoteEvent>(events.front()));
+    ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // A3
     expectedPitchCurve.emplace(5000, 25); // 1/4
 
-    const mu::mpe::NoteEvent& event = std::get<mu::mpe::NoteEvent>(events.front());
+    const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.pitchCtx().nominalPitchLevel, 2250); // A3
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
 }
@@ -322,7 +323,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend_CustomTimeOffsets)
 
     // [THEN] Chord successfully rendered
     ASSERT_EQ(events.size(), 1);
-    ASSERT_TRUE(std::holds_alternative<mu::mpe::NoteEvent>(events.front()));
+    ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(events.front()));
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0);
@@ -333,7 +334,7 @@ TEST_F(Engraving_BendsRendererTests, Multibend_CustomTimeOffsets)
     expectedPitchCurve.emplace(4125, 250); // start offset: 25%
     expectedPitchCurve.emplace(4950, 150); // end offset: 50%
 
-    const mu::mpe::NoteEvent& event = std::get<mu::mpe::NoteEvent>(events.front());
+    const mpe::NoteEvent& event = std::get<mpe::NoteEvent>(events.front());
     EXPECT_EQ(event.arrangementCtx().actualDuration, 1500000);
     EXPECT_EQ(event.pitchCtx().pitchCurve, expectedPitchCurve);
 }

@@ -31,9 +31,9 @@
 #include "log.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
-void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
+void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, PlaybackSetupData& result) const
 {
     if (KeyboardsSetupDataResolver::resolve(instrument, result)) {
         return;
@@ -59,10 +59,10 @@ void PlaybackSetupDataResolver::resolveSetupData(const Instrument* instrument, m
            << ", family: " << instrument->family();
 }
 
-void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* instrument, mpe::PlaybackSetupData& result) const
+void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* instrument, PlaybackSetupData& result) const
 {
     if (instrument->hasStrings()) {
-        static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
+        static const PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
             SoundId::Guitar, SoundCategory::Strings, { SoundSubCategory::Acoustic,
                                                        SoundSubCategory::Nylon,
                                                        SoundSubCategory::Plucked }, {}
@@ -70,7 +70,7 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
 
         result = CHORD_SYMBOLS_SETUP_DATA;
     } else {
-        static const mpe::PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
+        static const PlaybackSetupData CHORD_SYMBOLS_SETUP_DATA = {
             SoundId::Piano, SoundCategory::Keyboards, {}, {}
         };
 
@@ -78,9 +78,9 @@ void PlaybackSetupDataResolver::resolveChordSymbolsSetupData(const Instrument* i
     }
 }
 
-void PlaybackSetupDataResolver::resolveMetronomeSetupData(mpe::PlaybackSetupData& result) const
+void PlaybackSetupDataResolver::resolveMetronomeSetupData(PlaybackSetupData& result) const
 {
-    static const mpe::PlaybackSetupData METRONOME_SETUP_DATA = {
+    static const PlaybackSetupData METRONOME_SETUP_DATA = {
         SoundId::Block, SoundCategory::Percussions, { SoundSubCategory::Wooden }, {}
     };
 

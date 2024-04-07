@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_EVENTS_H
-#define MU_MPE_EVENTS_H
+#ifndef MUSE_MPE_EVENTS_H
+#define MUSE_MPE_EVENTS_H
 
 #include <variant>
 #include <vector>
@@ -34,7 +34,7 @@
 #include "mpetypes.h"
 #include "soundid.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 struct NoteEvent;
 struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
@@ -215,7 +215,7 @@ private:
         float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
 
         for (auto& pair : m_pitchCtx.pitchCurve) {
-            pair.second = static_cast<pitch_level_t>(RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0));
+            pair.second = static_cast<pitch_level_t>(mu::RealRound(static_cast<float>(pair.second) * ratio * patternUnitRatio, 0));
         }
     }
 
@@ -244,10 +244,10 @@ private:
         float ratio = static_cast<float>(actualDynamicLevel) / static_cast<float>(articulationDynamicLevel);
 
         for (auto& pair : m_expressionCtx.expressionCurve) {
-            pair.second = static_cast<dynamic_level_t>(RealRound(pair.second * ratio, 0));
+            pair.second = static_cast<dynamic_level_t>(mu::RealRound(pair.second * ratio, 0));
         }
 
-        if (!RealIsNull(requiredVelocityFraction)) {
+        if (!mu::RealIsNull(requiredVelocityFraction)) {
             m_expressionCtx.expressionCurve.amplifyVelocity(requiredVelocityFraction);
         }
     }
@@ -422,24 +422,4 @@ struct PlaybackData {
 };
 }
 
-namespace muse::mpe {
-using PlaybackData = mu::mpe::PlaybackData;
-using PlaybackSetupData = mu::mpe::PlaybackSetupData;
-using PlaybackEventsMap = mu::mpe::PlaybackEventsMap;
-using PlaybackParamMap = mu::mpe::PlaybackParamMap;
-using DynamicLevelMap = mu::mpe::DynamicLevelMap;
-using MainStreamChanges = mu::mpe::MainStreamChanges;
-using OffStreamChanges = mu::mpe::OffStreamChanges;
-using SoundId = mu::mpe::SoundId;
-using SoundCategory = mu::mpe::SoundCategory;
-using SoundSubCategory = mu::mpe::SoundSubCategory;
-using SoundSubCategories = mu::mpe::SoundSubCategories;
-using ArticulationType = mu::mpe::ArticulationType;
-using ArticulationTypeSet = mu::mpe::ArticulationTypeSet;
-using NoteEvent = mu::mpe::NoteEvent;
-using voice_layer_idx_t = mu::mpe::voice_layer_idx_t;
-using pitch_level_t = mu::mpe::pitch_level_t;
-using dynamic_level_t = mu::mpe::dynamic_level_t;
-}
-
-#endif // MU_MPE_EVENTS_H
+#endif // MUSE_MPE_EVENTS_H

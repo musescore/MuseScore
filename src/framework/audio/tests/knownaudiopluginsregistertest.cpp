@@ -111,7 +111,7 @@ protected:
         pluginInfo1.meta.type = AudioResourceType::VstPlugin;
         pluginInfo1.meta.vendor = "Some vendor";
         pluginInfo1.meta.attributes = { { audio::CATEGORIES_ATTRIBUTE, u"Fx|Reverb" },
-            { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mu::mpe::GENERIC_SETUP_DATA_STRING } };
+            { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING } };
         pluginInfo1.enabled = true;
         plugins.push_back(pluginInfo1);
 
@@ -122,7 +122,7 @@ protected:
         pluginInfo2.meta.type = AudioResourceType::VstPlugin;
         pluginInfo2.meta.vendor = "Another vendor";
         pluginInfo2.meta.attributes = { { audio::CATEGORIES_ATTRIBUTE, u"Fx|Distortion" },
-            { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mu::mpe::GENERIC_SETUP_DATA_STRING } };
+            { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING } };
         pluginInfo2.enabled = true;
         plugins.push_back(pluginInfo2);
 
@@ -132,8 +132,10 @@ protected:
         disabledPluginInfo.meta.id = "CCC";
         disabledPluginInfo.meta.type = AudioResourceType::VstPlugin;
         disabledPluginInfo.enabled = false;
-        disabledPluginInfo.meta.attributes = { { audio::CATEGORIES_ATTRIBUTE, u"Instrument|Synth" },
-            { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mu::mpe::GENERIC_SETUP_DATA_STRING } };
+        disabledPluginInfo.meta.attributes = {
+            { audio::CATEGORIES_ATTRIBUTE, u"Instrument|Synth" },
+            { audio::PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING }
+        };
         disabledPluginInfo.errorCode = -1;
         plugins.push_back(disabledPluginInfo);
 

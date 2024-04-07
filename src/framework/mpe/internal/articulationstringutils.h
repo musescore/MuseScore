@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_STRINGUTILS_H
-#define MU_MPE_STRINGUTILS_H
+#ifndef MUSE_MPE_STRINGUTILS_H
+#define MUSE_MPE_STRINGUTILS_H
 
 #include <QString>
 #include <unordered_map>
 
 #include "mpetypes.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 static const std::unordered_map<ArticulationFamily, QString> ARTICULATION_FAMILY_NAMES = {
     { ArticulationFamily::Undefined, "Undefined" },
     { ArticulationFamily::Keyboards, "KeyboardsArticulation" },
@@ -194,4 +194,4 @@ inline QString articulationTypeToString(const ArticulationType type)
 }
 }
 
-#endif // MU_MPE_STRINGUTILS_H
+#endif // MUSE_MPE_STRINGUTILS_H

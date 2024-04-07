@@ -24,10 +24,10 @@
 
 #include "global/interpolation.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
 using namespace muse::midi;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 0);
 static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
@@ -75,7 +75,7 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events
     updateDynamicChangesIterator();
 }
 
-async::Channel<channel_t, Program> FluidSequencer::channelAdded() const
+muse::async::Channel<channel_t, Program> FluidSequencer::channelAdded() const
 {
     return m_channels.channelAdded;
 }
@@ -88,7 +88,7 @@ const ChannelMap& FluidSequencer::channels() const
 void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
 {
     for (const auto& pair : changes) {
-        for (const mu::mpe::PlaybackEvent& event : pair.second) {
+        for (const mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
             }
@@ -193,7 +193,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
         return;
     }
 
-    mu::mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
 
     auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
     auto nextIt = std::next(currIt);
@@ -207,13 +207,14 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
         return;
     }
 
-    auto makePoint = [](mu::mpe::timestamp_t time, int value) {
+    auto makePoint = [](mpe::timestamp_t time, int value) {
         return mu::Interpolation::Point { static_cast<double>(time), static_cast<double>(value) };
     };
 
     //! NOTE: Increasing this number results in fewer points being interpolated
     const mpe::pitch_level_t POINT_WEIGHT = currentType == mpe::ArticulationType::Multibend
-                                            ? mu::mpe::PITCH_LEVEL_STEP / 5 : mu::mpe::PITCH_LEVEL_STEP / 2;
+                                            ? mpe::PITCH_LEVEL_STEP / 5
+                                            : mpe::PITCH_LEVEL_STEP / 2;
 
     for (; nextIt != endIt; currIt = nextIt, nextIt = std::next(currIt)) {
         int currBendValue = pitchBendLevel(currIt->second);
@@ -258,7 +259,7 @@ note_idx_t FluidSequencer::noteIndex(const mpe::pitch_level_t pitchLevel) const
 
     float stepCount = MIN_SUPPORTED_NOTE
                       + ((pitchLevel - MIN_SUPPORTED_PITCH_LEVEL)
-                         / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP));
+                         / static_cast<float>(mpe::PITCH_LEVEL_STEP));
 
     return stepCount;
 }
@@ -268,24 +269,24 @@ tuning_t FluidSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int n
     int semitonesCount = noteIdx - MIN_SUPPORTED_NOTE;
 
     mpe::pitch_level_t tuningPitchLevel = noteEvent.pitchCtx().nominalPitchLevel
-                                          - (semitonesCount * mu::mpe::PITCH_LEVEL_STEP);
+                                          - (semitonesCount * mpe::PITCH_LEVEL_STEP);
 
-    return tuningPitchLevel / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP);
+    return tuningPitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
 }
 
 velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
     static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
 
-    velocity_t result = RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+    velocity_t result = mu::RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
 
     return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
 }
 
 int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
 {
-    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMICS_LEVEL = mu::mpe::dynamicLevelFromType(DynamicType::ppp);
-    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMICS_LEVEL = mu::mpe::dynamicLevelFromType(DynamicType::fff);
+    static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMICS_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
+    static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMICS_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
     static constexpr int MIN_SUPPORTED_VOLUME = 16; // MIDI equivalent for PPP
     static constexpr int MAX_SUPPORTED_VOLUME = 127; // MIDI equivalent for FFF
     static constexpr int VOLUME_STEP = 16;
@@ -299,17 +300,17 @@ int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) con
     }
 
     float stepCount = ((dynamicLevel - MIN_SUPPORTED_DYNAMICS_LEVEL)
-                       / static_cast<float>(mu::mpe::DYNAMIC_LEVEL_STEP));
+                       / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
 
-    if (dynamicLevel == mu::mpe::dynamicLevelFromType(DynamicType::Natural)) {
+    if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
         stepCount -= 0.5;
     }
 
-    if (dynamicLevel > mu::mpe::dynamicLevelFromType(DynamicType::Natural)) {
+    if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
         stepCount -= 1;
     }
 
-    dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
+    dynamic_level_t result = mu::RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
 
     return std::min(result, MAX_SUPPORTED_DYNAMICS_LEVEL);
 }
@@ -318,7 +319,7 @@ int FluidSequencer::pitchBendLevel(const mpe::pitch_level_t pitchLevel) const
 {
     static constexpr int PITCH_BEND_SEMITONE_STEP = 4096 / 12;
 
-    float pitchLevelSteps = pitchLevel / static_cast<float>(mu::mpe::PITCH_LEVEL_STEP);
+    float pitchLevelSteps = pitchLevel / static_cast<float>(mpe::PITCH_LEVEL_STEP);
 
     int offset = pitchLevelSteps * PITCH_BEND_SEMITONE_STEP;
 

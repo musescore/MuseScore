@@ -118,7 +118,7 @@ bool NotationPlayback::isChordSymbolsTrack(const engraving::InstrumentTrackId& t
     return m_playbackModel.isChordSymbolsTrack(trackId);
 }
 
-const mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const
+const muse::mpe::PlaybackData& NotationPlayback::trackPlaybackData(const engraving::InstrumentTrackId& trackId) const
 {
     return m_playbackModel.resolveTrackPlaybackData(trackId);
 }

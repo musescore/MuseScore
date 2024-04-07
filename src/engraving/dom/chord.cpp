@@ -1491,13 +1491,13 @@ double Chord::calcDefaultStemLength()
         double bottomLine = lineDistance * (staffLineCount - 1.0);
         double target = 0.0;
         double midLine = middleLine / 4.0 * lineDistance;
-        if (RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
+        if (mu::RealIsEqualOrMore(lineDistance / _spatium, 1.0)) {
             // need to extend to middle line, or to opposite line if staff is < 2sp tall
             if (bottomLine < 2 * _spatium) {
                 target = ldata()->up ? topLine : bottomLine;
             } else {
                 double twoSpIn = ldata()->up ? bottomLine - (2 * _spatium) : topLine + (2 * _spatium);
-                target = RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
+                target = mu::RealIsEqual(lineDistance / _spatium, 1.0) ? midLine : twoSpIn;
             }
         } else {
             // need to extend to second line in staff, or to opposite line if staff has < 3 lines

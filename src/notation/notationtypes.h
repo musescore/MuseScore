@@ -440,7 +440,7 @@ struct StaffConfig
     bool operator==(const StaffConfig& conf) const
     {
         bool equal = visible == conf.visible;
-        equal &= RealIsEqual(userDistance, conf.userDistance);
+        equal &= mu::RealIsEqual(userDistance, conf.userDistance);
         equal &= cutaway == conf.cutaway;
         equal &= showIfEmpty == conf.showIfEmpty;
         equal &= hideSystemBarline == conf.hideSystemBarline;

@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
-#define MU_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
+#ifndef MUSE_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
+#define MUSE_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
 
 #include "mpe/mpetypes.h"
 
-namespace mu::mpe::tests {
+namespace muse::mpe::tests {
 inline ArrangementPattern createArrangementPattern(const duration_percentage_t durationFactor,
                                                    const duration_percentage_t timestampOffset)
 {
@@ -66,4 +66,4 @@ inline ExpressionPattern createSimpleExpressionPattern(const dynamic_level_t amp
 }
 }
 
-#endif // MU_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
+#endif // MUSE_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H

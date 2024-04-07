@@ -29,7 +29,7 @@ namespace mu::engraving {
 class ChordFilter : public FilterBase<ChordFilter>
 {
 public:
-    static void validateArticulations(const EngravingItem* item, mpe::ArticulationMap& result);
+    static void validateArticulations(const EngravingItem* item, muse::mpe::ArticulationMap& result);
 
 protected:
     friend class FilterBase<ChordFilter>;

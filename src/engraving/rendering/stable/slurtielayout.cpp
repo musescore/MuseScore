@@ -2112,7 +2112,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     const PointF tieEnd = tieSeg->ups(Grip::END).p + tieSeg->ups(Grip::END).off;
 
     PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
-    if (RealIsNull(tieEndNormalized.x())) {
+    if (mu::RealIsNull(tieEndNormalized.x())) {
         return;
     }
 
@@ -2435,7 +2435,7 @@ void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurT
     const double minTieThickness = mag * (0.15 * slurTieSeg->spatium() - slurTieSeg->style().styleMM(Sid::SlurEndWidth));
     const double normalThickness = mag * (slurTieSeg->style().styleMM(Sid::SlurMidWidth) - slurTieSeg->style().styleMM(Sid::SlurEndWidth));
 
-    bool invalid = RealIsEqualOrMore(minTieLength, shortTieLimit);
+    bool invalid = mu::RealIsEqualOrMore(minTieLength, shortTieLimit);
 
     double finalThickness;
     if (slurTieLengthInSp > shortTieLimit || invalid) {

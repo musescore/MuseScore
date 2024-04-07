@@ -25,7 +25,8 @@
 #include "dom/glissando.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 const ArticulationTypeSet& GlissandosRenderer::supportedTypes()
 {

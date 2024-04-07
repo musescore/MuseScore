@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_MPEMODULE_H
-#define MU_MPE_MPEMODULE_H
+#ifndef MUSE_MPE_MPEMODULE_H
+#define MUSE_MPE_MPEMODULE_H
 
 #include <memory>
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 class ArticulationProfilesRepository;
 class MpeModule : public modularity::IModuleSetup
 {
@@ -42,4 +42,4 @@ private:
 };
 }
 
-#endif // MU_MPE_MPEMODULE_H
+#endif // MUSE_MPE_MPEMODULE_H

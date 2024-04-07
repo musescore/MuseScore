@@ -60,7 +60,7 @@ double EaseInOut::tFromX(const double x) const
     double discr = (q * q) / 4.0 + (p * p * p) / 27.0;
     double t = 0.0;
     // Crazy idea to first test the least probable case with such an expensive test but...
-    if (RealIsNull(discr)) {
+    if (mu::RealIsNull(discr)) {
         // Case that happens extremely rarely --> 2 roots.
         double q2 = q / 2.0;
         double u = q2 < 0.0 ? std::pow(-q2, 1.0 / 3.0) : -std::pow(q2, 1.0 / 3.0);

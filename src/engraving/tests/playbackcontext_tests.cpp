@@ -34,7 +34,8 @@
 #include "types/typesconv.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse::mpe;
+using namespace muse;
 
 static const mu::String PLAYBACK_CONTEXT_TEST_FILES_DIR("playbackcontext_data/");
 
@@ -77,8 +78,8 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
     DynamicLevelMap expectedDynamics;
 
     // [GIVEN] 1st hairpin (inside the repeat): f -> fff
-    constexpr mu::mpe::dynamic_level_t f = dynamicLevelFromType(mu::mpe::DynamicType::f);
-    constexpr mu::mpe::dynamic_level_t fff = dynamicLevelFromType(mu::mpe::DynamicType::fff);
+    constexpr mpe::dynamic_level_t f = dynamicLevelFromType(mpe::DynamicType::f);
+    constexpr mpe::dynamic_level_t fff = dynamicLevelFromType(mpe::DynamicType::fff);
     constexpr int f_to_fff_startTick = 0;
 
     std::map<int, int> f_to_fff_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(fff - f), ChangeMethod::NORMAL);
@@ -87,21 +88,21 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const auto& pair : f_to_fff_curve) {
-            mu::mpe::timestamp_t time = timestampFromTicks(score, f_to_fff_startTick + pair.first + tickPositionOffset);
+            mpe::timestamp_t time = timestampFromTicks(score, f_to_fff_startTick + pair.first + tickPositionOffset);
             ASSERT_FALSE(mu::contains(expectedDynamics, time));
             expectedDynamics.emplace(time, static_cast<int>(f) + pair.second);
         }
     }
 
     // [GIVEN] 2nd hairpin (right after the repeat): ppp -> p
-    constexpr mu::mpe::dynamic_level_t ppp = dynamicLevelFromType(mu::mpe::DynamicType::ppp);
-    constexpr mu::mpe::dynamic_level_t p = dynamicLevelFromType(mu::mpe::DynamicType::p);
+    constexpr mpe::dynamic_level_t ppp = dynamicLevelFromType(mpe::DynamicType::ppp);
+    constexpr mpe::dynamic_level_t p = dynamicLevelFromType(mpe::DynamicType::p);
     constexpr int ppp_to_p_startTick = 1920 + 1920; // real tick + repeat tick
 
     std::map<int, int> ppp_to_p_curve = TConv::easingValueCurve(1440, HAIRPIN_STEPS, static_cast<int>(p - ppp), ChangeMethod::NORMAL);
 
     for (const auto& pair : ppp_to_p_curve) {
-        mu::mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
+        mpe::timestamp_t time = timestampFromTicks(score, ppp_to_p_startTick + pair.first);
         ASSERT_FALSE(mu::contains(expectedDynamics, time));
         expectedDynamics.emplace(time, static_cast<int>(ppp) + pair.second);
     }
@@ -135,9 +136,9 @@ TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
     PlaybackParamMap params = ctx.playbackParamMap(score);
 
     // [THEN] Expected params
-    PlaybackParamList studio  { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Studio") } };
-    PlaybackParamList pop { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Pop") } };
-    PlaybackParamList orchestral  { { mu::mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Orchestral") } };
+    PlaybackParamList studio  { { mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Studio") } };
+    PlaybackParamList pop { { mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Pop") } };
+    PlaybackParamList orchestral  { { mpe::SOUND_PRESET_PARAM_CODE, mu::Val("Orchestral") } };
 
     PlaybackParamMap expectedParams {
         { timestampFromTicks(score, 960), studio },

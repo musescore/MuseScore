@@ -919,7 +919,7 @@ Shape BeamSegment::shape() const
     }
     double beamHorizontalLength = endPoint.x() - startPoint.x();
     // If beam is horizontal, one rectangle is enough
-    if (RealIsEqual(startPoint.y(), endPoint.y())) {
+    if (mu::RealIsEqual(startPoint.y(), endPoint.y())) {
         RectF rect(startPoint.x(), startPoint.y(), beamHorizontalLength, _beamWidth / 2);
         rect.adjust(0.0, -_beamWidth / 2, 0.0, 0.0);
         shape.add(rect, parentElement);

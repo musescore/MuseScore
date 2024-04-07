@@ -26,9 +26,9 @@
 #include "mpe/events.h"
 #include "mpe/tests/utils/articulationutils.h"
 
-using namespace mu;
-using namespace mu::mpe;
-using namespace mu::mpe::tests;
+using namespace muse;
+using namespace muse::mpe;
+using namespace muse::mpe::tests;
 
 class MPE_MultiNoteArticulationsTest : public ::testing::Test
 {

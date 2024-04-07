@@ -25,7 +25,7 @@
 
 using namespace mu;
 using namespace muse::vst;
-using namespace mu::mpe;
+using namespace muse::mpe;
 using namespace muse::audio;
 
 VstAudioClient::~VstAudioClient()
@@ -358,7 +358,7 @@ bool VstAudioClient::fillOutputBuffer(samples_t sampleCount, float* output)
                     continue;
                 }
 
-                if (!RealIsNull(sample)) {
+                if (!mu::RealIsNull(sample)) {
                     hasMeaningSamples = true;
                 }
             }

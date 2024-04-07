@@ -32,20 +32,20 @@ class Note;
 class NoteArticulationsParser : public MetaParserBase<NoteArticulationsParser>
 {
 public:
-    static void buildNoteArticulationMap(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void buildNoteArticulationMap(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
 protected:
     friend MetaParserBase;
 
-    static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void doParse(const EngravingItem* item, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 
 private:
-    static mpe::ArticulationType articulationTypeByNoteheadGroup(const NoteHeadGroup noteheadGroup);
+    static muse::mpe::ArticulationType articulationTypeByNoteheadGroup(const NoteHeadGroup noteheadGroup);
 
-    static void parsePersistentMeta(const RenderingContext& ctx, mpe::ArticulationMap& result);
-    static void parseGhostNote(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);
-    static void parseNoteHead(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);
-    static void parseSpanners(const Note* note, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parsePersistentMeta(const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseGhostNote(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseNoteHead(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
+    static void parseSpanners(const Note* note, const RenderingContext& ctx, muse::mpe::ArticulationMap& result);
 };
 }
 

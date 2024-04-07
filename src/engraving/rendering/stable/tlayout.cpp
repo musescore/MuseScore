@@ -669,7 +669,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
                        ldata->bottomPos.y());
         // shorten line on each side by offsets
         double yDelta = ldata->bottomPos.y() - ldata->topPos.y();
-        if (!RealIsNull(yDelta)) {
+        if (!mu::RealIsNull(yDelta)) {
             double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
             PointF p1 = fullLine.pointAt(off / yDelta);
             PointF p2 = fullLine.pointAt(1 - (off / yDelta));
@@ -2633,10 +2633,10 @@ static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::Lay
     double tune2 = anchor2->tuning();
     AccidentalType acc1 = anchor1->accidentalType();
     AccidentalType acc2 = anchor2->accidentalType();
-    if (RealIsNull(tune1) && Accidental::isMicrotonal(acc1)) {
+    if (mu::RealIsNull(tune1) && Accidental::isMicrotonal(acc1)) {
         tune1 = Accidental::subtype2centOffset(acc1);
     }
-    if (RealIsNull(tune2) && Accidental::isMicrotonal(acc2)) {
+    if (mu::RealIsNull(tune2) && Accidental::isMicrotonal(acc2)) {
         tune2 = Accidental::subtype2centOffset(acc2);
     }
 

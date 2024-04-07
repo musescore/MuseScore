@@ -1265,7 +1265,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         const int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
         const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
 
-        if (RealIsEqual(item->growLeft(), item->growRight())) {
+        if (mu::RealIsEqual(item->growLeft(), item->growRight())) {
             startY -= verticalOffset * item->growLeft();
             endY -= verticalOffset * item->growLeft();
         } else {
@@ -1314,7 +1314,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
                                                                              level, beamsAbove, beamsBelow);
             if (stemLengthAdjustmentSteps != 0) {
                 double grow = item->growLeft();
-                if (!RealIsEqual(item->growLeft(), item->growRight())) {
+                if (!mu::RealIsEqual(item->growLeft(), item->growRight())) {
                     double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
                     double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
                     grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
@@ -1363,7 +1363,7 @@ void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, Chor
     const int upValue = cr->up() ? -1 : 1;
     const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
 
-    if (RealIsEqual(item->growLeft(), item->growRight())) {
+    if (mu::RealIsEqual(item->growLeft(), item->growRight())) {
         startY -= verticalOffset * item->growLeft();
         endY -= verticalOffset * item->growLeft();
     } else {

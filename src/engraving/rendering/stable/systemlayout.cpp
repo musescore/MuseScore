@@ -526,7 +526,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 void SystemLayout::justifySystem(System* system, double curSysWidth, double targetSystemWidth)
 {
     double rest = targetSystemWidth - curSysWidth;
-    if (RealIsNull(rest)) {
+    if (mu::RealIsNull(rest)) {
         return;
     }
     if (rest < 0) {
@@ -1508,7 +1508,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && ss->visible()
                 && prevSegment->isHarmonicMarkSegment()
                 && ss->isVibratoSegment()
-                && RealIsEqual(prevSegment->x(), ss->x())) {
+                && mu::RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = ss->ldata()->bbox().bottom() - prevSegment->ldata()->bbox().bottom()
                               + prevSegment->ldata()->bbox().top();
                 prevSegment->mutldata()->moveY(diff);
@@ -1518,7 +1518,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && ss->visible()
                 && prevSegment->isVibratoSegment()
                 && ss->isHarmonicMarkSegment()
-                && RealIsEqual(prevSegment->x(), ss->x())) {
+                && mu::RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = prevSegment->ldata()->bbox().bottom() - ss->ldata()->bbox().bottom()
                               + ss->ldata()->bbox().top();
                 ss->mutldata()->moveY(diff);
@@ -1678,7 +1678,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
 
     // First, try to gradually reduce the duration stretch (i.e. flatten the spacing curve)
     double stretchCoeff = firstMeasure->layoutStretch() - step;
-    while (curSysWidth > targetSysWidth && RealIsEqualOrMore(stretchCoeff, 0.0)) {
+    while (curSysWidth > targetSysWidth && mu::RealIsEqualOrMore(stretchCoeff, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
                 continue;
@@ -1697,7 +1697,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
 
     // Now we are limited by the collision checks, so try to gradually squeeze everything without collisions
     double squeezeFactor = 1 - step;
-    while (curSysWidth > targetSysWidth && RealIsEqualOrMore(squeezeFactor, 0.0)) {
+    while (curSysWidth > targetSysWidth && mu::RealIsEqualOrMore(squeezeFactor, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
                 continue;
@@ -1744,7 +1744,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
     // Things don't fit without collisions, so give up and allow collisions
     double smallerStep = 0.25 * step;
     double widthReduction = 1 - smallerStep;
-    while (curSysWidth > targetSysWidth && RealIsEqualOrMore(widthReduction, 0.0)) {
+    while (curSysWidth > targetSysWidth && mu::RealIsEqualOrMore(widthReduction, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {
                 continue;
@@ -1811,7 +1811,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         maxNamesWidth = indent - instrumentNameOffset;
     }
 
-    if (RealIsNull(indent)) {
+    if (mu::RealIsNull(indent)) {
         if (ctx.conf().styleB(Sid::alignSystemToMargin)) {
             system->setLeftMargin(0.0);
         } else {

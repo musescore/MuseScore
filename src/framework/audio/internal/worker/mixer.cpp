@@ -389,7 +389,7 @@ void Mixer::mixOutputFromChannel(float* outBuffer, const float* inBuffer, unsign
 
             outBuffer[idx] += sample;
 
-            if (outBufferIsSilent && !RealIsNull(sample)) {
+            if (outBufferIsSilent && !mu::RealIsNull(sample)) {
                 outBufferIsSilent = false;
             }
         }
@@ -426,7 +426,7 @@ void Mixer::writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParam
         }
 
         const AuxSendParams& auxSend = auxSends.at(auxIdx);
-        if (!auxSend.active || RealIsNull(auxSend.signalAmount)) {
+        if (!auxSend.active || mu::RealIsNull(auxSend.signalAmount)) {
             continue;
         }
 
@@ -482,7 +482,7 @@ void Mixer::completeOutput(float* buffer, samples_t samplesPerChannel)
             float resultSample = buffer[idx] * totalGain;
             buffer[idx] = resultSample;
 
-            if (m_isSilence && !RealIsNull(resultSample)) {
+            if (m_isSilence && !mu::RealIsNull(resultSample)) {
                 m_isSilence = false;
             }
 

@@ -46,7 +46,7 @@ template<typename T>
 inline bool isEqual(T a1, T a2)
 {
     if constexpr (std::is_same<T, double>::value) {
-        return RealIsEqual(a1, a2);
+        return mu::RealIsEqual(a1, a2);
     } else {
         return a1 == a2;
     }
@@ -95,7 +95,7 @@ public:
     {
         // Need some extra precision if the length is very small.
         double len = double(m_x) * double(m_x) + double(m_y) * double(m_y);
-        if (RealIsNull(len - 1.0f) || RealIsNull(len)) {
+        if (mu::RealIsNull(len - 1.0f) || mu::RealIsNull(len)) {
             return;
         }
 

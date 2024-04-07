@@ -38,40 +38,43 @@ class PlaybackEventsRenderer
 public:
     PlaybackEventsRenderer() = default;
 
-    void render(const EngravingItem* item, const mpe::dynamic_level_t nominalDynamicLevel,
-                const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
-                mpe::PlaybackEventsMap& result) const;
+    void render(const EngravingItem* item, const muse::mpe::dynamic_level_t nominalDynamicLevel,
+                const muse::mpe::ArticulationType persistentArticulationApplied, const muse::mpe::ArticulationsProfilePtr profile,
+                muse::mpe::PlaybackEventsMap& result) const;
 
-    void render(const EngravingItem* item, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,
-                const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
-                mpe::PlaybackEventsMap& result) const;
+    void render(const EngravingItem* item, const int tickPositionOffset, const muse::mpe::dynamic_level_t nominalDynamicLevel,
+                const muse::mpe::ArticulationType persistentArticulationApplied, const muse::mpe::ArticulationsProfilePtr profile,
+                muse::mpe::PlaybackEventsMap& result) const;
 
-    void render(const EngravingItem* item, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
-                const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
-                const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
+    void render(const EngravingItem* item, const muse::mpe::timestamp_t actualTimestamp, const muse::mpe::duration_t actualDuration,
+                const muse::mpe::dynamic_level_t actualDynamicLevel, const muse::mpe::ArticulationType persistentArticulationApplied,
+                const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventsMap& result) const;
 
-    void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, const mpe::ArticulationsProfilePtr profile,
-                           mpe::PlaybackEventsMap& result) const;
-    void renderChordSymbol(const Harmony* chordSymbol, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
-                           const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventsMap& result) const;
+    void renderChordSymbol(const Harmony* chordSymbol, const int ticksPositionOffset, const muse::mpe::ArticulationsProfilePtr profile,
+                           muse::mpe::PlaybackEventsMap& result) const;
+    void renderChordSymbol(const Harmony* chordSymbol, const muse::mpe::timestamp_t actualTimestamp,
+                           const muse::mpe::duration_t actualDuration, const muse::mpe::ArticulationsProfilePtr profile,
+                           muse::mpe::PlaybackEventsMap& result) const;
 
     void renderMetronome(const Score* score, const int measureStartTick, const int measureEndTick, const int ticksPositionOffset,
-                         mpe::PlaybackEventsMap& result) const;
+                         muse::mpe::PlaybackEventsMap& result) const;
 
-    void renderMetronome(const Score* score, const int tick, const mpe::timestamp_t actualTimestamp, mpe::PlaybackEventsMap& result) const;
+    void renderMetronome(const Score* score, const int tick, const muse::mpe::timestamp_t actualTimestamp,
+                         muse::mpe::PlaybackEventsMap& result) const;
 
 private:
-    void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const mpe::dynamic_level_t nominalDynamicLevel,
-                          const mpe::ArticulationType persistentArticulationApplied, const mpe::ArticulationsProfilePtr profile,
-                          mpe::PlaybackEventsMap& result) const;
+    void renderNoteEvents(const Chord* chord, const int tickPositionOffset, const muse::mpe::dynamic_level_t nominalDynamicLevel,
+                          const muse::mpe::ArticulationType persistentArticulationApplied, const muse::mpe::ArticulationsProfilePtr profile,
+                          muse::mpe::PlaybackEventsMap& result) const;
 
-    void renderFixedNoteEvent(const Note* note, const mpe::timestamp_t actualTimestamp, const mpe::duration_t actualDuration,
-                              const mpe::dynamic_level_t actualDynamicLevel, const mpe::ArticulationType persistentArticulationApplied,
-                              const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const;
+    void renderFixedNoteEvent(const Note* note, const muse::mpe::timestamp_t actualTimestamp, const muse::mpe::duration_t actualDuration,
+                              const muse::mpe::dynamic_level_t actualDynamicLevel,
+                              const muse::mpe::ArticulationType persistentArticulationApplied,
+                              const muse::mpe::ArticulationsProfilePtr profile, muse::mpe::PlaybackEventList& result) const;
 
-    void renderRestEvents(const Rest* rest, const int tickPositionOffset, mpe::PlaybackEventsMap& result) const;
+    void renderRestEvents(const Rest* rest, const int tickPositionOffset, muse::mpe::PlaybackEventsMap& result) const;
 
-    void renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const;
+    void renderArticulations(const Chord* chord, const RenderingContext& ctx, muse::mpe::PlaybackEventList& result) const;
 };
 }
 

@@ -55,7 +55,7 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
 
     //! HACK Temporary hack for Spatium comparisons (maybe one type is Spatium and another type is real)
     if (v.m_type == P_TYPE::SPATIUM || m_type == P_TYPE::SPATIUM) {
-        return RealIsEqual(v.value<double>(), value<double>());
+        return mu::RealIsEqual(v.value<double>(), value<double>());
     }
 
     //! HACK Temporary hack for Fraction comparisons
@@ -66,7 +66,7 @@ bool PropertyValue::operator ==(const PropertyValue& v) const
 
     if (v.m_type == P_TYPE::REAL) {
         assert(m_type == P_TYPE::REAL);
-        return RealIsEqual(v.value<double>(), value<double>());
+        return mu::RealIsEqual(v.value<double>(), value<double>());
     }
 
     assert(m_data);

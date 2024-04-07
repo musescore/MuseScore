@@ -547,7 +547,7 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
 
     double spatium = item->spatium();
     ldata->y1 = (spatium * .5 * item->spanFrom());
-    if (RealIsEqual(ldata->y2, 0.0)) {
+    if (mu::RealIsEqual(ldata->y2, 0.0)) {
         ldata->y2 = (spatium * .5 * (8.0 + item->spanTo()));
     }
 

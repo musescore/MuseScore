@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_MPE_MIDISTUBMODULE_H
-#define MU_MPE_MIDISTUBMODULE_H
+#ifndef MUSE_MPE_MIDISTUBMODULE_H
+#define MUSE_MPE_MIDISTUBMODULE_H
 
 #include "modularity/imodulesetup.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 class MpeModule : public modularity::IModuleSetup
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_MPE_MIDISTUBMODULE_H
+#endif // MUSE_MPE_MIDISTUBMODULE_H

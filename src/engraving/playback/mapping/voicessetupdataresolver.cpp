@@ -23,7 +23,8 @@
 #include "voicessetupdataresolver.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse::mpe;
+using namespace muse;
 
 PlaybackSetupData VoicesSetupDataResolver::doResolve(const Instrument* instrument)
 {

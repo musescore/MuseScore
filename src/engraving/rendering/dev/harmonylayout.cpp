@@ -190,7 +190,7 @@ void HarmonyLayout::alignHarmonies(const System* system, const std::vector<Segme
         }
     };
 
-    if (RealIsNull(maxShiftAbove) && RealIsNull(maxShiftBelow)) {
+    if (mu::RealIsNull(maxShiftAbove) && mu::RealIsNull(maxShiftBelow)) {
         return;
     }
 

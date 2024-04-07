@@ -26,7 +26,7 @@
 #include "internal/worker/audioengine.h"
 
 using namespace mu;
-using namespace mu::mpe;
+using namespace muse::mpe;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_ARTICULATIONPATTERNITEM_H
-#define MU_MPE_ARTICULATIONPATTERNITEM_H
+#ifndef MUSE_MPE_ARTICULATIONPATTERNITEM_H
+#define MUSE_MPE_ARTICULATIONPATTERNITEM_H
 
 #include <QAbstractListModel>
 #include <QList>
@@ -29,7 +29,7 @@
 #include "mpetypes.h"
 #include "articulationpatternsegmentitem.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 class ArticulationPatternItem : public QAbstractListModel
 {
     Q_OBJECT
@@ -98,4 +98,4 @@ private:
 };
 }
 
-#endif // MU_MPE_ARTICULATIONPATTERNITEM_H
+#endif // MUSE_MPE_ARTICULATIONPATTERNITEM_H

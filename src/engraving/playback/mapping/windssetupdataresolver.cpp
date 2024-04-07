@@ -23,11 +23,11 @@
 #include "windssetupdataresolver.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse::mpe;
 
 PlaybackSetupData WindsSetupDataResolver::doResolve(const Instrument* instrument)
 {
-    static const std::unordered_map<std::string, mpe::PlaybackSetupData> SETUP_DATA_MAP = {
+    static const std::unordered_map<std::string, muse::mpe::PlaybackSetupData> SETUP_DATA_MAP = {
         { "winds", { SoundId::WindsGroup, SoundCategory::Winds, {}, {} } },
         { "eb-piccolo", { SoundId::Piccolo, SoundCategory::Winds, {}, {} } },
         { "db-piccolo", { SoundId::Piccolo, SoundCategory::Winds, {}, {} } },

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_MPE_IARTICULATIONPROFILESREPOSITORY_H
-#define MU_MPE_IARTICULATIONPROFILESREPOSITORY_H
+#ifndef MUSE_MPE_IARTICULATIONPROFILESREPOSITORY_H
+#define MUSE_MPE_IARTICULATIONPROFILESREPOSITORY_H
 
 #include "modularity/imoduleinterface.h"
 #include "async/channel.h"
@@ -29,7 +29,7 @@
 
 #include "mpetypes.h"
 
-namespace mu::mpe {
+namespace muse::mpe {
 class IArticulationProfilesRepository : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IArticulationProfilesRepository)
@@ -45,4 +45,4 @@ public:
 };
 }
 
-#endif // MU_MPE_IARTICULATIONPROFILESREPOSITORY_H
+#endif // MUSE_MPE_IARTICULATIONPROFILESREPOSITORY_H

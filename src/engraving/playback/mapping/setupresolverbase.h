@@ -34,7 +34,7 @@ template<class T>
 class SetupDataResolverBase
 {
 public:
-    static bool resolve(const Instrument* instrument, mpe::PlaybackSetupData& result)
+    static bool resolve(const Instrument* instrument, muse::mpe::PlaybackSetupData& result)
     {
         assert(instrument);
         if (!instrument) {

@@ -23,7 +23,8 @@
 #include "stringssetupdataresolver.h"
 
 using namespace mu::engraving;
-using namespace mu::mpe;
+using namespace muse;
+using namespace muse::mpe;
 
 PlaybackSetupData StringsSetupDataResolver::doResolve(const Instrument* instrument)
 {

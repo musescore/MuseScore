@@ -78,7 +78,7 @@ static bool isEqual(const double& v1, const double& v2, double tolerance)
         double delta = RealFloor(v1, DEFAULT_PREC) - RealFloor(v2, DEFAULT_PREC);
         return std::fabs(delta) < tolerance;
     }
-    return RealIsEqual(RealFloor(v1, DEFAULT_PREC), RealFloor(v2, DEFAULT_PREC));
+    return mu::RealIsEqual(RealFloor(v1, DEFAULT_PREC), RealFloor(v2, DEFAULT_PREC));
 }
 
 static bool isEqual(const PointF& p1, const PointF& p2, double tolerance)
@@ -134,7 +134,7 @@ static bool isEqual(const Pen& p1, const Pen& p2)
         return false;
     }
 
-    if (!RealIsEqual(p1.widthF(), p2.widthF())) {
+    if (!mu::RealIsEqual(p1.widthF(), p2.widthF())) {
         return false;
     }
 
@@ -165,7 +165,7 @@ static bool isEqual(const Font& f1, const Font& f2)
         return false;
     }
 
-    if (!RealIsEqual(f1.pointSizeF(), f2.pointSizeF())) {
+    if (!mu::RealIsEqual(f1.pointSizeF(), f2.pointSizeF())) {
         return false;
     }
 

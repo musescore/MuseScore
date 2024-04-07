@@ -33,7 +33,7 @@ using namespace mu::engraving;
 
 bool Swing::ChordDurationAdjustment::isNull() const
 {
-    return RealIsNull(remainingDurationMultiplier) && RealIsNull(durationMultiplier);
+    return mu::RealIsNull(remainingDurationMultiplier) && mu::RealIsNull(durationMultiplier);
 }
 
 //---------------------------------------------------------
