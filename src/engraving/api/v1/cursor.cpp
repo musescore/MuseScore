@@ -288,7 +288,6 @@ void Cursor::add(EngravingItem* wrapped)
         // To be added at chord level
         case ElementType::NOTE:
         case ElementType::ARPEGGIO:
-        case ElementType::TREMOLO:
         case ElementType::TREMOLO_SINGLECHORD:
         case ElementType::TREMOLO_TWOCHORD:
         case ElementType::CHORDLINE:
