@@ -78,7 +78,7 @@ jobs:
         bash ./build/ci/tools/setup_ccache.sh
     - name: Setup environment
       run: |
-        bash ./build/ci/linux/setup.sh --compiler clang
+        bash ./build/ci/linux/setup.sh
     - name: Build and Pack
       run: |
         bash ./build/ci/vtests/build_and_pack.sh
