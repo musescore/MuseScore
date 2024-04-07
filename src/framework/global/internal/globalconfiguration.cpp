@@ -74,7 +74,7 @@ QString GlobalConfiguration::resolveAppDataPath() const
 #endif
 
 #ifdef Q_OS_WIN
-    QDir dir(QCoreApplication::applicationDirPath() + QString("/../" MUSE_APP_INSTALL_NAME));
+    QDir dir(QCoreApplication::applicationDirPath() + QString("/../"));
     return dir.absolutePath() + "/";
 #elif defined(Q_OS_MAC)
     QDir dir(QCoreApplication::applicationDirPath() + QString("/../Resources"));
