@@ -39,6 +39,112 @@ class Factory;
 class Note;
 enum class AccidentalVal : signed char;
 
+// transposition table for microtonal accidentals
+const SymId accTable[] = {
+    SymId::noSym,
+    // standard accidentals
+    SymId::accidentalTripleFlat,
+    SymId::accidentalDoubleFlat,
+    SymId::accidentalFlat,
+    SymId::accidentalNatural,
+    SymId::accidentalSharp,
+    SymId::accidentalDoubleSharp,
+    SymId::accidentalTripleSharp,
+    SymId::noSym,
+    //  natural sharp
+    SymId::accidentalNatural,
+    SymId::accidentalNaturalSharp,
+    SymId::accidentalSharp,
+    SymId::noSym,
+    //  natural flat
+    SymId::accidentalDoubleFlat,
+    SymId::accidentalNaturalFlat,
+    SymId::accidentalNatural,
+    SymId::noSym,
+    //  natural sharp sharp
+    SymId::accidentalSharp,
+    SymId::accidentalSharpSharp,
+    SymId::accidentalTripleSharp,
+    SymId::noSym,
+    // Gould quarter tone
+    //  arrow down
+    SymId::accidentalFiveQuarterTonesFlatArrowDown,
+    SymId::accidentalThreeQuarterTonesFlatArrowDown,
+    SymId::accidentalQuarterToneFlatNaturalArrowDown,
+    SymId::accidentalQuarterToneSharpArrowDown,
+    SymId::accidentalThreeQuarterTonesSharpArrowDown,
+    SymId::accidentalFiveQuarterTonesFlatArrowDown,
+    SymId::noSym,
+    //  arrow up
+    SymId::accidentalThreeQuarterTonesFlatArrowUp,
+    SymId::accidentalQuarterToneFlatArrowUp,
+    SymId::accidentalQuarterToneSharpNaturalArrowUp,
+    SymId::accidentalThreeQuarterTonesSharpArrowUp,
+    SymId::accidentalFiveQuarterTonesSharpArrowUp,
+    SymId::noSym,
+    // Stein-Zimmermann
+    //  basic
+    SymId::accidentalThreeQuarterTonesFlatZimmermann,
+    SymId::accidentalQuarterToneFlatStein,
+    SymId::accidentalQuarterToneSharpStein,
+    SymId::accidentalThreeQuarterTonesSharpStein,
+    SymId::noSym,
+    //  narrow (as variant of above)
+    SymId::accidentalNarrowReversedFlatAndFlat,
+    SymId::accidentalNarrowReversedFlat,
+    SymId::accidentalQuarterToneSharpStein,
+    // Extended Helmholtz-Ellis (just intonation)
+    //  one syntonic comma down arrow
+    SymId::accidentalDoubleFlatOneArrowDown,
+    SymId::accidentalFlatOneArrowDown,
+    SymId::accidentalNaturalOneArrowDown,
+    SymId::accidentalSharpOneArrowDown,
+    SymId::accidentalDoubleSharpOneArrowDown,
+    SymId::noSym,
+    //   one syntonic comma up arrow
+    SymId::accidentalDoubleFlatOneArrowUp,
+    SymId::accidentalFlatOneArrowUp,
+    SymId::accidentalNaturalOneArrowUp,
+    SymId::accidentalSharpOneArrowUp,
+    SymId::accidentalDoubleSharpOneArrowUp,
+    SymId::noSym,
+    //   two syntonic commas down
+    SymId::accidentalDoubleFlatTwoArrowsDown,
+    SymId::accidentalFlatTwoArrowsDown,
+    SymId::accidentalNaturalTwoArrowsDown,
+    SymId::accidentalSharpTwoArrowsDown,
+    SymId::accidentalDoubleSharpTwoArrowsDown,
+    SymId::noSym,
+    //   two syntonic commas up
+    SymId::accidentalDoubleFlatTwoArrowsUp,
+    SymId::accidentalFlatTwoArrowsUp,
+    SymId::accidentalNaturalTwoArrowsUp,
+    SymId::accidentalSharpTwoArrowsUp,
+    SymId::accidentalDoubleSharpTwoArrowsUp,
+    SymId::noSym,
+    //   three syntonic commas down
+    SymId::accidentalDoubleFlatThreeArrowsDown,
+    SymId::accidentalFlatThreeArrowsDown,
+    SymId::accidentalNaturalThreeArrowsDown,
+    SymId::accidentalSharpThreeArrowsDown,
+    SymId::accidentalDoubleSharpThreeArrowsDown,
+    SymId::noSym,
+    //   three syntonic commas up
+    SymId::accidentalDoubleFlatThreeArrowsUp,
+    SymId::accidentalFlatThreeArrowsUp,
+    SymId::accidentalNaturalThreeArrowsUp,
+    SymId::accidentalSharpThreeArrowsUp,
+    SymId::accidentalDoubleSharpThreeArrowsUp,
+    SymId::noSym,
+    //   equal tempered semitone
+    SymId::accidentalDoubleFlatEqualTempered,
+    SymId::accidentalFlatEqualTempered,
+    SymId::accidentalNaturalEqualTempered,
+    SymId::accidentalSharpEqualTempered,
+    SymId::accidentalDoubleSharpEqualTempered,
+    SymId::noSym
+};
+
 //---------------------------------------------------------
 //   AccidentalBracket
 //---------------------------------------------------------
@@ -72,10 +178,12 @@ public:
 
     TranslatableString subtypeUserName() const override;
     void setSubtype(const AsciiStringView& s);
-    int subtype() const override { return (int)m_accidentalType; }
+    int subtype() const override { return (int)accidentalType(); }
 
-    void setAccidentalType(AccidentalType t) { m_accidentalType = t; }
-    AccidentalType accidentalType() const { return m_accidentalType; }
+    void setAccidentalType(AccidentalType t) { m_accidentalType[0] = t; m_accidentalType[1] = t; }
+    void setAccidentalTypeConcert(AccidentalType t) { m_accidentalType[0] = t; }
+    void setAccidentalTypeTransposing(AccidentalType t) { m_accidentalType[1] = t; }
+    AccidentalType accidentalType() const;
 
     void setRole(AccidentalRole r) { m_role = r; }
     AccidentalRole role() const { return m_role; }
@@ -105,6 +213,7 @@ public:
     static SymId subtype2symbol(AccidentalType);
     static AsciiStringView subtype2name(AccidentalType);
     static AccidentalType value2subtype(AccidentalVal);
+    static AccidentalType symId2subtype(SymId symId);
     static AccidentalType name2subtype(const AsciiStringView&);
     static bool isMicrotonal(AccidentalType t) { return t > AccidentalType::FLAT3; }
     static double subtype2centOffset(AccidentalType);
@@ -134,7 +243,8 @@ private:
 
     Accidental(EngravingItem* parent);
 
-    AccidentalType m_accidentalType = AccidentalType::NONE;
+    // accidental for concert pitch and accidetnal for transposing pitch may differ in microtonality
+    AccidentalType m_accidentalType[2] = { AccidentalType::NONE, AccidentalType::NONE };
     AccidentalBracket m_bracket = AccidentalBracket::NONE;
     AccidentalRole m_role = AccidentalRole::AUTO;
     bool m_isSmall = false;

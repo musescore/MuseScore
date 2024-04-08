@@ -307,24 +307,29 @@ double Accidental::subtype2centOffset(AccidentalType st)
 }
 
 //---------------------------------------------------------
+//   symId2subtype
+//---------------------------------------------------------
+
+AccidentalType Accidental::symId2subtype(SymId symId)
+{
+    int i = 0;
+    for (const Acc& acc : ACC_LIST) {
+        if (acc.sym == symId) {
+            return AccidentalType(i);
+        }
+        ++i;
+    }
+    return AccidentalType::NONE;
+}
+
+//---------------------------------------------------------
 //   name2subtype
 //---------------------------------------------------------
 
 AccidentalType Accidental::name2subtype(const AsciiStringView& tag)
 {
     SymId symId = SymNames::symIdByName(tag);
-    if (symId == SymId::noSym) {
-        // LOGD("no symbol found");
-    } else {
-        int i = 0;
-        for (const Acc& acc : ACC_LIST) {
-            if (acc.sym == symId) {
-                return AccidentalType(i);
-            }
-            ++i;
-        }
-    }
-    return AccidentalType::NONE;
+    return symId2subtype(symId);
 }
 
 //---------------------------------------------------------
@@ -363,6 +368,18 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
         ASSERT_X(u"value2subtype: illegal accidental val: " + String::number(int(v)));
     }
     return AccidentalType::NONE;
+}
+
+//---------------------------------------------------------
+//   accidentalType
+//---------------------------------------------------------
+AccidentalType Accidental::accidentalType() const
+{
+    if (style().styleB(Sid::concertPitch)) {
+        return m_accidentalType[0];
+    } else {
+        return m_accidentalType[1];
+    }
 }
 
 //---------------------------------------------------------
@@ -433,7 +450,7 @@ void Accidental::undoSetSmall(bool val)
 PropertyValue Accidental::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::ACCIDENTAL_TYPE:    return int(m_accidentalType);
+    case Pid::ACCIDENTAL_TYPE:    return int(accidentalType());
     case Pid::SMALL:              return m_isSmall;
     case Pid::ACCIDENTAL_BRACKET: return int(bracket());
     case Pid::ACCIDENTAL_ROLE:    return role();

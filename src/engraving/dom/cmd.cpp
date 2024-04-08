@@ -2226,6 +2226,9 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
     Staff* st     = chord->staff();
     int fret      = n->fret();
     int string    = n->string();
+    Accidental* accidental = n->accidental();
+    int microAccShift = 0;
+    bool concertPitch = n->style().styleB(Sid::concertPitch);
 
     if (st->isTabStaff(chord->tick())) {
         if (pitch != n->pitch()) {
@@ -2239,9 +2242,38 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             }
         }
     }
+
     int tpc1;
     int tpc2 = n->transposeTpc(tpc);
-    if (n->style().styleB(Sid::concertPitch)) {
+    // for microtonal accidentals, always use "natural tpc"
+    if (accidental && Accidental::isMicrotonal(accidental->accidentalType()) && tpc2 > Tpc::TPC_INVALID) {
+        while (tpc2 < Tpc::TPC_F) {
+            tpc2 += TPC_DELTA_SEMITONE;
+            microAccShift --;
+        }
+        while (tpc2 > Tpc::TPC_B) {
+            tpc2 -= TPC_DELTA_SEMITONE;
+            microAccShift ++;
+        }
+    }
+    // update microtonal accidental if needed
+    if (microAccShift != 0) {
+        AccidentalType accidentalType = accidental->accidentalType();
+        SymId sym = accidental->symId();
+        int accIndex = std::distance(std::begin(accTable), std::find(std::begin(accTable), std::end(accTable), sym));
+        if (accIndex < std::end(accTable) - std::begin(accTable)) {
+            sym = accTable[accIndex + microAccShift];
+            if (sym != SymId::noSym) {
+                accidentalType = accidental->symId2subtype(sym);
+            }
+        }
+        if (concertPitch) {
+            accidental->setAccidentalTypeTransposing(accidentalType);
+        } else {
+            accidental->setAccidentalTypeConcert(accidentalType);
+        }
+    }
+    if (concertPitch) {
         tpc1 = tpc;
     } else {
         tpc1 = tpc2;
