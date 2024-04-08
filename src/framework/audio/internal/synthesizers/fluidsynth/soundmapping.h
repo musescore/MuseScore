@@ -791,7 +791,7 @@ inline const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupDat
 {
     const std::map<SoundMappingKey, midi::Programs>& mapping = mappingByCategory(setupData.category);
 
-    mpe::SoundSubCategories subCategorySet = setupData.subCategorySet;
+    mpe::SoundSubCategories subCategorySet = setupData.soundSubCategories();
     mu::remove(subCategorySet, mpe::SoundSubCategory::Primary);
     mu::remove(subCategorySet, mpe::SoundSubCategory::Secondary);
 

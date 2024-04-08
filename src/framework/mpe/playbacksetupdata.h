@@ -31,39 +31,56 @@
 namespace mu::mpe {
 struct PlaybackSetupData
 {
-    using ID = std::variant<SoundId, mu::String>;
-
-    ID id = SoundId::Undefined;
+    String id;
     SoundCategory category = SoundCategory::Undefined;
-    SoundSubCategories subCategorySet;
+    StringList subCategories;
 
     std::optional<std::string> musicXmlSoundId;
 
     PlaybackSetupData() = default;
 
-    PlaybackSetupData(ID id, SoundCategory category, SoundSubCategories&& subCategorySet = {})
-        : id(id), category(category), subCategorySet(std::move(subCategorySet))
+    PlaybackSetupData(SoundId id, SoundCategory category, SoundSubCategories&& soundSubCategories = {})
+        : id(soundIdToString(id)), category(category)
+    {
+        for (SoundSubCategory subCategory : soundSubCategories) {
+            subCategories.push_back(soundSubCategoryToString(subCategory));
+        }
+    }
+
+    PlaybackSetupData(String id, SoundCategory category, StringList&& subCategories = {})
+        : id(std::move(id)), category(category), subCategories(std::move(subCategories))
     {}
 
     SoundId soundId() const
     {
-        if (std::holds_alternative<SoundId>(id)) {
-            return std::get<SoundId>(id);
+        return soundIdFromString(id);
+    }
+
+    SoundSubCategories soundSubCategories() const
+    {
+        SoundSubCategories result;
+        for (const String& subCategory : subCategories) {
+            result.insert(soundSubCategoryFromString(subCategory));
         }
 
-        return SoundId::Undefined;
+        return result;
     }
 
     bool contains(const SoundSubCategory subcategory) const
     {
-        return subCategorySet.find(subcategory) != subCategorySet.cend();
+        return mu::contains(subCategories, soundSubCategoryToString(subcategory));
+    }
+
+    void add(const SoundSubCategory subcategory)
+    {
+        subCategories.push_back(soundSubCategoryToString(subcategory));
     }
 
     bool operator==(const PlaybackSetupData& other) const
     {
         return id == other.id
                && category == other.category
-               && subCategorySet == other.subCategorySet;
+               && subCategories == other.subCategories;
     }
 
     bool operator<(const PlaybackSetupData& other) const
@@ -74,7 +91,7 @@ struct PlaybackSetupData
             if (other.category > category) {
                 return true;
             } else if (other.category == category) {
-                return other.subCategorySet > subCategorySet;
+                return other.subCategories > subCategories;
             }
         }
 
@@ -87,35 +104,30 @@ struct PlaybackSetupData
             return false;
         }
 
-        if (std::holds_alternative<SoundId>(id)) {
-            return std::get<SoundId>(id) != SoundId::Undefined;
-        } else if (std::holds_alternative<String>(id)) {
-            return !std::get<String>(id).empty();
+        if (id.empty()) {
+            return false;
         }
 
-        return false;
+        if (id == ID_STRINGS.at(SoundId::Undefined)) {
+            return false;
+        }
+
+        return true;
     }
 
     String toString() const
     {
         String result;
 
-        String idAsStr;
-        if (std::holds_alternative<SoundId>(id)) {
-            idAsStr = soundIdToString(std::get<SoundId>(id));
-        } else if (std::holds_alternative<String>(id)) {
-            idAsStr = std::get<String>(id);
-        }
-
-        if (!subCategorySet.empty()) {
+        if (!subCategories.empty()) {
             result = String(u"%1.%2.%3")
                      .arg(soundCategoryToString(category))
-                     .arg(idAsStr)
-                     .arg(subCategorySet.toString());
+                     .arg(id)
+                     .arg(subCategories.join(u":"));
         } else {
             result = String(u"%1.%2")
                      .arg(soundCategoryToString(category))
-                     .arg(idAsStr);
+                     .arg(id);
         }
 
         return result;
@@ -133,22 +145,13 @@ struct PlaybackSetupData
             return PlaybackSetupData();
         }
 
-        SoundSubCategories subCategories;
+        StringList subCategories;
         if (subStrList.size() == 3) {
-            subCategories = SoundSubCategories::fromString(subStrList.at(2));
-        }
-
-        ID id;
-
-        SoundId soundId = soundIdFromString(subStrList.at(1));
-        if (soundId != SoundId::Undefined) {
-            id = soundId;
-        } else {
-            id = subStrList.at(1);
+            subCategories = subStrList.at(2).split(u":");
         }
 
         PlaybackSetupData result = {
-            id,
+            subStrList.at(1),
             soundCategoryFromString(subStrList.at(0)),
             std::move(subCategories)
         };
