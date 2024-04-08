@@ -126,9 +126,9 @@ void MuseSamplerUpdateService::openMuseHub()
         });
     });
     return;
-#endif
-
+#else
     openMuseHubWebsite();
+#endif
 }
 
 mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::parseRelease(const QByteArray& json) const
