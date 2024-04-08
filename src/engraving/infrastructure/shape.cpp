@@ -271,7 +271,7 @@ double Shape::left() const
 {
     double dist = DBL_MAX;
     for (const ShapeElement& r : m_elements) {
-        if (r.height() != 0.0 && !(r.item() && r.item()->isTextBase()) && r.left() < dist) {
+        if (!RealIsNull(r.height()) && !(r.item() && r.item()->isTextBase()) && r.left() < dist) {
             // if (r.left() < dist)
             dist = r.left();
         }

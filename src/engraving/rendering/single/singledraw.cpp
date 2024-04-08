@@ -1574,7 +1574,7 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)
 
     if (item->hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-        if (item->frameWidth().val() != 0.0) {
+        if (!RealIsNull(item->frameWidth().val())) {
             Color fColor = item->curColor(item->visible(), item->frameColor());
             double frameWidthVal = item->frameWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
 
@@ -1787,7 +1787,7 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
     const Harmony::LayoutData* ldata = item->ldata();
 
     if (item->hasFrame()) {
-        if (item->frameWidth().val() != 0.0) {
+        if (!RealIsNull(item->frameWidth().val())) {
             Color color = item->frameColor();
             Pen pen(color, item->frameWidth().val() * item->spatium(), PenStyle::SolidLine,
                     PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);

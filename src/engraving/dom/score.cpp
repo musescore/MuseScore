@@ -498,7 +498,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     length = std::max(length, toBreath(e)->pause());
                 }
             }
-            if (length != 0.0) {
+            if (!RealIsNull(length)) {
                 tempomap()->setPause(startTick.ticks(), length);
             }
         }
@@ -519,7 +519,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     length = std::max(length, b->pause());
                 }
             }
-            if (length != 0.0) {
+            if (!RealIsNull(length)) {
                 tempomap()->setPause(tick.ticks(), length);
             }
         } else if (segment.isTimeSigType()) {
@@ -558,7 +558,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     }
                 }
             }
-            if (stretch != 0.0 && stretch != 1.0) {
+            if (!RealIsNull(stretch) && !RealIsNull(stretch)) {
                 BeatsPerSecond otempo = tempomap()->tempo(segment.tick().ticks());
                 BeatsPerSecond ntempo = otempo.val / stretch;
                 tempomap()->setTempo(segment.tick().ticks(), ntempo);

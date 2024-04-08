@@ -944,7 +944,7 @@ void BarLine::endEditDrag(EditData& ed)
 void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     // if no width (staff has bar lines turned off) and not all requested, do nothing
-    if (width() == 0.0 && !all) {
+    if (RealIsNull(width()) && !all) {
         return;
     }
 

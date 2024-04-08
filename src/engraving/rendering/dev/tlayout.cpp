@@ -3227,7 +3227,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
             }
         }
         double yd = ymax - item->pos().y();
-        if (yd != 0.0) {
+        if (!RealIsNull(yd)) {
             if (ldata->offsetChanged() != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
@@ -4743,7 +4743,7 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
     const Staff* stf = item->staff();
     const StaffType* st = stf ? stf->staffTypeForElement(item) : 0;
     double lineDist = st ? st->lineDistance().val() : 1.0;
-    int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * spatium));
+    int userLine   = RealIsNull(yOff) ? 0 : lrint(yOff / (lineDist * spatium));
     int lines      = st ? st->lines() : 5;
 
     int naturalLine = item->computeNaturalLine(lines); // Measured in 1sp steps

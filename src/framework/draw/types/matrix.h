@@ -44,7 +44,7 @@ public:
     Matrix inverted(bool* invertible) const
     {
         double dtr = determinant();
-        if (dtr == 0.0) {
+        if (mu::RealIsNull(dtr)) {
             if (invertible) {
                 *invertible = false;
             }

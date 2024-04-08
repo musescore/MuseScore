@@ -438,10 +438,10 @@ void Beam::setAsFeathered(const bool slower)
 
 void Beam::reset()
 {
-    if (growLeft() != 1.0) {
+    if (!RealIsEqual(growLeft(), 1.0)) {
         undoChangeProperty(Pid::GROW_LEFT, 1.0);
     }
-    if (growRight() != 1.0) {
+    if (!RealIsEqual(growRight(), 1.0)) {
         undoChangeProperty(Pid::GROW_RIGHT, 1.0);
     }
     if (userModified()) {

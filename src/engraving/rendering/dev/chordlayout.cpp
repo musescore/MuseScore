@@ -420,7 +420,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
                     //    use available space
                     // for negative x offset:
                     //    space is allocated elsewhere, so don't re-allocate here
-                    if (note->ldata()->pos().x() != 0.0) {                      // this probably does not work for TAB, as
+                    if (!RealIsNull(note->ldata()->pos().x())) {                      // this probably does not work for TAB, as
                         overlap += std::abs(note->ldata()->pos().x());              // _pos is used to centre the fret on the stem
                     } else {
                         overlap -= fretWidth * 0.125;
@@ -2247,7 +2247,7 @@ static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me,
     }
     if (conflictAbove || conflictBelow) {
         me->x = lx - acc->width() - acc->ldata()->bbox().x();
-    } else if (colOffset != 0.0) {
+    } else if (!RealIsNull(colOffset)) {
         me->x = lx - pd - acc->width() - acc->ldata()->bbox().x();
     } else {
         me->x = lx - pnd - acc->width() - acc->ldata()->bbox().x();

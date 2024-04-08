@@ -366,7 +366,7 @@ void Palette::write(XmlWriter& xml, bool pasteMode) const
         xml.tag("grid", m_drawGrid);
     }
 
-    if (m_yOffset != 0.0) {
+    if (!RealIsNull(m_yOffset)) {
         xml.tag("yoffset", m_yOffset);
     }
 
