@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATEERRORS_H
-#define MU_UPDATE_UPDATEERRORS_H
+#ifndef MUSE_UPDATE_UPDATEERRORS_H
+#define MUSE_UPDATE_UPDATEERRORS_H
 
 #include "types/ret.h"
 
-namespace mu::update {
+namespace muse::update {
 enum class Err {
     Undefined       = int(Ret::Code::Undefined),
     NoError         = int(Ret::Code::Ok),
@@ -40,4 +40,4 @@ inline mu::Ret make_ret(Err e)
 }
 }
 
-#endif // MU_UPDATE_UPDATEERRORS_H
+#endif // MUSE_UPDATE_UPDATEERRORS_H

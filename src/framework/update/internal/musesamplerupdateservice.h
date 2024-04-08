@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_MUSESAMPLERUPDATESERVICE_H
-#define MU_UPDATE_MUSESAMPLERUPDATESERVICE_H
+#ifndef MUSE_UPDATE_MUSESAMPLERUPDATESERVICE_H
+#define MUSE_UPDATE_MUSESAMPLERUPDATESERVICE_H
 
 #include "async/asyncable.h"
 
@@ -37,16 +37,16 @@
 #include "../iupdateconfiguration.h"
 #include "../imusesamplerupdateservice.h"
 
-namespace mu::update {
+namespace muse::update {
 class MuseSamplerUpdateService : public IMuseSamplerUpdateService, public async::Asyncable
 {
-    Inject<muse::network::INetworkManagerCreator> networkManagerCreator;
+    Inject<network::INetworkManagerCreator> networkManagerCreator;
     Inject<IUpdateConfiguration> configuration;
     Inject<io::IFileSystem> fileSystem;
-    Inject<ISystemInfo> systemInfo;
-    Inject<muse::languages::ILanguagesConfiguration> languagesConfiguration;
-    Inject<muse::musesampler::IMuseSamplerInfo> museSamplerInfo;
-    Inject<IInteractive> interactive;
+    Inject<mu::ISystemInfo> systemInfo;
+    Inject<languages::ILanguagesConfiguration> languagesConfiguration;
+    Inject<musesampler::IMuseSamplerInfo> museSamplerInfo;
+    Inject<mu::IInteractive> interactive;
 
 public:
     RetVal<ReleaseInfo> checkForUpdate() override;
@@ -69,4 +69,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_MUSESAMPLERUPDATESERVICE_H
+#endif // MUSE_UPDATE_MUSESAMPLERUPDATESERVICE_H

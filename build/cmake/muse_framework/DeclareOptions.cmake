@@ -26,6 +26,7 @@ declare_muse_module_opt(MUSESAMPLER ON)
 declare_muse_module_opt(NETWORK ON)
 declare_muse_module_opt(SHORTCUTS ON)
 declare_muse_module_opt(UI ON)
+declare_muse_module_opt(UPDATE ON)
 
 set(VST3_SDK_VERSION "3.7")
 declare_muse_module_opt(VST OFF)

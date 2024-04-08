@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATETYPES_H
-#define MU_UPDATE_UPDATETYPES_H
+#ifndef MUSE_UPDATE_UPDATETYPES_H
+#define MUSE_UPDATE_UPDATETYPES_H
 
 #include <string>
 
 #include "types/val.h"
 
-namespace mu::update {
+namespace muse::update {
 struct PrevReleaseNotes {
     std::string version;
     std::string notes;
@@ -59,4 +59,4 @@ struct ReleaseInfo {
 };
 }
 
-#endif // MU_UPDATE_UPDATETYPES_H
+#endif // MUSE_UPDATE_UPDATETYPES_H

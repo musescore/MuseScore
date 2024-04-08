@@ -35,7 +35,7 @@
 #include "translation.h"
 #include "log.h"
 
-using namespace mu::update;
+using namespace muse::update;
 using namespace muse::network;
 
 mu::RetVal<ReleaseInfo> MuseSamplerUpdateService::checkForUpdate()

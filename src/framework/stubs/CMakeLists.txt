@@ -58,7 +58,7 @@ if (NOT MUSE_MODULE_SHORTCUTS)
     add_subdirectory(shortcuts)
 endif()
 
-if (NOT MUE_BUILD_UPDATE_MODULE)
+if (NOT MUSE_MODULE_UPDATE)
     add_subdirectory(update)
 endif()
 

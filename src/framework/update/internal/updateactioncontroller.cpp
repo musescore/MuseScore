@@ -19,22 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_IUPDATESCENARIO_H
-#define MU_UPDATE_IUPDATESCENARIO_H
+#include "updateactioncontroller.h"
 
-#include "modularity/imoduleinterface.h"
+using namespace muse::update;
 
-namespace mu::update {
-class IUpdateScenario : MODULE_EXPORT_INTERFACE
+void UpdateActionController::init()
 {
-    INTERFACE_ID(IUpdateScenario)
-
-public:
-    virtual ~IUpdateScenario() = default;
-
-    virtual void checkForAppUpdate() = 0;
-    virtual void checkForMuseSamplerUpdate() = 0;
-};
+    dispatcher()->reg(this, "check-update", this, &UpdateActionController::checkForAppUpdate);
 }
 
-#endif // MU_UPDATE_IUPDATESCENARIO_H
+void UpdateActionController::checkForAppUpdate()
+{
+    updateScenario()->checkForAppUpdate();
+}

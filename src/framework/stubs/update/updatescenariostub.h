@@ -24,7 +24,7 @@
 
 #include "update/iupdatescenario.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateScenarioStub : public IUpdateScenario
 {
 public:

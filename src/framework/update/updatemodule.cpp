@@ -40,7 +40,7 @@
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
-using namespace mu::update;
+using namespace muse::update;
 using namespace mu::modularity;
 using namespace muse::ui;
 

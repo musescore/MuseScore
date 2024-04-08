@@ -21,7 +21,7 @@
  */
 #include "updateservicestub.h"
 
-using namespace mu::update;
+using namespace muse::update;
 
 mu::RetVal<ReleaseInfo> UpdateServiceStub::checkForUpdate()
 {
@@ -39,5 +39,5 @@ void UpdateServiceStub::cancelUpdate()
 
 mu::Progress UpdateServiceStub::updateProgress()
 {
-    return Progress();
+    return mu::Progress();
 }

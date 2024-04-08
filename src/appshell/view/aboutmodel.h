@@ -38,7 +38,7 @@ class AboutModel : public QObject
     Q_OBJECT
 
     Inject<IAppShellConfiguration> configuration;
-    Inject<update::IUpdateConfiguration> updateConfiguration;
+    Inject<muse::update::IUpdateConfiguration> updateConfiguration;
     Inject<IGlobalConfiguration> globalConfiguration;
     Inject<IApplication> application;
 

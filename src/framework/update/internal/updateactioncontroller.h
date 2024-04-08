@@ -19,31 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_IAPPUPDATESERVICE_H
-#define MU_UPDATE_IAPPUPDATESERVICE_H
+#ifndef MUSE_UPDATE_UPDATEACTIONCONTROLLER_H
+#define MUSE_UPDATE_UPDATEACTIONCONTROLLER_H
 
-#include "types/retval.h"
-#include "io/path.h"
-#include "progress.h"
+#include "actions/actionable.h"
 
-#include "updatetypes.h"
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "../iupdatescenario.h"
 
-#include "modularity/imoduleinterface.h"
-
-namespace mu::update {
-class IAppUpdateService : MODULE_EXPORT_INTERFACE
+namespace muse::update {
+class UpdateActionController : public muse::actions::Actionable
 {
-    INTERFACE_ID(IAppUpdateService)
+    Inject<muse::actions::IActionsDispatcher> dispatcher;
+    Inject<IUpdateScenario> updateScenario;
 
 public:
-    virtual ~IAppUpdateService() = default;
+    void init();
 
-    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
-
-    virtual RetVal<io::path_t> downloadRelease() = 0;
-    virtual void cancelUpdate() = 0;
-    virtual mu::Progress updateProgress() = 0;
+private:
+    void checkForAppUpdate();
 };
 }
 
-#endif // MU_UPDATE_IAPPUPDATESERVICE_H
+#endif // MUSE_UPDATE_UPDATEACTIONCONTROLLER_H

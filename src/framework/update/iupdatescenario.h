@@ -19,32 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_IMUSESAMPLERUPDATESERVICE_H
-#define MU_UPDATE_IMUSESAMPLERUPDATESERVICE_H
-
-#include "types/retval.h"
-#include "io/path.h"
-#include "progress.h"
-
-#include "updatetypes.h"
+#ifndef MUSE_UPDATE_IUPDATESCENARIO_H
+#define MUSE_UPDATE_IUPDATESCENARIO_H
 
 #include "modularity/imoduleinterface.h"
 
-namespace mu::update {
-class IMuseSamplerUpdateService : MODULE_EXPORT_INTERFACE
+namespace muse::update {
+class IUpdateScenario : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMuseSamplerUpdateService)
+    INTERFACE_ID(IUpdateScenario)
 
 public:
-    virtual ~IMuseSamplerUpdateService() = default;
+    virtual ~IUpdateScenario() = default;
 
-    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
-    virtual RetVal<ReleaseInfo> lastCheckResult() = 0;
-
-    virtual mu::Progress updateProgress() = 0;
-
-    virtual void openMuseHub() = 0;
+    virtual void checkForAppUpdate() = 0;
+    virtual void checkForMuseSamplerUpdate() = 0;
 };
 }
 
-#endif // MU_UPDATE_IMUSESAMPLERUPDATESERVICE_H
+#endif // MUSE_UPDATE_IUPDATESCENARIO_H

@@ -28,7 +28,7 @@
 #include "translation.h"
 #include "log.h"
 
-using namespace mu::update;
+using namespace muse::update;
 
 UpdateModel::UpdateModel(QObject* parent)
     : QObject(parent)

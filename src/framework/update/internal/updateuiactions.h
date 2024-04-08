@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_UPDATEUIACTIONS_H
-#define MU_UPDATE_UPDATEUIACTIONS_H
+#ifndef MUSE_UPDATE_UPDATEUIACTIONS_H
+#define MUSE_UPDATE_UPDATEUIACTIONS_H
 
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
@@ -29,10 +29,10 @@
 
 #include "updateactioncontroller.h"
 
-namespace mu::update {
+namespace muse::update {
 class UpdateUiActions : public muse::ui::IUiActionsModule
 {
-    INJECT(context::IUiContextResolver, uicontextResolver)
+    INJECT(mu::context::IUiContextResolver, uicontextResolver)
 
 public:
     UpdateUiActions(std::shared_ptr<UpdateActionController> controller);
@@ -53,4 +53,4 @@ private:
 };
 }
 
-#endif // MU_UPDATE_UPDATEUIACTIONS_H
+#endif // MUSE_UPDATE_UPDATEUIACTIONS_H

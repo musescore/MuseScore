@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UPDATE_IUPDATECONFIGURATION_H
-#define MU_UPDATE_IUPDATECONFIGURATION_H
+#ifndef MUSE_UPDATE_IUPDATECONFIGURATION_H
+#define MUSE_UPDATE_IUPDATECONFIGURATION_H
 
 #include "io/path.h"
 #include "network/networktypes.h"
 
 #include "modularity/imoduleinterface.h"
 
-namespace mu::update {
+namespace muse::update {
 class IUpdateConfiguration : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IUpdateConfiguration)
@@ -62,4 +62,4 @@ public:
 };
 }
 
-#endif // MU_UPDATE_IUPDATECONFIGURATION_H
+#endif // MUSE_UPDATE_IUPDATECONFIGURATION_H

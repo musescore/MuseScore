@@ -21,7 +21,7 @@
  */
 #include "updateconfigurationstub.h"
 
-using namespace mu::update;
+using namespace muse::update;
 
 bool UpdateConfigurationStub::isAppUpdatable() const
 {
