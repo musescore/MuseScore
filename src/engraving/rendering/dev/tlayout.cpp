@@ -4285,18 +4285,22 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         const Staff* st = item->staff();
+        auto tick = item->chord()->segment()->tick();
+        auto stringData = item->staff()->part()->instrument(tick)->stringData();
         auto scoreElement = item->links() ? item->links()->mainElement() : nullptr;
+        Note* staffNote = nullptr;
+        size_t maxStrings = stringData->strings();
+        int updatedString = item->string();
+        int updatedFret = item->fret();
         if (scoreElement && scoreElement->isNote()) {
-            if (auto n = toNote(scoreElement)) {
-                int updatedString = item->string();
-                int updatedFret = item->fret();
-                for (auto& e : n->el()) {
+            staffNote = toNote(scoreElement);
+            if (staffNote) {
+                // Handle String Text:
+                for (auto& e : staffNote->el()) {
                     if (e->isFingering()) {
                         if (auto fingering = toFingering(e)) {
                             if (fingering->textStyleType() == TextStyleType::STRING_NUMBER) {
-                                auto stringData = st->part()->instrument(item->tick())->stringData();
                                 int whichString = fingering->plainText().toInt();
-                                size_t maxStrings = stringData->strings();
                                 if (whichString <= maxStrings && whichString >= 0) {
                                     updatedString = whichString;  // E.g: 1-6
                                     updatedString -= 1;           // E.g: 0-5 (internal representation)
@@ -4309,6 +4313,28 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
                 const_cast<Note*>(item)->setString(updatedString);
                 const_cast<Note*>(item)->setFret(updatedFret);
             }
+        }
+
+        // Handle Capo Text:
+        // (Can be on either clef or tab staff)
+        Staff* clefStaff = staffNote ? staffNote->staff() : nullptr;
+        const Staff* tabStaff = item->staff();
+        const Staff* staff = clefStaff ? clefStaff : tabStaff;
+        int capoPosition = staff->capo(tick).fretPosition;
+        if (capoPosition > 0) {
+            while (updatedFret < capoPosition) {
+                updatedString += 1;
+                updatedFret = stringData->fret(item->pitch(), updatedString, tabStaff);
+                if (updatedFret < 0 || updatedString > maxStrings) {
+                    updatedFret = -1;
+                    updatedString = item->string();
+                    break;
+                } else if (updatedFret < capoPosition) {
+                    continue;
+                }
+            }
+            const_cast<Note*>(item)->setString(updatedString);
+            const_cast<Note*>(item)->setFret(updatedFret);
         }
 
         const StaffType* tab = st->staffTypeForElement(item);
