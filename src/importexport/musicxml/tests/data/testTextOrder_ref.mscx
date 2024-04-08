@@ -151,9 +151,10 @@
           <StaffText>
             <text>3rd time senza Invisalign</text>
             </StaffText>
-          <StaffText>
+          <Tempo>
+            <tempo>2</tempo>
             <text><font size="12"/><b>Straight</b></text>
-            </StaffText>
+            </Tempo>
           <StaffText>
             <placement>below</placement>
             <text><i>Cantabile</i></text>
