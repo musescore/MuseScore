@@ -4640,6 +4640,22 @@ void NotationInteraction::addStretch(qreal value)
     apply();
 }
 
+Measure* NotationInteraction::selectedMeasure() const
+{
+    INotationInteraction::HitElementContext context = hitElementContext();
+    mu::engraving::Measure* measure = context.element && context.element->isMeasure() ? mu::engraving::toMeasure(context.element) : nullptr;
+
+    if (!measure) {
+        INotationSelectionPtr selection = this->selection();
+        if (selection->isRange()) {
+            measure = selection->range()->measureRange().endMeasure;
+        } else if (selection->element()) {
+            measure = selection->element()->findMeasure();
+        }
+    }
+    return measure;
+}
+
 void NotationInteraction::addTimeSignature(Measure* measure, staff_idx_t staffIndex, TimeSignature* timeSignature)
 {
     startEdit();
