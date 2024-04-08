@@ -86,6 +86,7 @@
 #include "dom/ledgerline.h"
 #include "dom/letring.h"
 #include "dom/line.h"
+#include "dom/linkedobjects.h"
 #include "dom/lyrics.h"
 
 #include "dom/marker.h"
@@ -4284,6 +4285,32 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         const Staff* st = item->staff();
+        auto scoreElement = item->links() ? item->links()->mainElement() : nullptr;
+        if (scoreElement && scoreElement->isNote()) {
+            if (auto n = toNote(scoreElement)) {
+                int updatedString = item->string();
+                int updatedFret = item->fret();
+                for (auto& e : n->el()) {
+                    if (e->isFingering()) {
+                        if (auto fingering = toFingering(e)) {
+                            if (fingering->textStyleType() == TextStyleType::STRING_NUMBER) {
+                                auto stringData = st->part()->instrument(item->tick())->stringData();
+                                int whichString = fingering->plainText().toInt();
+                                size_t maxStrings = stringData->strings();
+                                if (whichString <= maxStrings && whichString >= 0) {
+                                    updatedString = whichString;  // E.g: 1-6
+                                    updatedString -= 1;           // E.g: 0-5 (internal representation)
+                                    updatedFret = stringData->fret(item->pitch(), updatedString, st);
+                                }
+                            }
+                        }
+                    }
+                }
+                const_cast<Note*>(item)->setString(updatedString);
+                const_cast<Note*>(item)->setFret(updatedFret);
+            }
+        }
+
         const StaffType* tab = st->staffTypeForElement(item);
         // not complete but we need systems to be laid out to add parenthesis
         if (item->fixed()) {
@@ -4293,6 +4320,8 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
             if (item->negativeFretUsed()) {
                 const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
+            } else if (item->fret() < 0) {
+                const_cast<Note*>(item)->setFretString(u"?");
             }
 
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
