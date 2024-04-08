@@ -556,7 +556,8 @@ KerningType HorizontalSpacing::computeNoteKerningType(const Note* note, const En
         return KerningType::KERNING;
     }
     if (item2->isLyrics() && c->isMelismaEnd()) {
-        return KerningType::NON_KERNING;
+        Note* melismaEndNote = c->up() ? c->downNote() : c->upNote();
+        return note == melismaEndNote ? KerningType::NON_KERNING : KerningType::KERNING;
     }
     if (c->allowKerningAbove() && c->allowKerningBelow()) {
         return KerningType::KERNING;

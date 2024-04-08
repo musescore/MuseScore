@@ -303,12 +303,6 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
             item->setNumOfDashes(1);
         }
         ldata->moveY(-item->lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
-        // if not final segment, shorten it (why? -AS)
-        /*
-        if (isBeginType() || isMiddleType()) {
-            rxpos2() -= ctx.conf().styleP(Sid::minNoteDistance) * mag();
-        }
-        */
     } else {                              // dash(es)
         // set conventional dash Y pos
         ldata->moveY(-lyr->fontMetrics().xHeight() * ctx.conf().styleD(Sid::lyricsDashYposRatio));
