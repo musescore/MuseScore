@@ -92,7 +92,7 @@ void StringData::set(const StringData& src)
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, const Staff* staff, int* string, int* fret) const
 {
     return convertPitch(pitch, pitchOffsetAt(staff), string, fret);
 }
@@ -105,7 +105,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) c
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, Staff* staff) const
+int StringData::getPitch(int string, int fret, const Staff* staff) const
 {
     return getPitch(string, fret, pitchOffsetAt(staff));
 }
@@ -117,7 +117,7 @@ int StringData::getPitch(int string, int fret, Staff* staff) const
 //    Returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string, Staff* staff) const
+int StringData::fret(int pitch, int string, const Staff* staff) const
 {
     return fret(pitch, string, pitchOffsetAt(staff));
 }
@@ -303,7 +303,7 @@ int StringData::frettedStrings() const
 //   For string data calculations, pitch offset may depend on transposition, capos and, possibly, ottavas.
 //---------------------------------------------------------
 
-int StringData::pitchOffsetAt(Staff* staff)
+int StringData::pitchOffsetAt(const Staff* staff)
 {
     return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
 }

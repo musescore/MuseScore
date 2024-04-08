@@ -60,11 +60,11 @@ public:
     bool isNull() const;
 
     void        set(const StringData& src);
-    bool        convertPitch(int pitch, Staff* staff, int* string, int* fret) const;
-    int         fret(int pitch, int string, Staff* staff) const;
+    bool        convertPitch(int pitch, const Staff* staff, int* string, int* fret) const;
+    int         fret(int pitch, int string, const Staff* staff) const;
     void        fretChords(Chord* chord) const;
-    int         getPitch(int string, int fret, Staff* staff) const;
-    static int  pitchOffsetAt(Staff* staff);
+    int         getPitch(int string, int fret, const Staff* staff) const;
+    static int  pitchOffsetAt(const Staff* staff);
     size_t      strings() const { return m_stringTable.size(); }
     int         frettedStrings() const;
     const std::vector<instrString>& stringList() const { return m_stringTable; }
