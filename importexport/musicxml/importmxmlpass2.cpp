@@ -3780,6 +3780,8 @@ bool MusicXMLParserDirection::isLyricBracket() const
 
 bool MusicXMLParserDirection::isLikelyFingering() const
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return false;
       // One or more newline-separated digits (or changes), possibly lead or trailed by whitespace
       return _wordsText.contains(QRegularExpression("^\\s*[0-5pimac](?:[-–][0-5pimac])?(?:\\n[0-5pimac](?:[-–][0-5pimac])?)*\\s*$"))
             && _rehearsalText.isEmpty()
@@ -3793,6 +3795,8 @@ bool MusicXMLParserDirection::isLikelyFingering() const
 
 bool MusicXMLParserDirection::isLikelySubtitle(const Fraction& tick) const
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return false;
       return (tick + _offset < Fraction(5, 1)) // Only early in the piece
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
@@ -3806,6 +3810,8 @@ bool MusicXMLParserDirection::isLikelySubtitle(const Fraction& tick) const
 
 bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return false;
       return (tick + _offset < Fraction(5, 1)) // Only early in the piece
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
@@ -3819,6 +3825,8 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
 
 bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) const
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return false;
       return (tick + _offset < Fraction(5, 1)) // Only early in the piece
             && _rehearsalText.isEmpty()
             && _metroText.isEmpty()
@@ -4032,6 +4040,8 @@ bool MusicXMLParserDirection::attemptTempoTextCoercion(const Fraction& tick)
 
 void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, const Fraction tick)
       {
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return;
       // Try to recognize the various repeats
       QString repeat;
       if (!_sndCoda.isEmpty())
@@ -4091,16 +4101,18 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
 
 void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const int track, const Fraction tick, DelayedDirectionsList& delayedDirections)
       {
-            if (!_wordsText.contains("NmiCmi"))
-                  return;
-            Harmony* ha = new Harmony(_score);
-            ha->setRootTpc(Tpc::TPC_INVALID);
-            ha->setId(-1);
-            ha->setTextName("N.C.");
-            ha->setTrack(track);
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, "above", measure, tick, false);
-            delayedDirections.push_back(delayedDirection);
-            _wordsText.replace("NmiCmi", "");
+      if (!preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE))
+            return;
+      if (!_wordsText.contains("NmiCmi"))
+            return;
+      Harmony* ha = new Harmony(_score);
+      ha->setRootTpc(Tpc::TPC_INVALID);
+      ha->setId(-1);
+      ha->setTextName("N.C.");
+      ha->setTrack(track);
+      MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, "above", measure, tick, false);
+      delayedDirections.push_back(delayedDirection);
+      _wordsText.replace("NmiCmi", "");
       }
 
 //---------------------------------------------------------
@@ -4752,7 +4764,11 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
             else if (type.isEmpty())
                   _logger->logError("empty ending type", &_e);
             else {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+                  QStringList sl = number.split(",", Qt::SkipEmptyParts);
+#else
                   QStringList sl = number.split(",", QString::SkipEmptyParts);
+#endif
                   QList<int> iEndingNumbers;
                   bool unsupported = false;
                   for (const QString &s : sl) {

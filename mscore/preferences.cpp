@@ -17,7 +17,6 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //=============================================================================
 
-#include "libmscore/style.h"
 #include "libmscore/mscore.h"
 #include "preferences.h"
 
@@ -167,6 +166,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_EXPORT_MP3_BITRATE,                              new IntPreference(128, false)},
             {PREF_EXPORT_MUSICXML_EXPORTBREAKS,                    new EnumPreference(QVariant::fromValue(MusicxmlExportBreaks::ALL), false)},
             {PREF_EXPORT_MUSICXML_EXPORTLAYOUT,                    new BoolPreference(true, false)},
+            {PREF_EXPORT_MUSICXML_EXPORTINVISIBLEELEMENTS,         new BoolPreference(false)},
             {PREF_EXPORT_PDF_DPI,                                  new IntPreference(DPI, false)},
             {PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(DPI, false)},
             {PREF_EXPORT_PNG_USETRANSPARENCY,                      new BoolPreference(true, false)},
@@ -175,6 +175,7 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_IMPORT_GUITARPRO_CHARSET,                        new StringPreference("UTF-8", false)},
             {PREF_IMPORT_MUSICXML_IMPORTBREAKS,                    new BoolPreference(true, false)},
             {PREF_IMPORT_MUSICXML_IMPORTLAYOUT,                    new BoolPreference(true, false)},
+            {PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE,             new BoolPreference(false, false)},
             {PREF_IMPORT_MUSICXML_REMOVEINSTRUMENTNAMES,           new BoolPreference(true, false)}, // TODO: add to preferences menu
             {PREF_IMPORT_OVERTURE_CHARSET,                         new StringPreference("GBK", false)},
             {PREF_IMPORT_STYLE_STYLEFILE,                          new StringPreference("", false)},

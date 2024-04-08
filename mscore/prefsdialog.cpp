@@ -34,7 +34,6 @@
 
 #include "pathlistdialog.h"
 #include "resourceManager.h"
-#include "audio/midi/msynthesizer.h"
 
 #ifdef AVSOMR
 #include "avsomr/avsomrlocal.h"
@@ -320,6 +319,7 @@ void PreferenceDialog::start()
                                             bool value = preferences.getBool(PREF_MIGRATION_DO_NOT_ASK_ME_AGAIN_XML) && preferences.getBool(PREF_MIGRATION_APPLY_EDWIN_FOR_XML_FILES);
                                             applyDefaultTypeFaceToImportedScores->setChecked(value);
                                             }), // update function
+                  new BoolPreferenceItem(PREF_IMPORT_MUSICXML_IMPORTINFERTEXTTYPE, inferTextTypes),
             #ifdef AVSOMR
                   new BoolPreferenceItem(PREF_IMPORT_AVSOMR_USELOCAL, useLocalAvsOmr, [&](){ updateUseLocalAvsOmr(); }),
             #endif
@@ -1781,7 +1781,7 @@ void PreferenceDialog::printShortcutsClicked()
       const MStyle& s = MScore::defaultStyle();
       qreal pageW = s.value(Sid::pageWidth).toReal();
       qreal pageH = s.value(Sid::pageHeight).toReal();
-      printer.setPaperSize(QSizeF(pageW, pageH), QPrinter::Inch);
+      printer.setPageSize(QPageSize(QSizeF(pageW, pageH), QPageSize::Inch));
 
       printer.setCreator("MuseScore Version: " VERSION);
       printer.setFullPage(true);
