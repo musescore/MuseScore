@@ -28,7 +28,7 @@
 
 namespace mu::iex::guitarpro {
 class GuitarProConfiguration;
-class GuitarProModule : public modularity::IModuleSetup
+class GuitarProModule : public muse::modularity::IModuleSetup
 {
 public:
 

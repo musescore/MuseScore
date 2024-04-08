@@ -30,7 +30,7 @@ using namespace mu::inspector;
 BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(mu::qtrc("inspector", "Breaths & pauses"));
+    setTitle(muse::qtrc("inspector", "Breaths & pauses"));
     setModelType(InspectorModelType::TYPE_BREATH);
 
     createProperties();

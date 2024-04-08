@@ -273,7 +273,7 @@ void MixerPanelModel::setupConnections()
         this, [this](const aux_channel_idx_t index,
                      notation::INotationSoloMuteState::SoloMuteState newSoloMuteState) {
         const IPlaybackController::AuxTrackIdMap& auxTrackIdMap = controller()->auxTrackIdMap();
-        TrackId trackId = mu::value(auxTrackIdMap, index);
+        TrackId trackId = muse::value(auxTrackIdMap, index);
 
         if (MixerChannelItem* item = findChannelItem(trackId)) {
             item->loadSoloMuteState(std::move(newSoloMuteState));
@@ -322,7 +322,7 @@ void MixerPanelModel::setupConnections()
 
     configuration()->isAuxChannelVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
         const auto& auxMap = controller()->auxTrackIdMap();
-        TrackId trackId = mu::value(auxMap, index);
+        TrackId trackId = muse::value(auxMap, index);
         if (visible) {
             int visibleAuxesOnRight = 0;
 
@@ -549,7 +549,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 {
     MixerChannelItem* item = new MixerChannelItem(this, MixerChannelItem::Type::Master, true /*outputOnly*/);
     item->setPanelSection(m_navigationSection);
-    item->setTitle(mu::qtrc("playback", "Master"));
+    item->setTitle(muse::qtrc("playback", "Master"));
 
     playback()->audioOutput()->masterOutputParams()
     .onResolve(this, [this, item](AudioOutputParams outParams) {

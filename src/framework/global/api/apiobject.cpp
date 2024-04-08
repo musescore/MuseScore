@@ -21,7 +21,7 @@
  */
 #include "apiobject.h"
 
-using namespace mu::api;
+using namespace muse::api;
 
 ApiObject::ApiObject(IApiEngine* e)
     : m_engine(e)

@@ -26,7 +26,7 @@
 #include "internal/printprovider.h"
 
 using namespace mu::print;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string PrintModule::moduleName() const
 {

@@ -28,9 +28,10 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::notation;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::draw;
-using namespace mu::notation;
 using namespace muse::actions;
 
 static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
@@ -124,7 +125,7 @@ void AbstractNotationPaintView::initBackground()
 
 void AbstractNotationPaintView::initNavigatorOrientation()
 {
-    configuration()->canvasOrientation().ch.onReceive(this, [this](mu::Orientation) {
+    configuration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
         moveCanvasToPosition(PointF(0, 0));
     });
 }
@@ -974,7 +975,7 @@ bool AbstractNotationPaintView::doMoveCanvas(qreal dx, qreal dy)
     return true;
 }
 
-void AbstractNotationPaintView::scheduleRedraw(const mu::RectF& rect)
+void AbstractNotationPaintView::scheduleRedraw(const muse::RectF& rect)
 {
     QRect qrect = correctDrawRect(rect).toQRect();
     update(qrect);

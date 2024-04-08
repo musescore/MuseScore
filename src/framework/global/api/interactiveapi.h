@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_INTERACTIVEAPI_H
-#define MU_API_INTERACTIVEAPI_H
+#ifndef MUSE_API_INTERACTIVEAPI_H
+#define MUSE_API_INTERACTIVEAPI_H
 
 #include "api/apiobject.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 
-namespace mu::api {
+namespace muse::api {
 class InteractiveApi : public ApiObject
 {
     Q_OBJECT
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_API_INTERACTIVEAPI_H
+#endif // MUSE_API_INTERACTIVEAPI_H

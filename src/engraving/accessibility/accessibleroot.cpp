@@ -72,11 +72,11 @@ void AccessibleRoot::notifyAboutFocusedElementNameChanged()
     m_staffInfo = "";
 
     if (auto focusedElement = m_focusedElement.lock()) {
-        focusedElement->accessiblePropertyChanged().send(IAccessible::Property::Name, Val());
+        focusedElement->accessiblePropertyChanged().send(IAccessible::Property::Name, muse::Val());
     }
 }
 
-mu::RectF AccessibleRoot::toScreenRect(const RectF& rect, bool* ok) const
+RectF AccessibleRoot::toScreenRect(const RectF& rect, bool* ok) const
 {
     RectF result;
     if (m_accessibleMapToScreenFunc) {
@@ -102,7 +102,7 @@ IAccessible::Role AccessibleRoot::accessibleRole() const
 
 QString AccessibleRoot::accessibleName() const
 {
-    return mu::qtrc("engraving", "Score") + " " + element()->score()->name();
+    return muse::qtrc("engraving", "Score") + " " + element()->score()->name();
 }
 
 bool AccessibleRoot::enabled() const
@@ -134,11 +134,11 @@ void AccessibleRoot::updateStaffInfo(const AccessibleItemWeakPtr newAccessibleIt
 
     if (newItem && newItem->element()->hasStaff()) {
         staff_idx_t newStaffIdx = newItem->element()->staffIdx();
-        staff_idx_t oldStaffIdx = oldItem ? oldItem->element()->staffIdx() : nidx;
+        staff_idx_t oldStaffIdx = oldItem ? oldItem->element()->staffIdx() : muse::nidx;
 
         if (newStaffIdx != oldStaffIdx) {
             auto element = newItem->element();
-            QString staff = mu::qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
+            QString staff = muse::qtrc("engraving", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
             QString staffName = element->staff()->part()->longName(element->tick());
             if (staffName.isEmpty()) {
@@ -208,16 +208,16 @@ QString AccessibleRoot::rangeSelectionInfo()
         Staff* staff1 = score->staff(startStaff);
         Staff* staff2 = score->staff(endStaff);
         if (staff1 && staff2) {
-            staffInstrument1 = mu::qtrc("engraving", "Staff %1 (%2)")
+            staffInstrument1 = muse::qtrc("engraving", "Staff %1 (%2)")
                                .arg(QString::number(startStaff + 1))
                                .arg(staff1 ? staff1->partName().toQString() : "");
-            staffInstrument2 = mu::qtrc("engraving", "Staff %1 (%2)")
+            staffInstrument2 = muse::qtrc("engraving", "Staff %1 (%2)")
                                .arg(QString::number(endStaff + 1))
                                .arg(staff2 ? staff2->partName().toQString() : "");
         }
     }
 
-    return mu::qtrc("engraving", "Range selection starts %1%2 ends %3%4")
+    return muse::qtrc("engraving", "Range selection starts %1%2 ends %3%4")
            .arg(startBarBeat)
            .arg(!staffInstrument1.isEmpty() ? (" " + staffInstrument1) : "")
            .arg(endBarBeat)

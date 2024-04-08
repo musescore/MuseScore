@@ -34,7 +34,7 @@
 class QAccessibleInterface;
 class QAccessibleEvent;
 namespace mu::diagnostics {
-class DiagnosticAccessibleModel : public QAbstractItemModel, public async::Asyncable
+class DiagnosticAccessibleModel : public QAbstractItemModel, public muse::async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isAutoRefresh READ isAutoRefresh WRITE setIsAutoRefresh NOTIFY isAutoRefreshChanged)

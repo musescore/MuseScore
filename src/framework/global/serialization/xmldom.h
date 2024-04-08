@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_XMLDOM_H
-#define MU_GLOBAL_XMLDOM_H
+#ifndef MUSE_GLOBAL_XMLDOM_H
+#define MUSE_GLOBAL_XMLDOM_H
 
 #include <memory>
 
 #include "types/bytearray.h"
 #include "types/string.h"
 
-namespace mu {
+namespace muse {
 struct XmlDomData;
 
 class XmlDomElement;
@@ -91,4 +91,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_XMLDOM_H
+#endif // MUSE_GLOBAL_XMLDOM_H

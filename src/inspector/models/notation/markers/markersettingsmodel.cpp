@@ -29,7 +29,7 @@ MarkerSettingsModel::MarkerSettingsModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_MARKER);
-    setTitle(mu::qtrc("inspector", "Marker"));
+    setTitle(muse::qtrc("inspector", "Marker"));
     setIcon(muse::ui::IconCode::Code::MARKER);
     createProperties();
 }

@@ -42,41 +42,41 @@ class IProjectConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectConfiguration() = default;
 
-    virtual io::path_t recentFilesJsonPath() const = 0;
-    virtual ByteArray compatRecentFilesData() const = 0;
+    virtual muse::io::path_t recentFilesJsonPath() const = 0;
+    virtual muse::ByteArray compatRecentFilesData() const = 0;
 
-    virtual io::path_t myFirstProjectPath() const = 0;
+    virtual muse::io::path_t myFirstProjectPath() const = 0;
 
-    virtual io::paths_t availableTemplateDirs() const = 0;
-    virtual io::path_t templateCategoriesJsonPath(const io::path_t& templatesDir) const = 0;
+    virtual muse::io::paths_t availableTemplateDirs() const = 0;
+    virtual muse::io::path_t templateCategoriesJsonPath(const muse::io::path_t& templatesDir) const = 0;
 
-    virtual io::path_t userTemplatesPath() const = 0;
-    virtual void setUserTemplatesPath(const io::path_t& path) = 0;
-    virtual async::Channel<io::path_t> userTemplatesPathChanged() const = 0;
+    virtual muse::io::path_t userTemplatesPath() const = 0;
+    virtual void setUserTemplatesPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userTemplatesPathChanged() const = 0;
 
-    virtual io::path_t lastOpenedProjectsPath() const = 0;
-    virtual void setLastOpenedProjectsPath(const io::path_t& path) = 0;
+    virtual muse::io::path_t lastOpenedProjectsPath() const = 0;
+    virtual void setLastOpenedProjectsPath(const muse::io::path_t& path) = 0;
 
-    virtual io::path_t lastSavedProjectsPath() const = 0;
-    virtual void setLastSavedProjectsPath(const io::path_t& path) = 0;
+    virtual muse::io::path_t lastSavedProjectsPath() const = 0;
+    virtual void setLastSavedProjectsPath(const muse::io::path_t& path) = 0;
 
-    virtual io::path_t userProjectsPath() const = 0;
-    virtual void setUserProjectsPath(const io::path_t& path) = 0;
-    virtual async::Channel<io::path_t> userProjectsPathChanged() const = 0;
-    virtual io::path_t defaultUserProjectsPath() const = 0;
+    virtual muse::io::path_t userProjectsPath() const = 0;
+    virtual void setUserProjectsPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userProjectsPathChanged() const = 0;
+    virtual muse::io::path_t defaultUserProjectsPath() const = 0;
 
     virtual bool shouldAskSaveLocationType() const = 0;
     virtual void setShouldAskSaveLocationType(bool shouldAsk) = 0;
 
-    virtual bool isCloudProject(const io::path_t& projectPath) const = 0;
-    virtual bool isLegacyCloudProject(const io::path_t& projectPath) const = 0;
-    virtual io::path_t cloudProjectPath(int scoreId) const = 0;
-    virtual int cloudScoreIdFromPath(const io::path_t& projectPath) const = 0;
+    virtual bool isCloudProject(const muse::io::path_t& projectPath) const = 0;
+    virtual bool isLegacyCloudProject(const muse::io::path_t& projectPath) const = 0;
+    virtual muse::io::path_t cloudProjectPath(int scoreId) const = 0;
+    virtual int cloudScoreIdFromPath(const muse::io::path_t& projectPath) const = 0;
 
-    virtual io::path_t cloudProjectSavingPath(int scoreId = 0) const = 0;
+    virtual muse::io::path_t cloudProjectSavingPath(int scoreId = 0) const = 0;
 
-    virtual io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
-                                             const std::string& suffix = "") const = 0;
+    virtual muse::io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                                   const std::string& suffix = "") const = 0;
 
     virtual SaveLocationType lastUsedSaveLocationType() const = 0;
     virtual void setLastUsedSaveLocationType(SaveLocationType type) = 0;
@@ -99,7 +99,7 @@ public:
     virtual void setHomeScoresPageViewType(HomeScoresPageViewType type) = 0;
 
     virtual QColor templatePreviewBackgroundColor() const = 0;
-    virtual async::Notification templatePreviewBackgroundChanged() const = 0;
+    virtual muse::async::Notification templatePreviewBackgroundChanged() const = 0;
 
     enum class PreferredScoreCreationMode {
         FromInstruments,
@@ -114,15 +114,15 @@ public:
 
     virtual bool isAutoSaveEnabled() const = 0;
     virtual void setAutoSaveEnabled(bool enabled) = 0;
-    virtual async::Channel<bool> autoSaveEnabledChanged() const = 0;
+    virtual muse::async::Channel<bool> autoSaveEnabledChanged() const = 0;
 
     virtual int autoSaveIntervalMinutes() const = 0;
     virtual void setAutoSaveInterval(int minutes) = 0;
-    virtual async::Channel<int> autoSaveIntervalChanged() const = 0;
+    virtual muse::async::Channel<int> autoSaveIntervalChanged() const = 0;
 
     virtual bool alsoShareAudioCom() const = 0;
     virtual void setAlsoShareAudioCom(bool share) = 0;
-    virtual async::Channel<bool> alsoShareAudioComChanged() const = 0;
+    virtual muse::async::Channel<bool> alsoShareAudioComChanged() const = 0;
 
     virtual bool showAlsoShareAudioComDialog() const = 0;
     virtual void setShowAlsoShareAudioComDialog(bool show) = 0;
@@ -130,7 +130,7 @@ public:
     virtual bool hasAskedAlsoShareAudioCom() const = 0;
     virtual void setHasAskedAlsoShareAudioCom(bool has) = 0;
 
-    virtual io::path_t newProjectTemporaryPath() const = 0;
+    virtual muse::io::path_t newProjectTemporaryPath() const = 0;
 
     virtual bool isAccessibleEnabled() const = 0;
 
@@ -151,9 +151,9 @@ public:
     virtual int numberOfSavesToGenerateAudio() const = 0;
     virtual void setNumberOfSavesToGenerateAudio(int number) = 0;
 
-    virtual io::path_t temporaryMp3FilePathTemplate() const = 0;
+    virtual muse::io::path_t temporaryMp3FilePathTemplate() const = 0;
 
-    virtual io::path_t projectBackupPath(const io::path_t& projectPath) const = 0;
+    virtual muse::io::path_t projectBackupPath(const muse::io::path_t& projectPath) const = 0;
 
     virtual bool showCloudIsNotAvailableWarning() const = 0;
     virtual void setShowCloudIsNotAvailableWarning(bool show) = 0;

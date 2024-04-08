@@ -248,7 +248,7 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     if (acc) {
         AccidentalType type = acc->accidentalType();
         double cents = Accidental::subtype2centOffset(type);
-        if (!mu::RealIsNull(cents)) {
+        if (!muse::RealIsNull(cents)) {
             double pwValue = cents / 100.0 * (double)wheelSpec.mLimit / (double)wheelSpec.mAmplitude;
             PitchWheelRenderer::PitchWheelFunction func;
             func.mStartTick = params.onTime - params.offset;
@@ -1490,7 +1490,7 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
 
                     double veloMultiplier = chordVelocityMultiplier(chord, context);
 
-                    if (mu::RealIsEqual(veloMultiplier, 1.0)) {
+                    if (muse::RealIsEqual(veloMultiplier, 1.0)) {
                         continue;
                     }
 

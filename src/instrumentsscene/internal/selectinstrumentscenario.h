@@ -30,16 +30,17 @@
 namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 {
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(notation::IInstrumentsRepository, instrumentsRepository)
 
 public:
-    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
-    RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const
+    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
+    muse::RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey())
+    const
     override;
 
 private:
-    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
+    muse::RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
 };
 }
 

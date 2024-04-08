@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IO_IODEVICE_H
-#define MU_IO_IODEVICE_H
+#ifndef MUSE_IO_IODEVICE_H
+#define MUSE_IO_IODEVICE_H
 
 #include <cstdint>
 #include <string>
@@ -29,7 +29,7 @@
 
 #include "global/types/bytearray.h"
 
-namespace mu::io {
+namespace muse::io {
 class IODevice
 {
 public:
@@ -100,8 +100,4 @@ private:
 };
 }
 
-namespace muse::io {
-using IODevice = mu::io::IODevice;
-}
-
-#endif // MU_IO_IODEVICE_H
+#endif // MUSE_IO_IODEVICE_H

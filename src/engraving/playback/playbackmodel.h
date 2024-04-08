@@ -48,7 +48,7 @@ class Segment;
 class Instrument;
 class RepeatList;
 
-class PlaybackModel : public async::Asyncable
+class PlaybackModel : public muse::async::Asyncable
 {
     INJECT(muse::mpe::IArticulationProfilesRepository, profilesRepository)
 
@@ -56,7 +56,7 @@ public:
     void load(Score* score);
     void reload();
 
-    async::Notification dataChanged() const;
+    muse::async::Notification dataChanged() const;
 
     bool isPlayRepeatsEnabled() const;
     void setPlayRepeats(const bool isEnabled);
@@ -77,8 +77,8 @@ public:
     void triggerMetronome(int tick);
 
     InstrumentTrackIdSet existingTrackIdSet() const;
-    async::Channel<InstrumentTrackId> trackAdded() const;
-    async::Channel<InstrumentTrackId> trackRemoved() const;
+    muse::async::Channel<InstrumentTrackId> trackAdded() const;
+    muse::async::Channel<InstrumentTrackId> trackRemoved() const;
 
 private:
     static const InstrumentTrackId METRONOME_TRACK_ID;
@@ -94,8 +94,8 @@ private:
 
     struct TrackBoundaries
     {
-        track_idx_t trackFrom = mu::nidx;
-        track_idx_t trackTo = mu::nidx;
+        track_idx_t trackFrom = muse::nidx;
+        track_idx_t trackTo = muse::nidx;
     };
 
     InstrumentTrackId idKey(const EngravingItem* item) const;
@@ -149,9 +149,9 @@ private:
     std::unordered_map<InstrumentTrackId, PlaybackContext> m_playbackCtxMap;
     std::unordered_map<InstrumentTrackId, muse::mpe::PlaybackData> m_playbackDataMap;
 
-    async::Notification m_dataChanged;
-    async::Channel<InstrumentTrackId> m_trackAdded;
-    async::Channel<InstrumentTrackId> m_trackRemoved;
+    muse::async::Notification m_dataChanged;
+    muse::async::Channel<InstrumentTrackId> m_trackAdded;
+    muse::async::Channel<InstrumentTrackId> m_trackRemoved;
 };
 }
 

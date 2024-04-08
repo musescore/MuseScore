@@ -31,7 +31,7 @@ using namespace mu::engraving;
 NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(mu::qtrc("inspector", "Head"));
+    setTitle(muse::qtrc("inspector", "Head"));
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
 
     createProperties();
@@ -96,41 +96,41 @@ void NoteheadSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet
 
 void NoteheadSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
+    if (muse::contains(propertyIdSet, Pid::VISIBLE)) {
         loadPropertyItem(m_isHeadHidden, [](const QVariant& isVisible) -> QVariant {
             return !isVisible.toBool();
         });
     }
 
-    if (mu::contains(propertyIdSet, Pid::SMALL)) {
+    if (muse::contains(propertyIdSet, Pid::SMALL)) {
         loadPropertyItem(m_isHeadSmall);
     }
 
-    if (mu::contains(propertyIdSet, Pid::HEAD_HAS_PARENTHESES)) {
+    if (muse::contains(propertyIdSet, Pid::HEAD_HAS_PARENTHESES)) {
         loadPropertyItem(m_hasHeadParentheses);
     }
 
-    if (mu::contains(propertyIdSet, Pid::MIRROR_HEAD)) {
+    if (muse::contains(propertyIdSet, Pid::MIRROR_HEAD)) {
         loadPropertyItem(m_headDirection);
     }
 
-    if (mu::contains(propertyIdSet, Pid::HEAD_GROUP)) {
+    if (muse::contains(propertyIdSet, Pid::HEAD_GROUP)) {
         loadPropertyItem(m_headGroup);
     }
 
-    if (mu::contains(propertyIdSet, Pid::HEAD_TYPE)) {
+    if (muse::contains(propertyIdSet, Pid::HEAD_TYPE)) {
         loadPropertyItem(m_headType);
     }
 
-    if (mu::contains(propertyIdSet, Pid::HEAD_SCHEME)) {
+    if (muse::contains(propertyIdSet, Pid::HEAD_SCHEME)) {
         loadPropertyItem(m_headSystem);
     }
 
-    if (mu::contains(propertyIdSet, Pid::DOT_POSITION)) {
+    if (muse::contains(propertyIdSet, Pid::DOT_POSITION)) {
         loadPropertyItem(m_dotPosition);
     }
 
-    if (mu::contains(propertyIdSet, Pid::OFFSET)) {
+    if (muse::contains(propertyIdSet, Pid::OFFSET)) {
         loadPropertyItem(m_offset);
     }
 }
@@ -188,16 +188,16 @@ bool NoteheadSettingsModel::isTrillCueNote() const
 QVariantList NoteheadSettingsModel::possibleHeadSystemTypes() const
 {
     QMap<mu::engraving::NoteHeadScheme, QString> types {
-        { mu::engraving::NoteHeadScheme::HEAD_AUTO,                    mu::qtrc("inspector", "Auto") },
-        { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  mu::qtrc("inspector", "Normal") },
-        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               mu::qtrc("inspector", "Pitch names") },
-        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,        mu::qtrc("inspector", "German pitch names") },
-        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,                 mu::qtrc("inspector", "Solfège movable do") },
-        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,           mu::qtrc("inspector", "Solfège fixed do") },
-        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,            mu::qtrc("inspector", "4-shape (Walker)") },
-        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,      mu::qtrc("inspector", "7-shape (Aikin)") },
-        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,       mu::qtrc("inspector", "7-shape (Funk)") },
-        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER,     mu::qtrc("inspector", "7-shape (Walker)") },
+        { mu::engraving::NoteHeadScheme::HEAD_AUTO,                    muse::qtrc("inspector", "Auto") },
+        { mu::engraving::NoteHeadScheme::HEAD_NORMAL,                  muse::qtrc("inspector", "Normal") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME,               muse::qtrc("inspector", "Pitch names") },
+        { mu::engraving::NoteHeadScheme::HEAD_PITCHNAME_GERMAN,        muse::qtrc("inspector", "German pitch names") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE,                 muse::qtrc("inspector", "Solfège movable do") },
+        { mu::engraving::NoteHeadScheme::HEAD_SOLFEGE_FIXED,           muse::qtrc("inspector", "Solfège fixed do") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_4,            muse::qtrc("inspector", "4-shape (Walker)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_AIKIN,      muse::qtrc("inspector", "7-shape (Aikin)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_FUNK,       muse::qtrc("inspector", "7-shape (Funk)") },
+        { mu::engraving::NoteHeadScheme::HEAD_SHAPE_NOTE_7_WALKER,     muse::qtrc("inspector", "7-shape (Walker)") },
     };
 
     QVariantList result;

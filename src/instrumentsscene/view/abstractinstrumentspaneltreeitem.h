@@ -33,8 +33,8 @@
 
 namespace mu::instrumentsscene {
 struct MoveParams {
-    IDList childIdListToMove;
-    ID destinationParentId;
+    muse::IDList childIdListToMove;
+    muse::ID destinationParentId;
     notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
 };
 
@@ -57,7 +57,7 @@ public:
                                      notation::INotationPtr notation, QObject* parent);
     virtual ~AbstractInstrumentsPanelTreeItem();
 
-    ID id() const;
+    muse::ID id() const;
     QString idStr() const;
     QString title() const;
     int type() const;
@@ -83,7 +83,7 @@ public:
     AbstractInstrumentsPanelTreeItem* parentItem() const;
     void setParentItem(AbstractInstrumentsPanelTreeItem* parent);
 
-    AbstractInstrumentsPanelTreeItem* childAtId(const ID& id) const;
+    AbstractInstrumentsPanelTreeItem* childAtId(const muse::ID& id) const;
     AbstractInstrumentsPanelTreeItem* childAtRow(int row) const;
     const QList<AbstractInstrumentsPanelTreeItem*>& childItems() const;
 
@@ -98,7 +98,7 @@ public slots:
     void setType(InstrumentsTreeItemType::ItemType type);
     void setTitle(QString title);
     void setIsVisible(bool isVisible, bool setChildren = true);
-    void setId(const ID& id);
+    void setId(const muse::ID& id);
     void setIsExpandable(bool expandable);
     void setIsEditable(bool editable);
     void setIsRemovable(bool removable);
@@ -123,7 +123,7 @@ private:
     QList<AbstractInstrumentsPanelTreeItem*> m_children;
     AbstractInstrumentsPanelTreeItem* m_parent = nullptr;
 
-    ID m_id;
+    muse::ID m_id;
     QString m_title;
     InstrumentsTreeItemType::ItemType m_type = InstrumentsTreeItemType::ItemType::UNDEFINED;
     bool m_isVisible = false;

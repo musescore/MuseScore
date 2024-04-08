@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_IAPIREGISTER_H
-#define MU_API_IAPIREGISTER_H
+#ifndef MUSE_API_IAPIREGISTER_H
+#define MUSE_API_IAPIREGISTER_H
 
 #include "modularity/imoduleinterface.h"
 #include "iapiengine.h"
 #include "api/apiobject.h"
 
-namespace mu::api {
+namespace muse::api {
 class IApiRegister : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(mu::api::IApiRegister)
+    INTERFACE_ID(api::IApiRegister)
 public:
     virtual ~IApiRegister() = default;
 
@@ -50,4 +50,4 @@ struct ApiCreator : public IApiRegister::ICreator
 };
 }
 
-#endif // MU_API_IAPIREGISTER_H
+#endif // MUSE_API_IAPIREGISTER_H

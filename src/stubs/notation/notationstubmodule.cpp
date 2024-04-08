@@ -27,7 +27,7 @@
 #include "instrumentsrepositorystub.h"
 
 using namespace mu::notation;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string NotationModule::moduleName() const
 {

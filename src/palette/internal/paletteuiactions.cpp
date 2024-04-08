@@ -27,6 +27,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::palette;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
@@ -107,12 +108,12 @@ bool PaletteUiActions::actionChecked(const UiAction& act) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> PaletteUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> PaletteUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> PaletteUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> PaletteUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

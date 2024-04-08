@@ -128,7 +128,7 @@ public:
     const muse::draw::Font& font() const { return m_font; }
     bool isHiddenOnTabStaff() const;
 
-    std::vector<mu::LineF> dragAnchorLines() const override;
+    std::vector<LineF> dragAnchorLines() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

@@ -28,6 +28,7 @@
 
 #include "brailleconfigurationstub.h"
 
+using namespace muse;
 using namespace mu::braille;
 
 std::string BrailleModule::moduleName() const

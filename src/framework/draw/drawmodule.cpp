@@ -33,7 +33,7 @@
 #endif
 
 using namespace muse::draw;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string DrawModule::moduleName() const
 {

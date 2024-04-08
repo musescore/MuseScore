@@ -21,7 +21,7 @@
  */
 #include "mnemonicstring.h"
 
-using namespace mu;
+using namespace muse;
 
 #ifndef NO_QT_SUPPORT
 static QString processMnemonic(const QString& str, bool showUnderlines)

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_SETTINGS_H
-#define MU_GLOBAL_SETTINGS_H
+#ifndef MUSE_GLOBAL_SETTINGS_H
+#define MUSE_GLOBAL_SETTINGS_H
 
 #include <string>
 
@@ -41,7 +41,7 @@
 
 class QSettings;
 
-namespace mu {
+namespace muse {
 class Settings
 {
 #ifdef MUSE_MODULE_MULTIINSTANCES
@@ -139,4 +139,4 @@ inline Settings* settings()
 }
 }
 
-#endif // MU_GLOBAL_SETTINGS_H
+#endif // MUSE_GLOBAL_SETTINGS_H

@@ -220,7 +220,7 @@ ms_Track MuseSamplerSequencer::resolveTrack(staff_layer_idx_t staffLayerIdx)
     }
 
     for (track_idx_t trackIdx = 0; trackIdx < tracks.size(); ++trackIdx) {
-        if (!mu::contains(assignedTracks, trackIdx)) {
+        if (!muse::contains(assignedTracks, trackIdx)) {
             m_layerIdxToTrackIdx.emplace(layerIdx, trackIdx);
             return tracks.at(trackIdx);
         }
@@ -479,7 +479,7 @@ void MuseSamplerSequencer::pitchAndTuning(const pitch_level_t nominalPitch, int&
 
     // Get midi pitch
     float stepCount = MIN_SUPPORTED_NOTE + ((nominalPitch - MIN_SUPPORTED_PITCH_LEVEL) / static_cast<float>(PITCH_LEVEL_STEP));
-    pitch = mu::RealRound(stepCount, 0);
+    pitch = RealRound(stepCount, 0);
 
     // Get tuning offset
     int semitonesCount = pitch - MIN_SUPPORTED_NOTE;

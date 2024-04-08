@@ -35,6 +35,7 @@
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace muse;
 
 static const std::string module_name("project");
 
@@ -128,7 +129,7 @@ void ProjectConfiguration::init()
     fileSystem()->makePath(cloudProjectsPath());
 }
 
-io::path_t ProjectConfiguration::recentFilesJsonPath() const
+muse::io::path_t ProjectConfiguration::recentFilesJsonPath() const
 {
     return globalConfiguration()->userAppDataPath().appendingComponent("recent_files.json");
 }
@@ -140,12 +141,12 @@ ByteArray ProjectConfiguration::compatRecentFilesData() const
     return ByteArray(data.data(), data.size());
 }
 
-io::path_t ProjectConfiguration::myFirstProjectPath() const
+muse::io::path_t ProjectConfiguration::myFirstProjectPath() const
 {
     return appTemplatesPath() + "/My_First_Score.mscx";
 }
 
-io::path_t ProjectConfiguration::appTemplatesPath() const
+muse::io::path_t ProjectConfiguration::appTemplatesPath() const
 {
     return globalConfiguration()->appDataPath() + "/templates";
 }
@@ -154,10 +155,10 @@ io::paths_t ProjectConfiguration::availableTemplateDirs() const
 {
     io::paths_t dirs;
 
-    io::path_t defaultTemplatesPath = this->appTemplatesPath();
+    muse::io::path_t defaultTemplatesPath = this->appTemplatesPath();
     dirs.push_back(defaultTemplatesPath);
 
-    io::path_t userTemplatesPath = this->userTemplatesPath();
+    muse::io::path_t userTemplatesPath = this->userTemplatesPath();
     if (!userTemplatesPath.empty() && userTemplatesPath != defaultTemplatesPath) {
         dirs.push_back(userTemplatesPath);
     }
@@ -165,62 +166,62 @@ io::paths_t ProjectConfiguration::availableTemplateDirs() const
     return dirs;
 }
 
-io::path_t ProjectConfiguration::templateCategoriesJsonPath(const io::path_t& templatesDir) const
+muse::io::path_t ProjectConfiguration::templateCategoriesJsonPath(const muse::io::path_t& templatesDir) const
 {
     return templatesDir + "/categories.json";
 }
 
-io::path_t ProjectConfiguration::userTemplatesPath() const
+muse::io::path_t ProjectConfiguration::userTemplatesPath() const
 {
     return settings()->value(USER_TEMPLATES_PATH).toPath();
 }
 
-void ProjectConfiguration::setUserTemplatesPath(const io::path_t& path)
+void ProjectConfiguration::setUserTemplatesPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(USER_TEMPLATES_PATH, Val(path));
 }
 
-async::Channel<io::path_t> ProjectConfiguration::userTemplatesPathChanged() const
+muse::async::Channel<muse::io::path_t> ProjectConfiguration::userTemplatesPathChanged() const
 {
     return m_userTemplatesPathChanged;
 }
 
-io::path_t ProjectConfiguration::lastOpenedProjectsPath() const
+muse::io::path_t ProjectConfiguration::lastOpenedProjectsPath() const
 {
     return settings()->value(LAST_OPENED_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setLastOpenedProjectsPath(const io::path_t& path)
+void ProjectConfiguration::setLastOpenedProjectsPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(LAST_OPENED_PROJECTS_PATH, Val(path));
 }
 
-io::path_t ProjectConfiguration::lastSavedProjectsPath() const
+muse::io::path_t ProjectConfiguration::lastSavedProjectsPath() const
 {
     return settings()->value(LAST_SAVED_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setLastSavedProjectsPath(const io::path_t& path)
+void ProjectConfiguration::setLastSavedProjectsPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(LAST_SAVED_PROJECTS_PATH, Val(path));
 }
 
-io::path_t ProjectConfiguration::userProjectsPath() const
+muse::io::path_t ProjectConfiguration::userProjectsPath() const
 {
     return settings()->value(USER_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setUserProjectsPath(const io::path_t& path)
+void ProjectConfiguration::setUserProjectsPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(USER_PROJECTS_PATH, Val(path));
 }
 
-async::Channel<io::path_t> ProjectConfiguration::userProjectsPathChanged() const
+muse::async::Channel<muse::io::path_t> ProjectConfiguration::userProjectsPathChanged() const
 {
     return m_userScoresPathChanged;
 }
 
-io::path_t ProjectConfiguration::defaultUserProjectsPath() const
+muse::io::path_t ProjectConfiguration::defaultUserProjectsPath() const
 {
     return settings()->defaultValue(USER_PROJECTS_PATH).toPath();
 }
@@ -235,44 +236,44 @@ void ProjectConfiguration::setShouldAskSaveLocationType(bool shouldAsk)
     settings()->setSharedValue(SHOULD_ASK_SAVE_LOCATION_TYPE, Val(shouldAsk));
 }
 
-io::path_t ProjectConfiguration::legacyCloudProjectsPath() const
+muse::io::path_t ProjectConfiguration::legacyCloudProjectsPath() const
 {
     return globalConfiguration()->userDataPath() + "/Cloud Scores";
 }
 
-io::path_t ProjectConfiguration::cloudProjectsPath() const
+muse::io::path_t ProjectConfiguration::cloudProjectsPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/cloud_scores";
 }
 
-bool ProjectConfiguration::isCloudProject(const io::path_t& projectPath) const
+bool ProjectConfiguration::isCloudProject(const muse::io::path_t& projectPath) const
 {
-    io::path_t dirpath = io::dirpath(projectPath);
+    muse::io::path_t dirpath = io::dirpath(projectPath);
     return dirpath == legacyCloudProjectsPath() || dirpath == cloudProjectsPath();
 }
 
-bool ProjectConfiguration::isLegacyCloudProject(const io::path_t& projectPath) const
+bool ProjectConfiguration::isLegacyCloudProject(const muse::io::path_t& projectPath) const
 {
     return io::dirpath(projectPath) == legacyCloudProjectsPath();
 }
 
-io::path_t ProjectConfiguration::cloudProjectPath(int scoreId) const
+muse::io::path_t ProjectConfiguration::cloudProjectPath(int scoreId) const
 {
     return cloudProjectsPath().appendingComponent(QString::number(scoreId)).appendingSuffix(DEFAULT_FILE_SUFFIX);
 }
 
-int ProjectConfiguration::cloudScoreIdFromPath(const io::path_t& projectPath) const
+int ProjectConfiguration::cloudScoreIdFromPath(const muse::io::path_t& projectPath) const
 {
     return io::filename(projectPath, false).toQString().toInt();
 }
 
-io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
+muse::io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
 {
     if (scoreId != 0) {
         return cloudProjectPath(scoreId);
     }
 
-    io::path_t path;
+    muse::io::path_t path;
     int counter = 0;
 
     do {
@@ -284,14 +285,14 @@ io::path_t ProjectConfiguration::cloudProjectSavingPath(int scoreId) const
     return path;
 }
 
-io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition,
-                                                       const std::string& suffix) const
+muse::io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition,
+                                                             const std::string& suffix) const
 {
-    io::path_t folderPath;
-    io::path_t filename;
+    muse::io::path_t folderPath;
+    muse::io::path_t filename;
     std::string theSuffix = suffix;
 
-    io::path_t projectPath = project->path();
+    muse::io::path_t projectPath = project->path();
     bool isLocalProject = !project->isCloudProject();
 
     if (isLocalProject) {
@@ -329,7 +330,7 @@ io::path_t ProjectConfiguration::defaultSavingFilePath(INotationProjectPtr proje
     }
 
     if (filename.empty()) {
-        filename = mu::qtrc("project", "Untitled");
+        filename = muse::qtrc("project", "Untitled");
     }
 
     if (theSuffix.empty()) {
@@ -398,7 +399,7 @@ QColor ProjectConfiguration::templatePreviewBackgroundColor() const
     return notationConfiguration()->backgroundColor();
 }
 
-async::Notification ProjectConfiguration::templatePreviewBackgroundChanged() const
+muse::async::Notification ProjectConfiguration::templatePreviewBackgroundChanged() const
 {
     return notationConfiguration()->backgroundChanged();
 }
@@ -518,7 +519,7 @@ void ProjectConfiguration::setAutoSaveEnabled(bool enabled)
     settings()->setSharedValue(AUTOSAVE_ENABLED_KEY, Val(enabled));
 }
 
-async::Channel<bool> ProjectConfiguration::autoSaveEnabledChanged() const
+muse::async::Channel<bool> ProjectConfiguration::autoSaveEnabledChanged() const
 {
     return m_autoSaveEnabledChanged;
 }
@@ -533,7 +534,7 @@ void ProjectConfiguration::setAutoSaveInterval(int minutes)
     settings()->setSharedValue(AUTOSAVE_INTERVAL_KEY, Val(minutes));
 }
 
-async::Channel<int> ProjectConfiguration::autoSaveIntervalChanged() const
+muse::async::Channel<int> ProjectConfiguration::autoSaveIntervalChanged() const
 {
     return m_autoSaveIntervalChanged;
 }
@@ -548,7 +549,7 @@ void ProjectConfiguration::setAlsoShareAudioCom(bool share)
     settings()->setSharedValue(ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH, Val(share));
 }
 
-async::Channel<bool> ProjectConfiguration::alsoShareAudioComChanged() const
+muse::async::Channel<bool> ProjectConfiguration::alsoShareAudioComChanged() const
 {
     return m_alsoShareAudioComChanged;
 }
@@ -573,7 +574,7 @@ void ProjectConfiguration::setHasAskedAlsoShareAudioCom(bool has)
     settings()->setSharedValue(HAS_ASKED_ALSO_SHARE_AUDIO_COM, Val(has));
 }
 
-io::path_t ProjectConfiguration::newProjectTemporaryPath() const
+muse::io::path_t ProjectConfiguration::newProjectTemporaryPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/new_project" + DEFAULT_FILE_SUFFIX;
 }
@@ -645,15 +646,15 @@ void ProjectConfiguration::setNumberOfSavesToGenerateAudio(int number)
     settings()->setSharedValue(NUMBER_OF_SAVES_TO_GENERATE_AUDIO_KEY, Val(number));
 }
 
-io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
+muse::io::path_t ProjectConfiguration::temporaryMp3FilePathTemplate() const
 {
     return globalConfiguration()->userAppDataPath() + "/audioFile_XXXXXX.mp3";
 }
 
-io::path_t ProjectConfiguration::projectBackupPath(const io::path_t& projectPath) const
+muse::io::path_t ProjectConfiguration::projectBackupPath(const muse::io::path_t& projectPath) const
 {
-    io::path_t projectDir = io::absoluteDirpath(projectPath);
-    io::path_t projectName = io::filename(projectPath);
+    muse::io::path_t projectDir = io::absoluteDirpath(projectPath);
+    muse::io::path_t projectName = io::filename(projectPath);
 
     return projectDir + "/.mscbackup/." + projectName + "~";
 }

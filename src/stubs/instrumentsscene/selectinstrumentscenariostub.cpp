@@ -23,13 +23,14 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse;
 
-mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenarioStub::selectInstruments() const
+RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenarioStub::selectInstruments() const
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-mu::RetVal<Instrument> SelectInstrumentsScenarioStub::selectInstrument(const notation::InstrumentKey&) const
+RetVal<Instrument> SelectInstrumentsScenarioStub::selectInstrument(const notation::InstrumentKey&) const
 {
     return make_ret(Ret::Code::NotSupported);
 }

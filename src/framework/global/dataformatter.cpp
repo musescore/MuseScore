@@ -23,7 +23,7 @@
 
 #include "translation.h"
 
-using namespace mu;
+using namespace muse;
 
 double DataFormatter::roundDouble(const double& val, const int decimals)
 {

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IPC_IPC_H
-#define MU_IPC_IPC_H
+#ifndef MUSE_IPC_IPC_H
+#define MUSE_IPC_IPC_H
 
 #include <QString>
 #include <QStringList>
@@ -31,7 +31,7 @@
 
 class QLocalSocket;
 
-namespace mu::ipc {
+namespace muse::ipc {
 static const QString SERVER_NAME("musescore-app-ipc");
 
 using ID = QString;
@@ -83,4 +83,4 @@ bool writeToSocket(QLocalSocket* socket, const QByteArray& data);
 bool readFromSocket(QLocalSocket* socket, std::function<void(const QByteArray& data)> onPackageRead);
 }
 
-#endif // MU_IPC_IPC_H
+#endif // MUSE_IPC_IPC_H

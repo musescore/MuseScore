@@ -486,7 +486,7 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
         }
     }
     if ((ctx.writeTrack() || item->track() != ctx.curTrack())
-        && (item->track() != mu::nidx) && !item->isBeam() && !item->isTuplet()) {
+        && (item->track() != muse::nidx) && !item->isBeam() && !item->isTuplet()) {
         // Writing track number for beams and tuplets is redundant as it is calculated
         // during layout.
         int t = static_cast<int>(item->track()) + ctx.trackDiff();
@@ -1743,7 +1743,7 @@ void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
     //
     String relativeFilePath;
     if (!item->linkPath().isEmpty() && item->linkIsValid()) {
-        io::FileInfo fi(item->linkPath());
+        muse::io::FileInfo fi(item->linkPath());
         // score()->fileInfo()->canonicalPath() would be better
         // but we are saving under a temp file name and the 'final' file
         // might not exist yet, so canonicalFilePath() may return only "/"
@@ -1751,7 +1751,7 @@ void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
         String scorePath = item->score()->masterScore()->fileInfo()->absoluteDirPath().toString();
         String imgFPath  = fi.canonicalFilePath();
         // if imgFPath is in (or below) the directory of scorePath
-        if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
+        if (imgFPath.startsWith(scorePath, muse::CaseSensitive)) {
             // relative img path is the part exceeding scorePath
             imgFPath.remove(0, scorePath.size());
             if (imgFPath.startsWith(u'/')) {
@@ -1762,10 +1762,10 @@ void TWrite::write(const Image* item, XmlWriter& xml, WriteContext& ctx)
         // try 1 level up
         else {
             // reduce scorePath by one path level
-            fi = io::FileInfo(scorePath);
+            fi = muse::io::FileInfo(scorePath);
             scorePath = fi.path();
             // if imgFPath is in (or below) the directory up the score directory
-            if (imgFPath.startsWith(scorePath, mu::CaseSensitive)) {
+            if (imgFPath.startsWith(scorePath, muse::CaseSensitive)) {
                 // relative img path is the part exceeding new scorePath plus "../"
                 imgFPath.remove(0, scorePath.size());
                 if (!imgFPath.startsWith(u'/')) {

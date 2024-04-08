@@ -39,6 +39,7 @@
 
 using namespace mu::notation;
 using namespace mu::engraving;
+using namespace muse;
 using namespace muse::ui;
 
 //---------------------------------------------------------
@@ -187,7 +188,7 @@ void EditStaffType::setInstrument(const Instrument& instrument)
     templateCombo->setCurrentIndex(-1);
 }
 
-mu::Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const mu::io::path_t& path)
+Ret EditStaffType::loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path)
 {
     mu::engraving::ScoreLoad sl;
 

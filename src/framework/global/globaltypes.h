@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_GLOBALTYPES_H
-#define MU_GLOBAL_GLOBALTYPES_H
+#ifndef MUSE_GLOBAL_GLOBALTYPES_H
+#define MUSE_GLOBAL_GLOBALTYPES_H
 
-namespace mu {
+namespace muse {
 enum class Orientation
 {
     // Note: values from Qt::Orientation
@@ -31,4 +31,4 @@ enum class Orientation
 };
 }
 
-#endif // MU_GLOBAL_GLOBALTYPES_H
+#endif // MUSE_GLOBAL_GLOBALTYPES_H

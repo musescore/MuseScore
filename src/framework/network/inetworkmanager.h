@@ -44,7 +44,7 @@ public:
                       const RequestHeaders& headers = RequestHeaders()) = 0;
     virtual Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) = 0;
 
-    virtual mu::Progress progress() const = 0;
+    virtual Progress progress() const = 0;
 
     virtual void abort() = 0;
 };

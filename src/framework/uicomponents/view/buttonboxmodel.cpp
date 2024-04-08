@@ -66,7 +66,7 @@ QList<int> ButtonBoxModel::load()
     auto buttonsByRole = [&sortedButtons, maxCustomRole](ButtonRole buttonRole) -> std::vector<LayoutButton*> {
         bool isCustom = buttonRole == ButtonRole::CustomRole;
         if (!isCustom) {
-            if (mu::contains(sortedButtons, static_cast<int>(buttonRole))) {
+            if (muse::contains(sortedButtons, static_cast<int>(buttonRole))) {
                 return sortedButtons[buttonRole];
             }
 

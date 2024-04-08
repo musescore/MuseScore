@@ -102,7 +102,7 @@ bool SlurSegment::isEditAllowed(EditData& ed) const
         Key_Right
     };
 
-    return mu::contains(navigationKeys, ed.key);
+    return muse::contains(navigationKeys, ed.key);
 }
 
 //---------------------------------------------------------

@@ -441,7 +441,7 @@ std::vector<unsigned int> CoreAudioDriver::resolveBufferSizes(unsigned int minBu
     return result;
 }
 
-mu::async::Notification CoreAudioDriver::outputDeviceChanged() const
+async::Notification CoreAudioDriver::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
@@ -454,7 +454,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
     CoInitialize(NULL);
 
     AudioDeviceList result;
-    result.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
+    result.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
     HRESULT hr;
     IMMDeviceCollection* devices;
@@ -506,7 +506,7 @@ AudioDeviceList CoreAudioDriver::availableOutputDevices() const
     return result;
 }
 
-mu::async::Notification CoreAudioDriver::availableOutputDevicesChanged() const
+async::Notification CoreAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
@@ -542,7 +542,7 @@ bool CoreAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     return ok;
 }
 
-mu::async::Notification CoreAudioDriver::outputDeviceBufferSizeChanged() const
+async::Notification CoreAudioDriver::outputDeviceBufferSizeChanged() const
 {
     return m_bufferSizeChanged;
 }

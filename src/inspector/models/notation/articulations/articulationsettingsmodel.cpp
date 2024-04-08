@@ -32,7 +32,7 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_ARTICULATION);
-    setTitle(mu::qtrc("inspector", "Articulation"));
+    setTitle(muse::qtrc("inspector", "Articulation"));
     setIcon(muse::ui::IconCode::Code::ARTICULATION);
     createProperties();
 }

@@ -143,10 +143,10 @@ std::vector<std::string> WebAudioDriver::availableOutputDevices() const
     return { "default" };
 }
 
-mu::async::Notification WebAudioDriver::availableOutputDevicesChanged() const
+async::Notification WebAudioDriver::availableOutputDevicesChanged() const
 {
     NOT_SUPPORTED;
-    return mu::async::Notification();
+    return async::Notification();
 }
 
 void WebAudioDriver::resume()

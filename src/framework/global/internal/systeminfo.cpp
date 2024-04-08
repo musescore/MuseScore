@@ -23,7 +23,7 @@
 
 #include <QSysInfo>
 
-using namespace mu;
+using namespace muse;
 
 static const std::string CPU_ARCHITECTURE_KEY = "cpuArchitecture";
 static const std::string PRODUCT_TYPE_KEY = "productType";

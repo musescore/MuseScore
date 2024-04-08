@@ -49,7 +49,7 @@ public:
               const RequestHeaders& headers = RequestHeaders()) override;
     Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
 
-    mu::Progress progress() const override;
+    Progress progress() const override;
 
     void abort() override;
 
@@ -83,7 +83,7 @@ private:
     QNetworkAccessManager* m_manager = nullptr;
     IncomingDevice* m_incomingData = nullptr;
     QNetworkReply* m_reply = nullptr;
-    mu::Progress m_progress;
+    Progress m_progress;
 
     bool m_isAborted = false;
 };

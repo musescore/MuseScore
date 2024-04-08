@@ -33,8 +33,9 @@
 //! NOTE The current implementation resolves files by extension.
 //! This will probably be changed in the future.
 
+using namespace muse;
+using namespace muse::io;
 using namespace mu;
-using namespace mu::io;
 using namespace mu::engraving;
 
 MscReader::MscReader(const Params& params)
@@ -153,7 +154,7 @@ ByteArray MscReader::readScoreFile() const
         StringList files = reader()->fileList();
         for (const String& name : files) {
             // mscx file in the root dir
-            if (!name.contains(u'/') && name.endsWith(u".mscx", mu::CaseInsensitive)) {
+            if (!name.contains(u'/') && name.endsWith(u".mscx", muse::CaseInsensitive)) {
                 mscxFileName = name;
                 break;
             }
@@ -173,7 +174,7 @@ std::vector<String> MscReader::excerptFileNames() const
     std::vector<String> names;
     StringList files = reader()->fileList();
     for (const String& filePath : files) {
-        if (filePath.startsWith(u"Excerpts/") && filePath.endsWith(u".mscx", mu::CaseInsensitive)) {
+        if (filePath.startsWith(u"Excerpts/") && filePath.endsWith(u".mscx", muse::CaseInsensitive)) {
             names.push_back(FileInfo(filePath).completeBaseName());
         }
     }
@@ -232,12 +233,12 @@ ByteArray MscReader::readAudioFile() const
     return fileData(u"audio.ogg");
 }
 
-ByteArray MscReader::readAudioSettingsJsonFile(const io::path_t& pathPrefix) const
+ByteArray MscReader::readAudioSettingsJsonFile(const muse::io::path_t& pathPrefix) const
 {
     return fileData(pathPrefix.toString() + u"audiosettings.json");
 }
 
-ByteArray MscReader::readViewSettingsJsonFile(const io::path_t& pathPrefix) const
+ByteArray MscReader::readViewSettingsJsonFile(const muse::io::path_t& pathPrefix) const
 {
     return fileData(pathPrefix.toString() + u"viewsettings.json");
 }
@@ -358,7 +359,7 @@ Ret MscReader::DirReader::open(IODevice* device, const path_t& filePath)
 
     m_rootPath = containerPath(filePath);
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 void MscReader::DirReader::close()
@@ -387,7 +388,7 @@ StringList MscReader::DirReader::fileList() const
     }
 
     StringList files;
-    for (const io::path_t& p : rv.val) {
+    for (const muse::io::path_t& p : rv.val) {
         String filePath = p.toString();
         files << filePath.mid(m_rootPath.size() + 1);
     }
@@ -397,13 +398,13 @@ StringList MscReader::DirReader::fileList() const
 
 bool MscReader::DirReader::fileExists(const String& fileName) const
 {
-    io::path_t filePath = m_rootPath + "/" + fileName;
+    muse::io::path_t filePath = m_rootPath + "/" + fileName;
     return File::exists(filePath);
 }
 
 ByteArray MscReader::DirReader::fileData(const String& fileName) const
 {
-    io::path_t filePath = m_rootPath + "/" + fileName;
+    muse::io::path_t filePath = m_rootPath + "/" + fileName;
     File file(filePath);
     if (!file.open(IODevice::ReadOnly)) {
         LOGE() << "failed open file: " << filePath;
@@ -433,7 +434,7 @@ Ret MscReader::XmlFileReader::open(IODevice* device, const path_t& filePath)
         }
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 void MscReader::XmlFileReader::close()

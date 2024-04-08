@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 namespace mu::palette {
-class PaletteWorkspaceSetup : public async::Asyncable
+class PaletteWorkspaceSetup : public muse::async::Asyncable
 {
     INJECT(muse::workspace::IWorkspacesDataProvider, workspacesDataProvider)
     INJECT(IPaletteProvider, paletteProvider)

@@ -41,10 +41,10 @@ public:
     virtual QString name() const = 0;
     virtual void setName(const QString& name) = 0; // not undoable
     virtual void undoSetName(const QString& name) = 0; // undoable
-    virtual async::Notification nameChanged() const = 0;
+    virtual muse::async::Notification nameChanged() const = 0;
 
     virtual bool hasFileName() const = 0;
-    virtual const String& fileName() const = 0;
+    virtual const muse::String& fileName() const = 0;
 
     virtual INotationPtr notation() = 0;
     virtual IExcerptNotationPtr clone() const = 0;

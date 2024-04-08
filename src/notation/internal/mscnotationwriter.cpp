@@ -30,7 +30,8 @@
 
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
@@ -51,7 +52,7 @@ bool MscNotationWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const Options&)
+Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -96,7 +97,7 @@ mu::Ret MscNotationWriter::write(INotationPtr notation, io::IODevice& device, co
     return Ret(Ret::Code::Ok);
 }
 
-mu::Ret MscNotationWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
+Ret MscNotationWriter::writeList(const INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

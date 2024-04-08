@@ -32,7 +32,7 @@
 using namespace mu::iex::musedata;
 using namespace mu::engraving;
 
-mu::Ret MuseDataReader::read(MasterScore* score, const io::path_t& path, const Options&)
+muse::Ret MuseDataReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     if (!QFileInfo::exists(path.toQString())) {
         return make_ret(Err::FileNotFound, path);
@@ -44,5 +44,5 @@ mu::Ret MuseDataReader::read(MasterScore* score, const io::path_t& path, const O
     }
 
     md.convert();
-    return mu::make_ok();
+    return muse::make_ok();
 }

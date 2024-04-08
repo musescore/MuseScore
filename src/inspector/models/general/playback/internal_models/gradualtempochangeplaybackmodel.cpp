@@ -30,7 +30,7 @@ using namespace mu::engraving;
 GradualTempoChangePlaybackModel::GradualTempoChangePlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {
-    setTitle(mu::qtrc("inspector", "Tempo change"));
+    setTitle(muse::qtrc("inspector", "Tempo change"));
     setModelType(InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE);
 
     createProperties();
@@ -49,9 +49,9 @@ PropertyItem* GradualTempoChangePlaybackModel::tempoEasingMethod() const
 QVariantList GradualTempoChangePlaybackModel::possibleEasingMethods() const
 {
     QVariantList methods {
-        object(ChangeMethod::NORMAL, mu::qtrc("inspector", "Normal")),
-        object(ChangeMethod::EASE_IN, mu::qtrc("inspector", "Ease in")),
-        object(ChangeMethod::EASE_OUT, mu::qtrc("inspector", "Ease out"))
+        object(ChangeMethod::NORMAL, muse::qtrc("inspector", "Normal")),
+        object(ChangeMethod::EASE_IN, muse::qtrc("inspector", "Ease in")),
+        object(ChangeMethod::EASE_OUT, muse::qtrc("inspector", "Ease out"))
     };
 
     return methods;
@@ -69,7 +69,7 @@ void GradualTempoChangePlaybackModel::createProperties()
 void GradualTempoChangePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tempoChangeFactor, [](const QVariant& elementPropertyValue) -> QVariant {
-        return static_cast<int>(DataFormatter::roundDouble(elementPropertyValue.toDouble() * 100.0));
+        return static_cast<int>(muse::DataFormatter::roundDouble(elementPropertyValue.toDouble() * 100.0));
     });
 
     loadPropertyItem(m_tempoEasingMethod);

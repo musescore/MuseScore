@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::bb {
-class BBModule : public modularity::IModuleSetup
+class BBModule : public muse::modularity::IModuleSetup
 {
 public:
 

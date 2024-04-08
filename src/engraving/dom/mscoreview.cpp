@@ -47,7 +47,7 @@ static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
 //   elementAt
 //---------------------------------------------------------
 
-EngravingItem* MuseScoreView::elementAt(const mu::PointF& p) const
+EngravingItem* MuseScoreView::elementAt(const PointF& p) const
 {
     std::vector<EngravingItem*> el = elementsAt(p);
     EngravingItem* e = el.front();
@@ -61,7 +61,7 @@ EngravingItem* MuseScoreView::elementAt(const mu::PointF& p) const
 //   point2page
 //---------------------------------------------------------
 
-Page* MuseScoreView::point2page(const mu::PointF& p) const
+Page* MuseScoreView::point2page(const PointF& p) const
 {
     if (score()->linearMode()) {
         return score()->pages().empty() ? 0 : score()->pages().front();
@@ -79,7 +79,7 @@ Page* MuseScoreView::point2page(const mu::PointF& p) const
 //    p is in canvas coordinates
 //---------------------------------------------------------
 
-const std::vector<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p) const
+const std::vector<EngravingItem*> MuseScoreView::elementsAt(const PointF& p) const
 {
     std::vector<EngravingItem*> el;
 
@@ -92,7 +92,7 @@ const std::vector<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p)
     return el;
 }
 
-EngravingItem* MuseScoreView::elementNear(const mu::PointF& pos) const
+EngravingItem* MuseScoreView::elementNear(const PointF& pos) const
 {
     std::vector<EngravingItem*> near = elementsNear(pos);
     if (near.empty()) {
@@ -101,7 +101,7 @@ EngravingItem* MuseScoreView::elementNear(const mu::PointF& pos) const
     return near.front();
 }
 
-const std::vector<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& pos) const
+const std::vector<EngravingItem*> MuseScoreView::elementsNear(const PointF& pos) const
 {
     std::vector<EngravingItem*> ll;
     Page* page = point2page(pos);
@@ -109,7 +109,7 @@ const std::vector<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& 
         return ll;
     }
 
-    mu::PointF p = pos - page->pos();
+    PointF p = pos - page->pos();
     double w = selectionProximity();
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 

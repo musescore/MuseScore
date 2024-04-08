@@ -30,7 +30,7 @@
 #include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
-class SaveAndPublishPreferencesModel : public QObject, public async::Asyncable
+class SaveAndPublishPreferencesModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -150,10 +150,10 @@ public:
     // ListView item Interface
     virtual int accessibleRowIndex() const = 0;
 
-    virtual mu::async::Channel<IAccessible::Property, mu::Val> accessiblePropertyChanged() const = 0;
+    virtual async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const = 0;
 
     virtual void setState(State state, bool arg) = 0;
-    virtual mu::async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
+    virtual async::Channel<IAccessible::State, bool> accessibleStateChanged() const = 0;
 };
 }
 

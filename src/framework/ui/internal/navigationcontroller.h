@@ -38,7 +38,7 @@ namespace muse::ui {
 class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
     INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IMainWindow, mainWindow)
 
 public:

@@ -31,7 +31,7 @@
 #include "ui/inavigationcontroller.h"
 
 namespace muse::api {
-class NavigationApi : public mu::api::ApiObject
+class NavigationApi : public api::ApiObject
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ class NavigationApi : public mu::api::ApiObject
     INJECT(ui::INavigationController, navigation)
 
 public:
-    explicit NavigationApi(mu::api::IApiEngine* e);
+    explicit NavigationApi(api::IApiEngine* e);
     ~NavigationApi();
 
     Q_INVOKABLE void nextPanel();

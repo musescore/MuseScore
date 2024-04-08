@@ -37,7 +37,7 @@ class Score;
 namespace mu::notation {
 class NotationInteraction;
 class NotationPlayback;
-class Notation : virtual public INotation, public IGetScore, public async::Asyncable
+class Notation : virtual public INotation, public IGetScore, public muse::async::Asyncable
 {
     INJECT_STATIC(INotationConfiguration, configuration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
@@ -58,13 +58,13 @@ public:
 
     bool isOpen() const override;
     void setIsOpen(bool open) override;
-    async::Notification openChanged() const override;
+    muse::async::Notification openChanged() const override;
 
     bool hasVisibleParts() const override;
 
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& viewMode) override;
-    async::Notification viewModeChanged() const override;
+    muse::async::Notification viewModeChanged() const override;
 
     INotationPaintingPtr painting() const override;
     INotationViewStatePtr viewState() const override;
@@ -77,27 +77,27 @@ public:
     INotationAccessibilityPtr accessibility() const override;
     INotationPartsPtr parts() const override;
 
-    async::Notification notationChanged() const override;
+    muse::async::Notification notationChanged() const override;
 
 protected:
     mu::engraving::Score* score() const override;
     void setScore(mu::engraving::Score* score);
-    async::Notification scoreInited() const override;
+    muse::async::Notification scoreInited() const override;
 
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
     INotationUndoStackPtr m_undoStack = nullptr;
-    async::Notification m_notationChanged;
+    muse::async::Notification m_notationChanged;
 
 private:
     friend class NotationInteraction;
     friend class NotationPainting;
 
     engraving::Score* m_score = nullptr;
-    async::Notification m_scoreInited;
+    muse::async::Notification m_scoreInited;
 
-    async::Notification m_openChanged;
+    muse::async::Notification m_openChanged;
 
     INotationPaintingPtr m_painting = nullptr;
     INotationViewStatePtr m_viewState = nullptr;

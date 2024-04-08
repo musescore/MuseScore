@@ -31,10 +31,11 @@
 
 #include "log.h"
 
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 
-mu::Ret mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
+Ret mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray* msczData)
 {
     File mscxFile(mscxFilePath);
     if (!mscxFile.open(IODevice::ReadOnly)) {
@@ -52,19 +53,19 @@ mu::Ret mu::engraving::compat::mscxToMscz(const String& mscxFilePath, ByteArray*
     writer.open();
     writer.writeScoreFile(mscxData);
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
-mu::Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
+Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& path, bool ignoreVersionError)
 {
     ByteArray msczData;
-    if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
+    if (path.endsWith(u".mscx", muse::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
         Ret ret = mscxToMscz(path, &msczData);
         if (!ret) {
             return ret;
         }
-    } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
+    } else if (path.endsWith(u".mscz", muse::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             return make_ret(Err::FileOpenError, path);
@@ -91,18 +92,18 @@ mu::Ret mu::engraving::compat::loadMsczOrMscx(MasterScore* score, const String& 
     return scoreReader.loadMscz(score, reader, audioSettings, ignoreVersionError);
 }
 
-mu::Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError)
+Ret mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const String& path, bool ignoreVersionError)
 {
     ByteArray msczData;
     String filePath = path;
-    if (path.endsWith(u".mscx", mu::CaseInsensitive)) {
+    if (path.endsWith(u".mscx", muse::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
         Ret ret = mscxToMscz(path, &msczData);
         if (!ret) {
             return ret;
         }
-    } else if (path.endsWith(u".mscz", mu::CaseInsensitive)) {
+    } else if (path.endsWith(u".mscz", muse::CaseInsensitive)) {
         File msczFile(path);
         if (!msczFile.open(IODevice::ReadOnly)) {
             return make_ret(Err::FileOpenError, path);

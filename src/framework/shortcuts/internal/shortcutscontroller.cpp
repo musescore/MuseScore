@@ -60,8 +60,8 @@ static bool defaultHasLowerPriorityThan(const std::string& ctx1, const std::stri
         CTX_PROJECT_FOCUSED,
     };
 
-    size_t index1 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx1);
-    size_t index2 = mu::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx2);
+    size_t index1 = muse::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx1);
+    size_t index2 = muse::indexOf(CONTEXTS_BY_INCREASING_PRIORITY, ctx2);
 
     return index1 < index2;
 }

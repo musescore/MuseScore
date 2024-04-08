@@ -106,7 +106,7 @@ struct TimelineTheme {
     QColor metaValuePenColor, metaValueBrushColor;
 };
 
-class Timeline : public QGraphicsView, public mu::async::Asyncable
+class Timeline : public QGraphicsView, public muse::async::Asyncable
 {
     Q_OBJECT
 

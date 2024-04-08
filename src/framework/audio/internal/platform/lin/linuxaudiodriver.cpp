@@ -36,6 +36,7 @@
 
 static constexpr char DEFAULT_DEVICE_ID[] = "default";
 
+using namespace muse;
 using namespace muse::audio;
 
 namespace {
@@ -56,7 +57,7 @@ static muse::audio::IAudioDriver::Spec s_format;
 
 static void* alsaThread(void* aParam)
 {
-    mu::runtime::setThreadName("audio_driver");
+    muse::runtime::setThreadName("audio_driver");
     ALSAData* data = static_cast<ALSAData*>(aParam);
 
     int ret = snd_pcm_wait(data->alsaDeviceHandle, 1000);
@@ -238,7 +239,7 @@ bool LinuxAudioDriver::resetToDefaultOutputDevice()
     return selectOutputDevice(DEFAULT_DEVICE_ID);
 }
 
-mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
+async::Notification LinuxAudioDriver::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
@@ -246,12 +247,12 @@ mu::async::Notification LinuxAudioDriver::outputDeviceChanged() const
 AudioDeviceList LinuxAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
+    devices.push_back({ DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
     return devices;
 }
 
-mu::async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
+async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
@@ -283,7 +284,7 @@ bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     return ok;
 }
 
-mu::async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
+async::Notification LinuxAudioDriver::outputDeviceBufferSizeChanged() const
 {
     return m_bufferSizeChanged;
 }

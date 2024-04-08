@@ -27,7 +27,7 @@
 
 #include "global/allocator.h"
 #include "types/string.h"
-#include "draw/types/geometry.h"
+#include "../types/types.h"
 
 namespace mu::engraving {
 class BspTreeVisitor;
@@ -57,31 +57,31 @@ public:
     };
 private:
 
-    void initialize(const mu::RectF& rect, int depth, int index);
-    void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
-    void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);
+    void initialize(const RectF& rect, int depth, int index);
+    void climbTree(BspTreeVisitor* visitor, const PointF& pos, int index = 0);
+    void climbTree(BspTreeVisitor* visitor, const RectF& rect, int index = 0);
 
-    void findItems(std::list<EngravingItem*>* foundItems, const mu::RectF& rect, int index);
-    void findItems(std::list<EngravingItem*>* foundItems, const mu::PointF& pos, int index);
-    mu::RectF rectForIndex(int index) const;
+    void findItems(std::list<EngravingItem*>* foundItems, const RectF& rect, int index);
+    void findItems(std::list<EngravingItem*>* foundItems, const PointF& pos, int index);
+    RectF rectForIndex(int index) const;
 
     unsigned int m_depth = 0;
     std::vector<Node> m_nodes;
     std::vector<std::list<EngravingItem*> > m_leaves;
     int m_leafCnt = 0;
-    mu::RectF m_rect;
+    RectF m_rect;
 
 public:
     BspTree();
 
-    void initialize(const mu::RectF& rect, int depth);
+    void initialize(const RectF& rect, int depth);
     void clear();
 
     void insert(EngravingItem* item);
     void remove(EngravingItem* item);
 
-    std::vector<EngravingItem*> items(const mu::RectF& rect);
-    std::vector<EngravingItem*> items(const mu::PointF& pos);
+    std::vector<EngravingItem*> items(const RectF& rect);
+    std::vector<EngravingItem*> items(const PointF& pos);
 
     int leafCount() const { return m_leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }

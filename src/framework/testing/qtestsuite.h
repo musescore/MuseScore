@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_TESTING_QTESTSUITE_H
-#define MU_TESTING_QTESTSUITE_H
+#ifndef MUSE_TESTING_QTESTSUITE_H
+#define MUSE_TESTING_QTESTSUITE_H
 
 #include <QtTest/QtTest>
 #include <QList>
 
 #include "log.h"
 
-namespace mu::testing {
+namespace muse::testing {
 class QTestSuite
 {
 public:
@@ -120,8 +120,8 @@ public:
 #undef QTEST_MAIN
 #endif
 
-#define DECLARE_TEST(className) static mu::testing::QTestHolder<className> t_(#className);
+#define DECLARE_TEST(className) static muse::testing::QTestHolder<className> t_(#className);
 #define QTEST_MAIN(className) DECLARE_TEST(className)
 }
 
-#endif // MU_TESTING_QTESTSUITE_H
+#endif // MUSE_TESTING_QTESTSUITE_H

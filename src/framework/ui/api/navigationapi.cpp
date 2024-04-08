@@ -26,8 +26,8 @@
 using namespace muse::api;
 using namespace muse::ui;
 
-NavigationApi::NavigationApi(mu::api::IApiEngine* e)
-    : mu::api::ApiObject(e)
+NavigationApi::NavigationApi(api::IApiEngine* e)
+    : api::ApiObject(e)
 {
 }
 

@@ -42,7 +42,8 @@
 #include "view/internal/soundflag/soundflagsettingsmodel.h"
 
 using namespace mu::playback;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::actions;
 

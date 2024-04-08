@@ -308,7 +308,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
     setupUi(this);
-    setWindowTitle(mu::qtrc("palette", "Key signatures"));
+    setWindowTitle(muse::qtrc("palette", "Key signatures"));
 
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 

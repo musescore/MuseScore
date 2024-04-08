@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_TIMER_H
-#define MU_GLOBAL_TIMER_H
+#ifndef MUSE_GLOBAL_TIMER_H
+#define MUSE_GLOBAL_TIMER_H
 
 #include "async/notification.h"
 #include "async/asyncable.h"
@@ -28,7 +28,7 @@
 #include <memory>
 #include <thread>
 
-namespace mu {
+namespace muse {
 /*!
  * mu::Timer
  * usage:
@@ -112,4 +112,4 @@ private:
     std::unique_ptr<std::thread> m_thread = nullptr;
 };
 }
-#endif // MU_GLOBAL_TIMER_H
+#endif // MUSE_GLOBAL_TIMER_H

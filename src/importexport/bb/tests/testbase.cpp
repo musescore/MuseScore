@@ -39,7 +39,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::iex::bb {
@@ -52,7 +52,7 @@ MasterScore* MTest::readScore(const QString& name)
     QString path = root + "/" + name;
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
-    std::string suffix = io::suffix(path);
+    std::string suffix = muse::io::suffix(path);
 
     ScoreLoad sl;
     Err rv;

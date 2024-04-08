@@ -49,7 +49,7 @@ inline int timestampToTick(const Score* score, const muse::mpe::timestamp_t time
 inline muse::mpe::duration_t pauseUs(const Score* score, const int tick)
 {
     double secs = score->tempomap()->pauseSecs(tick);
-    return mu::RealIsNull(secs) ? 0 : secs* 1000000;
+    return muse::RealIsNull(secs) ? 0 : secs* 1000000;
 }
 
 inline muse::mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick,
@@ -125,14 +125,14 @@ static constexpr int QUAVER_TICKS = Constants::DIVISION / 2;
 static constexpr int SEMIQUAVER_TICKS = Constants::DIVISION / 4;
 static constexpr int DEMISEMIQUAVER_TICKS = Constants::DIVISION / 8;
 
-static const double PRESTISSIMO_BPS_BOUND = mu::RealRound(200 /*bpm*/ / 60.f /*secs*/, 2);
-static const double PRESTO_BPS_BOUND = mu::RealRound(168 /*bpm*/ / 60.f /*secs*/, 2);
-static const double ALLEGRO_BPS_BOUND = mu::RealRound(120 /*bpm*/ / 60.f /*secs*/, 2);
-static const double MODERATO_BPS_BOUND = mu::RealRound(108 /*bpm*/ / 60.f /*secs*/, 2);
-static const double ANDANTE_BPS_BOUND = mu::RealRound(76 /*bpm*/ / 60.f /*secs*/, 2);
-static const double ADAGIO_BPS_BOUND = mu::RealRound(66 /*bpm*/ / 60.f /*secs*/, 2);
-static const double LENTO_BPS_BOUND = mu::RealRound(40 /*bpm*/ / 60.f /*secs*/, 2);
-static const double GRAVE_BPS_BOUND = mu::RealRound(20 /*bpm*/ / 60.f /*secs*/, 2);
+static const double PRESTISSIMO_BPS_BOUND = muse::RealRound(200 /*bpm*/ / 60.f /*secs*/, 2);
+static const double PRESTO_BPS_BOUND = muse::RealRound(168 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ALLEGRO_BPS_BOUND = muse::RealRound(120 /*bpm*/ / 60.f /*secs*/, 2);
+static const double MODERATO_BPS_BOUND = muse::RealRound(108 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ANDANTE_BPS_BOUND = muse::RealRound(76 /*bpm*/ / 60.f /*secs*/, 2);
+static const double ADAGIO_BPS_BOUND = muse::RealRound(66 /*bpm*/ / 60.f /*secs*/, 2);
+static const double LENTO_BPS_BOUND = muse::RealRound(40 /*bpm*/ / 60.f /*secs*/, 2);
+static const double GRAVE_BPS_BOUND = muse::RealRound(20 /*bpm*/ / 60.f /*secs*/, 2);
 }
 
 #endif // MU_ENGRAVING_ARRANGEMENTUTILS_H

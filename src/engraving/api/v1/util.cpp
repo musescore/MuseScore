@@ -193,7 +193,7 @@ void ScoreView::paint(QPainter* qp)
 {
     muse::draw::Painter p(qp, "plugins_scoreview");
     p.setAntialiasing(true);
-    p.fillRect(mu::RectF(0.0, 0.0, width(), height()), _color);
+    p.fillRect(RectF(0.0, 0.0, width(), height()), _color);
     if (!score) {
         return;
     }

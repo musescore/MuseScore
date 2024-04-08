@@ -153,7 +153,7 @@ void TestMidiMapping::testReadChangeOrderWrite(const char* f1, const char* ref, 
 
     std::vector<int> dl;
     for (Staff* staff : score->staves()) {
-        int idx = mu::indexOf(score->staves(), staff);
+        int idx = muse::indexOf(score->staves(), staff);
         if ((idx == p1 || idx == p2)
             && ((idx != 0 && staff->part() == score->staves()[idx - 1]->part())
                 || (idx != score->nstaves() && staff->part() == score->staves()[idx + 1]->part()))) {

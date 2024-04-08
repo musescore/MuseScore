@@ -27,7 +27,7 @@
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "project/inotationwriter.h"
 
-namespace mu::deprecated {
+namespace muse::deprecated {
 class XmlWriter;
 }
 
@@ -52,18 +52,18 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::IODevice& device, const Options& options = Options()) override;
-    Ret writeList(const INotationPtrList& notations, io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) override;
+    muse::Ret writeList(const INotationPtrList& notations, muse::io::IODevice& device, const Options& options = Options()) override;
 
 private:
     qreal pngDpiResolution() const;
     QHash<void*, int> elementIds(const mu::engraving::Score* score) const;
 
-    void writeElementsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
-    void writeSegmentsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
-    void writeMeasuresPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeElementsPositions(muse::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeSegmentsPositions(muse::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeMeasuresPositions(muse::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
 
-    void writeEventsPositions(deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
+    void writeEventsPositions(muse::deprecated::XmlWriter& writer, const mu::engraving::Score* score) const;
 
     ElementType m_elementType = ElementType::SEGMENT;
 };

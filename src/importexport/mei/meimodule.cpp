@@ -31,6 +31,7 @@
 
 #include "internal/meiconfiguration.h"
 
+using namespace muse;
 using namespace mu::iex::mei;
 using namespace mu::project;
 

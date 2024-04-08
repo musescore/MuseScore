@@ -34,8 +34,8 @@ class StandardButton
     Q_GADGET
 public:
     enum Button {
-        Ok = static_cast<int>(mu::IInteractive::Button::Ok),
-        Cancel = static_cast<int>(mu::IInteractive::Button::Cancel),
+        Ok = static_cast<int>(IInteractive::Button::Ok),
+        Cancel = static_cast<int>(IInteractive::Button::Cancel),
     };
     Q_ENUM(Button)
 };
@@ -49,7 +49,7 @@ class MessageDialog : public QObject
     Q_PROPERTY(QVariantList standardButtons READ standardButtons WRITE setStandardButtons NOTIFY standardButtonsChanged FINAL)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged FINAL)
 
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
 
 public:
 

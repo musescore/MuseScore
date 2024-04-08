@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::audio;
 
 AudioEngine* AudioEngine::instance()
@@ -47,7 +48,7 @@ AudioEngine::~AudioEngine()
     ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
 }
 
-mu::Ret AudioEngine::init(AudioBufferPtr bufferPtr)
+Ret AudioEngine::init(AudioBufferPtr bufferPtr)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -161,7 +162,7 @@ void AudioEngine::setMode(const RenderMode newMode)
     m_modeChanges.notify();
 }
 
-mu::async::Notification AudioEngine::modeChanged() const
+async::Notification AudioEngine::modeChanged() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 

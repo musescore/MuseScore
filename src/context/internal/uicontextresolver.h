@@ -31,9 +31,9 @@
 #include "ui/inavigationcontroller.h"
 
 namespace mu::context {
-class UiContextResolver : public IUiContextResolver, public async::Asyncable
+class UiContextResolver : public IUiContextResolver, public muse::async::Asyncable
 {
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(IGlobalContext, globalContext)
     INJECT(muse::ui::INavigationController, navigationController)
@@ -44,7 +44,7 @@ public:
     void init();
 
     muse::ui::UiContext currentUiContext() const override;
-    async::Notification currentUiContextChanged() const override;
+    muse::async::Notification currentUiContextChanged() const override;
 
     bool match(const muse::ui::UiContext& currentCtx, const muse::ui::UiContext& actCtx) const override;
     bool matchWithCurrent(const muse::ui::UiContext& ctx) const override;
@@ -54,7 +54,7 @@ public:
 private:
     void notifyAboutContextChanged();
 
-    async::Notification m_currentUiContextChanged;
+    muse::async::Notification m_currentUiContextChanged;
 };
 }
 

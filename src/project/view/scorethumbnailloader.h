@@ -29,7 +29,7 @@
 #include "irecentfilescontroller.h"
 
 namespace mu::project {
-class ScoreThumbnailLoader : public QObject, public async::Asyncable
+class ScoreThumbnailLoader : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT;
 

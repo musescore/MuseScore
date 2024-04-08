@@ -29,7 +29,7 @@ AccidentalSettingsModel::AccidentalSettingsModel(QObject* parent, IElementReposi
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_ACCIDENTAL);
-    setTitle(mu::qtrc("inspector", "Accidental"));
+    setTitle(muse::qtrc("inspector", "Accidental"));
     setIcon(muse::ui::IconCode::Code::ACCIDENTAL_SHARP);
     createProperties();
 }

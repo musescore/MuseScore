@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_XMLWRITER_H
-#define MU_GLOBAL_XMLWRITER_H
+#ifndef MUSE_GLOBAL_XMLWRITER_H
+#define MUSE_GLOBAL_XMLWRITER_H
 
 #include <memory>
 #include <QIODevice>
@@ -32,7 +32,7 @@
 
 class QXmlStreamWriter;
 
-namespace mu::deprecated {
+namespace muse::deprecated {
 class XmlWriter
 {
 public:
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_XMLWRITER_H
+#endif // MUSE_GLOBAL_XMLWRITER_H

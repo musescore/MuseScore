@@ -31,14 +31,15 @@
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 std::vector<INotationWriter::UnitType> PngWriter::supportedUnitTypes() const
 {
     return { UnitType::PER_PAGE };
 }
 
-mu::Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
+Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice, const Options& options)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -47,7 +48,7 @@ mu::Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
     const float CANVAS_DPI = configuration()->exportPngDpiResolution();
 
     INotationPainting::Options opt;
-    opt.fromPage = mu::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
+    opt.fromPage = muse::value(options, OptionKey::PAGE_NUMBER, Val(0)).toInt();
     opt.toPage = opt.fromPage;
     opt.trimMarginPixelSize = configuration()->trimMarginPixelSize();
     opt.deviceDpi = CANVAS_DPI;
@@ -62,8 +63,8 @@ mu::Ret PngWriter::write(INotationPtr notation, io::IODevice& destinationDevice,
     image.setDotsPerMeterX(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
     image.setDotsPerMeterY(std::lrint((CANVAS_DPI * 1000) / mu::engraving::INCH));
 
-    const bool TRANSPARENT_BACKGROUND = mu::value(options, OptionKey::TRANSPARENT_BACKGROUND,
-                                                  Val(configuration()->exportPngWithTransparentBackground())).toBool();
+    const bool TRANSPARENT_BACKGROUND = muse::value(options, OptionKey::TRANSPARENT_BACKGROUND,
+                                                    Val(configuration()->exportPngWithTransparentBackground())).toBool();
     image.fill(TRANSPARENT_BACKGROUND ? Qt::transparent : Qt::white);
 
     muse::draw::Painter painter(&image, "pngwriter");

@@ -38,11 +38,11 @@ class IAppUpdateService : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IAppUpdateService() = default;
 
-    virtual mu::RetVal<ReleaseInfo> checkForUpdate() = 0;
+    virtual muse::RetVal<ReleaseInfo> checkForUpdate() = 0;
 
-    virtual RetVal<io::path_t> downloadRelease() = 0;
+    virtual muse::RetVal<muse::io::path_t> downloadRelease() = 0;
     virtual void cancelUpdate() = 0;
-    virtual mu::Progress updateProgress() = 0;
+    virtual muse::Progress updateProgress() = 0;
 };
 }
 

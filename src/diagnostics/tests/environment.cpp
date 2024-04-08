@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-static mu::testing::SuiteEnvironment diagnostics_se(
+static muse::testing::SuiteEnvironment diagnostics_se(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()

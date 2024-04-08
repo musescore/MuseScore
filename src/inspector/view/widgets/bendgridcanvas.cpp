@@ -90,7 +90,7 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
 
 BendGridCanvas::~BendGridCanvas()
 {
-    DeleteAll(m_pointsAccessibleItems);
+    muse::DeleteAll(m_pointsAccessibleItems);
 }
 
 QVariant BendGridCanvas::pointList() const
@@ -822,7 +822,7 @@ QString BendGridCanvas::pointAccessibleName(const CurvePoint& point)
     QString string = mu::engraving::bendAmountToString(fulls, quarts).toQString();
 
     return (!pointName.isEmpty() ? pointName + "; " : "")
-           + mu::qtrc("inspector", "Time: %2, value: %3").arg(QString::number(point.time), string);
+           + muse::qtrc("inspector", "Time: %2, value: %3").arg(QString::number(point.time), string);
 }
 
 void BendGridCanvas::updatePointAccessibleName(int index)
@@ -834,7 +834,7 @@ void BendGridCanvas::updatePointAccessibleName(int index)
     muse::ui::AccessibleItem* accItem = m_pointsAccessibleItems[index];
     if (accItem) {
         accItem->setName(pointAccessibleName(m_points.at(index)));
-        accItem->accessiblePropertyChanged().send(IAccessible::Property::Name, Val());
+        accItem->accessiblePropertyChanged().send(IAccessible::Property::Name, muse::Val());
     }
 
     m_needVoicePointName = false;

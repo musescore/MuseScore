@@ -27,9 +27,10 @@
 #include "log.h"
 
 using namespace mu::iex::musicxml;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
-mu::Ret MxlWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret MxlWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);

@@ -28,8 +28,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 
 bool MacOSInteractiveHelper::revealInFinder(const io::path_t& filePath)
 {

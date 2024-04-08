@@ -65,14 +65,14 @@ public:
 
     virtual bool isOpen() const = 0;
     virtual void setIsOpen(bool opened) = 0;
-    virtual async::Notification openChanged() const = 0;
+    virtual muse::async::Notification openChanged() const = 0;
 
     virtual bool hasVisibleParts() const = 0;
 
     // draw
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& viewMode) = 0;
-    virtual async::Notification viewModeChanged() const = 0;
+    virtual muse::async::Notification viewModeChanged() const = 0;
 
     virtual INotationPaintingPtr painting() const = 0;
     virtual INotationViewStatePtr viewState() const = 0;
@@ -102,7 +102,7 @@ public:
     virtual INotationPartsPtr parts() const = 0;
 
     // notify
-    virtual async::Notification notationChanged() const = 0;
+    virtual muse::async::Notification notationChanged() const = 0;
 };
 }
 

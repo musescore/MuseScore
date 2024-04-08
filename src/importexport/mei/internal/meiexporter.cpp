@@ -208,7 +208,7 @@ bool MeiExporter::writeHeader()
         pugi::xml_node date = pubStmt.append_child("date");
 
         // date
-        String dateStr = DateTime::currentDateTime().toString();
+        String dateStr = muse::DateTime::currentDateTime().toString();
         date.append_attribute("isodate") = dateStr.toStdString().c_str();
 
         if (!m_score->metaTag(u"copyright").isEmpty()) {

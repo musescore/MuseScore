@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 static const int LEGACY_MSC_VERSION_V302 = 302;

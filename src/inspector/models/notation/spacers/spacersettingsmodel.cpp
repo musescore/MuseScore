@@ -32,7 +32,7 @@ SpacerSettingsModel::SpacerSettingsModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SPACER);
-    setTitle(mu::qtrc("inspector", "Spacer"));
+    setTitle(muse::qtrc("inspector", "Spacer"));
     setIcon(muse::ui::IconCode::Code::SPACER);
     createProperties();
 }
@@ -59,7 +59,7 @@ void SpacerSettingsModel::resetProperties()
 
 void SpacerSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
-    if (mu::contains(changedPropertyIdSet, Pid::SPACE)) {
+    if (muse::contains(changedPropertyIdSet, Pid::SPACE)) {
         loadPropertyItem(m_spacerHeight, formatDoubleFunc);
     }
 }

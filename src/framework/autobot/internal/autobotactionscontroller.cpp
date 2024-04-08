@@ -25,8 +25,8 @@
 
 using namespace muse::autobot;
 
-static const mu::UriQuery SHOW_BATCHTESTS_URI("musescore://autobot/batchtests?sync=false&modal=false&floating=true");
-static const mu::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=false&modal=false&floating=true");
+static const muse::UriQuery SHOW_BATCHTESTS_URI("musescore://autobot/batchtests?sync=false&modal=false&floating=true");
+static const muse::UriQuery SHOW_SCRIPTS_URI("musescore://autobot/scripts?sync=false&modal=false&floating=true");
 
 void AutobotActionsController::init()
 {
@@ -34,7 +34,7 @@ void AutobotActionsController::init()
     dispatcher()->reg(this, "autobot-show-scripts", [this]() { openUri(SHOW_SCRIPTS_URI); });
 }
 
-void AutobotActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
+void AutobotActionsController::openUri(const UriQuery& uri, bool isSingle)
 {
     if (isSingle && interactive()->isOpened(uri.uri()).val) {
         return;

@@ -28,7 +28,8 @@
 #include "infrastructure/mscreader.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 
 class Engraving_MsczFileTests : public ::testing::Test

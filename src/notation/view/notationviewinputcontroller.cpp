@@ -53,7 +53,7 @@ static bool seekAllowed(const mu::engraving::EngravingItem* element)
         ElementType::BAR_LINE
     };
 
-    return contains(playableTypes, element->type());
+    return muse::contains(playableTypes, element->type());
 }
 
 NotationViewInputController::NotationViewInputController(IControlledView* view)
@@ -335,7 +335,7 @@ void NotationViewInputController::doZoomToTwoPages()
     qreal pageHeightScale = 0.0;
     qreal pageWidthScale = 0.0;
 
-    if (configuration()->canvasOrientation().val == mu::Orientation::Vertical) {
+    if (configuration()->canvasOrientation().val == muse::Orientation::Vertical) {
         constexpr qreal VERTICAL_PAGE_GAP = 5.0;
         pageHeightScale = viewHeight / (pageHeight * 2.0 + VERTICAL_PAGE_GAP);
         pageWidthScale = viewWidth / pageWidth;
@@ -445,7 +445,7 @@ void NotationViewInputController::movePage(int direction)
         return;
     }
     Page* page = notation->elements()->msScore()->pages().back();
-    if (configuration()->canvasOrientation().val == mu::Orientation::Vertical) {
+    if (configuration()->canvasOrientation().val == muse::Orientation::Vertical) {
         qreal offset = std::min((page->height() + notationScreenPadding) * direction, m_view->toLogical(
                                     QPoint()).y() + notationScreenPadding);
         m_view->moveCanvasVertical(offset);
@@ -568,7 +568,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     EngravingItem* hitElement = nullptr;
-    staff_idx_t hitStaffIndex = mu::nidx;
+    staff_idx_t hitStaffIndex = muse::nidx;
 
     if (!m_readonly) {
         m_prevHitElement = hitElementContext().element;
@@ -579,7 +579,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->setHitElementContext(context);
 
         hitElement = context.element;
-        hitStaffIndex = context.staff ? context.staff->idx() : mu::nidx;
+        hitStaffIndex = context.staff ? context.staff->idx() : muse::nidx;
     }
 
     // note enter mode
@@ -861,7 +861,7 @@ void NotationViewInputController::handleLeftClickRelease(const QPointF& releaseP
         return;
     }
 
-    engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : mu::nidx;
+    engraving::staff_idx_t staffIndex = ctx.staff ? ctx.staff->idx() : muse::nidx;
 
     INotationInteractionPtr interaction = viewInteraction();
     interaction->select({ ctx.element }, SelectType::SINGLE, staffIndex);
@@ -1146,11 +1146,11 @@ ElementType NotationViewInputController::selectionType() const
     return ElementType::PAGE;
 }
 
-mu::PointF NotationViewInputController::selectionElementPos() const
+muse::PointF NotationViewInputController::selectionElementPos() const
 {
     auto selection = viewInteraction()->selection();
     if (!selection) {
-        return mu::PointF();
+        return muse::PointF();
     }
 
     if (auto hitElement = hitElementContext().element) {
@@ -1162,7 +1162,7 @@ mu::PointF NotationViewInputController::selectionElementPos() const
         return selectedElement->canvasBoundingRect().center();
     }
 
-    return mu::PointF();
+    return muse::PointF();
 }
 
 void NotationViewInputController::togglePopupForItemIfSupports(const EngravingItem* item)

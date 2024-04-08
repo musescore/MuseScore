@@ -28,7 +28,7 @@
 #include "../types/fontstypes.h"
 
 namespace muse::draw {
-class IFontsDatabase : public mu::modularity::IModuleExportInterface
+class IFontsDatabase : public modularity::IModuleExportInterface
 {
     INTERFACE_ID(muse::draw::IFontsDatabase)
 public:
@@ -36,14 +36,14 @@ public:
 
     virtual void setDefaultFont(Font::Type type, const FontDataKey& key) = 0;
 
-    virtual int addFont(const FontDataKey& key, const mu::io::path_t& path) = 0;
+    virtual int addFont(const FontDataKey& key, const io::path_t& path) = 0;
 
     virtual FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const = 0;
     virtual std::vector<FontDataKey> substitutionFonts(Font::Type type) const = 0;
     virtual FontData fontData(const FontDataKey& requireKey, Font::Type type) const = 0;
-    virtual mu::io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const = 0;
+    virtual io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const = 0;
 
-    virtual void addAdditionalFonts(const mu::io::path_t& path) = 0;
+    virtual void addAdditionalFonts(const io::path_t& path) = 0;
 };
 }
 

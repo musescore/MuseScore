@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_MNEMONICSTRING_H
-#define MU_GLOBAL_MNEMONICSTRING_H
+#ifndef MUSE_GLOBAL_MNEMONICSTRING_H
+#define MUSE_GLOBAL_MNEMONICSTRING_H
 
 #ifndef NO_QT_SUPPORT
 #include <QString>
@@ -28,7 +28,7 @@
 
 #include "translatablestring.h"
 
-namespace mu {
+namespace muse {
 class MnemonicString
 {
 public:
@@ -72,4 +72,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_MNEMONICSTRING_H
+#endif // MUSE_GLOBAL_MNEMONICSTRING_H

@@ -32,7 +32,7 @@ ImageSettingsModel::ImageSettingsModel(QObject* parent, IElementRepositoryServic
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_IMAGE);
-    setTitle(mu::qtrc("inspector", "Image"));
+    setTitle(muse::qtrc("inspector", "Image"));
     setIcon(muse::ui::IconCode::Code::IMAGE_MOUNTAINS);
     createProperties();
 }
@@ -110,32 +110,32 @@ void ImageSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyI
 
 void ImageSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::AUTOSCALE)) {
+    if (muse::contains(propertyIdSet, Pid::AUTOSCALE)) {
         loadPropertyItem(m_shouldScaleToFrameSize);
     }
 
-    if (mu::contains(propertyIdSet, Pid::IMAGE_HEIGHT)) {
+    if (muse::contains(propertyIdSet, Pid::IMAGE_HEIGHT)) {
         loadPropertyItem(m_height, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::IMAGE_WIDTH)) {
+    if (muse::contains(propertyIdSet, Pid::IMAGE_WIDTH)) {
         loadPropertyItem(m_width, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::SIZE)) {
+    if (muse::contains(propertyIdSet, Pid::SIZE)) {
         loadPropertyItem(m_height, formatDoubleFunc);
         loadPropertyItem(m_width, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::LOCK_ASPECT_RATIO)) {
+    if (muse::contains(propertyIdSet, Pid::LOCK_ASPECT_RATIO)) {
         loadPropertyItem(m_isAspectRatioLocked);
     }
 
-    if (mu::contains(propertyIdSet, mu::engraving::Pid::SIZE_IS_SPATIUM)) {
+    if (muse::contains(propertyIdSet, mu::engraving::Pid::SIZE_IS_SPATIUM)) {
         loadPropertyItem(m_isSizeInSpatiums);
     }
 
-    if (mu::contains(propertyIdSet, Pid::IMAGE_FRAMED)) {
+    if (muse::contains(propertyIdSet, Pid::IMAGE_FRAMED)) {
         loadPropertyItem(m_isImageFramed);
     }
 

@@ -353,8 +353,8 @@ TEST_F(MPE_MultiNoteArticulationsTest, IsMultiNoteArticulation)
 
     for (int i = int(ArticulationType::Standard); i < int(ArticulationType::Last); ++i) {
         ArticulationType type = ArticulationType(i);
-        bool isMulti = mu::contains(MULTI_TYPES, type);
-        bool isRanged = mu::contains(RANGED_TYPES, type);
+        bool isMulti = muse::contains(MULTI_TYPES, type);
+        bool isRanged = muse::contains(RANGED_TYPES, type);
 
         EXPECT_EQ(mpe::isMultiNoteArticulation(type), isMulti);
         EXPECT_EQ(mpe::isSingleNoteArticulation(type), !isMulti);

@@ -81,7 +81,7 @@ void SystemDivider::styleChanged()
 //   drag
 //---------------------------------------------------------
 
-mu::RectF SystemDivider::drag(EditData& ed)
+RectF SystemDivider::drag(EditData& ed)
 {
     setGenerated(false);
     return Symbol::drag(ed);

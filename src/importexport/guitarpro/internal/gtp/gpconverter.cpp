@@ -482,7 +482,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, int32_t ma
                 Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
                 StaffText* st = Factory::createStaffText(s);
                 st->setTrack(staffIdx * VOICES);
-                st->setPlainText(mu::mtrc("iex_guitarpro", "Free time", "time signature"));
+                st->setPlainText(muse::mtrc("iex_guitarpro", "Free time", "time signature"));
                 s->add(st);
 
                 // if timeSig is different, it was added before, here we handle "freetime"
@@ -757,7 +757,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
                     StaffText* st = Factory::createStaffText(s);
                     st->setTrack(curTrack);
                     String capoText = String(u"Capo fret %1").arg(capo);
-                    st->setPlainText(mu::mtrc("iex_guitarpro", capoText));
+                    st->setPlainText(muse::mtrc("iex_guitarpro", capoText));
                     s->add(st);
                     m_hasCapo[curTrack] = true;
                 }
@@ -963,7 +963,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
             }
         }
         // Never should get here
-        return nidx;
+        return muse::nidx;
     };
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
@@ -974,7 +974,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
         bool useFlats = mB->useFlats() || key < 0;
         size_t numSharps = getNumSharps(key);
-        IF_ASSERT_FAILED(numSharps != nidx) {
+        IF_ASSERT_FAILED(numSharps != muse::nidx) {
             LOGE() << "Unprocessable key for key signature";
             numSharps = 0;
         }
@@ -1058,12 +1058,12 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
     }
     if (!gpscore->composer().isEmpty()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
-        s->setPlainText(mu::mtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
+        s->setPlainText(muse::mtrc("iex_guitarpro", "Music by %1").arg(gpscore->composer()));
         m->add(s);
     }
     if (!gpscore->poet().isEmpty()) {
         Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
-        s->setPlainText(mu::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
+        s->setPlainText(muse::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         m->add(s);
     }
 }
@@ -2244,7 +2244,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
             if (startPitch == endNote->pitch() && startNote->string() == endNote->string()) {
                 tie->setEndNote(endNote);
                 endNote->setTieBack(tie);
-                mu::remove(tiesOnTrack, tie);
+                muse::remove(tiesOnTrack, tie);
 
                 /// adding tremolos to tied note
                 Chord* startChord = toChord(startNote->parent());
@@ -2255,7 +2255,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
                     TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy()->chord());
                     t->setTremoloType(type);
                     endChord->add(t);
-                    mu::remove(m_tremolosInChords, startChord);
+                    muse::remove(m_tremolosInChords, startChord);
                     m_tremolosInChords[endChord] = type;
                 }
 
@@ -2893,7 +2893,7 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
     graceGhords.clear();
 }
 
-void GPConverter::addTextToNote(String string, Note* note)
+void GPConverter::addTextToNote(muse::String string, Note* note)
 {
     Segment* segment = note->chord()->segment();
     StaffText* text = Factory::createStaffText(segment);

@@ -26,7 +26,7 @@
 
 #include "global/isysteminfo.h"
 
-namespace mu {
+namespace muse {
 class SystemInfoMock : public ISystemInfo
 {
 public:

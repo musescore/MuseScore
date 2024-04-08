@@ -108,7 +108,7 @@ void PainterPath::cubicTo(const PointF& ctrlPt1, const PointF& ctrlPt2, const Po
 
 void PainterPath::translate(double dx, double dy)
 {
-    if (mu::RealIsNull(dx) && mu::RealIsNull(dy)) {
+    if (RealIsNull(dx) && RealIsNull(dy)) {
         return;
     }
     auto m_elementsLeft = m_elements.size();
@@ -217,12 +217,12 @@ void PainterPath::addRoundedRect(const RectF& rect, double xRadius, double yRadi
     {
         double w = r.width() / 2;
         double h = r.height() / 2;
-        if (mu::RealIsNull(w)) {
+        if (RealIsNull(w)) {
             xRadius = 0.0;
         } else {
             xRadius = 100 * std::min(xRadius, w) / w;
         }
-        if (mu::RealIsNull(h)) {
+        if (RealIsNull(h)) {
             yRadius = 0.0;
         } else {
             yRadius = 100 * std::min(yRadius, h) / h;
@@ -355,7 +355,7 @@ void PainterPath::closeSubpath()
     const Element& first = m_elements.at(m_cStart);
     Element& last = m_elements.back();
     if (first.x != last.x || first.y != last.y) {
-        if (mu::RealIsEqual(first.x, last.x) && mu::RealIsEqual(first.y, last.y)) {
+        if (RealIsEqual(first.x, last.x) && RealIsEqual(first.y, last.y)) {
             last.x = first.x;
             last.y = first.y;
         } else {
@@ -545,13 +545,13 @@ static PointF curvesForArc(const RectF& rect, double startAngle, double sweepLen
         sweepLength = -360;
     }
     // Special case fast paths
-    if (mu::RealIsNull(startAngle)) {
-        if (mu::RealIsEqual(sweepLength, 360.0)) {
+    if (RealIsNull(startAngle)) {
+        if (RealIsEqual(sweepLength, 360.0)) {
             for (int i = 11; i >= 0; --i) {
                 curves[(*point_count)++] = points[i];
             }
             return points[12];
-        } else if (mu::RealIsEqual(sweepLength, -360.0)) {
+        } else if (RealIsEqual(sweepLength, -360.0)) {
             for (int i = 1; i <= 12; ++i) {
                 curves[(*point_count)++] = points[i];
             }
@@ -568,19 +568,19 @@ static PointF curvesForArc(const RectF& rect, double startAngle, double sweepLen
         endT = 1 - endT;
     }
     // avoid empty start segment
-    if (mu::RealIsNull(startT - double(1))) {
+    if (RealIsNull(startT - double(1))) {
         startT = 0.0;
         startSegment += delta;
     }
     // avoid empty end segment
-    if (mu::RealIsNull(endT)) {
+    if (RealIsNull(endT)) {
         endT = 1;
         endSegment -= delta;
     }
     startT = angleForArc(startT * 90);
     endT = angleForArc(endT * 90);
-    const bool splitAtStart = !mu::RealIsNull(startT);
-    const bool splitAtEnd = !mu::RealIsNull(endT - double(1));
+    const bool splitAtStart = !RealIsNull(startT);
+    const bool splitAtEnd = !RealIsNull(endT - double(1));
     const int end = endSegment + delta;
     // empty arc?
     if (startSegment == end) {
@@ -600,7 +600,7 @@ static PointF curvesForArc(const RectF& rect, double startAngle, double sweepLen
             b = Bezier::fromPoints(points[j], points[j + 1], points[j + 2], points[j + 3]);
         }
         // empty arc?
-        if (startSegment == endSegment && mu::RealIsEqual(startT, endT)) {
+        if (startSegment == endSegment && RealIsEqual(startT, endT)) {
             return startPoint;
         }
         if (i == startSegment) {
@@ -624,10 +624,10 @@ static PointF curvesForArc(const RectF& rect, double startAngle, double sweepLen
 
 static double angleForArc(double angle)
 {
-    if (mu::RealIsNull(angle)) {
+    if (RealIsNull(angle)) {
         return 0;
     }
-    if (mu::RealIsEqual(angle, double(90))) {
+    if (RealIsEqual(angle, double(90))) {
         return 1;
     }
     double radians = angle * (pi / 180);
@@ -699,9 +699,9 @@ RectF PainterPath::painterpathBezierExtrema(const Bezier& b)
         double bx = BEZIER_B(b, x);
         double cx = BEZIER_C(b, x);
         // specialcase quadratic curves to avoid div by zero
-        if (mu::RealIsNull(ax)) {
+        if (RealIsNull(ax)) {
             // linear curves are covered by initialization.
-            if (!mu::RealIsNull(bx)) {
+            if (!RealIsNull(bx)) {
                 double t = -cx / bx;
                 BEZIER_CHECK_T(b, t);
             }
@@ -723,9 +723,9 @@ RectF PainterPath::painterpathBezierExtrema(const Bezier& b)
         double by = BEZIER_B(b, y);
         double cy = BEZIER_C(b, y);
         // specialcase quadratic curves to avoid div by zero
-        if (mu::RealIsNull(ay)) {
+        if (RealIsNull(ay)) {
             // linear curves are covered by initialization.
-            if (!mu::RealIsNull(by)) {
+            if (!RealIsNull(by)) {
                 double t = -cy / by;
                 BEZIER_CHECK_T(b, t);
             }

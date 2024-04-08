@@ -29,7 +29,7 @@
 #include "ui/imainwindow.h"
 
 namespace muse::api {
-class KeyboardApi : public mu::api::ApiObject
+class KeyboardApi : public api::ApiObject
 {
     Q_OBJECT
 
@@ -37,7 +37,7 @@ class KeyboardApi : public mu::api::ApiObject
     INJECT(ui::IMainWindow, mainWindow)
 
 public:
-    explicit KeyboardApi(mu::api::IApiEngine* e);
+    explicit KeyboardApi(api::IApiEngine* e);
 
     Q_INVOKABLE void key(const QString& key);
     Q_INVOKABLE void repeatKey(const QString& key, int count);

@@ -50,17 +50,17 @@ public:
 
     QUrl scoreManagerUrl() const override;
 
-    mu::ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
-                                const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
-    mu::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
+    ProgressPtr uploadScore(QIODevice& scoreData, const QString& title, Visibility visibility = Visibility::Private,
+                            const QUrl& sourceUrl = QUrl(), int revisionId = 0) override;
+    ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl) override;
 
     RetVal<ScoreInfo> downloadScoreInfo(const QUrl& sourceUrl) override;
     RetVal<ScoreInfo> downloadScoreInfo(int scoreId) override;
 
     async::Promise<ScoresList> downloadScoresList(int scoresPerBatch, int batchNumber) override;
 
-    mu::ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
-                                  const QString& secret = QString()) override;
+    ProgressPtr downloadScore(int scoreId, QIODevice& scoreData, const QString& hash = QString(),
+                              const QString& secret = QString()) override;
 
 private:
     ServerConfig serverConfig() const override;
@@ -76,8 +76,8 @@ private:
     Ret doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
                         const QString& hash = QString(), const QString& secret = QString());
 
-    mu::RetVal<mu::ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
-                                         Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
+    RetVal<ValMap> doUploadScore(network::INetworkManagerPtr uploadManager, QIODevice& scoreData, const QString& title,
+                                 Visibility visibility, const QUrl& sourceUrl = QUrl(), int revisionId = 0);
 
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat, const QUrl& sourceUrl);
 };

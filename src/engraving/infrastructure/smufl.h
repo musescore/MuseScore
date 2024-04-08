@@ -45,7 +45,7 @@ public:
     static const Code code(SymId id);
     static char32_t smuflCode(SymId id);
 
-    static const std::map<String, StringList>& smuflRanges();
+    static const std::map<muse::String, muse::StringList>& smuflRanges();
     static constexpr const char* SMUFL_ALL_SYMBOLS = "All symbols";
 
 private:

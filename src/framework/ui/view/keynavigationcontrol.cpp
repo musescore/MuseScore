@@ -45,7 +45,7 @@ const IKeyNavigation::Index& KeyNavigationControl::index() const
     return AbstractKeyNavigation::index();
 }
 
-mu::async::Channel<IKeyNavigation::Index> KeyNavigationControl::indexChanged() const
+async::Channel<IKeyNavigation::Index> KeyNavigationControl::indexChanged() const
 {
     return AbstractKeyNavigation::indexChanged();
 }
@@ -55,7 +55,7 @@ bool KeyNavigationControl::enabled() const
     return AbstractKeyNavigation::enabled();
 }
 
-mu::async::Channel<bool> KeyNavigationControl::enabledChanged() const
+async::Channel<bool> KeyNavigationControl::enabledChanged() const
 {
     return AbstractKeyNavigation::enabledChanged();
 }
@@ -70,7 +70,7 @@ void KeyNavigationControl::setActive(bool arg)
     AbstractKeyNavigation::setActive(arg);
 }
 
-mu::async::Channel<bool> KeyNavigationControl::activeChanged() const
+async::Channel<bool> KeyNavigationControl::activeChanged() const
 {
     return AbstractKeyNavigation::activeChanged();
 }
@@ -85,7 +85,7 @@ void KeyNavigationControl::trigger()
     emit triggered();
 }
 
-mu::async::Channel<IKeyNavigationControl*> KeyNavigationControl::forceActiveRequested() const
+async::Channel<IKeyNavigationControl*> KeyNavigationControl::forceActiveRequested() const
 {
     return m_forceActiveRequested;
 }

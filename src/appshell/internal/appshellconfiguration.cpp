@@ -30,6 +30,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::appshell;
 using namespace mu::notation;
@@ -54,7 +55,7 @@ static const std::string UTM_MEDIUM_MENU("menu");
 static const QString NOTATION_NAVIGATOR_VISIBLE_KEY("showNavigator");
 static const Settings::Key SPLASH_SCREEN_VISIBLE_KEY(module_name, "ui/application/startup/showSplashScreen");
 
-static const mu::io::path_t SESSION_FILE("/session.json");
+static const muse::io::path_t SESSION_FILE("/session.json");
 static const std::string SESSION_RESOURCE_NAME("SESSION");
 
 void AppShellConfiguration::init()
@@ -87,17 +88,17 @@ void AppShellConfiguration::setStartupModeType(StartupModeType type)
     settings()->setSharedValue(STARTUP_MODE_TYPE, Val(type));
 }
 
-mu::io::path_t AppShellConfiguration::startupScorePath() const
+muse::io::path_t AppShellConfiguration::startupScorePath() const
 {
     return settings()->value(STARTUP_SCORE_PATH).toString();
 }
 
-void AppShellConfiguration::setStartupScorePath(const io::path_t& scorePath)
+void AppShellConfiguration::setStartupScorePath(const muse::io::path_t& scorePath)
 {
     settings()->setSharedValue(STARTUP_SCORE_PATH, Val(scorePath.toStdString()));
 }
 
-mu::io::path_t AppShellConfiguration::userDataPath() const
+muse::io::path_t AppShellConfiguration::userDataPath() const
 {
     return globalConfiguration()->userDataPath();
 }
@@ -172,7 +173,7 @@ void AppShellConfiguration::setIsNotationNavigatorVisible(bool visible) const
     uiConfiguration()->setIsVisible(NOTATION_NAVIGATOR_VISIBLE_KEY, visible);
 }
 
-mu::async::Notification AppShellConfiguration::isNotationNavigatorVisibleChanged() const
+muse::async::Notification AppShellConfiguration::isNotationNavigatorVisibleChanged() const
 {
     return uiConfiguration()->isVisibleChanged(NOTATION_NAVIGATOR_VISIBLE_KEY);
 }
@@ -207,7 +208,7 @@ void AppShellConfiguration::revertToFactorySettings(bool keepDefaultSettings, bo
     settings()->reset(keepDefaultSettings, notifyAboutChanges);
 }
 
-mu::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
+muse::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
 {
     RetVal<ByteArray> retVal = readSessionState();
     if (!retVal.ret) {
@@ -218,10 +219,10 @@ mu::io::paths_t AppShellConfiguration::sessionProjectsPaths() const
     return parseSessionProjectsPaths(retVal.val.toQByteArrayNoCopy());
 }
 
-mu::Ret AppShellConfiguration::setSessionProjectsPaths(const mu::io::paths_t& paths)
+muse::Ret AppShellConfiguration::setSessionProjectsPaths(const muse::io::paths_t& paths)
 {
     QJsonArray jsonArray;
-    for (const io::path_t& path : paths) {
+    for (const muse::io::path_t& path : paths) {
         jsonArray << QJsonValue(path.toQString());
     }
 
@@ -244,29 +245,29 @@ std::string AppShellConfiguration::currentLanguageCode() const
     return locale.bcp47Name().toStdString();
 }
 
-mu::io::path_t AppShellConfiguration::sessionDataPath() const
+muse::io::path_t AppShellConfiguration::sessionDataPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/session";
 }
 
-mu::io::path_t AppShellConfiguration::sessionFilePath() const
+muse::io::path_t AppShellConfiguration::sessionFilePath() const
 {
     return sessionDataPath() + SESSION_FILE;
 }
 
-mu::RetVal<mu::ByteArray> AppShellConfiguration::readSessionState() const
+RetVal<muse::ByteArray> AppShellConfiguration::readSessionState() const
 {
     muse::mi::ReadResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->readFile(sessionFilePath());
 }
 
-mu::Ret AppShellConfiguration::writeSessionState(const QByteArray& data)
+muse::Ret AppShellConfiguration::writeSessionState(const QByteArray& data)
 {
     muse::mi::WriteResourceLockGuard lock_guard(multiInstancesProvider(), SESSION_RESOURCE_NAME);
     return fileSystem()->writeFile(sessionFilePath(), ByteArray::fromQByteArrayNoCopy(data));
 }
 
-mu::io::paths_t AppShellConfiguration::parseSessionProjectsPaths(const QByteArray& json) const
+muse::io::paths_t AppShellConfiguration::parseSessionProjectsPaths(const QByteArray& json) const
 {
     QJsonParseError err;
     QJsonDocument jsodDoc = QJsonDocument::fromJson(json, &err);
@@ -278,7 +279,7 @@ mu::io::paths_t AppShellConfiguration::parseSessionProjectsPaths(const QByteArra
     io::paths_t result;
     const QVariantList pathsList = jsodDoc.array().toVariantList();
     for (const QVariant& pathVal : pathsList) {
-        io::path_t path = pathVal.toString().toStdString();
+        muse::io::path_t path = pathVal.toString().toStdString();
         if (!path.empty()) {
             result.push_back(path);
         }

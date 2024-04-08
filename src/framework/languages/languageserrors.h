@@ -48,14 +48,15 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::AlreadyUpToDate: return Ret(retCode, mu::trc("languages", "Up to date"));
-    case Err::ErrorParseConfig: return Ret(retCode, mu::trc("languages", "Error while parsing response from server"));
-    case Err::ErrorDownloadLanguage: return Ret(retCode, mu::trc("languages", "Error while downloading language"));
-    case Err::ErrorWriteLanguage: return Ret(retCode, mu::trc("languages", "Error while writing language files"));
-    case Err::ErrorLanguageNotFound: return Ret(retCode, mu::trc("languages", "Language not found"));
-    case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, mu::trc("languages", "Error while removing language directory"));
+    case Err::AlreadyUpToDate: return Ret(retCode, muse::trc("languages", "Up to date"));
+    case Err::ErrorParseConfig: return Ret(retCode, muse::trc("languages", "Error while parsing response from server"));
+    case Err::ErrorDownloadLanguage: return Ret(retCode, muse::trc("languages", "Error while downloading language"));
+    case Err::ErrorWriteLanguage: return Ret(retCode, muse::trc("languages", "Error while writing language files"));
+    case Err::ErrorLanguageNotFound: return Ret(retCode, muse::trc("languages", "Language not found"));
+    case Err::ErrorRemoveLanguageDirectory: return Ret(retCode, muse::trc("languages", "Error while removing language directory"));
     case Err::ErrorAnotherOperationStarted: return Ret(retCode,
-                                                       mu::trc("languages", "Another operation on this language has already been started"));
+                                                       muse::trc("languages",
+                                                                 "Another operation on this language has already been started"));
     }
 
     return retCode;

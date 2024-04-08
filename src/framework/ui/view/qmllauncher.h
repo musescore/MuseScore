@@ -32,7 +32,7 @@ class QmlLauncher : public QObject
 {
     Q_OBJECT
 
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
 
 public:
     QmlLauncher(QObject* parent);

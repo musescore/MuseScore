@@ -32,6 +32,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::iex::imagesexport;
 using namespace mu::project;
 

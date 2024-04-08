@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 static void fillMap(ValMap& v, const std::string& key, const JsonValue& jv);
 static void fillList(ValList& l, const JsonValue& jv)

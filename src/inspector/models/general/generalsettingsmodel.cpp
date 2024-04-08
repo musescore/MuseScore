@@ -31,7 +31,7 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 {
     createProperties();
 
-    setTitle(mu::qtrc("inspector", "General"));
+    setTitle(muse::qtrc("inspector", "General"));
     setSectionType(InspectorSectionType::SECTION_GENERAL);
 
     m_playbackProxyModel = new PlaybackProxyModel(this, repository);
@@ -106,15 +106,15 @@ void GeneralSettingsModel::onNotationChanged(const PropertyIdSet& changedPropert
 
 void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
+    if (muse::contains(propertyIdSet, Pid::VISIBLE)) {
         loadPropertyItem(m_isVisible);
     }
 
-    if (mu::contains(propertyIdSet, Pid::AUTOPLACE)) {
+    if (muse::contains(propertyIdSet, Pid::AUTOPLACE)) {
         loadPropertyItem(m_isAutoPlaceAllowed);
     }
 
-    if (mu::contains(propertyIdSet, Pid::PLAY)) {
+    if (muse::contains(propertyIdSet, Pid::PLAY)) {
         bool isMaster = isMasterNotation();
         m_isPlayable->setIsVisible(isMaster);
 
@@ -123,7 +123,7 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
         }
     }
 
-    if (mu::contains(propertyIdSet, Pid::SMALL)) {
+    if (muse::contains(propertyIdSet, Pid::SMALL)) {
         loadPropertyItem(m_isSmall, m_elementsForIsSmallProperty);
     }
 }

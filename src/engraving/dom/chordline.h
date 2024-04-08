@@ -82,7 +82,7 @@ public:
     int gripsCount() const override { return m_straight ? 1 : static_cast<int>(ldata()->path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     bool isToTheLeft() const { return m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::SCOOP; }
     bool isBelow() const { return m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::FALL; }

@@ -50,11 +50,11 @@ public:
     inline bool operator==(const Pen& o) const
     {
         return m_color == o.m_color
-               && mu::RealIsEqual(m_width, o.m_width)
+               && RealIsEqual(m_width, o.m_width)
                && m_style == o.m_style
                && m_capStyle == o.m_capStyle
                && m_joinStyle == o.m_joinStyle
-               && mu::RealIsEqual(m_dashPattern, o.m_dashPattern);
+               && RealIsEqual(m_dashPattern, o.m_dashPattern);
     }
 
     inline bool operator!=(const Pen& o) const { return !this->operator==(o); }

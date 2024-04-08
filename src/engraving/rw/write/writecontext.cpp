@@ -38,7 +38,7 @@ void WriteContext::setLidLocalIndex(int lid, int localIndex)
 
 int WriteContext::lidLocalIndex(int lid) const
 {
-    return mu::value(m_lidLocalIndices, lid, 0);
+    return muse::value(m_lidLocalIndices, lid, 0);
 }
 
 bool WriteContext::canWrite(const EngravingItem* e) const

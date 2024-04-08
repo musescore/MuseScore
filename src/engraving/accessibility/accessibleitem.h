@@ -86,8 +86,8 @@ public:
     // ListView item Interface
     int accessibleRowIndex() const override;
 
-    async::Channel<Property, Val> accessiblePropertyChanged() const override;
-    async::Channel<State, bool> accessibleStateChanged() const override;
+    muse::async::Channel<Property, muse::Val> accessiblePropertyChanged() const override;
+    muse::async::Channel<State, bool> accessibleStateChanged() const override;
 
     void setState(State state, bool arg) override;
     // ---
@@ -104,8 +104,8 @@ protected:
 
     Role m_role = Role::ElementOnScore;
 
-    mu::async::Channel<IAccessible::Property, Val> m_accessiblePropertyChanged;
-    mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
+    muse::async::Channel<IAccessible::Property, muse::Val> m_accessiblePropertyChanged;
+    muse::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
 };
 using AccessibleItemPtr = std::shared_ptr<AccessibleItem>;
 using AccessibleItemWeakPtr = std::weak_ptr<AccessibleItem>;

@@ -191,7 +191,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     double mag = 0.0;
 
     item->notes().clear();
-    staff_idx_t staffIdx = mu::nidx;
+    staff_idx_t staffIdx = muse::nidx;
     for (ChordRest* cr : item->elements()) {
         double m = cr->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0;
         mag = std::max(mag, m);
@@ -347,7 +347,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notes());
         item->setStartAnchor(item->ldata()->startAnchor);
         item->setEndAnchor(item->ldata()->endAnchor);
-        item->setSlope(mu::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));
+        item->setSlope(muse::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));
         item->setBeamDist(item->ldata()->beamDist);
     } else {
         item->setSlope(0.0);
@@ -648,7 +648,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                     continue;
                 }
                 int beat = (mcr->rtick() * stretch).ticks() / Constants::DIVISION;
-                if (mu::contains(beatSubdivision, beat)) {
+                if (muse::contains(beatSubdivision, beat)) {
                     beatSubdivision[beat] = std::min(beatSubdivision[beat], mcr->durationType());
                 } else {
                     beatSubdivision[beat] = mcr->durationType();
@@ -1198,7 +1198,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         const int extraBeamAdjust = overallUp ? beamsAbove : beamsBelow;
         const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
 
-        if (mu::RealIsEqual(item->growLeft(), item->growRight())) {
+        if (muse::RealIsEqual(item->growLeft(), item->growRight())) {
             startY -= verticalOffset * item->growLeft();
             endY -= verticalOffset * item->growLeft();
         } else {
@@ -1240,7 +1240,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
 
         if (level > 0) {
             double grow = item->growLeft();
-            if (!mu::RealIsEqual(item->growLeft(), item->growRight())) {
+            if (!muse::RealIsEqual(item->growLeft(), item->growRight())) {
                 double anchorX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
                 double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
                 grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
@@ -1250,7 +1250,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
             addition = grow * (level - extraBeamAdjust) * item->beamDist();
         }
 
-        if (level == 0 || !mu::RealIsEqual(addition, 0.0)) {
+        if (level == 0 || !muse::RealIsEqual(addition, 0.0)) {
             BeamTremoloLayout::extendStem(item->ldata(), chord, addition);
         }
 
@@ -1291,7 +1291,7 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
     const int upValue = cr->up() ? -1 : 1;
     const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
 
-    if (mu::RealIsEqual(item->growLeft(), item->growRight())) {
+    if (muse::RealIsEqual(item->growLeft(), item->growRight())) {
         startY -= verticalOffset * item->growLeft();
         endY -= verticalOffset * item->growLeft();
     } else {

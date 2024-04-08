@@ -35,7 +35,7 @@
 #include "log.h"
 
 using namespace muse::accessibility;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string AccessibilityModule::moduleName() const
 {
@@ -64,7 +64,7 @@ void AccessibilityModule::resolveImports()
 
 void AccessibilityModule::registerApi()
 {
-    using namespace mu::api;
+    using namespace muse::api;
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
@@ -72,9 +72,9 @@ void AccessibilityModule::registerApi()
     }
 }
 
-void AccessibilityModule::onInit(const mu::IApplication::RunMode& mode)
+void AccessibilityModule::onInit(const IApplication::RunMode& mode)
 {
-    if (mode != mu::IApplication::RunMode::GuiApp) {
+    if (mode != IApplication::RunMode::GuiApp) {
         return;
     }
 

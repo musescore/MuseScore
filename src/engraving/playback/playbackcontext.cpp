@@ -66,7 +66,7 @@ PlaybackParamMap PlaybackContext::playbackParamMap(const Score* score, const int
 {
     mpe::PlaybackParamMap result;
 
-    auto it = mu::findLessOrEqual(m_playbackParamMap, nominalPositionTick);
+    auto it = muse::findLessOrEqual(m_playbackParamMap, nominalPositionTick);
     if (it == m_playbackParamMap.end()) {
         return result;
     }

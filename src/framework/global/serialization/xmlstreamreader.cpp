@@ -29,8 +29,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace tinyxml2;
 
 struct XmlStreamReader::Xml {

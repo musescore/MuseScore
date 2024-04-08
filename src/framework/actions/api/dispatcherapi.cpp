@@ -23,11 +23,12 @@
 
 #include "log.h"
 
-using namespace mu::api;
+using namespace muse::api;
 using namespace muse::actions;
+using namespace muse::actions::api;
 
-DispatcherApi::DispatcherApi(IApiEngine* e)
-    : ApiObject(e)
+DispatcherApi::DispatcherApi(muse::api::IApiEngine* e)
+    : muse::api::ApiObject(e)
 {
 }
 

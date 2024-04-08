@@ -35,7 +35,7 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
-    mu::async::Channel<unsigned int> audioChannelsCountChanged() const override;
+    async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
 protected:
     unsigned int m_sampleRate = 1;

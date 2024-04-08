@@ -27,9 +27,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
-using namespace mu::async;
+using namespace muse::async;
 
 SequencePlayer::SequencePlayer(IGetTracks* getTracks, IClockPtr clock)
     : m_getTracks(getTracks), m_clock(clock)

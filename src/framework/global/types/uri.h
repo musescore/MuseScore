@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_URI_H
-#define MU_GLOBAL_URI_H
+#ifndef MUSE_GLOBAL_URI_H
+#define MUSE_GLOBAL_URI_H
 
 #include <string>
 #include <vector>
@@ -28,7 +28,7 @@
 
 #include "val.h"
 
-namespace mu {
+namespace muse {
 class Uri
 {
 public:
@@ -97,9 +97,4 @@ private:
 };
 }
 
-namespace muse {
-using Uri = mu::Uri;
-using UriQuery = mu::UriQuery;
-}
-
-#endif // MU_GLOBAL_URI_H
+#endif // MUSE_GLOBAL_URI_H

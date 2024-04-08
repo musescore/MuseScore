@@ -37,25 +37,26 @@
 #include "log.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::diagnostics;
 
-const io::path_t DATA_ROOT(diagnostics_tests_DATA_ROOT);
-const io::path_t VTEST_SCORES = DATA_ROOT + "/../../../vtest/scores";
+const muse::io::path_t DATA_ROOT(diagnostics_tests_DATA_ROOT);
+const muse::io::path_t VTEST_SCORES = DATA_ROOT + "/../../../vtest/scores";
 
 class Diagnostics_DrawDataTests : public ::testing::Test
 {
 public:
 };
 
-void saveAsPng(const io::path_t& path, const DrawDataPtr& data)
+void saveAsPng(const muse::io::path_t& path, const DrawDataPtr& data)
 {
     DrawDataConverter c;
     Pixmap px = c.drawDataToPixmap(data);
     io::File::writeFile(path, px.data());
 }
 
-void saveDiff(const io::path_t& path, const DrawDataPtr& origin, const DrawDataPtr& diff)
+void saveDiff(const muse::io::path_t& path, const DrawDataPtr& origin, const DrawDataPtr& diff)
 {
     DrawDataConverter c;
     Pixmap px(std::lrint(origin->viewport.width()), std::lrint(origin->viewport.height()));
@@ -78,7 +79,7 @@ TEST_F(Diagnostics_DrawDataTests, Rw)
         readed = DrawDataRW::readData("rw_data.origin.json").val;
     }
 
-    mu::SetCompareRealPrecision(3);
+    muse::SetCompareRealPrecision(3);
 
     EXPECT_EQ(origin->item.chilren.size(), readed->item.chilren.size());
 

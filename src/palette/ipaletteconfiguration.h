@@ -43,20 +43,20 @@ public:
     virtual double paletteScaling() const = 0;
     virtual void setPaletteScaling(double scale) = 0;
 
-    virtual ValCh<bool> isSinglePalette() const = 0;
+    virtual muse::ValCh<bool> isSinglePalette() const = 0;
     virtual void setIsSinglePalette(bool isSingle) = 0;
 
-    virtual ValCh<bool> isSingleClickToOpenPalette() const = 0;
+    virtual muse::ValCh<bool> isSingleClickToOpenPalette() const = 0;
     virtual void setIsSingleClickToOpenPalette(bool isSingleClick) = 0;
 
     virtual QColor elementsBackgroundColor() const = 0;
     virtual QColor elementsColor() const = 0;
     virtual QColor gridColor() const = 0;
     virtual QColor accentColor() const = 0;
-    virtual async::Notification colorsChanged() const = 0;
+    virtual muse::async::Notification colorsChanged() const = 0;
 
-    virtual io::path_t keySignaturesDirPath() const = 0;
-    virtual io::path_t timeSignaturesDirPath() const = 0;
+    virtual muse::io::path_t keySignaturesDirPath() const = 0;
+    virtual muse::io::path_t timeSignaturesDirPath() const = 0;
 
     virtual bool useFactorySettings() const = 0;
     virtual bool enableExperimental() const = 0;
@@ -77,10 +77,10 @@ public:
         bool drawStaff = false;
     };
 
-    virtual ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const = 0;
+    virtual muse::ValCh<PaletteConfig> paletteConfig(const QString& paletteId) const = 0;
     virtual void setPaletteConfig(const QString& paletteId, const PaletteConfig& config) = 0;
 
-    virtual ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const = 0;
+    virtual muse::ValCh<PaletteCellConfig> paletteCellConfig(const QString& cellId) const = 0;
     virtual void setPaletteCellConfig(const QString& cellId, const PaletteCellConfig& config) = 0;
 };
 }

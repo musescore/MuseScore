@@ -48,11 +48,11 @@ class QDrag;
 namespace mu::notation {
 class Notation;
 class NotationSelection;
-class NotationInteraction : public INotationInteraction, public async::Asyncable
+class NotationInteraction : public INotationInteraction, public muse::async::Asyncable
 {
     INJECT(INotationConfiguration, configuration)
     INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
 
 public:
@@ -64,16 +64,16 @@ public:
     INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
-    bool showShadowNote(const PointF& pos) override;
+    bool showShadowNote(const muse::PointF& pos) override;
     void hideShadowNote() override;
-    RectF shadowNoteRect() const override;
+    muse::RectF shadowNoteRect() const override;
 
     // Visibility
     void toggleVisible() override;
 
     // Hit
-    EngravingItem* hitElement(const PointF& pos, float width) const override;
-    Staff* hitStaff(const PointF& pos) const override;
+    EngravingItem* hitElement(const muse::PointF& pos, float width) const override;
+    Staff* hitStaff(const muse::PointF& pos) const override;
     const HitElementContext& hitElementContext() const override;
     void setHitElementContext(const HitElementContext& context) override;
 
@@ -87,7 +87,7 @@ public:
     void selectLastElement() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;
-    async::Notification selectionChanged() const override;
+    muse::async::Notification selectionChanged() const override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
     void moveSegmentSelection(MoveDirection d) override;
 
@@ -97,10 +97,10 @@ public:
 
     // Drag
     bool isDragStarted() const override;
-    void startDrag(const std::vector<EngravingItem*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;
-    void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) override;
+    void startDrag(const std::vector<EngravingItem*>& elems, const muse::PointF& eoffset, const IsDraggable& isDraggable) override;
+    void drag(const muse::PointF& fromPos, const muse::PointF& toPos, DragMode mode) override;
     void endDrag() override;
-    async::Notification dragChanged() const override;
+    muse::async::Notification dragChanged() const override;
 
     bool isDragCopyStarted() const override;
     bool dragCopyAllowed(const EngravingItem* element) const override;
@@ -110,12 +110,12 @@ public:
     // Drop
     void startDrop(const QByteArray& edata) override;
     bool startDrop(const QUrl& url) override;
-    bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
-    bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool isDropAccepted(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
+    bool drop(const muse::PointF& pos, Qt::KeyboardModifiers modifiers) override;
     void setDropTarget(const EngravingItem* item, bool notify = true) override;
-    void setDropRect(const RectF& rect) override;
+    void setDropRect(const muse::RectF& rect) override;
     void endDrop() override;
-    async::Notification dropChanged() const override;
+    muse::async::Notification dropChanged() const override;
 
     bool applyPaletteElement(mu::engraving::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) override;
     void undo() override;
@@ -140,20 +140,20 @@ public:
     bool isTextSelected() const override;
     bool isTextEditingStarted() const override;
     bool textEditingAllowed(const EngravingItem* element) const override;
-    void startEditText(EngravingItem* element, const PointF& cursorPos = PointF()) override;
+    void startEditText(EngravingItem* element, const muse::PointF& cursorPos = muse::PointF()) override;
     void editText(QInputMethodEvent* event) override;
     void endEditText() override;
-    void changeTextCursorPosition(const PointF& newCursorPos) override;
+    void changeTextCursorPosition(const muse::PointF& newCursorPos) override;
     void selectText(mu::engraving::SelectTextType type) override;
     const TextBase* editedText() const override;
-    async::Notification textEditingStarted() const override;
-    async::Notification textEditingChanged() const override;
-    async::Channel<TextBase*> textEditingEnded() const override;
+    muse::async::Notification textEditingStarted() const override;
+    muse::async::Notification textEditingChanged() const override;
+    muse::async::Channel<TextBase*> textEditingEnded() const override;
 
     // Grip edit
     bool isGripEditStarted() const override;
-    bool isHitGrip(const PointF& pos) const override;
-    void startEditGrip(const PointF& pos) override;
+    bool isHitGrip(const muse::PointF& pos) const override;
+    void startEditGrip(const muse::PointF& pos) override;
     void startEditGrip(EngravingItem* element, mu::engraving::Grip grip) override;
     void endEditGrip() override;
 
@@ -168,13 +168,13 @@ public:
     void splitSelectedMeasure() override;
     void joinSelectedMeasures() override;
 
-    Ret canAddBoxes() const override;
+    muse::Ret canAddBoxes() const override;
     void addBoxes(BoxType boxType, int count, AddBoxesTarget target) override;
     void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool moveSignaturesClef = true) override;
 
     void copySelection() override;
     void copyLyrics() override;
-    Ret repeatSelection() override;
+    muse::Ret repeatSelection() override;
     void pasteSelection(const Fraction& scale = Fraction(1, 1)) override;
     void swapSelection() override;
     void deleteSelection() override;
@@ -209,13 +209,13 @@ public:
 
     void addTextToTopFrame(TextStyleType type) override;
 
-    Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
+    muse::Ret canAddTextToItem(TextStyleType type, const EngravingItem* item) const override;
     void addTextToItem(TextStyleType type, EngravingItem* item) override;
 
-    Ret canAddImageToItem(const EngravingItem* item) const override;
-    void addImageToItem(const io::path_t& imagePath, EngravingItem* item) override;
+    muse::Ret canAddImageToItem(const EngravingItem* item) const override;
+    void addImageToItem(const muse::io::path_t& imagePath, EngravingItem* item) override;
 
-    Ret canAddFiguredBass() const override;
+    muse::Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
 
     void addStretch(qreal value) override;
@@ -245,7 +245,7 @@ public:
 
     ScoreConfig scoreConfig() const override;
     void setScoreConfig(const ScoreConfig& config) override;
-    async::Channel<ScoreConfigType> scoreConfigChanged() const override;
+    muse::async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
     void navigateToLyrics(MoveDirection direction, bool moveOnly = true) override;
     void navigateToLyricsVerse(MoveDirection direction) override;
@@ -265,7 +265,7 @@ public:
     void addMelisma() override;
     void addLyricsVerse() override;
 
-    Ret canAddGuitarBend() const override;
+    muse::Ret canAddGuitarBend() const override;
     void addGuitarBend(GuitarBendType bendType) override;
 
     void toggleBold() override;
@@ -287,9 +287,9 @@ public:
     void execute(void (mu::engraving::Score::*)()) override;
 
     void showItem(const mu::engraving::EngravingItem* item, int staffIndex = -1) override;
-    async::Channel<ShowItemRequest> showItemRequested() const override;
+    muse::async::Channel<ShowItemRequest> showItemRequested() const override;
 
-    void setGetViewRectFunc(const std::function<RectF()>& func) override;
+    void setGetViewRectFunc(const std::function<muse::RectF()>& func) override;
 
 private:
     mu::engraving::Score* score() const;
@@ -318,7 +318,7 @@ private:
     void notifyAboutTextEditingChanged();
     void notifyAboutTextEditingEnded(TextBase* text);
     void notifyAboutNoteInputStateChanged();
-    void doDragLasso(const PointF& p);
+    void doDragLasso(const muse::PointF& p);
     void endLasso();
     void toggleFontStyle(mu::engraving::FontStyle);
     void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
@@ -335,17 +335,17 @@ private:
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
 
-    mu::engraving::Page* point2page(const PointF& p) const;
-    std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;
-    std::vector<EngravingItem*> elementsAt(const PointF& p) const;
-    EngravingItem* elementAt(const PointF& p) const;
+    mu::engraving::Page* point2page(const muse::PointF& p) const;
+    std::vector<EngravingItem*> hitElements(const muse::PointF& p_in, float w) const;
+    std::vector<EngravingItem*> elementsAt(const muse::PointF& p) const;
+    EngravingItem* elementAt(const muse::PointF& p) const;
 
     // Sorting using this function will place the elements that are the most
     // interesting to be selected at the end of the list
     static bool elementIsLess(const mu::engraving::EngravingItem* e1, const mu::engraving::EngravingItem* e2);
 
     void updateAnchorLines();
-    void setAnchorLines(const std::vector<LineF>& anchorList);
+    void setAnchorLines(const std::vector<muse::LineF>& anchorList);
     void resetAnchorLines();
     double currentScaling(muse::draw::Painter* painter) const;
     void drawAnchorLines(muse::draw::Painter* painter);
@@ -356,15 +356,15 @@ private:
     void moveStringSelection(MoveDirection d);
 
     EngravingItem* dropTarget(mu::engraving::EditData& ed) const;
-    bool dragMeasureAnchorElement(const PointF& pos);
-    bool dragTimeAnchorElement(const PointF& pos);
+    bool dragMeasureAnchorElement(const muse::PointF& pos);
+    bool dragTimeAnchorElement(const muse::PointF& pos);
     bool dropCanvas(EngravingItem* e);
     void resetDropElement();
 
     bool selectInstrument(mu::engraving::InstrumentChange* instrumentChange);
 
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
-                                 Qt::KeyboardModifiers modifiers, PointF pt = PointF(), bool pasteMode = false);
+                                 Qt::KeyboardModifiers modifiers, muse::PointF pt = muse::PointF(), bool pasteMode = false);
 
     void applyLineNoteToNote(engraving::Score* score, Note* note1, Note* note2, EngravingItem* line);
 
@@ -391,12 +391,12 @@ private:
         Staff* staff = nullptr;
     };
 
-    HitMeasureData hitMeasure(const PointF& pos) const;
+    HitMeasureData hitMeasure(const muse::PointF& pos) const;
 
     struct DragData
     {
-        PointF beginMove;
-        PointF elementOffset;
+        muse::PointF beginMove;
+        muse::PointF elementOffset;
         mu::engraving::EditData ed;
         std::vector<EngravingItem*> elements;
         std::vector<std::unique_ptr<mu::engraving::ElementGroup> > dragGroups;
@@ -407,7 +407,7 @@ private:
     {
         mu::engraving::EditData ed;
         const EngravingItem* dropTarget = nullptr;
-        RectF dropRect;
+        muse::RectF dropRect;
     };
 
     ScoreCallbacks m_scoreCallbacks;
@@ -417,32 +417,32 @@ private:
     INotationNoteInputPtr m_noteInput = nullptr;
 
     std::shared_ptr<NotationSelection> m_selection = nullptr;
-    async::Notification m_selectionChanged;
+    muse::async::Notification m_selectionChanged;
 
     DragData m_dragData;
-    async::Notification m_dragChanged;
-    std::vector<LineF> m_anchorLines;
+    muse::async::Notification m_dragChanged;
+    std::vector<muse::LineF> m_anchorLines;
 
     QDrag* m_drag = nullptr;
 
     mu::engraving::EditData m_editData;
 
-    async::Notification m_textEditingStarted;
-    async::Notification m_textEditingChanged;
-    async::Channel<TextBase*> m_textEditingEnded;
-    async::Channel<TextBase*> m_textAdded;
+    muse::async::Notification m_textEditingStarted;
+    muse::async::Notification m_textEditingChanged;
+    muse::async::Channel<TextBase*> m_textEditingEnded;
+    muse::async::Channel<TextBase*> m_textAdded;
 
     DropData m_dropData;
-    async::Notification m_dropChanged;
+    muse::async::Notification m_dropChanged;
 
-    async::Channel<ScoreConfigType> m_scoreConfigChanged;
+    muse::async::Channel<ScoreConfigType> m_scoreConfigChanged;
 
     mu::engraving::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
     HitElementContext m_hitElementContext;
 
-    async::Channel<ShowItemRequest> m_showItemRequested;
+    muse::async::Channel<ShowItemRequest> m_showItemRequested;
 };
 }
 

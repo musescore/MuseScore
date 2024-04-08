@@ -28,6 +28,7 @@
 #include "translation.h"
 #include "log.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::accessibility;
 
@@ -59,7 +60,7 @@ void NavigationPanel::setIndex(const Index& index)
     AbstractNavigation::setIndex(index);
 }
 
-mu::async::Channel<INavigation::Index> NavigationPanel::indexChanged() const
+async::Channel<INavigation::Index> NavigationPanel::indexChanged() const
 {
     return AbstractNavigation::indexChanged();
 }
@@ -80,7 +81,7 @@ bool NavigationPanel::enabled() const
     return enbl;
 }
 
-mu::async::Channel<bool> NavigationPanel::enabledChanged() const
+async::Channel<bool> NavigationPanel::enabledChanged() const
 {
     return AbstractNavigation::enabledChanged();
 }
@@ -98,7 +99,7 @@ void NavigationPanel::setActive(bool arg)
     }
 }
 
-mu::async::Channel<bool> NavigationPanel::activeChanged() const
+async::Channel<bool> NavigationPanel::activeChanged() const
 {
     return AbstractNavigation::activeChanged();
 }
@@ -131,9 +132,9 @@ NavigationPanel::QmlDirection NavigationPanel::direction_property() const
 QString NavigationPanel::directionInfo() const
 {
     switch (m_direction) {
-    case Horizontal: return mu::qtrc("ui", "direction is horizontal");
-    case Vertical: return mu::qtrc("ui", "direction is vertical");
-    case Both: return mu::qtrc("ui", "direction is both");
+    case Horizontal: return muse::qtrc("ui", "direction is horizontal");
+    case Vertical: return muse::qtrc("ui", "direction is vertical");
+    case Both: return muse::qtrc("ui", "direction is both");
     }
     return QString();
 }
@@ -148,7 +149,7 @@ const std::set<INavigationControl*>& NavigationPanel::controls() const
     return m_controls;
 }
 
-mu::async::Notification NavigationPanel::controlsListChanged() const
+async::Notification NavigationPanel::controlsListChanged() const
 {
     return m_controlsListChanged;
 }

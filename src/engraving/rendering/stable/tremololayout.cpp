@@ -335,13 +335,13 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx
     PointF endAnchor = item->ldata()->endAnchor - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
-    const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);
+    const double slope = muse::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);
 
     double gapSp = stemGapSp;
     if (defaultStyle || item->tremoloStyle() == TremoloStyle::TRADITIONAL_ALTERNATE) {
         // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together
         double widthSp = (endAnchor.x() - startAnchor.x()) / item->spatium() - (stemGapSp * 2);
-        if (!mu::RealIsEqualOrMore(widthSp, 0.6)) {
+        if (!muse::RealIsEqualOrMore(widthSp, 0.6)) {
             // tremolo beam is too short; we can eat into the gap spacing a little
             gapSp = std::max(stemGapSp - ((0.6 - widthSp) * 0.5), 0.4);
         }

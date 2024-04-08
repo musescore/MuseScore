@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_PROCESS_H
-#define MU_GLOBAL_PROCESS_H
+#ifndef MUSE_GLOBAL_PROCESS_H
+#define MUSE_GLOBAL_PROCESS_H
 
 #include "../iprocess.h"
 
-namespace mu {
+namespace muse {
 class Process : public IProcess
 {
 public:
@@ -35,4 +35,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_PROCESS_H
+#endif // MUSE_GLOBAL_PROCESS_H

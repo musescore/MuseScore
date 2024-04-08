@@ -36,9 +36,9 @@
 
 #include "cloudqmltypes.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::cloud;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static void cloud_init_qrc()
 {

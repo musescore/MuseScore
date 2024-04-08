@@ -58,7 +58,7 @@ public:
     virtual std::string museScoreUrl() const = 0;
     virtual std::string museScorePrivacyPolicyUrl() const = 0;
 
-    virtual io::path_t updateDataPath() const = 0;
+    virtual muse::io::path_t updateDataPath() const = 0;
 };
 }
 

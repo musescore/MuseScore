@@ -35,7 +35,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class AbstractStyleDialogModel : public QObject, public async::Asyncable
+class AbstractStyleDialogModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

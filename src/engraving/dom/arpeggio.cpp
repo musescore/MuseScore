@@ -73,7 +73,7 @@ Arpeggio::~Arpeggio()
     }
 }
 
-const TranslatableString& Arpeggio::arpeggioTypeName() const
+const muse::TranslatableString& Arpeggio::arpeggioTypeName() const
 {
     return TConv::userName(m_arpeggioType);
 }

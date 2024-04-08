@@ -34,7 +34,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace muse::draw;
 using namespace mu::engraving;
 
@@ -113,7 +114,7 @@ void EngravingFont::ensureLoad()
         computeMetrics(sym, code);
     }
 
-    File metadataFile(io::FileInfo(m_fontPath).path() + u"/metadata.json");
+    File metadataFile(FileInfo(m_fontPath).path() + u"/metadata.json");
     if (!metadataFile.open(IODevice::ReadOnly)) {
         LOGE() << "Failed to open glyph metadata file: " << metadataFile.filePath();
         return;
@@ -730,7 +731,7 @@ PointF EngravingFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, double ma
         return engravingFonts()->fallbackFont()->smuflAnchor(symId, anchorId, mag);
     }
 
-    const std::map<SmuflAnchorId, mu::PointF>& smuflAnchors = sym(symId).smuflAnchors;
+    const std::map<SmuflAnchorId, PointF>& smuflAnchors = sym(symId).smuflAnchors;
 
     auto it = smuflAnchors.find(anchorId);
     if (it == smuflAnchors.cend()) {

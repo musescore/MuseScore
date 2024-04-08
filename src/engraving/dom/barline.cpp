@@ -309,7 +309,7 @@ String BarLine::translatedUserTypeName(BarLineType t)
 {
     for (const auto& i : barLineTable) {
         if (i.type == t) {
-            return mtrc("engraving/sym", i.userName);
+            return muse::mtrc("engraving/sym", i.userName);
         }
     }
     return String();
@@ -340,7 +340,7 @@ BarLine::BarLine(const BarLine& bl)
 
 BarLine::~BarLine()
 {
-    DeleteAll(m_el);
+    muse::DeleteAll(m_el);
 }
 
 void BarLine::setParent(Segment* parent)
@@ -836,7 +836,7 @@ void BarLine::editDrag(EditData& ed)
         // max is the bottom of the system
         const System* system = segment() ? segment()->system() : nullptr;
         const staff_idx_t st = staffIdx();
-        const double max = (system && st != mu::nidx)
+        const double max = (system && st != muse::nidx)
                            ? (system->height() - ldata()->y2 - system->staff(st)->y())
                            : std::numeric_limits<double>::max();
         // update yoff2 and bring it within limit
@@ -1214,10 +1214,10 @@ String BarLine::accessibleExtraInfo() const
         }
         if (s->type() == ElementType::VOLTA) {
             if (s->tick() == tick) {
-                rez += u"; " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
+                rez += u"; " + muse::mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
             }
             if (s->tick2() == tick) {
-                rez += u"; " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
+                rez += u"; " + muse::mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
             }
         }
     }

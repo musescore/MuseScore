@@ -40,7 +40,7 @@ public:
     bool isRange() const override;
     SelectionState state() const override;
 
-    Ret canCopy() const override;
+    muse::Ret canCopy() const override;
     QMimeData* mimeData() const override;
 
     EngravingItem* element() const override;
@@ -48,7 +48,7 @@ public:
 
     std::vector<Note*> notes(NoteFilter filter) const override;
 
-    RectF canvasBoundingRect() const override;
+    muse::RectF canvasBoundingRect() const override;
 
     INotationSelectionRangePtr range() const override;
 

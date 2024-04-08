@@ -26,7 +26,7 @@
 
 #include "realfn.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
 using namespace muse::musesampler;
 

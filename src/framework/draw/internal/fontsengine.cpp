@@ -44,15 +44,15 @@ static const double TEXT_LINE_SCALE = 1.2;
 static const int SDF_WIDTH = 64;
 static const int SDF_HEIGHT = 64;
 
-static inline mu::RectF fromFBBox(const FBBox& bb, double scale)
+static inline RectF fromFBBox(const FBBox& bb, double scale)
 {
-    return mu::RectF(from_f26d6(bb.left()) * scale, from_f26d6(bb.top()) * scale,
-                     from_f26d6(bb.width()) * scale, from_f26d6(bb.height()) * scale);
+    return RectF(from_f26d6(bb.left()) * scale, from_f26d6(bb.top()) * scale,
+                 from_f26d6(bb.width()) * scale, from_f26d6(bb.height()) * scale);
 }
 
-static inline mu::RectF scaleRect(const mu::RectF& r, double scale)
+static inline RectF scaleRect(const RectF& r, double scale)
 {
-    return mu::RectF(r.x() * scale, r.y() * scale, r.width() * scale, r.height() * scale);
+    return RectF(r.x() * scale, r.y() * scale, r.width() * scale, r.height() * scale);
 }
 
 static const IFontFace* findSubtitutionFont(char32_t ch, const std::vector<IFontFace*>& subtitutionFaces)
@@ -187,26 +187,26 @@ double FontsEngine::horizontalAdvance(const Font& f, const std::u32string& text)
     return from_f26d6(advance) * rf->pixelScale();
 }
 
-mu::RectF FontsEngine::boundingRect(const Font& f, const char32_t& ch) const
+RectF FontsEngine::boundingRect(const Font& f, const char32_t& ch) const
 {
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
-        return mu::RectF();
+        return RectF();
     }
 
     glyph_idx_t glyphIdx = rf->face->glyphIndex(ch);
     return fromFBBox(rf->face->glyphBbox(glyphIdx), rf->pixelScale());
 }
 
-mu::RectF FontsEngine::boundingRect(const Font& f, const std::u32string& text) const
+RectF FontsEngine::boundingRect(const Font& f, const std::u32string& text) const
 {
     if (text.empty()) {
-        return mu::RectF();
+        return RectF();
     }
 
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
-        return mu::RectF();
+        return RectF();
     }
 
     FBBox rect;      // f26dot6_t units
@@ -259,15 +259,15 @@ mu::RectF FontsEngine::boundingRect(const Font& f, const std::u32string& text) c
     return fromFBBox(rect, rf->pixelScale());
 }
 
-mu::RectF FontsEngine::tightBoundingRect(const Font& f, const std::u32string& text) const
+RectF FontsEngine::tightBoundingRect(const Font& f, const std::u32string& text) const
 {
     if (text.empty()) {
-        return mu::RectF();
+        return RectF();
     }
 
     RequireFace* rf = fontFace(f);
     IF_ASSERT_FAILED(rf && rf->face) {
-        return mu::RectF();
+        return RectF();
     }
 
     FBBox rect;      // f26dot6_t units
@@ -328,11 +328,11 @@ mu::RectF FontsEngine::tightBoundingRect(const Font& f, const std::u32string& te
     return fromFBBox(rect, rf->pixelScale());
 }
 
-mu::RectF FontsEngine::symBBox(const Font& f, char32_t ucs4) const
+RectF FontsEngine::symBBox(const Font& f, char32_t ucs4) const
 {
     RequireFace* rf = fontFace(f, true);
     IF_ASSERT_FAILED(rf && rf->face) {
-        return mu::RectF();
+        return RectF();
     }
 
     glyph_idx_t glyphIdx = rf->face->glyphIndex(ucs4);
@@ -482,14 +482,14 @@ void FontsEngine::setFontFaceFactory(const FontFaceFactory& f)
     m_fontFaceFactory = f;
 }
 
-IFontFace* FontsEngine::createFontFace(const mu::io::path_t& path) const
+IFontFace* FontsEngine::createFontFace(const io::path_t& path) const
 {
     if (m_fontFaceFactory) {
         return m_fontFaceFactory(path);
     }
 
     IFontFace* origin = new FontFaceFT();
-    if (mu::io::FileInfo::suffix(path) == u"ftx") {
+    if (io::FileInfo::suffix(path) == u"ftx") {
         //origin = new FontFaceXT();
     } else {
         origin = new FontFaceFT();
@@ -547,7 +547,7 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
 
     //! NOTE If we haven't found a face, we'll create a new one
     if (!face) {
-        mu::io::path_t fontPath = fontsDatabase()->fontPath(requireKey.dataKey, requireKey.type);
+        io::path_t fontPath = fontsDatabase()->fontPath(requireKey.dataKey, requireKey.type);
         IF_ASSERT_FAILED(!fontPath.empty()) {
             return nullptr;
         }
@@ -576,7 +576,7 @@ FontsEngine::RequireFace* FontsEngine::fontFace(const Font& f, bool isSymbolMode
         }
 
         if (!subtitutionFace) {
-            mu::io::path_t fontPath = fontsDatabase()->fontPath(dataKey, requireKey.type);
+            io::path_t fontPath = fontsDatabase()->fontPath(dataKey, requireKey.type);
             IF_ASSERT_FAILED(!fontPath.empty()) {
                 return nullptr;
             }

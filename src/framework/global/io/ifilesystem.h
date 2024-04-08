@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IO_IFILESYSTEM_H
-#define MU_IO_IFILESYSTEM_H
+#ifndef MUSE_IO_IFILESYSTEM_H
+#define MUSE_IO_IFILESYSTEM_H
 
 #include "global/modularity/imoduleinterface.h"
 #include "global/types/bytearray.h"
@@ -30,7 +30,7 @@
 #include "path.h"
 #include "ioenums.h"
 
-namespace mu::io {
+namespace muse::io {
 class IFileSystem : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IFileSystem)
@@ -74,8 +74,4 @@ public:
 };
 }
 
-namespace muse::io {
-using IFileSystem = mu::io::IFileSystem;
-}
-
-#endif // MU_IO_IFILESYSTEM_H
+#endif // MUSE_IO_IFILESYSTEM_H

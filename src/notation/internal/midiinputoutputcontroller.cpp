@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::midi;
 
 void MidiInputOutputController::init()

@@ -40,10 +40,10 @@ public:
 
     FontDataKey() = default;
     FontDataKey(const std::string& fa)
-        : m_family(mu::strings::toLower(fa)), m_bold(false), m_italic(false) {}
+        : m_family(muse::strings::toLower(fa)), m_bold(false), m_italic(false) {}
 
     FontDataKey(const std::string& fa, bool bo, bool it)
-        : m_family(mu::strings::toLower(fa)), m_bold(bo), m_italic(it) {}
+        : m_family(muse::strings::toLower(fa)), m_bold(bo), m_italic(it) {}
 
     inline bool valid() const { return !m_family.empty(); }
 
@@ -84,7 +84,7 @@ inline FontDataKey dataKeyForFont(const Font& f)
 
 struct FontData {
     FontDataKey key;
-    mu::ByteArray data;
+    muse::ByteArray data;
 
     inline bool valid() const { return key.valid() && !data.empty(); }
 };
@@ -129,7 +129,7 @@ inline FaceKey faceKeyForFont(const Font& f)
 }
 
 struct Sdf {
-    mu::ByteArray bitmap;
+    muse::ByteArray bitmap;
     uint32_t width = 0;
     uint32_t height = 0;
     float threshold = 0.;
@@ -137,7 +137,7 @@ struct Sdf {
 };
 
 struct GlyphImage {
-    mu::RectF rect;
+    muse::RectF rect;
     Sdf sdf;
 
     bool isNull() const { return rect.isNull(); }

@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_LOGAPI_H
-#define MU_GLOBAL_LOGAPI_H
+#ifndef MUSE_GLOBAL_LOGAPI_H
+#define MUSE_GLOBAL_LOGAPI_H
 
 #include "api/apiobject.h"
 
-namespace mu::api {
+namespace muse::api {
 class LogApi : public api::ApiObject
 {
     Q_OBJECT
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_GLOBAL_LOGAPI_H
+#endif // MUSE_GLOBAL_LOGAPI_H

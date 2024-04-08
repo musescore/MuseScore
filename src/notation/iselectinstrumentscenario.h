@@ -34,8 +34,8 @@ class ISelectInstrumentsScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISelectInstrumentsScenario() = default;
 
-    virtual RetVal<PartInstrumentListScoreOrder> selectInstruments() const = 0;
-    virtual RetVal<Instrument> selectInstrument(const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
+    virtual muse::RetVal<PartInstrumentListScoreOrder> selectInstruments() const = 0;
+    virtual muse::RetVal<Instrument> selectInstrument(const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
 };
 }
 

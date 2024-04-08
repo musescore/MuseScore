@@ -28,6 +28,7 @@
 #include "log.h"
 
 using namespace mu::workspacescene;
+using namespace muse;
 using namespace muse::workspace;
 
 static const QString NAME_KEY("name");

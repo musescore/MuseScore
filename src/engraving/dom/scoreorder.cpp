@@ -237,7 +237,7 @@ String ScoreOrder::getFamilyName(const InstrumentTemplate* instrTemplate, bool s
 
     if (soloist) {
         return String(u"<soloists>");
-    } else if (mu::contains(instrumentMap, instrTemplate->id)) {
+    } else if (muse::contains(instrumentMap, instrTemplate->id)) {
         return instrumentMap.at(instrTemplate->id).id;
     } else if (instrTemplate->family) {
         return instrTemplate->family->id;
@@ -315,7 +315,7 @@ int ScoreOrder::instrumentSortingIndex(const String& instrumentId, bool isSolois
         return 0;
     }
 
-    String family = mu::contains(instrumentMap, instrumentId) ? instrumentMap.at(instrumentId).id : ii.instrTemplate->familyId();
+    String family = muse::contains(instrumentMap, instrumentId) ? instrumentMap.at(instrumentId).id : ii.instrTemplate->familyId();
 
     size_t index = groups.size();
 

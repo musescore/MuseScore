@@ -53,7 +53,7 @@ class Palette : public QObject
     INJECT_STATIC(IPaletteConfiguration, configuration)
     INJECT_STATIC(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
 
 public:
     enum class Type {
@@ -111,13 +111,13 @@ public:
     // TODO: Remove QString overload
     PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
+    PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const muse::TranslatableString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
     PaletteCellPtr insertActionIcon(size_t idx, engraving::ActionIconType type, muse::actions::ActionCode code, double mag = 1.0);
     // TODO: Remove QString overload
     PaletteCellPtr appendElement(engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr appendElement(engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
+    PaletteCellPtr appendElement(engraving::ElementPtr element, const muse::TranslatableString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
     PaletteCellPtr appendActionIcon(engraving::ActionIconType type, muse::actions::ActionCode code, double mag = 1.0);
 

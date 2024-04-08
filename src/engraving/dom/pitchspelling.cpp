@@ -276,7 +276,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
     switch (accVal) {
     case AccidentalVal::FLAT3:
         if (explicitAccidental) {
-            acc = mtrc("engraving", TConv::userName(AccidentalVal::FLAT3, full));
+            acc = muse::mtrc("engraving", TConv::userName(AccidentalVal::FLAT3, full));
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             switch (tpc) {
             case TPC_A_BBB: acc = u"sasas";
@@ -291,7 +291,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
         break;
     case AccidentalVal::FLAT2:
         if (explicitAccidental) {
-            acc = mtrc("engraving", TConv::userName(AccidentalVal::FLAT2, full));
+            acc = muse::mtrc("engraving", TConv::userName(AccidentalVal::FLAT2, full));
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             switch (tpc) {
             case TPC_A_BB: acc = u"sas";
@@ -306,7 +306,7 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
         break;
     case AccidentalVal::FLAT:
         if (explicitAccidental) {
-            acc = mtrc("engraving", TConv::userName(AccidentalVal::FLAT, full));
+            acc = muse::mtrc("engraving", TConv::userName(AccidentalVal::FLAT, full));
         } else if (noteSpelling == NoteSpellingType::GERMAN_PURE) {
             acc = (tpc == TPC_A_B || tpc == TPC_E_B) ? u"s" : u"es";
         } else {
@@ -317,21 +317,21 @@ void tpc2name(int tpc, NoteSpellingType noteSpelling, NoteCaseType noteCase, Str
         break;
     case  AccidentalVal::SHARP:
         if (explicitAccidental) {
-            acc = mtrc("engraving", TConv::userName(AccidentalVal::SHARP, full));
+            acc = muse::mtrc("engraving", TConv::userName(AccidentalVal::SHARP, full));
         } else {
             acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"is" : u"#";
         }
         break;
     case  AccidentalVal::SHARP2:
         if (explicitAccidental) {
-            acc = mtrc("engraving", TConv::userName(AccidentalVal::SHARP2, full));
+            acc = muse::mtrc("engraving", TConv::userName(AccidentalVal::SHARP2, full));
         } else {
             acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"isis" : u"##";
         }
         break;
     case AccidentalVal::SHARP3:
         if (explicitAccidental) {
-            acc = mtrc("engraving", TConv::userName(AccidentalVal::SHARP3, full));
+            acc = muse::mtrc("engraving", TConv::userName(AccidentalVal::SHARP3, full));
         } else {
             acc = (noteSpelling == NoteSpellingType::GERMAN_PURE) ? u"isisis" : u"###";
         }

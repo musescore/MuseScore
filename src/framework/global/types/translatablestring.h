@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_TRANSLATABLESTRING_H
-#define MU_GLOBAL_TRANSLATABLESTRING_H
+#ifndef MUSE_GLOBAL_TRANSLATABLESTRING_H
+#define MUSE_GLOBAL_TRANSLATABLESTRING_H
 
 #include "translation.h"
 
@@ -30,7 +30,7 @@
 #include <QString>
 #endif
 
-namespace mu {
+namespace muse {
 //! Note: in order to make the string visible for `lupdate`,
 //! you must write TranslatableString(...) explicitly.
 class TranslatableString
@@ -254,8 +254,4 @@ TranslatableString TranslatableString::arg(const Args& ... args) const
 }
 }
 
-namespace muse {
-using TranslatableString = mu::TranslatableString;
-}
-
-#endif // MU_GLOBAL_TRANSLATABLESTRING_H
+#endif // MUSE_GLOBAL_TRANSLATABLESTRING_H

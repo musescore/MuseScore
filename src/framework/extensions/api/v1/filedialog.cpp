@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::extensions::apiv1;
 
 FileDialog::FileDialog(QObject* parent)

@@ -25,7 +25,7 @@
 
 #include "settings.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::midi;
 
 static const std::string module_name("midi");
@@ -77,7 +77,7 @@ void MidiConfiguration::setMidiInputDeviceId(const MidiDeviceID& deviceId)
     settings()->setSharedValue(MIDI_INPUT_DEVICE_ID, Val(deviceId));
 }
 
-mu::async::Notification MidiConfiguration::midiInputDeviceIdChanged() const
+async::Notification MidiConfiguration::midiInputDeviceIdChanged() const
 {
     return m_midiInputDeviceIdChanged;
 }
@@ -92,7 +92,7 @@ void MidiConfiguration::setMidiOutputDeviceId(const MidiDeviceID& deviceId)
     settings()->setSharedValue(MIDI_OUTPUT_DEVICE_ID, Val(deviceId));
 }
 
-mu::async::Notification MidiConfiguration::midiOutputDeviceIdChanged() const
+async::Notification MidiConfiguration::midiOutputDeviceIdChanged() const
 {
     return m_midiOutputDeviceIdChanged;
 }

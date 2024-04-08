@@ -34,7 +34,7 @@
 #include "iappshellconfiguration.h"
 
 namespace mu::appshell {
-class FoldersPreferencesModel : public QAbstractListModel, public async::Asyncable
+class FoldersPreferencesModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -93,8 +93,8 @@ private:
     void setFolderPaths(FolderType folderType, const QString& paths);
     QModelIndex folderIndex(FolderType folderType);
 
-    QString pathsToString(const io::paths_t& paths) const;
-    io::paths_t pathsFromString(const QString& pathsStr) const;
+    QString pathsToString(const muse::io::paths_t& paths) const;
+    muse::io::paths_t pathsFromString(const QString& pathsStr) const;
 
     QList<FolderInfo> m_folders;
 };

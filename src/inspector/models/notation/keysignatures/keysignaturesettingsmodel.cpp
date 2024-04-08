@@ -29,7 +29,7 @@ KeySignatureSettingsModel::KeySignatureSettingsModel(QObject* parent, IElementRe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_KEYSIGNATURE);
-    setTitle(mu::qtrc("inspector", "Key signature"));
+    setTitle(muse::qtrc("inspector", "Key signature"));
     setIcon(muse::ui::IconCode::Code::KEY_SIGNATURE);
     createProperties();
 }

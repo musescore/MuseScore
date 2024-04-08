@@ -38,7 +38,7 @@ class Score;
 
 namespace mu::notation {
 class ScoreCallbacks;
-class NotationNoteInput : public INotationNoteInput, public async::Asyncable
+class NotationNoteInput : public INotationNoteInput, public muse::async::Asyncable
 {
     INJECT(INotationConfiguration, configuration)
 
@@ -55,10 +55,10 @@ public:
     void toggleNoteInputMethod(NoteInputMethod method) override;
     void addNote(NoteName noteName, NoteAddingMode addingMode) override;
     void padNote(const Pad& pad) override;
-    Ret putNote(const PointF& pos, bool replace, bool insert) override;
-    void removeNote(const PointF& pos) override;
-    async::Notification noteInputStarted() const override;
-    async::Notification noteInputEnded() const override;
+    muse::Ret putNote(const muse::PointF& pos, bool replace, bool insert) override;
+    void removeNote(const muse::PointF& pos) override;
+    muse::async::Notification noteInputStarted() const override;
+    muse::async::Notification noteInputEnded() const override;
 
     void addTuplet(const TupletOptions& options) override;
 
@@ -77,12 +77,12 @@ public:
 
     void resetInputPosition() override;
 
-    RectF cursorRect() const override;
+    muse::RectF cursorRect() const override;
 
-    async::Notification noteAdded() const override;
-    async::Notification stateChanged() const override;
+    muse::async::Notification noteAdded() const override;
+    muse::async::Notification stateChanged() const override;
 
-    void setGetViewRectFunc(const std::function<RectF()>& func);
+    void setGetViewRectFunc(const std::function<muse::RectF()>& func);
 
 private:
     mu::engraving::Score* score() const;
@@ -104,13 +104,13 @@ private:
     INotationInteraction* m_interaction = nullptr;
     INotationUndoStackPtr m_undoStack;
 
-    async::Notification m_stateChanged;
-    async::Notification m_noteAdded;
-    async::Notification m_noteInputStarted;
-    async::Notification m_noteInputEnded;
+    muse::async::Notification m_stateChanged;
+    muse::async::Notification m_noteAdded;
+    muse::async::Notification m_noteInputStarted;
+    muse::async::Notification m_noteInputEnded;
 
     ScoreCallbacks* m_scoreCallbacks = nullptr;
-    std::function<RectF()> m_getViewRectFunc;
+    std::function<muse::RectF()> m_getViewRectFunc;
 };
 }
 

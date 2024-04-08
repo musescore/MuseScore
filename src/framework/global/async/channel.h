@@ -19,18 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_CHANNEL_H
-#define MU_ASYNC_CHANNEL_H
+#ifndef MUSE_ASYNC_CHANNEL_H
+#define MUSE_ASYNC_CHANNEL_H
 
 #include "../thirdparty/kors_async/async/channel.h"
-namespace mu::async {
-template<typename ... T>
-using Channel = kors::async::Channel<T...>;
-}
-
 namespace muse::async {
 template<typename ... T>
 using Channel = kors::async::Channel<T...>;
 }
 
-#endif // MU_ASYNC_CHANNEL_H
+#endif // MUSE_ASYNC_CHANNEL_H

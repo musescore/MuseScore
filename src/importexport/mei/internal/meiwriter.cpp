@@ -31,6 +31,7 @@
 #include "engraving/dom/score.h"
 
 using namespace mu;
+using namespace muse;
 using namespace mu::iex::mei;
 using namespace mu::project;
 
@@ -45,7 +46,7 @@ bool MeiWriter::supportsUnitType(UnitType unitType) const
     return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
-mu::Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
+Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinationDevice, const Options&)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -61,13 +62,13 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, io::IODevice& destinat
     if (exporter.write(meiData)) {
         ByteArray data = ByteArray::fromRawData(meiData.c_str(), meiData.size());
         destinationDevice.write(data);
-        return mu::make_ok();
+        return muse::make_ok();
     } else {
         return make_ret(Ret::Code::UnknownError);
     }
 }
 
-mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const io::path_t& path)
+mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const muse::io::path_t& path)
 {
     MeiExporter exporter(score);
     // Force no layout option in this case
@@ -80,7 +81,7 @@ mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const io::
     }
 }
 
-mu::Ret MeiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
+Ret MeiWriter::writeList(const notation::INotationPtrList&, io::IODevice&, const Options&)
 {
     NOT_SUPPORTED;
     return Ret(Ret::Code::NotSupported);

@@ -28,9 +28,10 @@
 #include "log.h"
 
 using namespace mu::diagnostics;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
-mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPath)
+Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPath)
 {
     TRACEFUNC;
 
@@ -49,7 +50,7 @@ mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPat
             continue;
         }
 
-        for (const io::path_t& filePath : files.val) {
+        for (const muse::io::path_t& filePath : files.val) {
             Ret ret = addFileToZip(filePath, zip, dirName);
             if (!ret) {
                 LOGE() << ret.toString();
@@ -70,10 +71,10 @@ mu::Ret DiagnosticFilesWriter::writeDiagnosticFiles(const path_t& destinationPat
         }
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
-mu::RetVal<mu::io::paths_t> DiagnosticFilesWriter::scanDir(const std::string& dirName)
+RetVal<muse::io::paths_t> DiagnosticFilesWriter::scanDir(const std::string& dirName)
 {
     RetVal<io::paths_t> paths = fileSystem()->scanFiles(globalConfiguration()->userAppDataPath() + "/" + dirName,
                                                         { "*" },
@@ -81,7 +82,7 @@ mu::RetVal<mu::io::paths_t> DiagnosticFilesWriter::scanDir(const std::string& di
     return paths;
 }
 
-mu::Ret DiagnosticFilesWriter::addFileToZip(const path_t& filePath, ZipWriter& zip, const std::string& destinationDirName)
+Ret DiagnosticFilesWriter::addFileToZip(const path_t& filePath, ZipWriter& zip, const std::string& destinationDirName)
 {
     RetVal<ByteArray> data = fileSystem()->readFile(filePath);
     if (!data.ret) {
@@ -93,5 +94,5 @@ mu::Ret DiagnosticFilesWriter::addFileToZip(const path_t& filePath, ZipWriter& z
 
     zip.addFile(filePathInZip, data.val);
 
-    return mu::make_ok();
+    return muse::make_ok();
 }

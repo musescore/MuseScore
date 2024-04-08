@@ -28,7 +28,7 @@
 
 namespace mu::instrumentsscene {
 class InstrumentsActionsController;
-class InstrumentsSceneModule : public modularity::IModuleSetup
+class InstrumentsSceneModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -36,7 +36,7 @@ public:
     void resolveImports() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<InstrumentsActionsController> m_actionsController;

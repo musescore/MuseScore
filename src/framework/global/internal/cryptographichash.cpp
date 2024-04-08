@@ -23,7 +23,7 @@
 
 #include <QCryptographicHash>
 
-using namespace mu;
+using namespace muse;
 
 static QCryptographicHash::Algorithm toAlgorithm(CryptographicHash::Algorithm a)
 {

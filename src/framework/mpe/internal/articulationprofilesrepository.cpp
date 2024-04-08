@@ -31,9 +31,9 @@
 
 #include "internal/articulationstringutils.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::mpe;
-using namespace mu::async;
+using namespace muse::async;
 
 static const std::map<ArticulationFamily, io::path_t> DEFAULT_ARTICULATION_PROFILES =
 {

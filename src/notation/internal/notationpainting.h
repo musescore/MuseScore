@@ -49,13 +49,13 @@ public:
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
-    async::Notification viewModeChanged() const override;
+    muse::async::Notification viewModeChanged() const override;
 
     int pageCount() const override;
-    SizeF pageSizeInch() const override;
-    SizeF pageSizeInch(const Options& opt) const override;
+    muse::SizeF pageSizeInch() const override;
+    muse::SizeF pageSizeInch(const Options& opt) const override;
 
-    void paintView(muse::draw::Painter* painter, const RectF& frameRect, bool isPrinting) override;
+    void paintView(muse::draw::Painter* painter, const muse::RectF& frameRect, bool isPrinting) override;
     void paintPdf(muse::draw::Painter* painter, const Options& opt) override;
     void paintPrint(muse::draw::Painter* painter, const Options& opt) override;
     void paintPng(muse::draw::Painter* painter, const Options& opt) override;
@@ -66,11 +66,12 @@ private:
     bool isPaintPageBorder() const;
     void doPaint(muse::draw::Painter* painter, const Options& opt);
     void paintPageBorder(muse::draw::Painter* painter, const mu::engraving::Page* page) const;
-    void paintPageSheet(muse::draw::Painter* painter, const engraving::Page* page, const RectF& pageRect, bool printPageBackground) const;
+    void paintPageSheet(muse::draw::Painter* painter, const engraving::Page* page, const muse::RectF& pageRect,
+                        bool printPageBackground) const;
 
     Notation* m_notation = nullptr;
 
-    async::Notification m_viewModeChanged;
+    muse::async::Notification m_viewModeChanged;
 };
 }
 

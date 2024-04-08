@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::print {
-class PrintModule : public modularity::IModuleSetup
+class PrintModule : public muse::modularity::IModuleSetup
 {
 public:
 

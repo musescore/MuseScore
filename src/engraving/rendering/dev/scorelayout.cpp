@@ -61,9 +61,9 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     // Check empty score
     if (!score->last() || (ctx.conf().isLinearMode() && !score->firstMeasure())) {
         LOGD() << "empty score";
-        DeleteAll(score->systems());
+        muse::DeleteAll(score->systems());
         score->systems().clear();
-        DeleteAll(score->pages());
+        muse::DeleteAll(score->pages());
         score->pages().clear();
         PageLayout::getNextPage(ctx);
         return;

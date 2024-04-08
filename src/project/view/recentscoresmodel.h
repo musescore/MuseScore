@@ -31,13 +31,13 @@
 #include "io/ifilesystem.h"
 
 namespace mu::project {
-class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
+class RecentScoresModel : public AbstractScoresModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
     INJECT(IProjectConfiguration, configuration)
     INJECT(IRecentFilesController, recentFilesController)
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);

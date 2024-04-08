@@ -1306,13 +1306,13 @@ void convertCapella(Score* score, Capella* cap, bool capxMode);
 Err importCapXml(MasterScore* score, const QString& name)
 {
     LOGD("importCapXml(score %p, name %s)", score, qPrintable(name));
-    ZipReader uz(name);
+    muse::ZipReader uz(name);
     if (!uz.exists()) {
         LOGD("importCapXml: <%s> not found", qPrintable(name));
         return Err::FileNotFound;
     }
 
-    ByteArray dbuf = uz.fileData("score.xml");
+    muse::ByteArray dbuf = uz.fileData("score.xml");
     XmlReader e(dbuf);
     e.setDocName(name);
     Capella cf;

@@ -32,7 +32,7 @@
 
 using namespace mu::iex::videoexport;
 using namespace mu::project;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static std::shared_ptr<VideoExportConfiguration> s_configuration = std::make_shared<VideoExportConfiguration>();
 

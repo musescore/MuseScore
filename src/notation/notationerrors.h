@@ -27,9 +27,9 @@
 
 namespace mu::notation {
 enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::NotationFirst),
+    Undefined       = int(muse::Ret::Code::Undefined),
+    NoError         = int(muse::Ret::Code::Ok),
+    UnknownError    = int(muse::Ret::Code::NotationFirst),
 
     // selection
     NoteIsNotSelected = 1050,
@@ -40,42 +40,42 @@ enum class Err {
     EmptySelection,
 };
 
-inline Ret make_ret(Err err)
+inline muse::Ret make_ret(Err err)
 {
     std::string text;
 
     switch (err) {
     case Err::UnknownError:
-        text = mu::trc("notation", "Unknown error");
+        text = muse::trc("notation", "Unknown error");
         break;
     case Err::NoteIsNotSelected:
-        text = mu::trc("notation", "No note selected")
-               + "\n" + mu::trc("notation", "Please select a note and retry");
+        text = muse::trc("notation", "No note selected")
+               + "\n" + muse::trc("notation", "Please select a note and retry");
         break;
     case Err::NoteOrRestIsNotSelected:
-        text = mu::trc("notation", "No note or rest selected")
-               + "\n" + mu::trc("notation", "Please select a note or rest and retry");
+        text = muse::trc("notation", "No note or rest selected")
+               + "\n" + muse::trc("notation", "Please select a note or rest and retry");
         break;
     case Err::NoteOrFiguredBassIsNotSelected:
-        text = mu::trc("notation", "No note or figured bass selected")
-               + "\n" + mu::trc("notation", "Please select a note or figured bass and retry");
+        text = muse::trc("notation", "No note or figured bass selected")
+               + "\n" + muse::trc("notation", "Please select a note or figured bass and retry");
         break;
     case Err::MeasureIsNotSelected:
-        text = mu::trc("notation", "No measure selected")
-               + "\n" + mu::trc("notation", "Please select a measure and retry");
+        text = muse::trc("notation", "No measure selected")
+               + "\n" + muse::trc("notation", "Please select a measure and retry");
         break;
     case Err::SelectCompleteTupletOrTremolo:
-        text = mu::trc("notation", "Please select the complete tuplet or tremolo and retry");
+        text = muse::trc("notation", "Please select the complete tuplet or tremolo and retry");
         break;
     case Err::EmptySelection:
-        text = mu::trc("notation", "The selection is empty");
+        text = muse::trc("notation", "The selection is empty");
         break;
     case Err::Undefined:
     case Err::NoError:
         break;
     }
 
-    return mu::Ret(static_cast<int>(err), text);
+    return muse::Ret(static_cast<int>(err), text);
 }
 }
 

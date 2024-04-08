@@ -46,8 +46,8 @@ public:
 
     std::vector<const Part*> selectedParts() const override;
 
-    std::vector<RectF> boundingArea() const override;
-    bool containsPoint(const PointF& point) const override;
+    std::vector<muse::RectF> boundingArea() const override;
+    bool containsPoint(const muse::PointF& point) const override;
 
 private:
     mu::engraving::Score* score() const;

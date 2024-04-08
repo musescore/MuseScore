@@ -73,10 +73,10 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
-    bool read(mu::io::IODevice* device, bool ign = false);
-    bool write(mu::io::IODevice* device);
+    bool read(muse::io::IODevice* device, bool ign = false);
+    bool write(muse::io::IODevice* device);
     void save(XmlWriter& xml, bool optimize);
-    static bool isValid(mu::io::IODevice* device);
+    static bool isValid(muse::io::IODevice* device);
 
     void precomputeValues();
 

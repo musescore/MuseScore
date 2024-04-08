@@ -34,7 +34,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::autobot;
 
 void Autobot::init()
@@ -237,7 +237,7 @@ void Autobot::setSpeedMode(SpeedMode mode)
     m_runner.setSpeedMode(mode);
 }
 
-mu::async::Channel<SpeedMode> Autobot::speedModeChanged() const
+async::Channel<SpeedMode> Autobot::speedModeChanged() const
 {
     return m_runner.speedModeChanged();
 }
@@ -354,12 +354,12 @@ IAutobot::Status Autobot::status() const
     return m_status;
 }
 
-mu::async::Channel<mu::io::path_t, IAutobot::Status> Autobot::statusChanged() const
+async::Channel<io::path_t, IAutobot::Status> Autobot::statusChanged() const
 {
     return m_statusChanged;
 }
 
-mu::async::Channel<StepInfo, mu::Ret> Autobot::stepStatusChanged() const
+async::Channel<StepInfo, Ret> Autobot::stepStatusChanged() const
 {
     return m_stepStatusChanged;
 }

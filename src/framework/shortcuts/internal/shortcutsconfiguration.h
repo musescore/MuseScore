@@ -30,7 +30,7 @@
 namespace muse::shortcuts {
 class ShortcutsConfiguration : public IShortcutsConfiguration, public async::Asyncable
 {
-    INJECT(mu::IGlobalConfiguration, globalConfiguration)
+    INJECT(IGlobalConfiguration, globalConfiguration)
 
 public:
     void init();

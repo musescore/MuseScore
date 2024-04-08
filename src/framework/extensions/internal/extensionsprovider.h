@@ -31,7 +31,7 @@ namespace muse::extensions {
 class ExtensionsProvider : public IExtensionsProvider
 {
     Inject<IExtensionsConfiguration> configuration;
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
 
 public:
     ExtensionsProvider() = default;

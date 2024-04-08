@@ -36,19 +36,19 @@
 #include "ui/imainwindow.h"
 
 namespace muse::autobot::api {
-class AutobotApi : public mu::api::ApiObject, public async::Asyncable
+class AutobotApi : public muse::api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(autobot::IAutobot, autobot)
     INJECT(autobot::IAutobotConfiguration, autobotConfiguration)
     INJECT(mu::project::IProjectFilesController, projectFilesController)
-    INJECT(mu::IInteractive, interactive)
-    INJECT(mu::io::IFileSystem, fileSystem)
+    INJECT(IInteractive, interactive)
+    INJECT(io::IFileSystem, fileSystem)
     INJECT(muse::ui::IMainWindow, mainWindow)
 
 public:
-    explicit AutobotApi(mu::api::IApiEngine* e);
+    explicit AutobotApi(muse::api::IApiEngine* e);
 
     Q_INVOKABLE void setInterval(int msec);
     Q_INVOKABLE void runTestCase(const QJSValue& testCase);

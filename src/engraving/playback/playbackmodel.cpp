@@ -42,7 +42,7 @@
 using namespace mu;
 using namespace mu::engraving;
 using namespace muse::mpe;
-using namespace mu::async;
+using namespace muse::async;
 
 static const String METRONOME_INSTRUMENT_ID(u"metronome");
 static const String CHORD_SYMBOLS_INSTRUMENT_ID(u"chord_symbols");
@@ -282,12 +282,12 @@ InstrumentTrackIdSet PlaybackModel::existingTrackIdSet() const
     return result;
 }
 
-async::Channel<InstrumentTrackId> PlaybackModel::trackAdded() const
+muse::async::Channel<InstrumentTrackId> PlaybackModel::trackAdded() const
 {
     return m_trackAdded;
 }
 
-async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
+muse::async::Channel<InstrumentTrackId> PlaybackModel::trackRemoved() const
 {
     return m_trackRemoved;
 }
@@ -598,7 +598,7 @@ bool PlaybackModel::hasToReloadScore(const ScoreChangesRange& changesRange) cons
     };
 
     for (const Pid pid: changesRange.changedPropertyIdSet) {
-        if (mu::contains(REQUIRED_PROPERTIES, pid)) {
+        if (muse::contains(REQUIRED_PROPERTIES, pid)) {
             return true;
         }
     }
@@ -734,7 +734,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {
-        if (!mu::contains(oldTracks, it->first)) {
+        if (!muse::contains(oldTracks, it->first)) {
             m_trackAdded.send(it->first);
         }
     }

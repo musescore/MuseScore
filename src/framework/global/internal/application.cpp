@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 String Application::name() const
 {

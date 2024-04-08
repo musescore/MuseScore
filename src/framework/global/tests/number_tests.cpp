@@ -23,7 +23,7 @@
 
 #include "global/types/number.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_Types_NumberTests : public ::testing::Test
 {

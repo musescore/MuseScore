@@ -26,7 +26,7 @@
 using namespace mu::context;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::async;
+using namespace muse::async;
 
 void GlobalContext::setCurrentProject(const INotationProjectPtr& project)
 {

@@ -667,7 +667,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
 
 ScoreRange::~ScoreRange()
 {
-    DeleteAll(m_tracks);
+    muse::DeleteAll(m_tracks);
 }
 
 //---------------------------------------------------------

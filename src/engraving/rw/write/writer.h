@@ -33,10 +33,10 @@
 namespace mu::engraving::write {
 class Writer : public rw::IWriter
 {
-    Inject<IApplication> application;
+    muse::Inject<muse::IApplication> application;
 public:
 
-    bool writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* out) override;
+    bool writeScore(Score* score, muse::io::IODevice* device, bool onlySelection, rw::WriteInOutData* out) override;
 
     static void write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook);
 

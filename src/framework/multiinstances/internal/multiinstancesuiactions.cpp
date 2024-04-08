@@ -25,6 +25,7 @@
 #include "shortcuts/shortcutcontext.h"
 #include "types/translatablestring.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 using namespace muse::mi;
@@ -47,7 +48,7 @@ bool MultiInstancesUiActions::actionEnabled(const UiAction&) const
     return true;
 }
 
-mu::async::Channel<ActionCodeList> MultiInstancesUiActions::actionEnabledChanged() const
+async::Channel<ActionCodeList> MultiInstancesUiActions::actionEnabledChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;
@@ -58,7 +59,7 @@ bool MultiInstancesUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> MultiInstancesUiActions::actionCheckedChanged() const
+async::Channel<ActionCodeList> MultiInstancesUiActions::actionCheckedChanged() const
 {
     static async::Channel<ActionCodeList> ch;
     return ch;

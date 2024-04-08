@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_ID_H
-#define MU_GLOBAL_ID_H
+#ifndef MUSE_GLOBAL_ID_H
+#define MUSE_GLOBAL_ID_H
 
 #include <cstdint>
 #include <vector>
@@ -32,7 +32,7 @@
 
 #include "global/logstream.h"
 
-namespace mu {
+namespace muse {
 class ID
 {
 public:
@@ -78,10 +78,10 @@ inline bool containsId(const IDList& list, const ID& id)
 }
 }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::ID& v)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const muse::ID& v)
 {
     s << v.toUint64();
     return s;
 }
 
-#endif // MU_GLOBAL_ID_H
+#endif // MUSE_GLOBAL_ID_H

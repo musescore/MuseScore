@@ -71,6 +71,7 @@
 
 #include "thirdparty/pugixml.hpp"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::iex::mei;
 using namespace mu::engraving;
@@ -86,7 +87,7 @@ using namespace mu::engraving;
  * Return false on error.
  */
 
-bool MeiImporter::read(const io::path_t& path)
+bool MeiImporter::read(const muse::io::path_t& path)
 {
     m_uids = UIDRegister::instance();
     m_uids->clear();
@@ -3080,7 +3081,7 @@ void MeiImporter::addLayoutBreakToMeasure(Measure* measure, LayoutBreakType layo
 
     LayoutBreak* layoutBreak = Factory::createLayoutBreak(measure);
     layoutBreak->setLayoutBreakType(layoutBreakType);
-    layoutBreak->setTrack(mu::nidx); // this are system elements
+    layoutBreak->setTrack(muse::nidx); // this are system elements
     measure->add(layoutBreak);
 }
 

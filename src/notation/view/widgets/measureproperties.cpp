@@ -191,7 +191,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     nextButton->setEnabled(m_measure->nextMeasure() != 0);
     previousButton->setEnabled(m_measure->prevMeasure() != 0);
 
-    setWindowTitle(mu::qtrc("notation/measureproperties", "Measure properties for measure %1").arg(m_measure->no() + 1));
+    setWindowTitle(muse::qtrc("notation/measureproperties", "Measure properties for measure %1").arg(m_measure->no() + 1));
     m_notation->interaction()->clearSelection();
     m_notation->interaction()->select({ m_measure }, mu::engraving::SelectType::ADD, 0);
 
@@ -223,7 +223,8 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
 
     auto itemAccessibleText = [](const QTableWidgetItem* item){
         return item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
-               + (item->checkState() == Qt::Checked ? mu::qtrc("ui", "checked", "checkstate") : mu::qtrc("ui", "unchecked", "checkstate"));
+               + (item->checkState() == Qt::Checked ? muse::qtrc("ui", "checked", "checkstate") : muse::qtrc("ui", "unchecked",
+                                                                                                             "checkstate"));
     };
 
     for (size_t staffIdx = 0; staffIdx < rows; ++staffIdx) {
@@ -236,14 +237,14 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
         if (rows == 1) {                  // cannot be invisible if only one row
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
-        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, mu::qtrc("notation/measureproperties", "Visible"));
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, muse::qtrc("notation/measureproperties", "Visible"));
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(static_cast<int>(staffIdx), 1, item);
 
         item = new QTableWidgetItem();
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         item->setCheckState(m_measure->stemless(staffIdx) ? Qt::Checked : Qt::Unchecked);
-        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, mu::qtrc("notation/measureproperties", "Stemless"));
+        item->setData(ITEM_ACCESSIBLE_TITLE_ROLE, muse::qtrc("notation/measureproperties", "Stemless"));
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
         staves->setItem(static_cast<int>(staffIdx), 2, item);
     }

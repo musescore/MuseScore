@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_APIREGISTER_H
-#define MU_API_APIREGISTER_H
+#ifndef MUSE_API_APIREGISTER_H
+#define MUSE_API_APIREGISTER_H
 
 #include <map>
 
 #include "../iapiregister.h"
 
-namespace mu::api {
+namespace muse::api {
 class ApiRegister : public IApiRegister
 {
 public:
@@ -46,4 +46,4 @@ private:
 };
 }
 
-#endif // MU_API_APIREGISTER_H
+#endif // MUSE_API_APIREGISTER_H

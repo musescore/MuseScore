@@ -224,7 +224,7 @@ bool JackAudioDriver::resetToDefaultOutputDevice()
     return selectOutputDevice(JACK_DEFAULT_DEVICE_ID);
 }
 
-mu::async::Notification JackAudioDriver::outputDeviceChanged() const
+async::Notification JackAudioDriver::outputDeviceChanged() const
 {
     return m_outputDeviceChanged;
 }
@@ -232,12 +232,12 @@ mu::async::Notification JackAudioDriver::outputDeviceChanged() const
 AudioDeviceList JackAudioDriver::availableOutputDevices() const
 {
     AudioDeviceList devices;
-    devices.push_back({ JACK_DEFAULT_DEVICE_ID, mu::trc("audio", "System default") });
+    devices.push_back({ JACK_DEFAULT_DEVICE_ID, muse::trc("audio", "System default") });
 
     return devices;
 }
 
-mu::async::Notification JackAudioDriver::availableOutputDevicesChanged() const
+async::Notification JackAudioDriver::availableOutputDevicesChanged() const
 {
     return m_availableOutputDevicesChanged;
 }
@@ -269,7 +269,7 @@ bool JackAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
     return ok;
 }
 
-mu::async::Notification JackAudioDriver::outputDeviceBufferSizeChanged() const
+async::Notification JackAudioDriver::outputDeviceBufferSizeChanged() const
 {
     return m_bufferSizeChanged;
 }

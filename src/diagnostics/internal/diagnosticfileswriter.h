@@ -29,22 +29,23 @@
 #include "types/ret.h"
 #include "io/path.h"
 
-namespace mu {
+namespace muse {
 class ZipWriter;
 }
 
 namespace mu::diagnostics {
 class DiagnosticFilesWriter
 {
-    INJECT_STATIC(io::IFileSystem, fileSystem)
-    INJECT_STATIC(IGlobalConfiguration, globalConfiguration)
+    INJECT_STATIC(muse::io::IFileSystem, fileSystem)
+    INJECT_STATIC(muse::IGlobalConfiguration, globalConfiguration)
 
 public:
-    static Ret writeDiagnosticFiles(const io::path_t& destinationZipPath);
+    static muse::Ret writeDiagnosticFiles(const muse::io::path_t& destinationZipPath);
 
 private:
-    static RetVal<io::paths_t> scanDir(const std::string& dirName);
-    static mu::Ret addFileToZip(const io::path_t& filePath, ZipWriter& zip, const std::string& destinationDirName = std::string());
+    static muse::RetVal<muse::io::paths_t> scanDir(const std::string& dirName);
+    static muse::Ret addFileToZip(const muse::io::path_t& filePath, muse::ZipWriter& zip,
+                                  const std::string& destinationDirName = std::string());
 };
 }
 

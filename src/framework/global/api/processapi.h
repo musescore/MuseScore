@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_PROCESSAPI_H
-#define MU_API_PROCESSAPI_H
+#ifndef MUSE_API_PROCESSAPI_H
+#define MUSE_API_PROCESSAPI_H
 
 #include <QString>
 
@@ -29,7 +29,7 @@
 #include "modularity/ioc.h"
 #include "global/iprocess.h"
 
-namespace mu::api {
+namespace muse::api {
 class ProcessApi : public ApiObject
 {
     Q_OBJECT
@@ -44,4 +44,4 @@ public:
 };
 }
 
-#endif // MU_API_PROCESSAPI_H
+#endif // MUSE_API_PROCESSAPI_H

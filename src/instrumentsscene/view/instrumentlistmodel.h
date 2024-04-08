@@ -32,7 +32,7 @@
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
 namespace mu::instrumentsscene {
-class InstrumentListModel : public QAbstractListModel, public async::Asyncable
+class InstrumentListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -112,7 +112,7 @@ private:
 
     void init(const QString& genreId, const QString& groupId);
 
-    QString resolveInstrumentGroupId(const String& instrumentId) const;
+    QString resolveInstrumentGroupId(const muse::String& instrumentId) const;
 
     void loadGenres();
     void loadGroups();

@@ -117,7 +117,7 @@ void CanvasPreferencesModel::setScrollPagesOrientation(int orientation)
         return;
     }
 
-    notationConfiguration()->setCanvasOrientation(static_cast<mu::Orientation>(orientation));
+    notationConfiguration()->setCanvasOrientation(static_cast<muse::Orientation>(orientation));
 }
 
 void CanvasPreferencesModel::setLimitScrollArea(bool limit)
@@ -142,7 +142,7 @@ void CanvasPreferencesModel::setSelectionProximity(int proximity)
 
 void CanvasPreferencesModel::setupConnections()
 {
-    notationConfiguration()->canvasOrientation().ch.onReceive(this, [this](mu::Orientation) {
+    notationConfiguration()->canvasOrientation().ch.onReceive(this, [this](muse::Orientation) {
         emit scrollPagesOrientationChanged();
     });
 }

@@ -30,7 +30,7 @@ ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IEle
     : AbstractInspectorModel(parent, repository)
 {
     setSectionType(InspectorSectionType::SECTION_SCORE_APPEARANCE);
-    setTitle(mu::qtrc("inspector", "Score appearance"));
+    setTitle(muse::qtrc("inspector", "Score appearance"));
 }
 
 bool ScoreAppearanceSettingsModel::hideEmptyStaves() const
@@ -85,15 +85,15 @@ void ScoreAppearanceSettingsModel::onCurrentNotationChanged()
 
 void ScoreAppearanceSettingsModel::onNotationChanged(const engraving::PropertyIdSet&, const engraving::StyleIdSet& changedStyleIdSet)
 {
-    if (mu::contains(changedStyleIdSet, StyleId::hideEmptyStaves)) {
+    if (muse::contains(changedStyleIdSet, StyleId::hideEmptyStaves)) {
         emit hideEmptyStavesChanged();
     }
 
-    if (mu::contains(changedStyleIdSet, StyleId::dontHideStavesInFirstSystem)) {
+    if (muse::contains(changedStyleIdSet, StyleId::dontHideStavesInFirstSystem)) {
         emit dontHideEmptyStavesInFirstSystemChanged();
     }
 
-    if (mu::contains(changedStyleIdSet, StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden)) {
+    if (muse::contains(changedStyleIdSet, StyleId::alwaysShowBracketsWhenEmptyStavesAreHidden)) {
         emit showBracketsWhenSpanningSingleStaffChanged();
     }
 }

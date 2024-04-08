@@ -47,22 +47,22 @@ public:
 
     virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
     virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
-    virtual async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const = 0;
+    virtual muse::async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const = 0;
 
     virtual bool isAuxSendVisible(muse::audio::aux_channel_idx_t index) const = 0;
     virtual void setAuxSendVisible(muse::audio::aux_channel_idx_t index, bool visible) = 0;
-    virtual async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const = 0;
+    virtual muse::async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const = 0;
 
     virtual bool isAuxChannelVisible(muse::audio::aux_channel_idx_t index) const = 0;
     virtual void setAuxChannelVisible(muse::audio::aux_channel_idx_t index, bool visible) const = 0;
-    virtual async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const = 0;
+    virtual muse::async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const = 0;
 
     virtual muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
-                                                    const String& instrumentSoundId) const = 0;
+                                                    const muse::String& instrumentSoundId) const = 0;
 
     virtual bool muteHiddenInstruments() const = 0;
     virtual void setMuteHiddenInstruments(bool mute) = 0;
-    virtual async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
+    virtual muse::async::Channel<bool> muteHiddenInstrumentsChanged() const = 0;
 
     virtual const SoundProfileName& basicSoundProfileName() const = 0;
     virtual const SoundProfileName& museSoundProfileName() const = 0;

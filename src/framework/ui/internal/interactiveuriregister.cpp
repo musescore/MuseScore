@@ -27,7 +27,7 @@ using namespace muse::ui;
 
 void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& meta)
 {
-    IF_ASSERT_FAILED(!mu::contains(m_uriMap, uri)) {
+    IF_ASSERT_FAILED(!muse::contains(m_uriMap, uri)) {
         LOGW() << "URI " << uri.toString() << " is already registered. Will be overridden.";
     }
 
@@ -36,7 +36,7 @@ void InteractiveUriRegister::registerUri(const Uri& uri, const ContainerMeta& me
 
 ContainerMeta InteractiveUriRegister::meta(const Uri& uri) const
 {
-    if (!mu::contains(m_uriMap, uri)) {
+    if (!muse::contains(m_uriMap, uri)) {
         LOGW() << "URI " << uri.toString() << " is not registered";
         return ContainerMeta();
     }

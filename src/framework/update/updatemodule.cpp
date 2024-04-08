@@ -41,7 +41,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace muse::update;
-using namespace mu::modularity;
+using namespace muse::modularity;
 using namespace muse::ui;
 
 static void update_init_qrc()

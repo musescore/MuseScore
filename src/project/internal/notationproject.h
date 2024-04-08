@@ -45,9 +45,9 @@ class MscWriter;
 }
 
 namespace mu::project {
-class NotationProject : public INotationProject, public async::Asyncable
+class NotationProject : public INotationProject, public muse::async::Asyncable
 {
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
     INJECT(IProjectConfiguration, configuration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(notation::INotationCreator, notationCreator)
@@ -58,16 +58,16 @@ class NotationProject : public INotationProject, public async::Asyncable
 public:
     ~NotationProject() override;
 
-    Ret load(const io::path_t& path, const io::path_t& stylePath = io::path_t(), bool forceMode = false,
-             const std::string& format = "") override;
-    Ret createNew(const ProjectCreateOptions& projectInfo) override;
+    muse::Ret load(const muse::io::path_t& path,
+                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false, const std::string& format = "") override;
+    muse::Ret createNew(const ProjectCreateOptions& projectInfo) override;
 
-    io::path_t path() const override;
-    void setPath(const io::path_t& path) override;
-    async::Notification pathChanged() const override;
+    muse::io::path_t path() const override;
+    void setPath(const muse::io::path_t& path) override;
+    muse::async::Notification pathChanged() const override;
 
     QString displayName() const override;
-    async::Notification displayNameChanged() const override;
+    muse::async::Notification displayNameChanged() const override;
 
     bool isCloudProject() const override;
     const CloudProjectInfo& cloudInfo() const override;
@@ -83,14 +83,14 @@ public:
 
     void markAsUnsaved() override;
 
-    ValNt<bool> needSave() const override;
-    Ret canSave() const override;
+    muse::ValNt<bool> needSave() const override;
+    muse::Ret canSave() const override;
 
     bool needAutoSave() const override;
     void setNeedAutoSave(bool val) override;
 
-    Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
-    Ret writeToDevice(QIODevice* device) override;
+    muse::Ret save(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) override;
+    muse::Ret writeToDevice(QIODevice* device) override;
 
     ProjectMeta metaInfo() const override;
     void setMetaInfo(const ProjectMeta& meta, bool undoable = false) override;
@@ -101,20 +101,21 @@ public:
 private:
     void setupProject();
 
-    Ret loadTemplate(const ProjectCreateOptions& projectOptions);
+    muse::Ret loadTemplate(const ProjectCreateOptions& projectOptions);
 
-    Ret doLoad(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format);
-    Ret doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode);
+    muse::Ret doLoad(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode, const std::string& format);
+    muse::Ret doImport(const muse::io::path_t& path, const muse::io::path_t& stylePath, bool forceMode);
 
-    Ret saveScore(const io::path_t& path, const std::string& fileSuffix, bool generateBackup = true, bool createThumbnail = true);
-    Ret saveSelectionOnScore(const io::path_t& path = io::path_t());
-    Ret exportProject(const io::path_t& path, const std::string& suffix);
-    Ret doSave(const io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true);
-    Ret makeCurrentFileAsBackup();
-    Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
+    muse::Ret saveScore(const muse::io::path_t& path, const std::string& fileSuffix, bool generateBackup = true,
+                        bool createThumbnail = true);
+    muse::Ret saveSelectionOnScore(const muse::io::path_t& path = muse::io::path_t());
+    muse::Ret exportProject(const muse::io::path_t& path, const std::string& suffix);
+    muse::Ret doSave(const muse::io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true);
+    muse::Ret makeCurrentFileAsBackup();
+    muse::Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
 
     void listenIfNeedSaveChanges();
-    void markAsSaved(const io::path_t& path);
+    void markAsSaved(const muse::io::path_t& path);
     void setNeedSave(bool needSave);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
@@ -123,11 +124,11 @@ private:
     mutable CloudProjectInfo m_cloudInfo;
     mutable CloudAudioInfo m_cloudAudioInfo;
 
-    io::path_t m_path;
-    async::Notification m_pathChanged;
-    async::Notification m_displayNameChanged;
+    muse::io::path_t m_path;
+    muse::async::Notification m_pathChanged;
+    muse::async::Notification m_displayNameChanged;
 
-    async::Notification m_needSaveNotification;
+    muse::async::Notification m_needSaveNotification;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;

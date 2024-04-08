@@ -35,18 +35,19 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::workspace;
 
 WorkspaceFile::WorkspaceFile(const io::path_t& filePath)
     : m_filePath(filePath)
 {}
 
-mu::io::path_t WorkspaceFile::filePath() const
+io::path_t WorkspaceFile::filePath() const
 {
     return m_filePath;
 }
 
-mu::Ret WorkspaceFile::load()
+Ret WorkspaceFile::load()
 {
     RetVal<ByteArray> data = fileSystem()->readFile(m_filePath);
     if (!data.ret) {
@@ -82,7 +83,7 @@ mu::Ret WorkspaceFile::load()
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret WorkspaceFile::save()
+Ret WorkspaceFile::save()
 {
     std::vector<std::string> paths;
     for (const auto& d : m_data) {
@@ -212,7 +213,7 @@ bool WorkspaceFile::isLoaded() const
     return !m_meta.empty();
 }
 
-mu::Val WorkspaceFile::meta(const std::string& key) const
+Val WorkspaceFile::meta(const std::string& key) const
 {
     auto it = m_meta.find(key);
     if (it != m_meta.end()) {

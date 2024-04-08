@@ -65,7 +65,7 @@ private:
     int m_value = 0;
     int m_to = 0;
     QString m_statusMessage;
-    mu::Progress* m_progress = nullptr;
+    Progress* m_progress = nullptr;
 };
 }
 

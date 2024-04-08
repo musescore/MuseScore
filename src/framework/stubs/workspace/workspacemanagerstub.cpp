@@ -23,7 +23,7 @@
 #include "workspacestub.h"
 
 using namespace muse::workspace;
-using namespace mu;
+using namespace muse;
 
 IWorkspacePtr WorkspaceManagerStub::defaultWorkspace() const
 {

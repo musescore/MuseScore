@@ -30,7 +30,7 @@
 #include "types/fontstypes.h"
 
 namespace muse::draw {
-class IFontsEngine : public mu::modularity::IModuleExportInterface
+class IFontsEngine : public modularity::IModuleExportInterface
 {
     INTERFACE_ID(muse::draw::IFontsEngine)
 public:
@@ -47,12 +47,12 @@ public:
     virtual double horizontalAdvance(const Font& f, const char32_t& ch) const = 0;
     virtual double horizontalAdvance(const Font& f, const std::u32string& text) const = 0;
 
-    virtual mu::RectF boundingRect(const Font& f, const char32_t& ch) const = 0;
-    virtual mu::RectF boundingRect(const Font& f, const std::u32string& text) const = 0;
-    virtual mu::RectF tightBoundingRect(const Font& f, const std::u32string& text) const = 0;
+    virtual RectF boundingRect(const Font& f, const char32_t& ch) const = 0;
+    virtual RectF boundingRect(const Font& f, const std::u32string& text) const = 0;
+    virtual RectF tightBoundingRect(const Font& f, const std::u32string& text) const = 0;
 
     // Score symbols
-    virtual mu::RectF symBBox(const Font& f, char32_t ucs4) const = 0;
+    virtual RectF symBBox(const Font& f, char32_t ucs4) const = 0;
     virtual double symAdvance(const Font& f, char32_t ucs4) const = 0;
 
     // Draw

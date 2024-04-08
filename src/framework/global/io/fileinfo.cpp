@@ -21,8 +21,8 @@
  */
 #include "fileinfo.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 FileInfo::FileInfo(const path_t& filePath)
     : m_filePath(filePath.toString())
@@ -32,7 +32,7 @@ FileInfo::FileInfo(const path_t& filePath)
 String FileInfo::path() const
 {
     size_t lastSep = m_filePath.lastIndexOf(u'/');
-    if (lastSep == mu::nidx) {
+    if (lastSep == muse::nidx) {
 #if defined(Q_OS_WIN)
         if (m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
             return m_filePath.left(2);
@@ -70,7 +70,7 @@ String FileInfo::fileName() const
 {
     size_t lastSep = m_filePath.lastIndexOf(u'/');
 #if defined(Q_OS_WIN)
-    if (lastSep == mu::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
+    if (lastSep == muse::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
         return m_filePath.mid(2);
     }
 #endif
@@ -86,7 +86,7 @@ String FileInfo::baseName() const
     size_t length = to - from;
 
 #if defined(Q_OS_WIN)
-    if (lastSep == mu::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
+    if (lastSep == muse::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
         return m_filePath.mid(2, length - 2);
     }
 #endif
@@ -102,7 +102,7 @@ String FileInfo::completeBaseName() const
     size_t length = to - from;
 
 #if defined(Q_OS_WIN)
-    if (lastSep == mu::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
+    if (lastSep == muse::nidx && m_filePath.size() >= 2 && m_filePath.at(1) == u':') {
         return m_filePath.mid(2, length - 2);
     }
 #endif
@@ -122,12 +122,12 @@ String FileInfo::suffix(const path_t& filePath)
 String FileInfo::doSuffix(const String& filePath)
 {
     size_t lastDot = filePath.lastIndexOf(u'.');
-    if (lastDot == mu::nidx) {
+    if (lastDot == muse::nidx) {
         return String();
     }
 
     size_t lastSep = filePath.lastIndexOf(u'/');
-    if (lastSep == mu::nidx) {
+    if (lastSep == muse::nidx) {
         lastSep = 0;
     }
 
@@ -186,7 +186,7 @@ bool FileInfo::exists(const path_t& filePath)
 path_t FileInfo::dirPath() const
 {
     size_t lastSep = m_filePath.lastIndexOf(u'/');
-    if (lastSep == mu::nidx) {
+    if (lastSep == muse::nidx) {
         return ".";
     }
     return m_filePath.mid(0, lastSep);

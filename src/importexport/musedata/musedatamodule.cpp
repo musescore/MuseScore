@@ -27,6 +27,7 @@
 #include "project/inotationreadersregister.h"
 #include "internal/musedatareader.h"
 
+using namespace muse::modularity;
 using namespace mu::iex::musedata;
 using namespace mu::project;
 
@@ -37,7 +38,7 @@ std::string MuseDataModule::moduleName() const
 
 void MuseDataModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "md" }, std::make_shared<MuseDataReader>());
     }

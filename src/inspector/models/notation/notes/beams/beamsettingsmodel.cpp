@@ -31,7 +31,7 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEAM);
-    setTitle(mu::qtrc("inspector", "Beam"));
+    setTitle(muse::qtrc("inspector", "Beam"));
 
     m_beamModesModel = new BeamModesModel(this, repository);
     m_beamModesModel->init();
@@ -114,17 +114,17 @@ void BeamSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 
 void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::VISIBLE)) {
+    if (muse::contains(propertyIdSet, Pid::VISIBLE)) {
         loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
             return !isVisible.toBool();
         });
     }
 
-    if (mu::contains(propertyIdSet, Pid::GROW_LEFT)) {
+    if (muse::contains(propertyIdSet, Pid::GROW_LEFT)) {
         loadPropertyItem(m_featheringHeightLeft, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::GROW_RIGHT)) {
+    if (muse::contains(propertyIdSet, Pid::GROW_RIGHT)) {
         loadPropertyItem(m_featheringHeightRight, formatDoubleFunc);
     }
 

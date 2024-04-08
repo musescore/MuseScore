@@ -158,53 +158,53 @@ QString SelectionFilterModel::titleForType(SelectionFilterType type) const
 {
     switch (type) {
     case SelectionFilterType::ALL:
-        return mu::qtrc("notation", "All");
+        return muse::qtrc("notation", "All");
     case SelectionFilterType::FIRST_VOICE:
-        return mu::qtrc("notation", "Voice %1").arg(1);
+        return muse::qtrc("notation", "Voice %1").arg(1);
     case SelectionFilterType::SECOND_VOICE:
-        return mu::qtrc("notation", "Voice %1").arg(2);
+        return muse::qtrc("notation", "Voice %1").arg(2);
     case SelectionFilterType::THIRD_VOICE:
-        return mu::qtrc("notation", "Voice %1").arg(3);
+        return muse::qtrc("notation", "Voice %1").arg(3);
     case SelectionFilterType::FOURTH_VOICE:
-        return mu::qtrc("notation", "Voice %1").arg(4);
+        return muse::qtrc("notation", "Voice %1").arg(4);
     case SelectionFilterType::DYNAMIC:
-        return mu::qtrc("notation", "Dynamics");
+        return muse::qtrc("notation", "Dynamics");
     case SelectionFilterType::HAIRPIN:
-        return mu::qtrc("notation", "Hairpins");
+        return muse::qtrc("notation", "Hairpins");
     case SelectionFilterType::FINGERING:
-        return mu::qtrc("notation", "Fingerings");
+        return muse::qtrc("notation", "Fingerings");
     case SelectionFilterType::LYRICS:
-        return mu::qtrc("notation", "Lyrics");
+        return muse::qtrc("notation", "Lyrics");
     case SelectionFilterType::CHORD_SYMBOL:
-        return mu::qtrc("notation", "Chord symbols");
+        return muse::qtrc("notation", "Chord symbols");
     case SelectionFilterType::OTHER_TEXT:
-        return mu::qtrc("notation", "Other text");
+        return muse::qtrc("notation", "Other text");
     case SelectionFilterType::ARTICULATION:
-        return mu::qtrc("notation", "Articulations");
+        return muse::qtrc("notation", "Articulations");
     case SelectionFilterType::ORNAMENT:
-        return mu::qtrc("notation", "Ornaments");
+        return muse::qtrc("notation", "Ornaments");
     case SelectionFilterType::SLUR:
-        return mu::qtrc("notation", "Slurs");
+        return muse::qtrc("notation", "Slurs");
     case SelectionFilterType::FIGURED_BASS:
-        return mu::qtrc("notation", "Figured bass");
+        return muse::qtrc("notation", "Figured bass");
     case SelectionFilterType::OTTAVA:
-        return mu::qtrc("notation", "Ottavas");
+        return muse::qtrc("notation", "Ottavas");
     case SelectionFilterType::PEDAL_LINE:
-        return mu::qtrc("notation", "Pedal lines");
+        return muse::qtrc("notation", "Pedal lines");
     case SelectionFilterType::OTHER_LINE:
-        return mu::qtrc("notation", "Other lines");
+        return muse::qtrc("notation", "Other lines");
     case SelectionFilterType::ARPEGGIO:
-        return mu::qtrc("notation", "Arpeggios");
+        return muse::qtrc("notation", "Arpeggios");
     case SelectionFilterType::GLISSANDO:
-        return mu::qtrc("notation", "Glissandos");
+        return muse::qtrc("notation", "Glissandos");
     case SelectionFilterType::FRET_DIAGRAM:
-        return mu::qtrc("notation", "Fretboard diagrams");
+        return muse::qtrc("notation", "Fretboard diagrams");
     case SelectionFilterType::BREATH:
-        return mu::qtrc("notation", "Breath marks");
+        return muse::qtrc("notation", "Breath marks");
     case SelectionFilterType::TREMOLO:
-        return mu::qtrc("notation", "Tremolos");
+        return muse::qtrc("notation", "Tremolos");
     case SelectionFilterType::GRACE_NOTE:
-        return mu::qtrc("notation", "Grace notes");
+        return muse::qtrc("notation", "Grace notes");
     case SelectionFilterType::NONE:
         break;
     }

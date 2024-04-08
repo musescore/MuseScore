@@ -25,8 +25,8 @@
 
 using namespace muse::api;
 
-ShortcutsApi::ShortcutsApi(mu::api::IApiEngine* e)
-    : mu::api::ApiObject(e)
+ShortcutsApi::ShortcutsApi(api::IApiEngine* e)
+    : api::ApiObject(e)
 {
 }
 

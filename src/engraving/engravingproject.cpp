@@ -31,6 +31,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::engraving;
 
@@ -58,16 +59,16 @@ std::shared_ptr<EngravingProject> EngravingProject::create(const MStyle& style)
 
 EngravingProject::EngravingProject()
 {
-    ObjectAllocator::used();
+    muse::ObjectAllocator::used();
 }
 
 EngravingProject::~EngravingProject()
 {
     delete m_masterScore;
 
-    ObjectAllocator::unused();
+    muse::ObjectAllocator::unused();
 
-    AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
+    // muse::AllocatorsRegister::instance()->printStatistic("=== Destroy engraving project ===");
     //! NOTE At the moment, the allocator is working as leak detector. No need to do cleanup, at the moment it can lead to crashes
     // AllocatorsRegister::instance()->cleanupAll("engraving");
 }
@@ -131,7 +132,7 @@ Ret EngravingProject::doSetupMasterScore(bool forceMode)
     Ret ret = checkCorrupted();
     m_isCorruptedUponLoading = !ret;
 
-    return forceMode ? mu::make_ok() : ret;
+    return forceMode ? muse::make_ok() : ret;
 }
 
 MasterScore* EngravingProject::masterScore() const

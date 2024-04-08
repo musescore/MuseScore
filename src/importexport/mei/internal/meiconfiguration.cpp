@@ -25,6 +25,7 @@
 
 using namespace mu;
 using namespace mu::iex::mei;
+using namespace muse;
 
 static const std::string module_name("iex_mei");
 

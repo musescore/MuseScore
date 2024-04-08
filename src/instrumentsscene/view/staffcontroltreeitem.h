@@ -34,12 +34,12 @@ class StaffControlTreeItem : public AbstractInstrumentsPanelTreeItem
 public:
     StaffControlTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
-    void init(const ID& partId);
+    void init(const muse::ID& partId);
 
     Q_INVOKABLE void appendNewItem() override;
 
 private:
-    ID m_partId;
+    muse::ID m_partId;
 };
 }
 

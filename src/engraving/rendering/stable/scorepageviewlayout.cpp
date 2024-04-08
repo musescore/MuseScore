@@ -76,16 +76,16 @@ void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& c
 
     if (!state.isLayoutAll() && m->system()) {
         System* system = m->system();
-        system_idx_t systemIndex = mu::indexOf(score->systems(), system);
+        system_idx_t systemIndex = muse::indexOf(score->systems(), system);
 
         // set current system
         state.setCurSystem(system);
-        state.setSystemList(mu::mid(score->systems(), systemIndex));
+        state.setSystemList(muse::mid(score->systems(), systemIndex));
 
         // set current page
         state.setPage(system->page());
         page_idx_t pageIdx = score->pageIdx(state.page());
-        if (pageIdx == mu::nidx) {
+        if (pageIdx == muse::nidx) {
             pageIdx = 0;
         }
         state.setPageIdx(pageIdx);
@@ -129,7 +129,7 @@ void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& c
 void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
 {
     if (!ctx.state().isLayoutAll() && ctx.state().curSystem()) {
-        system_idx_t systemIndex = mu::indexOf(score->systems(), ctx.state().curSystem());
+        system_idx_t systemIndex = muse::indexOf(score->systems(), ctx.state().curSystem());
         score->systems().erase(score->systems().begin() + systemIndex, score->systems().end());
     } else {
         for (System* s : score->systems()) {
@@ -151,10 +151,10 @@ void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
                 toMeasure(mb)->mmRest()->moveToDummy();
             }
         }
-        DeleteAll(score->systems());
+        muse::DeleteAll(score->systems());
         score->systems().clear();
 
-        DeleteAll(score->pages());
+        muse::DeleteAll(score->pages());
         score->pages().clear();
     }
 }
@@ -220,7 +220,7 @@ void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
 
     if (!state.curSystem()) {
         // The end of the score. The remaining systems are not needed...
-        DeleteAll(state.systemList());
+        muse::DeleteAll(state.systemList());
         state.systemList().clear();
 
         // ...and the remaining pages too

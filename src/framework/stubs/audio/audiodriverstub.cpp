@@ -21,6 +21,7 @@
  */
 #include "audiodriverstub.h"
 
+using namespace muse;
 using namespace muse::audio;
 
 void AudioDriverStub::init()
@@ -61,7 +62,7 @@ bool AudioDriverStub::resetToDefaultOutputDevice()
     return false;
 }
 
-mu::async::Notification AudioDriverStub::outputDeviceChanged() const
+async::Notification AudioDriverStub::outputDeviceChanged() const
 {
     return async::Notification();
 }
@@ -71,7 +72,7 @@ AudioDeviceList AudioDriverStub::availableOutputDevices() const
     return {};
 }
 
-mu::async::Notification AudioDriverStub::availableOutputDevicesChanged() const
+async::Notification AudioDriverStub::availableOutputDevicesChanged() const
 {
     return async::Notification();
 }
@@ -86,7 +87,7 @@ bool AudioDriverStub::setOutputDeviceBufferSize(unsigned int)
     return false;
 }
 
-mu::async::Notification AudioDriverStub::outputDeviceBufferSizeChanged() const
+async::Notification AudioDriverStub::outputDeviceBufferSizeChanged() const
 {
     return async::Notification();
 }

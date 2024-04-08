@@ -23,7 +23,7 @@
 
 #include "types/flags.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_Types_FlagsTests : public ::testing::Test
 {

@@ -319,7 +319,7 @@ public:
 
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);
-    void addRefresh(const mu::RectF& r);
+    void addRefresh(const RectF& r);
 
     // Other
     const Selection& selection() const;

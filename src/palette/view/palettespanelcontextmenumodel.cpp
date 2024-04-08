@@ -28,6 +28,7 @@
 #include "log.h"
 
 using namespace mu::palette;
+using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;

@@ -89,7 +89,7 @@ private:
     void spatiumChanged(double oldValue, double newValue) override;
 
     double m_lw = 0.0;
-    mu::RectF m_iconBorderRect;
+    RectF m_iconBorderRect;
     muse::draw::PainterPath m_iconPath;
     double m_pause = 0.0;
     bool m_startWithLongNames = false;

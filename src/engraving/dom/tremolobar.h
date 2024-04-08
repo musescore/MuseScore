@@ -71,7 +71,7 @@ public:
     void setPlay(bool val) { m_play = val; }
 
     struct LayoutData : public EngravingItem::LayoutData {
-        mu::PolygonF polygon;
+        PolygonF polygon;
     };
     DECLARE_LAYOUTDATA_METHODS(TremoloBar)
 

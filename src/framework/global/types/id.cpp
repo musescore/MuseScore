@@ -22,7 +22,7 @@
 
 #include "id.h"
 
-using namespace mu;
+using namespace muse;
 
 ID::ID()
     : m_id(0)

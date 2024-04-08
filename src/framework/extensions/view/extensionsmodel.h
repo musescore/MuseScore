@@ -37,7 +37,7 @@ class ExtensionsListModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
     Inject<IExtensionsProvider> provider;
     Inject<IExtensionsConfiguration> configuration;
 

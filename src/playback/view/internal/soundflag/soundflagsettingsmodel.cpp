@@ -70,7 +70,7 @@ static QVariantList buildAvailablePlayingTechniquesModel(const std::set<String>&
 
     QVariantMap ordinaryItem;
     ordinaryItem["code"] = QString::fromStdString(muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE);
-    ordinaryItem["name"] = mu::qtrc("playback", "Ord. (default)");
+    ordinaryItem["name"] = muse::qtrc("playback", "Ord. (default)");
     model << ordinaryItem;
 
     for (const String& playingTechniqueCode : availableTechniqueCodes) {
@@ -223,7 +223,8 @@ void SoundFlagSettingsModel::togglePlayingTechnique(const QString& playingTechni
     emit contextMenuModelChanged();
 }
 
-muse::uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode, const TranslatableString& title,
+muse::uicomponents::MenuItem* SoundFlagSettingsModel::buildMenuItem(const QString& actionCode,
+                                                                    const muse::TranslatableString& title,
                                                                     bool enabled)
 {
     muse::uicomponents::MenuItem* item = new muse::uicomponents::MenuItem(this);
@@ -335,7 +336,7 @@ bool SoundFlagSettingsModel::updateStaffText()
         return false;
     }
 
-    String newText = mtrc("engraving", "Staff text");
+    String newText = muse::mtrc("engraving", "Staff text");
     const SoundFlag* soundFlag = toSoundFlag(m_item);
     const SoundFlag::PresetCodes& activePresetCodes = soundFlag->soundPresets();
 
@@ -346,7 +347,7 @@ bool SoundFlagSettingsModel::updateStaffText()
             continue;
         }
 
-        if (mu::contains(activePresetCodes, preset.code)) {
+        if (muse::contains(activePresetCodes, preset.code)) {
             strs << preset.name;
         }
     }
@@ -354,7 +355,7 @@ bool SoundFlagSettingsModel::updateStaffText()
     const SoundFlag::PlayingTechniqueCode& techniqueCode = soundFlag->playingTechnique();
     if (!techniqueCode.empty()) {
         if (techniqueCode.toStdString() == muse::mpe::ORDINARY_PLAYING_TECHNIQUE_CODE) {
-            strs << mtrc("playback", "ordinary");
+            strs << muse::mtrc("playback", "ordinary");
         } else {
             strs << soundFlag->playingTechnique();
         }

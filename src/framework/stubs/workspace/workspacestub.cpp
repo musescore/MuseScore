@@ -21,6 +21,7 @@
  */
 #include "workspacestub.h"
 
+using namespace muse;
 using namespace muse::workspace;
 
 std::string WorkspaceStub::name() const
@@ -42,17 +43,17 @@ void WorkspaceStub::setIsManaged(const DataKey&, bool)
 {
 }
 
-mu::RetVal<QByteArray> WorkspaceStub::rawData(const DataKey&) const
+RetVal<QByteArray> WorkspaceStub::rawData(const DataKey&) const
 {
     return RetVal<QByteArray>(make_ret(Ret::Code::NotImplemented));
 }
 
-mu::Ret WorkspaceStub::setRawData(const DataKey&, const QByteArray&)
+Ret WorkspaceStub::setRawData(const DataKey&, const QByteArray&)
 {
     return make_ret(Ret::Code::NotImplemented);
 }
 
-mu::async::Notification WorkspaceStub::reloadNotification()
+async::Notification WorkspaceStub::reloadNotification()
 {
     return async::Notification();
 }

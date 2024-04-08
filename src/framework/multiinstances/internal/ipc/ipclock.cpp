@@ -23,7 +23,7 @@
 
 #include <QSystemSemaphore>
 
-using namespace mu::ipc;
+using namespace muse::ipc;
 
 IpcLock::IpcLock(const QString& name)
 {

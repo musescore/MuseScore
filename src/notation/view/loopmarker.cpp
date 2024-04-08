@@ -24,8 +24,9 @@
 #include "draw/types/pen.h"
 #include "engraving/iengravingfont.h"
 
-using namespace mu::notation;
+using namespace muse;
 using namespace mu;
+using namespace mu::notation;
 
 LoopMarker::LoopMarker(LoopBoundaryType type)
     : m_type(type)

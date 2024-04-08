@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_IAPPLICATION_H
-#define MU_GLOBAL_IAPPLICATION_H
+#ifndef MUSE_GLOBAL_IAPPLICATION_H
+#define MUSE_GLOBAL_IAPPLICATION_H
 
 #include <string>
 
@@ -34,7 +34,7 @@ class QEvent;
 class QWindow;
 #endif
 
-namespace mu {
+namespace muse {
 class IApplication : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IApplication)
@@ -68,8 +68,4 @@ public:
 };
 }
 
-namespace muse {
-using IApplication = mu::IApplication;
-}
-
-#endif // MU_GLOBAL_IAPPLICATION_H
+#endif // MUSE_GLOBAL_IAPPLICATION_H

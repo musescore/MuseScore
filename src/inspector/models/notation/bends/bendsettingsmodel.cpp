@@ -59,7 +59,7 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BEND);
-    setTitle(mu::qtrc("inspector", "Bend"));
+    setTitle(muse::qtrc("inspector", "Bend"));
     setIcon(muse::ui::IconCode::Code::GUITAR_BEND);
 
     createProperties();
@@ -165,8 +165,8 @@ void BendSettingsModel::loadBendCurve()
     m_releaseBend = bend->isReleaseBend();
     bool isSlightBend = bend->type() == GuitarBendType::SLIGHT_BEND;
 
-    QString startPointName = mu::qtrc("inspector", "Start point");
-    QString endPointName = mu::qtrc("inspector", "End point");
+    QString startPointName = muse::qtrc("inspector", "Start point");
+    QString endPointName = muse::qtrc("inspector", "End point");
 
     if (bend->type() == GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
@@ -192,7 +192,7 @@ void BendSettingsModel::loadBendCurve()
 EngravingItem* BendSettingsModel::item() const
 {
     for (EngravingItem* item : m_elementList) {
-        if (contains(ELEMENTS_TYPES, item->type())) {
+        if (muse::contains(ELEMENTS_TYPES, item->type())) {
             return item;
         }
     }

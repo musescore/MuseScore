@@ -87,7 +87,7 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
             }
         } else if (tag == "Score") {
             if (!readScore410(score, e, ctx)) {
-                if (e.error() == XmlStreamReader::CustomError) {
+                if (e.error() == muse::XmlStreamReader::CustomError) {
                     return Err::FileCriticallyCorrupted;
                 }
                 return Err::FileBadFormat;
@@ -118,7 +118,7 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
 {
     std::vector<int> sysStaves;
     while (e.readNextStartElement()) {
-        ctx.setTrack(mu::nidx);
+        ctx.setTrack(muse::nidx);
         const AsciiStringView tag(e.name());
         if (tag == "Staff") {
             StaffRead::readStaff(score, e, ctx);
@@ -250,8 +250,8 @@ bool Read410::readScore410(Score* score, XmlReader& e, ReadContext& ctx)
         }
     }
     ctx.reconnectBrokenConnectors();
-    if (e.error() != XmlStreamReader::NoError) {
-        if (e.error() == XmlStreamReader::CustomError) {
+    if (e.error() != muse::XmlStreamReader::NoError) {
+        if (e.error() == muse::XmlStreamReader::CustomError) {
             LOGE() << e.errorString();
         } else {
             LOGE() << String(u"XML read error at line %1, column %2: %3").arg(e.lineNumber(), e.columnNumber())

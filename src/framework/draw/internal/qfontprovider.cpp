@@ -29,7 +29,7 @@
 #include "engraving/dom/mscore.h"
 #include "fontengineft.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 class FontPaintDevice : public QPaintDevice
@@ -178,7 +178,7 @@ double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) con
     }
 
     double symAdvance = engine->advance(ucs4, dpi_f);
-    if (mu::RealIsNull(symAdvance)) {
+    if (RealIsNull(symAdvance)) {
         for (const auto& fontName : QFont::substitutes(f.family())) {
             Font subFont(f);
             subFont.setFamily(fontName, f.type());
@@ -188,7 +188,7 @@ double QFontProvider::symAdvance(const Font& f, char32_t ucs4, double dpi_f) con
             }
 
             symAdvance = engine->advance(ucs4, dpi_f);
-            if (!mu::RealIsNull(symAdvance)) {
+            if (!RealIsNull(symAdvance)) {
                 break;
             }
         }

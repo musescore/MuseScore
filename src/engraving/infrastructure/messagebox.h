@@ -34,7 +34,7 @@ namespace mu::engraving {
 class MessageBox
 {
 #ifndef ENGRAVING_NO_INTERACTIVE
-    INJECT_STATIC(IInteractive, interactive)
+    INJECT_STATIC(muse::IInteractive, interactive)
 #endif
 public:
 

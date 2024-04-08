@@ -29,7 +29,8 @@
 #include "multiinstances/resourcelockguard.h"
 
 using namespace mu::project;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 
 static const std::string RECENT_FILES_RESOURCE_NAME("RECENT_FILES");
 
@@ -91,7 +92,7 @@ void RecentFilesController::prependRecentFile(const RecentFile& newFile)
     prependPlatformRecentFile(newFile.path);
 }
 
-void RecentFilesController::moveRecentFile(const io::path_t& before, const RecentFile& after)
+void RecentFilesController::moveRecentFile(const muse::io::path_t& before, const RecentFile& after)
 {
     bool moved = false;
     RecentFilesList newList = m_recentFilesList;
@@ -116,7 +117,7 @@ void RecentFilesController::clearRecentFiles()
     clearPlatformRecentFiles();
 }
 
-void RecentFilesController::prependPlatformRecentFile(const io::path_t&) {}
+void RecentFilesController::prependPlatformRecentFile(const muse::io::path_t&) {}
 
 void RecentFilesController::clearPlatformRecentFiles() {}
 
@@ -158,7 +159,7 @@ void RecentFilesController::loadRecentFilesList()
         const JsonValue val = array.at(i);
 
         if (val.isString()) {
-            newList.emplace_back(io::path_t(val.toStdString()));
+            newList.emplace_back(muse::io::path_t(val.toStdString()));
         } else if (val.isObject()) {
             const JsonObject obj = val.toObject();
             RecentFile file;
@@ -245,7 +246,7 @@ void RecentFilesController::saveRecentFilesList()
     }
 }
 
-Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& filePath) const
+Promise<QPixmap> RecentFilesController::thumbnail(const muse::io::path_t& filePath) const
 {
     return Promise<QPixmap>([this, filePath](auto resolve, auto reject) {
         if (filePath.empty()) {
@@ -287,7 +288,7 @@ void RecentFilesController::cleanUpThumbnailCache(const RecentFilesList& files)
         if (files.empty()) {
             m_thumbnailCache.clear();
         } else {
-            std::map<io::path_t, CachedThumbnail> cleanedCache;
+            std::map<muse::io::path_t, CachedThumbnail> cleanedCache;
 
             for (const RecentFile& file : files) {
                 auto it = m_thumbnailCache.find(file.path);

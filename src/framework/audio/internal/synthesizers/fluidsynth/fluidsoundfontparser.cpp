@@ -28,9 +28,10 @@
 
 #include "defer.h"
 
+using namespace muse;
 using namespace muse::audio::synth;
 
-mu::RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& path)
+RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPath& path)
 {
     fluid_settings_t* settings = nullptr;
     fluid_sfloader_t* loader = nullptr;

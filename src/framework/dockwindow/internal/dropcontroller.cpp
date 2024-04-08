@@ -181,7 +181,7 @@ void DropController::updateToolBarOrientation(DockToolBarView* draggedToolBar, c
         return;
     }
 
-    mu::Orientation orientation = mu::Orientation::Horizontal;
+    muse::Orientation orientation = muse::Orientation::Horizontal;
 
     if (!dropDestination.isValid()) {
         draggedToolBar->setOrientation(static_cast<Qt::Orientation>(orientation));
@@ -191,11 +191,11 @@ void DropController::updateToolBarOrientation(DockToolBarView* draggedToolBar, c
     switch (dropDestination.dock->location()) {
     case Location::Left:
     case Location::Right:
-        orientation = mu::Orientation::Vertical;
+        orientation = muse::Orientation::Vertical;
         break;
     case Location::Top:
     case Location::Bottom:
-        orientation = mu::Orientation::Horizontal;
+        orientation = muse::Orientation::Horizontal;
         break;
     case Location::Center:
     case Location::Undefined:

@@ -32,10 +32,10 @@ int main(int argc, char** argv)
 
     qputenv("QML_DISABLE_DISK_CACHE", "true");
 
-    mu::runtime::mainThreadId(); //! NOTE Needs only call
-    mu::runtime::setThreadName("main");
+    muse::runtime::mainThreadId(); //! NOTE Needs only call
+    muse::runtime::setThreadName("main");
 
-    mu::testing::Environment::setup();
+    muse::testing::Environment::setup();
 
-    return mu::testing::QTestSuite::run(argc, argv);
+    return muse::testing::QTestSuite::run(argc, argv);
 }

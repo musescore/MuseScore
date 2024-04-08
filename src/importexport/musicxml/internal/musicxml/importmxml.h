@@ -29,7 +29,7 @@
 namespace mu::engraving {
 class Score;
 
-Err importMusicXMLfromBuffer(Score* score, const String&, const ByteArray& data);
+Err importMusicXMLfromBuffer(Score* score, const muse::String&, const muse::ByteArray& data);
 }
 
 #endif

@@ -30,37 +30,37 @@ class ProjectConfigurationStub : public IProjectConfiguration
 public:
     ProjectConfigurationStub() = default;
 
-    io::path_t recentFilesJsonPath() const override;
+    muse::io::path_t recentFilesJsonPath() const override;
     ByteArray compatRecentFilesData() const override;
 
-    io::path_t myFirstProjectPath() const override;
+    muse::io::path_t myFirstProjectPath() const override;
 
     io::paths_t availableTemplateDirs() const override;
-    io::path_t templateCategoriesJsonPath(const io::path_t& templatesDir) const override;
+    muse::io::path_t templateCategoriesJsonPath(const muse::io::path_t& templatesDir) const override;
 
-    io::path_t userTemplatesPath() const override;
-    void setUserTemplatesPath(const io::path_t& path) override;
-    async::Channel<io::path_t> userTemplatesPathChanged() const override;
+    muse::io::path_t userTemplatesPath() const override;
+    void setUserTemplatesPath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> userTemplatesPathChanged() const override;
 
-    io::path_t lastOpenedProjectsPath() const override;
-    void setLastOpenedProjectsPath(const io::path_t& path) override;
+    muse::io::path_t lastOpenedProjectsPath() const override;
+    void setLastOpenedProjectsPath(const muse::io::path_t& path) override;
 
-    io::path_t lastSavedProjectsPath() const override;
-    void setLastSavedProjectsPath(const io::path_t& path) override;
+    muse::io::path_t lastSavedProjectsPath() const override;
+    void setLastSavedProjectsPath(const muse::io::path_t& path) override;
 
-    io::path_t userProjectsPath() const override;
-    void setUserProjectsPath(const io::path_t& path) override;
-    async::Channel<io::path_t> userProjectsPathChanged() const override;
-    io::path_t defaultUserProjectsPath() const override;
+    muse::io::path_t userProjectsPath() const override;
+    void setUserProjectsPath(const muse::io::path_t& path) override;
+    muse::async::Channel<muse::io::path_t> userProjectsPathChanged() const override;
+    muse::io::path_t defaultUserProjectsPath() const override;
 
     bool shouldAskSaveLocationType() const override;
     void setShouldAskSaveLocationType(bool shouldAsk) override;
 
-    bool isCloudProject(const io::path_t& projectPath) const override;
+    bool isCloudProject(const muse::io::path_t& projectPath) const override;
 
-    io::path_t cloudProjectSavingFilePath(const io::path_t& projectName) const override;
-    io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
-                                     const std::string& suffix = "") const override;
+    muse::io::path_t cloudProjectSavingFilePath(const muse::io::path_t& projectName) const override;
+    muse::io::path_t defaultSavingFilePath(INotationProjectPtr project, const std::string& filenameAddition = "",
+                                           const std::string& suffix = "") const override;
 
     SaveLocationType lastUsedSaveLocationType() const override;
     void setLastUsedSaveLocationType(SaveLocationType type) override;
@@ -72,7 +72,7 @@ public:
     void setShouldWarnBeforeSavingPubliclyToCloud(bool shouldWarn) override;
 
     QColor templatePreviewBackgroundColor() const override;
-    async::Notification templatePreviewBackgroundChanged() const override;
+    muse::async::Notification templatePreviewBackgroundChanged() const override;
 
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
@@ -82,15 +82,15 @@ public:
 
     bool isAutoSaveEnabled() const override;
     void setAutoSaveEnabled(bool enabled) override;
-    async::Channel<bool> autoSaveEnabledChanged() const override;
+    muse::async::Channel<bool> autoSaveEnabledChanged() const override;
 
     int autoSaveIntervalMinutes() const override;
     void setAutoSaveInterval(int minutes) override;
-    async::Channel<int> autoSaveIntervalChanged() const override;
+    muse::async::Channel<int> autoSaveIntervalChanged() const override;
 
     bool alsoShareAudioCom() const override;
     void setAlsoShareAudioCom(bool share) override;
-    async::Channel<bool> alsoShareAudioComChanged() const override;
+    muse::async::Channel<bool> alsoShareAudioComChanged() const override;
 
     bool showAlsoShareAudioComDialog() const override;
     void setShowAlsoShareAudioComDialog(bool show) override;
@@ -98,7 +98,7 @@ public:
     bool hasAskedAlsoShareAudioCom() const override;
     void setHasAskedAlsoShareAudioCom(bool has) override;
 
-    io::path_t newProjectTemporaryPath() const override;
+    muse::io::path_t newProjectTemporaryPath() const override;
 
     bool isAccessibleEnabled() const override;
 
@@ -119,9 +119,9 @@ public:
     int numberOfSavesToGenerateAudio() const override;
     void setNumberOfSavesToGenerateAudio(int number) override;
 
-    io::path_t temporaryMp3FilePathTemplate() const override;
+    muse::io::path_t temporaryMp3FilePathTemplate() const override;
 
-    io::path_t projectBackupPath(const io::path_t& projectPath) const override;
+    muse::io::path_t projectBackupPath(const muse::io::path_t& projectPath) const override;
 
     bool showCloudIsNotAvailableWarning() const override;
     void setShowCloudIsNotAvailableWarning(bool show) override;

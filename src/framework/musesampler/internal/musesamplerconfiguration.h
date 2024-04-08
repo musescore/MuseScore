@@ -31,7 +31,7 @@
 namespace muse::musesampler {
 class MuseSamplerConfiguration : public IMuseSamplerConfiguration
 {
-    INJECT(mu::IGlobalConfiguration, globalConfig)
+    INJECT(IGlobalConfiguration, globalConfig)
 
 public:
     void init();

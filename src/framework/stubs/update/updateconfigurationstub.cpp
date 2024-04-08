@@ -94,7 +94,7 @@ std::string UpdateConfigurationStub::museScorePrivacyPolicyUrl() const
     return "";
 }
 
-mu::io::path_t UpdateConfigurationStub::updateDataPath() const
+muse::io::path_t UpdateConfigurationStub::updateDataPath() const
 {
     return "";
 }

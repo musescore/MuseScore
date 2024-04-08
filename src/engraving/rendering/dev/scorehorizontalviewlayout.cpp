@@ -119,9 +119,9 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
                 ss->resetExplicitParent();
             }
         }
-        DeleteAll(mutDom.systems());
+        muse::DeleteAll(mutDom.systems());
         mutDom.systems().clear();
-        DeleteAll(mutDom.pages());
+        muse::DeleteAll(mutDom.pages());
         mutDom.pages().clear();
         if (!ctx.dom().firstMeasure()) {
             LOGD("no measures");

@@ -53,12 +53,12 @@ String ProjectFileInfoProvider::displayName() const
     return m_project->displayName();
 }
 
-mu::DateTime ProjectFileInfoProvider::birthTime() const
+DateTime ProjectFileInfoProvider::birthTime() const
 {
     return filesystem()->birthTime(path());
 }
 
-mu::DateTime ProjectFileInfoProvider::lastModified() const
+DateTime ProjectFileInfoProvider::lastModified() const
 {
     return filesystem()->lastModified(path());
 }

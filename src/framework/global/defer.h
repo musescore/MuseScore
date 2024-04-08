@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_DEFER_H
-#define MU_GLOBAL_DEFER_H
+#ifndef MUSE_GLOBAL_DEFER_H
+#define MUSE_GLOBAL_DEFER_H
 
 #include <functional>
 
-namespace mu {
+namespace muse {
 struct Defer
 {
     template<class F>
@@ -45,6 +45,6 @@ struct Defer
 #define CONCAT_IMPL(x, y) x##y
 #define MACRO_CONCAT(x, y) CONCAT_IMPL(x, y)
 
-#define DEFER const ::mu::Defer MACRO_CONCAT(defer_, __LINE__) = [&]()
+#define DEFER const ::muse::Defer MACRO_CONCAT(defer_, __LINE__) = [&]()
 
-#endif // MU_GLOBAL_DEFER_H
+#endif // MUSE_GLOBAL_DEFER_H

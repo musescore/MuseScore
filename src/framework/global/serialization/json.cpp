@@ -30,9 +30,9 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
-struct mu::JsonData
+struct muse::JsonData
 {
     picojson::value val;
 };

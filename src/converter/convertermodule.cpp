@@ -24,6 +24,7 @@
 #include "modularity/ioc.h"
 #include "internal/convertercontroller.h"
 
+using namespace muse::modularity;
 using namespace mu::converter;
 
 std::string ConverterModule::moduleName() const
@@ -33,5 +34,5 @@ std::string ConverterModule::moduleName() const
 
 void ConverterModule::registerExports()
 {
-    modularity::ioc()->registerExport<IConverterController>(moduleName(), new ConverterController());
+    ioc()->registerExport<IConverterController>(moduleName(), new ConverterController());
 }

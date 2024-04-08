@@ -44,9 +44,9 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::ExtNotFound: return Ret(retCode, mu::trc("extensions", "Plugin not found"));
-    case Err::ExtLoadError: return Ret(retCode, mu::trc("extensions", "Could not load plugin"));
-    case Err::ExtBadFormat: return Ret(retCode, mu::trc("extensions", "Plugin is not in the correct format"));
+    case Err::ExtNotFound: return Ret(retCode, muse::trc("extensions", "Plugin not found"));
+    case Err::ExtLoadError: return Ret(retCode, muse::trc("extensions", "Could not load plugin"));
+    case Err::ExtBadFormat: return Ret(retCode, muse::trc("extensions", "Plugin is not in the correct format"));
     }
 
     return Ret(static_cast<int>(e));

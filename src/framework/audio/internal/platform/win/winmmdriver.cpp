@@ -235,10 +235,10 @@ std::vector<std::string> WinmmDriver::availableOutputDevices() const
     return { "default" };
 }
 
-mu::async::Notification WinmmDriver::availableOutputDevicesChanged() const
+async::Notification WinmmDriver::availableOutputDevicesChanged() const
 {
     NOT_IMPLEMENTED;
-    return mu::async::Notification();
+    return async::Notification();
 }
 
 void WinmmDriver::resume()

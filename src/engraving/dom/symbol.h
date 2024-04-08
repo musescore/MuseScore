@@ -64,7 +64,7 @@ public:
     const std::shared_ptr<IEngravingFont>& scoreFont() const { return m_scoreFont; }
     double symbolsSize() const { return m_symbolsSize; }
     double symAngle() const { return m_symAngle; }
-    mu::AsciiStringView symName() const;
+    AsciiStringView symName() const;
 
     String accessibleInfo() const override;
 

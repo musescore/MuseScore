@@ -222,7 +222,7 @@ void InspectorListModel::removeUnusedModels(const ElementKeySet& newElementKeySe
                                                                                                     selectedElementList);
 
     for (AbstractInspectorModel* model : m_modelList) {
-        if (mu::contains(exclusions, model->sectionType())) {
+        if (muse::contains(exclusions, model->sectionType())) {
             continue;
         }
 
@@ -250,13 +250,13 @@ bool InspectorListModel::isModelAllowed(const AbstractInspectorModel* model, con
 {
     InspectorModelType modelType = model->modelType();
 
-    if (modelType != InspectorModelType::TYPE_UNDEFINED && mu::contains(allowedModelTypes, modelType)) {
+    if (modelType != InspectorModelType::TYPE_UNDEFINED && muse::contains(allowedModelTypes, modelType)) {
         return true;
     }
 
     auto proxyModel = dynamic_cast<const AbstractInspectorProxyModel*>(model);
     if (!proxyModel) {
-        return mu::contains(allowedSectionTypes, model->sectionType());
+        return muse::contains(allowedSectionTypes, model->sectionType());
     }
 
     for (auto subModel : proxyModel->modelList()) {

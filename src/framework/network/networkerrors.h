@@ -46,11 +46,11 @@ inline Ret make_ret(Err e)
     case Err::Undefined: return Ret(retCode);
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
-    case Err::Abort: return Ret(retCode, mu::trc("network", "The request was aborted"));
-    case Err::Timeout: return Ret(retCode, mu::trc("network", "The connection to the remote server timed out"));
-    case Err::NetworkError: return Ret(retCode, mu::trc("network", "An unknown network-related error occurred"));
-    case Err::FiledOpenIODeviceRead: return Ret(retCode, mu::trc("network", "The I/O device was not opened for reading"));
-    case Err::FiledOpenIODeviceWrite: return Ret(retCode, mu::trc("network", "The I/O device was not opened for writing"));
+    case Err::Abort: return Ret(retCode, muse::trc("network", "The request was aborted"));
+    case Err::Timeout: return Ret(retCode, muse::trc("network", "The connection to the remote server timed out"));
+    case Err::NetworkError: return Ret(retCode, muse::trc("network", "An unknown network-related error occurred"));
+    case Err::FiledOpenIODeviceRead: return Ret(retCode, muse::trc("network", "The I/O device was not opened for reading"));
+    case Err::FiledOpenIODeviceWrite: return Ret(retCode, muse::trc("network", "The I/O device was not opened for writing"));
     }
 
     return Ret(static_cast<int>(e));

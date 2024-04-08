@@ -26,6 +26,7 @@
 #include "io/path.h"
 #include "log.h"
 
+using namespace muse;
 using namespace muse::autobot;
 
 inline QTextStream& operator<<(QTextStream& s, const std::string& v)
@@ -39,7 +40,7 @@ static QString formatVal(const ITestCaseContext::Val& val)
     return val.toString();
 }
 
-mu::Ret TestCaseReport::beginReport(const TestCase& testCase)
+Ret TestCaseReport::beginReport(const TestCase& testCase)
 {
     io::path_t reportsPath = configuration()->reportsPath();
     Ret ret = fileSystem()->makePath(reportsPath);

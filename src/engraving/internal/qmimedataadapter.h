@@ -35,7 +35,7 @@ public:
     std::vector<std::string> formats() const override;
 
     bool hasFormat(const std::string& mimeType) const override;
-    ByteArray data(const std::string& mimeType) const override;
+    muse::ByteArray data(const std::string& mimeType) const override;
 
     bool hasImage() const override;
     std::shared_ptr<muse::draw::Pixmap> imageData() const override;

@@ -51,7 +51,7 @@ public:
     void updateDrumset();
     bool handleEvent(QEvent* event);
 
-    mu::async::Channel<QString> pitchNameChanged() const;
+    muse::async::Channel<QString> pitchNameChanged() const;
 
     PaletteWidget* paletteWidget() const;
 
@@ -82,7 +82,7 @@ private:
     PaletteWidget* m_drumPalette = nullptr;
     const mu::engraving::Drumset* m_drumset = nullptr;
     mu::notation::INotationPtr m_notation;
-    mu::async::Channel<QString> m_pitchNameChanged;
+    muse::async::Channel<QString> m_pitchNameChanged;
 };
 }
 

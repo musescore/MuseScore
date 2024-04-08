@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_XMLREADER_H
-#define MU_GLOBAL_XMLREADER_H
+#ifndef MUSE_GLOBAL_XMLREADER_H
+#define MUSE_GLOBAL_XMLREADER_H
 
 #include <memory>
 #include <QIODevice>
@@ -33,7 +33,7 @@
 class QXmlStreamReader;
 class QByteArray;
 
-namespace mu::deprecated {
+namespace muse::deprecated {
 class XmlReader
 {
 public:
@@ -87,4 +87,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_XMLREADER_H
+#endif // MUSE_GLOBAL_XMLREADER_H

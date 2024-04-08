@@ -35,7 +35,7 @@
 
 using namespace mu::iex::guitarpro;
 
-static mu::testing::SuiteEnvironment importexport_se(
+static muse::testing::SuiteEnvironment importexport_se(
 {
     new muse::draw::DrawModule(),         // needs for engraving
     new mu::engraving::EngravingModule(),
@@ -45,7 +45,7 @@ static mu::testing::SuiteEnvironment importexport_se(
     []() {
     LOGI() << "guitarpro tests suite post init";
 
-    mu::engraving::ScoreRW::setRootPath(mu::String::fromUtf8(iex_guitarpro_tests_DATA_ROOT));
+    mu::engraving::ScoreRW::setRootPath(muse::String::fromUtf8(iex_guitarpro_tests_DATA_ROOT));
 
     mu::engraving::MScore::testMode = true;
     mu::engraving::MScore::testWriteStyleToScore = false;

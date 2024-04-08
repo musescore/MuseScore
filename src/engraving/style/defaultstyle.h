@@ -37,7 +37,7 @@ class DefaultStyle
 public:
     static DefaultStyle* instance();
 
-    void init(const io::path_t& defaultStyleFilePath, const io::path_t& partStyleFilePath);
+    void init(const muse::io::path_t& defaultStyleFilePath, const muse::io::path_t& partStyleFilePath);
 
     static const MStyle& baseStyle();
 
@@ -49,7 +49,7 @@ public:
 private:
     DefaultStyle() = default;
 
-    static bool doLoadStyle(MStyle* style, const io::path_t& filePath);
+    static bool doLoadStyle(MStyle* style, const muse::io::path_t& filePath);
 
     MStyle m_baseStyle; // builtin initial style
     MStyle m_defaultStyle; // builtin modified by preferences

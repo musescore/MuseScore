@@ -48,7 +48,7 @@
 #define LAYOUT_CALL_CLEAR()
 #define LAYOUT_CALL_BEGIN(name, info)
 #define LAYOUT_CALL_END()
-#define LAYOUT_CALL() if (0) mu::logger::Stream()
+#define LAYOUT_CALL() if (0) muse::logger::Stream()
 #define LAYOUT_ITEM_INFO(item) ""
 #define LAYOUT_CALL_PRINT()
 #endif
@@ -322,7 +322,7 @@ public:
 
     struct CallBeginMarker {
         std::string_view name;
-        mu::logger::Stream stream;
+        muse::logger::Stream stream;
         CallBeginMarker(const std::string_view& n)
             : name(n)
         {
@@ -397,7 +397,7 @@ public:
 
     // Mark
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e);
-    void addRefresh(const mu::RectF& r);
+    void addRefresh(const RectF& r);
 
     // Other
     const Selection& selection() const;

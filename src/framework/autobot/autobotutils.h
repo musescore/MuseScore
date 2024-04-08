@@ -56,7 +56,7 @@ inline Ret jsValueToRet(const QJSValue& val)
     return Ret(Ret::Code::Ok);
 }
 
-inline QJSValue toQJSValue(const JsonValue& jv, mu::api::IApiEngine* e = nullptr)
+inline QJSValue toQJSValue(const JsonValue& jv, api::IApiEngine* e = nullptr)
 {
     if (jv.isNull()) {
         return QJSValue(QJSValue::NullValue);

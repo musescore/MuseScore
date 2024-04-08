@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_FLAGS_H
-#define MU_GLOBAL_FLAGS_H
+#ifndef MUSE_GLOBAL_FLAGS_H
+#define MUSE_GLOBAL_FLAGS_H
 
 #include <cstdint>
 
-namespace mu {
+namespace muse {
 class Flag
 {
 public:
@@ -104,14 +104,14 @@ private:
 };
 
 #define DECLARE_FLAGS(Name, Enum) \
-    using Name = mu::Flags<Enum>;
+    using Name = muse::Flags<Enum>;
 
 #define DECLARE_OPERATORS_FOR_FLAGS(Name) \
-    constexpr inline mu::Flags<Name::enum_type> operator|(Name::enum_type f1, \
-                                                          Name::enum_type f2) \
+    constexpr inline muse::Flags<Name::enum_type> operator|(Name::enum_type f1, \
+                                                            Name::enum_type f2) \
     { \
-        return mu::Flags<Name::enum_type>(f1) | f2; \
+        return muse::Flags<Name::enum_type>(f1) | f2; \
     }
 }
 
-#endif // MU_GLOBAL_FLAGS_H
+#endif // MUSE_GLOBAL_FLAGS_H

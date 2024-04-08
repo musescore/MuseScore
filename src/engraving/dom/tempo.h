@@ -35,7 +35,7 @@ enum class TempoType : char {
     INVALID = 0x0, PAUSE = 0x1, FIX = 0x2, RAMP = 0x4
 };
 
-typedef Flags<TempoType> TempoTypes;
+typedef muse::Flags<TempoType> TempoTypes;
 DECLARE_OPERATORS_FOR_FLAGS(TempoTypes)
 
 //---------------------------------------------------------

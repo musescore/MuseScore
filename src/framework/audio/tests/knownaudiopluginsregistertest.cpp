@@ -32,9 +32,9 @@
 using ::testing::_;
 using ::testing::Return;
 
-using namespace mu;
+using namespace muse;
 using namespace muse::audio;
-using namespace mu::io;
+using namespace muse::io;
 
 namespace muse::audio {
 class Audio_KnownAudioPluginsRegisterTest : public ::testing::Test
@@ -74,7 +74,7 @@ protected:
 
             JsonObject metaObj;
             metaObj.set("id", info.meta.id);
-            metaObj.set("type", mu::value(RESOURCE_TYPE_TO_STR, info.meta.type, "Undefined"));
+            metaObj.set("type", muse::value(RESOURCE_TYPE_TO_STR, info.meta.type, "Undefined"));
             metaObj.set("hasNativeEditorSupport", info.meta.hasNativeEditorSupport);
 
             if (!info.meta.vendor.empty()) {
@@ -139,9 +139,9 @@ protected:
         disabledPluginInfo.errorCode = -1;
         plugins.push_back(disabledPluginInfo);
 
-        mu::ByteArray data = pluginInfoListToJson(plugins);
+        ByteArray data = pluginInfoListToJson(plugins);
         ON_CALL(*m_fileSystem, readFile(m_knownAudioPluginsFilePath))
-        .WillByDefault(Return(mu::RetVal<mu::ByteArray>::make_ok(data)));
+        .WillByDefault(Return(RetVal<ByteArray>::make_ok(data)));
 
         return plugins;
     }
@@ -172,10 +172,10 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
 
     // [GIVEN] File exists
     ON_CALL(*m_fileSystem, exists(m_knownAudioPluginsFilePath))
-    .WillByDefault(Return(mu::make_ok()));
+    .WillByDefault(Return(muse::make_ok()));
 
     // [WHEN] Load the info
-    mu::Ret ret = m_knownPlugins->load();
+    Ret ret = m_knownPlugins->load();
 
     // [THEN] Successfully loaded the info
     EXPECT_TRUE(ret);
@@ -186,7 +186,7 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [THEN] Successfully received the info
     EXPECT_EQ(actualPluginInfoList.size(), expectedPluginInfoList.size());
     for (const AudioPluginInfo& actualInfo : actualPluginInfoList) {
-        EXPECT_TRUE(mu::contains(expectedPluginInfoList, actualInfo));
+        EXPECT_TRUE(muse::contains(expectedPluginInfoList, actualInfo));
         EXPECT_TRUE(m_knownPlugins->exists(actualInfo.path));
         EXPECT_TRUE(m_knownPlugins->exists(actualInfo.meta.id));
         EXPECT_EQ(actualInfo.path, m_knownPlugins->pluginPath(actualInfo.meta.id));
@@ -206,9 +206,9 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     expectedPluginInfoList.push_back(newPluginInfo);
 
     // [THEN] All the plugins will be written to the file
-    mu::ByteArray expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
+    ByteArray expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
     EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsFilePath, expectedNewPluginsData))
-    .WillOnce(Return(mu::make_ok()));
+    .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Register it
     ret = m_knownPlugins->registerPlugin(newPluginInfo);
@@ -224,7 +224,7 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     // [THEN] All the plugins will be written to the file
     expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
     EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsFilePath, expectedNewPluginsData))
-    .WillOnce(Return(mu::make_ok()));
+    .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Register it
     ret = m_knownPlugins->registerPlugin(duplicatedPluginInfo);
@@ -235,18 +235,18 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     actualPluginInfoList = m_knownPlugins->pluginInfoList();
     EXPECT_EQ(expectedPluginInfoList.size(), actualPluginInfoList.size());
     for (const AudioPluginInfo& actualInfo : actualPluginInfoList) {
-        EXPECT_TRUE(mu::contains(expectedPluginInfoList, actualInfo));
+        EXPECT_TRUE(muse::contains(expectedPluginInfoList, actualInfo));
         EXPECT_TRUE(m_knownPlugins->exists(actualInfo.path));
         EXPECT_TRUE(m_knownPlugins->exists(actualInfo.meta.id));
     }
 
     // [GIVEN] We want to unregister the first plugin in the list
-    AudioPluginInfo unregisteredPlugin = mu::takeFirst(expectedPluginInfoList);
+    AudioPluginInfo unregisteredPlugin = muse::takeFirst(expectedPluginInfoList);
 
     // [THEN] All the plugins will be written to the file (except the unregistered one)
     expectedNewPluginsData = pluginInfoListToJson(expectedPluginInfoList);
     EXPECT_CALL(*m_fileSystem, writeFile(m_knownAudioPluginsFilePath, expectedNewPluginsData))
-    .WillOnce(Return(mu::make_ok()));
+    .WillOnce(Return(muse::make_ok()));
 
     // [WHEN] Unregister the plugin
     ret = m_knownPlugins->unregisterPlugin(unregisteredPlugin.meta.id);
@@ -257,5 +257,5 @@ TEST_F(Audio_KnownAudioPluginsRegisterTest, PluginInfoList)
     EXPECT_FALSE(m_knownPlugins->exists(unregisteredPlugin.meta.id));
     EXPECT_EQ(m_knownPlugins->pluginPath(unregisteredPlugin.meta.id), "");
     actualPluginInfoList = m_knownPlugins->pluginInfoList();
-    EXPECT_FALSE(mu::contains(actualPluginInfoList, unregisteredPlugin));
+    EXPECT_FALSE(muse::contains(actualPluginInfoList, unregisteredPlugin));
 }

@@ -19,13 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_UTILS_H
-#define MU_GLOBAL_UTILS_H
+#ifndef MUSE_GLOBAL_UTILS_H
+#define MUSE_GLOBAL_UTILS_H
 
 #include <string>
 
-namespace mu {
+namespace muse {
 std::string pitchToString(int pitch, bool addoctave=true, bool useFlats=false);
 }
 
-#endif // MU_GLOBAL_GLOBAL_H
+#endif // MUSE_GLOBAL_GLOBAL_H

@@ -44,8 +44,8 @@ public:
 
     void setAntialiasing(bool arg) override;
     void setCompositionMode(muse::draw::CompositionMode mode) override;
-    void setWindow(const RectF& window) override;
-    void setViewport(const RectF& viewport) override;
+    void setWindow(const muse::RectF& window) override;
+    void setViewport(const muse::RectF& viewport) override;
 
     void setFont(const muse::draw::Font& font) override;
     const muse::draw::Font& font() const override;
@@ -64,25 +64,25 @@ public:
     const muse::draw::Transform& transform() const override;
 
     void drawPath(const muse::draw::PainterPath& path) override;
-    void drawPolygon(const PointF* points, size_t pointCount, muse::draw::PolygonMode mode) override;
+    void drawPolygon(const muse::PointF* points, size_t pointCount, muse::draw::PolygonMode mode) override;
 
-    void drawText(const PointF& point, const String& text) override;
-    void drawText(const RectF& rect, int flags, const String& text) override;
-    void drawTextWorkaround(const muse::draw::Font& f, const PointF& pos, const String& text) override;
+    void drawText(const muse::PointF& point, const muse::String& text) override;
+    void drawText(const muse::RectF& rect, int flags, const muse::String& text) override;
+    void drawTextWorkaround(const muse::draw::Font& f, const muse::PointF& pos, const muse::String& text) override;
 
-    void drawSymbol(const PointF& point, char32_t ucs4Code) override;
+    void drawSymbol(const muse::PointF& point, char32_t ucs4Code) override;
 
-    void drawPixmap(const PointF& p, const muse::draw::Pixmap& pm) override;
-    void drawTiledPixmap(const RectF& rect, const muse::draw::Pixmap& pm, const PointF& offset = PointF()) override;
+    void drawPixmap(const muse::PointF& p, const muse::draw::Pixmap& pm) override;
+    void drawTiledPixmap(const muse::RectF& rect, const muse::draw::Pixmap& pm, const muse::PointF& offset = muse::PointF()) override;
 
 #ifndef NO_QT_SUPPORT
-    void drawPixmap(const PointF& point, const QPixmap& pm) override;
-    void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) override;
+    void drawPixmap(const muse::PointF& point, const QPixmap& pm) override;
+    void drawTiledPixmap(const muse::RectF& rect, const QPixmap& pm, const muse::PointF& offset = muse::PointF()) override;
 #endif
 
     bool hasClipping() const override;
 
-    void setClipRect(const RectF& rect) override;
+    void setClipRect(const muse::RectF& rect) override;
     void setClipping(bool enable) override;
 
 private:

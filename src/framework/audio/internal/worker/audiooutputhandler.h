@@ -63,7 +63,7 @@ public:
                                         const SoundTrackFormat& format) override;
     void abortSavingAllSoundTracks() override;
 
-    mu::Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
+    Progress saveSoundTrackProgress(const TrackSequenceId sequenceId) override;
 
     void clearAllFx() override;
 
@@ -78,7 +78,7 @@ private:
     mutable async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     mutable async::Channel<TrackSequenceId, TrackId, AudioOutputParams> m_outputParamsChanged;
 
-    std::unordered_map<TrackSequenceId, mu::Progress> m_saveSoundTracksProgressMap;
+    std::unordered_map<TrackSequenceId, Progress> m_saveSoundTracksProgressMap;
     std::unordered_map<TrackSequenceId, soundtrack::SoundTrackWriterPtr> m_saveSoundTracksWritersMap;
 };
 }

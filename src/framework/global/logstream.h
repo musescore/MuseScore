@@ -19,11 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LOGSTREAM_H
-#define MU_LOGSTREAM_H
+#ifndef MUSE_LOGSTREAM_H
+#define MUSE_LOGSTREAM_H
 
 #include "thirdparty/kors_logger/src/logstream.h"
-namespace mu::logger {
+namespace muse::logger {
 using Stream = kors::logger::Stream;
 }
 

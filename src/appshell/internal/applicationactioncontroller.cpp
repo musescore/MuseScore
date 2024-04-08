@@ -35,6 +35,7 @@
 #include "log.h"
 
 using namespace mu::appshell;
+using namespace muse;
 using namespace muse::actions;
 
 void ApplicationActionController::preInit()
@@ -46,7 +47,7 @@ void ApplicationActionController::init()
 {
     dispatcher()->reg(this, "quit", [this](const ActionData& args) {
         bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
-        io::path_t installatorPath = args.count() > 1 ? args.arg<io::path_t>(1) : "";
+        muse::io::path_t installatorPath = args.count() > 1 ? args.arg<muse::io::path_t>(1) : "";
         quit(isAllInstances, installatorPath);
     });
 
@@ -78,7 +79,7 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     if (urls.count() > 0) {
         const QUrl& url = urls.front();
         if (projectFilesController()->isUrlSupported(url)
-            || (url.isLocalFile() && muse::audio::synth::isSoundFont(io::path_t(url)))) {
+            || (url.isLocalFile() && muse::audio::synth::isSoundFont(muse::io::path_t(url)))) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
         }
@@ -104,7 +105,7 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
             });
             shouldBeHandled = true;
         } else if (url.isLocalFile()) {
-            io::path_t filePath { url };
+            muse::io::path_t filePath { url };
 
             if (muse::audio::synth::isSoundFont(filePath)) {
                 async::Async::call(this, [this, filePath]() {
@@ -153,7 +154,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
     return QObject::eventFilter(watched, event);
 }
 
-bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
+bool ApplicationActionController::quit(bool isAllInstances, const muse::io::path_t& installerPath)
 {
     if (m_quiting) {
         return false;
@@ -245,15 +246,15 @@ void ApplicationActionController::openPreferencesDialog()
 
 void ApplicationActionController::revertToFactorySettings()
 {
-    std::string title = mu::trc("appshell", "Are you sure you want to revert to factory settings?");
-    std::string question = mu::trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
-                                               "The list of recent scores will also be cleared.\n\n"
-                                               "This action will not delete any of your scores.");
+    std::string title = muse::trc("appshell", "Are you sure you want to revert to factory settings?");
+    std::string question = muse::trc("appshell", "This action will reset all your app preferences and delete all custom palettes and custom shortcuts. "
+                                                 "The list of recent scores will also be cleared.\n\n"
+                                                 "This action will not delete any of your scores.");
 
     int revertBtn = int(IInteractive::Button::Apply);
     IInteractive::Result result = interactive()->warning(title, question,
                                                          { interactive()->buttonData(IInteractive::Button::Cancel),
-                                                           IInteractive::ButtonData(revertBtn, mu::trc("appshell", "Revert"), true) },
+                                                           IInteractive::ButtonData(revertBtn, muse::trc("appshell", "Revert"), true) },
                                                          revertBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {
@@ -264,13 +265,13 @@ void ApplicationActionController::revertToFactorySettings()
     static constexpr bool NOTIFY_ABOUT_CHANGES = false;
     configuration()->revertToFactorySettings(KEEP_DEFAULT_SETTINGS, NOTIFY_ABOUT_CHANGES);
 
-    title = mu::trc("appshell", "Would you like to restart MuseScore now?");
-    question = mu::trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
+    title = muse::trc("appshell", "Would you like to restart MuseScore now?");
+    question = muse::trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
 
     int restartBtn = int(IInteractive::Button::Apply);
     result = interactive()->question(title, question,
                                      { interactive()->buttonData(IInteractive::Button::Cancel),
-                                       IInteractive::ButtonData(restartBtn, mu::trc("appshell", "Restart"), true) },
+                                       IInteractive::ButtonData(restartBtn, muse::trc("appshell", "Restart"), true) },
                                      restartBtn);
 
     if (result.standardButton() == IInteractive::Button::Cancel) {

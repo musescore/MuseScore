@@ -31,7 +31,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 namespace mu::engraving {
 ImageStore imageStore;  // the global image store
@@ -144,7 +145,7 @@ inline static int toInt(char c)
 
 ImageStore::~ImageStore()
 {
-    DeleteAll(m_items);
+    muse::DeleteAll(m_items);
 }
 
 //---------------------------------------------------------

@@ -208,7 +208,7 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     }
 
     auto makePoint = [](mpe::timestamp_t time, int value) {
-        return mu::Interpolation::Point { static_cast<double>(time), static_cast<double>(value) };
+        return Interpolation::Point { static_cast<double>(time), static_cast<double>(value) };
     };
 
     //! NOTE: Increasing this number results in fewer points being interpolated
@@ -223,16 +223,16 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
         timestamp_t currTime = timestampFrom + duration * percentageToFactor(currIt->first);
         timestamp_t nextTime = timestampFrom + duration * percentageToFactor(nextIt->first);
 
-        mu::Interpolation::Point p0 = makePoint(currTime, currBendValue);
-        mu::Interpolation::Point p1 = makePoint(nextTime, currBendValue);
-        mu::Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
+        Interpolation::Point p0 = makePoint(currTime, currBendValue);
+        Interpolation::Point p1 = makePoint(nextTime, currBendValue);
+        Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
 
         size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
         pointCount = std::max(pointCount, size_t(1));
 
-        std::vector<mu::Interpolation::Point> points = mu::Interpolation::quadraticBezierCurve(p0, p1, p2, pointCount);
+        std::vector<Interpolation::Point> points = Interpolation::quadraticBezierCurve(p0, p1, p2, pointCount);
 
-        for (const mu::Interpolation::Point& point : points) {
+        for (const Interpolation::Point& point : points) {
             timestamp_t time = static_cast<timestamp_t>(std::round(point.x));
             int bendValue = static_cast<int>(std::round(point.y));
 
@@ -278,7 +278,7 @@ velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
     static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
 
-    velocity_t result = mu::RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+    velocity_t result = RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
 
     return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
 }
@@ -310,7 +310,7 @@ int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) con
         stepCount -= 1;
     }
 
-    dynamic_level_t result = mu::RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
+    dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
 
     return std::min(result, MAX_SUPPORTED_DYNAMICS_LEVEL);
 }

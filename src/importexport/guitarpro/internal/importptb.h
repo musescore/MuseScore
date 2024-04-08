@@ -48,7 +48,7 @@ class PalmMute;
 namespace mu::iex::guitarpro {
 class PowerTab
 {
-    mu::io::IODevice* _file = nullptr;
+    muse::io::IODevice* _file = nullptr;
     mu::engraving::MasterScore* score = nullptr;
 
     bool              readBoolean();
@@ -396,7 +396,7 @@ class PowerTab
     void addPalmMute(mu::engraving::Chord*);
 
 public:
-    PowerTab(mu::io::IODevice* f, mu::engraving::MasterScore* s)
+    PowerTab(muse::io::IODevice* f, mu::engraving::MasterScore* s)
         : _file(f), score(s) {}
     mu::engraving::Err read();
 };

@@ -38,7 +38,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 const PropertyValue& MStyle::value(Sid idx) const
@@ -482,7 +482,7 @@ const char* MStyle::valueName(const Sid i)
 
 Sid MStyle::styleIdx(const String& name)
 {
-    ByteArray ba = name.toAscii();
+    muse::ByteArray ba = name.toAscii();
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         if (st.name() == ba.constChar()) {
             return st.styleIdx();

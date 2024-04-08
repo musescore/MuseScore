@@ -34,7 +34,7 @@ class ISaveDiagnosticFilesScenario : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISaveDiagnosticFilesScenario() = default;
 
-    virtual mu::Ret saveDiagnosticFiles() = 0;
+    virtual muse::Ret saveDiagnosticFiles() = 0;
 };
 }
 

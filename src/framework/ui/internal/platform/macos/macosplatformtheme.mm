@@ -29,7 +29,7 @@
 #include <QWindow>
 
 using namespace muse::ui;
-using namespace mu::async;
+using namespace muse::async;
 
 id<NSObject> darkModeObserverToken = nil;
 

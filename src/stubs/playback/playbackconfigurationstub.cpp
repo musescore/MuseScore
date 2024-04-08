@@ -65,7 +65,7 @@ void PlaybackConfigurationStub::setMixerSectionVisible(MixerSectionType, bool)
 {
 }
 
-mu::async::Channel<MixerSectionType, bool> PlaybackConfigurationStub::isMixerSectionVisibleChanged() const
+muse::async::Channel<MixerSectionType, bool> PlaybackConfigurationStub::isMixerSectionVisibleChanged() const
 {
     return {};
 }
@@ -79,7 +79,7 @@ void PlaybackConfigurationStub::setAuxSendVisible(aux_channel_idx_t, bool)
 {
 }
 
-mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxSendVisibleChanged() const
+muse::async::Channel<aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxSendVisibleChanged() const
 {
     return {};
 }
@@ -93,12 +93,12 @@ void PlaybackConfigurationStub::setAuxChannelVisible(aux_channel_idx_t, bool) co
 {
 }
 
-mu::async::Channel<aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxChannelVisibleChanged() const
+muse::async::Channel<aux_channel_idx_t, bool> PlaybackConfigurationStub::isAuxChannelVisibleChanged() const
 {
     return {};
 }
 
-gain_t PlaybackConfigurationStub::defaultAuxSendValue(aux_channel_idx_t, AudioSourceType, const String&) const
+gain_t PlaybackConfigurationStub::defaultAuxSendValue(aux_channel_idx_t, AudioSourceType, const muse::String&) const
 {
     return 0.f;
 }
@@ -112,9 +112,9 @@ void PlaybackConfigurationStub::setMuteHiddenInstruments(bool)
 {
 }
 
-mu::async::Channel<bool> PlaybackConfigurationStub::muteHiddenInstrumentsChanged() const
+muse::async::Channel<bool> PlaybackConfigurationStub::muteHiddenInstrumentsChanged() const
 {
-    static async::Channel<bool> ch;
+    static muse::async::Channel<bool> ch;
     return ch;
 }
 

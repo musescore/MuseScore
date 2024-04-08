@@ -568,7 +568,7 @@ void TremoloTwoChord::clearBeamSegments()
         }
     }
 
-    DeleteAll(m_beamSegments);
+    muse::DeleteAll(m_beamSegments);
     m_beamSegments.clear();
 }
 
@@ -589,7 +589,7 @@ PainterPath TremoloTwoChord::basePath(double stretch) const
         return PainterPath();
     }
     bool tradAlternate = twoNotes() && m_style == TremoloStyle::TRADITIONAL_ALTERNATE;
-    if (tradAlternate && mu::RealIsEqual(stretch, 0.)) {
+    if (tradAlternate && muse::RealIsEqual(stretch, 0.)) {
         // this shape will have to be constructed after the stretch
         // is known
         return PainterPath();

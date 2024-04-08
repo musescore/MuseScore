@@ -99,7 +99,7 @@ const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------
 
-PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
+PointF MeasureRepeat::numberPosition(const RectF& numberBbox) const
 {
     double x = (symBbox(ldata()->symId).width() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
@@ -190,7 +190,7 @@ Fraction MeasureRepeat::ticks() const
 
 String MeasureRepeat::accessibleInfo() const
 {
-    return mtrc("engraving", "%1; Duration: %n measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
+    return muse::mtrc("engraving", "%1; Duration: %n measure(s)", nullptr, numMeasures()).arg(EngravingItem::accessibleInfo());
 }
 
 //---------------------------------------------------------

@@ -34,7 +34,7 @@ class INotationAccessibility
 public:
     virtual ~INotationAccessibility() = default;
 
-    virtual ValCh<std::string> accessibilityInfo() const = 0;
+    virtual muse::ValCh<std::string> accessibilityInfo() const = 0;
 
     virtual void setMapToScreenFunc(const mu::engraving::AccessibleMapToScreenFunc& func) = 0;
 

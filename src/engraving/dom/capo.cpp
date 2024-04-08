@@ -135,20 +135,20 @@ bool Capo::shouldAutomaticallyGenerateText() const
     return m_shouldAutomaticallyGenerateText;
 }
 
-mu::String Capo::generateText(size_t stringCount) const
+muse::String Capo::generateText(size_t stringCount) const
 {
     if (!m_params.active || m_params.fretPosition == 0) {
-        return mtrc("engraving", "No capo");
+        return muse::mtrc("engraving", "No capo");
     }
 
     if (m_params.ignoredStrings.empty()) {
-        return mtrc("engraving", "Capo %1").arg(m_params.fretPosition);
+        return muse::mtrc("engraving", "Capo %1").arg(m_params.fretPosition);
     }
 
     StringList stringsToApply;
 
     for (string_idx_t idx = 0; idx < stringCount; ++idx) {
-        if (mu::contains(m_params.ignoredStrings, idx)) {
+        if (muse::contains(m_params.ignoredStrings, idx)) {
             continue;
         }
 
@@ -156,10 +156,10 @@ mu::String Capo::generateText(size_t stringCount) const
     }
 
     if (stringsToApply.empty()) {
-        return mtrc("engraving", "No capo");
+        return muse::mtrc("engraving", "No capo");
     }
 
-    String text = mtrc("engraving", "Partial capo:\nFret %1 on strings %2")
+    String text = muse::mtrc("engraving", "Partial capo:\nFret %1 on strings %2")
                   .arg(m_params.fretPosition)
                   .arg(stringsToApply.join(u", "));
 

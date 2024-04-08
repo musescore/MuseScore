@@ -32,9 +32,9 @@
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
-class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
+class InstrumentsRepository : public IInstrumentsRepository, public muse::async::Asyncable
 {
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
     INJECT(INotationConfiguration, configuration)
 
 public:
@@ -55,7 +55,7 @@ private:
     void load();
     void clear();
 
-    bool loadStringTuningsPresets(const io::path_t& path);
+    bool loadStringTuningsPresets(const muse::io::path_t& path);
 
     InstrumentTemplateList m_instrumentTemplates;
     InstrumentGroupList m_groups;

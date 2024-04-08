@@ -208,7 +208,7 @@ void Lyrics::paste(EditData& ed, const String& txt)
     }
 
     String regex = String(u"[^\\S") + Char(0xa0) + Char(0x202F) + u"]+";
-    StringList sl = txt.split(std::regex(regex.toStdString()), mu::SkipEmptyParts);
+    StringList sl = txt.split(std::regex(regex.toStdString()), muse::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }

@@ -32,7 +32,7 @@ namespace mu::engraving::apiv1 {
 //! NOTE This API is used in `js` scripts of macros
 //! It repeats the API of the qml plugin.
 //! It is also available as `api.engraving.`
-class EngravingApiV1 : public mu::api::ApiObject, public muse::extensions::apiv1::IApiV1Object
+class EngravingApiV1 : public muse::api::ApiObject, public muse::extensions::apiv1::IApiV1Object
 {
     Q_OBJECT
 
@@ -70,7 +70,7 @@ class EngravingApiV1 : public mu::api::ApiObject, public muse::extensions::apiv1
     Q_PROPERTY(apiv1::Enum * HarmonyType READ harmonyTypeEnum CONSTANT)
 
 public:
-    EngravingApiV1(mu::api::IApiEngine* e);
+    EngravingApiV1(muse::api::IApiEngine* e);
     ~EngravingApiV1();
 
     void setup(QJSValue globalObject) override;

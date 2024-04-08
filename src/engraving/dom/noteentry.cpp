@@ -45,6 +45,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::engraving;
 
@@ -390,7 +391,7 @@ Ret Score::putNote(const Position& p, bool replace)
     if (mu::engraving::Excerpt* excerpt = score()->excerpt()) {
         const TracksMap& tracks = excerpt->tracksMapping();
 
-        if (!tracks.empty() && mu::key(tracks, m_is.track(), mu::nidx) == mu::nidx) {
+        if (!tracks.empty() && muse::key(tracks, m_is.track(), muse::nidx) == muse::nidx) {
             return make_ret(Ret::Code::UnknownError);
         }
     }
@@ -406,10 +407,10 @@ Ret Score::putNote(const Position& p, bool replace)
     Measure* m = m_is.segment()->measure();
     staff_idx_t staffIdx = track2staff(m_is.track());
     if (m->isMeasureRepeatGroup(staffIdx)) {
-        auto b = MessageBox::warning(mu::trc("engraving", "Note input will remove measure repeat"),
-                                     mu::trc("engraving", "This measure contains a measure repeat."
-                                                          " If you enter notes here, it will be deleted."
-                                                          " Do you want to continue?"));
+        auto b = MessageBox::warning(muse::trc("engraving", "Note input will remove measure repeat"),
+                                     muse::trc("engraving", "This measure contains a measure repeat."
+                                                            " If you enter notes here, it will be deleted."
+                                                            " Do you want to continue?"));
         if (b == MessageBox::Cancel) {
             return make_ret(Ret::Code::Cancel);
         }
@@ -484,7 +485,7 @@ Ret Score::putNote(const Position& p, bool replace)
                         int tpc2 = note->tpc2default(nval.pitch);
                         undoChangeFretting(note, nval.pitch, nval.string, nval.fret, tpc1, tpc2);
                         setPlayNote(true);
-                        return mu::make_ok();
+                        return muse::make_ok();
                     }
                 }
             } else {                            // not TAB
@@ -495,7 +496,7 @@ Ret Score::putNote(const Position& p, bool replace)
                     if (chord->notes().size() > 1) {
                         undoRemoveElement(note);
                     }
-                    return mu::make_ok();
+                    return muse::make_ok();
                 }
             }
             addToChord = true;                  // if no special case, add note to chord
@@ -507,7 +508,7 @@ Ret Score::putNote(const Position& p, bool replace)
         forceAccidental = (nval.pitch == nval2.pitch);
     }
 
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     if (addToChord && cr->isChord()) {
         // if adding, add!
@@ -605,7 +606,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
         if (next) {
             m_is.moveInputPos(next->segment());
         }
-        return mu::make_ok();
+        return muse::make_ok();
     } else {
         chord = toChord(cr);
     }
@@ -696,7 +697,7 @@ Ret Score::repitchNote(const Position& p, bool replace)
         m_is.moveInputPos(next->segment());
     }
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 
 //---------------------------------------------------------
@@ -818,6 +819,6 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
     p.segment = s;
     putNote(p, true);
 
-    return mu::make_ok();
+    return muse::make_ok();
 }
 } // namespace mu::engraving

@@ -65,7 +65,7 @@ void DrumsetPalette::setNotation(INotationPtr notation)
 
 void DrumsetPalette::retranslate()
 {
-    m_drumPalette->setName(mu::qtrc("palette", "Drumset"));
+    m_drumPalette->setName(muse::qtrc("palette", "Drumset"));
 }
 
 void DrumsetPalette::updateDrumset()
@@ -278,7 +278,7 @@ bool DrumsetPalette::handleEvent(QEvent* event)
     return QWidget::event(event);
 }
 
-mu::async::Channel<QString> DrumsetPalette::pitchNameChanged() const
+muse::async::Channel<QString> DrumsetPalette::pitchNameChanged() const
 {
     return m_pitchNameChanged;
 }

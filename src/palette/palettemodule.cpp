@@ -52,7 +52,8 @@
 #include "view/widgets/timedialog.h"
 
 using namespace mu::palette;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::ui;
 using namespace muse::accessibility;
 

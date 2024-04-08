@@ -30,7 +30,7 @@ using namespace muse::actions;
 InstrumentNameSettingsModel::InstrumentNameSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(mu::qtrc("inspector", "Instrument names"));
+    setTitle(muse::qtrc("inspector", "Instrument names"));
     setModelType(InspectorModelType::TYPE_INSTRUMENT_NAME);
 }
 

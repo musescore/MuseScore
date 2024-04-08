@@ -32,6 +32,7 @@
 #include "defer.h"
 #include "log.h"
 
+using namespace muse;
 using namespace muse::midi;
 
 struct muse::midi::CoreMidiOutPort::Core {
@@ -168,7 +169,7 @@ MidiDeviceList CoreMidiOutPort::availableDevices() const
 {
     MidiDeviceList ret;
 
-    ret.push_back({ NONE_DEVICE_ID, mu::trc("midi", "No device") });
+    ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
 
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     ItemCount destinations = MIDIGetNumberOfDestinations();
@@ -203,12 +204,12 @@ MidiDeviceList CoreMidiOutPort::availableDevices() const
     return ret;
 }
 
-mu::async::Notification CoreMidiOutPort::availableDevicesChanged() const
+async::Notification CoreMidiOutPort::availableDevicesChanged() const
 {
     return m_availableDevicesChanged;
 }
 
-mu::Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
+Ret CoreMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
     DEFER {
         m_deviceChanged.notify();
@@ -274,7 +275,7 @@ std::string CoreMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
-mu::async::Notification CoreMidiOutPort::deviceChanged() const
+async::Notification CoreMidiOutPort::deviceChanged() const
 {
     return m_deviceChanged;
 }
@@ -300,7 +301,7 @@ static ByteCount packetListSize(const std::vector<Event>& events)
     return offsetof(MIDIPacketList, packet) + events.size() * (offsetof(MIDIPacket, data) + eventSize);
 }
 
-mu::Ret CoreMidiOutPort::sendEvent(const Event& e)
+Ret CoreMidiOutPort::sendEvent(const Event& e)
 {
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);

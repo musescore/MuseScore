@@ -42,7 +42,7 @@ Drumset* smDrumset = nullptr;           // standard midi drumset
 
 String Drumset::translatedName(int pitch) const
 {
-    return mtrc("engraving/drumset", name(pitch));
+    return muse::mtrc("engraving/drumset", name(pitch));
 }
 
 //---------------------------------------------------------

@@ -42,32 +42,32 @@ class Score;
 
 class ImageStoreItem
 {
-    INJECT(ICryptographicHash, cryptographicHash)
+    INJECT(muse::ICryptographicHash, cryptographicHash)
 
 public:
-    ImageStoreItem(const io::path_t& p);
+    ImageStoreItem(const muse::io::path_t& p);
     void dereference(Image*);
     void reference(Image*);
 
-    const io::path_t& path() const { return m_path; }
-    mu::ByteArray& buffer() { return m_buffer; }
-    const mu::ByteArray& buffer() const { return m_buffer; }
+    const muse::io::path_t& path() const { return m_path; }
+    muse::ByteArray& buffer() { return m_buffer; }
+    const muse::ByteArray& buffer() const { return m_buffer; }
     bool loaded() const { return !m_buffer.empty(); }
-    void setPath(const io::path_t& val);
+    void setPath(const muse::io::path_t& val);
     bool isUsed(Score*) const;
     bool isUsed() const { return !m_references.empty(); }
     void load();
-    String hashName() const;
-    const mu::ByteArray& hash() const { return m_hash; }
-    void set(const mu::ByteArray& b, const mu::ByteArray& h) { m_buffer = b; m_hash = h; }
+    muse::String hashName() const;
+    const muse::ByteArray& hash() const { return m_hash; }
+    void set(const muse::ByteArray& b, const muse::ByteArray& h) { m_buffer = b; m_hash = h; }
 
 private:
 
     std::list<Image*> m_references;
-    io::path_t m_path;                  // original location of image
-    String m_type;                      // image type (file extension)
-    mu::ByteArray m_buffer;
-    mu::ByteArray m_hash;               // 16 byte md4 hash of _buffer
+    muse::io::path_t m_path;                  // original location of image
+    muse::String m_type;                      // image type (file extension)
+    muse::ByteArray m_buffer;
+    muse::ByteArray m_hash;               // 16 byte md4 hash of _buffer
 };
 
 //---------------------------------------------------------
@@ -76,7 +76,7 @@ private:
 
 class ImageStore
 {
-    INJECT(ICryptographicHash, cryptographicHash)
+    INJECT(muse::ICryptographicHash, cryptographicHash)
 
 public:
     ImageStore() = default;
@@ -84,8 +84,8 @@ public:
     ImageStore& operator=(const ImageStore&) = delete;
     ~ImageStore();
 
-    ImageStoreItem* getImage(const io::path_t& path) const;
-    ImageStoreItem* add(const io::path_t& path, const mu::ByteArray&);
+    ImageStoreItem* getImage(const muse::io::path_t& path) const;
+    ImageStoreItem* add(const muse::io::path_t& path, const muse::ByteArray&);
     void clearUnused();
 
     typedef std::vector<ImageStoreItem*> ItemList;

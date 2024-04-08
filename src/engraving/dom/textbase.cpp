@@ -184,7 +184,7 @@ std::pair<size_t, size_t> TextCursor::positionToLocalCoord(int position) const
 {
     const TextBase::LayoutData* ldata = m_text->ldata();
     IF_ASSERT_FAILED(ldata) {
-        return { mu::nidx, mu::nidx };
+        return { muse::nidx, muse::nidx };
     }
 
     int currentPosition = 0;
@@ -199,7 +199,7 @@ std::pair<size_t, size_t> TextCursor::positionToLocalCoord(int position) const
         }
     }
 
-    return { mu::nidx, mu::nidx };
+    return { muse::nidx, muse::nidx };
 }
 
 int TextCursor::currentPosition() const
@@ -834,7 +834,7 @@ void TextFragment::draw(Painter* p, const TextBase* t) const
 //   drawTextWorkaround
 //---------------------------------------------------------
 
-void TextBase::drawTextWorkaround(Painter* p, Font& f, const mu::PointF& pos, const String& text)
+void TextBase::drawTextWorkaround(Painter* p, Font& f, const PointF& pos, const String& text)
 {
     double mm = p->worldTransform().m11();
     if (!(MScore::pdfPrinting) && (mm < 1.0) && f.bold() && !(f.underline() || f.strike())) {
@@ -1596,7 +1596,7 @@ TextBlock TextBlock::split(int column, TextCursor* cursor)
 
 static String toSymbolXml(Char c)
 {
-    static std::shared_ptr<IEngravingFontsProvider> provider = modularity::ioc()->resolve<IEngravingFontsProvider>("engraving");
+    static std::shared_ptr<IEngravingFontsProvider> provider = muse::modularity::ioc()->resolve<IEngravingFontsProvider>("engraving");
 
     SymId symId = provider->fallbackFont()->fromCode(c.unicode());
     return u"<sym>" + String::fromAscii(SymNames::nameForSymId(symId).ascii()) + u"</sym>";
@@ -2635,7 +2635,7 @@ bool TextBase::validateText(String& s)
     }
 
     String ss = u"<data>" + d + u"</data>\n";
-    ByteArray ba = ss.toUtf8();
+    muse::ByteArray ba = ss.toUtf8();
     XmlReader xml(ba);
     while (xml.readNextStartElement()) {
         // LOGD("  token %d <%s>", int(xml.tokenType()), muPrintable(xml.name().toString()));
@@ -2994,7 +2994,7 @@ void TextBase::notifyAboutTextCursorChanged()
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     using namespace muse::accessibility;
     if (accessible()) {
-        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextCursor, Val());
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextCursor, muse::Val());
     }
 #endif
 }
@@ -3005,7 +3005,7 @@ void TextBase::notifyAboutTextInserted(int startPosition, int endPosition, const
     using namespace muse::accessibility;
     if (accessible()) {
         auto range = IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextInsert, Val::fromQVariant(range.toMap()));
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextInsert, muse::Val::fromQVariant(range.toMap()));
     }
 #else
     UNUSED(startPosition);
@@ -3020,7 +3020,7 @@ void TextBase::notifyAboutTextRemoved(int startPosition, int endPosition, const 
     using namespace muse::accessibility;
     if (accessible()) {
         auto range = IAccessible::TextRange(startPosition, endPosition, text);
-        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextRemove, Val::fromQVariant(range.toMap()));
+        accessible()->accessiblePropertyChanged().send(IAccessible::Property::TextRemove, muse::Val::fromQVariant(range.toMap()));
     }
 #else
     UNUSED(startPosition);
@@ -3446,7 +3446,7 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         Pid::TEXT_SCRIPT_ALIGN
     };
 
-    if (!mu::contains(CHARACTER_SPECIFIC_PROPERTIES, id)) {
+    if (!muse::contains(CHARACTER_SPECIFIC_PROPERTIES, id)) {
         EngravingItem::undoChangeProperty(id, v, ps);
         return;
     }

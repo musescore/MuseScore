@@ -29,7 +29,7 @@
 #include "inotationconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 
-namespace mu {
+namespace muse {
 class TranslatableString;
 }
 
@@ -62,8 +62,8 @@ signals:
 private:
     muse::uicomponents::MenuItem* makeViewMenu();
 
-    muse::uicomponents::MenuItem* makeKeyWidthScalingItem(const TranslatableString& title, qreal scaling);
-    muse::uicomponents::MenuItem* makeNumberOfKeysItem(const TranslatableString& title, int numberOfKeys);
+    muse::uicomponents::MenuItem* makeKeyWidthScalingItem(const muse::TranslatableString& title, qreal scaling);
+    muse::uicomponents::MenuItem* makeNumberOfKeysItem(const muse::TranslatableString& title, int numberOfKeys);
 
     void updateKeyWidthScalingItems();
 

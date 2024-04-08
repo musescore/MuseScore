@@ -23,6 +23,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace muse;
 
 static inline bool isIndexInRange(int index, int start, int end)
 {

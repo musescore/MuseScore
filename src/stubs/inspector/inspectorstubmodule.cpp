@@ -25,7 +25,7 @@
 #include "ui/iuiengine.h"
 
 using namespace mu::inspector;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static void inspector_init_qrc()
 {

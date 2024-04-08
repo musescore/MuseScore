@@ -55,19 +55,19 @@ public:
     double horizontalAdvance(const Font& f, const char32_t& ch) const override;
     double horizontalAdvance(const Font& f, const std::u32string& text) const override;
 
-    mu::RectF boundingRect(const Font& f, const char32_t& ch) const override;
-    mu::RectF boundingRect(const Font& f, const std::u32string& text) const override;
-    mu::RectF tightBoundingRect(const Font& f, const std::u32string& text) const override;
+    RectF boundingRect(const Font& f, const char32_t& ch) const override;
+    RectF boundingRect(const Font& f, const std::u32string& text) const override;
+    RectF tightBoundingRect(const Font& f, const std::u32string& text) const override;
 
     // Score symbols
-    mu::RectF symBBox(const Font& f, char32_t ucs4) const override;
+    RectF symBBox(const Font& f, char32_t ucs4) const override;
     double symAdvance(const Font& f, char32_t ucs4) const override;
 
     // For draw
     std::vector<GlyphImage> render(const Font& f, const std::u32string& text) const override;
 
     // For dev
-    using FontFaceFactory = std::function<IFontFace* (const mu::io::path_t&)>;
+    using FontFaceFactory = std::function<IFontFace* (const io::path_t&)>;
     void setFontFaceFactory(const FontFaceFactory& f);
 
 private:
@@ -86,7 +86,7 @@ private:
         double pixelScale() const;
     };
 
-    IFontFace* createFontFace(const mu::io::path_t& path) const;
+    IFontFace* createFontFace(const io::path_t& path) const;
     RequireFace* fontFace(const Font& f, bool isSymbolMode = false) const;
 
     std::vector<TextBlock> splitTextByLines(const std::u32string& text) const;

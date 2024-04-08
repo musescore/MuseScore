@@ -149,7 +149,7 @@ void ExcerptNotation::undoSetName(const QString& name)
     notifyAboutNotationChanged();
 }
 
-mu::async::Notification ExcerptNotation::nameChanged() const
+muse::async::Notification ExcerptNotation::nameChanged() const
 {
     return m_excerpt->nameChanged();
 }
@@ -159,7 +159,7 @@ bool ExcerptNotation::hasFileName() const
     return m_excerpt->hasFileName();
 }
 
-const mu::String& ExcerptNotation::fileName() const
+const muse::String& ExcerptNotation::fileName() const
 {
     return m_excerpt->fileName();
 }

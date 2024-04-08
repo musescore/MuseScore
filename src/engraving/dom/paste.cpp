@@ -58,7 +58,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -343,7 +343,7 @@ static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
     return true;
 }
 
-inline static bool canPasteStaff(const ByteArray& mimeData, const Fraction& scale)
+inline static bool canPasteStaff(const muse::ByteArray& mimeData, const Fraction& scale)
 {
     XmlReader reader(mimeData);
     return canPasteStaff(reader, scale);
@@ -363,7 +363,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
         return {};
     }
     if ((m_selection.isSingle() || m_selection.isList()) && ms->hasFormat(mimeSymbolFormat)) {
-        ByteArray data = ms->data(mimeSymbolFormat);
+        muse::ByteArray data = ms->data(mimeSymbolFormat);
 
         PointF dragOffset;
         Fraction duration(1, 4);
@@ -426,7 +426,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             MScore::setError(MsError::DEST_TUPLET);
             return {};
         } else {
-            ByteArray data = ms->data(mimeStaffListFormat);
+            muse::ByteArray data = ms->data(mimeStaffListFormat);
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -457,7 +457,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             MScore::setError(MsError::NO_DEST);
             return {};
         } else {
-            ByteArray data = ms->data(mimeSymbolListFormat);
+            muse::ByteArray data = ms->data(mimeSymbolListFormat);
             if (MScore::debugMode) {
                 LOGD("paste <%s>", data.data());
             }
@@ -465,7 +465,7 @@ std::vector<EngravingItem*> Score::cmdPaste(const IMimeData* ms, MuseScoreView* 
             pasteSymbols(e, cr);
         }
     } else if (ms->hasImage()) {
-        ByteArray ba;
+        muse::ByteArray ba;
         Buffer buffer(&ba);
         buffer.open(IODevice::WriteOnly);
 

@@ -26,17 +26,17 @@
 
 namespace muse::update {
 enum class Err {
-    Undefined       = int(Ret::Code::Undefined),
-    NoError         = int(Ret::Code::Ok),
-    UnknownError    = int(Ret::Code::UpdateFirst),
+    Undefined       = int(muse::Ret::Code::Undefined),
+    NoError         = int(muse::Ret::Code::Ok),
+    UnknownError    = int(muse::Ret::Code::UpdateFirst),
 
     NoUpdate,
     NetworkError
 };
 
-inline mu::Ret make_ret(Err e)
+inline muse::Ret make_ret(Err e)
 {
-    return Ret(static_cast<int>(e));
+    return muse::Ret(static_cast<int>(e));
 }
 }
 

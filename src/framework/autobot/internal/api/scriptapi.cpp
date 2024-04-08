@@ -25,7 +25,7 @@
 
 using namespace muse::autobot;
 
-ScriptApi::ScriptApi(mu::api::IApiEngine* engine, QObject* parent)
+ScriptApi::ScriptApi(muse::api::IApiEngine* engine, QObject* parent)
     : QObject(parent), m_engine(engine)
 {
 }

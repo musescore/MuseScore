@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_APIUTILS_H
-#define MU_API_APIUTILS_H
+#ifndef MUSE_API_APIUTILS_H
+#define MUSE_API_APIUTILS_H
 
 #include <string>
 #include <vector>
 #include <QString>
 
-namespace mu::api {
+namespace muse::api {
 inline std::vector<std::string> toStdVector(const QStringList& l)
 {
     std::vector<std::string> v;
@@ -38,4 +38,4 @@ inline std::vector<std::string> toStdVector(const QStringList& l)
 }
 }
 
-#endif // MU_API_APIUTILS_H
+#endif // MUSE_API_APIUTILS_H

@@ -28,7 +28,7 @@
 
 namespace mu::iex::musicxml {
 class MusicXmlConfiguration;
-class MusicXmlModule : public modularity::IModuleSetup
+class MusicXmlModule : public muse::modularity::IModuleSetup
 {
 public:
 
@@ -36,7 +36,7 @@ public:
     void registerResources() override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode&) override;
+    void onInit(const muse::IApplication::RunMode&) override;
 
 private:
     std::shared_ptr<MusicXmlConfiguration> m_configuration;

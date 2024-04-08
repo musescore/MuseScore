@@ -44,14 +44,14 @@ public:
 
     virtual ~INotationSoloMuteState() = default;
 
-    virtual Ret read(const engraving::MscReader& reader, const io::path_t& pathPrefix = "") = 0;
-    virtual Ret write(io::IODevice* out) = 0;
+    virtual muse::Ret read(const engraving::MscReader& reader, const muse::io::path_t& pathPrefix = "") = 0;
+    virtual muse::Ret write(muse::io::IODevice* out) = 0;
 
     virtual bool trackSoloMuteStateExists(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) = 0;
     virtual void removeTrackSoloMuteState(const engraving::InstrumentTrackId& trackId) = 0;
-    virtual async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const = 0;
+    virtual muse::async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const = 0;
 };
 
 using INotationSoloMuteStatePtr = std::shared_ptr<INotationSoloMuteState>;

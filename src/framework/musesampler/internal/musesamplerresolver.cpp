@@ -28,8 +28,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::musesampler;

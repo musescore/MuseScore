@@ -27,7 +27,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 static String translate(const char* context, const char* key, const char* disambiguation, int n)
 {
@@ -41,24 +41,24 @@ static String translate(const char* context, const char* key, const char* disamb
 #endif
 }
 
-std::string mu::trc(const char* context, const char* key, const char* disambiguation, int n)
+std::string muse::trc(const char* context, const char* key, const char* disambiguation, int n)
 {
     return translate(context, key, disambiguation, n).toStdString();
 }
 
 #ifndef NO_QT_SUPPORT
-QString mu::qtrc(const char* context, const char* key, const char* disambiguation, int n)
+QString muse::qtrc(const char* context, const char* key, const char* disambiguation, int n)
 {
     return QCoreApplication::translate(context, key, disambiguation, n);
 }
 
-QString mu::qtrc(const char* context, const String& key, const char* disambiguation, int n)
+QString muse::qtrc(const char* context, const String& key, const char* disambiguation, int n)
 {
     ByteArray utf8 = key.toUtf8();
     return QCoreApplication::translate(context, utf8.constChar(), disambiguation, n);
 }
 
-QString mu::qtrc(const char* context, const String& key, const String& disambiguation, int n)
+QString muse::qtrc(const char* context, const String& key, const String& disambiguation, int n)
 {
     ByteArray keyutf8 = key.toUtf8();
     ByteArray disutf8 = disambiguation.toUtf8();
@@ -67,18 +67,18 @@ QString mu::qtrc(const char* context, const String& key, const String& disambigu
 
 #endif
 
-String mu::mtrc(const char* context, const char* key, const char* disambiguation, int n)
+String muse::mtrc(const char* context, const char* key, const char* disambiguation, int n)
 {
     return translate(context, key, disambiguation, n);
 }
 
-String mu::mtrc(const char* context, const String& key, const char* disambiguation, int n)
+String muse::mtrc(const char* context, const String& key, const char* disambiguation, int n)
 {
     ByteArray keyutf8 = key.toUtf8();
     return translate(context, keyutf8.constChar(), disambiguation, n);
 }
 
-String mu::mtrc(const char* context, const String& key, const String& disambiguation, int n)
+String muse::mtrc(const char* context, const String& key, const String& disambiguation, int n)
 {
     ByteArray keyutf8 = key.toUtf8();
     ByteArray disutf8 = disambiguation.toUtf8();

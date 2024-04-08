@@ -32,7 +32,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 constexpr unsigned char U8_BOM[] = { 239, 187, 191 };
 constexpr unsigned char U16LE_BOM[] = { 255, 254 };
@@ -297,7 +297,7 @@ String::String(const Char* unicode, size_t size)
 
     static_assert(sizeof(Char) == sizeof(char16_t));
     const char16_t* str = reinterpret_cast<const char16_t*>(unicode);
-    if (size == mu::nidx) {
+    if (size == muse::nidx) {
         m_data = std::make_shared<std::u16string>(str);
     } else {
         m_data = std::make_shared<std::u16string>(str, size);
@@ -536,7 +536,7 @@ String String::fromAscii(const char* str, size_t size)
         return String();
     }
 
-    size = (size == mu::nidx) ? std::strlen(str) : size;
+    size = (size == muse::nidx) ? std::strlen(str) : size;
     String s;
     std::u16string& data = s.mutStr();
     data.resize(size);
@@ -588,7 +588,7 @@ std::u16string String::toStdU16String() const
 String String::fromUcs4(const char32_t* str, size_t size)
 {
     std::u32string_view v32;
-    if (size == mu::nidx) {
+    if (size == muse::nidx) {
         v32 = std::u32string_view(str);
     } else {
         v32 = std::u32string_view(str, size);
@@ -714,7 +714,7 @@ size_t String::indexOf(const Char& ch, size_t from) const
             return i;
         }
     }
-    return mu::nidx;
+    return muse::nidx;
 }
 
 size_t String::indexOf(const String& str, size_t from) const
@@ -736,7 +736,7 @@ size_t String::lastIndexOf(const Char& ch, size_t from) const
             return i;
         }
     }
-    return mu::nidx;
+    return muse::nidx;
 }
 
 bool String::startsWith(const String& str, CaseSensitivity cs) const
@@ -1011,7 +1011,7 @@ void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>&
 {
     struct Part {
         std::u16string_view substr;
-        size_t argIdxToInsertAfter = mu::nidx;
+        size_t argIdxToInsertAfter = muse::nidx;
     };
 
     const std::u16string& str = constStr();
@@ -1042,7 +1042,7 @@ void String::doArgs(std::u16string& out, const std::vector<std::u16string_view>&
                 out += substr;
             }
 
-            if (argIdxToInsertAfter != mu::nidx) {
+            if (argIdxToInsertAfter != muse::nidx) {
                 if (argIdxToInsertAfter < args.size()) {
                     out += args.at(argIdxToInsertAfter);
                 } else {
@@ -1405,7 +1405,7 @@ AsciiChar AsciiStringView::at(size_t i) const
 
 bool AsciiStringView::contains(char ch) const
 {
-    return indexOf(ch) != mu::nidx;
+    return indexOf(ch) != muse::nidx;
 }
 
 size_t AsciiStringView::indexOf(char ch) const
@@ -1415,7 +1415,7 @@ size_t AsciiStringView::indexOf(char ch) const
             return i;
         }
     }
-    return mu::nidx;
+    return muse::nidx;
 }
 
 int AsciiStringView::toInt(bool* ok, int base) const

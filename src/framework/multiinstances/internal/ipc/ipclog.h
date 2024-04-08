@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_IPC_IPCLOG_H
-#define MU_IPC_IPCLOG_H
+#ifndef MUSE_IPC_IPCLOG_H
+#define MUSE_IPC_IPCLOG_H
 
 #include "log.h"
 
@@ -34,4 +34,4 @@
 #define IPCLOG() LOGN()
 #endif
 
-#endif // MU_IPC_IPCLOG_H
+#endif // MUSE_IPC_IPCLOG_H

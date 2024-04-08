@@ -50,47 +50,47 @@ enum class Err {
     IgnoreError = 2012
 };
 
-inline Ret make_ret(Err err, const io::path_t& filePath = "")
+inline muse::Ret make_ret(Err err, const muse::io::path_t& filePath = "")
 {
-    String text;
+    muse::String text;
 
     switch (err) {
     case Err::NoError:
-        return mu::make_ok();
+        return muse::make_ok();
     case Err::FileUnknownError:
-        text = mtrc("engraving", "Unknown error");
+        text = muse::mtrc("engraving", "Unknown error");
         break;
     case Err::FileNotFound:
-        text = mtrc("engraving", "File “%1” not found").arg(filePath.toString());
+        text = muse::mtrc("engraving", "File “%1” not found").arg(filePath.toString());
         break;
     case Err::FileOpenError:
-        text = mtrc("engraving", "File open error");
+        text = muse::mtrc("engraving", "File open error");
         break;
     case Err::FileBadFormat:
-        text = mtrc("engraving", "Bad format");
+        text = muse::mtrc("engraving", "Bad format");
         break;
     case Err::FileUnknownType:
-        text = mtrc("engraving", "Unknown filetype");
+        text = muse::mtrc("engraving", "Unknown filetype");
         break;
     case Err::FileTooOld:
-        text = mtrc("engraving", "This file was last saved in a version older than 2.0.0. "
-                                 "You can convert this score by opening and then "
-                                 "saving in MuseScore version 2.x. "
-                                 "Visit the <a href=\"%1\">MuseScore download page</a> to obtain such a 2.x version.")
+        text = muse::mtrc("engraving", "This file was last saved in a version older than 2.0.0. "
+                                       "You can convert this score by opening and then "
+                                       "saving in MuseScore version 2.x. "
+                                       "Visit the <a href=\"%1\">MuseScore download page</a> to obtain such a 2.x version.")
                .arg(u"https://musescore.org/download#older-versions");
         break;
     case Err::FileTooNew:
-        text = mtrc("engraving", "This file was saved using a newer version of MuseScore. "
-                                 "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version.");
+        text = muse::mtrc("engraving", "This file was saved using a newer version of MuseScore. "
+                                       "Please visit <a href=\"https://musescore.org\">musescore.org</a> to obtain the latest version.");
         break;
     case Err::FileOld300Format:
-        text = mtrc("engraving", "This file was last saved in a development version of 3.0.");
+        text = muse::mtrc("engraving", "This file was last saved in a development version of 3.0.");
         break;
     case Err::FileCorrupted:
-        text = mtrc("engraving", "File “%1” is corrupted.").arg(filePath.toString());
+        text = muse::mtrc("engraving", "File “%1” is corrupted.").arg(filePath.toString());
         break;
     case Err::FileCriticallyCorrupted:
-        text = mtrc("engraving", "File “%1” is critically corrupted and cannot be processed.").arg(filePath.toString());
+        text = muse::mtrc("engraving", "File “%1” is critically corrupted and cannot be processed.").arg(filePath.toString());
         break;
     case Err::Undefined:
     case Err::UnknownError:
@@ -99,7 +99,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         break;
     }
 
-    return mu::Ret(static_cast<int>(err), text.toStdString());
+    return muse::Ret(static_cast<int>(err), text.toStdString());
 }
 }
 

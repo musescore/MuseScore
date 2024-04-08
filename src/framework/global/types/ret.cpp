@@ -22,7 +22,7 @@
 
 #include "ret.h"
 
-using namespace mu;
+using namespace muse;
 
 Ret::Ret(bool arg)
     : m_code(arg ? int(Code::Ok) : int(Code::UnknownError))

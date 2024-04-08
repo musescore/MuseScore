@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::midi;
 
 MidiDevicesListener::~MidiDevicesListener()
@@ -57,7 +58,7 @@ void MidiDevicesListener::stop()
     m_devicesUpdateThread = nullptr;
 }
 
-mu::async::Notification MidiDevicesListener::devicesChanged() const
+async::Notification MidiDevicesListener::devicesChanged() const
 {
     return m_devicesChanged;
 }

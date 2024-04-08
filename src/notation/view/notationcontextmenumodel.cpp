@@ -28,6 +28,7 @@
 #include "view/widgets/editstyle.h"
 
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::uicomponents;
 using namespace muse::actions;
 

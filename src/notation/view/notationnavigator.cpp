@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::notation;
 
 NotationNavigatorCursorView::NotationNavigatorCursorView(QQuickItem* parent)
@@ -72,7 +73,7 @@ void NotationNavigator::load()
 
 bool NotationNavigator::isVerticalOrientation() const
 {
-    return configuration()->canvasOrientation().val == mu::Orientation::Vertical;
+    return configuration()->canvasOrientation().val == muse::Orientation::Vertical;
 }
 
 PageList NotationNavigator::pages() const
@@ -230,8 +231,8 @@ INotationPtr NotationNavigator::currentNotation() const
 
 void NotationNavigator::initOrientation()
 {
-    ValCh<mu::Orientation> orientation = configuration()->canvasOrientation();
-    orientation.ch.onReceive(this, [this](mu::Orientation) {
+    ValCh<muse::Orientation> orientation = configuration()->canvasOrientation();
+    orientation.ch.onReceive(this, [this](muse::Orientation) {
         moveCanvasToPosition(PointF(0, 0));
         emit orientationChanged();
     });

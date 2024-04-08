@@ -27,6 +27,7 @@
 #include "types/translatablestring.h"
 
 using namespace mu::instrumentsscene;
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::actions;
 
@@ -60,12 +61,12 @@ bool InstrumentsUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> InstrumentsUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> InstrumentsUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> InstrumentsUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> InstrumentsUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

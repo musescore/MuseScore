@@ -24,7 +24,7 @@
 using namespace mu;
 
 namespace mu::braille {
-async::Notification BrailleConfigurationStub::braillePanelEnabledChanged() const
+muse::async::Notification BrailleConfigurationStub::braillePanelEnabledChanged() const
 {
     return {};
 }
@@ -38,7 +38,7 @@ void BrailleConfigurationStub::setBraillePanelEnabled(const bool)
 {
 }
 
-async::Notification BrailleConfigurationStub::intervalDirectionChanged() const
+muse::async::Notification BrailleConfigurationStub::intervalDirectionChanged() const
 {
     return {};
 }
@@ -52,7 +52,7 @@ void BrailleConfigurationStub::setIntervalDirection(const BrailleIntervalDirecti
 {
 }
 
-async::Notification BrailleConfigurationStub::brailleTableChanged() const
+muse::async::Notification BrailleConfigurationStub::brailleTableChanged() const
 {
     return {};
 }

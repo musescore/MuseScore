@@ -28,6 +28,7 @@
 
 #include "log.h"
 
+using namespace muse::modularity;
 using namespace mu::iex::bb;
 using namespace mu::project;
 
@@ -38,7 +39,7 @@ std::string BBModule::moduleName() const
 
 void BBModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mgu", "sgu" }, std::make_shared<NotationBBReader>());
     }

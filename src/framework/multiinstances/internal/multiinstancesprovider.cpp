@@ -30,18 +30,18 @@
 #include "settings.h"
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::mi;
-using namespace mu::ipc;
+using namespace muse::ipc;
 using namespace muse::actions;
 
-static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
+static const muse::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
 static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_PROJECT("ACTIVATE_WINDOW_WITH_PROJECT");
 static const QString METHOD_IS_WITHOUT_PROJECT("IS_WITHOUT_PROJECT");
 static const QString METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT("METHOD_ACTIVATE_WINDOW_WITHOUT_PROJECT");
 
-static const mu::Uri PREFERENCES_URI("musescore://preferences");
+static const muse::Uri PREFERENCES_URI("musescore://preferences");
 static const QString METHOD_PREFERENCES_IS_OPENED("PREFERENCES_IS_OPENED");
 static const QString METHOD_ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES("ACTIVATE_WINDOW_WITH_OPENED_PREFERENCES");
 static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTION");
@@ -357,7 +357,7 @@ void MultiInstancesProvider::settingsSetValue(const std::string& key, const Val&
     m_ipcChannel->broadcast(METHOD_SETTINGS_SET_VALUE, args);
 }
 
-mu::ipc::IpcLock* MultiInstancesProvider::lock(const std::string& name)
+muse::ipc::IpcLock* MultiInstancesProvider::lock(const std::string& name)
 {
     auto it = m_locks.find(name);
     if (it != m_locks.end()) {
@@ -389,7 +389,7 @@ void MultiInstancesProvider::notifyAboutResourceChanged(const std::string& name)
     m_ipcChannel->broadcast(METHOD_RESOURCE_CHANGED, args);
 }
 
-mu::async::Channel<std::string> MultiInstancesProvider::resourceChanged()
+async::Channel<std::string> MultiInstancesProvider::resourceChanged()
 {
     return m_resourceChanged;
 }
@@ -417,7 +417,7 @@ std::vector<InstanceMeta> MultiInstancesProvider::instances() const
     return ret;
 }
 
-mu::async::Notification MultiInstancesProvider::instancesChanged() const
+async::Notification MultiInstancesProvider::instancesChanged() const
 {
     return m_instancesChanged;
 }

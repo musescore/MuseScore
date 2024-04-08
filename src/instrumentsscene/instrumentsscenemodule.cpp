@@ -42,7 +42,8 @@
 #include "instrumentsscenetypes.h"
 
 using namespace mu::instrumentsscene;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::ui;
 
 static void instrumentsscene_init_qrc()

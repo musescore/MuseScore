@@ -30,7 +30,7 @@
 #include "log.h"
 #include "networkerrors.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::network;
 
 static constexpr int NET_TIMEOUT_MS = 60000;
@@ -284,7 +284,7 @@ Ret NetworkManager::errorFromReply(const QNetworkReply* reply) const
         return make_ret(Err::NetworkError);
     }
 
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     if (reply->error() != QNetworkReply::NoError) {
         ret.setCode(static_cast<int>(Err::NetworkError));

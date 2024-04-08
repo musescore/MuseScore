@@ -29,7 +29,7 @@
 namespace mu::engraving {
 class EngravingConfiguration;
 class EngravingFontsProvider;
-class EngravingModule : public modularity::IModuleSetup
+class EngravingModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -39,7 +39,7 @@ public:
     void registerApi() override;
     void registerResources() override;
     void registerUiTypes() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
     void onDestroy() override;
 
 private:

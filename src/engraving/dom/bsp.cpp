@@ -266,7 +266,7 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
 //   climbTree
 //---------------------------------------------------------
 
-void BspTree::climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index)
+void BspTree::climbTree(BspTreeVisitor* visitor, const PointF& pos, int index)
 {
     if (m_nodes.empty()) {
         return;
@@ -300,7 +300,7 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int inde
 //   climbTree
 //---------------------------------------------------------
 
-void BspTree::climbTree(BspTreeVisitor* visitor, const mu::RectF& rec, int index)
+void BspTree::climbTree(BspTreeVisitor* visitor, const RectF& rec, int index)
 {
     if (m_nodes.empty()) {
         return;
@@ -339,7 +339,7 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const mu::RectF& rec, int index
 //   rectForIndex
 //---------------------------------------------------------
 
-mu::RectF BspTree::rectForIndex(int index) const
+RectF BspTree::rectForIndex(int index) const
 {
     if (index <= 0) {
         return m_rect;

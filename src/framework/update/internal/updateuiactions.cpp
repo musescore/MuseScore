@@ -61,12 +61,12 @@ bool UpdateUiActions::actionChecked(const UiAction&) const
     return false;
 }
 
-mu::async::Channel<ActionCodeList> UpdateUiActions::actionEnabledChanged() const
+muse::async::Channel<ActionCodeList> UpdateUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<ActionCodeList> UpdateUiActions::actionCheckedChanged() const
+muse::async::Channel<ActionCodeList> UpdateUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

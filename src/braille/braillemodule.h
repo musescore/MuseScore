@@ -31,7 +31,7 @@ class BrailleConfiguration;
 }
 
 namespace mu::braille {
-class BrailleModule : public modularity::IModuleSetup
+class BrailleModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -39,7 +39,7 @@ public:
     void registerExports() override;
     void registerUiTypes() override;
     void registerResources() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<engraving::BrailleConfiguration> m_brailleConfiguration;

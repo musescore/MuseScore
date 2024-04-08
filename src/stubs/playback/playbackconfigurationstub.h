@@ -41,22 +41,22 @@ public:
 
     bool isMixerSectionVisible(MixerSectionType sectionType) const override;
     void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
-    mu::async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const override;
+    muse::async::Channel<MixerSectionType, bool> isMixerSectionVisibleChanged() const override;
 
     bool isAuxSendVisible(muse::audio::aux_channel_idx_t index) const override;
     void setAuxSendVisible(muse::audio::aux_channel_idx_t index, bool visible) override;
-    async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
+    muse::async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxSendVisibleChanged() const override;
 
     bool isAuxChannelVisible(muse::audio::aux_channel_idx_t index) const override;
     void setAuxChannelVisible(muse::audio::aux_channel_idx_t index, bool visible) const override;
-    async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const override;
+    muse::async::Channel<muse::audio::aux_channel_idx_t, bool> isAuxChannelVisibleChanged() const override;
 
     muse::audio::gain_t defaultAuxSendValue(muse::audio::aux_channel_idx_t index, muse::audio::AudioSourceType sourceType,
-                                            const String& instrumentSoundId) const override;
+                                            const muse::String& instrumentSoundId) const override;
 
     bool muteHiddenInstruments() const override;
     void setMuteHiddenInstruments(bool mute) override;
-    async::Channel<bool> muteHiddenInstrumentsChanged() const override;
+    muse::async::Channel<bool> muteHiddenInstrumentsChanged() const override;
 
     const SoundProfileName& basicSoundProfileName() const override;
     const SoundProfileName& museSoundProfileName() const override;

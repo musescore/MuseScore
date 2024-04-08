@@ -89,8 +89,8 @@ void PageFormat::read206(XmlReader& e)
             e.unknown();
         }
     }
-    double w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
-    double w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
+    double w1 = _size.width() - _oddLeftMargin - _oddRightMargin;
+    double w2 = _size.width() - _evenLeftMargin - _evenRightMargin;
     _printableWidth = std::min(w1, w2);       // silently adjust right margins
 }
 

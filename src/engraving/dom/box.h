@@ -51,7 +51,7 @@ public:
     virtual EngravingItem* drop(EditData&) override;
     virtual void add(EngravingItem* e) override;
 
-    mu::RectF contentRect() const;
+    RectF contentRect() const;
     Spatium boxWidth() const { return m_boxWidth; }
     void setBoxWidth(Spatium val) { m_boxWidth = val; }
     Spatium boxHeight() const { return m_boxHeight; }
@@ -83,7 +83,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
+    std::vector<PointF> gripsPositions(const EditData&) const override { return { PointF() }; }   // overridden in descendants
 
     bool canBeExcludedFromOtherParts() const override { return true; }
     void manageExclusionFromParts(bool exclude) override;
@@ -117,7 +117,7 @@ public:
 
     HBox* clone() const override { return new HBox(*this); }
 
-    mu::RectF drag(EditData&) override;
+    RectF drag(EditData&) override;
 
     bool isMovable() const override;
     void computeMinWidth() override;
@@ -129,7 +129,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
 private:
 
@@ -160,7 +160,7 @@ public:
 
     void startEditDrag(EditData&) override;
 
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 };
 
 //---------------------------------------------------------

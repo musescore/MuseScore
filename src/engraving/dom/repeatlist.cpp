@@ -129,7 +129,7 @@ RepeatList::RepeatList(Score* s)
 
 RepeatList::~RepeatList()
 {
-    DeleteAll(*this);
+    muse::DeleteAll(*this);
 }
 
 //---------------------------------------------------------
@@ -289,7 +289,7 @@ std::vector<RepeatSegment*>::const_iterator RepeatList::findRepeatSegmentFromUTi
 
 void RepeatList::flatten()
 {
-    DeleteAll(*this);
+    muse::DeleteAll(*this);
     clear();
 
     Measure* m = m_score->firstMeasure();
@@ -364,7 +364,7 @@ void RepeatList::collectRepeatListElements()
 
     // Clear out previous listing
     for (const RepeatListElementList& srle : m_rlElements) {
-        DeleteAll(srle);
+        muse::DeleteAll(srle);
     }
     m_rlElements.clear();
 
@@ -433,7 +433,7 @@ void RepeatList::collectRepeatListElements()
                 }
                 // Cross-section of the repeatList
                 std::vector<int> endings = remainder->endings();
-                mu::remove_if(endings, [&volta](const int& ending) {
+                muse::remove_if(endings, [&volta](const int& ending) {
                     return !(volta->hasEnding(ending));
                 });
 
@@ -627,7 +627,7 @@ void RepeatList::collectRepeatListElements()
 ///         "end" will result in end of current section
 ///
 std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> RepeatList::findMarker(
-    String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+    muse::String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
     RepeatListElementList::const_iterator referenceRepeatListElementIt) const
 {
     bool found = false;
@@ -774,7 +774,7 @@ void RepeatList::unwind()
 {
     TRACEFUNC;
 
-    DeleteAll(*this);
+    muse::DeleteAll(*this);
     clear();
     m_jumpsTaken.clear();
 

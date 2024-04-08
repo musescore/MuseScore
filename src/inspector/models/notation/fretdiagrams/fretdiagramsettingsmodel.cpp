@@ -32,7 +32,7 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_FRET_DIAGRAM);
-    setTitle(mu::qtrc("inspector", "Fretboard diagram"));
+    setTitle(muse::qtrc("inspector", "Fretboard diagram"));
     setIcon(muse::ui::IconCode::Code::FRETBOARD_DIAGRAM);
     createProperties();
 }
@@ -85,7 +85,7 @@ void FretDiagramSettingsModel::requestElements()
 void FretDiagramSettingsModel::loadProperties()
 {
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_stringsCount);

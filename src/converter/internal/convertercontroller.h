@@ -45,49 +45,51 @@ class ConverterController : public IConverterController
 public:
     ConverterController() = default;
 
-    Ret fileConvert(const io::path_t& in, const io::path_t& out,
-                    const io::path_t& stylePath = io::path_t(), bool forceMode = false, const String& soundProfile = String()) override;
-    Ret batchConvert(const io::path_t& batchJobFile,
-                     const io::path_t& stylePath = io::path_t(), bool forceMode = false, const String& soundProfile = String()) override;
+    muse::Ret fileConvert(const muse::io::path_t& in, const muse::io::path_t& out,
+                          const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+                          const muse::String& soundProfile = muse::String()) override;
+    muse::Ret batchConvert(const muse::io::path_t& batchJobFile,
+                           const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false,
+                           const muse::String& soundProfile = muse::String()) override;
 
-    Ret convertScoreParts(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath = io::path_t(),
-                          bool forceMode = false) override;
+    muse::Ret convertScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
+                                const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
 
-    Ret exportScoreMedia(const io::path_t& in, const io::path_t& out,
-                         const io::path_t& highlightConfigPath = io::path_t(), const io::path_t& stylePath = io::path_t(),
-                         bool forceMode = false) override;
-    Ret exportScoreMeta(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath = io::path_t(),
-                        bool forceMode = false) override;
-    Ret exportScoreParts(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath = io::path_t(),
-                         bool forceMode = false) override;
-    Ret exportScorePartsPdfs(const io::path_t& in, const io::path_t& out,
-                             const io::path_t& stylePath = io::path_t(), bool forceMode = false) override;
-    Ret exportScoreTranspose(const io::path_t& in, const io::path_t& out, const std::string& optionsJson,
-                             const io::path_t& stylePath = io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScoreMedia(const muse::io::path_t& in, const muse::io::path_t& out,
+                               const muse::io::path_t& highlightConfigPath = muse::io::path_t(),
+                               const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScoreMeta(const muse::io::path_t& in, const muse::io::path_t& out,
+                              const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScoreParts(const muse::io::path_t& in, const muse::io::path_t& out,
+                               const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScorePartsPdfs(const muse::io::path_t& in, const muse::io::path_t& out,
+                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
+    muse::Ret exportScoreTranspose(const muse::io::path_t& in, const muse::io::path_t& out, const std::string& optionsJson,
+                                   const muse::io::path_t& stylePath = muse::io::path_t(), bool forceMode = false) override;
 
-    Ret exportScoreVideo(const io::path_t& in, const io::path_t& out) override;
+    muse::Ret exportScoreVideo(const muse::io::path_t& in, const muse::io::path_t& out) override;
 
-    Ret updateSource(const io::path_t& in, const std::string& newSource, bool forceMode = false) override;
+    muse::Ret updateSource(const muse::io::path_t& in, const std::string& newSource, bool forceMode = false) override;
 
 private:
 
     struct Job {
-        io::path_t in;
-        io::path_t out;
+        muse::io::path_t in;
+        muse::io::path_t out;
     };
 
     using BatchJob = std::list<Job>;
 
-    RetVal<BatchJob> parseBatchJob(const io::path_t& batchJobFile) const;
+    muse::RetVal<BatchJob> parseBatchJob(const muse::io::path_t& batchJobFile) const;
 
     bool isConvertPageByPage(const std::string& suffix) const;
-    Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const io::path_t& out) const;
-    Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const io::path_t& out) const;
+    muse::Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
+    muse::Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const muse::io::path_t& out) const;
 
-    Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                               const io::path_t& out) const;
-    Ret convertScorePartsToPngs(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                                const io::path_t& out) const;
+    muse::Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                     const muse::io::path_t& out) const;
+    muse::Ret convertScorePartsToPngs(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
+                                      const muse::io::path_t& out) const;
 };
 }
 

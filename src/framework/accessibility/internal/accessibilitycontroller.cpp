@@ -44,6 +44,7 @@
 #endif
 
 using namespace muse;
+using namespace muse::modularity;
 using namespace muse::accessibility;
 
 AccessibleObject* s_rootObject = nullptr;
@@ -66,7 +67,7 @@ QAccessibleInterface* AccessibilityController::accessibleInterface(QObject*)
 static QAccessibleInterface* muAccessibleFactory(const QString& classname, QObject* object)
 {
     if (!accessibleInterfaceRegister) {
-        accessibleInterfaceRegister = mu::modularity::ioc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
+        accessibleInterfaceRegister = ioc()->resolve<IQAccessibleInterfaceRegister>("accessibility");
     }
 
     auto interfaceGetter = accessibleInterfaceRegister->interfaceGetter(classname);
@@ -426,7 +427,7 @@ IAccessible* AccessibilityController::findSiblingItem(const IAccessible* item, c
     return nullptr;
 }
 
-mu::async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const
+async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const
 {
     return m_eventSent;
 }
@@ -669,7 +670,7 @@ int AccessibilityController::accessibleRowIndex() const
     return 0;
 }
 
-async::Channel<IAccessible::Property, mu::Val> AccessibilityController::accessiblePropertyChanged() const
+async::Channel<IAccessible::Property, Val> AccessibilityController::accessiblePropertyChanged() const
 {
     static async::Channel<IAccessible::Property, Val> ch;
     return ch;

@@ -52,7 +52,7 @@ public:
 
 void Capella_Tests::capReadTest(const char* file)
 {
-    auto importFunc = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
+    auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
         return mu::iex::capella::importCapella(score, path.toQString());
     };
 
@@ -72,7 +72,7 @@ void Capella_Tests::capReadTest(const char* file)
 
 void Capella_Tests::capxReadTest(const char* file)
 {
-    auto importFunc = [](MasterScore* score, const io::path_t& path) -> engraving::Err {
+    auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> engraving::Err {
         return mu::iex::capella::importCapXml(score, path.toQString());
     };
 

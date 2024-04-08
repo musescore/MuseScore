@@ -38,7 +38,7 @@
 #include "abstractaudioresourceitem.h"
 
 namespace mu::playback {
-class InputResourceItem : public AbstractAudioResourceItem, public async::Asyncable
+class InputResourceItem : public AbstractAudioResourceItem, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -71,7 +71,7 @@ private:
     QVariantMap buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildMsBasicMenuItem(const muse::audio::AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
                                      const std::optional<muse::midi::Program>& currentPreset) const;
-    QVariantMap buildSoundFontMenuItem(const String& soundFont, const muse::audio::AudioResourceMetaList& availableResources,
+    QVariantMap buildSoundFontMenuItem(const muse::String& soundFont, const muse::audio::AudioResourceMetaList& availableResources,
                                        bool isCurrentSoundFont, const std::optional<muse::midi::Program>& currentPreset) const;
 
     void updateAvailableResources(const muse::audio::AudioResourceMetaList& availableResources);

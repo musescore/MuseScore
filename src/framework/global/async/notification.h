@@ -19,16 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ASYNC_NOTIFY_H
-#define MU_ASYNC_NOTIFY_H
+#ifndef MUSE_ASYNC_NOTIFY_H
+#define MUSE_ASYNC_NOTIFY_H
 
 #include "../thirdparty/kors_async/async/notification.h"
-namespace mu::async {
-using Notification = kors::async::Notification;
-}
-
 namespace muse::async {
 using Notification = kors::async::Notification;
 }
 
-#endif // MU_ASYNC_NOTIFY_H
+#endif // MUSE_ASYNC_NOTIFY_H

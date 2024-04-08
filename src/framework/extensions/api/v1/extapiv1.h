@@ -37,11 +37,11 @@ class ExtApiV1 : public QObject
     Q_PROPERTY(QJSValue log READ log CONSTANT)
     Q_PROPERTY(QJSValue engraving READ engraving CONSTANT)
 
-    Inject<mu::api::IApiRegister> apiRegister;
+    Inject<muse::api::IApiRegister> apiRegister;
 
 public:
 
-    ExtApiV1(mu::api::IApiEngine* engine, QObject* parent);
+    ExtApiV1(muse::api::IApiEngine* engine, QObject* parent);
 
     void setup(QJSValue globalObj);
 
@@ -56,11 +56,11 @@ private:
 
     struct Api
     {
-        mu::api::ApiObject* obj = nullptr;
+        muse::api::ApiObject* obj = nullptr;
         QJSValue jsval;
     };
 
-    mu::api::IApiEngine* m_engine = nullptr;
+    muse::api::IApiEngine* m_engine = nullptr;
     mutable QMap<std::string, Api> m_apis;
 };
 }

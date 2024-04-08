@@ -43,7 +43,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
@@ -70,8 +71,8 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
     return RetVal<IReaderPtr>::make_ok(RWRegister::reader(version));
 }
 
-mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
-                            bool ignoreVersionError)
+Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader, SettingsCompat& settingsCompat,
+                        bool ignoreVersionError)
 {
     TRACEFUNC;
 
@@ -115,7 +116,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
     ReadInOutData masterReadOutData;
 
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     // Read score
     {
@@ -202,8 +203,8 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
     return ret;
 }
 
-mu::Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out,
-                                   compat::ReadStyleHook* styleHook)
+Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignoreVersionError, ReadInOutData* out,
+                               compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {

@@ -33,7 +33,7 @@
 #include "engraving/dom/engravingitem.h"
 
 namespace mu::notation {
-class AbstractElementPopupModel : public QObject, public async::Asyncable, public muse::actions::Actionable
+class AbstractElementPopupModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -68,8 +68,8 @@ signals:
     void itemRectChanged(QRect rect);
 
 protected:
-    PointF fromLogical(PointF point) const;
-    RectF fromLogical(RectF rect) const;
+    muse::PointF fromLogical(muse::PointF point) const;
+    muse::RectF fromLogical(muse::RectF rect) const;
 
     notation::INotationUndoStackPtr undoStack() const;
     void beginCommand();

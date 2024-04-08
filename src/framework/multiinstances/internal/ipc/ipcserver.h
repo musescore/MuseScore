@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IPC_IPCSERVER_H
-#define MU_IPC_IPCSERVER_H
+#ifndef MUSE_IPC_IPCSERVER_H
+#define MUSE_IPC_IPCSERVER_H
 
 #include <QList>
 
@@ -30,7 +30,7 @@ class QLocalServer;
 class QLocalSocket;
 class QThread;
 
-namespace mu::ipc {
+namespace muse::ipc {
 class IpcLock;
 class IpcServer
 {
@@ -70,4 +70,4 @@ private:
 };
 }
 
-#endif // MU_IPC_IPCSERVER_H
+#endif // MUSE_IPC_IPCSERVER_H

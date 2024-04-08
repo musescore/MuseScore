@@ -43,13 +43,13 @@ public:
 
     StaffLines* clone() const override { return new StaffLines(*this); }
 
-    mu::PointF pagePos() const override;      ///< position in page coordinates
-    mu::PointF canvasPos() const override;    ///< position in page coordinates
+    PointF pagePos() const override;      ///< position in page coordinates
+    PointF canvasPos() const override;    ///< position in page coordinates
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    const std::vector<mu::LineF>& lines() const { return m_lines; }
-    void setLines(const std::vector<mu::LineF>& l) { m_lines = l; }
+    const std::vector<LineF>& lines() const { return m_lines; }
+    void setLines(const std::vector<LineF>& l) { m_lines = l; }
 
     Measure* measure() const { return (Measure*)explicitParent(); }
     double y1() const;
@@ -65,7 +65,7 @@ private:
     StaffLines(Measure* parent);
 
     double m_lw = 0.0;
-    std::vector<mu::LineF> m_lines;
+    std::vector<LineF> m_lines;
 };
 }
 

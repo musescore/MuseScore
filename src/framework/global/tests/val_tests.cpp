@@ -23,7 +23,7 @@
 
 #include "types/val.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_ValTests : public ::testing::Test
 {

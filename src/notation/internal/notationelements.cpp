@@ -30,6 +30,7 @@
 #include "log.h"
 #include "searchcommandsparser.h"
 
+using namespace muse;
 using namespace mu::notation;
 
 NotationElements::NotationElements(IGetScore* getScore)

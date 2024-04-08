@@ -21,7 +21,7 @@
  */
 #include "dummymidiinport.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::midi;
 
 void DummyMidiInPort::init()

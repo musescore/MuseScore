@@ -34,7 +34,7 @@
 #include "ipclock.h"
 #include "ipclog.h"
 
-using namespace mu::ipc;
+using namespace muse::ipc;
 
 IpcServer::~IpcServer()
 {

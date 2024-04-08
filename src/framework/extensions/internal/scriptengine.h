@@ -36,7 +36,7 @@
 
 namespace muse::extensions {
 class JsModuleLoader;
-class ScriptEngine : public mu::api::IApiEngine
+class ScriptEngine : public muse::api::IApiEngine
 {
     Inject<io::IFileSystem> fileSystem;
 
@@ -73,7 +73,7 @@ public:
     QJSValue newArray(size_t length = 0) override;
 
     static void dump(const QString& name, const QJSValue& val);
-    static mu::Ret jsValueToRet(const QJSValue& val);
+    static Ret jsValueToRet(const QJSValue& val);
 
 private:
 

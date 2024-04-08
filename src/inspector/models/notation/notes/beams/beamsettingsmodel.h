@@ -117,7 +117,7 @@ private:
 
     PropertyItem* m_beamHeightLeft = nullptr;
     PropertyItem* m_beamHeightRight = nullptr;
-    PairF m_cachedBeamHeights; //!Note used in delta calculation
+    muse::PairF m_cachedBeamHeights; //!Note used in delta calculation
     bool m_isBeamHeightLocked = false;
 
     PropertyItem* m_isBeamHidden = nullptr;

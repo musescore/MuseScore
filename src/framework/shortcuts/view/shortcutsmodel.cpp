@@ -34,7 +34,7 @@ using namespace muse::ui;
 
 static std::vector<std::string> shortcutsFileFilter()
 {
-    return { mu::trc("shortcuts", "MuseScore shortcuts file") + " (*.xml)" };
+    return { muse::trc("shortcuts", "MuseScore shortcuts file") + " (*.xml)" };
 }
 
 ShortcutsModel::ShortcutsModel(QObject* parent)
@@ -183,7 +183,7 @@ void ShortcutsModel::setSelection(const QItemSelection& selection)
 void ShortcutsModel::importShortcutsFromFile()
 {
     io::path_t path = interactive()->selectOpeningFile(
-        mu::qtrc("shortcuts", "Import shortcuts"),
+        muse::qtrc("shortcuts", "Import shortcuts"),
         globalConfiguration()->homePath(),
         shortcutsFileFilter());
 
@@ -195,7 +195,7 @@ void ShortcutsModel::importShortcutsFromFile()
 void ShortcutsModel::exportShortcutsToFile()
 {
     io::path_t path = interactive()->selectSavingFile(
-        mu::qtrc("shortcuts", "Export shortcuts"),
+        muse::qtrc("shortcuts", "Export shortcuts"),
         globalConfiguration()->homePath(),
         shortcutsFileFilter());
 

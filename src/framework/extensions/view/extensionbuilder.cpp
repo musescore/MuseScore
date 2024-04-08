@@ -70,16 +70,16 @@ void ExtensionBuilder::load(const QString& uri, QObject* itemParent)
     }
 
     if (m_contentItem) {
-        if (mu::is_zero(m_contentItem->implicitHeight())) {
+        if (muse::is_zero(m_contentItem->implicitHeight())) {
             m_contentItem->setImplicitHeight(m_contentItem->height());
-            if (mu::is_zero(m_contentItem->implicitHeight())) {
+            if (muse::is_zero(m_contentItem->implicitHeight())) {
                 m_contentItem->setImplicitHeight(480);
             }
         }
 
-        if (mu::is_zero(m_contentItem->implicitWidth())) {
+        if (muse::is_zero(m_contentItem->implicitWidth())) {
             m_contentItem->setImplicitWidth(m_contentItem->width());
-            if (mu::is_zero(m_contentItem->implicitWidth())) {
+            if (muse::is_zero(m_contentItem->implicitWidth())) {
                 m_contentItem->setImplicitWidth(600);
             }
         }

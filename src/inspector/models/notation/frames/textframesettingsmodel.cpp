@@ -30,7 +30,7 @@ TextFrameSettingsModel::TextFrameSettingsModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TEXT_FRAME);
-    setTitle(mu::qtrc("inspector", "Text frame"));
+    setTitle(muse::qtrc("inspector", "Text frame"));
     setIcon(muse::ui::IconCode::Code::TEXT_FRAME);
     createProperties();
 }
@@ -81,27 +81,27 @@ void TextFrameSettingsModel::onNotationChanged(const PropertyIdSet& changedPrope
 
 void TextFrameSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {
+    if (muse::contains(propertyIdSet, Pid::TOP_GAP)) {
         loadPropertyItem(m_gapAbove, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
+    if (muse::contains(propertyIdSet, Pid::BOTTOM_GAP)) {
         loadPropertyItem(m_gapBelow, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::LEFT_MARGIN)) {
+    if (muse::contains(propertyIdSet, Pid::LEFT_MARGIN)) {
         loadPropertyItem(m_frameLeftMargin);
     }
 
-    if (mu::contains(propertyIdSet, Pid::RIGHT_MARGIN)) {
+    if (muse::contains(propertyIdSet, Pid::RIGHT_MARGIN)) {
         loadPropertyItem(m_frameRightMargin);
     }
 
-    if (mu::contains(propertyIdSet, Pid::TOP_MARGIN)) {
+    if (muse::contains(propertyIdSet, Pid::TOP_MARGIN)) {
         loadPropertyItem(m_frameTopMargin);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BOTTOM_MARGIN)) {
+    if (muse::contains(propertyIdSet, Pid::BOTTOM_MARGIN)) {
         loadPropertyItem(m_frameBottomMargin);
     }
 }

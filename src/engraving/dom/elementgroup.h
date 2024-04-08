@@ -43,7 +43,7 @@ public:
     virtual ~ElementGroup() {}
 
     virtual void startDrag(EditData&) = 0;
-    virtual mu::RectF drag(EditData&) = 0;
+    virtual muse::RectF drag(EditData&) = 0;
     virtual void endDrag(EditData&) = 0;
 
     virtual bool enabled() const { return true; }
@@ -60,7 +60,7 @@ public:
     bool enabled() const override { return false; }
 
     void startDrag(EditData&) override {}
-    mu::RectF drag(EditData&) override { return mu::RectF(); }
+    muse::RectF drag(EditData&) override { return muse::RectF(); }
     void endDrag(EditData&) override {}
 };
 
@@ -78,7 +78,7 @@ public:
         : m_e(el) {}
 
     void startDrag(EditData& ed) override;
-    mu::RectF drag(EditData& ed) override;
+    muse::RectF drag(EditData& ed) override;
     void endDrag(EditData& ed) override;
 
 private:

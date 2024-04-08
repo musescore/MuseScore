@@ -24,6 +24,7 @@
 #include "log.h"
 #include "translation.h"
 
+using namespace muse;
 using namespace mu::appshell;
 
 ScorePreferencesModel::ScorePreferencesModel(QObject* parent)
@@ -88,13 +89,13 @@ void ScorePreferencesModel::load()
     beginResetModel();
 
     m_defaultFiles = {
-        { DefaultFileType::FirstScoreOrderList, mu::qtrc("appshell/preferences", "Score order list 1"), firstScoreOrderListPath(),
+        { DefaultFileType::FirstScoreOrderList, muse::qtrc("appshell/preferences", "Score order list 1"), firstScoreOrderListPath(),
           scoreOrderPathFilter(), scoreOrderChooseTitle() },
-        { DefaultFileType::SecondScoreOrderList, mu::qtrc("appshell/preferences", "Score order list 2"), secondScoreOrderListPath(),
+        { DefaultFileType::SecondScoreOrderList, muse::qtrc("appshell/preferences", "Score order list 2"), secondScoreOrderListPath(),
           scoreOrderPathFilter(), scoreOrderChooseTitle() },
-        { DefaultFileType::Style, mu::qtrc("appshell/preferences", "Style"), stylePath(),
+        { DefaultFileType::Style, muse::qtrc("appshell/preferences", "Style"), stylePath(),
           stylePathFilter(), styleChooseTitle() },
-        { DefaultFileType::PartStyle, mu::qtrc("appshell/preferences", "Style for part"), partStylePath(),
+        { DefaultFileType::PartStyle, muse::qtrc("appshell/preferences", "Style for part"), partStylePath(),
           stylePathFilter(), partStyleChooseTitle() },
     };
 
@@ -177,27 +178,27 @@ QString ScorePreferencesModel::partStylePath() const
 
 QStringList ScorePreferencesModel::scoreOrderPathFilter() const
 {
-    return { mu::qtrc("appshell/preferences", "Score order list") + " (*.xml)" };
+    return { muse::qtrc("appshell/preferences", "Score order list") + " (*.xml)" };
 }
 
 QStringList ScorePreferencesModel::stylePathFilter() const
 {
-    return { mu::qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)" };
+    return { muse::qtrc("appshell/preferences", "MuseScore style file") + " (*.mss)" };
 }
 
 QString ScorePreferencesModel::scoreOrderChooseTitle() const
 {
-    return mu::qtrc("appshell/preferences", "Choose score order list");
+    return muse::qtrc("appshell/preferences", "Choose score order list");
 }
 
 QString ScorePreferencesModel::styleChooseTitle() const
 {
-    return mu::qtrc("appshell/preferences", "Choose default style");
+    return muse::qtrc("appshell/preferences", "Choose default style");
 }
 
 QString ScorePreferencesModel::partStyleChooseTitle() const
 {
-    return mu::qtrc("appshell/preferences", "Choose default style for parts");
+    return muse::qtrc("appshell/preferences", "Choose default style for parts");
 }
 
 void ScorePreferencesModel::setPath(ScorePreferencesModel::DefaultFileType fileType, const QString& path)

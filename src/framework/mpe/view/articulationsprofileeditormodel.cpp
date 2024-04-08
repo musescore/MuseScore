@@ -22,7 +22,7 @@
 
 #include "articulationsprofileeditormodel.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::mpe;
 
 static const std::string PROFILE_EXTENSION = "(*.json)";

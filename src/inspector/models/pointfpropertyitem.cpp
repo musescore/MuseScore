@@ -32,7 +32,7 @@ PointFPropertyItem::PointFPropertyItem(const mu::engraving::Pid propertyId, QObj
 
 qreal PointFPropertyItem::x_property() const
 {
-    return DataFormatter::roundDouble(value().toPointF().x());
+    return muse::DataFormatter::roundDouble(value().toPointF().x());
 }
 
 qreal PointFPropertyItem::x() const
@@ -47,7 +47,7 @@ void PointFPropertyItem::setX(qreal newX)
 
 qreal PointFPropertyItem::y_property() const
 {
-    return DataFormatter::roundDouble(value().toPointF().y());
+    return muse::DataFormatter::roundDouble(value().toPointF().y());
 }
 
 qreal PointFPropertyItem::y() const

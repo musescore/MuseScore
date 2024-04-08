@@ -33,15 +33,15 @@
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
 {
-    INJECT(IInteractive, interactive)
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::IInteractive, interactive)
+    INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
-    Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
-    mu::engraving::Err import(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options());
+    muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) override;
+    mu::engraving::Err import(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options());
 
 private:
-    bool askToLoadDespiteWarnings(const String& text, const String& detailedText);
+    bool askToLoadDespiteWarnings(const muse::String& text, const muse::String& detailedText);
 };
 } // namespace
 

@@ -28,8 +28,8 @@
 #include "stringutils.h"
 #include "fileinfo.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 path_t::path_t(const String& s)
     : m_path(s.toStdString())
@@ -123,50 +123,50 @@ std::wstring path_t::toStdWString() const
 
 #endif
 
-std::string mu::io::suffix(const mu::io::path_t& path)
+std::string muse::io::suffix(const io::path_t& path)
 {
     return FileInfo::suffix(path).toLower().toStdString();
 }
 
-mu::io::path_t mu::io::filename(const mu::io::path_t& path, bool includingExtension)
+io::path_t muse::io::filename(const io::path_t& path, bool includingExtension)
 {
     FileInfo fi(path);
     return includingExtension ? fi.fileName() : fi.completeBaseName();
 }
 
-mu::io::path_t mu::io::basename(const mu::io::path_t& path)
+io::path_t muse::io::basename(const io::path_t& path)
 {
     FileInfo fi(path);
     return fi.baseName();
 }
 
-mu::io::path_t mu::io::completeBasename(const mu::io::path_t& path)
+io::path_t muse::io::completeBasename(const io::path_t& path)
 {
     FileInfo fi(path);
     return fi.completeBaseName();
 }
 
-mu::io::path_t mu::io::absolutePath(const path_t& path)
+io::path_t muse::io::absolutePath(const path_t& path)
 {
     return FileInfo(path).absolutePath();
 }
 
-mu::io::path_t mu::io::dirpath(const mu::io::path_t& path)
+io::path_t muse::io::dirpath(const io::path_t& path)
 {
     return FileInfo(path).dir().path();
 }
 
-mu::io::path_t mu::io::absoluteDirpath(const mu::io::path_t& path)
+io::path_t muse::io::absoluteDirpath(const io::path_t& path)
 {
     return FileInfo(path).dir().absolutePath();
 }
 
-bool mu::io::isAbsolute(const path_t& path)
+bool muse::io::isAbsolute(const path_t& path)
 {
     return FileInfo(path).isAbsolute();
 }
 
-bool mu::io::isAllowedFileName(const path_t& fn_)
+bool muse::io::isAllowedFileName(const path_t& fn_)
 {
     std::string fn = basename(fn_).toStdString();
     if (fn.empty()) {
@@ -223,7 +223,7 @@ bool mu::io::isAllowedFileName(const path_t& fn_)
     return true;
 }
 
-mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_)
+io::path_t muse::io::escapeFileName(const io::path_t& fn_)
 {
     //
     // special characters in filenames are a constant source
@@ -256,7 +256,7 @@ mu::io::path_t mu::io::escapeFileName(const mu::io::path_t& fn_)
     return fn;
 }
 
-paths_t mu::io::pathsFromString(const std::string& str, const std::string& delim)
+paths_t muse::io::pathsFromString(const std::string& str, const std::string& delim)
 {
     if (str.empty()) {
         return {};
@@ -273,7 +273,7 @@ paths_t mu::io::pathsFromString(const std::string& str, const std::string& delim
     return ps;
 }
 
-std::string mu::io::pathsToString(const paths_t& ps, const std::string& delim)
+std::string muse::io::pathsToString(const paths_t& ps, const std::string& delim)
 {
     std::string result;
     bool first = true;
@@ -288,7 +288,7 @@ std::string mu::io::pathsToString(const paths_t& ps, const std::string& delim)
     return result;
 }
 
-path_t mu::io::toNativeSeparators(const path_t& path)
+path_t muse::io::toNativeSeparators(const path_t& path)
 {
 #ifndef NO_QT_SUPPORT
     return QDir::toNativeSeparators(path.toQString());

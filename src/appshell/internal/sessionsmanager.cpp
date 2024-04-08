@@ -23,6 +23,7 @@
 #include "sessionsmanager.h"
 
 using namespace mu::appshell;
+using namespace muse;
 using namespace muse::actions;
 
 void SessionsManager::init()
@@ -64,7 +65,7 @@ void SessionsManager::restore()
         return;
     }
 
-    for (const io::path_t& path : projects) {
+    for (const muse::io::path_t& path : projects) {
         dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(path.toQUrl()));
     }
 }
@@ -76,7 +77,7 @@ void SessionsManager::reset()
 
 void SessionsManager::update()
 {
-    io::path_t newProjectPath;
+    muse::io::path_t newProjectPath;
 
     if (auto project = globalContext()->currentProject()) {
         newProjectPath = project->isNewlyCreated() ? projectConfiguration()->newProjectTemporaryPath() : project->path();
@@ -97,7 +98,7 @@ void SessionsManager::update()
     m_lastOpenedProjectPath = newProjectPath;
 }
 
-void SessionsManager::removeProjectFromSession(const io::path_t& projectPath)
+void SessionsManager::removeProjectFromSession(const muse::io::path_t& projectPath)
 {
     io::paths_t projects = configuration()->sessionProjectsPaths();
     if (projects.empty()) {
@@ -108,7 +109,7 @@ void SessionsManager::removeProjectFromSession(const io::path_t& projectPath)
     configuration()->setSessionProjectsPaths(projects);
 }
 
-void SessionsManager::addProjectToSession(const mu::io::path_t& projectPath)
+void SessionsManager::addProjectToSession(const muse::io::path_t& projectPath)
 {
     io::paths_t projects = configuration()->sessionProjectsPaths();
 

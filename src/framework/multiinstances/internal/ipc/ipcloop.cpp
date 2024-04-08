@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::ipc;
+using namespace muse::ipc;
 
 IpcLoop::IpcLoop()
 {

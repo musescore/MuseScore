@@ -30,7 +30,7 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
-class CanvasPreferencesModel : public QObject, public async::Asyncable
+class CanvasPreferencesModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -29,7 +29,7 @@
 
 namespace muse::accessibility {
 class AccessibilityConfiguration;
-class AccessibilityModule : public mu::modularity::IModuleSetup
+class AccessibilityModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -38,7 +38,7 @@ public:
     void resolveImports() override;
     void registerApi() override;
 
-    void onInit(const mu::IApplication::RunMode& mode) override;
+    void onInit(const IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<AccessibilityConfiguration> m_configuration;

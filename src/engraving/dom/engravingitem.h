@@ -121,7 +121,7 @@ enum class ElementFlag {
     WRITTEN                = 0x04000000,
 };
 
-typedef Flags<ElementFlag> ElementFlags;
+typedef muse::Flags<ElementFlag> ElementFlags;
 DECLARE_OPERATORS_FOR_FLAGS(ElementFlags)
 
 enum class KerningType
@@ -182,7 +182,7 @@ public:
     MeasureBase* findMeasureBase();
     const MeasureBase* findMeasureBase() const;
 
-    //!Note Returns basic representative for the current element.
+    //!Note muse::Returns basic representative for the current element.
     //!     For example: notes->chord, chords->beam, etc.
     virtual EngravingItem* elementBase() const { return const_cast<EngravingItem*>(this); }
 
@@ -251,20 +251,20 @@ public:
 
     virtual Fraction tick() const;
     virtual Fraction rtick() const;
-    virtual Fraction playTick() const;   ///< Returns the tick at which playback should begin when this element is selected. Defaults to the element's own tick position.
+    virtual Fraction playTick() const;   ///< muse::Returns the tick at which playback should begin when this element is selected. Defaults to the element's own tick position.
 
     Fraction beat() const;
 
     bool isNudged() const { return !m_offset.isNull(); }
 
     bool contains(const PointF& p) const;
-    bool intersects(const mu::RectF& r) const;
+    bool intersects(const RectF& r) const;
 
-    virtual mu::RectF hitBBox() const { return ldata()->bbox(); }
+    virtual RectF hitBBox() const { return ldata()->bbox(); }
     virtual Shape hitShape() const { return shape(); }
     Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
-    bool hitShapeIntersects(const mu::RectF& rr) const;
+    bool hitShapeIntersects(const RectF& rr) const;
 
     virtual int subtype() const { return -1; }                    // for select gui
 
@@ -282,10 +282,10 @@ public:
     }
 
     virtual void startDrag(EditData&);
-    virtual mu::RectF drag(EditData&);
+    virtual RectF drag(EditData&);
     virtual void endDrag(EditData&);
-    /** Returns anchor lines displayed while dragging element in canvas coordinates. */
-    virtual std::vector<mu::LineF> dragAnchorLines() const { return std::vector<mu::LineF>(); }
+    /** muse::Returns anchor lines displayed while dragging element in canvas coordinates. */
+    virtual std::vector<LineF> dragAnchorLines() const { return std::vector<LineF>(); }
     /**
      * A generic \ref dragAnchorLines() implementation which can be used in
      * dragAnchorLines() overrides in descendants. It is not made its default
@@ -295,7 +295,7 @@ public:
      * class of various annotation types and which would have this
      * dragAnchorLines() implementation by default.
      */
-    std::vector<mu::LineF> genericDragAnchorLines() const;
+    std::vector<LineF> genericDragAnchorLines() const;
 
     virtual bool isEditable() const { return !flag(ElementFlag::GENERATED); }
     virtual bool needStartEditingAfterSelecting() const { return false; }
@@ -314,13 +314,13 @@ public:
     void updateGrips(EditData&) const;
     virtual bool nextGrip(EditData&) const;
     virtual bool prevGrip(EditData&) const;
-    /** Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
-    virtual std::vector<mu::LineF> gripAnchorLines(Grip) const { return std::vector<mu::LineF>(); }
+    /** muse::Returns anchor lines displayed while dragging element's grip in canvas coordinates. */
+    virtual std::vector<LineF> gripAnchorLines(Grip) const { return std::vector<LineF>(); }
 
     virtual int gripsCount() const { return 0; }
     virtual Grip initialEditModeGrip() const { return Grip::NO_GRIP; }
     virtual Grip defaultGrip() const { return Grip::NO_GRIP; }
-    /** Returns grips positions in page coordinates. */
+    /** muse::Returns grips positions in page coordinates. */
     virtual std::vector<PointF> gripsPositions(const EditData& = EditData()) const { return std::vector<PointF>(); }
 
     bool hasGrips() const;
@@ -358,22 +358,22 @@ public:
     virtual TranslatableString subtypeUserName() const;
     virtual String translatedSubtypeUserName() const;
 
-    virtual void setColor(const muse::draw::Color& c);
-    virtual muse::draw::Color color() const;
-    muse::draw::Color curColor() const;
-    muse::draw::Color curColor(bool isVisible) const;
-    muse::draw::Color curColor(bool isVisible, muse::draw::Color normalColor) const;
+    virtual void setColor(const Color& c);
+    virtual Color color() const;
+    Color curColor() const;
+    Color curColor(bool isVisible) const;
+    Color curColor(bool isVisible, Color normalColor) const;
 
-    void undoSetColor(const muse::draw::Color& c);
+    void undoSetColor(const Color& c);
     void undoSetVisible(bool v);
     void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true);
 
     static ElementType readType(XmlReader& node, PointF*, Fraction*);
-    static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, PointF*, Fraction*);
+    static EngravingItem* readMimeData(Score* score, const muse::ByteArray& data, PointF*, Fraction*);
 
-    virtual mu::ByteArray mimeData(const PointF& dragOffset = PointF()) const;
+    virtual muse::ByteArray mimeData(const PointF& dragOffset = PointF()) const;
 /**
- Return true if this element accepts a drop at canvas relative \a pos
+ muse::Return true if this element accepts a drop at canvas relative \a pos
  of given element \a type and \a subtype.
 
  Reimplemented by elements that accept drops. Used to change cursor shape while
@@ -383,7 +383,7 @@ public:
 
 /**
  Handle a dropped element at canvas relative \a pos of given element
- \a type and \a subtype. Returns dropped element if any.
+ \a type and \a subtype. muse::Returns dropped element if any.
  The ownership of element in DropData is transferred to the called
  element (if not used, element has to be deleted).
  The returned element will be selected if not in note edit mode.
@@ -550,10 +550,10 @@ public:
 
         void setShape(const Shape& sh) { m_shape.set_value(sh); }
 
-        void setBbox(const mu::RectF& r);
+        void setBbox(const RectF& r);
 
-        void setBbox(double x, double y, double w, double h) { setBbox(mu::RectF(x, y, w, h)); }
-        void addBbox(const mu::RectF& r)
+        void setBbox(double x, double y, double w, double h) { setBbox(RectF(x, y, w, h)); }
+        void addBbox(const RectF& r)
         {
             DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
             DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));
@@ -566,14 +566,14 @@ public:
 
         void setHeight(double v)
         {
-            mu::RectF r = bbox();
+            RectF r = bbox();
             r.setHeight(v);
             setBbox(r);
         }
 
         void setWidth(double v)
         {
-            mu::RectF r = bbox();
+            RectF r = bbox();
             r.setWidth(v);
             setBbox(r);
         }
@@ -618,9 +618,9 @@ public:
     Shape shape(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->shape(mode); }
     virtual double baseLine() const { return -height(); }
 
-    mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
-    mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
-    mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
+    RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
+    RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
+    RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
 
     virtual bool isPropertyLinkedToMaster(Pid id) const;
     virtual bool isUnlinkedFromMaster() const;
@@ -632,7 +632,7 @@ public:
     virtual void manageExclusionFromParts(bool exclude);
 
     //! --- Old Interface ---
-    void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
+    void setbbox(const RectF& r) { mutldata()->setBbox(r); }
     double height() const { return ldata()->bbox().height(); }
     void setHeight(double v) { mutldata()->setHeight(v); }
 
@@ -666,9 +666,9 @@ protected:
     virtual LayoutData* mutldataInternal();
 
     mutable int m_z = 0;
-    muse::draw::Color m_color;                // element color attribute
+    Color m_color;                // element color attribute
 
-    track_idx_t m_track = mu::nidx;         // staffIdx * VOICES + voice
+    track_idx_t m_track = muse::nidx;         // staffIdx * VOICES + voice
 
 private:
 

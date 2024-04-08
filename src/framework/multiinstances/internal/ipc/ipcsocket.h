@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IPC_IPCSOCKET_H
-#define MU_IPC_IPCSOCKET_H
+#ifndef MUSE_IPC_IPCSOCKET_H
+#define MUSE_IPC_IPCSOCKET_H
 
 #include "ipc.h"
 
@@ -30,7 +30,7 @@
 
 class QLocalSocket;
 
-namespace mu::ipc {
+namespace muse::ipc {
 class IpcLock;
 class IpcSocket : public async::Asyncable
 {
@@ -66,4 +66,4 @@ private:
 };
 }
 
-#endif // MU_IPC_IPCSOCKET_H
+#endif // MUSE_IPC_IPCSOCKET_H

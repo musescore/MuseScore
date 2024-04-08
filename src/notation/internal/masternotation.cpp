@@ -48,8 +48,9 @@
 #include "../notationerrors.h"
 
 using namespace mu::notation;
-using namespace mu::async;
 using namespace mu::engraving;
+using namespace muse;
+using namespace muse::async;
 
 static ExcerptNotation* get_impl(const IExcerptNotationPtr& excerpt)
 {
@@ -297,7 +298,7 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
 
 //! NOTE: this method with all of its dependencies was copied from MU3
 //! source: file.cpp, MuseScore::getNewFile()
-mu::Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions)
+Ret MasterNotation::setupNewScore(mu::engraving::MasterScore* score, const ScoreCreateOptions& scoreOptions)
 {
     TRACEFUNC;
 
@@ -538,7 +539,7 @@ void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
         auto it = std::find(m_excerpts.cbegin(), m_excerpts.cend(), excerptNotation);
         if (it != m_excerpts.end()) {
             std::vector<Excerpt*>& msExcerpts = score->excerpts();
-            mu::moveItem(msExcerpts, mu::indexOf(msExcerpts, excerptNotationImpl->excerpt()), i);
+            muse::moveItem(msExcerpts, muse::indexOf(msExcerpts, excerptNotationImpl->excerpt()), i);
             continue;
         }
 
@@ -601,8 +602,8 @@ void MasterNotation::sortExcerpts(ExcerptNotationList& excerpts)
         const ID& initialPart1 = get_impl(f)->excerpt()->initialPartId();
         const ID& initialPart2 = get_impl(s)->excerpt()->initialPartId();
 
-        size_t index1 = mu::indexOf(partIdList, initialPart1);
-        size_t index2 = mu::indexOf(partIdList, initialPart2);
+        size_t index1 = muse::indexOf(partIdList, initialPart1);
+        size_t index2 = muse::indexOf(partIdList, initialPart2);
 
         return index1 < index2;
     });
@@ -649,7 +650,7 @@ void MasterNotation::updateExcerpts()
     for (IExcerptNotationPtr excerptNotation : m_excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
-        if (mu::contains(excerpts, impl->excerpt())) {
+        if (muse::contains(excerpts, impl->excerpt())) {
             updatedExcerpts.push_back(excerptNotation);
             continue;
         }
@@ -745,7 +746,7 @@ const ExcerptNotationList& MasterNotation::excerpts() const
     return m_excerpts;
 }
 
-async::Notification MasterNotation::excerptsChanged() const
+muse::async::Notification MasterNotation::excerptsChanged() const
 {
     return m_excerptsChanged;
 }

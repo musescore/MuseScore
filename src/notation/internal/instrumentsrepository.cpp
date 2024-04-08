@@ -28,6 +28,7 @@
 
 #include "engraving/dom/instrtemplate.h"
 
+using namespace muse;
 using namespace mu::notation;
 
 void InstrumentsRepository::init()
@@ -106,12 +107,12 @@ void InstrumentsRepository::load()
     m_groups.clear();
     mu::engraving::clearInstrumentTemplates();
 
-    io::path_t instrumentsPath = configuration()->instrumentListPath();
+    muse::io::path_t instrumentsPath = configuration()->instrumentListPath();
     if (!mu::engraving::loadInstrumentTemplates(instrumentsPath)) {
         LOGE() << "Could not load instruments from " << instrumentsPath << "!";
     }
 
-    for (const io::path_t& ordersPath : configuration()->scoreOrderListPaths()) {
+    for (const muse::io::path_t& ordersPath : configuration()->scoreOrderListPaths()) {
         if (!mu::engraving::loadInstrumentTemplates(ordersPath)) {
             LOGE() << "Could not load orders from " << ordersPath << "!";
         }
@@ -134,13 +135,13 @@ void InstrumentsRepository::load()
         }
     }
 
-    io::path_t stringTuningsPresetsPath = configuration()->stringTuningsPresetsPath();
+    muse::io::path_t stringTuningsPresetsPath = configuration()->stringTuningsPresetsPath();
     if (!loadStringTuningsPresets(stringTuningsPresetsPath)) {
         LOGE() << "Could not load string tunings presets from " << stringTuningsPresetsPath << "!";
     }
 }
 
-bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
+bool InstrumentsRepository::loadStringTuningsPresets(const muse::io::path_t& path)
 {
     TRACEFUNC;
 
@@ -184,7 +185,7 @@ bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
                 JsonObject presetObj = presetVal.toObject();
 
                 StringTuningPreset preset;
-                preset.name = mu::trc("instruments/stringTunings", presetObj.value("name").toStdString().c_str());
+                preset.name = muse::trc("instruments/stringTunings", presetObj.value("name").toStdString().c_str());
 
                 JsonArray valuesArr = presetObj.value("value").toArray();
                 for (size_t l = 0; l < valuesArr.size(); ++l) {

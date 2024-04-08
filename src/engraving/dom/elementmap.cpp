@@ -29,7 +29,7 @@
 namespace mu::engraving {
 EngravingItem* ElementMap::findNew(EngravingItem* o) const
 {
-    return mu::value(*this, o, nullptr);
+    return muse::value(*this, o, nullptr);
 }
 
 void ElementMap::add(EngravingItem* o, EngravingItem* n)

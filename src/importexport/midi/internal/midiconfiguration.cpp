@@ -28,6 +28,7 @@
 #include "midiimport/importmidi_operations.h"
 
 using namespace mu;
+using namespace muse;
 using namespace mu::iex::midi;
 
 static const Settings::Key SHORTEST_NOTE_KEY("iex_midi", "io/midi/shortestNote");
@@ -51,7 +52,7 @@ void MidiConfiguration::setMidiShortestNote(int ticks)
     settings()->setSharedValue(SHORTEST_NOTE_KEY, Val(ticks));
 }
 
-void MidiConfiguration::setMidiImportOperationsFile(const std::optional<io::path_t>& filePath) const
+void MidiConfiguration::setMidiImportOperationsFile(const std::optional<muse::io::path_t>& filePath) const
 {
     if (filePath) {
         midiImportOperations.setOperationsFile(filePath.value().toQString());

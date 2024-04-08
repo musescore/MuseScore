@@ -405,7 +405,7 @@ class EngravingItem : public apiv1::ScoreElement
     qreal posX() const { return element()->pos().x() / element()->spatium(); }
     qreal posY() const { return element()->pos().y() / element()->spatium(); }
 
-    QPointF pagePos() const { return mu::PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
+    QPointF pagePos() const { return PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
 
     apiv1::EngravingItem* parent() const { return wrap(element()->parentItem()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
@@ -417,7 +417,7 @@ public:
     EngravingItem(mu::engraving::EngravingItem* e = nullptr, Ownership own = Ownership::PLUGIN)
         : apiv1::ScoreElement(e, own) {}
 
-    /// \brief Returns the underlying mu::engraving::EngravingItem
+    /// \brief muse::Returns the underlying mu::engraving::EngravingItem
     /// \{
     mu::engraving::EngravingItem* element() { return toEngravingItem(e); }
     const mu::engraving::EngravingItem* element() const { return toEngravingItem(e); }

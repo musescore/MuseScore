@@ -36,9 +36,9 @@ void MuseSamplerActionController::checkLibraryIsDetected()
     std::string status;
 
     if (libVersion.empty()) {
-        status = mu::trc("musesampler", "Muse Sampler library is not found");
+        status = muse::trc("musesampler", "Muse Sampler library is not found");
     } else {
-        status = mu::qtrc("musesampler", "Muse Sampler library is detected, version %1")
+        status = muse::qtrc("musesampler", "Muse Sampler library is detected, version %1")
                  .arg(QString::fromStdString(libVersion)).toStdString();
     }
 

@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_TEXTSTREAM_H
-#define MU_GLOBAL_TEXTSTREAM_H
+#ifndef MUSE_GLOBAL_TEXTSTREAM_H
+#define MUSE_GLOBAL_TEXTSTREAM_H
 
-#include "io/iodevice.h"
-#include "types/bytearray.h"
-#include "types/string.h"
+#include "../io/iodevice.h"
+#include "../types/bytearray.h"
+#include "../types/string.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QString>
 #endif
 
-namespace mu {
+namespace muse {
 class TextStream
 {
 public:
@@ -67,4 +67,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_TEXTSTREAM_H
+#endif // MUSE_GLOBAL_TEXTSTREAM_H

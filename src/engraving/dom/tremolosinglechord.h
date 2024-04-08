@@ -90,7 +90,7 @@ public:
     int gripsCount() const override;
     Grip initialEditModeGrip() const override;
     Grip defaultGrip() const override;
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
     bool isMovable() const override { return true; }
     bool isEditable() const override { return true; }
     void endEdit(EditData&) override;

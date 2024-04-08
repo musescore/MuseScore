@@ -23,7 +23,7 @@
 
 #include "settings.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::learn;
 using namespace muse::network;
 

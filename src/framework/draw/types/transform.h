@@ -56,9 +56,9 @@ public:
     bool operator ==(const Transform& other) const
     {
         return m_affine == other.m_affine
-               && mu::RealIsEqual(m_13, other.m_13)
-               && mu::RealIsEqual(m_23, other.m_23)
-               && mu::RealIsEqual(m_33, other.m_33);
+               && RealIsEqual(m_13, other.m_13)
+               && RealIsEqual(m_23, other.m_23)
+               && RealIsEqual(m_33, other.m_33);
     }
 
     bool operator !=(const Transform& other) const { return !this->operator==(other); }
@@ -138,7 +138,7 @@ private:
 
 inline Transform& Transform::operator*=(double num)
 {
-    if (mu::RealIsEqual(num, 1.)) {
+    if (RealIsEqual(num, 1.)) {
         return *this;
     }
     m_affine.m_11 *= num;
@@ -158,7 +158,7 @@ inline Transform& Transform::operator*=(double num)
 
 inline Transform& Transform::operator/=(double div)
 {
-    if (mu::RealIsNull(div)) {
+    if (RealIsNull(div)) {
         return *this;
     }
     div = 1.0 / div;

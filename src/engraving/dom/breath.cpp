@@ -87,7 +87,7 @@ double Breath::mag() const
 //   pagePos
 //---------------------------------------------------------
 
-mu::PointF Breath::pagePos() const
+PointF Breath::pagePos() const
 {
     if (explicitParent() == 0) {
         return pos();

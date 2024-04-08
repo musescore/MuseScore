@@ -41,11 +41,12 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::app;
 using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
-static mu::GlobalModule globalModule;
+static muse::GlobalModule globalModule;
 
 static void app_init_qrc()
 {
@@ -153,17 +154,17 @@ int App::run(int argc, char** argv)
     globalModule.registerExports();
     globalModule.registerUiTypes();
 
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->registerResources();
     }
 
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->registerExports();
     }
 
     globalModule.resolveImports();
     globalModule.registerApi();
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
         m->resolveImports();
         m->registerApi();
@@ -179,7 +180,7 @@ int App::run(int argc, char** argv)
     // Setup modules: onPreInit
     // ====================================================
     globalModule.onPreInit(runMode);
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->onPreInit(runMode);
     }
 
@@ -213,7 +214,7 @@ int App::run(int argc, char** argv)
     // Setup modules: onInit
     // ====================================================
     globalModule.onInit(runMode);
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->onInit(runMode);
     }
 
@@ -221,7 +222,7 @@ int App::run(int argc, char** argv)
     // Setup modules: onAllInited
     // ====================================================
     globalModule.onAllInited(runMode);
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->onAllInited(runMode);
     }
 
@@ -230,7 +231,7 @@ int App::run(int argc, char** argv)
     // ====================================================
     QMetaObject::invokeMethod(qApp, [this]() {
         globalModule.onStartApp();
-        for (mu::modularity::IModuleSetup* m : m_modules) {
+        for (modularity::IModuleSetup* m : m_modules) {
             m->onStartApp();
         }
     }, Qt::QueuedConnection);
@@ -308,7 +309,7 @@ int App::run(int argc, char** argv)
                     // ====================================================
 
                     globalModule.onDelayedInit();
-                    for (mu::modularity::IModuleSetup* m : m_modules) {
+                    for (modularity::IModuleSetup* m : m_modules) {
                         m->onDelayedInit();
                     }
 
@@ -377,13 +378,13 @@ int App::run(int argc, char** argv)
 
     globalModule.invokeQueuedCalls();
 
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }
 
     globalModule.onDeinit();
 
-    for (mu::modularity::IModuleSetup* m : m_modules) {
+    for (modularity::IModuleSetup* m : m_modules) {
         m->onDestroy();
     }
 
@@ -392,7 +393,7 @@ int App::run(int argc, char** argv)
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
-    mu::modularity::ioc()->reset();
+    modularity::ioc()->reset();
 
     delete qapp;
 
@@ -471,7 +472,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
 int App::processConverter(const CommandLineParser::ConverterTask& task)
 {
     Ret ret = make_ret(Ret::Code::Ok);
-    io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
+    muse::io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
     bool forceMode = task.params[CommandLineParser::ParamKey::ForceMode].toBool();
     String soundProfile = task.params[CommandLineParser::ParamKey::SoundProfile].toString();
 
@@ -491,7 +492,7 @@ int App::processConverter(const CommandLineParser::ConverterTask& task)
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
         break;
     case CommandLineParser::ConvertType::ExportScoreMedia: {
-        io::path_t highlightConfigPath = task.params[CommandLineParser::ParamKey::HighlightConfigPath].toString();
+        muse::io::path_t highlightConfigPath = task.params[CommandLineParser::ParamKey::HighlightConfigPath].toString();
         ret = converter()->exportScoreMedia(task.inputFile, task.outputFile, highlightConfigPath, stylePath, forceMode);
     } break;
     case CommandLineParser::ConvertType::ExportScoreMeta:
@@ -540,7 +541,7 @@ int App::processDiagnostic(const CommandLineParser::Diagnostic& task)
         input.push_back(p);
     }
 
-    io::path_t output = task.output;
+    muse::io::path_t output = task.output;
 
     if (output.empty()) {
         output = "./";
@@ -560,8 +561,8 @@ int App::processDiagnostic(const CommandLineParser::Diagnostic& task)
         ret = diagnosticDrawProvider()->drawDataToPng(input.front(), output);
         break;
     case CommandLineParser::DiagnosticType::DrawDiffToPng: {
-        io::path_t diffPath = input.at(0);
-        io::path_t refPath;
+        muse::io::path_t diffPath = input.at(0);
+        muse::io::path_t refPath;
         if (input.size() > 1) {
             refPath = input.at(1);
         }
@@ -598,7 +599,7 @@ int App::processAudioPluginRegistration(const CommandLineParser::AudioPluginRegi
 void App::processAutobot(const CommandLineParser::Autobot& task)
 {
     using namespace muse::autobot;
-    async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
+    muse::async::Channel<StepInfo, Ret> stepCh = autobot()->stepStatusChanged();
     stepCh.onReceive(nullptr, [](const StepInfo& step, const Ret& ret){
         if (!ret) {
             LOGE() << "failed step: " << step.name << ", ret: " << ret.toString();
@@ -608,8 +609,8 @@ void App::processAutobot(const CommandLineParser::Autobot& task)
         }
     });
 
-    async::Channel<io::path_t, IAutobot::Status> statusCh = autobot()->statusChanged();
-    statusCh.onReceive(nullptr, [](const io::path_t& path, IAutobot::Status st){
+    muse::async::Channel<muse::io::path_t, IAutobot::Status> statusCh = autobot()->statusChanged();
+    statusCh.onReceive(nullptr, [](const muse::io::path_t& path, IAutobot::Status st){
         if (st == IAutobot::Status::Finished) {
             LOGI() << "success finished, path: " << path;
             qApp->exit(0);

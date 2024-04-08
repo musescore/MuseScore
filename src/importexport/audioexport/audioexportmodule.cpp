@@ -33,9 +33,10 @@
 
 #include "log.h"
 
+using namespace muse;
+using namespace muse::modularity;
 using namespace mu::iex::audioexport;
 using namespace mu::project;
-using namespace mu::modularity;
 
 std::string AudioExportModule::moduleName() const
 {

@@ -22,7 +22,7 @@
 #include "vstcomponenthandler.h"
 
 using namespace muse::vst;
-using namespace mu::async;
+using namespace muse::async;
 
 IMPLEMENT_FUNKNOWN_METHODS(VstAdvancedHandler, Steinberg::Vst::IComponentHandler2, Steinberg::Vst::IComponentHandler2::iid)
 

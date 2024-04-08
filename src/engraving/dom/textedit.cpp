@@ -798,7 +798,7 @@ void SplitJoinText::join(EditData* ed)
     if (fragmentsList.size() > 0) {
         ldata->textBlock(static_cast<int>(line) - 1).removeEmptyFragment();
     }
-    mu::join(ldata->textBlock(static_cast<int>(line) - 1).fragments(), fragmentsList);
+    muse::join(ldata->textBlock(static_cast<int>(line) - 1).fragments(), fragmentsList);
 
     ldata->blocks.erase(ldata->blocks.begin() + line);
 

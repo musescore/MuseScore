@@ -32,7 +32,7 @@
 #include "ui/uitypes.h"
 #include "uicomponents/view/abstractmenumodel.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::dock;
 using namespace muse::ui;
 using namespace muse::uicomponents;

@@ -30,8 +30,8 @@
 
 using namespace muse::api;
 
-KeyboardApi::KeyboardApi(mu::api::IApiEngine* e)
-    : mu::api::ApiObject(e)
+KeyboardApi::KeyboardApi(api::IApiEngine* e)
+    : api::ApiObject(e)
 {
 }
 

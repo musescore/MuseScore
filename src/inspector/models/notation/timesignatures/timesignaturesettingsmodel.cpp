@@ -31,7 +31,7 @@ TimeSignatureSettingsModel::TimeSignatureSettingsModel(QObject* parent, IElement
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TIME_SIGNATURE);
-    setTitle(mu::qtrc("inspector", "Time signature"));
+    setTitle(muse::qtrc("inspector", "Time signature"));
     setIcon(muse::ui::IconCode::Code::TIME_SIGNATURE);
     createProperties();
 }
@@ -67,11 +67,11 @@ void TimeSignatureSettingsModel::requestElements()
 void TimeSignatureSettingsModel::loadProperties()
 {
     loadPropertyItem(m_horizontalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().width()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().width()) * 100;
     });
 
     loadPropertyItem(m_verticalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().height()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.value<QSizeF>().height()) * 100;
     });
 
     loadPropertyItem(m_shouldShowCourtesy);

@@ -33,7 +33,7 @@
 #include "shortcutstypes.h"
 #include "../imidiremote.h"
 
-namespace mu::deprecated {
+namespace muse::deprecated {
 class XmlReader;
 class XmlWriter;
 }
@@ -67,10 +67,10 @@ public:
 
 private:
     void readMidiMappings();
-    MidiControlsMapping readMidiMapping(mu::deprecated::XmlReader& reader) const;
+    MidiControlsMapping readMidiMapping(deprecated::XmlReader& reader) const;
 
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
-    void writeMidiMapping(mu::deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
+    void writeMidiMapping(deprecated::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
 
     bool needIgnoreEvent(const muse::midi::Event& event) const;
 

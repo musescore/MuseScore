@@ -61,7 +61,7 @@ public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
-    mu::PointF pagePos() const override;
+    PointF pagePos() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

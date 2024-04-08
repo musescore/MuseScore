@@ -32,8 +32,8 @@
 #include "../ioretcodes.h"
 #include "log.h"
 
-using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 Ret FileSystem::exists(const io::path_t& path) const
 {
@@ -176,7 +176,7 @@ RetVal<ByteArray> FileSystem::readFile(const io::path_t& filePath) const
 
 Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
 {
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
@@ -200,7 +200,7 @@ Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
 
 Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
 {
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
@@ -399,7 +399,7 @@ DateTime FileSystem::lastModified(const io::path_t& filePath) const
 
 Ret FileSystem::isWritable(const io::path_t& filePath) const
 {
-    Ret ret = mu::make_ok();
+    Ret ret = muse::make_ok();
 
     QFileInfo fileInfo(filePath.toQString());
 

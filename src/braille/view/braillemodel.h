@@ -35,7 +35,7 @@
 #include "inotationbraille.h"
 
 namespace mu::engraving {
-class BrailleModel : public QObject, public async::Asyncable, public muse::actions::Actionable
+class BrailleModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 

@@ -521,7 +521,7 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 
         // flag
         if (ldata->isDrawFlag) {
-            noteData.flagXY = mu::PointF(x - ldata->stemLineW * .5 + xcorr, y1 + ycorr);
+            noteData.flagXY = PointF(x - ldata->stemLineW * .5 + xcorr, y1 + ycorr);
             ldata->addBbox(flagBBox.translated(noteData.flagXY));
         }
 
@@ -547,7 +547,7 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
 
     double spatium = item->spatium();
     ldata->y1 = (spatium * .5 * item->spanFrom());
-    if (mu::RealIsEqual(ldata->y2, 0.0)) {
+    if (muse::RealIsEqual(ldata->y2, 0.0)) {
         ldata->y2 = (spatium * .5 * (8.0 + item->spanTo()));
     }
 

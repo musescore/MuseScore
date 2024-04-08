@@ -22,7 +22,7 @@
 #include "font.h"
 #include "global/realfn.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 
 bool Font::g_disableFontMerging = false;
@@ -40,7 +40,7 @@ bool Font::operator ==(const Font& other) const
     // && m_type == other.m_type
 
     return m_family == other.m_family
-           && mu::RealIsEqual(m_pointSizeF, other.m_pointSizeF)
+           && RealIsEqual(m_pointSizeF, other.m_pointSizeF)
            && m_weight == other.m_weight
            && m_style == other.m_style
            && m_noFontMerging == other.m_noFontMerging

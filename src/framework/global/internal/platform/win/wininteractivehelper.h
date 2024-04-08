@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 #include "async/promise.h"
 
-namespace mu {
+namespace muse {
 class WinInteractiveHelper : public async::Asyncable
 {
 public:

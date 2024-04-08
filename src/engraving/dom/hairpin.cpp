@@ -434,13 +434,13 @@ int Hairpin::subtype() const
 
 DynamicType Hairpin::dynamicTypeFrom() const
 {
-    ByteArray ba = beginText().toAscii();
+    muse::ByteArray ba = beginText().toAscii();
     return TConv::dynamicType(ba.constChar());
 }
 
 DynamicType Hairpin::dynamicTypeTo() const
 {
-    ByteArray ba = endText().toAscii();
+    muse::ByteArray ba = endText().toAscii();
     return TConv::dynamicType(ba.constChar());
 }
 
@@ -631,13 +631,13 @@ String Hairpin::accessibleInfo() const
     String rez = TextLineBase::accessibleInfo();
     switch (hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
-        rez += u": " + mtrc("engraving", "Crescendo");
+        rez += u": " + muse::mtrc("engraving", "Crescendo");
         break;
     case HairpinType::DECRESC_HAIRPIN:
-        rez += u": " + mtrc("engraving", "Decrescendo");
+        rez += u": " + muse::mtrc("engraving", "Decrescendo");
         break;
     default:
-        rez += u": " + mtrc("engraving", "Custom");
+        rez += u": " + muse::mtrc("engraving", "Custom");
     }
     return rez;
 }

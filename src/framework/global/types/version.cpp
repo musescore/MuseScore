@@ -24,11 +24,11 @@
 #include <array>
 #include "log.h"
 
-static const mu::Char SUFFIX_DELIMITER = '-';
+static const muse::Char SUFFIX_DELIMITER = '-';
 
-using namespace mu;
+using namespace muse;
 
-static std::array<int, 3> parseVersion(const mu::String& versionString, bool& ok)
+static std::array<int, 3> parseVersion(const muse::String& versionString, bool& ok)
 {
     std::array<int, 3> result { 0, 0, 0 };
 
@@ -59,14 +59,14 @@ static std::array<int, 3> parseVersion(const mu::String& versionString, bool& ok
     return result;
 }
 
-static std::pair<mu::String, int> parseVersionSuffix(const mu::String& suffix, bool& ok)
+static std::pair<String, int> parseVersionSuffix(const String& suffix, bool& ok)
 {
     if (suffix.isEmpty()) {
         ok = false;
-        return std::make_pair(mu::String(), 0);
+        return std::make_pair(String(), 0);
     }
 
-    mu::StringList suffixComponents = suffix.split('.');
+    StringList suffixComponents = suffix.split('.');
 
     ok = true;
     return std::make_pair(suffixComponents.front(), (suffixComponents.size() > 1 ? suffixComponents[1].toInt() : 0));
@@ -77,7 +77,7 @@ Version::Version(int major, int minor, int patch, const String& suffix, int suff
 {
 }
 
-Version::Version(const mu::String& versionStr)
+Version::Version(const String& versionStr)
 {
     String version = versionStr.left(versionStr.indexOf(SUFFIX_DELIMITER));
 
@@ -99,7 +99,7 @@ Version::Version(const mu::String& versionStr)
 }
 
 Version::Version(const std::string& versionStr)
-    : Version(mu::String::fromStdString(versionStr))
+    : Version(String::fromStdString(versionStr))
 {
 }
 
@@ -118,7 +118,7 @@ int Version::patch() const
     return m_patch;
 }
 
-mu::String Version::suffix() const
+String Version::suffix() const
 {
     return m_suffix;
 }
@@ -145,7 +145,7 @@ bool Version::preRelease() const
     return !suffix().isEmpty();
 }
 
-mu::String Version::toString() const
+String Version::toString() const
 {
     String res = String(u"%1.%2.%3").arg(m_major, m_minor, m_patch);
 
@@ -181,7 +181,7 @@ bool Version::operator <(const Version& other) const
                     return true;
                 }
 
-                static mu::StringList suffixes {
+                static StringList suffixes {
                     u"dev",
                     u"alpha",
                     u"beta",

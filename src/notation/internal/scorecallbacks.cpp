@@ -32,7 +32,7 @@
 
 using namespace mu::notation;
 
-void ScoreCallbacks::dataChanged(const RectF&)
+void ScoreCallbacks::dataChanged(const muse::RectF&)
 {
     NOT_IMPLEMENTED;
 }
@@ -42,15 +42,15 @@ void ScoreCallbacks::updateAll()
     NOT_IMPLEMENTED;
 }
 
-void ScoreCallbacks::drawBackground(muse::draw::Painter*, const mu::RectF&) const
+void ScoreCallbacks::drawBackground(muse::draw::Painter*, const muse::RectF&) const
 {
     NOT_IMPLEMENTED;
 }
 
-const mu::Rect ScoreCallbacks::geometry() const
+const muse::Rect ScoreCallbacks::geometry() const
 {
     NOT_IMPLEMENTED;
-    return mu::Rect();
+    return muse::Rect();
 }
 
 qreal ScoreCallbacks::selectionProximity() const
@@ -72,7 +72,7 @@ void ScoreCallbacks::setDropTarget(const mu::engraving::EngravingItem* dropTarge
     m_interaction->setDropTarget(dropTarget, false);
 }
 
-void ScoreCallbacks::setDropRectangle(const RectF& rect)
+void ScoreCallbacks::setDropRectangle(const muse::RectF& rect)
 {
     IF_ASSERT_FAILED(m_interaction) {
         return;

@@ -563,14 +563,14 @@ char **EXPORT_CALL
 _lou_defaultTableResolver(const char *tableList, const char *base);
 
 /**
- * Return single-cell dot pattern corresponding to a character.
+ * muse::Return single-cell dot pattern corresponding to a character.
  * TODO: move to commonTranslationFunctions.c
  */
 widechar EXPORT_CALL
 _lou_getDotsForChar(widechar c, const DisplayTableHeader *table);
 
 /**
- * Return character corresponding to a single-cell dot pattern.
+ * muse::Return character corresponding to a single-cell dot pattern.
  * TODO: move to commonTranslationFunctions.c
  */
 widechar EXPORT_CALL
@@ -619,7 +619,7 @@ unsigned long int EXPORT_CALL
 _lou_charHash(widechar c);
 
 /**
- * Return a string in the same format as the characters operand in opcodes
+ * muse::Return a string in the same format as the characters operand in opcodes
  */
 const char *EXPORT_CALL
 _lou_showString(widechar const *chars, int length, int forceHex);
@@ -634,20 +634,20 @@ const char *EXPORT_CALL
 _lou_unknownDots(widechar dots);
 
 /**
- * Return a character string in the format of the dots operand
+ * muse::Return a character string in the format of the dots operand
  */
 const char *EXPORT_CALL
 _lou_showDots(widechar const *dots, int length);
 
 /**
- * Return a character string where the attributes are indicated
+ * muse::Return a character string where the attributes are indicated
  * by the attribute letters used in multipass opcodes
  */
 char *EXPORT_CALL
 _lou_showAttributes(TranslationTableCharacterAttributes a);
 
 /**
- * Return number of the opcode
+ * muse::Return number of the opcode
  *
  * @param toFind the opcodes
  */
@@ -655,7 +655,7 @@ TranslationTableOpcode EXPORT_CALL
 _lou_findOpcodeNumber(const char *tofind);
 
 /**
- * Return the name of the opcode associated with an opcode number
+ * muse::Return the name of the opcode associated with an opcode number
  *
  * @param opcode an opcode
  */
@@ -750,13 +750,13 @@ _lou_logMessage(logLevels level, const char *format, ...);
 extern int translation_direction;
 
 /**
- * Return 1 if given translation mode is valid. Return 0 otherwise.
+ * muse::Return 1 if given translation mode is valid. muse::Return 0 otherwise.
  */
 int EXPORT_CALL
 _lou_isValidMode(int mode);
 
 /**
- * Return the default braille representation for a character.
+ * muse::Return the default braille representation for a character.
  */
 widechar EXPORT_CALL
 _lou_charToFallbackDots(widechar c);

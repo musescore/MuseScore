@@ -28,11 +28,12 @@
 #include "translation.h"
 
 using namespace mu;
+using namespace muse;
 using namespace mu::notation;
 
 const QString customPreset()
 {
-    return mu::qtrc("notation", "Custom");
+    return muse::qtrc("notation", "Custom");
 }
 
 StringTuningsSettingsModel::StringTuningsSettingsModel(QObject* parent)
@@ -70,9 +71,9 @@ void StringTuningsSettingsModel::init()
 
     const InstrumentStringTuningsMap& stringTuningsPresets = instrumentsRepository()->stringTuningsPresets();
 
-    if (contains(stringTuningsPresets, instrument->id().toStdString())) {
+    if (muse::contains(stringTuningsPresets, instrument->id().toStdString())) {
         m_itemId = instrument->id().toStdString();
-    } else if (contains(stringTuningsPresets, instrument->family().toStdString())) {
+    } else if (muse::contains(stringTuningsPresets, instrument->family().toStdString())) {
         m_itemId = instrument->family().toStdString();
     }
 
@@ -85,7 +86,7 @@ void StringTuningsSettingsModel::init()
         StringTuningsItem* item = new StringTuningsItem(this);
 
         item->blockSignals(true);
-        item->setShow(contains(visibleStrings, instrStringIndex));
+        item->setShow(muse::contains(visibleStrings, instrStringIndex));
         item->setNumber(QString::number(i + 1));
         item->setValue(string.pitch);
         item->setUseFlat(string.useFlat);
@@ -261,7 +262,7 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
         int number = static_cast<int>(stringTuning.number);
 
         QVariantMap stringNumberMap;
-        stringNumberMap.insert("text", mu::qtrc("notation", "%n string(s)", nullptr, number));
+        stringNumberMap.insert("text", muse::qtrc("notation", "%n string(s)", nullptr, number));
         stringNumberMap.insert("value", number);
         numbersList << stringNumberMap;
     }
@@ -406,7 +407,7 @@ void StringTuningsSettingsModel::updateCurrentPreset()
 
 void StringTuningsSettingsModel::doSetCurrentPreset(const QString& preset)
 {
-    changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, String::fromQString(preset));
+    changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, muse::String::fromQString(preset));
     emit currentPresetChanged();
 }
 

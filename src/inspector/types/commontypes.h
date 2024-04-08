@@ -75,7 +75,7 @@ public:
 
 inline double formatDoubleFunc(const QVariant& elementPropertyValue)
 {
-    return DataFormatter::roundDouble(elementPropertyValue.toDouble());
+    return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble());
 }
 
 template<typename T>

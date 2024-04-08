@@ -26,7 +26,7 @@
 
 using namespace muse::extensions;
 namespace muse::extensions {
-class QmlApiEngine : public mu::api::IApiEngine
+class QmlApiEngine : public muse::api::IApiEngine
 {
 public:
     QmlApiEngine(QQmlEngine* e)

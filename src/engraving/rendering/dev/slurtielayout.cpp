@@ -55,7 +55,7 @@ using namespace mu::engraving::rendering::dev;
 
 void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
 {
-    if (item->track2() == mu::nidx) {
+    if (item->track2() == muse::nidx) {
         item->setTrack2(item->track());
     }
 
@@ -228,7 +228,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         // this is the first call to layoutSystem,
         // processing the first line segment
         //
-        if (item->track2() == mu::nidx) {
+        if (item->track2() == muse::nidx) {
             item->setTrack2(item->track());
         }
         if (item->startCR() == 0 || item->startCR()->measure() == 0) {
@@ -1778,7 +1778,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         ElementType::LYRICS
     };
     chordShape.remove_if([&](ShapeElement& s) {
-        return !s.item() || s.item() == note || mu::contains(IGNORED_TYPES, s.item()->type())
+        return !s.item() || s.item() == note || muse::contains(IGNORED_TYPES, s.item()->type())
                || (s.item()->isNoteDot() && ignoreDot) || !s.item()->addToSkyline();
     });
 
@@ -2159,7 +2159,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     const PointF tieEnd = tieSeg->ups(Grip::END).p + tieSeg->ups(Grip::END).off;
 
     PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
-    if (mu::RealIsNull(tieEndNormalized.x())) {
+    if (muse::RealIsNull(tieEndNormalized.x())) {
         return;
     }
 
@@ -2518,7 +2518,7 @@ void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurT
     const double minTieThickness = mag * (0.15 * slurTieSeg->spatium() - endWidth);
     const double normalThickness = mag * (midWidth - endWidth);
 
-    bool invalid = mu::RealIsEqualOrMore(minTieLength, shortTieLimit);
+    bool invalid = muse::RealIsEqualOrMore(minTieLength, shortTieLimit);
 
     double finalThickness;
     if (slurTieLengthInSp > shortTieLimit || invalid) {

@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_REALFN_H
-#define MU_GLOBAL_REALFN_H
+#ifndef MUSE_GLOBAL_REALFN_H
+#define MUSE_GLOBAL_REALFN_H
 
 #include <cmath>
 #include <algorithm>
 #include <vector>
 
-namespace mu {
+namespace muse {
 // default
 constexpr double COMPARE_DOUBLE_EPSILON(1000000000.0);
 constexpr double COMPARE_DOUBLE_NULL(0.000000001);
@@ -178,4 +178,4 @@ inline double RealFloor(float value, int prec)
 }
 }
 
-#endif // MU_GLOBAL_REALFN_H
+#endif // MUSE_GLOBAL_REALFN_H

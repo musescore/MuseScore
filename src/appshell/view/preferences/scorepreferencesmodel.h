@@ -31,7 +31,7 @@
 #include "audio/iaudioconfiguration.h"
 
 namespace mu::appshell {
-class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
+class ScorePreferencesModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 

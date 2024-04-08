@@ -75,7 +75,7 @@ bool AudioThread::isRunning() const
 
 void AudioThread::main()
 {
-    mu::runtime::setThreadName("audio_worker");
+    runtime::setThreadName("audio_worker");
 
     AudioThread::ID = std::this_thread::get_id();
 
@@ -84,7 +84,7 @@ void AudioThread::main()
     }
 
     while (m_running) {
-        mu::async::processEvents();
+        async::processEvents();
 
         if (m_mainLoopBody) {
             m_mainLoopBody();

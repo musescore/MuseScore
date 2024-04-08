@@ -38,7 +38,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
@@ -47,10 +47,10 @@ MasterScore* MTest::readScore(const QString& name)
     QString path = root + "/" + name;
     MasterScore* score = compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setFileInfoProvider(std::make_shared<LocalFileInfoProvider>(path));
-    std::string suffix = io::suffix(path);
+    std::string suffix = muse::io::suffix(path);
 
     ScoreLoad sl;
-    Ret ret;
+    muse::Ret ret;
     if (suffix == "mscz" || suffix == "mscx") {
         ret = compat::loadMsczOrMscx(score, path, false);
     } else {

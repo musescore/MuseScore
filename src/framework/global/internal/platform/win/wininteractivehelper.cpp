@@ -30,8 +30,8 @@
 
 #include <QDesktopServices>
 
-using namespace mu;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 
 async::Promise<Ret> WinInteractiveHelper::openApp(const std::string& appIdentifier)
 {

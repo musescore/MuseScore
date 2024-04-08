@@ -464,7 +464,7 @@ private:
 };
 }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::engraving::PropertyValue&)
+inline muse::logger::Stream& operator<<(muse::logger::Stream& s, const mu::engraving::PropertyValue&)
 {
     s << "property(not implemented log output)";
     return s;

@@ -51,7 +51,7 @@ SvgRenderer::~SvgRenderer()
 #endif
 }
 
-mu::SizeF SvgRenderer::defaultSize() const
+muse::SizeF SvgRenderer::defaultSize() const
 {
 #ifndef DRAW_NO_QSVGRENDER
     return SizeF::fromQSizeF(m_qSvgRenderer->defaultSize());

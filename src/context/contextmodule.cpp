@@ -27,7 +27,7 @@
 #include "shortcutcontext.h"
 
 using namespace mu::context;
-using namespace mu::modularity;
+using namespace muse::modularity;
 using namespace muse::shortcuts;
 
 std::string ContextModule::moduleName() const
@@ -45,9 +45,9 @@ void ContextModule::registerExports()
     ioc()->registerExport<IShortcutContextPriority>(moduleName(), new ShortcutContextPriority());
 }
 
-void ContextModule::onInit(const IApplication::RunMode& mode)
+void ContextModule::onInit(const muse::IApplication::RunMode& mode)
 {
-    if (mode != IApplication::RunMode::GuiApp) {
+    if (mode != muse::IApplication::RunMode::GuiApp) {
         return;
     }
 

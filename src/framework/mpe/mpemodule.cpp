@@ -30,8 +30,8 @@
 #include "internal/articulationprofilesrepository.h"
 #include "view/articulationsprofileeditormodel.h"
 
-using namespace mu;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::mpe;
 
 static void mpe_init_qrc()

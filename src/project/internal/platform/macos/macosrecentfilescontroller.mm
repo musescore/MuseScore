@@ -25,7 +25,7 @@
 
 using namespace mu::project;
 
-void MacOSRecentFilesController::prependPlatformRecentFile(const io::path_t& path)
+void MacOSRecentFilesController::prependPlatformRecentFile(const muse::io::path_t& path)
 {
     NSString* string = path.toQString().toNSString();
     NSURL* url = [NSURL fileURLWithPath:string];

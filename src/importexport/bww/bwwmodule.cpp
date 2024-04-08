@@ -28,6 +28,7 @@
 
 #include "log.h"
 
+using namespace muse::modularity;
 using namespace mu::iex::bww;
 using namespace mu::project;
 
@@ -38,7 +39,7 @@ std::string BwwModule::moduleName() const
 
 void BwwModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
     }

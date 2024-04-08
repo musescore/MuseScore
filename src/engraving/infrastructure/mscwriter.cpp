@@ -35,7 +35,8 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 using namespace mu::engraving;
 
 MscWriter::MscWriter(const Params& params)
@@ -192,12 +193,12 @@ void MscWriter::writeAudioFile(const ByteArray& data)
     addFileData(u"audio.ogg", data);
 }
 
-void MscWriter::writeAudioSettingsJsonFile(const ByteArray& data, const io::path_t& pathPrefix)
+void MscWriter::writeAudioSettingsJsonFile(const ByteArray& data, const muse::io::path_t& pathPrefix)
 {
     addFileData(pathPrefix.toString() + u"audiosettings.json", data);
 }
 
-void MscWriter::writeViewSettingsJsonFile(const ByteArray& data, const io::path_t& pathPrefix)
+void MscWriter::writeViewSettingsJsonFile(const ByteArray& data, const muse::io::path_t& pathPrefix)
 {
     addFileData(pathPrefix.toString() + u"viewsettings.json", data);
 }
@@ -317,7 +318,7 @@ bool MscWriter::ZipFileWriter::addFileData(const String& fileName, const ByteArr
     return true;
 }
 
-Ret MscWriter::DirWriter::open(io::IODevice* device, const io::path_t& filePath)
+Ret MscWriter::DirWriter::open(io::IODevice* device, const muse::io::path_t& filePath)
 {
     if (device) {
         NOT_SUPPORTED;
@@ -368,7 +369,7 @@ bool MscWriter::DirWriter::hasError() const
 
 bool MscWriter::DirWriter::addFileData(const String& fileName, const ByteArray& data)
 {
-    io::path_t filePath = m_rootPath + "/" + fileName;
+    muse::io::path_t filePath = m_rootPath + "/" + fileName;
 
     Dir fileDir(FileInfo(filePath).absolutePath());
     if (!fileDir.exists()) {
@@ -454,7 +455,7 @@ bool MscWriter::XmlFileWriter::addFileData(const String& fileName, const ByteArr
 
     static const std::vector<String> supportedExts = { u"mscx", u"json", u"mss" };
     String ext = FileInfo::suffix(fileName);
-    if (!mu::contains(supportedExts, ext)) {
+    if (!muse::contains(supportedExts, ext)) {
         NOT_SUPPORTED << fileName;
         return true; // not error
     }

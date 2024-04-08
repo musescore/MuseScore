@@ -41,7 +41,7 @@ void NewWorkspaceModel::load(const QString& workspaceNames)
 {
     m_workspaceNames = workspaceNames.split(',');
 
-    setWorkspaceName(mu::qtrc("workspace", "My new workspace"));
+    setWorkspaceName(muse::qtrc("workspace", "My new workspace"));
     setUseUiPreferences(true);
     setUseUiArrangement(true);
     setUsePalettes(true);
@@ -99,14 +99,14 @@ void NewWorkspaceModel::validateWorkspaceName()
     m_errorMessage.clear();
 
     if (m_workspaceNames.contains(m_workspaceName)) {
-        m_errorMessage = mu::qtrc("workspace", "A workspace with the name “%1” already exists. Please choose a different name.")
+        m_errorMessage = muse::qtrc("workspace", "A workspace with the name “%1” already exists. Please choose a different name.")
                          .arg(m_workspaceName);
         return;
     }
 
     //! NOTE A file will be created with this name, so let's check if the name is valid for the file name
-    if (!io::isAllowedFileName(io::path_t(m_workspaceName))) {
-        m_errorMessage = mu::qtrc("workspace", "“%1” cannot be used as a workspace name. Please choose a different name.")
+    if (!muse::io::isAllowedFileName(muse::io::path_t(m_workspaceName))) {
+        m_errorMessage = muse::qtrc("workspace", "“%1” cannot be used as a workspace name. Please choose a different name.")
                          .arg(m_workspaceName);
         return;
     }

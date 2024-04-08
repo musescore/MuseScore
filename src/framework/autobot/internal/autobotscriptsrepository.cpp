@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::autobot;
 
 Scripts AutobotScriptsRepository::scripts() const
@@ -34,7 +34,7 @@ Scripts AutobotScriptsRepository::scripts() const
     io::paths_t scriptsDirs = configuration()->scriptsDirPaths();
     io::paths_t scriptsPaths;
     for (const io::path_t& dir : scriptsDirs) {
-        RetVal<io::paths_t> paths = fileSystem()->scanFiles(dir, { "*.js" }, mu::io::ScanMode::FilesInCurrentDir);
+        RetVal<io::paths_t> paths = fileSystem()->scanFiles(dir, { "*.js" }, io::ScanMode::FilesInCurrentDir);
         scriptsPaths.insert(scriptsPaths.end(), paths.val.begin(), paths.val.end());
     }
 
@@ -51,7 +51,7 @@ Scripts AutobotScriptsRepository::scripts() const
         if (!engine.evaluate()) {
             LOGW() << "Bad script: " << p;
             s.type = ScriptType::Undefined;
-            s.title = mu::io::completeBasename(p).toQString();
+            s.title = io::completeBasename(p).toQString();
             scripts.push_back(std::move(s));
             continue;
         }
@@ -60,7 +60,7 @@ Scripts AutobotScriptsRepository::scripts() const
         TestCase tc(tcVal);
         if (!tc.isValid()) {
             s.type = ScriptType::Custom;
-            s.title = mu::io::completeBasename(p).toQString();
+            s.title = io::completeBasename(p).toQString();
             scripts.push_back(std::move(s));
             continue;
         }

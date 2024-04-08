@@ -32,8 +32,9 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
 using namespace mu::palette;
+using namespace muse;
+using namespace muse::io;
 using namespace muse::workspace;
 
 static const AsciiStringView PALETTE_XML_TAG("PaletteBox");

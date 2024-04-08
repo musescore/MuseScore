@@ -32,7 +32,7 @@ BarlineSettingsModel::BarlineSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
-    setTitle(mu::qtrc("inspector", "Barline"));
+    setTitle(muse::qtrc("inspector", "Barline"));
     setIcon(muse::ui::IconCode::Code::SECTION_BREAK);
     createProperties();
 }
@@ -83,31 +83,31 @@ void BarlineSettingsModel::onNotationChanged(const mu::engraving::PropertyIdSet&
 
 void BarlineSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::BARLINE_TYPE)) {
+    if (muse::contains(propertyIdSet, Pid::BARLINE_TYPE)) {
         loadPropertyItem(m_type, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toInt();
         });
     }
 
-    if (mu::contains(propertyIdSet, Pid::BARLINE_SPAN)) {
+    if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN)) {
         loadPropertyItem(m_isSpanToNextStaff, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toBool();
         });
     }
 
-    if (mu::contains(propertyIdSet, Pid::BARLINE_SPAN_FROM)) {
+    if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN_FROM)) {
         loadPropertyItem(m_spanFrom, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toInt();
         });
     }
 
-    if (mu::contains(propertyIdSet, Pid::BARLINE_SPAN_TO)) {
+    if (muse::contains(propertyIdSet, Pid::BARLINE_SPAN_TO)) {
         loadPropertyItem(m_spanTo, [](const QVariant& elementPropertyValue) -> QVariant {
             return elementPropertyValue.toInt();
         });
     }
 
-    if (mu::contains(propertyIdSet, Pid::BARLINE_SHOW_TIPS)) {
+    if (muse::contains(propertyIdSet, Pid::BARLINE_SHOW_TIPS)) {
         loadPropertyItem(m_hasToShowTips);
     }
 }

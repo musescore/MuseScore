@@ -28,28 +28,28 @@
 #include "ibrailleconfiguration.h"
 
 namespace mu::engraving {
-class BrailleConfiguration : public mu::braille::IBrailleConfiguration, public async::Asyncable
+class BrailleConfiguration : public mu::braille::IBrailleConfiguration, public muse::async::Asyncable
 {
 public:
     void init();
 
-    async::Notification braillePanelEnabledChanged() const override;
+    muse::async::Notification braillePanelEnabledChanged() const override;
     bool braillePanelEnabled() const override;
     void setBraillePanelEnabled(const bool enabled) override;
 
-    async::Notification intervalDirectionChanged() const override;
+    muse::async::Notification intervalDirectionChanged() const override;
     braille::BrailleIntervalDirection intervalDirection() const override;
     void setIntervalDirection(const braille::BrailleIntervalDirection) override;
 
-    async::Notification brailleTableChanged() const override;
+    muse::async::Notification brailleTableChanged() const override;
     QString brailleTable() const override;
     void setBrailleTable(const QString table) override;
     QStringList brailleTableList() const override;
 
 private:
-    async::Notification m_braillePanelEnabledChanged;
-    async::Notification m_brailleTableChanged;
-    async::Notification m_intervalDirectionChanged;
+    muse::async::Notification m_braillePanelEnabledChanged;
+    muse::async::Notification m_brailleTableChanged;
+    muse::async::Notification m_intervalDirectionChanged;
 };
 }
 

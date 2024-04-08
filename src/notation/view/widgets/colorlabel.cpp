@@ -27,7 +27,7 @@
 
 #include "translation.h"
 
-using namespace mu;
+using namespace muse;
 
 namespace Awl {
 //---------------------------------------------------------
@@ -106,7 +106,7 @@ void ColorLabel::colorButtonClicked(bool)
         return;
     }
     QColor c = QColorDialog::getColor(_color, this,
-                                      mu::qtrc("notation", "Select color"),
+                                      muse::qtrc("notation", "Select color"),
                                       QColorDialog::ShowAlphaChannel
                                       );
     if (c.isValid()) {

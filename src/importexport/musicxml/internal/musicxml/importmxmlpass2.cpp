@@ -98,6 +98,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -105,12 +106,12 @@ using namespace mu::engraving::rendering::dev;
 namespace mu::engraving {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
-    return mu::modularity::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
+    return muse::modularity::ioc()->resolve<mu::iex::musicxml::IMusicXmlConfiguration>("iex_musicxml");
 }
 
 static std::shared_ptr<mu::engraving::IEngravingFontsProvider> engravingFonts()
 {
-    return mu::modularity::ioc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
+    return muse::modularity::ioc()->resolve<mu::engraving::IEngravingFontsProvider>("iex_musicxml");
 }
 
 //---------------------------------------------------------
@@ -183,7 +184,7 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick, const tra
                 }
             }
         }
-        s = s->nextCR(mu::nidx, true);
+        s = s->nextCR(muse::nidx, true);
     }
     return Fraction(0, 1);
 }
@@ -220,7 +221,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, cons
     }
     // cleanup
     for (Lyrics* l : list) {
-        mu::remove(m_lyrics, l);
+        muse::remove(m_lyrics, l);
     }
 }
 
@@ -634,7 +635,7 @@ static void setPartInstruments(MxmlLogger* logger, const XmlStreamReader* xmlrea
         Fraction tick = (*it).first;
         if (it == instrList.cbegin()) {
             prevInstrId = (*it).second;              // first instrument id
-            MusicXMLInstrument mxmlInstr = mu::value(instruments, prevInstrId);
+            MusicXMLInstrument mxmlInstr = muse::value(instruments, prevInstrId);
             updatePartWithInstrument(part, mxmlInstr, intervList.interval(tick));
         } else {
             auto instrId = (*it).second;
@@ -658,11 +659,11 @@ static void setPartInstruments(MxmlLogger* logger, const XmlStreamReader* xmlrea
                 if (!segment) {
                     logger->logError(String(u"segment for instrument change at tick %1 not found")
                                      .arg(tick.ticks()), xmlreader);
-                } else if (!mu::contains(instruments, instrId)) {
+                } else if (!muse::contains(instruments, instrId)) {
                     logger->logError(String(u"changed instrument '%1' at tick %2 not found in part '%3'")
                                      .arg(instrId).arg(tick.ticks()).arg(partId), xmlreader);
                 } else {
-                    MusicXMLInstrument mxmlInstr = mu::value(instruments, instrId);
+                    MusicXMLInstrument mxmlInstr = muse::value(instruments, instrId);
                     updatePartWithInstrumentChange(part, mxmlInstr, intervList.interval(tick), segment, track, tick);
                 }
             }
@@ -721,7 +722,7 @@ static String text2syms(const String& t)
         AsciiStringView sym;
         while (maxMatch > 0) {
             String toBeMatched = in.left(maxMatch);
-            if (mu::contains(map, toBeMatched)) {
+            if (muse::contains(map, toBeMatched)) {
                 sym = SymNames::nameForSymId(map.at(toBeMatched));
                 break;
             }
@@ -871,10 +872,10 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
                       const std::set<Lyrics*>& extLyrics,
                       MusicXmlLyricsExtend& extendedLyrics)
 {
-    for (const auto lyricNo : mu::keys(numbrdLyrics)) {
+    for (const auto lyricNo : muse::keys(numbrdLyrics)) {
         const auto lyric = numbrdLyrics.at(lyricNo);
         addLyric(logger, xmlreader, cr, lyric, lyricNo, extendedLyrics);
-        if (mu::contains(extLyrics, lyric)) {
+        if (muse::contains(extLyrics, lyric)) {
             extendedLyrics.addLyric(lyric);
         }
     }
@@ -883,10 +884,10 @@ static void addLyrics(MxmlLogger* logger, const XmlStreamReader* const xmlreader
 static void addGraceNoteLyrics(const std::map<int, Lyrics*>& numberedLyrics, std::set<Lyrics*> extendedLyrics,
                                std::vector<GraceNoteLyrics>& gnLyrics)
 {
-    for (const auto lyricNo : mu::keys(numberedLyrics)) {
+    for (const auto lyricNo : muse::keys(numberedLyrics)) {
         const auto lyric = numberedLyrics.at(lyricNo);
         if (lyric) {
-            bool extend = mu::contains(extendedLyrics, lyric);
+            bool extend = muse::contains(extendedLyrics, lyric);
             const GraceNoteLyrics gnl = GraceNoteLyrics(lyric, extend, lyricNo);
             gnLyrics.push_back(gnl);
         }
@@ -1229,7 +1230,7 @@ static bool convertArticulationToSymId(const String& mxmlName, SymId& id)
         map[u"unstress"]         = SymId::articUnstressAbove;
     }
 
-    if (mu::contains(map, mxmlName)) {
+    if (muse::contains(map, mxmlName)) {
         id = map.at(mxmlName);
         return true;
     } else {
@@ -1260,7 +1261,7 @@ static SymId convertFermataToSymId(const String& mxmlName)
         map[u"curlew"]           = SymId::curlewSign;
     }
 
-    if (mu::contains(map, mxmlName)) {
+    if (muse::contains(map, mxmlName)) {
         return map.at(mxmlName);
     } else {
         LOGD("unknown fermata %s", muPrintable(mxmlName));
@@ -1300,7 +1301,7 @@ static NoteHeadGroup convertNotehead(String mxmlName)
         map[u"ti"] = int(NoteHeadGroup::HEAD_TI);
     }
 
-    if (mu::contains(map, mxmlName)) {
+    if (muse::contains(map, mxmlName)) {
         return NoteHeadGroup(map.at(mxmlName));
     } else {
         LOGD("unknown notehead %s", muPrintable(mxmlName));      // TODO
@@ -1936,7 +1937,7 @@ void MusicXMLParserPass2::part()
     // try to prevent an empty track name
     if (part->partName() == "") {
         String instrId = m_pass1.getInstrList(id).instrument(Fraction(0, 1));
-        part->setPartName(mu::value(instruments, instrId).name);
+        part->setPartName(muse::value(instruments, instrId).name);
     }
 
 #ifdef DEBUG_VOICE_MAPPER
@@ -2162,7 +2163,7 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
             }
             Chord* chord = static_cast<Chord*>(e);
             for (Note* nt : chord->notes()) {
-                if (mu::contains(alterMap, nt)) {
+                if (muse::contains(alterMap, nt)) {
                     int alter = alterMap.at(nt);
                     int ln  = absStep(nt->tpc(), nt->pitch());
                     bool error = false;
@@ -2173,15 +2174,15 @@ static void markUserAccidentals(const staff_idx_t firstStaff,
                     if ((alter == -1
                          && currAccVal == AccidentalVal::FLAT
                          && nt->accidental()->accidentalType() == AccidentalType::FLAT
-                         && !mu::value(accTmp, ln, false))
+                         && !muse::value(accTmp, ln, false))
                         || (alter == 0
                             && currAccVal == AccidentalVal::NATURAL
                             && nt->accidental()->accidentalType() == AccidentalType::NATURAL
-                            && !mu::value(accTmp, ln, false))
+                            && !muse::value(accTmp, ln, false))
                         || (alter == 1
                             && currAccVal == AccidentalVal::SHARP
                             && nt->accidental()->accidentalType() == AccidentalType::SHARP
-                            && !mu::value(accTmp, ln, false))) {
+                            && !muse::value(accTmp, ln, false))) {
                         nt->accidental()->setRole(AccidentalRole::USER);
                     } else if (Accidental::isMicrotonal(nt->accidental()->accidentalType())
                                && nt->accidental()->accidentalType() < AccidentalType::END) {
@@ -2240,7 +2241,7 @@ static void addGraceChordsAfter(Chord* c, GraceChordList& gcl, size_t& gac)
 
     while (gac > 0) {
         if (gcl.size() > 0) {
-            Chord* graceChord = mu::takeFirst(gcl);
+            Chord* graceChord = muse::takeFirst(gcl);
             graceChord->toGraceAfter();
             c->add(graceChord);              // TODO check if same voice ?
             coerceGraceCue(c, graceChord);
@@ -2278,7 +2279,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
 
 static bool canAddTempoText(const TempoMap* const tempoMap, const int tick)
 {
-    if (!mu::contains(*tempoMap, tick)) {
+    if (!muse::contains(*tempoMap, tick)) {
         return true;
     }
 
@@ -2497,7 +2498,7 @@ void MusicXMLParserPass2::measure(const String& partId, const Fraction time)
     fillGapsInFirstVoices(measure, part);
 
     // Prevent any beams from extending into the next measure
-    for (Beam* beam : mu::values(beams)) {
+    for (Beam* beam : muse::values(beams)) {
         if (beam) {
             removeBeam(beam);
         }
@@ -3450,11 +3451,11 @@ void MusicXMLParserDirection::otherDirection()
             { String(u"Thick caesura"), SymId::caesuraThick }
         };
         String t = m_e.readText();
-        String val = mu::value(otherDirectionStrings, t);
+        String val = muse::value(otherDirectionStrings, t);
         if (!val.empty()) {
             m_wordsText += val;
         } else {
-            SymId sym = mu::value(otherDirectionSyms, t);
+            SymId sym = muse::value(otherDirectionSyms, t);
             Symbol* smuflSym = Factory::createSymbol(m_score->dummy());
             smuflSym->setSym(sym);
             if (color.isValid()) {
@@ -4226,7 +4227,7 @@ void MusicXMLParserPass2::clearSpanner(const MusicXmlSpannerDesc& d)
 
 void MusicXMLParserPass2::deleteHandledSpanner(SLine* const& spanner)
 {
-    mu::remove(m_spanners, spanner);
+    muse::remove(m_spanners, spanner);
     delete spanner;
 }
 
@@ -4528,7 +4529,7 @@ void MusicXMLParserPass2::doEnding(const String& partId, Measure* measure, const
                     volta->setText(text.empty() ? number : text);
                     // LVIFIX TODO also support endings "1 - 3"
                     volta->endings().clear();
-                    mu::join(volta->endings(), iEndingNumbers);
+                    muse::join(volta->endings(), iEndingNumbers);
                     volta->setTick(measure->tick());
                     m_score->addElement(volta);
                     m_lastVolta = volta;
@@ -5291,20 +5292,20 @@ static void setNoteHead(Note* note, const Color noteheadColor, const bool notehe
 static BeamMode computeBeamMode(const std::map<int, String>& beamTypes)
 {
     // Start with uniquely-handled beam modes
-    if (mu::value(beamTypes, 1) == u"continue"
-        && mu::value(beamTypes, 2) == u"begin") {
+    if (muse::value(beamTypes, 1) == u"continue"
+        && muse::value(beamTypes, 2) == u"begin") {
         return BeamMode::BEGIN16;
-    } else if (mu::value(beamTypes, 1) == u"continue"
-               && mu::value(beamTypes, 2) == u"continue"
-               && mu::value(beamTypes, 3) == u"begin") {
+    } else if (muse::value(beamTypes, 1) == u"continue"
+               && muse::value(beamTypes, 2) == u"continue"
+               && muse::value(beamTypes, 3) == u"begin") {
         return BeamMode::BEGIN32;
     }
     // Generic beam modes are naive to all except the first beam
-    else if (mu::value(beamTypes, 1) == u"begin") {
+    else if (muse::value(beamTypes, 1) == u"begin") {
         return BeamMode::BEGIN;
-    } else if (mu::value(beamTypes, 1) == u"continue") {
+    } else if (muse::value(beamTypes, 1) == u"continue") {
         return BeamMode::MID;
-    } else if (mu::value(beamTypes, 1) == u"end") {
+    } else if (muse::value(beamTypes, 1) == u"end") {
         return BeamMode::END;
     } else {
         // backward-hook, forward-hook, and other unknown combinations
@@ -5436,7 +5437,7 @@ static void setPitch(Note* note, MusicXMLParserPass1& pass1, const String& partI
 {
     const auto& instruments = pass1.getInstruments(partId);
     if (mnp.unpitched()) {
-        if (hasDrumset(instruments) && mu::contains(instruments, instrumentId)) {
+        if (hasDrumset(instruments) && muse::contains(instruments, instrumentId)) {
             // step and oct are display-step and ...-oct
             // get pitch from instrument definition in drumset instead
             int unpitched = instruments.at(instrumentId).unpitched;
@@ -5631,7 +5632,7 @@ Note* MusicXMLParserPass2::note(const String& partId,
     }
 
     // Define currBeam based on currentVoice to handle multi-voice beaming (and instantiate if not already)
-    if (!mu::contains(currBeams, currentVoice)) {
+    if (!muse::contains(currBeams, currentVoice)) {
         currBeams.insert({ currentVoice, (Beam*)nullptr });
     }
     Beam*& currBeam = currBeams[currentVoice];
@@ -6622,7 +6623,7 @@ void MusicXMLParserLyric::parse()
     } else if (lyricNo > MAX_LYRICS) {
         m_logger->logError(String(u"too much lyrics (>%1)").arg(MAX_LYRICS), &m_e);
         return;
-    } else if (mu::contains(m_numberedLyrics, lyricNo)) {
+    } else if (muse::contains(m_numberedLyrics, lyricNo)) {
         m_logger->logError(String(u"duplicate lyrics number (%1)").arg(lyricNumber), &m_e);
         return;
     }
@@ -7165,7 +7166,7 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
         delayedArps.insert(std::pair<int, DelayedArpeggio>(cr->tick().ticks(), delayedArp));
     } else {
         // Retrieve stored arpeggio to add to this chord
-        DelayedArpeggio delayedArp = mu::value(delayedArps, cr->tick().ticks(), DelayedArpeggio(u"", 0));
+        DelayedArpeggio delayedArp = muse::value(delayedArps, cr->tick().ticks(), DelayedArpeggio(u"", 0));
         if (!delayedArp.m_arpeggioType.empty()) {
             arpeggioType = delayedArp.m_arpeggioType;
             arpeggioNo = delayedArp.m_arpeggioNo;
@@ -7176,7 +7177,7 @@ static void addArpeggio(ChordRest* cr, String& arpeggioType, int arpeggioNo, Arp
     // If no current arpeggio with same number add new
     // If not, expand span
     // no support for arpeggio on rest
-    const std::vector<MusicXmlArpeggioDesc> arps = mu::values(arpMap, cr->tick().ticks());
+    const std::vector<MusicXmlArpeggioDesc> arps = muse::values(arpMap, cr->tick().ticks());
     Arpeggio* curArp = nullptr;
     for (const MusicXmlArpeggioDesc arp : arps) {
         if (arp.no == arpeggioNo) {

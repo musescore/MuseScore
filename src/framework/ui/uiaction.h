@@ -51,7 +51,7 @@ struct UiAction
     actions::ActionCode code;
     UiContext uiCtx = UiCtxAny;
     std::string scCtx = "any";
-    mu::MnemonicString title;
+    MnemonicString title;
     TranslatableString description;
     IconCode::Code iconCode = IconCode::Code::NONE;
     Checkable checkable = Checkable::No;
@@ -61,19 +61,19 @@ struct UiAction
     UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc),  checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title,
              const TranslatableString& desc, IconCode::Code icon, Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), description(desc), iconCode(icon), checkable(ch) {}
 
-    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const mu::MnemonicString& title, IconCode::Code icon,
+    UiAction(const actions::ActionCode& code, UiContext ctx, std::string scCtx, const MnemonicString& title, IconCode::Code icon,
              Checkable ch = Checkable::No)
         : code(code), uiCtx(ctx), scCtx(scCtx), title(title), iconCode(icon), checkable(ch) {}
 

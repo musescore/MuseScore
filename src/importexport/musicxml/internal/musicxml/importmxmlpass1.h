@@ -90,7 +90,7 @@ enum class MxmlTupletFlag : char {
     STOP_CURRENT = 8
 };
 
-typedef Flags<MxmlTupletFlag> MxmlTupletFlags;
+typedef muse::Flags<MxmlTupletFlag> MxmlTupletFlags;
 
 struct MxmlTupletState {
     void addDurationToTuplet(const Fraction duration, const Fraction timeMod);
@@ -127,7 +127,7 @@ class MusicXMLParserPass1
 public:
     MusicXMLParserPass1(Score* score, MxmlLogger* logger);
     void initPartState(const String& partId);
-    Err parse(const ByteArray& data);
+    Err parse(const muse::ByteArray& data);
     Err parse();
     String errors() const { return m_errors; }
     void scorePartwise();
@@ -156,9 +156,9 @@ public:
     void note(const String& partId, const Fraction& cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr,
               VoiceOverlapDetector& vod, MxmlTupletStates& tupletStates);
     void notePrintSpacingNo(Fraction& dura);
-    Fraction calcTicks(const int& intTicks, const int& _divisions, const XmlStreamReader* xmlReader);
+    Fraction calcTicks(const int& intTicks, const int& _divisions, const muse::XmlStreamReader* xmlReader);
     Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, m_divs, &m_e); }
-    void duration(Fraction& dura, XmlStreamReader& e);
+    void duration(Fraction& dura, muse::XmlStreamReader& e);
     void duration(Fraction& dura) { duration(dura, m_e); }
     void forward(Fraction& dura);
     void backup(Fraction& dura);
@@ -172,9 +172,9 @@ public:
     int voiceToInt(const String& voice);
     track_idx_t trackForPart(const String& id) const;
     bool hasPart(const String& id) const;
-    Part* getPart(const String& id) const { return mu::value(m_partMap, id); }
-    MusicXmlPart getMusicXmlPart(const String& id) const { return mu::value(m_parts, id); }
-    MusicXMLInstruments getInstruments(const String& id) const { return mu::value(m_instruments, id); }
+    Part* getPart(const String& id) const { return muse::value(m_partMap, id); }
+    MusicXmlPart getMusicXmlPart(const String& id) const { return muse::value(m_parts, id); }
+    MusicXMLInstruments getInstruments(const String& id) const { return muse::value(m_instruments, id); }
     void setDrumsetDefault(const String& id, const String& instrId, const NoteHeadGroup hg, const int line, const DirectionV sd);
     MusicXmlInstrList getInstrList(const String& id) const;
     MusicXmlIntervalList getIntervals(const String& id) const;
@@ -187,7 +187,7 @@ public:
     void createDefaultHeader(Score* const score);
     void createMeasuresAndVboxes(Score* const score, const std::vector<Fraction>& ml, const std::vector<Fraction>& ms,
                                  const std::set<int>& systemStartMeasureNrs, const std::set<int>& pageStartMeasureNrs,
-                                 const CreditWordsList& crWords, const Size& pageSize);
+                                 const CreditWordsList& crWords, const muse::Size& pageSize);
     void setHasInferredHeaderText(bool b) { m_hasInferredHeaderText = b; }
     bool hasInferredHeaderText() const { return m_hasInferredHeaderText; }
     int maxDiff() const { return m_maxDiff; }
@@ -201,7 +201,7 @@ private:
     void addError(const String& error);        // Add an error to be shown in the GUI
 
     // generic pass 1 data
-    XmlStreamReader m_e;
+    muse::XmlStreamReader m_e;
     String m_exporterString;                    // Name of the software which exported the file
     int m_divs = 0;                              // Current MusicXML divisions value
     std::map<String, MusicXmlPart> m_parts;     // Parts data, mapped on part id
@@ -221,7 +221,7 @@ private:
     // part specific data (TODO: move to part-specific class)
     Fraction m_timeSigDura;                      // Measure duration according to last timesig read
     std::map<int, MxmlOctaveShiftDesc> m_octaveShifts;   // Pending octave-shifts
-    Size m_pageSize;                             // Page width read from defaults
+    muse::Size m_pageSize;                             // Page width read from defaults
 
     const int m_maxDiff = 5;                   // Duration rounding tick threshold;
     std::map<Fraction, Fraction> m_adjustedDurations;  // Rounded durations

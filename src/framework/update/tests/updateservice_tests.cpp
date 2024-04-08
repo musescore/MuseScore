@@ -40,13 +40,14 @@ using ::testing::Return;
 #include "modularity/ioc.h"
 #include "global/iapplication.h"
 
+using namespace muse;
 using namespace mu;
 using namespace muse::update;
 
 namespace muse::update {
 class AppUpdateServiceTests : public ::testing::Test
 {
-    Inject<IApplication> application;
+    muse::Inject<muse::IApplication> application;
 public:
     void SetUp() override
     {
@@ -100,7 +101,7 @@ public:
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
-            return mu::make_ok();
+            return muse::make_ok();
         }));
     }
 
@@ -127,7 +128,7 @@ public:
             buf->write(releasesNotes.toUtf8());
             buf->close();
 
-            return mu::make_ok();
+            return muse::make_ok();
         }));
     }
 
@@ -153,7 +154,7 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_x86_64)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::x86_64));
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -174,7 +175,7 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_arm)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::Arm));
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -195,7 +196,7 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_aarch64)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::Arm64));
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -216,7 +217,7 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Linux_Unknown)
     .WillByDefault(Return(ISystemInfo::CpuArchitecture::Unknown));
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -237,7 +238,7 @@ TEST_F(AppUpdateServiceTests, ParseRelease_Windows)
     .Times(1);
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -258,7 +259,7 @@ TEST_F(AppUpdateServiceTests, ParseRelease_MacOS)
     .Times(1);
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);
@@ -278,7 +279,7 @@ TEST_F(AppUpdateServiceTests, CheckForUpdate_ReleasesNotes)
     };
 
     //! [WHEN] Check for update
-    mu::RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
+    RetVal<ReleaseInfo> retVal = m_service->checkForUpdate();
 
     //! [THEN] Should return correct release file
     EXPECT_TRUE(retVal.ret);

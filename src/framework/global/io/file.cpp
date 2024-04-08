@@ -25,7 +25,8 @@
 
 #include "ioretcodes.h"
 
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 File::File(const path_t& filePath)
     : m_filePath(filePath)
@@ -62,13 +63,13 @@ bool File::copy(const path_t& src, const path_t& dst, bool replace)
     return fileSystem()->copy(src, dst, replace);
 }
 
-mu::Ret File::readFile(const io::path_t& filePath, ByteArray& out)
+Ret File::readFile(const io::path_t& filePath, ByteArray& out)
 {
     bool ok = fileSystem()->readFile(filePath, out);
     return make_ret(ok ? Err::NoError : Err::FSReadError);
 }
 
-mu::Ret File::writeFile(const io::path_t& filePath, const ByteArray& data)
+Ret File::writeFile(const io::path_t& filePath, const ByteArray& data)
 {
     return fileSystem()->writeFile(filePath, data);
 }

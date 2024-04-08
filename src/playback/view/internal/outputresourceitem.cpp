@@ -7,11 +7,12 @@
 #include "stringutils.h"
 
 using namespace mu::playback;
+using namespace muse;
 using namespace muse::audio;
 
 static const QString& NO_FX_MENU_ITEM_ID()
 {
-    static std::string id = mu::trc("playback", "No effect");
+    static std::string id = muse::trc("playback", "No effect");
     static QString resultStr = QString::fromStdString(id);
     return resultStr;
 }

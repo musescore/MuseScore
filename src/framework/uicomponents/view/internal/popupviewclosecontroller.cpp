@@ -102,7 +102,7 @@ void PopupViewCloseController::setIsCloseOnPressOutsideParent(bool close)
     m_isCloseOnPressOutsideParent = close;
 }
 
-mu::async::Notification PopupViewCloseController::closeNotification() const
+muse::async::Notification PopupViewCloseController::closeNotification() const
 {
     return m_closeNotification;
 }

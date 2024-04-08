@@ -29,7 +29,7 @@ GradualTempoChangeSettingsModel::GradualTempoChangeSettingsModel(QObject* parent
     : TextLineSettingsModel(parent, repository, ElementType::GRADUAL_TEMPO_CHANGE)
 {
     setModelType(InspectorModelType::TYPE_GRADUAL_TEMPO_CHANGE);
-    setTitle(mu::qtrc("inspector", "Tempo change"));
+    setTitle(muse::qtrc("inspector", "Tempo change"));
     setIcon(muse::ui::IconCode::Code::TEMPO_CHANGE);
 
     createProperties();

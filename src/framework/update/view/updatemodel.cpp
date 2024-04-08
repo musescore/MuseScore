@@ -33,7 +33,7 @@ using namespace muse::update;
 UpdateModel::UpdateModel(QObject* parent)
     : QObject(parent)
 {
-    setProgressTitle(mu::qtrc("update", "Updating MuseScore"));
+    setProgressTitle(muse::qtrc("update", "Updating MuseScore"));
 }
 
 UpdateModel::~UpdateModel()
@@ -65,7 +65,7 @@ void UpdateModel::load(const QString& mode)
 
     async::Async::call(this, [this, mode]() {
         if (mode == "download") {
-            RetVal<io::path_t> downloadRetVal = service()->downloadRelease();
+            RetVal<muse::io::path_t> downloadRetVal = service()->downloadRelease();
             emit finished(downloadRetVal.ret.code(), downloadRetVal.val.toQString());
         }
     });

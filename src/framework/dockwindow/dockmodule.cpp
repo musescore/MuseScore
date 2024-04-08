@@ -102,7 +102,7 @@ public:
 }
 
 using namespace muse::dock;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static void dock_init_qrc()
 {

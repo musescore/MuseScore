@@ -26,14 +26,14 @@
 
 namespace mu::iex::mei {
 class MeiConfiguration;
-class MeiModule : public modularity::IModuleSetup
+class MeiModule : public muse::modularity::IModuleSetup
 {
 public:
 
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<MeiConfiguration> m_configuration;

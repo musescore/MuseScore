@@ -99,7 +99,7 @@ public:
     UndoStack* undoStack() const override { return m_undoStack; }
     TimeSigMap* sigmap() const override { return m_sigmap; }
     TempoMap* tempomap() const override { return m_tempomap; }
-    async::Channel<ScoreChangesRange> changesChannel() const override { return m_changesRangeChannel; }
+    muse::async::Channel<ScoreChangesRange> changesChannel() const override { return m_changesRangeChannel; }
 
     bool playlistDirty() const override { return m_playlistDirty; }
     void setPlaylistDirty() override;
@@ -122,7 +122,7 @@ public:
 
     void setUpdateAll() override;
 
-    void setLayoutAll(staff_idx_t staff = mu::nidx, const EngravingItem* e = nullptr);
+    void setLayoutAll(staff_idx_t staff = muse::nidx, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e = nullptr);
 
@@ -159,7 +159,7 @@ public:
     Fraction loopBoundaryTick(LoopBoundaryType type) const;
     void setLoopBoundaryTick(LoopBoundaryType type, Fraction tick);
 
-    void addExcerpt(Excerpt*, size_t index = mu::nidx);
+    void addExcerpt(Excerpt*, size_t index = muse::nidx);
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
 
@@ -188,7 +188,7 @@ public:
 
     String name() const override;
 
-    Ret sanityCheck();
+    muse::Ret sanityCheck();
 
     void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
@@ -221,7 +221,7 @@ private:
     std::vector<Excerpt*> m_excerpts;
     std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
     Score* m_playbackScore = nullptr;
-    async::Channel<ScoreChangesRange> m_changesRangeChannel;
+    muse::async::Channel<ScoreChangesRange> m_changesRangeChannel;
 
     bool m_readOnly = false;
 

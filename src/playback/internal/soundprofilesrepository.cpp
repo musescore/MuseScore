@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace mu::playback;
+using namespace muse;
 using namespace muse::audio;
 
 void SoundProfilesRepository::init()
@@ -84,7 +85,7 @@ const SoundProfile& SoundProfilesRepository::profile(const SoundProfileName& nam
 
 bool SoundProfilesRepository::containsProfile(const SoundProfileName& name) const
 {
-    return mu::contains(m_profilesMap, name);
+    return muse::contains(m_profilesMap, name);
 }
 
 const SoundProfilesMap& SoundProfilesRepository::availableProfiles() const

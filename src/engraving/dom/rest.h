@@ -66,7 +66,7 @@ class Rest : public ChordRest
 
 public:
 
-    ~Rest() { DeleteAll(m_dots); }
+    ~Rest() { muse::DeleteAll(m_dots); }
 
     void hack_toRestType();
 
@@ -111,9 +111,9 @@ public:
 
     int upLine() const override;
     int downLine() const override;
-    mu::PointF stemPos() const override;
+    PointF stemPos() const override;
     double stemPosX() const override;
-    mu::PointF stemPosBeam() const override;
+    PointF stemPosBeam() const override;
     double rightEdge() const override;
     double centerX() const;
 
@@ -154,7 +154,7 @@ protected:
     Rest(const Rest&, bool link = false);
 
     Sid getPropertyStyle(Pid pid) const override;
-    virtual mu::RectF numberRect() const { return mu::RectF(); } // TODO: add style to show number over 1-measure rests
+    virtual RectF numberRect() const { return RectF(); } // TODO: add style to show number over 1-measure rests
 
 private:
 
@@ -162,10 +162,10 @@ private:
     Rest(Segment* parent);
     Rest(Segment* parent, const TDuration&);
 
-    mu::RectF drag(EditData&) override;
+    RectF drag(EditData&) override;
     double upPos() const override;
     double downPos() const override;
-    void setOffset(const mu::PointF& o) override;
+    void setOffset(const PointF& o) override;
 
     // values calculated by layout:
 

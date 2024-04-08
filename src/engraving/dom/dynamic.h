@@ -140,7 +140,7 @@ private:
     Expression* m_snappedExpression = nullptr;
     bool m_playDynamic = true;
 
-    mutable mu::PointF m_dragOffset;
+    mutable PointF m_dragOffset;
     int m_velocity = -1;           // associated midi velocity 0-127
     DynamicRange m_dynRange = DynamicRange::PART; // STAFF, PART, SYSTEM
 

@@ -38,7 +38,7 @@
 #include "accessibility/accessibleroot.h"
 
 using namespace mu::notation;
-using namespace mu::async;
+using namespace muse::async;
 using namespace mu::engraving;
 using namespace muse::accessibility;
 
@@ -65,7 +65,7 @@ const mu::engraving::Selection* NotationAccessibility::selection() const
     return &score()->selection();
 }
 
-mu::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
+muse::ValCh<std::string> NotationAccessibility::accessibilityInfo() const
 {
     return m_accessibilityInfo;
 }
@@ -135,7 +135,7 @@ void NotationAccessibility::updateAccessibilityInfo()
     } else if (selection()->isRange()) {
         newAccessibilityInfo = rangeAccessibilityInfo();
     } else if (selection()->isList()) {
-        newAccessibilityInfo = mu::qtrc("notation", "List selection");
+        newAccessibilityInfo = muse::qtrc("notation", "List selection");
     }
 
     // Simplify whitespace and remove newlines
@@ -166,16 +166,16 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
     }
 
     std::pair<int, float> startBarbeat = selection()->startSegment()->barbeat();
-    QString start =  mu::qtrc("notation", "Start measure: %1; Start beat: %2")
+    QString start =  muse::qtrc("notation", "Start measure: %1; Start beat: %2")
                     .arg(startBarbeat.first)
                     .arg(startBarbeat.second);
 
     std::pair<int, float> endBarbeat = endSegment->barbeat();
-    QString end =  mu::qtrc("notation", "End measure: %1; End beat: %2")
+    QString end =  muse::qtrc("notation", "End measure: %1; End beat: %2")
                   .arg(endBarbeat.first)
                   .arg(endBarbeat.second);
 
-    return mu::qtrc("notation", "Range selection; %1; %2")
+    return muse::qtrc("notation", "Range selection; %1; %2")
            .arg(start)
            .arg(end);
 }
@@ -195,7 +195,7 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     }
 
     if (element->hasStaff()) {
-        QString staff = mu::qtrc("notation", "Staff %1").arg(QString::number(element->staffIdx() + 1));
+        QString staff = muse::qtrc("notation", "Staff %1").arg(QString::number(element->staffIdx() + 1));
 
         QString staffName = element->staff()->part()->longName(element->tick());
         if (staffName.isEmpty()) {

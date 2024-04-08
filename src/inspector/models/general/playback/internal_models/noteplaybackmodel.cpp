@@ -29,7 +29,7 @@ using namespace mu::inspector;
 NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(mu::qtrc("inspector", "Notes"));
+    setTitle(muse::qtrc("inspector", "Notes"));
     setModelType(InspectorModelType::TYPE_NOTE);
 
     createProperties();

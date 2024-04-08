@@ -34,7 +34,7 @@
 
 namespace muse::api {
 class ProxyStyle;
-class ThemeApi : public mu::api::ApiObject, public async::Asyncable
+class ThemeApi : public api::ApiObject, public async::Asyncable
 {
     Q_OBJECT
 

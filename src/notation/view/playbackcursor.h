@@ -46,14 +46,14 @@ public:
     bool visible() const;
     void setVisible(bool arg);
 
-    const RectF& rect() const;
+    const muse::RectF& rect() const;
 
 private:
     QColor color() const;
-    RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
+    muse::RectF resolveCursorRectByTick(muse::midi::tick_t tick) const;
 
     bool m_visible = false;
-    RectF m_rect;
+    muse::RectF m_rect;
 
     INotationPtr m_notation;
 };

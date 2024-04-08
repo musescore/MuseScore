@@ -25,17 +25,17 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::engraving {
-extern Err importMusicXml(MasterScore*, const String&, bool forceMode);
-extern Err importCompressedMusicXml(MasterScore*, const String&, bool forceMode);
+extern Err importMusicXml(MasterScore*, const muse::String&, bool forceMode);
+extern Err importCompressedMusicXml(MasterScore*, const muse::String&, bool forceMode);
 }
 
 using namespace mu::iex::musicxml;
 using namespace mu::engraving;
 
-mu::Ret MusicXmlReader::read(MasterScore* score, const io::path_t& path, const Options& options)
+muse::Ret MusicXmlReader::read(MasterScore* score, const muse::io::path_t& path, const Options& options)
 {
     Err err = Err::FileUnknownType;
-    std::string suffix = mu::io::suffix(path);
+    std::string suffix = muse::io::suffix(path);
     bool forceMode = false;
     if (options.find(INotationReader::OptionKey::ForceMode) != options.end()) {
         forceMode = options.at(INotationReader::OptionKey::ForceMode).toBool();

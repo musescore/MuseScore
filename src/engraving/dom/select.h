@@ -168,10 +168,10 @@ public:
 
     const std::vector<EngravingItem*>& elements() const { return m_el; }
     std::vector<EngravingItem*> elements(ElementType type) const;
-    std::vector<Note*> noteList(track_idx_t track = mu::nidx) const;
+    std::vector<Note*> noteList(track_idx_t track = muse::nidx) const;
 
     const std::list<EngravingItem*> uniqueElements() const;
-    std::list<Note*> uniqueNotes(track_idx_t track = mu::nidx) const;
+    std::list<Note*> uniqueNotes(track_idx_t track = muse::nidx) const;
 
     bool isSingle() const { return (m_state == SelState::LIST) && (m_el.size() == 1); }
 
@@ -182,14 +182,14 @@ public:
     EngravingItem* element() const;
     ChordRest* cr() const;
     Segment* firstChordRestSegment() const;
-    ChordRest* firstChordRest(track_idx_t track = mu::nidx) const;
-    ChordRest* lastChordRest(track_idx_t track = mu::nidx) const;
+    ChordRest* firstChordRest(track_idx_t track = muse::nidx) const;
+    ChordRest* lastChordRest(track_idx_t track = muse::nidx) const;
     Measure* findMeasure() const;
     void update();
     void updateState();
     void dump();
     String mimeType() const;
-    mu::ByteArray mimeData() const;
+    muse::ByteArray mimeData() const;
 
     Segment* startSegment() const { return m_startSegment; }
     Segment* endSegment() const { return m_endSegment; }
@@ -219,8 +219,8 @@ public:
 
 private:
 
-    mu::ByteArray staffMimeData() const;
-    mu::ByteArray symbolListMimeData() const;
+    muse::ByteArray staffMimeData() const;
+    muse::ByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
     bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
     bool canSelectVoice(track_idx_t track) const { return selectionFilter().canSelectVoice(track); }

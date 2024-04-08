@@ -80,8 +80,8 @@ public:
 
     BarLine* clone() const override { return new BarLine(*this); }
     Fraction playTick() const override;
-    mu::PointF canvasPos() const override;      ///< position in canvas coordinates
-    mu::PointF pagePos() const override;        ///< position in page coordinates
+    PointF canvasPos() const override;      ///< position in canvas coordinates
+    PointF pagePos() const override;        ///< position in page coordinates
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void setTrack(track_idx_t t) override;
@@ -137,7 +137,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     static const std::vector<BarLineTableItem> barLineTable;
 

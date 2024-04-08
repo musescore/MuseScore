@@ -61,7 +61,7 @@ class AbstractCloudService : public QObject, public IAuthorizationService, publi
     INJECT(ui::IUiConfiguration, uiConfig)
     INJECT(io::IFileSystem, fileSystem)
     INJECT(network::INetworkManagerCreator, networkManagerCreator)
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
@@ -118,7 +118,7 @@ protected:
     Ret executeRequest(const RequestCallback& requestCallback);
 
     Ret uploadingDownloadingRetFromRawRet(const Ret& rawRet, bool isAlreadyUploaded = false) const;
-    int statusCode(const mu::Ret& ret) const;
+    int statusCode(const Ret& ret) const;
     void printServerReply(const QBuffer& reply) const;
 
     QString accessToken() const;

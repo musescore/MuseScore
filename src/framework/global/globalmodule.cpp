@@ -58,9 +58,9 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::modularity;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::modularity;
+using namespace muse::io;
 
 std::shared_ptr<Invoker> GlobalModule::s_asyncInvoker = {};
 
@@ -95,7 +95,7 @@ void GlobalModule::registerExports()
 
 void GlobalModule::registerApi()
 {
-    using namespace mu::api;
+    using namespace muse::api;
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {
@@ -108,20 +108,20 @@ void GlobalModule::registerApi()
 
 void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 {
-    mu::runtime::mainThreadId(); //! NOTE Needs only call
-    mu::runtime::setThreadName("main");
+    muse::runtime::mainThreadId(); //! NOTE Needs only call
+    muse::runtime::setThreadName("main");
 
     //! NOTE: settings must be inited before initialization of any module
     //! because modules can use settings at the moment of their initialization
     settings()->load();
 
     //! --- Setup logger ---
-    using namespace mu::logger;
+    using namespace muse::logger;
     Logger* logger = Logger::instance();
     logger->clearDests();
 
     //! Console
-    if (mode == IApplication::RunMode::GuiApp || mu::runtime::isDebug()) {
+    if (mode == IApplication::RunMode::GuiApp || muse::runtime::isDebug()) {
         logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread|15} | ${tag|15} | ${message}")));
     }
 
@@ -159,9 +159,9 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         logger->setLevel(m_loggerLevel.value());
     } else {
 #ifdef MUSE_MODULE_GLOBAL_LOGGER_DEBUGLEVEL
-        logger->setLevel(mu::logger::Level::Debug);
+        logger->setLevel(muse::logger::Level::Debug);
 #else
-        logger->setLevel(mu::logger::Level::Normal);
+        logger->setLevel(muse::logger::Level::Normal);
 #endif
     }
 
@@ -171,7 +171,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
            << ", build: " << m_application->build() << " ===";
 
     //! --- Setup profiler ---
-    using namespace mu::profiler;
+    using namespace muse::profiler;
     struct MyPrinter : public Profiler::Printer
     {
         void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", Color::Magenta)() << str; }
@@ -192,13 +192,13 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
 
     Invoker::setup();
 
-    mu::async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
+    async::onMainThreadInvoke([](const std::function<void()>& f, bool isAlwaysQueued) {
         s_asyncInvoker->invoke(f, isAlwaysQueued);
     });
 
     //! --- Diagnostics ---
 #ifdef MUE_BUILD_DIAGNOSTICS_MODULE
-    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("appBinPath", m_configuration->appBinPath());
         pr->reg("appBinDirPath", m_configuration->appBinDirPath());
@@ -229,7 +229,7 @@ void GlobalModule::invokeQueuedCalls()
     s_asyncInvoker->invokeQueuedCalls();
 }
 
-void GlobalModule::setLoggerLevel(const mu::logger::Level& level)
+void GlobalModule::setLoggerLevel(const muse::logger::Level& level)
 {
     m_loggerLevel = level;
 }

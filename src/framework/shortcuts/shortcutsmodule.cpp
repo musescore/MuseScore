@@ -53,7 +53,7 @@
 #endif
 
 using namespace muse::shortcuts;
-using namespace mu::modularity;
+using namespace muse::modularity;
 using namespace muse::ui;
 
 static void shortcuts_init_qrc()
@@ -81,7 +81,7 @@ void ShortcutsModule::registerExports()
 
 void ShortcutsModule::registerApi()
 {
-    using namespace mu::api;
+    using namespace muse::api;
 
     auto api = ioc()->resolve<IApiRegister>(moduleName());
     if (api) {

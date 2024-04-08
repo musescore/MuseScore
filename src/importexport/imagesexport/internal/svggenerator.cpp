@@ -156,7 +156,7 @@ static QString getClass(const mu::engraving::EngravingItem* e)
 
 class SvgPaintEnginePrivate
 {
-    mu::Inject<mu::IApplication> application;
+    muse::Inject<muse::IApplication> application;
 
 public:
     SvgPaintEnginePrivate()
@@ -1133,7 +1133,7 @@ void SvgPaintEngine::drawImage(const QRectF& r, const QImage& image,
         const mu::engraving::Image* img = mu::engraving::toImage(_element);
         const mu::engraving::ImageStoreItem* storeItem = img->storeItem(); // holds the original image file content
         if (img->imageType() == mu::engraving::ImageType::RASTER && storeItem) {
-            const mu::ByteArray& imgBa = storeItem->buffer();
+            const muse::ByteArray& imgBa = storeItem->buffer();
             QByteArray imgData = imgBa.toQByteArrayNoCopy();
             const QMimeType type = QMimeDatabase().mimeTypeForData(imgData);
             if (type.isValid() && allowedImageTypes.contains(type.name())

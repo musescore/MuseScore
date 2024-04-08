@@ -41,7 +41,7 @@
 #include "global/iglobalconfiguration.h"
 
 namespace mu::appshell {
-class NotationStatusBarModel : public QObject, public async::Asyncable, public muse::actions::Actionable
+class NotationStatusBarModel : public QObject, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
 
@@ -50,7 +50,7 @@ class NotationStatusBarModel : public QObject, public async::Asyncable, public m
     INJECT(muse::ui::IUiActionsRegister, actionsRegister)
     INJECT(muse::workspace::IWorkspaceConfiguration, workspaceConfiguration)
     INJECT(notation::INotationConfiguration, notationConfiguration)
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
 
     Q_PROPERTY(QString accessibilityInfo READ accessibilityInfo NOTIFY accessibilityInfoChanged)
     Q_PROPERTY(QVariant currentWorkspaceItem READ currentWorkspaceItem NOTIFY currentWorkspaceActionChanged)

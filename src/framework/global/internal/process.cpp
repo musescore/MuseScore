@@ -23,7 +23,7 @@
 
 #include <QProcess>
 
-using namespace mu;
+using namespace muse;
 
 static QStringList toQList(const std::vector<std::string>& args)
 {

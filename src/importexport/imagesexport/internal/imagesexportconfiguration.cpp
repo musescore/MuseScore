@@ -25,6 +25,7 @@
 
 #include "engraving/dom/mscore.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::iex::imagesexport;
 

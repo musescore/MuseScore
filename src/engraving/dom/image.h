@@ -59,15 +59,15 @@ public:
     Image* clone() const override { return new Image(*this); }
 
     bool load(); // after set paths
-    bool load(const io::path_t& s);
-    bool loadFromData(const io::path_t& name, const mu::ByteArray&);
+    bool load(const muse::io::path_t& s);
+    bool loadFromData(const muse::io::path_t& name, const muse::ByteArray&);
 
     void init();
 
     bool isImageFramed() const;
     double imageAspectRatio() const;
-    void setSize(const mu::SizeF& s) { m_size = s; }
-    const mu::SizeF& size() const { return m_size; }
+    void setSize(const SizeF& s) { m_size = s; }
+    const SizeF& size() const { return m_size; }
     void updateImageHeight(const double& height);
     void updateImageWidth(const double& width);
     double imageHeight() const;
@@ -90,7 +90,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    mu::SizeF imageSize() const;
+    SizeF imageSize() const;
 
     void setImageType(ImageType);
     ImageType imageType() const { return m_imageType; }
@@ -103,10 +103,10 @@ public:
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
-    mu::SizeF pixel2size(const mu::SizeF& s) const;
-    mu::SizeF size2pixel(const mu::SizeF& s) const;
+    SizeF pixel2size(const SizeF& s) const;
+    SizeF size2pixel(const SizeF& s) const;
 
     const muse::draw::Pixmap& buffer() const { return m_buffer; }
     void setBuffer(const muse::draw::Pixmap& p) const { m_buffer = p; }
@@ -118,14 +118,14 @@ private:
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData& ed) override;
-    std::vector<mu::LineF> gripAnchorLines(Grip) const override { return std::vector<mu::LineF>(); }
+    std::vector<LineF> gripAnchorLines(Grip) const override { return std::vector<LineF>(); }
 
     ImageStoreItem* m_storeItem = nullptr;
     String m_storePath;                 // the path of the img in the ImageStore
     String m_linkPath;                  // the path of an external linked img
     bool m_linkIsValid = false;         // whether _linkPath file exists or not
     mutable muse::draw::Pixmap m_buffer;  // cached rendering
-    mu::SizeF m_size;                   // in mm or spatium units
+    SizeF m_size;                   // in mm or spatium units
     bool m_lockAspectRatio = false;
     bool m_autoScale = false;           // fill parent frame
     bool m_sizeIsSpatium = false;

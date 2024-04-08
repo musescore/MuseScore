@@ -40,7 +40,7 @@
 #include "auxsenditem.h"
 
 namespace mu::playback {
-class MixerChannelItem : public QObject, public async::Asyncable
+class MixerChannelItem : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -64,7 +64,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
 
     Q_PROPERTY(muse::ui::NavigationPanel * panel READ panel NOTIFY panelChanged)
 
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(context::IGlobalContext, context)
     INJECT(IPlaybackConfiguration, configuration)
 
@@ -178,7 +178,7 @@ protected:
 
     muse::audio::AudioFxChainOrder resolveNewBlankOutputResourceItemOrder() const;
 
-    void openEditor(AbstractAudioResourceItem* item, const UriQuery& editorUri);
+    void openEditor(AbstractAudioResourceItem* item, const muse::UriQuery& editorUri);
     void closeEditor(AbstractAudioResourceItem* item);
 
     bool askAboutChangingSound();

@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-namespace mu::ipc {
+namespace muse::ipc {
 IpcChannel::IpcChannel()
 {
     m_selfSocket = new IpcSocket();
@@ -139,7 +139,7 @@ void IpcChannel::onSocketMsgReceived(const Msg& msg)
     m_msgReceived.send(msg);
 }
 
-mu::async::Channel<Msg> IpcChannel::msgReceived() const
+async::Channel<Msg> IpcChannel::msgReceived() const
 {
     return m_msgReceived;
 }
@@ -181,7 +181,7 @@ QList<ID> IpcChannel::instances() const
     return m_selfSocket->instances();
 }
 
-mu::async::Notification IpcChannel::instancesChanged() const
+async::Notification IpcChannel::instancesChanged() const
 {
     return m_selfSocket->instancesChanged();
 }

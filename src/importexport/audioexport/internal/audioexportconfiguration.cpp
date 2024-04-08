@@ -24,6 +24,7 @@
 
 #include "settings.h"
 
+using namespace muse;
 using namespace mu;
 using namespace mu::iex::audioexport;
 

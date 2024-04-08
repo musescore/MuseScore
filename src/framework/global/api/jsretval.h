@@ -19,15 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_API_JSRETVAL_H
-#define MU_API_JSRETVAL_H
+#ifndef MUSE_API_JSRETVAL_H
+#define MUSE_API_JSRETVAL_H
 
 #include <QVariant>
 
 #include "types/retval.h"
 #include "io/path.h"
 
-namespace mu::api {
+namespace muse::api {
 #define JSVal QVariant
 #define JSRet QVariantMap
 #define JSRetVal QVariantMap
@@ -89,4 +89,4 @@ inline RetVal<T> retValFromJs(const JSRet& r)
 }
 }
 
-#endif // MU_API_JSRETVAL_H
+#endif // MUSE_API_JSRETVAL_H

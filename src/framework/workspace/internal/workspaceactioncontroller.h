@@ -32,7 +32,7 @@ namespace muse::workspace {
 class WorkspaceActionController : public muse::actions::Actionable
 {
     INJECT(actions::IActionsDispatcher, dispatcher)
-    INJECT(mu::IInteractive, interactive)
+    INJECT(IInteractive, interactive)
     INJECT(IWorkspaceConfiguration, configuration)
 
 public:

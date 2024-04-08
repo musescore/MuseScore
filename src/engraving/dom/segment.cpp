@@ -234,7 +234,7 @@ Segment::~Segment()
         delete e;
     }
 
-    DeleteAll(m_annotations);
+    muse::DeleteAll(m_annotations);
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -532,7 +532,7 @@ Segment* Segment::nextCR(track_idx_t track, bool sameStaff) const
     }
     for (Segment* seg = next1(); seg; seg = seg->next1()) {
         if (seg->isChordRestType()) {
-            if (track == mu::nidx) {
+            if (track == muse::nidx) {
                 return seg;
             }
             for (track_idx_t t = strack; t < etrack; ++t) {
@@ -647,7 +647,7 @@ void Segment::add(EngravingItem* el)
     }
 
     track_idx_t track = el->track();
-    assert(track != mu::nidx);
+    assert(track != muse::nidx);
     assert(el->score() == score());
     assert(score()->nstaves() * VOICES == m_elist.size());
     // make sure offset is correct for staff
@@ -1276,7 +1276,7 @@ bool Segment::allElementsInvisible() const
         track_idx_t endTrack = staffIdx * VOICES + VOICES;
         for (track_idx_t track = staffIdx * VOICES; track < endTrack; ++track) {
             EngravingItem* e = m_elist[track];
-            if (e && e->visible() && !mu::RealIsEqual(e->width(), 0.0)) {
+            if (e && e->visible() && !muse::RealIsEqual(e->width(), 0.0)) {
                 return false;
             }
         }
@@ -2315,7 +2315,7 @@ String Segment::accessibleExtraInfo() const
             }
         }
         if (!temp.isEmpty()) {
-            rez = rez + mtrc("engraving", "Annotations:") + temp;
+            rez = rez + muse::mtrc("engraving", "Annotations:") + temp;
         }
     }
 
@@ -2341,7 +2341,7 @@ String Segment::accessibleExtraInfo() const
         }
 
         if (s->tick() == tick()) {
-            startSpanners += u" " + mtrc("engraving", "Start of %1").arg(s->accessibleInfo());
+            startSpanners += u" " + muse::mtrc("engraving", "Start of %1").arg(s->accessibleInfo());
         }
 
         const Segment* seg = 0;
@@ -2356,7 +2356,7 @@ String Segment::accessibleExtraInfo() const
         }
 
         if (seg && s->tick2() == seg->tick()) {
-            endSpanners += u" " + mtrc("engraving", "End of %1").arg(s->accessibleInfo());
+            endSpanners += u" " + muse::mtrc("engraving", "End of %1").arg(s->accessibleInfo());
         }
     }
 
@@ -2742,7 +2742,7 @@ void Segment::computeCrossBeamType(Segment* nextSeg)
 
 void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
 {
-    if (springs.empty() || RealIsEqualOrLess(width, 0.0)) {
+    if (springs.empty() || muse::RealIsEqualOrLess(width, 0.0)) {
         return;
     }
 
@@ -2787,7 +2787,7 @@ double Segment::computeDurationStretch(const Segment* prevSeg, Fraction minTicks
         double dMinTicks = minTicks.toDouble();
         double dMaxTicks = maxTicks.toDouble();
         double maxSysRatio = dMaxTicks / dMinTicks;
-        if (mu::RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
+        if (muse::RealIsEqualOrMore(dMaxTicks / dMinTicks, 2.0) && dMinTicks < longNoteThreshold) {
             /* HACK: we trick the system to ignore the shortest note and use the "next"
              * shortest. For example, if the shortest is a 32nd, we make it a 16th. */
             dMinTicks *= 2.0;

@@ -63,7 +63,7 @@ MMRest::MMRest(const MMRest& r, bool link)
 ///   returns the mmrest number's bounding rectangle
 //---------------------------------------------------------
 
-PointF MMRest::numberPosition(const mu::RectF& numberBbox) const
+PointF MMRest::numberPosition(const RectF& numberBbox) const
 {
     double x = (ldata()->restWidth() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line

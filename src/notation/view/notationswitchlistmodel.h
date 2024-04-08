@@ -32,7 +32,7 @@
 #include "project/inotationproject.h"
 
 namespace mu::notation {
-class NotationSwitchListModel : public QAbstractListModel, public async::Asyncable
+class NotationSwitchListModel : public QAbstractListModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -81,7 +81,7 @@ private:
     };
 
     QList<INotationPtr> m_notations;
-    std::unique_ptr<async::Asyncable> m_notationChangedReceiver;
+    std::unique_ptr<muse::async::Asyncable> m_notationChangedReceiver;
 };
 }
 

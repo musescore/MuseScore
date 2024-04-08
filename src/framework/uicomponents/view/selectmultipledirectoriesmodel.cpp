@@ -87,7 +87,7 @@ QItemSelectionModel* SelectMultipleDirectoriesModel::selection() const
 void SelectMultipleDirectoriesModel::load(const QString& startDir, const QString& directoriesStr)
 {
     beginResetModel();
-    m_directories = mu::io::pathsFromString(directoriesStr.toStdString());
+    m_directories = io::pathsFromString(directoriesStr.toStdString());
     m_dir = startDir.toStdString();
     endResetModel();
 }
@@ -124,7 +124,7 @@ void SelectMultipleDirectoriesModel::removeSelectedDirectories()
 
 void SelectMultipleDirectoriesModel::addDirectory()
 {
-    mu::io::path_t path = interactive()->selectDirectory(mu::qtrc("ui", "Choose directory"), m_dir.toStdString());
+    io::path_t path = interactive()->selectDirectory(muse::qtrc("ui", "Choose directory"), m_dir.toStdString());
     if (path.empty()) {
         return;
     }
@@ -145,7 +145,7 @@ void SelectMultipleDirectoriesModel::addDirectory()
 
 QString SelectMultipleDirectoriesModel::directories() const
 {
-    return QString::fromStdString(mu::io::pathsToString(m_directories));
+    return QString::fromStdString(io::pathsToString(m_directories));
 }
 
 bool SelectMultipleDirectoriesModel::isRemovingAvailable() const

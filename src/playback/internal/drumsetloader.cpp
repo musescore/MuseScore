@@ -33,7 +33,7 @@ using namespace muse::audio;
 using namespace mu::notation;
 using namespace mu::engraving;
 
-static void readDrumset(const mu::ByteArray& drumMapping, Drumset& drumset)
+static void readDrumset(const muse::ByteArray& drumMapping, Drumset& drumset)
 {
     XmlReader reader(drumMapping);
 
@@ -86,7 +86,7 @@ void DrumsetLoader::loadDrumset(INotationPtr notation, const InstrumentTrackId& 
         return;
     }
 
-    String drumMapping = museSampler()->drumMapping(instrumentId);
+    muse::String drumMapping = museSampler()->drumMapping(instrumentId);
     if (drumMapping.empty()) {
         m_drumsetCache.emplace(instrumentId, std::nullopt);
         return;

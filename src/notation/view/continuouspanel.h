@@ -53,7 +53,7 @@ public:
         qreal xOffset = 0.;
         qreal yOffset = 0.;
         qreal scaling = 0.;
-        std::function<PointF(const PointF&)> fromLogical;
+        std::function<muse::PointF(const muse::PointF&)> fromLogical;
     };
 
     void paint(muse::draw::Painter& painter, const NotationViewContext& ctx);
@@ -64,7 +64,7 @@ private:
 
     INotationPtr m_notation;
     qreal m_width = 0;
-    RectF m_rect;
+    muse::RectF m_rect;
 };
 }
 

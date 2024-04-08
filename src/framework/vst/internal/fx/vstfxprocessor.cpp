@@ -66,7 +66,7 @@ const AudioFxParams& VstFxProcessor::params() const
     return m_params;
 }
 
-mu::async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
+async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
 {
     return m_paramsChanges;
 }

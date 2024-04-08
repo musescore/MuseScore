@@ -28,13 +28,14 @@
 #include "log.h"
 
 using namespace mu::diagnostics;
+using namespace muse;
 using namespace muse::accessibility;
 
-static const mu::UriQuery SYSTEM_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false&floating=true");
-static const mu::UriQuery PROFILER_URI("musescore://diagnostics/system/profiler?sync=false&modal=false&floating=true");
-static const mu::UriQuery NAVIGATION_TREE_URI("musescore://diagnostics/navigation/tree?sync=false&modal=false&floating=true");
-static const mu::UriQuery ACCESSIBLE_TREE_URI("musescore://diagnostics/accessible/tree?sync=false&modal=false&floating=true");
-static const mu::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?sync=false&modal=false&floating=true");
+static const muse::UriQuery SYSTEM_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false&floating=true");
+static const muse::UriQuery PROFILER_URI("musescore://diagnostics/system/profiler?sync=false&modal=false&floating=true");
+static const muse::UriQuery NAVIGATION_TREE_URI("musescore://diagnostics/navigation/tree?sync=false&modal=false&floating=true");
+static const muse::UriQuery ACCESSIBLE_TREE_URI("musescore://diagnostics/accessible/tree?sync=false&modal=false&floating=true");
+static const muse::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?sync=false&modal=false&floating=true");
 
 void DiagnosticsActionsController::init()
 {
@@ -47,7 +48,7 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-save-diagnostic-files", this, &DiagnosticsActionsController::saveDiagnosticFiles);
 }
 
-void DiagnosticsActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
+void DiagnosticsActionsController::openUri(const UriQuery& uri, bool isSingle)
 {
     if (isSingle && interactive()->isOpened(uri.uri()).val) {
         return;

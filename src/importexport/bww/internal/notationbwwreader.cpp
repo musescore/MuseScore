@@ -31,7 +31,7 @@ namespace mu::iex::bww {
 extern Err importBww(MasterScore*, const QString& name);
 }
 
-mu::Ret NotationBwwReader::read(MasterScore* score, const io::path_t& path, const Options&)
+muse::Ret NotationBwwReader::read(MasterScore* score, const muse::io::path_t& path, const Options&)
 {
     Err err = importBww(score, path.toQString());
     return make_ret(err, path);

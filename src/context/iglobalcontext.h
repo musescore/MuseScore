@@ -37,14 +37,14 @@ public:
 
     virtual void setCurrentProject(const project::INotationProjectPtr& project) = 0;
     virtual project::INotationProjectPtr currentProject() const = 0;
-    virtual async::Notification currentProjectChanged() const = 0;
+    virtual muse::async::Notification currentProjectChanged() const = 0;
 
     virtual notation::IMasterNotationPtr currentMasterNotation() const = 0;
-    virtual async::Notification currentMasterNotationChanged() const = 0;
+    virtual muse::async::Notification currentMasterNotationChanged() const = 0;
 
     virtual void setCurrentNotation(const notation::INotationPtr& notation) = 0;
     virtual notation::INotationPtr currentNotation() const = 0;
-    virtual async::Notification currentNotationChanged() const = 0;
+    virtual muse::async::Notification currentNotationChanged() const = 0;
 };
 }
 

@@ -28,7 +28,7 @@
 #include "iplaybackcontroller.h"
 
 namespace mu::playback {
-class PlaybackLoadingModel : public QObject, public async::Asyncable
+class PlaybackLoadingModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

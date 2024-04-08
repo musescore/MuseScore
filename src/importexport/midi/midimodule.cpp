@@ -32,6 +32,7 @@
 
 #include "log.h"
 
+using namespace muse::modularity;
 using namespace mu::iex::midi;
 using namespace mu::project;
 
@@ -44,25 +45,25 @@ void MidiModule::registerExports()
 {
     m_configuration = std::make_shared<MidiConfiguration>();
 
-    modularity::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
+    ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
 }
 
 void MidiModule::resolveImports()
 {
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
     }
 
-    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
     }
 }
 
-void MidiModule::onInit(const IApplication::RunMode& mode)
+void MidiModule::onInit(const muse::IApplication::RunMode& mode)
 {
-    if (mode == IApplication::RunMode::AudioPluginRegistration) {
+    if (mode == muse::IApplication::RunMode::AudioPluginRegistration) {
         return;
     }
 

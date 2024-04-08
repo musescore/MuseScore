@@ -31,7 +31,7 @@
 #endif
 
 using namespace muse::languages;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 std::string LanguagesModule::moduleName() const
 {

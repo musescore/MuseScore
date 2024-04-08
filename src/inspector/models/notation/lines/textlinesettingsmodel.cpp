@@ -37,23 +37,23 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository, elementType)
 {
     setModelType(InspectorModelType::TYPE_TEXT_LINE);
-    setTitle(mu::qtrc("inspector", "Text line"));
+    setTitle(muse::qtrc("inspector", "Text line"));
     setIcon(muse::ui::IconCode::Code::TEXT_BELOW_STAFF);
 
     static const QList<HookTypeInfo> startHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, mu::qtrc("inspector", "Hooked 90°") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, mu::qtrc("inspector", "Hooked 45°") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK, mu::qtrc("inspector", "Hooked 90° T-style") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_START_HOOK, muse::qtrc("inspector", "Hooked 90°") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, muse::qtrc("inspector", "Hooked 45°") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK, muse::qtrc("inspector", "Hooked 90° T-style") }
     };
 
     setPossibleStartHookTypes(startHookTypes);
 
     static const QList<HookTypeInfo> endHookTypes {
-        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, mu::qtrc("inspector", "Normal") },
-        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, mu::qtrc("inspector", "Hooked 90°") },
-        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, mu::qtrc("inspector", "Hooked 45°") },
-        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, mu::qtrc("inspector", "Hooked 90° T-style") }
+        { mu::engraving::HookType::NONE, IconCode::LINE_NORMAL, muse::qtrc("inspector", "Normal") },
+        { mu::engraving::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, muse::qtrc("inspector", "Hooked 90°") },
+        { mu::engraving::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, muse::qtrc("inspector", "Hooked 45°") },
+        { mu::engraving::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, muse::qtrc("inspector", "Hooked 90° T-style") }
     };
 
     setPossibleEndHookTypes(endHookTypes);
@@ -315,75 +315,75 @@ void TextLineSettingsModel::onNotationChanged(const PropertyIdSet& changedProper
 
 void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::LINE_VISIBLE)) {
+    if (muse::contains(propertyIdSet, Pid::LINE_VISIBLE)) {
         loadPropertyItem(m_isLineVisible);
     }
 
-    if (mu::contains(propertyIdSet, Pid::DIAGONAL)) {
+    if (muse::contains(propertyIdSet, Pid::DIAGONAL)) {
         loadPropertyItem(m_allowDiagonal);
     }
 
-    if (mu::contains(propertyIdSet, Pid::LINE_STYLE)) {
+    if (muse::contains(propertyIdSet, Pid::LINE_STYLE)) {
         loadPropertyItem(m_lineStyle);
     }
 
-    if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
+    if (muse::contains(propertyIdSet, Pid::LINE_WIDTH)) {
         loadPropertyItem(m_thickness, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
+    if (muse::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
         loadPropertyItem(m_dashLineLength, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
+    if (muse::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
         loadPropertyItem(m_dashGapLength, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_TYPE)) {
+    if (muse::contains(propertyIdSet, Pid::BEGIN_HOOK_TYPE)) {
         loadPropertyItem(m_startHookType);
     }
 
-    if (mu::contains(propertyIdSet, Pid::END_HOOK_TYPE)) {
+    if (muse::contains(propertyIdSet, Pid::END_HOOK_TYPE)) {
         loadPropertyItem(m_endHookType);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_HEIGHT)) {
+    if (muse::contains(propertyIdSet, Pid::BEGIN_HOOK_HEIGHT)) {
         loadPropertyItem(m_startHookHeight);
     }
 
-    if (mu::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
+    if (muse::contains(propertyIdSet, Pid::END_HOOK_HEIGHT)) {
         loadPropertyItem(m_endHookHeight);
     }
 
-    if (mu::contains(propertyIdSet, Pid::GAP_BETWEEN_TEXT_AND_LINE)) {
+    if (muse::contains(propertyIdSet, Pid::GAP_BETWEEN_TEXT_AND_LINE)) {
         loadPropertyItem(m_gapBetweenTextAndLine);
     }
 
-    if (mu::contains(propertyIdSet, Pid::PLACEMENT)) {
+    if (muse::contains(propertyIdSet, Pid::PLACEMENT)) {
         loadPropertyItem(m_placement);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BEGIN_TEXT)) {
+    if (muse::contains(propertyIdSet, Pid::BEGIN_TEXT)) {
         loadPropertyItem(m_beginningText);
     }
 
-    if (mu::contains(propertyIdSet, Pid::BEGIN_TEXT_OFFSET)) {
+    if (muse::contains(propertyIdSet, Pid::BEGIN_TEXT_OFFSET)) {
         loadPropertyItem(m_beginningTextOffset);
     }
 
-    if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT)) {
+    if (muse::contains(propertyIdSet, Pid::CONTINUE_TEXT)) {
         loadPropertyItem(m_continuousText);
     }
 
-    if (mu::contains(propertyIdSet, Pid::CONTINUE_TEXT_OFFSET)) {
+    if (muse::contains(propertyIdSet, Pid::CONTINUE_TEXT_OFFSET)) {
         loadPropertyItem(m_continuousTextOffset);
     }
 
-    if (mu::contains(propertyIdSet, Pid::END_TEXT)) {
+    if (muse::contains(propertyIdSet, Pid::END_TEXT)) {
         loadPropertyItem(m_endText);
     }
 
-    if (mu::contains(propertyIdSet, Pid::END_TEXT_OFFSET)) {
+    if (muse::contains(propertyIdSet, Pid::END_TEXT_OFFSET)) {
         loadPropertyItem(m_endTextOffset);
     }
 

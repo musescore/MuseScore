@@ -31,7 +31,7 @@ namespace mu::notation {
 class MScoreErrorsController
 {
     INJECT_STATIC(INotationConfiguration, configuration)
-    INJECT_STATIC(IInteractive, interactive)
+    INJECT_STATIC(muse::IInteractive, interactive)
 
 public:
     static void checkAndShowMScoreError();

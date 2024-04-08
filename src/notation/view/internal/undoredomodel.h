@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class UndoRedoModel : public QObject, public async::Asyncable
+class UndoRedoModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

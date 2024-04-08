@@ -120,7 +120,7 @@ private:
     double m_pointSizeF = -1.0;
     int m_pixelSize = -1;
     Weight m_weight = Weight::Normal;
-    mu::Flags<Style> m_style{ Style::Normal };
+    muse::Flags<Style> m_style{ Style::Normal };
     bool m_noFontMerging = false;
     Hinting m_hinting = Hinting::PreferDefaultHinting;
 };

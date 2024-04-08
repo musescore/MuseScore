@@ -28,14 +28,14 @@
 
 namespace mu::iex::ove {
 class OveConfiguration;
-class OveModule : public modularity::IModuleSetup
+class OveModule : public muse::modularity::IModuleSetup
 {
 public:
 
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
 

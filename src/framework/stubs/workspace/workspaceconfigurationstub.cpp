@@ -22,7 +22,7 @@
 #include "workspaceconfigurationstub.h"
 
 using namespace muse::workspace;
-using namespace mu;
+using namespace muse;
 
 io::paths_t WorkspaceConfigurationStub::workspacePaths() const
 {

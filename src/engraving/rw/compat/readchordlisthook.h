@@ -41,7 +41,7 @@ public:
 private:
     Score* m_score = nullptr;
     bool m_chordListTag = false;
-    String m_oldChordDescriptionFile;
+    muse::String m_oldChordDescriptionFile;
 };
 }
 

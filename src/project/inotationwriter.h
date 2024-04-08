@@ -52,15 +52,16 @@ public:
         BEATS_COLORS
     };
 
-    using Options = std::map<OptionKey, Val>;
+    using Options = std::map<OptionKey, muse::Val>;
 
     virtual std::vector<UnitType> supportedUnitTypes() const = 0;
     virtual bool supportsUnitType(UnitType unitType) const = 0;
 
-    virtual Ret write(notation::INotationPtr notation, io::IODevice& device, const Options& options = Options()) = 0;
-    virtual Ret writeList(const notation::INotationPtrList& notations, io::IODevice& device, const Options& options = Options()) = 0;
+    virtual muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& device, const Options& options = Options()) = 0;
+    virtual muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& device,
+                                const Options& options = Options()) = 0;
 
-    virtual mu::Progress* progress() { return nullptr; }
+    virtual muse::Progress* progress() { return nullptr; }
     virtual void abort() {}
 };
 

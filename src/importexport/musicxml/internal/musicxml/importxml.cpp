@@ -38,6 +38,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace mu::iex::musicxml;
 
 namespace mu::engraving {

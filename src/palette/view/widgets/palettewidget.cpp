@@ -65,7 +65,7 @@
 #include "log.h"
 
 using namespace mu;
-using namespace mu::io;
+using namespace muse::io;
 using namespace mu::palette;
 using namespace mu::engraving;
 using namespace muse::draw;
@@ -886,7 +886,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         }
     } else if (datap->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
         QByteArray dta(event->mimeData()->data(mu::commonscene::MIME_SYMBOL_FORMAT));
-        ByteArray ba = ByteArray::fromQByteArrayNoCopy(dta);
+        muse::ByteArray ba = muse::ByteArray::fromQByteArrayNoCopy(dta);
         XmlReader xml(ba);
         PointF dragOffset;
         Fraction duration;
@@ -1141,8 +1141,8 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
     }
 
     QMenu menu;
-    QAction* deleteCellAction = menu.addAction(mu::qtrc("palette", "Delete"));
-    QAction* contextAction = menu.addAction(mu::qtrc("palette", "Properties…"));
+    QAction* deleteCellAction = menu.addAction(muse::qtrc("palette", "Delete"));
+    QAction* contextAction = menu.addAction(muse::qtrc("palette", "Properties…"));
     deleteCellAction->setEnabled(!m_isReadOnly);
     contextAction->setEnabled(!m_isReadOnly);
 
@@ -1159,16 +1159,16 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
     if (action == deleteCellAction) {
         PaletteCellPtr cell = cellAt(i);
         if (cell) {
-            std::string title = mu::trc("palette", "Delete palette cell");
-            std::string question
-                = mu::qtrc("palette", "Are you sure you want to delete palette cell “%1”?").arg(cell->name).toStdString();
+            std::string title = muse::trc("palette", "Delete palette cell");
+            std::string question = muse::qtrc("palette", "Are you sure you want to delete palette cell “%1”?")
+                                   .arg(cell->name).toStdString();
 
-            IInteractive::Result result = interactive()->question(title, question, {
-                IInteractive::Button::Yes,
-                IInteractive::Button::No
-            }, IInteractive::Button::Yes);
+            muse::IInteractive::Result result = interactive()->question(title, question, {
+                muse::IInteractive::Button::Yes,
+                muse::IInteractive::Button::No
+            }, muse::IInteractive::Button::Yes);
 
-            if (result.standardButton() != IInteractive::Button::Yes) {
+            if (result.standardButton() != muse::IInteractive::Button::Yes) {
                 return;
             }
             m_palette->takeCell(i);

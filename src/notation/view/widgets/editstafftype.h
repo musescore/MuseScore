@@ -76,7 +76,7 @@ public:
     void setInstrument(const Instrument& instrument);
 
 private:
-    mu::Ret loadScore(mu::engraving::MasterScore* score, const io::path_t& path);
+    muse::Ret loadScore(mu::engraving::MasterScore* score, const muse::io::path_t& path);
 };
 }
 #endif

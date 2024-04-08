@@ -35,7 +35,7 @@ namespace muse::extensions {
 class ExtensionsUiActions;
 class ExtensionsActionController : public muse::actions::Actionable, public async::Asyncable
 {
-    Inject<mu::IInteractive> interactive;
+    Inject<IInteractive> interactive;
     Inject<muse::actions::IActionsDispatcher> dispatcher;
     Inject<extensions::IExtensionsProvider> provider;
     Inject<ui::IUiActionsRegister> uiActionsRegister;

@@ -33,7 +33,7 @@ void DrawObjectsLogger::beginObject(const std::string& name)
     std::string gap;
     gap.resize(m_objects.size());
 #ifdef LOG_STREAM
-    LOG_STREAM(mu::logger::Logger::DEBG, DRAW_OBJ_TAG, mu::logger::Color::None)() << "Begin: " << gap << name;
+    LOG_STREAM(muse::logger::Logger::DEBG, DRAW_OBJ_TAG, muse::logger::Color::None)() << "Begin: " << gap << name;
 #else
     UNUSED(pagePos);
 #endif
@@ -48,7 +48,7 @@ void DrawObjectsLogger::endObject()
     std::string gap;
     gap.resize(m_objects.size());
 #ifdef LOG_STREAM
-    LOG_STREAM(mu::logger::Logger::DEBG, DRAW_OBJ_TAG, mu::logger::Color::None)() << "End:   " << gap << m_objects.top();
+    LOG_STREAM(muse::logger::Logger::DEBG, DRAW_OBJ_TAG, muse::logger::Color::None)() << "End:   " << gap << m_objects.top();
 #endif
 
     m_objects.pop();

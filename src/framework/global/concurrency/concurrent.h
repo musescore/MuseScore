@@ -20,15 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_CONCURRENT_H
-#define MU_GLOBAL_CONCURRENT_H
+#ifndef MUSE_GLOBAL_CONCURRENT_H
+#define MUSE_GLOBAL_CONCURRENT_H
 
 #ifndef NO_QT_SUPPORT
 #include <QtConcurrent>
 
 #include "log.h"
 
-namespace mu {
+namespace muse {
 class Concurrent
 {
 public:
@@ -109,4 +109,4 @@ public:
 
 #endif // NO_QT_SUPPORT
 
-#endif // MU_GLOBAL_CONCURRENT_H
+#endif // MUSE_GLOBAL_CONCURRENT_H

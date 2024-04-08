@@ -39,6 +39,7 @@ using ::testing::ReturnRef;
 
 using namespace mu;
 using namespace mu::notation;
+using namespace muse;
 
 static const String TEST_SCORE_PATH(u"data/test.mscx");
 

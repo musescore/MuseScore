@@ -30,12 +30,12 @@
 #include "modularity/ioc.h"
 #include "diagnostics/idiagnosticdrawprovider.h"
 
-namespace mu::api {
+namespace muse::api {
 class DiagnosticsApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(mu::diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
 
 public:
     DiagnosticsApi(IApiEngine* e);

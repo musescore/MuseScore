@@ -52,8 +52,8 @@ public:
     virtual bool isActive() const;
     virtual bool hasNativeEditorSupport() const;
 
-    const UriQuery& editorUri() const;
-    void setEditorUri(const UriQuery& uri);
+    const muse::UriQuery& editorUri() const;
+    void setEditorUri(const muse::UriQuery& uri);
 
 signals:
     void titleChanged();
@@ -78,7 +78,7 @@ protected:
 private:
     void doRequestToLaunchNativeEditorView();
 
-    UriQuery m_editorUri;
+    muse::UriQuery m_editorUri;
 };
 }
 

@@ -23,7 +23,7 @@
 
 #include "types/uri.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_UriTests : public ::testing::Test
 {

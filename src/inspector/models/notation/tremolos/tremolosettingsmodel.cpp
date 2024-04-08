@@ -34,7 +34,7 @@ TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_TREMOLO);
-    setTitle(mu::qtrc("inspector", "Tremolos"));
+    setTitle(muse::qtrc("inspector", "Tremolos"));
     setIcon(muse::ui::IconCode::Code::TREMOLO_TWO_NOTES);
     createProperties();
 }

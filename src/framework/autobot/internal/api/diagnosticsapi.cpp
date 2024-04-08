@@ -21,8 +21,8 @@
  */
 #include "diagnosticsapi.h"
 
-using namespace mu;
-using namespace mu::api;
+using namespace muse;
+using namespace muse::api;
 using namespace mu::diagnostics;
 
 DiagnosticsApi::DiagnosticsApi(IApiEngine* e)

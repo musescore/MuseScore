@@ -35,21 +35,21 @@ public:
 
     void setDefaultFont(Font::Type type, const FontDataKey& key) override;
 
-    int addFont(const FontDataKey& key, const mu::io::path_t& path) override;
+    int addFont(const FontDataKey& key, const io::path_t& path) override;
 
     FontDataKey actualFont(const FontDataKey& requireKey, Font::Type type) const override;
     std::vector<FontDataKey> substitutionFonts(Font::Type type) const override;
     FontData fontData(const FontDataKey& requireKey, Font::Type type) const override;
-    mu::io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const override;
+    io::path_t fontPath(const FontDataKey& requireKey, Font::Type type) const override;
 
-    void addAdditionalFonts(const mu::io::path_t& path) override;
+    void addAdditionalFonts(const io::path_t& path) override;
 
 private:
 
     struct FontInfo {
         int id = -1;
         FontDataKey key;
-        mu::io::path_t path;
+        io::path_t path;
 
         bool valid() const { return id > -1; }
     };

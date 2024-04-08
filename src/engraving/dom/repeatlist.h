@@ -101,7 +101,7 @@ public:
 private:
     void collectRepeatListElements();
     std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
-        String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
+        muse::String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
         RepeatListElementList::const_iterator referenceRepeatListElementIt) const;
 
     void performJump(std::vector<RepeatListElementList>::const_iterator sectionIt,

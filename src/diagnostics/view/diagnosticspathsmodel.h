@@ -34,7 +34,7 @@ class DiagnosticsPathsModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(IDiagnosticsPathsRegister, pathsRegister)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
 
 public:
     explicit DiagnosticsPathsModel(QObject* parent = nullptr);

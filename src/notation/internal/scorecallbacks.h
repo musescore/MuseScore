@@ -37,13 +37,13 @@ class ScoreCallbacks : public mu::engraving::MuseScoreView
 public:
     ScoreCallbacks() = default;
 
-    void dataChanged(const mu::RectF&) override;
+    void dataChanged(const muse::RectF&) override;
     void updateAll() override;
-    void drawBackground(muse::draw::Painter*, const RectF&) const override;
-    const mu::Rect geometry() const override;
+    void drawBackground(muse::draw::Painter*, const muse::RectF&) const override;
+    const muse::Rect geometry() const override;
     qreal selectionProximity() const override;
     void setDropTarget(const mu::engraving::EngravingItem* dropTarget) override;
-    void setDropRectangle(const RectF& rect) override;
+    void setDropRectangle(const muse::RectF& rect) override;
     void changeEditElement(mu::engraving::EngravingItem* newElement) override;
     void adjustCanvasPosition(const mu::engraving::EngravingItem*, int staffIdx = -1) override;
 

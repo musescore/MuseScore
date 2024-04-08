@@ -25,7 +25,7 @@
 
 #include "types/bytearray.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_Types_ByteArrayTests : public ::testing::Test
 {

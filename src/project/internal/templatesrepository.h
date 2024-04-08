@@ -35,16 +35,16 @@ class TemplatesRepository : public ITemplatesRepository
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(IMscMetaReader, mscReader)
-    INJECT(io::IFileSystem, fileSystem)
+    INJECT(muse::io::IFileSystem, fileSystem)
 
 public:
-    RetVal<Templates> templates() const override;
+    muse::RetVal<Templates> templates() const override;
 
 private:
-    Templates readTemplates(const io::path_t& dirPath) const;
+    Templates readTemplates(const muse::io::path_t& dirPath) const;
 
-    Templates readTemplates(const io::paths_t& files, const QString& category, bool isCustom,
-                            const io::path_t& dirPath = io::path_t()) const;
+    Templates readTemplates(const muse::io::paths_t& files, const QString& category, bool isCustom,
+                            const muse::io::path_t& dirPath = muse::io::path_t()) const;
 };
 }
 

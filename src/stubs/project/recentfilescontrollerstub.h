@@ -31,13 +31,13 @@ public:
     RecentFilesControllerStub() = default;
 
     const RecentFilesList& recentFilesList() const override;
-    async::Notification recentFilesListChanged() const override;
+    muse::async::Notification recentFilesListChanged() const override;
 
     void prependRecentFile(const RecentFile& file) override;
-    void moveRecentFile(const io::path_t& before, const RecentFile& after) override;
+    void moveRecentFile(const muse::io::path_t& before, const RecentFile& after) override;
     void clearRecentFiles() override;
 
-    async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;
+    muse::async::Promise<QPixmap> thumbnail(const RecentFile& file) const override;
 };
 }
 

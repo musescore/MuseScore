@@ -25,7 +25,7 @@
 #include "internal/audiosanitizer.h"
 #include "internal/worker/audioengine.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::mpe;
 using namespace muse::audio;
 using namespace muse::audio::synth;

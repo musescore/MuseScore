@@ -27,9 +27,9 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::api;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::api;
+using namespace muse::io;
 
 FileSystemApi::FileSystemApi(IApiEngine* e)
     : ApiObject(e)

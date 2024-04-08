@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-static mu::testing::SuiteEnvironment importexport_se(
+static muse::testing::SuiteEnvironment importexport_se(
 {
     new muse::draw::DrawModule(),
     new mu::engraving::EngravingModule()

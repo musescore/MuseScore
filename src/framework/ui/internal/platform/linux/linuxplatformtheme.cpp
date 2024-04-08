@@ -26,7 +26,7 @@
 #include "linuxplatformtheme.h"
 
 using namespace muse::ui;
-using namespace mu::async;
+using namespace muse::async;
 
 static const QLatin1String service("org.freedesktop.portal.Desktop");
 static const QLatin1String path("/org/freedesktop/portal/desktop");

@@ -29,9 +29,9 @@
 namespace mu::engraving {
 class Score;
 
-bool saveMxl(Score*, io::IODevice*);
-bool saveXml(Score*, io::IODevice*);
-bool saveXml(Score*, const String&);
+bool saveMxl(Score*, muse::io::IODevice*);
+bool saveXml(Score*, muse::io::IODevice*);
+bool saveXml(Score*, const muse::String&);
 }
 
 #endif // MU_IMPORTEXPORT_EXPORTXML_H

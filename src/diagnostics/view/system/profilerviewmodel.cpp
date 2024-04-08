@@ -26,7 +26,7 @@
 #include "log.h"
 
 using namespace mu::diagnostics;
-using namespace mu::profiler;
+using namespace muse::profiler;
 
 ProfilerViewModel::ProfilerViewModel(QObject* parent)
     : QAbstractListModel(parent)

@@ -406,7 +406,7 @@ static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
     case NoteSpellingType::SOLFEGGIO:
     case NoteSpellingType::FRENCH:
         useSolfeggio = true;
-        if (s.startsWith(u"sol", mu::CaseInsensitive)) {
+        if (s.startsWith(u"sol", muse::CaseInsensitive)) {
             acci = 3;
         } else {
             acci = 2;
@@ -613,7 +613,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
         *root = r;
         *base = Tpc::TPC_INVALID;
         size_t slash = s.lastIndexOf(u'/');
-        if (slash != mu::nidx) {
+        if (slash != muse::nidx) {
             String bs = s.mid(slash + 1).simplified();
             s = s.mid(idx, slash - idx).simplified();
             size_t idx2;
@@ -1222,7 +1222,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
         //parse bass
         size_t slash = m_textName.lastIndexOf('/');
         int bassTpc;
-        if (slash == mu::nidx) {
+        if (slash == muse::nidx) {
             bassTpc = Tpc::TPC_INVALID;
         } else {
             bassTpc = function2Tpc(m_textName.mid(slash + 1), key);
@@ -1650,7 +1650,7 @@ StringList Harmony::xmlDegrees() const
 
 HDegree Harmony::degree(int i) const
 {
-    return mu::value(m_degreeList, i);
+    return muse::value(m_degreeList, i);
 }
 
 //---------------------------------------------------------
@@ -1773,7 +1773,7 @@ String Harmony::generateScreenReaderInfo() const
         bool hasUpper = aux.contains(u'I') || aux.contains(u'V');
         bool hasLower = aux.contains(u'i') || aux.contains(u'v');
         if (hasLower && !hasUpper) {
-            rez = String(u"%1 %2").arg(rez, mtrc("engraving", "lower case"));
+            rez = String(u"%1 %2").arg(rez, muse::mtrc("engraving", "lower case"));
         }
         aux = aux.toLower();
         static std::vector<std::pair<String, String> > rnaReplacements {
@@ -1829,7 +1829,7 @@ String Harmony::generateScreenReaderInfo() const
         aux = aux.replace(u"#", u"♯").replace(u"<", u"");
         String extension;
 
-        for (String s : aux.split(u'>', mu::SkipEmptyParts)) {
+        for (String s : aux.split(u'>', muse::SkipEmptyParts)) {
             if (!s.contains(u"blues")) {
                 s.replace(u"b", u"♭");
             }

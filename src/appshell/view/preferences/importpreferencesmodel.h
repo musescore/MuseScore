@@ -35,7 +35,7 @@
 #include "notation/inotationconfiguration.h"
 
 namespace mu::appshell {
-class ImportPreferencesModel : public QObject, public async::Asyncable
+class ImportPreferencesModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

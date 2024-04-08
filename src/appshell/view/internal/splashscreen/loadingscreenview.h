@@ -39,7 +39,7 @@ class LoadingScreenView : public QWidget
 
     Inject<muse::ui::IUiConfiguration> uiConfiguration;
     Inject<muse::languages::ILanguagesService> languagesService;
-    Inject<IApplication> application;
+    Inject<muse::IApplication> application;
 
 public:
     explicit LoadingScreenView(QWidget* parent = nullptr);

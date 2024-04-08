@@ -58,13 +58,13 @@ struct Shortcut
 
     static std::string sequencesToString(const std::vector<std::string>& seqs)
     {
-        return mu::strings::join(seqs, ", ");
+        return muse::strings::join(seqs, ", ");
     }
 
     static std::vector<std::string> sequencesFromString(const std::string& str)
     {
         std::vector<std::string> seqs;
-        mu::strings::split(str, seqs, ", ");
+        muse::strings::split(str, seqs, ", ");
         return seqs;
     }
 
@@ -100,14 +100,15 @@ struct RemoteEvent {
     {
         if (this->type == RemoteEventType::Note) {
             //: A MIDI remote event, namely a note event
-            return mu::mtrc("shortcuts", "Note %1").arg(String::fromStdString(mu::pitchToString(this->value)));
+            return muse::mtrc("shortcuts", "Note %1")
+                   .arg(String::fromStdString(muse::pitchToString(this->value)));
         } else if (this->type == RemoteEventType::Controller) {
             //: A MIDI remote event, namely a MIDI controller event
-            return mu::mtrc("shortcuts", "CC %1").arg(String::number(this->value));
+            return muse::mtrc("shortcuts", "CC %1").arg(String::number(this->value));
         }
 
         //: No MIDI remote event
-        return mu::mtrc("shortcuts", "None");
+        return muse::mtrc("shortcuts", "None");
     }
 
     bool operator ==(const RemoteEvent& other) const

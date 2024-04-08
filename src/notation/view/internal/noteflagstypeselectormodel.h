@@ -29,7 +29,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::notation {
-class NoteFlagsTypeSelectorModel : public QObject, public async::Asyncable
+class NoteFlagsTypeSelectorModel : public QObject, public muse::async::Asyncable
 {
     Q_OBJECT
 

@@ -39,14 +39,14 @@ public:
     virtual ~IProjectFilesController() = default;
 
     virtual bool isUrlSupported(const QUrl& url) const = 0;
-    virtual bool isFileSupported(const io::path_t& path) const = 0;
-    virtual Ret openProject(const ProjectFile& file) = 0;
+    virtual bool isFileSupported(const muse::io::path_t& path) const = 0;
+    virtual muse::Ret openProject(const ProjectFile& file) = 0;
     virtual bool closeOpenedProject(bool quitApp = false) = 0;
-    virtual bool saveProject(const io::path_t& path = io::path_t()) = 0;
-    virtual bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) = 0;
+    virtual bool saveProject(const muse::io::path_t& path = muse::io::path_t()) = 0;
+    virtual bool saveProjectLocally(const muse::io::path_t& path = muse::io::path_t(), SaveMode saveMode = SaveMode::Save) = 0;
 
     virtual const ProjectBeingDownloaded& projectBeingDownloaded() const = 0;
-    virtual async::Notification projectBeingDownloadedChanged() const = 0;
+    virtual muse::async::Notification projectBeingDownloadedChanged() const = 0;
 };
 }
 

@@ -26,7 +26,8 @@
 #include "framework/ui/iinteractiveuriregister.h"
 
 using namespace mu::workspacescene;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::ui;
 
 static void workspacescene_init_qrc()

@@ -37,7 +37,7 @@ AppearanceSettingsModel::AppearanceSettingsModel(QObject* parent, IElementReposi
 {
     createProperties();
 
-    setTitle(mu::qtrc("inspector", "Appearance"));
+    setTitle(muse::qtrc("inspector", "Appearance"));
 }
 
 void AppearanceSettingsModel::createProperties()
@@ -62,7 +62,7 @@ void AppearanceSettingsModel::requestElements()
     };
 
     for (EngravingItem* element : m_repository->takeAllElements()) {
-        if (mu::contains(noAvailableChangeAppearanceTypes, element->type())) {
+        if (muse::contains(noAvailableChangeAppearanceTypes, element->type())) {
             continue;
         }
 
@@ -78,7 +78,7 @@ void AppearanceSettingsModel::requestElements()
     QSet<EngravingItem*> elementsForOffsetProperty;
 
     for (EngravingItem* element : m_elementList) {
-        if (!mu::contains(applyOffsetToChordTypes, element->type())) {
+        if (!muse::contains(applyOffsetToChordTypes, element->type())) {
             elementsForOffsetProperty.insert(element);
             continue;
         }
@@ -125,27 +125,27 @@ void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedProp
 
 void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
-    if (mu::contains(propertyIdSet, Pid::LEADING_SPACE)) {
+    if (muse::contains(propertyIdSet, Pid::LEADING_SPACE)) {
         loadPropertyItem(m_leadingSpace, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::USER_STRETCH)) {
+    if (muse::contains(propertyIdSet, Pid::USER_STRETCH)) {
         loadPropertyItem(m_measureWidth, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
+    if (muse::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
         loadPropertyItem(m_minimumDistance, formatDoubleFunc);
     }
 
-    if (mu::contains(propertyIdSet, Pid::COLOR)) {
+    if (muse::contains(propertyIdSet, Pid::COLOR)) {
         loadPropertyItem(m_color);
     }
 
-    if (mu::contains(propertyIdSet, Pid::Z)) {
+    if (muse::contains(propertyIdSet, Pid::Z)) {
         loadPropertyItem(m_arrangeOrder);
     }
 
-    if (mu::contains(propertyIdSet, Pid::OFFSET)) {
+    if (muse::contains(propertyIdSet, Pid::OFFSET)) {
         loadPropertyItem(m_offset, m_elementsForOffsetProperty);
     }
 
@@ -276,8 +276,8 @@ bool AppearanceSettingsModel::isVerticalOffsetAvailable() const
 
 bool AppearanceSettingsModel::isSnappedToGrid() const
 {
-    bool isSnapped = notationConfiguration()->isSnappedToGrid(mu::Orientation::Horizontal);
-    isSnapped &= notationConfiguration()->isSnappedToGrid(mu::Orientation::Vertical);
+    bool isSnapped = notationConfiguration()->isSnappedToGrid(muse::Orientation::Horizontal);
+    isSnapped &= notationConfiguration()->isSnappedToGrid(muse::Orientation::Vertical);
 
     return isSnapped;
 }
@@ -288,8 +288,8 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
         return;
     }
 
-    notationConfiguration()->setIsSnappedToGrid(mu::Orientation::Horizontal, isSnapped);
-    notationConfiguration()->setIsSnappedToGrid(mu::Orientation::Vertical, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(muse::Orientation::Horizontal, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(muse::Orientation::Vertical, isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }

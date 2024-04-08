@@ -32,7 +32,7 @@
 namespace mu::project {
 struct ProjectMeta
 {
-    io::path_t filePath;
+    muse::io::path_t filePath;
 
     QString title;
     QString subtitle;
@@ -55,9 +55,9 @@ struct ProjectMeta
 
     QVariantMap additionalTags;
 
-    io::path_t fileName(bool includingExtension = true) const
+    muse::io::path_t fileName(bool includingExtension = true) const
     {
-        return io::filename(filePath, includingExtension);
+        return muse::io::filename(filePath, includingExtension);
     }
 
     bool operator==(const ProjectMeta& other) const

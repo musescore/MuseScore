@@ -41,25 +41,25 @@ class INotationViewState
 public:
     virtual ~INotationViewState() = default;
 
-    virtual Ret read(const engraving::MscReader& reader, const io::path_t& pathPrefix = "") = 0;
-    virtual Ret write(engraving::MscWriter& writer, const io::path_t& pathPrefix = "") = 0;
+    virtual muse::Ret read(const engraving::MscReader& reader, const muse::io::path_t& pathPrefix = "") = 0;
+    virtual muse::Ret write(engraving::MscWriter& writer, const muse::io::path_t& pathPrefix = "") = 0;
 
     virtual bool isMatrixInited() const = 0;
     virtual void setMatrixInited(bool inited) = 0;
 
     virtual muse::draw::Transform matrix() const = 0;
-    virtual async::Channel<muse::draw::Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
+    virtual muse::async::Channel<muse::draw::Transform /*newMatrix*/, NotationPaintView* /*sender*/> matrixChanged() const = 0;
     virtual void setMatrix(const muse::draw::Transform& matrix, NotationPaintView* sender) = 0;
 
-    virtual ValCh<int> zoomPercentage() const = 0;
+    virtual muse::ValCh<int> zoomPercentage() const = 0;
 
-    virtual ValCh<ZoomType> zoomType() const = 0;
+    virtual muse::ValCh<ZoomType> zoomType() const = 0;
     virtual void setZoomType(ZoomType type) = 0;
 
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& mode) = 0;
 
-    virtual async::Notification stateChanged() const = 0;
+    virtual muse::async::Notification stateChanged() const = 0;
 
     virtual void makeDefault() = 0;
 };

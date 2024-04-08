@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_GLOBAL_XMLSTREAMWRITER_H
-#define MU_GLOBAL_XMLSTREAMWRITER_H
+#ifndef MUSE_GLOBAL_XMLSTREAMWRITER_H
+#define MUSE_GLOBAL_XMLSTREAMWRITER_H
 
 #include <list>
 #include <variant>
@@ -28,7 +28,7 @@
 #include "types/string.h"
 #include "io/iodevice.h"
 
-namespace mu {
+namespace muse {
 class TextStream;
 class XmlStreamWriter
 {
@@ -79,4 +79,4 @@ private:
 };
 }
 
-#endif // MU_GLOBAL_XMLSTREAMWRITER_H
+#endif // MUSE_GLOBAL_XMLSTREAMWRITER_H

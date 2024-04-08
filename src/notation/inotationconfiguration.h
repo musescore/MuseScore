@@ -43,32 +43,32 @@ public:
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
 
-    virtual io::path_t backgroundWallpaperPath() const = 0;
+    virtual muse::io::path_t backgroundWallpaperPath() const = 0;
     virtual const QPixmap& backgroundWallpaper() const = 0;
-    virtual void setBackgroundWallpaperPath(const io::path_t& path) = 0;
+    virtual void setBackgroundWallpaperPath(const muse::io::path_t& path) = 0;
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
 
     virtual void resetBackground() = 0;
 
-    virtual async::Notification backgroundChanged() const = 0;
+    virtual muse::async::Notification backgroundChanged() const = 0;
 
     virtual QColor foregroundColor() const = 0;
     virtual void setForegroundColor(const QColor& color) = 0;
 
-    virtual io::path_t foregroundWallpaperPath() const = 0;
+    virtual muse::io::path_t foregroundWallpaperPath() const = 0;
     virtual const QPixmap& foregroundWallpaper() const = 0;
-    virtual void setForegroundWallpaperPath(const io::path_t& path) = 0;
+    virtual void setForegroundWallpaperPath(const muse::io::path_t& path) = 0;
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
 
     virtual void resetForeground() = 0;
 
-    virtual async::Notification foregroundChanged() const = 0;
+    virtual muse::async::Notification foregroundChanged() const = 0;
 
-    virtual io::path_t wallpapersDefaultDirPath() const = 0;
+    virtual muse::io::path_t wallpapersDefaultDirPath() const = 0;
 
     virtual QColor borderColor() const = 0;
     virtual int borderWidth() const = 0;
@@ -103,15 +103,15 @@ public:
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
-    virtual io::path_t userStylesPath() const = 0;
-    virtual void setUserStylesPath(const io::path_t& path) = 0;
-    virtual async::Channel<io::path_t> userStylesPathChanged() const = 0;
+    virtual muse::io::path_t userStylesPath() const = 0;
+    virtual void setUserStylesPath(const muse::io::path_t& path) = 0;
+    virtual muse::async::Channel<muse::io::path_t> userStylesPathChanged() const = 0;
 
-    virtual io::path_t defaultStyleFilePath() const = 0;
-    virtual void setDefaultStyleFilePath(const io::path_t& path) = 0;
+    virtual muse::io::path_t defaultStyleFilePath() const = 0;
+    virtual void setDefaultStyleFilePath(const muse::io::path_t& path) = 0;
 
-    virtual io::path_t partStyleFilePath() const = 0;
-    virtual void setPartStyleFilePath(const io::path_t& path) = 0;
+    virtual muse::io::path_t partStyleFilePath() const = 0;
+    virtual void setPartStyleFilePath(const muse::io::path_t& path) = 0;
 
     virtual bool isMidiInputEnabled() const = 0;
     virtual void setIsMidiInputEnabled(bool enabled) = 0;
@@ -124,11 +124,11 @@ public:
 
     virtual bool isPlayRepeatsEnabled() const = 0;
     virtual void setIsPlayRepeatsEnabled(bool enabled) = 0;
-    virtual async::Notification isPlayRepeatsChanged() const = 0;
+    virtual muse::async::Notification isPlayRepeatsChanged() const = 0;
 
     virtual bool isPlayChordSymbolsEnabled() const = 0;
     virtual void setIsPlayChordSymbolsEnabled(bool enabled) = 0;
-    virtual async::Notification isPlayChordSymbolsChanged() const = 0;
+    virtual muse::async::Notification isPlayChordSymbolsChanged() const = 0;
 
     virtual bool isMetronomeEnabled() const = 0;
     virtual void setIsMetronomeEnabled(bool enabled) = 0;
@@ -139,12 +139,12 @@ public:
     virtual double guiScaling() const = 0;
     virtual double notationScaling() const = 0;
 
-    virtual ValCh<mu::Orientation> canvasOrientation() const = 0;
-    virtual void setCanvasOrientation(mu::Orientation orientation) = 0;
+    virtual muse::ValCh<muse::Orientation> canvasOrientation() const = 0;
+    virtual void setCanvasOrientation(muse::Orientation orientation) = 0;
 
     virtual bool isLimitCanvasScrollArea() const = 0;
     virtual void setIsLimitCanvasScrollArea(bool limited) = 0;
-    virtual async::Notification isLimitCanvasScrollAreaChanged() const = 0;
+    virtual muse::async::Notification isLimitCanvasScrollAreaChanged() const = 0;
 
     virtual bool colorNotesOutsideOfUsablePitchRange() const = 0;
     virtual void setColorNotesOutsideOfUsablePitchRange(bool value) = 0;
@@ -161,21 +161,21 @@ public:
     virtual void setTemplateModeEnabled(std::optional<bool> enabled) = 0;
     virtual void setTestModeEnabled(std::optional<bool> enabled) = 0;
 
-    virtual io::path_t instrumentListPath() const = 0;
+    virtual muse::io::path_t instrumentListPath() const = 0;
 
-    virtual io::paths_t scoreOrderListPaths() const = 0;
-    virtual async::Notification scoreOrderListPathsChanged() const = 0;
+    virtual muse::io::paths_t scoreOrderListPaths() const = 0;
+    virtual muse::async::Notification scoreOrderListPathsChanged() const = 0;
 
-    virtual io::paths_t userScoreOrderListPaths() const = 0;
-    virtual void setUserScoreOrderListPaths(const io::paths_t& paths) = 0;
+    virtual muse::io::paths_t userScoreOrderListPaths() const = 0;
+    virtual void setUserScoreOrderListPaths(const muse::io::paths_t& paths) = 0;
 
-    virtual io::path_t stringTuningsPresetsPath() const = 0;
+    virtual muse::io::path_t stringTuningsPresetsPath() const = 0;
 
-    virtual bool isSnappedToGrid(mu::Orientation gridOrientation) const = 0;
-    virtual void setIsSnappedToGrid(mu::Orientation gridOrientation, bool isSnapped) = 0;
+    virtual bool isSnappedToGrid(muse::Orientation gridOrientation) const = 0;
+    virtual void setIsSnappedToGrid(muse::Orientation gridOrientation, bool isSnapped) = 0;
 
-    virtual int gridSizeSpatium(mu::Orientation gridOrientation) const = 0;
-    virtual void setGridSize(mu::Orientation gridOrientation, int sizeSpatium) = 0;
+    virtual int gridSizeSpatium(muse::Orientation gridOrientation) const = 0;
+    virtual void setGridSize(muse::Orientation gridOrientation, int sizeSpatium) = 0;
 
     virtual bool needToShowAddTextErrorMessage() const = 0;
     virtual void setNeedToShowAddTextErrorMessage(bool show) = 0;
@@ -189,11 +189,11 @@ public:
     virtual bool needToShowMScoreError(const std::string& errorKey) const = 0;
     virtual void setNeedToShowMScoreError(const std::string& errorKey, bool show) = 0;
 
-    virtual ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
+    virtual muse::ValCh<int> pianoKeyboardNumberOfKeys() const = 0;
     virtual void setPianoKeyboardNumberOfKeys(int number) = 0;
 
-    virtual io::path_t styleFileImportPath() const = 0;
-    virtual void setStyleFileImportPath(const io::path_t& path) = 0;
+    virtual muse::io::path_t styleFileImportPath() const = 0;
+    virtual void setStyleFileImportPath(const muse::io::path_t& path) = 0;
 
     virtual int styleDialogLastPageIndex() const = 0;
     virtual void setStyleDialogLastPageIndex(int value) = 0;

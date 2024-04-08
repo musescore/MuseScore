@@ -26,7 +26,7 @@
 #endif
 
 namespace mu::engraving {
-String HtmlParser::parse(const String& name)
+muse::String HtmlParser::parse(const muse::String& name)
 {
 #ifndef ENGRAVING_NO_QTEXTDOCUMENT
     return QTextDocumentFragment::fromHtml(name.toQString()).toPlainText();

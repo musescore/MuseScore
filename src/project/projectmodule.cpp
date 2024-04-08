@@ -66,7 +66,8 @@
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::project;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 
 static void project_init_qrc()
 {

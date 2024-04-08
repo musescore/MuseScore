@@ -43,7 +43,7 @@ class MasterNotation : public IMasterNotation, public Notation, public std::enab
 public:
     ~MasterNotation();
 
-    Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
+    muse::Ret setupNewScore(engraving::MasterScore* score, const ScoreCreateOptions& options) override;
     void applyOptions(engraving::MasterScore* score, const ScoreCreateOptions& options, bool createdFromTemplate = false) override;
     engraving::MasterScore* masterScore() const override;
     void setMasterScore(engraving::MasterScore* masterScore) override;
@@ -54,7 +54,7 @@ public:
     IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const override;
 
     const ExcerptNotationList& excerpts() const override;
-    async::Notification excerptsChanged() const override;
+    muse::async::Notification excerptsChanged() const override;
     const ExcerptNotationList& potentialExcerpts() const override;
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
@@ -66,7 +66,7 @@ public:
 
     INotationPartsPtr parts() const override;
     bool hasParts() const override;
-    async::Notification hasPartsChanged() const override;
+    muse::async::Notification hasPartsChanged() const override;
 
     INotationPlaybackPtr playback() const override;
 
@@ -93,9 +93,9 @@ private:
     void markScoreAsNeedToSave();
 
     ExcerptNotationList m_excerpts;
-    async::Notification m_excerptsChanged;
+    muse::async::Notification m_excerptsChanged;
     INotationPlaybackPtr m_notationPlayback = nullptr;
-    async::Notification m_hasPartsChanged;
+    muse::async::Notification m_hasPartsChanged;
 
     mutable ExcerptNotationList m_potentialExcerpts;
 

@@ -23,6 +23,7 @@
 
 #include "engraving/dom/mscore.h"
 
+using namespace muse;
 using namespace mu::engraving;
 using namespace mu::notation;
 
@@ -48,101 +49,101 @@ void MScoreErrorsController::checkAndShowMScoreError()
     case MsError::MS_NO_ERROR:
         return;
     case MsError::NO_NOTE_SELECTED:
-        title = mu::trc("notation", "No note selected");
-        message = mu::trc("notation", "Please select a note and retry");
+        title = muse::trc("notation", "No note selected");
+        message = muse::trc("notation", "Please select a note and retry");
         break;
     case MsError::NO_CHORD_REST_SELECTED:
-        title = mu::trc("notation", "No chord/rest selected");
-        message = mu::trc("notation", "Please select a chord or rest and retry");
+        title = muse::trc("notation", "No chord/rest selected");
+        message = muse::trc("notation", "Please select a chord or rest and retry");
         break;
     case MsError::NO_LYRICS_SELECTED:
-        title = mu::trc("notation", "No note or lyrics selected");
-        message = mu::trc("notation", "Please select a note or lyrics and retry");
+        title = muse::trc("notation", "No note or lyrics selected");
+        message = muse::trc("notation", "Please select a note or lyrics and retry");
         break;
     case MsError::NO_NOTE_REST_SELECTED:
-        title = mu::trc("notation", "No note or rest selected");
-        message = mu::trc("notation", "Please select a note or rest and retry");
+        title = muse::trc("notation", "No note or rest selected");
+        message = muse::trc("notation", "Please select a note or rest and retry");
         break;
     case MsError::NO_FLIPPABLE_SELECTED:
-        title = mu::trc("notation", "No flippable element selected");
-        message = mu::trc("notation", "Please select an element that can be flipped and retry");
+        title = muse::trc("notation", "No flippable element selected");
+        message = muse::trc("notation", "Please select an element that can be flipped and retry");
         break;
     case MsError::NO_STAFF_SELECTED:
-        title = mu::trc("notation", "No staff selected");
-        message = mu::trc("notation", "Please select one or more staves and retry");
+        title = muse::trc("notation", "No staff selected");
+        message = muse::trc("notation", "Please select one or more staves and retry");
         break;
     case MsError::NO_NOTE_FIGUREDBASS_SELECTED:
-        title = mu::trc("notation", "No note or figured bass selected");
-        message = mu::trc("notation", "Please select a note or figured bass and retry");
+        title = muse::trc("notation", "No note or figured bass selected");
+        message = muse::trc("notation", "Please select a note or figured bass and retry");
         break;
     case MsError::CANNOT_INSERT_TUPLET:
-        title = mu::trc("notation", "Cannot insert chord/rest in tuplet");
+        title = muse::trc("notation", "Cannot insert chord/rest in tuplet");
         break;
     case MsError::CANNOT_SPLIT_TUPLET:
-        title = mu::trc("notation", "Cannot split tuplet");
+        title = muse::trc("notation", "Cannot split tuplet");
         break;
     case MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT:
-        title = mu::trc("notation", "Cannot split measure at the first beat");
+        title = muse::trc("notation", "Cannot split measure at the first beat");
         break;
     case MsError::CANNOT_SPLIT_MEASURE_TUPLET:
-        title = mu::trc("notation", "Cannot split measure here");
-        message = mu::trc("notation", "Cannot split tuplet");
+        title = muse::trc("notation", "Cannot split measure here");
+        message = muse::trc("notation", "Cannot split tuplet");
         break;
     case MsError::INSUFFICIENT_MEASURES:
-        title = mu::trc("notation", "Cannot create measure repeat here");
-        message = mu::trc("notation", "Insufficient or unequal measures");
+        title = muse::trc("notation", "Cannot create measure repeat here");
+        message = muse::trc("notation", "Insufficient or unequal measures");
         break;
     case MsError::CANNOT_SPLIT_MEASURE_REPEAT:
-        title = mu::trc("notation", "Cannot split measure repeat");
-        message = mu::trc("notation", "Please select a note or rest and retry");
+        title = muse::trc("notation", "Cannot split measure repeat");
+        message = muse::trc("notation", "Please select a note or rest and retry");
         break;
     case MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT:
-        title = mu::trc("notation", "This measure is too short to be split");
+        title = muse::trc("notation", "This measure is too short to be split");
         break;
     case MsError::CANNOT_REMOVE_TIME_TUPLET:
-        title = mu::trc("notation", "Cannot remove time from tuplet");
-        message = mu::trc("notation", "Please select the complete tuplet and retry");
+        title = muse::trc("notation", "Cannot remove time from tuplet");
+        message = muse::trc("notation", "Please select the complete tuplet and retry");
         break;
     case MsError::CANNOT_REMOVE_TIME_MEASURE_REPEAT:
-        title = mu::trc("notation", "Cannot remove time from measure repeat");
-        message = mu::trc("notation", "Please select the complete measure repeat and retry");
+        title = muse::trc("notation", "Cannot remove time from measure repeat");
+        message = muse::trc("notation", "Please select the complete measure repeat and retry");
         break;
     case MsError::NO_DEST:
-        title = mu::trc("notation", "No destination to paste");
+        title = muse::trc("notation", "No destination to paste");
         break;
     case MsError::DEST_TUPLET:
-        title = mu::trc("notation", "Cannot paste into tuplet");
+        title = muse::trc("notation", "Cannot paste into tuplet");
         break;
     case MsError::TUPLET_CROSSES_BAR:
-        title = mu::trc("notation", "Tuplet cannot cross barlines");
+        title = muse::trc("notation", "Tuplet cannot cross barlines");
         break;
     case MsError::DEST_LOCAL_TIME_SIGNATURE:
-        title = mu::trc("notation", "Cannot paste in local time signature");
+        title = muse::trc("notation", "Cannot paste in local time signature");
         break;
     case MsError::DEST_TREMOLO:
-        title = mu::trc("notation", "Cannot paste in tremolo");
+        title = muse::trc("notation", "Cannot paste in tremolo");
         break;
     case MsError::NO_MIME:
-        title = mu::trc("notation", "Nothing to paste");
+        title = muse::trc("notation", "Nothing to paste");
         break;
     case MsError::DEST_NO_CR:
-        title = mu::trc("notation", "Destination is not a chord or rest");
+        title = muse::trc("notation", "Destination is not a chord or rest");
         break;
     case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_MEASURE_NOT_EMPTY:
-        title = mu::trc("notation", "Cannot change local time signature");
-        message = mu::trc("notation", "Measure is not empty");
+        title = muse::trc("notation", "Cannot change local time signature");
+        message = muse::trc("notation", "Measure is not empty");
         break;
     case MsError::CANNOT_CHANGE_LOCAL_TIMESIG_HAS_EXCERPTS:
-        title = mu::trc("notation", "Cannot change local time signature");
-        message = mu::trc("notation", "This score already has part scores. Changing local time "
-                                      "signatures while part scores are present is not yet supported.");
+        title = muse::trc("notation", "Cannot change local time signature");
+        message = muse::trc("notation", "This score already has part scores. Changing local time "
+                                        "signatures while part scores are present is not yet supported.");
         break;
     case MsError::CORRUPTED_MEASURE:
-        title = mu::trc("notation", "Cannot change time signature in front of a corrupted measure");
+        title = muse::trc("notation", "Cannot change time signature in front of a corrupted measure");
         break;
     case MsError::CANNOT_REMOVE_KEY_SIG:
-        title = mu::trc("notation", "This key signature cannot be deleted");
-        message = mu::trc("notation", "Please replace it with a key signature from the palettes instead.");
+        title = muse::trc("notation", "This key signature cannot be deleted");
+        message = muse::trc("notation", "Please replace it with a key signature from the palettes instead.");
         break;
     }
 

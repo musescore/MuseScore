@@ -79,7 +79,7 @@ public:
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
 
-    muse::draw::Color color() const override { return m_bi->color(); }
+    Color color() const override { return m_bi->color(); }
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
@@ -94,7 +94,7 @@ public:
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     void setSelected(bool f) override;
 

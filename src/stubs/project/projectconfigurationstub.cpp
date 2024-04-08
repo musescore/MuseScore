@@ -24,9 +24,9 @@
 using namespace mu;
 using namespace mu::project;
 
-io::path_t ProjectConfigurationStub::recentFilesJsonPath() const
+muse::io::path_t ProjectConfigurationStub::recentFilesJsonPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 ByteArray ProjectConfigurationStub::compatRecentFilesData() const
@@ -34,9 +34,9 @@ ByteArray ProjectConfigurationStub::compatRecentFilesData() const
     return ByteArray();
 }
 
-io::path_t ProjectConfigurationStub::myFirstProjectPath() const
+muse::io::path_t ProjectConfigurationStub::myFirstProjectPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 io::paths_t ProjectConfigurationStub::availableTemplateDirs() const
@@ -44,62 +44,62 @@ io::paths_t ProjectConfigurationStub::availableTemplateDirs() const
     return io::paths_t();
 }
 
-io::path_t ProjectConfigurationStub::templateCategoriesJsonPath(const io::path_t&) const
+muse::io::path_t ProjectConfigurationStub::templateCategoriesJsonPath(const muse::io::path_t&) const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-io::path_t ProjectConfigurationStub::userTemplatesPath() const
+muse::io::path_t ProjectConfigurationStub::userTemplatesPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void ProjectConfigurationStub::setUserTemplatesPath(const io::path_t&)
+void ProjectConfigurationStub::setUserTemplatesPath(const muse::io::path_t&)
 {
 }
 
-async::Channel<io::path_t> ProjectConfigurationStub::userTemplatesPathChanged() const
+muse::async::Channel<muse::io::path_t> ProjectConfigurationStub::userTemplatesPathChanged() const
 {
-    static async::Channel<io::path_t> ch;
+    static muse::async::Channel<muse::io::path_t> ch;
     return ch;
 }
 
-io::path_t ProjectConfigurationStub::lastOpenedProjectsPath() const
+muse::io::path_t ProjectConfigurationStub::lastOpenedProjectsPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void ProjectConfigurationStub::setLastOpenedProjectsPath(const io::path_t&)
-{
-}
-
-io::path_t ProjectConfigurationStub::lastSavedProjectsPath() const
-{
-    return io::path_t();
-}
-
-void ProjectConfigurationStub::setLastSavedProjectsPath(const io::path_t&)
+void ProjectConfigurationStub::setLastOpenedProjectsPath(const muse::io::path_t&)
 {
 }
 
-io::path_t ProjectConfigurationStub::userProjectsPath() const
+muse::io::path_t ProjectConfigurationStub::lastSavedProjectsPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-void ProjectConfigurationStub::setUserProjectsPath(const io::path_t&)
+void ProjectConfigurationStub::setLastSavedProjectsPath(const muse::io::path_t&)
 {
 }
 
-async::Channel<io::path_t> ProjectConfigurationStub::userProjectsPathChanged() const
+muse::io::path_t ProjectConfigurationStub::userProjectsPath() const
 {
-    static async::Channel<io::path_t> ch;
+    return muse::io::path_t();
+}
+
+void ProjectConfigurationStub::setUserProjectsPath(const muse::io::path_t&)
+{
+}
+
+muse::async::Channel<muse::io::path_t> ProjectConfigurationStub::userProjectsPathChanged() const
+{
+    static muse::async::Channel<muse::io::path_t> ch;
     return ch;
 }
 
-io::path_t ProjectConfigurationStub::defaultUserProjectsPath() const
+muse::io::path_t ProjectConfigurationStub::defaultUserProjectsPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 bool ProjectConfigurationStub::shouldAskSaveLocationType() const
@@ -111,19 +111,19 @@ void ProjectConfigurationStub::setShouldAskSaveLocationType(bool)
 {
 }
 
-bool ProjectConfigurationStub::isCloudProject(const io::path_t&) const
+bool ProjectConfigurationStub::isCloudProject(const muse::io::path_t&) const
 {
     return false;
 }
 
-io::path_t ProjectConfigurationStub::cloudProjectSavingFilePath(const io::path_t&) const
+muse::io::path_t ProjectConfigurationStub::cloudProjectSavingFilePath(const muse::io::path_t&) const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-io::path_t ProjectConfigurationStub::defaultSavingFilePath(INotationProjectPtr, const std::string&, const std::string&) const
+muse::io::path_t ProjectConfigurationStub::defaultSavingFilePath(INotationProjectPtr, const std::string&, const std::string&) const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 SaveLocationType ProjectConfigurationStub::lastUsedSaveLocationType() const
@@ -158,9 +158,9 @@ QColor ProjectConfigurationStub::templatePreviewBackgroundColor() const
     return QColor();
 }
 
-async::Notification ProjectConfigurationStub::templatePreviewBackgroundChanged() const
+muse::async::Notification ProjectConfigurationStub::templatePreviewBackgroundChanged() const
 {
-    static async::Notification n;
+    static muse::async::Notification n;
     return n;
 }
 
@@ -191,9 +191,9 @@ void ProjectConfigurationStub::setAutoSaveEnabled(bool)
 {
 }
 
-async::Channel<bool> ProjectConfigurationStub::autoSaveEnabledChanged() const
+muse::async::Channel<bool> ProjectConfigurationStub::autoSaveEnabledChanged() const
 {
-    static async::Channel<bool> ch;
+    static muse::async::Channel<bool> ch;
     return ch;
 }
 
@@ -206,9 +206,9 @@ void ProjectConfigurationStub::setAutoSaveInterval(int)
 {
 }
 
-async::Channel<int> ProjectConfigurationStub::autoSaveIntervalChanged() const
+muse::async::Channel<int> ProjectConfigurationStub::autoSaveIntervalChanged() const
 {
-    static async::Channel<int> ch;
+    static muse::async::Channel<int> ch;
     return ch;
 }
 
@@ -221,9 +221,9 @@ void ProjectConfigurationStub::setAlsoShareAudioCom(bool share)
 {
 }
 
-async::Channel<bool> ProjectConfigurationStub::alsoShareAudioComChanged() const
+muse::async::Channel<bool> ProjectConfigurationStub::alsoShareAudioComChanged() const
 {
-    static async::Channel<bool> ch;
+    static muse::async::Channel<bool> ch;
     return ch;
 }
 
@@ -245,9 +245,9 @@ void ProjectConfigurationStub::setHasAskedAlsoShareAudioCom(bool has)
 {
 }
 
-io::path_t ProjectConfigurationStub::newProjectTemporaryPath() const
+muse::io::path_t ProjectConfigurationStub::newProjectTemporaryPath() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 bool ProjectConfigurationStub::isAccessibleEnabled() const
@@ -305,14 +305,14 @@ void ProjectConfigurationStub::setNumberOfSavesToGenerateAudio(int)
 {
 }
 
-io::path_t ProjectConfigurationStub::temporaryMp3FilePathTemplate() const
+muse::io::path_t ProjectConfigurationStub::temporaryMp3FilePathTemplate() const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
-io::path_t ProjectConfigurationStub::projectBackupPath(const io::path_t&) const
+muse::io::path_t ProjectConfigurationStub::projectBackupPath(const muse::io::path_t&) const
 {
-    return io::path_t();
+    return muse::io::path_t();
 }
 
 bool ProjectConfigurationStub::showCloudIsNotAvailableWarning() const

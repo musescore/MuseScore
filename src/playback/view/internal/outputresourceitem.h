@@ -41,7 +41,7 @@
 #endif
 
 namespace mu::playback {
-class OutputResourceItem : public AbstractAudioResourceItem, public async::Asyncable
+class OutputResourceItem : public AbstractAudioResourceItem, public muse::async::Asyncable
 {
     Q_OBJECT
 

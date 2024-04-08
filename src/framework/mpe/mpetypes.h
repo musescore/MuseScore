@@ -123,13 +123,13 @@ struct ValuesCurve : public SharedMap<duration_percentage_t, T>
 
     void amplifyVelocity(const float requiredVelocityFraction)
     {
-        if (mu::RealIsEqual(requiredVelocityFraction, 0.f)) {
+        if (RealIsEqual(requiredVelocityFraction, 0.f)) {
             return;
         }
 
         ValuesCurve result;
 
-        if (mu::RealIsEqualOrMore(requiredVelocityFraction, 0.5f)) {
+        if (RealIsEqualOrMore(requiredVelocityFraction, 0.5f)) {
             accelerate(requiredVelocityFraction, result);
         } else {
             decelerate(requiredVelocityFraction, result);
@@ -151,7 +151,7 @@ private:
 
             float newPointPositionCoef = (pair.second / static_cast<float>(pair.first)) * positionAmplifyFactor;
             duration_percentage_t newPointPosition
-                = static_cast<duration_percentage_t>(mu::RealRound(pair.second / newPointPositionCoef, 0));
+                = static_cast<duration_percentage_t>(RealRound(pair.second / newPointPositionCoef, 0));
 
             result.insert({ newPointPosition, pair.second });
         }
@@ -372,7 +372,7 @@ inline bool isMultiNoteArticulation(const ArticulationType type)
         ArticulationType::ArpeggioStraightDown,
     };
 
-    return mu::contains(MULTI_TYPES, type);
+    return muse::contains(MULTI_TYPES, type);
 }
 
 inline bool isSingleNoteArticulation(const ArticulationType type)

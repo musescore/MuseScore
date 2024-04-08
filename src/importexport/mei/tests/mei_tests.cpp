@@ -58,12 +58,12 @@ void Mei_Tests::meiReadTest(const char* file)
 {
     String fileName = String::fromUtf8(file);
 
-    auto importFunc = [](MasterScore* score, const io::path_t& path) -> Err {
+    auto importFunc = [](MasterScore* score, const muse::io::path_t& path) -> Err {
         MeiReader meiReader;
         return meiReader.import(score, path);
     };
 
-    auto exportFunc = [](Score* score, const io::path_t& path) -> Err {
+    auto exportFunc = [](Score* score, const muse::io::path_t& path) -> Err {
         MeiWriter meiWriter;
         return meiWriter.writeScore(score, path);
     };

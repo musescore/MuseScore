@@ -31,7 +31,7 @@ SymbolSettingsModel::SymbolSettingsModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_SYMBOL);
-    setTitle(mu::qtrc("inspector", "Symbol"));
+    setTitle(muse::qtrc("inspector", "Symbol"));
     setIcon(muse::ui::IconCode::Code::TRIANGLE_SYMBOL);
     createProperties();
 }
@@ -61,7 +61,7 @@ void SymbolSettingsModel::loadProperties()
     loadPropertyItem(m_sym);
     loadPropertyItem(m_scoreFont);
     loadPropertyItem(m_symbolSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+        return muse::DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
     loadPropertyItem(m_symAngle);
 }

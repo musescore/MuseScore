@@ -55,7 +55,7 @@ class BeamSegment
 {
     OBJECT_ALLOCATOR(engraving, BeamSegment)
 public:
-    mu::LineF line;
+    LineF line;
     int level = 0;
     bool above = false; // above level 0 or below? (meaningless for level 0)
     Fraction startTick;
@@ -95,8 +95,8 @@ public:
     EngravingObject* scanParent() const override;
 
     Beam* clone() const override { return new Beam(*this); }
-    mu::PointF pagePos() const override;      ///< position in page coordinates
-    mu::PointF canvasPos() const override;    ///< position in page coordinates
+    PointF pagePos() const override;      ///< position in page coordinates
+    PointF canvasPos() const override;    ///< position in page coordinates
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
@@ -125,7 +125,7 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
-    void move(const mu::PointF&) override;
+    void move(const PointF&) override;
 
     void setId(int i) const { m_id = i; }
     int id() const { return m_id; }
@@ -164,12 +164,12 @@ public:
     void computeAndSetSlope();
     void setSlope(double val) { m_slope = val; }
 
-    const mu::PointF& startAnchor() const { return m_startAnchor; }
-    mu::PointF& startAnchor() { return m_startAnchor; }
-    void setStartAnchor(const mu::PointF& p) { m_startAnchor = p; }
-    const mu::PointF& endAnchor() const { return m_endAnchor; }
-    mu::PointF& endAnchor() { return m_endAnchor; }
-    void setEndAnchor(const mu::PointF& p) { m_endAnchor = p; }
+    const PointF& startAnchor() const { return m_startAnchor; }
+    PointF& startAnchor() { return m_startAnchor; }
+    void setStartAnchor(const PointF& p) { m_startAnchor = p; }
+    const PointF& endAnchor() const { return m_endAnchor; }
+    PointF& endAnchor() { return m_endAnchor; }
+    void setEndAnchor(const PointF& p) { m_endAnchor = p; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -197,11 +197,11 @@ public:
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
-    std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+    std::vector<PointF> gripsPositions(const EditData&) const override;
 
     static ActionIconType actionIconTypeForBeamMode(BeamMode);
 
-    mu::RectF drag(EditData&) override;
+    RectF drag(EditData&) override;
     bool isMovable() const override;
     void startDrag(EditData&) override;
 
@@ -258,8 +258,8 @@ private:
     double m_beamDist = 0.0;
     int m_beamSpacing = 3;              // how far apart beams are spaced in quarter spaces
     double m_beamWidth = 0.0;           // how wide each beam is
-    mu::PointF m_startAnchor;
-    mu::PointF m_endAnchor;
+    PointF m_startAnchor;
+    PointF m_endAnchor;
 
     // for tabs
     bool m_isBesideTabStaff = false;

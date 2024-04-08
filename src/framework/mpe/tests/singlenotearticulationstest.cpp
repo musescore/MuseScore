@@ -25,7 +25,7 @@
 #include "mpe/events.h"
 #include "mpe/tests/utils/articulationutils.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::mpe;
 using namespace muse::mpe::tests;
 

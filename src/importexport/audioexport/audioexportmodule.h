@@ -29,13 +29,13 @@
 
 namespace mu::iex::audioexport {
 class AudioExportConfiguration;
-class AudioExportModule : public modularity::IModuleSetup
+class AudioExportModule : public muse::modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
     void registerExports() override;
     void resolveImports() override;
-    void onInit(const IApplication::RunMode& mode) override;
+    void onInit(const muse::IApplication::RunMode& mode) override;
 
 private:
     std::shared_ptr<AudioExportConfiguration> m_configuration;

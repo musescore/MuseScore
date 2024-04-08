@@ -28,15 +28,16 @@
 #include <QApplication>
 
 using namespace mu::diagnostics;
+using namespace muse;
 
-mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
+Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
 {
     if (configuration()->shouldWarnBeforeSavingDiagnosticFiles()) {
         IInteractive::Result result = interactive()->warning(
-            mu::trc("diagnostics", "Save diagnostic files?"),
-            mu::trc("diagnostics", "This will create a .zip file with information about your MuseScore setup "
-                                   "to help developers diagnose any problems you are having. "
-                                   "You can inspect the contents of this file before sending it to anyone."),
+            muse::trc("diagnostics", "Save diagnostic files?"),
+            muse::trc("diagnostics", "This will create a .zip file with information about your MuseScore setup "
+                                     "to help developers diagnose any problems you are having. "
+                                     "You can inspect the contents of this file before sending it to anyone."),
             { IInteractive::Button::Cancel, IInteractive::Button::Save }, IInteractive::Button::Save,
             IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox);
 
@@ -47,8 +48,8 @@ mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
         configuration()->setShouldWarnBeforeSavingDiagnosticFiles(result.showAgain());
     }
 
-    io::path_t path = interactive()->selectSavingFile(
-        mu::qtrc("diagnostics", "Save diagnostic files"),
+    muse::io::path_t path = interactive()->selectSavingFile(
+        muse::qtrc("diagnostics", "Save diagnostic files"),
         configuration()->diagnosticFilesDefaultSavingPath(),
         { "(*.zip)" });
 
@@ -69,5 +70,5 @@ mu::Ret SaveDiagnosticFilesScenario::saveDiagnosticFiles()
 
     interactive()->revealInFileBrowser(path);
 
-    return mu::make_ok();
+    return muse::make_ok();
 }

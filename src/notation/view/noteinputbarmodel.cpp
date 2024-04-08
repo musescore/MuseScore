@@ -31,6 +31,7 @@
 
 using namespace mu;
 using namespace mu::notation;
+using namespace muse;
 using namespace muse::actions;
 using namespace muse::ui;
 using namespace muse::uicomponents;

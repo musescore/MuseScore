@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_MnemonicStringTests : public ::testing::Test
 {

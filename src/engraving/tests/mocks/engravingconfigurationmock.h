@@ -30,49 +30,49 @@ namespace mu::engraving {
 class EngravingConfigurationMock : public IEngravingConfiguration
 {
 public:
-    MOCK_METHOD(io::path_t, appDataPath, (), (const, override));
+    MOCK_METHOD(muse::io::path_t, appDataPath, (), (const, override));
 
-    MOCK_METHOD(io::path_t, defaultStyleFilePath, (), (const, override));
-    MOCK_METHOD(void, setDefaultStyleFilePath, (const io::path_t&), (override));
+    MOCK_METHOD(muse::io::path_t, defaultStyleFilePath, (), (const, override));
+    MOCK_METHOD(void, setDefaultStyleFilePath, (const muse::io::path_t&), (override));
 
-    MOCK_METHOD(io::path_t, partStyleFilePath, (), (const, override));
-    MOCK_METHOD(void, setPartStyleFilePath, (const io::path_t&), (override));
+    MOCK_METHOD(muse::io::path_t, partStyleFilePath, (), (const, override));
+    MOCK_METHOD(void, setPartStyleFilePath, (const muse::io::path_t&), (override));
 
     MOCK_METHOD(SizeF, defaultPageSize, (), (const, override));
 
     MOCK_METHOD(String, iconsFontFamily, (), (const, override));
 
-    MOCK_METHOD(muse::draw::Color, defaultColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, scoreInversionColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, invisibleColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, lassoColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, warningColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, warningSelectedColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, criticalColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, criticalSelectedColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, formattingMarksColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, thumbnailBackgroundColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, noteBackgroundColor, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, fontPrimaryColor, (), (const, override));
+    MOCK_METHOD(Color, defaultColor, (), (const, override));
+    MOCK_METHOD(Color, scoreInversionColor, (), (const, override));
+    MOCK_METHOD(Color, invisibleColor, (), (const, override));
+    MOCK_METHOD(Color, lassoColor, (), (const, override));
+    MOCK_METHOD(Color, warningColor, (), (const, override));
+    MOCK_METHOD(Color, warningSelectedColor, (), (const, override));
+    MOCK_METHOD(Color, criticalColor, (), (const, override));
+    MOCK_METHOD(Color, criticalSelectedColor, (), (const, override));
+    MOCK_METHOD(Color, formattingMarksColor, (), (const, override));
+    MOCK_METHOD(Color, thumbnailBackgroundColor, (), (const, override));
+    MOCK_METHOD(Color, noteBackgroundColor, (), (const, override));
+    MOCK_METHOD(Color, fontPrimaryColor, (), (const, override));
 
-    MOCK_METHOD(muse::draw::Color, timeTickAnchorColorLighter, (), (const, override));
-    MOCK_METHOD(muse::draw::Color, timeTickAnchorColorDarker, (), (const, override));
+    MOCK_METHOD(Color, timeTickAnchorColorLighter, (), (const, override));
+    MOCK_METHOD(Color, timeTickAnchorColorDarker, (), (const, override));
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
-    MOCK_METHOD(muse::draw::Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));
-    MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, muse::draw::Color), (override));
-    MOCK_METHOD((async::Channel<engraving::voice_idx_t, muse::draw::Color>), selectionColorChanged, (), (const, override));
+    MOCK_METHOD(Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));
+    MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, Color), (override));
+    MOCK_METHOD((muse::async::Channel<engraving::voice_idx_t, Color>), selectionColorChanged, (), (const, override));
 
     MOCK_METHOD(bool, scoreInversionEnabled, (), (const, override));
     MOCK_METHOD(void, setScoreInversionEnabled, (bool), (override));
-    MOCK_METHOD(async::Notification, scoreInversionChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, scoreInversionChanged, (), (const, override));
 
-    MOCK_METHOD(muse::draw::Color, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
+    MOCK_METHOD(Color, highlightSelectionColor, (engraving::voice_idx_t), (const, override));
 
     MOCK_METHOD(const DebuggingOptions&, debuggingOptions, (), (const, override));
     MOCK_METHOD(void, setDebuggingOptions, (const DebuggingOptions&), (override));
-    MOCK_METHOD(async::Notification, debuggingOptionsChanged, (), (const, override));
+    MOCK_METHOD(muse::async::Notification, debuggingOptionsChanged, (), (const, override));
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
 

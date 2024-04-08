@@ -30,7 +30,7 @@
 namespace mu::diagnostics {
 class DiagnosticsConfiguration : public IDiagnosticsConfiguration
 {
-    INJECT(IGlobalConfiguration, globalConfiguration)
+    INJECT(muse::IGlobalConfiguration, globalConfiguration)
 
 public:
     DiagnosticsConfiguration() = default;
@@ -43,7 +43,7 @@ public:
     bool shouldWarnBeforeSavingDiagnosticFiles() const override;
     void setShouldWarnBeforeSavingDiagnosticFiles(bool val) override;
 
-    io::path_t diagnosticFilesDefaultSavingPath() const override;
+    muse::io::path_t diagnosticFilesDefaultSavingPath() const override;
 };
 }
 

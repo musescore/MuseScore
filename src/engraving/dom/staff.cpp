@@ -95,7 +95,7 @@ Staff* Staff::clone() const
 
 staff_idx_t Staff::idx() const
 {
-    return mu::indexOf(score()->staves(), (Staff*)this);
+    return muse::indexOf(score()->staves(), (Staff*)this);
 }
 
 //---------------------------------------------------------
@@ -146,7 +146,7 @@ void Staff::fillBrackets(size_t idx)
 void Staff::cleanBrackets()
 {
     while (!m_brackets.empty() && (m_brackets.back()->bracketType() == BracketType::NO_BRACKET)) {
-        BracketItem* bi = mu::takeLast(m_brackets);
+        BracketItem* bi = muse::takeLast(m_brackets);
         delete bi;
     }
 }
@@ -196,7 +196,7 @@ void Staff::swapBracket(size_t oldIdx, size_t newIdx)
     fillBrackets(idx);
     m_brackets[oldIdx]->setColumn(newIdx);
     m_brackets[newIdx]->setColumn(oldIdx);
-    mu::swapItemsAt(m_brackets, oldIdx, newIdx);
+    muse::swapItemsAt(m_brackets, oldIdx, newIdx);
     cleanBrackets();
 }
 
@@ -214,7 +214,7 @@ void Staff::changeBracketColumn(size_t oldColumn, size_t newColumn)
         size_t newIdx = i + step;
         m_brackets[oldIdx]->setColumn(newIdx);
         m_brackets[newIdx]->setColumn(oldIdx);
-        mu::swapItemsAt(m_brackets, oldIdx, newIdx);
+        muse::swapItemsAt(m_brackets, oldIdx, newIdx);
     }
     cleanBrackets();
 }
@@ -348,8 +348,8 @@ void Staff::updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tr
 
     voice_idx_t voiceIndex = 0;
     for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-        std::vector<track_idx_t> masterStaffTracks = mu::values(tracks, masterStaffIdx * VOICES + voice % VOICES);
-        bool isVoiceVisible = mu::contains(masterStaffTracks, staffIdx * VOICES + voiceIndex % VOICES);
+        std::vector<track_idx_t> masterStaffTracks = muse::values(tracks, masterStaffIdx * VOICES + voice % VOICES);
+        bool isVoiceVisible = muse::contains(masterStaffTracks, staffIdx * VOICES + voiceIndex % VOICES);
         if (isVoiceVisible) {
             voices[voice] = true;
             voiceIndex++;
@@ -862,7 +862,7 @@ SwingParameters Staff::swing(const Fraction& tick) const
 {
     SwingParameters sp;
     int swingUnit = 0;
-    ByteArray ba = style().styleSt(Sid::swingUnit).toAscii();
+    muse::ByteArray ba = style().styleSt(Sid::swingUnit).toAscii();
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
     int swingRatio = style().styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
@@ -878,7 +878,7 @@ SwingParameters Staff::swing(const Fraction& tick) const
         return sp;
     }
 
-    std::vector<int> ticks = mu::keys(m_swingList);
+    std::vector<int> ticks = muse::keys(m_swingList);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
     if (it == ticks.cbegin()) {
         return sp;
@@ -895,7 +895,7 @@ const CapoParams& Staff::capo(const Fraction& tick) const
         return dummy;
     }
 
-    std::vector<int> ticks = mu::keys(m_capoMap);
+    std::vector<int> ticks = muse::keys(m_capoMap);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
     if (it == ticks.cbegin()) {
         return dummy;
@@ -924,7 +924,7 @@ int Staff::channel(const Fraction& tick, voice_idx_t voice) const
         return 0;
     }
 
-    std::vector<int> ticks = mu::keys(m_channelList[voice]);
+    std::vector<int> ticks = muse::keys(m_channelList[voice]);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
     if (it == ticks.cbegin()) {
         return 0;
@@ -1376,7 +1376,7 @@ Staff* Staff::primaryStaff() const
 
 staff_idx_t Staff::rstaff() const
 {
-    return mu::indexOf(m_part->staves(), this);
+    return muse::indexOf(m_part->staves(), this);
 }
 
 //---------------------------------------------------------

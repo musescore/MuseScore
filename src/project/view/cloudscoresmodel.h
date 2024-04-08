@@ -31,7 +31,7 @@
 #include "cloud/musescorecom/imusescorecomservice.h"
 
 namespace mu::project {
-class CloudScoresModel : public AbstractScoresModel, public async::Asyncable
+class CloudScoresModel : public AbstractScoresModel, public muse::async::Asyncable
 {
     Q_OBJECT
 
@@ -79,7 +79,7 @@ private:
     State m_state = State::Fine;
     bool m_isWaitingForPromise = false;
 
-    size_t m_totalItems = mu::nidx;
+    size_t m_totalItems = muse::nidx;
 
     int m_desiredRowCount = 0;
 };

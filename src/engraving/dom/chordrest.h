@@ -91,9 +91,9 @@ public:
     int line() const { return ldata()->up ? upLine() : downLine(); }
     virtual int upLine() const = 0;
     virtual int downLine() const = 0;
-    virtual mu::PointF stemPos() const = 0;
+    virtual PointF stemPos() const = 0;
     virtual double stemPosX() const = 0;
-    virtual mu::PointF stemPosBeam() const = 0;
+    virtual PointF stemPosBeam() const = 0;
     virtual double rightEdge() const = 0;
 
     bool isSmall() const { return m_isSmall; }

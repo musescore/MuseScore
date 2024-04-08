@@ -30,7 +30,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 using namespace muse::midi;
 using namespace muse::audio;
 using namespace muse::audio::synth;

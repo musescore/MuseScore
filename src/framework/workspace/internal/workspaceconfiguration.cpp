@@ -25,19 +25,20 @@
 
 #include "workspacetypes.h"
 
+using namespace muse;
 using namespace muse::workspace;
 
-static const mu::Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
+static const muse::Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
 
 void WorkspaceConfiguration::init()
 {
-    mu::settings()->setDefaultValue(CURRENT_WORKSPACE, Val(std::string(DEFAULT_WORKSPACE_NAME)));
-    mu::settings()->valueChanged(CURRENT_WORKSPACE).onReceive(this, [this](const Val& name) {
+    settings()->setDefaultValue(CURRENT_WORKSPACE, Val(std::string(DEFAULT_WORKSPACE_NAME)));
+    settings()->valueChanged(CURRENT_WORKSPACE).onReceive(this, [this](const Val& name) {
         m_currentWorkspaceNameChanged.send(name.toString());
     });
 }
 
-mu::io::paths_t WorkspaceConfiguration::workspacePaths() const
+io::paths_t WorkspaceConfiguration::workspacePaths() const
 {
     io::paths_t paths;
     paths.push_back(userWorkspacesPath());
@@ -45,23 +46,23 @@ mu::io::paths_t WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-mu::io::path_t WorkspaceConfiguration::userWorkspacesPath() const
+io::path_t WorkspaceConfiguration::userWorkspacesPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/workspaces";
 }
 
 std::string WorkspaceConfiguration::currentWorkspaceName() const
 {
-    return mu::settings()->value(CURRENT_WORKSPACE).toString();
+    return settings()->value(CURRENT_WORKSPACE).toString();
 }
 
 void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& workspaceName)
 {
     //! NOTE Workspace selection does not need to be synchronized between instances
-    mu::settings()->setLocalValue(CURRENT_WORKSPACE, Val(workspaceName));
+    settings()->setLocalValue(CURRENT_WORKSPACE, Val(workspaceName));
 }
 
-mu::async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
+async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
 {
     return m_currentWorkspaceNameChanged;
 }

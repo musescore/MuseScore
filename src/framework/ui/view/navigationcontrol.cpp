@@ -25,6 +25,7 @@
 
 #include "log.h"
 
+using namespace muse;
 using namespace muse::ui;
 using namespace muse::accessibility;
 
@@ -56,7 +57,7 @@ void NavigationControl::setIndex(const Index& index)
     AbstractNavigation::setIndex(index);
 }
 
-mu::async::Channel<INavigation::Index> NavigationControl::indexChanged() const
+async::Channel<INavigation::Index> NavigationControl::indexChanged() const
 {
     return AbstractNavigation::indexChanged();
 }
@@ -66,7 +67,7 @@ bool NavigationControl::enabled() const
     return AbstractNavigation::enabled();
 }
 
-mu::async::Channel<bool> NavigationControl::enabledChanged() const
+async::Channel<bool> NavigationControl::enabledChanged() const
 {
     return AbstractNavigation::enabledChanged();
 }
@@ -84,7 +85,7 @@ void NavigationControl::setActive(bool arg)
     }
 }
 
-mu::async::Channel<bool> NavigationControl::activeChanged() const
+async::Channel<bool> NavigationControl::activeChanged() const
 {
     return AbstractNavigation::activeChanged();
 }

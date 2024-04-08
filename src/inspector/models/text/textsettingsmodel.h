@@ -118,7 +118,7 @@ signals:
 
 private:
     bool isTextEditingStarted() const;
-    async::Notification isTextEditingChanged() const;
+    muse::async::Notification isTextEditingChanged() const;
 
     void updateFramePropertiesAvailability();
     void updateStaffPropertiesAvailability();

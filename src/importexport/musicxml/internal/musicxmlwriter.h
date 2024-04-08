@@ -33,8 +33,9 @@ public:
     std::vector<UnitType> supportedUnitTypes() const override;
     bool supportsUnitType(UnitType unitType) const override;
 
-    Ret write(notation::INotationPtr notation, io::IODevice& dstDevice, const Options& options = Options()) override;
-    Ret writeList(const notation::INotationPtrList& notations, io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret write(notation::INotationPtr notation, muse::io::IODevice& dstDevice, const Options& options = Options()) override;
+    muse::Ret writeList(const notation::INotationPtrList& notations, muse::io::IODevice& dstDevice,
+                        const Options& options = Options()) override;
 };
 }
 

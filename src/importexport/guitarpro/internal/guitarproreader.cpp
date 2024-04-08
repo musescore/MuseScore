@@ -27,12 +27,12 @@
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::guitarpro {
-extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, mu::io::IODevice* io, bool createLinkedTabForce = false,
+extern mu::engraving::Err importGTP(mu::engraving::MasterScore*, muse::io::IODevice* io, bool createLinkedTabForce = false,
                                     bool experimental = false);
 
-mu::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const io::path_t& path, const Options&)
+muse::Ret GuitarProReader::read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options&)
 {
-    mu::io::File file(path);
+    muse::io::File file(path);
     mu::engraving::Err err = importGTP(score, &file, guitarProConfiguration()->linkedTabStaffCreated(),
                                        guitarProConfiguration()->experimental());
     return mu::engraving::make_ret(err, path);

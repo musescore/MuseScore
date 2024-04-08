@@ -27,8 +27,9 @@
 #include "notation.h"
 
 using namespace mu;
-using namespace muse::draw;
 using namespace mu::notation;
+using namespace muse;
+using namespace muse::draw;
 
 static ViewMode viewModeFromString(const QString& str)
 {
@@ -77,7 +78,7 @@ NotationViewState::NotationViewState(Notation* notation)
     });
 }
 
-Ret NotationViewState::read(const engraving::MscReader& reader, const io::path_t& pathPrefix)
+Ret NotationViewState::read(const engraving::MscReader& reader, const muse::io::path_t& pathPrefix)
 {
     ByteArray json = reader.readViewSettingsJsonFile(pathPrefix);
     QJsonObject rootObj = QJsonDocument::fromJson(json.toQByteArrayNoCopy()).object();
@@ -88,7 +89,7 @@ Ret NotationViewState::read(const engraving::MscReader& reader, const io::path_t
     return make_ret(Ret::Code::Ok);
 }
 
-Ret NotationViewState::write(engraving::MscWriter& writer, const io::path_t& pathPrefix)
+Ret NotationViewState::write(engraving::MscWriter& writer, const muse::io::path_t& pathPrefix)
 {
     QJsonObject notationObj;
     notationObj["viewMode"] = viewModeToString(m_viewMode);
@@ -117,7 +118,7 @@ Transform NotationViewState::matrix() const
     return m_matrix;
 }
 
-async::Channel<Transform, NotationPaintView*> NotationViewState::matrixChanged() const
+muse::async::Channel<Transform, NotationPaintView*> NotationViewState::matrixChanged() const
 {
     return m_matrixChanged;
 }
@@ -171,7 +172,7 @@ void NotationViewState::makeDefault()
     m_viewMode = ViewMode::PAGE;
 }
 
-async::Notification NotationViewState::stateChanged() const
+muse::async::Notification NotationViewState::stateChanged() const
 {
     return m_stateChanged;
 }

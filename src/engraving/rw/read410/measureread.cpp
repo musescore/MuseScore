@@ -94,8 +94,8 @@ void MeasureRead::readMeasure(Measure* measure, XmlReader& e, ReadContext& ctx, 
         }
         irregular = true;
         if (measure->m_len.numerator() <= 0 || measure->m_len.denominator() <= 0 || measure->m_len.denominator() > 128) {
-            e.raiseError(mtrc("engraving",
-                              "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->m_len.toString()));
+            e.raiseError(muse::mtrc("engraving",
+                                    "MSCX error at line %1: invalid measure length: %2").arg(e.lineNumber()).arg(measure->m_len.toString()));
             return;
         }
         ctx.compatTimeSigMap()->add(measure->tick().ticks(), SigEvent(measure->m_len, measure->m_timesig));

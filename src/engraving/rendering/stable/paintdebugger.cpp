@@ -22,6 +22,7 @@
 #include "paintdebugger.h"
 
 using namespace mu;
+using namespace muse;
 using namespace muse::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;

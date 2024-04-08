@@ -105,7 +105,7 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score
     TRACEFUNC;
 
     //! NOTE: Before MU4, they were available in the Staff Text Properties dialog (Change Channel page)
-    static const std::unordered_map<mu::String, PlayingTechniqueType> textToPlayTechniqueType {
+    static const std::unordered_map<muse::String, PlayingTechniqueType> textToPlayTechniqueType {
         { u"natural", PlayingTechniqueType::Natural },
         { u"normal", PlayingTechniqueType::Natural },
 
@@ -135,13 +135,13 @@ void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score
 
                 StaffTextBase* text = toStaffTextBase(annotation);
                 PlayingTechniqueType type
-                    = mu::value(textToPlayTechniqueType, text->plainText().toLower(), PlayingTechniqueType::Undefined);
+                    = muse::value(textToPlayTechniqueType, text->plainText().toLower(), PlayingTechniqueType::Undefined);
 
                 if (type == PlayingTechniqueType::Undefined) {
-                    mu::String channelName = text->channelName(0).toLower();
+                    muse::String channelName = text->channelName(0).toLower();
 
                     if (!channelName.isEmpty()) {
-                        type = mu::value(textToPlayTechniqueType, channelName, PlayingTechniqueType::Undefined);
+                        type = muse::value(textToPlayTechniqueType, channelName, PlayingTechniqueType::Undefined);
                     }
                 }
 
@@ -210,7 +210,7 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
         }
 
         for (Part* part : excerpt->excerptScore()->parts()) {
-            if (mu::contains(assignedPartIdSet, part->id())) {
+            if (muse::contains(assignedPartIdSet, part->id())) {
                 continue;
             }
 

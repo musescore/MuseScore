@@ -52,7 +52,7 @@
 
 using namespace muse::uicomponents;
 using namespace muse::ui;
-using namespace mu::modularity;
+using namespace muse::modularity;
 
 static void uicomponents_init_qrc()
 {

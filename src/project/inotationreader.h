@@ -41,11 +41,11 @@ public:
         ForceMode // Ignore lower priority errors (like version errors)
     };
 
-    using Options = std::map<OptionKey, Val>;
+    using Options = std::map<OptionKey, muse::Val>;
 
     virtual ~INotationReader() = default;
 
-    virtual Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) = 0;
+    virtual muse::Ret read(mu::engraving::MasterScore* score, const muse::io::path_t& path, const Options& options = Options()) = 0;
 };
 
 using INotationReaderPtr = std::shared_ptr<INotationReader>;

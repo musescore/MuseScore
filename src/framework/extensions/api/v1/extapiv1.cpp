@@ -44,7 +44,7 @@ void ExtApiV1::registerQmlTypes()
     qmlRegisterType<FileDialog>("MuseScore", 3, 0, "FileDialog");
 }
 
-ExtApiV1::ExtApiV1(mu::api::IApiEngine* engine, QObject* parent)
+ExtApiV1::ExtApiV1(muse::api::IApiEngine* engine, QObject* parent)
     : QObject(parent), m_engine(engine)
 {
 }

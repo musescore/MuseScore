@@ -164,7 +164,7 @@ void GPDrumSetResolver::initGPDrum()
 
 int32_t GPDrumSetResolver::pitch(int32_t element,
                                  int32_t variation,
-                                 const String& name) const
+                                 const muse::String& name) const
 {
     if (_drum.find(name) == _drum.end()) {
         return 0;

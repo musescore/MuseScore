@@ -26,7 +26,7 @@
 
 namespace mu::diagnostics {
 struct GenOpt {
-    SizeF pageSize;
+    muse::SizeF pageSize;
 };
 
 struct ComOpt {

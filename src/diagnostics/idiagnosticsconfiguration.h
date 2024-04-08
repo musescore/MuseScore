@@ -38,7 +38,7 @@ public:
     virtual bool shouldWarnBeforeSavingDiagnosticFiles() const = 0;
     virtual void setShouldWarnBeforeSavingDiagnosticFiles(bool val) = 0;
 
-    virtual io::path_t diagnosticFilesDefaultSavingPath() const = 0;
+    virtual muse::io::path_t diagnosticFilesDefaultSavingPath() const = 0;
 };
 }
 

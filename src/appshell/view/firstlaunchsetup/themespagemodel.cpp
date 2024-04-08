@@ -156,5 +156,5 @@ void ThemesPageModel::setCurrentAccentColorIndex(int index)
     }
 
     QColor color = accentColors()[index];
-    uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(color));
+    uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, muse::Val(color));
 }

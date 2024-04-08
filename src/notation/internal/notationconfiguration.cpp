@@ -31,7 +31,8 @@
 
 using namespace mu;
 using namespace mu::notation;
-using namespace mu::async;
+using namespace muse;
+using namespace muse::async;
 using namespace muse::ui;
 
 static const std::string module_name("notation");
@@ -167,7 +168,7 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(IS_COUNT_IN_ENABLED, Val(false));
 
     settings()->setDefaultValue(PLAYBACK_SMOOTH_PANNING, Val(false));
-    settings()->setDescription(PLAYBACK_SMOOTH_PANNING, mu::trc("notation", "Smooth panning"));
+    settings()->setDescription(PLAYBACK_SMOOTH_PANNING, muse::trc("notation", "Smooth panning"));
     settings()->setCanBeManuallyEdited(PLAYBACK_SMOOTH_PANNING, true);
 
     settings()->valueChanged(IS_PLAY_CHORD_SYMBOLS_ENABLED).onReceive(nullptr, [this](const Val&) {
@@ -260,17 +261,17 @@ void NotationConfiguration::setBackgroundColor(const QColor& color)
     }
 }
 
-io::path_t NotationConfiguration::backgroundWallpaperPath() const
+muse::io::path_t NotationConfiguration::backgroundWallpaperPath() const
 {
     return settings()->value(BACKGROUND_WALLPAPER_PATH).toString();
 }
 
 const QPixmap& NotationConfiguration::backgroundWallpaper() const
 {
-    io::path_t path = backgroundWallpaperPath();
+    muse::io::path_t path = backgroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path_t lastPath;
+    static muse::io::path_t lastPath;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -283,7 +284,7 @@ const QPixmap& NotationConfiguration::backgroundWallpaper() const
     return wallpaper;
 }
 
-void NotationConfiguration::setBackgroundWallpaperPath(const io::path_t& path)
+void NotationConfiguration::setBackgroundWallpaperPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
@@ -310,7 +311,7 @@ void NotationConfiguration::resetBackground()
     settings()->setSharedValue(BACKGROUND_WALLPAPER_PATH, settings()->defaultValue(BACKGROUND_WALLPAPER_PATH));
 }
 
-async::Notification NotationConfiguration::backgroundChanged() const
+muse::async::Notification NotationConfiguration::backgroundChanged() const
 {
     return m_backgroundChanged;
 }
@@ -329,17 +330,17 @@ void NotationConfiguration::setForegroundColor(const QColor& color)
     settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
 }
 
-io::path_t NotationConfiguration::foregroundWallpaperPath() const
+muse::io::path_t NotationConfiguration::foregroundWallpaperPath() const
 {
     return settings()->value(FOREGROUND_WALLPAPER_PATH).toString();
 }
 
 const QPixmap& NotationConfiguration::foregroundWallpaper() const
 {
-    io::path_t path = foregroundWallpaperPath();
+    muse::io::path_t path = foregroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path_t lastPath;
+    static muse::io::path_t lastPath;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -352,7 +353,7 @@ const QPixmap& NotationConfiguration::foregroundWallpaper() const
     return wallpaper;
 }
 
-void NotationConfiguration::setForegroundWallpaperPath(const io::path_t& path)
+void NotationConfiguration::setForegroundWallpaperPath(const muse::io::path_t& path)
 {
     return settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
@@ -376,12 +377,12 @@ void NotationConfiguration::resetForeground()
     engravingConfiguration()->setScoreInversionEnabled(false);
 }
 
-async::Notification NotationConfiguration::foregroundChanged() const
+muse::async::Notification NotationConfiguration::foregroundChanged() const
 {
     return m_foregroundChanged;
 }
 
-io::path_t NotationConfiguration::wallpapersDefaultDirPath() const
+muse::io::path_t NotationConfiguration::wallpapersDefaultDirPath() const
 {
     return globalConfiguration()->appDataPath() + "/wallpapers";
 }
@@ -498,37 +499,37 @@ int NotationConfiguration::fontSize() const
     return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
-io::path_t NotationConfiguration::userStylesPath() const
+muse::io::path_t NotationConfiguration::userStylesPath() const
 {
     return settings()->value(USER_STYLES_PATH).toPath();
 }
 
-void NotationConfiguration::setUserStylesPath(const io::path_t& path)
+void NotationConfiguration::setUserStylesPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(USER_STYLES_PATH, Val(path));
 }
 
-async::Channel<io::path_t> NotationConfiguration::userStylesPathChanged() const
+muse::async::Channel<muse::io::path_t> NotationConfiguration::userStylesPathChanged() const
 {
     return m_userStylesPathChanged;
 }
 
-io::path_t NotationConfiguration::defaultStyleFilePath() const
+muse::io::path_t NotationConfiguration::defaultStyleFilePath() const
 {
     return engravingConfiguration()->defaultStyleFilePath();
 }
 
-void NotationConfiguration::setDefaultStyleFilePath(const io::path_t& path)
+void NotationConfiguration::setDefaultStyleFilePath(const muse::io::path_t& path)
 {
     engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
-io::path_t NotationConfiguration::partStyleFilePath() const
+muse::io::path_t NotationConfiguration::partStyleFilePath() const
 {
     return engravingConfiguration()->partStyleFilePath();
 }
 
-void NotationConfiguration::setPartStyleFilePath(const io::path_t& path)
+void NotationConfiguration::setPartStyleFilePath(const muse::io::path_t& path)
 {
     engravingConfiguration()->setPartStyleFilePath(path.toQString());
 }
@@ -589,7 +590,7 @@ void NotationConfiguration::setIsPlayChordSymbolsEnabled(bool enabled)
     settings()->setSharedValue(IS_PLAY_CHORD_SYMBOLS_ENABLED, Val(enabled));
 }
 
-async::Notification NotationConfiguration::isPlayChordSymbolsChanged() const
+muse::async::Notification NotationConfiguration::isPlayChordSymbolsChanged() const
 {
     return m_isPlayChordSymbolsChanged;
 }
@@ -624,19 +625,19 @@ double NotationConfiguration::notationScaling() const
     return uiConfiguration()->physicalDpi() / mu::engraving::DPI;
 }
 
-ValCh<mu::Orientation> NotationConfiguration::canvasOrientation() const
+ValCh<muse::Orientation> NotationConfiguration::canvasOrientation() const
 {
-    ValCh<mu::Orientation> orientation;
+    ValCh<muse::Orientation> orientation;
     orientation.ch = m_canvasOrientationChanged;
     bool isVertical = settings()->value(IS_CANVAS_ORIENTATION_VERTICAL_KEY).toBool();
-    orientation.val = isVertical ? mu::Orientation::Vertical : mu::Orientation::Horizontal;
+    orientation.val = isVertical ? muse::Orientation::Vertical : muse::Orientation::Horizontal;
 
     return orientation;
 }
 
-void NotationConfiguration::setCanvasOrientation(mu::Orientation orientation)
+void NotationConfiguration::setCanvasOrientation(muse::Orientation orientation)
 {
-    bool isVertical = orientation == mu::Orientation::Vertical;
+    bool isVertical = orientation == muse::Orientation::Vertical;
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 
     settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
@@ -710,7 +711,7 @@ void NotationConfiguration::setTestModeEnabled(std::optional<bool> enabled)
     mu::engraving::MScore::testMode = enabled ? enabled.value() : false;
 }
 
-io::path_t NotationConfiguration::instrumentListPath() const
+muse::io::path_t NotationConfiguration::instrumentListPath() const
 {
     return globalConfiguration()->appDataPath() + "instruments/instruments.xml";
 }
@@ -719,10 +720,10 @@ io::paths_t NotationConfiguration::scoreOrderListPaths() const
 {
     io::paths_t paths;
 
-    io::path_t firstScoreOrderListPath = this->firstScoreOrderListPath();
+    muse::io::path_t firstScoreOrderListPath = this->firstScoreOrderListPath();
     paths.push_back(firstScoreOrderListPath);
 
-    io::path_t secondScoreOrderListPath = this->secondScoreOrderListPath();
+    muse::io::path_t secondScoreOrderListPath = this->secondScoreOrderListPath();
     if (!secondScoreOrderListPath.empty()) {
         paths.push_back(secondScoreOrderListPath);
     }
@@ -730,7 +731,7 @@ io::paths_t NotationConfiguration::scoreOrderListPaths() const
     return paths;
 }
 
-async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
+muse::async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
 {
     return m_scoreOrderListPathsChanged;
 }
@@ -757,51 +758,51 @@ void NotationConfiguration::setUserScoreOrderListPaths(const io::paths_t& paths)
     }
 }
 
-io::path_t NotationConfiguration::stringTuningsPresetsPath() const
+muse::io::path_t NotationConfiguration::stringTuningsPresetsPath() const
 {
     return globalConfiguration()->appDataPath() + "instruments/string_tunings_presets.json";
 }
 
-bool NotationConfiguration::isSnappedToGrid(mu::Orientation gridOrientation) const
+bool NotationConfiguration::isSnappedToGrid(muse::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
-    case mu::Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
-    case mu::Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
+    case muse::Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
+    case muse::Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
     }
 
     return false;
 }
 
-void NotationConfiguration::setIsSnappedToGrid(mu::Orientation gridOrientation, bool isSnapped)
+void NotationConfiguration::setIsSnappedToGrid(muse::Orientation gridOrientation, bool isSnapped)
 {
     switch (gridOrientation) {
-    case mu::Orientation::Horizontal:
+    case muse::Orientation::Horizontal:
         settings()->setSharedValue(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY, Val(isSnapped));
         break;
-    case mu::Orientation::Vertical:
+    case muse::Orientation::Vertical:
         settings()->setSharedValue(IS_SNAPPED_TO_VERTICAL_GRID_KEY, Val(isSnapped));
         break;
     }
 }
 
-int NotationConfiguration::gridSizeSpatium(mu::Orientation gridOrientation) const
+int NotationConfiguration::gridSizeSpatium(muse::Orientation gridOrientation) const
 {
     switch (gridOrientation) {
-    case mu::Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
-    case mu::Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
+    case muse::Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
+    case muse::Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
     }
 
     return DEFAULT_GRID_SIZE_SPATIUM;
 }
 
-void NotationConfiguration::setGridSize(mu::Orientation gridOrientation, int sizeSpatium)
+void NotationConfiguration::setGridSize(muse::Orientation gridOrientation, int sizeSpatium)
 {
     switch (gridOrientation) {
-    case mu::Orientation::Horizontal:
+    case muse::Orientation::Horizontal:
         mu::engraving::MScore::setHRaster(sizeSpatium);
         settings()->setSharedValue(HORIZONTAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
-    case mu::Orientation::Vertical:
+    case muse::Orientation::Vertical:
         mu::engraving::MScore::setVRaster(sizeSpatium);
         settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
         break;
@@ -863,32 +864,32 @@ void NotationConfiguration::setPianoKeyboardNumberOfKeys(int number)
     settings()->setSharedValue(PIANO_KEYBOARD_NUMBER_OF_KEYS, Val(number));
 }
 
-io::path_t NotationConfiguration::firstScoreOrderListPath() const
+muse::io::path_t NotationConfiguration::firstScoreOrderListPath() const
 {
     return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
 }
 
-void NotationConfiguration::setFirstScoreOrderListPath(const io::path_t& path)
+void NotationConfiguration::setFirstScoreOrderListPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
 
-io::path_t NotationConfiguration::secondScoreOrderListPath() const
+muse::io::path_t NotationConfiguration::secondScoreOrderListPath() const
 {
     return settings()->value(SECOND_SCORE_ORDER_LIST_KEY).toString();
 }
 
-void NotationConfiguration::setSecondScoreOrderListPath(const io::path_t& path)
+void NotationConfiguration::setSecondScoreOrderListPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }
 
-mu::io::path_t NotationConfiguration::styleFileImportPath() const
+muse::io::path_t NotationConfiguration::styleFileImportPath() const
 {
     return settings()->value(STYLE_FILE_IMPORT_PATH_KEY).toString();
 }
 
-void NotationConfiguration::setStyleFileImportPath(const io::path_t& path)
+void NotationConfiguration::setStyleFileImportPath(const muse::io::path_t& path)
 {
     settings()->setSharedValue(STYLE_FILE_IMPORT_PATH_KEY, Val(path.toStdString()));
 }

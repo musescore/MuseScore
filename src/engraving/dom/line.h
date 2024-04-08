@@ -48,7 +48,7 @@ protected:
     void updateAnchors(EditData& ed) const;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
-    std::vector<mu::LineF> gripAnchorLines(Grip) const override;
+    std::vector<LineF> gripAnchorLines(Grip) const override;
     virtual void startEditDrag(EditData&) override;
     void startDrag(EditData&) override;
 
@@ -70,17 +70,17 @@ public:
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
-    std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
+    std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    std::vector<mu::LineF> dragAnchorLines() const override;
-    mu::RectF drag(EditData& ed) override;
+    std::vector<LineF> dragAnchorLines() const override;
+    RectF drag(EditData& ed) override;
 private:
-    mu::PointF leftAnchorPosition(const double& systemPositionY) const;
-    mu::PointF rightAnchorPosition(const double& systemPositionY) const;
+    PointF leftAnchorPosition(const double& systemPositionY) const;
+    PointF rightAnchorPosition(const double& systemPositionY) const;
 
-    Segment* findSegmentForGrip(Grip grip, mu::PointF pos) const;
-    static mu::PointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
-    static mu::PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg);
+    Segment* findSegmentForGrip(Grip grip, PointF pos) const;
+    static PointF deltaRebaseLeft(const Segment* oldSeg, const Segment* newSeg);
+    static PointF deltaRebaseRight(const Segment* oldSeg, const Segment* newSeg);
     static Fraction lastSegmentEndTick(const Segment* lastSeg, const Spanner* s);
     LineSegment* rebaseAnchor(Grip grip, Segment* newSeg);
     void rebaseAnchors(EditData&, Grip);
@@ -106,10 +106,10 @@ public:
     void setDiagonal(bool v) { m_diagonal = v; }
 
     Millimetre lineWidth() const { return m_lineWidth; }
-    muse::draw::Color lineColor() const { return m_lineColor; }
+    Color lineColor() const { return m_lineColor; }
     LineType lineStyle() const { return m_lineStyle; }
     void setLineWidth(const Millimetre& v) { m_lineWidth = v; }
-    void setLineColor(const muse::draw::Color& v) { m_lineColor = v; }
+    void setLineColor(const Color& v) { m_lineColor = v; }
     void setLineStyle(LineType v) { m_lineStyle = v; }
 
     double dashLineLen() const { return m_dashLineLen; }
@@ -128,7 +128,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    virtual mu::PointF linePos(Grip grip, System** system) const;
+    virtual PointF linePos(Grip grip, System** system) const;
     virtual bool allowTimeAnchor() const override { return true; }
 
 private:
@@ -136,7 +136,7 @@ private:
     friend class LineSegment;
 
     Millimetre m_lineWidth;
-    muse::draw::Color m_lineColor { engravingConfiguration()->defaultColor() };
+    Color m_lineColor { engravingConfiguration()->defaultColor() };
     LineType m_lineStyle = LineType::SOLID;
     double m_dashLineLen = 5.0;
     double m_dashGapLen = 5.0;

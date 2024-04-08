@@ -37,7 +37,8 @@ using ::testing::Return;
 using namespace mu;
 using namespace mu::project;
 using namespace mu::notation;
-using namespace mu::io;
+using namespace muse;
+using namespace muse::io;
 
 class Project_TemplatesRepositoryTest : public ::testing::Test
 {
@@ -63,7 +64,7 @@ protected:
         return obj;
     }
 
-    Template buildTemplate(const QString& categoryTitle, const io::path_t& path, bool isCustom) const
+    Template buildTemplate(const QString& categoryTitle, const muse::io::path_t& path, bool isCustom) const
     {
         Template templ;
         templ.categoryTitle = categoryTitle;
@@ -112,7 +113,7 @@ TEST_F(Project_TemplatesRepositoryTest, Templates)
         "/path/to/user/templates/without/categories_json"
     };
 
-    io::path_t otherUserTemplatesDir = templateDirs[2];
+    muse::io::path_t otherUserTemplatesDir = templateDirs[2];
 
     ON_CALL(*m_configuration, availableTemplateDirs())
     .WillByDefault(Return(templateDirs));
@@ -172,7 +173,7 @@ TEST_F(Project_TemplatesRepositoryTest, Templates)
         buildTemplate("Popular", "/path/to/user/templates/Rock_Band.mscz", false)
     };
 
-    for (const io::path_t& otherTemplatePath : otherUserTemplates) {
+    for (const muse::io::path_t& otherTemplatePath : otherUserTemplates) {
         expectedTemplates << buildTemplate("My templates", otherTemplatePath, true /*isCustom*/);
     }
 

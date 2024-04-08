@@ -54,8 +54,8 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::modularity;
+using namespace muse;
+using namespace muse::modularity;
 using namespace muse::audio;
 using namespace muse::audio::synth;
 using namespace muse::audio::fx;
@@ -218,7 +218,7 @@ void AudioModule::onInit(const IApplication::RunMode& mode)
     setupAudioDriver(mode);
 
     //! --- Diagnostics ---
-    auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = ioc()->resolve<mu::diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         std::vector<io::path_t> paths = m_configuration->soundFontDirectories();
         for (const io::path_t& p : paths) {

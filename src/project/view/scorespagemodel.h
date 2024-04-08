@@ -39,7 +39,7 @@ class ScoresPageModel : public QObject
 
     INJECT(IProjectConfiguration, configuration)
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
-    INJECT(IInteractive, interactive)
+    INJECT(muse::IInteractive, interactive)
     INJECT(muse::cloud::IMuseScoreComService, museScoreComService)
 
     Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)

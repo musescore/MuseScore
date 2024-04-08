@@ -23,7 +23,7 @@
 
 #include "types/datetime.h"
 
-using namespace mu;
+using namespace muse;
 
 class Global_Types_DateTimeTests : public ::testing::Test
 {

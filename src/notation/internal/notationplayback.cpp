@@ -46,14 +46,15 @@
 
 using namespace mu;
 using namespace mu::notation;
-using namespace muse::midi;
-using namespace mu::async;
 using namespace mu::engraving;
+using namespace muse;
+using namespace muse::midi;
+using namespace muse::async;
 
 static constexpr int PLAYBACK_TAIL_SECS = 3;
 
 NotationPlayback::NotationPlayback(IGetScore* getScore,
-                                   async::Notification notationChanged)
+                                   muse::async::Notification notationChanged)
     : m_getScore(getScore), m_notationChanged(notationChanged)
 {
     m_notationChanged.onNotify(this, [this]() {
@@ -138,12 +139,12 @@ InstrumentTrackIdSet NotationPlayback::existingTrackIdSet() const
     return m_playbackModel.existingTrackIdSet();
 }
 
-async::Channel<InstrumentTrackId> NotationPlayback::trackAdded() const
+muse::async::Channel<InstrumentTrackId> NotationPlayback::trackAdded() const
 {
     return m_playbackModel.trackAdded();
 }
 
-async::Channel<InstrumentTrackId> NotationPlayback::trackRemoved() const
+muse::async::Channel<InstrumentTrackId> NotationPlayback::trackRemoved() const
 {
     return m_playbackModel.trackRemoved();
 }
@@ -187,7 +188,7 @@ muse::audio::msecs_t NotationPlayback::totalPlayTime() const
     return m_totalPlayTime;
 }
 
-async::Channel<muse::audio::msecs_t> NotationPlayback::totalPlayTimeChanged() const
+muse::async::Channel<muse::audio::msecs_t> NotationPlayback::totalPlayTimeChanged() const
 {
     return m_totalPlayTimeChanged;
 }
@@ -522,7 +523,7 @@ std::vector<StaffText*> NotationPlayback::collectStaffText(const InstrumentTrack
             }
 
             InstrumentTrackId trackId = mu::engraving::makeInstrumentTrackId(annotation);
-            if (mu::contains(trackIdSet, trackId)) {
+            if (muse::contains(trackIdSet, trackId)) {
                 result.push_back(staffText);
             }
         }

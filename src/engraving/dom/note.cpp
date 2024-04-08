@@ -571,13 +571,13 @@ Note::Note(Chord* ch)
 Note::~Note()
 {
     delete m_accidental;
-    DeleteAll(m_el);
+    muse::DeleteAll(m_el);
 
     if (m_tieFor && m_tieFor->parent() == this) {
         delete m_tieFor;
     }
 
-    DeleteAll(m_dots);
+    muse::DeleteAll(m_dots);
     m_leftParenthesis = nullptr;
     m_rightParenthesis = nullptr;
 }
@@ -837,7 +837,7 @@ String Note::tpcUserName(int tpc, int pitch, bool explicitAccidental, bool full)
         pitchStr.replace(u"#", u"♯");
     }
 
-    pitchStr = mtrc("engraving", pitchStr);
+    pitchStr = muse::mtrc("engraving", pitchStr);
 
     const String octaveStr = String::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
@@ -875,7 +875,7 @@ String Note::tpcUserName(const bool explicitAccidental, bool full) const
 
     if (!concertPitch() && transposition()) {
         String soundingPitch = tpcUserName(tpc1(), ppitch(), explicitAccidental);
-        return mtrc("engraving", "%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
+        return muse::mtrc("engraving", "%1 (sounding as %2%3)").arg(pitchName, soundingPitch, pitchOffset);
     }
     return pitchName + pitchOffset;
 }
@@ -1612,7 +1612,7 @@ public:
         double x = std::abs(deltaX);
         double y = std::abs(deltaY);
 
-        mu::PointF normalizedVector(x, y);
+        PointF normalizedVector(x, y);
 
         normalizedVector.normalize();
 
@@ -2197,19 +2197,19 @@ String Note::noteTypeUserName() const
 {
     switch (noteType()) {
     case NoteType::ACCIACCATURA:
-        return mtrc("engraving", "Acciaccatura");
+        return muse::mtrc("engraving", "Acciaccatura");
     case NoteType::APPOGGIATURA:
-        return mtrc("engraving", "Appoggiatura");
+        return muse::mtrc("engraving", "Appoggiatura");
     case NoteType::GRACE8_AFTER:
     case NoteType::GRACE16_AFTER:
     case NoteType::GRACE32_AFTER:
-        return mtrc("engraving", "Grace note after");
+        return muse::mtrc("engraving", "Grace note after");
     case NoteType::GRACE4:
     case NoteType::GRACE16:
     case NoteType::GRACE32:
-        return mtrc("engraving", "Grace note before");
+        return muse::mtrc("engraving", "Grace note before");
     default:
-        return mtrc("engraving", "Note");
+        return muse::mtrc("engraving", "Note");
     }
 }
 
@@ -2394,7 +2394,7 @@ int Note::ottaveCapoFret() const
     int capoFret = 0;
 
     if (capo.active) {
-        if (capo.ignoredStrings.empty() || !mu::contains(capo.ignoredStrings, static_cast<string_idx_t>(m_string))) {
+        if (capo.ignoredStrings.empty() || !muse::contains(capo.ignoredStrings, static_cast<string_idx_t>(m_string))) {
             capoFret = capo.fretPosition;
         }
     }
@@ -3121,7 +3121,7 @@ String Note::accessibleInfo() const
     }
 
     String duration = chord()->durationUserName();
-    String voice = mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
+    String voice = muse::mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1);
     String pitchName;
     String onofftime;
     if (!m_playEvents.empty()) {
@@ -3129,23 +3129,23 @@ String Note::accessibleInfo() const
         int off = m_playEvents[0].offtime();
         if (on != 0 || off != NoteEvent::NOTE_LENGTH) {
             //: Note-on and note-off times relative to note duration, expressed in thousandths (per mille)
-            onofftime = u" " + mtrc("engraving", "(on %1‰ off %2‰)").arg(on, off);
+            onofftime = u" " + muse::mtrc("engraving", "(on %1‰ off %2‰)").arg(on, off);
         }
     }
 
     const Drumset* drumset = part()->instrument(chord()->tick())->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
+        pitchName = chord()->noStem() ? muse::mtrc("engraving", "Beat slash") : muse::mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
+        pitchName = muse::mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(false), String::number(string() + 1), String::number(fret()));
     } else {
         pitchName = tpcUserName(false);
     }
 
-    return mtrc("engraving", "%1; Pitch: %2; Duration: %3%4%5")
+    return muse::mtrc("engraving", "%1; Pitch: %2; Duration: %3%4%5")
            .arg(noteTypeUserName(), pitchName, duration, onofftime, (chord()->isGrace() ? u"" : String(u"; %1").arg(voice)));
 }
 
@@ -3159,36 +3159,36 @@ String Note::screenReaderInfo() const
     String duration = chord()->durationUserName();
     Measure* m = chord()->measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
-    String voice = voices ? mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
+    String voice = voices ? muse::mtrc("engraving", "Voice: %1").arg(track() % VOICES + 1) : u"";
     String pitchName;
     String pitchOutOfRangeWarning;
     const Drumset* drumset = instrument->drumset();
     if (fixed() && headGroup() == NoteHeadGroup::HEAD_SLASH) {
-        pitchName = chord()->noStem() ? mtrc("engraving", "Beat slash") : mtrc("engraving", "Rhythm slash");
+        pitchName = chord()->noStem() ? muse::mtrc("engraving", "Beat slash") : muse::mtrc("engraving", "Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
         pitchName = drumset->translatedName(pitch());
     } else if (staff()->isTabStaff(tick())) {
-        pitchName = mtrc("engraving", "%1; String: %2; Fret: %3")
+        pitchName = muse::mtrc("engraving", "%1; String: %2; Fret: %3")
                     .arg(tpcUserName(true, true), String::number(string() + 1), String::number(fret()));
     } else {
         pitchName = m_headGroup == NoteHeadGroup::HEAD_NORMAL
                     ? tpcUserName(true, true)
                     //: head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).
-                    : mtrc("engraving", "%1 head %2").arg(translatedSubtypeUserName()).arg(tpcUserName(true));
+                    : muse::mtrc("engraving", "%1 head %2").arg(translatedSubtypeUserName()).arg(tpcUserName(true));
         if (chord()->staffMove() < 0) {
-            duration += u"; " + mtrc("engraving", "Cross-staff above");
+            duration += u"; " + muse::mtrc("engraving", "Cross-staff above");
         } else if (chord()->staffMove() > 0) {
-            duration += u"; " + mtrc("engraving", "Cross-staff below");
+            duration += u"; " + muse::mtrc("engraving", "Cross-staff below");
         }
 
         if (pitch() < instrument->minPitchP()) {
-            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too low");
+            pitchOutOfRangeWarning = u" " + muse::mtrc("engraving", "too low");
         } else if (pitch() > instrument->maxPitchP()) {
-            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too high");
+            pitchOutOfRangeWarning = u" " + muse::mtrc("engraving", "too high");
         } else if (pitch() < instrument->minPitchA()) {
-            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too low for amateurs");
+            pitchOutOfRangeWarning = u" " + muse::mtrc("engraving", "too low for amateurs");
         } else if (pitch() > instrument->maxPitchA()) {
-            pitchOutOfRangeWarning = u" " + mtrc("engraving", "too high for amateurs");
+            pitchOutOfRangeWarning = u" " + muse::mtrc("engraving", "too high for amateurs");
         }
     }
     return String(u"%1 %2 %3%4%5").arg(noteTypeUserName(), pitchName, duration, pitchOutOfRangeWarning,
@@ -3214,11 +3214,11 @@ String Note::accessibleExtraInfo() const
         }
     }
     if (tieFor()) {
-        rez += u" " + mtrc("engraving", "Start of %1").arg(tieFor()->screenReaderInfo());
+        rez += u" " + muse::mtrc("engraving", "Start of %1").arg(tieFor()->screenReaderInfo());
     }
 
     if (tieBack()) {
-        rez += u" " + mtrc("engraving", "End of %1").arg(tieBack()->screenReaderInfo());
+        rez += u" " + muse::mtrc("engraving", "End of %1").arg(tieBack()->screenReaderInfo());
     }
 
     if (!spannerFor().empty()) {
@@ -3226,7 +3226,7 @@ String Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez += u" " + mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
+            rez += u" " + muse::mtrc("engraving", "Start of %1").arg(s->screenReaderInfo());
         }
     }
     if (!spannerBack().empty()) {
@@ -3234,7 +3234,7 @@ String Note::accessibleExtraInfo() const
             if (!score()->selectionFilter().canSelect(s)) {
                 continue;
             }
-            rez += u" " + mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
+            rez += u" " + muse::mtrc("engraving", "End of %1").arg(s->screenReaderInfo());
         }
     }
 
@@ -3769,10 +3769,10 @@ bool Note::hasAnotherStraightAboveOrBelow(bool above) const
     return false;
 }
 
-mu::PointF Note::posInStaffCoordinates()
+PointF Note::posInStaffCoordinates()
 {
     double X = x() + chord()->x() + chord()->segment()->x() + chord()->measure()->x() + headWidth() / 2;
-    return mu::PointF(X, y());
+    return PointF(X, y());
 }
 
 void Note::setIsTrillCueNote(bool v)

@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_GLOBAL_SHAREDHASHMAP_H
-#define MU_GLOBAL_SHAREDHASHMAP_H
+#ifndef MUSE_GLOBAL_SHAREDHASHMAP_H
+#define MUSE_GLOBAL_SHAREDHASHMAP_H
 
 #include <memory>
 #include <unordered_map>
 
-namespace mu {
+namespace muse {
 template<typename KeyType, typename ValType>
 class SharedHashMap
 {
@@ -227,9 +227,4 @@ protected:
 };
 }
 
-namespace muse {
-template<typename KeyType, typename ValType>
-using SharedHashMap = mu::SharedHashMap<KeyType, ValType>;
-}
-
-#endif // MU_GLOBAL_SHAREDHASHMAP_H
+#endif // MUSE_GLOBAL_SHAREDHASHMAP_H

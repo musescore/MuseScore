@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-using namespace mu;
+using namespace muse;
 
 void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const String& pattern)
 {
@@ -57,10 +57,10 @@ void LogRemover::removeLogs(const io::path_t& logsDir, int olderThanDays, const 
     removeFiles(toRemoveFiles);
 }
 
-mu::Date LogRemover::parseDate(const String& fileName)
+muse::Date LogRemover::parseDate(const String& fileName)
 {
     size_t dateStartIdx = fileName.indexOf(u'_');
-    if (dateStartIdx == mu::nidx) {
+    if (dateStartIdx == muse::nidx) {
         return Date();
     }
 

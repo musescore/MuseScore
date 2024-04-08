@@ -36,7 +36,7 @@
 #include "isessionsmanager.h"
 
 namespace mu::appshell {
-class SessionsManager : public ISessionsManager, public async::Asyncable
+class SessionsManager : public ISessionsManager, public muse::async::Asyncable
 {
     INJECT(muse::actions::IActionsDispatcher, dispatcher)
     INJECT(muse::mi::IMultiInstancesProvider, multiInstancesProvider)
@@ -56,10 +56,10 @@ public:
 private:
     void update();
 
-    void removeProjectFromSession(const io::path_t& projectPath);
-    void addProjectToSession(const io::path_t& projectPath);
+    void removeProjectFromSession(const muse::io::path_t& projectPath);
+    void addProjectToSession(const muse::io::path_t& projectPath);
 
-    io::path_t m_lastOpenedProjectPath;
+    muse::io::path_t m_lastOpenedProjectPath;
 };
 }
 

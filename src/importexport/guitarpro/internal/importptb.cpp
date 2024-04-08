@@ -844,7 +844,7 @@ void PowerTab::addToScore(ptSection& sec)
         t = new RehearsalMark(seg);
         t->setFrameType(FrameType::NO_FRAME);
         t->setPlainText(String::fromStdString(sec.partName));
-        t->setOffset(mu::PointF(10.0, 0.0));
+        t->setOffset(muse::PointF(10.0, 0.0));
         t->setTrack(0);
         seg->add(t);
     }
