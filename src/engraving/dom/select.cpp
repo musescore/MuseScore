@@ -451,6 +451,10 @@ void Selection::clear()
 
 void Selection::remove(EngravingItem* el)
 {
+    if (el->isSpannerSegment()) {
+        Spanner* sp = toSpannerSegment(el)->spanner();
+        el = toEngravingItem(sp);
+    }
     const bool removed = mu::remove(m_el, el);
     el->setSelected(false);
     if (removed) {
@@ -463,6 +467,10 @@ void Selection::add(EngravingItem* el)
     IF_ASSERT_FAILED(!isLocked()) {
         LOGE() << "selection locked, reason: " << lockReason();
         return;
+    }
+    if (el->isSpannerSegment()) {
+        Spanner* sp = toSpannerSegment(el)->spanner();
+        el = toEngravingItem(sp);
     }
     m_el.push_back(el);
     update();
