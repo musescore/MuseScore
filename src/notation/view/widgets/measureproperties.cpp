@@ -77,6 +77,10 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     setFocus();
 
     qApp->installEventFilter(this);
+
+    if (!m_measure) {
+        deleteLater();
+    }
 }
 
 #ifdef MU_QT5_COMPAT
@@ -94,12 +98,14 @@ void MeasurePropertiesDialog::initMeasure()
     }
 
     INotationInteraction::HitElementContext context = m_notation->interaction()->hitElementContext();
-    mu::engraving::Measure* measure = mu::engraving::toMeasure(context.element);
+    mu::engraving::Measure* measure = context.element && context.element->isMeasure() ? mu::engraving::toMeasure(context.element) : nullptr;
 
     if (!measure) {
         INotationSelectionPtr selection = m_notation->interaction()->selection();
         if (selection->isRange()) {
             measure = selection->range()->measureRange().endMeasure;
+        } else if (selection->element()) {
+            measure = selection->element()->findMeasure();
         }
     }
 
