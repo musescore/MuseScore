@@ -107,7 +107,7 @@
 #include "framework/uicomponents/uicomponentsmodule.h"
 #endif
 
-#ifdef MUE_BUILD_UPDATE_MODULE
+#ifdef MUSE_MODULE_UPDATE
 #include "update/updatemodule.h"
 #else
 #include "framework/stubs/update/updatestubmodule.h"

@@ -87,6 +87,10 @@
 #cmakedefine MUSE_MODULE_UI_API 1
 #cmakedefine MUSE_MODULE_UI_DISABLE_MODALITY 1
 
+#cmakedefine MUSE_MODULE_UPDATE 1
+#cmakedefine MUSE_MODULE_UPDATE_TESTS 1
+#cmakedefine MUSE_MODULE_UPDATE_API 1
+
 #cmakedefine MUSE_MODULE_VST 1
 #cmakedefine MUSE_MODULE_VST_TESTS 1
 #cmakedefine MUSE_MODULE_VST_API 1

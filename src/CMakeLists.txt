@@ -74,10 +74,6 @@ if (MUE_BUILD_PROJECT_MODULE)
     add_subdirectory(project)
 endif()
 
-if (MUE_BUILD_UPDATE_MODULE)
-    add_subdirectory(update)
-endif()
-
 if (MUSE_MODULE_WORKSPACE)
     add_subdirectory(workspacescene)
 endif()
