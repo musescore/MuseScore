@@ -2937,8 +2937,10 @@ void MusicXMLParserDirection::direction(const String& partId,
             sound();
         } else if (m_e.name() == "staff") {
             String strStaff = m_e.readText();
-            staff_idx_t staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-            track += staff * VOICES;
+            int staff = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+            if (staff >= 0) {
+                track += staff * VOICES;
+            }
         } else {
             skipLogCurrElem();
         }
@@ -4885,11 +4887,11 @@ void MusicXMLParserPass2::clef(const String& partId, Measure* measure, const Fra
     // TODO: check error handling for
     // - single staff
     // - multi-staff with same clef
-    size_t clefno = 0;   // default
+    int clefno = 0;   // default
     if (strClefno != "") {
         clefno = m_pass1.getMusicXmlPart(partId).staffNumberToIndex(strClefno.toInt());
     }
-    if (clefno >= part->nstaves()) {
+    if (clefno < 0 || clefno >= int(part->nstaves())) {
         // conversion error (0) or other issue, assume staff 1
         // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
         // Same fix is required in pass 1 and pass 2
